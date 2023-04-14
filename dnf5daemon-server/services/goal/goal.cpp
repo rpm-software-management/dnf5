@@ -196,8 +196,8 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 
 
 // TODO (mblaha) callbacks to report the status
-void download_packages(libdnf::base::Transaction & transaction) {
-    libdnf::repo::PackageDownloader downloader;
+void download_packages(Session & session, libdnf::base::Transaction & transaction) {
+    libdnf::repo::PackageDownloader downloader(session.get_base()->get_weak_ptr());
 
     // container is owner of package callbacks user_data
     std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
@@ -225,7 +225,7 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     auto * transaction = session.get_transaction();
 
-    download_packages(*transaction);
+    download_packages(session, *transaction);
 
     std::string comment;
     if (options.find("comment") != options.end()) {

@@ -36,7 +36,8 @@ class PackageDownloadError : public Error {
 
 class PackageDownloader {
 public:
-    PackageDownloader();
+    explicit PackageDownloader(const libdnf::BaseWeakPtr & base);
+    explicit PackageDownloader(libdnf::Base & base);
     ~PackageDownloader();
 
     /// Adds a package to download to the standard location of repo cachedir/packages.
