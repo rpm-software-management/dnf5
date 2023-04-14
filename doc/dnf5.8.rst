@@ -50,6 +50,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`advisory <advisory_command_ref-label>`
     | Manage advisories.
 
+:ref:`autoremove <autoremove_command_ref-label>`
+    | Remove unneeded packages.
+
 :ref:`clean <clean_command_ref-label>`
     | Remove or invalidate cached data.
 
@@ -290,6 +293,7 @@ See Also
 
 Commands in detail:
     | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
+    | :manpage:`dnf5-autoremove(8)`, :ref:`Autoremove command <autoremove_command_ref-label>`
     | :manpage:`dnf5-clean(8)`, :ref:`Clean command <clean_command_ref-label>`
     | :manpage:`dnf5-distro-sync(8)`, :ref:`Distro-Sync command <distro-sync_command_ref-label>`
     | :manpage:`dnf5-downgrade(8)`, :ref:`Downgrade command <downgrade_command_ref-label>`

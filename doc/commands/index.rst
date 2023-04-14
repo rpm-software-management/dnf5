@@ -7,6 +7,7 @@ DNF5 Commands
     :maxdepth: 1
 
     advisory.8
+    autoremove.8
     clean.8
     distro-sync.8
     downgrade.8
