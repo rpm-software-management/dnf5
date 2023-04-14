@@ -168,8 +168,10 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
 
     // Store file paths of packages we don't want to keep cached.
     auto & config = p_impl->base->get_config();
-    auto keepcache = config.get_keepcache_option().get_value();
-    if (!keepcache) {
+    auto removal_configured = !config.get_keepcache_option().get_value();
+    auto removal_enforced = keep_packages.has_value() && !keep_packages.value();
+    auto keep_enforced = keep_packages.has_value() && keep_packages.value();
+    if (removal_enforced || (!keep_enforced && removal_configured)) {
         std::vector<std::string> package_paths;
         std::transform(
             p_impl->targets.begin(),
