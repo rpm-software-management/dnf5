@@ -1,7 +1,7 @@
 C++ coding style
 ================
 
-* C++17
+* C++20
 * Indent by 4 spaces
 * Up to 120 characters per line
 * Comments start with two forward slashes: ``//``
