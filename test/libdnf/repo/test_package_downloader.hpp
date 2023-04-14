@@ -28,10 +28,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class PackageDownloaderTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(PackageDownloaderTest);
     CPPUNIT_TEST(test_package_downloader);
+    CPPUNIT_TEST(test_package_downloader_temp_files_memory);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_package_downloader();
+    void test_package_downloader_temp_files_memory();
 };
 
 #endif
