@@ -76,17 +76,9 @@ The functionality is now split to two config options - `skip_broken` for the uni
 corresponding command line options `--skip-broken` and `--skip-unavailable` for commands where it makes sense.
 
 
-Upgrade command
----------------
- * New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for
- `upgrade --minimal`).
-
-Repoquery command
------------------
- * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
- dnf5. The options are no longer needed.
- * Dopped: `--nvr`, `--envra` options. They are no longer supported.
-
+Autoremove command
+------------------
+ * Dropped `<spec>` positional argument since the usecase is sufficiently covered by the `remove` command.
 
 List command
 ------------
@@ -95,3 +87,14 @@ List command
  whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip
  packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
  is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
+
+Repoquery command
+-----------------
+ * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
+ dnf5. The options are no longer needed.
+ * Dopped: `--nvr`, `--envra` options. They are no longer supported.
+
+Upgrade command
+---------------
+ * New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for
+ `upgrade --minimal`).
