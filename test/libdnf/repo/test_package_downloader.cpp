@@ -19,12 +19,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_package_downloader.hpp"
 
+#include "../shared/utils.hpp"
+#include "repo/temp_files_memory.hpp"
+#include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
+#include <filesystem>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
@@ -88,4 +92,38 @@ void PackageDownloaderTest::test_package_downloader() {
 
     CPPUNIT_ASSERT_GREATEREQUAL(1, cbs->progress_cnt);
     CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
+}
+
+void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
+    auto repo = add_repo_rpm("rpm-repo1");
+
+    libdnf::rpm::PackageQuery query(base);
+    query.filter_name({"one"});
+    CPPUNIT_ASSERT_EQUAL((size_t)4, query.size());
+
+    auto & config = base.get_config();
+
+    // ensure keepcache option is switched off
+    config.get_keepcache_option().set(false);
+
+    auto & cachedir = config.get_cachedir_option().get_value();
+    libdnf::repo::TempFilesMemory memory(cachedir);
+
+    // check memory is empty before downloading
+    CPPUNIT_ASSERT_EQUAL((size_t)0, memory.get_files().size());
+
+    auto downloader = libdnf::repo::PackageDownloader(base);
+    for (const auto & package : query) {
+        downloader.add(package);
+    }
+    downloader.download(true, true);
+
+    auto paths_prefix = std::filesystem::path(repo->get_cachedir()) / std::filesystem::path("packages");
+    const std::vector<std::string> expected = {
+        paths_prefix / "one-1-1.noarch.rpm",
+        paths_prefix / "one-1-1.src.rpm",
+        paths_prefix / "one-2-1.noarch.rpm",
+        paths_prefix / "one-2-1.src.rpm"};
+
+    CPPUNIT_ASSERT_EQUAL(expected, memory.get_files());
 }
