@@ -86,6 +86,11 @@ Options
 ``--leaves``
     | Display only leaf packages.
 
+``--unneeded``
+    | Limit the resulting set to leaves packages that were installed as dependencies
+    | so they are no longer needed. This switch lists packages that are going to be
+    | removed after executing the `autoremove` command.
+
 ``--nevra``
     | Use the `NEVRA` format for the output.
     | This is the default behavior.
