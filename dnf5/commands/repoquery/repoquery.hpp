@@ -47,6 +47,7 @@ private:
 
     libdnf::OptionBool * available_option{nullptr};
     libdnf::OptionBool * installed_option{nullptr};
+    libdnf::OptionBool * userinstalled_option{nullptr};
     libdnf::OptionBool * leaves_option{nullptr};
     libdnf::OptionBool * info_option{nullptr};
     libdnf::OptionNumber<std::int32_t> * latest_limit_option{nullptr};

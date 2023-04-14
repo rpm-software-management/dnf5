@@ -54,6 +54,9 @@ void RepoqueryCommand::set_argument_parser() {
     installed_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
+    userinstalled_option = dynamic_cast<libdnf::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+
     leaves_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
@@ -78,6 +81,13 @@ void RepoqueryCommand::set_argument_parser() {
     installed->set_description("Limit to installed packages.");
     installed->set_const_value("true");
     installed->link_value(installed_option);
+
+    auto userinstalled = parser.add_new_named_arg("userinstalled");
+    userinstalled->set_long_name("userinstalled");
+    userinstalled->set_description("Limit to packages that are not installed as dependencies or weak dependencies.");
+    userinstalled->set_const_value("true");
+    userinstalled->link_value(userinstalled_option);
+    userinstalled->add_conflict_argument(*installed);
 
     auto leaves = parser.add_new_named_arg("leaves");
     leaves->set_long_name("leaves");
@@ -279,6 +289,7 @@ void RepoqueryCommand::set_argument_parser() {
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
+    cmd.register_named_arg(userinstalled);
     cmd.register_named_arg(leaves);
     cmd.register_named_arg(latest_limit);
 
@@ -299,7 +310,8 @@ void RepoqueryCommand::set_argument_parser() {
 void RepoqueryCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
-    only_system_repo_needed = installed_option->get_value() || duplicates->get_value() || leaves_option->get_value();
+    only_system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
+                              duplicates->get_value() || leaves_option->get_value();
     context.set_load_system_repo(only_system_repo_needed);
     bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
                              advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
@@ -347,6 +359,10 @@ void RepoqueryCommand::run() {
 
     if (leaves_option->get_value()) {
         full_package_query.filter_leaves();
+    }
+
+    if (userinstalled_option->get_value()) {
+        full_package_query.filter_userinstalled();
     }
 
     auto advisories = advisory_query_from_cli_input(
