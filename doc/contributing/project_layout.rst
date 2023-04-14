@@ -21,5 +21,6 @@ Project layout
     +-- libdnf-plugins          # libdnf C/C++ plugins
     +-- dnf5daemon-client       # command line client for dnf5daemon-server
     +-- dnf5daemon-server       # DBus package manager service
-    +-- dnf5                # dnf5 command line package manager
+    +-- dnf5                    # dnf5 command line package manager
+    +-- dnf5-plugins            # dnf5 plugins
     +-- test                    # tests; similar layout to the bindings
