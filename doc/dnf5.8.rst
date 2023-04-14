@@ -71,6 +71,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`install <install_command_ref-label>`
     | Install packages.
 
+:ref:`leaves <leaves_command_ref-label>`
+    | List groups of leaf packages.
+
 :ref:`makecache <makecache_command_ref-label>`
     | Generate the metadata cache.
 
@@ -294,6 +297,7 @@ Commands in detail:
     | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
     | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
     | :manpage:`dnf5-install(8)`, :ref:`Install command <install_command_ref-label>`
+    | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
     | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
     | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`
     | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`

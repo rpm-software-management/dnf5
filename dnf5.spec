@@ -211,6 +211,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 # TODO(jkolarik): history is not ready yet
 # %%{_mandir}/man8/dnf5-history.8.*
 %{_mandir}/man8/dnf5-install.8.*
+%{_mandir}/man8/dnf5-leaves.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
 # TODO(jkolarik): module is not ready yet

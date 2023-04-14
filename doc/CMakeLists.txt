@@ -58,6 +58,7 @@ if(WITH_MAN)
         # TODO(jkolarik): history is not ready yet
         # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-history.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-install.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-leaves.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-makecache.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-mark.8 DESTINATION share/man/man8)
         # TODO(jkolarik): module is not ready yet
