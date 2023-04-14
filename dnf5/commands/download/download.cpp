@@ -152,6 +152,9 @@ void DownloadCommand::run() {
         libdnf::repo::PackageDownloader downloader(ctx.base);
         auto destination = ctx.base.get_config().get_destdir_option().get_value().c_str();
 
+        // for download command, we don't want to mark the packages for removal
+        downloader.force_keep_packages(true);
+
         for (auto & pkg : download_pkgs) {
             downloader.add(pkg, destination);
         }
