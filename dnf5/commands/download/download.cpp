@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_set.hpp>
 
 #include <iostream>
+#include <set>
 
 
 namespace dnf5 {
@@ -109,42 +110,36 @@ void DownloadCommand::configure() {
 void DownloadCommand::run() {
     auto & ctx = get_context();
 
-    std::vector<libdnf::rpm::Package> download_pkgs;
-    libdnf::rpm::PackageSet result_query(ctx.base);
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
+    std::set<libdnf::rpm::Package> download_pkgs;
+    libdnf::rpm::PackageQuery full_pkg_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
-        libdnf::rpm::PackageQuery package_query(full_package_query);
+        libdnf::rpm::PackageQuery pkg_query(full_pkg_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        package_query.resolve_pkg_spec(option->get_value(), {}, true);
-        package_query.filter_priority();
-        package_query.filter_latest_evr();
-        result_query |= package_query;
-    }
+        pkg_query.resolve_pkg_spec(option->get_value(), {}, true);
+        pkg_query.filter_priority();
+        pkg_query.filter_latest_evr();
 
-    if (resolve_option->get_value()) {
-        auto goal = std::make_unique<libdnf::Goal>(ctx.base);
-        libdnf::GoalJobSettings settings;
-        for (auto pkg : result_query) {
-            goal->add_rpm_install(pkg, settings);
-        }
-        auto transaction = goal->resolve();
-        auto transaction_problems = transaction.get_problems();
-        if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
-            if (transaction_problems != libdnf::GoalProblem::NOT_FOUND) {
-                throw GoalResolveError(transaction);
+        for (const auto & pkg : pkg_query) {
+            if (resolve_option->get_value()) {
+                auto goal = std::make_unique<libdnf::Goal>(ctx.base);
+                goal->add_rpm_install(pkg, {});
+
+                auto transaction = goal->resolve();
+                auto transaction_problems = transaction.get_problems();
+                if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
+                    if (transaction_problems != libdnf::GoalProblem::NOT_FOUND) {
+                        throw GoalResolveError(transaction);
+                    }
+                }
+                for (auto & tspkg : transaction.get_transaction_packages()) {
+                    if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                        tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+                        download_pkgs.insert(tspkg.get_package());
+                    }
+                }
+            } else {
+                download_pkgs.insert(std::move(pkg));
             }
-        }
-        download_pkgs.reserve(transaction.get_transaction_packages().size());
-        for (auto & tspkg : transaction.get_transaction_packages()) {
-            if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-                tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
-                download_pkgs.push_back(tspkg.get_package());
-            }
-        }
-    } else {
-        download_pkgs.reserve(result_query.size());
-        for (auto package : result_query) {
-            download_pkgs.push_back(std::move(package));
         }
     }
 
