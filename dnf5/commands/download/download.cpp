@@ -23,9 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <libdnf/conf/option_string.hpp>
+#include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
+
+#include <iostream>
 
 
 namespace dnf5 {
@@ -146,7 +149,16 @@ void DownloadCommand::run() {
     }
 
     if (!download_pkgs.empty()) {
-        download_packages(download_pkgs, ctx.base.get_config().get_destdir_option().get_value().c_str());
+        libdnf::repo::PackageDownloader downloader(ctx.base);
+        auto destination = ctx.base.get_config().get_destdir_option().get_value().c_str();
+
+        for (auto & pkg : download_pkgs) {
+            downloader.add(pkg, destination);
+        }
+
+        std::cout << "Downloading Packages:" << std::endl;
+        downloader.download(true, true);
+        std::cout << std::endl;
     }
 }
 
