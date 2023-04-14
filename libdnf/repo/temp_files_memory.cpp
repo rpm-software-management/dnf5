@@ -58,7 +58,10 @@ void TempFilesMemory::add_files(const std::vector<std::string> & paths) {
     std::sort(files.begin(), files.end());
     files.erase(std::unique(files.begin(), files.end()), files.end());
 
-    utils::fs::File(full_memory_path, "w").write(toml::format(toml::value({{FILE_PATHS_TOML_KEY, files}})));
+    // write new contents to a temporary file and then move the new file atomically
+    auto temporary_path = full_memory_path.string() + ".temp";
+    utils::fs::File(temporary_path, "w").write(toml::format(toml::value({{FILE_PATHS_TOML_KEY, files}})));
+    std::filesystem::rename(temporary_path, full_memory_path);
 }
 
 void TempFilesMemory::clear() {
