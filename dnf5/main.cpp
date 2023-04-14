@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmdline_aliases.hpp"
 #include "commands/advisory/advisory.hpp"
+#include "commands/autoremove/autoremove.hpp"
 #include "commands/check-upgrade/check-upgrade.hpp"
 #include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
@@ -486,6 +487,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<ReinstallCommand>(context));
     context.add_and_initialize_command(std::make_unique<SwapCommand>(context));
     context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
+    context.add_and_initialize_command(std::make_unique<AutoremoveCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<LeavesCommand>(context));
     context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));
