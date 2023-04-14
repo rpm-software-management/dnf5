@@ -34,8 +34,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/const.hpp>
-#include <libdnf/repo/file_downloader.hpp>
-#include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/rpm_signature.hpp>
@@ -155,22 +153,6 @@ void Context::load_repos(bool load_system) {
         download_callbacks->reset_progress_bar();
     }
     print_info("Repositories loaded.");
-}
-
-void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
-    libdnf::repo::PackageDownloader downloader(packages.front().get_base());
-
-    for (auto & package : packages) {
-        if (dest_dir != nullptr) {
-            downloader.add(package, dest_dir);
-        } else {
-            downloader.add(package);
-        }
-    }
-
-    std::cout << "Downloading Packages:" << std::endl;
-    downloader.download(true, true);
-    std::cout << std::endl;
 }
 
 namespace {
