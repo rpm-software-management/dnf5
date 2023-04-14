@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 
 #include <memory>
+#include <optional>
 
 namespace libdnf::repo {
 
@@ -56,9 +57,19 @@ public:
     /// @param resume Whether to try to resume the download if a destination package already exists.
     void download(bool fail_fast, bool resume);
 
+    /// Explicitly setup the behavior related to packages caching.
+    /// By default, the `keepcache` configuration option is used to determine whether to keep
+    /// downloaded packages even after following successful transaction.
+    ///
+    /// @param value If true, packages will be kept on the disk after downloading
+    /// regardless the `keepcache` option value, if false, it enforces packages removal after
+    /// the next successful transaction.
+    void force_keep_packages(bool value) { keep_packages = value; }
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
+    std::optional<bool> keep_packages;
 };
 
 /// Wraps librepo PackageTarget
