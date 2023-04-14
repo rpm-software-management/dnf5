@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
+#include <filesystem>
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmTransactionTest);
 
@@ -110,4 +112,33 @@ void RpmTransactionTest::test_transaction() {
 
     CPPUNIT_ASSERT_EQUAL(libdnf::base::Transaction::TransactionRunResult::SUCCESS, res);
     // TODO(lukash) assert the packages were installed
+}
+
+void RpmTransactionTest::test_transaction_temp_files_cleanup() {
+    auto repo = add_repo_rpm("rpm-repo1");
+
+    // ensure keepcache option is switched off
+    base.get_config().get_keepcache_option().set(false);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_install("one");
+
+    auto transaction = goal.resolve();
+
+    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
+        get_pkg("one-0:2-1.noarch"),
+        TransactionItemAction::INSTALL,
+        TransactionItemReason::USER,
+        TransactionItemState::STARTED)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+
+    auto package_path =
+        std::filesystem::path(repo->get_cachedir()) / std::filesystem::path("packages/one-2-1.noarch.rpm");
+
+    // check package was downloaded and then removed after transaction run
+    CPPUNIT_ASSERT(!std::filesystem::exists(package_path));
+    transaction.download();
+    CPPUNIT_ASSERT(std::filesystem::exists(package_path));
+    transaction.run();
+    CPPUNIT_ASSERT(!std::filesystem::exists(package_path));
 }

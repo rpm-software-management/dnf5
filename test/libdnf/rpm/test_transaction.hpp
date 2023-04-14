@@ -30,10 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class RpmTransactionTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RpmTransactionTest);
     CPPUNIT_TEST(test_transaction);
+    CPPUNIT_TEST(test_transaction_temp_files_cleanup);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_transaction();
+    void test_transaction_temp_files_cleanup();
 };
 
 #endif
