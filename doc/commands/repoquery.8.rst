@@ -78,6 +78,11 @@ Options
 ``--installed``
     | Display only installed packages.
 
+``--userinstalled``
+    | Limit to packages that are not installed as dependencies or weak dependencies.
+    | This means limit to packages that were installed at the user request or indirectly as a part of a module profile or comps group. Additionally it returns packages with unknown reason.
+    | The result may be influenced by the "exclude" option in the configuration file.
+
 ``--leaves``
     | Display only leaf packages.
 
