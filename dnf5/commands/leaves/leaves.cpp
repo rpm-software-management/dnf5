@@ -39,6 +39,17 @@ void LeavesCommand::set_parent_command() {
 void LeavesCommand::set_argument_parser() {
     get_argument_parser_command()->set_description(
         "List groups of installed packages not required by other installed packages");
+    get_argument_parser_command()->set_long_description(
+        R"(The `leaves` command is used to list all leaf packages.
+
+Leaf packages are installed packages that are not required as a dependency
+of another installed package. However, two or more installed packages might
+depend on each other in a dependency cycle. Packages in such cycles that
+are not required by any other installed package are also leaf.
+Packages in such cycles form a group of leaf packages.
+
+Packages in the output list are sorted by group and the first package
+in the group is preceded by a '-' character.)");
 }
 
 void LeavesCommand::configure() {
