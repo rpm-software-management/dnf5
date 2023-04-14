@@ -33,7 +33,7 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         query.filter_arch(["noarch"])
         self.assertEqual(query.size(), 1)
 
-        downloader = libdnf5.repo.PackageDownloader()
+        downloader = libdnf5.repo.PackageDownloader(self.base)
 
         class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
             end_cnt = 0

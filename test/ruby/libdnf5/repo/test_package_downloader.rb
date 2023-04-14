@@ -66,7 +66,7 @@ class TestPackageDownloader < BaseTestCase
         query.filter_arch(["noarch"])
         assert_equal(1, query.size())
 
-        downloader = Repo::PackageDownloader.new()
+        downloader = Repo::PackageDownloader.new(@base)
 
         cbs = PackageDownloadCallbacks.new()
         @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(cbs))

@@ -158,7 +158,7 @@ void Context::load_repos(bool load_system) {
 }
 
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
-    libdnf::repo::PackageDownloader downloader;
+    libdnf::repo::PackageDownloader downloader(packages.front().get_base());
 
     for (auto & package : packages) {
         if (dest_dir != nullptr) {

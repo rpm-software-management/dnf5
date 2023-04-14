@@ -72,7 +72,7 @@ void PackageDownloaderTest::test_package_downloader() {
     query.filter_arch({"noarch"});
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
-    auto downloader = libdnf::repo::PackageDownloader();
+    auto downloader = libdnf::repo::PackageDownloader(base);
 
     auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
     auto cbs = cbs_unique_ptr.get();

@@ -279,7 +279,7 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 }
 
 void Transaction::download(const std::string & dest_dir) {
-    libdnf::repo::PackageDownloader downloader;
+    libdnf::repo::PackageDownloader downloader(p_impl->base);
     for (auto & tspkg : this->get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
             tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {

@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 
 #include "repo_downloader.hpp"
+#include "temp_files_memory.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
@@ -29,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <librepo/librepo.h>
 
+#include <algorithm>
 #include <filesystem>
 
 
@@ -90,12 +92,16 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
 
 class PackageDownloader::Impl {
+public:
+    Impl(const BaseWeakPtr & base) : base(base) {}
+    BaseWeakPtr base;
     friend PackageDownloader;
     std::vector<PackageTarget> targets;
 };
 
 
-PackageDownloader::PackageDownloader() : p_impl(std::make_unique<Impl>()) {}
+PackageDownloader::PackageDownloader(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+PackageDownloader::PackageDownloader(Base & base) : p_impl(std::make_unique<Impl>(base.get_weak_ptr())) {}
 PackageDownloader::~PackageDownloader() = default;
 
 
@@ -158,6 +164,25 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
     LrPackageDownloadFlag flags = static_cast<LrPackageDownloadFlag>(0);
     if (fail_fast) {
         flags = static_cast<LrPackageDownloadFlag>(flags | LR_PACKAGEDOWNLOAD_FAILFAST);
+    }
+
+    // Store file paths of packages we don't want to keep cached.
+    auto & config = p_impl->base->get_config();
+    auto keepcache = config.get_keepcache_option().get_value();
+    if (!keepcache) {
+        std::vector<std::string> package_paths;
+        std::transform(
+            p_impl->targets.begin(),
+            p_impl->targets.end(),
+            std::back_inserter(package_paths),
+            [](const PackageTarget & target) {
+                return std::filesystem::canonical(std::filesystem::path(target.destination)) /
+                       std::filesystem::path(target.package.get_location()).filename();
+            });
+
+        auto & cachedir = config.get_cachedir_option().get_value();
+        TempFilesMemory temp_files_memory(cachedir);
+        temp_files_memory.add_files(package_paths);
     }
 
     if (!lr_download_packages(list, flags, &err)) {
