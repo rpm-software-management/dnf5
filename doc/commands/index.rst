@@ -14,6 +14,7 @@ DNF5 Commands
     environment.8
     group.8
     install.8
+    leaves.8
     makecache.8
     mark.8
     reinstall.8
