@@ -2,3 +2,4 @@ build/*
 __pycache__
 *.log
 *.tar.gz
+libdnf/conf/config.h

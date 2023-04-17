@@ -144,6 +144,9 @@ void CheckUpgradeCommand::run() {
             std::move(advisories.value()), installed_query, libdnf::sack::QueryCmp::GTE);
     }
 
+    // Last, only include latest upgrades
+    upgrades_query.filter_latest_evr();
+
     libdnf::rpm::PackageQuery obsoletes_query(upgrades_query);
     obsoletes_query.filter_obsoletes(installed_query);
 
