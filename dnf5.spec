@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 8
+%global project_version_patch 9
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -628,6 +628,15 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 
 %changelog
+* Tue Apr 18 2023 Nicola Sella <nsella@redhat.com> - 5.0.9-1
+- Add `--userinstalled` to `repoquery` man page
+- Implement `repoquery -userinstalled`
+- Fix: progressbar: Prevent length_error exception (RhBug:2184271)
+- Add dnf5-plugins directory in documentation
+- Document `repoquery --leaves`
+- Implement `repoquery --leaves`
+- Implement new filters rpm::filter_leaves and rpm::filter_leaves_groups
+
 * Thu Apr 13 2023 Nicola Sella <nsella@redhat.com> - 5.0.8-1
 - Improve error message in download command
 - Add repoquery --latest-limit option
