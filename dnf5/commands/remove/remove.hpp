@@ -37,7 +37,6 @@ public:
     void run() override;
 
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
-    libdnf::OptionBool * unneeded{nullptr};
 };
 
 }  // namespace dnf5
