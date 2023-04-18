@@ -129,8 +129,6 @@ private:
     /// Ranges of solvables for different types of data, used for writing libsolv cache files
     int main_solvables_start{0};
     int main_solvables_end{0};
-    int comps_solvables_start{0};
-    int comps_solvables_end{0};
     int updateinfo_solvables_start{0};
     int updateinfo_solvables_end{0};
 
