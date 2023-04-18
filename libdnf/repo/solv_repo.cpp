@@ -280,9 +280,6 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 
 void SolvRepo::load_system_repo_ext(RepodataType type) {
-    solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
-                                                    : static_cast<solv::Pool &>(get_rpm_pool(base));
-    int solvables_start = pool->nsolvables;
     auto type_name = repodata_type_to_name(type);
     switch (type) {
         case RepodataType::COMPS: {
@@ -292,9 +289,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
             auto comps_dir = system_state.get_group_xml_dir();
             for (auto & group_id : system_state.get_installed_groups()) {
                 auto ext_fn = comps_dir / (group_id + ".xml");
-                if (read_group_solvable_from_xml(ext_fn)) {
-                    comps_solvables_start = solvables_start;
-                } else {
+                if (!read_group_solvable_from_xml(ext_fn)) {
                     // The group xml file either not exists or is not parseable by
                     // libsolv.
                     groups_missing_xml.push_back(std::move(group_id));
@@ -340,9 +335,6 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
         if (type == RepodataType::UPDATEINFO) {
             updateinfo_solvables_start = solvables_start;
             updateinfo_solvables_end = pool->nsolvables;
-        } else if (type == RepodataType::COMPS) {
-            comps_solvables_start = solvables_start;
-            comps_solvables_end = pool->nsolvables;
         }
 
         return;
@@ -366,10 +358,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             }
             break;
         case RepodataType::COMPS:
-            if ((res = repo_add_comps(comps_repo, ext_file.get(), 0)) == 0) {
-                comps_solvables_start = solvables_start;
-                comps_solvables_end = pool->nsolvables;
-            }
+            res = repo_add_comps(comps_repo, ext_file.get(), 0);
             break;
         case RepodataType::OTHER:
             res = repo_add_rpmmd(repo, ext_file.get(), 0, REPO_EXTEND_SOLVABLES);
@@ -626,9 +615,9 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
     if (type == RepodataType::UPDATEINFO) {
         repowriter_set_solvablerange(writer, updateinfo_solvables_start, updateinfo_solvables_end);
-    } else if (type == RepodataType::COMPS) {
-        repowriter_set_solvablerange(writer, comps_solvables_start, comps_solvables_end);
-    } else {
+    }
+
+    if (type != RepodataType::COMPS && type != RepodataType::UPDATEINFO) {
         repowriter_set_flags(writer, REPOWRITER_NO_STORAGE_SOLVABLE);
     }
 
@@ -687,7 +676,6 @@ std::filesystem::path SolvRepo::solv_file_path(const char * type) {
 
 bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     auto & logger = *base->get_logger();
-    solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
     bool read_success = true;
 
     fs::File ext_file;
@@ -701,9 +689,7 @@ bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     if (read_success) {
         logger.debug("Loading group extension for system repo from \"{}\"", path);
         read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
-        if (read_success) {
-            comps_solvables_end = pool->nsolvables;
-        } else {
+        if (!read_success) {
             logger.debug("Loading group extension for system repo from \"{}\" failed.", path);
         }
     }
