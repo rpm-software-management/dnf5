@@ -12,7 +12,6 @@ Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-Requires:       dnf-data
 Recommends:     bash-completion
 
 # Remove if condition when Fedora 37 is EOL
@@ -20,6 +19,12 @@ Recommends:     bash-completion
 Provides:       microdnf = %{version}-%{release}
 Obsoletes:      microdnf < 4
 %endif
+
+Provides:       dnf = %{version}-%{release}
+Obsoletes:      dnf < 5
+
+Provides:       yum = %{version}-%{release}
+Obsoletes:      yum < 5
 
 # ========== build options ==========
 
@@ -178,6 +183,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
+%{_bindir}/dnf
+%{_bindir}/yum
 
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37
@@ -240,11 +247,15 @@ License:        LGPL-2.1-or-later
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
+Conflicts:      dnf-data < 4.16.0
 
 %description -n libdnf5
 Package management library.
 
 %files -n libdnf5
+%config(noreplace) %{_sysconfdir}/dnf/dnf.conf
+%dir %{_sysconfdir}/dnf/vars
+%dir %{_sysconfdir}/dnf/protected.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
@@ -509,7 +520,6 @@ License:        GPL-2.0-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dbus
-Requires:       dnf-data
 Requires:       polkit
 
 %description -n dnf5daemon-server
@@ -609,6 +619,9 @@ Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclos
 
 %install
 %cmake_install
+
+ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
+ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
 
 # own dirs and files that dnf5 creates on runtime
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/dnf
