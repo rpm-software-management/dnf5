@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base/base_impl.hpp"
 #include "module/module_db.hpp"
 #include "module/module_metadata.hpp"
+#include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -102,6 +103,48 @@ public:
     std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> module_solve(
         std::vector<ModuleItem *> module_items);
 
+    /// Enable module stream.
+    /// @param name module name to be enabled.
+    /// @param stream module stream to be enabled.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @return `true` if requested change realy triggers a change in the ModuleDB, `false` otherwise.
+    /// @throw EnableMultipleStreamsError in case of conflicting enable requests.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    bool enable(const std::string & name, const std::string & stream, bool count = true);
+    /// Enable module stream.
+    /// @param module_spec module to be enabled.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @return `true` if requested change realy triggers a change in the ModuleDB, `false` otherwise.
+    /// @throw EnableMultipleStreamsError in case of conflicting enable requests.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    bool enable(const std::string & module_spec, bool count = true);
+    /// Disable module.
+    /// @param name module name to be disabled.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    void disable(const std::string & name, bool count = true);
+    /// Disable module.
+    /// @param module_item module to be disabled.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    void disable(const ModuleItem * module_item, bool count = true);
+    /// Reset module, so it's no longer enabled nor disabled.
+    /// @param name module name to be reset.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    void reset(const std::string & name, bool count = true);
+    /// Reset module, so it's no longer enabled nor disabled.
+    /// @param module_item module item to be reset.
+    /// @param count if `true`, count the change towards the limit of module status modifications.
+    /// @throw NoModuleError if the module doesn't exist.
+    /// @since 5.0.14
+    void reset(const ModuleItem * module_item, bool count = true);
+
 private:
     friend ModuleSack;
     friend ModuleItem;
@@ -129,6 +172,7 @@ private:
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
+    std::vector<libdnf::solv::IdQueue> modules_to_enable;
 
     std::unique_ptr<ModuleDB> module_db;
 
