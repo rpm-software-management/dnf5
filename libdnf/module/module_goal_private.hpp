@@ -51,6 +51,14 @@ public:
     /// @since 5.0
     void add_provide_install(Id reldepid, bool skip_broken, bool best);
 
+    /// Adds an install operation for one of the items.
+    ///
+    /// @param queue Queue of module solvable ids.
+    /// @param skip_broken Whether solver can skip reldep with unmet dependencies
+    /// @param best Whether the latest version is required or not.
+    /// @since 5.0.14
+    void add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best);
+
     /// Resolve all operations.
     ///
     /// @return libdnf::GoalProblem to indicate whether there was a solver error.
