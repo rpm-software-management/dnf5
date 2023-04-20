@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_query.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
+#include "libdnf/module/nsvcap.hpp"
 
 #include <modulemd-2.0/modulemd.h>
 
@@ -437,6 +438,15 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
         }
     }
 
+    // There are queues of modules to enable that must be added to goals, because they better match user requirements
+    // than just "module(name:stream)" provides. (E.g. user might have requested specific context or version.)
+    for (auto & queue : modules_to_enable) {
+        goal_strict.add_install(queue, 0, 1);
+        goal_weak.add_install(queue, 1, 0);
+        goal_best.add_install(queue, 0, 1);
+        goal.add_install(queue, 0, 0);
+    }
+
     auto ret = goal_strict.resolve();
 
     // TODO(pkratoch): Write debugdata if debug_solver config option is set to true.
@@ -678,6 +688,75 @@ ModuleSack::resolve_active_module_items() {
     auto problems = p_impl->module_solve(module_items_to_solve);
     active_modules_resolved = true;
     return problems;
+}
+
+
+bool ModuleSack::Impl::enable(const std::string & name, const std::string & stream, bool count) {
+    module_db->initialize();
+    bool changed = false;
+    changed |= module_db->change_stream(name, stream, count);
+    changed |= module_db->change_status(name, ModuleStatus::ENABLED);
+    if (changed) {
+        module_db->clear_profiles(name);
+    }
+    return changed;
+}
+
+
+bool ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
+    module_db->initialize();
+    auto nsvcaps = Nsvcap::parse(module_spec);
+
+    ModuleQuery query(base, true);
+    for (auto & nsvcap : nsvcaps) {
+        ModuleQuery nsvcap_query(base, false);
+        nsvcap_query.filter_nsvca(nsvcap);
+        query |= nsvcap_query;
+    }
+
+    if (query.empty()) {
+        throw NoModuleError(M_("No such module: {}"), module_spec);
+    }
+
+    bool changed = false;
+    libdnf::solv::IdQueue queue;
+    for (const auto & module_item : query) {
+        queue.push_back(module_item.get_id().id);
+        changed += enable(module_item.get_name(), module_item.get_stream(), count);
+    }
+    modules_to_enable.push_back(queue);
+
+    return changed;
+}
+
+
+void ModuleSack::Impl::disable(const std::string & name, bool count) {
+    module_db->initialize();
+    module_db->change_stream(name, "", count);
+    if (module_db->change_status(name, ModuleStatus::DISABLED)) {
+        module_db->clear_profiles(name);
+    }
+}
+
+
+void ModuleSack::Impl::disable(const ModuleItem * module_item, bool count) {
+    module_db->initialize();
+    disable(module_item->get_name(), count);
+}
+
+
+void ModuleSack::Impl::reset(const std::string & name, bool count) {
+    module_db->initialize();
+    module_db->change_stream(name, "", count);
+    if (module_db->change_status(name, ModuleStatus::AVAILABLE)) {
+        module_db->clear_profiles(name);
+    }
+}
+
+
+void ModuleSack::Impl::reset(const ModuleItem * module_item, bool count) {
+    module_db->initialize();
+    reset(module_item->get_name(), count);
 }
 
 
