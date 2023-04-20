@@ -59,6 +59,8 @@ void BuildDepCommand::set_argument_parser() {
     });
     cmd.register_positional_arg(specs);
 
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
+
     auto defs = parser.add_new_named_arg("rpm_macros");
     defs->set_short_name('D');
     defs->set_long_name("define");
@@ -247,6 +249,8 @@ void BuildDepCommand::run() {
 
     // fill the goal with build dependencies
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
+    
     for (const auto & spec : install_specs) {
         if (libdnf::rpm::Reldep::is_rich_dependency(spec)) {
             goal->add_provide_install(spec);

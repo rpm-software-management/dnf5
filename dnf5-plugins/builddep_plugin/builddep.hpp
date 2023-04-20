@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <vector>
@@ -53,6 +54,8 @@ private:
     std::vector<std::string> spec_file_paths{};
     std::vector<std::string> srpm_file_paths{};
     std::vector<std::pair<std::string, std::string>> rpm_macros{};
+
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 };
 
 
