@@ -724,6 +724,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         std::filesystem::create_directories(comps_xml_dir);
         for (const auto & tsgroup : groups) {
             auto group = tsgroup.get_group();
+            auto group_xml_path = comps_xml_dir / (group.get_groupid() + ".xml");
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
                 libdnf::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
@@ -746,7 +747,18 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                 }
                 system_state.set_group_state(group.get_groupid(), state);
                 // save the current xml group definition
-                group.serialize(comps_xml_dir / (group.get_groupid() + ".xml"));
+                group.serialize(group_xml_path);
+            } else {
+                // delete system state data for removed groups
+                system_state.remove_group_state(group.get_groupid());
+                std::error_code ec;
+                std::filesystem::remove(group_xml_path, ec);
+                if (ec) {
+                    logger->warning(
+                        "Failed to remove installed group definition file \"{}\": {}",
+                        group_xml_path.string(),
+                        ec.message());
+                }
             }
         }
 
