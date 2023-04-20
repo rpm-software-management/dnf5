@@ -66,6 +66,12 @@ public:
 };
 
 
+class GroupNoPackagesOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit GroupNoPackagesOption(libdnf::cli::session::Command & command)
+        : BoolOption(command, "no-packages", '\0', _("Operate on groups only, no packages are changed."), false) {}
+};
+
 }  // namespace dnf5
 
 

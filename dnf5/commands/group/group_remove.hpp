@@ -35,6 +35,7 @@ public:
     void configure() override;
     void run() override;
 
+    std::unique_ptr<GroupNoPackagesOption> no_packages{nullptr};
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
 
 protected:

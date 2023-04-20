@@ -36,6 +36,7 @@ void GroupInstallCommand::set_argument_parser() {
     cmd.set_description("Install comp groups, including their packages");
 
     with_optional = std::make_unique<GroupWithOptionalOption>(*this);
+    no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
@@ -54,6 +55,9 @@ void GroupInstallCommand::run() {
     auto goal = ctx.get_goal();
 
     libdnf::GoalJobSettings settings;
+    if (no_packages->get_value()) {
+        settings.group_no_packages = true;
+    }
     if (with_optional->get_value()) {
         auto group_package_types =
             libdnf::comps::package_type_from_string(ctx.base.get_config().get_group_package_types_option().get_value());
