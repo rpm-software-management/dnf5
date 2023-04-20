@@ -27,9 +27,9 @@ fi
 EXCLUDE=":!:test/tutorial"
 
 if [ -n "`git diff --name-only`" ]; then
-    FILES=`git diff --name-only -- "$@" $EXCLUDE | egrep '\.(c|cpp|h|hpp)$'`
+    FILES=`git diff --name-only -- "$@" $EXCLUDE | grep -E '\.(c|cpp|h|hpp)$'`
 else
-    FILES=`git ls-files -- "$@" $EXCLUDE | egrep '\.(c|cpp|h|hpp)$'`
+    FILES=`git ls-files -- "$@" $EXCLUDE | grep -E '\.(c|cpp|h|hpp)$'`
 fi
 
 for FILE in $FILES; do
