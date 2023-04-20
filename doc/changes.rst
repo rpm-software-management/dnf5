@@ -79,6 +79,7 @@ corresponding command line options `--skip-broken` and `--skip-unavailable` for 
 Autoremove command
 ------------------
  * Dropped `<spec>` positional argument since the usecase is sufficiently covered by the `remove` command.
+ * Specific `autoremove-n`, `autoremove-na`, and `autoremove-nevra` variants of the command are not supported.
 
 List command
 ------------
