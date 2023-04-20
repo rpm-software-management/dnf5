@@ -1467,6 +1467,10 @@ void Goal::Impl::add_group_install_to_goal(
     auto & cfg_main = base->get_config();
     auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
     for (auto group : group_query) {
+        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
+        if (settings.group_no_packages) {
+            continue;
+        }
         std::vector<libdnf::comps::Package> packages;
         // TODO(mblaha): filter packages by p.arch attribute when supported by comps
         for (const auto & p : group.get_packages()) {
@@ -1477,7 +1481,6 @@ void Goal::Impl::add_group_install_to_goal(
         for (const auto & pkg : packages) {
             install_group_package(transaction, pkg);
         }
-        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
     }
 }
 
@@ -1502,6 +1505,10 @@ void Goal::Impl::add_group_remove_to_goal(
     rpm::PackageSet remove_candidates(base);
     for (auto & [spec, reason, group_query, settings] : groups_to_remove) {
         for (const auto & group : group_query) {
+            rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason, {});
+            if (settings.group_no_packages) {
+                continue;
+            }
             // get all packages installed by the group
             rpm::PackageQuery group_packages(query_installed);
             group_packages.filter_name(system_state.get_group_state(group.get_groupid()).packages);
@@ -1526,7 +1533,6 @@ void Goal::Impl::add_group_remove_to_goal(
 
                 remove_candidates.add(pkg);
             }
-            rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason, {});
         }
     }
     if (remove_candidates.empty()) {
