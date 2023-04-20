@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_sack_weak.hpp"
 
 extern "C" {
+#include <solv/queue.h>
 #include <solv/solver.h>
 }
 
@@ -40,6 +41,15 @@ void ModuleGoalPrivate::add_provide_install(Id reldepid, bool skip_broken, bool 
         SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
             (best ? SOLVER_FORCEBEST : 0),
         reldepid);
+}
+
+
+void ModuleGoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best) {
+    Id what = pool_queuetowhatprovides(module_sack->p_impl->pool, &queue.get_queue());
+    staging.push_back(
+        SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
+            (best ? SOLVER_FORCEBEST : 0),
+        what);
 }
 
 
