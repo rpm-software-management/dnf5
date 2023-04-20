@@ -81,21 +81,28 @@ Autoremove command
  * Dropped `<spec>` positional argument since the usecase is sufficiently covered by the `remove` command.
  * Specific `autoremove-n`, `autoremove-na`, and `autoremove-nevra` variants of the command are not supported.
 
+Group command
+-------------
+ * Dropped `group mark install` and `group mark remove` subcommands in favour of the
+   new `--no-packages` option of the `group install/remove` commands. So for example
+   to mark a group as installed without touching any packages,
+   `dnf5 group install --no-packages <group_id>` command can be used.
+
 List command
 ------------
  * Dropped `--all` option since this behavior is now the default one.
  * Changed the list of `--available` packages. Previously, dnf4 only listed packages that are either not installed, or
- whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip
- packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
- is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
+   whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip
+   packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
+   is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
 Repoquery command
 -----------------
  * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
- dnf5. The options are no longer needed.
+   dnf5. The options are no longer needed.
  * Dopped: `--nvr`, `--envra` options. They are no longer supported.
 
 Upgrade command
 ---------------
  * New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for
- `upgrade --minimal`).
+   `upgrade --minimal`).
