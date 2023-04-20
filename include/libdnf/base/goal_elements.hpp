@@ -159,6 +159,10 @@ public:
         return group_package_types ? &group_package_types.value() : nullptr;
     }
 
+    /// If set to true, group operations (install / remove) will only work
+    /// with the group itself, but will not add to the transaction any packages.
+    bool group_no_packages{false};
+
     /// Set whether hints should be reported
     bool report_hint{true};
     /// Set skip_broken, AUTO means that it is handled according to the default behavior
