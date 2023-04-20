@@ -34,6 +34,7 @@ void GroupRemoveCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Remove comp groups, including their packages");
 
+    no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 }
 
@@ -49,6 +50,9 @@ void GroupRemoveCommand::run() {
     auto goal = ctx.get_goal();
 
     libdnf::GoalJobSettings settings;
+    if (no_packages->get_value()) {
+        settings.group_no_packages = true;
+    }
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_remove(spec, libdnf::transaction::TransactionItemReason::USER, settings);
     }
