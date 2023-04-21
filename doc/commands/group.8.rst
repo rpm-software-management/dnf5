@@ -40,15 +40,35 @@ Optional ``group-spec`` arguments could be passed to filter only groups with giv
 Subcommands
 ===========
 
-``install``
-    | Install comps groups, including their packages.
-
 ``list``
-    | List available groups.
+    List all matching groups, either among installed or available groups. If
+    nothing is specified, list all known groups. ``--installed`` and ``--available``
+    options narrow down the requested list. If ``--hidden`` option is used, also
+    hidden groups are included in the list.
 
 ``info``
-    | Print details about groups.
+    Print detailed information about groups.
+    The command accepts the same options as the ``list`` subcommand.
 
+``install``
+    Mark the specified groups installed and install packages it contains.
+    Also include optional packages of the group if the ``--with-optional`` option is
+    specified. All `Mandatory` and `Default` packages will be installed whenever
+    possible. `Conditional` packages are installed if they meet their requirement.
+    If the group is already (partially) installed, the command  installs the missing
+    packages from the group.
+
+    If the ``--no-packages`` option is used, no new packages will be installed by
+    this command. Only currently installed group packages are considered to be installed
+    with the group.
+
+``remove``
+    Mark the group removed and remove those packages in the group  from  the
+    system  which  do not belong to another installed group and were not installed
+    explicitly by the user.
+
+    If the ``--no-packages`` option is used, no packages will be removed by this
+    command.
 
 Options
 =======
@@ -64,6 +84,9 @@ Options
 
 ``--with-optional``
     | Used with ``install`` command to include optional packages from the groups.
+
+``--no-packages``
+    | Used with ``install`` and ``remove`` commands to operate exclusively on the groups without manipulating any packages.
 
 Examples
 ========
