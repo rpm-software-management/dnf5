@@ -102,18 +102,21 @@ void DownloadCommand::run() {
     auto & ctx = get_context();
 
     std::vector<libdnf::rpm::Package> download_pkgs;
-    libdnf::rpm::PackageSet result_pset(ctx.base);
+    libdnf::rpm::PackageQuery result_query =
+        libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         package_query.resolve_pkg_spec(option->get_value(), {}, true);
-        result_pset |= package_query;
+        result_query |= package_query;
     }
+    result_query.filter_priority();
+    result_query.filter_latest_evr();
     if (resolve_option->get_value()) {
         auto goal = std::make_unique<libdnf::Goal>(ctx.base);
         libdnf::GoalJobSettings settings;
-        for (auto pkg : result_pset) {
+        for (auto pkg : result_query) {
             goal->add_rpm_install(pkg, settings);
         }
         auto transaction = goal->resolve();
@@ -131,8 +134,8 @@ void DownloadCommand::run() {
             }
         }
     } else {
-        download_pkgs.reserve(result_pset.size());
-        for (auto package : result_pset) {
+        download_pkgs.reserve(result_query.size());
+        for (auto package : result_query) {
             download_pkgs.push_back(std::move(package));
         }
     }
