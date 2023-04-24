@@ -44,6 +44,8 @@ Options
 ``--alldeps``
     | To be used together with ``--resolve``, it downloads all dependencies, not skipping the already installed ones.
 
+``--destdir=<path>``
+    Set directory used for downloading packages to. Default location is to the current working directory.
 
 Examples
 ========
@@ -57,6 +59,8 @@ Examples
 ``dnf5 download maven-compiler-plugin --resolve --alldeps``
     | Download the ``maven-compiler-plugin`` package with all its dependencies.
 
+``dnf5 download --destdir /tmp/my_packages maven-compiler-plugin``
+    | Download the ``maven-compiler-plugin`` package to ``/tmp/my_packages`` directory.
 
 See Also
 ========
