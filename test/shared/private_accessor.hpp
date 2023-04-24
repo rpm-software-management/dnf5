@@ -23,10 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 // A getter generating structure
-#define create_private_getter_template                         \
-    template <typename AccessTag, typename T, T value>         \
-    struct PrivateGetter {                                     \
-        friend constexpr auto get(AccessTag) { return value; } \
+#define create_private_getter_template                 \
+    template <typename AccessTag, typename T, T value> \
+    struct PrivateGetter {                             \
+        friend constexpr auto get(AccessTag) {         \
+            return value;                              \
+        }                                              \
     }
 
 // Helper macro with automatic member type deduction

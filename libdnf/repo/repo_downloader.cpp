@@ -533,7 +533,7 @@ void RepoDownloader::apply_http_headers(LibrepoHandle & handle) {
     std::unique_ptr<char * [], std::function<void(char **)>> lr_headers {
         nullptr, [](char ** ptr) {
             for (auto item = ptr; *item != nullptr; ++item) {
-                delete[] * item;
+                delete[] *item;
             }
             delete[] ptr;
         }

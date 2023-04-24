@@ -28,8 +28,8 @@ namespace libdnf::utils {
 /// intended to call its exit function when a scope is exited.
 template <typename TExitFunction>
     requires requires(TExitFunction f) {
-                 { f() } noexcept;
-             }
+        { f() } noexcept;
+    }
 class OnScopeExit {
 public:
     OnScopeExit(TExitFunction && function) noexcept : exit_function{std::move(function)} {}
