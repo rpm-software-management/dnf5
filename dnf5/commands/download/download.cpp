@@ -57,6 +57,8 @@ void DownloadCommand::set_argument_parser() {
 
     alldeps_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    destdir_option =
+        dynamic_cast<libdnf::OptionString *>(parser.add_init_value(std::make_unique<libdnf::OptionString>(".")));
 
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
@@ -71,8 +73,17 @@ void DownloadCommand::set_argument_parser() {
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
 
-    cmd.register_named_arg(resolve);
+    auto destdir = parser.add_new_named_arg("destdir");
+    destdir->set_long_name("destdir");
+    destdir->set_description(
+        "Set directory used for downloading packages to. Default location is to the current working directory");
+    destdir->set_has_value(true);
+    destdir->set_arg_value_help("DESTDIR");
+    destdir->link_value(destdir_option);
+
     cmd.register_named_arg(alldeps);
+    cmd.register_named_arg(destdir);
+    cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
 }
 
@@ -141,8 +152,9 @@ void DownloadCommand::run() {
         }
     }
 
+    printf("tests %s\n", destdir_option->get_value().c_str());
     if (!download_pkgs.empty()) {
-        download_packages(download_pkgs, ".");
+        download_packages(download_pkgs, destdir_option->get_value().c_str());
     }
 }
 
