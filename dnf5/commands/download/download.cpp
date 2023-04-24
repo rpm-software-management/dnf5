@@ -109,10 +109,11 @@ void DownloadCommand::run() {
         libdnf::rpm::PackageQuery package_query(full_package_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         package_query.resolve_pkg_spec(option->get_value(), {}, true);
+        package_query.filter_priority();
+        package_query.filter_latest_evr();
         result_query |= package_query;
     }
-    result_query.filter_priority();
-    result_query.filter_latest_evr();
+
     if (resolve_option->get_value()) {
         auto goal = std::make_unique<libdnf::Goal>(ctx.base);
         libdnf::GoalJobSettings settings;
