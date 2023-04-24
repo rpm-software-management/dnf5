@@ -113,8 +113,7 @@ void DownloadCommand::run() {
     auto & ctx = get_context();
 
     std::vector<libdnf::rpm::Package> download_pkgs;
-    libdnf::rpm::PackageQuery result_query =
-        libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf::rpm::PackageSet result_query(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);
@@ -152,7 +151,6 @@ void DownloadCommand::run() {
         }
     }
 
-    printf("tests %s\n", destdir_option->get_value().c_str());
     if (!download_pkgs.empty()) {
         download_packages(download_pkgs, destdir_option->get_value().c_str());
     }
