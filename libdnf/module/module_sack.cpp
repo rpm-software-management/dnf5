@@ -386,9 +386,7 @@ void ModuleSack::Impl::recompute_considered_in_pool() {
 
 
 void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
-    if (!goal.get_transaction()) {
-        active_modules.clear();
-    }
+    active_modules.clear();
 
     std::set<std::string> solvable_names;
     for (auto id : goal.list_installs()) {
