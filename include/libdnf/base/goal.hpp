@@ -307,6 +307,18 @@ public:
         const libdnf::transaction::TransactionItemReason reason,
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// Add group upgrade request to the goal.
+    /// Upgrades the packages from the group and upgrades the group itself. The
+    /// latter  comprises of installing packages that were added to the group by
+    /// the distribution and removing packages that got removed from  the  group
+    /// as far as they were not installed explicitly by the user and are not required
+    /// by any other installed package.
+    ///
+    /// @param spec         A string with group specification
+    /// @param settings     A structure to override default goal settings.
+    void add_group_upgrade(
+        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
     /// Request to install providers of the `spec`. Useful to install package
     /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not
     /// parsed but directly passed to the solver to install package(s) which

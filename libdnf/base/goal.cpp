@@ -125,6 +125,8 @@ public:
     void add_group_remove_to_goal(
         std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>> &
             groups_to_remove);
+    void add_group_upgrade_to_goal(
+        base::Transaction & transaction, comps::GroupQuery group_query, GoalJobSettings & settings);
 
     GoalProblem add_reason_change_to_goal(
         base::Transaction & transaction,
@@ -165,6 +167,9 @@ private:
 
     rpm::solv::GoalPrivate rpm_goal;
     bool allow_erasing{false};
+
+    void install_group_package(base::Transaction & transaction, libdnf::comps::Package pkg);
+    void remove_group_packages(const rpm::PackageSet & remove_candidates);
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -406,6 +411,12 @@ void Goal::add_group_remove(
     p_impl->group_specs.push_back(std::make_tuple(GoalAction::REMOVE, reason, spec, settings));
 }
 
+void Goal::add_group_upgrade(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+    // upgrade keeps old reason, thus use NONE here
+    p_impl->group_specs.push_back(
+        std::make_tuple(GoalAction::UPGRADE, libdnf::transaction::TransactionItemReason::NONE, spec, settings));
+}
+
 GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     auto sack = base->get_rpm_package_sack();
     auto & cfg_main = base->get_config();
@@ -486,15 +497,16 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     auto & cfg_main = base->get_config();
+    // (spec, reason, query, settings)
+    using GroupItem = std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>;
     // To correctly remove all unneeded group packages when a group is removed,
     // the list of all other removed groups in the transaction is needed.
     // Therefore resolve spec -> group_query first.
-    std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>>
-        groups_remove, groups_install;
+    std::map<GoalAction, std::vector<GroupItem>> groups_action;
     for (auto & [action, reason, spec, settings] : group_specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
-        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE) {
+        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE && action != GoalAction::UPGRADE) {
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::UNSUPPORTED_ACTION,
@@ -536,19 +548,19 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
                 ret |= GoalProblem::NOT_FOUND;
             }
         } else {
-            if (action == GoalAction::INSTALL) {
-                groups_install.emplace_back(spec, reason, std::move(group_query), settings);
-            } else if (action == GoalAction::REMOVE) {
-                groups_remove.emplace_back(spec, reason, std::move(group_query), settings);
-            }
+            groups_action[action].push_back({spec, reason, std::move(group_query), settings});
         }
     }
 
     // process group removals first
-    add_group_remove_to_goal(groups_remove);
+    add_group_remove_to_goal(groups_action[GoalAction::REMOVE]);
 
-    for (auto & [spec, reason, group_query, settings] : groups_install) {
+    for (auto & [spec, reason, group_query, settings] : groups_action[GoalAction::INSTALL]) {
         add_group_install_to_goal(transaction, reason, group_query, settings);
+    }
+
+    for (auto & [spec, reason, group_query, settings] : groups_action[GoalAction::UPGRADE]) {
+        add_group_upgrade_to_goal(transaction, group_query, settings);
     }
 
     return ret;
@@ -1381,6 +1393,72 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     }
 }
 
+void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf::comps::Package pkg) {
+    auto pkg_settings = GoalJobSettings();
+    pkg_settings.with_provides = false;
+    pkg_settings.with_filenames = false;
+    pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+
+    // TODO(mblaha): apply pkg.basearchonly when available in comps
+    auto pkg_name = pkg.get_name();
+    auto pkg_condition = pkg.get_condition();
+    if (pkg_condition.empty()) {
+        auto [pkg_problem, pkg_queue] =
+            // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
+            add_install_to_goal(transaction, GoalAction::INSTALL_BY_GROUP, pkg_name, pkg_settings);
+        rpm_goal.add_transaction_group_installed(pkg_queue);
+    } else {
+        // check whether condition can even be met
+        rpm::PackageQuery condition_query(base);
+        condition_query.filter_name(std::vector<std::string>{pkg_condition});
+        if (!condition_query.empty()) {
+            // remember names to identify GROUP reason of conditional packages
+            rpm::PackageQuery query(base);
+            query.filter_name(std::vector<std::string>{pkg_name});
+            // TODO(mblaha): log absence of pkg in case the query is empty
+            if (!query.empty()) {
+                add_provide_install_to_goal(fmt::format("({} if {})", pkg_name, pkg_condition), pkg_settings);
+                rpm_goal.add_transaction_group_installed(*query.p_impl);
+            }
+        }
+    }
+}
+
+void Goal::Impl::remove_group_packages(const rpm::PackageSet & remove_candidates) {
+    // all installed packages, that are not candidates for removal
+    rpm::PackageQuery dependent_base(base);
+    dependent_base.filter_installed();
+    {
+        // create auxiliary goal to resolve all unused dependencies that are going to be
+        // removed together with removal candidates
+        Goal goal_tmp(base);
+        goal_tmp.add_rpm_remove(remove_candidates);
+        for (const auto & tspkg : goal_tmp.resolve().get_transaction_packages()) {
+            if (transaction_item_action_is_outbound(tspkg.get_action())) {
+                dependent_base.remove(tspkg.get_package());
+            }
+        }
+    }
+
+    // The second step of packages removal - filter out packages that are
+    // dependencies of a package that is not also being removed.
+    libdnf::solv::IdQueue packages_to_remove_ids;
+    for (const auto & pkg : remove_candidates) {
+        // if the package is required by another installed package, it is
+        // not removed, but it's reason is changed to DEPENDENCY
+        rpm::PackageQuery dependent(dependent_base);
+        dependent.filter_requires(pkg.get_provides());
+        if (dependent.size() > 0) {
+            rpm_goal.add_reason_change(pkg, transaction::TransactionItemReason::DEPENDENCY, std::nullopt);
+        } else {
+            packages_to_remove_ids.push_back(pkg.get_id().id);
+        }
+    }
+
+    auto & cfg_main = base->get_config();
+    rpm_goal.add_remove(packages_to_remove_ids, cfg_main.get_clean_requirements_on_remove_option().get_value());
+}
+
 void Goal::Impl::add_group_install_to_goal(
     base::Transaction & transaction,
     const transaction::TransactionItemReason reason,
@@ -1388,11 +1466,6 @@ void Goal::Impl::add_group_install_to_goal(
     GoalJobSettings & settings) {
     auto & cfg_main = base->get_config();
     auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
-    auto pkg_settings = GoalJobSettings();
-    // TODO(mblaha): consider inheriting from `settings`
-    pkg_settings.with_provides = false;
-    pkg_settings.with_filenames = false;
-    pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
     for (auto group : group_query) {
         std::vector<libdnf::comps::Package> packages;
         // TODO(mblaha): filter packages by p.arch attribute when supported by comps
@@ -1402,29 +1475,7 @@ void Goal::Impl::add_group_install_to_goal(
             }
         }
         for (const auto & pkg : packages) {
-            // TODO(mblaha): apply pkg.basearchonly when available in comps
-            auto pkg_name = pkg.get_name();
-            auto pkg_condition = pkg.get_condition();
-            if (pkg_condition.empty()) {
-                auto [pkg_problem, pkg_queue] =
-                    // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
-                    add_install_to_goal(transaction, GoalAction::INSTALL_BY_GROUP, pkg_name, pkg_settings);
-                rpm_goal.add_transaction_group_installed(pkg_queue);
-            } else {
-                // check whether condition can even be met
-                rpm::PackageQuery condition_query(base);
-                condition_query.filter_name(std::vector<std::string>{pkg_condition});
-                if (!condition_query.empty()) {
-                    // remember names to identify GROUP reason of conditional packages
-                    rpm::PackageQuery query(base);
-                    query.filter_name(std::vector<std::string>{pkg_name});
-                    // TODO(mblaha): log absence of pkg in case the query is empty
-                    if (!query.empty()) {
-                        add_provide_install_to_goal(fmt::format("({} if {})", pkg_name, pkg_condition), pkg_settings);
-                        rpm_goal.add_transaction_group_installed(*query.p_impl);
-                    }
-                }
-            }
+            install_group_package(transaction, pkg);
         }
         rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
     }
@@ -1436,8 +1487,6 @@ void Goal::Impl::add_group_remove_to_goal(
     if (groups_to_remove.empty()) {
         return;
     }
-
-    auto & cfg_main = base->get_config();
 
     // get list of group ids being removed in this transaction
     std::set<std::string> removed_groups_ids;
@@ -1484,35 +1533,92 @@ void Goal::Impl::add_group_remove_to_goal(
         return;
     }
 
-    // all installed packages, that are not candidates for removal
-    rpm::PackageQuery dependent_base(query_installed);
-    {
-        // create auxiliary goal to resolve all unused dependencies that are going to be
-        // removed together with removal candidates
-        Goal goal_tmp(base);
-        goal_tmp.add_rpm_remove(remove_candidates);
-        for (const auto & tspkg : goal_tmp.resolve().get_transaction_packages()) {
-            if (transaction_item_action_is_outbound(tspkg.get_action())) {
-                dependent_base.remove(tspkg.get_package());
+    remove_group_packages(remove_candidates);
+}
+
+void Goal::Impl::add_group_upgrade_to_goal(
+    base::Transaction & transaction, comps::GroupQuery group_query, GoalJobSettings & settings) {
+    auto & system_state = base->p_impl->get_system_state();
+    auto & cfg_main = base->get_config();
+    auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
+
+    comps::GroupQuery available_groups(base);
+    available_groups.filter_installed(false);
+
+    rpm::PackageQuery query_installed(base);
+    query_installed.filter_installed();
+    rpm::PackageSet remove_candidates(base);
+
+    for (auto installed_group : group_query) {
+        auto group_id = installed_group.get_groupid();
+        // find available group of the same id
+        comps::GroupQuery available_group_query(available_groups);
+        available_group_query.filter_groupid(group_id);
+        if (available_group_query.empty()) {
+            // group is not available any more
+            transaction.p_impl->add_resolve_log(
+                GoalAction::UPGRADE,
+                GoalProblem::NOT_AVAILABLE,
+                settings,
+                libdnf::transaction::TransactionItemType::GROUP,
+                group_id,
+                {},
+                libdnf::Logger::Level::WARNING);
+            continue;
+        }
+        auto available_group = available_group_query.get();
+        auto state_group = system_state.get_group_state(group_id);
+
+        // set of package names that are part of the installed version of the group
+        std::set<std::string> old_set{};
+        for (const auto & pkg : installed_group.get_packages()) {
+            old_set.emplace(pkg.get_name());
+        }
+        // set of package names that are part of the available version of the group
+        std::set<std::string> new_set{};
+        for (const auto & pkg : available_group.get_packages()) {
+            new_set.emplace(pkg.get_name());
+        }
+
+        // install packages newly added to the group
+        for (const auto & pkg : available_group.get_packages_of_type(state_group.package_types)) {
+            if (!old_set.contains(pkg.get_name())) {
+                install_group_package(transaction, pkg);
             }
         }
-    }
 
-    // The second step of packages removal - filter out packages that are
-    // dependencies of a package that is not also being removed.
-    libdnf::solv::IdQueue packages_to_remove_ids;
-    for (const auto & pkg : remove_candidates) {
-        // if the package is required by another installed package, it is
-        // not removed, but it's reason is changed to DEPENDENCY
-        rpm::PackageQuery dependent(dependent_base);
-        dependent.filter_requires(pkg.get_provides());
-        if (dependent.size() > 0) {
-            rpm_goal.add_reason_change(pkg, transaction::TransactionItemReason::DEPENDENCY, std::nullopt);
-        } else {
-            packages_to_remove_ids.push_back(pkg.get_id().id);
+        auto pkg_settings = GoalJobSettings();
+        pkg_settings.with_provides = false;
+        pkg_settings.with_filenames = false;
+        for (const auto & pkg_name : state_group.packages) {
+            if (new_set.contains(pkg_name)) {
+                // upgrade all packages installed with the group
+                pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+                add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
+            } else {
+                // remove those packages that are not part of the group any more
+                // and are not user-installed
+                rpm::PackageQuery query(query_installed);
+                auto nevra_pair = query.resolve_pkg_spec(pkg_name, pkg_settings, false);
+                if (nevra_pair.first) {
+                    for (const auto & pkg : query) {
+                        if (pkg.get_reason() <= transaction::TransactionItemReason::GROUP) {
+                            remove_candidates.add(pkg);
+                        }
+                    }
+                }
+            }
         }
+        // upgrade the group itself
+        rpm_goal.add_group(
+            available_group,
+            transaction::TransactionItemAction::UPGRADE,
+            installed_group.get_reason(),
+            allowed_package_types);
     }
-    rpm_goal.add_remove(packages_to_remove_ids, cfg_main.get_clean_requirements_on_remove_option().get_value());
+    if (!remove_candidates.empty()) {
+        remove_group_packages(remove_candidates);
+    }
 }
 
 GoalProblem Goal::Impl::add_reason_change_to_goal(
