@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_install.hpp"
 #include "group_list.hpp"
 #include "group_remove.hpp"
+#include "group_upgrade.hpp"
 
 namespace dnf5 {
 
@@ -51,6 +52,7 @@ void GroupCommand::register_subcommands() {
     get_argument_parser_command()->register_group(software_management_commands_group);
     register_subcommand(std::make_unique<GroupInstallCommand>(get_context()), software_management_commands_group);
     register_subcommand(std::make_unique<GroupRemoveCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<GroupUpgradeCommand>(get_context()), software_management_commands_group);
 }
 
 void GroupCommand::pre_configure() {
