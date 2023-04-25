@@ -168,6 +168,9 @@ public:
                 case libdnf::transaction::TransactionItemAction::REMOVE:
                     text = "Removing groups";
                     break;
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                    text = "Upgrading groups";
+                    break;
                 default:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
