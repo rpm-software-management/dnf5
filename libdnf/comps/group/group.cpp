@@ -154,13 +154,13 @@ std::vector<Package> Group::get_packages() {
 
 
 std::vector<Package> Group::get_packages_of_type(PackageType type) {
-    std::vector<Package> packages_ot_type;
+    std::vector<Package> packages_of_type;
     for (auto package : get_packages()) {
-        if (package.get_type() == type) {
-            packages_ot_type.push_back(package);
+        if (static_cast<bool>(package.get_type() & type)) {
+            packages_of_type.push_back(package);
         }
     }
-    return packages_ot_type;
+    return packages_of_type;
 }
 
 
