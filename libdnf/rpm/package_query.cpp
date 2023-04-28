@@ -1497,6 +1497,12 @@ void PackageQuery::filter_provides(const ReldepList & reldep_list, libdnf::sack:
     }
 }
 
+void PackageQuery::filter_provides(const Reldep & reldep, libdnf::sack::QueryCmp cmp_type) {
+    libdnf::rpm::ReldepList reldep_list{p_impl->base};
+    reldep_list.add(reldep.get_id());
+    filter_provides(reldep_list, cmp_type);
+}
+
 /// Provide libdnf::sack::QueryCmp without NOT flag
 void PackageQuery::PQImpl::str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern) {

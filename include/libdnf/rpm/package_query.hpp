@@ -264,6 +264,14 @@ public:
 
     /// Filter packages by their `provides`.
     ///
+    /// @param reldep           RelDep object the filter is matched against.
+    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`.
+    /// @since 5.0
+    void filter_provides(const Reldep & reldep, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `provides`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
