@@ -1,0 +1,30 @@
+# from: https://github.com/packit/packit/blob/main/.github/workflows/prepare-release.yml
+name: Prepare a new release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: Version number for the new release
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Prepare release content
+        uses: packit/prepare-release@v1
+        with:
+          version: ${{ inputs.version }}
+          specfiles: dnf5.spec
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          labels: release
+          commit-message: Release ${{ inputs.version }}
+          title: Release ${{ inputs.version }}
+          body: Update the changelog and the specfile for release ${{ inputs.version }}.
+          delete-branch: true

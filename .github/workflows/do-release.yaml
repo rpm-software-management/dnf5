@@ -1,0 +1,25 @@
+# from: https://github.com/packit/packit/blob/main/.github/workflows/do_release.yml
+name: Create a GitHub release once a release PR is merged
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release') && github.repository_owner == 'rpm-software-management'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create GitHub release
+        run: |
+          VERSION=$(grep -oP '^# \K[0-9.]*' CHANGELOG.md | head -n 1)
+          # Take the lines between the first two headers from CHANGELOG.md,
+          # and use it as a description for the new release.
+          CHANGELOG=$(awk 'BEGIN { first = 0 } /^# / { if (first == 0) { first = 1 } else { exit } } /^[^#]/ { print $0 }' CHANGELOG.md)
+          # Use the changelog re-calculated to create a new release
+          gh release create ${VERSION} --draft --title ${VERSION} -n "${CHANGELOG}"
+        env:
+          GH_TOKEN: ${{ secrets.RELEASEBOT_GITHUB_TOKEN }}
