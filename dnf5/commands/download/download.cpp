@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_set.hpp>
 
 #include <iostream>
-#include <set>
+#include <map>
 
 
 namespace dnf5 {
@@ -110,16 +110,21 @@ void DownloadCommand::configure() {
 void DownloadCommand::run() {
     auto & ctx = get_context();
 
-    std::set<libdnf::rpm::Package> download_pkgs;
+    auto create_nevra_pkg_pair = [](const libdnf::rpm::Package & pkg) { return std::make_pair(pkg.get_nevra(), pkg); };
+
+    std::map<std::string, libdnf::rpm::Package> download_pkgs;
     libdnf::rpm::PackageQuery full_pkg_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::PackageQuery pkg_query(full_pkg_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         pkg_query.resolve_pkg_spec(option->get_value(), {}, true);
+        pkg_query.filter_available();
         pkg_query.filter_priority();
         pkg_query.filter_latest_evr();
 
         for (const auto & pkg : pkg_query) {
+            download_pkgs.insert(create_nevra_pkg_pair(pkg));
+
             if (resolve_option->get_value()) {
                 auto goal = std::make_unique<libdnf::Goal>(ctx.base);
                 goal->add_rpm_install(pkg, {});
@@ -134,11 +139,9 @@ void DownloadCommand::run() {
                 for (auto & tspkg : transaction.get_transaction_packages()) {
                     if (transaction_item_action_is_inbound(tspkg.get_action()) &&
                         tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
-                        download_pkgs.insert(tspkg.get_package());
+                        download_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
                     }
                 }
-            } else {
-                download_pkgs.insert(std::move(pkg));
             }
         }
     }
@@ -149,7 +152,7 @@ void DownloadCommand::run() {
         // for download command, we don't want to mark the packages for removal
         downloader.force_keep_packages(true);
 
-        for (auto & pkg : download_pkgs) {
+        for (auto & [nevra, pkg] : download_pkgs) {
             downloader.add(pkg);
         }
 
