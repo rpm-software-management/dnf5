@@ -4,7 +4,7 @@ includedir=${prefix}/include
 
 Name: libdnf-cli
 Description: Library for working with a terminal in a command-line package manager
-Version: @PROGRAM_VERSION@
+Version: @PROJECT_VERSION@
 Requires: @LIBDNF_CLI_PC_REQUIRES_STRING@
 Requires.private: @LIBDNF_CLI_PC_REQUIRES_PRIVATE_STRING@
 Libs: -L${libdir} -ldnf-cli
