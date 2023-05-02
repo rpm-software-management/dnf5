@@ -248,6 +248,16 @@ ReldepList Package::get_supplements() const {
     return list;
 }
 
+ReldepList Package::get_depends() const {
+    ReldepList list(base);
+    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_REQUIRES);
+    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_ENHANCES);
+    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUGGESTS);
+    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUPPLEMENTS);
+    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_RECOMMENDS);
+    return list;
+}
+
 ReldepList Package::get_prereq_ignoreinst() const {
     ReldepList list(base);
     reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_PREREQ_IGNOREINST);

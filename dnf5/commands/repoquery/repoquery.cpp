@@ -260,6 +260,7 @@ void RepoqueryCommand::set_argument_parser() {
 
     std::vector<std::string> pkg_attrs_options{
         "conflicts",
+        "depends",
         "enhances",
         "obsoletes",
         "provides",

@@ -68,6 +68,7 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"suggests", &libdnf::rpm::Package::get_suggests},
     {"enhances", &libdnf::rpm::Package::get_enhances},
     {"supplements", &libdnf::rpm::Package::get_supplements},
+    {"depends", &libdnf::rpm::Package::get_depends},
     {"from_repo", &libdnf::rpm::Package::get_from_repo_id},
     {"installtime", &libdnf::rpm::Package::get_install_time},
     {"repoid", &libdnf::rpm::Package::get_repo_id},

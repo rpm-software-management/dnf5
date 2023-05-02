@@ -316,6 +316,10 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_supplements(DnfPackage * pkg)
     ReldepList get_supplements() const;
 
+    /// @return List of RPM package dependencies (requries + enhances + suggests + supplements + recommends).
+    /// @since 5.0.10
+    ReldepList get_depends() const;
+
     // ===== FILE LIST (filelists.xml) =====
 
     /// @return List of files and directories the RPM package contains (`RPMTAG_FILENAMES`).
