@@ -64,10 +64,18 @@ void construct_job(
     bool allow_erasing,
     const libdnf::solv::SolvMap * protected_packages,
     libdnf::rpm::PackageId protected_kernel,
-    const libdnf::solv::IdQueue * user_installed_packages) {
+    const libdnf::solv::IdQueue * user_installed_packages,
+    const libdnf::solv::SolvMap * exclude_from_weak) {
     // turn off implicit obsoletes for installonly packages
     for (int i = 0; i < install_only.size(); ++i) {
         job.push_back(SOLVER_MULTIVERSION | SOLVER_SOLVABLE_PROVIDES, install_only[i]);
+    }
+
+    // Mark to solver to not use them to satisfy weak dependencies
+    if (exclude_from_weak) {
+        for (auto id : *exclude_from_weak) {
+            job.push_back(SOLVER_SOLVABLE | SOLVER_EXCLUDEFROMWEAK, id);
+        }
     }
 
     if (allow_erasing) {
@@ -334,7 +342,8 @@ libdnf::GoalProblem GoalPrivate::resolve() {
         allow_erasing,
         protected_packages.get(),
         protected_running_kernel,
-        user_installed_packages.get());
+        user_installed_packages.get(),
+        exclude_from_weak.get());
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
@@ -643,6 +652,14 @@ void GoalPrivate::add_transaction_group_installed(const libdnf::solv::SolvMap & 
         transaction_group_installed.reset(new libdnf::solv::SolvMap(solvmap));
     } else {
         *transaction_group_installed |= solvmap;
+    }
+}
+
+void GoalPrivate::add_exclude_from_weak(const libdnf::solv::SolvMap & solvmap) {
+    if (!exclude_from_weak) {
+        exclude_from_weak.reset(new libdnf::solv::SolvMap(solvmap));
+    } else {
+        *exclude_from_weak |= solvmap;
     }
 }
 
