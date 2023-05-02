@@ -226,6 +226,8 @@ public:
     const OptionStringList & get_includepkgs_option() const;
     OptionStringList & get_exclude_from_weak_option();
     const OptionStringList & get_exclude_from_weak_option() const;
+    OptionBool & get_exclude_from_weak_autodetect_option();
+    const OptionBool & get_exclude_from_weak_autodetect_option() const;
     OptionString & get_proxy_option();
     const OptionString & get_proxy_option() const;
     OptionString & get_proxy_username_option();
