@@ -31,6 +31,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
+namespace libdnf {
+
+class Goal;
+
+}
+
+namespace libdnf::base {
+
+class Transaction;
+
+}
+
 namespace libdnf::repo {
 
 class Repo;
@@ -95,6 +107,8 @@ public:
 
 private:
     friend class libdnf::Base;
+    friend class libdnf::Goal;
+    friend class libdnf::base::Transaction;
     friend class libdnf::repo::Repo;
     friend class libdnf::repo::RepoSack;
     friend ModuleItem;

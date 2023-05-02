@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/transaction_environment.hpp"
 #include "libdnf/base/transaction_group.hpp"
+#include "libdnf/base/transaction_module.hpp"
 #include "libdnf/base/transaction_package.hpp"
 
 #include <memory>

@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory/advisory_package_private.hpp"
 #include "base_private.hpp"
+#include "module/module_goal_private.hpp"
+#include "module/module_sack_impl.hpp"
 #include "rpm/package_query_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "rpm/package_set_impl.hpp"
@@ -35,6 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/query.hpp"
+#include "libdnf/module/module_errors.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/reldep.hpp"
 #include "libdnf/utils/patterns.hpp"
@@ -100,6 +103,7 @@ public:
     GoalProblem resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction);
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
+    GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
@@ -2060,6 +2064,21 @@ bool Goal::get_allow_erasing() const {
 }
 
 base::Transaction Goal::resolve() {
+    libdnf_user_assert(p_impl->base->is_initialized(), "Base instance was not fully initialized by Base::setup()");
+
+    // Enable modules
+    module::ModuleSack & module_sack = p_impl->base->module_sack;
+    for (auto module_enable_spec : p_impl->module_enable_specs) {
+        module_sack.p_impl->enable(module_enable_spec);
+    }
+
+    // Resolve modules
+    auto module_error = module_sack.resolve_active_module_items().second;
+    if (module_error != libdnf::module::ModuleSack::ModuleErrorType::NO_ERROR) {
+        throw module::ModuleResolveError(M_("Failed to resolve modules."));
+    }
+    module_sack.p_impl->enable_dependent_modules();
+
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
     p_impl->add_paths_to_goal();
@@ -2159,7 +2178,7 @@ base::Transaction Goal::resolve() {
             libdnf::Logger::Level::WARNING);
     }
 
-    transaction.p_impl->set_transaction(p_impl->rpm_goal, ret);
+    transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
 
     return transaction;
 }

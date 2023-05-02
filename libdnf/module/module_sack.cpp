@@ -404,6 +404,54 @@ void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
 }
 
 
+// TODO(pkratoch): Could be done more efficiently, e.g. dnf4 used PackageSets
+void ModuleSack::Impl::enable_dependent_modules() {
+    std::map<std::string, std::vector<std::string>> modules_to_enable;
+
+    // Go through newly enabled active module items and store their dependencies in modules_to_enable
+    for (const auto & active_module : active_modules) {
+        const auto & state = module_db->get_runtime_module_state(active_module.second->get_name());
+        if (state.original.status != ModuleStatus::ENABLED && state.changed.status == ModuleStatus::ENABLED) {
+            for (const auto & dependency : active_module.second->get_module_dependencies()) {
+                try {
+                    if (module_db->get_status(dependency.get_module_name()) == ModuleStatus::AVAILABLE) {
+                        modules_to_enable.emplace(dependency.get_module_name(), dependency.get_streams());
+                    }
+                } catch (NoModuleError &) {
+                    ;
+                }
+            }
+        }
+    }
+
+    // While there are some modules to enable, search for corresponding active module items and enable them + process their dependencies
+    while (!modules_to_enable.empty()) {
+        for (const auto & active_module : active_modules) {
+            const auto & module_name = active_module.second->get_name();
+            const auto & module_stream = active_module.second->get_stream();
+            const auto & module_to_enable = modules_to_enable.find(module_name);
+            // If this module_item is in the modules_to_enable, enable it + process its dependencies
+            if (module_to_enable != modules_to_enable.end() &&
+                std::find(module_to_enable->second.begin(), module_to_enable->second.end(), module_stream) !=
+                    module_to_enable->second.end()) {
+                modules_to_enable.erase(module_to_enable);
+                module_db->change_status(module_name, ModuleStatus::ENABLED);
+                module_db->change_stream(module_name, module_stream);
+                for (const auto & dependency : active_module.second->get_module_dependencies()) {
+                    try {
+                        if (module_db->get_status(dependency.get_module_name()) == ModuleStatus::AVAILABLE) {
+                            modules_to_enable.emplace(dependency.get_module_name(), dependency.get_streams());
+                        }
+                    } catch (NoModuleError &) {
+                        ;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> ModuleSack::Impl::module_solve(
     std::vector<ModuleItem *> module_items) {
     std::vector<std::vector<std::string>> problems;
