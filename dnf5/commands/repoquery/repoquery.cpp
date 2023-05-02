@@ -70,6 +70,10 @@ void RepoqueryCommand::set_argument_parser() {
     latest_limit_option = dynamic_cast<libdnf::OptionNumber<std::int32_t> *>(
         parser.add_init_value(std::make_unique<libdnf::OptionNumber<std::int32_t>>(0)));
 
+    querytags_option =
+        dynamic_cast<libdnf::OptionBool *>(parser.add_init_value(std::make_unique<libdnf::OptionBool>(false)));
+
+
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_description("Limit to available packages (default).");
@@ -101,6 +105,12 @@ void RepoqueryCommand::set_argument_parser() {
     info->set_description("Show detailed information about the packages.");
     info->set_const_value("true");
     info->link_value(info_option);
+
+    auto query_tags = parser.add_new_named_arg("querytags");
+    query_tags->set_long_name("querytags");
+    query_tags->set_description("Display available tags for --queryformat.");
+    query_tags->set_const_value("true");
+    query_tags->link_value(querytags_option);
 
     auto query_format = parser.add_new_named_arg("queryformat");
     query_format->set_long_name("queryformat");
@@ -294,6 +304,8 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(info);
     repoquery_formatting->register_argument(query_format);
     cmd.register_named_arg(query_format);
+    repoquery_formatting->register_argument(query_tags);
+    cmd.register_named_arg(query_tags);
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
@@ -539,7 +551,9 @@ void RepoqueryCommand::run() {
         }
     }
 
-    if (info_option->get_value()) {
+    if (querytags_option->get_value()) {
+        libdnf::cli::output::print_available_pkg_attrs(stdout);
+    } else if (info_option->get_value()) {
         for (auto package : result_pset) {
             libdnf::cli::output::print_package_info_table(package);
             std::cout << '\n';

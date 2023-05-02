@@ -74,7 +74,15 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"repoid", &libdnf::rpm::Package::get_repo_id},
 };
 
-//TODO(amatej): Use keys of NAME_TO_GETTER for --querytags options
+void print_available_pkg_attrs(std::FILE * target) {
+    std::set<std::string> output;
+    for (const auto & pair : NAME_TO_GETTER) {
+        output.insert(pair.first);
+    }
+    for (const auto & line : output) {
+        fmt::print(target, "{}\n", line);
+    }
+}
 
 // Argument format contains partially copied and converted queryformat, for example: "name: %-30{{name".
 // We know the tag "name" is valid so this function check align spec "-30" and if it is valid
