@@ -156,6 +156,9 @@ public:
     void add_transaction_group_installed(const libdnf::solv::IdQueue & idqueue);
     void add_transaction_group_installed(const libdnf::solv::SolvMap & solvmap);
 
+    /// Add packages that should not be used by solver to satisfy weak dependencies
+    void add_exclude_from_weak(const libdnf::solv::SolvMap & solvmap);
+
 private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
 
@@ -171,6 +174,9 @@ private:
     std::unique_ptr<libdnf::solv::SolvMap> transaction_group_installed;
     // packages explicitely user-installed in this transaction
     std::unique_ptr<libdnf::solv::SolvMap> transaction_user_installed;
+
+    // packages that should be not included to satisfy weak dependencies
+    std::unique_ptr<libdnf::solv::SolvMap> exclude_from_weak;
 
     libdnf::solv::Solver libsolv_solver;
     ::Transaction * libsolv_transaction{nullptr};
@@ -219,6 +225,9 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     }
     if (src.user_installed_packages) {
         user_installed_packages.reset(new libdnf::solv::IdQueue(*src.user_installed_packages));
+    }
+    if (src.exclude_from_weak) {
+        exclude_from_weak.reset(new libdnf::solv::SolvMap(*src.exclude_from_weak));
     }
 }
 
