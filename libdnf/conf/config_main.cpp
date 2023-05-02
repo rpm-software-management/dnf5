@@ -286,6 +286,7 @@ class ConfigMain::Impl {
     OptionBool fastestmirror{false};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
+    OptionStringList exclude_from_weak{std::vector<std::string>{}};
     OptionString proxy{""};
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
@@ -495,6 +496,15 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
         includepkgs,
         [&](Option::Priority priority, const std::string & value) {
             option_T_list_append(includepkgs, priority, value);
+        },
+        nullptr,
+        true);
+
+    owner.opt_binds().add(
+        "exclude_from_weak",
+        exclude_from_weak,
+        [&](Option::Priority priority, const std::string & value) {
+            option_T_list_append(exclude_from_weak, priority, value);
         },
         nullptr,
         true);
@@ -1167,6 +1177,14 @@ OptionStringList & ConfigMain::get_includepkgs_option() {
 }
 const OptionStringList & ConfigMain::get_includepkgs_option() const {
     return p_impl->includepkgs;
+}
+
+OptionStringList & ConfigMain::get_exclude_from_weak_option() {
+    return p_impl->exclude_from_weak;
+}
+
+const OptionStringList & ConfigMain::get_exclude_from_weak_option() const {
+    return p_impl->exclude_from_weak;
 }
 
 OptionString & ConfigMain::get_proxy_option() {
