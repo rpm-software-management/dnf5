@@ -77,6 +77,8 @@ void print_pkg_set_with_format(
 void print_pkg_attr_uniq_sorted(
     std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & getter_name);
 
+void print_available_pkg_attrs(std::FILE * target);
+
 }  // namespace libdnf::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
