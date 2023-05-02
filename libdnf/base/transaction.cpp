@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+#include "module/module_db.hpp"
+#include "module/module_sack_impl.hpp"
 #include "repo/temp_files_memory.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
@@ -111,6 +113,8 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
       packages(src.packages),
       groups(src.groups),
       environments(src.environments),
+      modules(src.modules),
+      module_db(src.module_db),
       resolve_logs(src.resolve_logs),
       transaction_problems(src.transaction_problems),
       signature_problems(src.signature_problems) {}
@@ -123,6 +127,8 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     packages = other.packages;
     groups = other.groups;
     environments = other.environments;
+    modules = other.modules;
+    module_db = other.module_db;
     resolve_logs = other.resolve_logs;
     transaction_problems = other.transaction_problems;
     signature_problems = other.signature_problems;
@@ -147,6 +153,10 @@ std::vector<TransactionGroup> & Transaction::get_transaction_groups() const {
 
 std::vector<TransactionEnvironment> & Transaction::get_transaction_environments() const {
     return p_impl->environments;
+}
+
+std::vector<TransactionModule> & Transaction::get_transaction_modules() const {
+    return p_impl->modules;
 }
 
 GoalProblem Transaction::Impl::report_not_found(
@@ -341,7 +351,8 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
     return p_impl->signature_problems;
 }
 
-void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
+void Transaction::Impl::set_transaction(
+    rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems) {
     auto solver_problems = process_solver_problems(base, solved_goal);
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
@@ -416,6 +427,14 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     for (auto & [group, action, reason, package_types] : solved_goal.list_groups()) {
         TransactionGroup tsgrp(group, action, reason, package_types);
         groups.emplace_back(std::move(tsgrp));
+    }
+
+    // Add modules to the transaction
+    module_db = module_sack.p_impl->module_db->get_weak_ptr();
+    for (auto & [name, stream] : module_db->get_all_newly_enabled_streams()) {
+        TransactionModule tsmodule(
+            name, stream, transaction::TransactionItemAction::ENABLE, transaction::TransactionItemReason::USER);
+        modules.emplace_back(std::move(tsmodule));
     }
 
     // Add reason change actions to the transaction
@@ -652,6 +671,16 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
 
     auto logger = base->get_logger().get();
+
+    if (!modules.empty()) {
+        module_db->save();
+        try {
+            base->p_impl->get_system_state().save();
+        } catch (const std::filesystem::filesystem_error & ex) {
+            logger->error("Cannot save system state: {}", ex.what());
+        }
+    }
+
     int pipe_out_from_scriptlets[2];
     if (pipe(pipe_out_from_scriptlets) == -1) {
         logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));

@@ -31,11 +31,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::module {
 
 
+class ModuleDB;
+using ModuleDBWeakPtr = WeakPtr<ModuleDB, false>;
+
+
 // Stores states of all modules
 // @replaces libdnf:module/ModulePackageContainer.cpp:class:ModulePackageContainer::Impl::ModulePersistor
 class ModuleDB {
 public:
     ModuleDB(const BaseWeakPtr & base) : base(base) {}
+
+    ModuleDBWeakPtr get_weak_ptr();
 
     /// Load all module states from `system::State` and create states for available modules.
     void initialize();
@@ -94,6 +100,8 @@ private:
     /// Get all module names and changes in their profiles if there are any.
     /// @param installed If `true`, get installed profiles, if `false`, get removed profiles.
     std::map<std::string, std::vector<std::string>> get_all_changed_profiles(bool installed = true) const;
+
+    WeakPtrGuard<ModuleDB, false> data_guard;
 
     BaseWeakPtr base;
 

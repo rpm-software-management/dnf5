@@ -40,6 +40,7 @@ namespace libdnf::base {
 
 class TransactionGroup;
 class TransactionEnvironment;
+class TransactionModule;
 class TransactionPackage;
 
 /// Error related to processing transaction
@@ -90,6 +91,9 @@ public:
 
     /// @return the transaction groups.
     std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
+
+    /// @return the transaction modules.
+    std::vector<libdnf::base::TransactionModule> & get_transaction_modules() const;
 
     /// @return environmental groups that are part of the transaction.
     std::vector<libdnf::base::TransactionEnvironment> & get_transaction_environments() const;
@@ -171,6 +175,7 @@ public:
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;
+    friend class TransactionModule;
     friend class TransactionPackage;
     friend class libdnf::Goal;
 

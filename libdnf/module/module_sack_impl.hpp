@@ -36,6 +36,13 @@ extern "C" {
 
 #include <optional>
 
+
+namespace libdnf::base {
+
+class Transaction;
+
+}
+
 namespace libdnf::module {
 
 
@@ -95,6 +102,10 @@ public:
     // (<name>:<stream>:<context>) into active_modules.
     void set_active_modules(ModuleGoalPrivate & goal);
 
+    // Requires resolved goal. Enable all modules that are required by any newly enabled modules.
+    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.enableDependencyTree()
+    void enable_dependent_modules();
+
     /// Resolve given module items.
     ///
     /// @param module_items Module Items to resolve.
@@ -146,6 +157,7 @@ public:
     void reset(const ModuleItem * module_item, bool count = true);
 
 private:
+    friend class libdnf::base::Transaction;
     friend ModuleSack;
     friend ModuleItem;
     friend ModuleGoalPrivate;

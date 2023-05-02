@@ -36,6 +36,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::module {
 
 
+ModuleDBWeakPtr ModuleDB::get_weak_ptr() {
+    return ModuleDBWeakPtr(this, &data_guard);
+}
+
+
 void ModuleDB::initialize() {
     if (initialized) {
         return;

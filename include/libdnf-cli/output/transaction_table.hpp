@@ -248,6 +248,53 @@ private:
 };
 
 
+class ActionHeaderPrinterModule {
+public:
+    ActionHeaderPrinterModule(struct libscols_table * table) : table(table) {}
+
+    template <class T>
+    struct libscols_line * print(const T & tsmodule) {
+        if (!current_action || *current_action != tsmodule.get_action() || !current_reason ||
+            *current_reason != tsmodule.get_reason()) {
+            auto reason = tsmodule.get_reason();
+            auto action = tsmodule.get_action();
+            current_header_line = scols_table_new_line(table, NULL);
+            std::string text;
+
+            switch (action) {
+                case libdnf::transaction::TransactionItemAction::ENABLE:
+                    text = "Enabling module streams";
+                    break;
+                case libdnf::transaction::TransactionItemAction::DISABLE:
+                    text = "Disabling module streams";
+                    break;
+                case libdnf::transaction::TransactionItemAction::RESET:
+                    text = "Resetting module streams";
+                    break;
+                default:
+                    libdnf_throw_assertion(
+                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+            }
+
+            text += ":";
+
+            scols_line_set_data(current_header_line, COL_NAME, text.c_str());
+
+            current_action = action;
+            current_reason = reason;
+        }
+
+        return current_header_line;
+    }
+
+private:
+    struct libscols_table * table = nullptr;
+    struct libscols_line * current_header_line = nullptr;
+    std::optional<libdnf::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+};
+
+
 class TransactionSummary {
 public:
     void add(const libdnf::transaction::TransactionItemAction & action) {
@@ -374,8 +421,9 @@ bool print_transaction_table(Transaction & transaction) {
     auto tspkgs = transaction.get_transaction_packages();
     auto tsgrps = transaction.get_transaction_groups();
     auto tsenvs = transaction.get_transaction_environments();
+    auto tsmodules = transaction.get_transaction_modules();
 
-    if (tspkgs.empty() && tsgrps.empty() && tsenvs.empty()) {
+    if (tspkgs.empty() && tsgrps.empty() && tsenvs.empty() && tsmodules.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
@@ -530,6 +578,16 @@ bool print_transaction_table(Transaction & transaction) {
         }
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tsenv.get_action()));
+    }
+
+    ActionHeaderPrinterModule action_header_printer_module(tb);
+    for (auto & tsmodule : tsmodules) {
+        header_ln = action_header_printer_module.print(tsmodule);
+
+        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        scols_line_set_data(ln, COL_NAME, tsmodule.get_module_name().c_str());
+        scols_line_set_data(ln, COL_EVR, tsmodule.get_module_stream().c_str());
+        scols_cell_set_color(scols_line_get_cell(ln, COL_NAME), action_color(tsmodule.get_action()));
     }
 
     scols_print_table(tb);

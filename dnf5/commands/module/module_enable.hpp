@@ -28,7 +28,11 @@ class ModuleEnableCommand : public Command {
 public:
     explicit ModuleEnableCommand(Context & context) : Command(context, "enable") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
+
+private:
+    std::vector<std::string> module_specs;
 };
 
 }  // namespace dnf5

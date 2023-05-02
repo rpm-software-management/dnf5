@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus_transaction_environment_wrapper.hpp"
 #include "dbus_transaction_group_wrapper.hpp"
+#include "dbus_transaction_module_wrapper.hpp"
 #include "dbus_transaction_package_wrapper.hpp"
 
 #include <libdnf/transaction/transaction_item_action.hpp>
@@ -41,6 +42,7 @@ public:
     std::vector<DbusTransactionEnvironmentWrapper> get_transaction_environments() const {
         return transaction_environments;
     };
+    std::vector<DbusTransactionModuleWrapper> get_transaction_modules() const { return transaction_modules; };
     std::vector<std::string> get_resolve_logs_as_strings() const { return resolve_logs; }
     void set_resolve_logs(std::vector<std::string> logs) { resolve_logs = logs; }
 
@@ -48,6 +50,7 @@ private:
     std::vector<DbusTransactionPackageWrapper> transaction_packages;
     std::vector<DbusTransactionGroupWrapper> transaction_groups;
     std::vector<DbusTransactionEnvironmentWrapper> transaction_environments;
+    std::vector<DbusTransactionModuleWrapper> transaction_modules;
     std::vector<std::string> resolve_logs;
 };
 
