@@ -106,6 +106,8 @@ Repoquery command
    dnf5. The options are no longer needed.
  * Dopped: `--nvr`, `--envra` options. They are no longer supported.
  * Moved `--groupmember` option to the Group info and list commands and renamed to `--contains-pkgs`.
+ * --queryformat/--qf no longer prints additional new line at the end of each formatted string, bringing it closer to
+   rpm --query behavior.
 
 Upgrade command
 ---------------
