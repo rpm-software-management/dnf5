@@ -3,7 +3,7 @@
 %global project_version_patch 9
 
 Name:           dnf5
-Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
+Version:        5.0.10
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
@@ -629,6 +629,9 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 
 %changelog
+* Wed May 03 2023 Packit Team <hello@packit.dev> - 5.0.10-1
+- New upstream release 5.0.10
+
 * Tue Apr 18 2023 Nicola Sella <nsella@redhat.com> - 5.0.9-1
 - New upstream release 5.0.9
 
