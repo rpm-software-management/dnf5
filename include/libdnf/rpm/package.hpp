@@ -187,6 +187,29 @@ public:
     // @replaces dnf:dnf/package.py:attribute:Package.source_name
     std::string get_source_name() const;
 
+    /// @return name of the debugsource package for this package
+    /// E.g. krb5-libs -> krb5-debugsource
+    /// @since 5.0.10
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.debugsource_name
+    std::string get_debugsource_name() const;
+
+    /// @return name of the debuginfo package for source package of this package.
+    /// E.g. krb5-libs -> krb5-debuginfo
+    /// @since 5.0.10
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.debugsource_name
+    std::string get_debuginfo_name_of_source() const;
+
+    /// @return name of the debuginfo package for this package.
+    /// If this package is a debuginfo package, return its name.
+    /// If this package is a debugsource package, returns the debuginfo package for the base package.
+    /// E.g. kernel-PAE -> kernel-PAE-debuginfo
+    /// @since 5.0.10
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.debug_name
+    std::string get_debuginfo_name() const;
+
     /// @return RPM package source package filename (`RPMTAG_SOURCERPM`).
     /// @since 5.0
     //
@@ -459,9 +482,15 @@ public:
     /// @note This isn't the repository the package was installed from.
     //
     // @replaces dnf:dnf/package.py:attribute:Package.repoid
+    std::string get_repo_id() const;
+
+    /// @return Name of the repository the package belongs to.
+    /// @since 5.0.10
+    /// @note This isn't the repository the package was installed from.
+    //
     // @replaces dnf:dnf/package.py:attribute:Package.reponame
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
-    std::string get_repo_id() const;
+    std::string get_repo_name() const;
 
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
@@ -488,6 +517,9 @@ private:
     friend class libdnf::Goal;
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Transaction;
+
+    static constexpr const char * DEBUGINFO_SUFFIX = "-debuginfo";
+    static constexpr const char * DEBUGSOURCE_SUFFIX = "-debugsource";
 
     // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
     Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
