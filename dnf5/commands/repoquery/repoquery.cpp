@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/output/repoquery.hpp"
 
+#include "libdnf/utils/patterns.hpp"
+
 #include <libdnf/advisory/advisory_query.hpp>
 #include <libdnf/conf/const.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -346,6 +348,24 @@ void RepoqueryCommand::configure() {
         available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
+    for (const auto & option :
+         {whatrequires_option,
+          whatdepends_option,
+          whatconflicts_option,
+          whatprovides_option,
+          whatobsoletes_option,
+          whatrecommends_option,
+          whatenhances_option,
+          whatsupplements_option,
+          whatsuggests_option}) {
+        for (const auto & capability : option->get_value()) {
+            if (libdnf::utils::is_file_pattern(capability)) {
+                context.base.get_config().get_optional_metadata_types_option().add_item(
+                    libdnf::METADATA_TYPE_FILELISTS);
+                return;
+            }
+        }
+    }
 }
 
 void RepoqueryCommand::load_additional_packages() {
