@@ -98,6 +98,9 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:count()
     int size() const noexcept;
 
+    /// Return true if container is empty
+    bool empty() const noexcept;
+
     /// Remove all RelDeps
     void clear();
 
