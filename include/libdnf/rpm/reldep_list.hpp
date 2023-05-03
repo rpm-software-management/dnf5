@@ -98,6 +98,9 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:count()
     int size() const noexcept;
 
+    /// Remove all RelDeps
+    void clear();
+
     libdnf::BaseWeakPtr get_base() const;
 
 private:

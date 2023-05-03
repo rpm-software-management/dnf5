@@ -140,6 +140,10 @@ int ReldepList::size() const noexcept {
     return p_impl->queue.size();
 }
 
+void ReldepList::clear() {
+    p_impl->queue.clear();
+}
+
 ReldepList::iterator ReldepList::begin() const {
     ReldepList::iterator it(*this);
     it.begin();
