@@ -140,6 +140,10 @@ int ReldepList::size() const noexcept {
     return p_impl->queue.size();
 }
 
+bool ReldepList::empty() const noexcept {
+    return p_impl->queue.size() == 0;
+}
+
 void ReldepList::clear() {
     p_impl->queue.clear();
 }
