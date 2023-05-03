@@ -108,6 +108,8 @@ Repoquery command
  * Moved `--groupmember` option to the Group info and list commands and renamed to `--contains-pkgs`.
  * --queryformat/--qf no longer prints additional new line at the end of each formatted string, bringing it closer to
    rpm --query behavior.
+ * --queryformat no longer supports `size` tag because it was printing install size for installed packages and download
+   size for not-installed packages. This could be confusing.
 
 Upgrade command
 ---------------

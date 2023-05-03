@@ -31,8 +31,9 @@ namespace libdnf::cli::output {
 using StrGetter = std::string (libdnf::rpm::Package::*)() const;
 using UnsignedLongLongGetter = unsigned long long (libdnf::rpm::Package::*)() const;
 using ReldepListGetter = libdnf::rpm::ReldepList (libdnf::rpm::Package::*)() const;
+using TransactionItemReasonGetter = libdnf::transaction::TransactionItemReason (libdnf::rpm::Package::*)() const;
 
-using Getter = std::variant<StrGetter, UnsignedLongLongGetter, ReldepListGetter>;
+using Getter = std::variant<StrGetter, UnsignedLongLongGetter, ReldepListGetter, TransactionItemReasonGetter>;
 
 static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"name", &libdnf::rpm::Package::get_name},
@@ -41,11 +42,9 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"release", &libdnf::rpm::Package::get_release},
     {"arch", &libdnf::rpm::Package::get_arch},
     {"evr", &libdnf::rpm::Package::get_evr},
-    {"nevra", &libdnf::rpm::Package::get_nevra},
     {"full_nevra", &libdnf::rpm::Package::get_full_nevra},
-    {"na", &libdnf::rpm::Package::get_na},
     {"group", &libdnf::rpm::Package::get_group},
-    {"packagesize", &libdnf::rpm::Package::get_package_size},
+    {"downloadsize", &libdnf::rpm::Package::get_package_size},
     {"installsize", &libdnf::rpm::Package::get_install_size},
     {"license", &libdnf::rpm::Package::get_license},
     {"source_name", &libdnf::rpm::Package::get_source_name},
@@ -71,6 +70,10 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"from_repo", &libdnf::rpm::Package::get_from_repo_id},
     {"installtime", &libdnf::rpm::Package::get_install_time},
     {"repoid", &libdnf::rpm::Package::get_repo_id},
+    {"reponame", &libdnf::rpm::Package::get_repo_name},
+    {"reason", &libdnf::rpm::Package::get_reason},
+    {"debug_name", &libdnf::rpm::Package::get_debuginfo_name},
+    {"source_debug_name", &libdnf::rpm::Package::get_debuginfo_name_of_source},
 };
 
 void print_available_pkg_attrs(std::FILE * target) {
@@ -217,6 +220,8 @@ void print_pkg_set_with_format(
                             joined.push_back('\n');
                         }
                         arg_store.push_back(joined);
+                    } else if constexpr (std::is_same_v<T, TransactionItemReasonGetter>) {
+                        arg_store.push_back(std::move(transaction_item_reason_to_string((package.*getter_func)())));
                     } else {
                         arg_store.push_back((package.*getter_func)());
                     }
@@ -249,6 +254,8 @@ void print_pkg_attr_uniq_sorted(
                     }
                 } else if constexpr (std::is_same_v<T, UnsignedLongLongGetter>) {
                     output.insert(std::move(std::to_string((package.*getter_func)())));
+                } else if constexpr (std::is_same_v<T, TransactionItemReasonGetter>) {
+                    output.insert(std::move(transaction_item_reason_to_string((package.*getter_func)())));
                 } else {
                     output.insert(std::move((package.*getter_func)()));
                 }
