@@ -1,9 +1,9 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 9
+%global project_version_patch 10
 
 Name:           dnf5
-Version:        5.0.10
+Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
