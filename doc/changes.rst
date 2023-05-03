@@ -96,6 +96,10 @@ List command
    packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
    is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
+Repoclosure command
+-------------------
+ * Dropped `--pkg`` option. Positional arguments can be used to specify packages to check closure for.
+
 Repoquery command
 -----------------
  * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
