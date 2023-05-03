@@ -120,6 +120,26 @@ std::string Package::get_sourcerpm() const {
     return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_sourcerpm(id.id));
 }
 
+std::string Package::get_debugsource_name() const {
+    return get_source_name() + DEBUGSOURCE_SUFFIX;
+}
+
+std::string Package::get_debuginfo_name_of_source() const {
+    return get_source_name() + DEBUGINFO_SUFFIX;
+}
+
+std::string Package::get_debuginfo_name() const {
+    if (libdnf::utils::string::ends_with(get_name(), DEBUGINFO_SUFFIX)) {
+        return get_name();
+    }
+
+    auto name = get_name();
+    if (libdnf::utils::string::ends_with(name, DEBUGSOURCE_SUFFIX)) {
+        name.resize(name.size() - strlen(DEBUGSOURCE_SUFFIX));
+    }
+    return name + DEBUGINFO_SUFFIX;
+}
+
 unsigned long long Package::get_build_time() const {
     return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
 }
@@ -357,6 +377,10 @@ libdnf::repo::RepoWeakPtr Package::get_repo() const {
 
 std::string Package::get_repo_id() const {
     return get_rpm_pool(base).get_repo(id.id).get_id();
+}
+
+std::string Package::get_repo_name() const {
+    return get_rpm_pool(base).get_repo(id.id).get_name();
 }
 
 std::string Package::get_from_repo_id() const {
