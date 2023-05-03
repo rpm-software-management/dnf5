@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "clean.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
+#include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/repo/repo_cache.hpp>
 
 #include <filesystem>
@@ -86,7 +89,17 @@ void CleanCommand::set_argument_parser() {
                     }
                 }
                 if (!found) {
-                    throw std::runtime_error(fmt::format("Unknown cache type \"{}\"", argv[i]));
+                    std::string known_types;
+                    bool first = true;
+                    for (const auto & type : CACHE_TYPES) {
+                        if (!first) {
+                            known_types.append(", ");
+                        }
+                        known_types.append(type.name);
+                        first = false;
+                    }
+                    throw libdnf::cli::ArgumentParserUnknownArgumentError(
+                        M_("Unknown cache type \"{0}\". Supported types: {1}"), argv[i], known_types);
                 }
             }
             return true;
