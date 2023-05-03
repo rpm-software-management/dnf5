@@ -10,6 +10,7 @@ Welcome to DNF5's documentation!
     tutorial/bindings/index
     api/index
     commands/index
+    dnf5_plugins/index
     dnf5.8
     dnf_daemon/index
     misc/index

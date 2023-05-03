@@ -1,0 +1,78 @@
+..
+    Copyright Contributors to the libdnf project.
+
+    This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+    Libdnf is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    Libdnf is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+
+.. _repoclosure_plugin_ref-label:
+
+####################
+ Repoclosure Command
+####################
+
+Display a list of unresolved dependencies for repositories.
+
+Synopsis
+========
+
+``dnf5 repoclosure [options] [<pkg-spec>...]``
+
+
+
+The ``repoclosure`` command in ``DNF5`` reads package metadata from one or more repositories, checks all dependencies, and displays a list of packages with unresolved dependencies.
+
+
+Options
+-------
+
+``--arch <arch>``
+    Query only packages for specified architecture, can be specified multiple times (default is all
+    compatible architectures with your system).
+
+``--best``
+    Check only the newest packages per arch.
+
+``--check <repoid>``
+    Specify repo ids to check, can be specified multiple times (default is all enabled).
+
+``--newest``
+    Check only the newest packages in the repos.
+
+``--repo <repoid>``
+    Specify repo ids to query, can be specified multiple times (default is all enabled).
+
+``<pkg-spec>``
+    Check closure for this package only.
+
+
+--------
+Examples
+--------
+
+Display list of unresolved dependencies for all enabled repositories::
+
+    dnf5 repoclosure
+
+Display list of unresolved dependencies for rawhide repository and packages with architecture noarch and x86_64::
+
+    dnf5 repoclosure --repo rawhide --arch noarch --arch x86_64
+
+Display list of unresolved dependencies for zmap package from rawhide repository::
+
+    dnf5 repoclosure --repo rawhide zmap
+
+Display list of unresolved dependencies for myrepo, an add-on for the rawhide repository::
+
+    dnf5 repoclosure --repo rawhide --check myrepo
