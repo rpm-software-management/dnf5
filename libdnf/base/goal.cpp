@@ -1717,26 +1717,25 @@ void Goal::Impl::autodetect_unsatisfied_installed_weak_dependencies() {
     installed_names.reserve(installed_query.size());
 
     // Investigate uninstalled recommends of installed packages
-    for (auto pkg : installed_query) {
+    for (const auto & pkg : installed_query) {
         installed_names.push_back(pkg.get_name());
-        for (auto recommend : pkg.get_recommends()) {
+        for (const auto & recommend : pkg.get_recommends()) {
             if (libdnf::rpm::Reldep::is_rich_dependency(recommend.to_string())) {
                 // Rich dependencies are skipped because they are too complicated to provide correct result
                 continue;
             };
             rpm::PackageQuery query(base_query);
 
-            //  There can be installed provider in different version or upgraded packed can recommend a different
-            //  version therefore ignore version and search only by reldep name
+            //  There can be installed provider in a different version or upgraded package can recommend a different
+            //  version therefore ignore the version and to search only using reldep name
             if (auto version = recommend.get_version(); version && strlen(version) > 0) {
                 auto & pool = get_rpm_pool(base);
                 Id id = pool.str2id(recommend.get_name(), 0);
                 reldep_list.add(rpm::ReldepId(id));
-                query.filter_provides(reldep_list);
             } else {
                 reldep_list.add(recommend);
-                query.filter_provides(reldep_list);
             };
+            query.filter_provides(reldep_list);
             reldep_list.clear();
             // No providers of recommend => continue
             if (query.empty()) {
@@ -1757,12 +1756,12 @@ void Goal::Impl::autodetect_unsatisfied_installed_weak_dependencies() {
     // We have to remove all installed packages from testing set
     base_query -= installed_query;
     rpm::PackageSet exclude_supplements(base);
-    for (auto pkg : base_query) {
+    for (const auto & pkg : base_query) {
         auto supplements = pkg.get_supplements();
         if (supplements.empty()) {
             continue;
         }
-        for (auto supplement : supplements) {
+        for (const auto & supplement : supplements) {
             if (libdnf::rpm::Reldep::is_rich_dependency(supplement.to_string())) {
                 // Rich dependencies are skipped because they are too complicated to provide correct result
                 continue;

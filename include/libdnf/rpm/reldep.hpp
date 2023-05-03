@@ -87,6 +87,9 @@ public:
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     ReldepId get_id() const noexcept { return id; };
 
+    /// Return weak pointer to base
+    BaseWeakPtr get_base() const { return base; };
+
     /// @brief Test if pattern is rich dependency
     /// Return true if pattern start with "("
     static bool is_rich_dependency(const std::string & pattern) { return pattern[0] == '('; }
