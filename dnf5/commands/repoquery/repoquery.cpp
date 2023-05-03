@@ -276,7 +276,7 @@ void RepoqueryCommand::set_argument_parser() {
         "provides",
         "recommends",
         "requires",
-        "requires-pre",
+        "requires_pre",
         "suggests",
         "supplements",
         "",  // empty when option is not used
@@ -290,12 +290,14 @@ void RepoqueryCommand::set_argument_parser() {
 
     // remove the last empty ("") option, it should not be an arg
     pkg_attrs_options.pop_back();
-    for (const auto & pkg_attr : pkg_attrs_options) {
+    for (auto & pkg_attr : pkg_attrs_options) {
         auto * arg = parser.add_new_named_arg(pkg_attr);
-        arg->set_long_name(pkg_attr);
         arg->set_description("Like --queryformat=\"%{" + pkg_attr + "}\" but deduplicated and sorted.");
         arg->set_has_value(false);
         arg->set_const_value(pkg_attr);
+        // The option names use '-' separator instead of '_'
+        std::replace(pkg_attr.begin(), pkg_attr.end(), '_', '-');
+        arg->set_long_name(pkg_attr);
         arg->link_value(pkg_attr_option);
         repoquery_formatting->register_argument(arg);
         cmd.register_named_arg(arg);
