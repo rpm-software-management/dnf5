@@ -145,6 +145,9 @@ public:
     /// cmdline repo.
     void add_paths_to_goal();
 
+    void set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak);
+    void autodetect_unsatisfied_installed_weak_dependencies();
+
 private:
     friend class Goal;
     BaseWeakPtr base;
@@ -1690,6 +1693,97 @@ void Goal::Impl::add_paths_to_goal() {
     rpm_filepaths.clear();
 }
 
+void Goal::Impl::set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak) {
+    for (const auto & exclude_weak : exclude_from_weak) {
+        rpm::PackageQuery weak_query(base, rpm::PackageQuery::ExcludeFlags::APPLY_EXCLUDES);
+        libdnf::ResolveSpecSettings settings{
+            .with_nevra = true, .with_provides = false, .with_filenames = true, .with_binaries = false};
+        weak_query.resolve_pkg_spec(exclude_weak, settings, false);
+        weak_query.filter_available();
+        rpm_goal.add_exclude_from_weak(*weak_query.p_impl);
+    }
+}
+
+void Goal::Impl::autodetect_unsatisfied_installed_weak_dependencies() {
+    rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    installed_query.filter_installed();
+    if (installed_query.empty()) {
+        return;
+    }
+    rpm::PackageQuery base_query(base, rpm::PackageQuery::ExcludeFlags::APPLY_EXCLUDES);
+    rpm::ReldepList reldep_list(base);
+
+    std::vector<std::string> installed_names;
+    installed_names.reserve(installed_query.size());
+
+    // Investigate uninstalled recommends of installed packages
+    for (auto pkg : installed_query) {
+        installed_names.push_back(pkg.get_name());
+        for (auto recommend : pkg.get_recommends()) {
+            if (libdnf::rpm::Reldep::is_rich_dependency(recommend.to_string())) {
+                // Rich dependencies are skipped because they are too complicated to provide correct result
+                continue;
+            };
+            rpm::PackageQuery query(base_query);
+
+            //  There can be installed provider in different version or upgraded packed can recommend a different
+            //  version therefore ignore version and search only by reldep name
+            if (auto version = recommend.get_version(); version && strlen(version) > 0) {
+                auto & pool = get_rpm_pool(base);
+                Id id = pool.str2id(recommend.get_name(), 0);
+                reldep_list.add(rpm::ReldepId(id));
+                query.filter_provides(reldep_list);
+            } else {
+                reldep_list.add(recommend);
+                query.filter_provides(reldep_list);
+            };
+            reldep_list.clear();
+            // No providers of recommend => continue
+            if (query.empty()) {
+                continue;
+            }
+            rpm::PackageQuery test_installed(query);
+            test_installed.filter_installed();
+            // when there is not installed any provider of recommend, exclude it
+            if (test_installed.empty()) {
+                rpm_goal.add_exclude_from_weak(*query.p_impl);
+            }
+        }
+    }
+
+    // Investigate supplements of only available packages with a different name to installed packages
+    // We can use base_query, because it is not useful anymore
+    base_query.filter_name(installed_names, sack::QueryCmp::NEQ);
+    // We have to remove all installed packages from testing set
+    base_query -= installed_query;
+    rpm::PackageSet exclude_supplements(base);
+    for (auto pkg : base_query) {
+        auto supplements = pkg.get_supplements();
+        if (supplements.empty()) {
+            continue;
+        }
+        for (auto supplement : supplements) {
+            if (libdnf::rpm::Reldep::is_rich_dependency(supplement.to_string())) {
+                // Rich dependencies are skipped because they are too complicated to provide correct result
+                continue;
+            };
+            reldep_list.add(supplement);
+        }
+        if (reldep_list.empty()) {
+            continue;
+        }
+        rpm::PackageQuery query(installed_query);
+        query.filter_provides(reldep_list);
+        reldep_list.clear();
+        if (!query.empty()) {
+            exclude_supplements.add(pkg);
+        }
+    }
+    if (!exclude_supplements.empty()) {
+        rpm_goal.add_exclude_from_weak(*exclude_supplements.p_impl);
+    }
+}
+
 void Goal::set_allow_erasing(bool value) {
     p_impl->allow_erasing = value;
 }
@@ -1756,6 +1850,14 @@ base::Transaction Goal::resolve() {
         auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
         p_impl->rpm_goal.set_installonly(installonly_packages);
         p_impl->rpm_goal.set_installonly_limit(cfg_main.get_installonly_limit_option().get_value());
+    }
+
+    // Set exclude weak dependencies from configuration
+    {
+        p_impl->set_exclude_from_weak(cfg_main.get_exclude_from_weak_option().get_value());
+        if (cfg_main.get_exclude_from_weak_autodetect_option().get_value()) {
+            p_impl->autodetect_unsatisfied_installed_weak_dependencies();
+        }
     }
 
     ret |= p_impl->rpm_goal.resolve();
