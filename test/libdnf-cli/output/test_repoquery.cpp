@@ -177,3 +177,11 @@ void RepoqueryTest::test_pkg_attr_uniq_sorted() {
     CPPUNIT_ASSERT_EQUAL(std::string("456\n"), std::string(buf));
     free(buf);
 }
+
+void RepoqueryTest::test_requires_filelists() {
+    CPPUNIT_ASSERT_EQUAL(libdnf::cli::output::requires_filelists("asd"), false);
+    CPPUNIT_ASSERT_EQUAL(libdnf::cli::output::requires_filelists("file"), false);
+    CPPUNIT_ASSERT_EQUAL(libdnf::cli::output::requires_filelists("%{file}"), false);
+    CPPUNIT_ASSERT_EQUAL(libdnf::cli::output::requires_filelists("%{name}"), false);
+    CPPUNIT_ASSERT_EQUAL(libdnf::cli::output::requires_filelists("%{files}"), true);
+}

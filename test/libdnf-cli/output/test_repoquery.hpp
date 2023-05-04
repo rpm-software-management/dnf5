@@ -40,6 +40,7 @@ class RepoqueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_format_set_with_invalid_tags);
     CPPUNIT_TEST(test_format_set_with_tags_with_spacing);
     CPPUNIT_TEST(test_pkg_attr_uniq_sorted);
+    CPPUNIT_TEST(test_requires_filelists);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -51,6 +52,7 @@ public:
     void test_format_set_with_invalid_tags();
     void test_format_set_with_tags_with_spacing();
     void test_pkg_attr_uniq_sorted();
+    void test_requires_filelists();
 
 private:
     std::unique_ptr<libdnf::rpm::PackageQuery> pkgs;

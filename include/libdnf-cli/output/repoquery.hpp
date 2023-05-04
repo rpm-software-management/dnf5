@@ -71,6 +71,8 @@ static void print_package_info_table(Package & package) {
     scols_unref_table(table);
 }
 
+bool requires_filelists(const std::string & queryformat);
+
 void print_pkg_set_with_format(
     std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat);
 
