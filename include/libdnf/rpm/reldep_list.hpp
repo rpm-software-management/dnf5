@@ -60,7 +60,7 @@ public:
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_add(DnfReldepList *reldep_list, DnfReldep *reldep)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:add(Dependency *dependency)
-    void add(Reldep & reldep);
+    void add(const Reldep & reldep);
 
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:add(Id id))
     void add(ReldepId id);
