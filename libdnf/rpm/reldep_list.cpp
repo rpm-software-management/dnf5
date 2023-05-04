@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep_list.hpp"
 
+#include "../base/base_private.hpp"
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/reldep_parser.hpp"
@@ -78,7 +79,8 @@ ReldepList & ReldepList::operator=(const ReldepList & src) {
     return *this;
 }
 
-void ReldepList::add(Reldep & reldep) {
+void ReldepList::add(const Reldep & reldep) {
+    libdnf_assert_same_base(p_impl->base, reldep.get_base());
     p_impl->queue.push_back(reldep.id.id);
 }
 
@@ -128,6 +130,7 @@ bool ReldepList::add_reldep(const std::string & reldep_str, int create) {
 }
 
 void ReldepList::append(ReldepList & source) {
+    libdnf_assert_same_base(p_impl->base, source.get_base());
     p_impl->queue += source.p_impl->queue;
 }
 
