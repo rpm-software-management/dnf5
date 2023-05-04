@@ -29,11 +29,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::cli::output {
 
 using StrGetter = std::string (libdnf::rpm::Package::*)() const;
+using VecStrGetter = std::vector<std::string> (libdnf::rpm::Package::*)() const;
 using UnsignedLongLongGetter = unsigned long long (libdnf::rpm::Package::*)() const;
 using ReldepListGetter = libdnf::rpm::ReldepList (libdnf::rpm::Package::*)() const;
 using TransactionItemReasonGetter = libdnf::transaction::TransactionItemReason (libdnf::rpm::Package::*)() const;
 
-using Getter = std::variant<StrGetter, UnsignedLongLongGetter, ReldepListGetter, TransactionItemReasonGetter>;
+using Getter =
+    std::variant<StrGetter, VecStrGetter, UnsignedLongLongGetter, ReldepListGetter, TransactionItemReasonGetter>;
 
 static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"name", &libdnf::rpm::Package::get_name},
@@ -74,6 +76,7 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"reason", &libdnf::rpm::Package::get_reason},
     {"debug_name", &libdnf::rpm::Package::get_debuginfo_name},
     {"source_debug_name", &libdnf::rpm::Package::get_debuginfo_name_of_source},
+    {"files", &libdnf::rpm::Package::get_files},
 };
 
 void print_available_pkg_attrs(std::FILE * target) {
@@ -220,6 +223,13 @@ void print_pkg_set_with_format(
                             joined.push_back('\n');
                         }
                         arg_store.push_back(joined);
+                    } else if constexpr (std::is_same_v<T, VecStrGetter>) {
+                        std::string joined;
+                        for (const auto & str : (package.*getter_func)()) {
+                            joined.append(std::move(str));
+                            joined.push_back('\n');
+                        }
+                        arg_store.push_back(joined);
                     } else if constexpr (std::is_same_v<T, TransactionItemReasonGetter>) {
                         arg_store.push_back(std::move(transaction_item_reason_to_string((package.*getter_func)())));
                     } else {
@@ -256,6 +266,10 @@ void print_pkg_attr_uniq_sorted(
                     output.insert(std::move(std::to_string((package.*getter_func)())));
                 } else if constexpr (std::is_same_v<T, TransactionItemReasonGetter>) {
                     output.insert(std::move(transaction_item_reason_to_string((package.*getter_func)())));
+                } else if constexpr (std::is_same_v<T, VecStrGetter>) {
+                    for (const auto & str : (package.*getter_func)()) {
+                        output.insert(std::move(str));
+                    }
                 } else {
                     output.insert(std::move((package.*getter_func)()));
                 }

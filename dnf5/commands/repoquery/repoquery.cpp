@@ -281,6 +281,7 @@ void RepoqueryCommand::set_argument_parser() {
         "requires_pre",
         "suggests",
         "supplements",
+        "files",
         "",  // empty when option is not used
     };
     pkg_attr_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
@@ -348,6 +349,11 @@ void RepoqueryCommand::configure() {
         available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
+
+    if (pkg_attr_option->get_value() == "files") {
+        context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
+        return;
+    }
     for (const auto & option :
          {whatrequires_option,
           whatdepends_option,
