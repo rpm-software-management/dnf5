@@ -350,7 +350,8 @@ void RepoqueryCommand::configure() {
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
-    if (pkg_attr_option->get_value() == "files") {
+    if ((pkg_attr_option->get_value() == "files") ||
+        (libdnf::cli::output::requires_filelists(query_format_option->get_value()))) {
         context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
         return;
     }

@@ -146,8 +146,7 @@ static bool replace_tag_in_format(
     return true;
 }
 
-void print_pkg_set_with_format(
-    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat) {
+std::pair<std::vector<Getter>, std::string> parse_queryformat(const std::string & queryformat) {
     std::vector<Getter> getters;
     std::string format;
     // format max possible len is 2 * queryformat.size() (if it contained just curly braces)
@@ -205,6 +204,25 @@ void print_pkg_set_with_format(
 
     // Resize the format to resulting size to trim excess characters.
     format.resize(format_size);
+
+    return {getters, format};
+}
+
+bool requires_filelists(const std::string & queryformat) {
+    auto [getters, _] = parse_queryformat(queryformat);
+    for (auto getter : getters) {
+        auto * getter_pointer = std::get_if<VecStrGetter>(&getter);
+        if (getter_pointer && (*getter_pointer == &libdnf::rpm::Package::get_files)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void print_pkg_set_with_format(
+    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat) {
+    auto [getters, format] = parse_queryformat(queryformat);
 
     std::set<std::string> output;
     // Format and print each package.
