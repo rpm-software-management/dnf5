@@ -54,15 +54,15 @@ private:
     std::vector<std::string> pkg_specs;
     std::vector<libdnf::rpm::Package> cmdline_packages;
 
-    libdnf::OptionStringList * whatdepends_option{nullptr};
-    libdnf::OptionStringList * whatconflicts_option{nullptr};
-    libdnf::OptionStringList * whatenhances_option{nullptr};
-    libdnf::OptionStringList * whatobsoletes_option{nullptr};
-    libdnf::OptionStringList * whatprovides_option{nullptr};
-    libdnf::OptionStringList * whatrecommends_option{nullptr};
-    libdnf::OptionStringList * whatrequires_option{nullptr};
-    libdnf::OptionStringList * whatsuggests_option{nullptr};
-    libdnf::OptionStringList * whatsupplements_option{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatdepends{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatconflicts{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatenhances{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatobsoletes{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatprovides{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatrecommends{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatrequires{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsuggests{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsupplements{nullptr};
 
     std::unique_ptr<libdnf::cli::session::BoolOption> exactdeps{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
