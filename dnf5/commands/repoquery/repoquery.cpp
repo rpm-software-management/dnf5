@@ -147,97 +147,92 @@ void RepoqueryCommand::set_argument_parser() {
         }
     });
 
-    whatdepends_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatdepends = parser.add_new_named_arg("whatdepends");
-    whatdepends->set_long_name("whatdepends");
-    whatdepends->set_description(
-        "Limit to packages that require, enhance, recommend, suggest or supplement any of <capabilities>.");
-    whatdepends->set_has_value(true);
-    whatdepends->link_value(whatdepends_option);
-    whatdepends->set_arg_value_help("CAPABILITY,...");
-
-    whatconflicts_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatconflicts = parser.add_new_named_arg("whatconflicts");
-    whatconflicts->set_long_name("whatconflicts");
-    whatconflicts->set_description("Limit to packages that conflict with any of <capabilities>.");
-    whatconflicts->set_has_value(true);
-    whatconflicts->link_value(whatconflicts_option);
-    whatconflicts->set_arg_value_help("CAPABILITY,...");
-
-    whatprovides_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatprovides = parser.add_new_named_arg("whatprovides");
-    whatprovides->set_long_name("whatprovides");
-    whatprovides->set_description("Limit to packages that provide any of <capabilities>.");
-    whatprovides->set_has_value(true);
-    whatprovides->link_value(whatprovides_option);
-    whatprovides->set_arg_value_help("CAPABILITY,...");
-
-    whatrequires_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatrequires = parser.add_new_named_arg("whatrequires");
-    whatrequires->set_long_name("whatrequires");
-    whatrequires->set_description(
-        "Limit to packages that require any of <capabilities>. Use --whatdepends if you want to "
-        "list all depending packages.");
-    whatrequires->set_has_value(true);
-    whatrequires->link_value(whatrequires_option);
-    whatrequires->set_arg_value_help("CAPABILITY,...");
-
-    whatobsoletes_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatobsoletes = parser.add_new_named_arg("whatobsoletes");
-    whatobsoletes->set_long_name("whatobsoletes");
-    whatobsoletes->set_description("Limit to packages that obsolete any of <capabilities>.");
-    whatobsoletes->set_has_value(true);
-    whatobsoletes->link_value(whatobsoletes_option);
-    whatobsoletes->set_arg_value_help("CAPABILITY,...");
-
-    whatrecommends_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatrecommends = parser.add_new_named_arg("whatrecommends");
-    whatrecommends->set_long_name("whatrecommends");
-    whatrecommends->set_description(
-        "Limit to packages that recommend any of <capabilities>. Use --whatdepends if you want "
-        "to list all depending packages.");
-    whatrecommends->set_has_value(true);
-    whatrecommends->link_value(whatrecommends_option);
-    whatrecommends->set_arg_value_help("CAPABILITY,...");
-
-    whatenhances_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatenhances = parser.add_new_named_arg("whatenhances");
-    whatenhances->set_long_name("whatenhances");
-    whatenhances->set_description(
+    whatdepends = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatdepends",
+        '\0',
+        "Limit to packages that require, enhance, recommend, suggest or supplement any of <capabilities>.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatconflicts = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatconflicts",
+        '\0',
+        "Limit to packages that conflict with any of <capabilities>.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatenhances = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatenhances",
+        '\0',
         "Limit to packages that enhance any of <capabilities>. Use --whatdepends if you want to "
-        "list all depending packages.");
-    whatenhances->set_has_value(true);
-    whatenhances->link_value(whatenhances_option);
-    whatenhances->set_arg_value_help("CAPABILITY,...");
-
-    whatsupplements_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatsupplements = parser.add_new_named_arg("whatsupplements");
-    whatsupplements->set_long_name("whatsupplements");
-    whatsupplements->set_description(
+        "list all depending packages.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatobsoletes = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatobsoletes",
+        '\0',
+        "Limit to packages that obsolete any of <capabilities>.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatprovides = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatprovides",
+        '\0',
+        "Limit to packages that provide any of <capabilities>.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatrecommends = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatrecommends",
+        '\0',
+        "Limit to packages that recommend any of <capabilities>. Use --whatdepends if you want "
+        "to list all depending packages.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatrequires = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatrequires",
+        '\0',
+        "Limit to packages that require any of <capabilities>. Use --whatdepends if you want to "
+        "list all depending packages.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatsupplements = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatsupplements",
+        '\0',
         "Limit to packages that supplement any of <capabilities>. Use --whatdepends if you "
-        "want to list all depending packages.");
-    whatsupplements->set_has_value(true);
-    whatsupplements->link_value(whatsupplements_option);
-    whatsupplements->set_arg_value_help("CAPABILITY,...");
-
-    whatsuggests_option = dynamic_cast<libdnf::OptionStringList *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
-    auto * whatsuggests = parser.add_new_named_arg("whatsuggests");
-    whatsuggests->set_long_name("whatsuggests");
-    whatsuggests->set_description(
+        "want to list all depending packages.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
+    whatsuggests = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this,
+        "whatsuggests",
+        '\0',
         "Limit to packages that suggest any of <capabilities>. Use --whatdepends if you want to "
-        "list all depending packages.");
-    whatsuggests->set_has_value(true);
-    whatsuggests->link_value(whatsuggests_option);
-    whatsuggests->set_arg_value_help("CAPABILITY,...");
+        "list all depending packages.",
+        "CAPABILITY,...",
+        "",
+        false,
+        ",");
 
     exactdeps = std::make_unique<libdnf::cli::session::BoolOption>(
         *this,
@@ -318,17 +313,6 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(leaves);
     cmd.register_named_arg(latest_limit);
 
-    cmd.register_named_arg(whatdepends);
-    cmd.register_named_arg(whatconflicts);
-    cmd.register_named_arg(whatprovides);
-    cmd.register_named_arg(whatrequires);
-    cmd.register_named_arg(whatobsoletes);
-    cmd.register_named_arg(whatrecommends);
-    cmd.register_named_arg(whatenhances);
-    cmd.register_named_arg(whatsupplements);
-    cmd.register_named_arg(whatsuggests);
-
-
     cmd.register_positional_arg(keys);
 }
 
@@ -357,17 +341,17 @@ void RepoqueryCommand::configure() {
             libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
         return;
     }
-    for (const auto & option :
-         {whatrequires_option,
-          whatdepends_option,
-          whatconflicts_option,
-          whatprovides_option,
-          whatobsoletes_option,
-          whatrecommends_option,
-          whatenhances_option,
-          whatsupplements_option,
-          whatsuggests_option}) {
-        for (const auto & capability : option->get_value()) {
+    for (const auto & capabilities :
+         {whatrequires->get_value(),
+          whatdepends->get_value(),
+          whatconflicts->get_value(),
+          whatprovides->get_value(),
+          whatobsoletes->get_value(),
+          whatrecommends->get_value(),
+          whatenhances->get_value(),
+          whatsupplements->get_value(),
+          whatsuggests->get_value()}) {
+        for (const auto & capability : capabilities) {
             if (libdnf::utils::is_file_pattern(capability)) {
                 context.base.get_config().get_optional_metadata_types_option().add_item(
                     libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
@@ -434,9 +418,9 @@ void RepoqueryCommand::run() {
         full_package_query.filter_latest_evr(latest_limit_option->get_value());
     }
 
-    if (!whatdepends_option->get_value().empty()) {
+    if (!whatdepends->get_value().empty()) {
         auto matched_reldeps = libdnf::rpm::ReldepList(ctx.base);
-        for (const auto & reldep_glob : whatdepends_option->get_value()) {
+        for (const auto & reldep_glob : whatdepends->get_value()) {
             matched_reldeps.add_reldep_with_glob(reldep_glob);
         }
 
@@ -460,7 +444,7 @@ void RepoqueryCommand::run() {
 
         if (!exactdeps->get_value()) {
             auto pkgs_from_resolved_nevras =
-                resolve_nevras_to_packges(ctx.base, whatdepends_option->get_value(), full_package_query);
+                resolve_nevras_to_packges(ctx.base, whatdepends->get_value(), full_package_query);
 
             // Filter requires by packages from resolved nevras
             auto what_requires_resolved_nevras = full_package_query;
@@ -485,70 +469,70 @@ void RepoqueryCommand::run() {
 
         full_package_query = dependsquery;
     }
-    if (!whatprovides_option->get_value().empty()) {
+    if (!whatprovides->get_value().empty()) {
         auto provides_query = full_package_query;
-        provides_query.filter_provides(whatprovides_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        provides_query.filter_provides(whatprovides->get_value(), libdnf::sack::QueryCmp::GLOB);
         if (!provides_query.empty()) {
             full_package_query = provides_query;
         } else {
             // If provides query doesn't match anything try matching files
-            full_package_query.filter_file(whatprovides_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_file(whatprovides->get_value(), libdnf::sack::QueryCmp::GLOB);
         }
     }
-    if (!whatrequires_option->get_value().empty()) {
+    if (!whatrequires->get_value().empty()) {
         if (exactdeps->get_value()) {
-            full_package_query.filter_requires(whatrequires_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_requires(whatrequires->get_value(), libdnf::sack::QueryCmp::GLOB);
         } else {
             auto requires_resolved = full_package_query;
             requires_resolved.filter_requires(
-                resolve_nevras_to_packges(ctx.base, whatrequires_option->get_value(), full_package_query));
+                resolve_nevras_to_packges(ctx.base, whatrequires->get_value(), full_package_query));
 
-            full_package_query.filter_requires(whatrequires_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_requires(whatrequires->get_value(), libdnf::sack::QueryCmp::GLOB);
             full_package_query |= requires_resolved;
             //TODO(amatej): add recurisve option call
         }
     }
-    if (!whatobsoletes_option->get_value().empty()) {
-        full_package_query.filter_obsoletes(whatobsoletes_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+    if (!whatobsoletes->get_value().empty()) {
+        full_package_query.filter_obsoletes(whatobsoletes->get_value(), libdnf::sack::QueryCmp::GLOB);
     }
-    if (!whatconflicts_option->get_value().empty()) {
+    if (!whatconflicts->get_value().empty()) {
         auto conflicts_resolved = full_package_query;
         conflicts_resolved.filter_conflicts(
-            resolve_nevras_to_packges(ctx.base, whatconflicts_option->get_value(), full_package_query));
+            resolve_nevras_to_packges(ctx.base, whatconflicts->get_value(), full_package_query));
 
-        full_package_query.filter_conflicts(whatconflicts_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_conflicts(whatconflicts->get_value(), libdnf::sack::QueryCmp::GLOB);
         full_package_query |= conflicts_resolved;
     }
-    if (!whatrecommends_option->get_value().empty()) {
+    if (!whatrecommends->get_value().empty()) {
         auto recommends_resolved = full_package_query;
         recommends_resolved.filter_recommends(
-            resolve_nevras_to_packges(ctx.base, whatrecommends_option->get_value(), full_package_query));
+            resolve_nevras_to_packges(ctx.base, whatrecommends->get_value(), full_package_query));
 
-        full_package_query.filter_recommends(whatrecommends_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_recommends(whatrecommends->get_value(), libdnf::sack::QueryCmp::GLOB);
         full_package_query |= recommends_resolved;
     }
-    if (!whatenhances_option->get_value().empty()) {
+    if (!whatenhances->get_value().empty()) {
         auto enhances_resolved = full_package_query;
         enhances_resolved.filter_enhances(
-            resolve_nevras_to_packges(ctx.base, whatenhances_option->get_value(), full_package_query));
+            resolve_nevras_to_packges(ctx.base, whatenhances->get_value(), full_package_query));
 
-        full_package_query.filter_enhances(whatenhances_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_enhances(whatenhances->get_value(), libdnf::sack::QueryCmp::GLOB);
         full_package_query |= enhances_resolved;
     }
-    if (!whatsupplements_option->get_value().empty()) {
+    if (!whatsupplements->get_value().empty()) {
         auto supplements_resolved = full_package_query;
         supplements_resolved.filter_supplements(
-            resolve_nevras_to_packges(ctx.base, whatsupplements_option->get_value(), full_package_query));
+            resolve_nevras_to_packges(ctx.base, whatsupplements->get_value(), full_package_query));
 
-        full_package_query.filter_supplements(whatsupplements_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_supplements(whatsupplements->get_value(), libdnf::sack::QueryCmp::GLOB);
         full_package_query |= supplements_resolved;
     }
-    if (!whatsuggests_option->get_value().empty()) {
+    if (!whatsuggests->get_value().empty()) {
         auto suggests_resolved = full_package_query;
         suggests_resolved.filter_suggests(
-            resolve_nevras_to_packges(ctx.base, whatsuggests_option->get_value(), full_package_query));
+            resolve_nevras_to_packges(ctx.base, whatsuggests->get_value(), full_package_query));
 
-        full_package_query.filter_suggests(whatsuggests_option->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_suggests(whatsuggests->get_value(), libdnf::sack::QueryCmp::GLOB);
         full_package_query |= suggests_resolved;
     }
 
