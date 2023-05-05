@@ -136,6 +136,8 @@ public:
     const OptionBool & get_best_option() const;
     OptionBool & get_install_weak_deps_option();
     const OptionBool & get_install_weak_deps_option() const;
+    OptionBool & get_allow_downgrade_option();
+    const OptionBool & get_allow_downgrade_option() const;
     OptionString & get_bugtracker_url_option();
     const OptionString & get_bugtracker_url_option() const;
     OptionBool & get_zchunk_option();

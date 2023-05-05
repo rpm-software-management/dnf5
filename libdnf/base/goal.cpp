@@ -1817,6 +1817,7 @@ base::Transaction Goal::resolve() {
     p_impl->rpm_goal.set_allow_vendor_change(cfg_main.get_allow_vendor_change_option().get_value());
     p_impl->rpm_goal.set_allow_erasing(p_impl->allow_erasing);
     p_impl->rpm_goal.set_install_weak_deps(cfg_main.get_install_weak_deps_option().get_value());
+    p_impl->rpm_goal.set_allow_downgrade(cfg_main.get_allow_downgrade_option().get_value());
 
     if (cfg_main.get_protect_running_kernel_option().get_value()) {
         p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());

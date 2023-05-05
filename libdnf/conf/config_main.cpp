@@ -216,6 +216,7 @@ class ConfigMain::Impl {
     OptionEnum<std::string> multilib_policy{"best", {"best", "all"}};  // :api
     OptionBool best{false};                                            // :api
     OptionBool install_weak_deps{true};
+    OptionBool allow_downgrade{true};
     OptionString bugtracker_url{BUGTRACKER};
     OptionBool zchunk{true};
 
@@ -418,6 +419,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("multilib_policy", multilib_policy);
     owner.opt_binds().add("best", best);
     owner.opt_binds().add("install_weak_deps", install_weak_deps);
+    owner.opt_binds().add("allow_downgrade", allow_downgrade);
     owner.opt_binds().add("bugtracker_url", bugtracker_url);
     owner.opt_binds().add("zchunk", zchunk);
     owner.opt_binds().add("color", color);
@@ -888,6 +890,13 @@ OptionBool & ConfigMain::get_install_weak_deps_option() {
 }
 const OptionBool & ConfigMain::get_install_weak_deps_option() const {
     return p_impl->install_weak_deps;
+}
+
+OptionBool & ConfigMain::get_allow_downgrade_option() {
+    return p_impl->allow_downgrade;
+}
+const OptionBool & ConfigMain::get_allow_downgrade_option() const {
+    return p_impl->allow_downgrade;
 }
 
 OptionString & ConfigMain::get_bugtracker_url_option() {
