@@ -50,10 +50,10 @@ public:
 };
 
 
-class GroupContainsPkgsOption : public libdnf::cli::session::StringListOption {
+class GroupContainsPkgsOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit GroupContainsPkgsOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "contains-pkgs",
               '\0',

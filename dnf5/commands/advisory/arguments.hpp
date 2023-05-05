@@ -73,10 +73,10 @@ public:
 };
 
 
-class AdvisoryContainsPkgsOption : public libdnf::cli::session::StringListOption {
+class AdvisoryContainsPkgsOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit AdvisoryContainsPkgsOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "contains-pkgs",
               '\0',

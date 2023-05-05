@@ -125,17 +125,18 @@ BoolOption::BoolOption(
 }
 
 
-StringListOption::StringListOption(
+AppendStringListOption::AppendStringListOption(
     libdnf::cli::session::Command & command,
     const std::string & long_name,
     char short_name,
     const std::string & desc,
     const std::string & help,
     const std::string & allowed_values_regex,
-    const bool icase) {
+    const bool icase,
+    const std::string & delimiters) {
     auto & parser = command.get_session().get_argument_parser();
-    conf = dynamic_cast<libdnf::OptionStringList *>(parser.add_init_value(
-        std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), allowed_values_regex, icase)));
+    conf = dynamic_cast<libdnf::OptionStringList *>(parser.add_init_value(std::make_unique<libdnf::OptionStringList>(
+        std::vector<std::string>(), allowed_values_regex, icase, delimiters)));
     arg = parser.add_new_named_arg(long_name);
 
     if (!long_name.empty()) {
@@ -160,13 +161,13 @@ StringListOption::StringListOption(
 }
 
 
-StringListOption::StringListOption(
+AppendStringListOption::AppendStringListOption(
     libdnf::cli::session::Command & command,
     const std::string & long_name,
     char short_name,
     const std::string & desc,
     const std::string & help)
-    : StringListOption(command, long_name, short_name, desc, help, "", false) {}
+    : AppendStringListOption(command, long_name, short_name, desc, help, "", false) {}
 
 
 StringArgumentList::StringArgumentList(

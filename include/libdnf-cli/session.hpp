@@ -189,23 +189,27 @@ public:
 };
 
 
-class StringListOption : public Option {
+/// AppendStringListOption is a wrapper around NamedArg and OptionStringList
+/// which allows specifying the argument multiple times and merging their values.
+/// E.g. --whatrequires=tree --whatrequires=plant -> option contains: "tree, plant"
+class AppendStringListOption : public Option {
 public:
-    explicit StringListOption(
+    explicit AppendStringListOption(
         libdnf::cli::session::Command & command,
         const std::string & long_name,
         char short_name,
         const std::string & desc,
         const std::string & help);
 
-    explicit StringListOption(
+    explicit AppendStringListOption(
         libdnf::cli::session::Command & command,
         const std::string & long_name,
         char short_name,
         const std::string & desc,
         const std::string & help,
         const std::string & allowed_values_regex,
-        const bool icase);
+        const bool icase,
+        const std::string & delimiters = libdnf::OptionStringList::get_default_delimiters());
 
     /// @return Parsed value.
     /// @since 5.0
