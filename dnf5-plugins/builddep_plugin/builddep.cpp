@@ -61,6 +61,7 @@ void BuildDepCommand::set_argument_parser() {
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    create_allow_downgrade_options(*this);
 
     auto defs = parser.add_new_named_arg("rpm_macros");
     defs->set_short_name('D');
