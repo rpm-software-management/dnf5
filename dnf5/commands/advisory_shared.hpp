@@ -104,10 +104,10 @@ inline std::optional<libdnf::advisory::AdvisoryQuery> advisory_query_from_cli_in
     return std::nullopt;
 }
 
-class AdvisoryOption : public libdnf::cli::session::StringListOption {
+class AdvisoryOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit AdvisoryOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "advisories",
               '\0',
@@ -144,10 +144,10 @@ public:
 };
 
 
-class AdvisorySeverityOption : public libdnf::cli::session::StringListOption {
+class AdvisorySeverityOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit AdvisorySeverityOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "advisory-severities",
               '\0',
@@ -159,7 +159,7 @@ public:
 
 
     std::vector<std::string> get_value() const {
-        auto vals = StringListOption::get_value();
+        auto vals = AppendStringListOption::get_value();
         std::transform(vals.begin(), vals.end(), vals.begin(), [](std::string val) -> std::string {
             val = libdnf::utils::string::tolower(val);
             val[0] = static_cast<char>(std::toupper(val[0]));
@@ -170,10 +170,10 @@ public:
     }
 };
 
-class BzOption : public libdnf::cli::session::StringListOption {
+class BzOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit BzOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "bzs",
               '\0',
@@ -181,10 +181,10 @@ public:
               _("BUGZILLA_ID,...")) {}
 };
 
-class CveOption : public libdnf::cli::session::StringListOption {
+class CveOption : public libdnf::cli::session::AppendStringListOption {
 public:
     explicit CveOption(libdnf::cli::session::Command & command)
-        : StringListOption(
+        : AppendStringListOption(
               command,
               "cves",
               '\0',
