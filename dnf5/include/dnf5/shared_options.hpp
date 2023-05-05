@@ -58,6 +58,10 @@ public:
               &command.get_context().base.get_config().get_skip_unavailable_option()) {}
 };
 
+/// Create two options (`--allow-downgrade` and `--no-allow-downgrade`) for a command provided as an argument command.
+/// The values are atored in the `allow_downgrade` configuration option
+void create_allow_downgrade_options(dnf5::Command & command);
+
 
 }  // namespace dnf5
 
