@@ -69,6 +69,7 @@ OptionStringContainer<T>::OptionStringContainer(
       delimiters(std::move(delimiters)),
       default_value(default_value),
       value(this->default_value) {
+    init_regex_matcher();
     test(this->default_value);
 }
 
