@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
+#include "libdnf-cli/output/changelogs.hpp"
 #include "libdnf-cli/output/repoquery.hpp"
 
 #include "libdnf/utils/patterns.hpp"
@@ -265,6 +266,9 @@ void RepoqueryCommand::set_argument_parser() {
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
 
+    changelogs = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "changelogs", '\0', "Display package changelogs.", false);
+
     std::vector<std::string> pkg_attrs_options{
         "conflicts",
         "depends",
@@ -306,6 +310,7 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(query_format);
     repoquery_formatting->register_argument(query_tags);
     cmd.register_named_arg(query_tags);
+    repoquery_formatting->register_argument(changelogs->arg);
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
@@ -334,6 +339,11 @@ void RepoqueryCommand::configure() {
         available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
+
+    if (changelogs->get_value()) {
+        context.base.get_config().get_optional_metadata_types_option().add_item(
+            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_OTHER);
+    }
 
     if ((pkg_attr_option->get_value() == "files") ||
         (libdnf::cli::output::requires_filelists(query_format_option->get_value()))) {
@@ -568,6 +578,9 @@ void RepoqueryCommand::run() {
 
     if (querytags_option->get_value()) {
         libdnf::cli::output::print_available_pkg_attrs(stdout);
+    } else if (changelogs->get_value()) {
+        libdnf::rpm::PackageQuery wrapped(result_pset);
+        libdnf::cli::output::print_changelogs(wrapped, full_package_query, false, 0, 0);
     } else if (info_option->get_value()) {
         for (auto package : result_pset) {
             libdnf::cli::output::print_package_info_table(package);
