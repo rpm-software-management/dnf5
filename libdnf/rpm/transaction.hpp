@@ -141,7 +141,7 @@ public:
         // TODO(jrohel): postfix operator ++, Bad iterator support in the librpm
         // iterator operator++(int);
 
-        bool operator==(Iterator & other) const { return rpmpsGetProblem(iter) == rpmpsGetProblem(other.iter); }
+        bool operator!=(Iterator & other) const { return rpmpsGetProblem(iter) != rpmpsGetProblem(other.iter); }
 
         RpmProblem operator*() { return RpmProblem(rpmpsGetProblem(iter)); }
 
