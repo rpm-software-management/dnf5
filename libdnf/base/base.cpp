@@ -200,7 +200,9 @@ void Base::setup() {
     // dnf4 persistor from /etc/dnf/modules.d/
     // Remove once reading of dnf4 data is not needed
     libdnf::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
-    system_state.reset_module_states(convertor.read_module_states());
+    if ((!std::filesystem::exists(system_state.get_module_state_path()))) {
+        system_state.reset_module_states(convertor.read_module_states());
+    }
 
     if (system_state.packages_import_required()) {
         // TODO(mblaha) - first try dnf5 history database, then fall back to dnf4
