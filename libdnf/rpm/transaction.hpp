@@ -147,7 +147,7 @@ public:
 
     private:
         friend RpmProblemSet;
-        explicit Iterator(rpmps problem_set) : iter(rpmpsInitIterator(problem_set)) {}
+        explicit Iterator(rpmps problem_set) : iter(rpmpsInitIterator(problem_set)) { rpmpsiNext(iter); }
 
         void free() {
             rpmpsFreeIterator(iter);
