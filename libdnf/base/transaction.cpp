@@ -533,9 +533,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     libdnf::rpm::Transaction rpm_transaction(base);
     rpm_transaction.fill(*transaction);
     if (!rpm_transaction.check()) {
-        auto problems = rpm_transaction.get_problems();
-        for (auto it = problems.begin(); it != problems.end(); ++it) {
-            transaction_problems.emplace_back((*it).to_string());
+        for (auto it : rpm_transaction.get_problems()) {
+            transaction_problems.emplace_back(it.to_string());
         }
         return TransactionRunResult::ERROR_CHECK;
     }
@@ -567,9 +566,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     //rpm_transaction.set_callbacks(std::move(callbacks));
     auto ret = rpm_transaction.run();
     if (ret != 0) {
-        auto problems = rpm_transaction.get_problems();
-        for (auto it = problems.begin(); it != problems.end(); ++it) {
-            transaction_problems.emplace_back((*it).to_string());
+        for (auto it : rpm_transaction.get_problems()) {
+            transaction_problems.emplace_back(it.to_string());
         }
         return TransactionRunResult::ERROR_RPM_RUN;
     }
@@ -781,9 +779,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     if (ret == 0) {
         return TransactionRunResult::SUCCESS;
     } else {
-        auto problems = rpm_transaction.get_problems();
-        for (auto it = problems.begin(); it != problems.end(); ++it) {
-            transaction_problems.emplace_back((*it).to_string());
+        for (auto it : rpm_transaction.get_problems()) {
+            transaction_problems.emplace_back(it.to_string());
         }
         return TransactionRunResult::ERROR_RPM_RUN;
     }
