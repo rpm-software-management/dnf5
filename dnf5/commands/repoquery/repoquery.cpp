@@ -372,8 +372,8 @@ void RepoqueryCommand::configure() {
 }
 
 void RepoqueryCommand::load_additional_packages() {
-    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed) {
-        auto & ctx = get_context();
+    auto & ctx = get_context();
+    if (ctx.get_load_available_repos() != Context::LoadAvailableRepos::NONE) {
         for (auto & [path, package] : ctx.base.get_repo_sack()->add_cmdline_packages(pkg_specs)) {
             cmdline_packages.push_back(std::move(package));
         }
