@@ -19,12 +19,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download.hpp"
 
+#include "dnf5/shared_options.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
+
 
 namespace dnf5 {
 
@@ -57,8 +59,6 @@ void DownloadCommand::set_argument_parser() {
 
     alldeps_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
-    destdir_option =
-        dynamic_cast<libdnf::OptionString *>(parser.add_init_value(std::make_unique<libdnf::OptionString>(".")));
 
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
@@ -73,16 +73,8 @@ void DownloadCommand::set_argument_parser() {
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
 
-    auto destdir = parser.add_new_named_arg("destdir");
-    destdir->set_long_name("destdir");
-    destdir->set_description(
-        "Set directory used for downloading packages to. Default location is to the current working directory");
-    destdir->set_has_value(true);
-    destdir->set_arg_value_help("DESTDIR");
-    destdir->link_value(destdir_option);
-
     cmd.register_named_arg(alldeps);
-    cmd.register_named_arg(destdir);
+    create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
 }
@@ -107,6 +99,8 @@ void DownloadCommand::configure() {
         context.set_load_system_repo(false);
     }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    // Default destination for downloaded rpms is the current directory
+    context.base.get_config().get_destdir_option().set(libdnf::Option::Priority::PLUGINDEFAULT, ".");
 }
 
 void DownloadCommand::run() {
@@ -152,7 +146,7 @@ void DownloadCommand::run() {
     }
 
     if (!download_pkgs.empty()) {
-        download_packages(download_pkgs, destdir_option->get_value().c_str());
+        download_packages(download_pkgs, ctx.base.get_config().get_destdir_option().get_value().c_str());
     }
 }
 

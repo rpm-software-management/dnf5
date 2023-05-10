@@ -48,5 +48,17 @@ void create_allow_downgrade_options(dnf5::Command & command) {
     allow_downgrade->add_conflict_argument(*no_allow_downgrade);
 }
 
+void create_destdir_option(dnf5::Command & command) {
+    auto & parser = command.get_context().get_argument_parser();
+    auto destdir = parser.add_new_named_arg("destdir");
+    destdir->set_long_name("destdir");
+    destdir->set_description(
+        "Set directory used for downloading packages to. Default location is to the current working directory");
+    destdir->set_has_value(true);
+    destdir->set_arg_value_help("DESTDIR");
+    destdir->link_value(&command.get_context().base.get_config().get_destdir_option());
+    command.get_argument_parser_command()->register_named_arg(destdir);
+}
+
 
 }  // namespace dnf5
