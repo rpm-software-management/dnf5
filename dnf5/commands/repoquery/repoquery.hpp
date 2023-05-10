@@ -70,6 +70,7 @@ private:
     std::unique_ptr<libdnf::cli::session::BoolOption> extras{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> upgrades{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> recent{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> installonly{nullptr};
 
     libdnf::OptionBool * querytags_option{nullptr};
     libdnf::OptionString * query_format_option{nullptr};
