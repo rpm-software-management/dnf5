@@ -1,25 +1,25 @@
 # 5.0.10
 
-dnf5-plugins: implement 'dnf5 copr'
-Add new configuration option exclude_from_weak_autodetect
-Add new config option exclude_from_weak
-Add repoquery --unneeded
-Fix handling of incorrect argument (RhBug:2192854)
-Add detect_release to public API
-Add group --no-packages option
-Add group upgrade command
-Enable group upgrades in transaction table
-Add --destdir option to download command
-Filter latest per argument for download command
-Add builddep --allowerasing
-download command: filter by priority, latest
-Remove --unneeded option from remove command
-Document autoremove differences from dnf4
-Add autoremove command
-state: Add package_types attribute to GroupState
-comps: Add conversion of PackageType to string(s)
-Add check-update alias for check-upgrade
-Add `check-upgrade --changelogs`
+- dnf5-plugins: implement 'dnf5 copr'
+- Add new configuration option exclude_from_weak_autodetect
+- Add new config option exclude_from_weak
+- Add repoquery --unneeded
+- Fix handling of incorrect argument (RhBug:2192854)
+- Add detect_release to public API
+- Add group --no-packages option
+- Add group upgrade command
+- Enable group upgrades in transaction table
+- Add --destdir option to download command
+- Filter latest per argument for download command
+- Add builddep --allowerasing
+- download command: filter by priority, latest
+- Remove --unneeded option from remove command
+- Document autoremove differences from dnf4
+- Add autoremove command
+- state: Add package_types attribute to GroupState
+- comps: Add conversion of PackageType to string(s)
+- Add check-update alias for check-upgrade
+- Add `check-upgrade --changelogs`
 
 # 5.0.9
 
