@@ -127,6 +127,7 @@ man_pages = [
     ('commands/search.8', 'dnf5-search', 'Search Command', AUTHORS, 8),
     ('commands/swap.8', 'dnf5-swap', 'Swap Command', AUTHORS, 8),
     ('commands/upgrade.8', 'dnf5-upgrade', 'Upgrade Command', AUTHORS, 8),
+    ('dnf5_plugins/repoclosure.8', 'dnf5-repoclosure', 'Repoclosure Command', AUTHORS, 8),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
     ('misc/filtering.7', 'dnf5-filtering', 'Packages Filtering', AUTHORS, 7),
     ('misc/installroot.7', 'dnf5-installroot', 'Installroot Parameter', AUTHORS, 7),

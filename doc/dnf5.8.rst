@@ -114,6 +114,16 @@ For more details see the separate man page for the specific command, f.e. ``man 
         | Manage modules.
 
 
+Plugin commands
+---------------
+
+Here is the list of the commands available as plugins.
+
+:ref:`repoclosure <repoclosure_plugin_ref-label>`
+    | Display a list of unresolved dependencies for repositories.
+
+
+
 Options
 =======
 
@@ -318,6 +328,9 @@ Commands in detail:
 
     # TODO(jkolarik): Module command is not ready yet
     | :manpage:`dnf5-module(8)`, :ref:`Module command, <module_command_ref-label>`
+
+Plugins:
+    | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
 
 Miscellaneous:
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`

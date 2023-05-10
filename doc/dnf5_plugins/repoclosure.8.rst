@@ -31,7 +31,10 @@ Synopsis
 
 
 
-The ``repoclosure`` command in ``DNF5`` reads package metadata from one or more repositories, checks all dependencies, and displays a list of packages with unresolved dependencies.
+The ``repoclosure`` command in DNF5 allows you to analyze package metadata from multiple repositories. It checks all dependencies of the packages and provides a list of packages that have unresolved dependencies.
+
+By default, ``repoclosure`` considers all enabled repositories when checking dependencies. However, you can customize the set of repositories by using standard DNF5 options such as ``--repo``, ``--enable-repo``, or ``--disable-repo``.
+
 
 
 Options
@@ -45,13 +48,10 @@ Options
     Check only the newest packages per arch.
 
 ``--check <repoid>``
-    Specify repo ids to check, can be specified multiple times (default is all enabled).
+    Specify repositories to check, can be specified multiple times (default is all enabled repositories).
 
 ``--newest``
     Check only the newest packages in the repos.
-
-``--repo <repoid>``
-    Specify repo ids to query, can be specified multiple times (default is all enabled).
 
 ``<pkg-spec>``
     Check closure for this package only.
