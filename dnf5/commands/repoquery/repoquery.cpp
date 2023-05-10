@@ -266,6 +266,8 @@ void RepoqueryCommand::set_argument_parser() {
         false);
     recent = std::make_unique<libdnf::cli::session::BoolOption>(
         *this, "recent", '\0', "Limit to only recently changed packages.", false);
+    installonly = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "installonly", '\0', "Limit to installed installonly packages.", false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -336,7 +338,8 @@ void RepoqueryCommand::configure() {
     context.update_repo_metadata_from_specs(pkg_specs);
     system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
                          duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
-                         extras->get_value() || upgrades->get_value() || recent->get_value();
+                         extras->get_value() || upgrades->get_value() || recent->get_value() ||
+                         installonly->get_value();
     context.set_load_system_repo(system_repo_needed);
     bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
                              advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
@@ -407,6 +410,14 @@ static libdnf::rpm::PackageSet resolve_nevras_to_packges(
     }
 
     return resolved_nevras_set;
+}
+
+static libdnf::rpm::PackageQuery get_installonly_query(libdnf::Base & base) {
+    auto & cfg_main = base.get_config();
+    const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
+    libdnf::rpm::PackageQuery installonly_query(base);
+    installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
+    return installonly_query;
 }
 
 void RepoqueryCommand::run() {
@@ -560,11 +571,7 @@ void RepoqueryCommand::run() {
     }
 
     if (duplicates->get_value()) {
-        auto & cfg_main = ctx.base.get_config();
-        const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
-        auto installonly_query = full_package_query;
-        installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
-        full_package_query -= installonly_query;
+        full_package_query -= get_installonly_query(ctx.base);
         full_package_query.filter_duplicates();
     }
 
@@ -585,6 +592,10 @@ void RepoqueryCommand::run() {
         auto recent_limit_days = cfg_main.get_recent_option().get_value();
         auto now = time(nullptr);
         full_package_query.filter_recent(now - (recent_limit_days * 86400));
+    }
+
+    if (installonly->get_value()) {
+        full_package_query &= get_installonly_query(ctx.base);
     }
 
     if (pkg_specs.empty()) {
