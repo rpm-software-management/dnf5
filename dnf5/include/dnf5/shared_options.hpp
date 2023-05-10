@@ -62,6 +62,10 @@ public:
 /// The values are atored in the `allow_downgrade` configuration option
 void create_allow_downgrade_options(dnf5::Command & command);
 
+/// Create the `--destdir` option for a command provided as an argument.
+/// The values are stored in the `destdir` configuration option
+void create_destdir_option(dnf5::Command & command);
+
 
 }  // namespace dnf5
 

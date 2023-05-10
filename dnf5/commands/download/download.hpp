@@ -42,7 +42,6 @@ public:
 private:
     libdnf::OptionBool * resolve_option{nullptr};
     libdnf::OptionBool * alldeps_option{nullptr};
-    libdnf::OptionString * destdir_option{nullptr};
 
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_download_options{nullptr};
 };
