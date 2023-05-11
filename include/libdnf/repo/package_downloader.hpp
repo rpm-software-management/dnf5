@@ -41,11 +41,13 @@ public:
 
     /// Adds a package to download to the standard location of repo cachedir/packages.
     /// @param package The package to download.
+    /// @param user_data User data.
     void add(const libdnf::rpm::Package & package, void * user_data = nullptr);
 
     /// Adds a package to download to a specific destination directory.
     /// @param package The package to download.
     /// @param destination The directory to which to download the package.
+    /// @param user_data User data.
     void add(const libdnf::rpm::Package & package, const std::string & destination, void * user_data = nullptr);
 
     /// Download the previously added packages.

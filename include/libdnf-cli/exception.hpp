@@ -72,8 +72,8 @@ public:
     /// message.
     ///
     /// @param exit_code The exit code
-    /// @format The format string for the message
-    /// @args The format arguments
+    /// @param format The format string for the message
+    /// @param args The format arguments
     template <typename... Ss>
     explicit CommandExitError(int exit_code, BgettextMessage format, Ss &&... args)
         : Error(format, std::forward<Ss>(args)...),
@@ -95,8 +95,8 @@ public:
     /// message.
     ///
     /// @param exit_code The exit code
-    /// @format The format string for the message
-    /// @args The format arguments
+    /// @param format The format string for the message
+    /// @param args The format arguments
     template <typename... Ss>
     explicit SilentCommandExitError(int exit_code, BgettextMessage format, Ss &&... args)
         : Error(format, std::forward<Ss>(args)...),

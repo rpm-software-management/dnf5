@@ -81,7 +81,7 @@ public:
 
     /// Filter repos by their `id`.
     ///
-    /// @param pattern  A vector of strings the filter is matched against.
+    /// @param patterns A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     void filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
@@ -101,14 +101,14 @@ public:
 
     /// Filter repos by their `name`.
     ///
-    /// @param pattern  A vector of strings the filter is matched against.
+    /// @param patterns A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
     /// Filter repos by their `type`.
     ///
-    /// @param pattern  A type the filter is matched against.
+    /// @param type     A type the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);

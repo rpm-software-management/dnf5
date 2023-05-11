@@ -75,7 +75,7 @@ public:
     /// Filter packages by their `name`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
@@ -87,7 +87,7 @@ public:
     /// Filter packages by their `name` based on names of the packages in the `package_set`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     void filter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -95,7 +95,7 @@ public:
     /// Filter packages by their `epoch`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -107,7 +107,7 @@ public:
     /// Filter packages by their `epoch`.
     ///
     /// @param patterns         A vector of numbers the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     /// @since 5.0
     void filter_epoch(
@@ -116,7 +116,7 @@ public:
     /// Filter packages by their `version`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -128,7 +128,7 @@ public:
     /// Filter packages by their `release`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -140,7 +140,7 @@ public:
     /// Filter packages by their `arch`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     void filter_arch(
@@ -149,7 +149,7 @@ public:
     /// Filter packages by their `name` and `arch` based on names and arches of the packages in the `package_set`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     void filter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -157,7 +157,7 @@ public:
     /// Filter packages by their `epoch:version-release`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
     /// @since 5.0
     //
@@ -169,7 +169,7 @@ public:
     /// Filter packages by their `name-[epoch:]version-release.arch`. The following matches are tolerant to omitted 0 epoch: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`, `IGLOB`, `NOT_IGLOB`, `IEXACT`, `NOT_IEXACT`.
     /// @since 5.0
     //
@@ -184,7 +184,7 @@ public:
     /// Only the attributes that are not blank are used in the filter.
     ///
     /// @param nevra            A Nevra object the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `IGLOB`, `NOT_IGLOB`.
     /// @since 5.0
     void filter_nevra(const libdnf::rpm::Nevra & nevra, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -207,7 +207,7 @@ public:
     /// Filter packages by their `sourcerpm`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SOURCERPM
@@ -218,7 +218,7 @@ public:
     /// Filter packages by their `url`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
@@ -230,7 +230,7 @@ public:
     /// Filter packages by their `summary`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
@@ -242,7 +242,7 @@ public:
     /// Filter packages by their `summary`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
@@ -254,7 +254,7 @@ public:
     /// Filter packages by their `provides`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -265,7 +265,7 @@ public:
     /// Filter packages by their `provides`.
     ///
     /// @param reldep           RelDep object the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     void filter_provides(const Reldep & reldep, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -273,7 +273,7 @@ public:
     /// Filter packages by their `provides`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -285,7 +285,7 @@ public:
     /// Filter packages by their `requires`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -296,7 +296,7 @@ public:
     /// Filter packages by their `requires`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -308,7 +308,7 @@ public:
     /// Filter packages by their `requires`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -318,7 +318,7 @@ public:
     /// Filter packages by their `conflicts`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -329,7 +329,7 @@ public:
     /// Filter packages by their `conflicts`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -341,7 +341,7 @@ public:
     /// Filter packages by their `conflicts`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -351,7 +351,7 @@ public:
     /// Filter packages by their `obsoletes`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -362,7 +362,7 @@ public:
     /// Filter packages by their `obsoletes`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -374,7 +374,7 @@ public:
     /// Filter packages by their `obsoletes`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -384,7 +384,7 @@ public:
     /// Filter packages by their `recommends`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -396,7 +396,7 @@ public:
     /// Filter packages by their `recommends`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -408,7 +408,7 @@ public:
     /// Filter packages by their `recommends`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -419,7 +419,7 @@ public:
     /// Filter packages by their `suggests`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -430,7 +430,7 @@ public:
     /// Filter packages by their `suggests`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -442,7 +442,7 @@ public:
     /// Filter packages by their `suggests`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -452,7 +452,7 @@ public:
     /// Filter packages by their `enhances`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -463,7 +463,7 @@ public:
     /// Filter packages by their `enhances`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -475,7 +475,7 @@ public:
     /// Filter packages by their `enhances`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -485,7 +485,7 @@ public:
     /// Filter packages by their `supplements`.
     ///
     /// @param reldep_list      ReldepList with RelDep objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -497,7 +497,7 @@ public:
     /// Filter packages by their `supplements`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -509,7 +509,7 @@ public:
     /// Filter packages by their `supplements`.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -520,7 +520,7 @@ public:
     /// Filter packages by `files` they contain.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
@@ -531,7 +531,7 @@ public:
 
     /// Filter packages by their `location`.
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
     //
@@ -544,7 +544,7 @@ public:
     /// Filter packages by `id` of the Repo they belong to.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
@@ -556,7 +556,7 @@ public:
     /// Filter packages by advisories they are included in.
     ///
     /// @param advisory_query   AdvisoryQuery with Advisories that contain package lists the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     /// @since 5.0
     //
@@ -571,7 +571,7 @@ public:
     ///
     /// @param advisory_query   AdvisoryQuery with Advisories that contain package lists the filter is matched against.
     /// @param installed        PackageQuery with currently installed packages.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     /// @since 5.0
     void filter_latest_unresolved_advisories(

@@ -206,6 +206,7 @@ private:
 
     // TODO(pkratoch): Make this private once it's not used in tests.
     /// @return The string representing module dependencies (e.g. "ninja;platform:[f29]" or "nodejs:[-11]").
+    /// @param md_stream Module stream
     /// @param remove_platform When true, the method will not return dependencies with stream "platform"
     ///                        (default is false).
     /// @since 5.0

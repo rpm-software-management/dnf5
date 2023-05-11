@@ -74,7 +74,7 @@ public:
     };
 
     /// Verify repo ID
-    /// @param id repo ID to verify
+    /// @param repo_id repo ID to verify
     /// @return   index of the first invalid character in the repo ID (if present) or std::string::npos
     // @replaces libdnf:repo/Repo.hpp:method:Repo.verifyId(const std::string & id)
     static std::string::size_type verify_id(const std::string & repo_id);
@@ -208,7 +208,7 @@ public:
     int64_t get_age() const;
 
     /// Return path to the particular downloaded repository metadata in cache
-    /// @param metadataType metadata type (filelists, other, productid...)
+    /// @param metadata_type metadata type (filelists, other, productid...)
     /// @return file path or empty string in case the requested metadata does not exist
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataPath(const std::string & metadataType)
     std::string get_metadata_path(const std::string & metadata_type);
@@ -251,8 +251,8 @@ public:
     /// of the local downloaded files (repository metadata and packages) to match those from
     /// the remote files.
     /// This feature is by default switched off.
-    /// @param preserveRemoteTime true - use remote file timestamp, false - use the current time
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setPreserveRemoteTime(bool preserveRemoteTime)
+    /// @param preserve_remote_time true - use remote file timestamp, false - use the current time
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setPreserveRemoteTime(bool preserveRemoteTime)
     void set_preserve_remote_time(bool preserve_remote_time);
 
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getPreserveRemoteTime()

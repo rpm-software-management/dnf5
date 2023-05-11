@@ -39,11 +39,13 @@ public:
     /// Create a new ModuleQuery instance.
     ///
     /// @param base     A weak pointer to Base
+    /// @param empty    `true` to create empty query, `false` to create query with all modules
     explicit ModuleQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
 
     /// Create a new ModuleQuery instance.
     ///
     /// @param base     Reference to Base
+    /// @param empty    `true` to create empty query, `false` to create query with all modules
     explicit ModuleQuery(libdnf::Base & base, bool empty = false);
 
     /// @return Weak pointer to the Base object.
@@ -53,7 +55,7 @@ public:
     /// Filter ModuleItems by their `name`.
     ///
     /// @param pattern          A string the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_name(const std::string & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -61,7 +63,7 @@ public:
     /// Filter ModuleItems by their `name`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_name(
@@ -70,7 +72,7 @@ public:
     /// Filter ModuleItems by their `stream`.
     ///
     /// @param pattern          A string the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_stream(const std::string & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -78,7 +80,7 @@ public:
     /// Filter ModuleItems by their `stream`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_stream(
@@ -87,7 +89,7 @@ public:
     /// Filter ModuleItems by their `version`.
     ///
     /// @param pattern          A string the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_version(const std::string & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -95,7 +97,7 @@ public:
     /// Filter ModuleItems by their `version`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_version(
@@ -104,7 +106,7 @@ public:
     /// Filter ModuleItems by their `context`.
     ///
     /// @param pattern          A string the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_context(const std::string & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -112,7 +114,7 @@ public:
     /// Filter ModuleItems by their `context`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_context(
@@ -121,7 +123,7 @@ public:
     /// Filter ModuleItems by their `arch`.
     ///
     /// @param pattern          A string the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_arch(const std::string & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
@@ -129,7 +131,7 @@ public:
     /// Filter ModuleItems by their `arch`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     void filter_arch(

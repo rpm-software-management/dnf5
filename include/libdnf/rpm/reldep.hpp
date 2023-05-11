@@ -51,9 +51,9 @@ public:
 
     /// @brief Creates a reldep from Char*. If parsing fails it raises std::runtime_error.
     ///
-    /// @param sack p_sack:...
-    /// @param dependency p_dependency:...
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
+    /// @param base Instance of Base class
+    /// @param reldep_string String with the dependency
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
     Reldep(const libdnf::BaseWeakPtr & base, const std::string & reldep_string);
     Reldep(libdnf::Base & base, const std::string & reldep_string);
 
@@ -108,9 +108,9 @@ private:
     /// @param base: The Base
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
-    /// @param cmpType p_cmpType: ComparisonType, and their combinations
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
-    /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
+    /// @param cmp_type p_cmpType: ComparisonType, and their combinations
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
+    // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
     Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of parsed reldep
@@ -118,7 +118,7 @@ private:
     /// @param base: The Base
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
-    /// @param cmpType p_cmpType: ComparisonType, and their combinations
+    /// @param cmp_type p_cmpType: ComparisonType, and their combinations
     /// @param create Whether a new Id should be created when name does not exist
     /// @return DependencyId
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
@@ -128,7 +128,7 @@ private:
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
     ///
     /// @param base: The Base
-    /// @param reldepStr p_reldepStr: const Char* of reldep
+    /// @param reldep_str p_reldepStr: const Char* of reldep
     /// @return DependencyId
     /// @param create Whether a new Id should be created when name does not exist
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
