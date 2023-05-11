@@ -44,12 +44,19 @@ public:
 
     /// The default forms and their order determine pkg_spec matching
     static const std::vector<Form> & get_default_pkg_spec_forms();
+
     /// Parse string into Nevra struct
-    /// @param - string to parse
-    /// @return - Vector with parsed Nevra
-    /// @exception - IncorrectNevraString
+    /// @param nevra_str String to parse
+    /// @return Vector with parsed Nevra
+    /// @exception IncorrectNevraString
     /// @since - 1.0.0
     static std::vector<Nevra> parse(const std::string & nevra_str);
+
+    /// Parse string into Nevra struct using given forms
+    /// @param nevra_str String to parse
+    /// @param forms Allowed forms used for parsing
+    /// @return Vector with parsed Nevra
+    /// @exception IncorrectNevraString
     static std::vector<Nevra> parse(const std::string & nevra_str, const std::vector<Form> & forms);
 
     Nevra() = default;

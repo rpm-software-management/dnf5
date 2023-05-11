@@ -68,7 +68,7 @@ public:
     /// @brief Adds a reldep from Char*. Only globs in name are proccessed. The proccess is slow
     /// therefore if reldepStr is not a glob please use addReldep() instead.
     ///
-    /// @param reldepStr p_reldepStr: Char*
+    /// @param reldep_str p_reldepStr: Char*
     /// @return bool - false if parsing or reldep creation fails
     ///
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:addReldepWithGlob(const char *reldepStr)
@@ -76,7 +76,7 @@ public:
 
     /// @brief Adds a reldep from Char*. It does not support globs.
     ///
-    /// @param reldepStr p_reldepStr: Char*
+    /// @param reldep_str p_reldepStr: Char*
     /// @return bool false if parsing or reldep creation fails
     ///
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:addReldep(const char *reldepStr)

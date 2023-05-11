@@ -46,6 +46,7 @@ public:
     /// @param repo The repository whose settings are to be used.
     /// @param url The file (url) to download.
     /// @param destination The file path to which to download the file.
+    /// @param user_data User data.
     void add(
         libdnf::repo::RepoWeakPtr & repo,
         const std::string & url,
@@ -55,6 +56,7 @@ public:
     /// Adds a file (URL) to download. The settings from ConfigMain passed in the FileDownloader constructor are used.
     /// @param url The file (url) to download.
     /// @param destination The file path to which to download the file.
+    /// @param user_data User data.
     void add(const std::string & url, const std::string & destination, void * user_data = nullptr);
 
     /// Download the previously added files (URLs).

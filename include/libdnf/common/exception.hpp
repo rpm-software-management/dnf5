@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 /// An assert macro that throws `libdnf::AssertionError`.
 ///
-/// @param format The format string for the message.
+/// @param msg_format The format string for the message.
 /// @param ... The format arguments.
 /// @exception libdnf::AssertionError Thrown always.
 #define libdnf_throw_assertion(msg_format, ...) \
@@ -43,7 +43,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 /// An assert macro that throws `libdnf::AssertionError` when `condition` is not met.
 ///
 /// @param condition The assertion condition. Throws AssertionError if it's not met.
-/// @param format The format string for the message.
+/// @param msg_format The format string for the message.
 /// @param ... The format arguments.
 /// @exception libdnf::AssertionError Thrown when condition is not met.
 #define libdnf_assert(condition, msg_format, ...) \
@@ -54,7 +54,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 /// An assert macro that throws `libdnf::UserAssertionError` when `condition` is not met.
 ///
 /// @param condition The assertion condition. Throws UserAssertionError if it's not met.
-/// @param format The format string for the message.
+/// @param msg_format The format string for the message.
 /// @param ... The format arguments.
 /// @exception libdnf::UserAssertionError Thrown when condition is not met.
 #define libdnf_user_assert(condition, msg_format, ...) \

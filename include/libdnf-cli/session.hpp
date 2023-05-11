@@ -176,7 +176,9 @@ public:
     /// @since 5.0
     bool get_value() const { return conf->get_value(); }
 
-    /// @set bool value with priority for the option
+    /// Set bool value with priority for the option
+    /// @param priority Priority
+    /// @param value Value
     /// @since 5.0
     void set(libdnf::Option::Priority priority, bool value) { return conf->set(priority, value); }
 

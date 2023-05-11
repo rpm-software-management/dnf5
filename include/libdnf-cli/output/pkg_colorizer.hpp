@@ -40,7 +40,7 @@ public:
     /// @param color_not_found Color returned in case package's name.arch is not in `base_versions`
     /// @param color_lt Color returned in case package's version is lower then the one in `base_versions`
     /// @param color_eq Color returned in case package's version is equal to the one in `base_versions`
-    /// @param color_lt Color returned in case package's version is greater then the one in `base_versions`
+    /// @param color_gt Color returned in case package's version is greater then the one in `base_versions`
     PkgColorizer(
         const libdnf::rpm::PackageSet & base_versions,
         const std::string & color_not_found,
