@@ -76,7 +76,7 @@ public:
     /// Verify repo ID
     /// @param id repo ID to verify
     /// @return   index of the first invalid character in the repo ID (if present) or std::string::npos
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.verifyId(const std::string & id)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.verifyId(const std::string & id)
     static std::string::size_type verify_id(const std::string & repo_id);
 
     /// Construct the Repo object
@@ -97,7 +97,7 @@ public:
     Type get_type() const noexcept;
 
     /// Registers a class that implements callback methods (fastest mirror detection, download state, key import).
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);
 
     /// @brief Sets the associated user data. These are used in callbacks.
@@ -110,41 +110,41 @@ public:
 
     /// Verify repo object configuration
     /// Will throw exception if Repo has no mirror or baseurl set or if Repo type is unsupported.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.verify()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.verify()
     void verify() const;
 
     /// Returns pointer to the repository configuration
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
     ConfigRepo & get_config() noexcept;
 
     /// Returns pointer to the repository configuration
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
     const ConfigRepo & get_config() const noexcept;
 
     /// Returns repository id
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getId()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getId()
     std::string get_id() const noexcept;
 
     /// Enable the repository
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.enable()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.enable()
     void enable();
 
     /// Disable the repository
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.disable()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.disable()
     void disable();
 
     /// Return whether the repository is enabled.
     /// @return true if enabled
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.isEnabled()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.isEnabled()
     bool is_enabled() const;
 
     /// Return whether the repository is local.
     /// @return true if local
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.isLocal()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.isLocal()
     bool is_local() const;
 
     /// Reads metadata from local cache.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
     void read_metadata_cache();
 
     /// Checks whether the locally downloaded metadata are in sync with the origin.
@@ -152,7 +152,7 @@ public:
     bool is_in_sync();
 
     /// Downloads repository metadata.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
 
     /// Loads the repository objects into sacks.
@@ -166,16 +166,16 @@ public:
 
     /// Returns whether the using of "includes" is enabled
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getUseIncludes()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getUseIncludes()
     bool get_use_includes() const;
 
     /// Enables/disables using of "includes"
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setUseIncludes(bool enabled)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setUseIncludes(bool enabled)
     void set_use_includes(bool enabled);
 
     /// Returns repository cost
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCost()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getCost()
     /// TODO(jrohel): Remove it? It is only shortcut for get_config()->cost()->get_value()
     int get_cost() const;
 
@@ -188,7 +188,7 @@ public:
     void set_cost(int value, Option::Priority priority = Option::Priority::RUNTIME);
 
     /// Returns repository priority
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getPriority()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getPriority()
     /// TODO(jrohel): Remove it? It is only shortcut for get_config()->cost()->get_value()
     int get_priority() const;
 
@@ -200,50 +200,50 @@ public:
     /// @param priority Optional argument
     void set_priority(int value, Option::Priority priority = Option::Priority::RUNTIME);
 
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getRevision()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getRevision()
     const std::string & get_revision() const;
 
     /// Gets age of the local cache
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getAge()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getAge()
     int64_t get_age() const;
 
     /// Return path to the particular downloaded repository metadata in cache
     /// @param metadataType metadata type (filelists, other, productid...)
     /// @return file path or empty string in case the requested metadata does not exist
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataPath(const std::string & metadataType)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataPath(const std::string & metadataType)
     std::string get_metadata_path(const std::string & metadata_type);
 
     /// Mark whatever is in the current cache expired.
     /// This repo instance will alway try to fetch a fresh metadata after this
     /// method is called.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.expire()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.expire()
     void expire();
 
     /// @brief Return whether the cached metadata is expired.
     /// @return bool
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.isExpired()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.isExpired()
     bool is_expired() const;
 
     /// @brief Get the number of seconds after which the cached metadata will expire.
     /// Negative number means the metadata has expired already.
     /// @return Seconds to expiration
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getExpiresIn()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getExpiresIn()
     int get_expires_in() const;
 
     /// Gets repository freshness
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.fresh()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.fresh()
     bool fresh();
 
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setMaxMirrorTries(int maxMirrorTries)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setMaxMirrorTries(int maxMirrorTries)
     void set_max_mirror_tries(int max_mirror_tries);
 
     /// Gets timestamp of metadata "primary" file
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getTimestamp()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getTimestamp()
     int64_t get_timestamp() const;
 
     /// Gets the highest timestamp from repomd records
     /// TODO(jrohel): Used in DNF repolist: displayed as "Repo-updated time" base.py: "using metadata from" in debug messages Is it correct?
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getMaxTimestamp()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getMaxTimestamp()
     int get_max_timestamp();
 
     /// Try to preserve remote side timestamps
@@ -255,25 +255,25 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setPreserveRemoteTime(bool preserveRemoteTime)
     void set_preserve_remote_time(bool preserve_remote_time);
 
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getPreserveRemoteTime()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getPreserveRemoteTime()
     bool get_preserve_remote_time() const;
 
     /// TODO(jrohel): Used by DNF repolist. Do we need it?
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getContentTags()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getContentTags()
     const std::vector<std::string> & get_content_tags();
 
     /// TODO(jrohel): Used by DNF repolist. Do we need it?
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getDistroTags()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getDistroTags()
     const std::vector<std::pair<std::string, std::string>> & get_distro_tags();
 
     /// Get list of relative locations of metadata files inside the repo
     /// e.g. [('primary', 'repodata/primary.xml.gz'), ('filelists', 'repodata/filelists.xml.gz')...]
     /// @return vector of (metadata_type, location) string pairs
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataLocations()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataLocations()
     const std::vector<std::pair<std::string, std::string>> get_metadata_locations() const;
 
     /// Gets path to the repository cache directory
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCacheDir()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getCacheDir()
     std::string get_cachedir() const;
 
     /// Gets path to the repository persistent directory
@@ -283,46 +283,46 @@ public:
     /// Alias
     std::string get_name() { return this->get_config().get_name_option().get_value(); };
     /// Sets repository configuration file path
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setRepoFilePath(const std::string & path)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setRepoFilePath(const std::string & path)
     void set_repo_file_path(const std::string & path);
 
     /// Gets repository configuration file path
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getRepoFilePath()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getRepoFilePath()
     const std::string & get_repo_file_path() const noexcept;
 
     /// Sets repository synchronisation strategy
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSyncStrategy(SyncStrategy strategy)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setSyncStrategy(SyncStrategy strategy)
     void set_sync_strategy(SyncStrategy strategy);
 
     /// Returns repository synchronisation strategy
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getSyncStrategy()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getSyncStrategy()
     SyncStrategy get_sync_strategy() const noexcept;
 
     /// Downloads file from URL into given opened file descriptor.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadUrl(const char * url, int fd)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadUrl(const char * url, int fd)
     /// TODO(lukash) fd seems like an inconvenient API for this function, use target path instead?
     ///              It also needs defining what it means downloading an URL through a particular repo
     //void download_url(const char * url, int fd);
 
     /// Set http headers.
     /// @param headers A vector of full headers ("header: value")
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setHttpHeaders(const char * headers[])
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setHttpHeaders(const char * headers[])
     void set_http_headers(const std::vector<std::string> & headers);
 
     /// Get http headers.
     /// @return A vector of full headers ("header: value")
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getHttpHeaders()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getHttpHeaders()
     std::vector<std::string> get_http_headers() const;
 
     /// Returns mirrorlist associated with the repository.
     /// Mirrors on this list are mirrors parsed from mirrorlist/metalink specified by LRO_MIRRORLIST or
     /// from mirrorlist specified by LRO_MIRROSLISTURL and metalink specified by LRO_METALINKURL.
     /// No URLs specified by LRO_URLS are included in this list.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getMirrors()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.getMirrors()
     std::vector<std::string> get_mirrors() const;
 
     /// Sets substitutions. Substitutions are used to substitute variables in repository configuration.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
     void add_libsolv_testcase(const std::string & path);
@@ -357,7 +357,7 @@ private:
 
     /// Downloads repository metadata from the origin or reads the local metadata cache if still valid.
     /// @return true if fresh metadata were downloaded, false otherwise.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.load()
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.load()
     bool fetch_metadata();
 
     void make_solv_repo();

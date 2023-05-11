@@ -30,7 +30,7 @@ namespace libdnf {
 
 /// Option that stores value from enumeration. The type of value is template parameter.
 /// Support default value and user defined function for conversion from string.
-/// @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<T>
+// @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<T>
 template <typename T>
 class OptionEnum : public Option {
 public:
@@ -43,12 +43,12 @@ public:
     OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals, FromStringFunc && from_string_func);
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.clone()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.clone()
     OptionEnum * clone() const override;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, bool value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, bool value)
     void set(Priority priority, ValueType value);
 
     /// Sets new value and runtime priority.
@@ -56,34 +56,34 @@ public:
 
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, const std::string & value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
     /// Parses input string and sets new value and runtime priority.
     void set(const std::string & value) override;
 
     /// Gets the stored value.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValue()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValue()
     T get_value() const;
 
     /// Gets the default value. Default value is used until it is replaced by set() method.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
     T get_default_value() const;
 
     /// Gets a string representation of the stored value.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
     std::string get_value_string() const override;
 
     /// Tests input value and throws exception if the value is not allowed.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.test(ValueType value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.test(ValueType value)
     void test(ValueType value) const;
 
     /// Parses input string and returns result.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.fromString(const std::string & value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.fromString(const std::string & value)
     ValueType from_string(const std::string & value) const;
 
     /// Converts input value to the string.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.toString(ValueType value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.toString(ValueType value)
     std::string to_string(ValueType value) const;
 
 private:
@@ -97,7 +97,7 @@ private:
 /// Option that stores value from enumeration. Specialized template for enumeration of strings.
 /// It supports default value.
 /// It supports user defined function for conversion from string.
-/// @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<std::string>
+// @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<std::string>
 template <>
 class OptionEnum<std::string> : public Option {
 public:
@@ -108,35 +108,35 @@ public:
     OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals, FromStringFunc && from_string_func);
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.clone()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.clone()
     OptionEnum * clone() const override;
 
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.set(Priority priority, const std::string & value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
     /// Parses input string and sets new value and runtime priority.
     void set(const std::string & value) override;
 
     /// Gets the stored value.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValue()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValue()
     const std::string & get_value() const;
 
     /// Gets the default value. Default value is used until it is replaced by set() method.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValueString()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValueString()
     const std::string & get_default_value() const;
 
     /// Gets a string representation of the stored value.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValueString()
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValueString()
     std::string get_value_string() const override;
 
     /// Tests input value and throws exception if the value is not allowed.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.test(const std::string & value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.test(const std::string & value)
     void test(const std::string & value) const;
 
     /// Parses input string and returns result.
-    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.fromString(const std::string & value)
+    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.fromString(const std::string & value)
     std::string from_string(const std::string & value) const;
 
 private:

@@ -28,25 +28,25 @@ namespace libdnf {
 /// Option that links option to another option. It uses default value and parameters from linked option.
 /// If it is empty (has no stored value), uses value from the linked option (parent).
 /// Parent option type is template parameter.
-/// @replaces libdnf:conf/OptionChild.hpp:class:OptionChild<T>
+// @replaces libdnf:conf/OptionChild.hpp:class:OptionChild<T>
 template <class ParentOptionType, class Enable = void>
 class OptionChild : public Option {
 public:
     /// Constructor takes reference to parent option.
-    /// @replaces libdnf:conf/OptionChild.hpp:ctor:OptionChild<T>.OptionChild(const ParentOptionType & parent)
+    // @replaces libdnf:conf/OptionChild.hpp:ctor:OptionChild<T>.OptionChild(const ParentOptionType & parent)
     explicit OptionChild(const ParentOptionType & parent);
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.clone()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.clone()
     OptionChild * clone() const override;
 
     /// Returns priority (source) of the stored value. If no value is stored, priority from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getPriority()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getPriority()
     Priority get_priority() const override;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, bool value)
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, bool value)
     void set(Priority priority, const typename ParentOptionType::ValueType & value);
 
     /// Sets new value and runtime priority.
@@ -54,26 +54,26 @@ public:
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, std::string value)
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.set(Priority priority, std::string value)
     void set(Priority priority, const std::string & value) override;
 
     /// Sets new value and runtime priority.
     void set(const std::string & value) override;
 
     /// Gets the stored value. If no value is stored, value from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValue()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValue()
     typename ParentOptionType::ValueType get_value() const;
 
     /// Gets the default value from parent. Default value is used until it is replaced by set() method.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValueString()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValueString()
     typename ParentOptionType::ValueType get_default_value() const;
 
     /// Gets a string representation of the stored value. If no value is stored, value from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValueString()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.getValueString()
     std::string get_value_string() const override;
 
     /// Checks if the option is empty (has no stored value). If it is empty, checks status of the parent.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.empty()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<T>.empty()
     bool empty() const noexcept override;
 
 private:
@@ -85,7 +85,7 @@ private:
 /// If it is empty (has no stored value), uses value from the linked option (parent).
 /// Parent option type is template parameter.
 /// This is specialization for parent with std::string ValueType.
-/// @replaces libdnf:conf/OptionChild.hpp:class:OptionChild<std::string>
+// @replaces libdnf:conf/OptionChild.hpp:class:OptionChild<std::string>
 template <class ParentOptionType>
 class OptionChild<
     ParentOptionType,
@@ -93,39 +93,39 @@ class OptionChild<
     : public Option {
 public:
     /// Constructor takes reference to parent option.
-    /// @replaces libdnf:conf/OptionChild.hpp:ctor:OptionChild.OptionChild<std::string>(const ParentOptionType & parent)
+    // @replaces libdnf:conf/OptionChild.hpp:ctor:OptionChild.OptionChild<std::string>(const ParentOptionType & parent)
     explicit OptionChild(const ParentOptionType & parent);
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.clone()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.clone()
     OptionChild * clone() const override;
 
     /// Returns priority (source) of the stored value. If no value is stored, priority from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getPriority()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getPriority()
     Priority get_priority() const override;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.set(Priority priority, std::string value)
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.set(Priority priority, std::string value)
     void set(Priority priority, const std::string & value) override;
 
     /// Sets new value and runtime priority.
     void set(const std::string & value) override;
 
     /// Gets the stored value. If no value is stored, value from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValue()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValue()
     const std::string & get_value() const;
 
     /// Gets the default value from parent. Default value is used until it is replaced by set() method.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValueString()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValueString()
     const std::string & get_default_value() const;
 
     /// Gets a string representation of the stored value. If no value is stored, value from the parent is returned.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValueString()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.getValueString()
     std::string get_value_string() const override;
 
     /// Checks if the option is empty (has no stored value). If it is empty, checks status of the parent.
-    /// @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.empty()
+    // @replaces libdnf:conf/OptionChild.hpp:method:OptionChild<std::string>.empty()
     bool empty() const noexcept override;
 
 private:

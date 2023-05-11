@@ -42,9 +42,9 @@ public:
 
 /// @brief Represent a relational dependency from libsolv
 ///
-/// @replaces libdnf/dnf-reldep.h:struct:DnfReldep
-/// @replaces libdnf/repo/solvable/Dependency.hpp:struct:Dependency
-/// @replaces hawkey:hawkey/__init__.py:class:Reldep
+// @replaces libdnf/dnf-reldep.h:struct:DnfReldep
+// @replaces libdnf/repo/solvable/Dependency.hpp:struct:Dependency
+// @replaces hawkey:hawkey/__init__.py:class:Reldep
 class Reldep {
 public:
     enum class CmpType { NONE = 0, GT = (1 << 0), EQ = (1 << 1), GTE = (GT | EQ), LT = (1 << 2), LTE = (LT | EQ) };
@@ -57,12 +57,12 @@ public:
     Reldep(const libdnf::BaseWeakPtr & base, const std::string & reldep_string);
     Reldep(libdnf::Base & base, const std::string & reldep_string);
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep) = default;
     Reldep(Reldep && reldep);
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
-    /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
+    // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     ~Reldep() = default;
 
     bool operator==(const Reldep & other) const noexcept;
@@ -70,21 +70,21 @@ public:
     Reldep & operator=(const Reldep & other) = default;
     Reldep & operator=(Reldep && other) = delete;
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
     const char * get_name() const;
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getRelation()
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getRelation()
     const char * get_relation() const;
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getVersion()
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getVersion()
     const char * get_version() const;
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:toString()
-    /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:toString()
+    // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     std::string to_string() const;
 
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getId()
-    /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getId()
+    // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     ReldepId get_id() const noexcept { return id; };
 
     /// Return weak pointer to base
@@ -96,7 +96,7 @@ public:
 
 protected:
     /// @brief Creates a reldep from Id
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, Id id)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, Id id)
     Reldep(const BaseWeakPtr & base, ReldepId dependency_id);
 
 private:
@@ -120,7 +120,7 @@ private:
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @return DependencyId
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
     static ReldepId get_reldep_id(
         const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create = 1);
 
@@ -129,7 +129,7 @@ private:
     /// @param base: The Base
     /// @param reldepStr p_reldepStr: const Char* of reldep
     /// @return DependencyId
-    /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
+    // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
     static ReldepId get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
 
     BaseWeakPtr base;
