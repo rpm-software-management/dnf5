@@ -120,7 +120,10 @@ Plugin commands
 Here is the list of the commands available as plugins.
 
 :ref:`builddep <builddep_plugin_ref-label>`
-    | Install missing dependencies for building an RPM package
+    | Install missing dependencies for building an RPM package.
+
+:ref:`copr <copr_plugin_ref-label>`
+    | Manage Copr repositories (add-ons provided by users/community/third-party).
 
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
@@ -333,6 +336,8 @@ Commands in detail:
     | :manpage:`dnf5-module(8)`, :ref:`Module command, <module_command_ref-label>`
 
 Plugins:
+    | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
+    | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
 
 Miscellaneous:

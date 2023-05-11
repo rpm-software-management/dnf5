@@ -551,6 +551,8 @@ Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclos
 
 %files -n dnf5-plugins
 %{_libdir}/dnf5/plugins/*.so
+%{_mandir}/man8/dnf5-builddep.8.*
+%{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
 %endif
 

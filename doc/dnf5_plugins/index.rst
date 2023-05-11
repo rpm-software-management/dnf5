@@ -7,6 +7,7 @@ DNF5 Plugins
     :maxdepth: 1
 
     builddep.8
+    copr.8
     repoclosure.8
 
 ..
