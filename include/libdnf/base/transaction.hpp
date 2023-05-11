@@ -93,9 +93,11 @@ public:
     /// Download all inbound packages (packages that are being installed on the
     /// system). Fails immediately on the first package download failure. Will
     /// try to resume downloads of any partially-downloaded RPMs.
-    /// @param dest_dir Destination directory for downloaded RPMs. Default is
-    /// the standard location of repo cachedir/packages.
-    void download(const std::string & dest_dir = {});
+    ///
+    /// The destination directory for downloaded RPMs is taken from the `destdir`
+    /// configuration option. If it's not specified, the standard location of
+    /// repo cachedir/packages is used.
+    void download();
 
     /// Check the transaction by running it with RPMTRANS_FLAG_TEST. The import
     /// of any necessary public keys will be requested, and transaction checks
