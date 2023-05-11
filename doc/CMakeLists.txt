@@ -80,6 +80,7 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-specs.7 DESTINATION share/man/man7)
 
         # plugin commands
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-builddep.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-repoclosure.8 DESTINATION share/man/man8)
     endif()
 
