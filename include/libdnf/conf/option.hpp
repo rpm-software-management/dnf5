@@ -58,11 +58,11 @@ public:
 
 
 /// Option class is an abstract class. Parent of all options. Options are used to store a configuration.
-/// @replaces libdnf:conf/Option.hpp:class:Option
+// @replaces libdnf:conf/Option.hpp:class:Option
 class Option {
 public:
     // TODO(jrohel): Prioroties are under discussion and probably will be modified.
-    /// @replaces libdnf:conf/Option.hpp:enum class:Option::Priority
+    // @replaces libdnf:conf/Option.hpp:enum class:Option::Priority
     enum class Priority {
         EMPTY = 0,
         DEFAULT = 10,
@@ -82,27 +82,27 @@ public:
     virtual ~Option() = default;
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/Option.hpp:method:Option.clone()
+    // @replaces libdnf:conf/Option.hpp:method:Option.clone()
     virtual Option * clone() const = 0;
 
     /// Returns priority (source) of the stored value.
-    /// @replaces libdnf:conf/Option.hpp:method:Option.getPriority()
+    // @replaces libdnf:conf/Option.hpp:method:Option.getPriority()
     virtual Priority get_priority() const;
 
     /// Parses input string and sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/Option.hpp:method:Option.set(Priority priority, const std::string & value)
+    // @replaces libdnf:conf/Option.hpp:method:Option.set(Priority priority, const std::string & value)
     virtual void set(Priority priority, const std::string & value) = 0;
 
     /// Parses input string and sets new value and runtime priority.
     virtual void set(const std::string & value) = 0;
 
     /// Gets a string representation of the stored value.
-    /// @replaces libdnf:conf/Option.hpp:method:Option.getValueString()
+    // @replaces libdnf:conf/Option.hpp:method:Option.getValueString()
     virtual std::string get_value_string() const = 0;
 
     /// Checks if the option is empty (has no stored value).
-    /// @replaces libdnf:conf/Option.hpp:method:Option.empty()
+    // @replaces libdnf:conf/Option.hpp:method:Option.empty()
     virtual bool empty() const noexcept;
 
     /// Locks the option.

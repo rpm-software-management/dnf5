@@ -44,21 +44,21 @@ class SolvMap;
 
 namespace libdnf::rpm {
 
-/// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
+// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
     using iterator = PackageSetIterator;
 
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
+    // @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
     explicit PackageSet(const libdnf::BaseWeakPtr & base);
     explicit PackageSet(libdnf::Base & base);
 
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
+    // @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
 
     PackageSet(PackageSet && pset) noexcept;
 
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_free(DnfPackageSet * pset)
+    // @replaces libdnf:hy-packageset.h:function:dnf_packageset_free(DnfPackageSet * pset)
     ~PackageSet();
 
     PackageSet & operator=(const PackageSet & src);

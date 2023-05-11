@@ -32,7 +32,7 @@ namespace libdnf {
 
 /// Option that stores a container of strings. The type of the container is a template parameter.
 /// Support default value, and check of an input value using the regular expression
-/// @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
+// @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
 template <typename T>
 class OptionStringContainer : public Option {
 public:
@@ -52,12 +52,12 @@ public:
     OptionStringContainer & operator=(OptionStringContainer && src) noexcept = default;
 
     /// Makes copy (clone) of this object.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
     OptionStringContainer * clone() const override;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionStingList.hpp:method:OptionStringList.set(Priority priority, bool value)
+    // @replaces libdnf:conf/OptionStingList.hpp:method:OptionStringList.set(Priority priority, bool value)
     virtual void set(Priority priority, const ValueType & value);
 
     /// Sets new value and runtime priority.
@@ -65,7 +65,7 @@ public:
 
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.set(Priority priority, const std::string & value)
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
     /// Parses input string and sets new value and runtime priority.
@@ -80,27 +80,27 @@ public:
     void add_item(const std::string & item);
 
     /// Gets the stored value.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValue()
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValue()
     const ValueType & get_value() const;
 
     /// Gets the default value. Default value is used until it is replaced by set() method.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValueString()
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValueString()
     const ValueType & get_default_value() const;
 
     /// Gets a string representation of the stored value.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValueString()
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValueString()
     std::string get_value_string() const override;
 
     /// Tests input value and throws exception if the value is not allowed.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.test(const std::vector<std::string> & value)
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.test(const std::vector<std::string> & value)
     void test(const ValueType & value) const;
 
     /// Parses input string and returns result.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
     ValueType from_string(std::string value) const;
 
     /// Converts input value to the string.
-    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.toString(const ValueType & value)
+    // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.toString(const ValueType & value)
     std::string to_string(const ValueType & value) const;
 
     /// Returns the default delimiters

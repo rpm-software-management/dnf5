@@ -37,7 +37,7 @@ struct NevraIncorrectInputError : public Error {
 };
 
 
-/// @replaces hawkey:hawkey/__init__.py:class:Nevra
+// @replaces hawkey:hawkey/__init__.py:class:Nevra
 struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
@@ -67,19 +67,19 @@ public:
 
     void clear() noexcept;
 
-    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
+    // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
     const std::string & get_name() const noexcept { return name; }
 
-    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
+    // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
     const std::string & get_epoch() const noexcept { return epoch; }
 
-    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
+    // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
     const std::string & get_version() const noexcept { return version; }
 
-    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
+    // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
     const std::string & get_release() const noexcept { return release; }
 
-    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
+    // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
     const std::string & get_arch() const noexcept { return arch; }
 
     void set_name(const std::string & value) { name = value; }
@@ -96,7 +96,7 @@ public:
 
     // TODO(jmracek) Add comperators ==
 
-    /// @replaces hawkey:hawkey/__init__.py:method:Nevra.has_just_name()
+    // @replaces hawkey:hawkey/__init__.py:method:Nevra.has_just_name()
     bool has_just_name() const;
 
 private:

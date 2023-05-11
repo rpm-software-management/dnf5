@@ -36,37 +36,37 @@ class RpmDbUtils;
 /// Package contains a copy of important data from rpm::Package that is used
 /// to perform rpm transaction and then stored in the transaction (history) database.
 ///
-/// @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
+// @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
 class Package : public TransactionItem {
 public:
     /// Get package name
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getName()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getName()
     const std::string & get_name() const noexcept { return name; }
 
     /// Get package epoch
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getEpoch()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getEpoch()
     const std::string & get_epoch() const noexcept { return epoch; }
 
     /// Get package release
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getRelease()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getRelease()
     const std::string & get_release() const noexcept { return release; }
 
     /// Get package arch
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getArch()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getArch()
     const std::string & get_arch() const noexcept { return arch; }
 
     /// Get package version
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getVersion()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getVersion()
     const std::string & get_version() const noexcept { return version; }
 
     /// Get string representation of the object, which equals to package NEVRA
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.toStr()
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.toStr()
     std::string to_string() const;
 
 private:
@@ -77,7 +77,7 @@ private:
 
     /// Set package name
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
     void set_name(const std::string & value) { name = value; }
 
     /// Get package epoch as an integer
@@ -85,22 +85,22 @@ private:
 
     /// Set package epoch
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setEpoch(int32_t value)
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setEpoch(int32_t value)
     void set_epoch(const std::string & value) { epoch = value; }
 
     /// Set package version
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setVersion(const std::string & value)
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setVersion(const std::string & value)
     void set_version(const std::string & value) { version = value; }
 
     /// Set package release
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setRelease(const std::string & value)
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setRelease(const std::string & value)
     void set_release(const std::string & value) { release = value; }
 
     /// Set package arch
     ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setArch(const std::string & value)
+    // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setArch(const std::string & value)
     void set_arch(const std::string & value) { arch = value; }
 
     /*

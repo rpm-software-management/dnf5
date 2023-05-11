@@ -52,7 +52,7 @@ class Transformer;
 class TransactionHistory;
 
 
-/// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
+// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
 enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 std::string transaction_state_to_string(TransactionState state);
@@ -73,7 +73,7 @@ public:
 /// from the transaction history database as well as for performing a transaction
 /// to change packages on disk.
 ///
-/// @replaces libdnf:transaction/Transaction.hpp:class:Transaction
+// @replaces libdnf:transaction/Transaction.hpp:class:Transaction
 class Transaction {
 public:
     using State = TransactionState;
@@ -87,44 +87,44 @@ public:
     /// Get Transaction database id (primary key)
     /// Return 0 if the id wasn't set yet
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getId()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getId()
     int64_t get_id() const noexcept { return id; }
 
     /// Get date and time of the transaction start
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
     int64_t get_dt_start() const noexcept { return dt_begin; }
 
     /// Get date and time of the transaction end
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
     int64_t get_dt_end() const noexcept { return dt_end; }
 
     /// Get RPM database version before the transaction
     /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_begin()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_begin()
     const std::string & get_rpmdb_version_begin() const noexcept { return rpmdb_version_begin; }
 
     /// Get RPM database version after the transaction
     /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_end()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_end()
     const std::string & get_rpmdb_version_end() const noexcept { return rpmdb_version_end; }
 
     /// Get $releasever variable value that was used during the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_releasever()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_releasever()
     const std::string & get_releasever() const noexcept { return releasever; }
 
     /// Get UID of a user that started the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_user_id()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_user_id()
     uint32_t get_user_id() const noexcept { return user_id; }
 
     /// Get the description of the transaction (e.g. the CLI command that was executed)
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_cmdline()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_cmdline()
     const std::string & get_description() const noexcept { return description; }
 
     /// Get a user-specified comment describing the transaction
@@ -132,22 +132,22 @@ public:
 
     /// Get transaction state
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getState()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getState()
     State get_state() const noexcept { return state; }
 
     /// Return all comps environments associated with the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
     std::vector<CompsEnvironment> & get_comps_environments();
 
     /// Return all comps groups associated with the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
     std::vector<CompsGroup> & get_comps_groups();
 
     /// Return all rpm packages associated with the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
     std::vector<Package> & get_packages();
 
 private:
@@ -174,7 +174,7 @@ private:
 
     /// Set Transaction database id (primary key)
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setId(int64_t value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setId(int64_t value)
     void set_id(int64_t value) { id = value; }
 
     /// Set a user-specified comment describing the transaction
@@ -182,50 +182,50 @@ private:
 
     /// Set date and time of the transaction start
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtBegin(int64_t value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtBegin(int64_t value)
     void set_dt_start(int64_t value) { dt_begin = value; }
 
     /// Set date and time of the transaction end
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtEnd(int64_t value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtEnd(int64_t value)
     void set_dt_end(int64_t value) { dt_end = value; }
 
     /// Set the description of the transaction (e.g. the CLI command that was executed)
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
     void set_description(const std::string & value) { description = value; }
 
     /// Set UID of a user that started the transaction
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
     void set_user_id(uint32_t value) { user_id = value; }
 
     /// Set $releasever variable value that was used during the transaction
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setReleasever(const std::string & value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setReleasever(const std::string & value)
     void set_releasever(const std::string & value) { releasever = value; }
 
     /// Set RPM database version after the transaction
     /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionEnd(const std::string & value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionEnd(const std::string & value)
     void set_rpmdb_version_end(const std::string & value) { rpmdb_version_end = value; }
 
     /// Set RPM database version before the transaction
     /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
     void set_rpmdb_version_begin(const std::string & value) { rpmdb_version_begin = value; }
 
     /// Set transaction state
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
     void set_state(State value) { state = value; }
 
     /// Create a new rpm package in the transaction and return a reference to it.
     /// The package is owned by the transaction.
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
     Package & new_package();
 
     /// Fill the transaction packages.
@@ -239,23 +239,23 @@ private:
     /// Create a new comps group in the transaction and return a reference to it.
     /// The group is owned by the transaction.
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
     CompsGroup & new_comps_group();
 
     /// Create a new comps environment in the transaction and return a reference to it.
     /// The environment is owned by the transaction.
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
     CompsEnvironment & new_comps_environment();
 
     /// Start the transaction by inserting it into the database
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
     void start();
 
     /// Finish the transaction by updating it's state in the database
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
+    // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
     void finish(TransactionState state);
 
     int64_t id{0};
