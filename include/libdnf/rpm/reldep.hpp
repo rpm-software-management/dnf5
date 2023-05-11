@@ -113,12 +113,13 @@ private:
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
     Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type);
 
-    /// @brief Returns Id of reldep
+    /// @brief Returns Id of parsed reldep
     ///
     /// @param base: The Base
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
+    /// @param create Whether a new Id should be created when name does not exist
     /// @return DependencyId
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
     static ReldepId get_reldep_id(
@@ -129,6 +130,7 @@ private:
     /// @param base: The Base
     /// @param reldepStr p_reldepStr: const Char* of reldep
     /// @return DependencyId
+    /// @param create Whether a new Id should be created when name does not exist
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
     static ReldepId get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
 
