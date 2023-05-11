@@ -118,7 +118,7 @@ public:
     // TODO(pkratoch): Either remove this method, or return a vector of the weak pointers to the repo objects
     std::set<std::string> get_repos() const;
 
-    /// @return `true` if the Group is installed (belongs to the @System repo).
+    /// @return `true` if the Group is installed (belongs to the \@System repo).
     /// @since 5.0
     bool get_installed() const;
 
