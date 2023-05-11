@@ -64,6 +64,7 @@ private:
     std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsuggests{nullptr};
     std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsupplements{nullptr};
     std::unique_ptr<libdnf::cli::session::AppendStringListOption> arch{nullptr};
+    std::unique_ptr<libdnf::cli::session::AppendStringListOption> file{nullptr};
 
     std::unique_ptr<libdnf::cli::session::BoolOption> exactdeps{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};

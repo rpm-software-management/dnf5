@@ -116,6 +116,7 @@ Repoquery command
    dnf5. The options are no longer needed.
  * Dropped: `--nvr`, `--envra` options. They are no longer supported.
  * Dropped: `--archlist` alias for `--arch`.
+ * Dropped: `-f` alias for `--file` also the arguments to `--file` are separated by comma instead of a space.
  * Moved `--groupmember` option to the Group info and list commands and renamed to `--contains-pkgs`.
  * --queryformat/--qf no longer prints additional new line at the end of each formatted string, bringing it closer to
    rpm --query behavior.
