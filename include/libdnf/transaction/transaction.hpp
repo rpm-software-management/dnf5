@@ -101,13 +101,13 @@ public:
     int64_t get_dt_end() const noexcept { return dt_end; }
 
     /// Get RPM database version before the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_begin()
     const std::string & get_rpmdb_version_begin() const noexcept { return rpmdb_version_begin; }
 
     /// Get RPM database version after the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_end()
     const std::string & get_rpmdb_version_end() const noexcept { return rpmdb_version_end; }
@@ -206,13 +206,13 @@ private:
     void set_releasever(const std::string & value) { releasever = value; }
 
     /// Set RPM database version after the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionEnd(const std::string & value)
     void set_rpmdb_version_end(const std::string & value) { rpmdb_version_end = value; }
 
     /// Set RPM database version before the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
     void set_rpmdb_version_begin(const std::string & value) { rpmdb_version_begin = value; }

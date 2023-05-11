@@ -125,7 +125,7 @@ public:
     /// Important for queries that resolve SPEC
     bool with_filenames{true};
     /// Important for queries that resolve SPEC
-    /// It will check whether SPEC is a binary -> /usr/(s)bin/<SPEC>
+    /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
     bool with_binaries{true};
     /// Important for queries that resolve SPEC
     std::vector<libdnf::rpm::Nevra::Form> nevra_forms{};

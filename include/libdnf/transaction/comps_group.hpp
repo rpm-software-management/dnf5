@@ -49,42 +49,42 @@ private:
 
     explicit CompsGroup(const Transaction & trans);
 
-    /// Get text id of the group (xml element: <comps><group><id>VALUE</id>...)
+    /// Get text id of the group (xml element: `<comps><group><id>VALUE</id>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getGroupId()
     const std::string & get_group_id() const noexcept { return group_id; }
 
-    /// Get text id of the group (xml element: <comps><group><id>VALUE</id>...)
+    /// Get text id of the group (xml element: `<comps><group><id>VALUE</id>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setGroupId(const std::string & value)
     void set_group_id(const std::string & value) { group_id = value; }
 
-    /// Get name of the group (xml element: <comps><group><name>VALUE</name>...)
+    /// Get name of the group (xml element: `<comps><group><name>VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getName()
     const std::string & get_name() const noexcept { return name; }
 
-    /// Set name of the group (xml element: <comps><group><name>VALUE</name>...)
+    /// Set name of the group (xml element: `<comps><group><name>VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setName(const std::string & value)
     void set_name(const std::string & value) { name = value; }
 
-    /// Get translated name of the group in the current locale (xml element: <comps><group><name xml:lang="...">VALUE</name>...)
+    /// Get translated name of the group in the current locale (xml element: `<comps><group><name xml:lang="...">VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getTranslatedName()
     const std::string & get_translated_name() const noexcept { return translated_name; }
 
-    /// Set translated name of the group in the current locale (xml element: <comps><group><name xml:lang="...">VALUE</name>...)
+    /// Set translated name of the group in the current locale (xml element: `<comps><group><name xml:lang="...">VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setTranslatedName(const std::string & value)
     void set_translated_name(const std::string & value) { translated_name = value; }
 
-    /// Get types of the packages to be installed with the group (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
+    /// Get types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
     libdnf::comps::PackageType get_package_types() const noexcept { return package_types; }
 
-    /// Set types of the packages to be installed with the group (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
+    /// Set types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setPackageTypes(libdnf::CompsPackageType value)
     void set_package_types(libdnf::comps::PackageType value) { package_types = value; }
@@ -134,12 +134,12 @@ private:
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setId(int64_t value)
     void set_id(int64_t value) { id = value; }
 
-    /// Get name of a package associated with a comps group (xml element: <comps><group><packagelist><packagereq>VALUE</packagereq>)
+    /// Get name of a package associated with a comps group (xml element: `<comps><group><packagelist><packagereq>VALUE</packagereq>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getName()
     const std::string & get_name() const noexcept { return name; }
 
-    /// Set name of a package associated with a comps group (xml element: <comps><group><packagelist><packagereq>VALUE</packagereq>)
+    /// Set name of a package associated with a comps group (xml element: `<comps><group><packagelist><packagereq>VALUE</packagereq>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setName(const std::string & value)
     void set_name(const std::string & value) { name = value; }
@@ -156,13 +156,13 @@ private:
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setInstalled(bool value)
     void set_installed(bool value) { installed = value; }
 
-    /// Get type of package associated with a comps group (xml element: <comps><group><packagelist><packagereq type="VALUE" ...>)
+    /// Get type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     /// See `enum class comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getPackageType()
     libdnf::comps::PackageType get_package_type() const noexcept { return package_type; }
 
-    /// Set type of package associated with a comps group (xml element: <comps><group><packagelist><packagereq type="VALUE" ...>)
+    /// Set type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     /// See `enum class libdnf::comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
