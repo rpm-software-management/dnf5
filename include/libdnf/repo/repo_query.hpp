@@ -86,9 +86,9 @@ public:
     /// @since 5.0
     void filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
-    /// Filter repos by their `name`.
+    /// Filter repositories by whether they are local
     ///
-    /// @param pattern  A string the filter is matched against.
+    /// @param local  `true` returns local repos, `false` remote repos.
     /// @since 5.0
     void filter_local(bool local);
 
