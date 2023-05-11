@@ -236,6 +236,8 @@ void RepoqueryCommand::set_argument_parser() {
         ",");
     arch = std::make_unique<libdnf::cli::session::AppendStringListOption>(
         *this, "arch", '\0', "Limit to packages of these architectures.", "ARCH,...", "", false, ",");
+    file = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+        *this, "file", '\0', "Limit to packages that own these files.", "FILE,...", "", false, ",");
 
     exactdeps = std::make_unique<libdnf::cli::session::BoolOption>(
         *this,
@@ -574,6 +576,10 @@ void RepoqueryCommand::run() {
 
     if (!arch->get_value().empty()) {
         full_package_query.filter_arch(arch->get_value(), libdnf::sack::QueryCmp::GLOB);
+    }
+
+    if (!file->get_value().empty()) {
+        full_package_query.filter_file(file->get_value(), libdnf::sack::QueryCmp::GLOB);
     }
 
     if (duplicates->get_value()) {
