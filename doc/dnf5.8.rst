@@ -119,6 +119,9 @@ Plugin commands
 
 Here is the list of the commands available as plugins.
 
+:ref:`builddep <builddep_plugin_ref-label>`
+    | Install missing dependencies for building an RPM package
+
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
 
