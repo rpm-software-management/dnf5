@@ -468,6 +468,12 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
+    static bool called = false;
+
+    if (called) {
+        libdnf_throw_assertion("RepoSack::updated_and_load_enabled_repos has already been called.");
+    }
+
     if (load_system) {
         // create the system repository if it does not exist
         base->get_repo_sack()->get_system_repo();
@@ -484,6 +490,8 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 
     // TODO(jmracek) Replace by call that will resolve active modules and apply modular filterring
     base->get_module_sack()->p_impl->module_filtering();
+
+    called = true;
 }
 
 
