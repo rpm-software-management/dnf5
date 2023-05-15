@@ -347,7 +347,8 @@ void BaseGoalTest::test_upgrade_not_available() {
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, first_event.get_job_settings()->get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_skip_unavailable());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_skip_unavailable());
 }
 
 void BaseGoalTest::test_upgrade_all() {
