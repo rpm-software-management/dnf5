@@ -144,10 +144,6 @@ void Base::load_config_from_dir() {
     load_config_from_dir(conf_dir);
 }
 
-void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
-    p_impl->plugins.register_plugin(std::make_unique<plugin::Plugin>(iplugin_instance));
-}
-
 void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     if (plugins_config_dir && config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
