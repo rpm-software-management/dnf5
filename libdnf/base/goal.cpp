@@ -104,7 +104,7 @@ public:
     GoalProblem add_reinstall_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_remove_to_goal(base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
-    void add_up_down_distrosync_to_goal(
+    GoalProblem add_up_down_distrosync_to_goal(
         base::Transaction & transaction,
         GoalAction action,
         const std::string & spec,
@@ -453,10 +453,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::DISTRO_SYNC:
             case GoalAction::DOWNGRADE:
             case GoalAction::UPGRADE:
-                add_up_down_distrosync_to_goal(transaction, action, spec, settings);
+                ret |= add_up_down_distrosync_to_goal(transaction, action, spec, settings);
                 break;
             case GoalAction::UPGRADE_MINIMAL:
-                add_up_down_distrosync_to_goal(transaction, action, spec, settings, true);
+                ret |= add_up_down_distrosync_to_goal(transaction, action, spec, settings, true);
                 break;
             case GoalAction::UPGRADE_ALL:
             case GoalAction::UPGRADE_ALL_MINIMAL: {
@@ -1210,7 +1210,7 @@ void Goal::Impl::add_remove_to_goal(
     rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
 }
 
-void Goal::Impl::add_up_down_distrosync_to_goal(
+GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     base::Transaction & transaction,
     GoalAction action,
     const std::string & spec,
@@ -1220,6 +1220,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     bool best = settings.resolve_best(base->get_config());
     bool skip_broken = action == GoalAction::UPGRADE ? true : settings.resolve_skip_broken(base->get_config());
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(base);
@@ -1228,8 +1229,8 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(action, spec, settings, libdnf::Logger::Level::WARNING);
-        return;
+        auto problem = transaction.p_impl->report_not_found(action, spec, settings, libdnf::Logger::Level::WARNING);
+        return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
     // Report when package is not installed
     rpm::PackageQuery all_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
@@ -1258,17 +1259,17 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                     spec,
                     {},
                     libdnf::Logger::Level::WARNING);
-            } else {
-                transaction.p_impl->add_resolve_log(
-                    action,
-                    GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
-                    settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
-                    spec,
-                    {},
-                    libdnf::Logger::Level::WARNING);
+                return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
             }
-            return;
+            transaction.p_impl->add_resolve_log(
+                action,
+                GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
+                settings,
+                libdnf::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                libdnf::Logger::Level::WARNING);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE;
         }
     }
 
@@ -1305,7 +1306,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                 spec,
                 {},
                 libdnf::Logger::Level::WARNING);
-            return;
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES;
         }
         query |= installed;
     }
@@ -1400,6 +1401,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         default:
             throw std::invalid_argument("Unsupported action");
     }
+    return GoalProblem::NO_PROBLEM;
 }
 
 void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf::comps::Package pkg) {
