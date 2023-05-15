@@ -846,7 +846,8 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     rpm::PackageQuery query(base);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        return transaction.p_impl->report_not_found(GoalAction::REINSTALL, spec, settings, log_level);
+        auto problem = transaction.p_impl->report_not_found(GoalAction::REINSTALL, spec, settings, log_level);
+        return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
     // Report when package is not installed
