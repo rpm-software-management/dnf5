@@ -111,9 +111,6 @@ public:
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
 
-    void add_plugin(plugin::IPlugin & iplugin_instance);
-    void load_plugins();
-
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
     class Impl;
@@ -145,6 +142,10 @@ private:
     /// Loads main configuration from files with ".conf" extension from directory defined by the current configuration.
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
+
+    /// Load plugins according to configuration
+    void load_plugins();
+
 
     WeakPtrGuard<Base, false> base_guard;
     // Impl has to be the second data member (right after base_guard which is needed for its construction) because it
