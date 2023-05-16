@@ -1,3 +1,15 @@
+# 5.0.11
+
+- Fix parameter names in documentation
+- Document create parameter of RelDep::get_id method
+- Document RepoQuery::filter_local
+- Document repoclosure in man pages
+- Document repoclosure command
+- Implement repoclosure plugin
+- package_query: filter_provides accepts also Reldep
+- Fix download callbacks and many segfaults in dnf5daemon
+- Add allow-downgrade configuration option
+
 # 5.0.10
 
 - dnf5-plugins: implement 'dnf5 copr'
