@@ -42,6 +42,7 @@ public:
     std::unique_ptr<GroupInstalledOption> installed{nullptr};
     std::unique_ptr<GroupHiddenOption> hidden{nullptr};
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
+    std::unique_ptr<GroupContainsPkgsOption> group_pkg_contains{nullptr};
 };
 
 
