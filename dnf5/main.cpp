@@ -46,12 +46,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf-cli/output/transaction_table.hpp"
 #include "libdnf-cli/utils/userconfirm.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf-cli/argument_parser.hpp>
 #include <libdnf-cli/exception.hpp>
 #include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
@@ -153,34 +155,33 @@ void RootCommand::set_argument_parser() {
         R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
-    setopt->set_parse_hook_func([&ctx](
-                                    [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                                    [[maybe_unused]] const char * option,
-                                    const char * value) {
-        auto val = strchr(value + 1, '=');
-        if (!val) {
-            throw std::runtime_error(fmt::format("setopt: Badly formatted argument value \"{}\"", value));
-        }
-        auto key = std::string(value, val);
-        auto dot_pos = key.rfind('.');
-        if (dot_pos != std::string::npos) {
-            if (dot_pos == key.size() - 1) {
-                throw std::runtime_error(
-                    std::string("setopt: Badly formatted argument value: Last key character cannot be '.': ") + value);
+    setopt->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            auto val = strchr(value + 1, '=');
+            if (!val) {
+                throw libdnf::cli::ArgumentParserError(M_("setopt: Badly formatted argument value \"{}\""), value);
             }
-            // Store repository option to vector. Use it later when repositories configuration will be loaded.
-            ctx.setopts.emplace_back(key, val + 1);
-        } else {
-            // Apply global option immediately.
-            auto & conf = ctx.base.get_config();
-            try {
-                conf.opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, val + 1);
-            } catch (const std::exception & ex) {
-                throw std::runtime_error(std::string("setopt: \"") + value + "\": " + ex.what());
+            auto key = std::string(value, val);
+            auto dot_pos = key.rfind('.');
+            if (dot_pos != std::string::npos) {
+                if (dot_pos == key.size() - 1) {
+                    throw libdnf::cli::ArgumentParserError(
+                        M_("setopt: Badly formatted argument value: Last key character cannot be '.': {}"), value);
+                }
+                // Store repository option to vector. Use it later when repositories configuration will be loaded.
+                ctx.setopts.emplace_back(key, val + 1);
+            } else {
+                // Apply global option immediately.
+                auto & conf = ctx.base.get_config();
+                try {
+                    conf.opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, val + 1);
+                } catch (const std::exception & ex) {
+                    throw libdnf::cli::ArgumentParserError(M_("setopt: \"{0}\": {1}"), value, std::string(ex.what()));
+                }
             }
-        }
-        return true;
-    });
+            return true;
+        });
     global_options_group->register_argument(setopt);
 
     // --setvar argument support
@@ -194,7 +195,7 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw std::runtime_error(fmt::format("setvar: Badly formatted argument value \"{}\"", value));
+                throw libdnf::cli::ArgumentParserError(M_("setvar: Badly formatted argument value \"{}\""), value);
             }
             auto name = std::string(value, val);
             ctx.base.get_vars()->set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
