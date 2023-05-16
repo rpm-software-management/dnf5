@@ -136,3 +136,17 @@ void CompsGroupQueryTest::test_query_filter_default() {
     expected = {get_group("core"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 }
+
+
+void CompsGroupQueryTest::test_query_filter_package_name() {
+    // Filter groups which contain given packages
+    GroupQuery q_groups(base);
+    q_groups.filter_package_name(std::vector<std::string>({"chrony"}));
+    std::vector<Group> expected = {get_group("standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    q_groups = GroupQuery(base);
+    q_groups.filter_package_name(std::vector<std::string>({"chrony", "fprintd*"}), libdnf::sack::QueryCmp::IGLOB);
+    expected = {get_group("critical-path-standard"), get_group("standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+}

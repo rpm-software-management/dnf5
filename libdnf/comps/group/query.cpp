@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/common/sack/match_string.hpp"
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/sack.hpp"
@@ -102,5 +103,19 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
 
 GroupQuery::GroupQuery(libdnf::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
 
+void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    for (auto it = get_data().begin(); it != get_data().end();) {
+        // Copy group so we can call `get_packages()`, this is needed because `it` is from a std::set and thus const
+        // but `get_packages()` modifies its group (it stores cache of its packages).
+        Group group = *it;
+        bool keep = std::ranges::any_of(
+            group.get_packages(), [&](const auto & pkg) { return match_string(pkg.get_name(), cmp, patterns); });
+        if (keep) {
+            ++it;
+        } else {
+            it = get_data().erase(it);
+        }
+    }
+}
 
 }  // namespace libdnf::comps

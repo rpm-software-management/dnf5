@@ -34,6 +34,7 @@ class CompsGroupQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_query_filter_name);
     CPPUNIT_TEST(test_query_filter_uservisible);
     CPPUNIT_TEST(test_query_filter_default);
+    CPPUNIT_TEST(test_query_filter_package_name);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -43,6 +44,7 @@ public:
     void test_query_filter_name();
     void test_query_filter_uservisible();
     void test_query_filter_default();
+    void test_query_filter_package_name();
 };
 
 #endif
