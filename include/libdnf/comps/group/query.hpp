@@ -54,6 +54,14 @@ public:
         filter(F::name, pattern, cmp);
     }
 
+    /// Filter groups by packages they contain. Keep only groups that contain packages with given names.
+    ///
+    /// @param patterns         A vector of strings (package names) the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    /// @since 5.12
+    void filter_package_name(
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+
     void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
         filter(F::name, patterns, cmp);
     }
