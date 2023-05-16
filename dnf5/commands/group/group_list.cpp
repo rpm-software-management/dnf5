@@ -38,6 +38,7 @@ void GroupListCommand::set_argument_parser() {
     // TODO(dmach): set_conflicting_args({available, installed});
     hidden = std::make_unique<GroupHiddenOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this);
+    group_pkg_contains = std::make_unique<GroupContainsPkgsOption>(*this);
 }
 
 void GroupListCommand::configure() {
@@ -68,6 +69,9 @@ void GroupListCommand::run() {
     }
     if (available->get_value()) {
         query.filter_installed(false);
+    }
+    if (!group_pkg_contains->get_value().empty()) {
+        query.filter_package_name(group_pkg_contains->get_value(), libdnf::sack::QueryCmp::IGLOB);
     }
 
     libdnf::cli::output::print_grouplist_table(query.list());

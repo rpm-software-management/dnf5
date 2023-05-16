@@ -88,6 +88,9 @@ Options
 ``--no-packages``
     | Used with ``install`` and ``remove`` commands to operate exclusively on the groups without manipulating any packages.
 
+``--contains-pkgs``
+    | Show only groups containing packges with specified names. List option, supports globs.
+
 Examples
 ========
 

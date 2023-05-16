@@ -50,6 +50,18 @@ public:
 };
 
 
+class GroupContainsPkgsOption : public libdnf::cli::session::StringListOption {
+public:
+    explicit GroupContainsPkgsOption(libdnf::cli::session::Command & command)
+        : StringListOption(
+              command,
+              "contains-pkgs",
+              '\0',
+              _("Show only groups containing packages with specified names. List option, supports globs."),
+              "PACKAGE_NAME,...") {}
+};
+
+
 class GroupSpecArguments : public libdnf::cli::session::StringArgumentList {
 public:
     GroupSpecArguments(libdnf::cli::session::Command & command, int nargs)

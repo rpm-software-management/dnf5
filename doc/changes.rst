@@ -105,6 +105,7 @@ Repoquery command
  * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
    dnf5. The options are no longer needed.
  * Dopped: `--nvr`, `--envra` options. They are no longer supported.
+ * Moved `--groupmember` option to the Group info and list commands and renamed to `--contains-pkgs`.
 
 Upgrade command
 ---------------
