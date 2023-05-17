@@ -94,7 +94,8 @@ public:
     void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
-    GoalProblem add_group_specs_to_goal(base::Transaction & transaction);
+    GoalProblem resolve_group_specs(base::Transaction & transaction);
+    void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
@@ -164,6 +165,12 @@ private:
     /// <libdnf::GoalAction, std::string filepath, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_filepaths;
 
+    // (spec, reason, query, settings)
+    using GroupItem = std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>;
+    // To correctly remove all unneeded group packages when a group is removed,
+    // the list of all other removed groups in the transaction is needed.
+    // Therefore resolve spec -> group_query first.
+    std::map<GoalAction, std::vector<GroupItem>> resolved_groups_specs;
     /// <libdnf::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>>
         group_specs;
@@ -499,15 +506,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     return ret;
 }
 
-GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction) {
+GoalProblem Goal::Impl::resolve_group_specs(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     auto & cfg_main = base->get_config();
-    // (spec, reason, query, settings)
-    using GroupItem = std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>;
-    // To correctly remove all unneeded group packages when a group is removed,
-    // the list of all other removed groups in the transaction is needed.
-    // Therefore resolve spec -> group_query first.
-    std::map<GoalAction, std::vector<GroupItem>> groups_action;
     for (auto & [action, reason, spec, settings] : group_specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
@@ -553,22 +554,24 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
                 ret |= GoalProblem::NOT_FOUND;
             }
         } else {
-            groups_action[action].push_back({spec, reason, std::move(group_query), settings});
+            resolved_groups_specs[action].push_back({spec, reason, std::move(group_query), settings});
         }
     }
 
-    // process group removals first
-    add_group_remove_to_goal(groups_action[GoalAction::REMOVE]);
+    return ret;
+}
 
-    for (auto & [spec, reason, group_query, settings] : groups_action[GoalAction::INSTALL]) {
+void Goal::Impl::add_resolved_group_specs_to_goal(base::Transaction & transaction) {
+    // process group removals first
+    add_group_remove_to_goal(resolved_groups_specs[GoalAction::REMOVE]);
+
+    for (auto & [spec, reason, group_query, settings] : resolved_groups_specs[GoalAction::INSTALL]) {
         add_group_install_to_goal(transaction, reason, group_query, settings);
     }
 
-    for (auto & [spec, reason, group_query, settings] : groups_action[GoalAction::UPGRADE]) {
+    for (auto & [spec, reason, group_query, settings] : resolved_groups_specs[GoalAction::UPGRADE]) {
         add_group_upgrade_to_goal(transaction, group_query, settings);
     }
-
-    return ret;
 }
 
 
@@ -1811,7 +1814,12 @@ base::Transaction Goal::resolve() {
     ret |= p_impl->add_specs_to_goal(transaction);
     p_impl->add_rpms_to_goal(transaction);
 
-    ret |= p_impl->add_group_specs_to_goal(transaction);
+    // Resolve group specs to group/environment queries first for two reasons:
+    // 1. group spec can also contain an environmental groups
+    // 2. group removal needs a list of all groups being removed to correctly remove packages
+    ret |= p_impl->resolve_group_specs(transaction);
+
+    p_impl->add_resolved_group_specs_to_goal(transaction);
 
     ret |= p_impl->add_reason_change_specs_to_goal(transaction);
 
