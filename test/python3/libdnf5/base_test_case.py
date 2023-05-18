@@ -38,6 +38,9 @@ class BaseTestCase(unittest.TestCase):
         self.base.get_config().cachedir = os.path.join(self.temp_dir, "cache")
         self.base.get_config().optional_metadata_types = libdnf5.conf.OPTIONAL_METADATA_TYPES
 
+        vars = self.base.get_vars().get()
+        vars.set("arch", "x86_64")
+
         self.base.setup()
 
         self.repo_sack = self.base.get_repo_sack()
