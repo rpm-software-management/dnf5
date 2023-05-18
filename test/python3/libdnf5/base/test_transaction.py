@@ -30,6 +30,7 @@ class TestTransaction(base_test_case.BaseTestCase):
         goal.add_rpm_install("pkg")
         transaction = goal.resolve()
 
+        self.assertEqual(1, transaction.get_transaction_packages_count())
         self.assertTrue(transaction.check_gpg_signatures())
         self.assertEqual((), transaction.get_gpg_signature_problems())
 
@@ -40,5 +41,6 @@ class TestTransaction(base_test_case.BaseTestCase):
         goal.add_rpm_install("pkg")
         transaction = goal.resolve()
 
+        self.assertEqual(1, transaction.get_transaction_packages_count())
         self.assertFalse(transaction.check_gpg_signatures())
         self.assertTrue(len(transaction.get_gpg_signature_problems()) > 0)
