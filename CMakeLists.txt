@@ -30,6 +30,7 @@ option(WITH_PYTHON_PLUGINS_LOADER "Build a special dnf5 plugin that loads Python
 # build options - features
 option(WITH_COMPS "Build with comps groups and environments support" ON)
 option(WITH_MODULEMD "Build with modulemd modules support" ON)
+option(WITH_STATIC_LIBSOLV "Link with dependencies of static libsolv" OFF)
 option(WITH_ZCHUNK "Build with zchunk delta compression support" ON)
 
 # build options - documentation
