@@ -26,6 +26,7 @@ jobs:
     dist_git_branches:
       - fedora-rawhide
       - fedora-38
+    copy_upstream_release_description: true
   - job: koji_build
     trigger: commit
     dist_git_branches:
