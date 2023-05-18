@@ -34,6 +34,7 @@ void BaseTransactionTest::test_check_gpg_signatures_no_gpgcheck() {
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve();
 
+    CPPUNIT_ASSERT_EQUAL((size_t)1, transaction.get_transaction_packages_count());
     CPPUNIT_ASSERT(transaction.check_gpg_signatures());
     CPPUNIT_ASSERT(transaction.get_gpg_signature_problems().empty());
 }
@@ -47,6 +48,7 @@ void BaseTransactionTest::test_check_gpg_signatures_fail() {
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve();
 
+    CPPUNIT_ASSERT_EQUAL((size_t)1, transaction.get_transaction_packages_count());
     CPPUNIT_ASSERT(!transaction.check_gpg_signatures());
     CPPUNIT_ASSERT(!transaction.get_gpg_signature_problems().empty());
 }
