@@ -138,6 +138,53 @@ private:
 };
 
 
+class ActionHeaderPrinterEnvironment {
+public:
+    ActionHeaderPrinterEnvironment(struct libscols_table * table) : table(table) {}
+
+    template <class T>
+    struct libscols_line * print(const T & tsgrp) {
+        if (!current_action || *current_action != tsgrp.get_action() || !current_reason ||
+            *current_reason != tsgrp.get_reason()) {
+            auto reason = tsgrp.get_reason();
+            auto action = tsgrp.get_action();
+            current_header_line = scols_table_new_line(table, NULL);
+            std::string text;
+
+            switch (action) {
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                    text = "Installing environmental groups";
+                    break;
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                    text = "Removing environmental groups";
+                    break;
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                    text = "Upgrading environmental groups";
+                    break;
+                default:
+                    libdnf_throw_assertion(
+                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+            }
+
+            text += ":";
+
+            scols_line_set_data(current_header_line, COL_NAME, text.c_str());
+
+            current_action = action;
+            current_reason = reason;
+        }
+
+        return current_header_line;
+    }
+
+private:
+    struct libscols_table * table = nullptr;
+    struct libscols_line * current_header_line = nullptr;
+    std::optional<libdnf::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+};
+
+
 class ActionHeaderPrinterGroup {
 public:
     ActionHeaderPrinterGroup(struct libscols_table * table) : table(table) {}
@@ -315,8 +362,9 @@ bool print_transaction_table(Transaction & transaction) {
     //static struct libscols_table * create_transaction_table(bool with_status) {}
     auto tspkgs = transaction.get_transaction_packages();
     auto tsgrps = transaction.get_transaction_groups();
+    auto tsenvs = transaction.get_transaction_environments();
 
-    if (tspkgs.empty() && tsgrps.empty()) {
+    if (tspkgs.empty() && tsgrps.empty() && tsenvs.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
@@ -454,6 +502,18 @@ bool print_transaction_table(Transaction & transaction) {
         }
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tsgrp.get_action()));
+    }
+
+    ActionHeaderPrinterEnvironment action_header_printer_environment(tb);
+    for (auto & tsenv : tsenvs) {
+        auto env = tsenv.get_environment();
+
+        header_ln = action_header_printer_environment.print(tsenv);
+
+        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        scols_line_set_data(ln, COL_NAME, env.get_name().c_str());
+        auto ce = scols_line_get_cell(ln, COL_NAME);
+        scols_cell_set_color(ce, action_color(tsenv.get_action()));
     }
 
     scols_print_table(tb);
