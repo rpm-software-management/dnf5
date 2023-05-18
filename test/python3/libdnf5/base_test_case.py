@@ -34,9 +34,10 @@ class BaseTestCase(unittest.TestCase):
 
         self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
-        self.base.get_config().installroot = os.path.join(self.temp_dir, "installroot")
-        self.base.get_config().cachedir = os.path.join(self.temp_dir, "cache")
-        self.base.get_config().optional_metadata_types = libdnf5.conf.OPTIONAL_METADATA_TYPES
+        config = self.base.get_config()
+        config.installroot = os.path.join(self.temp_dir, "installroot")
+        config.cachedir = os.path.join(self.temp_dir, "cache")
+        config.optional_metadata_types = libdnf5.conf.OPTIONAL_METADATA_TYPES
 
         vars = self.base.get_vars().get()
         vars.set("arch", "x86_64")
