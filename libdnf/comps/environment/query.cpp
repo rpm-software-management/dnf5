@@ -40,7 +40,11 @@ extern "C" {
 namespace libdnf::comps {
 
 
-EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
+EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(base) {
+    if (empty) {
+        return;
+    }
+
     libdnf::solv::CompsPool & pool = get_comps_pool(base);
 
     // Map of available environments:
@@ -97,7 +101,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
 }
 
 
-EnvironmentQuery::EnvironmentQuery(Base & base) : EnvironmentQuery(base.get_weak_ptr()) {}
+EnvironmentQuery::EnvironmentQuery(Base & base, bool empty) : EnvironmentQuery(base.get_weak_ptr(), empty) {}
 
 
 }  // namespace libdnf::comps
