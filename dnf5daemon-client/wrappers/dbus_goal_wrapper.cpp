@@ -38,6 +38,8 @@ DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> tra
                 transaction_packages.back().get_package().get_id(), transaction_packages.size() - 1);
         } else if (object_type == libdnf::transaction::TransactionItemType::GROUP) {
             transaction_groups.push_back(DbusTransactionGroupWrapper(ti));
+        } else if (object_type == libdnf::transaction::TransactionItemType::ENVIRONMENT) {
+            transaction_environments.push_back(DbusTransactionEnvironmentWrapper(ti));
         }
     }
     // set "replaces" for transaction_packages. Since transaction_package contains only
