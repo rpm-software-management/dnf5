@@ -119,6 +119,7 @@ private:
 // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentGroup
 class CompsEnvironmentGroup {
 private:
+    friend Transaction;
     friend CompsEnvironmentGroupDbUtils;
 
     /// Get database id (primary key)

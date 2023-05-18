@@ -39,6 +39,7 @@ class KeyInfo;
 namespace libdnf::base {
 
 class TransactionGroup;
+class TransactionEnvironment;
 class TransactionPackage;
 
 /// Error related to processing transaction
@@ -89,6 +90,9 @@ public:
 
     /// @return the transaction groups.
     std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
+
+    /// @return environmental groups that are part of the transaction.
+    std::vector<libdnf::base::TransactionEnvironment> & get_transaction_environments() const;
 
     /// Download all inbound packages (packages that are being installed on the
     /// system). Fails immediately on the first package download failure. Will
@@ -163,6 +167,7 @@ public:
     std::vector<std::string> get_gpg_signature_problems() const noexcept;
 
 private:
+    friend class TransactionEnvironment;
     friend class TransactionGroup;
     friend class TransactionPackage;
     friend class libdnf::Goal;
