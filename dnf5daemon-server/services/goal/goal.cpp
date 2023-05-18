@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "callbacks.hpp"
 #include "dbus.hpp"
+#include "environment.hpp"
 #include "group.hpp"
 #include "package.hpp"
 #include "transaction.hpp"
@@ -124,6 +125,14 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
                 transaction_item_reason_to_string(tsgrp.get_reason()),
                 trans_item_attrs,
                 group_to_map(tsgrp.get_group(), grp_attrs)));
+        }
+        for (auto & tsenv : transaction.get_transaction_environments()) {
+            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::ENVIRONMENT),
+                transaction_item_action_to_string(tsenv.get_action()),
+                transaction_item_reason_to_string(tsenv.get_reason()),
+                trans_item_attrs,
+                environment_to_map(tsenv.get_environment(), grp_attrs)));
         }
         // there are transactions resolved without problems but still resolve_logs
         // may contain some warnings / informations
