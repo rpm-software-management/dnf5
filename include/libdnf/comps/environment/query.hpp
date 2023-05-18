@@ -39,8 +39,8 @@ using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
 class EnvironmentQuery : public libdnf::sack::Query<Environment> {
 public:
     // Create new query with newly composed environments (using only solvables from currently enabled repositories)
-    explicit EnvironmentQuery(const libdnf::BaseWeakPtr & base);
-    explicit EnvironmentQuery(libdnf::Base & base);
+    explicit EnvironmentQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
+    explicit EnvironmentQuery(libdnf::Base & base, bool empty = false);
 
     void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
         filter(F::environmentid, pattern, cmp);
