@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/group/query.hpp"
 #include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/utils/format.hpp"
@@ -109,6 +110,7 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
       rpm_signature(src.rpm_signature),
       packages(src.packages),
       groups(src.groups),
+      environments(src.environments),
       resolve_logs(src.resolve_logs),
       transaction_problems(src.transaction_problems),
       signature_problems(src.signature_problems) {}
@@ -120,6 +122,7 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     rpm_signature = other.rpm_signature;
     packages = other.packages;
     groups = other.groups;
+    environments = other.environments;
     resolve_logs = other.resolve_logs;
     transaction_problems = other.transaction_problems;
     signature_problems = other.signature_problems;
@@ -140,6 +143,10 @@ std::size_t Transaction::get_transaction_packages_count() const {
 
 std::vector<TransactionGroup> & Transaction::get_transaction_groups() const {
     return p_impl->groups;
+}
+
+std::vector<TransactionEnvironment> & Transaction::get_transaction_environments() const {
+    return p_impl->environments;
 }
 
 GoalProblem Transaction::Impl::report_not_found(
@@ -399,6 +406,12 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         packages.emplace_back(std::move(tspkg));
     }
 
+    // Add environmental groups to the transaction
+    for (auto & [environment, action, reason, with_optional] : solved_goal.list_environments()) {
+        TransactionEnvironment tsenv(environment, action, reason, with_optional);
+        environments.emplace_back(std::move(tsenv));
+    }
+
     // Add groups to the transaction
     for (auto & [group, action, reason, package_types] : solved_goal.list_groups()) {
         TransactionGroup tsgrp(group, action, reason, package_types);
@@ -602,6 +615,21 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     db_transaction.set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
     db_transaction.fill_transaction_packages(packages);
 
+    if (!environments.empty()) {
+        comps::GroupQuery installed_query(base);
+        installed_query.filter_installed(true);
+        std::set<std::string> installed_group_ids{};
+        for (const auto & grp : installed_query) {
+            installed_group_ids.emplace(grp.get_groupid());
+        }
+        for (const auto & tsgrp : groups) {
+            if (transaction_item_action_is_inbound(tsgrp.get_action())) {
+                installed_group_ids.emplace(tsgrp.get_group().get_groupid());
+            }
+        }
+        db_transaction.fill_transaction_environments(environments, installed_group_ids);
+    }
+
     if (!groups.empty()) {
         // consider currently installed packages + inbound packages as installed for group members
         rpm::PackageQuery installed_query(base);
@@ -752,6 +780,33 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                     logger->warning(
                         "Failed to remove installed group definition file \"{}\": {}",
                         group_xml_path.string(),
+                        ec.message());
+                }
+            }
+        }
+
+        // Set correct system state for environmental groups in the transaction
+        for (const auto & tsenvironment : environments) {
+            auto environment = tsenvironment.get_environment();
+            auto environment_xml_path = comps_xml_dir / (environment.get_environmentid() + ".xml");
+            if (transaction_item_action_is_inbound(tsenvironment.get_action())) {
+                libdnf::system::EnvironmentState state;
+                // Remember groups installed by this environmental group
+                for (const auto & grpid : environment.get_groups()) {
+                    state.groups.emplace_back(grpid);
+                }
+                system_state.set_environment_state(environment.get_environmentid(), state);
+                // save the current xml group definition
+                environment.serialize(environment_xml_path);
+            } else {
+                // delete system state data for removed groups
+                system_state.remove_environment_state(environment.get_environmentid());
+                std::error_code ec;
+                std::filesystem::remove(environment_xml_path, ec);
+                if (ec) {
+                    logger->warning(
+                        "Failed to remove installed environmental group definition file \"{}\": {}",
+                        environment_xml_path.string(),
                         ec.message());
                 }
             }

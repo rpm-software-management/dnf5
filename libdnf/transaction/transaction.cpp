@@ -164,6 +164,37 @@ void Transaction::fill_transaction_packages(
 }
 
 
+void Transaction::fill_transaction_environments(
+    const std::vector<libdnf::base::TransactionEnvironment> & transaction_environments,
+    const std::set<std::string> & installed_group_ids) {
+    for (auto & tsenv : transaction_environments) {
+        auto & new_env = new_comps_environment();
+        auto environment = tsenv.get_environment();
+        new_env.set_name(environment.get_name());
+        new_env.set_translated_name(environment.get_translated_name());
+        libdnf::comps::PackageType package_types{libdnf::comps::PackageType::MANDATORY};
+        if (tsenv.get_with_optional()) {
+            package_types |= libdnf::comps::PackageType::OPTIONAL;
+        }
+        new_env.set_package_types(package_types);
+        for (const auto & group_id : environment.get_groups()) {
+            auto & new_env_grp = new_env.new_group();
+            new_env_grp.set_group_id(group_id);
+            new_env_grp.set_group_type(libdnf::comps::PackageType::MANDATORY);
+            new_env_grp.set_installed(installed_group_ids.contains(group_id));
+        }
+        for (const auto & group_id : environment.get_optional_groups()) {
+            auto & new_env_grp = new_env.new_group();
+            new_env_grp.set_group_id(group_id);
+            new_env_grp.set_group_type(libdnf::comps::PackageType::OPTIONAL);
+            new_env_grp.set_installed(installed_group_ids.contains(group_id));
+        }
+        new_env.set_action(tsenv.get_action());
+        new_env.set_reason(tsenv.get_reason());
+    }
+}
+
+
 void Transaction::fill_transaction_groups(
     const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
     const std::set<std::string> & installed_names) {

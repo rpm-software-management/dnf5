@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/base/transaction_environment.hpp"
 #include "libdnf/base/transaction_group.hpp"
 #include "libdnf/base/transaction_package.hpp"
 
@@ -232,9 +233,18 @@ private:
     void fill_transaction_packages(const std::vector<libdnf::base::TransactionPackage> & transaction_packages);
 
     /// Fill the transaction groups.
+    /// @param transaction_groups Groups that are part of the transaction
+    /// @param installed_names Names of currently installed plus inbound packages
     void fill_transaction_groups(
         const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
         const std::set<std::string> & installed_names);
+
+    /// Fill the transaction environmental groups.
+    /// @param transaction_groups Environmental groups that are part of the transaction
+    /// @param installed_names Ids of currently installed plus inbound groups
+    void fill_transaction_environments(
+        const std::vector<libdnf::base::TransactionEnvironment> & transaction_environments,
+        const std::set<std::string> & installed_group_ids);
 
     /// Create a new comps group in the transaction and return a reference to it.
     /// The group is owned by the transaction.
