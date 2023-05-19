@@ -20,29 +20,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_GROUP_GROUP_INFO_HPP
 #define DNF5_COMMANDS_GROUP_GROUP_INFO_HPP
 
-#include "arguments.hpp"
-
-#include <dnf5/context.hpp>
-
-#include <memory>
-#include <vector>
-
+#include "group_list.hpp"
 
 namespace dnf5 {
 
 
-class GroupInfoCommand : public Command {
+class GroupInfoCommand : public GroupListCommand {
 public:
-    explicit GroupInfoCommand(Context & context) : Command(context, "info") {}
-    void set_argument_parser() override;
-    void configure() override;
-    void run() override;
+    explicit GroupInfoCommand(Context & context) : GroupListCommand(context, "info") {}
 
-    std::unique_ptr<GroupAvailableOption> available{nullptr};
-    std::unique_ptr<GroupInstalledOption> installed{nullptr};
-    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
-    std::unique_ptr<GroupContainsPkgsOption> group_pkg_contains{nullptr};
+private:
+    void print(const libdnf::comps::GroupQuery & query) override;
 };
 
 

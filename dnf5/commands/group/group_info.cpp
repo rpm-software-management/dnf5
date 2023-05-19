@@ -20,60 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_info.hpp"
 
 #include <libdnf-cli/output/groupinfo.hpp>
-#include <libdnf/comps/comps.hpp>
-#include <libdnf/comps/group/group.hpp>
-#include <libdnf/comps/group/query.hpp>
-#include <libdnf/conf/const.hpp>
 
 namespace dnf5 {
 
 using namespace libdnf::cli;
 
-void GroupInfoCommand::set_argument_parser() {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Print details about comps groups");
-
-    available = std::make_unique<GroupAvailableOption>(*this);
-    installed = std::make_unique<GroupInstalledOption>(*this);
-    available->arg->add_conflict_argument(*installed->arg);
-    hidden = std::make_unique<GroupHiddenOption>(*this);
-    group_specs = std::make_unique<GroupSpecArguments>(*this);
-    group_pkg_contains = std::make_unique<GroupContainsPkgsOption>(*this);
-}
-
-void GroupInfoCommand::configure() {
-    auto & context = get_context();
-    context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_COMPS);
-}
-
-void GroupInfoCommand::run() {
-    auto & ctx = get_context();
-
-    libdnf::comps::GroupQuery query(ctx.base);
-    auto group_specs_str = group_specs->get_value();
-
-    // Filter by patterns if given
-    if (group_specs_str.size() > 0) {
-        libdnf::comps::GroupQuery query_names(query);
-        query_names.filter_name(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        query.filter_groupid(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        query |= query_names;
-    } else if (not hidden->get_value()) {
-        // Filter uservisible only if patterns are not given
-        query.filter_uservisible(true);
-    }
-    if (installed->get_value()) {
-        query.filter_installed(true);
-    }
-    if (available->get_value()) {
-        query.filter_installed(false);
-    }
-    if (!group_pkg_contains->get_value().empty()) {
-        query.filter_package_name(group_pkg_contains->get_value(), libdnf::sack::QueryCmp::IGLOB);
-    }
-
+void GroupInfoCommand::print(const libdnf::comps::GroupQuery & query) {
     for (auto group : query.list()) {
         libdnf::cli::output::print_groupinfo_table(group);
         std::cout << '\n';
