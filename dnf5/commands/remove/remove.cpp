@@ -59,7 +59,7 @@ void RemoveCommand::configure() {
 void RemoveCommand::run() {
     auto goal = get_context().get_goal();
     for (const auto & spec : pkg_specs) {
-        goal->add_rpm_remove(spec);
+        goal->add_remove(spec);
     }
     // To enable removal of dependency packages it requires to use allow_erasing
     goal->set_allow_erasing(true);
