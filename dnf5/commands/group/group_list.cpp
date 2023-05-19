@@ -35,7 +35,7 @@ void GroupListCommand::set_argument_parser() {
 
     available = std::make_unique<GroupAvailableOption>(*this);
     installed = std::make_unique<GroupInstalledOption>(*this);
-    // TODO(dmach): set_conflicting_args({available, installed});
+    available->arg->add_conflict_argument(*installed->arg);
     hidden = std::make_unique<GroupHiddenOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this);
     group_pkg_contains = std::make_unique<GroupContainsPkgsOption>(*this);
