@@ -331,7 +331,9 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
         const std::string_view ext(".rpm");
         if (libdnf::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
             // spec is a remote rpm file or a local rpm file
-            libdnf_user_assert(action != GoalAction::REMOVE, "Unsupported argument for REMOVE action: {}", spec);
+            if (action == GoalAction::REMOVE) {
+                throw RuntimeError(M_("Unsupported argument for REMOVE action: {}"), spec);
+            }
             rpm_filepaths.emplace_back(action, spec, settings);
         } else {
             // otherwise the spec is a repository package
