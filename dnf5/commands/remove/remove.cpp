@@ -37,13 +37,15 @@ void RemoveCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Remove (uninstall) software");
 
-    patterns_to_remove_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_remove_options);
-    keys->set_description("List of keys to match");
+    auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of package specs to remove");
+    keys->set_parse_hook_func(
+        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+            for (int i = 0; i < argc; ++i) {
+                pkg_specs.emplace_back(argv[i]);
+            }
+            return true;
+        });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, true); });
     cmd.register_positional_arg(keys);
 }
@@ -56,9 +58,8 @@ void RemoveCommand::configure() {
 
 void RemoveCommand::run() {
     auto goal = get_context().get_goal();
-    for (auto & pattern : *patterns_to_remove_options) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal->add_rpm_remove(option->get_value());
+    for (const auto & spec : pkg_specs) {
+        goal->add_rpm_remove(spec);
     }
     // To enable removal of dependency packages it requires to use allow_erasing
     goal->set_allow_erasing(true);

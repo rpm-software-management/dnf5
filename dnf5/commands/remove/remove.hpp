@@ -36,7 +36,8 @@ public:
     void configure() override;
     void run() override;
 
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
+private:
+    std::vector<std::string> pkg_specs;
 };
 
 }  // namespace dnf5
