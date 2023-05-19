@@ -66,9 +66,21 @@ void GroupListCommand::run() {
     }
     if (installed->get_value()) {
         query.filter_installed(true);
-    }
-    if (available->get_value()) {
+    } else if (available->get_value()) {
         query.filter_installed(false);
+    } else {
+        // to remove duplicities in the output remove from query all available
+        // groups with the same groupid as any of the installed groups.
+        libdnf::comps::GroupQuery query_installed(query);
+        query_installed.filter_installed(true);
+        std::vector<std::string> installed_ids;
+        for (const auto & grp : query_installed) {
+            installed_ids.emplace_back(grp.get_groupid());
+        }
+        libdnf::comps::GroupQuery query_available(query);
+        query_available.filter_installed(false);
+        query_available.filter_groupid(installed_ids);
+        query -= query_available;
     }
     if (!group_pkg_contains->get_value().empty()) {
         query.filter_package_name(group_pkg_contains->get_value(), libdnf::sack::QueryCmp::IGLOB);
