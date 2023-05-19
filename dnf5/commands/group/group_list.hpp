@@ -24,10 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf/comps/group/query.hpp>
 
 #include <memory>
-#include <vector>
 
 
 namespace dnf5 {
@@ -35,7 +34,7 @@ namespace dnf5 {
 
 class GroupListCommand : public Command {
 public:
-    explicit GroupListCommand(Context & context) : Command(context, "list") {}
+    explicit GroupListCommand(Context & context) : GroupListCommand(context, "list") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
@@ -45,6 +44,12 @@ public:
     std::unique_ptr<GroupHiddenOption> hidden{nullptr};
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
     std::unique_ptr<GroupContainsPkgsOption> group_pkg_contains{nullptr};
+
+protected:
+    GroupListCommand(Context & context, const std::string & name) : Command(context, name) {}
+
+private:
+    virtual void print(const libdnf::comps::GroupQuery & query);
 };
 
 

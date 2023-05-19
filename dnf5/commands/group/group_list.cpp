@@ -74,6 +74,10 @@ void GroupListCommand::run() {
         query.filter_package_name(group_pkg_contains->get_value(), libdnf::sack::QueryCmp::IGLOB);
     }
 
+    print(query);
+}
+
+void GroupListCommand::print(const libdnf::comps::GroupQuery & query) {
     libdnf::cli::output::print_grouplist_table(query.list());
 }
 
