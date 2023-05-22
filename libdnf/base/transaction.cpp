@@ -281,15 +281,10 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 
 void Transaction::download() {
     libdnf::repo::PackageDownloader downloader(p_impl->base);
-    auto & destdir_option = p_impl->base->get_config().get_destdir_option();
     for (auto & tspkg : this->get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
             tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
-            if (destdir_option.empty()) {
-                downloader.add(tspkg.get_package());
-            } else {
-                downloader.add(tspkg.get_package(), destdir_option.get_value().c_str());
-            }
+            downloader.add(tspkg.get_package());
         }
     }
     downloader.download(true, true);
