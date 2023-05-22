@@ -1,3 +1,14 @@
+# Next release
+
+- Implement keepcache functionality (RhBug:2176384)
+  - API changes:
+    - libdnf::repo::PackageDownloader default ctor dropped (now accepting the Base object)
+    - libdnf::base::Transaction not accepting dest_dir anymore (implicitly taken from configuration)
+  - A note for existing users:
+    - Regardless of the keepcache option, all downloaded packages have been cached up until now.
+    - Starting from now, downloaded packages will be kept only until the next successful transaction (keepcache=False by default).
+    - To remove all existing packages from the cache, use the `dnf5 clean packages` command.
+
 # 5.0.11
 
 - Add --contains-pkgs option to group info
