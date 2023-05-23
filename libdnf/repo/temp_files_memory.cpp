@@ -30,7 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::repo {
 
 TempFilesMemory::TempFilesMemory(const std::string & parent_dir)
-    : full_memory_path(std::filesystem::path(parent_dir) / MEMORY_FILENAME) {}
+    : full_memory_path(std::filesystem::path(parent_dir) / MEMORY_FILENAME) {
+    std::filesystem::create_directories(parent_dir);
+}
 
 TempFilesMemory::~TempFilesMemory() = default;
 

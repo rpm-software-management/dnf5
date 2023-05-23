@@ -39,6 +39,8 @@ public:
 
     /// @brief Create the object for managing temporary files' paths.
     /// @param parent_dir Path to a directory where the memory file is or will be stored.
+    ///                   If the directory doesn't exist yet, it will be created.
+    /// @exception std::filesystem::filesystem_error When an error occurs during creating the parent directory.
     TempFilesMemory(const std::string & parent_dir);
     ~TempFilesMemory();
 
