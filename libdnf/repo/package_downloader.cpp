@@ -122,6 +122,10 @@ void PackageDownloader::add(const libdnf::rpm::Package & package, const std::str
 
 
 void PackageDownloader::download(bool fail_fast, bool resume) try {
+    if (p_impl->targets.empty()) {
+        return;
+    }
+
     GError * err{nullptr};
 
     std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
