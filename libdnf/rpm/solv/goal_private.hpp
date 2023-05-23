@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solver.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/comps/environment/environment.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/reldep.hpp"
@@ -70,6 +71,7 @@ public:
         std::optional<std::string> group_id);
 
     /// Remember group action in the transaction
+    /// @param group Group to be added
     /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
     /// @param reason Reason for the group action - USER, DEPENDENCY
     /// @param package_types Types of group packages requested to be installed along with the group. Used only for INSTALL action
@@ -78,6 +80,13 @@ public:
         transaction::TransactionItemAction action,
         transaction::TransactionItemReason reason,
         libdnf::comps::PackageType package_types);
+
+    /// Add environmental group action to the transaction.
+    /// @param environment Environmental group to be added
+    /// @param action Action to be committed - INSTALL, REMOVE, UPGRADE
+    /// @param with_optional Whether also optional groups were taken into account
+    void add_environment(
+        const libdnf::comps::Environment & environment, transaction::TransactionItemAction action, bool with_optional);
 
     libdnf::GoalProblem resolve();
 
@@ -95,6 +104,15 @@ public:
         libdnf::comps::PackageType>>
     list_groups() {
         return groups;
+    };
+
+    std::vector<std::tuple<
+        libdnf::comps::Environment,
+        transaction::TransactionItemAction,
+        transaction::TransactionItemReason,
+        bool>>
+    list_environments() {
+        return environments;
     };
 
     std::vector<std::tuple<libdnf::rpm::Package, transaction::TransactionItemReason, std::optional<std::string>>>
@@ -200,6 +218,13 @@ private:
         transaction::TransactionItemReason,
         libdnf::comps::PackageType>>
         groups;
+
+    std::vector<std::tuple<
+        libdnf::comps::Environment,
+        transaction::TransactionItemAction,
+        transaction::TransactionItemReason,
+        bool>>
+        environments;
 
     // Reason change requirements
     std::vector<std::tuple<libdnf::rpm::Package, transaction::TransactionItemReason, std::optional<std::string>>>
@@ -330,6 +355,11 @@ inline void GoalPrivate::add_group(
     transaction::TransactionItemReason reason,
     libdnf::comps::PackageType package_types) {
     groups.emplace_back(group, action, reason, package_types);
+}
+
+inline void GoalPrivate::add_environment(
+    const libdnf::comps::Environment & environment, transaction::TransactionItemAction action, bool with_optional) {
+    environments.emplace_back(environment, action, transaction::TransactionItemReason::USER, with_optional);
 }
 
 inline void GoalPrivate::add_reason_change(
