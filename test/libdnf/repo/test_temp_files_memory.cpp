@@ -44,7 +44,14 @@ void TempFilesMemoryTest::tearDown() {
     CppUnit::TestCase::tearDown();
 }
 
-void TempFilesMemoryTest::test_get_files_is_empty_when_path_not_exists() {
+void TempFilesMemoryTest::test_directory_is_created_when_not_exists() {
+    auto test_path = temp_dir->get_path() / "some/new/path";
+    CPPUNIT_ASSERT(!std::filesystem::exists(test_path));
+    TempFilesMemory memory(test_path);
+    CPPUNIT_ASSERT(std::filesystem::exists(test_path));
+}
+
+void TempFilesMemoryTest::test_get_files_when_empty_storage() {
     TempFilesMemory memory(temp_dir->get_path() / "unknown/path");
     CPPUNIT_ASSERT(memory.get_files().empty());
 }
