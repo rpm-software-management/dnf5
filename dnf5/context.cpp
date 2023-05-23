@@ -428,6 +428,10 @@ bool Context::check_gpg_signatures(libdnf::base::Transaction & transaction) {
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
     transaction.download();
 
+    if (base.get_config().get_downloadonly_option().get_value()) {
+        return;
+    }
+
     std::cout << std::endl << "Verifying PGP signatures" << std::endl;
     if (!check_gpg_signatures(transaction)) {
         throw libdnf::cli::CommandExitError(1, M_("Signature verification failed"));
