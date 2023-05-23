@@ -30,7 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class TempFilesMemoryTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(TempFilesMemoryTest);
-    CPPUNIT_TEST(test_get_files_is_empty_when_path_not_exists);
+    CPPUNIT_TEST(test_directory_is_created_when_not_exists);
+    CPPUNIT_TEST(test_get_files_when_empty_storage);
     CPPUNIT_TEST(test_get_files_throws_exception_when_invalid_format);
     CPPUNIT_TEST(test_get_files_returns_stored_values);
     CPPUNIT_TEST(test_add_files_when_empty_storage);
@@ -44,7 +45,8 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    void test_get_files_is_empty_when_path_not_exists();
+    void test_directory_is_created_when_not_exists();
+    void test_get_files_when_empty_storage();
     void test_get_files_throws_exception_when_invalid_format();
     void test_get_files_returns_stored_values();
     void test_add_files_when_empty_storage();
