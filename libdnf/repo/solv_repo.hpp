@@ -96,13 +96,23 @@ public:
 
     void set_needs_internalizing() { needs_internalizing = true; };
 
+    /// @return  Vector of group ids of system repo groups without valid xml
     std::vector<std::string> & get_groups_missing_xml() { return groups_missing_xml; };
+
+    /// @return  Vector of environment ids of system repo environmental groups without valid xml
+    std::vector<std::string> & get_environments_missing_xml() { return environments_missing_xml; };
 
     /// Create a group solvable based on what's available in system state. Used in
     /// case we are not able to load metadata from xml file.
     /// @param groupid  Id of the group
     /// @param state    group state from the system state
     void create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state);
+
+    /// Create an environmental group solvable based on what's available in
+    /// system state. Used in case we are not able to load metadata from xml file.
+    /// @param environmentid  Id of the environment
+    /// @param state    environment state from the system state
+    void create_environment_solvable(const std::string & environmentid, const libdnf::system::EnvironmentState & state);
 
     /// Read comps group solvable from its xml file.
     /// @param path  Path to xml file.
@@ -137,6 +147,9 @@ private:
 
     /// List of system repo groups without valid file with xml definition
     std::vector<std::string> groups_missing_xml;
+
+    /// List of system repo environmental groups without valid file with xml definition
+    std::vector<std::string> environments_missing_xml;
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership

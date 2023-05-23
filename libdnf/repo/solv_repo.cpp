@@ -295,6 +295,14 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                     groups_missing_xml.push_back(std::move(group_id));
                 }
             }
+            for (auto & environment_id : system_state.get_installed_environments()) {
+                auto ext_fn = comps_dir / (environment_id + ".xml");
+                if (!read_group_solvable_from_xml(ext_fn)) {
+                    // The environment xml file either not exists or is not parseable by
+                    // libsolv.
+                    environments_missing_xml.push_back(std::move(environment_id));
+                }
+            }
             break;
         }
         case RepodataType::FILELISTS:
@@ -730,6 +738,46 @@ void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf::
 
     // Mark the repo as user-visible
     repodata_set_void(data, group_solvable_id, SOLVABLE_ISVISIBLE);
+
+    repodata_internalize(data);
+}
+
+void SolvRepo::create_environment_solvable(
+    const std::string & environmentid, const libdnf::system::EnvironmentState & state) {
+    solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
+    libdnf_assert(
+        comps_repo == (*pool)->installed,
+        "SolvRepo::create_environment_solvable() call enabled only for @System repo.");
+
+    // create a new solvable for the environment
+    auto environment_solvable_id = repo_add_solvable(comps_repo);
+    Solvable * environment_solvable = pool.id2solvable(environment_solvable_id);
+
+    // Information about environment contained in the system state is very limited.
+    // We have only repoid and list of installed groups.
+
+    // Set id with proper prefix
+    environment_solvable->name = pool.str2id(("environment:" + environmentid).c_str(), 1);
+    // Set noarch and empty evr
+    environment_solvable->arch = ARCH_NOARCH;
+    environment_solvable->evr = ID_EMPTY;
+    // Make the new environment provide it's own id
+    environment_solvable->dep_provides = repo_addid_dep(
+        comps_repo,
+        environment_solvable->dep_provides,
+        pool.rel2id(environment_solvable->name, environment_solvable->evr, REL_EQ, 1),
+        0);
+
+    // Add groups in the environment
+    for (const auto & grp_name : state.groups) {
+        auto grp_id = pool.str2id(grp_name.c_str(), 1);
+        repo_add_idarray(comps_repo, environment_solvable_id, SOLVABLE_REQUIRES, grp_id);
+    }
+
+    Repodata * data = repo_last_repodata(comps_repo);
+
+    // Mark the repo as user-visible
+    repodata_set_void(data, environment_solvable_id, SOLVABLE_ISVISIBLE);
 
     repodata_internalize(data);
 }

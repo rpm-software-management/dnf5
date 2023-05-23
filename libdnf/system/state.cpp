@@ -389,6 +389,7 @@ std::set<std::string> State::get_package_groups(const std::string & name) {
     }
 }
 
+
 std::vector<std::string> State::get_installed_groups() {
     std::vector<std::string> group_ids;
     group_ids.reserve(group_states.size());
@@ -396,6 +397,16 @@ std::vector<std::string> State::get_installed_groups() {
         group_ids.push_back(grp.first);
     }
     return group_ids;
+}
+
+
+std::vector<std::string> State::get_installed_environments() {
+    std::vector<std::string> environment_ids;
+    environment_ids.reserve(environment_states.size());
+    for (const auto & env : environment_states) {
+        environment_ids.push_back(env.first);
+    }
+    return environment_ids;
 }
 
 

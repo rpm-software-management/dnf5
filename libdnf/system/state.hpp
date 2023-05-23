@@ -152,6 +152,10 @@ public:
     /// @since 5.0
     std::vector<std::string> get_installed_groups();
 
+    /// @return List of ids of installed environmental groups.
+    /// @since 5.0
+    std::vector<std::string> get_installed_environments();
+
     /// @return The path to the directory containing the installed groups xml data.
     /// @since 5.0
     std::filesystem::path get_group_xml_dir();
