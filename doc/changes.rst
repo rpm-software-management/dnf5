@@ -81,6 +81,16 @@ Autoremove command
  * Dropped `<spec>` positional argument since the usecase is sufficiently covered by the `remove` command.
  * Specific `autoremove-n`, `autoremove-na`, and `autoremove-nevra` variants of the command are not supported.
 
+Distro-sync command
+-------------------
+ * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
+   the `--skip-unavailable` option.
+
+Downgrade command
+-----------------
+ * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
+   the `--skip-unavailable` option.
+
 Group command
 -------------
  * Dropped `group mark install` and `group mark remove` subcommands in favour of the
@@ -111,3 +121,5 @@ Upgrade command
 ---------------
  * New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for
    `upgrade --minimal`).
+ * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
+   the `--skip-unavailable` option.
