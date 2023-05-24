@@ -46,7 +46,7 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"evr", &libdnf::rpm::Package::get_evr},
     {"full_nevra", &libdnf::rpm::Package::get_full_nevra},
     {"group", &libdnf::rpm::Package::get_group},
-    {"downloadsize", &libdnf::rpm::Package::get_package_size},
+    {"downloadsize", &libdnf::rpm::Package::get_download_size},
     {"installsize", &libdnf::rpm::Package::get_install_size},
     {"license", &libdnf::rpm::Package::get_license},
     {"source_name", &libdnf::rpm::Package::get_source_name},

@@ -43,7 +43,7 @@ class InstallrootCase(unittest.TestCase):
             # between runs so we can't rely on the value
             pkg.pop('id')
             # also package size differs according to the builder
-            pkg.pop('package_size')
+            pkg.pop('download_size')
             # TODO(mblaha): calculate correct replaces value
             if "replaces" in trans_item_attrs:
                 trans_item_attrs.pop("replaces")

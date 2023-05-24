@@ -92,7 +92,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
             "arch",
             "repo_id",
             "from_repo_id",
-            "package_size",
+            "download_size",
             "install_size",
             "evr",
             "reason"};

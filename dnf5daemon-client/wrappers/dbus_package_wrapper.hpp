@@ -45,7 +45,7 @@ public:
     std::string get_evr() const { return rawdata.at("evr"); }
     bool is_installed() const { return rawdata.at("is_installed"); }
     uint64_t get_install_size() const { return rawdata.at("install_size"); }
-    uint64_t get_package_size() const { return rawdata.at("package_size"); }
+    uint64_t get_download_size() const { return rawdata.at("download_size"); }
     std::string get_sourcerpm() const { return rawdata.at("sourcerpm"); }
     std::string get_summary() const { return rawdata.at("summary"); }
     std::string get_url() const { return rawdata.at("url"); }

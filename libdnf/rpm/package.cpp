@@ -99,7 +99,7 @@ std::string Package::get_group() const {
     return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
 }
 
-unsigned long long Package::get_package_size() const {
+unsigned long long Package::get_download_size() const {
     return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_DOWNLOADSIZE);
 }
 
@@ -331,7 +331,7 @@ bool Package::is_cached() const {
     if (auto fd = ::open(get_package_path().c_str(), O_RDONLY); fd != -1) {
         utils::OnScopeExit close_fd([fd]() noexcept { ::close(fd); });
         auto length = static_cast<unsigned long long>(lseek(fd, 0, SEEK_END));
-        if (length == get_package_size()) {
+        if (length == get_download_size()) {
             lseek(fd, 0, SEEK_SET);
             auto checksum = get_checksum();
             lr_checksum_fd_cmp(

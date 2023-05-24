@@ -39,7 +39,7 @@ enum class PackageAttribute {
     from_repo_id,
     is_installed,
     install_size,
-    package_size,
+    download_size,
     sourcerpm,
     summary,
     url,
