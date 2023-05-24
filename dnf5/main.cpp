@@ -769,12 +769,16 @@ int main(int argc, char * argv[]) try {
 
             dnf5::print_transaction_size_stats(context);
 
-            for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
-                if (tsflag == "test") {
-                    std::cout
-                        << "Test mode enabled: Only package downloads, pgp key installations and transaction checks "
-                           "will be performed."
-                        << std::endl;
+            if (base.get_config().get_downloadonly_option().get_value()) {
+                std::cout << "The operation will only download packages for the transaction." << std::endl;
+            } else {
+                for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
+                    if (tsflag == "test") {
+                        std::cout << "Test mode enabled: Only package downloads, pgp key installations and transaction "
+                                     "checks "
+                                     "will be performed."
+                                  << std::endl;
+                    }
                 }
             }
 
