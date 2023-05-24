@@ -582,7 +582,7 @@ static void print_transaction_size_stats(Context & context) {
     for (const auto & trans_pkg : context.get_transaction()->get_transaction_packages()) {
         const auto pkg = trans_pkg.get_package();
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
-            const auto pkg_size = pkg.get_package_size();
+            const auto pkg_size = pkg.get_download_size();
             in_pkgs_size += pkg_size;
             if (!pkg.is_available_locally()) {
                 download_pkgs_size += pkg_size;

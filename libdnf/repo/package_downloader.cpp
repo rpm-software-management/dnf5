@@ -137,7 +137,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
             pkg_target.user_cb_data = download_callbacks->add_new_download(
                 pkg_target.user_data,
                 pkg_target.package.get_full_nevra().c_str(),
-                static_cast<double>(pkg_target.package.get_package_size()));
+                static_cast<double>(pkg_target.package.get_download_size()));
         }
 
         auto * lr_target = lr_packagetarget_new_v3(
@@ -146,7 +146,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
             pkg_target.destination.c_str(),
             static_cast<LrChecksumType>(pkg_target.package.get_checksum().get_type()),
             pkg_target.package.get_checksum().get_checksum().c_str(),
-            static_cast<int64_t>(pkg_target.package.get_package_size()),
+            static_cast<int64_t>(pkg_target.package.get_download_size()),
             pkg_target.package.get_baseurl().empty() ? nullptr : pkg_target.package.get_baseurl().c_str(),
             resume,
             progress_callback,

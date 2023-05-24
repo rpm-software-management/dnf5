@@ -103,8 +103,8 @@ void RpmPackageTest::test_get_group() {
 }
 
 
-void RpmPackageTest::test_get_package_size() {
-    CPPUNIT_ASSERT_EQUAL(111LLU, get_pkg("pkg-1.2-3.x86_64").get_package_size());
+void RpmPackageTest::test_get_download_size() {
+    CPPUNIT_ASSERT_EQUAL(111LLU, get_pkg("pkg-1.2-3.x86_64").get_download_size());
 }
 
 

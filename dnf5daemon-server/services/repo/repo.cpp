@@ -121,7 +121,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 for (auto pkg : query) {
-                    size += pkg.get_package_size();
+                    size += pkg.get_download_size();
                 }
                 dbus_repo.emplace(attr, size);
             } break;

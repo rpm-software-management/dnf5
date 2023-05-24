@@ -162,7 +162,7 @@ public:
     //
     // @replaces dnf:dnf/package.py:attribute:Package.downloadsize
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_downloadsize(DnfPackage * pkg)
-    unsigned long long get_package_size() const;
+    unsigned long long get_download_size() const;
 
     /// @return Size the RPM package should occupy after installing on disk (`RPMTAG_LONGSIZE`).
     ///         The information is always present - it is retrieved from rpmdb if the package is installed or from repodata if the package is available.

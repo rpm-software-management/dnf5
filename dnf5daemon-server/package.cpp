@@ -35,7 +35,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"from_repo_id", PackageAttribute::from_repo_id},
     {"is_installed", PackageAttribute::is_installed},
     {"install_size", PackageAttribute::install_size},
-    {"package_size", PackageAttribute::package_size},
+    {"download_size", PackageAttribute::download_size},
     {"sourcerpm", PackageAttribute::sourcerpm},
     {"summary", PackageAttribute::summary},
     {"url", PackageAttribute::url},
@@ -114,8 +114,8 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::install_size:
                 dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_install_size()));
                 break;
-            case PackageAttribute::package_size:
-                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_package_size()));
+            case PackageAttribute::download_size:
+                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_download_size()));
                 break;
             case PackageAttribute::sourcerpm:
                 dbus_package.emplace(attr, libdnf_package.get_sourcerpm());

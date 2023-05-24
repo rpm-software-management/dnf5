@@ -51,7 +51,7 @@ static struct libscols_table * create_package_info_table(Package & package) {
     add_line_into_package_info_table(table, "Architecture", package.get_arch().c_str());
     add_line_into_package_info_table(table, "Install size", std::to_string(package.get_install_size()).c_str());
     if (!package.is_installed()) {
-        add_line_into_package_info_table(table, "Package size", std::to_string(package.get_package_size()).c_str());
+        add_line_into_package_info_table(table, "Download size", std::to_string(package.get_download_size()).c_str());
     }
     add_line_into_package_info_table(table, "Source", package.get_sourcerpm().c_str());
     add_line_into_package_info_table(table, "Repository", package.get_repo_id().c_str());
