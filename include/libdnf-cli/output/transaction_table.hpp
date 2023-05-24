@@ -446,7 +446,12 @@ bool print_transaction_table(Transaction & transaction) {
         header_ln = action_header_printer_group.print(tsgrp);
 
         struct libscols_line * ln = scols_table_new_line(tb, header_ln);
-        scols_line_set_data(ln, COL_NAME, grp.get_name().c_str());
+        auto const grp_name = grp.get_name();
+        if (grp_name.empty()) {
+            scols_line_set_data(ln, COL_NAME, "<name-unset>");
+        } else {
+            scols_line_set_data(ln, COL_NAME, grp_name.c_str());
+        }
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tsgrp.get_action()));
     }
