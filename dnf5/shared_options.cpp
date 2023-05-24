@@ -60,5 +60,15 @@ void create_destdir_option(dnf5::Command & command) {
     command.get_argument_parser_command()->register_named_arg(destdir);
 }
 
+void create_downloadonly_option(dnf5::Command & command) {
+    auto & parser = command.get_context().get_argument_parser();
+    auto downloadonly = parser.add_new_named_arg("downloadonly");
+    downloadonly->set_long_name("downloadonly");
+    downloadonly->set_description("Only download packages for a transaction");
+    downloadonly->set_const_value("true");
+    downloadonly->link_value(&command.get_context().base.get_config().get_downloadonly_option());
+    command.get_argument_parser_command()->register_named_arg(downloadonly);
+}
+
 
 }  // namespace dnf5

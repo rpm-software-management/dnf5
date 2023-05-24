@@ -51,6 +51,7 @@ void ReinstallCommand::set_argument_parser() {
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
     cmd.register_positional_arg(keys);
 
+    create_downloadonly_option(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     create_allow_downgrade_options(*this);

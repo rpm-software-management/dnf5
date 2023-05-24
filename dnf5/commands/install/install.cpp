@@ -53,6 +53,7 @@ void InstallCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    create_downloadonly_option(*this);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
