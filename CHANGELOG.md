@@ -1,5 +1,23 @@
-# Next release
+# 5.0.12
 
+- Have DNF update to DNF5
+  - Add dnf, yum obsoletes and provides
+  - Symlinks for `dnf` and `yum` binaries
+  - Move ownership of /etc/dnf/dnf.conf, /etc/dnf/vars, and
+    /etc/dnf/protected.d from dnf-data to libdnf5
+    - Conflict with older versions of dnf-data that own these files/directories
+- Print environments in the transaction table
+- Add support for environmantal groups in dnf5daemon
+- Handle unnamed groups in transaction table
+- Update documentation for `distro-sync --skip-unavailable`
+- Update documentation for `downgrade --skip-unavailable`
+- Update documentation for `upgrade --skip-unavailable`
+- Add repoquery `--files` and `files` querytag instead of `--list`
+- Add getters to package for: debug, source, repo-name
+- Add `repoquery --querytags` option
+- Document `repoquery --queryformat`
+- Add `repoquery --qf` alias to `repoquery --queryformat`
+- Add get_depends() to package and --depends to repoquery
 - Implement keepcache functionality (RhBug:2176384)
   - API changes:
     - libdnf::repo::PackageDownloader default ctor dropped (now accepting the Base object)
@@ -8,6 +26,13 @@
     - Regardless of the keepcache option, all downloaded packages have been cached up until now.
     - Starting from now, downloaded packages will be kept only until the next successful transaction (keepcache=False by default).
     - To remove all existing packages from the cache, use the `dnf5 clean packages` command.
+- goal: Split group specs resolution to separate method
+- comps: Possibility to create an empty EnvironmentQuery
+- `remove` command accepts `remove spec`
+- Refactor remove positional arguments
+- Remove duplicates from `group list` output
+- Document `copr` plugin command
+- Document `builddep` plugin command
 
 # 5.0.11
 
