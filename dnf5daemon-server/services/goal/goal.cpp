@@ -219,7 +219,7 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
         }
     }
 
-    downloader.download(true, true);
+    downloader.download();
 }
 
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {

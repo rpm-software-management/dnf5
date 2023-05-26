@@ -73,7 +73,7 @@ class TestPackageDownloader < BaseTestCase
 
         downloader.add(query.begin().value)
 
-        downloader.download(true, true)
+        downloader.download()
 
         # forcefully deallocate the downloader, to check cbs is still valid
         downloader = nil

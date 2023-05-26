@@ -84,7 +84,7 @@ void PackageDownloaderTest::test_package_downloader() {
 
     downloader.add(*query.begin());
 
-    downloader.download(true, true);
+    downloader.download();
 
     CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
     CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
@@ -116,7 +116,7 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     for (const auto & package : query) {
         downloader.add(package);
     }
-    downloader.download(true, true);
+    downloader.download();
 
     auto paths_prefix = std::filesystem::path(repo->get_cachedir()) / std::filesystem::path("packages");
     const std::vector<std::string> expected = {

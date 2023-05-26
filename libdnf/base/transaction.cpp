@@ -294,7 +294,7 @@ void Transaction::download() {
             downloader.add(tspkg.get_package());
         }
     }
-    downloader.download(true, true);
+    downloader.download();
 }
 
 Transaction::TransactionRunResult Transaction::test() {

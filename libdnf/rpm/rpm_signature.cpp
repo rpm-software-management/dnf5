@@ -220,7 +220,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
             downloaded_key = std::make_unique<libdnf::utils::fs::TempFile>("rpmkey");
             libdnf::repo::FileDownloader downloader(base);
             downloader.add(key_url, downloaded_key->get_path());
-            downloader.download(true, true);
+            downloader.download();
             key_path = downloaded_key->get_path();
         }
     } else {

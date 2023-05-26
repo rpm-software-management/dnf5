@@ -26,5 +26,5 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 void download_file(libdnf::Base & base, const std::string & url, const std::filesystem::path & path) {
     libdnf::repo::FileDownloader downloader(base);
     downloader.add(url, path);
-    downloader.download(true, true);
+    downloader.download();
 }

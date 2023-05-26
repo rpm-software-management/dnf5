@@ -160,7 +160,7 @@ std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(
             // TODO(mblaha): temporarily used the dummy DownloadCallbacks instance
             downloader.add(std::string{url}, dest_path.string());
         }
-        downloader.download(true, true);
+        downloader.download();
 
         // fill the command line repo with downloaded URLs
         for (const auto & [url, path] : url_to_path) {
@@ -337,10 +337,14 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool impor
             if (!remote_keys_files.empty()) {
                 // download remote keys files to local temporary files
                 FileDownloader downloader(base);
+                downloader.set_fail_fast(false);
+                downloader.set_resume(false);
+
                 for (const auto & [repo, key_url, key_file] : remote_keys_files) {
                     downloader.add(key_url, key_file.get_path(), repo->get_user_data());
                 }
-                downloader.download(false, false);
+
+                downloader.download();
 
                 // import downloaded keys files
                 for (const auto & [repo, key_url, temp_file] : remote_keys_files) {

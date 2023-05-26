@@ -103,9 +103,11 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
 class FileDownloader::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base) {}
+    Impl(const BaseWeakPtr & base) : base(base), fail_fast(true), resume(true) {}
     BaseWeakPtr base;
     std::vector<FileTarget> targets;
+    bool fail_fast;
+    bool resume;
 };
 
 
@@ -124,7 +126,7 @@ void FileDownloader::add(const std::string & url, const std::string & destinatio
     p_impl->targets.emplace_back(p_impl->base, url, destination, user_data);
 }
 
-void FileDownloader::download(bool fail_fast, bool resume) try {
+void FileDownloader::download() try {
     std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
     lr_targets.reserve(p_impl->targets.size());
 
@@ -154,7 +156,7 @@ void FileDownloader::download(bool fail_fast, bool resume) try {
             file_target.destination.c_str(),
             NULL,
             0,
-            resume,
+            p_impl->resume,
             progress_callback,
             &file_target,
             end_callback,
@@ -177,11 +179,19 @@ void FileDownloader::download(bool fail_fast, bool resume) try {
     std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
 
     GError * err{nullptr};
-    if (!lr_download(list, fail_fast, &err)) {
+    if (!lr_download(list, p_impl->fail_fast, &err)) {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
 } catch (const std::runtime_error & e) {
     throw_with_nested(FileDownloadError(M_("Failed to download files")));
+}
+
+void FileDownloader::set_fail_fast(bool value) {
+    p_impl->fail_fast = value;
+}
+
+void FileDownloader::set_resume(bool value) {
+    p_impl->resume = value;
 }
 
 }  // namespace libdnf::repo
