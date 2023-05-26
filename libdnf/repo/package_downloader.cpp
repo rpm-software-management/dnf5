@@ -93,10 +93,12 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
 class PackageDownloader::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base) {}
+    Impl(const BaseWeakPtr & base) : base(base), fail_fast(true), resume(true) {}
     BaseWeakPtr base;
     friend PackageDownloader;
     std::vector<PackageTarget> targets;
+    bool fail_fast;
+    bool resume;
 };
 
 
@@ -121,7 +123,7 @@ void PackageDownloader::add(const libdnf::rpm::Package & package, const std::str
 }
 
 
-void PackageDownloader::download(bool fail_fast, bool resume) try {
+void PackageDownloader::download() try {
     if (p_impl->targets.empty()) {
         return;
     }
@@ -148,7 +150,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
             pkg_target.package.get_checksum().get_checksum().c_str(),
             static_cast<int64_t>(pkg_target.package.get_package_size()),
             pkg_target.package.get_baseurl().empty() ? nullptr : pkg_target.package.get_baseurl().c_str(),
-            resume,
+            p_impl->resume,
             progress_callback,
             &pkg_target,
             end_callback,
@@ -172,7 +174,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
     std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
 
     LrPackageDownloadFlag flags = static_cast<LrPackageDownloadFlag>(0);
-    if (fail_fast) {
+    if (p_impl->fail_fast) {
         flags = static_cast<LrPackageDownloadFlag>(flags | LR_PACKAGEDOWNLOAD_FAILFAST);
     }
 
@@ -202,6 +204,14 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
     }
 } catch (const std::runtime_error & e) {
     throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
+}
+
+void PackageDownloader::set_fail_fast(bool value) {
+    p_impl->fail_fast = value;
+}
+
+void PackageDownloader::set_resume(bool value) {
+    p_impl->resume = value;
 }
 
 }  // namespace libdnf::repo

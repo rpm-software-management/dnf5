@@ -60,9 +60,17 @@ public:
     void add(const std::string & url, const std::string & destination, void * user_data = nullptr);
 
     /// Download the previously added files (URLs).
-    /// @param fail_fast Whether to fail the whole download on a first error or keep downloading.
-    /// @param resume Whether to try to resume the download if a destination package already exists.
-    void download(bool fail_fast, bool resume);
+    void download();
+
+    /// Configure whether to fail the whole download on a first error or keep downloading.
+    /// @param value If true, download will fail on the first error, otherwise it continues.
+    /// This is set to true by default.
+    void set_fail_fast(bool value);
+
+    /// Configure whether to try resuming the download if a destination package already exists.
+    /// @param value If true, download is tried to be resumed, otherwise it starts over.
+    /// This is set to true by default.
+    void set_resume(bool value);
 
 private:
     class Impl;
