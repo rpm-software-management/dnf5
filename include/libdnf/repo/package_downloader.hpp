@@ -72,12 +72,11 @@ public:
     /// @param value If true, packages will be kept on the disk after downloading
     /// regardless the `keepcache` option value, if false, it enforces packages removal after
     /// the next successful transaction.
-    void force_keep_packages(bool value) { keep_packages = value; }
+    void force_keep_packages(bool value);
 
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
-    std::optional<bool> keep_packages;
 };
 
 /// Wraps librepo PackageTarget
