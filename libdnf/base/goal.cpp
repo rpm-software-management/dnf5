@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/url.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/reldep.hpp"
@@ -85,6 +86,8 @@ inline bool name_arch_compare_lower_solvable(const Solvable * first, const Solva
 
 }  // namespace
 
+using GroupSpec = std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>;
+
 class Goal::Impl {
 public:
     Impl(const BaseWeakPtr & base);
@@ -94,8 +97,9 @@ public:
     void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
-    GoalProblem resolve_group_specs(base::Transaction & transaction);
+    GoalProblem resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction);
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
+    void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
@@ -129,6 +133,8 @@ public:
     void add_group_upgrade_to_goal(
         base::Transaction & transaction, comps::GroupQuery group_query, GoalJobSettings & settings);
 
+    void add_environment_install_to_goal(
+        base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings);
     GoalProblem add_reason_change_to_goal(
         base::Transaction & transaction,
         const std::string & spec,
@@ -170,10 +176,15 @@ private:
     // To correctly remove all unneeded group packages when a group is removed,
     // the list of all other removed groups in the transaction is needed.
     // Therefore resolve spec -> group_query first.
-    std::map<GoalAction, std::vector<GroupItem>> resolved_groups_specs;
+    std::map<GoalAction, std::vector<GroupItem>> resolved_group_specs;
+
+    using EnvironmentItem = std::tuple<std::string, comps::EnvironmentQuery, GoalJobSettings>;
+    std::map<GoalAction, std::vector<EnvironmentItem>> resolved_environment_specs;
+
+    /// group_specs contain both comps groups and environments. These are resolved
+    /// according to settings.group_search_type flags value.
     /// <libdnf::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
-    std::vector<std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>>
-        group_specs;
+    std::vector<GroupSpec> group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
     bool allow_erasing{false};
@@ -506,13 +517,18 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     return ret;
 }
 
-GoalProblem Goal::Impl::resolve_group_specs(base::Transaction & transaction) {
+GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     auto & cfg_main = base->get_config();
-    for (auto & [action, reason, spec, settings] : group_specs) {
+    // optimization - creating a group query from scratch is relatively expensive,
+    // but the copy construction is cheap, so prepare a base query to be copied.
+    comps::GroupQuery base_groups_query(base);
+    comps::EnvironmentQuery base_environments_query(base);
+    for (auto & [action, reason, spec, settings] : specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
-        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE && action != GoalAction::UPGRADE) {
+        if (action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_GROUP && action != GoalAction::REMOVE &&
+            action != GoalAction::UPGRADE) {
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::UNSUPPORTED_ACTION,
@@ -525,23 +541,50 @@ GoalProblem Goal::Impl::resolve_group_specs(base::Transaction & transaction) {
             continue;
         }
         sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
-        comps::GroupQuery group_query(base, true);
-        comps::GroupQuery base_groups_query(base);
-        // for REMOVE / UPGRADE actions take only installed groups into account
-        // for INSTALL only available groups
-        base_groups_query.filter_installed(action != GoalAction::INSTALL);
-        if (settings.group_with_id) {
-            comps::GroupQuery group_query_id(base_groups_query);
-            group_query_id.filter_groupid(spec, cmp);
-            group_query |= group_query_id;
+        bool spec_resolved{false};
+        if (settings.group_search_groups) {
+            comps::GroupQuery group_query(base, true);
+            comps::GroupQuery spec_groups_query(base_groups_query);
+            // for REMOVE / UPGRADE actions take only installed groups into account
+            // for INSTALL only available groups
+            spec_groups_query.filter_installed(action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_GROUP);
+            if (settings.group_with_id) {
+                comps::GroupQuery group_query_id(spec_groups_query);
+                group_query_id.filter_groupid(spec, cmp);
+                group_query |= group_query_id;
+            }
+            // TODO(mblaha): reconsider usefulness of searching groups by names
+            if (settings.group_with_name) {
+                comps::GroupQuery group_query_name(spec_groups_query);
+                group_query_name.filter_name(spec, cmp);
+                group_query |= group_query_name;
+            }
+            if (!group_query.empty()) {
+                resolved_group_specs[action].push_back({spec, reason, std::move(group_query), settings});
+                spec_resolved = true;
+            }
         }
-        // TODO(mblaha): reconsider usefulness of searching groups by names
-        if (settings.group_with_name) {
-            comps::GroupQuery group_query_name(base_groups_query);
-            group_query_name.filter_name(spec, cmp);
-            group_query |= group_query_name;
+        if (settings.group_search_environments) {
+            comps::EnvironmentQuery environment_query(base, true);
+            comps::EnvironmentQuery spec_environments_query(base_environments_query);
+            spec_environments_query.filter_installed(action != GoalAction::INSTALL);
+            if (settings.group_with_id) {
+                comps::EnvironmentQuery environment_query_id(spec_environments_query);
+                environment_query_id.filter_environmentid(spec, cmp);
+                environment_query |= environment_query_id;
+            }
+            // TODO(mblaha): reconsider usefulness of searching groups by names
+            if (settings.group_with_name) {
+                comps::EnvironmentQuery environment_query_name(spec_environments_query);
+                environment_query_name.filter_name(spec, cmp);
+                environment_query |= environment_query_name;
+            }
+            if (!environment_query.empty()) {
+                resolved_environment_specs[action].push_back({spec, std::move(environment_query), settings});
+                spec_resolved = true;
+            }
         }
-        if (group_query.empty()) {
+        if (!spec_resolved) {
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::NOT_FOUND,
@@ -553,23 +596,29 @@ GoalProblem Goal::Impl::resolve_group_specs(base::Transaction & transaction) {
             if (!skip_unavailable) {
                 ret |= GoalProblem::NOT_FOUND;
             }
-        } else {
-            resolved_groups_specs[action].push_back({spec, reason, std::move(group_query), settings});
         }
     }
 
     return ret;
 }
 
+void Goal::Impl::add_resolved_environment_specs_to_goal(base::Transaction & transaction) {
+    for (auto & [spec, environment_query, settings] : resolved_environment_specs[GoalAction::INSTALL]) {
+        add_environment_install_to_goal(transaction, environment_query, settings);
+    }
+}
+
 void Goal::Impl::add_resolved_group_specs_to_goal(base::Transaction & transaction) {
     // process group removals first
-    add_group_remove_to_goal(resolved_groups_specs[GoalAction::REMOVE]);
+    add_group_remove_to_goal(resolved_group_specs[GoalAction::REMOVE]);
 
-    for (auto & [spec, reason, group_query, settings] : resolved_groups_specs[GoalAction::INSTALL]) {
-        add_group_install_to_goal(transaction, reason, group_query, settings);
+    for (const auto & action : std::vector<GoalAction>{GoalAction::INSTALL, GoalAction::INSTALL_BY_GROUP}) {
+        for (auto & [spec, reason, group_query, settings] : resolved_group_specs[action]) {
+            add_group_install_to_goal(transaction, reason, group_query, settings);
+        }
     }
 
-    for (auto & [spec, reason, group_query, settings] : resolved_groups_specs[GoalAction::UPGRADE]) {
+    for (auto & [spec, reason, group_query, settings] : resolved_group_specs[GoalAction::UPGRADE]) {
         add_group_upgrade_to_goal(transaction, group_query, settings);
     }
 }
@@ -1638,6 +1687,29 @@ void Goal::Impl::add_group_upgrade_to_goal(
     }
 }
 
+void Goal::Impl::add_environment_install_to_goal(
+    base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings) {
+    auto & cfg_main = base->get_config();
+    bool with_optional = any(settings.resolve_group_package_types(cfg_main) & libdnf::comps::PackageType::OPTIONAL);
+    auto group_settings = libdnf::GoalJobSettings(settings);
+    group_settings.group_search_environments = false;
+    std::vector<GroupSpec> env_group_specs;
+    for (auto environment : environment_query) {
+        rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        for (const auto & grp_id : environment.get_groups()) {
+            env_group_specs.emplace_back(
+                GoalAction::INSTALL_BY_GROUP, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
+        }
+        if (with_optional) {
+            for (const auto & grp_id : environment.get_optional_groups()) {
+                env_group_specs.emplace_back(
+                    GoalAction::INSTALL, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
+            }
+        }
+    }
+    resolve_group_specs(env_group_specs, transaction);
+}
+
 GoalProblem Goal::Impl::add_reason_change_to_goal(
     base::Transaction & transaction,
     const std::string & spec,
@@ -1819,8 +1891,12 @@ base::Transaction Goal::resolve() {
     // Resolve group specs to group/environment queries first for two reasons:
     // 1. group spec can also contain an environmental groups
     // 2. group removal needs a list of all groups being removed to correctly remove packages
-    ret |= p_impl->resolve_group_specs(transaction);
+    ret |= p_impl->resolve_group_specs(p_impl->group_specs, transaction);
 
+    // Handle environments befor groups because they will add/remove groups
+    p_impl->add_resolved_environment_specs_to_goal(transaction);
+
+    // Then handle groups
     p_impl->add_resolved_group_specs_to_goal(transaction);
 
     ret |= p_impl->add_reason_change_specs_to_goal(transaction);
@@ -1906,6 +1982,8 @@ void Goal::reset() {
     p_impl->rpm_ids.clear();
     p_impl->group_specs.clear();
     p_impl->rpm_filepaths.clear();
+    p_impl->resolved_group_specs.clear();
+    p_impl->resolved_environment_specs.clear();
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 }
 

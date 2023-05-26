@@ -91,7 +91,11 @@ std::string LogEvent::to_string(
                 }
                 return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
             } else if (action == GoalAction::INSTALL_BY_GROUP) {
-                return ret.append(utils::sformat(_("No match for group package: {}"), *spec));
+                if (spec_type && *spec_type == libdnf::transaction::TransactionItemType::GROUP) {
+                    return ret.append(utils::sformat(_("No match for group from environment: {}"), *spec));
+                } else {
+                    return ret.append(utils::sformat(_("No match for group package: {}"), *spec));
+                }
             }
             return ret.append(utils::sformat(_("No match for argument: {}"), *spec));
         case GoalProblem::NOT_FOUND_IN_REPOSITORIES:
