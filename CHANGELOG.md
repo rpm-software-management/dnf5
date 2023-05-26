@@ -1,3 +1,9 @@
+# Next release
+
+- Improve the download methods API
+  - Switch to parameterless download methods and introduce setters for fail_fast and resume
+  - Affected classes: libdnf::repo::FileDownloader, libdnf::repo::PackageDownloader
+
 # 5.0.13
 
 - Fix resolve behavior for `download`
