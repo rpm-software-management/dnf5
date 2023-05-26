@@ -133,6 +133,10 @@ public:
     /// these flags are used only for group resolving
     bool group_with_id{true};
     bool group_with_name{false};
+    /// Historically group spec could also mean an environment. These flags
+    /// configure in which entities the spec is searched for.
+    bool group_search_groups{true};
+    bool group_search_environments{true};
 };
 
 struct GoalJobSettings : public ResolveSpecSettings {
