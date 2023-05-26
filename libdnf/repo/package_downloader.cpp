@@ -94,9 +94,14 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 class PackageDownloader::Impl {
 public:
     Impl(const BaseWeakPtr & base) : base(base), fail_fast(true), resume(true) {}
-    BaseWeakPtr base;
+
+private:
     friend PackageDownloader;
+
+    BaseWeakPtr base;
+
     std::vector<PackageTarget> targets;
+    std::optional<bool> keep_packages;
     bool fail_fast;
     bool resume;
 };
@@ -181,8 +186,8 @@ void PackageDownloader::download() try {
     // Store file paths of packages we don't want to keep cached.
     auto & config = p_impl->base->get_config();
     auto removal_configured = !config.get_keepcache_option().get_value();
-    auto removal_enforced = keep_packages.has_value() && !keep_packages.value();
-    auto keep_enforced = keep_packages.has_value() && keep_packages.value();
+    auto removal_enforced = p_impl->keep_packages.has_value() && !p_impl->keep_packages.value();
+    auto keep_enforced = p_impl->keep_packages.has_value() && p_impl->keep_packages.value();
     if (removal_enforced || (!keep_enforced && removal_configured)) {
         std::vector<std::string> package_paths;
         std::transform(
@@ -212,6 +217,10 @@ void PackageDownloader::set_fail_fast(bool value) {
 
 void PackageDownloader::set_resume(bool value) {
     p_impl->resume = value;
+}
+
+void PackageDownloader::force_keep_packages(bool value) {
+    p_impl->keep_packages = value;
 }
 
 }  // namespace libdnf::repo

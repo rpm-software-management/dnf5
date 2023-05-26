@@ -104,7 +104,12 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 class FileDownloader::Impl {
 public:
     Impl(const BaseWeakPtr & base) : base(base), fail_fast(true), resume(true) {}
+
+private:
+    friend FileDownloader;
+
     BaseWeakPtr base;
+
     std::vector<FileTarget> targets;
     bool fail_fast;
     bool resume;
