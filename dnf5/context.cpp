@@ -269,7 +269,7 @@ public:
 
     void unpack_error(const libdnf::rpm::TransactionItem & item) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::ERROR, "Unpack errro: " + item.get_package().get_full_nevra());
+            libdnf::cli::progressbar::MessageType::ERROR, "Unpack error: " + item.get_package().get_full_nevra());
         active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
         multi_progress_bar.print();
     }
