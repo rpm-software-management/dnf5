@@ -1,3 +1,9 @@
+# 5.0.13
+
+- Fix resolve behavior for `download`
+- Add a message when `--downloadonly` is used
+- Add `--downloadonly` option to multiple commands
+
 # 5.0.12
 
 - Have DNF update to DNF5
