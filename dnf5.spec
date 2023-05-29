@@ -266,6 +266,8 @@ Package management library.
 %config(noreplace) %{_sysconfdir}/dnf/dnf.conf
 %dir %{_sysconfdir}/dnf/vars
 %dir %{_sysconfdir}/dnf/protected.d
+%else
+%exclude %{_sysconfdir}/dnf/dnf.conf
 %endif
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
