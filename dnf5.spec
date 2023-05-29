@@ -661,6 +661,9 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 
 %changelog
+* Mon May 29 2023 Packit Team <hello@packit.dev> - 5.0.13-1
+- New upstream release 5.0.13
+
 * Thu May 25 2023 Packit Team <hello@packit.dev> - 5.0.12-1
 - New upstream release 5.0.12
 
