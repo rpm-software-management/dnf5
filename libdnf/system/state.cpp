@@ -410,6 +410,17 @@ std::vector<std::string> State::get_installed_environments() {
 }
 
 
+std::set<std::string> State::get_group_environments(const std::string & id) {
+    std::set<std::string> environments;
+    for (const auto & env_iter : environment_states) {
+        auto & env = env_iter.second;
+        if (std::find(env.groups.begin(), env.groups.end(), id) != env.groups.end()) {
+            environments.emplace(env_iter.first);
+        }
+    }
+    return environments;
+}
+
 const std::map<std::string, ModuleState> & State::get_module_states() {
     return module_states;
 }
