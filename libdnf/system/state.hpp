@@ -195,6 +195,11 @@ public:
     /// @since 5.0
     void remove_environment_state(const std::string & id);
 
+    /// @return All environmental group ids the group is part of
+    /// @param id The group id.
+    /// @since 5.0
+    std::set<std::string> get_group_environments(const std::string & id);
+
     /// @return All module states.
     /// @since 5.0.8
     const std::map<std::string, ModuleState> & get_module_states();
