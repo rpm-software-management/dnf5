@@ -135,6 +135,10 @@ public:
 
     void add_environment_install_to_goal(
         base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings);
+    void add_environment_remove_to_goal(
+        base::Transaction & transaction,
+        std::vector<std::tuple<std::string, comps::EnvironmentQuery, GoalJobSettings>> & environments_to_remove);
+
     GoalProblem add_reason_change_to_goal(
         base::Transaction & transaction,
         const std::string & spec,
@@ -603,6 +607,8 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
 }
 
 void Goal::Impl::add_resolved_environment_specs_to_goal(base::Transaction & transaction) {
+    add_environment_remove_to_goal(transaction, resolved_environment_specs[GoalAction::REMOVE]);
+
     for (auto & [spec, environment_query, settings] : resolved_environment_specs[GoalAction::INSTALL]) {
         add_environment_install_to_goal(transaction, environment_query, settings);
     }
@@ -1708,6 +1714,63 @@ void Goal::Impl::add_environment_install_to_goal(
         }
     }
     resolve_group_specs(env_group_specs, transaction);
+}
+
+void Goal::Impl::add_environment_remove_to_goal(
+    base::Transaction & transaction,
+    std::vector<std::tuple<std::string, comps::EnvironmentQuery, GoalJobSettings>> & environments_to_remove) {
+    if (environments_to_remove.empty()) {
+        return;
+    }
+
+    // get list of environment ids being removed in this transaction
+    std::set<std::string> removed_environments_ids;
+    for (auto & [spec, environment_query, settings] : environments_to_remove) {
+        for (const auto & environment : environment_query) {
+            removed_environments_ids.emplace(environment.get_environmentid());
+        }
+    }
+    comps::GroupQuery query_installed(base);
+    query_installed.filter_installed(true);
+    auto & system_state = base->p_impl->get_system_state();
+    // groups that are candidates for removal
+    std::vector<GroupSpec> remove_group_specs;
+    auto group_settings = libdnf::GoalJobSettings();
+    group_settings.group_search_environments = false;
+    for (auto & [spec, environment_query, settings] : environments_to_remove) {
+        for (const auto & environment : environment_query) {
+            rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
+            // get all groups installed by the environment
+            comps::GroupQuery environment_groups(query_installed);
+            environment_groups.filter_groupid(
+                system_state.get_environment_state(environment.get_environmentid()).groups);
+            // Remove groups installed by the environment in case they are installed
+            // as dependencies and are not part of another installed environment.
+            for (const auto & grp : environment_groups) {
+                // is the group part of another environment which is not being removed?
+                auto grp_environments = system_state.get_group_environments(grp.get_groupid());
+                // remove from the list all environments being removed in this transaction
+                for (const auto & id : removed_environments_ids) {
+                    grp_environments.erase(id);
+                }
+                if (grp_environments.size() > 0) {
+                    continue;
+                }
+
+                // was the group user-installed?
+                if (grp.get_reason() > transaction::TransactionItemReason::GROUP) {
+                    continue;
+                }
+
+                remove_group_specs.emplace_back(
+                    GoalAction::REMOVE,
+                    transaction::TransactionItemReason::DEPENDENCY,
+                    grp.get_groupid(),
+                    group_settings);
+            }
+        }
+    }
+    resolve_group_specs(remove_group_specs, transaction);
 }
 
 GoalProblem Goal::Impl::add_reason_change_to_goal(
