@@ -138,6 +138,8 @@ public:
     void add_environment_remove_to_goal(
         base::Transaction & transaction,
         std::vector<std::tuple<std::string, comps::EnvironmentQuery, GoalJobSettings>> & environments_to_remove);
+    void add_environment_upgrade_to_goal(
+        base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings);
 
     GoalProblem add_reason_change_to_goal(
         base::Transaction & transaction,
@@ -611,6 +613,10 @@ void Goal::Impl::add_resolved_environment_specs_to_goal(base::Transaction & tran
 
     for (auto & [spec, environment_query, settings] : resolved_environment_specs[GoalAction::INSTALL]) {
         add_environment_install_to_goal(transaction, environment_query, settings);
+    }
+
+    for (auto & [spec, environment_query, settings] : resolved_environment_specs[GoalAction::UPGRADE]) {
+        add_environment_upgrade_to_goal(transaction, environment_query, settings);
     }
 }
 
@@ -1771,6 +1777,109 @@ void Goal::Impl::add_environment_remove_to_goal(
         }
     }
     resolve_group_specs(remove_group_specs, transaction);
+}
+
+void Goal::Impl::add_environment_upgrade_to_goal(
+    base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings) {
+    auto & system_state = base->p_impl->get_system_state();
+
+    comps::EnvironmentQuery available_environments(base);
+    available_environments.filter_installed(false);
+
+    comps::GroupQuery query_installed(base);
+    query_installed.filter_installed(true);
+    std::vector<GroupSpec> remove_group_specs;
+
+    std::vector<GroupSpec> env_group_specs;
+    auto group_settings = libdnf::GoalJobSettings(settings);
+    group_settings.group_search_environments = false;
+
+    for (auto installed_environment : environment_query) {
+        auto environment_id = installed_environment.get_environmentid();
+        // find available environment of the same id
+        comps::EnvironmentQuery available_environment_query(available_environments);
+        available_environment_query.filter_environmentid(environment_id);
+        if (available_environment_query.empty()) {
+            // environment is not available any more
+            transaction.p_impl->add_resolve_log(
+                GoalAction::UPGRADE,
+                GoalProblem::NOT_AVAILABLE,
+                settings,
+                libdnf::transaction::TransactionItemType::ENVIRONMENT,
+                environment_id,
+                {},
+                libdnf::Logger::Level::WARNING);
+            continue;
+        }
+        auto available_environment = available_environment_query.get();
+
+        // upgrade the environment itself
+        rpm_goal.add_environment(available_environment, transaction::TransactionItemAction::UPGRADE, {});
+
+        // group names that are part of the installed version of the environment
+        auto old_groups = installed_environment.get_groups();
+
+        // group names that are part of the new version of the environment
+        auto available_groups = available_environment.get_groups();
+
+        for (const auto & grp : available_groups) {
+            if (std::find(old_groups.begin(), old_groups.end(), grp) != old_groups.end()) {
+                // the group was already part of environment definition when it was installed.
+                // upgrade the group if is installed
+                try {
+                    auto group_state = system_state.get_group_state(grp);
+                    env_group_specs.emplace_back(
+                        GoalAction::UPGRADE, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
+                } catch (const system::StateNotFoundError &) {
+                    continue;
+                }
+            } else {
+                // newly added group to environment definition, install it.
+                env_group_specs.emplace_back(
+                    GoalAction::INSTALL_BY_GROUP, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
+            }
+        }
+
+        // upgrade also installed optional groups
+        auto old_optionals = installed_environment.get_optional_groups();
+        old_groups.insert(old_groups.end(), old_optionals.begin(), old_optionals.end());
+        for (const auto & grp : available_environment.get_optional_groups()) {
+            available_groups.emplace_back(grp);
+            if (std::find(old_groups.begin(), old_groups.end(), grp) != old_groups.end()) {
+                try {
+                    auto group_state = system_state.get_group_state(grp);
+                    env_group_specs.emplace_back(
+                        GoalAction::UPGRADE, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
+                } catch (const system::StateNotFoundError &) {
+                    continue;
+                }
+            }
+        }
+
+        // remove non-userinstalled groups that are not part of environment any more
+        for (const auto & grp : old_groups) {
+            if (std::find(available_groups.begin(), available_groups.end(), grp) == available_groups.end()) {
+                try {
+                    auto group_state = system_state.get_group_state(grp);
+                    if (!group_state.userinstalled) {
+                        auto grp_environments = system_state.get_group_environments(grp);
+                        grp_environments.erase(environment_id);
+                        if (grp_environments.empty()) {
+                            env_group_specs.emplace_back(
+                                GoalAction::REMOVE,
+                                transaction::TransactionItemReason::DEPENDENCY,
+                                grp,
+                                group_settings);
+                        }
+                    }
+                } catch (const system::StateNotFoundError &) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    resolve_group_specs(env_group_specs, transaction);
 }
 
 GoalProblem Goal::Impl::add_reason_change_to_goal(
