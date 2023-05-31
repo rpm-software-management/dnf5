@@ -511,7 +511,12 @@ bool print_transaction_table(Transaction & transaction) {
         header_ln = action_header_printer_environment.print(tsenv);
 
         struct libscols_line * ln = scols_table_new_line(tb, header_ln);
-        scols_line_set_data(ln, COL_NAME, env.get_name().c_str());
+        auto const env_name = env.get_name();
+        if (env_name.empty()) {
+            scols_line_set_data(ln, COL_NAME, "<name-unset>");
+        } else {
+            scols_line_set_data(ln, COL_NAME, env_name.c_str());
+        }
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tsenv.get_action()));
     }
