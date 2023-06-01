@@ -256,6 +256,16 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to unneeded installed packages (i.e. packages that were installed as "
         "dependencies but are no longer needed).",
         false);
+    extras = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
+    upgrades = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this,
+        "upgrades",
+        '\0',
+        "Limit to packages that provide an upgrade for some already installed package.",
+        false);
+    recent = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "recent", '\0', "Limit to only recently changed packages.", false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -324,9 +334,10 @@ void RepoqueryCommand::set_argument_parser() {
 void RepoqueryCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
-    only_system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
-                              duplicates->get_value() || leaves_option->get_value() || unneeded->get_value();
-    context.set_load_system_repo(only_system_repo_needed);
+    system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
+                         duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
+                         extras->get_value() || upgrades->get_value() || recent->get_value();
+    context.set_load_system_repo(system_repo_needed);
     bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
                              advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
                              advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
@@ -336,7 +347,9 @@ void RepoqueryCommand::configure() {
             libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
     }
     context.set_load_available_repos(
-        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
+        // available_option is on by default, to check if user specified it we check priority
+        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !system_repo_needed ||
+                extras->get_value() || upgrades->get_value() || recent->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
@@ -557,6 +570,21 @@ void RepoqueryCommand::run() {
 
     if (unneeded->get_value()) {
         full_package_query.filter_unneeded();
+    }
+
+    if (extras->get_value()) {
+        full_package_query.filter_extras();
+    }
+
+    if (upgrades->get_value()) {
+        full_package_query.filter_upgrades();
+    }
+
+    if (recent->get_value()) {
+        auto & cfg_main = ctx.base.get_config();
+        auto recent_limit_days = cfg_main.get_recent_option().get_value();
+        auto now = time(nullptr);
+        full_package_query.filter_recent(now - (recent_limit_days * 86400));
     }
 
     if (pkg_specs.empty()) {

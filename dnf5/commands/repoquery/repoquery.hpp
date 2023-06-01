@@ -43,7 +43,7 @@ public:
     void run() override;
 
 private:
-    bool only_system_repo_needed = false;
+    bool system_repo_needed = false;
 
     libdnf::OptionBool * available_option{nullptr};
     libdnf::OptionBool * installed_option{nullptr};
@@ -67,6 +67,9 @@ private:
     std::unique_ptr<libdnf::cli::session::BoolOption> exactdeps{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> unneeded{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> extras{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> upgrades{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> recent{nullptr};
 
     libdnf::OptionBool * querytags_option{nullptr};
     libdnf::OptionString * query_format_option{nullptr};
