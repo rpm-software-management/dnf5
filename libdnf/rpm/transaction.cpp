@@ -576,16 +576,26 @@ void * Transaction::ts_callback(
             break;
         case RPMCALLBACK_SCRIPT_ERROR: {
             // amount is script tag
-            // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
             auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
             auto nevra = trans_element_to_nevra(trans_element);
-            logger.error(
-                "RPM callback error in {} scriptlet \"{}\" return code {}",
-                TransactionCallbacks::script_type_to_string(script_type),
-                to_full_nevra_string(nevra),
-                total);
-            if (callbacks) {
-                callbacks->script_error(item, nevra, script_type, total);
+            // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
+            // therefore in case RPMRC_OK is passed, nothing critical happened
+            // don't confuse the user by telling an error occurred, but exit code is "success"
+            auto return_code = static_cast<rpmRC_e>(total);
+            if (return_code != RPMRC_OK) {
+                logger.error(
+                    "RPM callback error in {} scriptlet \"{}\" return code {}",
+                    TransactionCallbacks::script_type_to_string(script_type),
+                    to_full_nevra_string(nevra),
+                    total);
+                if (callbacks) {
+                    callbacks->script_error(item, nevra, script_type, return_code);
+                }
+            } else {
+                logger.warning(
+                    "RPM callback non-critical error in {} scriptlet \"{}\"",
+                    TransactionCallbacks::script_type_to_string(script_type),
+                    to_full_nevra_string(nevra));
             }
             break;
         }
