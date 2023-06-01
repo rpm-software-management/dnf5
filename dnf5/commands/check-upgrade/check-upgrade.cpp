@@ -181,7 +181,7 @@ void CheckUpgradeCommand::run() {
         if (changelogs->get_value()) {
             libdnf::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
         }
-        throw libdnf::cli::SilentCommandExitError(100, M_(""));
+        throw libdnf::cli::SilentCommandExitError(100);
     } else if (
         // Otherwise, main() will exit with code 0.
         size_before_filter_advisories > 0 &&

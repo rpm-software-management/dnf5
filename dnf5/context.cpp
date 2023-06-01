@@ -461,7 +461,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
         for (auto & problem : transaction.get_transaction_problems()) {
             std::cout << "  - " << problem << std::endl;
         }
-        throw libdnf::cli::SilentCommandExitError(1, M_(""));
+        throw libdnf::cli::SilentCommandExitError(1);
     }
 
     // TODO(mblaha): print a summary of successful transaction
