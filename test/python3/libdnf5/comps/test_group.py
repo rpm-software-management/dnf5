@@ -35,3 +35,9 @@ class TestGroup(base_test_case.BaseTestCase):
 
         # Try to create a group query without running base.setup()
         self.assertRaises(RuntimeError, libdnf5.comps.GroupQuery, base)
+
+    def test_group_get_packages(self):
+        self.add_repo_repomd("repomd-comps-core")
+        query = libdnf5.comps.GroupQuery(self.base)
+        core_group = next(iter(query))
+        self.assertEqual(5, len(core_group.get_packages()))
