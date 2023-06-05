@@ -44,6 +44,7 @@
 
 %include "libdnf/comps/group/package.hpp"
 %include "libdnf/comps/group/group.hpp"
+%template(VectorPackage) std::vector<libdnf::comps::Package>;
 %template(SetConstIteratorGroup) libdnf::SetConstIterator<libdnf::comps::Group>;
 %template(SetGroup) libdnf::Set<libdnf::comps::Group>;
 %template(SackQueryGroup) libdnf::sack::Query<libdnf::comps::Group>;
