@@ -299,6 +299,7 @@ void RepoqueryCommand::set_argument_parser() {
         "suggests",
         "supplements",
         "files",
+        "sourcerpm",
         "",  // empty when option is not used
     };
     pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
