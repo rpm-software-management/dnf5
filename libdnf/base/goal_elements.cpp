@@ -161,7 +161,7 @@ std::string goal_action_to_string(GoalAction action) {
             return "Install";
         case GoalAction::INSTALL_VIA_PROVIDE:
             return "Install via provide";
-        case GoalAction::INSTALL_BY_GROUP:
+        case GoalAction::INSTALL_BY_COMPS:
             return "Install by group";
         case GoalAction::UPGRADE:
             return "Upgrade";
