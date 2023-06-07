@@ -347,10 +347,20 @@ void Goal::add_provide_install(const std::string & spec, const GoalJobSettings &
 void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const GoalJobSettings & settings) {
     if (spec.starts_with("@")) {
         // spec is a group, environment or a module
-        // TODO(mblaha): detect and process environmental groups (prefixed by '@^')
         // TODO(mblaha): detect and process modules
+        std::string group_spec = spec.substr(1);
+        auto group_settings = libdnf::GoalJobSettings(settings);
+        // for compatibility reasons '@group-spec' can mean also environment
+        group_settings.group_search_environments = true;
+        // support for kickstart environmental groups syntax - '@^environment-spec'
+        if (group_spec.starts_with("^")) {
+            group_spec = group_spec.substr(1);
+            group_settings.group_search_groups = false;
+        } else {
+            group_settings.group_search_groups = true;
+        }
         group_specs.push_back(
-            std::make_tuple(action, libdnf::transaction::TransactionItemReason::USER, spec.substr(1), settings));
+            std::make_tuple(action, libdnf::transaction::TransactionItemReason::USER, group_spec, group_settings));
     } else {
         const std::string_view ext(".rpm");
         if (libdnf::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
@@ -1705,6 +1715,7 @@ void Goal::Impl::add_environment_install_to_goal(
     bool with_optional = any(settings.resolve_group_package_types(cfg_main) & libdnf::comps::PackageType::OPTIONAL);
     auto group_settings = libdnf::GoalJobSettings(settings);
     group_settings.group_search_environments = false;
+    group_settings.group_search_groups = true;
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
@@ -1715,7 +1726,10 @@ void Goal::Impl::add_environment_install_to_goal(
         if (with_optional) {
             for (const auto & grp_id : environment.get_optional_groups()) {
                 env_group_specs.emplace_back(
-                    GoalAction::INSTALL, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
+                    GoalAction::INSTALL_BY_GROUP,
+                    transaction::TransactionItemReason::DEPENDENCY,
+                    grp_id,
+                    group_settings);
             }
         }
     }
@@ -1743,6 +1757,7 @@ void Goal::Impl::add_environment_remove_to_goal(
     std::vector<GroupSpec> remove_group_specs;
     auto group_settings = libdnf::GoalJobSettings();
     group_settings.group_search_environments = false;
+    group_settings.group_search_groups = true;
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
         for (const auto & environment : environment_query) {
             rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
@@ -1793,6 +1808,7 @@ void Goal::Impl::add_environment_upgrade_to_goal(
     std::vector<GroupSpec> env_group_specs;
     auto group_settings = libdnf::GoalJobSettings(settings);
     group_settings.group_search_environments = false;
+    group_settings.group_search_groups = true;
 
     for (auto installed_environment : environment_query) {
         auto environment_id = installed_environment.get_environmentid();
