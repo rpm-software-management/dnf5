@@ -463,7 +463,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     for (auto & [action, spec, settings] : rpm_specs) {
         switch (action) {
             case GoalAction::INSTALL:
-            case GoalAction::INSTALL_BY_GROUP: {
+            case GoalAction::INSTALL_BY_COMPS: {
                 auto [problem, idqueue] = add_install_to_goal(transaction, action, spec, settings);
                 rpm_goal.add_transaction_user_installed(idqueue);
                 ret |= problem;
@@ -543,7 +543,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
     for (auto & [action, reason, spec, settings] : specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
-        if (action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_GROUP && action != GoalAction::REMOVE &&
+        if (action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_COMPS && action != GoalAction::REMOVE &&
             action != GoalAction::UPGRADE) {
             transaction.p_impl->add_resolve_log(
                 action,
@@ -563,7 +563,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
             comps::GroupQuery spec_groups_query(base_groups_query);
             // for REMOVE / UPGRADE actions take only installed groups into account
             // for INSTALL only available groups
-            spec_groups_query.filter_installed(action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_GROUP);
+            spec_groups_query.filter_installed(action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_COMPS);
             if (settings.group_with_id) {
                 comps::GroupQuery group_query_id(spec_groups_query);
                 group_query_id.filter_groupid(spec, cmp);
@@ -634,7 +634,7 @@ void Goal::Impl::add_resolved_group_specs_to_goal(base::Transaction & transactio
     // process group removals first
     add_group_remove_to_goal(resolved_group_specs[GoalAction::REMOVE]);
 
-    for (const auto & action : std::vector<GoalAction>{GoalAction::INSTALL, GoalAction::INSTALL_BY_GROUP}) {
+    for (const auto & action : std::vector<GoalAction>{GoalAction::INSTALL, GoalAction::INSTALL_BY_COMPS}) {
         for (auto & [spec, reason, group_query, settings] : resolved_group_specs[action]) {
             add_group_install_to_goal(transaction, reason, group_query, settings);
         }
@@ -1487,7 +1487,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf::
     if (pkg_condition.empty()) {
         auto [pkg_problem, pkg_queue] =
             // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
-            add_install_to_goal(transaction, GoalAction::INSTALL_BY_GROUP, pkg_name, pkg_settings);
+            add_install_to_goal(transaction, GoalAction::INSTALL_BY_COMPS, pkg_name, pkg_settings);
         rpm_goal.add_transaction_group_installed(pkg_queue);
     } else {
         // check whether condition can even be met
@@ -1721,12 +1721,12 @@ void Goal::Impl::add_environment_install_to_goal(
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
         for (const auto & grp_id : environment.get_groups()) {
             env_group_specs.emplace_back(
-                GoalAction::INSTALL_BY_GROUP, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
+                GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
         }
         if (with_optional) {
             for (const auto & grp_id : environment.get_optional_groups()) {
                 env_group_specs.emplace_back(
-                    GoalAction::INSTALL_BY_GROUP,
+                    GoalAction::INSTALL_BY_COMPS,
                     transaction::TransactionItemReason::DEPENDENCY,
                     grp_id,
                     group_settings);
@@ -1852,7 +1852,7 @@ void Goal::Impl::add_environment_upgrade_to_goal(
             } else {
                 // newly added group to environment definition, install it.
                 env_group_specs.emplace_back(
-                    GoalAction::INSTALL_BY_GROUP, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
+                    GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
             }
         }
 

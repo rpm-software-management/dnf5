@@ -90,7 +90,7 @@ std::string LogEvent::to_string(
                         break;
                 }
                 return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
-            } else if (action == GoalAction::INSTALL_BY_GROUP) {
+            } else if (action == GoalAction::INSTALL_BY_COMPS) {
                 if (spec_type && *spec_type == libdnf::transaction::TransactionItemType::GROUP) {
                     return ret.append(utils::sformat(_("No match for group from environment: {}"), *spec));
                 } else {
