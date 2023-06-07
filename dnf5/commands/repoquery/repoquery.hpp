@@ -73,6 +73,7 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> upgrades{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> recent{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> installonly{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> srpm{nullptr};
 
     libdnf5::OptionBool * querytags_option{nullptr};
     libdnf5::OptionString * query_format_option{nullptr};
