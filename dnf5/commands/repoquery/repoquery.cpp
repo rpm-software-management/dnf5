@@ -430,8 +430,26 @@ static libdnf5::rpm::PackageQuery get_installonly_query(libdnf5::Base & base) {
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::rpm::PackageSet result_pset(ctx.base);
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf5::rpm::PackageQuery base_query(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+
+    // First filter by pkg_specs - it can narrow the query the most
+    if (pkg_specs.empty()) {
+        full_package_query |= base_query;
+    } else {
+        for (const auto & pkg : cmdline_packages) {
+            if (base_query.contains(pkg)) {
+                full_package_query.add(pkg);
+            }
+        }
+
+        const libdnf5::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
+        for (const auto & spec : pkg_specs) {
+            libdnf5::rpm::PackageQuery package_query(base_query);
+            package_query.resolve_pkg_spec(spec, settings, true);
+            full_package_query |= package_query;
+        }
+    }
 
     if (leaves_option->get_value()) {
         full_package_query.filter_leaves();
@@ -613,37 +631,19 @@ void RepoqueryCommand::run() {
         full_package_query &= get_installonly_query(ctx.base);
     }
 
-    if (pkg_specs.empty()) {
-        result_pset |= full_package_query;
-    } else {
-        for (const auto & pkg : cmdline_packages) {
-            if (full_package_query.contains(pkg)) {
-                result_pset.add(pkg);
-            }
-        }
-
-        const libdnf5::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
-        for (const auto & spec : pkg_specs) {
-            libdnf5::rpm::PackageQuery package_query(full_package_query);
-            package_query.resolve_pkg_spec(spec, settings, true);
-            result_pset |= package_query;
-        }
-    }
-
     if (querytags_option->get_value()) {
         libdnf5::cli::output::print_available_pkg_attrs(stdout);
     } else if (changelogs->get_value()) {
-        libdnf5::rpm::PackageQuery wrapped(result_pset);
-        libdnf5::cli::output::print_changelogs(wrapped, full_package_query, false, 0, 0);
+        libdnf5::cli::output::print_changelogs(full_package_query, full_package_query, false, 0, 0);
     } else if (info_option->get_value()) {
-        for (auto package : result_pset) {
+        for (auto package : full_package_query) {
             libdnf5::cli::output::print_package_info_table(package);
             std::cout << '\n';
         }
     } else if (!pkg_attr_option->get_value().empty()) {
-        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, result_pset, pkg_attr_option->get_value());
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, full_package_query, pkg_attr_option->get_value());
     } else {
-        libdnf5::cli::output::print_pkg_set_with_format(stdout, result_pset, query_format_option->get_value());
+        libdnf5::cli::output::print_pkg_set_with_format(stdout, full_package_query, query_format_option->get_value());
     }
 }
 
