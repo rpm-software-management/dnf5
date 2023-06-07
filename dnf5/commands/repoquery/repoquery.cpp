@@ -274,6 +274,12 @@ void RepoqueryCommand::set_argument_parser() {
         *this, "recent", '\0', "Limit to only recently changed packages.", false);
     installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installonly", '\0', "Limit to installed installonly packages.", false);
+    srpm = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this,
+        "srpm",
+        '\0',
+        "After filtering is finished use packages' corresponding source RPMs for output (enables source repositories).",
+        false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -362,6 +368,10 @@ void RepoqueryCommand::configure() {
                 extras->get_value() || upgrades->get_value() || recent->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
+
+    if (srpm->get_value()) {
+        context.base.get_repo_sack()->enable_source_repos();
+    }
 
     if (changelogs->get_value()) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
@@ -631,6 +641,23 @@ void RepoqueryCommand::run() {
         full_package_query &= get_installonly_query(ctx.base);
     }
 
+    // srpm filter has to be applied last because it is not order independent like the other filters
+    if (srpm->get_value()) {
+        libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        auto only_src_query = full_package_query;
+        only_src_query.filter_arch({"src"});
+        for (const auto & pkg : full_package_query) {
+            if (!pkg.get_sourcerpm().empty()) {
+                auto tmp_q = only_src_query;
+                tmp_q.filter_name({pkg.get_source_name()});
+                tmp_q.filter_evr({pkg.get_evr()});
+                srpms |= tmp_q;
+            }
+        }
+        full_package_query = srpms;
+    }
+
+    // Output formatting section
     if (querytags_option->get_value()) {
         libdnf5::cli::output::print_available_pkg_attrs(stdout);
     } else if (changelogs->get_value()) {
