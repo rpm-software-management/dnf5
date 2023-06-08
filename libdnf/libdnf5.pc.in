@@ -5,7 +5,7 @@ includedir=${prefix}/include
 Name: libdnf5
 Description: Package management library
 Version: @PROJECT_VERSION@
-Requires: @LIBDNF_PC_REQUIRES_STRING@
-Requires.private: @LIBDNF_PC_REQUIRES_PRIVATE_STRING@
+Requires: @LIBDNF5_PC_REQUIRES_STRING@
+Requires.private: @LIBDNF5_PC_REQUIRES_PRIVATE_STRING@
 Libs: -L${libdir} -ldnf
 Cflags: -I${includedir}
