@@ -280,6 +280,8 @@ void RepoqueryCommand::set_argument_parser() {
         '\0',
         "After filtering is finished use packages' corresponding source RPMs for output (enables source repositories).",
         false);
+    disable_modular_filtering = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "disable-modular-filtering", '\0', "Include packages of inactive module streams.", false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -459,8 +461,11 @@ static libdnf5::rpm::PackageQuery get_installonly_query(libdnf5::Base & base) {
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::rpm::PackageQuery base_query(ctx.base);
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf5::sack::ExcludeFlags flags = disable_modular_filtering->get_value()
+                                            ? libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES
+                                            : libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+    libdnf5::rpm::PackageQuery base_query(ctx.base, flags, false);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base, flags, true);
 
     // First filter by pkg_specs - it can narrow the query the most
     if (pkg_specs.empty()) {
