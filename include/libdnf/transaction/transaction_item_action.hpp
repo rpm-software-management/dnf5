@@ -38,8 +38,11 @@ enum class TransactionItemAction : int {
     DOWNGRADE = 3,
     REINSTALL = 4,
     REMOVE = 5,
-    REPLACED = 6,      // a package that is being replaced by another package (this one is leaving the system)
-    REASON_CHANGE = 7  // a package is being kept on the system but its reason is changing
+    REPLACED = 6,       // a package that is being replaced by another package (this one is leaving the system)
+    REASON_CHANGE = 7,  // a package is being kept on the system but its reason is changing
+    ENABLE = 8,         // module enable
+    DISABLE = 9,        // module disable
+    RESET = 10          // module reset
 };
 
 

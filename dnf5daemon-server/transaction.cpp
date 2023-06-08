@@ -41,6 +41,9 @@ RpmTransactionItemActions transaction_package_to_action(const libdnf::base::Tran
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return RpmTransactionItemActions::ERASE;
         case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
+        case libdnf::base::TransactionPackage::Action::ENABLE:
+        case libdnf::base::TransactionPackage::Action::DISABLE:
+        case libdnf::base::TransactionPackage::Action::RESET:
             // TODO(lukash) handle cases
             libdnf_throw_assertion(
                 "Unexpected action in RpmTransactionItem: {}",
