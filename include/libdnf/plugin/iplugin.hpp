@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdint>
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Base;
 struct ConfigParser;
@@ -33,9 +33,9 @@ namespace base {
 class Transaction;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
-namespace libdnf::plugin {
+namespace libdnf5::plugin {
 
 /// Plugin version
 struct Version {
@@ -88,11 +88,11 @@ public:
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
-    virtual void pre_transaction(const libdnf::base::Transaction &) {}
+    virtual void pre_transaction(const libdnf5::base::Transaction &) {}
 
     /// The post_transaction hook.
     /// It is called after transactions.
-    virtual void post_transaction(const libdnf::base::Transaction &) {}
+    virtual void post_transaction(const libdnf5::base::Transaction &) {}
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept {}
@@ -103,14 +103,14 @@ private:
     Base * base;
 };
 
-}  // namespace libdnf::plugin
+}  // namespace libdnf5::plugin
 
 
 extern "C" {
 
 /// Returns the version of the API supported by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
-libdnf::PluginAPIVersion libdnf_plugin_get_api_version(void);
+libdnf5::PluginAPIVersion libdnf_plugin_get_api_version(void);
 
 /// Returns the name of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
@@ -118,14 +118,14 @@ const char * libdnf_plugin_get_name(void);
 
 /// Returns the version of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_version(), but can be called without creating an IPlugin instance.
-libdnf::plugin::Version libdnf_plugin_get_version(void);
+libdnf5::plugin::Version libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-libdnf::plugin::IPlugin * libdnf_plugin_new_instance(
-    libdnf::LibraryVersion library_version, libdnf::Base & base, libdnf::ConfigParser & parser);
+libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
+    libdnf5::LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser);
 
 /// Deletes plugin instance.
-void libdnf_plugin_delete_instance(libdnf::plugin::IPlugin * plugin_instance);
+void libdnf_plugin_delete_instance(libdnf5::plugin::IPlugin * plugin_instance);
 }
 
 #endif

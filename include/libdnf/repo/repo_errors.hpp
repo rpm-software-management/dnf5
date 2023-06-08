@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class RepoError : public Error {
     using Error::Error;
@@ -51,6 +51,6 @@ class RepoRpmError : public RepoError {
     const char * get_name() const noexcept override { return "RepoRpmError"; }
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

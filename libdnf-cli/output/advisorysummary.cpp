@@ -24,37 +24,37 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
-void print_advisorysummary_table(const libdnf::advisory::AdvisoryQuery & advisories, const std::string & mode) {
+void print_advisorysummary_table(const libdnf5::advisory::AdvisoryQuery & advisories, const std::string & mode) {
     KeyValueTable output_table;
     std::cout << mode << " advisory information summary:" << std::endl;
 
-    libdnf::advisory::AdvisoryQuery bugfixes{advisories};
+    libdnf5::advisory::AdvisoryQuery bugfixes{advisories};
     bugfixes.filter_type("bugfix");
 
-    libdnf::advisory::AdvisoryQuery enhancements{advisories};
+    libdnf5::advisory::AdvisoryQuery enhancements{advisories};
     enhancements.filter_type("enhancement");
 
-    libdnf::advisory::AdvisoryQuery securities{advisories};
+    libdnf5::advisory::AdvisoryQuery securities{advisories};
     securities.filter_type("security");
 
-    libdnf::advisory::AdvisoryQuery security_critical{securities};
+    libdnf5::advisory::AdvisoryQuery security_critical{securities};
     security_critical.filter_severity("Critical");
-    libdnf::advisory::AdvisoryQuery security_important{securities};
+    libdnf5::advisory::AdvisoryQuery security_important{securities};
     security_important.filter_severity("Important");
-    libdnf::advisory::AdvisoryQuery security_moderate{securities};
+    libdnf5::advisory::AdvisoryQuery security_moderate{securities};
     security_moderate.filter_severity("Moderate");
-    libdnf::advisory::AdvisoryQuery security_low{securities};
+    libdnf5::advisory::AdvisoryQuery security_low{securities};
     security_low.filter_severity("Low");
-    libdnf::advisory::AdvisoryQuery security_other{securities};
+    libdnf5::advisory::AdvisoryQuery security_other{securities};
     security_other -= security_critical;
     security_other -= security_important;
     security_other -= security_moderate;
     security_other -= security_low;
 
-    libdnf::advisory::AdvisoryQuery others{advisories};
+    libdnf5::advisory::AdvisoryQuery others{advisories};
     others -= bugfixes;
     others -= enhancements;
     others -= securities;
@@ -75,4 +75,4 @@ void print_advisorysummary_table(const libdnf::advisory::AdvisoryQuery & advisor
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

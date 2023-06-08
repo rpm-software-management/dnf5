@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 void Config::load_from_parser(
     const ConfigParser & parser,
@@ -43,4 +43,4 @@ void Config::load_from_parser(
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

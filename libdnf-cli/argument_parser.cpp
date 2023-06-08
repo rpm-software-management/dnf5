@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <utility>
 
-namespace libdnf::cli {
+namespace libdnf5::cli {
 
 namespace {
 
@@ -138,7 +138,7 @@ ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() con
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
-    ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values)
+    ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf5::Option>> * values)
     : Argument(owner, id),
       init_value(nullptr),
       values(values) {
@@ -151,8 +151,8 @@ ArgumentParser::PositionalArg::PositionalArg(
     ArgumentParser & owner,
     const std::string & id,
     int nvals,
-    libdnf::Option * init_value,
-    std::vector<std::unique_ptr<libdnf::Option>> * values)
+    libdnf5::Option * init_value,
+    std::vector<std::unique_ptr<libdnf5::Option>> * values)
     : Argument(owner, id),
       nvals(nvals),
       init_value(init_value),
@@ -215,9 +215,9 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     if (store_value) {
         for (size_t i = 0; i < count; ++i) {
             if (values->size() <= i) {
-                values->push_back(std::unique_ptr<libdnf::Option>((*init_value).clone()));
+                values->push_back(std::unique_ptr<libdnf5::Option>((*init_value).clone()));
             }
-            (*values)[i]->set(libdnf::Option::Priority::COMMANDLINE, argv[i]);
+            (*values)[i]->set(libdnf5::Option::Priority::COMMANDLINE, argv[i]);
         }
     }
     ++parse_count;
@@ -256,7 +256,7 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
         consumed_args = 1;
     }
     if (store_value && value) {
-        value->set(libdnf::Option::Priority::COMMANDLINE, arg_value);
+        value->set(libdnf5::Option::Priority::COMMANDLINE, arg_value);
     }
     ++parse_count;
     if (parse_hook) {
@@ -305,7 +305,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
             option[1] == '\0' ? 1 : 0;  // consume only if we are the last option in grop, example of 3 options: -cvf
     }
     if (store_value && value) {
-        value->set(libdnf::Option::Priority::COMMANDLINE, arg_value);
+        value->set(libdnf5::Option::Priority::COMMANDLINE, arg_value);
     }
     ++parse_count;
     if (parse_hook) {
@@ -347,7 +347,7 @@ void ArgumentParser::Command::print_complete(
     const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments) {
     // Using the Help class to print the completion suggestions, as it prints a table of two columns
     // which is also what we need here.
-    libdnf::cli::output::Help help;
+    libdnf5::cli::output::Help help;
     std::string last;
 
     // Search for matching commands.
@@ -759,7 +759,7 @@ void ArgumentParser::Command::help() const noexcept {
     auto & pos_args = get_positional_args();
     auto & groups = get_groups();
 
-    libdnf::cli::output::Usage usage_output;
+    libdnf5::cli::output::Usage usage_output;
 
     // generate usage
     // start with the current command name
@@ -782,7 +782,7 @@ void ArgumentParser::Command::help() const noexcept {
 
     // print usage
     auto * usage_header = usage_output.add_header(_("Usage:"));
-    for (auto & line : libdnf::utils::string::split(usage, "\n")) {
+    for (auto & line : libdnf5::utils::string::split(usage, "\n")) {
         usage_output.add_line(line, usage_header);
     }
 
@@ -790,12 +790,12 @@ void ArgumentParser::Command::help() const noexcept {
     if (!long_description.empty()) {
         usage_output.add_newline();
         auto * desc_header = usage_output.add_header(_("Description:"));
-        for (auto & line : libdnf::utils::string::split(long_description, "\n")) {
+        for (auto & line : libdnf5::utils::string::split(long_description, "\n")) {
             usage_output.add_line(line, desc_header);
         }
     }
 
-    libdnf::cli::output::Help help;
+    libdnf5::cli::output::Help help;
 
     // Arguments used in groups are not printed as ungrouped.
     std::set<Argument *> args_used_in_groups;
@@ -931,7 +931,7 @@ ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string &
 }
 
 ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
-    const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values) {
+    const std::string & id, std::vector<std::unique_ptr<libdnf5::Option>> * values) {
     std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
@@ -941,8 +941,8 @@ ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
 ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
     const std::string & id,
     int nargs,
-    libdnf::Option * init_value,
-    std::vector<std::unique_ptr<libdnf::Option>> * values) {
+    libdnf5::Option * init_value,
+    std::vector<std::unique_ptr<libdnf5::Option>> * values) {
     std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, nargs, init_value, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
@@ -963,21 +963,22 @@ std::vector<ArgumentParser::Argument *> * ArgumentParser::add_conflict_args_grou
     return ptr;
 }
 
-libdnf::Option * ArgumentParser::add_init_value(std::unique_ptr<libdnf::Option> && src) {
+libdnf5::Option * ArgumentParser::add_init_value(std::unique_ptr<libdnf5::Option> && src) {
     auto * ptr = src.get();
     values_init.push_back(std::move(src));
     return ptr;
 }
 
-std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_new_values() {
-    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> tmp(new std::vector<std::unique_ptr<libdnf::Option>>);
+std::vector<std::unique_ptr<libdnf5::Option>> * ArgumentParser::add_new_values() {
+    std::unique_ptr<std::vector<std::unique_ptr<libdnf5::Option>>> tmp(
+        new std::vector<std::unique_ptr<libdnf5::Option>>);
     auto * ptr = tmp.get();
     values.push_back(std::move(tmp));
     return ptr;
 }
 
-std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values(
-    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values) {
+std::vector<std::unique_ptr<libdnf5::Option>> * ArgumentParser::add_values(
+    std::unique_ptr<std::vector<std::unique_ptr<libdnf5::Option>>> && values) {
     auto * ptr = values.get();
     this->values.push_back(std::move(values));
     return ptr;
@@ -1063,11 +1064,11 @@ ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_
     throw ArgumentParserNotFoundError(M_("Named argument with path id \"{}\" not found"), id_path);
 }
 
-libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
+libdnf5::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
     const std::string & id,
     const std::string & long_name,
     char short_name,
-    libdnf::cli::ArgumentParser::Group * group) {
+    libdnf5::cli::ArgumentParser::Group * group) {
     auto * alias = get_argument_parser().add_new_named_arg(id);
     alias->set_long_name(long_name);
     alias->set_short_name(short_name);
@@ -1091,7 +1092,7 @@ libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
     alias->set_store_value(get_store_value());
     alias->set_const_value(get_const_value());
     alias->set_arg_value_help(get_arg_value_help());
-    alias->set_parse_hook_func(libdnf::cli::ArgumentParser::NamedArg::ParseHookFunc(get_parse_hook_func()));
+    alias->set_parse_hook_func(libdnf5::cli::ArgumentParser::NamedArg::ParseHookFunc(get_parse_hook_func()));
 
     // Do not offer aliases in completion
     alias->set_complete(false);
@@ -1134,4 +1135,4 @@ void ArgumentParser::assert_root_command() {
     libdnf_assert(root_command != nullptr, "Root command is not set");
 }
 
-}  // namespace libdnf::cli
+}  // namespace libdnf5::cli

@@ -36,7 +36,7 @@ class Configuration {
 public:
     struct RepoInfo {
         std::string file_path;
-        std::unique_ptr<libdnf::repo::ConfigRepo> repoconfig;
+        std::unique_ptr<libdnf5::repo::ConfigRepo> repoconfig;
     };
 
     explicit Configuration(Session & session);
@@ -45,17 +45,17 @@ public:
     void read_configuration();
     const std::map<std::string, std::unique_ptr<RepoInfo>> & get_repos() { return repos; }
     RepoInfo * find_repo(const std::string & repoid);
-    libdnf::ConfigParser * find_parser(const std::string & file_path);
+    libdnf5::ConfigParser * find_parser(const std::string & file_path);
 
 private:
     // repoid: repoinfo
     std::map<std::string, std::unique_ptr<RepoInfo>> repos;
     // repo_config_file_path: parser
-    std::map<std::string, std::unique_ptr<libdnf::ConfigParser>> config_parsers;
+    std::map<std::string, std::unique_ptr<libdnf5::ConfigParser>> config_parsers;
     std::map<std::string, std::string> substitutions;
     Session & session;
 
-    void read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path);
+    void read_repos(const libdnf5::ConfigParser * repo_parser, const std::string & file_path);
     void read_main_config();
     void read_repo_configs();
 };

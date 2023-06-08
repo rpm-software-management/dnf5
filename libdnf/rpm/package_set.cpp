@@ -28,12 +28,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_set_iterator.hpp"
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 PackageSet::PackageSet(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 
-PackageSet::PackageSet(libdnf::Base & base) : PackageSet(base.get_weak_ptr()) {}
+PackageSet::PackageSet(libdnf5::Base & base) : PackageSet(base.get_weak_ptr()) {}
 
 PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl)) {}
 
@@ -121,4 +121,4 @@ BaseWeakPtr PackageSet::get_base() const {
 }
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

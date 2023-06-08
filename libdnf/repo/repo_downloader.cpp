@@ -45,7 +45,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     { "sha512", "sha256" }
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 static void str_vector_to_char_array(const std::vector<std::string> & vec, const char * arr[]) {
     for (size_t i = 0; i < vec.size(); ++i) {
@@ -150,7 +150,7 @@ RepoDownloader::~RepoDownloader() = default;
 
 void RepoDownloader::download_metadata(const std::string & destdir) try {
     std::filesystem::create_directories(destdir);
-    libdnf::utils::fs::TempDir tmpdir(destdir, "tmpdir");
+    libdnf5::utils::fs::TempDir tmpdir(destdir, "tmpdir");
 
     LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
     perform(h, config.get_repo_gpgcheck_option().get_value());
@@ -787,4 +787,4 @@ std::set<std::string> RepoDownloader::get_optional_metadata() const {
 //        throw LibrepoError(std::move(err));
 //}
 
-}  //namespace libdnf::repo
+}  // namespace libdnf5::repo

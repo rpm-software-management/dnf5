@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "widget.hpp"
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 class SpeedWidget : public Widget {
@@ -35,7 +35,7 @@ public:
 };
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // LIBDNF_CLI_PROGRESSBAR_WIDGETS_SPEED_HPP

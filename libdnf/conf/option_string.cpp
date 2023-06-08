@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <regex>
 
-namespace libdnf {
+namespace libdnf5 {
 
 OptionString::OptionString(const std::string & default_value)
     : Option(Priority::DEFAULT),
@@ -99,4 +99,4 @@ const std::string & OptionString::get_value() const {
     return value;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

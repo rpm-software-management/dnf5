@@ -30,7 +30,7 @@ public:
     explicit GroupInfoCommand(Context & context) : GroupListCommand(context, "info") {}
 
 private:
-    void print(const libdnf::comps::GroupQuery & query) override;
+    void print(const libdnf5::comps::GroupQuery & query) override;
 };
 
 

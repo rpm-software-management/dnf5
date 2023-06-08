@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionRpmPackageTest);
@@ -38,20 +38,20 @@ namespace {
 
 // Allows accessing private methods
 create_private_getter_template;
-create_getter(new_package, &libdnf::transaction::Transaction::new_package);
-create_getter(start, &libdnf::transaction::Transaction::start);
-create_getter(finish, &libdnf::transaction::Transaction::finish);
-create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
+create_getter(new_package, &libdnf5::transaction::Transaction::new_package);
+create_getter(start, &libdnf5::transaction::Transaction::start);
+create_getter(finish, &libdnf5::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf5::transaction::TransactionHistory::new_transaction);
 
-create_getter(set_name, &libdnf::transaction::Package::set_name);
-create_getter(set_epoch, &libdnf::transaction::Package::set_epoch);
-create_getter(set_version, &libdnf::transaction::Package::set_version);
-create_getter(set_release, &libdnf::transaction::Package::set_release);
-create_getter(set_arch, &libdnf::transaction::Package::set_arch);
-create_getter(set_repoid, &libdnf::transaction::Package::set_repoid);
-create_getter(set_action, &libdnf::transaction::Package::set_action);
-create_getter(set_reason, &libdnf::transaction::Package::set_reason);
-create_getter(set_state, &libdnf::transaction::Package::set_state);
+create_getter(set_name, &libdnf5::transaction::Package::set_name);
+create_getter(set_epoch, &libdnf5::transaction::Package::set_epoch);
+create_getter(set_version, &libdnf5::transaction::Package::set_version);
+create_getter(set_release, &libdnf5::transaction::Package::set_release);
+create_getter(set_arch, &libdnf5::transaction::Package::set_arch);
+create_getter(set_repoid, &libdnf5::transaction::Package::set_repoid);
+create_getter(set_action, &libdnf5::transaction::Package::set_action);
+create_getter(set_reason, &libdnf5::transaction::Package::set_reason);
+create_getter(set_state, &libdnf5::transaction::Package::set_state);
 
 }  //namespace
 

@@ -60,7 +60,7 @@ public:
     void test_get_relogin_suggested();
 
 private:
-    std::vector<libdnf::advisory::AdvisoryPackage> packages;
+    std::vector<libdnf5::advisory::AdvisoryPackage> packages;
 };
 
 

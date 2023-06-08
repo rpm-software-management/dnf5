@@ -72,11 +72,11 @@ void LoggersTest::test_loggers() {
     // 1. Create a LogRouter instance with one MemoryBufferLogger instances attached.
     // ====================
     // Create log router.
-    std::unique_ptr<libdnf::LogRouter> log_router = std::make_unique<libdnf::LogRouter>();
+    std::unique_ptr<libdnf5::LogRouter> log_router = std::make_unique<libdnf5::LogRouter>();
     // Create circular memory buffer logger with capacity 10 messages (4 pre-allocated from start).
     const std::size_t max_items_to_keep = 10;
     const std::size_t reserve = 4;
-    log_router->add_logger(std::make_unique<libdnf::MemoryBufferLogger>(max_items_to_keep, reserve));
+    log_router->add_logger(std::make_unique<libdnf5::MemoryBufferLogger>(max_items_to_keep, reserve));
 
     // Test the number of registered loggers.
     CPPUNIT_ASSERT_EQUAL(log_router->get_loggers_count(), static_cast<size_t>(1));
@@ -85,13 +85,13 @@ void LoggersTest::test_loggers() {
     // 2. Write messages into log_router. They will be routed into memory_buffer_logger.
     // ====================
     for (int i = 0; i < 2; ++i) {
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::CRITICAL, "Critical message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::ERROR, "Error message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::WARNING, "Warning message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::NOTICE, "Notice message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::INFO, "Info message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::DEBUG, "Debug message");
-        log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::TRACE, "Trace message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::CRITICAL, "Critical message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::ERROR, "Error message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::WARNING, "Warning message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::NOTICE, "Notice message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::INFO, "Info message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::DEBUG, "Debug message");
+        log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::TRACE, "Trace message");
     }
 
     // ====================
@@ -104,12 +104,12 @@ void LoggersTest::test_loggers() {
     auto * log2_stream_ptr = log2_stream.get();
 
     // Create StreamLogger instance and swap it with MemoryBufferLogger instance which was added into LogRouter before.
-    std::unique_ptr<libdnf::Logger> tmp_logger = std::make_unique<libdnf::StreamLogger>(std::move(log1_stream));
+    std::unique_ptr<libdnf5::Logger> tmp_logger = std::make_unique<libdnf5::StreamLogger>(std::move(log1_stream));
     // In the log_router is registered only instance of MemoryBufferLogger just now. The index of the first logger is "0".
     log_router->swap_logger(tmp_logger, 0);
 
     // Create secondary StreamLogger instance and add it to LogRouter as another logger.
-    log_router->add_logger(std::make_unique<libdnf::StreamLogger>(std::move(log2_stream)));
+    log_router->add_logger(std::make_unique<libdnf5::StreamLogger>(std::move(log2_stream)));
 
     // Test the number of registered loggers.
     CPPUNIT_ASSERT_EQUAL(log_router->get_loggers_count(), static_cast<size_t>(2));
@@ -118,7 +118,7 @@ void LoggersTest::test_loggers() {
     // 4. Write messages from original (replaced) MemoryBufferLoger instance into LogRouter instance. They will be routed
     //    to both attached stream loggers.
     // ====================
-    dynamic_cast<libdnf::MemoryBufferLogger &>(*tmp_logger).write_to_logger(*log_router);
+    dynamic_cast<libdnf5::MemoryBufferLogger &>(*tmp_logger).write_to_logger(*log_router);
 
     // Messages from memory logger was written to log_router. Memory logger is not needed anymore.
     tmp_logger.reset();
@@ -126,7 +126,7 @@ void LoggersTest::test_loggers() {
     // ====================
     // 5. Write aditional message into LogRouter instance.
     // ====================
-    log_router->write(msg_time += 1s, pid, libdnf::Logger::Level::INFO, "Info additional message");
+    log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::INFO, "Info additional message");
 
     // ====================
     // 6. Check content of streams of both StreamLogger instances.

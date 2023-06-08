@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * select_sql = R"**(
@@ -48,11 +48,11 @@ static constexpr const char * select_sql = R"**(
 std::vector<int64_t> TransactionDbUtils::select_transaction_ids(const BaseWeakPtr & base) {
     auto conn = transaction_db_connect(*base);
 
-    auto query = libdnf::utils::SQLite3::Query(*conn, "SELECT \"id\" FROM \"trans\" ORDER BY \"id\"");
+    auto query = libdnf5::utils::SQLite3::Query(*conn, "SELECT \"id\" FROM \"trans\" ORDER BY \"id\"");
 
     std::vector<int64_t> res;
 
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         res.push_back(query.get<int64_t>("id"));
     }
 
@@ -61,10 +61,10 @@ std::vector<int64_t> TransactionDbUtils::select_transaction_ids(const BaseWeakPt
 
 
 std::vector<Transaction> TransactionDbUtils::load_from_select(
-    const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
+    const BaseWeakPtr & base, libdnf5::utils::SQLite3::Query & query) {
     std::vector<Transaction> res;
 
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         Transaction trans(base, query.get<int>("id"));
         trans.set_dt_start(query.get<int64_t>("dt_begin"));
         trans.set_dt_end(query.get<int64_t>("dt_end"));
@@ -100,7 +100,7 @@ std::vector<Transaction> TransactionDbUtils::select_transactions_by_ids(
         sql += ")";
     }
 
-    auto query = libdnf::utils::SQLite3::Query(*conn, sql);
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
 
     for (size_t i = 0; i < ids.size(); ++i) {
         query.bind(static_cast<int>(i + 1), ids[i]);
@@ -116,7 +116,7 @@ std::vector<Transaction> TransactionDbUtils::select_transactions_by_range(
 
     std::string sql = std::string(select_sql) + " WHERE \"trans\".\"id\" >= ? AND \"trans\".\"id\" <= ?";
 
-    auto query = libdnf::utils::SQLite3::Query(*conn, sql);
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
     query.bindv(start, end);
 
     return TransactionDbUtils::load_from_select(base, query);
@@ -142,14 +142,14 @@ static constexpr const char * SQL_TRANS_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> TransactionDbUtils::trans_insert_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_TRANS_INSERT);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> TransactionDbUtils::trans_insert_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_TRANS_INSERT);
     return query;
 }
 
 
-void TransactionDbUtils::trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
+void TransactionDbUtils::trans_insert(libdnf5::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
         trans.get_dt_start(),
         trans.get_dt_end(),
@@ -192,14 +192,14 @@ static constexpr const char * SQL_TRANS_UPDATE = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> TransactionDbUtils::trans_update_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_TRANS_UPDATE);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> TransactionDbUtils::trans_update_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_TRANS_UPDATE);
     return query;
 }
 
 
-void TransactionDbUtils::trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
+void TransactionDbUtils::trans_update(libdnf5::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
         // SET key=value
         trans.get_dt_start(),
@@ -218,4 +218,4 @@ void TransactionDbUtils::trans_update(libdnf::utils::SQLite3::Statement & query,
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

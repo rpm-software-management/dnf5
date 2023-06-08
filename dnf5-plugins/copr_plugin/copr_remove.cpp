@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/conf/const.hpp>
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 namespace dnf5 {
 
@@ -30,7 +30,7 @@ namespace dnf5 {
 void CoprRemoveCommand::set_argument_parser() {
     CoprSubCommandWithID::set_argument_parser();
     auto & cmd = *get_argument_parser_command();
-    std::string desc = libdnf::utils::sformat(
+    std::string desc = libdnf5::utils::sformat(
         _("remove specified Copr repository from the system (removes the {}/*.repo file)"),
         copr_repo_directory().native());
     cmd.set_description(desc);

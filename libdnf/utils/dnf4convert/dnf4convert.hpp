@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 #include <string>
 
-namespace libdnf::dnf4convert {
+namespace libdnf5::dnf4convert {
 
 constexpr const char * MODULES_PERSIST_DIR = "etc/dnf/modules.d";
 
@@ -35,12 +35,12 @@ constexpr const char * MODULES_PERSIST_DIR = "etc/dnf/modules.d";
 /// e.g. history database, modules state, user installed packages, etc.
 class Dnf4Convert {
 public:
-    Dnf4Convert(const libdnf::BaseWeakPtr & base) : base(base) {}
+    Dnf4Convert(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
     /// Reads modules state from ini files in dnf4 format
     /// @param path Path where module configuration is stored (e.g. /etc/dnf/modules.c)
     /// @return The map {module_name -> ModuleState object}
-    std::map<std::string, libdnf::system::ModuleState> read_module_states();
+    std::map<std::string, libdnf5::system::ModuleState> read_module_states();
 
     /// Reads installed packages, groups and environments from dnf4 history database.
     /// The state is then stored in parameters.
@@ -50,15 +50,15 @@ public:
     /// @param[out] environment_states Map {environment.environment_id -> EnvironmentState} for installed environmental groups
     /// @return True if packages were read successfully, False in case of database reading error.
     bool read_package_states_from_history(
-        std::map<std::string, libdnf::system::PackageState> & package_states,
-        std::map<std::string, libdnf::system::NevraState> & nevra_states,
-        std::map<std::string, libdnf::system::GroupState> & group_states,
-        std::map<std::string, libdnf::system::EnvironmentState> & environment_states);
+        std::map<std::string, libdnf5::system::PackageState> & package_states,
+        std::map<std::string, libdnf5::system::NevraState> & nevra_states,
+        std::map<std::string, libdnf5::system::GroupState> & group_states,
+        std::map<std::string, libdnf5::system::EnvironmentState> & environment_states);
 
 private:
     BaseWeakPtr base;
 };
 
-}  // namespace libdnf::dnf4convert
+}  // namespace libdnf5::dnf4convert
 
 #endif

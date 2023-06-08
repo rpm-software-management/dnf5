@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmver.h>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 static const std::vector<Nevra::Form> PKG_SPEC_FORMS{
@@ -267,4 +267,4 @@ int rpmvercmp(const char * lhs, const char * rhs) {
 }
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

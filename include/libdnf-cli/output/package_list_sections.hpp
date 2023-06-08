@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 /// Print list packages divided into sections.
 class PackageListSections {
@@ -48,9 +48,9 @@ public:
     /// @return Returns `true` in case at least one package was added, `false` otherwise
     bool virtual add_section(
         const std::string & heading,
-        const libdnf::rpm::PackageSet & pkg_set,
+        const libdnf5::rpm::PackageSet & pkg_set,
         const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
-        const std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> & obsoletes = {});
+        const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {});
 
     /// Setup table columns
     void virtual setup_cols();
@@ -62,6 +62,6 @@ protected:
 };
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_HPP

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <utility>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// The class template OnScopeExit is a general-purpose scope guard
 /// intended to call its exit function when a scope is exited.
@@ -45,6 +45,6 @@ private:
     TExitFunction exit_function;
 };
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif

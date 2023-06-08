@@ -25,12 +25,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 enum class TransactionItemType : int { PACKAGE, GROUP, ENVIRONMENT, MODULE };
 
 
-class InvalidTransactionItemType : public libdnf::Error {
+class InvalidTransactionItemType : public libdnf5::Error {
 public:
     InvalidTransactionItemType(const std::string & type);
 
@@ -43,6 +43,6 @@ std::string transaction_item_type_to_string(TransactionItemType action);
 TransactionItemType transaction_item_type_from_string(const std::string & action);
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_ITEM_TYPE_HPP

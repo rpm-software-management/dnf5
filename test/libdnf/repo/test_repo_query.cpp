@@ -45,29 +45,29 @@ void RepoQueryTest::test_query_basics() {
     repo2_updates->get_config().get_baseurl_option().set("https://host/path/to/repo2_updates");
 
     // create a RepoQuery and test that it contains expected repos
-    libdnf::repo::RepoQuery repo_query(base);
+    libdnf5::repo::RepoQuery repo_query(base);
     CPPUNIT_ASSERT_EQUAL(repo_query.size(), static_cast<size_t>(4));
-    CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2, repo1_updates, repo2_updates}));
+    CPPUNIT_ASSERT((repo_query == libdnf5::Set{repo1, repo2, repo1_updates, repo2_updates}));
 
     // Tests filter_enabled method
     repo_query.filter_enabled(true);
-    CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2_updates}));
+    CPPUNIT_ASSERT((repo_query == libdnf5::Set{repo1, repo2_updates}));
 
     // Tests filter_id method
-    libdnf::repo::RepoQuery repo_query1(base);
-    repo_query1.filter_id("*updates", libdnf::sack::QueryCmp::GLOB);
-    CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo1_updates, repo2_updates}));
+    libdnf5::repo::RepoQuery repo_query1(base);
+    repo_query1.filter_id("*updates", libdnf5::sack::QueryCmp::GLOB);
+    CPPUNIT_ASSERT((repo_query1 == libdnf5::Set{repo1_updates, repo2_updates}));
 
     // Tests filter_local method
-    libdnf::repo::RepoQuery repo_query2(base);
+    libdnf5::repo::RepoQuery repo_query2(base);
     repo_query2.filter_local(false);
-    CPPUNIT_ASSERT((repo_query2 == libdnf::Set{repo2, repo1_updates, repo2_updates}));
+    CPPUNIT_ASSERT((repo_query2 == libdnf5::Set{repo2, repo1_updates, repo2_updates}));
 
     // Tests iteration over RepoQuery object
-    libdnf::repo::RepoQuery repo_query3(base);
-    libdnf::Set<libdnf::repo::RepoWeakPtr> result;
+    libdnf5::repo::RepoQuery repo_query3(base);
+    libdnf5::Set<libdnf5::repo::RepoWeakPtr> result;
     for (auto repo : repo_query3) {
         result.add(repo);
     }
-    CPPUNIT_ASSERT((result == libdnf::Set{repo1, repo2, repo1_updates, repo2_updates}));
+    CPPUNIT_ASSERT((result == libdnf5::Set{repo1, repo2, repo1_updates, repo2_updates}));
 }

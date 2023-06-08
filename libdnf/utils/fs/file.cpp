@@ -32,7 +32,7 @@ extern "C" {
 #define libdnf_assert_file_open() libdnf_assert(file != nullptr, "The operation requires an open file");
 
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 File::File(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen) {
     open(path, mode, use_solv_xfopen);
@@ -294,4 +294,4 @@ int File::get_fd() const {
     return fd;
 }
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs

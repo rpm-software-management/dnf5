@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 
-namespace libdnf::xdg {
+namespace libdnf5::xdg {
 
 std::filesystem::path get_user_home_dir() {
     const char * dir = std::getenv("HOME");
@@ -99,4 +99,4 @@ std::filesystem::path get_user_runtime_dir() {
     throw RuntimeError(M_("get_user_runtime_dir(): Cannot determine the user's runtime directory"));
 }
 
-}  // namespace libdnf::xdg
+}  // namespace libdnf5::xdg

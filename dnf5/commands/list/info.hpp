@@ -33,7 +33,7 @@ public:
     explicit InfoCommand(Context & context) : ListCommand(context, "info") {}
 
 private:
-    std::unique_ptr<libdnf::cli::output::PackageListSections> create_output() override;
+    std::unique_ptr<libdnf5::cli::output::PackageListSections> create_output() override;
 };
 
 

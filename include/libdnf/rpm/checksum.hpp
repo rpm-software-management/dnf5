@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 /// Class contains checksum and checksum type
 class Checksum {
@@ -54,6 +54,6 @@ inline Checksum::Checksum(const char * checksum, int libsolv_type) : libsolv_typ
     }
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_CHECKSUM_HPP

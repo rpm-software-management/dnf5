@@ -43,7 +43,7 @@ public:
     void test_iniparser();
     void test_iniparser2();
 
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
 
 #endif

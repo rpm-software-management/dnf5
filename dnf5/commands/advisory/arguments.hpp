@@ -29,16 +29,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class AdvisoryAllOption : public libdnf::cli::session::BoolOption {
+class AdvisoryAllOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryAllOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryAllOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "all", '\0', _("Show advisories containing any version of installed packages."), false) {}
 };
 
 
-class AdvisoryAvailableOption : public libdnf::cli::session::BoolOption {
+class AdvisoryAvailableOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryAvailableOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryAvailableOption(libdnf5::cli::session::Command & command)
         : BoolOption(
               command,
               "available",
@@ -48,9 +48,9 @@ public:
 };
 
 
-class AdvisoryInstalledOption : public libdnf::cli::session::BoolOption {
+class AdvisoryInstalledOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryInstalledOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryInstalledOption(libdnf5::cli::session::Command & command)
         : BoolOption(
               command,
               "installed",
@@ -60,9 +60,9 @@ public:
 };
 
 
-class AdvisoryUpdatesOption : public libdnf::cli::session::BoolOption {
+class AdvisoryUpdatesOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryUpdatesOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryUpdatesOption(libdnf5::cli::session::Command & command)
         : BoolOption(
               command,
               "updates",
@@ -73,9 +73,9 @@ public:
 };
 
 
-class AdvisoryContainsPkgsOption : public libdnf::cli::session::AppendStringListOption {
+class AdvisoryContainsPkgsOption : public libdnf5::cli::session::AppendStringListOption {
 public:
-    explicit AdvisoryContainsPkgsOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryContainsPkgsOption(libdnf5::cli::session::Command & command)
         : AppendStringListOption(
               command,
               "contains-pkgs",
@@ -85,9 +85,9 @@ public:
 };
 
 
-class AdvisorySpecArguments : public libdnf::cli::session::StringArgumentList {
+class AdvisorySpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    explicit AdvisorySpecArguments(libdnf::cli::session::Command & command)
+    explicit AdvisorySpecArguments(libdnf5::cli::session::Command & command)
         : StringArgumentList(command, "advisory-spec", _("List of patterns matched against advisory names.")) {}
 };
 
@@ -102,9 +102,9 @@ public:
 };
 
 
-class AdvisoryWithCveOption : public libdnf::cli::session::BoolOption {
+class AdvisoryWithCveOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryWithCveOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryWithCveOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "with-cve", '\0', _("Show only advisories referencing a CVE."), false) {}
 };
 

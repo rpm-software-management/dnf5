@@ -29,14 +29,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 class GroupSack;
 using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 
 
-class GroupQuery : public libdnf::sack::Query<Group> {
+class GroupQuery : public libdnf5::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
     explicit GroupQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
@@ -79,14 +79,14 @@ private:
         static bool is_installed(const Group & obj) { return obj.get_installed(); }
     };
 
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
 
     friend Group;
     friend GroupSack;
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif  // LIBDNF_COMPS_GROUP_QUERY_HPP

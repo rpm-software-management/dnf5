@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 /// Object that creates and holds a temp directory.
 /// The directory gets removed when the object is deleted.
@@ -107,6 +107,6 @@ private:
     std::optional<File> file;
 };
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs
 
 #endif  // LIBDNF_UTILS_FS_TEMP_HPP

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 template <typename T>
 class Sack {
@@ -79,6 +79,6 @@ void Sack<T>::add_item(std::unique_ptr<T> && item) {
     data.push_back(std::move(item));
 }
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack
 
 #endif

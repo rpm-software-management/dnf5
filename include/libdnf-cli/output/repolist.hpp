@@ -25,14 +25,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 // repository list table columns
 enum { COL_REPO_ID, COL_REPO_NAME, COL_REPO_STATUS };
 
 static struct libscols_table * create_repolist_table(bool with_status) {
     struct libscols_table * table = scols_new_table();
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
         scols_table_enable_maxout(table, 1);
     }
@@ -76,6 +76,6 @@ static void print_repolist_table(Query query, bool with_status, size_t sort_colu
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_REPOLIST_HPP

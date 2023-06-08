@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/util.h>
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 // AdvisoryPackage
 AdvisoryPackage::AdvisoryPackage(AdvisoryPackage::Impl * private_pkg) : p_impl(private_pkg) {}
@@ -138,4 +138,4 @@ bool AdvisoryPackage::Impl::is_resolved_in(const libdnf::rpm::PackageSet & pkgs)
     return false;
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 CompsGroup::CompsGroup(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
@@ -76,4 +76,4 @@ CompsGroupPackage & CompsGroup::new_package() {
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

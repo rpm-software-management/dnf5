@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// MemoryBufferLogger is an implementation of logging class that stores incoming logging messages into memory buffer.
 /// It is usually used as temporary logger until a final logger is configured.
@@ -59,6 +59,6 @@ private:
     std::vector<Item> items;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

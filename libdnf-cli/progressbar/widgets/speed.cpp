@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/progressbar/progress_bar.hpp"
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::size_t SpeedWidget::get_total_width() const noexcept {
@@ -47,4 +47,4 @@ std::string SpeedWidget::to_string() const {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

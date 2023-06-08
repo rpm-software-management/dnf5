@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::dnf4convert {
+namespace libdnf5::dnf4convert {
 
 class ConfigModule : public Config {
 public:
@@ -42,10 +42,10 @@ public:
     OptionEnum<std::string> state{"", {"enabled", "disabled", ""}};
 
     void load_from_parser(
-        const libdnf::ConfigParser & parser,
+        const libdnf5::ConfigParser & parser,
         const std::string & section,
-        const libdnf::Vars & vars,
-        libdnf::Logger & logger,
+        const libdnf5::Vars & vars,
+        libdnf5::Logger & logger,
         Option::Priority priority = Option::Priority::DEFAULT) override {
         Config::load_from_parser(parser, section, vars, logger, priority);
     }
@@ -54,6 +54,6 @@ private:
     std::string module_name;
 };
 
-}  // namespace libdnf::dnf4convert
+}  // namespace libdnf5::dnf4convert
 
 #endif

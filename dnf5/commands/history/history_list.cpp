@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void HistoryListCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("List transactions");
@@ -40,7 +40,7 @@ void HistoryListCommand::set_argument_parser() {
 void HistoryListCommand::run() {
     auto ts_specs = transaction_specs->get_value();
     auto & history = *get_context().base.get_transaction_history();
-    std::vector<libdnf::transaction::Transaction> transactions;
+    std::vector<libdnf5::transaction::Transaction> transactions;
 
     if (ts_specs.empty()) {
         transactions = history.list_all_transactions();
@@ -54,7 +54,7 @@ void HistoryListCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
-    libdnf::cli::output::print_transaction_list(transactions);
+    libdnf5::cli::output::print_transaction_list(transactions);
 }
 
 }  // namespace dnf5

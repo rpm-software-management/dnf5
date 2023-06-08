@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/conf/option_string_list.hpp>
 
 
-namespace libdnf::cli::session {
+namespace libdnf5::cli::session {
 
 
 class Command;
@@ -37,7 +37,7 @@ class Command;
 
 class Session {
 public:
-    Session() : argument_parser(new libdnf::cli::ArgumentParser) {}
+    Session() : argument_parser(new libdnf5::cli::ArgumentParser) {}
 
     /// Store the command to the session and initialize it.
     /// @since 5.0
@@ -64,7 +64,7 @@ public:
 
     /// @return The underlying argument parser.
     /// @since 5.0
-    libdnf::cli::ArgumentParser & get_argument_parser();
+    libdnf5::cli::ArgumentParser & get_argument_parser();
 
     /// Remove all commands from the session and argument parser.
     /// @since 5.0
@@ -73,11 +73,11 @@ public:
 private:
     Command * selected_command{nullptr};
     std::vector<std::unique_ptr<Command>> commands;
-    std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
+    std::unique_ptr<libdnf5::cli::ArgumentParser> argument_parser;
 };
 
 
-class Command : public libdnf::cli::ArgumentParserUserData {
+class Command : public libdnf5::cli::ArgumentParserUserData {
 public:
     explicit Command(Session & session, const std::string & name);
     virtual ~Command() = default;
@@ -137,7 +137,7 @@ public:
     /// @return Pointer to the underlying argument parser command.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    libdnf::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept {
+    libdnf5::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept {
         return argument_parser_command;
     }
 
@@ -145,11 +145,12 @@ protected:
     /// Register a `subcommand` to the current command.
     /// The command becomes owner of the `subcommand`.
     /// @since 5.0
-    void register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group = nullptr);
+    void register_subcommand(
+        std::unique_ptr<Command> subcommand, libdnf5::cli::ArgumentParser::Group * group = nullptr);
 
 private:
     Session & session;
-    libdnf::cli::ArgumentParser::Command * argument_parser_command;
+    libdnf5::cli::ArgumentParser::Command * argument_parser_command;
 };
 
 
@@ -165,12 +166,12 @@ class Option {};
 class BoolOption : public Option {
 public:
     explicit BoolOption(
-        libdnf::cli::session::Command & command,
+        libdnf5::cli::session::Command & command,
         const std::string & long_name,
         char short_name,
         const std::string & desc,
         bool default_value,
-        libdnf::OptionBool * linked_option = nullptr);
+        libdnf5::OptionBool * linked_option = nullptr);
 
     /// @return Parsed value.
     /// @since 5.0
@@ -180,12 +181,12 @@ public:
     /// @param priority Priority
     /// @param value Value
     /// @since 5.0
-    void set(libdnf::Option::Priority priority, bool value) { return conf->set(priority, value); }
+    void set(libdnf5::Option::Priority priority, bool value) { return conf->set(priority, value); }
 
     // TODO(dmach): `arg` must be public, because it is used to define conflicting args
     //protected:
-    libdnf::OptionBool * conf{nullptr};
-    libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
+    libdnf5::OptionBool * conf{nullptr};
+    libdnf5::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
 
 
@@ -195,36 +196,36 @@ public:
 class AppendStringListOption : public Option {
 public:
     explicit AppendStringListOption(
-        libdnf::cli::session::Command & command,
+        libdnf5::cli::session::Command & command,
         const std::string & long_name,
         char short_name,
         const std::string & desc,
         const std::string & help);
 
     explicit AppendStringListOption(
-        libdnf::cli::session::Command & command,
+        libdnf5::cli::session::Command & command,
         const std::string & long_name,
         char short_name,
         const std::string & desc,
         const std::string & help,
         const std::string & allowed_values_regex,
         const bool icase,
-        const std::string & delimiters = libdnf::OptionStringList::get_default_delimiters());
+        const std::string & delimiters = libdnf5::OptionStringList::get_default_delimiters());
 
     /// @return Parsed value.
     /// @since 5.0
     std::vector<std::string> get_value() const { return conf->get_value(); }
 
-    libdnf::OptionStringList * conf{nullptr};
-    libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
+    libdnf5::OptionStringList * conf{nullptr};
+    libdnf5::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
 
 
 class StringArgumentList : public Option {
 public:
     explicit StringArgumentList(
-        libdnf::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs);
-    StringArgumentList(libdnf::cli::session::Command & command, const std::string & name, const std::string & desc)
+        libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs);
+    StringArgumentList(libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc)
         : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
 
     /// @return Parsed value.
@@ -232,12 +233,12 @@ public:
     std::vector<std::string> get_value() const;
 
 protected:
-    std::vector<std::unique_ptr<libdnf::Option>> * conf{nullptr};
-    libdnf::cli::ArgumentParser::PositionalArg * arg{nullptr};
+    std::vector<std::unique_ptr<libdnf5::Option>> * conf{nullptr};
+    libdnf5::cli::ArgumentParser::PositionalArg * arg{nullptr};
 };
 
 
-}  // namespace libdnf::cli::session
+}  // namespace libdnf5::cli::session
 
 
 #endif  // LIBDNF_CLI_SESSION_HPP

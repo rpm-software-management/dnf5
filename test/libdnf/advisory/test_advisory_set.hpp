@@ -61,8 +61,8 @@ public:
 
 
 private:
-    std::unique_ptr<libdnf::advisory::AdvisorySet> set1;
-    std::unique_ptr<libdnf::advisory::AdvisorySet> set2;
+    std::unique_ptr<libdnf5::advisory::AdvisorySet> set1;
+    std::unique_ptr<libdnf5::advisory::AdvisorySet> set2;
 };
 
 

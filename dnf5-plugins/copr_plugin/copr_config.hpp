@@ -28,16 +28,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-class CoprConfig : public libdnf::ConfigParser {
+class CoprConfig : public libdnf5::ConfigParser {
 private:
-    libdnf::Base & base;
+    libdnf5::Base & base;
     OSRelease os_release;
 
     void load_copr_config_file(const std::string & filename);
     void load_all_configuration();
 
 public:
-    explicit CoprConfig(libdnf::Base & base);
+    explicit CoprConfig(libdnf5::Base & base);
     std::string get_hub_hostname(const std::string & hubspec);
     std::string get_hub_url(const std::string & hubspec);
     std::string get_repo_url(

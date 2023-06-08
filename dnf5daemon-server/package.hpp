@@ -68,6 +68,6 @@ enum class PackageAttribute {
 };
 
 dnfdaemon::KeyValueMap package_to_map(
-    const libdnf::rpm::Package & libdnf_package, const std::vector<std::string> & attributes);
+    const libdnf5::rpm::Package & libdnf_package, const std::vector<std::string> & attributes);
 
 #endif

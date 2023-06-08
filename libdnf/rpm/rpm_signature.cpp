@@ -36,7 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmpgp.h>
 #include <rpm/rpmts.h>
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 namespace {
 
@@ -104,7 +104,7 @@ std::string KeyInfo::get_short_key_id() const {
 RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg) const {
     // is package gpg check even required?
     auto repo = pkg.get_repo();
-    if (repo->get_type() == libdnf::repo::Repo::Type::COMMANDLINE) {
+    if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
         if (!base->get_config().get_localpkg_gpgcheck_option().get_value()) {
             return CheckResult::OK;
         }
@@ -124,7 +124,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
 
     // This guard acquires the rpm log mutex and collects all rpm log messages into
     // the vector of strings.
-    libdnf::rpm::RpmLogGuardStrings rpm_log_guard;
+    libdnf5::rpm::RpmLogGuardStrings rpm_log_guard;
 
     auto ts_ptr = create_transaction(base);
     auto oldmask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_INFO)));
@@ -184,13 +184,13 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
 }
 
 bool RpmSignature::key_present(const KeyInfo & key) const {
-    libdnf::rpm::RpmLogGuard rpm_log_guard{base};
+    libdnf5::rpm::RpmLogGuard rpm_log_guard{base};
     auto ts_ptr = create_transaction(base);
     return rpmdb_lookup(ts_ptr, key);
 }
 
 bool RpmSignature::import_key(const KeyInfo & key) const {
-    libdnf::rpm::RpmLogGuard rpm_log_guard{base};
+    libdnf5::rpm::RpmLogGuard rpm_log_guard{base};
 
     auto ts_ptr = create_transaction(base);
     if (!rpmdb_lookup(ts_ptr, key)) {
@@ -217,8 +217,8 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
             key_path = key_url.substr(7);
         } else {
             // download the remote key
-            downloaded_key = std::make_unique<libdnf::utils::fs::TempFile>("rpmkey");
-            libdnf::repo::FileDownloader downloader(base);
+            downloaded_key = std::make_unique<libdnf5::utils::fs::TempFile>("rpmkey");
+            libdnf5::repo::FileDownloader downloader(base);
             downloader.add(key_url, downloaded_key->get_path());
             downloader.download();
             key_path = downloaded_key->get_path();
@@ -256,4 +256,4 @@ std::string RpmSignature::check_result_to_string(CheckResult result) {
     return {};
 }
 
-}  //  namespace libdnf::rpm
+}  // namespace libdnf5::rpm

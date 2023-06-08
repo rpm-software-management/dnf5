@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::size_t NumberWidget::get_total_width() const noexcept {
@@ -61,4 +61,4 @@ std::string NumberWidget::to_string() const {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class PackageSet;
 
@@ -67,6 +67,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_SET_ITERATOR_HPP

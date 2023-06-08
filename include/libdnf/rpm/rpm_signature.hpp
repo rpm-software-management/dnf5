@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 #include <string>
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class SignatureCheckError : public Error {
 public:
@@ -75,7 +75,7 @@ class RpmSignature {
 public:
     enum class CheckResult { OK, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
-    explicit RpmSignature(const libdnf::BaseWeakPtr & base) : base(base) {}
+    explicit RpmSignature(const libdnf5::BaseWeakPtr & base) : base(base) {}
     explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
     ~RpmSignature(){};
 
@@ -106,6 +106,6 @@ private:
     BaseWeakPtr base;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_RPM_SIGNATURE_HPP

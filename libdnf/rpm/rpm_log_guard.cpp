@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmlog.h>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 std::mutex RpmLogGuardBase::rpm_log_mutex;
 
@@ -57,7 +57,7 @@ static int rpmlog_callback(rpmlogRec rec, rpmlogCallbackData data) {
         msg.remove_suffix(1);
     }
 
-    static_cast<libdnf::Logger *>(data)->log(level, "[rpm] {}", msg);
+    static_cast<libdnf5::Logger *>(data)->log(level, "[rpm] {}", msg);
     return 0;
 }
 
@@ -89,4 +89,4 @@ RpmLogGuardStrings::RpmLogGuardStrings() : RpmLogGuardBase() {
     rpmlogSetCallback(&rpmlog_callback_strings, this);
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

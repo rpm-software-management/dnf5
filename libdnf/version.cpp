@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/version.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 namespace {
 
@@ -37,4 +37,4 @@ PluginAPIVersion get_plugin_api_version() noexcept {
     return PLUGIN_API_VERSION;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5

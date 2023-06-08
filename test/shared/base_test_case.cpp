@@ -40,12 +40,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 using fmt::format;
 
 
-libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
+libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo(
+    const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
     repo->get_config().get_baseurl_option().set("file://" + repo_path);
 
     if (load) {
-        libdnf::repo::RepoQuery repos(base);
+        libdnf5::repo::RepoQuery repos(base);
         repos.filter_id(repoid);
         repo_sack->update_and_load_repos(repos);
     }
@@ -54,32 +55,32 @@ libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, con
 }
 
 
-libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_repomd(const std::string & repoid, bool load) {
+libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo_repomd(const std::string & repoid, bool load) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
     repo_path /= repoid;
     return add_repo(repoid, repo_path, load);
 }
 
 
-libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_rpm(const std::string & repoid, bool load) {
+libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo_rpm(const std::string & repoid, bool load) {
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/data/repos-rpm";
     repo_path /= repoid;
     return add_repo(repoid, repo_path, load);
 }
 
 
-libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_solv(const std::string & repoid) {
+libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
     return repo_sack->create_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
 }
 
 
-libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) {
+libdnf5::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) {
     // This is used for testing queries as well, hence we don't use the AdvisoryQuery facility for filtering
-    libdnf::advisory::AdvisorySet advisories = libdnf::advisory::AdvisoryQuery(base);
+    libdnf5::advisory::AdvisorySet advisories = libdnf::advisory::AdvisoryQuery(base);
 
-    libdnf::advisory::AdvisorySet found(base);
+    libdnf5::advisory::AdvisorySet found(base);
     for (auto advisory : advisories) {
         if (advisory.get_name() == name) {
             found.add(advisory);
@@ -96,11 +97,11 @@ libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) 
 }
 
 
-libdnf::comps::Environment BaseTestCase::get_environment(const std::string & environmentid, bool installed) {
+libdnf5::comps::Environment BaseTestCase::get_environment(const std::string & environmentid, bool installed) {
     // This is used for testing queries as well, hence we don't use the EnvironmentQuery facility for filtering
-    libdnf::Set<libdnf::comps::Environment> environments = libdnf::comps::EnvironmentQuery(base);
+    libdnf5::Set<libdnf5::comps::Environment> environments = libdnf5::comps::EnvironmentQuery(base);
 
-    std::set<libdnf::comps::Environment> found;
+    std::set<libdnf5::comps::Environment> found;
     for (auto environment : environments) {
         if (environment.get_environmentid() == environmentid && environment.get_installed() == installed) {
             found.insert(environment);
@@ -119,11 +120,11 @@ libdnf::comps::Environment BaseTestCase::get_environment(const std::string & env
 }
 
 
-libdnf::comps::Group BaseTestCase::get_group(const std::string & groupid, bool installed) {
+libdnf5::comps::Group BaseTestCase::get_group(const std::string & groupid, bool installed) {
     // This is used for testing queries as well, hence we don't use the GroupQuery facility for filtering
-    libdnf::Set<libdnf::comps::Group> groups = libdnf::comps::GroupQuery(base);
+    libdnf5::Set<libdnf5::comps::Group> groups = libdnf5::comps::GroupQuery(base);
 
-    std::set<libdnf::comps::Group> found;
+    std::set<libdnf5::comps::Group> found;
     for (auto group : groups) {
         if (group.get_groupid() == groupid && group.get_installed() == installed) {
             found.insert(group);
@@ -140,8 +141,8 @@ libdnf::comps::Group BaseTestCase::get_group(const std::string & groupid, bool i
 }
 
 
-libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool installed) {
-    libdnf::rpm::PackageQuery query(base);
+libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool installed) {
+    libdnf5::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     if (installed) {
         query.filter_installed();
@@ -152,16 +153,16 @@ libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool insta
 }
 
 
-libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char * repo) {
-    libdnf::rpm::PackageQuery query(base);
+libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char * repo) {
+    libdnf5::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     query.filter_repo_id({repo});
     return first_query_pkg(query, nevra + " (repo: " + repo + ")");
 }
 
 
-libdnf::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t index) {
-    libdnf::rpm::PackageQuery query(base);
+libdnf5::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t index) {
+    libdnf5::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
 
     if (query.size() <= index) {
@@ -181,16 +182,16 @@ namespace {
 
 // Accessor of private Base::p_impl, see private_accessor.hpp
 create_private_getter_template;
-create_getter(priv_impl, &libdnf::Base::p_impl);
+create_getter(priv_impl, &libdnf5::Base::p_impl);
 
 }  // namespace
 
-libdnf::rpm::Package BaseTestCase::add_system_pkg(
-    const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
+libdnf5::rpm::Package BaseTestCase::add_system_pkg(
+    const std::string & relative_path, libdnf5::transaction::TransactionItemReason reason) {
     // parse out the NA from the package path to set the reason for the installed package
-    auto filename_toks = libdnf::utils::string::split(relative_path, "/");
-    auto basename_toks = libdnf::utils::string::rsplit(filename_toks.back(), ".", 2);
-    auto nevras = libdnf::rpm::Nevra::parse(basename_toks.front());
+    auto filename_toks = libdnf5::utils::string::split(relative_path, "/");
+    auto basename_toks = libdnf5::utils::string::rsplit(filename_toks.back(), ".", 2);
+    auto nevras = libdnf5::rpm::Nevra::parse(basename_toks.front());
     CPPUNIT_ASSERT_MESSAGE("Couldn't parse NEVRA from package path: \"" + relative_path + "\"", !nevras.empty());
     auto na = nevras[0].get_name() + "." + nevras[0].get_arch();
 
@@ -200,16 +201,16 @@ libdnf::rpm::Package BaseTestCase::add_system_pkg(
 }
 
 
-libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_path) {
+libdnf5::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_path) {
     std::string path = PROJECT_BINARY_DIR "/test/data/" + relative_path;
     return repo_sack->add_cmdline_packages({path}).at(path);
 }
 
 
-libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
+libdnf5::rpm::Package BaseTestCase::first_query_pkg(libdnf5::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL(fmt::format(
-            "No package \"{}\" found. All sack packages:{}", what, to_string(libdnf::rpm::PackageQuery(base))));
+            "No package \"{}\" found. All sack packages:{}", what, to_string(libdnf5::rpm::PackageQuery(base))));
     } else if (query.size() > 1) {
         CPPUNIT_FAIL(fmt::format("More than one package matching \"{}\" found:{}", what, to_string(query)));
     }
@@ -223,12 +224,12 @@ void BaseTestCase::setUp() {
 
     // TODO we could use get_preconfigured_base() for this now, but that would
     // need changing the `base` member to a unique_ptr
-    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");
+    temp = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf5_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     base.get_config().get_installroot_option().set(temp->get_path() / "installroot");
     base.get_config().get_cachedir_option().set(temp->get_path() / "cache");
-    base.get_config().get_optional_metadata_types_option().set(libdnf::OPTIONAL_METADATA_TYPES);
+    base.get_config().get_optional_metadata_types_option().set(libdnf5::OPTIONAL_METADATA_TYPES);
 
     base.get_vars()->set("arch", "x86_64");
 

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class FileDownloadError : public Error {
     using Error::Error;
@@ -38,8 +38,8 @@ class FileDownloadError : public Error {
 
 class FileDownloader {
 public:
-    explicit FileDownloader(const libdnf::BaseWeakPtr & base);
-    explicit FileDownloader(libdnf::Base & base);
+    explicit FileDownloader(const libdnf5::BaseWeakPtr & base);
+    explicit FileDownloader(libdnf5::Base & base);
     ~FileDownloader();
 
     /// Adds a file (URL) to download.
@@ -48,7 +48,7 @@ public:
     /// @param destination The file path to which to download the file.
     /// @param user_data User data.
     void add(
-        libdnf::repo::RepoWeakPtr & repo,
+        libdnf5::repo::RepoWeakPtr & repo,
         const std::string & url,
         const std::string & destination,
         void * user_data = nullptr);
@@ -77,6 +77,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_FILE_DOWNLOADER_HPP

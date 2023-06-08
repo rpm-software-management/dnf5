@@ -31,26 +31,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Goal;
 
 }
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class Transaction;
 
 }
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class Repo;
 class RepoSack;
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 // TODO(pkratoch): Make this a docstring.
@@ -106,11 +106,11 @@ public:
     std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
 
 private:
-    friend class libdnf::Base;
-    friend class libdnf::Goal;
-    friend class libdnf::base::Transaction;
-    friend class libdnf::repo::Repo;
-    friend class libdnf::repo::RepoSack;
+    friend class libdnf5::Base;
+    friend class libdnf5::Goal;
+    friend class libdnf5::base::Transaction;
+    friend class libdnf5::repo::Repo;
+    friend class libdnf5::repo::RepoSack;
     friend ModuleItem;
     friend class ModuleGoalPrivate;
     friend class ModuleQuery;
@@ -141,7 +141,7 @@ private:
 };
 
 
-class InvalidModuleStatus : public libdnf::Error {
+class InvalidModuleStatus : public libdnf5::Error {
 public:
     InvalidModuleStatus(const std::string & status);
 
@@ -154,7 +154,7 @@ std::string module_status_to_string(ModuleStatus status);
 ModuleStatus module_status_from_string(const std::string & status);
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_SACK_HPP

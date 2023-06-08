@@ -39,14 +39,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 class ModuleDB;
 
 }
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
 using VarsWeakPtr = WeakPtr<Vars, false>;
@@ -105,26 +105,26 @@ public:
 
     // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
-    libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
-    libdnf::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
+    libdnf5::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
+    libdnf5::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
 
-    libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
+    libdnf5::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
     class Impl;
 
 private:
-    friend class libdnf::InternalBaseUser;
-    friend class libdnf::base::Transaction;
-    friend class libdnf::Goal;
-    friend class libdnf::rpm::Package;
-    friend class libdnf::advisory::AdvisoryQuery;
-    friend class libdnf::module::ModuleDB;
-    friend class libdnf::module::ModuleSack;
-    friend class libdnf::repo::RepoSack;
-    friend class libdnf::repo::SolvRepo;
+    friend class libdnf5::InternalBaseUser;
+    friend class libdnf5::base::Transaction;
+    friend class libdnf5::Goal;
+    friend class libdnf5::rpm::Package;
+    friend class libdnf5::advisory::AdvisoryQuery;
+    friend class libdnf5::module::ModuleDB;
+    friend class libdnf5::module::ModuleSack;
+    friend class libdnf5::repo::RepoSack;
+    friend class libdnf5::repo::SolvRepo;
 
     /// Loads the default configuration. To load distribution-specific configuration.
     void load_defaults();
@@ -168,6 +168,6 @@ private:
     WeakPtrGuard<Vars, false> vars_gurad;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

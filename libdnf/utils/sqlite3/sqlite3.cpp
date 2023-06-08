@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 const BgettextMessage SQLite3::Statement::msg_compilation_failed = M_("SQL statement compilation failed: \"{}\"");
 const BgettextMessage SQLite3::Statement::msg_bind_int_failed =
@@ -160,4 +160,4 @@ void SQLite3::restore(const std::string & input_file) {
 }
 
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils

@@ -40,10 +40,10 @@ public:
     dnfdaemon::KeyValueMap session_config() override;
 
 private:
-    libdnf::OptionBool * available_option{nullptr};
-    libdnf::OptionBool * installed_option{nullptr};
-    libdnf::OptionBool * info_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
+    libdnf5::OptionBool * available_option{nullptr};
+    libdnf5::OptionBool * installed_option{nullptr};
+    libdnf5::OptionBool * info_option{nullptr};
+    std::vector<std::unique_ptr<libdnf5::Option>> * patterns_options{nullptr};
 };
 
 }  // namespace dnfdaemon::client

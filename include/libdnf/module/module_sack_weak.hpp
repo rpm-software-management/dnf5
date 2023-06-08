@@ -23,14 +23,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class ModuleSack;
 using ModuleSackWeakPtr = WeakPtr<ModuleSack, false>;
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_SACK_WEAK_HPP

@@ -24,17 +24,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_package.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 void print_advisorylist_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed);
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed);
 
 void print_advisorylist_references_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed,
     std::string reference_type);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP

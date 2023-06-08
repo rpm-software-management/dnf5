@@ -35,8 +35,8 @@ public:
     void run() override;
 
 private:
-    libdnf::OptionBool skip_broken_option{false};
-    libdnf::OptionBool skip_unavailable_option{false};
+    libdnf5::OptionBool skip_broken_option{false};
+    libdnf5::OptionBool skip_unavailable_option{false};
     std::vector<std::string> pkg_specs{};
 };
 

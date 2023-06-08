@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Logger is an abstract interface used for logging.
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
@@ -86,7 +86,7 @@ public:
 
     template <typename... Ss>
     void log(Level level, std::string_view format, Ss &&... args) {
-        log_line(level, libdnf::utils::sformat(format, std::forward<Ss>(args)...));
+        log_line(level, libdnf5::utils::sformat(format, std::forward<Ss>(args)...));
     }
 
     virtual void log_line(Level level, const std::string & message) noexcept;
@@ -115,6 +115,6 @@ public:
     virtual void write(const char * line) noexcept = 0;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

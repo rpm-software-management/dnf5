@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils::xml {
+namespace libdnf5::utils::xml {
 
 struct XMLSaveError : public Error {
     using Error::Error;
@@ -38,6 +38,6 @@ struct XMLSaveError : public Error {
 
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);
 
-}  // namespace libdnf::utils::xml
+}  // namespace libdnf5::utils::xml
 
 #endif  // LIBDNF_UTILS_XML_HPP

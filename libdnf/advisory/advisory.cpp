@@ -29,9 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
-Advisory::Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id) : base(base), id(id) {}
+Advisory::Advisory(const libdnf5::BaseWeakPtr & base, AdvisoryId id) : base(base), id(id) {}
 
 std::string Advisory::get_name() const {
     const char * name;
@@ -144,4 +144,4 @@ bool Advisory::is_applicable() const {
 
 Advisory::~Advisory() = default;
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

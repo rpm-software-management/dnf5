@@ -23,10 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
-std::unique_ptr<libdnf::cli::output::PackageListSections> InfoCommand::create_output() {
-    auto out = std::make_unique<libdnf::cli::output::PackageInfoSections>();
+std::unique_ptr<libdnf5::cli::output::PackageListSections> InfoCommand::create_output() {
+    auto out = std::make_unique<libdnf5::cli::output::PackageInfoSections>();
     out->setup_cols();
     return out;
 }

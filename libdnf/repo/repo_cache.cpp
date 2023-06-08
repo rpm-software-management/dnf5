@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/logger.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 
 namespace {
@@ -98,7 +98,7 @@ RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator+=(const RepoCach
 }
 
 
-RepoCache::RepoCache(const libdnf::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir)
+RepoCache::RepoCache(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir)
     : base(base),
       cache_dir(repo_cache_dir) {
     if (cache_dir.empty()) {
@@ -107,7 +107,7 @@ RepoCache::RepoCache(const libdnf::BaseWeakPtr & base, const std::filesystem::pa
 }
 
 
-RepoCache::RepoCache(libdnf::Base & base, const std::string & repo_cache_dir)
+RepoCache::RepoCache(libdnf5::Base & base, const std::string & repo_cache_dir)
     : RepoCache(base.get_weak_ptr(), repo_cache_dir) {}
 
 
@@ -210,4 +210,4 @@ std::string RepoCache::get_repoid() {
 }
 
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

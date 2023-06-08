@@ -27,7 +27,7 @@ namespace dnf5 {
 
 
 InvalidIdRangeError::InvalidIdRangeError(const std::string & id_range)
-    : libdnf::Error(
+    : libdnf5::Error(
           M_("Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID is \"NUMBER\", \"last\" or "
              "\"last-NUMBER\"."),
           id_range) {}
@@ -53,7 +53,7 @@ int64_t parse_id(const std::string & id) {
 
 
 std::pair<int64_t, int64_t> parse_transaction_id_range(const std::string & id_range) {
-    auto splitted = libdnf::utils::string::split(id_range, "..");
+    auto splitted = libdnf5::utils::string::split(id_range, "..");
 
     if (splitted.size() > 2 || splitted.size() < 1) {
         throw InvalidIdRangeError(id_range);
@@ -74,8 +74,8 @@ std::pair<int64_t, int64_t> parse_transaction_id_range(const std::string & id_ra
 }
 
 
-std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
-    libdnf::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs) {
+std::vector<libdnf5::transaction::Transaction> list_transactions_from_specs(
+    libdnf5::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs) {
     std::vector<int64_t> trans_id_cache;
     std::vector<int64_t> single_ids_to_get;
     std::vector<libdnf::transaction::Transaction> result;

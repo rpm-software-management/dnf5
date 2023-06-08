@@ -36,7 +36,7 @@ private:
     // Using a pure C++ pointer is safe here since the OptionBool class
     // will take care of moving the pointer ownership to the parser, which will
     // be in charge of handling the memory deallocation.
-    libdnf::OptionBool * foo_option{nullptr};
+    libdnf5::OptionBool * foo_option{nullptr};
 
     // Option 2: STL Unique Pointer
     // Create a unique_ptr<BarOption>

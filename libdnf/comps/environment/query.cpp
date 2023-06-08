@@ -37,7 +37,7 @@ extern "C" {
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(base) {
@@ -45,7 +45,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
         return;
     }
 
-    libdnf::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
 
     // Map of available environments:
     //     For each environmentid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
@@ -104,4 +104,4 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
 EnvironmentQuery::EnvironmentQuery(Base & base, bool empty) : EnvironmentQuery(base.get_weak_ptr(), empty) {}
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

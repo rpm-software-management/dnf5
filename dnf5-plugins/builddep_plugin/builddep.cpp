@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void BuildDepCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -74,9 +74,9 @@ void BuildDepCommand::set_argument_parser() {
     defs->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            auto split = libdnf::utils::string::split(value, " ", 2);
+            auto split = libdnf5::utils::string::split(value, " ", 2);
             if (split.size() != 2) {
-                throw libdnf::cli::ArgumentParserError(
+                throw libdnf5::cli::ArgumentParserError(
                     M_("Invalid value for macro definition \"{}\". \"macro expr\" format expected."), value);
             }
             rpm_macros.emplace_back(std::move(split[0]), std::move(split[1]));
@@ -182,16 +182,16 @@ bool BuildDepCommand::add_from_pkg(
     std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const std::string & pkg_spec) {
     auto & ctx = get_context();
 
-    libdnf::rpm::PackageQuery pkg_query(ctx.base);
+    libdnf5::rpm::PackageQuery pkg_query(ctx.base);
     pkg_query.resolve_pkg_spec(
-        pkg_spec, libdnf::ResolveSpecSettings{.with_provides = false, .with_filenames = false}, false);
+        pkg_spec, libdnf5::ResolveSpecSettings{.with_provides = false, .with_filenames = false}, false);
 
     std::vector<std::string> source_names{pkg_spec};
     for (const auto & pkg : pkg_query) {
         source_names.emplace_back(pkg.get_source_name());
     }
 
-    libdnf::rpm::PackageQuery source_pkgs(ctx.base);
+    libdnf5::rpm::PackageQuery source_pkgs(ctx.base);
     source_pkgs.filter_arch({"src"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
@@ -244,7 +244,7 @@ void BuildDepCommand::run() {
 
     if (!parse_ok) {
         // failed to parse some of inputs (invalid spec, no package matched...)
-        throw libdnf::cli::Error(M_("Failed to parse some inputs."));
+        throw libdnf5::cli::Error(M_("Failed to parse some inputs."));
     }
 
     // fill the goal with build dependencies
@@ -252,7 +252,7 @@ void BuildDepCommand::run() {
     goal->set_allow_erasing(allow_erasing->get_value());
 
     for (const auto & spec : install_specs) {
-        if (libdnf::rpm::Reldep::is_rich_dependency(spec)) {
+        if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {
             goal->add_provide_install(spec);
         } else {
             goal->add_rpm_install(spec);
@@ -264,10 +264,10 @@ void BuildDepCommand::run() {
         // exclude available (not installed) conflicting packages
         auto system_repo = ctx.base.get_repo_sack()->get_system_repo();
         auto rpm_package_sack = ctx.base.get_rpm_package_sack();
-        libdnf::rpm::PackageQuery conflicts_query_available(ctx.base);
+        libdnf5::rpm::PackageQuery conflicts_query_available(ctx.base);
         conflicts_query_available.filter_name({conflicts_specs.begin(), conflicts_specs.end()});
-        libdnf::rpm::PackageQuery conflicts_query_installed(conflicts_query_available);
-        conflicts_query_available.filter_repo_id({system_repo->get_id()}, libdnf::sack::QueryCmp::NEQ);
+        libdnf5::rpm::PackageQuery conflicts_query_installed(conflicts_query_available);
+        conflicts_query_available.filter_repo_id({system_repo->get_id()}, libdnf5::sack::QueryCmp::NEQ);
         rpm_package_sack->add_user_excludes(conflicts_query_available);
 
         // remove already installed conflicting packages
@@ -280,9 +280,9 @@ void BuildDepCommand::goal_resolved() {
     auto & ctx = get_context();
     auto & transaction = *ctx.get_transaction();
     auto transaction_problems = transaction.get_problems();
-    if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
+    if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM) {
         auto skip_unavailable = ctx.base.get_config().get_skip_unavailable_option().get_value();
-        if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable) {
+        if (transaction_problems != libdnf5::GoalProblem::NOT_FOUND || !skip_unavailable) {
             throw GoalResolveError(transaction);
         }
     }

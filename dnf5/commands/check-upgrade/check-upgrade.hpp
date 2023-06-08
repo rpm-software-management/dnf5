@@ -45,7 +45,7 @@ public:
     void run() override;
 
 protected:
-    libdnf::OptionBool * changelogs{nullptr};
+    libdnf5::OptionBool * changelogs{nullptr};
     std::vector<std::string> pkg_specs;
 
     std::unique_ptr<AdvisoryOption> advisory_name;

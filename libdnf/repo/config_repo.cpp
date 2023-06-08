@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class ConfigRepo::Impl {
     friend class ConfigRepo;
@@ -609,4 +609,4 @@ void ConfigRepo::load_from_parser(
     Config::load_from_parser(parser, section, vars, logger, priority);
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

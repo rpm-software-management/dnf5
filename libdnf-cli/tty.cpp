@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdlib>
 
 
-namespace libdnf::cli::tty {
+namespace libdnf5::cli::tty {
 
 
 int get_width() {
@@ -114,4 +114,4 @@ TTY_COMMAND(cursor_hide, "\x1b[?25l")
 TTY_COMMAND(cursor_show, "\x1b[?25h")
 
 
-}  // namespace libdnf::cli::tty
+}  // namespace libdnf5::cli::tty

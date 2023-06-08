@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void GroupInstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
@@ -50,24 +50,24 @@ void GroupInstallCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_COMPS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void GroupInstallCommand::run() {
     auto & ctx = get_context();
     auto goal = ctx.get_goal();
 
-    libdnf::GoalJobSettings settings;
+    libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {
         settings.group_no_packages = true;
     }
     if (with_optional->get_value()) {
-        auto group_package_types =
-            libdnf::comps::package_type_from_string(ctx.base.get_config().get_group_package_types_option().get_value());
-        settings.set_group_package_types(group_package_types | libdnf::comps::PackageType::OPTIONAL);
+        auto group_package_types = libdnf5::comps::package_type_from_string(
+            ctx.base.get_config().get_group_package_types_option().get_value());
+        settings.set_group_package_types(group_package_types | libdnf5::comps::PackageType::OPTIONAL);
     }
     for (const auto & spec : group_specs->get_value()) {
-        goal->add_group_install(spec, libdnf::transaction::TransactionItemReason::USER, settings);
+        goal->add_group_install(spec, libdnf5::transaction::TransactionItemReason::USER, settings);
     }
 }
 

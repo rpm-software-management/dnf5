@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstring>
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 
 bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept {
@@ -83,4 +83,4 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
     }
 }
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs

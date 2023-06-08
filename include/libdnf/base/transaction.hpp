@@ -31,12 +31,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 class KeyInfo;
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class TransactionGroup;
 class TransactionEnvironment;
@@ -72,11 +72,11 @@ public:
 
     /// Return basic overview about result of resolving transaction.
     /// To get complete information, use get_resolve_logs().
-    libdnf::GoalProblem get_problems();
+    libdnf5::GoalProblem get_problems();
 
     /// Returns information about resolvement of Goal.
     /// @return A vector of LogEvent instances.
-    const std::vector<libdnf::base::LogEvent> & get_resolve_logs() const;
+    const std::vector<libdnf5::base::LogEvent> & get_resolve_logs() const;
 
     /// Returns information about resolvement of Goal as a list of printable messages
     /// @return A vector of string representations of problems.
@@ -84,19 +84,19 @@ public:
 
     /// @return the transaction packages.
     // TODO(jrohel): Return reference instead of copy?
-    std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
+    std::vector<libdnf5::base::TransactionPackage> get_transaction_packages() const;
 
     /// @return the number of transaction packages.
     std::size_t get_transaction_packages_count() const;
 
     /// @return the transaction groups.
-    std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
+    std::vector<libdnf5::base::TransactionGroup> & get_transaction_groups() const;
 
     /// @return the transaction modules.
     std::vector<libdnf::base::TransactionModule> & get_transaction_modules() const;
 
     /// @return environmental groups that are part of the transaction.
-    std::vector<libdnf::base::TransactionEnvironment> & get_transaction_environments() const;
+    std::vector<libdnf5::base::TransactionEnvironment> & get_transaction_environments() const;
 
     /// Download all inbound packages (packages that are being installed on the
     /// system). Fails immediately on the first package download failure. Will
@@ -128,7 +128,7 @@ public:
 
     /// @brief Setup callbacks to be called during rpm transaction.
     /// @param callbacks Implemented callbacks object.
-    void set_callbacks(std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks);
+    void set_callbacks(std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks);
 
     /// @brief Setup a description of the transaction.
     /// @param description Value could be the console command for CLI or verbose description for API usage.
@@ -167,7 +167,7 @@ public:
     /// otherwise false. More info about occurred problems can be retrieved using the `get_gpg_signature_problems`
     /// method.
     // TODO(jkolarik): To be reworked as we don't want std::function exposed on the public API
-    bool check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
+    bool check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func);
 
     /// Retrieve a list of the problems that occurred during `check_gpg_signatures` procedure.
     std::vector<std::string> get_gpg_signature_problems() const noexcept;
@@ -177,19 +177,19 @@ private:
     friend class TransactionGroup;
     friend class TransactionModule;
     friend class TransactionPackage;
-    friend class libdnf::Goal;
+    friend class libdnf5::Goal;
 
-    Transaction(const libdnf::BaseWeakPtr & base);
+    Transaction(const libdnf5::BaseWeakPtr & base);
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
 
-    std::unique_ptr<libdnf::rpm::TransactionCallbacks> callbacks;
+    std::unique_ptr<libdnf5::rpm::TransactionCallbacks> callbacks;
     std::optional<uint32_t> user_id;
     std::string comment;
     std::string description;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_TRANSACTION_HPP

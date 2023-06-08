@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/conf/const.hpp>
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 namespace dnf5 {
 
@@ -33,7 +33,7 @@ void CoprEnableCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     auto & parser = ctx.get_argument_parser();
 
-    std::string desc = libdnf::utils::sformat(
+    std::string desc = libdnf5::utils::sformat(
         _("download the repository info from a Copr server and install it as a {}/*.repo file"),
         copr_repo_directory().native());
 

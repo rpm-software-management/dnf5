@@ -37,13 +37,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 Session::Session(
-    std::vector<std::unique_ptr<libdnf::Logger>> && loggers,
+    std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
     sdbus::IConnection & connection,
     dnfdaemon::KeyValueMap session_configuration,
     std::string object_path,
     std::string sender)
     : connection(connection),
-      base(std::make_unique<libdnf::Base>(std::move(loggers))),
+      base(std::make_unique<libdnf5::Base>(std::move(loggers))),
       goal(*base),
       session_configuration(session_configuration),
       object_path(object_path),
@@ -63,7 +63,7 @@ Session::Session(
         auto value = opt.second;
         auto bind = opt_binds.find(key);
         if (bind != opt_binds.end()) {
-            bind->second.new_string(libdnf::Option::Priority::RUNTIME, value);
+            bind->second.new_string(libdnf5::Option::Priority::RUNTIME, value);
         } else {
             base->get_logger()->warning("Unknown config option: {}", key);
         }
@@ -164,9 +164,9 @@ bool Session::read_all_repos() {
     bool load_system_repo = session_configuration_value<bool>("load_system_repo", true);
     if (load_available_repo) {
         //auto & logger = base->get_logger();
-        libdnf::repo::RepoQuery enabled_repos(*base);
+        libdnf5::repo::RepoQuery enabled_repos(*base);
         enabled_repos.filter_enabled(true);
-        enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+        enabled_repos.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
         // container is owner of package callbacks user_data
         std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> repos_user_data;
         for (auto & repo : enabled_repos) {

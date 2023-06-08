@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 class CompsGroup;
@@ -36,19 +36,19 @@ class Transaction;
 class CompsGroupDbUtils {
 public:
     /// Return a vector of CompsGroup objects with comps groups in a transaction
-    static std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    static std::vector<CompsGroup> get_transaction_comps_groups(libdnf5::utils::SQLite3 & conn, Transaction & trans);
 
 
     /// Use a query to insert a new record to the 'comps_group' table
-    static int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup & grp);
+    static int64_t comps_group_insert(libdnf5::utils::SQLite3::Statement & query, CompsGroup & grp);
 
 
     /// Insert CompsGroup objects associated with a transaction into the database
-    static void insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    static void insert_transaction_comps_groups(libdnf5::utils::SQLite3 & conn, Transaction & trans);
 };
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_COMPS_GROUP_HPP

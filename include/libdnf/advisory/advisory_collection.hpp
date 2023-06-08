@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 //TODO(amatej): add unit tests for AdvisoryCollection
 class AdvisoryCollection {
@@ -95,6 +95,6 @@ private:
     int index;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

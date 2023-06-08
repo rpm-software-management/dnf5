@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void RepoqueryCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -51,30 +51,30 @@ void RepoqueryCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Search for packages matching various criteria");
 
-    available_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+    available_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(true))));
 
-    installed_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    installed_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    userinstalled_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    userinstalled_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    leaves_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    leaves_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    info_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    info_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     // The default format is full_nevra
-    query_format_option = dynamic_cast<libdnf::OptionString *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionString>("%{full_nevra}\n")));
+    query_format_option = dynamic_cast<libdnf5::OptionString *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionString>("%{full_nevra}\n")));
 
-    latest_limit_option = dynamic_cast<libdnf::OptionNumber<std::int32_t> *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionNumber<std::int32_t>>(0)));
+    latest_limit_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionNumber<std::int32_t>>(0)));
 
     querytags_option =
-        dynamic_cast<libdnf::OptionBool *>(parser.add_init_value(std::make_unique<libdnf::OptionBool>(false)));
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
 
 
     auto available = parser.add_new_named_arg("available");
@@ -148,7 +148,7 @@ void RepoqueryCommand::set_argument_parser() {
         }
     });
 
-    whatdepends = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatdepends = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatdepends",
         '\0',
@@ -157,7 +157,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatconflicts = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatconflicts = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatconflicts",
         '\0',
@@ -166,7 +166,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatenhances = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatenhances = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatenhances",
         '\0',
@@ -176,7 +176,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatobsoletes = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatobsoletes = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatobsoletes",
         '\0',
@@ -185,7 +185,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatprovides = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatprovides = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatprovides",
         '\0',
@@ -194,7 +194,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatrecommends = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatrecommends = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatrecommends",
         '\0',
@@ -204,7 +204,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatrequires = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatrequires = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatrequires",
         '\0',
@@ -214,7 +214,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatsupplements = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatsupplements = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatsupplements",
         '\0',
@@ -224,7 +224,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    whatsuggests = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    whatsuggests = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
         "whatsuggests",
         '\0',
@@ -234,43 +234,43 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    arch = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    arch = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this, "arch", '\0', "Limit to packages of these architectures.", "ARCH,...", "", false, ",");
-    file = std::make_unique<libdnf::cli::session::AppendStringListOption>(
+    file = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this, "file", '\0', "Limit to packages that own these files.", "FILE,...", "", false, ",");
 
-    exactdeps = std::make_unique<libdnf::cli::session::BoolOption>(
+    exactdeps = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "exactdeps",
         '\0',
         "Limit to packages that require <capability> specified by --whatrequires. This option is stackable "
         "with --whatrequires or --whatdepends only.",
         false);
-    duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+    duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "duplicates",
         '\0',
         "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
-    unneeded = std::make_unique<libdnf::cli::session::BoolOption>(
+    unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "unneeded",
         '\0',
         "Limit to unneeded installed packages (i.e. packages that were installed as "
         "dependencies but are no longer needed).",
         false);
-    extras = std::make_unique<libdnf::cli::session::BoolOption>(
+    extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
-    upgrades = std::make_unique<libdnf::cli::session::BoolOption>(
+    upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "upgrades",
         '\0',
         "Limit to packages that provide an upgrade for some already installed package.",
         false);
-    recent = std::make_unique<libdnf::cli::session::BoolOption>(
+    recent = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "recent", '\0', "Limit to only recently changed packages.", false);
-    installonly = std::make_unique<libdnf::cli::session::BoolOption>(
+    installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installonly", '\0', "Limit to installed installonly packages.", false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
@@ -282,7 +282,7 @@ void RepoqueryCommand::set_argument_parser() {
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
 
-    changelogs = std::make_unique<libdnf::cli::session::BoolOption>(
+    changelogs = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "changelogs", '\0', "Display package changelogs.", false);
 
     std::vector<std::string> pkg_attrs_options{
@@ -299,8 +299,8 @@ void RepoqueryCommand::set_argument_parser() {
         "files",
         "",  // empty when option is not used
     };
-    pkg_attr_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        parser.add_init_value(std::make_unique<libdnf::OptionEnum<std::string>>("", pkg_attrs_options)));
+    pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
 
     auto * repoquery_formatting = get_context().get_argument_parser().add_new_group("repoquery_formatting");
     repoquery_formatting->set_header("Formatting:");
@@ -351,24 +351,24 @@ void RepoqueryCommand::configure() {
                              advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
     if (updateinfo_needed) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
     }
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
-        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !system_repo_needed ||
+        available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
                 extras->get_value() || upgrades->get_value() || recent->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
     if (changelogs->get_value()) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_OTHER);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
     }
 
     if ((pkg_attr_option->get_value() == "files") ||
-        (libdnf::cli::output::requires_filelists(query_format_option->get_value()))) {
+        (libdnf5::cli::output::requires_filelists(query_format_option->get_value()))) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
         return;
     }
     for (const auto & capabilities :
@@ -382,9 +382,9 @@ void RepoqueryCommand::configure() {
           whatsupplements->get_value(),
           whatsuggests->get_value()}) {
         for (const auto & capability : capabilities) {
-            if (libdnf::utils::is_file_pattern(capability)) {
+            if (libdnf5::utils::is_file_pattern(capability)) {
                 context.base.get_config().get_optional_metadata_types_option().add_item(
-                    libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
+                    libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
                 return;
             }
         }
@@ -401,8 +401,8 @@ void RepoqueryCommand::load_additional_packages() {
 }
 
 // In case of input being nevras -> resolve them to packages
-static libdnf::rpm::PackageSet resolve_nevras_to_packges(
-    libdnf::Base & base, const std::vector<std::string> & nevra_globs, const libdnf::rpm::PackageQuery & base_query) {
+static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
+    libdnf5::Base & base, const std::vector<std::string> & nevra_globs, const libdnf::rpm::PackageQuery & base_query) {
     auto resolved_nevras_set = libdnf::rpm::PackageSet(base);
     auto settings = libdnf::ResolveSpecSettings();
     settings.with_provides = false;
@@ -416,7 +416,7 @@ static libdnf::rpm::PackageSet resolve_nevras_to_packges(
     return resolved_nevras_set;
 }
 
-static libdnf::rpm::PackageQuery get_installonly_query(libdnf::Base & base) {
+static libdnf5::rpm::PackageQuery get_installonly_query(libdnf5::Base & base) {
     auto & cfg_main = base.get_config();
     const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
     libdnf::rpm::PackageQuery installonly_query(base);

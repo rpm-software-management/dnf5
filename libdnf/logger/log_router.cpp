@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/logger/log_router.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 std::unique_ptr<Logger> LogRouter::release_logger(size_t index) {
     auto ret = std::move(loggers.at(index));
@@ -46,4 +46,4 @@ void LogRouter::write(
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

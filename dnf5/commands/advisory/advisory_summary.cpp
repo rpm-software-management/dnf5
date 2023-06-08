@@ -24,26 +24,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void AdvisorySummaryCommand::process_and_print_queries(
-    Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {
+    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) {
     std::string mode;
 
     if (all->get_value()) {
         packages.filter_installed();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
-        auto advisory_query_not_installed = libdnf::advisory::AdvisoryQuery(ctx.base);
-        advisory_query_not_installed.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::LTE);
+        auto advisory_query_not_installed = libdnf5::advisory::AdvisoryQuery(ctx.base);
+        advisory_query_not_installed.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
         advisories |= advisory_query_not_installed;
         mode = _("All");
     } else if (installed->get_value()) {
         packages.filter_installed();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::LTE);
         mode = _("Installed");
     } else if (updates->get_value()) {
         packages.filter_upgradable();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
         mode = _("Updates");
     } else {  // available is the default
         packages.filter_installed();
@@ -51,11 +51,11 @@ void AdvisorySummaryCommand::process_and_print_queries(
 
         add_running_kernel_packages(ctx.base, packages);
 
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
         mode = _("Available");
     }
 
-    libdnf::cli::output::print_advisorysummary_table(advisories, mode);
+    libdnf5::cli::output::print_advisorysummary_table(advisories, mode);
 }
 
 }  // namespace dnf5

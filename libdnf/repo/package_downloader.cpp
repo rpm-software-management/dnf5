@@ -44,16 +44,16 @@ struct default_delete<LrPackageTarget> {
 }  // namespace std
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class PackageTarget {
 public:
-    PackageTarget(const libdnf::rpm::Package & package, const std::string & destination, void * user_data)
+    PackageTarget(const libdnf5::rpm::Package & package, const std::string & destination, void * user_data)
         : package(package),
           destination(destination),
           user_data(user_data) {}
 
-    libdnf::rpm::Package package;
+    libdnf5::rpm::Package package;
     std::string destination;
     void * user_data;
     void * user_cb_data{nullptr};
@@ -112,7 +112,7 @@ PackageDownloader::PackageDownloader(Base & base) : p_impl(std::make_unique<Impl
 PackageDownloader::~PackageDownloader() = default;
 
 
-void PackageDownloader::add(const libdnf::rpm::Package & package, void * user_data) {
+void PackageDownloader::add(const libdnf5::rpm::Package & package, void * user_data) {
     auto default_path = std::filesystem::path(package.get_repo()->get_cachedir()) / "packages";
     auto & destdir_option = p_impl->base->get_config().get_destdir_option();
     if (destdir_option.empty()) {
@@ -123,7 +123,7 @@ void PackageDownloader::add(const libdnf::rpm::Package & package, void * user_da
 }
 
 
-void PackageDownloader::add(const libdnf::rpm::Package & package, const std::string & destination, void * user_data) {
+void PackageDownloader::add(const libdnf5::rpm::Package & package, const std::string & destination, void * user_data) {
     p_impl->targets.emplace_back(package, destination, user_data);
 }
 
@@ -223,4 +223,4 @@ void PackageDownloader::force_keep_packages(bool value) {
     p_impl->keep_packages = value;
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

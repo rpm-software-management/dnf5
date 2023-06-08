@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
-class AdvisorySetIterator::Impl : private libdnf::solv::SolvMap::iterator {
+class AdvisorySetIterator::Impl : private libdnf5::solv::SolvMap::iterator {
 private:
     Impl(const AdvisorySet & advisory_set)
         : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
@@ -107,4 +107,4 @@ bool AdvisorySetIterator::operator!=(const AdvisorySetIterator & other) const {
 }
 
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

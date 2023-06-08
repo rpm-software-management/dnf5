@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/utils/format.hpp"
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 
 namespace {
@@ -113,7 +113,7 @@ bool is_unique(
 }
 
 std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
-    rpm::solv::GoalPrivate & solved_goal, const libdnf::solv::IdQueue & broken_installed) {
+    rpm::solv::GoalPrivate & solved_goal, const libdnf5::solv::IdQueue & broken_installed) {
     auto & pool = solved_goal.get_rpm_pool();
 
     auto protected_running_kernel = solved_goal.get_protect_running_kernel();
@@ -175,7 +175,7 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_pr
 }  // namespace
 
 SolverProblems::SolverProblems(
-    const std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> & problems)
+    const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems)
     : problems(problems) {}
 
 SolverProblems::SolverProblems(const SolverProblems & src) = default;
@@ -265,16 +265,16 @@ std::string SolverProblems::to_string() const {
     return output;
 }
 
-std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> process_solver_problems(
-    const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_solver_problems(
+    const libdnf5::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
     auto & pool = get_rpm_pool(base);
 
     // Required to discover of problems related to protected packages
-    libdnf::solv::IdQueue broken_installed;
+    libdnf5::solv::IdQueue broken_installed;
 
     auto solver_problems = solved_goal.get_problems();
 
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
 
     for (auto & problem : solver_problems) {
         std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
@@ -362,4 +362,4 @@ std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>
 }
 
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base

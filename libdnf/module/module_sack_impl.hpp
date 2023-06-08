@@ -37,13 +37,13 @@ extern "C" {
 #include <optional>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class Transaction;
 
 }
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class ModuleGoalPrivate;
@@ -182,7 +182,7 @@ private:
     bool platform_detected = false;
 
     std::map<std::string, std::string> module_defaults;
-    std::unique_ptr<libdnf::solv::SolvMap> excludes;
+    std::unique_ptr<libdnf5::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
     std::vector<libdnf::solv::IdQueue> modules_to_enable;
 
@@ -199,6 +199,6 @@ inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_mo
     return modules;
 }
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 #endif  // LIBDNF_MODULE_MODULE_SACK_IMPL_HPP

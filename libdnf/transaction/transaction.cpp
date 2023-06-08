@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 std::string transaction_state_to_string(TransactionState state) {
     switch (state) {
@@ -271,4 +271,4 @@ void Transaction::finish(TransactionState state) {
     }
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

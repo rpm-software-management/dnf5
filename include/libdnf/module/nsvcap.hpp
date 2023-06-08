@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class Nsvcap {
@@ -115,6 +115,6 @@ private:
 };
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 #endif  //LIBDNF_MODULE_NSCVAP_HPP

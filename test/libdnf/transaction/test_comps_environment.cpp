@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionCompsEnvironmentTest);
@@ -38,36 +38,36 @@ namespace {
 
 // Allows accessing private methods
 create_private_getter_template;
-create_getter(new_comps_environment, &libdnf::transaction::Transaction::new_comps_environment);
-create_getter(start, &libdnf::transaction::Transaction::start);
-create_getter(finish, &libdnf::transaction::Transaction::finish);
-create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
+create_getter(new_comps_environment, &libdnf5::transaction::Transaction::new_comps_environment);
+create_getter(start, &libdnf5::transaction::Transaction::start);
+create_getter(finish, &libdnf5::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf5::transaction::TransactionHistory::new_transaction);
 
-create_getter(set_environment_id, &libdnf::transaction::CompsEnvironment::set_environment_id);
-create_getter(set_name, &libdnf::transaction::CompsEnvironment::set_name);
-create_getter(set_translated_name, &libdnf::transaction::CompsEnvironment::set_translated_name);
-create_getter(set_package_types, &libdnf::transaction::CompsEnvironment::set_package_types);
-create_getter(set_repoid, &libdnf::transaction::CompsEnvironment::set_repoid);
-create_getter(set_action, &libdnf::transaction::CompsEnvironment::set_action);
-create_getter(set_reason, &libdnf::transaction::CompsEnvironment::set_reason);
-create_getter(set_state, &libdnf::transaction::CompsEnvironment::set_state);
-create_getter(new_group, &libdnf::transaction::CompsEnvironment::new_group);
-create_getter(get_environment_id, &libdnf::transaction::CompsEnvironment::get_environment_id);
-create_getter(get_name, &libdnf::transaction::CompsEnvironment::get_name);
-create_getter(get_translated_name, &libdnf::transaction::CompsEnvironment::get_translated_name);
-create_getter(get_package_types, &libdnf::transaction::CompsEnvironment::get_package_types);
-create_getter(get_repoid, &libdnf::transaction::CompsEnvironment::get_repoid);
-create_getter(get_action, &libdnf::transaction::CompsEnvironment::get_action);
-create_getter(get_reason, &libdnf::transaction::CompsEnvironment::get_reason);
-create_getter(get_state, &libdnf::transaction::CompsEnvironment::get_state);
-create_getter(get_groups, &libdnf::transaction::CompsEnvironment::get_groups);
+create_getter(set_environment_id, &libdnf5::transaction::CompsEnvironment::set_environment_id);
+create_getter(set_name, &libdnf5::transaction::CompsEnvironment::set_name);
+create_getter(set_translated_name, &libdnf5::transaction::CompsEnvironment::set_translated_name);
+create_getter(set_package_types, &libdnf5::transaction::CompsEnvironment::set_package_types);
+create_getter(set_repoid, &libdnf5::transaction::CompsEnvironment::set_repoid);
+create_getter(set_action, &libdnf5::transaction::CompsEnvironment::set_action);
+create_getter(set_reason, &libdnf5::transaction::CompsEnvironment::set_reason);
+create_getter(set_state, &libdnf5::transaction::CompsEnvironment::set_state);
+create_getter(new_group, &libdnf5::transaction::CompsEnvironment::new_group);
+create_getter(get_environment_id, &libdnf5::transaction::CompsEnvironment::get_environment_id);
+create_getter(get_name, &libdnf5::transaction::CompsEnvironment::get_name);
+create_getter(get_translated_name, &libdnf5::transaction::CompsEnvironment::get_translated_name);
+create_getter(get_package_types, &libdnf5::transaction::CompsEnvironment::get_package_types);
+create_getter(get_repoid, &libdnf5::transaction::CompsEnvironment::get_repoid);
+create_getter(get_action, &libdnf5::transaction::CompsEnvironment::get_action);
+create_getter(get_reason, &libdnf5::transaction::CompsEnvironment::get_reason);
+create_getter(get_state, &libdnf5::transaction::CompsEnvironment::get_state);
+create_getter(get_groups, &libdnf5::transaction::CompsEnvironment::get_groups);
 
-create_getter(set_group_id, &libdnf::transaction::CompsEnvironmentGroup::set_group_id);
-create_getter(set_installed, &libdnf::transaction::CompsEnvironmentGroup::set_installed);
-create_getter(set_group_type, &libdnf::transaction::CompsEnvironmentGroup::set_group_type);
-create_getter(get_group_id, &libdnf::transaction::CompsEnvironmentGroup::get_group_id);
-create_getter(get_installed, &libdnf::transaction::CompsEnvironmentGroup::get_installed);
-create_getter(get_group_type, &libdnf::transaction::CompsEnvironmentGroup::get_group_type);
+create_getter(set_group_id, &libdnf5::transaction::CompsEnvironmentGroup::set_group_id);
+create_getter(set_installed, &libdnf5::transaction::CompsEnvironmentGroup::set_installed);
+create_getter(set_group_type, &libdnf5::transaction::CompsEnvironmentGroup::set_group_type);
+create_getter(get_group_id, &libdnf5::transaction::CompsEnvironmentGroup::get_group_id);
+create_getter(get_installed, &libdnf5::transaction::CompsEnvironmentGroup::get_installed);
+create_getter(get_group_type, &libdnf5::transaction::CompsEnvironmentGroup::get_group_type);
 
 }  //namespace
 
@@ -92,7 +92,7 @@ CompsEnvironment & create_comps_environment(Transaction & trans) {
     auto & grp_base = (env.*get(new_group{}))();
     (grp_base.*get(set_group_id{}))("base");
     (grp_base.*get(set_installed{}))(false);
-    (grp_base.*get(set_group_type{}))(libdnf::comps::PackageType::OPTIONAL);
+    (grp_base.*get(set_group_type{}))(libdnf5::comps::PackageType::OPTIONAL);
 
     return env;
 }
@@ -128,7 +128,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), (env2.*get(get_environment_id{}))());
     CPPUNIT_ASSERT_EQUAL(std::string("Minimal Environment"), (env2.*get(get_name{}))());
     CPPUNIT_ASSERT_EQUAL(std::string("translated(Minimal Environment)"), (env2.*get(get_translated_name{}))());
-    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::DEFAULT, (env2.*get(get_package_types{}))());
+    CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::DEFAULT, (env2.*get(get_package_types{}))());
     CPPUNIT_ASSERT_EQUAL(std::string("repoid"), (env2.*get(get_repoid{}))());
     CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, (env2.*get(get_action{}))());
     CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, (env2.*get(get_reason{}))());
@@ -140,10 +140,10 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     auto & env2_group1 = (env2.*get(get_groups{}))().at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("core"), (env2_group1.*get(get_group_id{}))());
     CPPUNIT_ASSERT_EQUAL(true, (env2_group1.*get(get_installed{}))());
-    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::MANDATORY, (env2_group1.*get(get_group_type{}))());
+    CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::MANDATORY, (env2_group1.*get(get_group_type{}))());
 
     auto & env2_group2 = (env2.*get(get_groups{}))().at(1);
     CPPUNIT_ASSERT_EQUAL(std::string("base"), (env2_group2.*get(get_group_id{}))());
     CPPUNIT_ASSERT_EQUAL(false, (env2_group2.*get(get_installed{}))());
-    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::OPTIONAL, (env2_group2.*get(get_group_type{}))());
+    CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::OPTIONAL, (env2_group2.*get(get_group_type{}))());
 }

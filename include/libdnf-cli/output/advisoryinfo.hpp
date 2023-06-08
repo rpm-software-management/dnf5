@@ -26,15 +26,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory.hpp"
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 class AdvisoryInfo : public KeyValueTable {
 public:
-    void add_advisory(libdnf::advisory::Advisory & advisory);
+    void add_advisory(libdnf5::advisory::Advisory & advisory);
 };
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP

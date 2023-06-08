@@ -23,11 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class Repo;
 using RepoWeakPtr = WeakPtr<Repo, false>;
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

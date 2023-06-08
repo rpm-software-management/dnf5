@@ -27,14 +27,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-class AllowErasingOption : public libdnf::cli::session::BoolOption {
+class AllowErasingOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AllowErasingOption(libdnf::cli::session::Command & command)
+    explicit AllowErasingOption(libdnf5::cli::session::Command & command)
         : BoolOption(
               command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
 };
 
-class SkipBrokenOption : public libdnf::cli::session::BoolOption {
+class SkipBrokenOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit SkipBrokenOption(dnf5::Command & command)
         : BoolOption(
@@ -46,7 +46,7 @@ public:
               &command.get_context().base.get_config().get_skip_broken_option()) {}
 };
 
-class SkipUnavailableOption : public libdnf::cli::session::BoolOption {
+class SkipUnavailableOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit SkipUnavailableOption(dnf5::Command & command)
         : BoolOption(

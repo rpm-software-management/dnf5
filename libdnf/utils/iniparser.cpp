@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-namespace libdnf {
+namespace libdnf5 {
 
 constexpr char DELIMITER = '\n';
 
@@ -152,4 +152,4 @@ IniParser::ItemType IniParser::next() {
     return previous_line_with_key_val ? ItemType::KEY_VAL : ItemType::END_OF_INPUT;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

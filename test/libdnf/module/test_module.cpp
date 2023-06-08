@@ -39,7 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTest);
 
 
-using namespace libdnf::module;
+using namespace libdnf5::module;
 
 
 void ModuleTest::test_load() {

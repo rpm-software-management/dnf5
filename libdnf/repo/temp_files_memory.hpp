@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 /// @brief A class for storing paths of temporary files in a TOML file.
 /// It behaves in a stateless way, meaning no data are cached within the
@@ -68,6 +68,6 @@ private:
 };
 
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_TEMP_FILES_MEMORY_HPP

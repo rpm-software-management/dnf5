@@ -36,7 +36,7 @@ void NevraTest::tearDown() {}
 void NevraTest::test_nevra() {
     {
         auto nevras =
-            libdnf::rpm::Nevra::parse("four-of-fish-8:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+            libdnf5::rpm::Nevra::parse("four-of-fish-8:3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -52,21 +52,21 @@ void NevraTest::test_nevra() {
     // cannot parse due to ':' in name
     {
         auto nevras =
-            libdnf::rpm::Nevra::parse("four-of-f:ish-3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+            libdnf5::rpm::Nevra::parse("four-of-f:ish-3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // cannot parse due to ':' presence twice
     {
         CPPUNIT_ASSERT_THROW(
-            libdnf::rpm::Nevra::parse("four-of-fish-8:9:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA}),
-            libdnf::rpm::NevraIncorrectInputError);
+            libdnf5::rpm::Nevra::parse("four-of-fish-8:9:3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA}),
+            libdnf5::rpm::NevraIncorrectInputError);
     }
 
 
     {
         auto nevras =
-            libdnf::rpm::Nevra::parse("four-of-fish-3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+            libdnf5::rpm::Nevra::parse("four-of-fish-3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -77,7 +77,7 @@ void NevraTest::test_nevra() {
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-8:3.6.9", {libdnf::rpm::Nevra::Form::NEV});
+        auto nevras = libdnf5::rpm::Nevra::parse("four-of-fish-8:3.6.9", {libdnf5::rpm::Nevra::Form::NEV});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -88,7 +88,7 @@ void NevraTest::test_nevra() {
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("fish-8:3.6.9", {libdnf::rpm::Nevra::Form::NEV});
+        auto nevras = libdnf5::rpm::Nevra::parse("fish-8:3.6.9", {libdnf5::rpm::Nevra::Form::NEV});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
@@ -99,7 +99,7 @@ void NevraTest::test_nevra() {
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("fish-3.6.9", {libdnf::rpm::Nevra::Form::NEV});
+        auto nevras = libdnf5::rpm::Nevra::parse("fish-3.6.9", {libdnf5::rpm::Nevra::Form::NEV});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
@@ -111,7 +111,7 @@ void NevraTest::test_nevra() {
 
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish-3.6.9");
@@ -122,22 +122,22 @@ void NevraTest::test_nevra() {
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("name.ar-ch", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("name.ar-ch", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("name.-arch", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("name.-arch", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("name.", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("name.", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf::rpm::Nevra::Form::NEV});
+        auto nevras = libdnf5::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf5::rpm::Nevra::Form::NEV});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -149,27 +149,27 @@ void NevraTest::test_nevra() {
 
     // When parsing fails return false
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-of-fish", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("four-of-fish", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // When parsing fails return false => '-' after '.'
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-o.f-fish", {libdnf::rpm::Nevra::Form::NA});
+        auto nevras = libdnf5::rpm::Nevra::parse("four-o.f-fish", {libdnf5::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // When parsing fails return false - not allowed characters '()'
     {
         CPPUNIT_ASSERT_THROW(
-            libdnf::rpm::Nevra::parse("four-of(fish.i686)", {libdnf::rpm::Nevra::Form::NA}),
-            libdnf::rpm::NevraIncorrectInputError);
+            libdnf5::rpm::Nevra::parse("four-of(fish.i686)", {libdnf5::rpm::Nevra::Form::NA}),
+            libdnf5::rpm::NevraIncorrectInputError);
     }
 
     // Test parsing NEVRA with glob in epoch
     {
         auto nevras =
-            libdnf::rpm::Nevra::parse("four-of-fish-[01]:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+            libdnf5::rpm::Nevra::parse("four-of-fish-[01]:3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -182,7 +182,7 @@ void NevraTest::test_nevra() {
     // Test parsing NEVRA with glob in epoch
     {
         auto nevras =
-            libdnf::rpm::Nevra::parse("four-of-fish-?:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+            libdnf5::rpm::Nevra::parse("four-of-fish-?:3.6.9-11.fc100.x86_64", {libdnf5::rpm::Nevra::Form::NEVRA});
         CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -196,12 +196,12 @@ void NevraTest::test_nevra() {
 
 namespace {
 
-class TestPackage : public libdnf::rpm::Nevra {
+class TestPackage : public libdnf5::rpm::Nevra {
 public:
     explicit TestPackage(const char * nevra_str) {
         // use the static parse() method to parse `nevra_str` and then copy it to the current object
-        auto nevra = libdnf::rpm::Nevra::parse(nevra_str, {libdnf::rpm::Nevra::Form::NEVRA}).at(0);
-        libdnf::rpm::copy_nevra_attributes(nevra, *this);
+        auto nevra = libdnf5::rpm::Nevra::parse(nevra_str, {libdnf5::rpm::Nevra::Form::NEVRA}).at(0);
+        libdnf5::rpm::copy_nevra_attributes(nevra, *this);
     }
 
     std::string get_evr() const {
@@ -225,42 +225,42 @@ void NevraTest::test_evrcmp() {
 
     // order by epoch
     std::vector<TestPackage> actual = {foo_1_1_1_noarch, foo_0_2_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_2_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by epoch - already ordered
     actual = {foo_0_2_1_noarch, foo_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_2_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by version
     actual = {foo_0_2_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by version - already ordered
     actual = {foo_0_1_1_noarch, foo_0_2_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by release
     actual = {foo_0_1_2_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by release - already ordered
     actual = {foo_0_1_1_noarch, foo_0_1_2_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by version (with minor version > release)
     actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 
     // order by version (with minor version > release) - already sorted
     actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }
 
@@ -276,62 +276,62 @@ void NevraTest::test_cmp_nevra() {
 
     // order by name
     std::vector<TestPackage> actual = {foo_0_1_1_noarch, bar_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({bar_0_1_1_noarch, foo_0_1_1_noarch}), actual);
 
     // order by name - already ordered
     actual = {bar_0_1_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({bar_0_1_1_noarch, foo_0_1_1_noarch}), actual);
 
     // order by epoch
     actual = {foo_1_1_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by epoch - already ordered
     actual = {foo_0_1_1_noarch, foo_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by version
     actual = {foo_0_2_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by version - already ordered
     actual = {foo_0_1_1_noarch, foo_0_2_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by release
     actual = {foo_0_1_2_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by release - already ordered
     actual = {foo_0_1_1_noarch, foo_0_1_2_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by arch
     actual = {foo_0_1_1_x86_64, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_1_x86_64}), actual);
 
     // order by arch - already ordered
     actual = {foo_0_1_1_noarch, foo_0_1_1_x86_64};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_1_x86_64}), actual);
 
     // order by version (with minor version > release)
     actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 
     // order by version (with minor version > release) - already sorted
     actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }
 
@@ -348,61 +348,61 @@ void NevraTest::test_cmp_naevr() {
 
     // order by name
     std::vector<TestPackage> actual = {foo_0_1_1_noarch, bar_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({bar_0_1_1_noarch, foo_0_1_1_noarch}), actual);
 
     // order by name - already ordered
     actual = {bar_0_1_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({bar_0_1_1_noarch, foo_0_1_1_noarch}), actual);
 
     // order by epoch
     actual = {foo_1_1_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by epoch - already ordered
     actual = {foo_0_1_1_noarch, foo_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_1_1_1_noarch}), actual);
 
     // order by version
     actual = {foo_0_2_1_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by version - already ordered
     actual = {foo_0_1_1_noarch, foo_0_2_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
 
     // order by release
     actual = {foo_0_1_2_noarch, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by release - already ordered
     actual = {foo_0_1_1_noarch, foo_0_1_2_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
 
     // order by arch
     actual = {foo_0_1_0_x86_64, foo_0_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_0_x86_64}), actual);
 
     // order by arch - already ordered
     actual = {foo_0_1_1_noarch, foo_0_1_0_x86_64};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_0_x86_64}), actual);
 
     // order by version (with minor version > release)
     actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 
     // order by version (with minor version > release) - already sorted
     actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
-    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }

@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option exception
 class OptionError : public Error {
@@ -166,6 +166,6 @@ inline const std::string & Option::get_lock_comment() const noexcept {
     return lock_comment;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

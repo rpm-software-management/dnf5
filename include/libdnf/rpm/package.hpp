@@ -31,21 +31,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Goal;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class Transaction;
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class Transaction;
 
@@ -475,7 +475,7 @@ public:
     //
     // @replaces dnf:dnf/package.py:attribute:Package.repo
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
-    libdnf::repo::RepoWeakPtr get_repo() const;
+    libdnf5::repo::RepoWeakPtr get_repo() const;
 
     /// @return Id of the repository the package belongs to.
     /// @since 5.0
@@ -500,11 +500,11 @@ public:
     //
     // TODO(dmach): return actual value from data in PackageSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf::transaction::TransactionItemReason get_reason() const;
+    libdnf5::transaction::TransactionItemReason get_reason() const;
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0.5
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
@@ -513,10 +513,10 @@ protected:
 private:
     friend class PackageSetIterator;
     friend class PackageSack;
-    friend class libdnf::repo::Repo;
-    friend class libdnf::Goal;
-    friend class libdnf::base::Transaction;
-    friend class libdnf::rpm::Transaction;
+    friend class libdnf5::repo::Repo;
+    friend class libdnf5::Goal;
+    friend class libdnf5::base::Transaction;
+    friend class libdnf5::rpm::Transaction;
 
     static constexpr const char * DEBUGINFO_SUFFIX = "-debuginfo";
     static constexpr const char * DEBUGSOURCE_SUFFIX = "-debugsource";
@@ -543,6 +543,6 @@ inline bool Package::operator!=(const Package & other) const noexcept {
     return id != other.id || base != other.base;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_HPP

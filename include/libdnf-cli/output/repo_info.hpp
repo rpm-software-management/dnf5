@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "key_value_table.hpp"
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 class RepoInfo : public KeyValueTable {
@@ -135,7 +135,7 @@ general connection settings?
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 
 #endif  // LIBDNF_CLI_OUTPUT_REPO_INFO_HPP

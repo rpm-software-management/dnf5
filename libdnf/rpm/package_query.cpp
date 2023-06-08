@@ -41,12 +41,12 @@ extern "C" {
 
 #include <filesystem>
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 namespace {
 
 
-inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
+inline bool is_valid_candidate(libdnf5::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             return strcmp(candidate, c_pattern) == 0;
@@ -457,12 +457,12 @@ PackageQuery & PackageQuery::operator=(PackageQuery && src) noexcept = default;
 
 PackageQuery::~PackageQuery() = default;
 
-template <const char * (libdnf::solv::Pool::*getter)(Id) const>
+template <const char * (libdnf5::solv::Pool::*getter)(Id) const>
 inline static void filter_glob_internal(
-    libdnf::solv::Pool & pool,
+    libdnf5::solv::Pool & pool,
     const char * c_pattern,
     const libdnf::solv::SolvMap & candidates,
-    libdnf::solv::SolvMap & filter_result,
+    libdnf5::solv::SolvMap & filter_result,
     int fnm_flags) {
     for (Id candidate_id : candidates) {
         const char * candidate_str = (pool.*getter)(candidate_id);
@@ -2808,4 +2808,4 @@ void PackageQuery::filter_extras(const bool exact_evr) {
 }
 
 
-}  //  namespace libdnf::rpm
+}  // namespace libdnf5::rpm

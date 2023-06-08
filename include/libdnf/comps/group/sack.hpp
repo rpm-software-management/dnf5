@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 class Comps;
@@ -38,14 +38,14 @@ class GroupSack;
 using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 
 
-class GroupSack : public libdnf::sack::Sack<Group> {
+class GroupSack : public libdnf5::sack::Sack<Group> {
 public:
     ~GroupSack();
 
     /// Create WeakPtr to GroupSack
     GroupSackWeakPtr get_weak_ptr();
 
-    const std::map<std::string, libdnf::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+    const std::map<std::string, libdnf5::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
 
 protected:
     explicit GroupSack(Comps & comps);
@@ -58,7 +58,7 @@ private:
     /// @return Map of resolved reasons why groups were installed: ``{group_id -> reason}``.
     ///         A group can be installed due to multiple reasons, only the most significant is returned.
     /// @since 5.0
-    std::map<std::string, libdnf::transaction::TransactionItemReason> reasons;
+    std::map<std::string, libdnf5::transaction::TransactionItemReason> reasons;
 
     friend Comps;
     friend Group;
@@ -67,7 +67,7 @@ private:
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif  // LIBDNF_COMPS_GROUP_SACK_HPP

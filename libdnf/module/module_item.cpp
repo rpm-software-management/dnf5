@@ -40,7 +40,7 @@ extern "C" {
 #include <string>
 #include <vector>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 const char * ModuleItem::get_name_cstr() const {
@@ -443,4 +443,4 @@ bool ModuleItem::is_active() const {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

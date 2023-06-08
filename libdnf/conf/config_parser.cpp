@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 
-namespace libdnf {
+namespace libdnf5 {
 
 static void read(ConfigParser & cfg_parser, IniParser & parser) {
     IniParser::ItemType readed_type;
@@ -161,4 +161,4 @@ void ConfigParser::write(const std::string & file_path, bool append, const std::
     write_section(file, sit->first, sit->second, raw_items);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

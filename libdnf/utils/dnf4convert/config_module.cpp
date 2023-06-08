@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config_module.hpp"
 
-namespace libdnf::dnf4convert {
+namespace libdnf5::dnf4convert {
 
 ConfigModule::ConfigModule(const std::string & module_name) : module_name(module_name) {
     opt_binds().add("name", name);
@@ -29,4 +29,4 @@ ConfigModule::ConfigModule(const std::string & module_name) : module_name(module
 }
 
 
-}  // namespace libdnf::dnf4convert
+}  // namespace libdnf5::dnf4convert

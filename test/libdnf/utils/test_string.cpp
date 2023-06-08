@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 
-using namespace libdnf::utils::string;
+using namespace libdnf5::utils::string;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UtilsStringTest);

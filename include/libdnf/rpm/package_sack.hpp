@@ -35,14 +35,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Goal;
 class Swdb;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class Advisory;
 class AdvisorySack;
@@ -52,27 +52,27 @@ class AdvisoryPackage;
 class AdvisoryModule;
 class AdvisoryReference;
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 class ModuleSack;
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
-namespace libdnf::rpm::solv {
+namespace libdnf5::rpm::solv {
 
 class SolvPrivate;
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf5::rpm::solv
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class Transaction;
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class PackageSet;
 class PackageSack;
@@ -80,8 +80,8 @@ using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
 class PackageSack {
 public:
-    explicit PackageSack(const libdnf::BaseWeakPtr & base);
-    explicit PackageSack(libdnf::Base & base);
+    explicit PackageSack(const libdnf5::BaseWeakPtr & base);
+    explicit PackageSack(libdnf5::Base & base);
     ~PackageSack();
 
     /// Create WeakPtr to PackageSack
@@ -89,7 +89,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
@@ -148,7 +148,7 @@ public:
     rpm::Package get_running_kernel();
 
 private:
-    friend libdnf::Goal;
+    friend libdnf5::Goal;
     friend Package;
     friend PackageSet;
     friend Reldep;
@@ -156,22 +156,22 @@ private:
     friend class repo::Repo;
     friend class PackageQuery;
     friend class Transaction;
-    friend libdnf::Swdb;
+    friend libdnf5::Swdb;
     friend solv::SolvPrivate;
-    friend libdnf::advisory::Advisory;
-    friend libdnf::advisory::AdvisorySack;
-    friend libdnf::advisory::AdvisoryQuery;
-    friend libdnf::advisory::AdvisoryCollection;
-    friend libdnf::advisory::AdvisoryPackage;
-    friend libdnf::advisory::AdvisoryModule;
-    friend libdnf::advisory::AdvisoryReference;
-    friend libdnf::base::Transaction;
-    friend class libdnf::module::ModuleSack;
+    friend libdnf5::advisory::Advisory;
+    friend libdnf5::advisory::AdvisorySack;
+    friend libdnf5::advisory::AdvisoryQuery;
+    friend libdnf5::advisory::AdvisoryCollection;
+    friend libdnf5::advisory::AdvisoryPackage;
+    friend libdnf5::advisory::AdvisoryModule;
+    friend libdnf5::advisory::AdvisoryReference;
+    friend libdnf5::base::Transaction;
+    friend class libdnf5::module::ModuleSack;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_SACK_HPP

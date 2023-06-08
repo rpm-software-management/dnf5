@@ -33,17 +33,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class TransactionGroup {
 public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
     using Action = transaction::TransactionItemAction;
-    using PackageType = libdnf::comps::PackageType;
+    using PackageType = libdnf5::comps::PackageType;
 
     /// @return the underlying group.
-    libdnf::comps::Group get_group() const { return group; }
+    libdnf5::comps::Group get_group() const { return group; }
 
     /// @return the action being preformed on the transaction group.
     //
@@ -66,7 +66,7 @@ public:
 private:
     friend class Transaction::Impl;
 
-    TransactionGroup(const libdnf::comps::Group & grp, Action action, Reason reason, const PackageType types)
+    TransactionGroup(const libdnf5::comps::Group & grp, Action action, Reason reason, const PackageType types)
         : group(grp),
           action(action),
           reason(reason),
@@ -74,13 +74,13 @@ private:
 
     void set_state(State value) noexcept { state = value; }
 
-    libdnf::comps::Group group;
+    libdnf5::comps::Group group;
     Action action;
     Reason reason;
     State state{State::STARTED};
     PackageType package_types;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_TRANSACTION_GROUP_HPP

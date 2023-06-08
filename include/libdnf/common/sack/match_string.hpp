@@ -26,14 +26,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 bool match_string(const std::string & value, QueryCmp cmp, const std::string & pattern);
 bool match_string(const std::string & value, QueryCmp cmp, const std::vector<std::string> & patterns);
 bool match_string(const std::vector<std::string> & values, QueryCmp cmp, const std::string & pattern);
 bool match_string(const std::vector<std::string> & values, QueryCmp cmp, const std::vector<std::string> & patterns);
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack
 
 
 #endif

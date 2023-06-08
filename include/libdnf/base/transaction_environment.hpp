@@ -29,17 +29,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item_state.hpp"
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class TransactionEnvironment {
 public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
     using Action = transaction::TransactionItemAction;
-    using PackageType = libdnf::comps::PackageType;
+    using PackageType = libdnf5::comps::PackageType;
 
     /// @return the underlying environment.
-    libdnf::comps::Environment get_environment() const { return environment; }
+    libdnf5::comps::Environment get_environment() const { return environment; }
 
     /// @return the action being preformed on the transaction environment.
     //
@@ -63,7 +63,7 @@ private:
     friend class Transaction::Impl;
 
     TransactionEnvironment(
-        const libdnf::comps::Environment & grp, Action action, Reason reason, const bool with_optional)
+        const libdnf5::comps::Environment & grp, Action action, Reason reason, const bool with_optional)
         : environment(grp),
           action(action),
           reason(reason),
@@ -71,13 +71,13 @@ private:
 
     void set_state(State value) noexcept { state = value; }
 
-    libdnf::comps::Environment environment;
+    libdnf5::comps::Environment environment;
     Action action;
     Reason reason;
     State state{State::STARTED};
     bool with_optional;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_TRANSACTION_ENVIRONMENT_HPP

@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 /// Base class for dnf5daemon-client exceptions.
-class Error : public libdnf::Error {
+class Error : public libdnf5::Error {
 public:
-    using libdnf::Error::Error;
+    using libdnf5::Error::Error;
     const char * get_domain_name() const noexcept override { return "dnfdaemon::client"; }
     const char * get_name() const noexcept override { return "Error"; }
 };

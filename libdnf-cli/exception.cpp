@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
-namespace libdnf::cli {
+namespace libdnf5::cli {
 
 AbortedByUserError::AbortedByUserError() : Error(M_("Operation aborted by the user.")) {}
 
@@ -37,7 +37,7 @@ const char * GoalResolveError::what() const noexcept {
         if (resolve_logs.empty()) {
             message = TM_(format, 1);
         } else {
-            message = fmt::format("{}:\n{}", TM_(format, 1), libdnf::utils::string::join(resolve_logs, "\n"));
+            message = fmt::format("{}:\n{}", TM_(format, 1), libdnf5::utils::string::join(resolve_logs, "\n"));
         }
     } catch (...) {
         message = TM_(format, 1);
@@ -47,4 +47,4 @@ const char * GoalResolveError::what() const noexcept {
 
 SilentCommandExitError::SilentCommandExitError(int exit_code) : Error(M_("")), exit_code(exit_code) {}
 
-}  // namespace libdnf::cli
+}  // namespace libdnf5::cli

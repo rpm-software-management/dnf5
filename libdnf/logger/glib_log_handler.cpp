@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <glib.h>
 
-namespace libdnf {
+namespace libdnf5 {
 
 static GLogLevelFlags verbosity_to_glib_log_level_mask(Logger::Level verbosity) noexcept {
     // In GLib, the "G_LOG_LEVEL_ERROR" is more severe than "G_LOG_LEVEL_CRITICAL".
@@ -88,4 +88,4 @@ void GlibLogHandler::remove_handler() noexcept {
     g_log_remove_handler(this->domain.c_str(), handler_id);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

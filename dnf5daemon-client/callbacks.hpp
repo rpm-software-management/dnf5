@@ -58,15 +58,15 @@ public:
     void set_show_total_bar_limit(std::size_t limit);
 
 private:
-    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(const std::string & download_id);
+    libdnf5::cli::progressbar::DownloadProgressBar * find_progress_bar(const std::string & download_id);
     void print();
 
     bool printed{false};
     bool number_widget_visible{false};
     std::size_t show_total_bar_limit{static_cast<std::size_t>(-1)};
-    std::unique_ptr<libdnf::cli::progressbar::MultiProgressBar> multi_progress_bar;
+    std::unique_ptr<libdnf5::cli::progressbar::MultiProgressBar> multi_progress_bar;
     // map {download_id: progressbar}
-    std::unordered_map<std::string, libdnf::cli::progressbar::DownloadProgressBar *> progress_bars;
+    std::unordered_map<std::string, libdnf5::cli::progressbar::DownloadProgressBar *> progress_bars;
 };
 
 
@@ -96,8 +96,8 @@ public:
     void finished(sdbus::Signal & signal);
 
 private:
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
 
     void new_progress_bar(uint64_t total, const std::string & description);
 };

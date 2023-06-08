@@ -25,11 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::string format_size(int64_t num) {
-    auto result = libdnf::cli::utils::units::format_size_aligned(num);
+    auto result = libdnf5::cli::utils::units::format_size_aligned(num);
     // add leading spaces up to 9 characters
     // to make sure that the formatted size has always the same length in the progressbar
     if (result.size() < 9) {
@@ -70,4 +70,4 @@ std::string format_time(int64_t num, bool negative) {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

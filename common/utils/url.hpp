@@ -23,10 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils::url {
+namespace libdnf5::utils::url {
 
 bool is_url(std::string path);
 
-}  // namespace libdnf::utils::url
+}  // namespace libdnf5::utils::url
 
 #endif  // LIBDNF_UTILS_URL_HPP

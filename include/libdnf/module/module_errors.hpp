@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class ModuleError : public Error {
@@ -75,7 +75,7 @@ public:
 };
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_ERRORS_HPP

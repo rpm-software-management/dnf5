@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void InstallCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -63,7 +63,7 @@ void InstallCommand::set_argument_parser() {
     skip_unavailable->link_value(&skip_unavailable_option);
     cmd.register_named_arg(skip_unavailable);
 
-    auto specs_arg = pkg_specs_argument(parser, libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
+    auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
     specs_arg->set_description("List of packages to install");
     cmd.register_positional_arg(specs_arg);
 }
@@ -77,10 +77,10 @@ void InstallCommand::run() {
 
     dnfdaemon::KeyValueMap options = {};
     // pass the `skip_*` value to the server only when explicitly set by command line option
-    if (skip_broken_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+    if (skip_broken_option.get_priority() >= libdnf5::Option::Priority::COMMANDLINE) {
         options["skip_broken"] = skip_broken_option.get_value();
     }
-    if (skip_unavailable_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+    if (skip_unavailable_option.get_priority() >= libdnf5::Option::Priority::COMMANDLINE) {
         options["skip_unavailable"] = skip_unavailable_option.get_value();
     }
 

@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 enum class PackageType : int {
     CONDITIONAL = 1 << 0,  // a weak dependency
@@ -35,7 +35,7 @@ enum class PackageType : int {
     OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
 };
 
-class InvalidPackageType : public libdnf::Error {
+class InvalidPackageType : public libdnf5::Error {
 public:
     InvalidPackageType(const std::string & type);
     InvalidPackageType(const PackageType type);
@@ -132,7 +132,7 @@ private:
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif

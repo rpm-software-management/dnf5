@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 
-namespace libdnf {
+namespace libdnf5 {
 
 uid_t read_login_uid_from_proc(pid_t pid) noexcept {
     auto in = open(fmt::format("/proc/{}/loginuid", pid).c_str(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC);
@@ -59,14 +59,14 @@ uid_t read_login_uid_from_proc(pid_t pid) noexcept {
 }
 
 uid_t get_login_uid() noexcept {
-    static uid_t cached_uid = libdnf::INVALID_UID;
-    if (cached_uid == libdnf::INVALID_UID) {
-        cached_uid = libdnf::read_login_uid_from_proc(getpid());
-        if (cached_uid == libdnf::INVALID_UID) {
+    static uid_t cached_uid = libdnf5::INVALID_UID;
+    if (cached_uid == libdnf5::INVALID_UID) {
+        cached_uid = libdnf5::read_login_uid_from_proc(getpid());
+        if (cached_uid == libdnf5::INVALID_UID) {
             cached_uid = getuid();
         }
     }
     return cached_uid;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

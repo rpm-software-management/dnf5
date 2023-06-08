@@ -50,7 +50,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <thread>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 namespace {
 
@@ -610,7 +610,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     plugins.pre_transaction(*transaction);
 
     // start history db transaction
-    auto db_transaction = libdnf::transaction::Transaction(base);
+    auto db_transaction = libdnf5::transaction::Transaction(base);
     // save history db transaction id
     history_db_id = db_transaction.get_id();
 
@@ -1004,4 +1004,4 @@ bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rp
     return result;
 }
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base

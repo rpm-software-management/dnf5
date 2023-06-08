@@ -23,11 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
-void GroupInfoCommand::print(const libdnf::comps::GroupQuery & query) {
+void GroupInfoCommand::print(const libdnf5::comps::GroupQuery & query) {
     for (auto group : query.list()) {
-        libdnf::cli::output::print_groupinfo_table(group);
+        libdnf5::cli::output::print_groupinfo_table(group);
         std::cout << '\n';
     }
 }

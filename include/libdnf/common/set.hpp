@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename T>
 class Set;
@@ -220,6 +220,6 @@ inline Set<T> operator^(const Set<T> & lhs, const Set<T> & rhs) {
     return ret ^= rhs;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

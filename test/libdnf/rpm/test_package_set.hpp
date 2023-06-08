@@ -64,8 +64,8 @@ public:
 
 
 private:
-    std::unique_ptr<libdnf::rpm::PackageSet> set1;
-    std::unique_ptr<libdnf::rpm::PackageSet> set2;
+    std::unique_ptr<libdnf5::rpm::PackageSet> set1;
+    std::unique_ptr<libdnf5::rpm::PackageSet> set2;
 };
 
 

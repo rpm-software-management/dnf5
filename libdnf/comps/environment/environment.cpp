@@ -40,10 +40,10 @@ extern "C" {
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
-Environment::Environment(const libdnf::BaseWeakPtr & base) : base(base) {}
+Environment::Environment(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
 
 Environment::Environment(libdnf::Base & base) : base(base.get_weak_ptr()) {}
@@ -179,7 +179,7 @@ void Environment::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
 
     for (auto environment_id : environment_ids) {
         Dataiterator di;
@@ -238,4 +238,4 @@ void Environment::serialize(const std::string & path) {
     xmlFreeDoc(doc);
 }
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

@@ -26,10 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
-Comps::Comps(libdnf::Base & base) : base{base} {}
+Comps::Comps(libdnf5::Base & base) : base{base} {}
 
 
 Comps::~Comps() = default;
@@ -45,4 +45,4 @@ BaseWeakPtr Comps::get_base() const {
 }
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

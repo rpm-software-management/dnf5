@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 // advisory list table columns
@@ -58,7 +58,7 @@ static void add_line_into_advisorylist_table(
     scols_line_set_data(ln, COL_ADVISORY_TYPE, type);
     scols_line_set_data(ln, COL_ADVISORY_SEVERITY, severity);
     scols_line_set_data(ln, COL_ADVISORY_PACKAGE, package);
-    scols_line_set_data(ln, COL_ADVISORY_BUILDTIME, libdnf::utils::string::format_epoch(buildtime).c_str());
+    scols_line_set_data(ln, COL_ADVISORY_BUILDTIME, libdnf5::utils::string::format_epoch(buildtime).c_str());
     if (installed) {
         struct libscols_cell * cl = scols_line_get_cell(ln, COL_ADVISORY_PACKAGE);
         scols_cell_set_color(cl, "green");
@@ -67,8 +67,8 @@ static void add_line_into_advisorylist_table(
 
 
 void print_advisorylist_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed) {
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed) {
     struct libscols_table * table = create_advisorylist_table("Name");
     for (auto adv_pkg : advisory_package_list_not_installed) {
         auto advisory = adv_pkg.get_advisory();
@@ -99,8 +99,8 @@ void print_advisorylist_table(
 }
 
 void print_advisorylist_references_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed,
     std::string reference_type) {
     std::string first_column_name;
     if (reference_type == "cve") {
@@ -144,4 +144,4 @@ void print_advisorylist_references_table(
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

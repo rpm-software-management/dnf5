@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class RpmLogGuardBase {
 public:
@@ -59,6 +59,6 @@ private:
     std::vector<std::string> rpm_logs{};
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif

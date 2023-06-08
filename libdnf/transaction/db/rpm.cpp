@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
@@ -58,15 +58,15 @@ static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
 
 
 // Create a query that returns all rpm transaction items for a transaction
-static std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
-    libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_RPM_TRANSACTION_ITEM_SELECT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
+    libdnf5::utils::SQLite3 & conn, int64_t transaction_id) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Query>(conn, SQL_RPM_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
     return query;
 }
 
 
-int64_t RpmDbUtils::rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
+int64_t RpmDbUtils::rpm_transaction_item_select(libdnf5::utils::SQLite3::Query & query, Package & pkg) {
     TransItemDbUtils::transaction_item_select(query, pkg);
     pkg.set_name(query.get<std::string>("name"));
     pkg.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
@@ -93,13 +93,13 @@ static constexpr const char * SQL_RPM_INSERT = R"**(
 
 
 // Create a query (statement) that inserts new records to the 'rpm' table
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_RPM_INSERT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> rpm_insert_new_query(libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_RPM_INSERT);
     return query;
 }
 
 
-int64_t RpmDbUtils::rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
+int64_t RpmDbUtils::rpm_insert(libdnf5::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
         rpm.get_item_id(), rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
     query.step();
@@ -126,17 +126,17 @@ static constexpr const char * SQL_RPM_SELECT_PK = R"**(
 
 
 // Create a query that returns primary keys from table 'rpm'
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_RPM_SELECT_PK);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> rpm_select_pk_new_query(libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_RPM_SELECT_PK);
     return query;
 }
 
 
-int64_t RpmDbUtils::rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
+int64_t RpmDbUtils::rpm_select_pk(libdnf5::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
 
     int64_t result = 0;
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         result = query.get<int64_t>(0);
     }
     query.reset();
@@ -144,11 +144,11 @@ int64_t RpmDbUtils::rpm_select_pk(libdnf::utils::SQLite3::Statement & query, con
 }
 
 
-bool RpmDbUtils::rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm) {
+bool RpmDbUtils::rpm_select(libdnf5::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm) {
     bool result = false;
     query.bindv(rpm_id);
 
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         rpm.set_item_id(query.get<int>("item_id"));
         rpm.set_name(query.get<std::string>("name"));
         rpm.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
@@ -163,11 +163,11 @@ bool RpmDbUtils::rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_i
 }
 
 
-std::vector<Package> RpmDbUtils::get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+std::vector<Package> RpmDbUtils::get_transaction_packages(libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<Package> result;
 
     auto query = rpm_transaction_item_select_new_query(conn, trans.get_id());
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         Package trans_item(trans);
         rpm_transaction_item_select(*query, trans_item);
         result.push_back(std::move(trans_item));
@@ -177,7 +177,7 @@ std::vector<Package> RpmDbUtils::get_transaction_packages(libdnf::utils::SQLite3
 }
 
 
-void RpmDbUtils::insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+void RpmDbUtils::insert_transaction_packages(libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
     auto query_item_insert = item_insert_new_query(conn);
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
@@ -202,4 +202,4 @@ void RpmDbUtils::insert_transaction_packages(libdnf::utils::SQLite3 & conn, Tran
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

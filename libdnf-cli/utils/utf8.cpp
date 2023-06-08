@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cwchar>
 
 
-namespace libdnf::cli::utils::utf8 {
+namespace libdnf5::cli::utils::utf8 {
 
 
 /// return length of an utf-8 encoded string
@@ -213,4 +213,4 @@ std::string substr_width(const std::string & str, std::string::size_type pos, st
 }
 
 
-}  // namespace libdnf::cli::utils::utf8
+}  // namespace libdnf5::cli::utils::utf8

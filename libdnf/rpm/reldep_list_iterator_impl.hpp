@@ -28,10 +28,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list_iterator.hpp"
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
-class ReldepListIterator::Impl : public libdnf::solv::IdQueue::iterator {
+class ReldepListIterator::Impl : public libdnf5::solv::IdQueue::iterator {
 public:
     Impl(const ReldepList & reldep_list);
     Impl(const ReldepListIterator::Impl & reldep_list_iterator_impl) = default;
@@ -49,12 +49,12 @@ inline ReldepListIterator::Impl::Impl(const ReldepList & reldep_list)
       reldep_list{reldep_list} {}
 
 inline ReldepListIterator::Impl & ReldepListIterator::Impl::operator++() {
-    libdnf::solv::IdQueue::iterator::operator++();
+    libdnf5::solv::IdQueue::iterator::operator++();
     return *this;
 }
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 
 #endif  // LIBDNF_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP

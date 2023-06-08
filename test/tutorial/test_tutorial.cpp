@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TutorialTest);
 
 
 void TutorialTest::setUp() {
-    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
+    temp = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_unittest");
     installroot = temp->get_path() / "installroot";
     cachedir = installroot / "var/cache/dnf/";
 }

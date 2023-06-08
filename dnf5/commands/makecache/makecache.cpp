@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void MakeCacheCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -40,7 +40,7 @@ void MakeCacheCommand::set_argument_parser() {
 void MakeCacheCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::repo::RepoQuery enabled_repos_query(ctx.base);
+    libdnf5::repo::RepoQuery enabled_repos_query(ctx.base);
     enabled_repos_query.filter_enabled(true);
     if (enabled_repos_query.empty()) {
         std::string repos_paths;

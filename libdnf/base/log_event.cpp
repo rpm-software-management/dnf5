@@ -25,11 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/utils/format.hpp"
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 
 LogEvent::LogEvent(
-    libdnf::GoalAction action,
+    libdnf5::GoalAction action,
     libdnf::GoalProblem problem,
     const std::set<std::string> & additional_data,
     const libdnf::GoalJobSettings & settings,
@@ -42,8 +42,8 @@ LogEvent::LogEvent(
       spec_type(spec_type),
       spec(spec) {
     libdnf_assert(
-        !(problem == libdnf::GoalProblem::SOLVER_ERROR ||
-          problem == libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
+        !(problem == libdnf5::GoalProblem::SOLVER_ERROR ||
+          problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
         "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
         "libdnf::GoalProblem::SOLVER_ERROR or libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
         "problems it is necesarry to provide SolverProblems in constructor");
@@ -54,8 +54,8 @@ LogEvent::LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_pr
       problem(problem),
       solver_problems(solver_problems) {
     libdnf_assert(
-        problem == libdnf::GoalProblem::SOLVER_ERROR ||
-            problem == libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
+        problem == libdnf5::GoalProblem::SOLVER_ERROR ||
+            problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
         "LogEvent::LogEvent() called with incorrect problem, only libdnf::GoalProblem::SOLVER_ERROR or "
         "libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
 }
@@ -165,4 +165,4 @@ std::string LogEvent::to_string(
 }
 
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base

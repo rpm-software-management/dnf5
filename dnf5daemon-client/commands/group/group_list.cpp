@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 GroupListCommand::GroupListCommand(Context & context, const char * command)
     : DaemonCommand(context, command),
@@ -45,7 +45,7 @@ GroupListCommand::GroupListCommand(Context & context, const char * command)
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_options);
     keys->set_description("List of keys to match");
     cmd.register_positional_arg(keys);
@@ -61,7 +61,7 @@ void GroupListCommand::run() {
     if (patterns_options->size() > 0) {
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             patterns.emplace_back(option->get_value());
         }
     }
@@ -90,11 +90,11 @@ void GroupListCommand::run() {
 
     if (command == "info") {
         for (auto & group : groups) {
-            libdnf::cli::output::print_groupinfo_table(group);
+            libdnf5::cli::output::print_groupinfo_table(group);
             std::cout << '\n';
         }
     } else {
-        libdnf::cli::output::print_grouplist_table(groups);
+        libdnf5::cli::output::print_grouplist_table(groups);
     }
 }
 

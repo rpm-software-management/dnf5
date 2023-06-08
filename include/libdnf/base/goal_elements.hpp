@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 
 /// Define a type of a broken solver rule
@@ -128,7 +128,7 @@ public:
     /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
     bool with_binaries{true};
     /// Important for queries that resolve SPEC
-    std::vector<libdnf::rpm::Nevra::Form> nevra_forms{};
+    std::vector<libdnf5::rpm::Nevra::Form> nevra_forms{};
 
     /// these flags are used only for group resolving
     bool group_with_id{true};
@@ -151,15 +151,15 @@ public:
     GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
 
     /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
-    void set_advisory_filter(const libdnf::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
-    const libdnf::advisory::AdvisoryQuery * get_advisory_filter() const {
+    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
+    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const {
         return advisory_filter ? &advisory_filter.value() : nullptr;
     }
 
     // Which types of group packages are going to be installed with the group.
     // If not set, default is taken from ConfigMain.group_package_types
-    void set_group_package_types(const libdnf::comps::PackageType type) { group_package_types = type; }
-    const libdnf::comps::PackageType * get_group_package_types() const {
+    void set_group_package_types(const libdnf5::comps::PackageType type) { group_package_types = type; }
+    const libdnf5::comps::PackageType * get_group_package_types() const {
         return group_package_types ? &group_package_types.value() : nullptr;
     }
 
@@ -194,7 +194,7 @@ private:
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
-    bool resolve_skip_broken(const libdnf::ConfigMain & cfg_main);
+    bool resolve_skip_broken(const libdnf5::ConfigMain & cfg_main);
     /// Resolve skip_broken value and store the result as the value used. When GoalSetting::auto it returns false
     ///
     /// @return Resolved value.
@@ -208,7 +208,7 @@ private:
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
-    bool resolve_skip_unavailable(const libdnf::ConfigMain & cfg_main);
+    bool resolve_skip_unavailable(const libdnf5::ConfigMain & cfg_main);
 
     /// Resolve best value and store the result as the value used.
     ///
@@ -216,14 +216,14 @@ private:
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
-    bool resolve_best(const libdnf::ConfigMain & cfg_main);
+    bool resolve_best(const libdnf5::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
-    bool resolve_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main);
+    bool resolve_clean_requirements_on_remove(const libdnf5::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @return Resolved value.
@@ -234,15 +234,15 @@ private:
     /// Compute and store effective group_package_types value. Used only for goal jobs operating on groups.
     /// @return group_package_types value if set, cfg_main.group_package_types value otherwise.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
-    libdnf::comps::PackageType resolve_group_package_types(const libdnf::ConfigMain & cfg_main);
+    libdnf5::comps::PackageType resolve_group_package_types(const libdnf5::ConfigMain & cfg_main);
 
     GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
-    std::optional<libdnf::comps::PackageType> used_group_package_types{std::nullopt};
-    std::optional<libdnf::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
-    std::optional<libdnf::comps::PackageType> group_package_types{std::nullopt};
+    std::optional<libdnf5::comps::PackageType> used_group_package_types{std::nullopt};
+    std::optional<libdnf5::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
+    std::optional<libdnf5::comps::PackageType> group_package_types{std::nullopt};
 };
 
 
@@ -266,7 +266,7 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
 }
 
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 
 #endif  // LIBDNF_BASE_GOAL_ELEMENTS_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdlib>
 
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 
 TempDir::TempDir(const std::string & name_prefix) : TempDir(std::filesystem::temp_directory_path(), name_prefix) {}
@@ -161,4 +161,4 @@ void TempFile::release() noexcept {
     path.clear();
 }
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs

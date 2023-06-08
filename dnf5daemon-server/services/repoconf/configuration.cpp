@@ -41,7 +41,7 @@ void Configuration::read_main_config() {
 
     try {
         // create new main config parser and read the config file
-        std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
+        std::unique_ptr<libdnf5::ConfigParser> main_parser(new libdnf5::ConfigParser);
 
         main_parser->read(main_config_path);
         cfg_main.load_from_parser(*main_parser, "main", *base->get_vars(), *base->get_logger());
@@ -55,7 +55,7 @@ void Configuration::read_main_config() {
     }
 }
 
-void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path) {
+void Configuration::read_repos(const libdnf5::ConfigParser * repo_parser, const std::string & file_path) {
     const auto & cfg_parser_data = repo_parser->get_data();
     auto base = session.get_base();
     auto & cfg_main = base->get_config();
@@ -64,7 +64,7 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
             // each section other than [main] is considered a repository
             auto section = cfg_parser_data_iter.first;
             // TODO(lukash) normally the repo id is the section with vars substituted, shouldn't be different here
-            std::unique_ptr<libdnf::repo::ConfigRepo> cfg_repo(new libdnf::repo::ConfigRepo(cfg_main, section));
+            std::unique_ptr<libdnf5::repo::ConfigRepo> cfg_repo(new libdnf5::repo::ConfigRepo(cfg_main, section));
 
             cfg_repo->load_from_parser(*repo_parser, section, *base->get_vars(), *base->get_logger());
 
@@ -93,11 +93,11 @@ void Configuration::read_repo_configs() {
         glob_t glob_result;
         glob(pattern.c_str(), GLOB_MARK, nullptr, &glob_result);
         for (size_t i = 0; i < glob_result.gl_pathc; ++i) {
-            std::unique_ptr<libdnf::ConfigParser> repo_parser(new libdnf::ConfigParser);
+            std::unique_ptr<libdnf5::ConfigParser> repo_parser(new libdnf5::ConfigParser);
             std::string file_path = glob_result.gl_pathv[i];
             try {
                 repo_parser->read(file_path);
-            } catch (libdnf::ConfigParserError & e) {
+            } catch (libdnf5::ConfigParserError & e) {
                 logger.warning("Error parsing config file \"{}\": {}", file_path, e.what());
                 continue;
             }
@@ -116,7 +116,7 @@ Configuration::RepoInfo * Configuration::find_repo(const std::string & repoid) {
     return repo_iter->second.get();
 }
 
-libdnf::ConfigParser * Configuration::find_parser(const std::string & file_path) {
+libdnf5::ConfigParser * Configuration::find_parser(const std::string & file_path) {
     auto parser_iter = config_parsers.find(file_path);
     if (parser_iter == config_parsers.end()) {
         return nullptr;

@@ -25,18 +25,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
-void AdvisoryInfo::add_advisory(libdnf::advisory::Advisory & advisory) {
+void AdvisoryInfo::add_advisory(libdnf5::advisory::Advisory & advisory) {
     add_line("Name", advisory.get_name(), "bold");
     add_line("Title", advisory.get_title());
     add_line("Severity", advisory.get_severity());
     add_line("Type", advisory.get_type());
     add_line("Status", advisory.get_status());
     add_line("Vendor", advisory.get_vendor());
-    add_line("Issued", libdnf::utils::string::format_epoch(advisory.get_buildtime()));
-    add_lines("Description", libdnf::utils::string::split(advisory.get_description(), "\n"));
+    add_line("Issued", libdnf5::utils::string::format_epoch(advisory.get_buildtime()));
+    add_lines("Description", libdnf5::utils::string::split(advisory.get_description(), "\n"));
     add_line("Message", advisory.get_message());
     add_line("Rights", advisory.get_rights());
 
@@ -79,4 +79,4 @@ void AdvisoryInfo::add_advisory(libdnf::advisory::Advisory & advisory) {
     }
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

@@ -69,7 +69,7 @@ DownloadCB::DownloadCB(Context & context) : DbusCallback(context) {
 }
 
 
-libdnf::cli::progressbar::DownloadProgressBar * DownloadCB::find_progress_bar(const std::string & download_id) {
+libdnf5::cli::progressbar::DownloadProgressBar * DownloadCB::find_progress_bar(const std::string & download_id) {
     auto iter = progress_bars.find(download_id);
     if (iter != progress_bars.end()) {
         return iter->second;
@@ -115,10 +115,10 @@ void DownloadCB::add_new_download(sdbus::Signal & signal) {
         signal >> description;
         signal >> total_to_download;
         if (!multi_progress_bar) {
-            multi_progress_bar = std::make_unique<libdnf::cli::progressbar::MultiProgressBar>();
+            multi_progress_bar = std::make_unique<libdnf5::cli::progressbar::MultiProgressBar>();
             multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
         }
-        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(
+        auto progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(
             total_to_download > 0 ? total_to_download : -1, description);
         progress_bar->set_auto_finish(false);
         progress_bars.emplace(download_id, progress_bar.get());
@@ -140,23 +140,23 @@ void DownloadCB::end(sdbus::Signal & signal) {
         std::string msg;
         signal >> status_i;
         signal >> msg;
-        auto status = static_cast<libdnf::repo::DownloadCallbacks::TransferStatus>(status_i);
+        auto status = static_cast<libdnf5::repo::DownloadCallbacks::TransferStatus>(status_i);
         switch (status) {
-            case libdnf::repo::DownloadCallbacks::TransferStatus::SUCCESSFUL:
+            case libdnf5::repo::DownloadCallbacks::TransferStatus::SUCCESSFUL:
                 progress_bar->set_total_ticks(progress_bar->get_ticks());
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+                progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case libdnf::repo::DownloadCallbacks::TransferStatus::ALREADYEXISTS:
+            case libdnf5::repo::DownloadCallbacks::TransferStatus::ALREADYEXISTS:
                 // skipping the download -> downloading 0 bytes
                 progress_bar->set_ticks(0);
                 progress_bar->set_total_ticks(0);
-                progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
+                progress_bar->add_message(libdnf5::cli::progressbar::MessageType::SUCCESS, msg);
                 progress_bar->start();
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+                progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case libdnf::repo::DownloadCallbacks::TransferStatus::ERROR:
-                progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+            case libdnf5::repo::DownloadCallbacks::TransferStatus::ERROR:
+                progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, msg);
+                progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
                 break;
         }
         print();
@@ -178,7 +178,7 @@ void DownloadCB::progress(sdbus::Signal & signal) {
         if (total_to_download > 0) {
             progress_bar->set_total_ticks(total_to_download);
         }
-        if (progress_bar->get_state() == libdnf::cli::progressbar::ProgressBarState::READY) {
+        if (progress_bar->get_state() == libdnf5::cli::progressbar::ProgressBarState::READY) {
             progress_bar->start();
         }
         progress_bar->set_ticks(downloaded);
@@ -205,7 +205,7 @@ void DownloadCB::mirror_failure(sdbus::Signal & signal) {
         if (!metadata.empty()) {
             message += " - " + metadata;
         }
-        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
+        progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, message);
         print();
     }
 }
@@ -226,7 +226,7 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         std::cout << " From       : " + url << std::endl;
 
         // ask user for the key import confirmation
-        auto confirmed = libdnf::cli::utils::userconfirm::userconfirm(context);
+        auto confirmed = libdnf5::cli::utils::userconfirm::userconfirm(context);
 
         // signal the confirmation back to the server
         try {
@@ -299,11 +299,11 @@ TransactionCB::TransactionCB(Context & context) : DbusCallback(context) {
 }
 
 void TransactionCB::new_progress_bar(uint64_t total, const std::string & description) {
-    if (active_progress_bar && active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
-        active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
     auto progress_bar =
-        std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), description);
+        std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), description);
     progress_bar->set_auto_finish(false);
     progress_bar->start();
     active_progress_bar = progress_bar.get();
@@ -426,7 +426,7 @@ void TransactionCB::script_start(sdbus::Signal & signal) {
     if (signature_valid(signal) && active_progress_bar) {
         std::string nevra;
         signal >> nevra;
-        active_progress_bar->add_message(libdnf::cli::progressbar::MessageType::INFO, "Running scriptlet: " + nevra);
+        active_progress_bar->add_message(libdnf5::cli::progressbar::MessageType::INFO, "Running scriptlet: " + nevra);
         multi_progress_bar.print();
     }
 }
@@ -435,7 +435,7 @@ void TransactionCB::script_stop(sdbus::Signal & signal) {
     if (signature_valid(signal) && active_progress_bar) {
         std::string nevra;
         signal >> nevra;
-        active_progress_bar->add_message(libdnf::cli::progressbar::MessageType::INFO, "Stop scriptlet: " + nevra);
+        active_progress_bar->add_message(libdnf5::cli::progressbar::MessageType::INFO, "Stop scriptlet: " + nevra);
         multi_progress_bar.print();
     }
 }
@@ -444,7 +444,7 @@ void TransactionCB::script_error(sdbus::Signal & signal) {
     if (signature_valid(signal) && active_progress_bar) {
         std::string nevra;
         signal >> nevra;
-        active_progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, "Error in scriptlet: " + nevra);
+        active_progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, "Error in scriptlet: " + nevra);
         multi_progress_bar.print();
     }
 }
@@ -453,7 +453,7 @@ void TransactionCB::unpack_error(sdbus::Signal & signal) {
     if (signature_valid(signal) && active_progress_bar) {
         std::string nevra;
         signal >> nevra;
-        active_progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, "Unpack error: " + nevra);
+        active_progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, "Unpack error: " + nevra);
         multi_progress_bar.print();
     }
 }
@@ -461,8 +461,8 @@ void TransactionCB::unpack_error(sdbus::Signal & signal) {
 void TransactionCB::finished(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
         if (active_progress_bar &&
-            active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
-            active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+            active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+            active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
         }
         multi_progress_bar.print();
     }

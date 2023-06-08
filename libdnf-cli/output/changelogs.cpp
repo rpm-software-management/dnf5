@@ -30,21 +30,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 void print_changelogs(
-    libdnf::rpm::PackageQuery & query,
-    libdnf::rpm::PackageQuery & full_package_query,
+    libdnf5::rpm::PackageQuery & query,
+    libdnf5::rpm::PackageQuery & full_package_query,
     bool upgrades,
     int32_t count,
     int64_t since) {
     // by_srpm
-    std::map<std::string, std::vector<libdnf::rpm::Package>> by_srpm;
+    std::map<std::string, std::vector<libdnf5::rpm::Package>> by_srpm;
     for (auto pkg : query) {
         by_srpm[pkg.get_source_name() + '/' + pkg.get_evr()].push_back(pkg);
     }
 
-    libdnf::rpm::PackageQuery installed(full_package_query);
+    libdnf5::rpm::PackageQuery installed(full_package_query);
     installed.filter_installed();
 
     for (auto & [name, packages] : by_srpm) {
@@ -66,7 +66,7 @@ void print_changelogs(
         std::sort(
             changelogs.begin(),
             changelogs.end(),
-            [](const libdnf::rpm::Changelog & a, const libdnf::rpm::Changelog & b) {
+            [](const libdnf5::rpm::Changelog & a, const libdnf5::rpm::Changelog & b) {
                 return a.timestamp > b.timestamp;
             });
 
@@ -74,7 +74,7 @@ void print_changelogs(
         if (upgrades) {
             // Find the newest changelog on the installed version of the
             // package, and filter out any changelogs newer than that
-            libdnf::rpm::PackageQuery query(installed);
+            libdnf5::rpm::PackageQuery query(installed);
             query.filter_name({packages[0].get_name()});
             time_t newest_timestamp = 0;
             for (auto pkg : query) {
@@ -115,4 +115,4 @@ void print_changelogs(
     }
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

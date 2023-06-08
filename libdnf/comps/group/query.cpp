@@ -38,7 +38,7 @@ extern "C" {
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
@@ -46,7 +46,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
         return;
     }
 
-    libdnf::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
 
     // Map of available groups:
     //     For each groupid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
@@ -101,7 +101,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
     }
 }
 
-GroupQuery::GroupQuery(libdnf::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
+GroupQuery::GroupQuery(libdnf5::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
 
 void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     for (auto it = get_data().begin(); it != get_data().end();) {
@@ -118,4 +118,4 @@ void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, 
     }
 }
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-namespace libdnf::dnf4convert {
+namespace libdnf5::dnf4convert {
 
 // Query to get list of installed packages with versions and repoid.
 // The inner query selects id of the latest successful transaction item that touched
@@ -143,8 +143,8 @@ WHERE
 )**";
 
 
-std::map<std::string, libdnf::system::ModuleState> Dnf4Convert::read_module_states() {
-    std::map<std::string, libdnf::system::ModuleState> module_states;
+std::map<std::string, libdnf5::system::ModuleState> Dnf4Convert::read_module_states() {
+    std::map<std::string, libdnf5::system::ModuleState> module_states;
 
     auto & config = base->get_config();
     std::filesystem::path path =
@@ -156,14 +156,14 @@ std::map<std::string, libdnf::system::ModuleState> Dnf4Convert::read_module_stat
         auto & module_file = dir_entry.path();
         if ((dir_entry.is_regular_file() || dir_entry.is_symlink()) && (module_file.extension() == ".module")) {
             logger.debug("Loading module state from file \"{}\"", module_file.string());
-            libdnf::ConfigParser parser;
+            libdnf5::ConfigParser parser;
             parser.read(module_file);
             auto d = parser.get_data();
             // each module file contains only one section named by the module name
             auto name = module_file.stem();
             ConfigModule module_config{name};
             module_config.load_from_parser(parser, name, *base->get_vars(), logger);
-            libdnf::system::ModuleState state;
+            libdnf5::system::ModuleState state;
             state.enabled_stream = module_config.stream.get_value();
             state.installed_profiles = module_config.profiles.get_value();
             state.status = libdnf::module::ModuleStatus::AVAILABLE;
@@ -341,4 +341,4 @@ bool Dnf4Convert::read_package_states_from_history(
 }
 
 
-}  // namespace libdnf::dnf4convert
+}  // namespace libdnf5::dnf4convert

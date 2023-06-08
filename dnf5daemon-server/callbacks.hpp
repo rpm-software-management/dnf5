@@ -62,9 +62,9 @@ protected:
 };
 
 
-class DownloadCB : public DbusCallback, public libdnf::repo::DownloadCallbacks {
+class DownloadCB : public DbusCallback, public libdnf5::repo::DownloadCallbacks {
 public:
-    DownloadCB(Session & session) : DbusCallback(session), libdnf::repo::DownloadCallbacks() {}
+    DownloadCB(Session & session) : DbusCallback(session), libdnf5::repo::DownloadCallbacks() {}
 
     void * add_new_download(void * user_data, const char * description, double total_to_download) override;
 
@@ -79,7 +79,7 @@ private:
 };
 
 
-class KeyImportRepoCB : public DbusCallback, public libdnf::repo::RepoCallbacks {
+class KeyImportRepoCB : public DbusCallback, public libdnf5::repo::RepoCallbacks {
 public:
     KeyImportRepoCB(Session & session) : DbusCallback(session) {}
 
@@ -92,7 +92,7 @@ public:
 };
 
 
-class DbusTransactionCB : public libdnf::rpm::TransactionCallbacks, public DbusCallback {
+class DbusTransactionCB : public libdnf5::rpm::TransactionCallbacks, public DbusCallback {
 public:
     explicit DbusTransactionCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusTransactionCB() = default;
@@ -103,44 +103,44 @@ public:
     void transaction_stop(uint64_t total) override;
 
     // install a package
-    void install_start(const libdnf::rpm::TransactionItem & item, uint64_t) override;
-    void install_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
-    void install_stop(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
+    void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t) override;
+    void install_progress(const libdnf5::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
+    void install_stop(const libdnf5::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
 
     // uninstall a package (the same messages as for install are used)
-    void uninstall_start(const libdnf::rpm::TransactionItem & item, uint64_t total) override {
+    void uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override {
         install_start(item, total);
     }
-    void uninstall_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
+    void uninstall_progress(const libdnf5::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
         install_progress(item, amount, total);
     }
-    void uninstall_stop(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
+    void uninstall_stop(const libdnf5::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
         install_stop(item, amount, total);
     }
 
     void script_start(
-        const libdnf::rpm::TransactionItem * item,
-        libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCallbacks::ScriptType type) override;
+        const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type) override;
     void script_stop(
-        const libdnf::rpm::TransactionItem * item,
-        libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCallbacks::ScriptType type,
+        const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override;
     void script_error(
-        const libdnf::rpm::TransactionItem * item,
-        libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCallbacks::ScriptType type,
+        const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override;
 
-    void elem_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
+    void elem_progress(const libdnf5::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
 
     void verify_start(uint64_t total) override;
     void verify_progress(uint64_t amount, uint64_t total) override;
     void verify_stop(uint64_t total) override;
 
-    void unpack_error(const libdnf::rpm::TransactionItem & item) override;
-    void cpio_error(const libdnf::rpm::TransactionItem & /*item*/) override{};
+    void unpack_error(const libdnf5::rpm::TransactionItem & item) override;
+    void cpio_error(const libdnf5::rpm::TransactionItem & /*item*/) override{};
 
     // whole rpm transaction is finished
     void finish();

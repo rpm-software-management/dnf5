@@ -35,19 +35,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class TransactionDbUtils;
 class CompsEnvironment;
 class CompsEnvironmentDbUtils;
 
 class Transaction;
-using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
+using TransactionWeakPtr = libdnf5::WeakPtr<Transaction, false>;
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class Item;
 class Transformer;
@@ -60,7 +60,7 @@ enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 std::string transaction_state_to_string(TransactionState state);
 TransactionState transaction_state_from_string(const std::string & state);
 
-class InvalidTransactionState : public libdnf::Error {
+class InvalidTransactionState : public libdnf5::Error {
 public:
     InvalidTransactionState(const std::string & state);
 
@@ -154,7 +154,7 @@ public:
 
 private:
     friend Transformer;
-    friend libdnf::base::Transaction;
+    friend libdnf5::base::Transaction;
     friend TransactionDbUtils;
     friend TransactionHistory;
     friend CompsEnvironment;
@@ -164,7 +164,7 @@ private:
     /// be filled by the user and saved to the database.
     ///
     /// @param base The base.
-    explicit Transaction(const libdnf::BaseWeakPtr & base);
+    explicit Transaction(const libdnf5::BaseWeakPtr & base);
 
     /// Constructs the transaction with a known id which needs to exist in the
     /// database. The data are then lazily loaded from the database on first call
@@ -172,7 +172,7 @@ private:
     ///
     /// @param base The base.
     /// @param id The id of the transaction.
-    Transaction(const libdnf::BaseWeakPtr & base, int64_t id);
+    Transaction(const libdnf5::BaseWeakPtr & base, int64_t id);
 
     /// Set Transaction database id (primary key)
     ///
@@ -231,20 +231,20 @@ private:
     Package & new_package();
 
     /// Fill the transaction packages.
-    void fill_transaction_packages(const std::vector<libdnf::base::TransactionPackage> & transaction_packages);
+    void fill_transaction_packages(const std::vector<libdnf5::base::TransactionPackage> & transaction_packages);
 
     /// Fill the transaction groups.
     /// @param transaction_groups Groups that are part of the transaction
     /// @param installed_names Names of currently installed plus inbound packages
     void fill_transaction_groups(
-        const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
+        const std::vector<libdnf5::base::TransactionGroup> & transaction_groups,
         const std::set<std::string> & installed_names);
 
     /// Fill the transaction environmental groups.
     /// @param transaction_groups Environmental groups that are part of the transaction
     /// @param installed_names Ids of currently installed plus inbound groups
     void fill_transaction_environments(
-        const std::vector<libdnf::base::TransactionEnvironment> & transaction_environments,
+        const std::vector<libdnf5::base::TransactionEnvironment> & transaction_environments,
         const std::set<std::string> & installed_group_ids);
 
     /// Create a new comps group in the transaction and return a reference to it.
@@ -291,6 +291,6 @@ private:
     BaseWeakPtr base;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_HPP

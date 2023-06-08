@@ -38,7 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 /// @param ... The format arguments.
 /// @exception libdnf::AssertionError Thrown always.
 #define libdnf_throw_assertion(msg_format, ...) \
-    (throw libdnf::AssertionError(nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+    (throw libdnf5::AssertionError(nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
 /// An assert macro that throws `libdnf::AssertionError` when `condition` is not met.
 ///
@@ -49,7 +49,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define libdnf_assert(condition, msg_format, ...) \
     (static_cast<bool>(condition)                 \
          ? void(0)                                \
-         : throw libdnf::AssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+         : throw libdnf5::AssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
 /// An assert macro that throws `libdnf::UserAssertionError` when `condition` is not met.
 ///
@@ -60,14 +60,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define libdnf_user_assert(condition, msg_format, ...) \
     (static_cast<bool>(condition)                      \
          ? void(0)                                     \
-         : throw libdnf::UserAssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+         : throw libdnf5::UserAssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
 /// Indicates the availability of `libdnf_assert` and` libdnf_throw_assertion` macros.
 /// These macros may be removed in the future. E.g. when migrating the asserts implementation
 /// to C++20 `std::source_location`.
 #define LIBDNF_ASSERTION_MACROS 1
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// The source_location structure represents location information in the source code.
 /// Specifically, the file name, line number, and function name.
@@ -138,7 +138,7 @@ public:
         : std::runtime_error(b_gettextmsg_get_id(format)),
           format(format),
           // stores the format args in the lambda's closure
-          formatter([args...](const char * format) { return libdnf::utils::sformat(format, args...); }) {}
+          formatter([args...](const char * format) { return libdnf5::utils::sformat(format, args...); }) {}
 
     Error(const Error & e) noexcept;
     Error & operator=(const Error & e) noexcept;
@@ -210,6 +210,6 @@ public:
 /// If the exception is nested, recurses to format the message of the exception it holds.
 std::string format(const std::exception & e, bool with_domain);
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

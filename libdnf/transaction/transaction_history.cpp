@@ -25,10 +25,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
-TransactionHistory::TransactionHistory(const libdnf::BaseWeakPtr & base) : base{base} {}
+TransactionHistory::TransactionHistory(const libdnf5::BaseWeakPtr & base) : base{base} {}
 
 
 TransactionHistory::TransactionHistory(libdnf::Base & base) : TransactionHistory(base.get_weak_ptr()) {}
@@ -58,4 +58,4 @@ BaseWeakPtr TransactionHistory::get_base() const {
     return base;
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

@@ -26,14 +26,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::string format_size(int64_t num);
 std::string format_time(int64_t num, bool negative);
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // LIBDNF_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <modulemd-2.0/modulemd.h>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 std::string ModuleProfile::get_name() const {
@@ -99,4 +99,4 @@ ModuleProfile::~ModuleProfile() {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

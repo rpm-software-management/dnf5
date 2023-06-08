@@ -62,7 +62,7 @@ void TransactionCommand::run_transaction() {
             .withTimeout(static_cast<uint64_t>(-1))
             .storeResultsTo(problems);
         if (result == dnfdaemon::ResolveResult::ERROR) {
-            throw libdnf::cli::GoalResolveError(problems);
+            throw libdnf5::cli::GoalResolveError(problems);
         }
         dbus_goal_wrapper.set_resolve_logs(std::move(problems));
     }
@@ -74,12 +74,12 @@ void TransactionCommand::run_transaction() {
     }
 
     // print the transaction to the user and ask for confirmation
-    if (!libdnf::cli::output::print_transaction_table(dbus_goal_wrapper)) {
+    if (!libdnf5::cli::output::print_transaction_table(dbus_goal_wrapper)) {
         return;
     }
 
-    if (!libdnf::cli::utils::userconfirm::userconfirm(ctx)) {
-        throw libdnf::cli::AbortedByUserError();
+    if (!libdnf5::cli::utils::userconfirm::userconfirm(ctx)) {
+        throw libdnf5::cli::AbortedByUserError();
     }
 
     // do the transaction

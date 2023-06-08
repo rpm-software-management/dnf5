@@ -49,7 +49,7 @@ struct SolvUserdata {
     unsigned char checksum[CHKSUM_BYTES];
 } __attribute__((packed));
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 using LibsolvRepo = ::Repo;
 enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, COMPS, OTHER };
@@ -65,7 +65,7 @@ class SolvError : public Error {
 
 class SolvRepo {
 public:
-    SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata);
+    SolvRepo(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, void * appdata);
     ~SolvRepo();
 
     /// Loads main metadata (solvables) from available repo.
@@ -83,7 +83,7 @@ public:
     /// Loads additional system repo metadata (comps, modules)
     void load_system_repo_ext(RepodataType type);
 
-    void rewrite_repo(libdnf::solv::IdQueue & fileprovides);
+    void rewrite_repo(libdnf5::solv::IdQueue & fileprovides);
 
     // Internalize repository if needed.
     void internalize();
@@ -106,13 +106,14 @@ public:
     /// case we are not able to load metadata from xml file.
     /// @param groupid  Id of the group
     /// @param state    group state from the system state
-    void create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state);
+    void create_group_solvable(const std::string & groupid, const libdnf5::system::GroupState & state);
 
     /// Create an environmental group solvable based on what's available in
     /// system state. Used in case we are not able to load metadata from xml file.
     /// @param environmentid  Id of the environment
     /// @param state    environment state from the system state
-    void create_environment_solvable(const std::string & environmentid, const libdnf::system::EnvironmentState & state);
+    void create_environment_solvable(
+        const std::string & environmentid, const libdnf5::system::EnvironmentState & state);
 
     /// Read comps group solvable from its xml file.
     /// @param path  Path to xml file.
@@ -131,7 +132,7 @@ private:
     std::string solv_file_name(const char * type = nullptr);
     std::filesystem::path solv_file_path(const char * type = nullptr);
 
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
     const ConfigRepo & config;
 
     bool needs_internalizing{false};
@@ -158,6 +159,6 @@ public:
     ::Repo * comps_repo{nullptr};
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_SOLV_REPO_HPP

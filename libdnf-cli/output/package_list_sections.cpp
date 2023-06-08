@@ -30,12 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 PackageListSections::PackageListSections() {
     table = scols_new_table();
     scols_table_enable_noheadings(table, 1);
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
     }
 }
@@ -76,17 +76,17 @@ void PackageListSections::setup_cols() {
 
 bool PackageListSections::add_section(
     const std::string & heading,
-    const libdnf::rpm::PackageSet & pkg_set,
+    const libdnf5::rpm::PackageSet & pkg_set,
     const std::unique_ptr<PkgColorizer> & colorizer,
-    const std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> & obsoletes) {
+    const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes) {
     enum { COL_NA, COL_EVR, COL_REPO };
     if (!pkg_set.empty()) {
         // sort the packages in section according to NEVRA
-        std::vector<libdnf::rpm::Package> packages;
+        std::vector<libdnf5::rpm::Package> packages;
         for (const auto & pkg : pkg_set) {
             packages.emplace_back(std::move(pkg));
         }
-        std::sort(packages.begin(), packages.end(), libdnf::rpm::cmp_nevra<libdnf::rpm::Package>);
+        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf::rpm::Package>);
 
         struct libscols_line * first_line = nullptr;
         struct libscols_line * last_line = nullptr;
@@ -126,4 +126,4 @@ bool PackageListSections::add_section(
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

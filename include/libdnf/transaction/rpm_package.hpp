@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class Transaction;
 class RpmDbUtils;
@@ -122,6 +122,6 @@ private:
     std::string arch;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_RPM_PACKAGE_HPP

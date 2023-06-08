@@ -55,7 +55,7 @@ public:
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";
 
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp;
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp;
     std::filesystem::path installroot;
     std::filesystem::path cachedir;
 };

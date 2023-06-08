@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class InvalidIdRangeError : public libdnf::Error {
+class InvalidIdRangeError : public libdnf5::Error {
 public:
     InvalidIdRangeError(const std::string & id_range);
 
@@ -41,8 +41,8 @@ public:
 };
 
 
-std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
-    libdnf::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs);
+std::vector<libdnf5::transaction::Transaction> list_transactions_from_specs(
+    libdnf5::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs);
 
 
 }  // namespace dnf5

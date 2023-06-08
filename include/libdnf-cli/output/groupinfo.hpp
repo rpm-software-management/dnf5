@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 static void add_line_into_groupinfo_table(
@@ -53,7 +53,10 @@ static void add_line_into_groupinfo_table(struct libscols_table * table, const c
 
 template <typename GroupType>
 static void add_packages(
-    struct libscols_table * table, GroupType & group, libdnf::comps::PackageType pkg_type, const char * pkg_type_desc) {
+    struct libscols_table * table,
+    GroupType & group,
+    libdnf5::comps::PackageType pkg_type,
+    const char * pkg_type_desc) {
     std::set<std::string> packages;
 
     // we don't mind iterating through all packages in every add_packages() call,
@@ -94,7 +97,7 @@ static struct libscols_table * create_groupinfo_table(GroupType & group) {
     struct libscols_column * cl = scols_table_new_column(table, "value", 10, SCOLS_FL_WRAP);
     scols_column_set_safechars(cl, "\n");
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, true);
     }
     auto sy = scols_new_symbols();
@@ -111,12 +114,12 @@ static struct libscols_table * create_groupinfo_table(GroupType & group) {
     add_line_into_groupinfo_table(table, "Order", group.get_order().c_str());
     add_line_into_groupinfo_table(table, "Langonly", group.get_langonly().c_str());
     add_line_into_groupinfo_table(table, "Uservisible", group.get_uservisible() ? "yes" : "no");
-    add_line_into_groupinfo_table(table, "Repositories", libdnf::utils::string::join(group.get_repos(), ", ").c_str());
+    add_line_into_groupinfo_table(table, "Repositories", libdnf5::utils::string::join(group.get_repos(), ", ").c_str());
 
-    add_packages(table, group, libdnf::comps::PackageType::MANDATORY, "Mandatory packages");
-    add_packages(table, group, libdnf::comps::PackageType::DEFAULT, "Default packages");
-    add_packages(table, group, libdnf::comps::PackageType::OPTIONAL, "Optional packages");
-    add_packages(table, group, libdnf::comps::PackageType::CONDITIONAL, "Conditional packages");
+    add_packages(table, group, libdnf5::comps::PackageType::MANDATORY, "Mandatory packages");
+    add_packages(table, group, libdnf5::comps::PackageType::DEFAULT, "Default packages");
+    add_packages(table, group, libdnf5::comps::PackageType::OPTIONAL, "Optional packages");
+    add_packages(table, group, libdnf5::comps::PackageType::CONDITIONAL, "Conditional packages");
 
     return table;
 }
@@ -129,6 +132,6 @@ void print_groupinfo_table(GroupType & group) {
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_GROUPINFO_HPP

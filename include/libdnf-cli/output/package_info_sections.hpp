@@ -29,16 +29,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 class PackageInfoSections : public PackageListSections {
 public:
     PackageInfoSections() : PackageListSections() {}
     bool virtual add_section(
         const std::string & heading,
-        const libdnf::rpm::PackageSet & pkg_set,
+        const libdnf5::rpm::PackageSet & pkg_set,
         const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
-        const std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> & obsoletes = {}) override;
+        const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {}) override;
 
     void setup_cols() override;
 
@@ -46,6 +46,6 @@ private:
     struct libscols_line * add_line(const std::string & key, const std::string & value);
 };
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP

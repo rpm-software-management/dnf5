@@ -27,9 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_list) {
+void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list) {
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
     scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
@@ -38,7 +38,7 @@ void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_l
     scols_table_new_column(table.get(), "Action(s)", 0, 0);
     scols_table_new_column(table.get(), "Altered", 0, SCOLS_FL_RIGHT);
 
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table.get(), 1);
     }
 
@@ -57,4 +57,4 @@ void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_l
     scols_print_table(table.get());
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

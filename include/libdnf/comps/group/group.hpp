@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 struct GroupId {
@@ -128,8 +128,8 @@ public:
     //
     // TODO(dmach): return actual value from data in GroupSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf::transaction::TransactionItemReason get_reason() const {
-        return libdnf::transaction::TransactionItemReason::NONE;
+    libdnf5::transaction::TransactionItemReason get_reason() const {
+        return libdnf5::transaction::TransactionItemReason::NONE;
     }
 
     /// Merge the Group with another one.
@@ -152,10 +152,10 @@ public:
 
 protected:
     explicit Group(const BaseWeakPtr & base);
-    explicit Group(libdnf::Base & base);
+    explicit Group(libdnf5::Base & base);
 
 private:
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
 
     // Corresponds to solvable ids for this group (libsolv doesn't merge groups, so there are multiple solvables
     // for one groupid).
@@ -173,7 +173,7 @@ private:
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif  // LIBDNF_COMPS_GROUP_GROUP_HPP

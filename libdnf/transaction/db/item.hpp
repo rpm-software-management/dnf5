@@ -27,18 +27,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 /// Create a query (statement) that inserts new records to the 'item' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf::utils::SQLite3 & conn);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> item_insert_new_query(libdnf5::utils::SQLite3 & conn);
 
 
 /// Use a query to insert a new record to the 'item' table
-int64_t item_insert(libdnf::utils::SQLite3::Statement & query);
+int64_t item_insert(libdnf5::utils::SQLite3::Statement & query);
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_ITEM_HPP

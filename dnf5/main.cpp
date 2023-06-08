@@ -73,19 +73,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 namespace {
 
 // Registers `group` and all its arguments to `command`
 void register_group_with_args(
-    libdnf::cli::ArgumentParser::Command & command, libdnf::cli::ArgumentParser::Group & group) {
+    libdnf5::cli::ArgumentParser::Command & command, libdnf5::cli::ArgumentParser::Group & group) {
     for (auto * argument : group.get_arguments()) {
-        if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::PositionalArg *>(argument)) {
+        if (auto * arg = dynamic_cast<libdnf5::cli::ArgumentParser::PositionalArg *>(argument)) {
             command.register_positional_arg(arg);
-        } else if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::NamedArg *>(argument)) {
+        } else if (auto * arg = dynamic_cast<libdnf5::cli::ArgumentParser::NamedArg *>(argument)) {
             command.register_named_arg(arg);
-        } else if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::Command *>(argument)) {
+        } else if (auto * arg = dynamic_cast<libdnf5::cli::ArgumentParser::Command *>(argument)) {
             command.register_command(arg);
         }
     }
@@ -97,7 +97,7 @@ void register_group_with_args(
 
 class RootCommand : public Command {
 public:
-    explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
+    explicit RootCommand(libdnf5::cli::session::Session & context) : Command(context, "dnf5") {}
     void set_parent_command() override { get_session().set_root_command(*this); }
     void set_argument_parser() override;
     void pre_configure() override { throw_missing_command(); }
@@ -160,13 +160,13 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw libdnf::cli::ArgumentParserError(M_("setopt: Badly formatted argument value \"{}\""), value);
+                throw libdnf5::cli::ArgumentParserError(M_("setopt: Badly formatted argument value \"{}\""), value);
             }
             auto key = std::string(value, val);
             auto dot_pos = key.rfind('.');
             if (dot_pos != std::string::npos) {
                 if (dot_pos == key.size() - 1) {
-                    throw libdnf::cli::ArgumentParserError(
+                    throw libdnf5::cli::ArgumentParserError(
                         M_("setopt: Badly formatted argument value: Last key character cannot be '.': {}"), value);
                 }
                 // Store repository option to vector. Use it later when repositories configuration will be loaded.
@@ -175,9 +175,9 @@ void RootCommand::set_argument_parser() {
                 // Apply global option immediately.
                 auto & conf = ctx.base.get_config();
                 try {
-                    conf.opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, val + 1);
+                    conf.opt_binds().at(key).new_string(libdnf5::Option::Priority::COMMANDLINE, val + 1);
                 } catch (const std::exception & ex) {
-                    throw libdnf::cli::ArgumentParserError(M_("setopt: \"{0}\": {1}"), value, std::string(ex.what()));
+                    throw libdnf5::cli::ArgumentParserError(M_("setopt: \"{0}\": {1}"), value, std::string(ex.what()));
                 }
             }
             return true;
@@ -195,10 +195,10 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw libdnf::cli::ArgumentParserError(M_("setvar: Badly formatted argument value \"{}\""), value);
+                throw libdnf5::cli::ArgumentParserError(M_("setvar: Badly formatted argument value \"{}\""), value);
             }
             auto name = std::string(value, val);
-            ctx.base.get_vars()->set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
+            ctx.base.get_vars()->set(name, val + 1, libdnf5::Vars::Priority::COMMANDLINE);
             return true;
         });
     global_options_group->register_argument(setvar);
@@ -244,7 +244,7 @@ void RootCommand::set_argument_parser() {
                                          [[maybe_unused]] const char * option,
                                          [[maybe_unused]] const char * value) {
             auto & conf = ctx.base.get_config();
-            conf.opt_binds().at("tsflags").new_string(libdnf::Option::Priority::COMMANDLINE, "nodocs");
+            conf.opt_binds().at("tsflags").new_string(libdnf5::Option::Priority::COMMANDLINE, "nodocs");
             return true;
         });
         global_options_group->register_argument(no_docs);
@@ -262,7 +262,7 @@ void RootCommand::set_argument_parser() {
                                          [[maybe_unused]] const char * option,
                                          const char * value) {
             auto & conf = ctx.base.get_config();
-            conf.opt_binds().at("excludepkgs").new_string(libdnf::Option::Priority::COMMANDLINE, value);
+            conf.opt_binds().at("excludepkgs").new_string(libdnf5::Option::Priority::COMMANDLINE, value);
             return true;
         });
         global_options_group->register_argument(exclude);
@@ -278,7 +278,7 @@ void RootCommand::set_argument_parser() {
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             // Store the repositories enablement to vector. Use it later when repositories configuration will be loaded.
-            libdnf::OptionStringList repoid_patterns(value);
+            libdnf5::OptionStringList repoid_patterns(value);
             for (auto & repoid_pattern : repoid_patterns.get_value()) {
                 ctx.setopts.emplace_back(repoid_pattern + ".enabled", "1");
             }
@@ -296,7 +296,7 @@ void RootCommand::set_argument_parser() {
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             // Store the repositories disablement to vector. Use it later when repositories configuration will be loaded.
-            libdnf::OptionStringList repoid_patterns(value);
+            libdnf5::OptionStringList repoid_patterns(value);
             for (auto & repoid_pattern : repoid_patterns.get_value()) {
                 ctx.setopts.emplace_back(repoid_pattern + ".enabled", "0");
             }
@@ -318,7 +318,7 @@ void RootCommand::set_argument_parser() {
                 ctx.setopts.emplace_back("*.enabled", "0");
             }
             // Store repositories enablemend to vector. Use it later when repositories configuration will be loaded.
-            libdnf::OptionStringList repoid_patterns(value);
+            libdnf5::OptionStringList repoid_patterns(value);
             for (auto & repoid_pattern : repoid_patterns.get_value()) {
                 ctx.setopts.emplace_back(repoid_pattern + ".enabled", "1");
             }
@@ -336,8 +336,8 @@ void RootCommand::set_argument_parser() {
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
                                           [[maybe_unused]] const char * value) {
-        ctx.base.get_config().get_gpgcheck_option().set(libdnf::Option::Priority::COMMANDLINE, 0);
-        ctx.base.get_config().get_repo_gpgcheck_option().set(libdnf::Option::Priority::COMMANDLINE, 0);
+        ctx.base.get_config().get_gpgcheck_option().set(libdnf5::Option::Priority::COMMANDLINE, 0);
+        ctx.base.get_config().get_repo_gpgcheck_option().set(libdnf5::Option::Priority::COMMANDLINE, 0);
         // Store to vector. Use it later when repositories configuration will be loaded.
         ctx.setopts.emplace_back("*.gpgcheck", "0");
         ctx.setopts.emplace_back("*.repo_gpgcheck", "0");
@@ -361,7 +361,7 @@ void RootCommand::set_argument_parser() {
     enable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            libdnf::OptionStringList plugin_name_patterns(value);
+            libdnf5::OptionStringList plugin_name_patterns(value);
             for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
                 ctx.enable_plugins_patterns.emplace_back(plugin_name_pattern);
             }
@@ -378,7 +378,7 @@ void RootCommand::set_argument_parser() {
     disable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            libdnf::OptionStringList plugin_name_patterns(value);
+            libdnf5::OptionStringList plugin_name_patterns(value);
             for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
                 ctx.disable_plugins_patterns.emplace_back(plugin_name_pattern);
             }
@@ -536,7 +536,7 @@ static void load_plugins(Context & context) {
 static void load_cmdline_aliases(Context & context) {
     load_cmdline_aliases(context, INSTALL_PREFIX "/share/dnf5/aliases.d");
     load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d");
-    load_cmdline_aliases(context, libdnf::xdg::get_user_config_dir() / "dnf5/aliases.d");
+    load_cmdline_aliases(context, libdnf5::xdg::get_user_config_dir() / "dnf5/aliases.d");
 }
 
 static void print_versions(Context & context) {
@@ -550,9 +550,9 @@ static void print_versions(Context & context) {
                   << std::endl;
     }
     {
-        const auto & version = libdnf::get_library_version();
+        const auto & version = libdnf5::get_library_version();
         std::cout << fmt::format("libdnf5 version {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
-        const auto & api_version = libdnf::get_plugin_api_version();
+        const auto & api_version = libdnf5::get_plugin_api_version();
         std::cout << fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor) << std::endl;
     }
 
@@ -594,8 +594,9 @@ static void print_transaction_size_stats(Context & context) {
     }
 
     if (in_pkgs_size != 0) {
-        const auto [in_pkgs_size_value, in_pkgs_size_unit] = libdnf::cli::utils::units::to_size(in_pkgs_size);
-        const auto [dwnl_pkgs_size_value, dwnl_pkgs_size_unit] = libdnf::cli::utils::units::to_size(download_pkgs_size);
+        const auto [in_pkgs_size_value, in_pkgs_size_unit] = libdnf5::cli::utils::units::to_size(in_pkgs_size);
+        const auto [dwnl_pkgs_size_value, dwnl_pkgs_size_unit] =
+            libdnf5::cli::utils::units::to_size(download_pkgs_size);
         context.print_info(fmt::format(
             "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}.",
             in_pkgs_size_value,
@@ -604,10 +605,10 @@ static void print_transaction_size_stats(Context & context) {
             dwnl_pkgs_size_unit));
     }
 
-    const auto [install_size_value, install_size_unit] = libdnf::cli::utils::units::to_size(install_size);
-    const auto [remove_size_value, remove_size_unit] = libdnf::cli::utils::units::to_size(remove_size);
+    const auto [install_size_value, install_size_unit] = libdnf5::cli::utils::units::to_size(install_size);
+    const auto [remove_size_value, remove_size_unit] = libdnf5::cli::utils::units::to_size(remove_size);
     const auto size_diff = install_size - remove_size;
-    const auto [size_diff_value, size_diff_unit] = libdnf::cli::utils::units::to_size(std::abs(size_diff));
+    const auto [size_diff_value, size_diff_unit] = libdnf5::cli::utils::units::to_size(std::abs(size_diff));
     if (size_diff >= 0) {
         context.print_info(fmt::format(
             "After this operation {:.0f} {:s} will be used (install {:.0f} {:s}, remove {:.0f} {:s}).",
@@ -634,23 +635,23 @@ static void print_transaction_size_stats(Context & context) {
 
 int main(int argc, char * argv[]) try {
     // Creates a vector of loggers with one circular memory buffer logger
-    std::vector<std::unique_ptr<libdnf::Logger>> loggers;
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
     const std::size_t max_log_items_to_keep = 10000;
     const std::size_t prealloc_log_items = 256;
-    loggers.emplace_back(std::make_unique<libdnf::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
+    loggers.emplace_back(std::make_unique<libdnf5::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
 
     loggers.front()->info("DNF5 start");
 
     // Creates a context and passes the loggers to it. We want to capture all messages from the context in the log.
     dnf5::Context context(std::move(loggers));
 
-    libdnf::Base & base = context.base;
+    libdnf5::Base & base = context.base;
 
     auto & log_router = *base.get_logger();
 
     //TODO(jrohel) Logger verbosity is hardcoded to DEBUG. Use configuration.
-    libdnf::GlobalLogger global_logger;
-    global_logger.set(log_router, libdnf::Logger::Level::DEBUG);
+    libdnf5::GlobalLogger global_logger;
+    global_logger.set(log_router, libdnf5::Logger::Level::DEBUG);
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
@@ -680,27 +681,27 @@ int main(int argc, char * argv[]) try {
         auto & arg_parser = context.get_argument_parser();
         try {
             arg_parser.parse(argc, argv);
-        } catch (libdnf::cli::ArgumentParserError & ex) {
+        } catch (libdnf5::cli::ArgumentParserError & ex) {
             // Error during parsing arguments. Try to find "--help"/"-h".
             for (int idx = 1; idx < argc; ++idx) {
                 if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
                     arg_parser.get_selected_command()->help();
-                    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+                    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
                 }
             }
             std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
-            return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+            return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
         }
 
         // print help of the selected command if --help was used
         if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
             arg_parser.get_selected_command()->help();
-            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
         }
         // print version of program if --version was used
         if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
             dnf5::print_versions(context);
-            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
         }
     }
 
@@ -726,11 +727,11 @@ int main(int argc, char * argv[]) try {
             close(fd);
         }
 
-        auto file_logger = libdnf::create_file_logger(base);
+        auto file_logger = libdnf5::create_file_logger(base);
         // Swap to destination stream logger (log to file)
         log_router.swap_logger(file_logger, 0);
         // Write messages from memory buffer logger to stream logger
-        dynamic_cast<libdnf::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
+        dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
 
         base.setup();
 
@@ -763,8 +764,8 @@ int main(int argc, char * argv[]) try {
             download_callbacks->set_number_widget_visible(true);
             download_callbacks->set_show_total_bar_limit(0);
 
-            if (!libdnf::cli::output::print_transaction_table(*context.get_transaction())) {
-                return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+            if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
+                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
             }
 
             dnf5::print_transaction_size_stats(context);
@@ -782,13 +783,13 @@ int main(int argc, char * argv[]) try {
                 }
             }
 
-            if (!libdnf::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
-                throw libdnf::cli::AbortedByUserError();
+            if (!libdnf5::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
+                throw libdnf5::cli::AbortedByUserError();
             }
 
             context.download_and_run(*context.get_transaction());
         }
-    } catch (libdnf::cli::GoalResolveError & ex) {
+    } catch (libdnf5::cli::GoalResolveError & ex) {
         if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
             !base.get_config().get_use_host_config_option().get_value()) {
             std::cout << "No repositories were loaded from the installroot. To use the configuration and repositories "
@@ -796,25 +797,25 @@ int main(int argc, char * argv[]) try {
                       << std::endl;
         }
         std::cerr << ex.what() << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
-    } catch (libdnf::cli::ArgumentParserError & ex) {
+        return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
+    } catch (libdnf5::cli::ArgumentParserError & ex) {
         std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (libdnf::cli::CommandExitError & ex) {
+        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf5::cli::CommandExitError & ex) {
         std::cerr << ex.what() << std::endl;
         return ex.get_exit_code();
-    } catch (libdnf::cli::SilentCommandExitError & ex) {
+    } catch (libdnf5::cli::SilentCommandExitError & ex) {
         return ex.get_exit_code();
     } catch (std::runtime_error & ex) {
         std::cerr << ex.what() << std::endl;
         log_router.error("Command returned error: {}", ex.what());
-        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+        return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
     log_router.info("DNF5 end");
 
-    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
-} catch (const libdnf::Error & e) {
-    std::cerr << libdnf::format(e, false);
-    return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+} catch (const libdnf5::Error & e) {
+    std::cerr << libdnf5::format(e, false);
+    return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
 }

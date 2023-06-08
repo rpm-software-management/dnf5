@@ -47,7 +47,7 @@ extern "C" {
 
 using LibsolvRepo = Repo;
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 void PackageSack::Impl::make_provides_ready() {
     if (provides_ready) {
@@ -55,14 +55,14 @@ void PackageSack::Impl::make_provides_ready() {
     }
 
     // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
-    libdnf::solv::SolvMap original_considered_map(0);
+    libdnf5::solv::SolvMap original_considered_map(0);
     get_rpm_pool(base).swap_considered_map(original_considered_map);
 
     base->get_repo_sack()->internalize_repos();
 
     auto & pool = get_rpm_pool(base);
-    libdnf::solv::IdQueue addedfileprovides;
-    libdnf::solv::IdQueue addedfileprovides_inst;
+    libdnf5::solv::IdQueue addedfileprovides;
+    libdnf5::solv::IdQueue addedfileprovides_inst;
     pool_addfileprovides_queue(*pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
 
     if (base->get_repo_sack()->has_system_repo() && !addedfileprovides_inst.empty()) {
@@ -111,10 +111,10 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
 
     // first evaluate repo specific includes/excludes
     if (!only_main) {
-        libdnf::repo::RepoQuery rq(base);
+        libdnf5::repo::RepoQuery rq(base);
         rq.filter_enabled(true);
         if (!disable_excludes.empty()) {
-            rq.filter_id(disable_excludes, libdnf::sack::QueryCmp::NOT_GLOB);
+            rq.filter_id(disable_excludes, libdnf5::sack::QueryCmp::NOT_GLOB);
         }
         for (const auto & repo : rq) {
             if (!repo->get_config().get_includepkgs_option().get_value().empty()) {
@@ -176,7 +176,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     }
 
     if (includes_used) {
-        config_includes.reset(new libdnf::solv::SolvMap(0));
+        config_includes.reset(new libdnf5::solv::SolvMap(0));
         if (includes_exist) {
             *config_includes = *includes.p_impl;
         }
@@ -185,7 +185,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     }
 
     if (excludes_exist) {
-        config_excludes.reset(new libdnf::solv::SolvMap(0));
+        config_excludes.reset(new libdnf5::solv::SolvMap(0));
         *config_excludes = *excludes.p_impl;
     }
 }
@@ -215,7 +215,7 @@ void PackageSack::Impl::remove_user_excludes(const PackageSet & excludes) {
 }
 
 void PackageSack::Impl::set_user_excludes(const PackageSet & excludes) {
-    user_excludes.reset(new libdnf::solv::SolvMap(*excludes.p_impl));
+    user_excludes.reset(new libdnf5::solv::SolvMap(*excludes.p_impl));
     considered_uptodate = false;
 }
 
@@ -249,7 +249,7 @@ void PackageSack::Impl::remove_user_includes(const PackageSet & includes) {
 }
 
 void PackageSack::Impl::set_user_includes(const PackageSet & includes) {
-    user_includes.reset(new libdnf::solv::SolvMap(*includes.p_impl));
+    user_includes.reset(new libdnf5::solv::SolvMap(*includes.p_impl));
     // enable the use of includes for all repositories
     for (const auto & repo : base->get_repo_sack()->get_data()) {
         repo->set_use_includes(true);
@@ -287,7 +287,7 @@ void PackageSack::Impl::remove_module_excludes(const PackageSet & excludes) {
 }
 
 void PackageSack::Impl::set_module_excludes(const PackageSet & excludes) {
-    module_excludes.reset(new libdnf::solv::SolvMap(*excludes.p_impl));
+    module_excludes.reset(new libdnf5::solv::SolvMap(*excludes.p_impl));
     considered_uptodate = false;
 }
 
@@ -296,48 +296,49 @@ void PackageSack::Impl::clear_module_excludes() {
     considered_uptodate = false;
 }
 
-std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
-    if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
+std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
+    libdnf5::sack::ExcludeFlags flags) const {
+    if ((static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
          (!config_excludes && !config_includes)) &&
-        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
          (!user_excludes && !user_includes)) &&
-        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
-        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
         return {};
     }
 
     auto & pool = get_rpm_pool(base);
 
-    libdnf::solv::SolvMap considered(pool.get_nsolvables());
+    libdnf5::solv::SolvMap considered(pool.get_nsolvables());
 
     // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes) and
     //              (config_includes + user_includes + all_from_repos_not_using_includes)
     considered.set_all();
 
-    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) && module_excludes) {
+    if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) && module_excludes) {
         considered -= *module_excludes;
     }
 
-    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
+    if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
         considered -= *repo_excludes;
     }
 
-    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
-        std::unique_ptr<libdnf::solv::SolvMap> pkg_includes;
-        if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES)) {
+    if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
+        std::unique_ptr<libdnf5::solv::SolvMap> pkg_includes;
+        if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES)) {
             if (config_includes) {
-                pkg_includes.reset(new libdnf::solv::SolvMap(*config_includes));
+                pkg_includes.reset(new libdnf5::solv::SolvMap(*config_includes));
             }
             if (config_excludes) {
                 considered -= *config_excludes;
             }
         }
-        if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES)) {
+        if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES)) {
             if (user_includes) {
                 if (pkg_includes) {
                     *pkg_includes |= *user_includes;
                 } else {
-                    pkg_includes.reset(new libdnf::solv::SolvMap(*user_includes));
+                    pkg_includes.reset(new libdnf5::solv::SolvMap(*user_includes));
                 }
             }
             if (user_excludes) {
@@ -347,7 +348,7 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
 
         if (pkg_includes) {
             pkg_includes->grow(pool.get_nsolvables());
-            libdnf::solv::SolvMap pkg_includes_tmp(*pkg_includes);
+            libdnf5::solv::SolvMap pkg_includes_tmp(*pkg_includes);
 
             // Add all solvables from repositories which do not use "includes"
             for (const auto & repo : base->get_repo_sack()->get_data()) {
@@ -373,11 +374,11 @@ void PackageSack::Impl::recompute_considered_in_pool() {
         return;
     }
 
-    auto considered = compute_considered_map(libdnf::sack::ExcludeFlags::APPLY_EXCLUDES);
+    auto considered = compute_considered_map(libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES);
     if (considered) {
         get_rpm_pool(base).swap_considered_map(*considered);
     } else {
-        libdnf::solv::SolvMap empty_map(0);
+        libdnf5::solv::SolvMap empty_map(0);
         get_rpm_pool(base).swap_considered_map(empty_map);
     }
 
@@ -398,7 +399,7 @@ int PackageSack::get_nsolvables() const noexcept {
 
 PackageSack::PackageSack(const BaseWeakPtr & base) : p_impl{new Impl(base)} {}
 
-PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
+PackageSack::PackageSack(libdnf5::Base & base) : PackageSack(base.get_weak_ptr()) {}
 
 PackageSack::~PackageSack() = default;
 
@@ -446,12 +447,12 @@ void PackageSack::clear_user_includes() {
     p_impl->clear_user_includes();
 }
 
-static libdnf::rpm::PackageQuery running_kernel_check_path(const libdnf::BaseWeakPtr & base, const std::string & fn) {
+static libdnf5::rpm::PackageQuery running_kernel_check_path(const libdnf5::BaseWeakPtr & base, const std::string & fn) {
     auto & logger = *base->get_logger();
     if (access(fn.c_str(), F_OK)) {
         logger.debug("Cannot find \"{}\" to verify running kernel", fn);
     }
-    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    libdnf5::rpm::PackageQuery q(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
 
     q.filter_installed();
     q.filter_file({fn});
@@ -488,7 +489,7 @@ rpm::PackageId PackageSack::Impl::get_running_kernel_id() {
         logger.debug("Failed to find rpm package of a running kernel in sack");
         running_kernel.id = -1;
     } else {
-        libdnf::rpm::Package kernel_pkg = *query.begin();
+        libdnf5::rpm::Package kernel_pkg = *query.begin();
         running_kernel = kernel_pkg.get_id();
         logger.debug("Found running kernel: {}", kernel_pkg.get_full_nevra());
     }
@@ -499,4 +500,4 @@ rpm::Package PackageSack::get_running_kernel() {
     return rpm::Package(p_impl->base, p_impl->get_running_kernel_id());
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

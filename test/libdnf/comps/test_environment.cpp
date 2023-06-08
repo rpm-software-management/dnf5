@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsEnvironmentTest);
 
 
-using namespace libdnf::comps;
+using namespace libdnf5::comps;
 
 
 void CompsEnvironmentTest::test_load() {

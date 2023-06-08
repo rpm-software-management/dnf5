@@ -44,7 +44,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern char ** environ;
 
-namespace libdnf {
+namespace libdnf5 {
 
 // ==================================================================
 // The following helper functions should be moved e.g. into a library
@@ -137,7 +137,7 @@ std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, cons
     init_lib_rpm();
     std::unique_ptr<std::string> release_ver;
 
-    libdnf::rpm::RpmLogGuard rpm_log_guard(base);
+    libdnf5::rpm::RpmLogGuard rpm_log_guard(base);
 
     auto ts = rpmtsCreate();
     rpmtsSetRootDir(ts, install_root_path.c_str());
@@ -339,4 +339,4 @@ void Vars::load_from_env() {
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

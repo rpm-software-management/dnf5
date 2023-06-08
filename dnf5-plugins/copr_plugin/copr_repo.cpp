@@ -84,7 +84,7 @@ std::string project_name_from_dirname(const std::string & dirname) {
 void available_directories_error(
     const std::vector<std::string> & directories, const std::string & owner_name, const std::string & directory_name) {
     std::stringstream message;
-    message << libdnf::utils::sformat(
+    message << libdnf5::utils::sformat(
         _("Directory '{}' not found in '{}' Copr project."),
         owner_name + "/" + directory_name,
         owner_name + "/" + project_name_from_dirname(directory_name));
@@ -213,7 +213,7 @@ static void parse_project_spec(
 
 
 CoprRepo::CoprRepo(
-    libdnf::Base & base,
+    libdnf5::Base & base,
     const std::unique_ptr<CoprConfig> & copr_config,
     const std::string & project_spec,
     const std::string & selected_chroot) {
@@ -332,10 +332,10 @@ std::filesystem::path CoprRepo::file_path() const {
 void CoprRepo::remove() const {
     std::string path = file_path().native();
     if (-1 == unlink(path.c_str())) {
-        std::string msg = libdnf::utils::sformat(_("Can't remove the {} repo file"), path);
+        std::string msg = libdnf5::utils::sformat(_("Can't remove the {} repo file"), path);
         throw std::runtime_error(msg);
     }
-    std::cout << libdnf::utils::sformat(_("Repo file {} successfully removed"), path) << std::endl;
+    std::cout << libdnf5::utils::sformat(_("Repo file {} successfully removed"), path) << std::endl;
 }
 
 
@@ -381,7 +381,7 @@ static std::string nth_delimited_item(const std::string & string, size_t n, char
             return token;
         i++;
     }
-    std::string msg = libdnf::utils::sformat(_("Can't find {} item in {}"), n, string);
+    std::string msg = libdnf5::utils::sformat(_("Can't find {} item in {}"), n, string);
     throw std::runtime_error(msg);
 }
 
@@ -396,7 +396,7 @@ std::string CoprRepo::get_projectname() {
 
 void CoprRepo::save_interactive() {
     std::cout << COPR_THIRD_PARTY_WARNING;
-    if (!libdnf::cli::utils::userconfirm::userconfirm(base->get_config()))
+    if (!libdnf5::cli::utils::userconfirm::userconfirm(base->get_config()))
         return;
 
     if (has_external_deps()) {
@@ -417,9 +417,9 @@ void CoprRepo::save_interactive() {
         }
 
         std::cout << std::endl;
-        std::cout << libdnf::utils::sformat(COPR_EXTERNAL_DEPS_WARNING, the_list.str());
+        std::cout << libdnf5::utils::sformat(COPR_EXTERNAL_DEPS_WARNING, the_list.str());
         std::cout << std::endl;
-        if (!libdnf::cli::utils::userconfirm::userconfirm(base->get_config())) {
+        if (!libdnf5::cli::utils::userconfirm::userconfirm(base->get_config())) {
             for (auto & p : repositories) {
                 auto & repo = p.second;
                 if (!repo.is_external())
@@ -437,7 +437,7 @@ void CoprRepo::remove_old_repo() {
     path /= "_copr_" + get_ownername() + "-" + get_projectname() + ".repo";
 
     if (std::filesystem::exists(path)) {
-        std::cerr << libdnf::utils::sformat(_("Removing old config file '{}'"), path.native()) << std::endl;
+        std::cerr << libdnf5::utils::sformat(_("Removing old config file '{}'"), path.native()) << std::endl;
 
         if (unlink(path.native().c_str()))
             throw std::runtime_error(_("Can't remove"));
@@ -445,7 +445,7 @@ void CoprRepo::remove_old_repo() {
 }
 
 // bool partly_enabled = false
-void CoprRepo::add_dnf_repo(libdnf::repo::RepoWeakPtr dnfRepo) {
+void CoprRepo::add_dnf_repo(libdnf5::repo::RepoWeakPtr dnfRepo) {
     set_id_from_repo_id(dnfRepo->get_id());
     auto cp = CoprRepoPart(dnfRepo);
     this->enabled |= cp.is_enabled();
@@ -466,7 +466,7 @@ void CoprRepo::set_id_from_repo_id(const std::string & dnfRepoID) {
         id = copr_id;
 }
 
-void CoprRepo::load_raw_values(libdnf::ConfigParser & parser) {
+void CoprRepo::load_raw_values(libdnf5::ConfigParser & parser) {
     for (auto & pair : repositories) {
         pair.second.load_raw_values(parser, repo_file);
     }
@@ -476,7 +476,7 @@ void CoprRepo::add_repo_part(const CoprRepoPart & rp) {
     repositories[rp.get_id()] = rp;
 }
 
-void CoprRepoPart::load_raw_values(libdnf::ConfigParser & parser, const std::filesystem::path & path) {
+void CoprRepoPart::load_raw_values(libdnf5::ConfigParser & parser, const std::filesystem::path & path) {
     parser.read(path.native());
     if (parser.has_option(id, "baseurl"))
         baseurl = parser.get_value(id, "baseurl");
@@ -538,7 +538,7 @@ static std::string repo_id_to_copr_file(const std::string & repo_id) {
 }
 
 
-static void warn_weird_copr_repo(libdnf::repo::RepoWeakPtr dnfRepo) {
+static void warn_weird_copr_repo(libdnf5::repo::RepoWeakPtr dnfRepo) {
     /// Throw a warning for every copr-repofile-related repo ID which doesn't
     /// follow the pre-defined format.
 
@@ -560,7 +560,7 @@ static void warn_weird_copr_repo(libdnf::repo::RepoWeakPtr dnfRepo) {
 }
 
 
-void installed_copr_repositories(libdnf::Base & base, CoprRepoCallback cb) {
+void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb) {
     std::map<std::string, CoprRepo> copr_repos;
 
     libdnf::repo::RepoQuery query(base);
@@ -612,8 +612,8 @@ public:
 };
 
 
-void copr_repo_disable(libdnf::Base & base, const std::string & project_spec_string) {
-    libdnf::ConfigParser parser;
+void copr_repo_disable(libdnf5::Base & base, const std::string & project_spec_string) {
+    libdnf5::ConfigParser parser;
     auto repo_id = repo_id_from_project_spec(base, project_spec_string);
     auto disable = RepoDisableCB(repo_id, parser);
     installed_copr_repositories(base, disable.disable);
@@ -638,7 +638,7 @@ public:
     };
 };
 
-void copr_repo_remove(libdnf::Base & base, const std::string & project_spec_string) {
+void copr_repo_remove(libdnf5::Base & base, const std::string & project_spec_string) {
     auto repo_id = repo_id_from_project_spec(base, project_spec_string);
     auto remover = RepoRemoveCB(repo_id);
     installed_copr_repositories(base, remover.remove);

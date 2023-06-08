@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option_number.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores an integer value of seconds.
 /// Support default value, minimal and maximal values.
@@ -59,6 +59,6 @@ inline OptionSeconds * OptionSeconds::clone() const {
     return new OptionSeconds(*this);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

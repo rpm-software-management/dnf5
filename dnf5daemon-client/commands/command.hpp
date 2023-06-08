@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-class DaemonCommand : public libdnf::cli::session::Command {
+class DaemonCommand : public libdnf5::cli::session::Command {
 public:
     explicit DaemonCommand(Context & context, const std::string & name) : Command(context, name){};
     virtual dnfdaemon::KeyValueMap session_config() {

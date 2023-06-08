@@ -38,9 +38,9 @@ public:
 
 protected:
     virtual void process_and_print_queries(
-        Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) = 0;
+        Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) = 0;
 
-    void add_running_kernel_packages(libdnf::Base & base, libdnf::rpm::PackageQuery & package_query);
+    void add_running_kernel_packages(libdnf5::Base & base, libdnf5::rpm::PackageQuery & package_query);
 
     std::unique_ptr<AdvisoryAvailableOption> available{nullptr};
     std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};

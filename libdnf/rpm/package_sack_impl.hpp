@@ -58,7 +58,7 @@ static inline bool nevra_solvable_cmp_icase_key(
     return first.second->evr < second.second->evr;
 }
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class PackageSack::Impl {
 public:
@@ -68,7 +68,7 @@ public:
     int get_nsolvables() const noexcept { return get_rpm_pool(base)->nsolvables; };
 
     /// Return SolvMap with all package solvables
-    libdnf::solv::SolvMap & get_solvables();
+    libdnf5::solv::SolvMap & get_solvables();
 
     /// Return sorted list of all package solvables
     std::vector<Solvable *> & get_sorted_solvables();
@@ -111,7 +111,7 @@ public:
 
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
-    std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;
+    std::optional<libdnf5::solv::SolvMap> compute_considered_map(libdnf5::sack::ExcludeFlags flags) const;
 
     /// If the considered map in the pool is out of date - `considered_uptodate == false` - it will recompute it.
     /// And sets `considered_uptodate` to` true`.
@@ -124,18 +124,18 @@ private:
 
     WeakPtrGuard<PackageSack, false> sack_guard;
 
-    std::unique_ptr<libdnf::solv::SolvMap> config_excludes;  // packages explicitly excluded by configuration
-    std::unique_ptr<libdnf::solv::SolvMap> config_includes;  // packages explicitly included by configuration
+    std::unique_ptr<libdnf5::solv::SolvMap> config_excludes;  // packages explicitly excluded by configuration
+    std::unique_ptr<libdnf5::solv::SolvMap> config_includes;  // packages explicitly included by configuration
 
-    std::unique_ptr<libdnf::solv::SolvMap> user_excludes;  // packages explicitly excluded by API user
-    std::unique_ptr<libdnf::solv::SolvMap> user_includes;  // packages explicitly included by API user
+    std::unique_ptr<libdnf5::solv::SolvMap> user_excludes;  // packages explicitly excluded by API user
+    std::unique_ptr<libdnf5::solv::SolvMap> user_includes;  // packages explicitly included by API user
 
     // packages excluded by disabling repositories
     // Optimization, the PackageQuery does not have to test whether the package comes from an allowed repository.
     // TODO(jrohel): Recompute when state of repository is changed enabled/disabled or added solvable to disabled repo
-    std::unique_ptr<libdnf::solv::SolvMap> repo_excludes;
+    std::unique_ptr<libdnf5::solv::SolvMap> repo_excludes;
 
-    std::unique_ptr<libdnf::solv::SolvMap> module_excludes;  // packages excluded by modularity
+    std::unique_ptr<libdnf5::solv::SolvMap> module_excludes;  // packages excluded by modularity
 
     bool considered_uptodate = true;
 
@@ -144,7 +144,7 @@ private:
     /// pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> cached_sorted_icase_solvables;
     int cached_sorted_icase_solvables_size{0};
-    libdnf::solv::SolvMap cached_solvables{0};
+    libdnf5::solv::SolvMap cached_solvables{0};
     int cached_solvables_size{0};
     PackageId running_kernel;
 
@@ -218,7 +218,7 @@ inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
     return cached_solvables;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 
 #endif  // LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP

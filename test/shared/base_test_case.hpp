@@ -40,41 +40,41 @@ public:
 
     // Add (load) a repo from `repo_path`.
     // It's also a shared code for add_repo_repomd() and add_repo_rpm().
-    libdnf::repo::RepoWeakPtr add_repo(const std::string & repoid, const std::string & repo_path, bool load = true);
+    libdnf5::repo::RepoWeakPtr add_repo(const std::string & repoid, const std::string & repo_path, bool load = true);
 
     // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
-    libdnf::repo::RepoWeakPtr add_repo_repomd(const std::string & repoid, bool load = true);
+    libdnf5::repo::RepoWeakPtr add_repo_repomd(const std::string & repoid, bool load = true);
 
     // Add (load) a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
-    libdnf::repo::RepoWeakPtr add_repo_rpm(const std::string & repoid, bool load = true);
+    libdnf5::repo::RepoWeakPtr add_repo_rpm(const std::string & repoid, bool load = true);
 
     // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
-    libdnf::repo::RepoWeakPtr add_repo_solv(const std::string & repoid);
+    libdnf5::repo::RepoWeakPtr add_repo_solv(const std::string & repoid);
 
-    libdnf::advisory::Advisory get_advisory(const std::string & name);
+    libdnf5::advisory::Advisory get_advisory(const std::string & name);
 
-    libdnf::comps::Environment get_environment(const std::string & environmentid, bool installed = false);
+    libdnf5::comps::Environment get_environment(const std::string & environmentid, bool installed = false);
 
-    libdnf::comps::Group get_group(const std::string & groupid, bool installed = false);
+    libdnf5::comps::Group get_group(const std::string & groupid, bool installed = false);
 
-    libdnf::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
-    libdnf::rpm::Package get_pkg(const std::string & nevra, const char * repo);
-    libdnf::rpm::Package get_pkg(const std::string & nevra, const std::string & repo) {
+    libdnf5::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
+    libdnf5::rpm::Package get_pkg(const std::string & nevra, const char * repo);
+    libdnf5::rpm::Package get_pkg(const std::string & nevra, const std::string & repo) {
         return get_pkg(nevra, repo.c_str());
     }
-    libdnf::rpm::Package get_pkg_i(const std::string & nevra, size_t index);
+    libdnf5::rpm::Package get_pkg_i(const std::string & nevra, size_t index);
 
-    libdnf::rpm::Package add_system_pkg(
-        const std::string & relative_path, libdnf::transaction::TransactionItemReason reason);
-    libdnf::rpm::Package add_cmdline_pkg(const std::string & relative_path);
+    libdnf5::rpm::Package add_system_pkg(
+        const std::string & relative_path, libdnf5::transaction::TransactionItemReason reason);
+    libdnf5::rpm::Package add_cmdline_pkg(const std::string & relative_path);
 
-    libdnf::Base base;
+    libdnf5::Base base;
 
-    libdnf::repo::RepoSackWeakPtr repo_sack;
-    libdnf::rpm::PackageSackWeakPtr sack;
+    libdnf5::repo::RepoSackWeakPtr repo_sack;
+    libdnf5::rpm::PackageSackWeakPtr sack;
 
 private:
-    libdnf::rpm::Package first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what);
+    libdnf5::rpm::Package first_query_pkg(libdnf5::rpm::PackageQuery & query, const std::string & what);
 };
 
 

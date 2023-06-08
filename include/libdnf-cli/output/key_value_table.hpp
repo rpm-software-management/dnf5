@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 class KeyValueTable {
@@ -68,7 +68,7 @@ private:
 };
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 
 #endif  // LIBDNF_CLI_OUTPUT_KEY_VALUE_TABLE_HPP

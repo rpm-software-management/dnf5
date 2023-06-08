@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT = R"**(
@@ -55,21 +55,21 @@ static constexpr const char * SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT = R"**(
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_select_new_query(
-    libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Query> comps_group_transaction_item_select_new_query(
+    libdnf5::utils::SQLite3 & conn, int64_t transaction_id) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Query>(conn, SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
     return query;
 }
 
 
 std::vector<CompsGroup> CompsGroupDbUtils::get_transaction_comps_groups(
-    libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<CompsGroup> result;
 
     auto query = comps_group_transaction_item_select_new_query(conn, trans.get_id());
 
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         CompsGroup ti(trans);
         TransItemDbUtils::transaction_item_select(*query, ti);
         //        auto trans_item = std::make_shared< TransactionItem >(trans);
@@ -102,13 +102,14 @@ static constexpr const char * SQL_COMPS_GROUP_INSERT = R"**(
 
 
 // Create a query (statement) that inserts new records to the 'comps_group' table
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_insert_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_GROUP_INSERT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> comps_group_insert_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_COMPS_GROUP_INSERT);
     return query;
 }
 
 
-int64_t CompsGroupDbUtils::comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup & grp) {
+int64_t CompsGroupDbUtils::comps_group_insert(libdnf5::utils::SQLite3::Statement & query, CompsGroup & grp) {
     // insert a record to the 'item' table first
     auto query_item_insert = item_insert_new_query(query.get_db());
     auto item_id = item_insert(*query_item_insert);
@@ -126,7 +127,7 @@ int64_t CompsGroupDbUtils::comps_group_insert(libdnf::utils::SQLite3::Statement 
 }
 
 
-void CompsGroupDbUtils::insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+void CompsGroupDbUtils::insert_transaction_comps_groups(libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_group_insert = comps_group_insert_new_query(conn);
     auto query_trans_item_insert = TransItemDbUtils::trans_item_insert_new_query(conn);
 
@@ -138,4 +139,4 @@ void CompsGroupDbUtils::insert_transaction_comps_groups(libdnf::utils::SQLite3 &
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

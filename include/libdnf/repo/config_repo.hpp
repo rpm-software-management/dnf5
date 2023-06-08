@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
 class ConfigRepo : public Config {
@@ -158,10 +158,10 @@ public:
     std::string get_persistdir() const;
 
     void load_from_parser(
-        const libdnf::ConfigParser & parser,
+        const libdnf5::ConfigParser & parser,
         const std::string & section,
-        const libdnf::Vars & vars,
-        libdnf::Logger & logger,
+        const libdnf5::Vars & vars,
+        libdnf5::Logger & logger,
         Option::Priority priority = Option::Priority::REPOCONFIG) override;
 
 private:
@@ -169,6 +169,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

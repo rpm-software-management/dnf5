@@ -42,9 +42,9 @@ extern "C" {
 }
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
-namespace fs = libdnf::utils::fs;
+namespace fs = libdnf5::utils::fs;
 
 
 constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
@@ -218,7 +218,7 @@ bool is_one_piece(::Repo * repo) {
 }
 
 
-SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
+SolvRepo::SolvRepo(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
     : base(base),
       config(config),
       repo(repo_create(*get_rpm_pool(base), config.get_id().c_str())),
@@ -432,7 +432,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
 static bool is_superset(
-    const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue & q2, libdnf::solv::SolvMap & map) {
+    const libdnf5::solv::IdQueue & q1, const libdnf5::solv::IdQueue & q2, libdnf5::solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2.size(); i++) {
         map.add_unsafe(q2[i]);
@@ -449,7 +449,7 @@ static bool is_superset(
 }
 
 
-void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
+void SolvRepo::rewrite_repo(libdnf5::solv::IdQueue & fileprovides) {
     auto & logger = *base->get_logger();
     auto & pool = get_rpm_pool(base);
 
@@ -459,8 +459,8 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
         return;
     }
 
-    libdnf::solv::IdQueue fileprovidesq;
-    libdnf::solv::SolvMap providedids(pool->ss.nstrings);
+    libdnf5::solv::IdQueue fileprovidesq;
+    libdnf5::solv::SolvMap providedids(pool->ss.nstrings);
     Repodata * data = repo_id2repodata(repo, 1);
     if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovidesq.get_queue())) {
         if (is_superset(fileprovidesq, fileprovides, providedids)) {
@@ -706,7 +706,7 @@ bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     return read_success;
 }
 
-void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state) {
+void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf5::system::GroupState & state) {
     solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
     libdnf_assert(
         comps_repo == (*pool)->installed, "SolvRepo::create_group_solvable() call enabled only for @System repo.");
@@ -743,7 +743,7 @@ void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf::
 }
 
 void SolvRepo::create_environment_solvable(
-    const std::string & environmentid, const libdnf::system::EnvironmentState & state) {
+    const std::string & environmentid, const libdnf5::system::EnvironmentState & state) {
     solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
     libdnf_assert(
         comps_repo == (*pool)->installed,
@@ -782,4 +782,4 @@ void SolvRepo::create_environment_solvable(
     repodata_internalize(data);
 }
 
-}  //namespace libdnf::repo
+}  // namespace libdnf5::repo

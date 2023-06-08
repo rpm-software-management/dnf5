@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 struct ReldepId {
 public:
@@ -54,8 +54,8 @@ public:
     /// @param base Instance of Base class
     /// @param reldep_string String with the dependency
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
-    Reldep(const libdnf::BaseWeakPtr & base, const std::string & reldep_string);
-    Reldep(libdnf::Base & base, const std::string & reldep_string);
+    Reldep(const libdnf5::BaseWeakPtr & base, const std::string & reldep_string);
+    Reldep(libdnf5::Base & base, const std::string & reldep_string);
 
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep) = default;
@@ -146,6 +146,6 @@ inline bool Reldep::operator!=(const Reldep & other) const noexcept {
     return id != other.id || base != other.base;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_RELDEP_HPP

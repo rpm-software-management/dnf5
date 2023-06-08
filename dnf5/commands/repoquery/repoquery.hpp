@@ -45,39 +45,39 @@ public:
 private:
     bool system_repo_needed = false;
 
-    libdnf::OptionBool * available_option{nullptr};
-    libdnf::OptionBool * installed_option{nullptr};
-    libdnf::OptionBool * userinstalled_option{nullptr};
-    libdnf::OptionBool * leaves_option{nullptr};
-    libdnf::OptionBool * info_option{nullptr};
-    libdnf::OptionNumber<std::int32_t> * latest_limit_option{nullptr};
+    libdnf5::OptionBool * available_option{nullptr};
+    libdnf5::OptionBool * installed_option{nullptr};
+    libdnf5::OptionBool * userinstalled_option{nullptr};
+    libdnf5::OptionBool * leaves_option{nullptr};
+    libdnf5::OptionBool * info_option{nullptr};
+    libdnf5::OptionNumber<std::int32_t> * latest_limit_option{nullptr};
     std::vector<std::string> pkg_specs;
-    std::vector<libdnf::rpm::Package> cmdline_packages;
+    std::vector<libdnf5::rpm::Package> cmdline_packages;
 
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatdepends{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatconflicts{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatenhances{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatobsoletes{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatprovides{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatrecommends{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatrequires{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsuggests{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> whatsupplements{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> arch{nullptr};
-    std::unique_ptr<libdnf::cli::session::AppendStringListOption> file{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatdepends{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatconflicts{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatenhances{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatobsoletes{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatprovides{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatrecommends{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatrequires{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatsuggests{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> whatsupplements{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> arch{nullptr};
+    std::unique_ptr<libdnf5::cli::session::AppendStringListOption> file{nullptr};
 
-    std::unique_ptr<libdnf::cli::session::BoolOption> exactdeps{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> unneeded{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> extras{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> upgrades{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> recent{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> installonly{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> exactdeps{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> duplicates{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> unneeded{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> extras{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> upgrades{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> recent{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> installonly{nullptr};
 
-    libdnf::OptionBool * querytags_option{nullptr};
-    libdnf::OptionString * query_format_option{nullptr};
-    libdnf::OptionEnum<std::string> * pkg_attr_option{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> changelogs{nullptr};
+    libdnf5::OptionBool * querytags_option{nullptr};
+    libdnf5::OptionString * query_format_option{nullptr};
+    libdnf5::OptionEnum<std::string> * pkg_attr_option{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> changelogs{nullptr};
 
     std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
     std::unique_ptr<SecurityOption> advisory_security{nullptr};

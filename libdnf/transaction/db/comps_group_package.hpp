@@ -27,20 +27,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/comps_group.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 class CompsGroupPackageDbUtils {
 public:
     /// Load GroupPackage objects from the database to the CompsGroup object
-    static void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group);
+    static void comps_group_packages_select(libdnf5::utils::SQLite3 & conn, CompsGroup & group);
 
 
     /// Insert GroupPackage objects associated with a CompsGroup into the database
-    static void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group);
+    static void comps_group_packages_insert(libdnf5::utils::SQLite3 & conn, CompsGroup & group);
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 class Comps;
@@ -38,14 +38,14 @@ class EnvironmentSack;
 using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
 
 
-class EnvironmentSack : public libdnf::sack::Sack<Environment> {
+class EnvironmentSack : public libdnf5::sack::Sack<Environment> {
 public:
     ~EnvironmentSack();
 
     /// Create WeakPtr to EnvironmentSack
     EnvironmentSackWeakPtr get_weak_ptr();
 
-    const std::map<std::string, libdnf::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+    const std::map<std::string, libdnf5::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
 
 protected:
     explicit EnvironmentSack(Comps & comps);
@@ -58,7 +58,7 @@ private:
     /// @return Map of resolved reasons why environments were installed: ``{environment_id -> reason}``.
     ///         An environment can be installed due to multiple reasons, only the most significant is returned.
     /// @since 5.0
-    std::map<std::string, libdnf::transaction::TransactionItemReason> reasons;
+    std::map<std::string, libdnf5::transaction::TransactionItemReason> reasons;
 
     friend Comps;
     friend Environment;
@@ -67,7 +67,7 @@ private:
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif  // LIBDNF_COMPS_ENVIRONMENT_SACK_HPP

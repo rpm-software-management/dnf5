@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <toml.hpp>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 TempFilesMemory::TempFilesMemory(const std::string & parent_dir)
     : full_memory_path(std::filesystem::path(parent_dir) / MEMORY_FILENAME) {
@@ -45,7 +45,7 @@ std::vector<std::string> TempFilesMemory::get_files() const {
         auto toml_data = toml::parse(full_memory_path);
         return toml::get<std::vector<std::string>>(toml_data[FILE_PATHS_TOML_KEY]);
     } catch (const toml::exception & e) {
-        throw libdnf::Error(
+        throw libdnf5::Error(
             M_("An error occurred when parsing the temporary files memory file at '{}': {}"),
             full_memory_path.string(),
             std::string(e.what()));
@@ -70,4 +70,4 @@ void TempFilesMemory::clear() {
     std::filesystem::remove(full_memory_path);
 }
 
-}  //namespace libdnf::repo
+}  // namespace libdnf5::repo

@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// Library exception
 class LibraryError : public Error {
@@ -66,6 +66,6 @@ private:
     void * handle;
 };
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif

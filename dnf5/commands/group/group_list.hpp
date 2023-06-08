@@ -49,7 +49,7 @@ protected:
     GroupListCommand(Context & context, const std::string & name) : Command(context, name) {}
 
 private:
-    virtual void print(const libdnf::comps::GroupQuery & query);
+    virtual void print(const libdnf5::comps::GroupQuery & query);
 };
 
 

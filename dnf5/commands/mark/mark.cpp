@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 
 void MarkCommand::set_parent_command() {
@@ -62,7 +62,7 @@ void MarkUserCommand::set_argument_parser() {
     auto specs_arg = parser.add_new_positional_arg(
         "specs",
         ArgumentParser::PositionalArg::AT_LEAST_ONE,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         pkg_specs);
     specs_arg->set_description("List of package specs");
     specs_arg->set_complete_hook_func(
@@ -78,7 +78,7 @@ void MarkUserCommand::configure() {
 void MarkUserCommand::run() {
     auto goal = get_context().get_goal();
     for (auto & pattern : *pkg_specs) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         goal->add_rpm_reason_change(option->get_value(), reason);
     }
 }
@@ -108,7 +108,7 @@ void MarkGroupCommand::set_argument_parser() {
     auto specs_arg = parser.add_new_positional_arg(
         "specs",
         ArgumentParser::PositionalArg::AT_LEAST_ONE,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         pkg_specs);
     specs_arg->set_description("List of package specs");
     specs_arg->set_complete_hook_func(
@@ -119,7 +119,7 @@ void MarkGroupCommand::set_argument_parser() {
 void MarkGroupCommand::run() {
     auto goal = get_context().get_goal();
     for (auto & pattern : *pkg_specs) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         goal->add_rpm_reason_change(option->get_value(), reason, group_id);
     }
 }

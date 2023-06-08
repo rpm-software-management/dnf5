@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "widgets/time.hpp"
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 class DownloadProgressBar : public ProgressBar {
@@ -57,17 +57,17 @@ private:
     friend std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar);
 
     // widgets
-    libdnf::cli::progressbar::NumberWidget number_widget;
-    libdnf::cli::progressbar::DescriptionWidget description_widget;
-    libdnf::cli::progressbar::PercentWidget percent_widget;
-    libdnf::cli::progressbar::ProgressWidget progress_widget;
-    libdnf::cli::progressbar::SpeedWidget speed_widget;
-    libdnf::cli::progressbar::SizeWidget size_widget;
-    libdnf::cli::progressbar::TimeWidget time_widget;
+    libdnf5::cli::progressbar::NumberWidget number_widget;
+    libdnf5::cli::progressbar::DescriptionWidget description_widget;
+    libdnf5::cli::progressbar::PercentWidget percent_widget;
+    libdnf5::cli::progressbar::ProgressWidget progress_widget;
+    libdnf5::cli::progressbar::SpeedWidget speed_widget;
+    libdnf5::cli::progressbar::SizeWidget size_widget;
+    libdnf5::cli::progressbar::TimeWidget time_widget;
 };
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // LIBDNF_CLI_PROGRESSBAR_DOWNLOAD_PROGRESS_BAR_HPP

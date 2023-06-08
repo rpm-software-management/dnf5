@@ -33,10 +33,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryModuleTest, "AdvisoryAdvis
 void AdvisoryAdvisoryModuleTest::setUp() {
     BaseTestCase::setUp();
     BaseTestCase::add_repo_repomd("repomd-repo1");
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_name("DNF-2019-1");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
-    std::vector<libdnf::advisory::AdvisoryCollection> collections = advisory.get_collections();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
+    std::vector<libdnf5::advisory::AdvisoryCollection> collections = advisory.get_collections();
     modules = collections[0].get_modules();
 }
 
@@ -67,20 +67,20 @@ void AdvisoryAdvisoryModuleTest::test_get_arch() {
 
 void AdvisoryAdvisoryModuleTest::test_get_advisory_id() {
     // Tests get_advisory_id method
-    libdnf::advisory::AdvisoryId adv_id = modules[0].get_advisory_id();
+    libdnf5::advisory::AdvisoryId adv_id = modules[0].get_advisory_id();
     CPPUNIT_ASSERT(adv_id.id > 0);
 }
 
 void AdvisoryAdvisoryModuleTest::test_get_advisory() {
     // Tests get_advisory method
-    libdnf::advisory::Advisory a = modules[0].get_advisory();
+    libdnf5::advisory::Advisory a = modules[0].get_advisory();
     CPPUNIT_ASSERT_EQUAL(std::string("DNF-2019-1"), a.get_name());
 }
 
 void AdvisoryAdvisoryModuleTest::test_get_advisory_collection() {
     // Tests get_advisory_collection method
-    libdnf::advisory::AdvisoryCollection ac = modules[0].get_advisory_collection();
-    std::vector<libdnf::advisory::AdvisoryModule> out_mods = ac.get_modules();
+    libdnf5::advisory::AdvisoryCollection ac = modules[0].get_advisory_collection();
+    std::vector<libdnf5::advisory::AdvisoryModule> out_mods = ac.get_modules();
     size_t target_size = 2;
     CPPUNIT_ASSERT_EQUAL(target_size, out_mods.size());
 }

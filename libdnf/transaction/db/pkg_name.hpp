@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 /// Create a query (statement) that inserts new records to the 'pkg_name' table
 std::unique_ptr<utils::SQLite3::Statement> pkg_name_insert_if_not_exists_new_query(utils::SQLite3 & conn);
@@ -32,6 +32,6 @@ std::unique_ptr<utils::SQLite3::Statement> pkg_name_insert_if_not_exists_new_que
 /// Use a query to insert a new record to the 'pkg_name' table
 int64_t pkg_name_insert_if_not_exists(utils::SQLite3::Statement & query, const std::string & name);
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_DB_PKG_NAME_HPP

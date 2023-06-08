@@ -35,23 +35,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 class Comps;
 }
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 class Pool;
 }
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 class Package;
 class PackageSack;
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class SolvRepo;
 class RepoDownloader;
@@ -83,13 +83,13 @@ public:
     /// @param base   weak pointer to the Base instance
     /// @param id     repo ID to use
     /// @param type   type of repo
-    Repo(const libdnf::BaseWeakPtr & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
+    Repo(const libdnf5::BaseWeakPtr & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
 
     /// Construct the Repo object
     /// @param base   a reference to the Base instance
     /// @param id     repo ID to use
     /// @param type   type of repo
-    Repo(libdnf::Base & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
+    Repo(libdnf5::Base & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
 
     ~Repo();
 
@@ -98,7 +98,7 @@ public:
 
     /// Registers a class that implements callback methods (fastest mirror detection, download state, key import).
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
-    void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);
+    void set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && callbacks);
 
     /// @brief Sets the associated user data. These are used in callbacks.
     /// @param user_data  Pointer to user data
@@ -337,13 +337,13 @@ public:
     /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
     /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
     /// @return PackageId of the added package.
-    libdnf::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
+    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
 
-    libdnf::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
+    libdnf5::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 private:
     class Impl;
@@ -373,7 +373,7 @@ private:
     /// Depending on the result, the repository may be marked as expired.
     void recompute_expired();
 
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
     ConfigRepo config;
 
     Type type;
@@ -389,6 +389,6 @@ private:
     WeakPtrGuard<Repo, false> data_guard;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

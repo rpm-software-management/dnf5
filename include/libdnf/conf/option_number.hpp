@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores numerical value. The type of value is template parameter.
 /// Support default value, minimal and maximal values, user defined function for conversion from string.
@@ -138,6 +138,6 @@ extern template class OptionNumber<std::int64_t>;
 extern template class OptionNumber<std::uint64_t>;
 extern template class OptionNumber<float>;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

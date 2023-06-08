@@ -54,8 +54,8 @@ public:
     void test_remove_user_includes();
 
 private:
-    std::unique_ptr<libdnf::rpm::PackageSet> pkgset;
-    std::unique_ptr<libdnf::rpm::Package> pkg0;
+    std::unique_ptr<libdnf5::rpm::PackageSet> pkgset;
+    std::unique_ptr<libdnf5::rpm::Package> pkg0;
 };
 
 

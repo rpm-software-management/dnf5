@@ -37,7 +37,7 @@ struct default_delete<GError> {
 }  // namespace std
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class LibrepoError : public Error {
 public:
@@ -65,7 +65,7 @@ public:
     void get_info(LrResultInfoOption option, T * value) {
         GError * err_p{nullptr};
         if (!lr_result_getinfo(result, &err_p, option, value)) {
-            throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+            throw libdnf5::repo::LibrepoError(std::unique_ptr<GError>(err_p));
         }
     }
 
@@ -87,14 +87,14 @@ public:
     LibrepoHandle & operator=(const LibrepoHandle & other) = delete;
     LibrepoHandle & operator=(LibrepoHandle && other) noexcept;
 
-    void init_remote(const libdnf::ConfigMain & config);
-    void init_remote(const libdnf::repo::ConfigRepo & config);
+    void init_remote(const libdnf5::ConfigMain & config);
+    void init_remote(const libdnf5::repo::ConfigRepo & config);
 
     template <typename T>
     void set_opt(LrHandleOption option, T value) {
         GError * err_p{nullptr};
         if (!lr_handle_setopt(handle, &err_p, option, value)) {
-            throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+            throw libdnf5::repo::LibrepoError(std::unique_ptr<GError>(err_p));
         }
     }
 
@@ -102,7 +102,7 @@ public:
     void get_info(LrHandleInfoOption option, T * value) {
         GError * err_p{nullptr};
         if (!lr_handle_getinfo(handle, &err_p, option, value)) {
-            throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+            throw libdnf5::repo::LibrepoError(std::unique_ptr<GError>(err_p));
         }
     }
 
@@ -114,6 +114,6 @@ private:
     LrHandle * handle;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_LIBREPO_PRIVATE_HPP

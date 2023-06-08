@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// Format `args` according to the `runtime_format_string`, and return the result as a string.
 /// Unlike C++20 `std::format`, the format string of the `libdnf::sformat` function template
@@ -33,6 +33,6 @@ inline std::string sformat(std::string_view runtime_format_string, Args &&... ar
     return fmt::vformat(runtime_format_string, fmt::make_format_args(args...));
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_FORMAT_HPP

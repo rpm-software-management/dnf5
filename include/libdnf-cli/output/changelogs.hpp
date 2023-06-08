@@ -26,15 +26,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 void print_changelogs(
-    libdnf::rpm::PackageQuery & query,
-    libdnf::rpm::PackageQuery & full_package_query,
+    libdnf5::rpm::PackageQuery & query,
+    libdnf5::rpm::PackageQuery & full_package_query,
     bool upgrades,
     int32_t count,
     int64_t since);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP

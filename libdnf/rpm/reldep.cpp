@@ -32,7 +32,7 @@ extern "C" {
 
 #include <stdexcept>
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 Reldep::Reldep(const BaseWeakPtr & base, ReldepId dependency_id) : base(base), id(dependency_id) {}
@@ -45,7 +45,7 @@ Reldep::Reldep(const BaseWeakPtr & base, const std::string & reldep_string) : ba
     id = get_reldep_id(base, reldep_string);
 }
 
-Reldep::Reldep(libdnf::Base & base, const std::string & reldep_string) : Reldep(base.get_weak_ptr(), reldep_string) {}
+Reldep::Reldep(libdnf5::Base & base, const std::string & reldep_string) : Reldep(base.get_weak_ptr(), reldep_string) {}
 
 Reldep::Reldep(Reldep && reldep) : base(std::move(reldep.base)), id(std::move(reldep.id)) {}
 
@@ -102,4 +102,4 @@ ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & rel
         base, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

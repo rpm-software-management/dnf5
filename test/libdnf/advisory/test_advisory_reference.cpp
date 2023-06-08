@@ -36,9 +36,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryReferenceTest, "AdvisoryAd
 void AdvisoryAdvisoryReferenceTest::setUp() {
     BaseTestCase::setUp();
     BaseTestCase::add_repo_repomd("repomd-repo1");
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_name("DNF-2019-1");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
     references = advisory.get_references();
 }
 

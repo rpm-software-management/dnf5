@@ -35,29 +35,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Goal;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 // @replaces libdnf/hy-query.h:struct:HyQuery
 // @replaces libdnf/sack/query.hpp:struct:Query
 // @replaces hawkey:hawkey/__init__.py:class:Query
 class PackageQuery : public PackageSet {
 public:
-    using ExcludeFlags = libdnf::sack::ExcludeFlags;
+    using ExcludeFlags = libdnf5::sack::ExcludeFlags;
 
     // @replaces libdnf/hy-query.h:function:hy_query_create(DnfSack *sack);
     // @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     // @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     explicit PackageQuery(
-        const libdnf::BaseWeakPtr & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
-    explicit PackageQuery(libdnf::Base & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
+        const libdnf5::BaseWeakPtr & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
+    explicit PackageQuery(libdnf5::Base & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
 
     /// Construct a new PackageQuery based on given PackageSet. This is a shortcut to creating
     /// an empty PackageQuery and then updating it with the content of pkgset.
@@ -82,7 +82,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NAME
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NAME
     void filter_name(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `name` based on names of the packages in the `package_set`.
     ///
@@ -90,7 +90,7 @@ public:
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
-    void filter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_name(const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `epoch`.
     ///
@@ -102,7 +102,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EPOCH
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EPOCH
     void filter_epoch(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `epoch`.
     ///
@@ -111,7 +111,7 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     /// @since 5.0
     void filter_epoch(
-        const std::vector<unsigned long> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<unsigned long> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `version`.
     ///
@@ -123,7 +123,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_VERSION
     void filter_version(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `release`.
     ///
@@ -135,7 +135,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RELEASE
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RELEASE
     void filter_release(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `arch`.
     ///
@@ -144,7 +144,7 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     void filter_arch(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `name` and `arch` based on names and arches of the packages in the `package_set`.
     ///
@@ -152,7 +152,8 @@ public:
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
-    void filter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_name_arch(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `epoch:version-release`.
     ///
@@ -164,7 +165,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EVR
     void filter_evr(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `name-[epoch:]version-release.arch`. The following matches are tolerant to omitted 0 epoch: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     ///
@@ -178,7 +179,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA_STRICT
     void filter_nevra(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by the `name`, `epoch`, `version`, `release` and `arch` attributes from the `nevra` object.
     /// Only the attributes that are not blank are used in the filter.
@@ -187,7 +188,8 @@ public:
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `IGLOB`, `NOT_IGLOB`.
     /// @since 5.0
-    void filter_nevra(const libdnf::rpm::Nevra & nevra, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_nevra(
+        const libdnf5::rpm::Nevra & nevra, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `name-[epoch:]version-release.arch` attributes of
     /// the packages in the `package_set`.
@@ -202,7 +204,7 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`,
     ///                         and their combinations with `NOT`.
     /// @since 5.0
-    void filter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_nevra(const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `sourcerpm`.
     ///
@@ -213,7 +215,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SOURCERPM
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SOURCERPM
     void filter_sourcerpm(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `url`.
     ///
@@ -225,7 +227,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_URL
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_URL
     void filter_url(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `summary`.
     ///
@@ -237,7 +239,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUMMARY
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUMMARY
     void filter_summary(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `summary`.
     ///
@@ -249,7 +251,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_DESCRIPTION
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_DESCRIPTION
     void filter_description(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `provides`.
     ///
@@ -260,7 +262,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_PROVIDES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_PROVIDES
-    void filter_provides(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_provides(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `provides`.
     ///
@@ -268,7 +271,7 @@ public:
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`.
     /// @since 5.0
-    void filter_provides(const Reldep & reldep, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_provides(const Reldep & reldep, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `provides`.
     ///
@@ -280,7 +283,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_PROVIDES
     void filter_provides(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `requires`.
     ///
@@ -291,7 +294,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_REQUIRES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_REQUIRES
-    void filter_requires(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_requires(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `requires`.
     ///
@@ -303,7 +307,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REQUIRES
     void filter_requires(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `requires`.
     ///
@@ -313,7 +317,8 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_REQUIRES
-    void filter_requires(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_requires(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `conflicts`.
     ///
@@ -324,7 +329,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_CONFLICTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_CONFLICTS
-    void filter_conflicts(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_conflicts(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `conflicts`.
     ///
@@ -336,7 +342,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_CONFLICTS
     void filter_conflicts(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `conflicts`.
     ///
@@ -346,7 +352,8 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_CONFLICTS
-    void filter_conflicts(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_conflicts(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `obsoletes`.
     ///
@@ -357,7 +364,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_OBSOLETES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_OBSOLETES
-    void filter_obsoletes(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_obsoletes(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `obsoletes`.
     ///
@@ -369,7 +377,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_OBSOLETES
     void filter_obsoletes(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `obsoletes`.
     ///
@@ -379,7 +387,8 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_OBSOLETES
-    void filter_obsoletes(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_obsoletes(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `recommends`.
     ///
@@ -391,7 +400,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_RECOMMENDS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_RECOMMENDS
     void filter_recommends(
-        const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `recommends`.
     ///
@@ -403,7 +412,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RECOMMENDS
     void filter_recommends(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `recommends`.
     ///
@@ -414,7 +423,7 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_RECOMMENDS
     void filter_recommends(
-        const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `suggests`.
     ///
@@ -425,7 +434,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_SUGGESTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_SUGGESTS
-    void filter_suggests(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_suggests(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `suggests`.
     ///
@@ -437,7 +447,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUGGESTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUGGESTS
     void filter_suggests(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `suggests`.
     ///
@@ -447,7 +457,8 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_SUGGESTS
-    void filter_suggests(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_suggests(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `enhances`.
     ///
@@ -458,7 +469,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_ENHANCES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_ENHANCES
-    void filter_enhances(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_enhances(
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `enhances`.
     ///
@@ -470,7 +482,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_ENHANCES
     void filter_enhances(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `enhances`.
     ///
@@ -480,7 +492,8 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_ENHANCES
-    void filter_enhances(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    void filter_enhances(
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `supplements`.
     ///
@@ -492,7 +505,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_SUPPLEMENTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_SUPPLEMENTS
     void filter_supplements(
-        const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `supplements`.
     ///
@@ -504,7 +517,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUPPLEMENTS
     void filter_supplements(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `supplements`.
     ///
@@ -515,7 +528,7 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_SUPPLEMENTS
     void filter_supplements(
-        const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const PackageSet & package_set, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by `files` they contain.
     ///
@@ -527,7 +540,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_FILE
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_FILE
     void filter_file(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `location`.
     /// @param patterns         A vector of strings the filter is matched against.
@@ -539,7 +552,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_LOCATION
     void filter_location(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by `id` of the Repo they belong to.
     ///
@@ -551,7 +564,7 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REPONAME
     void filter_repo_id(
-        const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by advisories they are included in.
     ///
@@ -562,8 +575,8 @@ public:
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_ADVISORY/_BUG/_CVE/_SEVERITY/_TYPE
     void filter_advisories(
-        const libdnf::advisory::AdvisoryQuery & advisory_query,
-        libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const libdnf5::advisory::AdvisoryQuery & advisory_query,
+        libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by the advisories they are included in, considering
     /// only the latest advisories that are not resolved in the currently
@@ -575,9 +588,9 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     /// @since 5.0
     void filter_latest_unresolved_advisories(
-        const libdnf::advisory::AdvisoryQuery & advisory_query,
+        const libdnf5::advisory::AdvisoryQuery & advisory_query,
         PackageQuery & installed,
-        libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::GTE);
+        libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::GTE);
 
     void filter_installed();
 
@@ -652,8 +665,8 @@ public:
     /// the first tested type (NEVRA).
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
-    std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(
-        const std::string & pkg_spec, const libdnf::ResolveSpecSettings & settings, bool with_src);
+    std::pair<bool, libdnf5::rpm::Nevra> resolve_pkg_spec(
+        const std::string & pkg_spec, const libdnf5::ResolveSpecSettings & settings, bool with_src);
 
     void swap(PackageQuery & other) noexcept;
 
@@ -680,12 +693,12 @@ public:
 private:
     std::vector<std::vector<Package>> filter_leaves(bool return_grouped_leaves);
 
-    friend libdnf::Goal;
+    friend libdnf5::Goal;
     class PQImpl;
     std::unique_ptr<PQImpl> p_pq_impl;
 };
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_QUERY_HPP

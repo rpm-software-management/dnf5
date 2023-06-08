@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConfTest);
 
-using namespace libdnf;
+using namespace libdnf5;
 
 void ConfTest::setUp() {
     TestCaseFixture::setUp();

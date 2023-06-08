@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// PreserveOrderMap is an associative container that contains key-value pairs with unique unique keys.
 /// It is similar to standard std::map. But it preserves the order of items and the complexity is linear.
@@ -205,6 +205,6 @@ private:
     container_type items;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

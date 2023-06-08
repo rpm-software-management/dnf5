@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 
 struct RepoCacheRemoveStatistics {
@@ -60,13 +60,13 @@ public:
     ///
     /// @param base            WeakPtr on the Base instance.
     /// @param repo_cache_dir  Path to repository cache directory.
-    RepoCache(const libdnf::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir);
+    RepoCache(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir);
 
     /// Construct a new repository cache management instance.
     ///
     /// @param base            Base instance reference.
     /// @param repo_cache_dir  Path to repository cache directory.
-    RepoCache(libdnf::Base & base, const std::string & repo_cache_dir);
+    RepoCache(libdnf5::Base & base, const std::string & repo_cache_dir);
 
     /// Removes metadata from the cache.
     ///
@@ -124,11 +124,11 @@ public:
     std::string get_repoid();
 
 private:
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
     std::filesystem::path cache_dir;
 };
 
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

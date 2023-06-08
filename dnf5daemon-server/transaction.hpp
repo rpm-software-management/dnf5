@@ -29,7 +29,7 @@ namespace dnfdaemon {
 
 enum class RpmTransactionItemActions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL, CLEANUP };
 
-RpmTransactionItemActions transaction_package_to_action(const libdnf::base::TransactionPackage & tspkg);
+RpmTransactionItemActions transaction_package_to_action(const libdnf5::base::TransactionPackage & tspkg);
 
 }  // namespace dnfdaemon
 

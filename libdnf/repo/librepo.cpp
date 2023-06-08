@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/repo_errors.hpp"
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 // Map string from config option proxy_auth_method to librepo LrAuth value
 static constexpr struct {
@@ -220,4 +220,4 @@ LibrepoResult LibrepoHandle::perform() {
     return result;
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

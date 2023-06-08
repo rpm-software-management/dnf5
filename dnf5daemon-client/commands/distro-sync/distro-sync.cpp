@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void DistroSyncCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -47,7 +47,7 @@ void DistroSyncCommand::set_argument_parser() {
 
     cmd.set_description("Upgrade or downgrade installed software to the latest available versions");
 
-    auto specs_arg = pkg_specs_argument(parser, libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED, pkg_specs);
+    auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED, pkg_specs);
     specs_arg->set_description("Patterns");
     cmd.register_positional_arg(specs_arg);
 }

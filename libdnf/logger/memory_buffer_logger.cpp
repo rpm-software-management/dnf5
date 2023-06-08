@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/logger/memory_buffer_logger.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 MemoryBufferLogger::MemoryBufferLogger(std::size_t max_items_to_keep, std::size_t reserve)
     : max_items(max_items_to_keep),
@@ -80,4 +80,4 @@ void MemoryBufferLogger::clear() noexcept {
     items.clear();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

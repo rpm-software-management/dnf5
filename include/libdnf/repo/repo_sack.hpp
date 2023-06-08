@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/logger.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
@@ -40,7 +40,7 @@ public:
     /// Creates a new clear repository with default configuration.
     /// @param id The new repo id
     /// @return A weak pointer to the new repo
-    libdnf::repo::RepoWeakPtr create_repo(const std::string & id);
+    libdnf5::repo::RepoWeakPtr create_repo(const std::string & id);
 
     /// Creates new repositories from the configuration file at `path`.
     /// @param path The path to the repository configuration file
@@ -77,17 +77,17 @@ public:
     /// @param id The new repo id
     /// @param path The path to the libsolv testcase file
     /// @return A weak pointer to the new repo
-    libdnf::repo::RepoWeakPtr create_repo_from_libsolv_testcase(const std::string & id, const std::string & path);
+    libdnf5::repo::RepoWeakPtr create_repo_from_libsolv_testcase(const std::string & id, const std::string & path);
 
     /// If not created yet, creates the system repository and returns it.
     /// @return The system repository.
-    libdnf::repo::RepoWeakPtr get_system_repo();
+    libdnf5::repo::RepoWeakPtr get_system_repo();
 
     /// Add given paths to comdline repository.
     /// @param paths Vector of paths to rpm files to be inserted to cmdline repo. Can contain paths to local files or URLs of remote rpm files. Specifications that are neither file paths, nor URLs are ignored.
     /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
     /// @return Map path->rpm::Package which maps input path to newly created Package object in cmdline repo
-    std::map<std::string, libdnf::rpm::Package> add_cmdline_packages(
+    std::map<std::string, libdnf5::rpm::Package> add_cmdline_packages(
         const std::vector<std::string> & paths, bool calculate_checksum = false);
 
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
@@ -120,13 +120,13 @@ public:
     ///
     /// @param repos The repositories to update and load
     /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
-    void update_and_load_repos(libdnf::repo::RepoQuery & repos, bool import_keys = true);
+    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
 
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
     /// For each enabled repository enable corresponding source repository.
     /// @since 5.0
@@ -140,18 +140,18 @@ public:
     void fix_group_missing_xml();
 
 private:
-    friend class libdnf::Base;
+    friend class libdnf5::Base;
     friend class RepoQuery;
     friend class rpm::PackageSack;
 
-    explicit RepoSack(const libdnf::BaseWeakPtr & base) : base(base) {}
-    explicit RepoSack(libdnf::Base & base);
+    explicit RepoSack(const libdnf5::BaseWeakPtr & base) : base(base) {}
+    explicit RepoSack(libdnf5::Base & base);
 
     WeakPtrGuard<RepoSack, false> sack_guard;
 
     /// If not created yet, creates the cmdline repository and returns it.
     /// @return The cmdline repository.
-    libdnf::repo::RepoWeakPtr get_cmdline_repo();
+    libdnf5::repo::RepoWeakPtr get_cmdline_repo();
 
     void internalize_repos();
 
@@ -161,6 +161,6 @@ private:
     repo::Repo * cmdline_repo{nullptr};
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

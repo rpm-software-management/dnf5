@@ -29,16 +29,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class TransactionSpecArguments : public libdnf::cli::session::StringArgumentList {
+class TransactionSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    explicit TransactionSpecArguments(libdnf::cli::session::Command & command)
+    explicit TransactionSpecArguments(libdnf5::cli::session::Command & command)
         : StringArgumentList(command, "transaction-id", _("Transaction ID")) {}
 };
 
 
-class ReverseOption : public libdnf::cli::session::BoolOption {
+class ReverseOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit ReverseOption(libdnf::cli::session::Command & command)
+    explicit ReverseOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "reverse", '\0', _("Reverse the order of transactions."), false) {}
 };
 

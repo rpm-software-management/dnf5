@@ -48,12 +48,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace {
 
-void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf::rpm::PackageSet & data) {
-    libdnf::rpm::PackageQuery data_query(data);
+void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf5::rpm::PackageSet & data) {
+    libdnf5::rpm::PackageQuery data_query(data);
 
     // In case there is an installed package in the `data` behave consistently
     // with upgrade and add all the obsoleters.
-    libdnf::rpm::PackageQuery installed_data(data_query);
+    libdnf5::rpm::PackageQuery installed_data(data_query);
     installed_data.filter_installed();
 
     if (installed_data.empty()) {
@@ -66,7 +66,7 @@ void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf:
         data_query.filter_latest_evr();
     }
 
-    libdnf::rpm::PackageQuery obsoletes_query(base_query);
+    libdnf5::rpm::PackageQuery obsoletes_query(base_query);
     obsoletes_query.filter_obsoletes(data_query);
     data |= obsoletes_query;
 }
@@ -106,7 +106,7 @@ public:
     GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
-    std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
+    std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
@@ -122,8 +122,8 @@ public:
 
     static void filter_candidates_for_advisory_upgrade(
         const BaseWeakPtr & base,
-        libdnf::rpm::PackageQuery & candidates,
-        const libdnf::advisory::AdvisoryQuery & advisories,
+        libdnf5::rpm::PackageQuery & candidates,
+        const libdnf5::advisory::AdvisoryQuery & advisories,
         bool add_obsoletes);
 
     void add_group_install_to_goal(
@@ -172,12 +172,14 @@ private:
     /// <libdnf::GoalAction, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
     /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf::GoalJobSettings settings>
-    std::vector<
-        std::
-            tuple<libdnf::transaction::TransactionItemReason, std::string, std::optional<std::string>, GoalJobSettings>>
+    std::vector<std::tuple<
+        libdnf5::transaction::TransactionItemReason,
+        std::string,
+        std::optional<std::string>,
+        GoalJobSettings>>
         rpm_reason_change_specs;
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
-    std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    std::vector<std::tuple<GoalAction, libdnf5::solv::IdQueue, GoalJobSettings>> rpm_ids;
     /// <libdnf::GoalAction, std::string filepath, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_filepaths;
 
@@ -199,7 +201,7 @@ private:
     rpm::solv::GoalPrivate rpm_goal;
     bool allow_erasing{false};
 
-    void install_group_package(base::Transaction & transaction, libdnf::comps::Package pkg);
+    void install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg);
     void remove_group_packages(const rpm::PackageSet & remove_candidates);
 };
 
@@ -339,7 +341,7 @@ void Goal::add_rpm_reason_change(
     const std::string & group_id,
     const libdnf::GoalJobSettings & settings) {
     libdnf_user_assert(
-        reason != libdnf::transaction::TransactionItemReason::GROUP || !group_id.empty(),
+        reason != libdnf5::transaction::TransactionItemReason::GROUP || !group_id.empty(),
         "group_id is required for setting reason \"GROUP\"");
     p_impl->rpm_reason_change_specs.push_back(std::make_tuple(reason, spec, group_id, settings));
 }
@@ -1029,7 +1031,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     }
     std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
-    libdnf::solv::IdQueue tmp_queue;
+    libdnf5::solv::IdQueue tmp_queue;
 
     {
         auto * first = (*tmp_solvables.begin());

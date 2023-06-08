@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_PATTERNS_HPP
 #define LIBDNF_UTILS_PATTERNS_HPP
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// @brief Check if a given pattern is a GLOB.
 ///
@@ -40,6 +40,6 @@ inline bool is_file_pattern(const std::string & pattern) {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_PATTERNS_HPP

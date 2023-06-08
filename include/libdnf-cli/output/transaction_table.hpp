@@ -36,13 +36,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 enum { COL_NAME, COL_ARCH, COL_EVR, COL_REPO, COL_SIZE };
 
 
-static const char * action_color(libdnf::transaction::TransactionItemAction action) {
+static const char * action_color(libdnf5::transaction::TransactionItemAction action) {
     switch (action) {
         case libdnf::transaction::TransactionItemAction::INSTALL:
         case libdnf::transaction::TransactionItemAction::UPGRADE:
@@ -60,7 +60,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             return "halfbright";
     }
 
-    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
 }
 
 
@@ -122,7 +122,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::DISABLE:
                 case libdnf::transaction::TransactionItemAction::RESET:
                     libdnf_throw_assertion(
-                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+                        "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }
 
             text += ":";
@@ -139,8 +139,8 @@ public:
 private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
-    std::optional<libdnf::transaction::TransactionItemAction> current_action;
-    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+    std::optional<libdnf5::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
 };
 
 
@@ -158,18 +158,18 @@ public:
             std::string text;
 
             switch (action) {
-                case libdnf::transaction::TransactionItemAction::INSTALL:
+                case libdnf5::transaction::TransactionItemAction::INSTALL:
                     text = "Installing environmental groups";
                     break;
-                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf5::transaction::TransactionItemAction::REMOVE:
                     text = "Removing environmental groups";
                     break;
-                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                case libdnf5::transaction::TransactionItemAction::UPGRADE:
                     text = "Upgrading environmental groups";
                     break;
                 default:
                     libdnf_throw_assertion(
-                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+                        "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }
 
             text += ":";
@@ -186,8 +186,8 @@ public:
 private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
-    std::optional<libdnf::transaction::TransactionItemAction> current_action;
-    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+    std::optional<libdnf5::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
 };
 
 
@@ -212,21 +212,21 @@ public:
             std::string text;
 
             switch (action) {
-                case libdnf::transaction::TransactionItemAction::INSTALL:
+                case libdnf5::transaction::TransactionItemAction::INSTALL:
                     text = "Installing groups";
-                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                    if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
                         text += " dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf5::transaction::TransactionItemAction::REMOVE:
                     text = "Removing groups";
                     break;
-                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                case libdnf5::transaction::TransactionItemAction::UPGRADE:
                     text = "Upgrading groups";
                     break;
                 default:
                     libdnf_throw_assertion(
-                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+                        "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }
 
             text += ":";
@@ -243,8 +243,8 @@ public:
 private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
-    std::optional<libdnf::transaction::TransactionItemAction> current_action;
-    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+    std::optional<libdnf5::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
 };
 
 
@@ -297,27 +297,27 @@ private:
 
 class TransactionSummary {
 public:
-    void add(const libdnf::transaction::TransactionItemAction & action) {
+    void add(const libdnf5::transaction::TransactionItemAction & action) {
         switch (action) {
-            case libdnf::transaction::TransactionItemAction::INSTALL:
+            case libdnf5::transaction::TransactionItemAction::INSTALL:
                 installs++;
                 break;
-            case libdnf::transaction::TransactionItemAction::UPGRADE:
+            case libdnf5::transaction::TransactionItemAction::UPGRADE:
                 upgrades++;
                 break;
-            case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+            case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
                 downgrades++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALL:
+            case libdnf5::transaction::TransactionItemAction::REINSTALL:
                 reinstalls++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REMOVE:
+            case libdnf5::transaction::TransactionItemAction::REMOVE:
                 removes++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REPLACED:
+            case libdnf5::transaction::TransactionItemAction::REPLACED:
                 replaced++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+            case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
                 reason_changes++;
                 break;
             case libdnf::transaction::TransactionItemAction::ENABLE:
@@ -373,13 +373,13 @@ static bool transaction_package_cmp(const TransactionPackage & tspkg1, const Tra
 
     // INSTALL and REMOVE actions are divided (printed) into groups according to the reason.
     auto current_action = tspkg1.get_action();
-    if ((current_action == libdnf::transaction::TransactionItemAction::INSTALL ||
-         current_action == libdnf::transaction::TransactionItemAction::REMOVE) &&
+    if ((current_action == libdnf5::transaction::TransactionItemAction::INSTALL ||
+         current_action == libdnf5::transaction::TransactionItemAction::REMOVE) &&
         tspkg1.get_reason() != tspkg2.get_reason()) {
         return tspkg1.get_reason() > tspkg2.get_reason();
     }
 
-    return libdnf::rpm::cmp_naevr(tspkg1.get_package(), tspkg2.get_package());
+    return libdnf5::rpm::cmp_naevr(tspkg1.get_package(), tspkg2.get_package());
 }
 
 
@@ -451,7 +451,7 @@ bool print_transaction_table(Transaction & transaction) {
     scols_cell_set_color(header, "bold");
 
     scols_table_enable_maxout(tb, 1);
-    scols_table_enable_colors(tb, libdnf::cli::tty::is_interactive());
+    scols_table_enable_colors(tb, libdnf5::cli::tty::is_interactive());
 
     struct libscols_symbols * sb = scols_new_symbols();
     scols_symbols_set_branch(sb, " ");
@@ -473,7 +473,7 @@ bool print_transaction_table(Transaction & transaction) {
 
     for (auto & tspkg : tspkgs) {
         // TODO(lukash) handle OBSOLETED correctly throught the transaction table output
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
+        if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
             ts_summary.add(tspkg.get_action());
             continue;
         }
@@ -486,24 +486,24 @@ bool print_transaction_table(Transaction & transaction) {
         scols_line_set_data(ln, COL_NAME, pkg.get_name().c_str());
         scols_line_set_data(ln, COL_ARCH, pkg.get_arch().c_str());
         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REMOVE) {
+        if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
             scols_line_set_data(ln, COL_REPO, pkg.get_from_repo_id().c_str());
         } else {
             scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
         }
         auto tspkg_size = static_cast<int64_t>(pkg.get_install_size());
-        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size_aligned(tspkg_size).c_str());
+        scols_line_set_data(ln, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(tspkg_size).c_str());
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tspkg.get_action()));
 
         ts_summary.add(tspkg.get_action());
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
-            auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
+        if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REASON_CHANGE) {
+            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
             struct libscols_line * ln_reason = scols_table_new_line(tb, ln);
             std::string reason = fmt::format(
                 "{} -> {}",
-                libdnf::transaction::transaction_item_reason_to_string(pkg.get_reason()),
-                libdnf::transaction::transaction_item_reason_to_string(tspkg.get_reason()));
+                libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()),
+                libdnf5::transaction::transaction_item_reason_to_string(tspkg.get_reason()));
             scols_line_set_data(ln_reason, COL_NAME, reason.c_str());
             scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
         }
@@ -526,8 +526,8 @@ bool print_transaction_table(Transaction & transaction) {
 
             auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
             scols_line_set_data(
-                ln_replaced, COL_SIZE, libdnf::cli::utils::units::format_size_aligned(replaced_size).c_str());
-            auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
+                ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
+            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
             auto obsoleted_color = "brown";
 
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
@@ -599,6 +599,6 @@ bool print_transaction_table(Transaction & transaction) {
     return true;
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP

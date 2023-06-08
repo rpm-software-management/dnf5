@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 // Usage requires a different class to Help (which extends Usage by adding a new column)
@@ -40,7 +40,7 @@ public:
     explicit Usage() {
         table = scols_new_table();
         scols_table_enable_noheadings(table, 1);
-        if (libdnf::cli::tty::is_interactive()) {
+        if (libdnf5::cli::tty::is_interactive()) {
             scols_table_enable_colors(table, 1);
         }
 
@@ -99,7 +99,7 @@ protected:
 };
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 
 #endif  // LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP

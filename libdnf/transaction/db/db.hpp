@@ -27,20 +27,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf {
+namespace libdnf5 {
 class Base;
 }
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 /// Create a connection to transaction database in the 'persistdir' directory.
 /// The file is named 'transaction_history.sqlite'.
-std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base);
+std::unique_ptr<libdnf5::utils::SQLite3> transaction_db_connect(libdnf5::Base & base);
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_DB_HPP

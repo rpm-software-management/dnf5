@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisoryReference {
 public:
@@ -77,6 +77,6 @@ private:
     int index;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

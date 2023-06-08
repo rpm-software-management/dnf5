@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/environment/query.hpp"
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 EnvironmentSackWeakPtr EnvironmentSack::get_weak_ptr() {
@@ -38,4 +38,4 @@ EnvironmentSack::EnvironmentSack(Comps & comps) : comps{comps} {}
 EnvironmentSack::~EnvironmentSack() = default;
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

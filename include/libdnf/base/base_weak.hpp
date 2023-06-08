@@ -23,11 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Base;
 using BaseWeakPtr = WeakPtr<Base, false>;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

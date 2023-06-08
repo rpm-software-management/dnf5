@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 class SQLite3Error : public Error {
 public:
@@ -361,6 +361,6 @@ private:
 
 using SQLite3Ptr = std::shared_ptr<SQLite3>;
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_SQLITE3_SQLITE3_HPP

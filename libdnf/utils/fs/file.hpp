@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 /// A wrapper for a `FILE *` that handles opening and closing a file in RAII
 /// fashion. Errors are handled by raising instances of
@@ -164,6 +164,6 @@ private:
     FILE * file = nullptr;
 };
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs
 
 #endif  // LIBDNF_UTILS_FS_FILE_HPP

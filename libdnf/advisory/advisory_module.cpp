@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 // AdvisoryModule
 AdvisoryModule::AdvisoryModule(AdvisoryModule::Impl * private_module) : p_impl(private_module) {}
@@ -66,7 +66,7 @@ AdvisoryCollection AdvisoryModule::get_advisory_collection() const {
 
 // AdvisoryModule::Impl
 AdvisoryModule::Impl::Impl(
-    const libdnf::BaseWeakPtr & base,
+    const libdnf5::BaseWeakPtr & base,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,
@@ -83,4 +83,4 @@ AdvisoryModule::Impl::Impl(
       context(context),
       arch(arch) {}
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

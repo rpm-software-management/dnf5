@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 /// Type of the match against the related key.
 enum class SearchKeyMatch {
@@ -47,8 +47,8 @@ struct SearchOptions {
 
 /// Auxilliary structure for holding the set of result packages together with their comparator.
 struct SearchPackages {
-    std::set<libdnf::rpm::Package, decltype(&libdnf::rpm::cmp_nevra<libdnf::rpm::Package>)> packages{
-        &libdnf::rpm::cmp_nevra<libdnf::rpm::Package>};
+    std::set<libdnf5::rpm::Package, decltype(&libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>)> packages{
+        &libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>};
 };
 
 /// Search results grouped by the keys that were matched.
@@ -68,6 +68,6 @@ struct SearchResults {
 /// @param results Structure with already computed search results.
 void print_search_results(const SearchResults & results);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_SEARCH_HPP

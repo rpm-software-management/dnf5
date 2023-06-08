@@ -24,17 +24,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list.hpp"
 
 
-using libdnf::rpm::Reldep;
+using libdnf5::rpm::Reldep;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 
 
 void ReldepListTest::test_get() {
-    libdnf::rpm::ReldepList list1(base);
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
+    libdnf5::rpm::ReldepList list1(base);
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
 
     list1.add(a);
     list1.add(b);
@@ -47,9 +47,9 @@ void ReldepListTest::test_get() {
 
 
 void ReldepListTest::test_add() {
-    libdnf::rpm::ReldepList list1(base);
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::ReldepList list1(base);
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
 
     list1.add(a);
     list1.add(b.get_id());
@@ -59,11 +59,11 @@ void ReldepListTest::test_add() {
 
 
 void ReldepListTest::test_size() {
-    libdnf::rpm::ReldepList list1(base);
+    libdnf5::rpm::ReldepList list1(base);
     CPPUNIT_ASSERT(list1.size() == 0);
 
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
     list1.add(a);
     list1.add(b);
     CPPUNIT_ASSERT(list1.size() == 2);
@@ -71,10 +71,10 @@ void ReldepListTest::test_size() {
 
 
 void ReldepListTest::test_compare() {
-    libdnf::rpm::ReldepList list1(base);
-    libdnf::rpm::ReldepList list2(base);
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::ReldepList list1(base);
+    libdnf5::rpm::ReldepList list2(base);
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
 
     CPPUNIT_ASSERT(list1 == list2);
 
@@ -89,18 +89,18 @@ void ReldepListTest::test_compare() {
 
 
 void ReldepListTest::test_append() {
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(base, "labirinto.txt");
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
+    libdnf5::rpm::Reldep d(base, "labirinto.txt");
 
-    libdnf::rpm::ReldepList list1(base);
+    libdnf5::rpm::ReldepList list1(base);
     list1.add(a);
     list1.add(b);
     list1.add_reldep("delgado > 1.2");
 
 
-    libdnf::rpm::ReldepList list2(base);
+    libdnf5::rpm::ReldepList list2(base);
     list2.add(c);
     list2.add(d);
 
@@ -114,12 +114,12 @@ void ReldepListTest::test_append() {
 }
 
 void ReldepListTest::test_iterator() {
-    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(base, "labirinto.txt");
-    std::vector<libdnf::rpm::Reldep> expected;
-    libdnf::rpm::ReldepList list(base);
+    libdnf5::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf5::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf5::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
+    libdnf5::rpm::Reldep d(base, "labirinto.txt");
+    std::vector<libdnf5::rpm::Reldep> expected;
+    libdnf5::rpm::ReldepList list(base);
 
     expected.push_back(a);
     list.add(a);
@@ -155,7 +155,7 @@ void ReldepListTest::test_iterator() {
 
     // test loop with pre-increment operator
     {
-        std::vector<libdnf::rpm::Reldep> result;
+        std::vector<libdnf5::rpm::Reldep> result;
         for (auto it = list.begin(), end = list.end(); it != end; ++it) {
             result.push_back(*it);
         }
@@ -164,7 +164,7 @@ void ReldepListTest::test_iterator() {
 
     // test loop with post-increment operator
     {
-        std::vector<libdnf::rpm::Reldep> result;
+        std::vector<libdnf5::rpm::Reldep> result;
         for (auto it = list.begin(), end = list.end(); it != end; it++) {
             result.push_back(*it);
         }
@@ -176,7 +176,7 @@ void ReldepListTest::test_iterator() {
 void ReldepListTest::test_add_reldep_with_glob() {
     add_repo_solv("solv-repo1");
 
-    libdnf::rpm::ReldepList list(base);
+    libdnf5::rpm::ReldepList list(base);
     list.add_reldep_with_glob("pkg*");
 
     const std::vector<Reldep> expected = {

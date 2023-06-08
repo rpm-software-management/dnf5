@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace libdnf {
+namespace libdnf5 {
 
 class GlibLogHandler {
 public:
@@ -41,6 +41,6 @@ private:
     unsigned int handler_id;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif  // LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP

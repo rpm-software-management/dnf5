@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 namespace solv {
 
@@ -41,8 +41,8 @@ class Base::Impl {
 public:
     /// @return The system state object.
     /// @since 5.0
-    libdnf::system::State & get_system_state() { return *system_state; }
-    libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
+    libdnf5::system::State & get_system_state() { return *system_state; }
+    libdnf5::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     solv::RpmPool & get_rpm_pool() {
         libdnf_user_assert(pool, "Base instance was not fully initialized by Base::setup()");
@@ -58,7 +58,7 @@ public:
 
 private:
     friend class Base;
-    Impl(const libdnf::BaseWeakPtr & base);
+    Impl(const libdnf5::BaseWeakPtr & base);
 
     // RpmPool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
     std::unique_ptr<solv::RpmPool> pool;
@@ -73,8 +73,8 @@ private:
     // Thus we need to keep group solvables in a separate pool.
     std::unique_ptr<solv::CompsPool> comps_pool;
 
-    std::optional<libdnf::system::State> system_state;
-    libdnf::advisory::AdvisorySack rpm_advisory_sack;
+    std::optional<libdnf5::system::State> system_state;
+    libdnf5::advisory::AdvisorySack rpm_advisory_sack;
 
     plugin::Plugins plugins;
 };
@@ -82,10 +82,12 @@ private:
 
 class InternalBaseUser {
 public:
-    static solv::RpmPool & get_rpm_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
-    static solv::CompsPool & get_comps_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_comps_pool(); }
+    static solv::RpmPool & get_rpm_pool(const libdnf5::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
+    static solv::CompsPool & get_comps_pool(const libdnf5::BaseWeakPtr & base) {
+        return base->p_impl->get_comps_pool();
+    }
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif  // LIBDNF_BASE_BASE_IMPL_HPP

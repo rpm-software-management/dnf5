@@ -31,7 +31,7 @@ extern "C" {
 #define solver_initialized_assert() libdnf_assert(solver, "Solver is not initialized.")
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 Solver::Solver(Pool & pool) {
     solver = ::solver_create(*pool);
@@ -149,4 +149,4 @@ IdQueue Solver::get_cleandeps() {
     return deps;
 }
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv

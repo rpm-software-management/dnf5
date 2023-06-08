@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "string.hpp"
 
 
-namespace libdnf::utils::string {
+namespace libdnf5::utils::string {
 
 
 static std::vector<std::string> split_impl(
@@ -87,4 +87,4 @@ std::vector<std::string> split(const std::string & str, const std::string & deli
 }
 
 
-}  // namespace libdnf::utils::string
+}  // namespace libdnf5::utils::string

@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::system {
+namespace libdnf5::system {
 
 class PackageState {
 public:
@@ -52,7 +52,7 @@ public:
     bool userinstalled{false};
     std::vector<std::string> packages;
     /// List of allowed group package types installed with the group. Group upgrade needs to respect it.
-    libdnf::comps::PackageType package_types;
+    libdnf5::comps::PackageType package_types;
 };
 
 class EnvironmentState {
@@ -73,7 +73,7 @@ public:
 };
 
 
-class StateNotFoundError : public libdnf::Error {
+class StateNotFoundError : public libdnf5::Error {
 public:
     StateNotFoundError(const std::string & type, const std::string & key);
 
@@ -82,18 +82,18 @@ public:
 };
 
 
-class InvalidVersionError : public libdnf::Error {
+class InvalidVersionError : public libdnf5::Error {
 public:
-    using libdnf::Error::Error;
+    using libdnf5::Error::Error;
 
     const char * get_domain_name() const noexcept override { return "libdnf::system"; }
     const char * get_name() const noexcept override { return "InvalidVersionError"; }
 };
 
 
-class UnsupportedVersionError : public libdnf::Error {
+class UnsupportedVersionError : public libdnf5::Error {
 public:
-    using libdnf::Error::Error;
+    using libdnf5::Error::Error;
 
     const char * get_domain_name() const noexcept override { return "libdnf::system"; }
     const char * get_name() const noexcept override { return "UnsupportedVersionError"; }
@@ -251,10 +251,10 @@ private:
     /// @param installed_environments Vector of tuples <std::string environment_id, std::set<std::string> installed_groups> of currently installed environmental groups
     /// @since 5.0
     void reset_packages_states(
-        std::map<std::string, libdnf::system::PackageState> && package_states,
-        std::map<std::string, libdnf::system::NevraState> && nevra_states,
-        std::map<std::string, libdnf::system::GroupState> && group_states,
-        std::map<std::string, libdnf::system::EnvironmentState> && environment_states);
+        std::map<std::string, libdnf5::system::PackageState> && package_states,
+        std::map<std::string, libdnf5::system::NevraState> && nevra_states,
+        std::map<std::string, libdnf5::system::GroupState> && group_states,
+        std::map<std::string, libdnf5::system::EnvironmentState> && environment_states);
 
     /// Loads the system state from the filesystem path given in constructor.
     /// @since 5.0
@@ -300,6 +300,6 @@ private:
     std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
 };
 
-}  // namespace libdnf::system
+}  // namespace libdnf5::system
 
 #endif

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <type_traits>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 /// Match operators used in filter methods of the Query objects.
 //
@@ -144,6 +144,6 @@ inline constexpr QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) noexcept {
         ~static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack
 
 #endif  // LIBDNF_COMMON_SACK_QUERY_CMP_HPP

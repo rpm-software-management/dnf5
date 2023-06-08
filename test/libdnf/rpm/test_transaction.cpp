@@ -34,15 +34,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmTransactionTest);
 
 
-using namespace libdnf::rpm;
-using namespace libdnf::transaction;
+using namespace libdnf5::rpm;
+using namespace libdnf5::transaction;
 
 
-class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+class PackageDownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
     int end(
         [[maybe_unused]] void * user_cb_data,
-        libdnf::repo::DownloadCallbacks::TransferStatus status,
+        libdnf5::repo::DownloadCallbacks::TransferStatus status,
         const char * msg) override {
         ++end_cnt;
         end_status = status;
@@ -79,13 +79,13 @@ public:
 void RpmTransactionTest::test_transaction() {
     add_repo_rpm("rpm-repo1");
 
-    libdnf::Goal goal(base);
+    libdnf5::Goal goal(base);
 
     goal.add_rpm_install("one");
 
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
+    std::vector<libdnf5::base::TransactionPackage> expected = {libdnf5::base::TransactionPackage(
         get_pkg("one-0:2-1.noarch"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,
@@ -106,11 +106,11 @@ void RpmTransactionTest::test_transaction() {
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->mirror_failure_cnt);
 
     // TODO(lukash) test transaction callbacks
-    transaction.set_callbacks(std::make_unique<libdnf::rpm::TransactionCallbacks>());
+    transaction.set_callbacks(std::make_unique<libdnf5::rpm::TransactionCallbacks>());
     transaction.set_description("install package one");
     auto res = transaction.run();
 
-    CPPUNIT_ASSERT_EQUAL(libdnf::base::Transaction::TransactionRunResult::SUCCESS, res);
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, res);
     // TODO(lukash) assert the packages were installed
 }
 
@@ -120,12 +120,12 @@ void RpmTransactionTest::test_transaction_temp_files_cleanup() {
     // ensure keepcache option is switched off
     base.get_config().get_keepcache_option().set(false);
 
-    libdnf::Goal goal(base);
+    libdnf5::Goal goal(base);
     goal.add_rpm_install("one");
 
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
+    std::vector<libdnf5::base::TransactionPackage> expected = {libdnf5::base::TransactionPackage(
         get_pkg("one-0:2-1.noarch"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,

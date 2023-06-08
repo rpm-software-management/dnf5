@@ -43,7 +43,7 @@ public:
 class MarkUserCommand : public Command {
 public:
     explicit MarkUserCommand(Context & context)
-        : MarkUserCommand(context, "user", libdnf::transaction::TransactionItemReason::USER) {}
+        : MarkUserCommand(context, "user", libdnf5::transaction::TransactionItemReason::USER) {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
@@ -53,8 +53,8 @@ protected:
         Context & context, const std::string & name, libdnf::transaction::TransactionItemReason reason)
         : Command(context, name),
           reason(reason) {}
-    std::vector<std::unique_ptr<libdnf::Option>> * pkg_specs{nullptr};
-    libdnf::transaction::TransactionItemReason reason;
+    std::vector<std::unique_ptr<libdnf5::Option>> * pkg_specs{nullptr};
+    libdnf5::transaction::TransactionItemReason reason;
 };
 
 

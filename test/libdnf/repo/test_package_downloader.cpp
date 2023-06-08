@@ -33,12 +33,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
 
-class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
     int end([[maybe_unused]] void * user_cb_data, TransferStatus status, const char * msg) override {
         ++end_cnt;
         end_status = status;
-        end_msg = libdnf::utils::string::c_to_str(msg);
+        end_msg = libdnf5::utils::string::c_to_str(msg);
         return 0;
     }
 
@@ -70,13 +70,13 @@ public:
 void PackageDownloaderTest::test_package_downloader() {
     auto repo = add_repo_rpm("rpm-repo1");
 
-    libdnf::rpm::PackageQuery query(base);
+    libdnf5::rpm::PackageQuery query(base);
     query.filter_name({"one"});
     query.filter_version({"2"});
     query.filter_arch({"noarch"});
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
-    auto downloader = libdnf::repo::PackageDownloader(base);
+    auto downloader = libdnf5::repo::PackageDownloader(base);
 
     auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
     auto cbs = cbs_unique_ptr.get();
@@ -97,7 +97,7 @@ void PackageDownloaderTest::test_package_downloader() {
 void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     auto repo = add_repo_rpm("rpm-repo1");
 
-    libdnf::rpm::PackageQuery query(base);
+    libdnf5::rpm::PackageQuery query(base);
     query.filter_name({"one"});
     CPPUNIT_ASSERT_EQUAL((size_t)4, query.size());
 
@@ -107,12 +107,12 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     config.get_keepcache_option().set(false);
 
     auto & cachedir = config.get_cachedir_option().get_value();
-    libdnf::repo::TempFilesMemory memory(cachedir);
+    libdnf5::repo::TempFilesMemory memory(cachedir);
 
     // check memory is empty before downloading
     CPPUNIT_ASSERT_EQUAL((size_t)0, memory.get_files().size());
 
-    auto downloader = libdnf::repo::PackageDownloader(base);
+    auto downloader = libdnf5::repo::PackageDownloader(base);
     for (const auto & package : query) {
         downloader.add(package);
     }

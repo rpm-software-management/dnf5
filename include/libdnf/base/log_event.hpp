@@ -30,30 +30,32 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 /// Contain information, hint, or a problem created during libdnf::Goal::resolve()
 class LogEvent {
 public:
     /// Public constructor
     LogEvent(
-        libdnf::GoalAction action,
-        libdnf::GoalProblem problem,
+        libdnf5::GoalAction action,
+        libdnf5::GoalProblem problem,
         const std::set<std::string> & additional_data,
-        const libdnf::GoalJobSettings & settings,
-        const libdnf::transaction::TransactionItemType spec_type,
+        const libdnf5::GoalJobSettings & settings,
+        const libdnf5::transaction::TransactionItemType spec_type,
         const std::string & spec);
-    LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems);
+    LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems);
     ~LogEvent() = default;
 
     /// @return GoalAction for which goal event was created
-    libdnf::GoalAction get_action() const { return action; };
+    libdnf5::GoalAction get_action() const { return action; };
     /// @return GoalProblem that specify the type of report
-    libdnf::GoalProblem get_problem() const { return problem; };
+    libdnf5::GoalProblem get_problem() const { return problem; };
     /// @return Additional information (internal), that are required for formatted string
     const std::set<std::string> get_additional_data() const { return additional_data; };
     /// @return GoalJobSetting if it is relevant for the particular GoalProblem
-    const libdnf::GoalJobSettings * get_job_settings() const { return job_settings ? &job_settings.value() : nullptr; };
+    const libdnf5::GoalJobSettings * get_job_settings() const {
+        return job_settings ? &job_settings.value() : nullptr;
+    };
     /// @return SPEC if it is relevant for the particular GoalProblem
     const std::string * get_spec() const { return spec ? &spec.value() : nullptr; };
     /// @return SolverProblems if they are relevant for the particular GoalProblem
@@ -67,24 +69,24 @@ public:
 private:
     /// Convert an element from resolve log to string;
     static std::string to_string(
-        libdnf::GoalAction action,
-        libdnf::GoalProblem problem,
+        libdnf5::GoalAction action,
+        libdnf5::GoalProblem problem,
         const std::set<std::string> & additional_data,
-        const std::optional<libdnf::GoalJobSettings> & settings,
-        const std::optional<libdnf::transaction::TransactionItemType> & spec_type,
+        const std::optional<libdnf5::GoalJobSettings> & settings,
+        const std::optional<libdnf5::transaction::TransactionItemType> & spec_type,
         const std::optional<std::string> & spec,
         const std::optional<SolverProblems> & solver_problems);
 
-    libdnf::GoalAction action;
-    libdnf::GoalProblem problem;
+    libdnf5::GoalAction action;
+    libdnf5::GoalProblem problem;
 
     std::set<std::string> additional_data;
-    std::optional<libdnf::GoalJobSettings> job_settings;
-    std::optional<libdnf::transaction::TransactionItemType> spec_type;
+    std::optional<libdnf5::GoalJobSettings> job_settings;
+    std::optional<libdnf5::transaction::TransactionItemType> spec_type;
     std::optional<std::string> spec;
     std::optional<SolverProblems> solver_problems;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_LOG_EVENT_HPP

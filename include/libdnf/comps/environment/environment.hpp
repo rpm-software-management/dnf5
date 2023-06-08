@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 struct EnvironmentId {
@@ -109,8 +109,8 @@ public:
     //
     // TODO(dmach): return actual value from data in EnvironmentSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf::transaction::TransactionItemReason get_reason() const {
-        return libdnf::transaction::TransactionItemReason::NONE;
+    libdnf5::transaction::TransactionItemReason get_reason() const {
+        return libdnf5::transaction::TransactionItemReason::NONE;
     }
 
     /// Merge the Environment with another one.
@@ -136,11 +136,11 @@ public:
     void serialize(const std::string & path);
 
 protected:
-    explicit Environment(const libdnf::BaseWeakPtr & base);
-    explicit Environment(libdnf::Base & base);
+    explicit Environment(const libdnf5::BaseWeakPtr & base);
+    explicit Environment(libdnf5::Base & base);
 
 private:
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
 
     // Corresponds to solvable ids for this environment (libsolv doesn't merge groups, so there are multiple solvables
     // for one environmentid).
@@ -159,7 +159,7 @@ private:
 };
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 
 #endif  // LIBDNF_COMPS_ENVIRONMENT_ENVIRONMENT_HPP

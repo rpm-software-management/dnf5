@@ -35,8 +35,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-inline std::optional<libdnf::advisory::AdvisoryQuery> advisory_query_from_cli_input(
-    libdnf::Base & base,
+inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_input(
+    libdnf5::Base & base,
     const std::vector<std::string> & advisory_names,
     bool advisory_security,
     bool advisory_bugfix,
@@ -116,37 +116,37 @@ public:
 };
 
 
-class SecurityOption : public libdnf::cli::session::BoolOption {
+class SecurityOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit SecurityOption(libdnf::cli::session::Command & command)
+    explicit SecurityOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "security", '\0', _("Limit to packages in security advisories."), false) {}
 };
 
 
-class BugfixOption : public libdnf::cli::session::BoolOption {
+class BugfixOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit BugfixOption(libdnf::cli::session::Command & command)
+    explicit BugfixOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "bugfix", '\0', _("Limit to packages in bugfix advisories."), false) {}
 };
 
 
-class EnhancementOption : public libdnf::cli::session::BoolOption {
+class EnhancementOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit EnhancementOption(libdnf::cli::session::Command & command)
+    explicit EnhancementOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "enhancement", '\0', _("Limit to packages in enhancement advisories."), false) {}
 };
 
 
-class NewpackageOption : public libdnf::cli::session::BoolOption {
+class NewpackageOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit NewpackageOption(libdnf::cli::session::Command & command)
+    explicit NewpackageOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "newpackage", '\0', _("Limit to packages in newpackage advisories."), false) {}
 };
 
 
-class AdvisorySeverityOption : public libdnf::cli::session::AppendStringListOption {
+class AdvisorySeverityOption : public libdnf5::cli::session::AppendStringListOption {
 public:
-    explicit AdvisorySeverityOption(libdnf::cli::session::Command & command)
+    explicit AdvisorySeverityOption(libdnf5::cli::session::Command & command)
         : AppendStringListOption(
               command,
               "advisory-severities",
@@ -161,7 +161,7 @@ public:
     std::vector<std::string> get_value() const {
         auto vals = AppendStringListOption::get_value();
         std::transform(vals.begin(), vals.end(), vals.begin(), [](std::string val) -> std::string {
-            val = libdnf::utils::string::tolower(val);
+            val = libdnf5::utils::string::tolower(val);
             val[0] = static_cast<char>(std::toupper(val[0]));
             return val;
         });
@@ -170,9 +170,9 @@ public:
     }
 };
 
-class BzOption : public libdnf::cli::session::AppendStringListOption {
+class BzOption : public libdnf5::cli::session::AppendStringListOption {
 public:
-    explicit BzOption(libdnf::cli::session::Command & command)
+    explicit BzOption(libdnf5::cli::session::Command & command)
         : AppendStringListOption(
               command,
               "bzs",
@@ -181,9 +181,9 @@ public:
               _("BUGZILLA_ID,...")) {}
 };
 
-class CveOption : public libdnf::cli::session::AppendStringListOption {
+class CveOption : public libdnf5::cli::session::AppendStringListOption {
 public:
-    explicit CveOption(libdnf::cli::session::Command & command)
+    explicit CveOption(libdnf5::cli::session::Command & command)
         : AppendStringListOption(
               command,
               "cves",

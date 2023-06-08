@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void DownloadCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -53,16 +53,16 @@ void DownloadCommand::set_argument_parser() {
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_download_options);
     keys->set_description("List of keys to match");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
 
-    resolve_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    resolve_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    alldeps_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    alldeps_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
@@ -88,7 +88,7 @@ void DownloadCommand::configure() {
 
     std::vector<std::string> pkg_specs;
     for (auto & pattern : *patterns_to_download_options) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         pkg_specs.push_back(option->get_value());
     }
 
@@ -96,7 +96,7 @@ void DownloadCommand::configure() {
     if (resolve_option->get_value() && !alldeps_option->get_value()) {
         context.set_load_system_repo(true);
     } else if (!resolve_option->get_value() && alldeps_option->get_value()) {
-        throw libdnf::cli::ArgumentParserMissingDependentArgumentError(
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
             //TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
             M_("Option \"--alldeps\" should be used with \"--resolve\""));
     } else {
@@ -104,19 +104,19 @@ void DownloadCommand::configure() {
     }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     // Default destination for downloaded rpms is the current directory
-    context.base.get_config().get_destdir_option().set(libdnf::Option::Priority::PLUGINDEFAULT, ".");
+    context.base.get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, ".");
 }
 
 void DownloadCommand::run() {
     auto & ctx = get_context();
 
-    auto create_nevra_pkg_pair = [](const libdnf::rpm::Package & pkg) { return std::make_pair(pkg.get_nevra(), pkg); };
+    auto create_nevra_pkg_pair = [](const libdnf5::rpm::Package & pkg) { return std::make_pair(pkg.get_nevra(), pkg); };
 
-    std::map<std::string, libdnf::rpm::Package> download_pkgs;
-    libdnf::rpm::PackageQuery full_pkg_query(ctx.base);
+    std::map<std::string, libdnf5::rpm::Package> download_pkgs;
+    libdnf5::rpm::PackageQuery full_pkg_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
-        libdnf::rpm::PackageQuery pkg_query(full_pkg_query);
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        libdnf5::rpm::PackageQuery pkg_query(full_pkg_query);
+        auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         pkg_query.resolve_pkg_spec(option->get_value(), {}, true);
         pkg_query.filter_available();
         pkg_query.filter_priority();
@@ -126,19 +126,19 @@ void DownloadCommand::run() {
             download_pkgs.insert(create_nevra_pkg_pair(pkg));
 
             if (resolve_option->get_value()) {
-                auto goal = std::make_unique<libdnf::Goal>(ctx.base);
+                auto goal = std::make_unique<libdnf5::Goal>(ctx.base);
                 goal->add_rpm_install(pkg, {});
 
                 auto transaction = goal->resolve();
                 auto transaction_problems = transaction.get_problems();
-                if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
-                    if (transaction_problems != libdnf::GoalProblem::NOT_FOUND) {
+                if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM) {
+                    if (transaction_problems != libdnf5::GoalProblem::NOT_FOUND) {
                         throw GoalResolveError(transaction);
                     }
                 }
                 for (auto & tspkg : transaction.get_transaction_packages()) {
                     if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-                        tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+                        tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
                         download_pkgs.insert(create_nevra_pkg_pair(tspkg.get_package()));
                     }
                 }
@@ -147,7 +147,7 @@ void DownloadCommand::run() {
     }
 
     if (!download_pkgs.empty()) {
-        libdnf::repo::PackageDownloader downloader(ctx.base);
+        libdnf5::repo::PackageDownloader downloader(ctx.base);
 
         // for download command, we don't want to mark the packages for removal
         downloader.force_keep_packages(true);

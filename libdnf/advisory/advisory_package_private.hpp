@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 //TODO(amatej): We might want to remove the Impl idiom to speed up iterating over
 //              AdvisoryPackages (less classes, less overhead), but we would end
@@ -112,14 +112,14 @@ public:
     /// @param pkgs             libdnf::rpm::PackageSet of packages to check
     ///
     /// @return true or false whether this AdvisoryPackage is resolved in pkgs
-    bool is_resolved_in(const libdnf::rpm::PackageSet & pkgs) const;
+    bool is_resolved_in(const libdnf5::rpm::PackageSet & pkgs) const;
 
 private:
     friend class AdvisoryCollection;
     friend AdvisoryPackage;
 
     Impl(
-        const libdnf::BaseWeakPtr & base,
+        const libdnf5::BaseWeakPtr & base,
         AdvisoryId advisory,
         int owner_collection_index,
         Id name,
@@ -142,10 +142,10 @@ private:
     bool relogin_suggested;
 
     const char * filename;
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 
 #endif  // LIBDNF_ADVISORY_ADVISORY_PACKAGE_PRIVATE_HPP

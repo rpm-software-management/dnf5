@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 enum class ProgressBarState : int {
@@ -149,7 +149,7 @@ private:
 };
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // #define LIBDNF_CLI_PROGRESSBAR_PROGRESS_BAR_HPP

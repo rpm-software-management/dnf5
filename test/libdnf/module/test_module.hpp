@@ -49,7 +49,7 @@ public:
     void test_query_spec();
     void test_module_db();
 
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
 
 #endif

@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void CheckUpgradeCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -47,8 +47,8 @@ void CheckUpgradeCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Check for available package upgrades");
 
-    changelogs = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    changelogs = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto changelogs_opt = parser.add_new_named_arg("changelogs");
     changelogs_opt->set_long_name("changelogs");
     changelogs_opt->set_description("Show changelogs before update.");
@@ -85,12 +85,12 @@ void CheckUpgradeCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     if (changelogs->get_value()) {
         context.base.get_config().get_optional_metadata_types_option().add(
-            libdnf::Option::Priority::RUNTIME, libdnf::OPTIONAL_METADATA_TYPES);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
     }
 }
 
-std::unique_ptr<libdnf::cli::output::PackageListSections> CheckUpgradeCommand::create_output() {
-    auto out = std::make_unique<libdnf::cli::output::PackageListSections>();
+std::unique_ptr<libdnf5::cli::output::PackageListSections> CheckUpgradeCommand::create_output() {
+    auto out = std::make_unique<libdnf5::cli::output::PackageListSections>();
     out->setup_cols();
     return out;
 }
@@ -99,15 +99,15 @@ void CheckUpgradeCommand::run() {
     auto & ctx = get_context();
     auto & config = ctx.base.get_config();
 
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
-    libdnf::rpm::PackageQuery upgrades_query(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf5::rpm::PackageQuery upgrades_query(ctx.base);
 
     // filter by provided specs, for `check-upgrade <pkg1> <pkg2> ...`
     if (!pkg_specs.empty()) {
-        upgrades_query = libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        libdnf::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
+        upgrades_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(ctx.base);
+            libdnf5::rpm::PackageQuery package_query(ctx.base);
             package_query.resolve_pkg_spec(spec, settings, true);
             upgrades_query |= package_query;
         }
@@ -123,9 +123,9 @@ void CheckUpgradeCommand::run() {
     // Source RPMs should not be reported as upgrades, e.g. when the binary
     // package is marked exclude and only the source package is left in the
     // repo
-    upgrades_query.filter_arch({"src", "nosrc"}, libdnf::sack::QueryCmp::NOT_EXACT);
+    upgrades_query.filter_arch({"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
 
-    libdnf::rpm::PackageQuery installed_query(ctx.base);
+    libdnf5::rpm::PackageQuery installed_query(ctx.base);
     installed_query.filter_installed();
 
     // filter by advisory flags, e.g. `--security`
@@ -142,20 +142,20 @@ void CheckUpgradeCommand::run() {
         advisory_cve->get_value());
     if (advisories.has_value()) {
         upgrades_query.filter_latest_unresolved_advisories(
-            std::move(advisories.value()), installed_query, libdnf::sack::QueryCmp::GTE);
+            std::move(advisories.value()), installed_query, libdnf5::sack::QueryCmp::GTE);
     }
 
     // Last, only include latest upgrades
     upgrades_query.filter_latest_evr();
 
-    libdnf::rpm::PackageQuery obsoletes_query(upgrades_query);
+    libdnf5::rpm::PackageQuery obsoletes_query(upgrades_query);
     obsoletes_query.filter_obsoletes(installed_query);
 
     // prepare a map of obsoleted packages {obsoleter_id: [obsoleted_pkgs]}
-    std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> obsoletes;
+    std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> obsoletes;
     for (const auto & pkg : obsoletes_query) {
-        std::vector<libdnf::rpm::Package> obsoleted;
-        libdnf::rpm::PackageQuery obs_q(installed_query);
+        std::vector<libdnf5::rpm::Package> obsoleted;
+        libdnf5::rpm::PackageQuery obs_q(installed_query);
         obs_q.filter_provides(pkg.get_obsoletes());
         for (const auto & pkg_ob : obs_q) {
             obsoleted.emplace_back(pkg_ob);
@@ -163,7 +163,7 @@ void CheckUpgradeCommand::run() {
         obsoletes.emplace(pkg.get_id(), obsoleted);
     }
 
-    auto colorizer = std::make_unique<libdnf::cli::output::PkgColorizer>(
+    auto colorizer = std::make_unique<libdnf5::cli::output::PkgColorizer>(
         installed_query,
         "",  //config.get_color_list_available_install_option().get_value(),
         "",  //config.get_color_list_available_downgrade_option().get_value(),
@@ -179,9 +179,9 @@ void CheckUpgradeCommand::run() {
         // If any upgrades were found, print a table of them, and optionally print changelogs. Return exit code 100.
         sections->print();
         if (changelogs->get_value()) {
-            libdnf::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
+            libdnf5::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
         }
-        throw libdnf::cli::SilentCommandExitError(100);
+        throw libdnf5::cli::SilentCommandExitError(100);
     } else if (
         // Otherwise, main() will exit with code 0.
         size_before_filter_advisories > 0 &&

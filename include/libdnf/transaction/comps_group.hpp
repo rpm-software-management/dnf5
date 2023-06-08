@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class CompsGroupPackage;
 class Transaction;
@@ -82,12 +82,12 @@ private:
     /// Get types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
-    libdnf::comps::PackageType get_package_types() const noexcept { return package_types; }
+    libdnf5::comps::PackageType get_package_types() const noexcept { return package_types; }
 
     /// Set types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setPackageTypes(libdnf::CompsPackageType value)
-    void set_package_types(libdnf::comps::PackageType value) { package_types = value; }
+    void set_package_types(libdnf5::comps::PackageType value) { package_types = value; }
 
     /// Create a new CompsGroupPackage object and return a reference to it.
     /// The object is owned by the CompsGroup.
@@ -111,7 +111,7 @@ private:
     std::string group_id;
     std::string name;
     std::string translated_name;
-    libdnf::comps::PackageType package_types;
+    libdnf5::comps::PackageType package_types;
     std::vector<CompsGroupPackage> packages;
 };
 
@@ -160,20 +160,20 @@ private:
     /// See `enum class comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getPackageType()
-    libdnf::comps::PackageType get_package_type() const noexcept { return package_type; }
+    libdnf5::comps::PackageType get_package_type() const noexcept { return package_type; }
 
     /// Set type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     /// See `enum class libdnf::comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
-    void set_package_type(libdnf::comps::PackageType value) { package_type = value; }
+    void set_package_type(libdnf5::comps::PackageType value) { package_type = value; }
 
     int64_t id = 0;
     std::string name;
     bool installed = false;
-    libdnf::comps::PackageType package_type = libdnf::comps::PackageType::DEFAULT;
+    libdnf5::comps::PackageType package_type = libdnf5::comps::PackageType::DEFAULT;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_COMPS_GROUP_HPP

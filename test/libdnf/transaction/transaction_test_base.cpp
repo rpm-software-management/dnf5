@@ -22,15 +22,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 void TransactionTestBase::setUp() {
-    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
+    temp_dir = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_unittest");
 }
 
 
 void TransactionTestBase::tearDown() {}
 
 
-std::unique_ptr<libdnf::Base> TransactionTestBase::new_base() {
-    auto new_base = std::make_unique<libdnf::Base>();
+std::unique_ptr<libdnf5::Base> TransactionTestBase::new_base() {
+    auto new_base = std::make_unique<libdnf5::Base>();
     new_base->get_config().get_transaction_history_dir_option().set(temp_dir->get_path());
     return new_base;
 }

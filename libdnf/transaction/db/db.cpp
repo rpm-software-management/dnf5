@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_CREATE_TABLES =
@@ -57,16 +57,16 @@ static constexpr const char * SQL_GET_SCHEMA_VERSION = R"**(
 
 
 // Create tables and migrate schema if necessary.
-static void transaction_db_create(libdnf::utils::SQLite3 & conn) {
+static void transaction_db_create(libdnf5::utils::SQLite3 & conn) {
     // check if table 'config' exists; if not, assume an empty database and create the tables
-    libdnf::utils::SQLite3::Statement query_table_config_exists(conn, SQL_TABLE_CONFIG_EXISTS);
-    if (query_table_config_exists.step() != libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    libdnf5::utils::SQLite3::Statement query_table_config_exists(conn, SQL_TABLE_CONFIG_EXISTS);
+    if (query_table_config_exists.step() != libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         conn.exec(SQL_CREATE_TABLES);
     }
 
     std::string schema_version;
-    libdnf::utils::SQLite3::Statement query_get_schema_version(conn, SQL_GET_SCHEMA_VERSION);
-    if (query_get_schema_version.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    libdnf5::utils::SQLite3::Statement query_get_schema_version(conn, SQL_GET_SCHEMA_VERSION);
+    if (query_get_schema_version.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         schema_version = query_get_schema_version.get<std::string>(0);
     } else {
         throw RuntimeError(M_("Unable to get 'version' from table 'config'"));
@@ -76,7 +76,7 @@ static void transaction_db_create(libdnf::utils::SQLite3 & conn) {
 }
 
 
-std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base) {
+std::unique_ptr<libdnf5::utils::SQLite3> transaction_db_connect(libdnf5::Base & base) {
     auto & config = base.get_config();
     config.get_installroot_option().lock("installroot locked by transaction_db_connect");
 
@@ -84,10 +84,10 @@ std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & ba
     path /= std::filesystem::path(config.get_transaction_history_dir_option().get_value()).relative_path();
     std::filesystem::create_directories(path);
 
-    auto conn = std::make_unique<libdnf::utils::SQLite3>((path / "transaction_history.sqlite").native());
+    auto conn = std::make_unique<libdnf5::utils::SQLite3>((path / "transaction_history.sqlite").native());
     transaction_db_create(*conn);
     return conn;
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

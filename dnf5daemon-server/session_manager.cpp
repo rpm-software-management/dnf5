@@ -108,8 +108,8 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     // store newly created session
     {
         // create a vector of loggers with one logger
-        std::vector<std::unique_ptr<libdnf::Logger>> loggers;
-        loggers.emplace_back(std::make_unique<libdnf::StdCStreamLogger>(std::cerr));
+        std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+        loggers.emplace_back(std::make_unique<libdnf5::StdCStreamLogger>(std::cerr));
 
         std::lock_guard<std::mutex> lock(sessions_mutex);
         sessions[sender].emplace(

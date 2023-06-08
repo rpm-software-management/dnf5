@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/download_callbacks.hpp"
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 void * DownloadCallbacks::add_new_download(
     [[maybe_unused]] void * user_data,
@@ -53,4 +53,4 @@ void DownloadCallbacks::fastest_mirror(
     [[maybe_unused]] FastestMirrorStage stage,
     [[maybe_unused]] const char * ptr) {}
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

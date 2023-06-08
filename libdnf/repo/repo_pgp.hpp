@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class Key {
 public:
@@ -73,6 +73,6 @@ private:
     RepoCallbacks * callbacks = nullptr;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_REPO_PGP_HPP

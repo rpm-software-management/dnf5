@@ -41,9 +41,9 @@ public:
     void test_config_main();
     void test_config_repo();
 
-    std::unique_ptr<libdnf::Base> base;
-    libdnf::LogRouter logger;
-    libdnf::ConfigMain config;
+    std::unique_ptr<libdnf5::Base> base;
+    libdnf5::LogRouter logger;
+    libdnf5::ConfigMain config;
 };
 
 
