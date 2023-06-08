@@ -21,16 +21,16 @@ endif()
 # build test data
 add_subdirectory(data)
 
-# libdnf
-add_subdirectory(libdnf)
+# libdnf5
+add_subdirectory(libdnf5)
 
-# performance tests are available only for libdnf
+# performance tests are available only for libdnf5
 if(WITH_PERFORMANCE_TESTS)
     return()
 endif()
 
-# libdnf-cli
-add_subdirectory(libdnf-cli)
+# libdnf5-cli
+add_subdirectory(libdnf5-cli)
 
 # tutorial
 add_subdirectory(tutorial)

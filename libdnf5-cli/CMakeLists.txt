@@ -17,29 +17,29 @@ list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE)
 
 include_directories(.)
 
-# build libdnf-cli.so
-add_library(libdnf-cli SHARED ${LIBDNF5_CLI_SOURCES})
+# build libdnf5-cli.so
+add_library(libdnf5-cli SHARED ${LIBDNF5_CLI_SOURCES})
 set(DNF_CLI_SO_VERSION 1)
-set_target_properties(libdnf-cli PROPERTIES OUTPUT_NAME "dnf-cli")
-set_target_properties(libdnf-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
+set_target_properties(libdnf5-cli PROPERTIES OUTPUT_NAME "dnf-cli")
+set_target_properties(libdnf5-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
 # required by clang
-target_link_libraries(libdnf-cli stdc++)
+target_link_libraries(libdnf5-cli stdc++)
 
-# install libdnf-cli.so
-install(TARGETS libdnf-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+# install libdnf5-cli.so
+install(TARGETS libdnf5-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 
 # link libraries and set pkg-config requires
 
-target_link_libraries(libdnf-cli common libdnf)
+target_link_libraries(libdnf5-cli common libdnf5)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
-target_link_libraries(libdnf-cli ${LIBFMT_LIBRARIES})
+target_link_libraries(libdnf5-cli ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(SMARTCOLS REQUIRED smartcols)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE "${SMARTCOLS_MODULE_NAME}")
-target_link_libraries(libdnf-cli ${SMARTCOLS_LIBRARIES})
+target_link_libraries(libdnf5-cli ${SMARTCOLS_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string
@@ -50,8 +50,8 @@ list(JOIN LIBDNF5_CLI_PC_REQUIRES_PRIVATE ", " LIBDNF5_CLI_PC_REQUIRES_PRIVATE_S
 
 
 # create a .pc file
-configure_file("libdnf-cli.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf-cli.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf-cli.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
+configure_file("libdnf5-cli.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf5-cli.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf5-cli.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
 
 
 add_subdirectory(po)

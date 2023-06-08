@@ -18,9 +18,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::UserAssertionError & e) {
+    } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf::Error & e) {
+    } catch (const libdnf5::Error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
@@ -28,54 +28,54 @@
 }
 
 %{
-    #include "libdnf/logger/log_router.hpp"
-    #include "libdnf/logger/memory_buffer_logger.hpp"
-    #include "libdnf/repo/config_repo.hpp"
-    #include "libdnf/repo/download_callbacks.hpp"
-    #include "libdnf/repo/file_downloader.hpp"
-    #include "libdnf/repo/package_downloader.hpp"
-    #include "libdnf/repo/repo.hpp"
-    #include "libdnf/repo/repo_cache.hpp"
-    #include "libdnf/repo/repo_callbacks.hpp"
-    #include "libdnf/repo/repo_query.hpp"
-    #include "libdnf/repo/repo_sack.hpp"
+    #include "libdnf5/logger/log_router.hpp"
+    #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/repo/config_repo.hpp"
+    #include "libdnf5/repo/download_callbacks.hpp"
+    #include "libdnf5/repo/file_downloader.hpp"
+    #include "libdnf5/repo/package_downloader.hpp"
+    #include "libdnf5/repo/repo.hpp"
+    #include "libdnf5/repo/repo_cache.hpp"
+    #include "libdnf5/repo/repo_callbacks.hpp"
+    #include "libdnf5/repo/repo_query.hpp"
+    #include "libdnf5/repo/repo_sack.hpp"
 %}
 
 #define CV __perl_CV
 
 %feature("valuewrapper") Package;
 
-%include "libdnf/repo/config_repo.hpp"
+%include "libdnf5/repo/config_repo.hpp"
 
 %feature("director") DownloadCallbacks;
-%include "libdnf/repo/download_callbacks.hpp"
-wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf::repo::DownloadCallbacks);
+%include "libdnf5/repo/download_callbacks.hpp"
+wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 
 %ignore FileDownloadError;
-%include "libdnf/repo/file_downloader.hpp"
+%include "libdnf5/repo/file_downloader.hpp"
 
 %ignore PackageDownloadError;
-%include "libdnf/repo/package_downloader.hpp"
+%include "libdnf5/repo/package_downloader.hpp"
 
 %ignore RepoCacheError;
-%include "libdnf/repo/repo_cache.hpp"
+%include "libdnf5/repo/repo_cache.hpp"
 
-%include "libdnf/repo/repo.hpp"
+%include "libdnf5/repo/repo.hpp"
 
-%include "libdnf/repo/repo_weak.hpp"
-%template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
-%template(SetConstIteratorRepoWeakPtr) libdnf::SetConstIterator<libdnf::repo::RepoWeakPtr>;
-%template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;
-%template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
+%include "libdnf5/repo/repo_weak.hpp"
+%template(RepoWeakPtr) libdnf5::WeakPtr<libdnf5::repo::Repo, false>;
+%template(SetConstIteratorRepoWeakPtr) libdnf5::SetConstIterator<libdnf5::repo::RepoWeakPtr>;
+%template(SetRepoWeakPtr) libdnf5::Set<libdnf5::repo::RepoWeakPtr>;
+%template(SackQueryRepoWeakPtr) libdnf5::sack::Query<libdnf5::repo::RepoWeakPtr>;
 
 %feature("director") RepoCallbacks;
-%include "libdnf/repo/repo_callbacks.hpp"
-wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf::repo::RepoCallbacks);
+%include "libdnf5/repo/repo_callbacks.hpp"
+wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf5::repo::RepoCallbacks);
 
-%include "libdnf/repo/repo_query.hpp"
-%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo>;
-%include "libdnf/repo/repo_sack.hpp"
-%template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;
+%include "libdnf5/repo/repo_query.hpp"
+%template(SackRepoRepoQuery) libdnf5::sack::Sack<libdnf5::repo::Repo>;
+%include "libdnf5/repo/repo_sack.hpp"
+%template(RepoSackWeakPtr) libdnf5::WeakPtr<libdnf5::repo::RepoSack, false>;
 
 add_iterator(SetRepoWeakPtr)
 

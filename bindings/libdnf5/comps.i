@@ -19,9 +19,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::UserAssertionError & e) {
+    } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf::Error & e) {
+    } catch (const libdnf5::Error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
@@ -29,40 +29,40 @@
 }
 
 %{
-    #include "libdnf/comps/group/package.hpp"
-    #include "libdnf/comps/group/group.hpp"
-    #include "libdnf/comps/group/query.hpp"
-    #include "libdnf/comps/group/sack.hpp"
-    #include "libdnf/comps/environment/environment.hpp"
-    #include "libdnf/comps/environment/query.hpp"
-    #include "libdnf/comps/environment/sack.hpp"
-    #include "libdnf/comps/comps.hpp"
-    #include "libdnf/repo/repo.hpp"
+    #include "libdnf5/comps/group/package.hpp"
+    #include "libdnf5/comps/group/group.hpp"
+    #include "libdnf5/comps/group/query.hpp"
+    #include "libdnf5/comps/group/sack.hpp"
+    #include "libdnf5/comps/environment/environment.hpp"
+    #include "libdnf5/comps/environment/query.hpp"
+    #include "libdnf5/comps/environment/sack.hpp"
+    #include "libdnf5/comps/comps.hpp"
+    #include "libdnf5/repo/repo.hpp"
 %}
 
 #define CV __perl_CV
 
-%include "libdnf/comps/group/package.hpp"
-%include "libdnf/comps/group/group.hpp"
-%template(VectorPackage) std::vector<libdnf::comps::Package>;
-%template(SetConstIteratorGroup) libdnf::SetConstIterator<libdnf::comps::Group>;
-%template(SetGroup) libdnf::Set<libdnf::comps::Group>;
-%template(SackQueryGroup) libdnf::sack::Query<libdnf::comps::Group>;
-%include "libdnf/comps/group/query.hpp"
-%template(SackGroup) libdnf::sack::Sack<libdnf::comps::Group>;
-%include "libdnf/comps/group/sack.hpp"
-%template(GroupSackWeakPtr) libdnf::WeakPtr<libdnf::comps::GroupSack, false>;
+%include "libdnf5/comps/group/package.hpp"
+%include "libdnf5/comps/group/group.hpp"
+%template(VectorPackage) std::vector<libdnf5::comps::Package>;
+%template(SetConstIteratorGroup) libdnf5::SetConstIterator<libdnf5::comps::Group>;
+%template(SetGroup) libdnf5::Set<libdnf5::comps::Group>;
+%template(SackQueryGroup) libdnf5::sack::Query<libdnf5::comps::Group>;
+%include "libdnf5/comps/group/query.hpp"
+%template(SackGroup) libdnf5::sack::Sack<libdnf5::comps::Group>;
+%include "libdnf5/comps/group/sack.hpp"
+%template(GroupSackWeakPtr) libdnf5::WeakPtr<libdnf5::comps::GroupSack, false>;
 add_iterator(SetGroup)
 
-%include "libdnf/comps/environment/environment.hpp"
-%template(SetConstIteratorEnvironment) libdnf::SetConstIterator<libdnf::comps::Environment>;
-%template(SetEnvironment) libdnf::Set<libdnf::comps::Environment>;
-%template(SackQueryEnvironment) libdnf::sack::Query<libdnf::comps::Environment>;
-%include "libdnf/comps/environment/query.hpp"
-%template(SackEnvironment) libdnf::sack::Sack<libdnf::comps::Environment>;
-%include "libdnf/comps/environment/sack.hpp"
-%template(EnvironmentSackWeakPtr) libdnf::WeakPtr<libdnf::comps::EnvironmentSack, false>;
+%include "libdnf5/comps/environment/environment.hpp"
+%template(SetConstIteratorEnvironment) libdnf5::SetConstIterator<libdnf5::comps::Environment>;
+%template(SetEnvironment) libdnf5::Set<libdnf5::comps::Environment>;
+%template(SackQueryEnvironment) libdnf5::sack::Query<libdnf5::comps::Environment>;
+%include "libdnf5/comps/environment/query.hpp"
+%template(SackEnvironment) libdnf5::sack::Sack<libdnf5::comps::Environment>;
+%include "libdnf5/comps/environment/sack.hpp"
+%template(EnvironmentSackWeakPtr) libdnf5::WeakPtr<libdnf5::comps::EnvironmentSack, false>;
 add_iterator(SetEnvironment)
 
-%include "libdnf/comps/comps.hpp"
-%template(CompsWeakPtr) libdnf::WeakPtr<libdnf::comps::Comps, false>;
+%include "libdnf5/comps/comps.hpp"
+%template(CompsWeakPtr) libdnf5::WeakPtr<libdnf5::comps::Comps, false>;

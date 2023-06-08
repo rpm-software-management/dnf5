@@ -286,7 +286,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Library for working with a terminal in a command-line package manager.
 
 %files -n libdnf5-cli
-%{_libdir}/libdnf-cli.so.1*
+%{_libdir}/libdnf5-cli.so.1*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -340,9 +340,9 @@ Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Development files for libdnf5-cli.
 
 %files -n libdnf5-cli-devel
-%{_includedir}/libdnf-cli/
-%{_libdir}/libdnf-cli.so
-%{_libdir}/pkgconfig/libdnf-cli.pc
+%{_includedir}/libdnf5-cli/
+%{_libdir}/libdnf5-cli.so
+%{_libdir}/pkgconfig/libdnf5-cli.pc
 %license COPYING.md
 %license lgpl-2.1.txt
 

@@ -1,4 +1,4 @@
-%module(package="libdnf_cli") progressbar
+%module(package="libdnf5_cli") progressbar
 
 
 %include <exception.i>
@@ -8,15 +8,15 @@
 
 %{
     // make SWIG wrap following headers
-    #include "libdnf-cli/progressbar/progress_bar.hpp"
-    #include "libdnf-cli/progressbar/download_progress_bar.hpp"
-    #include "libdnf-cli/progressbar/multi_progress_bar.hpp"
+    #include "libdnf5-cli/progressbar/progress_bar.hpp"
+    #include "libdnf5-cli/progressbar/download_progress_bar.hpp"
+    #include "libdnf5-cli/progressbar/multi_progress_bar.hpp"
 %}
 
 
 #define CV __perl_CV
 
 
-%include "libdnf-cli/progressbar/progress_bar.hpp"
-%include "libdnf-cli/progressbar/download_progress_bar.hpp"
-%include "libdnf-cli/progressbar/multi_progress_bar.hpp"
+%include "libdnf5-cli/progressbar/progress_bar.hpp"
+%include "libdnf5-cli/progressbar/download_progress_bar.hpp"
+%include "libdnf5-cli/progressbar/multi_progress_bar.hpp"

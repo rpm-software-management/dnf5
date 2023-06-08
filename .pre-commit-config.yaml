@@ -6,7 +6,7 @@ repos:
   hooks:
   - id: trailing-whitespace
     exclude:
-       test/libdnf/iniparser/test_iniparser.cpp
+       test/libdnf5/iniparser/test_iniparser.cpp
   - id: end-of-file-fixer
   - id: check-xml
   - id: check-added-large-files

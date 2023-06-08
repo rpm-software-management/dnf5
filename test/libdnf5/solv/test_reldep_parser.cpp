@@ -46,11 +46,11 @@ void ReldepParserTest::test_parser() {
     CPPUNIT_ASSERT_MESSAGE(
         "Parse 'dnf == 34.66.7-67.4' with unsupported operator '==' must fail", !dep_parser.parse(reldep_str));
 
-    reldep_str = "libdnf <= h";
-    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.parse(reldep_str));
-    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_name() == "libdnf");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::LTE);
-    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_evr() == "h");
+    reldep_str = "libdnf5 <= h";
+    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf5 <= h'", dep_parser.parse(reldep_str));
+    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf5 <= h'", dep_parser.get_name() == "libdnf5");
+    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf5 <= h'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::LTE);
+    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf5 <= h'", dep_parser.get_evr() == "h");
 
     reldep_str = "dnf < 34.66.7-67.4";
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf < 34.66.7-67.4'", dep_parser.parse(reldep_str));

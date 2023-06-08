@@ -20,7 +20,7 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     # https://github.com/swig/swig/blob/33f6a2d0b2c3d90b928f56ddfa599afe87903f76/Lib/python/pyrun.swg#L776
     # We want to supress this message due to a bug in Python part of swig.
     # The core of the issue is that Python Swig has a global list of types used in all swig modules. This is
-    # needed because the modules are interlinked eg. libdnf::Base is used in all of them. During finalization
+    # needed because the modules are interlinked eg. libdnf5::Base is used in all of them. During finalization
     # of the Python runtime unused modules are cleaned up before garbage collector runs and cleans global objects.
     # This can result in a situation where for example libdnf5.advisory module is destoyed, removing its types
     # from the global swig types list includeing libdnf5.base.Base, and only after that a global libdnf5.base.Base
@@ -41,8 +41,6 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     target_compile_options(${TARGET_NAME} PUBLIC ${SWIG_COMPILE_OPTIONS})
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
-    # c library is called just libdnf (libdnf_cli) -> strip the 5
-    string(REPLACE "5" "" C_LIBRARY_NAME ${C_LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${Python3_LIBRARIES})
 

@@ -1,2 +1,2 @@
-add_subdirectory("libdnf")
-add_subdirectory("libdnf-cli")
+add_subdirectory("libdnf5")
+add_subdirectory("libdnf5-cli")

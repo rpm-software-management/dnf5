@@ -49,11 +49,11 @@ else()
 endif()
 
 
-# list of all modules that will be included in libdnf bindings
+# list of all modules that will be included in libdnf5 bindings
 list(APPEND SWIG_LIBDNF5_MODULES advisory base common comps conf logger repo rpm transaction plugin)
 
 
-# list of all modules that will be included in libdnf-cli bindings
+# list of all modules that will be included in libdnf5-cli bindings
 list(APPEND SWIG_LIBDNF5_CLI_MODULES progressbar)
 
 

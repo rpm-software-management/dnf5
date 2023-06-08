@@ -25,9 +25,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::UserAssertionError & e) {
+    } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf::Error & e) {
+    } catch (const libdnf5::Error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
@@ -35,34 +35,34 @@
 }
 
 %{
-    #include "libdnf/logger/memory_buffer_logger.hpp"
-    #include "libdnf/base/base.hpp"
-    #include "libdnf/base/solver_problems.hpp"
-    #include "libdnf/base/log_event.hpp"
-    #include "libdnf/base/transaction.hpp"
-    #include "libdnf/base/transaction_package.hpp"
-    #include "libdnf/base/goal.hpp"
-    #include "libdnf/base/goal_elements.hpp"
+    #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/base/base.hpp"
+    #include "libdnf5/base/solver_problems.hpp"
+    #include "libdnf5/base/log_event.hpp"
+    #include "libdnf5/base/transaction.hpp"
+    #include "libdnf5/base/transaction_package.hpp"
+    #include "libdnf5/base/goal.hpp"
+    #include "libdnf5/base/goal_elements.hpp"
 %}
 
 #define CV __perl_CV
 
-%template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
-%template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
+%template(BaseWeakPtr) libdnf5::WeakPtr<libdnf5::Base, false>;
+%template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 
-%include "libdnf/base/base.hpp"
+%include "libdnf5/base/base.hpp"
 
-%include "libdnf/base/solver_problems.hpp"
-%include "libdnf/base/log_event.hpp"
+%include "libdnf5/base/solver_problems.hpp"
+%include "libdnf5/base/log_event.hpp"
 
-%ignore libdnf::base::TransactionError;
-%include "libdnf/base/transaction.hpp"
+%ignore libdnf5::base::TransactionError;
+%include "libdnf5/base/transaction.hpp"
 
-%template(VectorLogEvent) std::vector<libdnf::base::LogEvent>;
+%template(VectorLogEvent) std::vector<libdnf5::base::LogEvent>;
 
-%include "libdnf/base/transaction_package.hpp"
+%include "libdnf5/base/transaction_package.hpp"
 
-%template(VectorBaseTransactionPackage) std::vector<libdnf::base::TransactionPackage>;
+%template(VectorBaseTransactionPackage) std::vector<libdnf5::base::TransactionPackage>;
 
-%include "libdnf/base/goal.hpp"
-%include "libdnf/base/goal_elements.hpp"
+%include "libdnf5/base/goal.hpp"
+%include "libdnf5/base/goal_elements.hpp"

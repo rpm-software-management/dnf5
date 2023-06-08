@@ -112,12 +112,12 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}/common")
 
 
-# libdnf
+# libdnf5
 add_subdirectory("common")
 add_subdirectory("include")
-add_subdirectory("libdnf")
-add_subdirectory("libdnf-cli")
-add_subdirectory("libdnf-plugins")
+add_subdirectory("libdnf5")
+add_subdirectory("libdnf5-cli")
+add_subdirectory("libdnf5-plugins")
 add_subdirectory("doc")
 add_subdirectory("bindings")
 

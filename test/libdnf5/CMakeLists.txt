@@ -5,7 +5,7 @@ pkg_check_modules(CPPUNIT REQUIRED cppunit)
 file(GLOB_RECURSE TEST_LIBDNF5_SOURCES *.cpp)
 
 include_directories(.)
-include_directories(${PROJECT_SOURCE_DIR}/libdnf)
+include_directories(${PROJECT_SOURCE_DIR}/libdnf5)
 
 add_executable(run_tests ${TEST_LIBDNF5_SOURCES})
 
@@ -15,8 +15,8 @@ target_compile_options(run_tests PRIVATE "-Wno-unused-value")
 target_compile_options(run_tests PRIVATE "-Wno-self-assign-overloaded")
 target_compile_options(run_tests PRIVATE "-Wno-self-move")
 
-target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
-target_link_libraries(run_tests stdc++ libdnf cppunit test_shared)
+target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf5)
+target_link_libraries(run_tests stdc++ libdnf5 cppunit test_shared)
 
 pkg_check_modules(JSONC REQUIRED json-c)
 include_directories(${JSONC_INCLUDE_DIRS})
