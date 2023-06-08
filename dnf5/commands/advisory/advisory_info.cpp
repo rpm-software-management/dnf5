@@ -26,33 +26,33 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void AdvisoryInfoCommand::process_and_print_queries(
-    Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {
+    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) {
     if (all->get_value()) {
         packages.filter_installed();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
-        auto advisory_query_not_installed = libdnf::advisory::AdvisoryQuery(ctx.base);
-        advisory_query_not_installed.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::LTE);
+        auto advisory_query_not_installed = libdnf5::advisory::AdvisoryQuery(ctx.base);
+        advisory_query_not_installed.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
         advisories |= advisory_query_not_installed;
     } else if (installed->get_value()) {
         packages.filter_installed();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::LTE);
     } else if (updates->get_value()) {
         packages.filter_upgradable();
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
     } else {  // available is the default
         packages.filter_installed();
         packages.filter_latest_evr();
 
         add_running_kernel_packages(ctx.base, packages);
 
-        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
     }
 
     for (auto advisory : advisories) {
-        libdnf::cli::output::AdvisoryInfo advisory_info;
+        libdnf5::cli::output::AdvisoryInfo advisory_info;
         advisory_info.add_advisory(advisory);
         advisory_info.print();
         std::cout << std::endl;

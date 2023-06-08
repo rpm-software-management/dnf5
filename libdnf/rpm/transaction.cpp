@@ -43,7 +43,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <type_traits>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 RpmHeader & RpmHeader::operator=(const RpmHeader & src) {
     if (&src != this) {
@@ -142,26 +142,26 @@ void Transaction::fill(const base::Transaction & transaction) {
     transaction_items = transaction.get_transaction_packages();
     for (auto & tspkg : transaction_items) {
         switch (tspkg.get_action()) {
-            case libdnf::transaction::TransactionItemAction::INSTALL:
+            case libdnf5::transaction::TransactionItemAction::INSTALL:
                 install(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::UPGRADE:
+            case libdnf5::transaction::TransactionItemAction::UPGRADE:
                 upgrade(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+            case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
                 downgrade(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALL:
+            case libdnf5::transaction::TransactionItemAction::REINSTALL:
                 reinstall(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::REMOVE:
-            case libdnf::transaction::TransactionItemAction::REPLACED:
+            case libdnf5::transaction::TransactionItemAction::REMOVE:
+            case libdnf5::transaction::TransactionItemAction::REPLACED:
                 erase(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-            case libdnf::transaction::TransactionItemAction::ENABLE:
-            case libdnf::transaction::TransactionItemAction::DISABLE:
-            case libdnf::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
+            case libdnf5::transaction::TransactionItemAction::ENABLE:
+            case libdnf5::transaction::TransactionItemAction::DISABLE:
+            case libdnf5::transaction::TransactionItemAction::RESET:
                 break;
         }
     }
@@ -315,15 +315,15 @@ void Transaction::erase(TransactionItem & item) {
     }
 }
 
-void Transaction::install_up_down(TransactionItem & item, libdnf::transaction::TransactionItemAction action) {
+void Transaction::install_up_down(TransactionItem & item, libdnf5::transaction::TransactionItemAction action) {
     std::string msg_action;
     bool upgrade{true};
-    if (action == libdnf::transaction::TransactionItemAction::UPGRADE) {
+    if (action == libdnf5::transaction::TransactionItemAction::UPGRADE) {
         msg_action = "upgrade";
-    } else if (action == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
+    } else if (action == libdnf5::transaction::TransactionItemAction::DOWNGRADE) {
         downgrade_requested = true;
         msg_action = "downgrade";
-    } else if (action == libdnf::transaction::TransactionItemAction::INSTALL) {
+    } else if (action == libdnf5::transaction::TransactionItemAction::INSTALL) {
         upgrade = false;
         msg_action = "install";
     } else {
@@ -674,4 +674,4 @@ void * Transaction::ts_callback(
 
 #undef libdnf_assert_transaction_item_set
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 
-namespace libdnf::cli::utils::units {
+namespace libdnf5::cli::utils::units {
 
 
 static const char * const SIZE_UNITS[] = {
@@ -56,4 +56,4 @@ std::string format_size_aligned(int64_t num) {
 }
 
 
-}  // namespace libdnf::cli::utils::units
+}  // namespace libdnf5::cli::utils::units

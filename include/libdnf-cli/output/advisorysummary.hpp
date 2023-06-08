@@ -23,10 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_query.hpp"
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-void print_advisorysummary_table(const libdnf::advisory::AdvisoryQuery & advisories, const std::string & mode);
+void print_advisorysummary_table(const libdnf5::advisory::AdvisoryQuery & advisories, const std::string & mode);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_ADVISORYSUMMARY_HPP

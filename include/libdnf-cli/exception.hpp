@@ -25,12 +25,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/common/exception.hpp"
 
-namespace libdnf::cli {
+namespace libdnf5::cli {
 
 /// Base class for libdnf-cli exceptions.
-class Error : public libdnf::Error {
+class Error : public libdnf5::Error {
 public:
-    using libdnf::Error::Error;
+    using libdnf5::Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf::cli"; }
     const char * get_name() const noexcept override { return "Error"; }
 };
@@ -54,7 +54,7 @@ public:
     /// A constructor that extracts errors from the transaction.
     ///
     /// @param transaction The failed transaction
-    explicit GoalResolveError(const libdnf::base::Transaction & transaction)
+    explicit GoalResolveError(const libdnf5::base::Transaction & transaction)
         : GoalResolveError(transaction.get_resolve_logs_as_strings()) {}
 
     const char * get_name() const noexcept override { return "GoalResolveError"; }
@@ -105,6 +105,6 @@ private:
     int exit_code;
 };
 
-}  // namespace libdnf::cli
+}  // namespace libdnf5::cli
 
 #endif

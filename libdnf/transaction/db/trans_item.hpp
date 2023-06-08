@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 class TransactionItem;
@@ -35,20 +35,20 @@ class TransactionItem;
 class TransItemDbUtils {
 public:
     /// Copy 'trans_item' fields from a query to TransactionItem or an object that inherits from it
-    static void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti);
+    static void transaction_item_select(libdnf5::utils::SQLite3::Query & query, TransactionItem & ti);
 
 
     /// Create a query (statement) that inserts new records to the 'trans_item' table
-    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(
-        libdnf::utils::SQLite3 & conn);
+    static std::unique_ptr<libdnf5::utils::SQLite3::Statement> trans_item_insert_new_query(
+        libdnf5::utils::SQLite3 & conn);
 
 
     /// Use a query to insert a new record to the 'trans_item' table
-    static int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti);
+    static int64_t transaction_item_insert(libdnf5::utils::SQLite3::Statement & query, TransactionItem & ti);
 };
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_TRANS_ITEM_HPP

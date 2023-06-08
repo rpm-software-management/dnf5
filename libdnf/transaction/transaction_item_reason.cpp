@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 InvalidTransactionItemReason::InvalidTransactionItemReason(const std::string & reason)
     : libdnf::Error(M_("Invalid transaction item reason: {}"), reason) {}
@@ -134,4 +134,4 @@ int transaction_item_reason_compare(TransactionItemReason lhs, TransactionItemRe
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

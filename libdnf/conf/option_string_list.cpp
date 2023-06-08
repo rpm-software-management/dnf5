@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename T>
 OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value)
@@ -243,4 +243,4 @@ std::string OptionStringContainer<T>::to_string(const ValueType & value) const {
 template class OptionStringContainer<std::vector<std::string>>;
 template class OptionStringContainer<std::set<std::string>>;
 
-}  // namespace libdnf
+}  // namespace libdnf5

@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// LogRouter is an implementation of logging class that forwards incoming logging messages to several other loggers.
 /// Loggers can be addressed via index. Index is serial number of the logger starting from zero.
@@ -66,6 +66,6 @@ private:
     std::vector<std::unique_ptr<Logger>> loggers;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

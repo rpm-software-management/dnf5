@@ -29,17 +29,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 class Transaction;
 
 class TransactionDbUtils {
 public:
-    static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query);
+    static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf5::utils::SQLite3::Query & query);
 
     /// Use a query to insert a new record to the 'trans' table
-    static void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
+    static void trans_insert(libdnf5::utils::SQLite3::Statement & query, Transaction & trans);
 
     /// Selects all transaction IDs, sorting in ascending order.
     static std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base);
@@ -52,16 +52,16 @@ public:
     static std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end);
 
     /// Create a query for inserting records to the 'trans' table
-    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_insert_new_query(libdnf::utils::SQLite3 & conn);
+    static std::unique_ptr<libdnf5::utils::SQLite3::Statement> trans_insert_new_query(libdnf5::utils::SQLite3 & conn);
 
     /// Create a query that updates a record in 'trans' table
-    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf::utils::SQLite3 & conn);
+    static std::unique_ptr<libdnf5::utils::SQLite3::Statement> trans_update_new_query(libdnf5::utils::SQLite3 & conn);
 
     /// Use a query to update a record in the 'trans' table
-    static void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
+    static void trans_update(libdnf5::utils::SQLite3::Statement & query, Transaction & trans);
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_TRANS_HPP

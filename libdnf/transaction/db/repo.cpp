@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_REPO_INSERT = R"**(
@@ -34,13 +34,13 @@ static constexpr const char * SQL_REPO_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> repo_insert_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_REPO_INSERT);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> repo_insert_new_query(libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_REPO_INSERT);
     return query;
 }
 
 
-int64_t repo_insert(libdnf::utils::SQLite3::Statement & query, const std::string & repoid) {
+int64_t repo_insert(libdnf5::utils::SQLite3::Statement & query, const std::string & repoid) {
     query.bindv(repoid);
     query.step();
     int64_t result = query.last_insert_rowid();
@@ -59,17 +59,17 @@ static constexpr const char * SQL_REPO_SELECT_PK = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> repo_select_pk_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_REPO_SELECT_PK);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> repo_select_pk_new_query(libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_REPO_SELECT_PK);
     return query;
 }
 
 
-int64_t repo_select_pk(libdnf::utils::SQLite3::Statement & query, const std::string & repoid) {
+int64_t repo_select_pk(libdnf5::utils::SQLite3::Statement & query, const std::string & repoid) {
     query.bindv(repoid);
 
     int64_t result = 0;
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         result = query.get<int64_t>(0);
     }
     query.reset();
@@ -77,4 +77,4 @@ int64_t repo_select_pk(libdnf::utils::SQLite3::Statement & query, const std::str
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

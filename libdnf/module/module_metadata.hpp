@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class ModuleMetadata {
@@ -69,7 +69,7 @@ private:
 };
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_METADATA_HPP

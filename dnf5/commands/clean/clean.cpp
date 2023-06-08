@@ -55,7 +55,7 @@ const CacheType CACHE_TYPES[]{
 }  // namespace
 
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void CleanCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -98,7 +98,7 @@ void CleanCommand::set_argument_parser() {
                         known_types.append(type.name);
                         first = false;
                     }
-                    throw libdnf::cli::ArgumentParserUnknownArgumentError(
+                    throw libdnf5::cli::ArgumentParserUnknownArgumentError(
                         M_("Unknown cache type \"{0}\". Supported types: {1}"), argv[i], known_types);
                 }
             }
@@ -130,9 +130,9 @@ void CleanCommand::run() {
     fs::path cachedir{ctx.base.get_config().get_cachedir_option().get_value()};
 
     std::error_code ec;
-    libdnf::repo::RepoCache::RemoveStatistics statistics{};
+    libdnf5::repo::RepoCache::RemoveStatistics statistics{};
     for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
-        libdnf::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
+        libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
 
         if (required_actions & CLEAN_ALL) {
             statistics += cache.remove_all();
@@ -148,7 +148,7 @@ void CleanCommand::run() {
             statistics += cache.remove_solv_files();
         }
         if (required_actions & EXPIRE_CACHE) {
-            cache.write_attribute(libdnf::repo::RepoCache::ATTRIBUTE_EXPIRED);
+            cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
         }
     }
 

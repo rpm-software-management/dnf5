@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that links option to another option. It uses default value and parameters from linked option.
 /// If it is empty (has no stored value), uses value from the linked option (parent).
@@ -274,6 +274,6 @@ inline bool OptionChild<
     return Option::get_priority() == Priority::EMPTY && parent->empty();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

@@ -46,7 +46,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 
 class RootCommand : public dnfdaemon::client::DaemonCommand {
@@ -109,7 +109,7 @@ void RootCommand::set_argument_parser() {
     installroot->set_description("set install root");
     installroot->link_value(&ctx.installroot);
     installroot->set_parse_hook_func(
-        [](libdnf::cli::ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+        [](libdnf5::cli::ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             if (value[0] != '/') {
                 throw std::runtime_error(fmt::format("--{}: Absolute path must be used.", arg->get_long_name()));
             }
@@ -136,7 +136,7 @@ void RootCommand::set_argument_parser() {
 
     // --setopt option support
     setopt->set_parse_hook_func([&ctx](
-                                    [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                    [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                     [[maybe_unused]] const char * option,
                                     const char * value) {
         auto val = strchr(value + 1, '=');
@@ -219,13 +219,13 @@ int main(int argc, char * argv[]) {
     // Parse command line arguments
     try {
         context.get_argument_parser().parse(argc, argv);
-    } catch (libdnf::cli::ArgumentParserError & ex) {
+    } catch (libdnf5::cli::ArgumentParserError & ex) {
         std::cout << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {
         std::cout << ex.what() << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
     }
 
     try {
@@ -236,7 +236,7 @@ int main(int argc, char * argv[]) {
         } catch (const sdbus::Error & ex) {
             std::cerr << ex.getMessage() << std::endl;
             std::cerr << "Is D-Bus daemon running?" << std::endl;
-            return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+            return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         }
 
         connection->enterEventLoopAsync();
@@ -246,25 +246,25 @@ int main(int argc, char * argv[]) {
             context.init_session(*connection);
         } catch (sdbus::Error & ex) {
             std::cerr << ex.getMessage() << std::endl << "Is dnf5daemon-server active?" << std::endl;
-            return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+            return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         }
 
         // Run selected command
         context.get_selected_command()->run();
-    } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
+    } catch (libdnf5::cli::ArgumentParserMissingCommandError & ex) {
         // print help if no command is provided
         std::cout << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (libdnf::cli::ArgumentParserError & ex) {
+        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf5::cli::ArgumentParserError & ex) {
         std::cout << ex.what() << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {
         std::cout << ex.what() << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+        return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
     //log_router.info("Dnf5daemon-client end");
 
-    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
 }

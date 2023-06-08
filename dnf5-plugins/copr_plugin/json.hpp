@@ -31,7 +31,7 @@ private:
     struct json_object * root;
 
 public:
-    Json(libdnf::Base & base, const std::string & url);
+    Json(libdnf5::Base & base, const std::string & url);
     explicit Json(struct json_object * root);
     std::unique_ptr<Json> get_array_item(size_t i);
     std::unique_ptr<Json> get_dict_item(const std::string & key);

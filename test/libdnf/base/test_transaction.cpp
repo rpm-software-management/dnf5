@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BaseTransactionTest);
 void BaseTransactionTest::test_check_gpg_signatures_no_gpgcheck() {
     add_repo_repomd("repomd-repo1");
 
-    libdnf::Goal goal(base);
+    libdnf5::Goal goal(base);
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve();
 
@@ -44,7 +44,7 @@ void BaseTransactionTest::test_check_gpg_signatures_fail() {
 
     base.get_config().get_gpgcheck_option().set(true);
 
-    libdnf::Goal goal(base);
+    libdnf5::Goal goal(base);
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve();
 

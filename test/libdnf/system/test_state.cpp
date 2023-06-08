@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StateTest);
 
-using namespace libdnf;
+using namespace libdnf5;
 
 static const std::string packages_contents{R"""(version = "1.0"
 [packages]
@@ -85,13 +85,13 @@ void StateTest::setUp() {
     BaseTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 
-    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_state");
+    temp_dir = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_test_state");
 
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(packages_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "modules.toml", "w").write(modules_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "system.toml", "w").write(system_contents);
+    libdnf5::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(packages_contents);
+    libdnf5::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
+    libdnf5::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
+    libdnf5::utils::fs::File(temp_dir->get_path() / "modules.toml", "w").write(modules_contents);
+    libdnf5::utils::fs::File(temp_dir->get_path() / "system.toml", "w").write(system_contents);
 }
 
 void StateTest::tearDown() {
@@ -101,19 +101,19 @@ void StateTest::tearDown() {
 }
 
 void StateTest::test_state_version() {
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "aaa"
+    libdnf5::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "aaa"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::InvalidVersionError);
+    CPPUNIT_ASSERT_THROW(libdnf5::system::State(temp_dir->get_path()), libdnf5::system::InvalidVersionError);
 
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "4.0"
+    libdnf5::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "4.0"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::UnsupportedVersionError);
+    CPPUNIT_ASSERT_THROW(libdnf5::system::State(temp_dir->get_path()), libdnf5::system::UnsupportedVersionError);
 }
 
 void StateTest::test_state_read() {
-    libdnf::system::State state(temp_dir->get_path());
+    libdnf5::system::State state(temp_dir->get_path());
 
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::USER, state.get_package_reason("pkg.x86_64"));
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::DEPENDENCY, state.get_package_reason("pkg-libs.x86_64"));
@@ -121,21 +121,21 @@ void StateTest::test_state_read() {
     CPPUNIT_ASSERT_EQUAL(std::string("repo1"), state.get_package_from_repo("pkg-1.2-1.x86_64"));
     CPPUNIT_ASSERT_EQUAL(std::string("repo2"), state.get_package_from_repo("unresolvable-1.2-1.noarch"));
 
-    libdnf::system::GroupState grp_state_1{
+    libdnf5::system::GroupState grp_state_1{
         .userinstalled = true,
         .packages = {"foo", "bar"},
         .package_types = libdnf::comps::PackageType::MANDATORY | libdnf::comps::PackageType::OPTIONAL};
     CPPUNIT_ASSERT_EQUAL(grp_state_1, state.get_group_state("group-1"));
-    libdnf::system::GroupState grp_state_2{
+    libdnf5::system::GroupState grp_state_2{
         .userinstalled = false, .packages = {"pkg1", "pkg2"}, .package_types = libdnf::comps::PackageType::MANDATORY};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 
-    libdnf::system::ModuleState module_state_1{
+    libdnf5::system::ModuleState module_state_1{
         .enabled_stream = "stream-1",
         .status = libdnf::module::ModuleStatus::ENABLED,
         .installed_profiles = {"zigg", "zagg"}};
     CPPUNIT_ASSERT_EQUAL(module_state_1, state.get_module_state("module-1"));
-    libdnf::system::ModuleState module_state_2{
+    libdnf5::system::ModuleState module_state_2{
         .enabled_stream = "stream-2", .status = libdnf::module::ModuleStatus::DISABLED};
     CPPUNIT_ASSERT_EQUAL(module_state_2, state.get_module_state("module-2"));
     CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
@@ -143,7 +143,7 @@ void StateTest::test_state_read() {
 
 void StateTest::test_state_write() {
     const auto path = temp_dir->get_path() / "write_test";
-    libdnf::system::State state(path);
+    libdnf5::system::State state(path);
 
     state.set_package_reason("pkg.x86_64", transaction::TransactionItemReason::USER);
     state.set_package_reason("pkg-libs.x86_64", transaction::TransactionItemReason::DEPENDENCY);
@@ -158,28 +158,30 @@ void StateTest::test_state_write() {
         "group-1",
         {.userinstalled = true,
          .packages = {"foo", "bar"},
-         .package_types = libdnf::comps::PackageType::MANDATORY | libdnf::comps::PackageType::OPTIONAL});
+         .package_types = libdnf5::comps::PackageType::MANDATORY | libdnf5::comps::PackageType::OPTIONAL});
     state.set_group_state(
         "group-2",
-        {.userinstalled = false, .packages = {"pkg1", "pkg2"}, .package_types = libdnf::comps::PackageType::MANDATORY});
+        {.userinstalled = false,
+         .packages = {"pkg1", "pkg2"},
+         .package_types = libdnf5::comps::PackageType::MANDATORY});
 
     state.set_module_state(
         "module-1",
         {.enabled_stream = "stream-1",
-         .status = libdnf::module::ModuleStatus::ENABLED,
+         .status = libdnf5::module::ModuleStatus::ENABLED,
          .installed_profiles = {"zigg", "zagg"}});
     state.set_module_state(
-        "module-2", {.enabled_stream = "stream-2", .status = libdnf::module::ModuleStatus::DISABLED});
+        "module-2", {.enabled_stream = "stream-2", .status = libdnf5::module::ModuleStatus::DISABLED});
 
     state.set_rpmdb_cookie("foo");
 
     state.save();
 
-    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf::utils::fs::File(path / "system.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf5::utils::fs::File(path / "system.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
@@ -196,7 +198,7 @@ void StateTest::test_state_write() {
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        packages_contents_after_remove, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
+        packages_contents_after_remove, trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
 
     const std::string nevras_contents_after_remove{R"""(version = "1.0"
 [nevras]
@@ -204,7 +206,8 @@ void StateTest::test_state_write() {
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 )"""};
 
-    CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(
+        nevras_contents_after_remove, trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
 
     const std::string groups_contents_after_remove{
         R"""(version = "1.0"
@@ -215,7 +218,8 @@ packages = ["pkg1","pkg2"]
 userinstalled = false
 )"""};
 
-    CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(
+        groups_contents_after_remove, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
 
     const std::string modules_contents_after_remove{R"""(version = "1.0"
 [modules]
@@ -223,5 +227,5 @@ module-2 = {enabled_stream="stream-2",installed_profiles=[],state="Disabled"}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        modules_contents_after_remove, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
+        modules_contents_after_remove, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
 }

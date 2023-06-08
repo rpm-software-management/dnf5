@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 static void add_line_into_environmentinfo_table(
@@ -81,7 +81,7 @@ static struct libscols_table * create_environmentinfo_table(EnvironmentType & en
     struct libscols_column * cl = scols_table_new_column(table, "value", 10, SCOLS_FL_WRAP);
     scols_column_set_safechars(cl, "\n");
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, true);
     }
     auto sy = scols_new_symbols();
@@ -97,7 +97,7 @@ static struct libscols_table * create_environmentinfo_table(EnvironmentType & en
     add_line_into_environmentinfo_table(table, "Order", environment.get_order().c_str());
     add_line_into_environmentinfo_table(table, "Installed", environment.get_installed() ? "True" : "False");
     add_line_into_environmentinfo_table(
-        table, "Repositories", libdnf::utils::string::join(environment.get_repos(), ", ").c_str());
+        table, "Repositories", libdnf5::utils::string::join(environment.get_repos(), ", ").c_str());
 
     add_groups(table, environment.get_groups(), "Required groups");
     add_groups(table, environment.get_optional_groups(), "Optional groups");
@@ -114,6 +114,6 @@ void print_environmentinfo_table(EnvironmentType & environment) {
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisorySet;
 
@@ -67,6 +67,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif  // LIBDNF_ADVISORY_ADVISORY_SET_ITERATOR_HPP

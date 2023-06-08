@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void AutoremoveCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -45,7 +45,7 @@ void AutoremoveCommand::configure() {
 
 void AutoremoveCommand::run() {
     auto & ctx = get_context();
-    libdnf::rpm::PackageQuery unneeded(ctx.base);
+    libdnf5::rpm::PackageQuery unneeded(ctx.base);
     unneeded.filter_unneeded();
     auto goal = get_context().get_goal();
     for (const auto & pkg : unneeded) {

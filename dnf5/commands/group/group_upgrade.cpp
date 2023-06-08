@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void GroupUpgradeCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
@@ -47,7 +47,7 @@ void GroupUpgradeCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_COMPS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void GroupUpgradeCommand::run() {
@@ -55,7 +55,7 @@ void GroupUpgradeCommand::run() {
     auto goal = ctx.get_goal();
     goal->set_allow_erasing(true);
 
-    libdnf::GoalJobSettings settings;
+    libdnf5::GoalJobSettings settings;
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_upgrade(spec, settings);
     }

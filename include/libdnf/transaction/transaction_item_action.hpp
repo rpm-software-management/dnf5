@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 // Any time you add a new action, change functions that resolve reasons,
 // because removed items (RPMs) must be excluded from reason resolution:
@@ -46,7 +46,7 @@ enum class TransactionItemAction : int {
 };
 
 
-class InvalidTransactionItemAction : public libdnf::Error {
+class InvalidTransactionItemAction : public libdnf5::Error {
 public:
     InvalidTransactionItemAction(const std::string & action);
 
@@ -63,7 +63,7 @@ std::string transaction_item_action_to_letter(TransactionItemAction action);
 bool transaction_item_action_is_inbound(TransactionItemAction action);
 bool transaction_item_action_is_outbound(TransactionItemAction action);
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 /*
 Install

@@ -23,7 +23,7 @@ extern "C" {
 #include <solv/chksum.h>
 }
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 std::string Checksum::get_type_str() const {
     auto type_str = solv_chksum_type2str(libsolv_type);
@@ -49,4 +49,4 @@ Checksum::Type Checksum::get_type() const noexcept {
     }
 }
 
-}  //  namespace libdnf::rpm
+}  // namespace libdnf5::rpm

@@ -32,7 +32,7 @@ struct _ModulemdModuleStream;
 class ModuleTest;
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 struct ModuleItemId {
@@ -273,7 +273,7 @@ inline std::string ModuleItem::get_name_stream() const {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_ITEM_HPP

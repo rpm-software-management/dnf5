@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class RpmProblemSet;
 
@@ -352,20 +352,24 @@ private:
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be installed
-    void install(TransactionItem & item) { install_up_down(item, libdnf::transaction::TransactionItemAction::INSTALL); }
+    void install(TransactionItem & item) {
+        install_up_down(item, libdnf5::transaction::TransactionItemAction::INSTALL);
+    }
 
     /// Add package to be upgraded to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
-    void upgrade(TransactionItem & item) { install_up_down(item, libdnf::transaction::TransactionItemAction::UPGRADE); }
+    void upgrade(TransactionItem & item) {
+        install_up_down(item, libdnf5::transaction::TransactionItemAction::UPGRADE);
+    }
 
     /// Add package to be upgraded to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
     void downgrade(TransactionItem & item) {
-        install_up_down(item, libdnf::transaction::TransactionItemAction::DOWNGRADE);
+        install_up_down(item, libdnf5::transaction::TransactionItemAction::DOWNGRADE);
     }
 
     /// Add package to be reinstalled to transaction set.
@@ -382,7 +386,7 @@ private:
     /// @param item  item to be erased
     /// @param action  one of TransactionItemAction::UPGRADE,
     ///     TransactionItemAction::DOWNGRADE, TransactionItemAction::INSTALL
-    void install_up_down(TransactionItem & item, libdnf::transaction::TransactionItemAction action);
+    void install_up_down(TransactionItem & item, libdnf5::transaction::TransactionItemAction action);
 
     static Nevra trans_element_to_nevra(rpmte te);
 
@@ -418,6 +422,6 @@ private:
         rpmCallbackData data);
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_TRANSACTION_HPP

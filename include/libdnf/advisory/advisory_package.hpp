@@ -27,19 +27,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class PackageQuery;
 
 }
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Goal;
 
 }
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisoryPackage {
 public:
@@ -111,14 +111,14 @@ private:
     friend class AdvisoryCollection;
     friend class AdvisoryQuery;
     friend class AdvisorySet;
-    friend class libdnf::rpm::PackageQuery;
-    friend class libdnf::Goal;
+    friend class libdnf5::rpm::PackageQuery;
+    friend class libdnf5::Goal;
 
     class Impl;
     AdvisoryPackage(Impl * private_pkg);
     ImplPtr<Impl> p_impl;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

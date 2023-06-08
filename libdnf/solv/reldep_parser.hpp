@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 struct ReldepParser {
 public:
@@ -44,14 +44,14 @@ public:
 
     const char * get_evr_cstr() const noexcept { return evr.empty() ? nullptr : evr.c_str(); }
 
-    libdnf::rpm::Reldep::CmpType get_cmp_type() const noexcept { return cmp_type; }
+    libdnf5::rpm::Reldep::CmpType get_cmp_type() const noexcept { return cmp_type; }
 
 private:
     std::string name;
     std::string evr;
-    libdnf::rpm::Reldep::CmpType cmp_type{libdnf::rpm::Reldep::CmpType::NONE};
+    libdnf5::rpm::Reldep::CmpType cmp_type{libdnf5::rpm::Reldep::CmpType::NONE};
 };
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
 #endif  // LIBDNF_SOLV_RELDEP_PARSER_HPP

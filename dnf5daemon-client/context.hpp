@@ -39,7 +39,7 @@ namespace dnfdaemon::client {
 
 constexpr const char * VERSION = "0.1.0";
 
-class Context : public libdnf::cli::session::Session {
+class Context : public libdnf5::cli::session::Session {
 public:
     Context() : repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
@@ -53,19 +53,19 @@ public:
     /// proxy to dnf5daemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
-    libdnf::OptionBool get_assumeno_option() const { return assume_no; }
-    libdnf::OptionBool get_assumeyes_option() const { return assume_yes; }
-    libdnf::OptionBool get_defaultyes_option() const { return default_yes; }
+    libdnf5::OptionBool get_assumeno_option() const { return assume_no; }
+    libdnf5::OptionBool get_assumeyes_option() const { return assume_yes; }
+    libdnf5::OptionBool get_defaultyes_option() const { return default_yes; }
 
     // global command line arguments
     std::vector<std::pair<std::string, std::string>> setopts;
-    libdnf::OptionBool verbose{false};
-    libdnf::OptionBool assume_yes{false};
-    libdnf::OptionBool assume_no{false};
-    libdnf::OptionBool default_yes{false};
-    libdnf::OptionBool allow_erasing{false};
-    libdnf::OptionString installroot{"/"};
-    libdnf::OptionString releasever{""};
+    libdnf5::OptionBool verbose{false};
+    libdnf5::OptionBool assume_yes{false};
+    libdnf5::OptionBool assume_no{false};
+    libdnf5::OptionBool default_yes{false};
+    libdnf5::OptionBool allow_erasing{false};
+    libdnf5::OptionString installroot{"/"};
+    libdnf5::OptionString releasever{""};
 
     DownloadCB * get_download_cb() { return download_cb.get(); }
 

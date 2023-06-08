@@ -36,7 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using bool_opt_t = std::unique_ptr<libdnf::cli::session::BoolOption>;
+using bool_opt_t = std::unique_ptr<libdnf5::cli::session::BoolOption>;
 using str_map_t = std::map<std::string, std::string>;
 
 class CoprCommand;
@@ -132,7 +132,7 @@ public:
     const std::string & hub() { return this->hub_option.get_value(); }
 
 private:
-    libdnf::OptionString hub_option{""};
+    libdnf5::OptionString hub_option{""};
 };
 
 

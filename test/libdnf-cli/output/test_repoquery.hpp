@@ -55,7 +55,7 @@ public:
     void test_requires_filelists();
 
 private:
-    std::unique_ptr<libdnf::rpm::PackageQuery> pkgs;
+    std::unique_ptr<libdnf5::rpm::PackageQuery> pkgs;
 };
 
 

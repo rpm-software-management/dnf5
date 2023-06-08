@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 // environment list table columns
@@ -34,7 +34,7 @@ enum { COL_ENVIRONMENT_ID, COL_ENVIRONMENT_NAME, COL_INSTALLED };
 
 static struct libscols_table * create_environmentlist_table() {
     struct libscols_table * table = scols_new_table();
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "ID", 20, 0);
@@ -75,6 +75,6 @@ void print_environmentlist_table(Query & environment_list) {
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_ENVIRONMENTLIST_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsEnvironmentQueryTest);
 
 
-using namespace libdnf::comps;
+using namespace libdnf5::comps;
 
 
 void CompsEnvironmentQueryTest::setUp() {
@@ -58,13 +58,13 @@ void CompsEnvironmentQueryTest::test_query_filter_environmentid() {
 
     // Filter envitonments with id containing "environment"
     q_environments = EnvironmentQuery(base);
-    q_environments.filter_environmentid("environment", libdnf::sack::QueryCmp::CONTAINS);
+    q_environments.filter_environmentid("environment", libdnf5::sack::QueryCmp::CONTAINS);
     expected = {get_environment("custom-environment"), get_environment("minimal-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 
     // Filter envitonments with id matching glob "*environment"
     q_environments = EnvironmentQuery(base);
-    q_environments.filter_environmentid("*environment", libdnf::sack::QueryCmp::GLOB);
+    q_environments.filter_environmentid("*environment", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_environment("custom-environment"), get_environment("minimal-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 
@@ -85,13 +85,13 @@ void CompsEnvironmentQueryTest::test_query_filter_name() {
 
     // Filter envitonments with name containing "Environment"
     q_environments = EnvironmentQuery(base);
-    q_environments.filter_name("Custom", libdnf::sack::QueryCmp::CONTAINS);
+    q_environments.filter_name("Custom", libdnf5::sack::QueryCmp::CONTAINS);
     expected = {get_environment("custom-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 
     // Filter envitonments with name matching glob "*Environment"
     q_environments = EnvironmentQuery(base);
-    q_environments.filter_name("Custom*", libdnf::sack::QueryCmp::GLOB);
+    q_environments.filter_name("Custom*", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_environment("custom-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 

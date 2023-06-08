@@ -29,12 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <numeric>
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 KeyValueTable::KeyValueTable() {
     tb = scols_new_table();
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(tb, true);
     }
 
@@ -85,7 +85,7 @@ struct libscols_line * KeyValueTable::add_line(
 
 struct libscols_line * KeyValueTable::add_line(
     const char * key, const std::vector<std::string> & value, const char * color, struct libscols_line * parent) {
-    return add_line(key, libdnf::utils::string::join(value, " "), color, parent);
+    return add_line(key, libdnf5::utils::string::join(value, " "), color, parent);
 }
 
 struct libscols_line * KeyValueTable::add_lines(
@@ -103,4 +103,4 @@ struct libscols_line * KeyValueTable::add_lines(
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

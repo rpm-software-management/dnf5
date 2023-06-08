@@ -25,9 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/tty.hpp"
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-void print_transaction_info(libdnf::transaction::Transaction & transaction) {
+void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     const auto dt_start_time = static_cast<time_t>(transaction.get_dt_start());
     const auto dt_end_time = static_cast<time_t>(transaction.get_dt_end());
 
@@ -70,4 +70,4 @@ void print_transaction_info(libdnf::transaction::Transaction & transaction) {
     scols_print_table(item_list.get());
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

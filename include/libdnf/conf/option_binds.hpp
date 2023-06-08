@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 struct OptionBindsError : public Error {
     using Error::Error;
@@ -101,6 +101,6 @@ private:
     Container items;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

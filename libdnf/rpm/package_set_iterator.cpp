@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
-class PackageSetIterator::Impl : private libdnf::solv::SolvMap::iterator {
+class PackageSetIterator::Impl : private libdnf5::solv::SolvMap::iterator {
 private:
     Impl(const PackageSet & package_set)
         : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
@@ -107,4 +107,4 @@ bool PackageSetIterator::operator!=(const PackageSetIterator & other) const {
 }
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf-cli/argument_parser.hpp>
 
-libdnf::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
-    libdnf::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs);
+libdnf5::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
+    libdnf5::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs);
 
 #endif

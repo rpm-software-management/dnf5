@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 /// Base class for repository callbacks.
 /// To implement callbacks, inherit from this class and override virtual methods.
@@ -57,6 +57,6 @@ public:
 #pragma GCC diagnostic pop
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_REPO_CALLBACKS_HPP

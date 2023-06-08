@@ -20,13 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_DOWNLOAD_CALLBACKS_HPP
 #define LIBDNF_REPO_DOWNLOAD_CALLBACKS_HPP
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Base;
 
 }
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 /// Base class for download callbacks.
 /// To implement a callback, inherit from this class and override the virtual methods.
@@ -110,6 +110,6 @@ public:
     virtual void fastest_mirror(void * user_cb_data, FastestMirrorStage stage, const char * ptr);
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_DOWNLOAD_CALLBACKS_HPP

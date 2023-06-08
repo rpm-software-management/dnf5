@@ -34,10 +34,11 @@ void ReldepParserTest::tearDown() {}
 // Ensure that both Ids from libsolv nad libdnf represent the same type
 void ReldepParserTest::test_parser() {
     std::string reldep_str("dnf = 34.66.7-67.4");
-    libdnf::solv::ReldepParser dep_parser;
+    libdnf5::solv::ReldepParser dep_parser;
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.get_name() == "dnf");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::EQ);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Parse 'dnf = 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::EQ);
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.get_evr() == "34.66.7-67.4");
 
     reldep_str = "dnf == 34.66.7-67.4";
@@ -48,26 +49,28 @@ void ReldepParserTest::test_parser() {
     reldep_str = "libdnf <= h";
     CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_name() == "libdnf");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::LTE);
+    CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::LTE);
     CPPUNIT_ASSERT_MESSAGE("Parse 'libdnf <= h'", dep_parser.get_evr() == "h");
 
     reldep_str = "dnf < 34.66.7-67.4";
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf < 34.66.7-67.4'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf < 34.66.7-67.4'", dep_parser.get_name() == "dnf");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'dnf < 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::LT);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Parse 'dnf < 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::LT);
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf < 34.66.7-67.4'", dep_parser.get_evr() == "34.66.7-67.4");
 
     reldep_str = "dnf > 34.66.7-67.4";
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf > 34.66.7-67.4'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf > 34.66.7-67.4'", dep_parser.get_name() == "dnf");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'dnf > 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::GT);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Parse 'dnf > 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::GT);
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf > 34.66.7-67.4'", dep_parser.get_evr() == "34.66.7-67.4");
 
     reldep_str = "dnf >= 34.66.7-67.4";
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf >= 34.66.7-67.4'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf >= 34.66.7-67.4'", dep_parser.get_name() == "dnf");
     CPPUNIT_ASSERT_MESSAGE(
-        "Parse 'dnf >= 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::GTE);
+        "Parse 'dnf >= 34.66.7-67.4'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::GTE);
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf >= 34.66.7-67.4'", dep_parser.get_evr() == "34.66.7-67.4");
 
     reldep_str = "python3-astroid <> 2.3.3-2.gitace7b29.fc31";
@@ -79,7 +82,7 @@ void ReldepParserTest::test_parser() {
     reldep_str = "space.txt";
     CPPUNIT_ASSERT_MESSAGE("Parse 'space.txt'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'space.txt'", dep_parser.get_name() == "space.txt");
-    CPPUNIT_ASSERT_MESSAGE("Parse 'space.txt'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::NONE);
+    CPPUNIT_ASSERT_MESSAGE("Parse 'space.txt'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::NONE);
     CPPUNIT_ASSERT_MESSAGE("Parse 'space.txt'", dep_parser.get_evr() == "");
 
     reldep_str = "python3-astroid =";
@@ -98,7 +101,7 @@ void ReldepParserTest::test_parser() {
     CPPUNIT_ASSERT_MESSAGE("Parse '/file/provide/space.txt'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse '/file/provide/space.txt'", dep_parser.get_name() == "/file/provide/space.txt");
     CPPUNIT_ASSERT_MESSAGE(
-        "Parse '/file/provide/space.txt'", dep_parser.get_cmp_type() == libdnf::rpm::Reldep::CmpType::NONE);
+        "Parse '/file/provide/space.txt'", dep_parser.get_cmp_type() == libdnf5::rpm::Reldep::CmpType::NONE);
     CPPUNIT_ASSERT_MESSAGE("Parse '/file/provide/space.txt'", dep_parser.get_evr() == "");
 
     reldep_str = "python3-astroid > sdfsdf asdad";

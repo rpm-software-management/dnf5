@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/types.h>
 #include <unistd.h>
 
-namespace libdnf {
+namespace libdnf5 {
 
 static std::string remove_file_prot(const std::string & value) {
     const int prefix_len = 7;
@@ -103,4 +103,4 @@ void OptionPath::set(const std::string & value) {
     set(Priority::RUNTIME, value);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

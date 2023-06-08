@@ -45,7 +45,7 @@ protected:
     explicit ListCommand(Context & context, const std::string & name) : Command(context, name) {}
 
 private:
-    virtual std::unique_ptr<libdnf::cli::output::PackageListSections> create_output();
+    virtual std::unique_ptr<libdnf5::cli::output::PackageListSections> create_output();
 
     enum class PkgNarrow { ALL, INSTALLED, AVAILABLE, EXTRAS, OBSOLETES, RECENT, UPGRADES, AUTOREMOVE };
 
@@ -53,16 +53,16 @@ private:
 
     // options to narrow the output packages
     PkgNarrow pkg_narrow{PkgNarrow::ALL};
-    std::unique_ptr<libdnf::cli::session::BoolOption> installed{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> available{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> extras{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> obsoletes{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> recent{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> upgrades{nullptr};
-    std::unique_ptr<libdnf::cli::session::BoolOption> autoremove{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> installed{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> available{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> extras{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> obsoletes{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> recent{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> upgrades{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> autoremove{nullptr};
 
     // show all NEVRAs, not only the latest one
-    std::unique_ptr<libdnf::cli::session::BoolOption> show_duplicates{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> show_duplicates{nullptr};
 };
 
 

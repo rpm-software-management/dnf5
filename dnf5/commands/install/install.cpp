@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void InstallCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -79,7 +79,7 @@ void InstallCommand::configure() {
                              advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
     if (updateinfo_needed) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
     }
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
@@ -89,7 +89,7 @@ void InstallCommand::run() {
     auto & ctx = get_context();
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
-    auto settings = libdnf::GoalJobSettings();
+    auto settings = libdnf5::GoalJobSettings();
     auto advisories = advisory_query_from_cli_input(
         ctx.base,
         advisory_name->get_value(),

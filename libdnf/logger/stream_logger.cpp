@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/stream_logger.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 void StreamLogger::write(const char * line) noexcept {
     try {
@@ -39,4 +39,4 @@ void StdCStreamLogger::write(const char * line) noexcept {
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

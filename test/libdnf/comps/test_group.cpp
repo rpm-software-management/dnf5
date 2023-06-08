@@ -36,12 +36,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
 namespace CPPUNIT_NS {
 
 template <>
-struct assertion_traits<libdnf::comps::Package> {
-    inline static bool equal(const libdnf::comps::Package & left, const libdnf::comps::Package & right) {
+struct assertion_traits<libdnf5::comps::Package> {
+    inline static bool equal(const libdnf5::comps::Package & left, const libdnf5::comps::Package & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::comps::Package & package) {
+    inline static std::string toString(const libdnf5::comps::Package & package) {
         return fmt::format(
             "{} (type: {}, condition: {})",
             package.get_name(),
@@ -53,7 +53,7 @@ struct assertion_traits<libdnf::comps::Package> {
 }  // namespace CPPUNIT_NS
 
 
-using namespace libdnf::comps;
+using namespace libdnf5::comps;
 
 
 void CompsGroupTest::test_load() {
@@ -282,11 +282,11 @@ void CompsGroupTest::test_serialize() {
     auto serialize_path = temp->get_path() / "serialized-standard.xml";
     standard.serialize(serialize_path);
 
-    std::string actual = libdnf::utils::fs::File(serialize_path, "r").read();
+    std::string actual = libdnf5::utils::fs::File(serialize_path, "r").read();
 
     std::filesystem::path expected_path =
         PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-comps-standard/repodata/comps.xml";
-    std::string expected = libdnf::utils::fs::File(expected_path, "r").read();
+    std::string expected = libdnf5::utils::fs::File(expected_path, "r").read();
 
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -298,7 +298,7 @@ void CompsGroupTest::test_solvables() {
     add_repo_repomd("repomd-comps-core-environment");
     add_repo_repomd("repomd-comps-standard");
 
-    libdnf::comps::GroupQuery q_groups(base);
+    libdnf5::comps::GroupQuery q_groups(base);
     auto groups = q_groups.list();
     CPPUNIT_ASSERT_EQUAL((size_t)2, groups.size());
 

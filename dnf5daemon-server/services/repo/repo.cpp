@@ -99,7 +99,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
 
 // converts Repo object to dbus map
 dnfdaemon::KeyValueMap repo_to_map(
-    libdnf::Base & base,
+    libdnf5::Base & base,
     const libdnf::WeakPtr<libdnf::repo::Repo, false> libdnf_repo,
     std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_repo;
@@ -258,7 +258,7 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
 
     // prepare repository query filtered by options
     auto base = session.get_base();
-    libdnf::repo::RepoQuery repos_query(*base);
+    libdnf5::repo::RepoQuery repos_query(*base);
 
     if (enable_disable == "enabled") {
         repos_query.filter_enabled(true);

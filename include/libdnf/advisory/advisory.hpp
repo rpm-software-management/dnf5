@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisoryCollection;
 class AdvisoryReference;
@@ -146,6 +146,6 @@ private:
     AdvisoryId id;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void UpgradeCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -40,8 +40,8 @@ void UpgradeCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Upgrade software");
 
-    minimal = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    minimal = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto minimal_opt = parser.add_new_named_arg("minimal");
     minimal_opt->set_long_name("minimal");
     // TODO(dmach): Explain how this relates to options such as --security, --enhacement etc.
@@ -88,7 +88,7 @@ void UpgradeCommand::configure() {
                              advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
     if (updateinfo_needed) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
     }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
@@ -98,17 +98,17 @@ void UpgradeCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
 
-    auto settings = libdnf::GoalJobSettings();
+    auto settings = libdnf5::GoalJobSettings();
 
     if (minimal->get_value()) {
         if ((advisory_name->get_value().empty() && !advisory_security->get_value() && !advisory_bugfix->get_value() &&
              !advisory_enhancement->get_value() && !advisory_newpackage->get_value() &&
              advisory_severity->get_value().empty() && advisory_bz->get_value().empty() &&
              advisory_cve->get_value().empty())) {
-            advisory_security->set(libdnf::Option::Priority::RUNTIME, true);
-            advisory_bugfix->set(libdnf::Option::Priority::RUNTIME, true);
-            advisory_enhancement->set(libdnf::Option::Priority::RUNTIME, true);
-            advisory_newpackage->set(libdnf::Option::Priority::RUNTIME, true);
+            advisory_security->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_bugfix->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_enhancement->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_newpackage->set(libdnf5::Option::Priority::RUNTIME, true);
         }
     }
 

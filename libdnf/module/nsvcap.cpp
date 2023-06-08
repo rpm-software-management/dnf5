@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 #define MODULE_NAME    "([" GLOB LETTERS DIGITS MODULE_SPECIAL "]+)"
@@ -145,4 +145,4 @@ void Nsvcap::clear() {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <ostream>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// StreamLogger is an implementation of logging class that writes messages into a stream.
 class StreamLogger : public StringLogger {
@@ -51,6 +51,6 @@ private:
     std::ostream & log_stream;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

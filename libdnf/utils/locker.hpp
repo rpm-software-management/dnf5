@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 class Locker {
 public:
@@ -39,6 +39,6 @@ private:
     int lock_fd{-1};
 };
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_LOCKER_HPP

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_ITEM_INSERT = R"**(
@@ -31,14 +31,14 @@ static constexpr const char * SQL_ITEM_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_ITEM_INSERT);
+std::unique_ptr<libdnf5::utils::SQLite3::Statement> item_insert_new_query(libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_ITEM_INSERT);
     return query;
 }
 
 
-int64_t item_insert(libdnf::utils::SQLite3::Statement & query) {
-    if (query.step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
+int64_t item_insert(libdnf5::utils::SQLite3::Statement & query) {
+    if (query.step() != libdnf5::utils::SQLite3::Statement::StepResult::DONE) {
         // TODO(dmach): replace with a better exception class
         throw RuntimeError(M_("Failed to insert record into table 'item' in history database"));
     }
@@ -46,4 +46,4 @@ int64_t item_insert(libdnf::utils::SQLite3::Statement & query) {
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

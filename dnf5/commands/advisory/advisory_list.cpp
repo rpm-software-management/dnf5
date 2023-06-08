@@ -26,40 +26,40 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void AdvisoryListCommand::process_and_print_queries(
-    Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {
-    std::vector<libdnf::advisory::AdvisoryPackage> installed_pkgs;
-    std::vector<libdnf::advisory::AdvisoryPackage> not_installed_pkgs;
+    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) {
+    std::vector<libdnf5::advisory::AdvisoryPackage> installed_pkgs;
+    std::vector<libdnf5::advisory::AdvisoryPackage> not_installed_pkgs;
 
     if (all->get_value()) {
         packages.filter_installed();
-        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::LTE);
-        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
+        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::LTE);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     } else if (installed->get_value()) {
         packages.filter_installed();
-        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::LTE);
+        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::LTE);
     } else if (updates->get_value()) {
         //TODO(amatej): all advisory commands with --updates should respect obsoletes and upgrades when noarch is involved,
         //              filed as: https://issues.redhat.com/browse/RHELPLAN-133820
         packages.filter_upgradable();
-        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     } else {  // available is the default
         packages.filter_installed();
         packages.filter_latest_evr();
 
         add_running_kernel_packages(ctx.base, packages);
 
-        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     }
 
     if (with_bz->get_value()) {
-        libdnf::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
+        libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
     } else if (with_cve->get_value()) {
-        libdnf::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");
+        libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");
     } else {
-        libdnf::cli::output::print_advisorylist_table(not_installed_pkgs, installed_pkgs);
+        libdnf5::cli::output::print_advisorylist_table(not_installed_pkgs, installed_pkgs);
     }
 }
 

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdint>
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Library version
 /// @since 5.0
@@ -49,6 +49,6 @@ LibraryVersion get_library_version() noexcept;
 /// @since 5.0
 PluginAPIVersion get_plugin_api_version() noexcept;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

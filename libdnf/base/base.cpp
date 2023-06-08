@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <vector>
 
-namespace libdnf {
+namespace libdnf5 {
 
 static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
@@ -52,7 +52,7 @@ Base::Base(std::vector<std::unique_ptr<Logger>> && loggers)
 
 Base::~Base() = default;
 
-Base::Impl::Impl(const libdnf::BaseWeakPtr & base) : rpm_advisory_sack(base), plugins(*base) {}
+Base::Impl::Impl(const libdnf5::BaseWeakPtr & base) : rpm_advisory_sack(base), plugins(*base) {}
 
 void Base::lock() {
     locked_base_mutex.lock();
@@ -78,7 +78,7 @@ void Base::load_defaults() {
         ConfigParser parser;
         parser.read(file_path);
         config.load_from_parser(parser, "main", vars, *get_logger(), Option::Priority::DEFAULT);
-    } catch (const libdnf::MissingConfigError & ex) {
+    } catch (const libdnf5::MissingConfigError & ex) {
         log_router.debug("Configuration file \"{}\" not found", file_path);
     }
 }
@@ -100,12 +100,12 @@ void Base::with_config_file_path(std::function<void(const std::string &)> func) 
         return func(conf_path.string());
     } catch (const MissingConfigError & e) {
         // Ignore the missing config file unless the user specified it via --config=...
-        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
+        if (conf_path_priority >= libdnf5::Option::Priority::COMMANDLINE) {
             throw;
         }
     } catch (const InaccessibleConfigError & e) {
         // Ignore the inaccessible config file unless the user specified it via --config=...
-        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
+        if (conf_path_priority >= libdnf5::Option::Priority::COMMANDLINE) {
             throw;
         }
     }
@@ -136,7 +136,7 @@ void Base::load_config_from_dir(const std::string & dir_path) {
 }
 
 void Base::load_config_from_dir() {
-    std::filesystem::path conf_dir{libdnf::CONF_DIRECTORY};
+    std::filesystem::path conf_dir{libdnf5::CONF_DIRECTORY};
     if (!config.get_use_host_config_option().get_value()) {
         conf_dir = config.get_installroot_option().get_value() / conf_dir.relative_path();
     }
@@ -182,8 +182,8 @@ void Base::setup() {
 
     p_impl->plugins.pre_base_setup();
 
-    pool.reset(new libdnf::solv::RpmPool);
-    p_impl->comps_pool.reset(new libdnf::solv::CompsPool);
+    pool.reset(new libdnf5::solv::RpmPool);
+    p_impl->comps_pool.reset(new libdnf5::solv::CompsPool);
     auto & config = get_config();
     auto & installroot = config.get_installroot_option();
     installroot.lock("Locked by Base::setup()");
@@ -199,17 +199,17 @@ void Base::setup() {
     // TODO(mblaha) - this is temporary override of modules state by reading
     // dnf4 persistor from /etc/dnf/modules.d/
     // Remove once reading of dnf4 data is not needed
-    libdnf::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
+    libdnf5::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
     if ((!std::filesystem::exists(system_state.get_module_state_path()))) {
         system_state.reset_module_states(convertor.read_module_states());
     }
 
     if (system_state.packages_import_required()) {
         // TODO(mblaha) - first try dnf5 history database, then fall back to dnf4
-        std::map<std::string, libdnf::system::PackageState> package_states;
-        std::map<std::string, libdnf::system::NevraState> nevra_states;
-        std::map<std::string, libdnf::system::GroupState> group_states;
-        std::map<std::string, libdnf::system::EnvironmentState> environment_states;
+        std::map<std::string, libdnf5::system::PackageState> package_states;
+        std::map<std::string, libdnf5::system::NevraState> nevra_states;
+        std::map<std::string, libdnf5::system::GroupState> group_states;
+        std::map<std::string, libdnf5::system::EnvironmentState> environment_states;
 
         if (convertor.read_package_states_from_history(
                 package_states, nevra_states, group_states, environment_states)) {
@@ -235,4 +235,4 @@ bool Base::is_initialized() {
     return p_impl->pool.get() != nullptr;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

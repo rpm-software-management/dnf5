@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void RemoveCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -48,12 +48,12 @@ void RemoveCommand::set_argument_parser() {
 
     cmd.set_description("remove packages on the system");
 
-    auto specs_arg = pkg_specs_argument(parser, libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
+    auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
     specs_arg->set_description("List of packages to remove");
     cmd.register_positional_arg(specs_arg);
 
     // run remove command allways with allow_erasing on
-    context.allow_erasing.set(libdnf::Option::Priority::RUNTIME, true);
+    context.allow_erasing.set(libdnf5::Option::Priority::RUNTIME, true);
 }
 
 void RemoveCommand::run() {

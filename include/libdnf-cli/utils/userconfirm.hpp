@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-namespace libdnf::cli::utils::userconfirm {
+namespace libdnf5::cli::utils::userconfirm {
 
 /// Asks the user for confirmation. The default answer is taken from the configuration.
 
@@ -62,6 +62,6 @@ bool userconfirm(Config & config) {
     }
 }
 
-};  // namespace libdnf::cli::utils::userconfirm
+};  // namespace libdnf5::cli::utils::userconfirm
 
 #endif  // LIBDNF_CLI_UTILS_USERCONFIRM_HPP

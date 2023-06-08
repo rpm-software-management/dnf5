@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_set_iterator.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 
 AdvisorySet::AdvisorySet(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -136,4 +136,4 @@ std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_name_a
     return out;
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

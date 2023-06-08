@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-namespace libdnf {
+namespace libdnf5 {
 
 OptionSeconds::OptionSeconds(ValueType default_value, ValueType min, ValueType max)
     : OptionNumber(default_value, min, max) {}
@@ -90,4 +90,4 @@ void OptionSeconds::set(const std::string & value) {
     set(Priority::RUNTIME, value);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
@@ -48,18 +48,18 @@ static constexpr const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_package_select_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_GROUP_PACKAGE_SELECT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Query> comps_group_package_select_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Query>(conn, SQL_COMPS_GROUP_PACKAGE_SELECT);
     return query;
 }
 
 
-void CompsGroupPackageDbUtils::comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+void CompsGroupPackageDbUtils::comps_group_packages_select(libdnf5::utils::SQLite3 & conn, CompsGroup & group) {
     auto query = comps_group_package_select_new_query(conn);
     query->bindv(group.get_item_id());
 
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto & pkg = group.new_package();
         pkg.set_id(query->get<int64_t>("id"));
         pkg.set_name(query->get<std::string>("name"));
@@ -82,14 +82,14 @@ static constexpr const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_package_insert_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_GROUP_PACKAGE_INSERT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> comps_group_package_insert_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_COMPS_GROUP_PACKAGE_INSERT);
     return query;
 }
 
 
-void CompsGroupPackageDbUtils::comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+void CompsGroupPackageDbUtils::comps_group_packages_insert(libdnf5::utils::SQLite3 & conn, CompsGroup & group) {
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
     auto query = comps_group_package_insert_new_query(conn);
     for (auto & pkg : group.get_packages()) {
@@ -104,4 +104,4 @@ void CompsGroupPackageDbUtils::comps_group_packages_insert(libdnf::utils::SQLite
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

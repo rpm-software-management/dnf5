@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <optional>
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class PackageDownloadError : public Error {
     using Error::Error;
@@ -37,20 +37,20 @@ class PackageDownloadError : public Error {
 
 class PackageDownloader {
 public:
-    explicit PackageDownloader(const libdnf::BaseWeakPtr & base);
-    explicit PackageDownloader(libdnf::Base & base);
+    explicit PackageDownloader(const libdnf5::BaseWeakPtr & base);
+    explicit PackageDownloader(libdnf5::Base & base);
     ~PackageDownloader();
 
     /// Adds a package to download to the standard location of repo cachedir/packages.
     /// @param package The package to download.
     /// @param user_data User data.
-    void add(const libdnf::rpm::Package & package, void * user_data = nullptr);
+    void add(const libdnf5::rpm::Package & package, void * user_data = nullptr);
 
     /// Adds a package to download to a specific destination directory.
     /// @param package The package to download.
     /// @param destination The directory to which to download the package.
     /// @param user_data User data.
-    void add(const libdnf::rpm::Package & package, const std::string & destination, void * user_data = nullptr);
+    void add(const libdnf5::rpm::Package & package, const std::string & destination, void * user_data = nullptr);
 
     /// Download the previously added packages.
     void download();
@@ -98,6 +98,6 @@ private:
 //
 //};
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP

@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::cli {
+namespace libdnf5::cli {
 
 /// Parent for all ArgumentsParser runtime errors.
 class ArgumentParserError : public Error {
@@ -267,7 +267,7 @@ public:
 
         /// Gets list of values.
         /// Parsed values are stored there if if get_store_value() == true.
-        std::vector<std::unique_ptr<libdnf::Option>> * get_linked_values() noexcept { return values; }
+        std::vector<std::unique_ptr<libdnf5::Option>> * get_linked_values() noexcept { return values; }
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
@@ -285,21 +285,21 @@ public:
         friend class ArgumentParser;
 
         PositionalArg(
-            ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values);
+            ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf5::Option>> * values);
         PositionalArg(
             ArgumentParser & owner,
             const std::string & id,
             int nvals,
-            libdnf::Option * init_value,
-            std::vector<std::unique_ptr<libdnf::Option>> * values);
+            libdnf5::Option * init_value,
+            std::vector<std::unique_ptr<libdnf5::Option>> * values);
 
         /// Parses input.
         /// Returns number of consumed arguments from the input.
         int parse(const char * option, int argc, const char * const argv[]);
 
         int nvals;
-        libdnf::Option * init_value;
-        std::vector<std::unique_ptr<libdnf::Option>> * values;
+        libdnf5::Option * init_value;
+        std::vector<std::unique_ptr<libdnf5::Option>> * values;
         bool store_value{true};
         ParseHookFunc parse_hook;
         CompleteHookFunc complete_hook;
@@ -320,7 +320,7 @@ public:
 
         /// Links the value to the argument.
         /// Parsed value is stored there if if get_store_value() == true.
-        void link_value(libdnf::Option * value) { this->value = value; }
+        void link_value(libdnf5::Option * value) { this->value = value; }
 
         /// Sets constant argument value.
         /// It is used for argument without value on command line (get_has_value() == false).
@@ -341,11 +341,11 @@ public:
 
         /// Gets the value.
         /// Parsed value is stored there if if get_store_value() == true.
-        libdnf::Option * get_linked_value() noexcept { return value; }
+        libdnf5::Option * get_linked_value() noexcept { return value; }
 
         /// Gets value.
         /// Parsed value is stored there if if get_store_value() == true.
-        const libdnf::Option * get_linked_value() const noexcept { return value; }
+        const libdnf5::Option * get_linked_value() const noexcept { return value; }
 
         /// Enables/disables storing parsed values.
         /// Values can be processed / stored in the user parse hook function.
@@ -368,11 +368,11 @@ public:
 
         /// Create alias for this named arg. The alias is not shown in completion.
         /// The conflicting args of the alias are copied to match the current conflicting args of this named arg.
-        libdnf::cli::ArgumentParser::NamedArg * add_alias(
+        libdnf5::cli::ArgumentParser::NamedArg * add_alias(
             const std::string & id,
             const std::string & long_name,
             char short_name,
-            libdnf::cli::ArgumentParser::Group * group);
+            libdnf5::cli::ArgumentParser::Group * group);
 
         void attach_named_arg(const std::string & id_path, const std::string & value);
 
@@ -394,7 +394,7 @@ public:
         char short_name{'\0'};
         bool has_value{false};
         std::string const_val;  // used if params == 0
-        libdnf::Option * value{nullptr};
+        libdnf5::Option * value{nullptr};
         bool store_value{true};
         ParseHookFunc parse_hook;
         std::string arg_value_help;
@@ -669,15 +669,15 @@ public:
     /// Constructs a new positional argument and stores it to the argument parser.
     /// Returns a pointer to the newly created positional argument.
     PositionalArg * add_new_positional_arg(
-        const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values);
+        const std::string & id, std::vector<std::unique_ptr<libdnf5::Option>> * values);
 
     /// Constructs a new positional argument and stores it to the argument parser.
     /// Returns a pointer to the newly created positional argument.
     PositionalArg * add_new_positional_arg(
         const std::string & id,
         int nargs,
-        libdnf::Option * init_value,
-        std::vector<std::unique_ptr<libdnf::Option>> * values);
+        libdnf5::Option * init_value,
+        std::vector<std::unique_ptr<libdnf5::Option>> * values);
 
     /// Constructs a new group and stores it to the argument parser.
     /// Returns a pointer to the newly created group.
@@ -689,16 +689,16 @@ public:
 
     /// Moves the option with the initial value to the argument parser.
     /// Returns a pointer to the option.
-    libdnf::Option * add_init_value(std::unique_ptr<libdnf::Option> && src);
+    libdnf5::Option * add_init_value(std::unique_ptr<libdnf5::Option> && src);
 
     /// Constructs a new empty list of values and stores it to the argument parser.
     /// Returns a pointer to the newly created list.
-    std::vector<std::unique_ptr<libdnf::Option>> * add_new_values();
+    std::vector<std::unique_ptr<libdnf5::Option>> * add_new_values();
 
     /// Moves an existing list of values to the argument parser.
     /// Returns a pointer to the list.
-    std::vector<std::unique_ptr<libdnf::Option>> * add_values(
-        std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values);
+    std::vector<std::unique_ptr<libdnf5::Option>> * add_values(
+        std::unique_ptr<std::vector<std::unique_ptr<libdnf5::Option>>> && values);
 
     /// Sets the "root" command.
     /// This is the top-level command in the command hierarchy. It can contain named and positional arguments and subcommands.
@@ -780,14 +780,14 @@ private:
     std::vector<std::unique_ptr<PositionalArg>> pos_args;
     std::vector<std::unique_ptr<Group>> groups;
     std::vector<std::unique_ptr<std::vector<Argument *>>> conflict_args_groups;
-    std::vector<std::unique_ptr<libdnf::Option>> values_init;
-    std::vector<std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>>> values;
+    std::vector<std::unique_ptr<libdnf5::Option>> values_init;
+    std::vector<std::unique_ptr<std::vector<std::unique_ptr<libdnf5::Option>>>> values;
     Command * root_command{nullptr};
     Command * selected_command{nullptr};
     bool inherit_named_args{false};
     const char * const * complete_arg_ptr{nullptr};
 };
 
-}  // namespace libdnf::cli
+}  // namespace libdnf5::cli
 
 #endif

@@ -25,14 +25,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdint>
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class TransactionGroup;
 class TransactionPackage;
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 /// Class represents one item in transaction set.
@@ -92,6 +92,6 @@ public:
 #pragma GCC diagnostic pop
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP

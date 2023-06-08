@@ -48,7 +48,7 @@ public:
     void test_get_url();
 
 private:
-    std::vector<libdnf::advisory::AdvisoryReference> references;
+    std::vector<libdnf5::advisory::AdvisoryReference> references;
 };
 
 

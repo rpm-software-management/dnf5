@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <type_traits>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 enum class ExcludeFlags : unsigned {
     APPLY_EXCLUDES = 0,
@@ -41,6 +41,6 @@ inline ExcludeFlags operator&(ExcludeFlags lhs, ExcludeFlags rhs) {
         static_cast<std::underlying_type<ExcludeFlags>::type>(rhs));
 }
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack
 
 #endif  // LIBDNF_COMMON_SACK_EXCLUDE_FLAGS_HPP

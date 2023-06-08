@@ -49,7 +49,7 @@ extern "C" {
 #include <memory>
 #include <string>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 static const std::string EMPTY_RESULT;
@@ -300,11 +300,11 @@ void ModuleSack::Impl::module_filtering() {
 
     target_packages.filter_repo_id(keep_repo_ids, libdnf::sack::QueryCmp::NEQ);
 
-    libdnf::rpm::PackageQuery include_query(base);
-    libdnf::rpm::PackageQuery exclude_query(target_packages);
-    libdnf::rpm::PackageQuery exclude_provides_query(target_packages);
-    libdnf::rpm::PackageQuery exclude_names_query(target_packages);
-    libdnf::rpm::PackageQuery exclude_src_names_query(target_packages);
+    libdnf5::rpm::PackageQuery include_query(base);
+    libdnf5::rpm::PackageQuery exclude_query(target_packages);
+    libdnf5::rpm::PackageQuery exclude_provides_query(target_packages);
+    libdnf5::rpm::PackageQuery exclude_names_query(target_packages);
+    libdnf5::rpm::PackageQuery exclude_src_names_query(target_packages);
 
     include_query.filter_nevra(include_NEVRAs);
 
@@ -568,7 +568,7 @@ class PlatformIdFormatError : public libdnf::Error {
 /// @throws PlatformIdFormatError when platform id in the file has incorrect format.
 /// @throws std::filesystem::filesystem_error when there is any error during reading a file.
 static std::pair<std::string, std::string> parse_platform_id_from_file(const std::string & os_release_path) {
-    libdnf::utils::fs::File file{os_release_path, "r"};
+    libdnf5::utils::fs::File file{os_release_path, "r"};
     std::string line;
     while (file.read_line(line)) {
         if (line.find("PLATFORM_ID") != std::string::npos) {
@@ -607,13 +607,13 @@ static std::pair<std::string, std::string> parse_platform_id_from_file(const std
 /// @param provide_name Name of the provide to be parsed.
 /// @return Set of all parsed values found in \a packages from provides having the \a provide_name name.
 static std::set<std::string> get_strings_from_provide(
-    const libdnf::rpm::PackageSet & packages, const char * provide_name) {
+    const libdnf5::rpm::PackageSet & packages, const char * provide_name) {
     std::set<std::string> strings;
 
     auto provide_name_length = strlen(provide_name);
     for (auto const & package : packages) {
         auto const & provides = package.get_provides();
-        auto found_provide = std::find_if(provides.begin(), provides.end(), [&](const libdnf::rpm::Reldep & dep) {
+        auto found_provide = std::find_if(provides.begin(), provides.end(), [&](const libdnf5::rpm::Reldep & dep) {
             return !strncmp(dep.get_name(), provide_name, strlen(provide_name));
         });
         if (found_provide != provides.end()) {
@@ -837,4 +837,4 @@ ModuleStatus module_status_from_string(const std::string & status) {
     throw InvalidModuleStatus(status);
 }
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

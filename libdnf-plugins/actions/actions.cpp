@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-using namespace libdnf;
+using namespace libdnf5;
 
 namespace {
 
@@ -105,18 +105,18 @@ public:
 private:
     void parse_action_files();
     void on_base_setup(const std::vector<Action> & trans_actions);
-    void on_transaction(const libdnf::base::Transaction & transaction, const std::vector<Action> & trans_actions);
+    void on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions);
     void execute_command(CommandToRun & command);
 
     [[nodiscard]] std::pair<std::string, bool> substitute(
-        const libdnf::base::TransactionPackage * trans_pkg,
-        const libdnf::rpm::Package * pkg,
+        const libdnf5::base::TransactionPackage * trans_pkg,
+        const libdnf5::rpm::Package * pkg,
         std::string_view in,
         std::filesystem::path file,
         int line_number);
 
     [[nodiscard]] std::pair<std::vector<std::string>, bool> substitute_args(
-        const libdnf::base::TransactionPackage * trans_pkg, const libdnf::rpm::Package * pkg, const Action & action);
+        const libdnf5::base::TransactionPackage * trans_pkg, const libdnf5::rpm::Package * pkg, const Action & action);
 
     void process_command_output_line(std::string_view line);
 
@@ -128,18 +128,18 @@ private:
 
     // cache for sharing between pre_transaction and post_transaction hooks
     bool transaction_cached = false;
-    std::vector<libdnf::base::TransactionPackage> trans_packages;
-    std::map<libdnf::rpm::PackageId, const libdnf::base::TransactionPackage *> pkg_id_to_trans_pkg;
-    std::optional<libdnf::rpm::PackageQuery> in_full_query;
-    std::optional<libdnf::rpm::PackageQuery> out_full_query;
-    std::optional<libdnf::rpm::PackageQuery> all_full_query;
+    std::vector<libdnf5::base::TransactionPackage> trans_packages;
+    std::map<libdnf5::rpm::PackageId, const libdnf5::base::TransactionPackage *> pkg_id_to_trans_pkg;
+    std::optional<libdnf5::rpm::PackageQuery> in_full_query;
+    std::optional<libdnf5::rpm::PackageQuery> out_full_query;
+    std::optional<libdnf5::rpm::PackageQuery> all_full_query;
 
     // store temporary variables for sharing data between actions (executables)
     std::map<std::string, std::string> tmp_variables;
 };
 
 
-class ActionsPluginError : public libdnf::Error {
+class ActionsPluginError : public libdnf5::Error {
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf::plugin"; }
     const char * get_name() const noexcept override { return "ActionsPluginError"; }
@@ -184,8 +184,8 @@ std::vector<std::string> split(const std::string & str) {
 }
 
 std::pair<std::string, bool> Actions::substitute(
-    const libdnf::base::TransactionPackage * trans_pkg,
-    const libdnf::rpm::Package * pkg,
+    const libdnf5::base::TransactionPackage * trans_pkg,
+    const libdnf5::rpm::Package * pkg,
     std::string_view in,
     std::filesystem::path file,
     int line_number) {
@@ -265,7 +265,7 @@ std::pair<std::string, bool> Actions::substitute(
             }
             if (trans_pkg) {
                 if (pkg_key == "action") {
-                    var_value = libdnf::transaction::transaction_item_action_to_letter(trans_pkg->get_action());
+                    var_value = libdnf5::transaction::transaction_item_action_to_letter(trans_pkg->get_action());
                 }
             }
         }
@@ -287,7 +287,7 @@ std::pair<std::string, bool> Actions::substitute(
 }
 
 std::pair<std::vector<std::string>, bool> Actions::substitute_args(
-    const libdnf::base::TransactionPackage * trans_pkg, const libdnf::rpm::Package * pkg, const Action & action) {
+    const libdnf5::base::TransactionPackage * trans_pkg, const libdnf5::rpm::Package * pkg, const Action & action) {
     std::vector<std::string> substituted_args;
     substituted_args.reserve(action.args.size());
     for (const auto & arg : action.args) {
@@ -364,7 +364,7 @@ void Actions::parse_action_files() {
     const auto & config = get_base().get_config();
     const char * env_plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     const std::string plugins_config_dir = env_plugins_config_dir && config.get_pluginconfpath_option().get_priority() <
-                                                                         libdnf::Option::Priority::COMMANDLINE
+                                                                         libdnf5::Option::Priority::COMMANDLINE
                                                ? env_plugins_config_dir
                                                : config.get_pluginconfpath_option().get_value();
 
@@ -518,8 +518,8 @@ void Actions::process_command_output_line(std::string_view line) {
             return;
         }
         try {
-            it->second.new_string(libdnf::Option::Priority::PLUGINCONFIG, var_value);
-        } catch (libdnf::OptionError & ex) {
+            it->second.new_string(libdnf5::Option::Priority::PLUGINCONFIG, var_value);
+        } catch (libdnf5::OptionError & ex) {
             base.get_logger()->error(
                 "Actions plugin: Cannot set config value returned by command \"{}={}\": {}",
                 var_name,
@@ -529,7 +529,7 @@ void Actions::process_command_output_line(std::string_view line) {
     } else if (line.starts_with("var.")) {
         std::string var_name(line.substr(4, eq_pos - 4));
         std::string var_value(line.substr(eq_pos + 1));
-        base.get_vars()->set(var_name, var_value, libdnf::Vars::Priority::PLUGIN);
+        base.get_vars()->set(var_name, var_value, libdnf5::Vars::Priority::PLUGIN);
     } else {
         base.get_logger()->error(
             "Actions plugin: Command output line not in correct format (has to start with \"tmp.\" or \"conf.\" or "
@@ -639,7 +639,8 @@ void Actions::execute_command(CommandToRun & command) {
     }
 }
 
-void Actions::on_transaction(const libdnf::base::Transaction & transaction, const std::vector<Action> & trans_actions) {
+void Actions::on_transaction(
+    const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions) {
     if (trans_actions.empty()) {
         return;
     }
@@ -647,7 +648,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
     if (!transaction_cached) {
         trans_packages = transaction.get_transaction_packages();
 
-        all_full_query = libdnf::rpm::PackageQuery(get_base(), libdnf::sack::ExcludeFlags::IGNORE_EXCLUDES, true);
+        all_full_query = libdnf5::rpm::PackageQuery(get_base(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES, true);
         in_full_query = out_full_query = all_full_query;
         for (const auto & trans_pkg : trans_packages) {
             auto pkg = trans_pkg.get_package();
@@ -668,7 +669,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
 
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
-    libdnf::ResolveSpecSettings spec_settings{
+    libdnf5::ResolveSpecSettings spec_settings{
         .ignore_case = false, .with_nevra = true, .with_provides = false, .with_filenames = true};
     for (const auto & action : trans_actions) {
         if (action.pkg_filter.empty()) {

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::size_t PercentWidget::get_total_width() const noexcept {
@@ -52,4 +52,4 @@ std::string PercentWidget::to_string() const {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

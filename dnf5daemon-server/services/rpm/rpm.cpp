@@ -71,11 +71,11 @@ std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, con
     return filter_patterns;
 }
 
-libdnf::rpm::PackageQuery resolve_nevras(libdnf::rpm::PackageQuery base_query, std::vector<std::string> nevras) {
-    libdnf::rpm::PackageQuery result(base_query.get_base(), libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-    libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+libdnf5::rpm::PackageQuery resolve_nevras(libdnf5::rpm::PackageQuery base_query, std::vector<std::string> nevras) {
+    libdnf5::rpm::PackageQuery result(base_query.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
     for (const auto & nevra : nevras) {
-        libdnf::rpm::PackageQuery nevra_query(base_query);
+        libdnf5::rpm::PackageQuery nevra_query(base_query);
         nevra_query.resolve_pkg_spec(nevra, settings, false);
         result |= nevra_query;
     }
@@ -91,7 +91,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     auto base = session.get_base();
 
     // start with all packages
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf5::rpm::PackageQuery query(*base);
 
     // toplevel filtering - the scope
     // TODO(mblaha): support for other possible scopes?
@@ -117,16 +117,16 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
         key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
 
     if (patterns.size() > 0) {
-        libdnf::rpm::PackageQuery result(*base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::rpm::PackageQuery result(*base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         // packages matching flags
         bool with_src = key_value_map_get<bool>(options, "with_src", true);
-        libdnf::ResolveSpecSettings settings{
+        libdnf5::ResolveSpecSettings settings{
             .ignore_case = key_value_map_get<bool>(options, "icase", true),
             .with_nevra = key_value_map_get<bool>(options, "with_nevra", true),
             .with_provides = key_value_map_get<bool>(options, "with_provides", true),
             .with_filenames = key_value_map_get<bool>(options, "with_filenames", true)};
         for (auto & pattern : patterns) {
-            libdnf::rpm::PackageQuery package_query(query);
+            libdnf5::rpm::PackageQuery package_query(query);
             package_query.resolve_pkg_spec(pattern, settings, with_src);
             result |= package_query;
         }
@@ -142,63 +142,63 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     }
     if (options.find("whatprovides") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatprovides");
-        libdnf::rpm::PackageQuery reldeps_query(query);
-        reldeps_query.filter_provides(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        libdnf5::rpm::PackageQuery reldeps_query(query);
+        reldeps_query.filter_provides(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         if (!reldeps_query.empty()) {
             query = reldeps_query;
         } else {
-            query.filter_file(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+            query.filter_file(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         }
     }
     if (options.find("whatobsoletes") != options.end()) {
-        query.filter_obsoletes(get_filter_patterns(options, "whatobsoletes"), libdnf::sack::QueryCmp::GLOB);
+        query.filter_obsoletes(get_filter_patterns(options, "whatobsoletes"), libdnf5::sack::QueryCmp::GLOB);
     }
     if (options.find("whatconflicts") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatconflicts");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_conflicts(resolve_nevras(query, filter_patterns));
 
-        query.filter_conflicts(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_conflicts(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
     if (options.find("whatdepends") != options.end()) {
         // TODO(mblaha): support for `exactdeps/alldeps` and `recursive` options
         auto filter_patterns = get_filter_patterns(options, "whatdepends");
         auto resolved_nevras = resolve_nevras(query, filter_patterns);
-        libdnf::rpm::PackageQuery by_package_query(query);
-        libdnf::rpm::PackageQuery by_glob_query(query);
-        libdnf::rpm::PackageQuery dep_query(query.get_base(), libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_glob_query(query);
+        libdnf5::rpm::PackageQuery dep_query(query.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
 
         // requires
-        by_glob_query.filter_requires(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        by_glob_query.filter_requires(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         dep_query |= by_glob_query;
         by_package_query.filter_requires(resolved_nevras);
         dep_query |= by_package_query;
         // recommends
         by_glob_query = query;
-        by_glob_query.filter_recommends(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        by_glob_query.filter_recommends(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         dep_query |= by_glob_query;
         by_package_query = query;
         by_package_query.filter_recommends(resolved_nevras);
         dep_query |= by_package_query;
         // enhances
         by_glob_query = query;
-        by_glob_query.filter_enhances(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        by_glob_query.filter_enhances(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         dep_query |= by_glob_query;
         by_package_query = query;
         by_package_query.filter_enhances(resolved_nevras);
         dep_query |= by_package_query;
         // supplements
         by_glob_query = query;
-        by_glob_query.filter_supplements(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        by_glob_query.filter_supplements(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         dep_query |= by_glob_query;
         by_package_query = query;
         by_package_query.filter_supplements(resolved_nevras);
         dep_query |= by_package_query;
         // suggests
         by_glob_query = query;
-        by_glob_query.filter_suggests(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        by_glob_query.filter_suggests(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         dep_query |= by_glob_query;
         by_package_query = query;
         by_package_query.filter_suggests(resolved_nevras);
@@ -210,46 +210,46 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
         // TODO(mblaha): support for `exactdeps/alldeps` and `recursive` options
         auto filter_patterns = get_filter_patterns(options, "whatrequires");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_requires(resolve_nevras(query, filter_patterns));
 
-        query.filter_requires(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_requires(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
     if (options.find("whatrecommends") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatrecommends");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_recommends(resolve_nevras(query, filter_patterns));
 
-        query.filter_recommends(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_recommends(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
     if (options.find("whatenhances") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatenhances");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_enhances(resolve_nevras(query, filter_patterns));
 
-        query.filter_enhances(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_enhances(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
     if (options.find("whatsuggests") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatsuggests");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_suggests(resolve_nevras(query, filter_patterns));
 
-        query.filter_suggests(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_suggests(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
     if (options.find("whatsupplements") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatsupplements");
 
-        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf5::rpm::PackageQuery by_package_query(query);
         by_package_query.filter_supplements(resolve_nevras(query, filter_patterns));
 
-        query.filter_supplements(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query.filter_supplements(filter_patterns, libdnf5::sack::QueryCmp::GLOB);
         query |= by_package_query;
     }
 
@@ -282,7 +282,7 @@ sdbus::MethodReply Rpm::distro_sync(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     if (specs.empty()) {
         goal.add_rpm_distro_sync(setting);
     } else {
@@ -306,7 +306,7 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     setting.to_repo_ids = repo_ids;
     for (const auto & spec : specs) {
         goal.add_downgrade(spec, setting);
@@ -324,25 +324,25 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    libdnf::GoalSetting skip_broken;
+    libdnf5::GoalSetting skip_broken;
     if (options.find("skip_broken") != options.end()) {
-        skip_broken = key_value_map_get<bool>(options, "skip_broken") ? libdnf::GoalSetting::SET_TRUE
-                                                                      : libdnf::GoalSetting::SET_FALSE;
+        skip_broken = key_value_map_get<bool>(options, "skip_broken") ? libdnf5::GoalSetting::SET_TRUE
+                                                                      : libdnf5::GoalSetting::SET_FALSE;
     } else {
-        skip_broken = libdnf::GoalSetting::AUTO;
+        skip_broken = libdnf5::GoalSetting::AUTO;
     }
-    libdnf::GoalSetting skip_unavailable;
+    libdnf5::GoalSetting skip_unavailable;
     if (options.find("skip_unavailable") != options.end()) {
-        skip_unavailable = key_value_map_get<bool>(options, "skip_unavailable") ? libdnf::GoalSetting::SET_TRUE
-                                                                                : libdnf::GoalSetting::SET_FALSE;
+        skip_unavailable = key_value_map_get<bool>(options, "skip_unavailable") ? libdnf5::GoalSetting::SET_TRUE
+                                                                                : libdnf5::GoalSetting::SET_FALSE;
     } else {
-        skip_unavailable = libdnf::GoalSetting::AUTO;
+        skip_unavailable = libdnf5::GoalSetting::AUTO;
     }
     std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     setting.skip_broken = skip_broken;
     setting.skip_unavailable = skip_unavailable;
     setting.to_repo_ids = repo_ids;
@@ -366,7 +366,7 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     setting.to_repo_ids = repo_ids;
     if (specs.empty()) {
         goal.add_rpm_upgrade(setting);
@@ -391,7 +391,7 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     setting.to_repo_ids = repo_ids;
     for (const auto & spec : specs) {
         goal.add_reinstall(spec, setting);
@@ -411,7 +411,7 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
-    libdnf::GoalJobSettings setting;
+    libdnf5::GoalJobSettings setting;
     for (const auto & spec : specs) {
         goal.add_remove(spec, setting);
     }

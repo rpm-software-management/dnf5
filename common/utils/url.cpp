@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "url.hpp"
 
 
-namespace libdnf::utils::url {
+namespace libdnf5::utils::url {
 
 bool is_url(std::string path) {
     for (auto & ch : path) {
@@ -34,4 +34,4 @@ bool is_url(std::string path) {
            path.starts_with("https://");
 }
 
-}  // namespace libdnf::utils::url
+}  // namespace libdnf5::utils::url

@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 InvalidPackageType::InvalidPackageType(const std::string & type)
     : libdnf::Error(M_("Invalid package type: {}"), type) {}
@@ -79,4 +79,4 @@ std::vector<std::string> package_types_to_strings(const PackageType types) {
     return result_types;
 }
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

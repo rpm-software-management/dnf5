@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dlfcn.h>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 Library::Library(const std::string & path) : path(path) {
     handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -50,4 +50,4 @@ void * Library::get_address(const char * symbol) const {
     return address;
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils

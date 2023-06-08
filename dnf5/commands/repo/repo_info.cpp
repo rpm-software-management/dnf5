@@ -25,9 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-void RepoInfoCommand::print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
+void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
     for (auto & repo : query.get_data()) {
-        libdnf::cli::output::RepoInfo repo_info;
+        libdnf5::cli::output::RepoInfo repo_info;
         repo_info.add_repo(*repo, false, false);
         repo_info.print();
         std::cout << std::endl;

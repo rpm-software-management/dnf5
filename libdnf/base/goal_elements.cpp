@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
-bool GoalJobSettings::resolve_skip_broken(const libdnf::ConfigMain & cfg_main) {
+bool GoalJobSettings::resolve_skip_broken(const libdnf5::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (skip_broken) {
         case GoalSetting::AUTO: {
@@ -191,4 +191,4 @@ std::string goal_action_to_string(GoalAction action) {
     return "";
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-using libdnf::rpm::Reldep;
+using libdnf5::rpm::Reldep;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageTest);
@@ -307,18 +307,18 @@ void RpmPackageTest::test_get_rpmdbid() {
 void RpmPackageTest::test_to_nevra_string() {
     // test that to_nevra_string() template function works
     auto pkg = get_pkg("pkg-1.2-3.x86_64");
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg-1.2-3.x86_64"), libdnf::rpm::to_nevra_string(pkg));
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg-1.2-3.x86_64"), libdnf5::rpm::to_nevra_string(pkg));
 
     auto pkg2 = get_pkg("pkg-libs-1:1.3-4.x86_64");
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg-libs-1:1.3-4.x86_64"), libdnf::rpm::to_nevra_string(pkg2));
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg-libs-1:1.3-4.x86_64"), libdnf5::rpm::to_nevra_string(pkg2));
 }
 
 
 void RpmPackageTest::test_to_full_nevra_string() {
     // test that to_full_nevra_string() template function works
     auto pkg = get_pkg("pkg-1.2-3.x86_64");
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg-0:1.2-3.x86_64"), libdnf::rpm::to_full_nevra_string(pkg));
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg-0:1.2-3.x86_64"), libdnf5::rpm::to_full_nevra_string(pkg));
 
     auto pkg2 = get_pkg("pkg-libs-1:1.3-4.x86_64");
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg-libs-1:1.3-4.x86_64"), libdnf::rpm::to_full_nevra_string(pkg2));
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg-libs-1:1.3-4.x86_64"), libdnf5::rpm::to_full_nevra_string(pkg2));
 }

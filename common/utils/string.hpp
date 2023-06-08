@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::utils::string {
+namespace libdnf5::utils::string {
 
 inline std::string c_to_str(const char * c_str) {
     if (c_str == nullptr) {
@@ -115,6 +115,6 @@ inline std::string format_epoch(unsigned long long epoch_num) {
     return std::string(buffer);
 }
 
-}  // namespace libdnf::utils::string
+}  // namespace libdnf5::utils::string
 
 #endif  // LIBDNF_UTILS_STRING_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli::output;
+using namespace libdnf5::cli::output;
 
 /// Definition of all package metadata fields keys used for searching.
 static const char * SEARCH_KEY_NAME = "name";
@@ -68,15 +68,15 @@ static auto get_matched_keys(int priority) {
 
 /// Get comparing method based on the pattern input representation.
 static auto get_cmp_from_pattern(const std::string & pattern) {
-    if (libdnf::utils::is_glob_pattern(pattern.c_str())) {
-        return libdnf::sack::QueryCmp::IGLOB;
+    if (libdnf5::utils::is_glob_pattern(pattern.c_str())) {
+        return libdnf5::sack::QueryCmp::IGLOB;
     } else {
-        return libdnf::sack::QueryCmp::ICONTAINS;
+        return libdnf5::sack::QueryCmp::ICONTAINS;
     }
 }
 
 SearchProcessor::SearchProcessor(
-    libdnf::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates)
+    libdnf5::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates)
     : base(base),
       patterns(patterns),
       search_all(search_all),
@@ -87,52 +87,52 @@ SearchProcessor::SearchProcessor(
     }
 }
 
-libdnf::rpm::PackageSet SearchProcessor::get_matches(
+libdnf5::rpm::PackageSet SearchProcessor::get_matches(
     const std::string & pattern, int priority, filter_method_type filter) {
     auto cmp = get_cmp_from_pattern(pattern);
 
-    libdnf::rpm::PackageQuery query_contains(full_package_query);
+    libdnf5::rpm::PackageQuery query_contains(full_package_query);
     (query_contains.*filter)({pattern}, cmp);
     update_priorities(query_contains, priority);
 
-    if (patterns.size() == 1 && cmp != libdnf::sack::QueryCmp::IGLOB) {
-        libdnf::rpm::PackageQuery query_exact(query_contains);
-        (query_exact.*filter)({pattern}, libdnf::sack::QueryCmp::EXACT);
+    if (patterns.size() == 1 && cmp != libdnf5::sack::QueryCmp::IGLOB) {
+        libdnf5::rpm::PackageQuery query_exact(query_contains);
+        (query_exact.*filter)({pattern}, libdnf5::sack::QueryCmp::EXACT);
         update_priorities(query_exact, (priority << 1));
     }
 
     return query_contains;
 }
 
-libdnf::rpm::PackageSet SearchProcessor::get_name_matches(const std::string & pattern) {
-    return get_matches(pattern, get_search_key_priority(SEARCH_KEY_NAME), &libdnf::rpm::PackageQuery::filter_name);
+libdnf5::rpm::PackageSet SearchProcessor::get_name_matches(const std::string & pattern) {
+    return get_matches(pattern, get_search_key_priority(SEARCH_KEY_NAME), &libdnf5::rpm::PackageQuery::filter_name);
 }
 
-libdnf::rpm::PackageSet SearchProcessor::get_summary_matches(const std::string & pattern) {
+libdnf5::rpm::PackageSet SearchProcessor::get_summary_matches(const std::string & pattern) {
     return get_matches(
-        pattern, get_search_key_priority(SEARCH_KEY_SUMMARY), &libdnf::rpm::PackageQuery::filter_summary);
+        pattern, get_search_key_priority(SEARCH_KEY_SUMMARY), &libdnf5::rpm::PackageQuery::filter_summary);
 }
 
-libdnf::rpm::PackageSet SearchProcessor::get_description_matches(const std::string & pattern) {
+libdnf5::rpm::PackageSet SearchProcessor::get_description_matches(const std::string & pattern) {
     return get_matches(
-        pattern, get_search_key_priority(SEARCH_KEY_DESCRIPTION), &libdnf::rpm::PackageQuery::filter_description);
+        pattern, get_search_key_priority(SEARCH_KEY_DESCRIPTION), &libdnf5::rpm::PackageQuery::filter_description);
 }
 
-libdnf::rpm::PackageSet SearchProcessor::get_url_matches(const std::string & pattern) {
-    return get_matches(pattern, get_search_key_priority(SEARCH_KEY_URL), &libdnf::rpm::PackageQuery::filter_url);
+libdnf5::rpm::PackageSet SearchProcessor::get_url_matches(const std::string & pattern) {
+    return get_matches(pattern, get_search_key_priority(SEARCH_KEY_URL), &libdnf5::rpm::PackageQuery::filter_url);
 }
 
-void SearchProcessor::update_priorities(const libdnf::rpm::PackageSet & packages, int priority) {
+void SearchProcessor::update_priorities(const libdnf5::rpm::PackageSet & packages, int priority) {
     for (auto const & package : packages) {
         packages_priorities[package.get_full_nevra()] |= priority;
     }
 }
 
 SearchResults SearchProcessor::get_results() {
-    libdnf::rpm::PackageSet all_matches(base);
+    libdnf5::rpm::PackageSet all_matches(base);
 
     for (auto it = patterns.begin(); it != patterns.end(); ++it) {
-        libdnf::rpm::PackageSet pattern_matches(base);
+        libdnf5::rpm::PackageSet pattern_matches(base);
         pattern_matches |= get_name_matches(*it);
         pattern_matches |= get_summary_matches(*it);
 

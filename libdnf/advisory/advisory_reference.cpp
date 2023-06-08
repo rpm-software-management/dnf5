@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/repo.h>
 #include <solv/util.h>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 AdvisoryReference::AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
     : base(base),
@@ -48,4 +48,4 @@ std::string AdvisoryReference::get_url() const {
     return std::string(get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_HREF, advisory.id, index));
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

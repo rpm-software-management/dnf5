@@ -35,7 +35,7 @@ public:
 
 protected:
     void process_and_print_queries(
-        Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) override;
+        Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) override;
 };
 
 }  // namespace dnf5

@@ -78,11 +78,11 @@ void TestCaseFixture::tearDown() {
     }
 }
 
-std::unique_ptr<libdnf::Base> TestCaseFixture::get_preconfigured_base() {
-    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");
+std::unique_ptr<libdnf5::Base> TestCaseFixture::get_preconfigured_base() {
+    temp = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf5_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
-    std::unique_ptr<libdnf::Base> base(new libdnf::Base());
+    std::unique_ptr<libdnf5::Base> base(new libdnf5::Base());
     base->get_config().get_installroot_option().set(temp->get_path() / "installroot");
     base->get_config().get_cachedir_option().set(temp->get_path() / "cache");
 

@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void ChangelogCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -47,9 +47,9 @@ void ChangelogCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Show package changelogs");
 
-    since_option = dynamic_cast<libdnf::OptionNumber<std::int64_t> *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionNumber<std::int64_t>>(
-            new libdnf::OptionNumber<int64_t>(0, [](const std::string & value) {
+    since_option = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
+            new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
                 struct tm time_m;
                 std::istringstream ss(value);
                 ss >> std::get_time(&time_m, "%Y-%m-%d");
@@ -59,11 +59,11 @@ void ChangelogCommand::set_argument_parser() {
                 return static_cast<int64_t>(mktime(&time_m));
             }))));
 
-    count_option = dynamic_cast<libdnf::OptionNumber<std::int32_t> *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionNumber<std::int32_t>>(new libdnf::OptionNumber<int>(0))));
+    count_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int32_t>>(new libdnf5::OptionNumber<int>(0))));
 
-    upgrades_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    upgrades_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     auto since = parser.add_new_named_arg("since");
     since->set_long_name("since");
@@ -88,7 +88,7 @@ void ChangelogCommand::set_argument_parser() {
     auto keys = parser.add_new_positional_arg(
         "pkg_spec",
         ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         pkgs_spec_to_show_options);
     keys->set_description("List of packages specifiers");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
@@ -108,7 +108,7 @@ void ChangelogCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add(
-        libdnf::Option::Priority::RUNTIME, libdnf::OPTIONAL_METADATA_TYPES);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
 }
 
 void ChangelogCommand::run() {
@@ -130,14 +130,14 @@ void ChangelogCommand::run() {
     }
 
     //query
-    libdnf::rpm::PackageQuery query(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-    libdnf::rpm::PackageQuery full_package_query(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, false);
-    libdnf::ResolveSpecSettings settings{
+    libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, false);
+    libdnf5::ResolveSpecSettings settings{
         .ignore_case = true, .with_nevra = true, .with_provides = false, .with_filenames = false};
     if (pkgs_spec_to_show_options->size() > 0) {
         for (auto & pattern : *pkgs_spec_to_show_options) {
-            libdnf::rpm::PackageQuery package_query(full_package_query);
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            libdnf5::rpm::PackageQuery package_query(full_package_query);
+            auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             package_query.resolve_pkg_spec(option->get_value(), settings, true);
             package_query.filter_latest_evr();
             query |= package_query;
@@ -151,7 +151,7 @@ void ChangelogCommand::run() {
         query.filter_available();
     }
 
-    libdnf::cli::output::print_changelogs(query, full_package_query, upgrades, count, since);
+    libdnf5::cli::output::print_changelogs(query, full_package_query, upgrades, count, since);
 }
 
 }  // namespace dnf5

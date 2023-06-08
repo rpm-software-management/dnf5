@@ -41,12 +41,12 @@ namespace dnf5 {
 
 class Plugins;
 
-class Context : public libdnf::cli::session::Session {
+class Context : public libdnf5::cli::session::Session {
 public:
     enum class LoadAvailableRepos { NONE, ENABLED, ALL };
 
     /// Constructs a new Context instance and sets the destination loggers.
-    Context(std::vector<std::unique_ptr<libdnf::Logger>> && loggers);
+    Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers);
 
     ~Context();
 
@@ -59,7 +59,7 @@ public:
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system);
 
-    libdnf::Base base;
+    libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
@@ -78,7 +78,7 @@ public:
 
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
-    void download_and_run(libdnf::base::Transaction & transaction);
+    void download_and_run(libdnf5::base::Transaction & transaction);
 
     /// Set to true to suppresses messages notifying about the current state or actions of dnf5.
     void set_quiet(bool quiet) { this->quiet = quiet; }
@@ -87,13 +87,13 @@ public:
 
     Plugins & get_plugins() { return *plugins; }
 
-    libdnf::Goal * get_goal(bool new_if_not_exist = true);
+    libdnf5::Goal * get_goal(bool new_if_not_exist = true);
 
-    void set_transaction(libdnf::base::Transaction && transaction) {
-        this->transaction = std::make_unique<libdnf::base::Transaction>(std::move(transaction));
+    void set_transaction(libdnf5::base::Transaction && transaction) {
+        this->transaction = std::make_unique<libdnf5::base::Transaction>(std::move(transaction));
     }
 
-    libdnf::base::Transaction * get_transaction() { return transaction.get(); }
+    libdnf5::base::Transaction * get_transaction() { return transaction.get(); }
 
     void set_load_system_repo(bool on) { load_system_repo = on; }
     bool get_load_system_repo() const noexcept { return load_system_repo; }
@@ -106,7 +106,7 @@ public:
 
 private:
     /// Check GPG signatures of packages that are going to be installed
-    bool check_gpg_signatures(libdnf::base::Transaction & transaction);
+    bool check_gpg_signatures(libdnf5::base::Transaction & transaction);
 
     /// Program arguments.
     size_t argc{0};
@@ -118,17 +118,17 @@ private:
     bool quiet{false};
 
     std::unique_ptr<Plugins> plugins;
-    std::unique_ptr<libdnf::Goal> goal;
-    std::unique_ptr<libdnf::base::Transaction> transaction;
+    std::unique_ptr<libdnf5::Goal> goal;
+    std::unique_ptr<libdnf5::base::Transaction> transaction;
 
     bool load_system_repo{false};
     LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
 };
 
 
-class Command : public libdnf::cli::session::Command {
+class Command : public libdnf5::cli::session::Command {
 public:
-    using libdnf::cli::session::Command::Command;
+    using libdnf5::cli::session::Command::Command;
 
     /// @return Reference to the Context.
     Context & get_context() const noexcept { return static_cast<Context &>(get_session()); }
@@ -137,18 +137,18 @@ public:
 };
 
 
-class RpmTransactionItem : public libdnf::rpm::TransactionItem {
+class RpmTransactionItem : public libdnf5::rpm::TransactionItem {
 public:
     enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
 
-    RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg);
+    RpmTransactionItem(const libdnf5::base::TransactionPackage & tspkg);
     Actions get_action() const noexcept { return action; }
 
 private:
     Actions action;
 };
 
-void run_transaction(libdnf::rpm::Transaction & transaction);
+void run_transaction(libdnf5::rpm::Transaction & transaction);
 
 /// Returns the names of matching packages and paths of matching package file names and directories.
 /// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.

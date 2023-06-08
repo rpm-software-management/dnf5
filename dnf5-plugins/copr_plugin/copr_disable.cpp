@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/conf/const.hpp>
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 namespace dnf5 {
 
@@ -30,7 +30,7 @@ namespace dnf5 {
 void CoprDisableCommand::set_argument_parser() {
     CoprSubCommandWithID::set_argument_parser();
     auto & cmd = *get_argument_parser_command();
-    std::string desc = libdnf::utils::sformat(
+    std::string desc = libdnf5::utils::sformat(
         _("disable specified Copr repository (if exists), keep {}/*.repo file - just mark enabled=0"),
         copr_repo_directory().native());
     cmd.set_description(desc);

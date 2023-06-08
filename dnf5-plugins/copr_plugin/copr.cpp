@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 CoprCommand * CoprSubCommand::copr_cmd() {
     return static_cast<CoprCommand *>(this->get_parent_command());
@@ -84,7 +84,7 @@ void CoprSubCommandWithID::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     auto & parser = ctx.get_argument_parser();
     auto project = parser.add_new_positional_arg("PROJECT_SPEC", 1, nullptr, nullptr);
-    project->set_description(libdnf::utils::sformat(
+    project->set_description(libdnf5::utils::sformat(
         _("Copr project ID to {}.  Use either a format OWNER/PROJECT "
           "or HUB/OWNER/PROJECT (if HUB is not specified, the default one, "
           "or --hub <ARG>, is used.  OWNER is either a username, or "

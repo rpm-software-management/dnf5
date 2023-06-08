@@ -26,10 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction.hpp"
 
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-void print_transaction_info(libdnf::transaction::Transaction & transaction);
+void print_transaction_info(libdnf5::transaction::Transaction & transaction);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_TRANSACTIONINFO_HPP

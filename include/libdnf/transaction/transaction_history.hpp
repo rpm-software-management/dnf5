@@ -26,16 +26,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class TransactionHistory;
-using TransactionHistoryWeakPtr = libdnf::WeakPtr<TransactionHistory, false>;
+using TransactionHistoryWeakPtr = libdnf5::WeakPtr<TransactionHistory, false>;
 
 /// A class for working with transactions recorded in the transaction history database.
 class TransactionHistory {
 public:
-    explicit TransactionHistory(const libdnf::BaseWeakPtr & base);
-    explicit TransactionHistory(libdnf::Base & base);
+    explicit TransactionHistory(const libdnf5::BaseWeakPtr & base);
+    explicit TransactionHistory(libdnf5::Base & base);
 
     TransactionHistoryWeakPtr get_weak_ptr() { return TransactionHistoryWeakPtr(this, &guard); }
 
@@ -66,17 +66,17 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 private:
     /// Create a new Transaction object.
-    libdnf::transaction::Transaction new_transaction();
+    libdnf5::transaction::Transaction new_transaction();
 
     BaseWeakPtr base;
 
     WeakPtrGuard<TransactionHistory, false> guard;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_HISTORY_HPP

@@ -36,15 +36,15 @@ class SearchProcessor {
 public:
     /// Prepare the processor based on the parameters given by the user.
     explicit SearchProcessor(
-        libdnf::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates);
+        libdnf5::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates);
 
     /// Results computation method.
-    libdnf::cli::output::SearchResults get_results();
+    libdnf5::cli::output::SearchResults get_results();
 
 private:
     /// Define a type for pointing to the filtering method from PackageQuery object.
     using filter_method_type =
-        void (libdnf::rpm::PackageQuery::*)(const std::vector<std::string> &, libdnf::sack::QueryCmp);
+        void (libdnf5::rpm::PackageQuery::*)(const std::vector<std::string> &, libdnf5::sack::QueryCmp);
 
     /// @brief Search for matching packages based on the given parameters.
     ///
@@ -57,27 +57,27 @@ private:
     /// @param priority Value indicating a level of importance of these matched packages.
     /// @param filter Type of the method to be used for filtering the package query.
     /// @return Set of matching packages.
-    libdnf::rpm::PackageSet get_matches(const std::string & pattern, int priority, filter_method_type filter);
+    libdnf5::rpm::PackageSet get_matches(const std::string & pattern, int priority, filter_method_type filter);
 
     /// @brief Search for matching packages against the name metadata field.
     /// @param pattern Pattern to be matched against the name field.
     /// @return Set of matching packages.
-    libdnf::rpm::PackageSet get_name_matches(const std::string & pattern);
+    libdnf5::rpm::PackageSet get_name_matches(const std::string & pattern);
 
     /// @brief Search for matching packages against the summary metadata field.
     /// @param pattern Pattern to be matched against the summary field.
     /// @return Set of matching packages.
-    libdnf::rpm::PackageSet get_summary_matches(const std::string & pattern);
+    libdnf5::rpm::PackageSet get_summary_matches(const std::string & pattern);
 
     /// @brief Search for matching packages against the description metadata field.
     /// @param pattern Pattern to be matched against the description field.
     /// @return Set of matching packages.
-    libdnf::rpm::PackageSet get_description_matches(const std::string & pattern);
+    libdnf5::rpm::PackageSet get_description_matches(const std::string & pattern);
 
     /// @brief Search for matching packages against the URL metadata field.
     /// @param pattern Pattern to be matched against the URL field.
     /// @return Set of matching packages.
-    libdnf::rpm::PackageSet get_url_matches(const std::string & pattern);
+    libdnf5::rpm::PackageSet get_url_matches(const std::string & pattern);
 
     /// @brief Update stored priority value for given packages.
     ///
@@ -95,12 +95,12 @@ private:
     ///
     /// @param packages Packages to be updated.
     /// @param priority Priority value to be added to the existing one.
-    void update_priorities(const libdnf::rpm::PackageSet & packages, int priority);
+    void update_priorities(const libdnf5::rpm::PackageSet & packages, int priority);
 
-    libdnf::Base & base;
+    libdnf5::Base & base;
     std::vector<std::string> patterns;
     bool search_all;
-    libdnf::rpm::PackageQuery full_package_query;
+    libdnf5::rpm::PackageQuery full_package_query;
     std::unordered_map<std::string, int> packages_priorities;
     bool showdupes;
 };

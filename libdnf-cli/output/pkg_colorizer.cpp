@@ -26,10 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cctype>
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 PkgColorizer::PkgColorizer(
-    const libdnf::rpm::PackageSet & base_versions,
+    const libdnf5::rpm::PackageSet & base_versions,
     const std::string & color_not_found,
     const std::string & color_lt,
     const std::string & color_eq,
@@ -55,7 +55,7 @@ inline std::string PkgColorizer::to_escape(const std::string & color) {
     }
     // color can be a composed value like "bold,cyan"
     std::string output{};
-    auto color_v = libdnf::utils::string::split(color, ",");
+    auto color_v = libdnf5::utils::string::split(color, ",");
     for (const auto & c : color_v) {
         auto it = color_to_escape.find(c);
         if (it != color_to_escape.end()) {
@@ -66,13 +66,13 @@ inline std::string PkgColorizer::to_escape(const std::string & color) {
 }
 
 
-std::string PkgColorizer::get_pkg_color(const libdnf::rpm::Package & package) {
+std::string PkgColorizer::get_pkg_color(const libdnf5::rpm::Package & package) {
     auto base_pkg = base_na_version.find(package.get_na());
     std::string color = "";
     if (base_pkg == base_na_version.end()) {
         color = color_not_found;
     } else {
-        auto vercmp = libdnf::rpm::evrcmp(package, base_pkg->second);
+        auto vercmp = libdnf5::rpm::evrcmp(package, base_pkg->second);
         if (vercmp < 0) {
             color = color_lt;
         } else if (vercmp == 0) {
@@ -84,4 +84,4 @@ std::string PkgColorizer::get_pkg_color(const libdnf::rpm::Package & package) {
     return color;
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

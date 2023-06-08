@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Error accessing config file other than ENOENT; e.g. we don't have read permission
 class InaccessibleConfigError : public Error {
@@ -263,6 +263,6 @@ inline ConfigParser::Container & ConfigParser::get_data() noexcept {
     return data;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

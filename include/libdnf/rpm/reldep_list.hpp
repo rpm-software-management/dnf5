@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 // @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 // @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -42,8 +42,8 @@ public:
 
     // @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_new(DnfSack *sack)
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(DnfSack *sack)
-    explicit ReldepList(const libdnf::BaseWeakPtr & base);
-    explicit ReldepList(libdnf::Base & base);
+    explicit ReldepList(const libdnf5::BaseWeakPtr & base);
+    explicit ReldepList(libdnf5::Base & base);
 
     // @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_free(DnfReldepList *reldep_list)
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()
@@ -104,7 +104,7 @@ public:
     /// Remove all RelDeps
     void clear();
 
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 private:
     friend ReldepListIterator;
@@ -130,6 +130,6 @@ inline bool ReldepList::add_reldep(const std::string & reldep_str) {
     return add_reldep(reldep_str, 1);
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_RELDEP_LIST_HPP

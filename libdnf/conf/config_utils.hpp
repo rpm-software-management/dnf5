@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename T>
 static void option_T_list_append(T & option, Option::Priority priority, const std::string & value) {
@@ -47,6 +47,6 @@ static void option_T_list_append(T & option, Option::Priority priority, const st
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

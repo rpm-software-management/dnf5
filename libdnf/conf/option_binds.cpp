@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <utility>
 
-namespace libdnf {
+namespace libdnf5 {
 
 OptionBindsOptionNotFoundError::OptionBindsOptionNotFoundError(const std::string & id)
     : OptionBindsError(M_("Option \"{}\" not found"), id) {}
@@ -107,4 +107,4 @@ OptionBinds::Item & OptionBinds::add(const std::string & id, Option & option) {
     return res.first->second;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

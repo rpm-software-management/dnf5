@@ -24,16 +24,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <solv/dataiterator.h>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
-libdnf::solv::SolvMap & AdvisorySack::get_solvables() {
+libdnf5::solv::SolvMap & AdvisorySack::get_solvables() {
     auto & pool = get_rpm_pool(base);
 
     if (cached_solvables_size == pool.get_nsolvables()) {
         return data_map;
     }
 
-    data_map = libdnf::solv::SolvMap(pool.get_nsolvables());
+    data_map = libdnf5::solv::SolvMap(pool.get_nsolvables());
 
     Dataiterator di;
 
@@ -60,7 +60,7 @@ libdnf::solv::SolvMap & AdvisorySack::get_solvables() {
     return data_map;
 }
 
-AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : base(base) {}
+AdvisorySack::AdvisorySack(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
 AdvisorySackWeakPtr AdvisorySack::get_weak_ptr() {
     return AdvisorySackWeakPtr(this, &sack_guard);
@@ -70,4 +70,4 @@ BaseWeakPtr AdvisorySack::get_base() const {
     return base->get_weak_ptr();
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

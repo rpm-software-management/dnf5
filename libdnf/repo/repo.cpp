@@ -68,7 +68,7 @@ extern "C" {
 #include <type_traits>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 static void is_readable_rpm(const std::string & fn) {
     if (std::filesystem::path(fn).extension() != ".rpm") {
@@ -268,7 +268,7 @@ void Repo::load_extra_system_repo(const std::string & rootdir) {
 void Repo::add_libsolv_testcase(const std::string & path) {
     make_solv_repo();
 
-    libdnf::utils::fs::File testcase_file(path, "r", true);
+    libdnf5::utils::fs::File testcase_file(path, "r", true);
     testcase_add_testtags(solv_repo->repo, testcase_file.get(), 0);
 
     solv_repo->set_needs_internalizing();
@@ -448,23 +448,23 @@ void Repo::load_available_repo() {
 
     auto optional_metadata = config.get_main_config().get_optional_metadata_types_option().get_value();
 
-    if (optional_metadata.contains(libdnf::METADATA_TYPE_FILELISTS)) {
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
         solv_repo->load_repo_ext(RepodataType::FILELISTS, *downloader.get());
     }
 
-    if (optional_metadata.contains(libdnf::METADATA_TYPE_OTHER)) {
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_OTHER)) {
         solv_repo->load_repo_ext(RepodataType::OTHER, *downloader.get());
     }
 
-    if (optional_metadata.contains(libdnf::METADATA_TYPE_PRESTO)) {
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_PRESTO)) {
         solv_repo->load_repo_ext(RepodataType::PRESTO, *downloader.get());
     }
 
-    if (optional_metadata.contains(libdnf::METADATA_TYPE_UPDATEINFO)) {
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_UPDATEINFO)) {
         solv_repo->load_repo_ext(RepodataType::UPDATEINFO, *downloader.get());
     }
 
-    if (optional_metadata.contains(libdnf::METADATA_TYPE_COMPS)) {
+    if (optional_metadata.contains(libdnf5::METADATA_TYPE_COMPS)) {
         solv_repo->load_repo_ext(RepodataType::COMPS, *downloader.get());
     }
 
@@ -481,14 +481,14 @@ void Repo::load_available_repo() {
     logger.debug(
         "Loading {} extension for repo {} from \"{}\"", RepoDownloader::MD_FILENAME_MODULES, config.get_id(), ext_fn);
 
-    libdnf::utils::fs::File file;
+    libdnf5::utils::fs::File file;
     std::string yaml_content;
 
     // TODO(pkratoch): Replace this by implementation in libdnf::utils::fs::File.
     // If the file is comressed, `std::fseek` doesn't work with the way libsolv decompresses the file, so read it by
     // chunks.
     if (solv_xfopen_iscompressed(ext_fn.c_str()) == 1) {
-        file = libdnf::utils::fs::File(ext_fn, "r", true);
+        file = libdnf5::utils::fs::File(ext_fn, "r", true);
 
         constexpr size_t buffer_size = 4096;
         char buffer[buffer_size];
@@ -502,7 +502,7 @@ void Repo::load_available_repo() {
 
         yaml_content.append(ss.str());
     } else {
-        file = libdnf::utils::fs::File(ext_fn, "r", false);
+        file = libdnf5::utils::fs::File(ext_fn, "r", false);
         yaml_content = file.read();
     }
 
@@ -570,4 +570,4 @@ void Repo::recompute_expired() {
     }
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

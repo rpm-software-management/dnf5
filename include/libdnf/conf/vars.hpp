@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// @class Vars
 ///
@@ -52,8 +52,8 @@ public:
         Priority priority;
     };
 
-    Vars(const libdnf::BaseWeakPtr & base) : base(base) {}
-    Vars(libdnf::Base & base);
+    Vars(const libdnf5::BaseWeakPtr & base) : base(base) {}
+    Vars(libdnf5::Base & base);
 
     /// @brief Substitute DNF vars in the input text.
     ///
@@ -125,6 +125,6 @@ private:
     std::map<std::string, Variable> variables;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 class CompsEnvironment;
@@ -38,17 +38,17 @@ class CompsEnvironmentDbUtils {
 public:
     /// Return a vector of CompsEnvironment objects with comps environments in a transaction
     static std::vector<CompsEnvironment> get_transaction_comps_environments(
-        libdnf::utils::SQLite3 & conn, Transaction & trans);
+        libdnf5::utils::SQLite3 & conn, Transaction & trans);
 
     /// Use a query to insert a new record to the 'comps_environment' table
-    static int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, CompsEnvironment & env);
+    static int64_t comps_environment_insert(libdnf5::utils::SQLite3::Statement & query, CompsEnvironment & env);
 
     /// Insert CompsEnvironment objects associated with a transaction into the database
-    static void insert_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    static void insert_transaction_comps_environments(libdnf5::utils::SQLite3 & conn, Transaction & trans);
 };
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_COMPS_ENVIRONMENT_HPP

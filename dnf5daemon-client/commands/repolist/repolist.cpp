@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void RepolistCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -46,9 +46,9 @@ void RepolistCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
 
 
-    enable_disable_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
-            new libdnf::OptionEnum<std::string>("enabled", {"all", "enabled", "disabled"}))));
+    enable_disable_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionEnum<std::string>>(
+            new libdnf5::OptionEnum<std::string>("enabled", {"all", "enabled", "disabled"}))));
 
     auto all = parser.add_new_named_arg("all");
     all->set_long_name("all");
@@ -71,8 +71,8 @@ void RepolistCommand::set_argument_parser() {
     patterns_options = parser.add_new_values();
     auto repos = parser.add_new_positional_arg(
         "repos_to_show",
-        libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED,
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_options);
     repos->set_description("List of repos to show");
 
@@ -99,7 +99,7 @@ void RepolistCommand::run() {
         options["enable_disable"] = "all";
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             patterns.emplace_back(option->get_value());
         }
     }
@@ -137,14 +137,14 @@ void RepolistCommand::run() {
     if (command == "repolist") {
         // print the output table
         bool with_status = enable_disable_option->get_value() == "all";
-        libdnf::cli::output::print_repolist_table(
-            DbusQueryRepoWrapper(repositories), with_status, libdnf::cli::output::COL_REPO_ID);
+        libdnf5::cli::output::print_repolist_table(
+            DbusQueryRepoWrapper(repositories), with_status, libdnf5::cli::output::COL_REPO_ID);
     } else {
         // repoinfo command
 
         for (auto & raw_repo : repositories) {
             DbusRepoWrapper repo(raw_repo);
-            auto repo_info = libdnf::cli::output::RepoInfo();
+            auto repo_info = libdnf5::cli::output::RepoInfo();
             repo_info.add_repo(repo, ctx.verbose.get_value(), ctx.verbose.get_value());
             repo_info.print();
             std::cout << std::endl;

@@ -4,7 +4,7 @@
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void TemplateCommand::set_argument_parser() {
     // Context is the main object in dnf5.
@@ -29,8 +29,8 @@ void TemplateCommand::set_argument_parser() {
     // Option 1: as said in the header file here you should handle the pointer
     // by giving up the ownership to dnf5's parser.
     // Set the default value here.
-    foo_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    foo_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     // Create an option by giving it a name. It will be shown in the help message.
     // Set long name, description and constant value.

@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 enum { COL_KEY, COL_VALUE };
@@ -55,16 +55,16 @@ struct libscols_line * PackageInfoSections::add_line(const std::string & key, co
 
 bool PackageInfoSections::add_section(
     const std::string & heading,
-    const libdnf::rpm::PackageSet & pkg_set,
+    const libdnf5::rpm::PackageSet & pkg_set,
     const std::unique_ptr<PkgColorizer> & colorizer,
-    const std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> & obsoletes) {
+    const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes) {
     if (!pkg_set.empty()) {
         // sort the packages in section according to NEVRA
-        std::vector<libdnf::rpm::Package> packages;
+        std::vector<libdnf5::rpm::Package> packages;
         for (const auto & pkg : pkg_set) {
             packages.emplace_back(std::move(pkg));
         }
-        std::sort(packages.begin(), packages.end(), libdnf::rpm::cmp_nevra<libdnf::rpm::Package>);
+        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf::rpm::Package>);
 
         struct libscols_line * first_line = nullptr;
         struct libscols_line * last_line = nullptr;
@@ -106,7 +106,7 @@ bool PackageInfoSections::add_section(
             add_line("URL", pkg.get_url());
             add_line("License", pkg.get_license());
 
-            auto lines = libdnf::utils::string::split(pkg.get_description(), "\n");
+            auto lines = libdnf5::utils::string::split(pkg.get_description(), "\n");
             auto iterator = lines.begin();
             ln = add_line("Description", *iterator);
             ++iterator;
@@ -126,4 +126,4 @@ bool PackageInfoSections::add_section(
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

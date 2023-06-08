@@ -25,12 +25,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 enum class TransactionItemState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 
-class InvalidTransactionItemState : public libdnf::Error {
+class InvalidTransactionItemState : public libdnf5::Error {
 public:
     InvalidTransactionItemState(const std::string & state);
 
@@ -42,6 +42,6 @@ public:
 std::string transaction_item_state_to_string(TransactionItemState state);
 TransactionItemState transaction_item_state_from_string(const std::string & state);
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP

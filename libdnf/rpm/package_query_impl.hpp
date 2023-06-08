@@ -30,25 +30,25 @@ extern "C" {
 
 #include <optional>
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 class PackageQuery::PQImpl {
 public:
     static void filter_provides(
         Pool * pool,
-        libdnf::sack::QueryCmp cmp_type,
+        libdnf5::sack::QueryCmp cmp_type,
         const ReldepList & reldep_list,
-        libdnf::solv::SolvMap & filter_result);
+        libdnf5::solv::SolvMap & filter_result);
     static void filter_reldep(
         PackageSet & pkg_set,
         Id libsolv_key,
-        libdnf::sack::QueryCmp cmp_type,
+        libdnf5::sack::QueryCmp cmp_type,
         const std::vector<std::string> & patterns);
     static void filter_reldep(
-        PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+        PackageSet & pkg_set, Id libsolv_key, libdnf5::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
     static void filter_reldep(
-        PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+        PackageSet & pkg_set, Id libsolv_key, libdnf5::sack::QueryCmp cmp_type, const PackageSet & package_set);
 
     /// @param cmp_glob performance optimization - it must be in synchronization with cmp_type
     static void filter_nevra(
@@ -67,24 +67,24 @@ public:
         libdnf::solv::SolvMap & filter_result);
     /// Provide libdnf::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
-        ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern);
+        ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern);
     /// Provide libdnf::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
-        ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+        ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
     /// Filter PackageSet by vector of SORTED advisory packages
     static void filter_sorted_advisory_pkgs(
         PackageSet & pkg_set,
         const std::vector<libdnf::advisory::AdvisoryPackage> & adv_pkgs,
-        libdnf::sack::QueryCmp cmp_type);
+        libdnf5::sack::QueryCmp cmp_type);
 
 private:
     friend PackageQuery;
     ExcludeFlags flags;
-    std::optional<libdnf::solv::SolvMap> considered_cache;
+    std::optional<libdnf5::solv::SolvMap> considered_cache;
 };
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP

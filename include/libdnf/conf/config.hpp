@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/logger.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Base class for configurations objects
 class Config {
@@ -49,6 +49,6 @@ private:
 };
 
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

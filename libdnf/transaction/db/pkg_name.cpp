@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pkg_name.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 static constexpr const char * SQL_NAME_INSERT_IF_NOT_EXISTS = R"**(
     INSERT INTO
@@ -47,4 +47,4 @@ int64_t pkg_name_insert_if_not_exists(utils::SQLite3::Statement & query, const s
     return result;
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

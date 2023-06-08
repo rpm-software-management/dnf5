@@ -29,9 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <numeric>
 #include <regex>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-using namespace libdnf::cli::tty;
+using namespace libdnf5::cli::tty;
 
 /// Get a string representation of a key that was matched together with a type of the match.
 static std::string key_to_string(const matched_key_pair & key_pair) {
@@ -61,7 +61,7 @@ static std::string concat_patterns(const std::string & acc, const std::string & 
 /// Construct a regular expression for matching all occurrences of any given pattern in the text.
 static std::regex construct_patterns_regex(std::vector<std::string> patterns) {
     // Glob patterns are skipped from highlighting for now.
-    std::erase_if(patterns, [](const auto & pattern) { return libdnf::utils::is_glob_pattern(pattern.c_str()); });
+    std::erase_if(patterns, [](const auto & pattern) { return libdnf5::utils::is_glob_pattern(pattern.c_str()); });
     auto inner_patterns_regex_str = std::accumulate(patterns.begin(), patterns.end(), std::string{}, concat_patterns);
     return std::regex("(" + inner_patterns_regex_str + ")", std::regex_constants::icase);
 }
@@ -101,4 +101,4 @@ void print_search_results(const SearchResults & results) {
     }
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

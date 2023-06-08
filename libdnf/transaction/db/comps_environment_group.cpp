@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
@@ -47,19 +47,19 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_select_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_GROUP_SELECT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Query> comps_environment_group_select_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_GROUP_SELECT);
     return query;
 }
 
 
 void CompsEnvironmentGroupDbUtils::comps_environment_groups_select(
-    libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+    libdnf5::utils::SQLite3 & conn, CompsEnvironment & env) {
     auto query = comps_environment_group_select_new_query(conn);
     query->bindv(env.get_item_id());
 
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto & grp = env.new_group();
         grp.set_id(query->get<int64_t>("id"));
         grp.set_group_id(query->get<std::string>("groupid"));
@@ -82,21 +82,21 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_INSERT = R"**(
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_group_insert_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_GROUP_INSERT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> comps_environment_group_insert_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_GROUP_INSERT);
     return query;
 }
 
 
 void CompsEnvironmentGroupDbUtils::comps_environment_groups_insert(
-    libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+    libdnf5::utils::SQLite3 & conn, CompsEnvironment & env) {
     auto query = comps_environment_group_insert_new_query(conn);
 
     for (auto & grp : env.get_groups()) {
         query->bindv(
             env.get_item_id(), grp.get_group_id(), grp.get_installed(), static_cast<int>(grp.get_group_type()));
-        if (query->step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
+        if (query->step() != libdnf5::utils::SQLite3::Statement::StepResult::DONE) {
             // TODO(dmach): replace with a better exception class
             throw RuntimeError(M_("Failed to insert record into table 'comps_environment_group' in history database"));
         }
@@ -106,4 +106,4 @@ void CompsEnvironmentGroupDbUtils::comps_environment_groups_insert(
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

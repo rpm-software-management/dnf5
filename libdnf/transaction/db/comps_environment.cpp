@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 static constexpr const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
@@ -55,20 +55,20 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"
 )**";
 
 
-static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(
-    libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(
+    libdnf5::utils::SQLite3 & conn, int64_t transaction_id) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
     return query;
 }
 
 
 std::vector<CompsEnvironment> CompsEnvironmentDbUtils::get_transaction_comps_environments(
-    libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<CompsEnvironment> result;
 
     auto query = comps_environment_transaction_item_select_new_query(conn, trans.get_id());
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         CompsEnvironment ti(trans);
         TransItemDbUtils::transaction_item_select(*query, ti);
         ti.set_environment_id(query->get<std::string>("environmentid"));
@@ -98,15 +98,15 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_INSERT = R"**(
 
 
 // Create a query (statement) that inserts new records to the 'comps_environment' table
-static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_insert_new_query(
-    libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_INSERT);
+static std::unique_ptr<libdnf5::utils::SQLite3::Statement> comps_environment_insert_new_query(
+    libdnf5::utils::SQLite3 & conn) {
+    auto query = std::make_unique<libdnf5::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_INSERT);
     return query;
 }
 
 
 int64_t CompsEnvironmentDbUtils::comps_environment_insert(
-    libdnf::utils::SQLite3::Statement & query, CompsEnvironment & grp) {
+    libdnf5::utils::SQLite3::Statement & query, CompsEnvironment & grp) {
     // insert a record to the 'item' table first
     auto query_item_insert = item_insert_new_query(query.get_db());
     auto item_id = item_insert(*query_item_insert);
@@ -125,7 +125,7 @@ int64_t CompsEnvironmentDbUtils::comps_environment_insert(
 
 
 void CompsEnvironmentDbUtils::insert_transaction_comps_environments(
-    libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    libdnf5::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_environment_insert = comps_environment_insert_new_query(conn);
     auto query_trans_item_insert = TransItemDbUtils::trans_item_insert_new_query(conn);
 
@@ -137,4 +137,4 @@ void CompsEnvironmentDbUtils::insert_transaction_comps_environments(
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

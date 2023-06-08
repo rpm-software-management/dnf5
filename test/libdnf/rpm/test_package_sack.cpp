@@ -32,14 +32,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageSackTest);
 
-using namespace libdnf::rpm;
+using namespace libdnf5::rpm;
 
 namespace {
 
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public Package {
 public:
-    TestPackage(libdnf::Base & base, PackageId id) : libdnf::rpm::Package(base.get_weak_ptr(), id) {}
+    TestPackage(libdnf5::Base & base, PackageId id) : libdnf5::rpm::Package(base.get_weak_ptr(), id) {}
 };
 
 }  // namespace
@@ -50,7 +50,7 @@ void RpmPackageSackTest::setUp() {
     add_repo_solv("solv-24pkgs");
 
     pkgset = std::make_unique<PackageSet>(base);
-    pkg0 = std::make_unique<TestPackage>(base, libdnf::rpm::PackageId(0));
+    pkg0 = std::make_unique<TestPackage>(base, libdnf5::rpm::PackageId(0));
     pkgset->add(*pkg0);
 }
 

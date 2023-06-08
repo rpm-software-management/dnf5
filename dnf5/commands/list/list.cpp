@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 
 void ListCommand::set_parent_command() {
@@ -57,21 +57,21 @@ void ListCommand::set_argument_parser() {
     specs->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, true, false, false); });
     cmd.register_positional_arg(specs);
 
-    show_duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+    show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
 
     auto conflicts =
-        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf::cli::ArgumentParser::Argument *>>());
+        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
 
-    installed =
-        std::make_unique<libdnf::cli::session::BoolOption>(*this, "installed", '\0', "List installed packages.", false);
+    installed = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "installed", '\0', "List installed packages.", false);
     conflicts->push_back(installed->arg);
 
-    available =
-        std::make_unique<libdnf::cli::session::BoolOption>(*this, "available", '\0', "List available packages.", false);
+    available = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "available", '\0', "List available packages.", false);
     conflicts->push_back(available->arg);
 
-    extras = std::make_unique<libdnf::cli::session::BoolOption>(
+    extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "extras",
         '\0',
@@ -79,7 +79,7 @@ void ListCommand::set_argument_parser() {
         false);
     conflicts->push_back(extras->arg);
 
-    obsoletes = std::make_unique<libdnf::cli::session::BoolOption>(
+    obsoletes = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "obsoletes",
         '\0',
@@ -87,15 +87,15 @@ void ListCommand::set_argument_parser() {
         false);
     conflicts->push_back(obsoletes->arg);
 
-    recent = std::make_unique<libdnf::cli::session::BoolOption>(
+    recent = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "recent", '\0', "List packages recently added into the repositories.", false);
     conflicts->push_back(recent->arg);
 
-    upgrades = std::make_unique<libdnf::cli::session::BoolOption>(
+    upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "upgrades", '\0', "List upgrades available for the installed packages.", false);
     conflicts->push_back(upgrades->arg);
 
-    autoremove = std::make_unique<libdnf::cli::session::BoolOption>(
+    autoremove = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "autoremove", '\0', "List packages which will be removed by the 'dnf autoremove' command.", false);
     conflicts->push_back(autoremove->arg);
 
@@ -135,8 +135,8 @@ void ListCommand::configure() {
     context.set_load_system_repo(load_system);
 }
 
-std::unique_ptr<libdnf::cli::output::PackageListSections> ListCommand::create_output() {
-    auto out = std::make_unique<libdnf::cli::output::PackageListSections>();
+std::unique_ptr<libdnf5::cli::output::PackageListSections> ListCommand::create_output() {
+    auto out = std::make_unique<libdnf5::cli::output::PackageListSections>();
     out->setup_cols();
     return out;
 }
@@ -145,15 +145,15 @@ void ListCommand::run() {
     auto & ctx = get_context();
     auto & config = ctx.base.get_config();
 
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
-    libdnf::rpm::PackageQuery base_query(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf5::rpm::PackageQuery base_query(ctx.base);
 
     // pre-select by patterns
     if (!pkg_specs.empty()) {
-        base_query = libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        libdnf::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
+        base_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery pkg_query(full_package_query);
+            libdnf5::rpm::PackageQuery pkg_query(full_package_query);
             pkg_query.resolve_pkg_spec(spec, settings, true);
             base_query |= pkg_query;
         }
@@ -164,12 +164,12 @@ void ListCommand::run() {
     // output table
     auto sections = create_output();
 
-    libdnf::rpm::PackageQuery installed(base_query);
+    libdnf5::rpm::PackageQuery installed(base_query);
     installed.filter_installed();
 
     // TODO(mblaha) currently only the installed version and upgrades
     // are highlighted to make the output a bit saner
-    auto colorizer = std::make_unique<libdnf::cli::output::PkgColorizer>(
+    auto colorizer = std::make_unique<libdnf5::cli::output::PkgColorizer>(
         installed,
         "",  //config.get_color_list_available_install_option().get_value(),
         "",  //config.get_color_list_available_downgrade_option().get_value(),
@@ -178,16 +178,16 @@ void ListCommand::run() {
 
     switch (pkg_narrow) {
         case PkgNarrow::ALL: {
-            libdnf::rpm::PackageQuery available(base_query);
+            libdnf5::rpm::PackageQuery available(base_query);
             available.filter_available();
             if (!show_duplicates->get_value()) {
                 available.filter_priority();
                 available.filter_latest_evr();
                 // keep only those available packages that are either not installed or
                 // available EVR is higher than the installed one
-                libdnf::rpm::PackageQuery installed_latest(installed);
+                libdnf5::rpm::PackageQuery installed_latest(installed);
                 installed_latest.filter_latest_evr();
-                available.filter_nevra(installed_latest, libdnf::sack::QueryCmp::NOT | libdnf::sack::QueryCmp::LTE);
+                available.filter_nevra(installed_latest, libdnf5::sack::QueryCmp::NOT | libdnf5::sack::QueryCmp::LTE);
             }
             package_matched |= sections->add_section("Installed packages", installed, colorizer);
             package_matched |= sections->add_section("Available packages", available, colorizer);
@@ -209,7 +209,7 @@ void ListCommand::run() {
         case PkgNarrow::UPGRADES:
             base_query.filter_priority();
             base_query.filter_upgrades();
-            base_query.filter_arch({"src", "nosrc"}, libdnf::sack::QueryCmp::NEQ);
+            base_query.filter_arch({"src", "nosrc"}, libdnf5::sack::QueryCmp::NEQ);
             base_query.filter_latest_evr();
             package_matched |= sections->add_section("Available upgrades", base_query, colorizer);
             break;
@@ -217,10 +217,10 @@ void ListCommand::run() {
             base_query.filter_priority();
             base_query.filter_obsoletes(installed);
             // prepare a map of obsoleted packages {obsoleter_id: [obsoleted_pkgs]}
-            std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> obsoletes;
+            std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> obsoletes;
             for (const auto & pkg : base_query) {
-                std::vector<libdnf::rpm::Package> obsoleted;
-                libdnf::rpm::PackageQuery obs_q(installed);
+                std::vector<libdnf5::rpm::Package> obsoleted;
+                libdnf5::rpm::PackageQuery obs_q(installed);
                 obs_q.filter_provides(pkg.get_obsoletes());
                 for (const auto & pkg_ob : obs_q) {
                     obsoleted.emplace_back(pkg_ob);
@@ -252,7 +252,7 @@ void ListCommand::run() {
     }
 
     if (!package_matched && !pkg_specs.empty()) {
-        throw libdnf::cli::CommandExitError(1, M_("No matching packages to list"));
+        throw libdnf5::cli::CommandExitError(1, M_("No matching packages to list"));
     } else {
         sections->print();
     }

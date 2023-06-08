@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionQueryTest);
@@ -36,9 +36,9 @@ namespace {
 
 // Allows accessing private methods
 create_private_getter_template;
-create_getter(start, &libdnf::transaction::Transaction::start);
-create_getter(finish, &libdnf::transaction::Transaction::finish);
-create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
+create_getter(start, &libdnf5::transaction::Transaction::start);
+create_getter(finish, &libdnf5::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf5::transaction::TransactionHistory::new_transaction);
 
 }  //namespace
 

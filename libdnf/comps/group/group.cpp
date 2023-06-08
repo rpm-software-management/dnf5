@@ -41,7 +41,7 @@ extern "C" {
 #include <vector>
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 Group::Group(const BaseWeakPtr & base) : base(base) {}
@@ -224,7 +224,7 @@ void Group::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
 
     for (auto group_id : group_ids) {
         Dataiterator di;
@@ -290,4 +290,4 @@ void Group::serialize(const std::string & path) {
     xmlSetGenericErrorFunc(NULL, NULL);
 }
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

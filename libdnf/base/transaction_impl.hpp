@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/transaction.h>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 enum class ImportRepoKeysResult { OK, NO_KEYS, ALREADY_PRESENT, IMPORT_DECLINED, IMPORT_FAILED };
 
@@ -61,7 +61,7 @@ public:
         GoalAction action,
         const std::string & pkg_spec,
         const GoalJobSettings & settings,
-        libdnf::Logger::Level log_level);
+        libdnf5::Logger::Level log_level);
     void add_resolve_log(
         GoalAction action,
         GoalProblem problem,
@@ -77,20 +77,20 @@ public:
     TransactionRunResult test();
 
     TransactionRunResult run(
-        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+        std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,
         const std::optional<uint32_t> user_id,
         const std::string & comment);
 
 private:
     friend Transaction;
-    friend class libdnf::Goal;
+    friend class libdnf5::Goal;
 
     Transaction * transaction;
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
-    libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
-    libdnf::rpm::RpmSignature rpm_signature;
+    libdnf5::GoalProblem problems{GoalProblem::NO_PROBLEM};
+    libdnf5::rpm::RpmSignature rpm_signature;
 
     std::vector<TransactionPackage> packages;
     std::vector<TransactionGroup> groups;
@@ -108,18 +108,18 @@ private:
     int64_t history_db_id = 0;
 
     TransactionRunResult _run(
-        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+        std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,
         const std::optional<uint32_t> user_id,
         const std::string & comment,
         const bool test_only);
 
-    bool check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
+    bool check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func);
     ImportRepoKeysResult import_repo_keys(
-        libdnf::repo::Repo & repo, std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
+        libdnf5::repo::Repo & repo, std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func);
 };
 
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_TRANSACTION_IMPL_HPP

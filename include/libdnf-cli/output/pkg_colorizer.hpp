@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 #include <string>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 class PkgColorizer {
@@ -42,7 +42,7 @@ public:
     /// @param color_eq Color returned in case package's version is equal to the one in `base_versions`
     /// @param color_gt Color returned in case package's version is greater then the one in `base_versions`
     PkgColorizer(
-        const libdnf::rpm::PackageSet & base_versions,
+        const libdnf5::rpm::PackageSet & base_versions,
         const std::string & color_not_found,
         const std::string & color_lt,
         const std::string & color_eq,
@@ -51,13 +51,13 @@ public:
     /// Compute a color for the package.
     /// @param package A package for which color is needed.
     /// @return Escape sequence for the color.
-    std::string get_pkg_color(const libdnf::rpm::Package & package);
+    std::string get_pkg_color(const libdnf5::rpm::Package & package);
 
 private:
     std::string to_escape(const std::string & color);
 
     // map N.A of the package to the version
-    std::unordered_map<std::string, libdnf::rpm::Package> base_na_version;
+    std::unordered_map<std::string, libdnf5::rpm::Package> base_na_version;
 
     std::string color_not_found;
     std::string color_lt;
@@ -83,6 +83,6 @@ private:
 };
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_PKG_COLORIZER_HPP

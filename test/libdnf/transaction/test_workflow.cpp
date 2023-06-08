@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionWorkflowTest);
@@ -38,75 +38,75 @@ namespace {
 
 // Allows accessing private methods
 create_private_getter_template;
-create_getter(new_package, &libdnf::transaction::Transaction::new_package);
-create_getter(new_comps_group, &libdnf::transaction::Transaction::new_comps_group);
-create_getter(new_comps_environment, &libdnf::transaction::Transaction::new_comps_environment);
-create_getter(set_releasever, &libdnf::transaction::Transaction::set_releasever);
-create_getter(start, &libdnf::transaction::Transaction::start);
-create_getter(finish, &libdnf::transaction::Transaction::finish);
+create_getter(new_package, &libdnf5::transaction::Transaction::new_package);
+create_getter(new_comps_group, &libdnf5::transaction::Transaction::new_comps_group);
+create_getter(new_comps_environment, &libdnf5::transaction::Transaction::new_comps_environment);
+create_getter(set_releasever, &libdnf5::transaction::Transaction::set_releasever);
+create_getter(start, &libdnf5::transaction::Transaction::start);
+create_getter(finish, &libdnf5::transaction::Transaction::finish);
 
-create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
+create_getter(new_transaction, &libdnf5::transaction::TransactionHistory::new_transaction);
 
-create_getter(set_name, &libdnf::transaction::Package::set_name);
-create_getter(set_epoch, &libdnf::transaction::Package::set_epoch);
-create_getter(set_version, &libdnf::transaction::Package::set_version);
-create_getter(set_release, &libdnf::transaction::Package::set_release);
-create_getter(set_arch, &libdnf::transaction::Package::set_arch);
-create_getter(set_repoid, &libdnf::transaction::Package::set_repoid);
-create_getter(set_action, &libdnf::transaction::Package::set_action);
-create_getter(set_reason, &libdnf::transaction::Package::set_reason);
-create_getter(set_state, &libdnf::transaction::Package::set_state);
+create_getter(set_name, &libdnf5::transaction::Package::set_name);
+create_getter(set_epoch, &libdnf5::transaction::Package::set_epoch);
+create_getter(set_version, &libdnf5::transaction::Package::set_version);
+create_getter(set_release, &libdnf5::transaction::Package::set_release);
+create_getter(set_arch, &libdnf5::transaction::Package::set_arch);
+create_getter(set_repoid, &libdnf5::transaction::Package::set_repoid);
+create_getter(set_action, &libdnf5::transaction::Package::set_action);
+create_getter(set_reason, &libdnf5::transaction::Package::set_reason);
+create_getter(set_state, &libdnf5::transaction::Package::set_state);
 
 }  //namespace
 
 namespace CompsGroupPrivates {
 
 create_private_getter_template;
-create_getter(set_group_id, &libdnf::transaction::CompsGroup::set_group_id);
-create_getter(set_name, &libdnf::transaction::CompsGroup::set_name);
-create_getter(set_translated_name, &libdnf::transaction::CompsGroup::set_translated_name);
-create_getter(set_repoid, &libdnf::transaction::CompsGroup::set_repoid);
-create_getter(set_action, &libdnf::transaction::CompsGroup::set_action);
-create_getter(set_reason, &libdnf::transaction::CompsGroup::set_reason);
-create_getter(new_package, &libdnf::transaction::CompsGroup::new_package);
+create_getter(set_group_id, &libdnf5::transaction::CompsGroup::set_group_id);
+create_getter(set_name, &libdnf5::transaction::CompsGroup::set_name);
+create_getter(set_translated_name, &libdnf5::transaction::CompsGroup::set_translated_name);
+create_getter(set_repoid, &libdnf5::transaction::CompsGroup::set_repoid);
+create_getter(set_action, &libdnf5::transaction::CompsGroup::set_action);
+create_getter(set_reason, &libdnf5::transaction::CompsGroup::set_reason);
+create_getter(new_package, &libdnf5::transaction::CompsGroup::new_package);
 
 }  // namespace CompsGroupPrivates
 
 namespace CompsGroupPackagePrivates {
 
 create_private_getter_template;
-create_getter(set_name, &libdnf::transaction::CompsGroupPackage::set_name);
-create_getter(set_installed, &libdnf::transaction::CompsGroupPackage::set_installed);
-create_getter(set_package_type, &libdnf::transaction::CompsGroupPackage::set_package_type);
+create_getter(set_name, &libdnf5::transaction::CompsGroupPackage::set_name);
+create_getter(set_installed, &libdnf5::transaction::CompsGroupPackage::set_installed);
+create_getter(set_package_type, &libdnf5::transaction::CompsGroupPackage::set_package_type);
 
 }  // namespace CompsGroupPackagePrivates
 
 namespace CompsEnvironmentPrivates {
 
 create_private_getter_template;
-create_getter(set_environment_id, &libdnf::transaction::CompsEnvironment::set_environment_id);
-create_getter(set_name, &libdnf::transaction::CompsEnvironment::set_name);
-create_getter(set_translated_name, &libdnf::transaction::CompsEnvironment::set_translated_name);
-create_getter(set_repoid, &libdnf::transaction::CompsEnvironment::set_repoid);
-create_getter(set_action, &libdnf::transaction::CompsEnvironment::set_action);
-create_getter(set_reason, &libdnf::transaction::CompsEnvironment::set_reason);
-create_getter(new_group, &libdnf::transaction::CompsEnvironment::new_group);
+create_getter(set_environment_id, &libdnf5::transaction::CompsEnvironment::set_environment_id);
+create_getter(set_name, &libdnf5::transaction::CompsEnvironment::set_name);
+create_getter(set_translated_name, &libdnf5::transaction::CompsEnvironment::set_translated_name);
+create_getter(set_repoid, &libdnf5::transaction::CompsEnvironment::set_repoid);
+create_getter(set_action, &libdnf5::transaction::CompsEnvironment::set_action);
+create_getter(set_reason, &libdnf5::transaction::CompsEnvironment::set_reason);
+create_getter(new_group, &libdnf5::transaction::CompsEnvironment::new_group);
 
 }  // namespace CompsEnvironmentPrivates
 
 namespace CompsEnvironmentGroupPrivates {
 
 create_private_getter_template;
-create_getter(set_group_id, &libdnf::transaction::CompsEnvironmentGroup::set_group_id);
-create_getter(set_installed, &libdnf::transaction::CompsEnvironmentGroup::set_installed);
-create_getter(set_group_type, &libdnf::transaction::CompsEnvironmentGroup::set_group_type);
+create_getter(set_group_id, &libdnf5::transaction::CompsEnvironmentGroup::set_group_id);
+create_getter(set_installed, &libdnf5::transaction::CompsEnvironmentGroup::set_installed);
+create_getter(set_group_type, &libdnf5::transaction::CompsEnvironmentGroup::set_group_type);
 
 }  // namespace CompsEnvironmentGroupPrivates
 
 namespace TransactionItemPrivates {
 
 create_private_getter_template;
-create_getter(set_state, &libdnf::transaction::TransactionItem::set_state);
+create_getter(set_state, &libdnf5::transaction::TransactionItem::set_state);
 
 }  // namespace TransactionItemPrivates
 
@@ -178,7 +178,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     // Both cases are equal from comps perspective and the group package must be marked as installed.
     // Please note that set_installed() has a completely different meaning than TransactionItemAction::INSTALL.
     (core_bash.*get(CompsGroupPackagePrivates::set_installed{}))(true);
-    (core_bash.*get(CompsGroupPackagePrivates::set_package_type{}))(libdnf::comps::PackageType::MANDATORY);
+    (core_bash.*get(CompsGroupPackagePrivates::set_package_type{}))(libdnf5::comps::PackageType::MANDATORY);
 
     // add comps environments to the transaction
 
@@ -193,7 +193,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto & minimal_core = (comps_environment_minimal.*get(CompsEnvironmentPrivates::new_group{}))();
     (minimal_core.*get(CompsEnvironmentGroupPrivates::set_group_id{}))("core");
     (minimal_core.*get(CompsEnvironmentGroupPrivates::set_installed{}))(true);
-    (minimal_core.*get(CompsEnvironmentGroupPrivates::set_group_type{}))(libdnf::comps::PackageType::MANDATORY);
+    (minimal_core.*get(CompsEnvironmentGroupPrivates::set_group_type{}))(libdnf5::comps::PackageType::MANDATORY);
 
     // save transaction and all associated transaction items
     (trans.*get(start{}))();

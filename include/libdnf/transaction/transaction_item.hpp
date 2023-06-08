@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class Transaction;
 class CompsEnvironment;
@@ -164,6 +164,6 @@ private:
     const Transaction * trans = nullptr;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP

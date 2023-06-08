@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void GroupListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
@@ -46,20 +46,20 @@ void GroupListCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_COMPS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void GroupListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::comps::GroupQuery query(ctx.base);
+    libdnf5::comps::GroupQuery query(ctx.base);
     auto group_specs_str = group_specs->get_value();
 
     // Filter by patterns if given
     if (group_specs_str.size() > 0) {
-        libdnf::comps::GroupQuery query_names(query);
-        query_names.filter_name(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        query.filter_groupid(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        libdnf5::comps::GroupQuery query_names(query);
+        query_names.filter_name(group_specs_str, libdnf5::sack::QueryCmp::IGLOB);
+        query.filter_groupid(group_specs_str, libdnf5::sack::QueryCmp::IGLOB);
         query |= query_names;
     } else if (not hidden->get_value()) {
         // Filter uservisible only if patterns are not given
@@ -72,26 +72,26 @@ void GroupListCommand::run() {
     } else {
         // to remove duplicities in the output remove from query all available
         // groups with the same groupid as any of the installed groups.
-        libdnf::comps::GroupQuery query_installed(query);
+        libdnf5::comps::GroupQuery query_installed(query);
         query_installed.filter_installed(true);
         std::vector<std::string> installed_ids;
         for (const auto & grp : query_installed) {
             installed_ids.emplace_back(grp.get_groupid());
         }
-        libdnf::comps::GroupQuery query_available(query);
+        libdnf5::comps::GroupQuery query_available(query);
         query_available.filter_installed(false);
         query_available.filter_groupid(installed_ids);
         query -= query_available;
     }
     if (!group_pkg_contains->get_value().empty()) {
-        query.filter_package_name(group_pkg_contains->get_value(), libdnf::sack::QueryCmp::IGLOB);
+        query.filter_package_name(group_pkg_contains->get_value(), libdnf5::sack::QueryCmp::IGLOB);
     }
 
     print(query);
 }
 
-void GroupListCommand::print(const libdnf::comps::GroupQuery & query) {
-    libdnf::cli::output::print_grouplist_table(query.list());
+void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
+    libdnf5::cli::output::print_grouplist_table(query.list());
 }
 
 }  // namespace dnf5

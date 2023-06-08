@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void SearchCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -45,7 +45,7 @@ void SearchCommand::set_argument_parser() {
     all = std::make_unique<SearchAllOption>(*this);
     patterns = std::make_unique<SearchPatternsArguments>(*this, get_context());
 
-    show_duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+    show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
 }
 
@@ -58,7 +58,7 @@ void SearchCommand::configure() {
 void SearchCommand::run() {
     auto & base = get_context().base;
     SearchProcessor processor(base, patterns->get_value(), all->get_value(), show_duplicates->get_value());
-    libdnf::cli::output::print_search_results(processor.get_results());
+    libdnf5::cli::output::print_search_results(processor.get_results());
 }
 
 

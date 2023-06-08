@@ -38,7 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queue, Id type) {
+static inline void reldeps_for(Solvable * solvable, libdnf5::solv::IdQueue & queue, Id type) {
     Id marker = -1;
     Id solv_type = type;
 
@@ -54,7 +54,7 @@ static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queu
 }
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 std::string Package::get_name() const {
     return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_name(id.id));
@@ -458,4 +458,4 @@ BaseWeakPtr Package::get_base() const {
     return base;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

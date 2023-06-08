@@ -27,14 +27,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 
 /// Centralized point to perform operations with RPMs, Comps groups, and Modules
 class Goal {
 public:
-    explicit Goal(const libdnf::BaseWeakPtr & base);
-    explicit Goal(libdnf::Base & base);
+    explicit Goal(const libdnf5::BaseWeakPtr & base);
+    explicit Goal(libdnf5::Base & base);
     ~Goal();
 
     // TODO(jmracek) Not yet implemented
@@ -47,7 +47,7 @@ public:
     /// or a module to be installed.
     /// @param spec  A string with installation spec
     /// @param settings  A structure to override default goal settings.
-    void add_install(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// High level API for an artifact upgrade. See `add_install()` for details.
     /// @param spec      A string with upgrade spec
@@ -55,23 +55,25 @@ public:
     /// @param minimal   Whether to do smallest possible upgrade
     void add_upgrade(
         const std::string & spec,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(),
         bool minimal = false);
 
     /// High level API for an artifact downgrade. See `add_install()` for details.
     /// @param spec      A string with upgrade spec
     /// @param settings  A structure to override default goal settings.
-    void add_downgrade(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_downgrade(
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// High level API for an artifact reinstall. See `add_install()` for details.
     /// @param spec      A string with reinstall spec
     /// @param settings  A structure to override default goal settings.
-    void add_reinstall(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_reinstall(
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// High level API for an artifact removal. See `add_install()` for details.
     /// @param spec      A string with reinstall spec
     /// @param settings  A structure to override default goal settings.
-    void add_remove(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_remove(const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add install request to the goal. The `spec` will be resolved to packages in the resolve() call. The operation will not
     /// result in a reinstall if the requested package is already installed. By default uses
@@ -81,7 +83,7 @@ public:
     /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used.
     // @replaces dnf:dnf/base.py:method:Base().install(self, pkg_spec, reponame=None, strict=True, forms=None)
     void add_rpm_install(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add install request to the goal. The operation will not result in a reinstall when requested package
     /// with the same NEVRA is already installed. By default uses `clean_requirements_on_remove` set to `false`.
@@ -90,7 +92,8 @@ public:
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     // @replaces dnf:dnf/base.py:method:Base().package_install(self, pkg, strict=True)
     void add_rpm_install(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add install request to the goal. The operation will not result in a reinstall when requested package
     /// with the same NEVRA is already installed. By default uses `clean_requirements_on_remove` set to `false`.
@@ -98,8 +101,8 @@ public:
     /// @param package_set      A package_set containig candidates for the install action.
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     void add_rpm_install(
-        const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::PackageSet & package_set,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add install or reinstall request to the goal. By default uses `clean_requirements_on_remove` set to `false`.
     ///
@@ -108,7 +111,8 @@ public:
     // @replaces libdnf/hy-goal.h:function:hy_goal_install(HyGoal goal, DnfPackage *new_pkg)
     // @replaces libdnf/hy-goal.h:function:hy_goal_install_optional(HyGoal goal, DnfPackage *new_pkg)
     void add_rpm_install_or_reinstall(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add install or reinstall request to the goal. By default uses `clean_requirements_on_remove` set to `false`.
     ///
@@ -117,8 +121,8 @@ public:
     // @replaces libdnf/hy-goal.h:function:hy_goal_install_selector(HyGoal goal, HySelector sltr, GError **error)
     // @replaces libdnf/hy-goal.h:function:hy_goal_install_selector_optional(HyGoal goal, HySelector sltr, GError **error)
     void add_rpm_install_or_reinstall(
-        const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::PackageSet & package_set,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add reinstall request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
@@ -127,7 +131,7 @@ public:
     /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used (not implemented yet).
     // @replaces dnf:dnf/base.py:method:Base().reinstall(self, pkg_spec, old_reponame=None, new_reponame=None, new_reponame_neq=None, remove_na=False)
     void add_rpm_reinstall(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add reinstall request to the goal. By default uses `clean_requirements_on_remove` set to `false`.
     ///
@@ -135,7 +139,8 @@ public:
     /// @param settings  A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     // @replaces dnf:dnf/base.py:method:Base().package_reinstall(self, pkg)
     void add_rpm_reinstall(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     // TODO(jmracek) Do we want to add reinstall or remove?
 
@@ -145,7 +150,8 @@ public:
     /// @param spec      A string describing the Goal remove request.
     /// @param settings  A structure to override default goal settings. Values `strict` and `best` are not used.
     // @replaces dnf:dnf/base.py:method:Base().remove(self, pkg_spec, reponame=None, forms=None)
-    void add_rpm_remove(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_rpm_remove(
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add remove request to the goal. By default uses `clean_requirements_on_remove` value from ConfigMain,
     /// which can be overridden in `settings`.
@@ -156,7 +162,8 @@ public:
     // @replaces libdnf/hy-goal.h:function:hy_goal_erase_flags(HyGoal goal, DnfPackage *pkg, int flags)
     // @replaces dnf:dnf/base.py:method:Base().package_remove(self, pkg)
     void add_rpm_remove(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add remove request to the goal. By default uses `clean_requirements_on_remove` value from ConfigMain,
     /// which can be overridden in `settings`.
@@ -165,8 +172,8 @@ public:
     /// @param settings         A structure to override default goal settings. Only `clean_requirements_on_remove` is used.
     // @replaces libdnf/hy-goal.h:function:hy_goal_erase_flags(HyGoal goal, DnfPackage *pkg, int flags)
     void add_rpm_remove(
-        const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::PackageSet & package_set,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add upgrade request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
@@ -177,7 +184,7 @@ public:
     // @replaces dnf:dnf/base.py:method:Base().upgrade(self, pkg_spec, reponame=None)
     void add_rpm_upgrade(
         const std::string & spec,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(),
         bool minimal = false);
 
     // TODO(jmracek) Add suport `to_repo_ids`
@@ -188,7 +195,7 @@ public:
     /// @param minimal   Whether to do smallest possible upgrade
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_all(HyGoal goal)
     // @replaces dnf:dnf/base.py:method:Base().upgrade_all(self, reponame=None)
-    void add_rpm_upgrade(const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(), bool minimal = false);
+    void add_rpm_upgrade(const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(), bool minimal = false);
 
     /// Add upgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
@@ -200,8 +207,8 @@ public:
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_to(HyGoal goal, DnfPackage *new_pkg)
     // @replaces dnf:dnf/base.py:method:Base().package_upgrade(self, pkg)
     void add_rpm_upgrade(
-        const libdnf::rpm::Package & rpm_package,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(),
         bool minimal = false);
 
     /// Add upgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
@@ -212,8 +219,8 @@ public:
     /// @param minimal          Whether to do smallest possible upgrade
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_selector(HyGoal goal, HySelector sltr)
     void add_rpm_upgrade(
-        const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        const libdnf5::rpm::PackageSet & package_set,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(),
         bool minimal = false);
 
     /// Add downgrade request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
@@ -223,7 +230,7 @@ public:
     /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used.
     // @replaces dnf:dnf/base.py:method:Base().downgrade(self, pkg_spec)
     void add_rpm_downgrade(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add downgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
@@ -234,7 +241,8 @@ public:
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     // @replaces dnf:dnf/base.py:method:Base().package_downgrade(self, pkg, strict=False)
     void add_rpm_downgrade(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add distrosync request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
@@ -243,7 +251,7 @@ public:
     /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used.
     // @replaces dnf:dnf/base.py:method:Base().distro_sync(self, pkg_spec=None)
     void add_rpm_distro_sync(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     // TODO(jmracek) Add suport `to_repo_ids`
     /// Add distrosync job of all installed packages to the goal if not limited in `settings`. By default uses
@@ -252,7 +260,7 @@ public:
     /// @param settings  A structure to override default goal settings. Values `from_repo_ids` is not used.
     // @replaces libdnf/hy-goal.h:function:hy_goal_distupgrade_all(HyGoal goal)
     // @replaces dnf:dnf/base.py:method:Base().distro_sync(self, pkg_spec=None)
-    void add_rpm_distro_sync(const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_rpm_distro_sync(const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add distrosync request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
@@ -261,7 +269,8 @@ public:
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` values are used.
     // @replaces libdnf/hy-goal.h:function:hy_goal_distupgrade(HyGoal goal, DnfPackage *new_pkg)
     void add_rpm_distro_sync(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::Package & rpm_package,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add distrosync request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
@@ -270,8 +279,8 @@ public:
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` values are used.
     // @replaces libdnf/hy-goal.h:function:hy_goal_distupgrade_selector(HyGoal goal, HySelector)
     void add_rpm_distro_sync(
-        const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::rpm::PackageSet & package_set,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add reason change request to the goal.
     ///
@@ -281,9 +290,9 @@ public:
     /// @param settings  A sructure to overrice default goal settings. Only ResolveSpecSettings values are used
     void add_rpm_reason_change(
         const std::string & spec,
-        const libdnf::transaction::TransactionItemReason reason,
+        const libdnf5::transaction::TransactionItemReason reason,
         const std::string & group_id = {},
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add group install request to the goal. The `spec` will be resolved to groups in the resolve() call.
     /// Also packages of the types specified in setting.group_package_types be installed.
@@ -293,8 +302,8 @@ public:
     /// @param settings  A structure to override default goal settings.
     void add_group_install(
         const std::string & spec,
-        const libdnf::transaction::TransactionItemReason reason,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::transaction::TransactionItemReason reason,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add group remove request to the goal. The `spec` will be resolved to groups in the resolve() call.
     /// Also packages not belonging to another group and not explicitly user-installed will get removed.
@@ -304,8 +313,8 @@ public:
     /// @param settings  A structure to override default goal settings.
     void add_group_remove(
         const std::string & spec,
-        const libdnf::transaction::TransactionItemReason reason,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf5::transaction::TransactionItemReason reason,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Add group upgrade request to the goal.
     /// Upgrades the packages from the group and upgrades the group itself. The
@@ -317,7 +326,7 @@ public:
     /// @param spec         A string with group specification
     /// @param settings     A structure to override default goal settings.
     void add_group_upgrade(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// Request to install providers of the `spec`. Useful to install package
     /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not
@@ -328,7 +337,7 @@ public:
     /// @param spec      A string with libsolv relational dependency.
     /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used.
     void add_provide_install(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
     /// When true it allows to remove installed packages to resolve dependency problems
     void set_allow_erasing(bool value);
@@ -349,7 +358,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 private:
     rpm::PackageId get_running_kernel_internal();
@@ -358,6 +367,6 @@ private:
 };
 
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif  // LIBDNF_BASE_GOAL_HPP

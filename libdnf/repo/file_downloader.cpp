@@ -38,7 +38,7 @@ struct default_delete<LrDownloadTarget> {
 }  // namespace std
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class FileTarget {
 public:
@@ -199,4 +199,4 @@ void FileDownloader::set_resume(bool value) {
     p_impl->resume = value;
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

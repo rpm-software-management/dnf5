@@ -31,10 +31,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisorySetTest);
 namespace {
 
 // make constructor public so we can create Advisory instances in the tests
-class TestAdvisory : public libdnf::advisory::Advisory {
+class TestAdvisory : public libdnf5::advisory::Advisory {
 public:
-    TestAdvisory(libdnf::Base & base, libdnf::advisory::AdvisoryId id)
-        : libdnf::advisory::Advisory(base.get_weak_ptr(), id) {}
+    TestAdvisory(libdnf5::Base & base, libdnf5::advisory::AdvisoryId id)
+        : libdnf5::advisory::Advisory(base.get_weak_ptr(), id) {}
 };
 
 }  // namespace
@@ -49,26 +49,26 @@ void AdvisoryAdvisorySetTest::setUp() {
     add_repo_solv("solv-24pkgs");
 
     // set1 contains advisories 0 - 15
-    set1 = std::make_unique<libdnf::advisory::AdvisorySet>(base);
+    set1 = std::make_unique<libdnf5::advisory::AdvisorySet>(base);
     for (int i = 0; i < 16; i++) {
-        TestAdvisory adv(base, libdnf::advisory::AdvisoryId(i));
+        TestAdvisory adv(base, libdnf5::advisory::AdvisoryId(i));
         set1->add(adv);
     }
 
     // set2 contains advisories 8, 24
-    set2 = std::make_unique<libdnf::advisory::AdvisorySet>(base);
+    set2 = std::make_unique<libdnf5::advisory::AdvisorySet>(base);
 
-    TestAdvisory adv8(base, libdnf::advisory::AdvisoryId(8));
+    TestAdvisory adv8(base, libdnf5::advisory::AdvisoryId(8));
     set2->add(adv8);
 
-    TestAdvisory adv24(base, libdnf::advisory::AdvisoryId(24));
+    TestAdvisory adv24(base, libdnf5::advisory::AdvisoryId(24));
     set2->add(adv24);
 }
 
 
 void AdvisoryAdvisorySetTest::test_add() {
     // add an Advisory that does not exist in a AdvisorySet
-    TestAdvisory adv(base, libdnf::advisory::AdvisoryId(24));
+    TestAdvisory adv(base, libdnf5::advisory::AdvisoryId(24));
     CPPUNIT_ASSERT(set1->contains(adv) == false);
     set1->add(adv);
     CPPUNIT_ASSERT(set1->contains(adv) == true);
@@ -81,22 +81,22 @@ void AdvisoryAdvisorySetTest::test_add() {
 
 void AdvisoryAdvisorySetTest::test_contains() {
     // AdvisorySet contains a Advisory
-    TestAdvisory adv0(base, libdnf::advisory::AdvisoryId(0));
+    TestAdvisory adv0(base, libdnf5::advisory::AdvisoryId(0));
     CPPUNIT_ASSERT(set1->contains(adv0) == true);
 
     // AdvisorySet does not contain a Advisory
-    TestAdvisory adv16(base, libdnf::advisory::AdvisoryId(16));
+    TestAdvisory adv16(base, libdnf5::advisory::AdvisoryId(16));
     CPPUNIT_ASSERT(set1->contains(adv16) == false);
 
     // AdvisorySet does not contain a Advisory does is out of range of underlying bitmap
-    TestAdvisory adv123(base, libdnf::advisory::AdvisoryId(123));
+    TestAdvisory adv123(base, libdnf5::advisory::AdvisoryId(123));
     CPPUNIT_ASSERT(set1->contains(adv123) == false);
 }
 
 
 void AdvisoryAdvisorySetTest::test_remove() {
     // remove a Advisory that exists in a AdvisorySet
-    TestAdvisory adv0(base, libdnf::advisory::AdvisoryId(0));
+    TestAdvisory adv0(base, libdnf5::advisory::AdvisoryId(0));
 
     CPPUNIT_ASSERT(set1->contains(adv0) == true);
     set1->remove(adv0);
@@ -109,15 +109,15 @@ void AdvisoryAdvisorySetTest::test_remove() {
 
 
 void AdvisoryAdvisorySetTest::test_union() {
-    std::vector<libdnf::advisory::Advisory> expected;
-    std::vector<libdnf::advisory::Advisory> result;
+    std::vector<libdnf5::advisory::Advisory> expected;
+    std::vector<libdnf5::advisory::Advisory> result;
 
     // expected advisories: 0-15, 24
     for (int i = 0; i < 16; i++) {
-        TestAdvisory adv(base, libdnf::advisory::AdvisoryId(i));
+        TestAdvisory adv(base, libdnf5::advisory::AdvisoryId(i));
         expected.push_back(adv);
     }
-    TestAdvisory adv24(base, libdnf::advisory::AdvisoryId(24));
+    TestAdvisory adv24(base, libdnf5::advisory::AdvisoryId(24));
     expected.push_back(adv24);
 
     *set1 |= *set2;
@@ -129,11 +129,11 @@ void AdvisoryAdvisorySetTest::test_union() {
 
 
 void AdvisoryAdvisorySetTest::test_intersection() {
-    std::vector<libdnf::advisory::Advisory> expected;
-    std::vector<libdnf::advisory::Advisory> result;
+    std::vector<libdnf5::advisory::Advisory> expected;
+    std::vector<libdnf5::advisory::Advisory> result;
 
     // expected advisories: 8
-    TestAdvisory adv8(base, libdnf::advisory::AdvisoryId(8));
+    TestAdvisory adv8(base, libdnf5::advisory::AdvisoryId(8));
     expected.push_back(adv8);
 
     *set1 &= *set2;
@@ -145,15 +145,15 @@ void AdvisoryAdvisorySetTest::test_intersection() {
 
 
 void AdvisoryAdvisorySetTest::test_difference() {
-    std::vector<libdnf::advisory::Advisory> expected;
-    std::vector<libdnf::advisory::Advisory> result;
+    std::vector<libdnf5::advisory::Advisory> expected;
+    std::vector<libdnf5::advisory::Advisory> result;
 
     // expected advisories: 0-7, 9-15
     for (int i = 0; i < 16; i++) {
         if (i == 8) {
             continue;
         }
-        TestAdvisory adv(base, libdnf::advisory::AdvisoryId(i));
+        TestAdvisory adv(base, libdnf5::advisory::AdvisoryId(i));
         expected.push_back(adv);
     }
 
@@ -166,10 +166,10 @@ void AdvisoryAdvisorySetTest::test_difference() {
 
 
 void AdvisoryAdvisorySetTest::test_iterator() {
-    std::vector<libdnf::advisory::Advisory> expected;
+    std::vector<libdnf5::advisory::Advisory> expected;
 
     for (int i = 0; i < 16; i++) {
-        TestAdvisory adv(base, libdnf::advisory::AdvisoryId(i));
+        TestAdvisory adv(base, libdnf5::advisory::AdvisoryId(i));
         expected.push_back(adv);
     }
 
@@ -202,7 +202,7 @@ void AdvisoryAdvisorySetTest::test_iterator() {
 
     // test loop with pre-increment operator
     {
-        std::vector<libdnf::advisory::Advisory> result;
+        std::vector<libdnf5::advisory::Advisory> result;
         for (auto it = set1->begin(), end = set1->end(); it != end; ++it) {
             result.push_back(*it);
         }
@@ -211,7 +211,7 @@ void AdvisoryAdvisorySetTest::test_iterator() {
 
     // test loop with post-increment operator
     {
-        std::vector<libdnf::advisory::Advisory> result;
+        std::vector<libdnf5::advisory::Advisory> result;
         for (auto it = set1->begin(), end = set1->end(); it != end; it++) {
             result.push_back(*it);
         }

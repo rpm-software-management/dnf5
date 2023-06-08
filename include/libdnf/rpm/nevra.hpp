@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 struct NevraIncorrectInputError : public Error {
     using Error::Error;
@@ -269,6 +269,6 @@ bool cmp_naevr(const T & lhs, const T & rhs) {
     return false;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_NEVRA_HPP

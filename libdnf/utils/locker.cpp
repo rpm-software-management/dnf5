@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include <unistd.h>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 bool Locker::read_lock() {
     return lock(F_RDLCK);
@@ -81,4 +81,4 @@ Locker::~Locker() {
     }
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils

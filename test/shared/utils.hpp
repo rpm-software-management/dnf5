@@ -76,23 +76,23 @@ struct assertion_traits<C<T>> {
 };
 
 template <>
-struct assertion_traits<libdnf::advisory::Advisory> {
-    inline static bool equal(const libdnf::advisory::Advisory & left, const libdnf::advisory::Advisory & right) {
+struct assertion_traits<libdnf5::advisory::Advisory> {
+    inline static bool equal(const libdnf5::advisory::Advisory & left, const libdnf5::advisory::Advisory & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::advisory::Advisory & advisory) {
+    inline static std::string toString(const libdnf5::advisory::Advisory & advisory) {
         return fmt::format("{} (id: {})", advisory.get_name(), advisory.get_id().id);
     }
 };
 
 template <>
-struct assertion_traits<libdnf::advisory::AdvisorySet> {
-    inline static std::string toString(const libdnf::advisory::AdvisorySet & advisories) {
+struct assertion_traits<libdnf5::advisory::AdvisorySet> {
+    inline static std::string toString(const libdnf5::advisory::AdvisorySet & advisories) {
         std::string result;
 
         for (const auto & advisory : advisories) {
-            result += "\n    " + assertion_traits<libdnf::advisory::Advisory>::toString(advisory);
+            result += "\n    " + assertion_traits<libdnf5::advisory::Advisory>::toString(advisory);
         }
 
         return result;
@@ -100,12 +100,12 @@ struct assertion_traits<libdnf::advisory::AdvisorySet> {
 };
 
 template <>
-struct assertion_traits<libdnf::comps::Environment> {
-    inline static bool equal(const libdnf::comps::Environment & left, const libdnf::comps::Environment & right) {
+struct assertion_traits<libdnf5::comps::Environment> {
+    inline static bool equal(const libdnf5::comps::Environment & left, const libdnf5::comps::Environment & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::comps::Environment & environment) {
+    inline static std::string toString(const libdnf5::comps::Environment & environment) {
         std::string repos;
         for (const auto & repo : environment.get_repos()) {
             if (!repos.empty()) {
@@ -119,7 +119,7 @@ struct assertion_traits<libdnf::comps::Environment> {
 };
 
 template <>
-struct assertion_traits<libdnf::Set<libdnf::comps::Environment>> {
+struct assertion_traits<libdnf5::Set<libdnf::comps::Environment>> {
     inline static std::string toString(const libdnf::Set<libdnf::comps::Environment> & environments) {
         std::string result;
 
@@ -132,12 +132,12 @@ struct assertion_traits<libdnf::Set<libdnf::comps::Environment>> {
 };
 
 template <>
-struct assertion_traits<libdnf::comps::Group> {
-    inline static bool equal(const libdnf::comps::Group & left, const libdnf::comps::Group & right) {
+struct assertion_traits<libdnf5::comps::Group> {
+    inline static bool equal(const libdnf5::comps::Group & left, const libdnf5::comps::Group & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::comps::Group & group) {
+    inline static std::string toString(const libdnf5::comps::Group & group) {
         std::string repos;
         for (const auto & repo : group.get_repos()) {
             if (!repos.empty()) {
@@ -151,7 +151,7 @@ struct assertion_traits<libdnf::comps::Group> {
 };
 
 template <>
-struct assertion_traits<libdnf::Set<libdnf::comps::Group>> {
+struct assertion_traits<libdnf5::Set<libdnf::comps::Group>> {
     inline static std::string toString(const libdnf::Set<libdnf::comps::Group> & groups) {
         std::string result;
 
@@ -164,12 +164,12 @@ struct assertion_traits<libdnf::Set<libdnf::comps::Group>> {
 };
 
 template <>
-struct assertion_traits<libdnf::rpm::Package> {
-    inline static bool equal(const libdnf::rpm::Package & left, const libdnf::rpm::Package & right) {
+struct assertion_traits<libdnf5::rpm::Package> {
+    inline static bool equal(const libdnf5::rpm::Package & left, const libdnf5::rpm::Package & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::rpm::Package & pkg) {
+    inline static std::string toString(const libdnf5::rpm::Package & pkg) {
         return fmt::format(
             "{} (id: {} repo: {} {})",
             pkg.get_full_nevra(),
@@ -180,12 +180,12 @@ struct assertion_traits<libdnf::rpm::Package> {
 };
 
 template <>
-struct assertion_traits<libdnf::rpm::PackageQuery> {
-    inline static std::string toString(const libdnf::rpm::PackageQuery & pkg_query) {
+struct assertion_traits<libdnf5::rpm::PackageQuery> {
+    inline static std::string toString(const libdnf5::rpm::PackageQuery & pkg_query) {
         std::string result;
 
         for (const auto & pkg : pkg_query) {
-            result += "\n    " + assertion_traits<libdnf::rpm::Package>::toString(pkg);
+            result += "\n    " + assertion_traits<libdnf5::rpm::Package>::toString(pkg);
         }
 
         return result;
@@ -193,25 +193,25 @@ struct assertion_traits<libdnf::rpm::PackageQuery> {
 };
 
 template <>
-struct assertion_traits<libdnf::rpm::Reldep> {
-    inline static bool equal(const libdnf::rpm::Reldep & left, const libdnf::rpm::Reldep & right) {
+struct assertion_traits<libdnf5::rpm::Reldep> {
+    inline static bool equal(const libdnf5::rpm::Reldep & left, const libdnf5::rpm::Reldep & right) {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::rpm::Reldep & reldep) {
+    inline static std::string toString(const libdnf5::rpm::Reldep & reldep) {
         return fmt::format("{} (id: {})", reldep.to_string(), reldep.get_id().id);
     }
 };
 
 template <>
-struct assertion_traits<libdnf::base::TransactionPackage> {
+struct assertion_traits<libdnf5::base::TransactionPackage> {
     inline static bool equal(
-        const libdnf::base::TransactionPackage & left, const libdnf::base::TransactionPackage & right) {
+        const libdnf5::base::TransactionPackage & left, const libdnf5::base::TransactionPackage & right) {
         return left.get_package() == right.get_package() && left.get_action() == right.get_action() &&
                left.get_reason() == right.get_reason() && left.get_state() == right.get_state();
     }
 
-    inline static std::string toString(const libdnf::base::TransactionPackage & tspkg) {
+    inline static std::string toString(const libdnf5::base::TransactionPackage & tspkg) {
         return fmt::format(
             "TransactionPackage: package: {}, action: {}, reason: {}, state {}",
             to_string(tspkg.get_package()),
@@ -222,56 +222,56 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 };
 
 template <>
-struct assertion_traits<libdnf::system::PackageState> {
-    inline static bool equal(const libdnf::system::PackageState & left, const libdnf::system::PackageState & right) {
+struct assertion_traits<libdnf5::system::PackageState> {
+    inline static bool equal(const libdnf5::system::PackageState & left, const libdnf5::system::PackageState & right) {
         return left.reason == right.reason;
     }
 
-    inline static std::string toString(const libdnf::system::PackageState & pkg_state) {
+    inline static std::string toString(const libdnf5::system::PackageState & pkg_state) {
         return fmt::format("PackageState: reason: {}", pkg_state.reason);
     }
 };
 
 template <>
-struct assertion_traits<libdnf::system::NevraState> {
-    inline static bool equal(const libdnf::system::NevraState & left, const libdnf::system::NevraState & right) {
+struct assertion_traits<libdnf5::system::NevraState> {
+    inline static bool equal(const libdnf5::system::NevraState & left, const libdnf5::system::NevraState & right) {
         return left.from_repo == right.from_repo;
     }
 
-    inline static std::string toString(const libdnf::system::NevraState & nevra_state) {
+    inline static std::string toString(const libdnf5::system::NevraState & nevra_state) {
         return fmt::format("NevraState: from_repo: {}", nevra_state.from_repo);
     }
 };
 
 template <>
-struct assertion_traits<libdnf::system::GroupState> {
-    inline static bool equal(const libdnf::system::GroupState & left, const libdnf::system::GroupState & right) {
+struct assertion_traits<libdnf5::system::GroupState> {
+    inline static bool equal(const libdnf5::system::GroupState & left, const libdnf5::system::GroupState & right) {
         return left.userinstalled == right.userinstalled && left.packages == right.packages &&
                static_cast<int>(left.package_types) == static_cast<int>(right.package_types);
     }
 
-    inline static std::string toString(const libdnf::system::GroupState & group_state) {
+    inline static std::string toString(const libdnf5::system::GroupState & group_state) {
         return fmt::format(
             "GroupState: userinstalled: {}, packages: {}, package_types: {}",
             group_state.userinstalled,
             assertion_traits<std::vector<std::string>>::toString(group_state.packages),
             assertion_traits<std::vector<std::string>>::toString(
-                libdnf::comps::package_types_to_strings(group_state.package_types)));
+                libdnf5::comps::package_types_to_strings(group_state.package_types)));
     }
 };
 
 template <>
-struct assertion_traits<libdnf::system::ModuleState> {
-    inline static bool equal(const libdnf::system::ModuleState & left, const libdnf::system::ModuleState & right) {
+struct assertion_traits<libdnf5::system::ModuleState> {
+    inline static bool equal(const libdnf5::system::ModuleState & left, const libdnf5::system::ModuleState & right) {
         return left.enabled_stream == right.enabled_stream && left.status == right.status &&
                left.installed_profiles == right.installed_profiles;
     }
 
-    inline static std::string toString(const libdnf::system::ModuleState & module_state) {
+    inline static std::string toString(const libdnf5::system::ModuleState & module_state) {
         return fmt::format(
             "ModuleState: enabled_stream: {}, state: {}, installed_profiles: {}",
             module_state.enabled_stream,
-            libdnf::module::module_status_to_string(module_state.status),
+            libdnf5::module::module_status_to_string(module_state.status),
             assertion_traits<std::vector<std::string>>::toString(module_state.installed_profiles));
     }
 };
@@ -279,10 +279,10 @@ struct assertion_traits<libdnf::system::ModuleState> {
 }  // namespace CPPUNIT_NS
 
 
-std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::AdvisorySet & advisory_set);
-std::vector<libdnf::comps::Environment> to_vector(const libdnf::Set<libdnf::comps::Environment> & environment_set);
-std::vector<libdnf::comps::Group> to_vector(const libdnf::Set<libdnf::comps::Group> & group_set);
-std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
-std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set);
+std::vector<libdnf5::advisory::Advisory> to_vector(const libdnf5::advisory::AdvisorySet & advisory_set);
+std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf::comps::Environment> & environment_set);
+std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf::comps::Group> & group_set);
+std::vector<libdnf5::rpm::Reldep> to_vector(const libdnf5::rpm::ReldepList & reldep_list);
+std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & package_set);
 
 #endif  // TEST_LIBDNF_UTILS_HPP

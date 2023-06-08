@@ -28,7 +28,7 @@ extern "C" {
 }
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 TempEvr::TempEvr(const Pool & pool, const char * evr) {
     split_evr = pool_alloctmpspace(*pool, static_cast<int>(strlen(evr)) + 1);
@@ -171,4 +171,4 @@ std::pair<std::string, std::string> CompsPool::split_solvable_name(std::string_v
         solvable_name.substr(0, delimiter_position), solvable_name.substr(delimiter_position + 1, std::string::npos));
 }
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv

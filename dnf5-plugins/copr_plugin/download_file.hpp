@@ -24,6 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-void download_file(libdnf::Base & base, const std::string & url, const std::filesystem::path & path);
+void download_file(libdnf5::Base & base, const std::string & url, const std::filesystem::path & path);
 
 #endif  // DNF5_COMMANDS_COPR_DOWNLOAD_FILE_HPP

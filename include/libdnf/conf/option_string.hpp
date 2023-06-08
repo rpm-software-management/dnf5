@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores string value.
 /// Support default value, and check of an input value using the regular expression
@@ -92,6 +92,6 @@ inline std::string OptionString::from_string(const std::string & value) const {
     return value;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

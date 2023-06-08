@@ -25,11 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fstream>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 using namespace std::filesystem;
 
-std::unique_ptr<libdnf::Logger> create_file_logger(Base & base) {
+std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
     auto & config = base.get_config();
     auto & installroot = config.get_installroot_option().get_value();
     auto & logdir = config.get_logdir_option().get_value();
@@ -48,4 +48,4 @@ std::unique_ptr<libdnf::Logger> create_file_logger(Base & base) {
     return std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

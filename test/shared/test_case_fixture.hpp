@@ -33,10 +33,10 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    std::unique_ptr<libdnf::Base> get_preconfigured_base();
+    std::unique_ptr<libdnf5::Base> get_preconfigured_base();
 
     // Only gets created if get_preconfigured_base() is called
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp;
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp;
 };
 
 

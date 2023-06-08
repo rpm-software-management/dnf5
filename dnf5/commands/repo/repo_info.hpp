@@ -37,7 +37,7 @@ public:
     }
 
 protected:
-    void print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;
+    void print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;
 };
 
 }  // namespace dnf5

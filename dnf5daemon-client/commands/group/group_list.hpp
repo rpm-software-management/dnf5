@@ -35,7 +35,7 @@ public:
     void run() override;
 
 private:
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
+    std::vector<std::unique_ptr<libdnf5::Option>> * patterns_options{nullptr};
     const std::string command;
 };
 

@@ -27,14 +27,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/impl_ptr.hpp"
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 /// Represent problems detected by a RPM solver (libsolv)
 class SolverProblems {
 public:
     /// Public constructor
     SolverProblems(
-        const std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> & problems);
+        const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems);
 
     SolverProblems(const SolverProblems & src);
     SolverProblems(SolverProblems && src) noexcept;
@@ -52,7 +52,7 @@ public:
     /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems() const {
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> get_problems() const {
         return problems;
     };
 
@@ -60,14 +60,14 @@ public:
     std::string to_string() const;
 
     /// Convert particular package solver problem to a string;
-    static std::string problem_to_string(const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
+    static std::string problem_to_string(const std::pair<libdnf5::ProblemRules, std::vector<std::string>> & raw);
 
 private:
     friend class Transaction;
 
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_SOLVER_PROBLEMS_HPP

@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 class MultiProgressBar {
@@ -72,7 +72,7 @@ private:
 };
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // LIBDNF_CLI_PROGRESSBAR_MULTI_PROGRESS_BAR_HPP

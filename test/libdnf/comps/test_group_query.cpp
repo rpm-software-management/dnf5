@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupQueryTest);
 
 
-using namespace libdnf::comps;
+using namespace libdnf5::comps;
 
 
 void CompsGroupQueryTest::setUp() {
@@ -57,19 +57,19 @@ void CompsGroupQueryTest::test_query_filter_groupid() {
 
     // Filter groups with id containing "standard"
     q_groups = GroupQuery(base);
-    q_groups.filter_groupid("standard", libdnf::sack::QueryCmp::CONTAINS);
+    q_groups.filter_groupid("standard", libdnf5::sack::QueryCmp::CONTAINS);
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with id matching glob "*standard"
     q_groups = GroupQuery(base);
-    q_groups.filter_groupid("*standard", libdnf::sack::QueryCmp::GLOB);
+    q_groups.filter_groupid("*standard", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with id matching glob "standard*"
     q_groups = GroupQuery(base);
-    q_groups.filter_groupid("standard*", libdnf::sack::QueryCmp::GLOB);
+    q_groups.filter_groupid("standard*", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
@@ -90,13 +90,13 @@ void CompsGroupQueryTest::test_query_filter_name() {
 
     // Filter groups with name containing "Standard"
     q_groups = GroupQuery(base);
-    q_groups.filter_name("Standard", libdnf::sack::QueryCmp::CONTAINS);
+    q_groups.filter_name("Standard", libdnf5::sack::QueryCmp::CONTAINS);
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with name matching glob "*Standard*"
     q_groups = GroupQuery(base);
-    q_groups.filter_name("*Standard*", libdnf::sack::QueryCmp::GLOB);
+    q_groups.filter_name("*Standard*", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
@@ -146,7 +146,7 @@ void CompsGroupQueryTest::test_query_filter_package_name() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     q_groups = GroupQuery(base);
-    q_groups.filter_package_name(std::vector<std::string>({"chrony", "fprintd*"}), libdnf::sack::QueryCmp::IGLOB);
+    q_groups.filter_package_name(std::vector<std::string>({"chrony", "fprintd*"}), libdnf5::sack::QueryCmp::IGLOB);
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 }

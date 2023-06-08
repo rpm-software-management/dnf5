@@ -27,19 +27,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/comps_environment.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class CompsEnvironmentGroupDbUtils {
 public:
     /// Load EnvironmentGroup objects from the database to the CompsEnvironment object
-    static void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
+    static void comps_environment_groups_select(libdnf5::utils::SQLite3 & conn, CompsEnvironment & env);
 
     /// Insert EnvironmentGroup objects associated with a CompsEnvironment into the database
-    static void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
+    static void comps_environment_groups_insert(libdnf5::utils::SQLite3 & conn, CompsEnvironment & env);
 };
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_COMPS_ENVIRONMENT_GROUP_HPP

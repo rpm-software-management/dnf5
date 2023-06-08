@@ -45,7 +45,7 @@ private:
     std::vector<std::string> pkg_specs{};
     std::vector<std::string> check_repos{};
     std::vector<std::string> arches{};
-    std::unique_ptr<libdnf::cli::session::BoolOption> newest{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> newest{nullptr};
 };
 
 

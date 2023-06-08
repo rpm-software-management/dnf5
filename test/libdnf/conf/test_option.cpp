@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OptionTest);
 
-using namespace libdnf;
+using namespace libdnf5;
 
 static const std::vector<std::string> DEFAULT_TRUE_VALUES{"1", "yes", "true", "on"};
 static const std::vector<std::string> DEFAULT_FALSE_VALUES{"0", "no", "false", "off"};

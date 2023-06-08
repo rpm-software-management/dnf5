@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 class ModuleDB;
@@ -112,7 +112,7 @@ private:
 };
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_DB_HPP

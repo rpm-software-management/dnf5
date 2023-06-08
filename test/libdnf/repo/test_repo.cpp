@@ -36,7 +36,7 @@ void RepoTest::test_load_system_repo() {
 
 namespace {
 
-class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
     void * add_new_download(
         [[maybe_unused]] void * user_data,
@@ -50,7 +50,7 @@ public:
     int end([[maybe_unused]] void * user_cb_data, [[maybe_unused]] TransferStatus status, const char * error_message)
         override {
         ++end_cnt;
-        end_error_message = libdnf::utils::string::c_to_str(error_message);
+        end_error_message = libdnf5::utils::string::c_to_str(error_message);
         return 0;
     }
 
@@ -89,7 +89,7 @@ public:
     int handle_mirror_failure_cnt = 0;
 };
 
-class RepoCallbacks : public libdnf::repo::RepoCallbacks {
+class RepoCallbacks : public libdnf5::repo::RepoCallbacks {
 public:
     bool repokey_import(
         [[maybe_unused]] const std::string & id,
@@ -118,7 +118,7 @@ void RepoTest::test_load_repo() {
     auto cbs = callbacks.get();
     repo->set_callbacks(std::move(callbacks));
 
-    libdnf::repo::RepoQuery repos(base);
+    libdnf5::repo::RepoQuery repos(base);
     repos.filter_id(repoid);
     repo_sack->update_and_load_repos(repos);
 
@@ -139,7 +139,7 @@ void RepoTest::test_load_repo_nonexistent() {
     auto repo = add_repo(repoid, "/path/thats/not/here", false);
     repo->get_config().get_skip_if_unavailable_option().set(false);
 
-    libdnf::repo::RepoQuery repos(base);
+    libdnf5::repo::RepoQuery repos(base);
     repos.filter_id(repoid);
-    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf::repo::RepoDownloadError);
+    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf5::repo::RepoDownloadError);
 }

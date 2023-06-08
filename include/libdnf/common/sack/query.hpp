@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 extern const BgettextMessage msg_err_exact_one_object;
 
@@ -212,6 +212,6 @@ inline void Query<T>::filter(Query<T>::FilterFunctionCString * getter, const std
     }
 }
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack
 
 #endif

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/session.hpp>
 
 
-namespace libdnf::cli::session {
+namespace libdnf5::cli::session {
 
 void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
     auto * arg_parser_command = command->get_argument_parser_command();
@@ -49,7 +49,7 @@ void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
 }
 
 
-libdnf::cli::ArgumentParser & Session::get_argument_parser() {
+libdnf5::cli::ArgumentParser & Session::get_argument_parser() {
     return *argument_parser;
 }
 
@@ -81,7 +81,7 @@ void Command::throw_missing_command() const {
 }
 
 
-void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group) {
+void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf5::cli::ArgumentParser::Group * group) {
     auto * sub_arg_parser_command = subcommand->get_argument_parser_command();
     get_argument_parser_command()->register_command(sub_arg_parser_command);
 
@@ -94,12 +94,12 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::c
 
 
 BoolOption::BoolOption(
-    libdnf::cli::session::Command & command,
+    libdnf5::cli::session::Command & command,
     const std::string & long_name,
     char short_name,
     const std::string & desc,
     bool default_value,
-    libdnf::OptionBool * linked_option) {
+    libdnf5::OptionBool * linked_option) {
     auto & parser = command.get_session().get_argument_parser();
     arg = parser.add_new_named_arg(long_name);
 
@@ -116,8 +116,8 @@ BoolOption::BoolOption(
     if (linked_option) {
         conf = linked_option;
     } else {
-        conf = dynamic_cast<libdnf::OptionBool *>(
-            parser.add_init_value(std::make_unique<libdnf::OptionBool>(default_value)));
+        conf = dynamic_cast<libdnf5::OptionBool *>(
+            parser.add_init_value(std::make_unique<libdnf5::OptionBool>(default_value)));
     }
     arg->link_value(conf);
 
@@ -126,7 +126,7 @@ BoolOption::BoolOption(
 
 
 AppendStringListOption::AppendStringListOption(
-    libdnf::cli::session::Command & command,
+    libdnf5::cli::session::Command & command,
     const std::string & long_name,
     char short_name,
     const std::string & desc,
@@ -135,7 +135,7 @@ AppendStringListOption::AppendStringListOption(
     const bool icase,
     const std::string & delimiters) {
     auto & parser = command.get_session().get_argument_parser();
-    conf = dynamic_cast<libdnf::OptionStringList *>(parser.add_init_value(std::make_unique<libdnf::OptionStringList>(
+    conf = dynamic_cast<libdnf5::OptionStringList *>(parser.add_init_value(std::make_unique<libdnf5::OptionStringList>(
         std::vector<std::string>(), allowed_values_regex, icase, delimiters)));
     arg = parser.add_new_named_arg(long_name);
 
@@ -153,7 +153,7 @@ AppendStringListOption::AppendStringListOption(
     arg->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            conf->add(libdnf::Option::Priority::COMMANDLINE, value);
+            conf->add(libdnf5::Option::Priority::COMMANDLINE, value);
             return true;
         });
 
@@ -162,7 +162,7 @@ AppendStringListOption::AppendStringListOption(
 
 
 AppendStringListOption::AppendStringListOption(
-    libdnf::cli::session::Command & command,
+    libdnf5::cli::session::Command & command,
     const std::string & long_name,
     char short_name,
     const std::string & desc,
@@ -171,12 +171,12 @@ AppendStringListOption::AppendStringListOption(
 
 
 StringArgumentList::StringArgumentList(
-    libdnf::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs) {
+    libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs) {
     auto & parser = command.get_session().get_argument_parser();
 
     conf = parser.add_new_values();
     arg = parser.add_new_positional_arg(
-        name, nargs, parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)), conf);
+        name, nargs, parser.add_init_value(std::make_unique<libdnf5::OptionString>(nullptr)), conf);
     arg->set_description(desc);
 
     command.get_argument_parser_command()->register_positional_arg(arg);
@@ -186,7 +186,7 @@ std::vector<std::string> StringArgumentList::get_value() const {
     std::vector<std::string> result;
 
     for (auto & opt : *conf) {
-        auto string_opt = dynamic_cast<libdnf::OptionString *>(opt.get());
+        auto string_opt = dynamic_cast<libdnf5::OptionString *>(opt.get());
         result.emplace_back(string_opt->get_value());
     }
 
@@ -194,4 +194,4 @@ std::vector<std::string> StringArgumentList::get_value() const {
 }
 
 
-}  // namespace libdnf::cli::session
+}  // namespace libdnf5::cli::session

@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 Package::Package(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
@@ -45,7 +45,7 @@ uint32_t Package::get_epoch_int() const {
 
 
 std::string Package::to_string() const {
-    return libdnf::rpm::to_full_nevra_string(*this);
+    return libdnf5::rpm::to_full_nevra_string(*this);
 }
 
 
@@ -190,4 +190,4 @@ std::vector<int64_t> Package::searchTransactions(
 }
 */
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

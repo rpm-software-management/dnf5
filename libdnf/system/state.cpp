@@ -30,9 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace toml {
 
 template <>
-struct from<libdnf::system::PackageState> {
-    static libdnf::system::PackageState from_toml(const value & v) {
-        libdnf::system::PackageState pkg_state;
+struct from<libdnf5::system::PackageState> {
+    static libdnf5::system::PackageState from_toml(const value & v) {
+        libdnf5::system::PackageState pkg_state;
 
         pkg_state.reason = toml::find<std::string>(v, "reason");
 
@@ -42,8 +42,8 @@ struct from<libdnf::system::PackageState> {
 
 
 template <>
-struct into<libdnf::system::PackageState> {
-    static toml::value into_toml(const libdnf::system::PackageState & pkg_state) {
+struct into<libdnf5::system::PackageState> {
+    static toml::value into_toml(const libdnf5::system::PackageState & pkg_state) {
         toml::value res;
 
         res["reason"] = pkg_state.reason;
@@ -54,9 +54,9 @@ struct into<libdnf::system::PackageState> {
 
 
 template <>
-struct from<libdnf::system::NevraState> {
-    static libdnf::system::NevraState from_toml(const value & v) {
-        libdnf::system::NevraState nevra_state;
+struct from<libdnf5::system::NevraState> {
+    static libdnf5::system::NevraState from_toml(const value & v) {
+        libdnf5::system::NevraState nevra_state;
 
         if (v.contains("from_repo")) {
             nevra_state.from_repo = toml::find<std::string>(v, "from_repo");
@@ -68,8 +68,8 @@ struct from<libdnf::system::NevraState> {
 
 
 template <>
-struct into<libdnf::system::NevraState> {
-    static toml::value into_toml(const libdnf::system::NevraState & nevra_state) {
+struct into<libdnf5::system::NevraState> {
+    static toml::value into_toml(const libdnf5::system::NevraState & nevra_state) {
         toml::value res;
 
         res["from_repo"] = nevra_state.from_repo;
@@ -80,28 +80,28 @@ struct into<libdnf::system::NevraState> {
 
 
 template <>
-struct from<libdnf::comps::PackageType> {
-    static libdnf::comps::PackageType from_toml(const value & v) {
-        return libdnf::comps::package_type_from_string(toml::get<std::vector<std::string>>(v));
+struct from<libdnf5::comps::PackageType> {
+    static libdnf5::comps::PackageType from_toml(const value & v) {
+        return libdnf5::comps::package_type_from_string(toml::get<std::vector<std::string>>(v));
     }
 };
 
 
 template <>
-struct into<libdnf::comps::PackageType> {
-    static toml::value into_toml(const libdnf::comps::PackageType & package_types) {
-        return libdnf::comps::package_types_to_strings(package_types);
+struct into<libdnf5::comps::PackageType> {
+    static toml::value into_toml(const libdnf5::comps::PackageType & package_types) {
+        return libdnf5::comps::package_types_to_strings(package_types);
     }
 };
 
 template <>
-struct from<libdnf::system::GroupState> {
-    static libdnf::system::GroupState from_toml(const value & v) {
-        libdnf::system::GroupState group_state;
+struct from<libdnf5::system::GroupState> {
+    static libdnf5::system::GroupState from_toml(const value & v) {
+        libdnf5::system::GroupState group_state;
 
         group_state.userinstalled = toml::find<bool>(v, "userinstalled");
         if (v.contains("package_types")) {
-            group_state.package_types = toml::find<libdnf::comps::PackageType>(v, "package_types");
+            group_state.package_types = toml::find<libdnf5::comps::PackageType>(v, "package_types");
         }
         if (v.contains("packages")) {
             group_state.packages = toml::find<std::vector<std::string>>(v, "packages");
@@ -113,8 +113,8 @@ struct from<libdnf::system::GroupState> {
 
 
 template <>
-struct into<libdnf::system::GroupState> {
-    static toml::value into_toml(const libdnf::system::GroupState & group_state) {
+struct into<libdnf5::system::GroupState> {
+    static toml::value into_toml(const libdnf5::system::GroupState & group_state) {
         toml::value res;
 
         res["userinstalled"] = group_state.userinstalled;
@@ -127,9 +127,9 @@ struct into<libdnf::system::GroupState> {
 
 
 template <>
-struct from<libdnf::system::EnvironmentState> {
-    static libdnf::system::EnvironmentState from_toml(const value & v) {
-        libdnf::system::EnvironmentState environment_state;
+struct from<libdnf5::system::EnvironmentState> {
+    static libdnf5::system::EnvironmentState from_toml(const value & v) {
+        libdnf5::system::EnvironmentState environment_state;
 
         if (v.contains("groups")) {
             environment_state.groups = toml::find<std::vector<std::string>>(v, "groups");
@@ -141,8 +141,8 @@ struct from<libdnf::system::EnvironmentState> {
 
 
 template <>
-struct into<libdnf::system::EnvironmentState> {
-    static toml::value into_toml(const libdnf::system::EnvironmentState & environment_state) {
+struct into<libdnf5::system::EnvironmentState> {
+    static toml::value into_toml(const libdnf5::system::EnvironmentState & environment_state) {
         toml::value res;
 
         res["groups"] = environment_state.groups;
@@ -153,12 +153,12 @@ struct into<libdnf::system::EnvironmentState> {
 
 
 template <>
-struct from<libdnf::system::ModuleState> {
-    static libdnf::system::ModuleState from_toml(const value & v) {
-        libdnf::system::ModuleState module_state;
+struct from<libdnf5::system::ModuleState> {
+    static libdnf5::system::ModuleState from_toml(const value & v) {
+        libdnf5::system::ModuleState module_state;
 
         module_state.enabled_stream = toml::find<std::string>(v, "enabled_stream");
-        module_state.status = libdnf::module::module_status_from_string(toml::find<std::string>(v, "state"));
+        module_state.status = libdnf5::module::module_status_from_string(toml::find<std::string>(v, "state"));
         module_state.installed_profiles = toml::find<std::vector<std::string>>(v, "installed_profiles");
 
         return module_state;
@@ -167,12 +167,12 @@ struct from<libdnf::system::ModuleState> {
 
 
 template <>
-struct into<libdnf::system::ModuleState> {
-    static toml::value into_toml(const libdnf::system::ModuleState & module_state) {
+struct into<libdnf5::system::ModuleState> {
+    static toml::value into_toml(const libdnf5::system::ModuleState & module_state) {
         toml::value res;
 
         res["enabled_stream"] = module_state.enabled_stream;
-        res["state"] = libdnf::module::module_status_to_string(module_state.status);
+        res["state"] = libdnf5::module::module_status_to_string(module_state.status);
         res["installed_profiles"] = module_state.installed_profiles;
 
         return res;
@@ -181,9 +181,9 @@ struct into<libdnf::system::ModuleState> {
 
 
 template <>
-struct from<libdnf::system::SystemState> {
-    static libdnf::system::SystemState from_toml(const value & v) {
-        libdnf::system::SystemState system_state;
+struct from<libdnf5::system::SystemState> {
+    static libdnf5::system::SystemState from_toml(const value & v) {
+        libdnf5::system::SystemState system_state;
 
         system_state.rpmdb_cookie = toml::find<std::string>(v, "rpmdb_cookie");
 
@@ -193,8 +193,8 @@ struct from<libdnf::system::SystemState> {
 
 
 template <>
-struct into<libdnf::system::SystemState> {
-    static toml::value into_toml(const libdnf::system::SystemState & system_state) {
+struct into<libdnf5::system::SystemState> {
+    static toml::value into_toml(const libdnf5::system::SystemState & system_state) {
         toml::value res;
 
         res["rpmdb_cookie"] = system_state.rpmdb_cookie;
@@ -206,7 +206,7 @@ struct into<libdnf::system::SystemState> {
 }  // namespace toml
 
 
-namespace libdnf::system {
+namespace libdnf5::system {
 
 const constexpr uint8_t version_major{1};
 const constexpr uint8_t version_minor{0};
@@ -218,7 +218,7 @@ static std::string make_version() {
 
 
 static std::pair<uint64_t, uint64_t> parse_version(const std::string & version) {
-    std::vector<std::string> split_version = libdnf::utils::string::split(version, ".");
+    std::vector<std::string> split_version = libdnf5::utils::string::split(version, ".");
     if (split_version.size() != 2) {
         throw InvalidVersionError(M_("Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"), version);
     }
@@ -581,4 +581,4 @@ void State::reset_packages_states(
     }
 }
 
-}  // namespace libdnf::system
+}  // namespace libdnf5::system

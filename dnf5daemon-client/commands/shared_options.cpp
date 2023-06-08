@@ -29,7 +29,7 @@ static void normalize_paths(int specs_count, const char * const specs[], std::ve
     for (int i = 0; i < specs_count; ++i) {
         const std::string_view spec(specs[i]);
         if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
-            if (!libdnf::utils::url::is_url(specs[i]) && spec.length() > ext.length() && spec.ends_with(ext)) {
+            if (!libdnf5::utils::url::is_url(specs[i]) && spec.length() > ext.length() && spec.ends_with(ext)) {
                 // convert local file paths to absolute path
                 pkg_specs.emplace_back(std::filesystem::canonical(spec));
             } else {
@@ -39,11 +39,11 @@ static void normalize_paths(int specs_count, const char * const specs[], std::ve
     }
 }
 
-libdnf::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
-    libdnf::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs) {
+libdnf5::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
+    libdnf5::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs) {
     auto specs = parser.add_new_positional_arg("pkg_specs", nargs, nullptr, nullptr);
     specs->set_parse_hook_func(
-        [&]([[maybe_unused]] libdnf::cli::ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+        [&]([[maybe_unused]] libdnf5::cli::ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             normalize_paths(argc, argv, pkg_specs);
             return true;
         });

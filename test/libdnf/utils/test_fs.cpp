@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-using namespace libdnf::utils::fs;
+using namespace libdnf5::utils::fs;
 namespace stdfs = std::filesystem;
 
 
@@ -60,7 +60,7 @@ void UtilsFsTest::test_temp_dir() {
     stdfs::path path;
 
     {
-        libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
+        libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
         path = temp_dir.get_path();
 
         CPPUNIT_ASSERT(path.native().starts_with("/tmp/libdnf_unittest_temp_dir."));
@@ -71,8 +71,8 @@ void UtilsFsTest::test_temp_dir() {
 
     // test creating temp dir at a custom location (in another temp dir) and removing a non-empty dir
     {
-        libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
-        libdnf::utils::fs::TempDir nested_temp_dir(temp_dir.get_path(), "nested_temp_dir");
+        libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
+        libdnf5::utils::fs::TempDir nested_temp_dir(temp_dir.get_path(), "nested_temp_dir");
         path = temp_dir.get_path();
 
         CPPUNIT_ASSERT(nested_temp_dir.get_path().native().starts_with((path / "nested_temp_dir.").native()));
@@ -84,11 +84,11 @@ void UtilsFsTest::test_temp_dir() {
 
 
 void UtilsFsTest::test_temp_file_creation() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_creation");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_creation");
 
     stdfs::path path;
     {
-        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp_file");
+        libdnf5::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp_file");
         path = temp_file.get_path();
 
         CPPUNIT_ASSERT(path.native().starts_with((temp_dir.get_path() / "temp_file.").native()));
@@ -100,11 +100,11 @@ void UtilsFsTest::test_temp_file_creation() {
 
 
 void UtilsFsTest::test_temp_file_operation() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_operation");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_operation");
 
     stdfs::path path;
     {
-        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
+        libdnf5::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
 
         path = temp_file.get_path();
 
@@ -130,11 +130,11 @@ void UtilsFsTest::test_temp_file_operation() {
 
 
 void UtilsFsTest::test_temp_file_release() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_release");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_release");
 
     stdfs::path path;
     {
-        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
+        libdnf5::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
 
         path = temp_file.get_path();
 
@@ -148,9 +148,9 @@ void UtilsFsTest::test_temp_file_release() {
 
 
 void UtilsFsTest::test_file_basic() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_basic");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_basic");
 
-    libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w+");
+    libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w+");
     auto path = file.get_path();
 
     CPPUNIT_ASSERT_EQUAL(temp_dir.get_path() / "file", path);
@@ -162,22 +162,22 @@ void UtilsFsTest::test_file_basic() {
 
     CPPUNIT_ASSERT_EQUAL(stdfs::path(), file.get_path());
     CPPUNIT_ASSERT_EQUAL(static_cast<FILE *>(nullptr), file.get());
-    CPPUNIT_ASSERT_THROW(file.get_fd(), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(file.get_fd(), libdnf5::AssertionError);
     CPPUNIT_ASSERT(!static_cast<bool>(file));
 
     CPPUNIT_ASSERT(stdfs::exists(path));
     CPPUNIT_ASSERT_EQUAL(stdfs::status(path).type(), stdfs::file_type::regular);
 
-    libdnf::utils::fs::File file2;
-    CPPUNIT_ASSERT_THROW(file2.read(), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(file2.tell(), libdnf::AssertionError);
+    libdnf5::utils::fs::File file2;
+    CPPUNIT_ASSERT_THROW(file2.read(), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(file2.tell(), libdnf5::AssertionError);
 }
 
 
 void UtilsFsTest::test_file_simple_io() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_simple_io");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_simple_io");
 
-    libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w");
+    libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w");
     auto path = file.get_path();
 
     char data_w[100];
@@ -206,14 +206,14 @@ void UtilsFsTest::test_file_simple_io() {
 
 
 void UtilsFsTest::test_file_open_fd() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_open_fd");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_open_fd");
 
     auto file_path = temp_dir.get_path() / "file";
     {
         int fd = open(file_path.c_str(), O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
         CPPUNIT_ASSERT_GREATEREQUAL(0, fd);
 
-        libdnf::utils::fs::File file(fd, file_path, "w");
+        libdnf5::utils::fs::File file(fd, file_path, "w");
         file.write("hello");
     }
 
@@ -221,7 +221,7 @@ void UtilsFsTest::test_file_open_fd() {
         int fd = open(file_path.c_str(), O_RDONLY);
         CPPUNIT_ASSERT_GREATEREQUAL(0, fd);
 
-        libdnf::utils::fs::File file;
+        libdnf5::utils::fs::File file;
         file.open(fd, file_path, "r");
         auto data = file.read();
         CPPUNIT_ASSERT_EQUAL(std::string("hello"), data);
@@ -230,9 +230,9 @@ void UtilsFsTest::test_file_open_fd() {
 
 
 void UtilsFsTest::test_file_putc_getc() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_putc_getc");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_putc_getc");
 
-    libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w");
+    libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w");
     auto path = file.get_path();
 
     file.putc('a');
@@ -254,11 +254,11 @@ void UtilsFsTest::test_file_putc_getc() {
 
 
 void UtilsFsTest::test_file_high_level_io() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_buffered_io");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_buffered_io");
 
     // simple write / read data
     {
-        libdnf::utils::fs::File file(temp_dir.get_path() / "file3", "w");
+        libdnf5::utils::fs::File file(temp_dir.get_path() / "file3", "w");
         auto path = file.get_path();
 
         std::string data_w = generate_test_data(100);
@@ -273,7 +273,7 @@ void UtilsFsTest::test_file_high_level_io() {
 
     // write / read big data
     {
-        libdnf::utils::fs::File file(temp_dir.get_path() / "file2", "w");
+        libdnf5::utils::fs::File file(temp_dir.get_path() / "file2", "w");
         auto path = file.get_path();
 
         std::string data_w = generate_test_data(1e6);  // 1MB of data
@@ -288,7 +288,7 @@ void UtilsFsTest::test_file_high_level_io() {
 
     // read from the middle, read certain amount of chars
     {
-        libdnf::utils::fs::File file(temp_dir.get_path() / "file3", "w");
+        libdnf5::utils::fs::File file(temp_dir.get_path() / "file3", "w");
         auto path = file.get_path();
 
         std::string data_w = generate_test_data(200);
@@ -313,9 +313,9 @@ void UtilsFsTest::test_file_high_level_io() {
 
 
 void UtilsFsTest::test_file_read_line() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_read_line");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_read_line");
 
-    libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w");
+    libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w");
     auto path = file.get_path();
 
     std::string data_w;
@@ -342,11 +342,11 @@ void UtilsFsTest::test_file_read_line() {
 
 
 void UtilsFsTest::test_file_seek() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
 
     std::string data_w = generate_test_data(10);
 
-    libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w+");
+    libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w+");
     file.write(data_w);
 
     CPPUNIT_ASSERT_EQUAL(10l, file.tell());
@@ -374,13 +374,13 @@ void UtilsFsTest::test_file_seek() {
 
 
 void UtilsFsTest::test_file_release() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
 
     std::string data_w = generate_test_data(10);
     FILE * file_p = nullptr;
 
     {
-        libdnf::utils::fs::File file(temp_dir.get_path() / "file", "w+");
+        libdnf5::utils::fs::File file(temp_dir.get_path() / "file", "w+");
 
         file.write(data_w);
         file.rewind();
@@ -397,16 +397,16 @@ void UtilsFsTest::test_file_release() {
 
 
 void UtilsFsTest::test_file_flush() {
-    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
+    libdnf5::utils::fs::TempDir temp_dir("libdnf_unittest_file_release");
 
     std::string data_w = generate_test_data(10);
 
-    libdnf::utils::fs::File file_w(temp_dir.get_path() / "file", "w+");
+    libdnf5::utils::fs::File file_w(temp_dir.get_path() / "file", "w+");
 
     file_w.write(data_w);
     file_w.flush();
 
-    libdnf::utils::fs::File file_r(temp_dir.get_path() / "file", "r");
+    libdnf5::utils::fs::File file_r(temp_dir.get_path() / "file", "r");
     auto data_r = file_r.read();
 
     CPPUNIT_ASSERT_EQUAL(data_w, data_r);

@@ -26,57 +26,57 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <variant>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
-using StrGetter = std::string (libdnf::rpm::Package::*)() const;
-using VecStrGetter = std::vector<std::string> (libdnf::rpm::Package::*)() const;
-using UnsignedLongLongGetter = unsigned long long (libdnf::rpm::Package::*)() const;
-using ReldepListGetter = libdnf::rpm::ReldepList (libdnf::rpm::Package::*)() const;
-using TransactionItemReasonGetter = libdnf::transaction::TransactionItemReason (libdnf::rpm::Package::*)() const;
+using StrGetter = std::string (libdnf5::rpm::Package::*)() const;
+using VecStrGetter = std::vector<std::string> (libdnf5::rpm::Package::*)() const;
+using UnsignedLongLongGetter = unsigned long long (libdnf5::rpm::Package::*)() const;
+using ReldepListGetter = libdnf5::rpm::ReldepList (libdnf5::rpm::Package::*)() const;
+using TransactionItemReasonGetter = libdnf5::transaction::TransactionItemReason (libdnf5::rpm::Package::*)() const;
 
 using Getter =
     std::variant<StrGetter, VecStrGetter, UnsignedLongLongGetter, ReldepListGetter, TransactionItemReasonGetter>;
 
 static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
-    {"name", &libdnf::rpm::Package::get_name},
-    {"epoch", &libdnf::rpm::Package::get_epoch},
-    {"version", &libdnf::rpm::Package::get_version},
-    {"release", &libdnf::rpm::Package::get_release},
-    {"arch", &libdnf::rpm::Package::get_arch},
-    {"evr", &libdnf::rpm::Package::get_evr},
-    {"full_nevra", &libdnf::rpm::Package::get_full_nevra},
-    {"group", &libdnf::rpm::Package::get_group},
-    {"downloadsize", &libdnf::rpm::Package::get_download_size},
-    {"installsize", &libdnf::rpm::Package::get_install_size},
-    {"license", &libdnf::rpm::Package::get_license},
-    {"source_name", &libdnf::rpm::Package::get_source_name},
-    {"sourcerpm", &libdnf::rpm::Package::get_sourcerpm},
-    {"buildtime", &libdnf::rpm::Package::get_build_time},
-    {"packager", &libdnf::rpm::Package::get_packager},
-    {"vendor", &libdnf::rpm::Package::get_vendor},
-    {"url", &libdnf::rpm::Package::get_url},
-    {"summary", &libdnf::rpm::Package::get_summary},
-    {"description", &libdnf::rpm::Package::get_description},
-    {"provides", &libdnf::rpm::Package::get_provides},
-    {"requires", &libdnf::rpm::Package::get_requires},
-    {"requires_pre", &libdnf::rpm::Package::get_requires_pre},
-    {"conflicts", &libdnf::rpm::Package::get_conflicts},
-    {"obsoletes", &libdnf::rpm::Package::get_obsoletes},
-    {"prereq_ignoreinst", &libdnf::rpm::Package::get_prereq_ignoreinst},
-    {"regular_requires", &libdnf::rpm::Package::get_regular_requires},
-    {"recommends", &libdnf::rpm::Package::get_recommends},
-    {"suggests", &libdnf::rpm::Package::get_suggests},
-    {"enhances", &libdnf::rpm::Package::get_enhances},
-    {"supplements", &libdnf::rpm::Package::get_supplements},
-    {"depends", &libdnf::rpm::Package::get_depends},
-    {"from_repo", &libdnf::rpm::Package::get_from_repo_id},
-    {"installtime", &libdnf::rpm::Package::get_install_time},
-    {"repoid", &libdnf::rpm::Package::get_repo_id},
-    {"reponame", &libdnf::rpm::Package::get_repo_name},
-    {"reason", &libdnf::rpm::Package::get_reason},
-    {"debug_name", &libdnf::rpm::Package::get_debuginfo_name},
-    {"source_debug_name", &libdnf::rpm::Package::get_debuginfo_name_of_source},
-    {"files", &libdnf::rpm::Package::get_files},
+    {"name", &libdnf5::rpm::Package::get_name},
+    {"epoch", &libdnf5::rpm::Package::get_epoch},
+    {"version", &libdnf5::rpm::Package::get_version},
+    {"release", &libdnf5::rpm::Package::get_release},
+    {"arch", &libdnf5::rpm::Package::get_arch},
+    {"evr", &libdnf5::rpm::Package::get_evr},
+    {"full_nevra", &libdnf5::rpm::Package::get_full_nevra},
+    {"group", &libdnf5::rpm::Package::get_group},
+    {"downloadsize", &libdnf5::rpm::Package::get_download_size},
+    {"installsize", &libdnf5::rpm::Package::get_install_size},
+    {"license", &libdnf5::rpm::Package::get_license},
+    {"source_name", &libdnf5::rpm::Package::get_source_name},
+    {"sourcerpm", &libdnf5::rpm::Package::get_sourcerpm},
+    {"buildtime", &libdnf5::rpm::Package::get_build_time},
+    {"packager", &libdnf5::rpm::Package::get_packager},
+    {"vendor", &libdnf5::rpm::Package::get_vendor},
+    {"url", &libdnf5::rpm::Package::get_url},
+    {"summary", &libdnf5::rpm::Package::get_summary},
+    {"description", &libdnf5::rpm::Package::get_description},
+    {"provides", &libdnf5::rpm::Package::get_provides},
+    {"requires", &libdnf5::rpm::Package::get_requires},
+    {"requires_pre", &libdnf5::rpm::Package::get_requires_pre},
+    {"conflicts", &libdnf5::rpm::Package::get_conflicts},
+    {"obsoletes", &libdnf5::rpm::Package::get_obsoletes},
+    {"prereq_ignoreinst", &libdnf5::rpm::Package::get_prereq_ignoreinst},
+    {"regular_requires", &libdnf5::rpm::Package::get_regular_requires},
+    {"recommends", &libdnf5::rpm::Package::get_recommends},
+    {"suggests", &libdnf5::rpm::Package::get_suggests},
+    {"enhances", &libdnf5::rpm::Package::get_enhances},
+    {"supplements", &libdnf5::rpm::Package::get_supplements},
+    {"depends", &libdnf5::rpm::Package::get_depends},
+    {"from_repo", &libdnf5::rpm::Package::get_from_repo_id},
+    {"installtime", &libdnf5::rpm::Package::get_install_time},
+    {"repoid", &libdnf5::rpm::Package::get_repo_id},
+    {"reponame", &libdnf5::rpm::Package::get_repo_name},
+    {"reason", &libdnf5::rpm::Package::get_reason},
+    {"debug_name", &libdnf5::rpm::Package::get_debuginfo_name},
+    {"source_debug_name", &libdnf5::rpm::Package::get_debuginfo_name_of_source},
+    {"files", &libdnf5::rpm::Package::get_files},
 };
 
 void print_available_pkg_attrs(std::FILE * target) {
@@ -212,7 +212,7 @@ bool requires_filelists(const std::string & queryformat) {
     auto [getters, _] = parse_queryformat(queryformat);
     for (auto getter : getters) {
         auto * getter_pointer = std::get_if<VecStrGetter>(&getter);
-        if (getter_pointer && (*getter_pointer == &libdnf::rpm::Package::get_files)) {
+        if (getter_pointer && (*getter_pointer == &libdnf5::rpm::Package::get_files)) {
             return true;
         }
     }
@@ -221,7 +221,7 @@ bool requires_filelists(const std::string & queryformat) {
 }
 
 void print_pkg_set_with_format(
-    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat) {
+    std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & queryformat) {
     auto [getters, format] = parse_queryformat(queryformat);
 
     std::set<std::string> output;
@@ -266,7 +266,7 @@ void print_pkg_set_with_format(
 }
 
 void print_pkg_attr_uniq_sorted(
-    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & getter_name) {
+    std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name) {
     auto getter = NAME_TO_GETTER.find(getter_name);
     if (getter == NAME_TO_GETTER.end()) {
         throw RuntimeError(M_("package getter: %s not available"), getter_name);
@@ -300,4 +300,4 @@ void print_pkg_attr_uniq_sorted(
     }
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output

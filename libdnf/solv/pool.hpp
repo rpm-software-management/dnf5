@@ -39,7 +39,7 @@ extern "C" {
 }
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 constexpr const char * ZERO_EPOCH = "0";
 
@@ -115,28 +115,28 @@ public:
 
     Id lookup_id(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).internalize();
+            libdnf5::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_id(pool, id, keyname);
     }
 
     const char * lookup_str(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).internalize();
+            libdnf5::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_str(pool, id, keyname);
     }
 
     unsigned long long lookup_num(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).internalize();
+            libdnf5::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_num(pool, id, keyname, 0);
     }
 
     bool lookup_void(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).internalize();
+            libdnf5::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_void(pool, id, keyname);
     }
@@ -295,18 +295,18 @@ public:
     static std::pair<std::string, std::string> split_solvable_name(std::string_view solvable_name);
 };
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
-namespace libdnf {
+namespace libdnf5 {
 
-static inline solv::RpmPool & get_rpm_pool(const libdnf::BaseWeakPtr & base) {
+static inline solv::RpmPool & get_rpm_pool(const libdnf5::BaseWeakPtr & base) {
     return InternalBaseUser::get_rpm_pool(base);
 }
 
-static inline solv::CompsPool & get_comps_pool(const libdnf::BaseWeakPtr & base) {
+static inline solv::CompsPool & get_comps_pool(const libdnf5::BaseWeakPtr & base) {
     return InternalBaseUser::get_comps_pool(base);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif  // LIBDNF_SOLV_POOL_HPP

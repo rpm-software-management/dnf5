@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_COMMON_IMPL_PTR_HPP
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <class T>
 class ImplPtr {
@@ -81,6 +81,6 @@ private:
     T * ptr{nullptr};  // object is owner of the pointer
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

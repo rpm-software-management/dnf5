@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class IniParserError : public Error {
 public:
@@ -155,6 +155,6 @@ inline void IniParser::clear_line() noexcept {
     line.clear();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

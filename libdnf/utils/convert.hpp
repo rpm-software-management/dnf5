@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// @brief Convert an input text to a lowercase version.
 ///
@@ -40,6 +40,6 @@ inline std::string to_lowercase(const std::string & source) {
     return result;
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_CONVERT_HPP

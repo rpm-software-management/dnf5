@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 CompsEnvironment::CompsEnvironment(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
@@ -75,4 +75,4 @@ CompsEnvironmentGroup & CompsEnvironment::new_group() {
 }
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

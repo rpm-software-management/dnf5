@@ -29,30 +29,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class GroupAvailableOption : public libdnf::cli::session::BoolOption {
+class GroupAvailableOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit GroupAvailableOption(libdnf::cli::session::Command & command)
+    explicit GroupAvailableOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "available", '\0', _("Show only available groups."), false) {}
 };
 
 
-class GroupHiddenOption : public libdnf::cli::session::BoolOption {
+class GroupHiddenOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit GroupHiddenOption(libdnf::cli::session::Command & command)
+    explicit GroupHiddenOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "hidden", '\0', _("Show also hidden groups."), false) {}
 };
 
 
-class GroupInstalledOption : public libdnf::cli::session::BoolOption {
+class GroupInstalledOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit GroupInstalledOption(libdnf::cli::session::Command & command)
+    explicit GroupInstalledOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "installed", '\0', _("Show only installed groups."), false) {}
 };
 
 
-class GroupContainsPkgsOption : public libdnf::cli::session::AppendStringListOption {
+class GroupContainsPkgsOption : public libdnf5::cli::session::AppendStringListOption {
 public:
-    explicit GroupContainsPkgsOption(libdnf::cli::session::Command & command)
+    explicit GroupContainsPkgsOption(libdnf5::cli::session::Command & command)
         : AppendStringListOption(
               command,
               "contains-pkgs",
@@ -62,25 +62,25 @@ public:
 };
 
 
-class GroupSpecArguments : public libdnf::cli::session::StringArgumentList {
+class GroupSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    GroupSpecArguments(libdnf::cli::session::Command & command, int nargs)
+    GroupSpecArguments(libdnf5::cli::session::Command & command, int nargs)
         : StringArgumentList(command, "group-spec", _("Pattern matching group IDS."), nargs) {}
-    explicit GroupSpecArguments(libdnf::cli::session::Command & command)
-        : GroupSpecArguments(command, libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
+    explicit GroupSpecArguments(libdnf5::cli::session::Command & command)
+        : GroupSpecArguments(command, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
 };
 
 
-class GroupWithOptionalOption : public libdnf::cli::session::BoolOption {
+class GroupWithOptionalOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit GroupWithOptionalOption(libdnf::cli::session::Command & command)
+    explicit GroupWithOptionalOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "with-optional", '\0', _("Include optional packages from group."), false) {}
 };
 
 
-class GroupNoPackagesOption : public libdnf::cli::session::BoolOption {
+class GroupNoPackagesOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit GroupNoPackagesOption(libdnf::cli::session::Command & command)
+    explicit GroupNoPackagesOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "no-packages", '\0', _("Operate on groups only, no packages are changed."), false) {}
 };
 

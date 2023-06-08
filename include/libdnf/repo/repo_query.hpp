@@ -30,17 +30,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
-class RepoQuery : public libdnf::sack::Query<RepoWeakPtr> {
+class RepoQuery : public libdnf5::sack::Query<RepoWeakPtr> {
 public:
 #ifndef SWIG
     using Query<RepoWeakPtr>::Query;
@@ -49,16 +49,16 @@ public:
     /// Create a new RepoQuery instance.
     ///
     /// @param base     A weak pointer to Base
-    explicit RepoQuery(const libdnf::BaseWeakPtr & base);
+    explicit RepoQuery(const libdnf5::BaseWeakPtr & base);
 
     /// Create a new RepoQuery instance.
     ///
     /// @param base     Reference to Base
-    explicit RepoQuery(libdnf::Base & base);
+    explicit RepoQuery(libdnf5::Base & base);
 
     /// @return Weak pointer to the Base object.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() { return base; }
+    libdnf5::BaseWeakPtr get_base() { return base; }
 
     /// Filter repos by their `enabled` state.
     ///
@@ -77,14 +77,14 @@ public:
     /// @param pattern  A string the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    void filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter repos by their `id`.
     ///
     /// @param patterns A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    void filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter repositories by whether they are local
     ///
@@ -97,26 +97,26 @@ public:
     /// @param pattern  A string the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter repos by their `name`.
     ///
     /// @param patterns A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter repos by their `type`.
     ///
     /// @param type     A type the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
 private:
     BaseWeakPtr base;
 };
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_REPO_QUERY_HPP

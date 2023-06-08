@@ -33,11 +33,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <tuple>
 #include <utility>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 ModuleMetadata::ModuleMetadata(const BaseWeakPtr & base) : base(base){};
-ModuleMetadata::ModuleMetadata(libdnf::Base & base) : base(base.get_weak_ptr()) {}
+ModuleMetadata::ModuleMetadata(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
 
 
 ModuleMetadata::ModuleMetadata(const ModuleMetadata & src)
@@ -218,4 +218,4 @@ std::vector<std::string> ModuleMetadata::get_default_profiles(std::string module
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

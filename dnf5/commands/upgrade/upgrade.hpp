@@ -40,7 +40,7 @@ public:
     void run() override;
 
 protected:
-    libdnf::OptionBool * minimal{nullptr};
+    libdnf5::OptionBool * minimal{nullptr};
     std::vector<std::string> pkg_specs;
 
     std::unique_ptr<AllowErasingOption> allow_erasing;

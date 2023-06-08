@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item_action.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 
 std::string TransactionItem::get_action_name() {
@@ -141,4 +141,4 @@ TransactionItem::getInstalledBy() const {
 */
 
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction

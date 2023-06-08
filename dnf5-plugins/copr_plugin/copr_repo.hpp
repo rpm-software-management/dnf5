@@ -42,7 +42,7 @@ void available_chroots_error(
 class CoprRepoPart {
 public:
     CoprRepoPart(){};
-    explicit CoprRepoPart(libdnf::repo::RepoWeakPtr dnfRepo) {
+    explicit CoprRepoPart(libdnf5::repo::RepoWeakPtr dnfRepo) {
         /// Copr enable/disable simply always generates the repofile from
         /// scratch ('enable' from the json provided by Copr Frontend, 'disable'
         /// loads the data from repofiles).
@@ -133,7 +133,7 @@ public:
                 name = val->string();
         }
     }
-    void load_raw_values(libdnf::ConfigParser & parser, const std::filesystem::path & path);
+    void load_raw_values(libdnf5::ConfigParser & parser, const std::filesystem::path & path);
 
     void set_copr_pub_key(const std::string & results_url, const std::string & owner, const std::string & projectname) {
         gpgkey = results_url + "/" + owner + "/" + projectname + "/pubkey.gpg";
@@ -171,7 +171,7 @@ public:
     CoprRepo(){};
 
     explicit CoprRepo(
-        libdnf::Base & base,
+        libdnf5::Base & base,
         const std::unique_ptr<CoprConfig> & copr_config,
         const std::string & project_spec,
         const std::string & selected_chroot);
@@ -185,7 +185,7 @@ public:
     friend std::ostream & operator<<(std::ostream & os, const class CoprRepo & copr_repo);
 
     // bool partly_enabled = false
-    void add_dnf_repo(libdnf::repo::RepoWeakPtr dnfRepo);
+    void add_dnf_repo(libdnf5::repo::RepoWeakPtr dnfRepo);
 
     bool is_multilib() const { return multilib; };
     bool is_enabled() const { return enabled; };
@@ -200,14 +200,14 @@ public:
         return std::any_of(r.begin(), r.end(), [&](const auto & p) { return p.second.is_external(); });
     }
 
-    void load_raw_values(libdnf::ConfigParser & parser);
+    void load_raw_values(libdnf5::ConfigParser & parser);
 
     void add_repo_part(const CoprRepoPart & rp);
 
     bool matches_repospec(const std::string & repo_spec);
 
 private:
-    libdnf::Base * base{nullptr};
+    libdnf5::Base * base{nullptr};
     std::string id;         /// the id, groups are like '@GROUPNAME'
     std::string repo_file;  /// full path
     std::map<std::string, CoprRepoPart> repositories;
@@ -219,11 +219,11 @@ private:
 };
 
 using CoprRepoCallback = std::function<void(CoprRepo &)>;
-void installed_copr_repositories(libdnf::Base & base, CoprRepoCallback cb);
+void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb);
 std::filesystem::path copr_repo_directory();
 
-void copr_repo_disable(libdnf::Base & base, const std::string & repo_spec);
-void copr_repo_remove(libdnf::Base & base, const std::string & repo_spec);
+void copr_repo_disable(libdnf5::Base & base, const std::string & repo_spec);
+void copr_repo_remove(libdnf5::Base & base, const std::string & repo_spec);
 
 }  // namespace dnf5
 

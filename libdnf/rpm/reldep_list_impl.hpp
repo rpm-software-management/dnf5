@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list.hpp"
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 class ReldepList::Impl {
 public:
@@ -36,16 +36,16 @@ public:
     ~Impl() = default;
 
     BaseWeakPtr get_base() const { return base; }
-    libdnf::solv::IdQueue & get_idqueue() { return queue; }
+    libdnf5::solv::IdQueue & get_idqueue() { return queue; }
 
 private:
     friend class ReldepList;
     friend class Package;
 
     BaseWeakPtr base;
-    libdnf::solv::IdQueue queue;
+    libdnf5::solv::IdQueue queue;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_RELDEP_LIST_IMPL_HPP

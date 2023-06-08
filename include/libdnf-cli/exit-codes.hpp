@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_EXIT_CODES_HPP
 #define LIBDNF_CLI_EXIT_CODES_HPP
 
-namespace libdnf::cli {
+namespace libdnf5::cli {
 
 enum class ExitCode : int { SUCCESS = 0, ERROR = 1, ARGPARSER_ERROR = 2 };
 
-}  // namespace libdnf::cli
+}  // namespace libdnf5::cli
 
 #endif  // LIBDNF_CLI_EXIT_CODES_HPP

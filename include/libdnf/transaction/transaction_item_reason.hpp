@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 enum class TransactionItemReason : int {
     NONE = 0,
@@ -38,7 +38,7 @@ enum class TransactionItemReason : int {
 };
 
 
-class InvalidTransactionItemReason : public libdnf::Error {
+class InvalidTransactionItemReason : public libdnf5::Error {
 public:
     InvalidTransactionItemReason(const std::string & reason);
 
@@ -64,6 +64,6 @@ bool operator<=(TransactionItemReason lhs, TransactionItemReason rhs);
 bool operator>(TransactionItemReason lhs, TransactionItemReason rhs);
 bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs);
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP

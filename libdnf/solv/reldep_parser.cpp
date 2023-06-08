@@ -25,11 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
 
-static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
+static bool set_cmp_type(libdnf5::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
         // The second character must be '='
         if (cmp_type_string[1] != '=') {
@@ -94,4 +94,4 @@ bool ReldepParser::parse(const std::string & reldep) {
     }
 }
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv

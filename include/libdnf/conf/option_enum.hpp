@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores value from enumeration. The type of value is template parameter.
 /// Support default value and user defined function for conversion from string.
@@ -167,6 +167,6 @@ inline std::string OptionEnum<std::string>::get_value_string() const {
     return value;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

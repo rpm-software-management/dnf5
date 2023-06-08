@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
     void set_number_widget_visible(bool value);
 
@@ -47,7 +47,7 @@ private:
     bool is_time_to_print();
     void print();
 
-    std::unique_ptr<libdnf::cli::progressbar::MultiProgressBar> multi_progress_bar;
+    std::unique_ptr<libdnf5::cli::progressbar::MultiProgressBar> multi_progress_bar;
     std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
     bool printed{false};
 

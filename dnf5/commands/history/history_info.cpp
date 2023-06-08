@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void HistoryInfoCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Print details about transactions");
@@ -47,7 +47,7 @@ void HistoryInfoCommand::run() {
     }
 
     for (auto ts : transactions) {
-        libdnf::cli::output::print_transaction_info(ts);
+        libdnf5::cli::output::print_transaction_info(ts);
         std::cout << std::endl;
     }
 }

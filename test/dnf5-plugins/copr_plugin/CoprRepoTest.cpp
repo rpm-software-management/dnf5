@@ -49,7 +49,7 @@ std::string get_data_file_contents(const std::string & filename) {
 
 /// this is a mocked replacement for
 /// dnf5-plugins/copr_plugin/download_file.cpp
-void download_file(libdnf::Base &, const std::string & url, const std::filesystem::path & path) {
+void download_file(libdnf5::Base &, const std::string & url, const std::filesystem::path & path) {
     std::filesystem::path input_filename = TEST_DATADIR;
     ofstream output;
     ifstream input;

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 // clang-format off
 // see http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetTable
@@ -372,6 +372,6 @@ inline std::size_t SolvMap::size() const noexcept {
     return result;
 }
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
 #endif  // LIBDNF_SOLV_MAP_HPP

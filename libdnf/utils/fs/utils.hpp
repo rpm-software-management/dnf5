@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils::fs {
+namespace libdnf5::utils::fs {
 
 /// Compares content of two files.
 /// Returns "true" if files have the same content.
@@ -35,6 +35,6 @@ bool have_files_same_content_noexcept(const char * file_path1, const char * file
 /// Implements copy and remove fallback.
 void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest);
 
-}  // namespace libdnf::utils::fs
+}  // namespace libdnf5::utils::fs
 
 #endif  // LIBDNF_UTILS_FS_UTILS_HPP

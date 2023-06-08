@@ -25,17 +25,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "widget.hpp"
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
-class PercentWidget : public libdnf::cli::progressbar::Widget {
+class PercentWidget : public libdnf5::cli::progressbar::Widget {
 public:
     std::size_t get_total_width() const noexcept override;
     std::string to_string() const override;
 };
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar
 
 
 #endif  // LIBDNF_CLI_PROGRESSBAR_WIDGETS_PERCENT_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
     : id{lr_gpg_subkey_get_id(subkey)},
@@ -148,4 +148,4 @@ void RepoPgp::import_key(int fd, const std::string & url) {
     }
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

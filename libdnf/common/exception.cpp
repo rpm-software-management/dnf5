@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <system_error>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 
 AssertionError::AssertionError(const char * assertion, const SourceLocation & location, const std::string & message)
@@ -172,4 +172,4 @@ const char * RuntimeError::get_description() const noexcept {
     return _("General RuntimeError exception");
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
-namespace libdnf {
+namespace libdnf5 {
 
 static GlibLogHandler * librepo_logger{nullptr};
 static GlibLogHandler * libmodulemd_logger{nullptr};
@@ -52,4 +52,4 @@ void GlobalLogger::unset() noexcept {
     librepo_logger = nullptr;
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

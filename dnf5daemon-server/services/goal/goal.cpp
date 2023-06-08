@@ -82,7 +82,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     std::vector<dnfdaemon::DbusTransactionItem> dbus_transaction;
     auto overall_result = dnfdaemon::ResolveResult::ERROR;
-    if (transaction.get_problems() == libdnf::GoalProblem::NO_PROBLEM) {
+    if (transaction.get_problems() == libdnf5::GoalProblem::NO_PROBLEM) {
         // return the transaction only if there were no problems
         std::vector<std::string> pkg_attrs{
             "name",
@@ -110,7 +110,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
                 trans_item_attrs.emplace("replaces", replaces_ids);
             }
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::PACKAGE),
+                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::PACKAGE),
                 transaction_item_action_to_string(tspkg.get_action()),
                 transaction_item_reason_to_string(tspkg.get_reason()),
                 trans_item_attrs,
@@ -120,7 +120,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
         dnfdaemon::KeyValueMap trans_item_attrs{};
         for (auto & tsgrp : transaction.get_transaction_groups()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::GROUP),
+                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::GROUP),
                 transaction_item_action_to_string(tsgrp.get_action()),
                 transaction_item_reason_to_string(tsgrp.get_reason()),
                 trans_item_attrs,
@@ -128,7 +128,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
         }
         for (auto & tsenv : transaction.get_transaction_environments()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::ENVIRONMENT),
+                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::ENVIRONMENT),
                 transaction_item_action_to_string(tsenv.get_action()),
                 transaction_item_reason_to_string(tsenv.get_reason()),
                 trans_item_attrs,
@@ -205,14 +205,14 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 
 
 // TODO (mblaha) callbacks to report the status
-void download_packages(Session & session, libdnf::base::Transaction & transaction) {
-    libdnf::repo::PackageDownloader downloader(session.get_base()->get_weak_ptr());
+void download_packages(Session & session, libdnf5::base::Transaction & transaction) {
+    libdnf5::repo::PackageDownloader downloader(session.get_base()->get_weak_ptr());
 
     // container is owner of package callbacks user_data
     std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
             auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
             data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
             downloader.add(tspkg.get_package(), data.get());
@@ -246,12 +246,12 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     transaction->set_comment(comment);
 
     auto rpm_result = transaction->run();
-    if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
+    if (rpm_result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
             dnfdaemon::ERROR_TRANSACTION,
             fmt::format(
                 "rpm transaction failed with code {}.",
-                static_cast<std::underlying_type_t<libdnf::base::Transaction::TransactionRunResult>>(rpm_result)));
+                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(rpm_result)));
     }
 
     // TODO(mblaha): clean up downloaded packages after successfull transaction

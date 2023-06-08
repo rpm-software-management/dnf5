@@ -36,6 +36,6 @@ enum class GroupAttribute {
 };
 
 dnfdaemon::KeyValueMap group_to_map(
-    const libdnf::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
+    const libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
 
 #endif

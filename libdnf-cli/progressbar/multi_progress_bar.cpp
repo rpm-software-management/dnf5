@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iomanip>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 MultiProgressBar::MultiProgressBar() : total(0, "Total") {
@@ -143,7 +143,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         numbers.pop_back();
 
         // skip printing bars that haven't started yet
-        if (bar->get_state() != libdnf::cli::progressbar::ProgressBarState::STARTED) {
+        if (bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::STARTED) {
             bar->update();
             continue;
         }
@@ -209,4 +209,4 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

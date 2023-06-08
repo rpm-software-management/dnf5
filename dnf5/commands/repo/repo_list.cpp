@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 //TODO(amatej): Find a different way of sharing code rather than repoinfo inheriting from repolist
 void RepoListCommand::set_argument_parser() {
@@ -43,7 +43,7 @@ void RepoListCommand::set_argument_parser() {
 void RepoListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::repo::RepoQuery query(ctx.base);
+    libdnf5::repo::RepoQuery query(ctx.base);
     if (all->get_value()) {
         // don't filter anything
     } else if (disabled->get_value()) {
@@ -58,14 +58,14 @@ void RepoListCommand::run() {
     if (repo_specs_str.size() > 0) {
         auto query_names = query;
         // filter by repo Name
-        query_names.filter_name(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        query_names.filter_name(repo_specs_str, libdnf5::sack::QueryCmp::IGLOB);
         // filter by repo ID
-        query.filter_id(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        query.filter_id(repo_specs_str, libdnf5::sack::QueryCmp::IGLOB);
         // union the results
         query |= query_names;
     }
 
-    query.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+    query.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
 
     // display status because we're printing mix of enabled and disabled repos
     bool with_status = all->get_value();
@@ -73,8 +73,8 @@ void RepoListCommand::run() {
     print(query, with_status);
 }
 
-void RepoListCommand::print(const libdnf::repo::RepoQuery & query, bool with_status) {
-    libdnf::cli::output::print_repolist_table(query, with_status, libdnf::cli::output::COL_REPO_ID);
+void RepoListCommand::print(const libdnf5::repo::RepoQuery & query, bool with_status) {
+    libdnf5::cli::output::print_repolist_table(query, with_status, libdnf5::cli::output::COL_REPO_ID);
 }
 
 }  // namespace dnf5

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/progressbar/progress_bar.hpp"
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 ProgressBar::ProgressBar(int64_t total_ticks) : total_ticks{total_ticks} {}
@@ -165,4 +165,4 @@ std::ostream & operator<<(std::ostream & os, ProgressBar & bar) {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::cli::progressbar {
+namespace libdnf5::cli::progressbar {
 
 
 std::ostream & operator<<(std::ostream & stream, Widget & widget) {
@@ -33,4 +33,4 @@ std::ostream & operator<<(std::ostream & stream, Widget & widget) {
 }
 
 
-}  // namespace libdnf::cli::progressbar
+}  // namespace libdnf5::cli::progressbar

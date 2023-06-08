@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void EnvironmentInfoCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
@@ -44,20 +44,20 @@ void EnvironmentInfoCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_COMPS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void EnvironmentInfoCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::comps::EnvironmentQuery query(ctx.base);
+    libdnf5::comps::EnvironmentQuery query(ctx.base);
     auto environment_specs_str = environment_specs->get_value();
 
     // Filter by patterns if given
     if (environment_specs_str.size() > 0) {
-        libdnf::comps::EnvironmentQuery query_names(query);
-        query_names.filter_name(environment_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        query.filter_environmentid(environment_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        libdnf5::comps::EnvironmentQuery query_names(query);
+        query_names.filter_name(environment_specs_str, libdnf5::sack::QueryCmp::IGLOB);
+        query.filter_environmentid(environment_specs_str, libdnf5::sack::QueryCmp::IGLOB);
         query |= query_names;
     }
     if (installed->get_value()) {
@@ -68,7 +68,7 @@ void EnvironmentInfoCommand::run() {
     }
 
     for (auto environment : query.list()) {
-        libdnf::cli::output::print_environmentinfo_table(environment);
+        libdnf5::cli::output::print_environmentinfo_table(environment);
         std::cout << '\n';
     }
 }

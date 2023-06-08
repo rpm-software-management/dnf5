@@ -36,6 +36,6 @@ enum class EnvironmentAttribute {
 };
 
 dnfdaemon::KeyValueMap environment_to_map(
-    const libdnf::comps::Environment & libdnf_environment, const std::vector<std::string> & attributes);
+    const libdnf5::comps::Environment & libdnf_environment, const std::vector<std::string> & attributes);
 
 #endif

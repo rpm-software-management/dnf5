@@ -28,7 +28,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(IniparserTest);
 
 void IniparserTest::setUp() {
     CppUnit::TestCase::setUp();
-    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_iniparser");
+    temp_dir = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_test_iniparser");
 }
 
 
@@ -38,7 +38,7 @@ void IniparserTest::tearDown() {
 }
 
 
-using ItemType = libdnf::IniParser::ItemType;
+using ItemType = libdnf5::IniParser::ItemType;
 
 namespace {
 
@@ -77,7 +77,7 @@ key1 = value1
 )**";
 
     std::filesystem::path ini_path = temp_dir->get_path() / "test.ini";
-    libdnf::utils::fs::File(ini_path, "w").write(ini_file_content);
+    libdnf5::utils::fs::File(ini_path, "w").write(ini_file_content);
 
     // Expected results from parser
     const Item expected_items[] = {
@@ -106,7 +106,7 @@ key1 = value1
         {ItemType::END_OF_INPUT, "section2", "", "", ""}};
 
     // Parse input
-    libdnf::IniParser parser(ini_path);
+    libdnf5::IniParser parser(ini_path);
     for (std::size_t idx = 0; idx < sizeof(expected_items) / sizeof(expected_items[0]); ++idx) {
         auto readedType = parser.next();
         CPPUNIT_ASSERT_EQUAL(readedType, expected_items[idx].type);
@@ -139,7 +139,7 @@ key4 = value4
 key1 = value1)**";
 
     std::filesystem::path ini_path = temp_dir->get_path() / "test.ini";
-    libdnf::utils::fs::File(ini_path, "w").write(ini_file_content);
+    libdnf5::utils::fs::File(ini_path, "w").write(ini_file_content);
 
     // Expected results from parser
     const Item expected_items[] = {
@@ -161,7 +161,7 @@ key1 = value1)**";
         {ItemType::END_OF_INPUT, "section2", "", "", ""}};
 
     // Parse input
-    libdnf::IniParser parser(ini_path);
+    libdnf5::IniParser parser(ini_path);
     for (std::size_t idx = 0; idx < sizeof(expected_items) / sizeof(expected_items[0]); ++idx) {
         auto readedType = parser.next();
         CPPUNIT_ASSERT_EQUAL(readedType, expected_items[idx].type);

@@ -41,7 +41,7 @@ protected:
     // for RepoInfoCommand
     explicit RepoListCommand(Context & context, const std::string & name) : Command(context, name) {}
 
-    virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
+    virtual void print(const libdnf5::repo::RepoQuery & query, bool with_status);
 };
 
 }  // namespace dnf5

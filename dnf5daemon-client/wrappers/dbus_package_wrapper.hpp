@@ -51,8 +51,8 @@ public:
     std::string get_url() const { return rawdata.at("url"); }
     std::string get_license() const { return rawdata.at("license"); }
     std::string get_description() const { return rawdata.at("description"); }
-    libdnf::transaction::TransactionItemReason get_reason() const {
-        return libdnf::transaction::transaction_item_reason_from_string(rawdata.at("reason"));
+    libdnf5::transaction::TransactionItemReason get_reason() const {
+        return libdnf5::transaction::transaction_item_reason_from_string(rawdata.at("reason"));
     }
 
 private:

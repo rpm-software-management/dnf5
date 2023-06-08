@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option_string.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Exception that is generated when input path does not exist.
 class OptionPathNotFoundError : public OptionValueNotAllowedError {
@@ -86,6 +86,6 @@ inline OptionPath * OptionPath::clone() const {
     return new OptionPath(*this);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

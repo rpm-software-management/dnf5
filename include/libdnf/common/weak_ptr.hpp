@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_set>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename TPtr, bool ptr_owner>
 struct WeakPtr;
@@ -237,6 +237,6 @@ private:
     TWeakPtrGuard * guard;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

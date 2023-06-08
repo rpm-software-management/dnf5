@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory/advisory_package_private.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 AdvisoryCollection::AdvisoryCollection(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
     : base(base),
@@ -128,4 +128,4 @@ Advisory AdvisoryCollection::get_advisory() const {
     return Advisory(base, advisory);
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

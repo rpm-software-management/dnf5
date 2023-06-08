@@ -51,7 +51,7 @@ protected:
 class Session {
 public:
     Session(
-        std::vector<std::unique_ptr<libdnf::Logger>> && loggers,
+        std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
         sdbus::IConnection & connection,
         dnfdaemon::KeyValueMap session_configuration,
         std::string object_path,
@@ -69,13 +69,13 @@ public:
 
     std::string get_object_path() { return object_path; };
     sdbus::IConnection & get_connection() { return connection; };
-    libdnf::Base * get_base() { return base.get(); };
+    libdnf5::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
-    libdnf::Goal & get_goal() { return goal; };
-    libdnf::base::Transaction * get_transaction() { return transaction.get(); };
-    void set_transaction(const libdnf::base::Transaction & src) {
-        transaction.reset(new libdnf::base::Transaction(src));
+    libdnf5::Goal & get_goal() { return goal; };
+    libdnf5::base::Transaction * get_transaction() { return transaction.get(); };
+    void set_transaction(const libdnf5::base::Transaction & src) {
+        transaction.reset(new libdnf5::base::Transaction(src));
     };
     std::string get_sender() const { return sender; };
 
@@ -88,9 +88,9 @@ public:
 
 private:
     sdbus::IConnection & connection;
-    std::unique_ptr<libdnf::Base> base;
-    libdnf::Goal goal;
-    std::unique_ptr<libdnf::base::Transaction> transaction{nullptr};
+    std::unique_ptr<libdnf5::Base> base;
+    libdnf5::Goal goal;
+    std::unique_ptr<libdnf5::base::Transaction> transaction{nullptr};
     dnfdaemon::KeyValueMap session_configuration;
     std::string object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};

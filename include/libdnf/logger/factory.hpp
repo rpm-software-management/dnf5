@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 // File logger destination filename.
 constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
@@ -33,8 +33,8 @@ constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
 /// @brief Helper method for creating a file logger.
 /// @param base Reference to Base for loading the configured logger path.
 /// @return Instance of a new file logger.
-std::unique_ptr<libdnf::Logger> create_file_logger(libdnf::Base & base);
+std::unique_ptr<libdnf5::Logger> create_file_logger(libdnf5::Base & base);
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

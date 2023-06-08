@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/types.h>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 constexpr uid_t INVALID_UID = static_cast<uid_t>(-1);
 
@@ -39,6 +39,6 @@ uid_t read_login_uid_from_proc(pid_t pid) noexcept;
 /// @since 5.0
 uid_t get_login_uid() noexcept;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

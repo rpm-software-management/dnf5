@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-namespace libdnf::xdg {
+namespace libdnf5::xdg {
 
 /// Returns user home directory.
 std::filesystem::path get_user_home_dir();
@@ -48,6 +48,6 @@ std::filesystem::path get_user_state_dir();
 /// (such as sockets, named pipes, ...) should be stored.
 std::filesystem::path get_user_runtime_dir();
 
-}  // namespace libdnf::xdg
+}  // namespace libdnf5::xdg
 
 #endif

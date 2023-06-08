@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <sstream>
 
-namespace libdnf {
+namespace libdnf5 {
 
 OptionBool::OptionBool(const OptionBool & src) : Option(src), default_value(src.default_value), value(src.value) {
     if (src.true_values) {
@@ -111,4 +111,4 @@ std::string OptionBool::to_string(bool value) const {
     return oss.str();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

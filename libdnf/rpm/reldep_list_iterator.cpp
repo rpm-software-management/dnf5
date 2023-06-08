@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "reldep_list_iterator_impl.hpp"
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 
 ReldepListIterator::ReldepListIterator(const ReldepList & reldep_list) : p_impl(new Impl(reldep_list)) {}
@@ -68,4 +68,4 @@ bool ReldepListIterator::operator!=(const ReldepListIterator & other) const {
 }
 
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

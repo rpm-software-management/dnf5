@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 struct _ModulemdProfile;
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 // @replaces libdnf:module:modulemd/ModuleProfile.hpp:class:ModuleProfile
@@ -76,7 +76,7 @@ private:
 };
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_PROFILE_HPP

@@ -40,7 +40,7 @@ public:
     void configure() override;
     void run() override;
 
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_distro_sync_options{nullptr};
+    std::vector<std::unique_ptr<libdnf5::Option>> * patterns_to_distro_sync_options{nullptr};
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
 };

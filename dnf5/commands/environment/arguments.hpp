@@ -28,23 +28,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class EnvironmentAvailableOption : public libdnf::cli::session::BoolOption {
+class EnvironmentAvailableOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit EnvironmentAvailableOption(libdnf::cli::session::Command & command)
+    explicit EnvironmentAvailableOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "available", '\0', _("Show only available environments."), false) {}
 };
 
 
-class EnvironmentInstalledOption : public libdnf::cli::session::BoolOption {
+class EnvironmentInstalledOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit EnvironmentInstalledOption(libdnf::cli::session::Command & command)
+    explicit EnvironmentInstalledOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "installed", '\0', _("Show only installed environments."), false) {}
 };
 
 
-class EnvironmentSpecArguments : public libdnf::cli::session::StringArgumentList {
+class EnvironmentSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    explicit EnvironmentSpecArguments(libdnf::cli::session::Command & command)
+    explicit EnvironmentSpecArguments(libdnf5::cli::session::Command & command)
         : StringArgumentList(command, "environment-spec", _("Pattern matching environment IDs.")) {}
 };
 

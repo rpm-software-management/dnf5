@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void DistroSyncCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -44,7 +44,7 @@ void DistroSyncCommand::set_argument_parser() {
     auto patterns_arg = parser.add_new_positional_arg(
         "patterns",
         ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_distro_sync_options);
     patterns_arg->set_description("Patterns");
     cmd.register_positional_arg(patterns_arg);
@@ -67,7 +67,7 @@ void DistroSyncCommand::run() {
         goal->add_rpm_distro_sync();
     } else {
         for (auto & pattern : *patterns_to_distro_sync_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             goal->add_rpm_distro_sync(option->get_value());
         }
     }

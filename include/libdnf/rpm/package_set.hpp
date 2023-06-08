@@ -30,19 +30,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <memory>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisoryPackage;
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 class SolvMap;
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 // @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
@@ -50,8 +50,8 @@ public:
     using iterator = PackageSetIterator;
 
     // @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
-    explicit PackageSet(const libdnf::BaseWeakPtr & base);
-    explicit PackageSet(libdnf::Base & base);
+    explicit PackageSet(const libdnf5::BaseWeakPtr & base);
+    explicit PackageSet(libdnf5::Base & base);
 
     // @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
@@ -142,7 +142,7 @@ public:
     void remove(const Package & pkg);
 
     // @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
     /// @return Number of elements in the set.
     //
@@ -157,15 +157,15 @@ private:
     friend class PackageQuery;
     friend class PackageSack;
     friend class Transaction;
-    friend class libdnf::base::Transaction;
-    friend class libdnf::advisory::AdvisoryPackage;
+    friend class libdnf5::base::Transaction;
+    friend class libdnf5::advisory::AdvisoryPackage;
 
-    friend libdnf::Goal;
-    PackageSet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
+    friend libdnf5::Goal;
+    PackageSet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_SET_HPP

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores a container of strings. The type of the container is a template parameter.
 /// Support default value, and check of an input value using the regular expression
@@ -162,6 +162,6 @@ inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
 using OptionStringList = OptionStringContainer<std::vector<std::string>>;
 using OptionStringSet = OptionStringContainer<std::set<std::string>>;
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdexcept>
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 
 bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
@@ -59,7 +59,7 @@ bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
 
 
 bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patterns) {
-    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool result = (cmp & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     for (auto & pattern : patterns) {
         if (match_int64(value, cmp, pattern) != result) {
             return !result;
@@ -70,7 +70,7 @@ bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patte
 
 
 bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t pattern) {
-    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool result = (cmp & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     for (auto & value : values) {
         if (match_int64(value, cmp, pattern) != result) {
             return !result;
@@ -81,7 +81,7 @@ bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t patt
 
 
 bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, const std::vector<int64_t> & patterns) {
-    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool result = (cmp & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     for (auto & value : values) {
         for (auto & pattern : patterns) {
             if (match_int64(value, cmp, pattern) != result) {
@@ -93,4 +93,4 @@ bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, const std::v
 }
 
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack

@@ -42,7 +42,7 @@ public:
     void test_vars_multiple_dirs();
     void test_vars_env();
 
-    std::unique_ptr<libdnf::Base> base;
+    std::unique_ptr<libdnf5::Base> base;
 };
 
 

@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <string>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 ModuleDBWeakPtr ModuleDB::get_weak_ptr() {
@@ -304,4 +304,4 @@ void ModuleDB::clear_profiles(const std::string & module_name) {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

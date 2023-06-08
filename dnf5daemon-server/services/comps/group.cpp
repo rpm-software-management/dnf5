@@ -56,7 +56,7 @@ const std::map<std::string, GroupAttribute> group_attributes{
     {"repos", GroupAttribute::repos},
 };
 
-dnfdaemon::KeyValueMap group_to_map(libdnf::comps::Group & libdnf_group, const std::vector<std::string> & attributes) {
+dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_group;
     // add group id by default
     dbus_group.emplace(std::make_pair("groupid", libdnf_group.get_groupid()));

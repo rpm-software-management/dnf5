@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-namespace libdnf::utils::xml {
+namespace libdnf5::utils::xml {
 
 
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
@@ -36,4 +36,4 @@ xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std:
 }
 
 
-}  // namespace libdnf::utils::xml
+}  // namespace libdnf5::utils::xml

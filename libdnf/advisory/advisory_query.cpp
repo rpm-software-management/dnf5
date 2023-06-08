@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // For glob support
 #include <fnmatch.h>
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : AdvisorySet(base), base(base) {
     *p_impl |= base->p_impl->get_rpm_advisory_sack()->get_solvables();
@@ -43,7 +43,7 @@ AdvisoryQuery::AdvisoryQuery(Base & base) : AdvisoryQuery(base.get_weak_ptr()) {
 
 AdvisoryQuery::~AdvisoryQuery() = default;
 
-static int libsolv_cmp_flags(libdnf::sack::QueryCmp cmp_type, const char * pattern) {
+static int libsolv_cmp_flags(libdnf5::sack::QueryCmp cmp_type, const char * pattern) {
     // Remove GLOB when the pattern is not a glob
     if ((cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB &&
         !libdnf::utils::is_glob_pattern(pattern)) {
@@ -283,4 +283,4 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages_sorted(
     return after_filter;
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory

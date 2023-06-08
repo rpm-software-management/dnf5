@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 
-namespace libdnf::sack {
+namespace libdnf5::sack {
 
 const BgettextMessage msg_err_exact_one_object = M_("Query must contain exactly one object.");
 
-}  // namespace libdnf::sack
+}  // namespace libdnf5::sack

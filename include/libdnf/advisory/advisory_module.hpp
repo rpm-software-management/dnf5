@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/impl_ptr.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisoryModule {
 public:
@@ -92,6 +92,6 @@ private:
     ImplPtr<Impl> p_impl;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

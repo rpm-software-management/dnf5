@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::plugin {
+namespace libdnf5::plugin {
 
 class PluginError : public Error {
 public:
@@ -58,8 +58,8 @@ public:
     void init();
     void pre_base_setup();
     void post_base_setup();
-    void pre_transaction(const libdnf::base::Transaction & transaction);
-    void post_transaction(const libdnf::base::Transaction & transaction);
+    void pre_transaction(const libdnf5::base::Transaction & transaction);
+    void post_transaction(const libdnf5::base::Transaction & transaction);
     void finish() noexcept;
 
 protected:
@@ -96,9 +96,9 @@ public:
 
     void post_base_setup();
 
-    void pre_transaction(const libdnf::base::Transaction & transaction);
+    void pre_transaction(const libdnf5::base::Transaction & transaction);
 
-    void post_transaction(const libdnf::base::Transaction & transaction);
+    void post_transaction(const libdnf5::base::Transaction & transaction);
 
     /// Call finish of all allowed plugins in reverse order.
     void finish() noexcept;
@@ -154,13 +154,13 @@ inline void Plugin::post_base_setup() {
     }
 }
 
-inline void Plugin::pre_transaction(const libdnf::base::Transaction & transaction) {
+inline void Plugin::pre_transaction(const libdnf5::base::Transaction & transaction) {
     if (iplugin_instance) {
         iplugin_instance->pre_transaction(transaction);
     }
 }
 
-inline void Plugin::post_transaction(const libdnf::base::Transaction & transaction) {
+inline void Plugin::post_transaction(const libdnf5::base::Transaction & transaction) {
     if (iplugin_instance) {
         iplugin_instance->post_transaction(transaction);
     }
@@ -178,6 +178,6 @@ inline size_t Plugins::count() const noexcept {
     return plugins.size();
 }
 
-}  // namespace libdnf::plugin
+}  // namespace libdnf5::plugin
 
 #endif

@@ -58,7 +58,7 @@ public:
     void test_get_advisory_collection();
 
 private:
-    std::vector<libdnf::advisory::AdvisoryModule> modules;
+    std::vector<libdnf5::advisory::AdvisoryModule> modules;
 };
 
 

@@ -26,20 +26,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 class Base;
 
 }
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
-using CompsWeakPtr = libdnf::WeakPtr<Comps, false>;
+using CompsWeakPtr = libdnf5::WeakPtr<Comps, false>;
 
 class Comps {
 public:
-    explicit Comps(libdnf::Base & base);
+    explicit Comps(libdnf5::Base & base);
     ~Comps();
 
     GroupSackWeakPtr get_group_sack() { return group_sack.get_weak_ptr(); }
@@ -47,10 +47,10 @@ public:
 
     CompsWeakPtr get_weak_ptr();
 
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
 private:
-    libdnf::Base & base;
+    libdnf5::Base & base;
     GroupSack group_sack{*this};
     EnvironmentSack environment_sack{*this};
     WeakPtrGuard<Comps, false> data_guard;
@@ -63,6 +63,6 @@ private:
     friend class EnvironmentQuery;
 };
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps
 
 #endif  // LIBDNF_COMPS_COMPS_HPP

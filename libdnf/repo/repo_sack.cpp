@@ -65,9 +65,9 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 
 }  // namespace
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
-RepoSack::RepoSack(libdnf::Base & base) : RepoSack(base.get_weak_ptr()) {}
+RepoSack::RepoSack(libdnf5::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
 
 RepoWeakPtr RepoSack::create_repo(const std::string & id) {
@@ -150,7 +150,7 @@ std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(
     }
 
     // map a path from the input paths to a Package object created in the cmdline repo
-    std::map<std::string, libdnf::rpm::Package> path_to_package;
+    std::map<std::string, libdnf5::rpm::Package> path_to_package;
 
     if (!url_to_path.empty()) {
         auto & logger = *base->get_logger();
@@ -693,4 +693,4 @@ void RepoSack::fix_group_missing_xml() {
     }
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

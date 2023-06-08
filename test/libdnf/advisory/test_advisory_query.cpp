@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryQueryTest);
 
-using namespace libdnf::advisory;
+using namespace libdnf5::advisory;
 
 void AdvisoryAdvisoryQueryTest::setUp() {
     BaseTestCase::setUp();
@@ -49,17 +49,17 @@ void AdvisoryAdvisoryQueryTest::test_size() {
 void AdvisoryAdvisoryQueryTest::test_filter_name() {
     // Tests filter_name method
     AdvisoryQuery adv_query(base);
-    adv_query.filter_name("*2020-1", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_name("*2020-1", libdnf5::sack::QueryCmp::GLOB);
     std::vector<Advisory> expected = {get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_name("DNF-20*", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_name("DNF-20*", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_name(std::vector<std::string>{"DNF-2019-1", "DNF-2020-1"}, libdnf::sack::QueryCmp::EQ);
+    adv_query.filter_name(std::vector<std::string>{"DNF-2019-1", "DNF-2020-1"}, libdnf5::sack::QueryCmp::EQ);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
@@ -77,37 +77,37 @@ void AdvisoryAdvisoryQueryTest::test_filter_type() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_type(std::vector<std::string>{"bugfix", "security"}, libdnf::sack::QueryCmp::EQ);
+    adv_query.filter_type(std::vector<std::string>{"bugfix", "security"}, libdnf5::sack::QueryCmp::EQ);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1"), get_advisory("PKG-OLDER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
 
 void AdvisoryAdvisoryQueryTest::test_filter_packages() {
     // Tests filter_packages method
-    libdnf::rpm::PackageQuery pkg_query(base);
+    libdnf5::rpm::PackageQuery pkg_query(base);
 
     AdvisoryQuery adv_query = AdvisoryQuery(base);
-    adv_query.filter_packages(pkg_query, libdnf::sack::QueryCmp::GT);
+    adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::GT);
     std::vector<Advisory> expected = {get_advisory("PKG-NEWER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_packages(pkg_query, libdnf::sack::QueryCmp::GTE);
+    adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::GTE);
     expected = {get_advisory("DNF-2019-1"), get_advisory("PKG-NEWER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_packages(pkg_query, libdnf::sack::QueryCmp::EQ);
+    adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::EQ);
     expected = {get_advisory("DNF-2019-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_packages(pkg_query, libdnf::sack::QueryCmp::LTE);
+    adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::LTE);
     expected = {get_advisory("DNF-2019-1"), get_advisory("PKG-OLDER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_packages(pkg_query, libdnf::sack::QueryCmp::LT);
+    adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::LT);
     expected = {get_advisory("PKG-OLDER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
@@ -130,7 +130,7 @@ void AdvisoryAdvisoryQueryTest::test_filter_cve() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_reference("*", "cve", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_reference("*", "cve", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
@@ -148,7 +148,7 @@ void AdvisoryAdvisoryQueryTest::test_filter_bugzilla() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_reference("*", "bugzilla", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_reference("*", "bugzilla", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
@@ -166,12 +166,12 @@ void AdvisoryAdvisoryQueryTest::test_filter_reference() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_reference("*", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_reference("*", libdnf5::sack::QueryCmp::GLOB);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_reference("none*", libdnf::sack::QueryCmp::GLOB);
+    adv_query.filter_reference("none*", libdnf5::sack::QueryCmp::GLOB);
     expected = {};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
@@ -179,29 +179,29 @@ void AdvisoryAdvisoryQueryTest::test_filter_reference() {
 void AdvisoryAdvisoryQueryTest::test_filter_severity() {
     // Tests filter_severity method
     AdvisoryQuery adv_query(base);
-    adv_query.filter_severity("moderate", libdnf::sack::QueryCmp::EQ);
+    adv_query.filter_severity("moderate", libdnf5::sack::QueryCmp::EQ);
     std::vector<Advisory> expected = {get_advisory("DNF-2019-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 
     adv_query = AdvisoryQuery(base);
-    adv_query.filter_severity(std::vector<std::string>{"moderate", "critical"}, libdnf::sack::QueryCmp::EQ);
+    adv_query.filter_severity(std::vector<std::string>{"moderate", "critical"}, libdnf5::sack::QueryCmp::EQ);
     expected = {get_advisory("DNF-2019-1"), get_advisory("DNF-2020-1")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
 
 void AdvisoryAdvisoryQueryTest::test_get_advisory_packages_sorted() {
     // Tests get_advisory_packages_sorted method
-    libdnf::rpm::PackageQuery pkg_query(base);
+    libdnf5::rpm::PackageQuery pkg_query(base);
     // pkg_query contains: pkg-1.2-3.x86_64, pkg-libs-1:1.3-4.x86_64, unresolvable-1:2-3.noarch
     std::vector<AdvisoryPackage> adv_pkgs =
-        AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf::sack::QueryCmp::GTE);
+        AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf5::sack::QueryCmp::GTE);
     CPPUNIT_ASSERT_EQUAL((size_t)2, adv_pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[1].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("4.0-1"), adv_pkgs[1].get_evr());
 
-    adv_pkgs = AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf::sack::QueryCmp::LTE);
+    adv_pkgs = AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf5::sack::QueryCmp::LTE);
     CPPUNIT_ASSERT_EQUAL((size_t)2, adv_pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());

@@ -35,8 +35,8 @@ public:
     public:
         explicit DbusGroupPackageWrapper(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {}
         std::string get_name() const { return rawdata.at("name"); }
-        libdnf::comps::PackageType get_type() const {
-            return static_cast<libdnf::comps::PackageType>(key_value_map_get<int>(rawdata, "type"));
+        libdnf5::comps::PackageType get_type() const {
+            return static_cast<libdnf5::comps::PackageType>(key_value_map_get<int>(rawdata, "type"));
         }
 
     private:

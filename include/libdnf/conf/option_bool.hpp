@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Option that stores boolean value.
 /// Supports default value.
@@ -158,6 +158,6 @@ inline const std::vector<std::string> & OptionBool::get_false_values() const noe
     return false_values ? *false_values : get_default_false_values();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

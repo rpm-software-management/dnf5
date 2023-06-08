@@ -34,13 +34,13 @@ namespace {
 
 constexpr const char * CONF_FILE_VERSION = "1.0";
 
-using ArgParser = libdnf::cli::ArgumentParser;
-using BasicValue = toml::basic_value<toml::discard_comments, libdnf::PreserveOrderMap, std::vector>;
+using ArgParser = libdnf5::cli::ArgumentParser;
+using BasicValue = toml::basic_value<toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>;
 
 // Attach aditional named arguments to the alias
 template <typename ArgT>
 bool attach_named_args(
-    libdnf::Logger & logger,
+    libdnf5::Logger & logger,
     const fs::path & path,
     ArgT & alias_arg,
     const BasicValue::array_type & attached_named_args,

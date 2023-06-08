@@ -32,7 +32,7 @@ extern "C" {
 
 #include "libdnf/base/transaction.hpp"
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 /// Private part of the module goal that works directly with libsolv.
@@ -63,7 +63,7 @@ public:
     ///
     /// @return libdnf::GoalProblem to indicate whether there was a solver error.
     /// @since 5.0
-    libdnf::GoalProblem resolve();
+    libdnf5::GoalProblem resolve();
 
     /// @return `std::vector` of problems during resolving. Each problem is a `std::vector` of items:
     ///          ProblemRules, source, dependency, target, solv string.
@@ -73,22 +73,22 @@ public:
 
     /// @return IdQueue of items to install. The goal must be resolved first.
     /// @since 5.0
-    libdnf::solv::IdQueue list_installs();
+    libdnf5::solv::IdQueue list_installs();
     /// @return IdQueue of items that conflict. The goal must be resolved first.
     /// @since 5.0
-    libdnf::solv::IdQueue list_conflicting();
+    libdnf5::solv::IdQueue list_conflicting();
 
     /// @return Transaction object. The goal must be resolved first.
     /// @since 5.0
     ::Transaction * get_transaction() { return libsolv_transaction; }
 
 private:
-    libdnf::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
+    libdnf5::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
 
     ModuleSackWeakPtr module_sack;
 
-    libdnf::solv::IdQueue staging;
-    libdnf::solv::Solver libsolv_solver;
+    libdnf5::solv::IdQueue staging;
+    libdnf5::solv::Solver libsolv_solver;
 
     ::Transaction * libsolv_transaction{nullptr};
 };
@@ -122,7 +122,7 @@ inline ModuleGoalPrivate & ModuleGoalPrivate::operator=(const ModuleGoalPrivate 
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
 
 
 #endif  // LIBDNF_MODULE_MODULE_GOAL_PRIVATE_HPP

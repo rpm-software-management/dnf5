@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class BaseGoalTest;
 class RpmTransactionTest;
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 /// Describe transaction operation related to rpm Package
 class TransactionPackage {
@@ -43,7 +43,7 @@ public:
     using State = transaction::TransactionItemState;
 
     /// @return the underlying package.
-    libdnf::rpm::Package get_package() const { return package; }
+    libdnf5::rpm::Package get_package() const { return package; }
 
     /// @return the action being preformed on the transaction package.
     //
@@ -78,19 +78,19 @@ private:
     friend class ::BaseGoalTest;
     friend class ::RpmTransactionTest;
 
-    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason)
+    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason)
         : package(pkg),
           action(action),
           reason(reason) {}
 
-    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
+    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state)
         : package(pkg),
           action(action),
           reason(reason),
           state(state) {}
 
     TransactionPackage(
-        const libdnf::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)
+        const libdnf5::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)
         : package(pkg),
           action(action),
           reason(reason),
@@ -99,7 +99,7 @@ private:
     void set_reason(Reason value) noexcept { reason = value; }
     void set_state(State value) noexcept { state = value; }
 
-    libdnf::rpm::Package package;
+    libdnf5::rpm::Package package;
     Action action;
     Reason reason;
     State state{State::STARTED};
@@ -109,6 +109,6 @@ private:
     std::vector<rpm::Package> replaced_by;
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
 #endif  // LIBDNF_BASE_TRANSACTION_PACKAGE_HPP

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <sstream>
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename T>
 bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)(std::ios_base &)) {
@@ -128,4 +128,4 @@ template class OptionNumber<std::int64_t>;
 template class OptionNumber<std::uint64_t>;
 template class OptionNumber<float>;
 
-}  // namespace libdnf
+}  // namespace libdnf5

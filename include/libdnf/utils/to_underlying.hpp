@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <type_traits>
 
-namespace libdnf::utils {
+namespace libdnf5::utils {
 
 /// Converts an enumeration to its underlying type.
 /// `std::to_underlying` is planed for C++23.
@@ -33,6 +33,6 @@ constexpr std::underlying_type_t<Enum> to_underlying(Enum e) noexcept {
     return static_cast<std::underlying_type_t<Enum>>(e);
 }
 
-}  // namespace libdnf::utils
+}  // namespace libdnf5::utils
 
 #endif  // LIBDNF_UTILS_TO_UNDERLYING_HPP

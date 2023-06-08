@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 // group list table columns
@@ -34,7 +34,7 @@ enum { COL_GROUP_ID, COL_GROUP_NAME, COL_INSTALLED };
 
 static struct libscols_table * create_grouplist_table() {
     struct libscols_table * table = scols_new_table();
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "ID", 20, 0);
@@ -72,6 +72,6 @@ void print_grouplist_table(Query & group_list) {
 }
 
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_GROUPLIST_HPP

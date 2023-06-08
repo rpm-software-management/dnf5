@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_sack.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 
 // Getter callbacks that return attribute values from an object. Used in query filters.
@@ -81,4 +81,4 @@ void RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
     filter(Get::type, static_cast<int64_t>(type), cmp);
 }
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo

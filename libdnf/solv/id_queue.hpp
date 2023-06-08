@@ -30,7 +30,7 @@ extern "C" {
 }
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 class IdQueueIterator {
 public:
@@ -198,6 +198,6 @@ inline void IdQueue::sort(int (*cmp)(const Id * a, const Id * b, TData * data), 
         (void *)data);
 }
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
 #endif  // LIBDNF_SOLV_ID_QUEUE_HPP

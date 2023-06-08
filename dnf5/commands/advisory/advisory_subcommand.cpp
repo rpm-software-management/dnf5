@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void AdvisorySubCommand::set_argument_parser() {
     all = std::make_unique<AdvisoryAllOption>(*this);
@@ -60,10 +60,10 @@ void AdvisorySubCommand::set_argument_parser() {
 // When the running kernel has available advisories show them because the system
 // is vulnerable (even if the newer fixed version of kernel is already installed).
 // DNF4 bug with behavior description: https://bugzilla.redhat.com/show_bug.cgi?id=1728004
-void AdvisorySubCommand::add_running_kernel_packages(libdnf::Base & base, libdnf::rpm::PackageQuery & package_query) {
+void AdvisorySubCommand::add_running_kernel_packages(libdnf5::Base & base, libdnf5::rpm::PackageQuery & package_query) {
     auto kernel = base.get_rpm_package_sack()->get_running_kernel();
     if (kernel.get_id().id > 0) {
-        libdnf::rpm::PackageQuery kernel_query(base);
+        libdnf5::rpm::PackageQuery kernel_query(base);
         kernel_query.filter_sourcerpm({kernel.get_sourcerpm()});
         kernel_query.filter_installed();
         package_query |= kernel_query;
@@ -75,17 +75,17 @@ void AdvisorySubCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
 }
 
 void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::rpm::PackageQuery package_query(ctx.base);
+    libdnf5::rpm::PackageQuery package_query(ctx.base);
     auto package_specs_strs = contains_pkgs->get_value();
     // Filter packages by name patterns if given
     if (package_specs_strs.size() > 0) {
-        package_query.filter_name(package_specs_strs, libdnf::sack::QueryCmp::IGLOB);
+        package_query.filter_name(package_specs_strs, libdnf5::sack::QueryCmp::IGLOB);
     }
 
     auto advisories_opt = advisory_query_from_cli_input(
@@ -99,13 +99,13 @@ void AdvisorySubCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
 
-    auto advisories = advisories_opt.value_or(libdnf::advisory::AdvisoryQuery(ctx.base));
+    auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.base));
 
     if (with_bz->get_value()) {
-        advisories.filter_reference("*", {"bugzilla"}, libdnf::sack::QueryCmp::IGLOB);
+        advisories.filter_reference("*", {"bugzilla"}, libdnf5::sack::QueryCmp::IGLOB);
     }
     if (with_cve->get_value()) {
-        advisories.filter_reference("*", {"cve"}, libdnf::sack::QueryCmp::IGLOB);
+        advisories.filter_reference("*", {"cve"}, libdnf5::sack::QueryCmp::IGLOB);
     }
 
     process_and_print_queries(ctx, advisories, package_query);

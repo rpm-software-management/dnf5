@@ -70,7 +70,7 @@ public:
         auto * tc = dynamic_cast<BaseTestCase *>(f->m_fixture);
 
         if (tc) {
-            tc->base.get_logger()->add_logger(std::make_unique<libdnf::MemoryBufferLogger>(10000, 256));
+            tc->base.get_logger()->add_logger(std::make_unique<libdnf5::MemoryBufferLogger>(10000, 256));
         }
     }
 
@@ -80,8 +80,8 @@ public:
 
         if (tc) {
             std::cout << std::endl << "Dnf log:" << std::endl;
-            libdnf::StdCStreamLogger cout_logger(std::cout);
-            dynamic_cast<libdnf::MemoryBufferLogger *>(tc->base.get_logger()->get_logger(0))
+            libdnf5::StdCStreamLogger cout_logger(std::cout);
+            dynamic_cast<libdnf5::MemoryBufferLogger *>(tc->base.get_logger()->get_logger(0))
                 ->write_to_logger(cout_logger);
             std::cout << std::endl << std::flush;
         }

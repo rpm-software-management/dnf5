@@ -30,20 +30,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 class SolvMap;
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisorySet {
 public:
     using iterator = AdvisorySetIterator;
 
-    explicit AdvisorySet(const libdnf::BaseWeakPtr & base);
-    explicit AdvisorySet(libdnf::Base & base);
+    explicit AdvisorySet(const libdnf5::BaseWeakPtr & base);
+    explicit AdvisorySet(libdnf5::Base & base);
 
     AdvisorySet(const AdvisorySet & aset);
 
@@ -110,7 +110,7 @@ public:
     /// @since 5.0
     void remove(const Advisory & adv);
 
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
     /// @return Number of elements in the set.
     size_t size() const noexcept;
@@ -122,11 +122,11 @@ public:
 private:
     friend AdvisorySetIterator;
     friend class AdvisoryQuery;
-    AdvisorySet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
+    AdvisorySet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif  // LIBDNF_ADVISORY_ADVISORY_SET_HPP

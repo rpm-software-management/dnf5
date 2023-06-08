@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <sstream>
 
-namespace libdnf {
+namespace libdnf5 {
 
 template <typename T>
 bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)(std::ios_base &)) {
@@ -187,4 +187,4 @@ void OptionEnum<std::string>::set(const std::string & value) {
     set(Priority::RUNTIME, value);
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

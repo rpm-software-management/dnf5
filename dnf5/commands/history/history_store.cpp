@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void HistoryStoreCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Store transaction to a file");

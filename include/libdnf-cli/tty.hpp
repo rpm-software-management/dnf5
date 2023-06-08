@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 
 
-namespace libdnf::cli::tty {
+namespace libdnf5::cli::tty {
 
 
 std::ostream & reset(std::ostream & stream);
@@ -54,7 +54,7 @@ int get_width();
 bool is_interactive();
 
 
-}  // namespace libdnf::cli::tty
+}  // namespace libdnf5::cli::tty
 
 
 #endif  // LIBDNF_CLI_TTY_HPP

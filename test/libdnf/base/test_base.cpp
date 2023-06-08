@@ -46,8 +46,8 @@ void BaseTest::test_weak_ptr() {
     base.reset();
 
     // Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-    CPPUNIT_ASSERT_THROW(vars->get_value("test_variable"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(vars->get_value("test_variable"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf5::AssertionError);
 }
 
 void BaseTest::test_missing_setup() {
@@ -55,10 +55,10 @@ void BaseTest::test_missing_setup() {
     auto base = get_preconfigured_base();
 
     // Base object is not fully initialized - not initialized by Base::setup()
-    CPPUNIT_ASSERT_THROW(libdnf::rpm::PackageQuery(*base.get()), libdnf::UserAssertionError);
+    CPPUNIT_ASSERT_THROW(libdnf5::rpm::PackageQuery(*base.get()), libdnf5::UserAssertionError);
 
     base->setup();
-    libdnf::rpm::PackageQuery(*base.get());
+    libdnf5::rpm::PackageQuery(*base.get());
 }
 
 void BaseTest::test_repeated_setup() {
@@ -69,7 +69,7 @@ void BaseTest::test_repeated_setup() {
     base->setup();
 
     // Base was already initialized
-    CPPUNIT_ASSERT_THROW(base->setup(), libdnf::UserAssertionError);
+    CPPUNIT_ASSERT_THROW(base->setup(), libdnf5::UserAssertionError);
 }
 
 void BaseTest::test_unlock_not_locked() {
@@ -77,7 +77,7 @@ void BaseTest::test_unlock_not_locked() {
     auto base = get_preconfigured_base();
 
     // Base::unlock() called on unlocked Base instance
-    CPPUNIT_ASSERT_THROW(base->unlock(), libdnf::UserAssertionError);
+    CPPUNIT_ASSERT_THROW(base->unlock(), libdnf5::UserAssertionError);
 
     // Lock the Base first
     base->lock();

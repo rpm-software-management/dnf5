@@ -46,11 +46,12 @@ void RepoclosureCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Print list of unresolved dependencies for repositories"));
 
-    auto specs =
-        parser.add_new_positional_arg("specs", libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
+    auto specs = parser.add_new_positional_arg(
+        "specs", libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     specs->set_description("List of package specs to check closure for");
     specs->set_parse_hook_func(
-        [this]([[maybe_unused]] libdnf::cli::ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+        [this](
+            [[maybe_unused]] libdnf5::cli::ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
                 pkg_specs.emplace_back(argv[i]);
             }
@@ -64,10 +65,10 @@ void RepoclosureCommand::set_argument_parser() {
     check_repos_arg->set_has_value(true);
     check_repos_arg->set_arg_value_help("<REPO ID>,...");
     check_repos_arg->set_parse_hook_func([this](
-                                             [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                             [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                              [[maybe_unused]] const char * option,
                                              const char * value) {
-        libdnf::OptionStringList list_value(value);
+        libdnf5::OptionStringList list_value(value);
         for (const auto & repoid : list_value.get_value()) {
             check_repos.emplace_back(repoid);
         }
@@ -81,10 +82,10 @@ void RepoclosureCommand::set_argument_parser() {
     arches_arg->set_has_value(true);
     arches_arg->set_arg_value_help("<ARCH>,...");
     arches_arg->set_parse_hook_func([this](
-                                        [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                        [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                         [[maybe_unused]] const char * option,
                                         const char * value) {
-        libdnf::OptionStringList list_value(value);
+        libdnf5::OptionStringList list_value(value);
         for (const auto & arch : list_value.get_value()) {
             arches.emplace_back(arch);
         }
@@ -92,7 +93,7 @@ void RepoclosureCommand::set_argument_parser() {
     });
     cmd.register_named_arg(arches_arg);
 
-    newest = std::make_unique<libdnf::cli::session::BoolOption>(
+    newest = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "newest", '\0', "Only consider the latest version of a package from each repo.", false);
 }
 
@@ -101,7 +102,7 @@ void RepoclosureCommand::configure() {
     context.set_load_system_repo(false);
     // filelists needed because there are packages in repos with file requirements
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
@@ -112,13 +113,13 @@ void RepoclosureCommand::run() {
     // to_check_query is the set of packages we are checking the dependencies of
     // in case that `--newest` was used, start with an empty query
     bool newest_used = newest->get_value();
-    libdnf::rpm::PackageQuery available_query(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
-    libdnf::rpm::PackageQuery to_check_query(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
+    libdnf5::rpm::PackageQuery available_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
+    libdnf5::rpm::PackageQuery to_check_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
     if (newest_used) {
-        libdnf::repo::RepoQuery repos(ctx.base);
+        libdnf5::repo::RepoQuery repos(ctx.base);
         repos.filter_enabled(true);
         for (const auto & repo : repos) {
-            libdnf::rpm::PackageQuery repo_pkgs(ctx.base);
+            libdnf5::rpm::PackageQuery repo_pkgs(ctx.base);
             repo_pkgs.filter_repo_id({repo->get_id()});
             repo_pkgs.filter_latest_evr();
             available_query |= repo_pkgs;
@@ -139,21 +140,21 @@ void RepoclosureCommand::run() {
     }
 
     if (!pkg_specs.empty()) {
-        libdnf::rpm::PackageQuery to_check_pkgs(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        libdnf::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
+        libdnf5::rpm::PackageQuery to_check_pkgs(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
         bool specs_resolved = true;
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(to_check_query);
+            libdnf5::rpm::PackageQuery package_query(to_check_query);
             auto nevra_pair = package_query.resolve_pkg_spec(spec, settings, true);
             if (!nevra_pair.first) {
                 specs_resolved = false;
-                std::cerr << libdnf::utils::sformat(_("No match for argument \"{}\"."), spec) << std::endl;
+                std::cerr << libdnf5::utils::sformat(_("No match for argument \"{}\"."), spec) << std::endl;
                 continue;
             }
             to_check_pkgs |= package_query;
         }
         if (!specs_resolved) {
-            throw libdnf::cli::CommandExitError(1, M_("Failed to resolve package specifications."));
+            throw libdnf5::cli::CommandExitError(1, M_("Failed to resolve package specifications."));
         }
         to_check_query = to_check_pkgs;
     }
@@ -161,7 +162,7 @@ void RepoclosureCommand::run() {
 
     // cache query results: reldepid -> whether the reldep is satisfied
     std::unordered_map<int, bool> resolved;
-    std::vector<std::pair<libdnf::rpm::Package, std::vector<std::string>>> unresolved_packages;
+    std::vector<std::pair<libdnf5::rpm::Package, std::vector<std::string>>> unresolved_packages;
     for (const auto & pkg : to_check_query) {
         std::vector<std::string> unsatisfied;
         for (const auto & reldep : pkg.get_requires()) {
@@ -169,7 +170,7 @@ void RepoclosureCommand::run() {
             auto resolved_it = resolved.find(reldep_id);
             bool satisfied;
             if (resolved_it == resolved.end()) {
-                libdnf::rpm::PackageQuery reldep_q(available_query);
+                libdnf5::rpm::PackageQuery reldep_q(available_query);
                 reldep_q.filter_provides(reldep);
                 satisfied = !reldep_q.empty();
                 resolved.emplace(reldep_id, satisfied);
@@ -191,9 +192,9 @@ void RepoclosureCommand::run() {
         std::sort(
             unresolved_packages.begin(),
             unresolved_packages.end(),
-            [](const std::pair<libdnf::rpm::Package, std::vector<std::string>> & l,
-               const std::pair<libdnf::rpm::Package, std::vector<std::string>> & r) {
-                return libdnf::rpm::cmp_nevra<libdnf::rpm::Package>(l.first, r.first);
+            [](const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & l,
+               const std::pair<libdnf5::rpm::Package, std::vector<std::string>> & r) {
+                return libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>(l.first, r.first);
             });
         int unresolved_deps_count = 0;
 
@@ -206,7 +207,7 @@ void RepoclosureCommand::run() {
             }
         }
 
-        throw libdnf::cli::CommandExitError(
+        throw libdnf5::cli::CommandExitError(
             1,
             M_("Error: Repoclosure ended with unresolved dependencies ({}) across {} packages."),
             unresolved_deps_count,

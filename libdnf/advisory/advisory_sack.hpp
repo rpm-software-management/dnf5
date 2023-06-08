@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 class AdvisorySack;
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
@@ -34,25 +34,25 @@ using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 class AdvisorySack {
 public:
-    explicit AdvisorySack(const libdnf::BaseWeakPtr & base);
+    explicit AdvisorySack(const libdnf5::BaseWeakPtr & base);
 
     AdvisorySackWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    libdnf5::BaseWeakPtr get_base() const;
 
     /// @return All advisories from pool inside of base.
-    libdnf::solv::SolvMap & get_solvables();
+    libdnf5::solv::SolvMap & get_solvables();
 
 private:
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
     WeakPtrGuard<AdvisorySack, false> sack_guard;
 
-    libdnf::solv::SolvMap data_map{0};
+    libdnf5::solv::SolvMap data_map{0};
     int cached_solvables_size{0};
 };
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 #endif

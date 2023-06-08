@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_cache.hpp"
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 
 namespace {
@@ -35,6 +35,6 @@ constexpr const char * CACHE_SOLV_FILES_DIR = "solv";
 }  // namespace
 
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif

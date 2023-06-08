@@ -38,8 +38,8 @@ public:
     void tearDown() override;
 
 protected:
-    std::unique_ptr<libdnf::Base> new_base();
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
+    std::unique_ptr<libdnf5::Base> new_base();
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
 
 

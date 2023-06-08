@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/chrono.h>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 void Logger::log_line(Level level, const std::string & message) noexcept {
     write(std::chrono::system_clock::now(), getpid(), level, message);
@@ -45,4 +45,4 @@ void StringLogger::write(
     }
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

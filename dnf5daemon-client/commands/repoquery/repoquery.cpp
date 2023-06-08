@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void RepoqueryCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -48,14 +48,14 @@ void RepoqueryCommand::set_argument_parser() {
     auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    available_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+    available_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(true))));
 
-    installed_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    installed_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
-    info_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    info_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
@@ -79,7 +79,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_options);
     keys->set_description("List of keys to match");
 
@@ -95,7 +95,7 @@ dnfdaemon::KeyValueMap RepoqueryCommand::session_config() {
     dnfdaemon::KeyValueMap cfg = {};
     cfg["load_system_repo"] = installed_option->get_value();
     cfg["load_available_repos"] =
-        (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
+        (available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !installed_option->get_value());
     return cfg;
 }
 
@@ -109,7 +109,7 @@ void RepoqueryCommand::run() {
     if (patterns_options->size() > 0) {
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             patterns.emplace_back(option->get_value());
         }
     }
@@ -148,7 +148,7 @@ void RepoqueryCommand::run() {
         DbusPackageWrapper package(raw_package);
         if (info_option->get_value()) {
             // TODO(mblaha) use smartcols for this output
-            libdnf::cli::output::print_package_info_table(package);
+            libdnf5::cli::output::print_package_info_table(package);
             if (num_packages) {
                 std::cout << std::endl;
             }

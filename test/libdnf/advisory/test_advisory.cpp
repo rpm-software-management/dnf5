@@ -40,37 +40,37 @@ void AdvisoryAdvisoryTest::setUp() {
 
 void AdvisoryAdvisoryTest::test_get_name() {
     // Tests get_name method
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_type("security");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_name(), std::string("DNF-2019-1"));
 }
 
 void AdvisoryAdvisoryTest::test_get_type() {
     // Tests get_type method
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_type("security");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_type(), std::string("security"));
 }
 
 void AdvisoryAdvisoryTest::test_get_severity() {
     // Tests get_severity method
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_type("security");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_severity(), std::string("moderate"));
 }
 
 void AdvisoryAdvisoryTest::test_get_references() {
     // Tests get_references method
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_type("security");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
-    std::vector<libdnf::advisory::AdvisoryReference> refs = advisory.get_references();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
+    std::vector<libdnf5::advisory::AdvisoryReference> refs = advisory.get_references();
     CPPUNIT_ASSERT_EQUAL((size_t)1, refs.size());
 
-    libdnf::advisory::AdvisoryReference r = refs[0];
+    libdnf5::advisory::AdvisoryReference r = refs[0];
     CPPUNIT_ASSERT_EQUAL(std::string("1111"), r.get_id());
     CPPUNIT_ASSERT_EQUAL(std::string("cve"), r.get_type());
     CPPUNIT_ASSERT_EQUAL(std::string("CVE-2999"), r.get_title());
@@ -79,30 +79,30 @@ void AdvisoryAdvisoryTest::test_get_references() {
 
 void AdvisoryAdvisoryTest::test_get_collections() {
     // Tests get_collections method
-    libdnf::advisory::AdvisoryQuery advisories(base);
+    libdnf5::advisory::AdvisoryQuery advisories(base);
     advisories.filter_type("security");
-    libdnf::advisory::Advisory advisory = *advisories.begin();
-    std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory.get_collections();
+    libdnf5::advisory::Advisory advisory = *advisories.begin();
+    std::vector<libdnf5::advisory::AdvisoryCollection> colls = advisory.get_collections();
     CPPUNIT_ASSERT_EQUAL((size_t)1, colls.size());
 
-    libdnf::advisory::AdvisoryCollection c = colls[0];
-    std::vector<libdnf::advisory::AdvisoryPackage> pkgs = c.get_packages();
+    libdnf5::advisory::AdvisoryCollection c = colls[0];
+    std::vector<libdnf5::advisory::AdvisoryPackage> pkgs = c.get_packages();
     CPPUNIT_ASSERT_EQUAL((size_t)2, pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("filesystem"), pkgs[1].get_name());
 
-    std::vector<libdnf::advisory::AdvisoryModule> mods = c.get_modules();
+    std::vector<libdnf5::advisory::AdvisoryModule> mods = c.get_modules();
     CPPUNIT_ASSERT_EQUAL((size_t)2, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
 
-    libdnf::advisory::AdvisoryQuery adv_query(base);
+    libdnf5::advisory::AdvisoryQuery adv_query(base);
     adv_query.filter_name("DNF-2020-1");
     CPPUNIT_ASSERT_EQUAL((size_t)1, adv_query.size());
     colls = (*adv_query.begin()).get_collections();
     CPPUNIT_ASSERT_EQUAL((size_t)2, colls.size());
 
-    libdnf::advisory::AdvisoryCollection c1 = colls[0];
+    libdnf5::advisory::AdvisoryCollection c1 = colls[0];
     pkgs.clear();
     pkgs = c1.get_packages();
     CPPUNIT_ASSERT_EQUAL((size_t)2, pkgs.size());
@@ -114,7 +114,7 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL((size_t)1, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
 
-    libdnf::advisory::AdvisoryCollection c2 = colls[1];
+    libdnf5::advisory::AdvisoryCollection c2 = colls[1];
     pkgs.clear();
     pkgs = c2.get_packages();
     CPPUNIT_ASSERT_EQUAL((size_t)1, pkgs.size());

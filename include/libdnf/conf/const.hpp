@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 constexpr const char * PERSISTDIR = "/var/lib/dnf";
 constexpr const char * SYSTEM_STATE_DIR = "/usr/lib/sysimage/libdnf5";
@@ -61,6 +61,6 @@ constexpr const char * METADATA_TYPE_UPDATEINFO = "updateinfo";
 const std::set<std::string> OPTIONAL_METADATA_TYPES{
     METADATA_TYPE_COMPS, METADATA_TYPE_FILELISTS, METADATA_TYPE_OTHER, METADATA_TYPE_PRESTO, METADATA_TYPE_UPDATEINFO};
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

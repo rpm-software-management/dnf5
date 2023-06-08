@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// Holds global configuration
 class ConfigMain : public Config {
@@ -290,10 +290,10 @@ public:
     const OptionBool & get_skip_if_unavailable_option() const;
 
     void load_from_parser(
-        const libdnf::ConfigParser & parser,
+        const libdnf5::ConfigParser & parser,
         const std::string & section,
-        const libdnf::Vars & vars,
-        libdnf::Logger & logger,
+        const libdnf5::Vars & vars,
+        libdnf5::Logger & logger,
         Option::Priority priority = Option::Priority::MAINCONFIG) override;
 
 private:
@@ -301,6 +301,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

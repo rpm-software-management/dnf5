@@ -39,7 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
-namespace libdnf::repo {
+namespace libdnf5::repo {
 
 /// Handles downloading and loading of repository metadata.
 /// @exception RepoDownloadError (public) All public methods should throw this exception,
@@ -57,7 +57,7 @@ public:
     static constexpr const char * MD_FILENAME_GROUP = "group";
     static constexpr const char * MD_FILENAME_MODULES = "modules";
 
-    RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type);
+    RepoDownloader(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type);
 
     ~RepoDownloader();
 
@@ -69,7 +69,7 @@ public:
 
     LibrepoHandle & get_cached_handle();
 
-    void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
+    void set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && callbacks) noexcept;
     void set_user_data(void * user_data) noexcept;
     void * get_user_data() const noexcept;
 
@@ -99,7 +99,7 @@ private:
 
     std::set<std::string> get_optional_metadata() const;
 
-    libdnf::BaseWeakPtr base;
+    libdnf5::BaseWeakPtr base;
     const ConfigRepo & config;
     Repo::Type repo_type;
     RepoPgp pgp;
@@ -141,6 +141,6 @@ private:
 //    static void download_url(ConfigMain * cfg, const char * url, int fd);
 //};
 
-}  // namespace libdnf::repo
+}  // namespace libdnf5::repo
 
 #endif  // LIBDNF_REPO_REPO_DOWNLOADER_HPP

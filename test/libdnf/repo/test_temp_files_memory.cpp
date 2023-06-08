@@ -29,12 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TempFilesMemoryTest);
 
-using namespace libdnf::repo;
+using namespace libdnf5::repo;
 
 
 void TempFilesMemoryTest::setUp() {
     CppUnit::TestCase::setUp();
-    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_filesmemory");
+    temp_dir = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_test_filesmemory");
     parent_dir_path = temp_dir->get_path();
     full_path = parent_dir_path / TempFilesMemory::MEMORY_FILENAME;
 }
@@ -57,17 +57,17 @@ void TempFilesMemoryTest::test_get_files_when_empty_storage() {
 }
 
 void TempFilesMemoryTest::test_get_files_throws_exception_when_invalid_format() {
-    libdnf::utils::fs::File(full_path, "w").write("");
+    libdnf5::utils::fs::File(full_path, "w").write("");
     TempFilesMemory memory_empty(parent_dir_path);
-    CPPUNIT_ASSERT_THROW(memory_empty.get_files(), libdnf::Error);
+    CPPUNIT_ASSERT_THROW(memory_empty.get_files(), libdnf5::Error);
 
-    libdnf::utils::fs::File(full_path, "w").write("[\"path1\", \"path2\", \"path3\"]");
+    libdnf5::utils::fs::File(full_path, "w").write("[\"path1\", \"path2\", \"path3\"]");
     TempFilesMemory memory_invalid(parent_dir_path);
-    CPPUNIT_ASSERT_THROW(memory_invalid.get_files(), libdnf::Error);
+    CPPUNIT_ASSERT_THROW(memory_invalid.get_files(), libdnf5::Error);
 }
 
 void TempFilesMemoryTest::test_get_files_returns_stored_values() {
-    libdnf::utils::fs::File(full_path, "w")
+    libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format(
             "{} = [\"path/to/package1.rpm\", \"different/path/to/package2.rpm\"]",
             TempFilesMemory::FILE_PATHS_TOML_KEY));
@@ -88,7 +88,7 @@ void TempFilesMemoryTest::test_add_files_when_empty_storage() {
 
 void TempFilesMemoryTest::test_add_files_when_existing_storage() {
     std::vector<std::string> new_paths = {"path3", "path4"};
-    libdnf::utils::fs::File(full_path, "w")
+    libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format("{} = [\"path1\", \"path2\"]", TempFilesMemory::FILE_PATHS_TOML_KEY));
 
     TempFilesMemory memory(parent_dir_path);
@@ -99,7 +99,7 @@ void TempFilesMemoryTest::test_add_files_when_existing_storage() {
 
 void TempFilesMemoryTest::test_add_files_deduplicates_and_sorts_data() {
     std::vector<std::string> new_paths = {"path1", "path2", "path4", "path1"};
-    libdnf::utils::fs::File(full_path, "w")
+    libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format("{} = [\"path4\", \"path1\", \"path4\", \"path3\"]", TempFilesMemory::FILE_PATHS_TOML_KEY));
 
     TempFilesMemory memory(parent_dir_path);
@@ -109,7 +109,7 @@ void TempFilesMemoryTest::test_add_files_deduplicates_and_sorts_data() {
 }
 
 void TempFilesMemoryTest::test_clear_deletes_storage_content() {
-    libdnf::utils::fs::File(full_path, "w")
+    libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format(
             "{} = [\"/path/to/package1.rpm\", \"/different-path/to/package2.rpm\", "
             "\"/another-path/leading/to/pkg3.rpm\"]",

@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-namespace libdnf::plugin {
+namespace libdnf5::plugin {
 
 // Support for Plugin in the shared library.
 class PluginLibrary : public Plugin {
@@ -56,7 +56,7 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("libdnf_plugin_get_api_version"));
     get_name = reinterpret_cast<TGetNameFunc>(library.get_address("libdnf_plugin_get_name"));
 
-    const auto & libdnf_plugin_api_version = libdnf::get_plugin_api_version();
+    const auto & libdnf_plugin_api_version = libdnf5::get_plugin_api_version();
     const auto & plugin_api_version = get_api_version();
     if (plugin_api_version.major != libdnf_plugin_api_version.major ||
         plugin_api_version.minor < libdnf_plugin_api_version.minor) {
@@ -74,7 +74,7 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
-    iplugin_instance = new_instance(libdnf::get_library_version(), base, get_config_parser());
+    iplugin_instance = new_instance(libdnf5::get_library_version(), base, get_config_parser());
 }
 
 PluginLibrary::~PluginLibrary() {
@@ -247,4 +247,4 @@ void Plugins::finish() noexcept {
     }
 }
 
-}  // namespace libdnf::plugin
+}  // namespace libdnf5::plugin

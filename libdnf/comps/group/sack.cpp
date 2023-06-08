@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/query.hpp"
 
 
-namespace libdnf::comps {
+namespace libdnf5::comps {
 
 
 GroupSackWeakPtr GroupSack::get_weak_ptr() {
@@ -38,4 +38,4 @@ GroupSack::GroupSack(Comps & comps) : comps{comps} {}
 GroupSack::~GroupSack() = default;
 
 
-}  // namespace libdnf::comps
+}  // namespace libdnf5::comps

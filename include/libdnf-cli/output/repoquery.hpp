@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 [[maybe_unused]] static void add_line_into_package_info_table(
     struct libscols_table * table, const char * key, const char * value) {
@@ -74,13 +74,13 @@ static void print_package_info_table(Package & package) {
 bool requires_filelists(const std::string & queryformat);
 
 void print_pkg_set_with_format(
-    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat);
+    std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & queryformat);
 
 void print_pkg_attr_uniq_sorted(
-    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & getter_name);
+    std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name);
 
 void print_available_pkg_attrs(std::FILE * target);
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_REPOQUERY_HPP

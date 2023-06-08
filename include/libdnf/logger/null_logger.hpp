@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "logger.hpp"
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 /// NullLogger is an implementation of logging class that discards all incoming logging messages.
 /// It can be used in case when no logs are needed.
@@ -38,6 +38,6 @@ public:
         const std::string & /*message*/) noexcept override {}
 };
 
-}  // namespace libdnf
+}  // namespace libdnf5
 
 #endif

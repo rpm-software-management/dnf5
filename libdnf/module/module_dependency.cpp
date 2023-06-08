@@ -39,7 +39,7 @@ extern "C" {
 #include <string>
 #include <vector>
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 std::string ModuleDependency::to_string() {
@@ -51,4 +51,4 @@ std::string ModuleDependency::to_string() {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module
