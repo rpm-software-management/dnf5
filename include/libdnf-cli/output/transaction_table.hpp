@@ -48,10 +48,13 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
         case libdnf::transaction::TransactionItemAction::UPGRADE:
         case libdnf::transaction::TransactionItemAction::REINSTALL:
         case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+        case libdnf::transaction::TransactionItemAction::ENABLE:
             return "green";
         case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+        case libdnf::transaction::TransactionItemAction::RESET:
             return "magenta";
         case libdnf::transaction::TransactionItemAction::REMOVE:
+        case libdnf::transaction::TransactionItemAction::DISABLE:
             return "red";
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return "halfbright";
@@ -115,6 +118,9 @@ public:
                     text = "Changing reason";
                     break;
                 case libdnf::transaction::TransactionItemAction::REPLACED:
+                case libdnf::transaction::TransactionItemAction::ENABLE:
+                case libdnf::transaction::TransactionItemAction::DISABLE:
+                case libdnf::transaction::TransactionItemAction::RESET:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
             }
@@ -266,6 +272,11 @@ public:
                 break;
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 reason_changes++;
+                break;
+            case libdnf::transaction::TransactionItemAction::ENABLE:
+            case libdnf::transaction::TransactionItemAction::DISABLE:
+            case libdnf::transaction::TransactionItemAction::RESET:
+                // Only package change counts are reported.
                 break;
         }
     }

@@ -203,6 +203,9 @@ public:
             case libdnf::transaction::TransactionItemAction::REPLACED:
                 break;
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+            case libdnf::transaction::TransactionItemAction::ENABLE:
+            case libdnf::transaction::TransactionItemAction::DISABLE:
+            case libdnf::transaction::TransactionItemAction::RESET:
                 throw std::logic_error(fmt::format(
                     "Unexpected action in TransactionPackage: {}",
                     static_cast<std::underlying_type_t<libdnf::base::Transaction::TransactionRunResult>>(

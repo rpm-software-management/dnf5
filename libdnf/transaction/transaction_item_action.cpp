@@ -44,6 +44,12 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
             return "Replaced";
         case TransactionItemAction::REASON_CHANGE:
             return "Reason Change";
+        case TransactionItemAction::ENABLE:
+            return "Enable";
+        case TransactionItemAction::DISABLE:
+            return "Disable";
+        case TransactionItemAction::RESET:
+            return "Reset";
     }
     return "";
 }
@@ -64,6 +70,12 @@ TransactionItemAction transaction_item_action_from_string(const std::string & ac
         return TransactionItemAction::REPLACED;
     } else if (action == "Reason Change") {
         return TransactionItemAction::REASON_CHANGE;
+    } else if (action == "Enable") {
+        return TransactionItemAction::ENABLE;
+    } else if (action == "Disable") {
+        return TransactionItemAction::DISABLE;
+    } else if (action == "Reset") {
+        return TransactionItemAction::RESET;
     }
 
     throw InvalidTransactionItemAction(action);
@@ -89,10 +101,17 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
         case TransactionItemAction::REASON_CHANGE:
             // TODO(dmach): replace "?" with something better
             return "?";
+        case TransactionItemAction::ENABLE:
+        case TransactionItemAction::DISABLE:
+        case TransactionItemAction::RESET:
+            // TODO(pkratoch): Add letters for ENABLE, DISABLE and RESET
+            return "";
     }
     return "";
 }
 
+
+// TODO(pkratoch): Decide inbound/outbound for ENABLE, DISABLE and RESET
 
 bool transaction_item_action_is_inbound(TransactionItemAction action) {
     switch (action) {

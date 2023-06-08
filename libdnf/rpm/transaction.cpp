@@ -159,6 +159,9 @@ void Transaction::fill(const base::Transaction & transaction) {
                 erase(tspkg);
                 break;
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+            case libdnf::transaction::TransactionItemAction::ENABLE:
+            case libdnf::transaction::TransactionItemAction::DISABLE:
+            case libdnf::transaction::TransactionItemAction::RESET:
                 break;
         }
     }
