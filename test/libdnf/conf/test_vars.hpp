@@ -22,8 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_CONF_VARS_HPP
 
 #include "../shared/test_case_fixture.hpp"
-
-#include "libdnf/base/base.hpp"
+#include "libdnf5/base/base.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

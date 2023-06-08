@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_COPR_HELPERS_HPP
 #define DNF5_COMMANDS_COPR_HELPERS_HPP
 
-#include <libdnf/utils/format.hpp>
+#include <libdnf5/utils/format.hpp>
 
 #include <iostream>
 #include <string>

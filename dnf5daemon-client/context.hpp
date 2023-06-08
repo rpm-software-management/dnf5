@@ -23,11 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
-#include <libdnf-cli/argument_parser.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/conf/config.hpp>
-#include <libdnf/repo/repo.hpp>
+#include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/conf/config.hpp>
+#include <libdnf5/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <memory>

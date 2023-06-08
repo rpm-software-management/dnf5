@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_UTILS_USERCONFIRM_HPP
 #define LIBDNF_CLI_UTILS_USERCONFIRM_HPP
 
-#include "libdnf/conf/config_main.hpp"
+#include "libdnf5/conf/config_main.hpp"
 
 #include <iostream>
 #include <string>

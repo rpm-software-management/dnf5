@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP
 #define LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 // TODO(lukash) include from common in a public libdnf-cli header
 #include "utils/string.hpp"

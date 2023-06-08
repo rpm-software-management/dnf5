@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_DB_TRANS_HPP
 
 
+#include "libdnf5/base/base_weak.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
-
-#include "libdnf/base/base_weak.hpp"
 
 #include <memory>
 

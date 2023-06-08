@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_transaction.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/base/goal.hpp"
+#include "libdnf5/base/goal.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseTransactionTest);

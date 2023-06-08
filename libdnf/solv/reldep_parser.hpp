@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SOLV_RELDEP_PARSER_HPP
 #define LIBDNF_SOLV_RELDEP_PARSER_HPP
 
-#include "libdnf/rpm/reldep.hpp"
+#include "libdnf5/rpm/reldep.hpp"
 
 #include <string>
 

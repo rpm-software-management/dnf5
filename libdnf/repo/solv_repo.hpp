@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_SOLV_REPO_HPP
 #define LIBDNF_REPO_SOLV_REPO_HPP
 
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/repo/config_repo.hpp"
 #include "repo_downloader.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "utils/fs/file.hpp"
-
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/repo/config_repo.hpp"
 
 #include <solv/repo.h>
 

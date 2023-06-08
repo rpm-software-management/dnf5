@@ -19,14 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/conf/const.hpp"
+#include "libdnf5/repo/repo_errors.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/conf/const.hpp"
-#include "libdnf/repo/repo_errors.hpp"
 
 #include <librepo/librepo.h>
 #include <solv/chksum.h>

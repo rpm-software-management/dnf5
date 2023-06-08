@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_DOWNLOAD_DOWNLOAD_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option.hpp>
+#include <libdnf5/conf/option.hpp>
 
 #include <memory>
 #include <vector>

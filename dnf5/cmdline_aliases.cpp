@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmdline_aliases.hpp"
 
-#include <libdnf/common/preserve_order_map.hpp>
+#include <libdnf5/common/preserve_order_map.hpp>
 #include <toml.hpp>
 
 #include <iostream>

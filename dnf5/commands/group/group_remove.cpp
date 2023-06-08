@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_remove.hpp"
 
-#include <libdnf/comps/comps.hpp>
-#include <libdnf/comps/group/group.hpp>
-#include <libdnf/comps/group/query.hpp>
-#include <libdnf/conf/const.hpp>
+#include <libdnf5/comps/comps.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/comps/group/query.hpp>
+#include <libdnf5/conf/const.hpp>
 
 #include <iostream>
 

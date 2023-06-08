@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_REPOLIST_HPP
 #define LIBDNF_CLI_OUTPUT_REPOLIST_HPP
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 

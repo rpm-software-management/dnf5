@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../advisory/advisory_sack.hpp"
+#include "libdnf5/base/base.hpp"
 #include "plugin/plugins.hpp"
 #include "system/state.hpp"
-
-#include "libdnf/base/base.hpp"
 
 
 namespace libdnf5 {

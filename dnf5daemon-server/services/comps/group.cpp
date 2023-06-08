@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 
-#include <libdnf/comps/group/group.hpp>
-#include <libdnf/comps/group/query.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/comps/group/query.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>

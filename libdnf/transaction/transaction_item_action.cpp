@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/transaction/transaction_item_action.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 

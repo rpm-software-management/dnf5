@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_group_package.hpp"
 
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/transaction/transaction.hpp"
 #include "pkg_name.hpp"
-
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>
 #include <memory>

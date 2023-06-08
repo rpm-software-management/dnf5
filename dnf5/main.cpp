@@ -44,25 +44,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
+#include "libdnf5-cli/output/transaction_table.hpp"
+#include "libdnf5-cli/utils/userconfirm.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include "libdnf-cli/output/transaction_table.hpp"
-#include "libdnf-cli/utils/userconfirm.hpp"
-
 #include <fcntl.h>
 #include <fmt/format.h>
-#include <libdnf-cli/argument_parser.hpp>
-#include <libdnf-cli/exception.hpp>
-#include <libdnf-cli/exit-codes.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/common/xdg.hpp>
-#include <libdnf/logger/factory.hpp>
-#include <libdnf/logger/global_logger.hpp>
-#include <libdnf/logger/memory_buffer_logger.hpp>
-#include <libdnf/version.hpp>
+#include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/exception.hpp>
+#include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/common/xdg.hpp>
+#include <libdnf5/logger/factory.hpp>
+#include <libdnf5/logger/global_logger.hpp>
+#include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/version.hpp>
 #include <string.h>
 
 #include <algorithm>

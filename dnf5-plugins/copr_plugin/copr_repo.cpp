@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "json.hpp"
 
 #include <fnmatch.h>
-#include <libdnf-cli/utils/userconfirm.hpp>
-#include <libdnf/conf/const.hpp>
+#include <libdnf5-cli/utils/userconfirm.hpp>
+#include <libdnf5/conf/const.hpp>
 
 #include <filesystem>
 #include <fstream>

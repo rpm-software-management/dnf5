@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_TRANSACTIONLIST_HPP
 #define LIBDNF_CLI_OUTPUT_TRANSACTIONLIST_HPP
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
-#include <libdnf/common/set.hpp>
-#include <libdnf/transaction/transaction.hpp>
+#include <libdnf5/common/set.hpp>
+#include <libdnf5/transaction/transaction.hpp>
 
 
 namespace libdnf5::cli::output {

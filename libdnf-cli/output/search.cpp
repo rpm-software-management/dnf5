@@ -18,11 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/output/search.hpp"
+#include "libdnf5-cli/output/search.hpp"
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
-#include <libdnf/utils/patterns.hpp>
+#include <libdnf5/utils/patterns.hpp>
 
 #include <algorithm>
 #include <iostream>

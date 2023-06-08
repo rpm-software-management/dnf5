@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module/module_db.hpp"
 
 #include "base/base_impl.hpp"
+#include "libdnf5/module/module_errors.hpp"
+#include "libdnf5/module/module_query.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/module/module_errors.hpp"
-#include "libdnf/module/module_query.hpp"
 
 #include <modulemd-2.0/modulemd.h>
 

@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_impl_ptr.hpp"
 
-#include "libdnf/common/impl_ptr.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <type_traits>
 #include <utility>

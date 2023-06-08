@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
-#include <libdnf/conf/option.hpp>
+#include <libdnf5/conf/option.hpp>
 
 namespace dnfdaemon::client {
 

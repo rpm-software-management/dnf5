@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/repo/download_callbacks.hpp"
+#include "libdnf5/repo/download_callbacks.hpp"
 
 namespace libdnf5::repo {
 

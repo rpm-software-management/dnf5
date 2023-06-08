@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "locker.hpp"
 
+#include "libdnf5/common/exception.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/common/exception.hpp"
 
 #include <fcntl.h>
 #include <string.h>

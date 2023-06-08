@@ -20,11 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_REPO_QUERY_HPP
 #define LIBDNF_REPO_REPO_QUERY_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/sack/query.hpp"
-#include "libdnf/common/sack/query_cmp.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/repo/repo.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/query.hpp"
+#include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/repo/repo.hpp"
 
 #include <string>
 #include <vector>

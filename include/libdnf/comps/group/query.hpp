@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_QUERY_HPP
 #define LIBDNF_COMPS_GROUP_QUERY_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/sack/query.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/comps/group/group.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/query.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/comps/group/group.hpp"
 
 #include <string>
 #include <vector>

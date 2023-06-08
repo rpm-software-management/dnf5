@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
 #define LIBDNF_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
 
-#include "libdnf/advisory/advisory.hpp"
-#include "libdnf/advisory/advisory_module.hpp"
+#include "libdnf5/advisory/advisory.hpp"
+#include "libdnf5/advisory/advisory_module.hpp"
 
 #include <solv/pooltypes.h>
 

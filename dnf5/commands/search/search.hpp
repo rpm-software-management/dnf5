@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf-cli/session.hpp>
+#include <libdnf5-cli/session.hpp>
 
 #include <memory>
 #include <vector>

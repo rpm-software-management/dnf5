@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RPM_SIGNATURE_HPP
 #define LIBDNF_RPM_RPM_SIGNATURE_HPP
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/package.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/package.hpp"
 
 #include <functional>
 #include <string>

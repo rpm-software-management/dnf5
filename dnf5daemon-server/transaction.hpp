@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_SERVICES_RPM_TRANSACTION_HPP
 #define DNF5DAEMON_SERVER_SERVICES_RPM_TRANSACTION_HPP
 
-#include <libdnf/base/transaction_package.hpp>
+#include <libdnf5/base/transaction_package.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>

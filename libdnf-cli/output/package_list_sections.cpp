@@ -17,12 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf-cli/output/package_list_sections.hpp"
+#include "libdnf5-cli/output/package_list_sections.hpp"
 
-#include "libdnf-cli/tty.hpp"
-
-#include "libdnf/rpm/nevra.hpp"
-#include "libdnf/rpm/package_set.hpp"
+#include "libdnf5-cli/tty.hpp"
+#include "libdnf5/rpm/nevra.hpp"
+#include "libdnf5/rpm/package_set.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 

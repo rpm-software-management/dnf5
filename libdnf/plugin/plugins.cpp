@@ -19,10 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/library.hpp"
-
-#include "libdnf/base/base.hpp"
 
 #include <filesystem>
 

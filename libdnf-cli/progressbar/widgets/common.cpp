@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "common.hpp"
 
-#include "libdnf-cli/utils/units.hpp"
+#include "libdnf5-cli/utils/units.hpp"
 
 #include <fmt/format.h>
 

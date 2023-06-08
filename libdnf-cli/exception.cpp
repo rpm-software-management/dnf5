@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/exception.hpp"
+#include "libdnf5-cli/exception.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"

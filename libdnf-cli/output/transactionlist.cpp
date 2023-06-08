@@ -18,11 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/output/transactionlist.hpp"
+#include "libdnf5-cli/output/transactionlist.hpp"
 
 #include "fmt/chrono.h"
-
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 

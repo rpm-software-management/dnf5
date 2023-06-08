@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "wrappers/dbus_group_wrapper.hpp"
 
-#include <libdnf-cli/output/groupinfo.hpp>
-#include <libdnf-cli/output/grouplist.hpp>
-#include <libdnf/conf/option.hpp>
-#include <libdnf/conf/option_string.hpp>
+#include <libdnf5-cli/output/groupinfo.hpp>
+#include <libdnf5-cli/output/grouplist.hpp>
+#include <libdnf5/conf/option.hpp>
+#include <libdnf5/conf/option_string.hpp>
 
 #include <iostream>
 

@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_GROUP_HPP
 #define LIBDNF_COMPS_GROUP_GROUP_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <set>
 #include <string>

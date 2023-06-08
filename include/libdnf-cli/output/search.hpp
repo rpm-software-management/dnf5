@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_SEARCH_HPP
 #define LIBDNF_CLI_OUTPUT_SEARCH_HPP
 
-#include <libdnf/rpm/nevra.hpp>
-#include <libdnf/rpm/package.hpp>
+#include <libdnf5/rpm/nevra.hpp>
+#include <libdnf5/rpm/package.hpp>
 
 #include <set>
 #include <utility>

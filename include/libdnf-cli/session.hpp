@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "argument_parser.hpp"
 
-#include <libdnf/conf/option_bool.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include <libdnf/conf/option_string_list.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/conf/option_string.hpp>
+#include <libdnf5/conf/option_string_list.hpp>
 
 
 namespace libdnf5::cli::session {

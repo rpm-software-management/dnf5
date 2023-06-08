@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RPM_LOG_GUARD_HPP
 #define LIBDNF_RPM_RPM_LOG_GUARD_HPP
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/logger/logger.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/logger/logger.hpp"
 
 #include <mutex>
 

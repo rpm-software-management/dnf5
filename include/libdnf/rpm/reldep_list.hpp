@@ -21,10 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_LIST_HPP
 #define LIBDNF_RPM_RELDEP_LIST_HPP
 
+#include "libdnf5/base/base_weak.hpp"
 #include "reldep.hpp"
 #include "reldep_list_iterator.hpp"
-
-#include "libdnf/base/base_weak.hpp"
 
 #include <memory>
 

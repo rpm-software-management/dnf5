@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_CHANGELOG_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
-#include <libdnf/conf/option_number.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/conf/option_number.hpp>
 
 #include <memory>
 #include <vector>

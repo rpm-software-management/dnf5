@@ -20,24 +20,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/context.hpp"
 
 #include "download_callbacks.hpp"
+#include "libdnf5-cli/utils/userconfirm.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/url.hpp"
 
-#include "libdnf-cli/utils/userconfirm.hpp"
-
 #include <fmt/format.h>
-#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
-#include <libdnf-cli/tty.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/base/goal.hpp>
-#include <libdnf/conf/const.hpp>
-#include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/rpm_signature.hpp>
-#include <libdnf/utils/patterns.hpp>
+#include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
+#include <libdnf5-cli/tty.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/conf/const.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/rpm/rpm_signature.hpp>
+#include <libdnf5/utils/patterns.hpp>
 
 #include <algorithm>
 #include <cctype>

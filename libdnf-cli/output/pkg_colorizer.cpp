@@ -17,11 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf-cli/output/pkg_colorizer.hpp"
+#include "libdnf5-cli/output/pkg_colorizer.hpp"
 
 #include "utils/string.hpp"
 
-#include <libdnf/rpm/nevra.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 
 #include <cctype>
 #include <string>

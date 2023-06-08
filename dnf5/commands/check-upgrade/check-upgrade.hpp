@@ -25,9 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 #include <dnf5/shared_options.hpp>
-#include <libdnf-cli/output/package_list_sections.hpp>
-#include <libdnf/conf/option_bool.hpp>
-#include <libdnf/rpm/package_set.hpp>
+#include <libdnf5-cli/output/package_list_sections.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <memory>
 #include <vector>

@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_SACK_HPP
 #define LIBDNF_COMPS_GROUP_SACK_HPP
 
-#include "libdnf/common/sack/sack.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
+#include "libdnf5/common/sack/sack.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <map>
 #include <string>

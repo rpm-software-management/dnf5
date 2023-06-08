@@ -17,15 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/advisory/advisory.hpp"
+#include "libdnf5/advisory/advisory.hpp"
 
+#include "libdnf5/advisory/advisory_collection.hpp"
+#include "libdnf5/advisory/advisory_reference.hpp"
+#include "libdnf5/common/exception.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
-
-#include "libdnf/advisory/advisory_collection.hpp"
-#include "libdnf/advisory/advisory_reference.hpp"
-#include "libdnf/common/exception.hpp"
 
 #include <fmt/format.h>
 

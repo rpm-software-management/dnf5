@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_WEAK_HPP
 #define LIBDNF_BASE_BASE_WEAK_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
 
 
 namespace libdnf5 {

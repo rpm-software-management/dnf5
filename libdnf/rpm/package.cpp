@@ -18,18 +18,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/rpm/package.hpp"
+#include "libdnf5/rpm/package.hpp"
 
 #include "base/base_impl.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
-
-#include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/package_query.hpp"
 
 #include <fcntl.h>
 #include <librepo/checksum.h>

@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/comps/group/package.hpp"
+#include "libdnf5/comps/group/package.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 

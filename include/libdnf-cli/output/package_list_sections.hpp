@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_HPP
 #define LIBDNF_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_HPP
 
+#include "libdnf5/rpm/package_set.hpp"
 #include "pkg_colorizer.hpp"
-
-#include "libdnf/rpm/package_set.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 

@@ -21,12 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_TRANSACTION_ENVIRONMENT_HPP
 #define LIBDNF_BASE_TRANSACTION_ENVIRONMENT_HPP
 
-#include "libdnf/base/goal_elements.hpp"
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/comps/environment/environment.hpp"
-#include "libdnf/transaction/transaction_item_action.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
-#include "libdnf/transaction/transaction_item_state.hpp"
+#include "libdnf5/base/goal_elements.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/comps/environment/environment.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
+#include "libdnf5/transaction/transaction_item_state.hpp"
 
 
 namespace libdnf5::base {

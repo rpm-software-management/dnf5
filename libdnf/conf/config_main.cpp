@@ -17,16 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/conf/config_main.hpp"
+#include "libdnf5/conf/config_main.hpp"
 
 #include "config.h"
 #include "config_utils.hpp"
+#include "libdnf5/common/xdg.hpp"
+#include "libdnf5/conf/config_parser.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
-
-#include "libdnf/common/xdg.hpp"
-#include "libdnf/conf/config_parser.hpp"
-#include "libdnf/conf/const.hpp"
 
 #include <glob.h>
 

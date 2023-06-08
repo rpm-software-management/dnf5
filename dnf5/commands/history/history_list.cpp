@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_id.hpp"
 
-#include <libdnf-cli/output/transactionlist.hpp>
+#include <libdnf5-cli/output/transactionlist.hpp>
 
 #include <iostream>
 

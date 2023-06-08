@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include <libdnf-cli/session.hpp>
+#include <libdnf5-cli/session.hpp>
 
 
 namespace libdnf5::cli::session {

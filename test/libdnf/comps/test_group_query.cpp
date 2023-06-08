@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_group_query.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/comps/group/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupQueryTest);

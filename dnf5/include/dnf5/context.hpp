@@ -22,12 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "version.hpp"
 
-#include <libdnf-cli/argument_parser.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/base/goal.hpp>
-#include <libdnf/base/transaction.hpp>
-#include <libdnf/rpm/package.hpp>
+#include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/transaction.hpp>
+#include <libdnf5/rpm/package.hpp>
 
 #include <filesystem>
 #include <memory>

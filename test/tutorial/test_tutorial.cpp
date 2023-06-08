@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_tutorial.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/base/goal.hpp"
-#include "libdnf/repo/package_downloader.hpp"
-#include "libdnf/rpm/package_query.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/base/goal.hpp"
+#include "libdnf5/repo/package_downloader.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TutorialTest);

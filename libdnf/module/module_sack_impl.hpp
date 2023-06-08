@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
 #include "base/base_impl.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/rpm/reldep_list.hpp"
 #include "module/module_db.hpp"
 #include "module/module_metadata.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/module/module_sack.hpp"
-#include "libdnf/rpm/reldep_list.hpp"
 
 extern "C" {
 #include <solv/pool.h>

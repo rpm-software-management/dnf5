@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_CALLBACKS_HPP
 #define DNF5DAEMON_SERVER_CALLBACKS_HPP
 
-#include <libdnf/repo/download_callbacks.hpp>
-#include <libdnf/repo/package_downloader.hpp>
-#include <libdnf/repo/repo_callbacks.hpp>
-#include <libdnf/rpm/transaction_callbacks.hpp>
+#include <libdnf5/repo/download_callbacks.hpp>
+#include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/repo/repo_callbacks.hpp>
+#include <libdnf5/rpm/transaction_callbacks.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>

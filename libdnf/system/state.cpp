@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
-#include <libdnf/comps/group/package.hpp>
+#include <libdnf5/comps/group/package.hpp>
 #include <toml.hpp>
 
 

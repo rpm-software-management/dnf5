@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
-#include <libdnf/conf/option_string.hpp>
+#include <libdnf5/conf/option_string.hpp>
 
 #include <iostream>
 #include <memory>

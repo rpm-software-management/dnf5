@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 #include <dnf5/shared_options.hpp>
-#include <libdnf/rpm/package.hpp>
+#include <libdnf5/rpm/package.hpp>
 
 #include <memory>
 #include <vector>

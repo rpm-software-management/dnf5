@@ -18,10 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/repo/repo_query.hpp"
+#include "libdnf5/repo/repo_query.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/repo/repo_sack.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/repo/repo_sack.hpp"
 
 
 namespace libdnf5::repo {

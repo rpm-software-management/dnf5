@@ -20,13 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction.hpp"
 
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
+#include "libdnf5/utils/to_underlying.hpp"
 #include "package_set_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/transaction/transaction_item_action.hpp"
-#include "libdnf/utils/to_underlying.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>

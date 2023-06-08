@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_PRIVATE_HPP
 #define LIBDNF_BASE_BASE_PRIVATE_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #define libdnf_assert_same_base(base_a, base_b) \
     libdnf_assert(                              \

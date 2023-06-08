@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_list.hpp"
 
-#include <libdnf-cli/output/grouplist.hpp>
-#include <libdnf/comps/comps.hpp>
-#include <libdnf/comps/group/group.hpp>
-#include <libdnf/comps/group/query.hpp>
-#include <libdnf/conf/const.hpp>
+#include <libdnf5-cli/output/grouplist.hpp>
+#include <libdnf5/comps/comps.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/comps/group/query.hpp>
+#include <libdnf5/conf/const.hpp>
 
 namespace dnf5 {
 

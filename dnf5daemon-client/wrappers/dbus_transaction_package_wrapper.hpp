@@ -23,8 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus_package_wrapper.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
-#include <libdnf/transaction/transaction_item_action.hpp>
-#include <libdnf/transaction/transaction_item_reason.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 
 #include <vector>
 

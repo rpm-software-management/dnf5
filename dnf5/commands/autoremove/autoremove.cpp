@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "autoremove.hpp"
 
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 namespace dnf5 {
 

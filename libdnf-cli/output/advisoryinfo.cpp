@@ -18,12 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/output/advisoryinfo.hpp"
+#include "libdnf5-cli/output/advisoryinfo.hpp"
 
+#include "libdnf5/advisory/advisory_collection.hpp"
+#include "libdnf5/advisory/advisory_reference.hpp"
 #include "utils/string.hpp"
-
-#include "libdnf/advisory/advisory_collection.hpp"
-#include "libdnf/advisory/advisory_reference.hpp"
 
 namespace libdnf5::cli::output {
 

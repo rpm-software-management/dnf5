@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_REPO_CACHE_HPP
 #define LIBDNF_REPO_REPO_CACHE_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include <filesystem>
 #include <string>

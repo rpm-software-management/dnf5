@@ -28,9 +28,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
-#include <libdnf/repo/package_downloader.hpp>
-#include <libdnf/transaction/transaction_item.hpp>
-#include <libdnf/transaction/transaction_item_action.hpp>
+#include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/transaction/transaction_item.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>

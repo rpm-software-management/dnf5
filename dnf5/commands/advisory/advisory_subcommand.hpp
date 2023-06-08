@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/advisory/advisory_query.hpp>
+#include <libdnf5/advisory/advisory_query.hpp>
 
 #include <memory>
 

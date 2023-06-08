@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_CONFIG_REPO_HPP
 #define LIBDNF_RPM_CONFIG_REPO_HPP
 
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/conf/option_child.hpp"
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/conf/option_child.hpp"
 
 #include <memory>
 

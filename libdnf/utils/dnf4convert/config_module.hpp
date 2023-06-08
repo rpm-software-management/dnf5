@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_DNF4CONVERT_CONFIG_MODULE_HPP
 #define LIBDNF_UTILS_DNF4CONVERT_CONFIG_MODULE_HPP
 
-#include "libdnf/conf/config.hpp"
-#include "libdnf/conf/option_enum.hpp"
-#include "libdnf/conf/option_string.hpp"
-#include "libdnf/conf/option_string_list.hpp"
+#include "libdnf5/conf/config.hpp"
+#include "libdnf5/conf/option_enum.hpp"
+#include "libdnf5/conf/option_string.hpp"
+#include "libdnf5/conf/option_string_list.hpp"
 
 #include <map>
 #include <string>

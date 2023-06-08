@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_HPP
 #define LIBDNF_ADVISORY_ADVISORY_HPP
 
-#include "libdnf/base/base_weak.hpp"
+#include "libdnf5/base/base_weak.hpp"
 
 #include <string>
 #include <vector>

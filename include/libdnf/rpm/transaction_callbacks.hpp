@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
 #define LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
 
-#include "libdnf/rpm/nevra.hpp"
+#include "libdnf5/rpm/nevra.hpp"
 
 #include <cstdint>
 

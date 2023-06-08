@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5DAEMON_CLIENT_WRAPPER_DBUS_PACKAGE_WRAPPER_HPP
 
 #include <dnf5daemon-server/dbus.hpp>
-#include <libdnf/transaction/transaction_item_reason.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 
 #include <vector>
 

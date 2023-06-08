@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_package.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/rpm/nevra.hpp"
+#include "libdnf5/rpm/nevra.hpp"
 
 #include <vector>
 

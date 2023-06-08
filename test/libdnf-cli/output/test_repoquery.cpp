@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_repoquery.hpp"
 
-#include "libdnf-cli/output/repoquery.hpp"
+#include "libdnf5-cli/output/repoquery.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoqueryTest);

@@ -20,13 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_SACK_HPP
 #define LIBDNF_RPM_REPO_SACK_HPP
 
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/sack.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/logger/logger.hpp"
 #include "repo.hpp"
 #include "repo_query.hpp"
-
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/sack/sack.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/logger/logger.hpp"
 
 
 namespace libdnf5::repo {

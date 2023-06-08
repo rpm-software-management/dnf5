@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_PLUGIN_IPLUGIN_HPP
 #define LIBDNF_PLUGIN_IPLUGIN_HPP
 
-#include "libdnf/version.hpp"
+#include "libdnf5/version.hpp"
 
 #include <cstdint>
 

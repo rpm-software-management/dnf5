@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_ARGUMENT_PARSER_HPP
 #define LIBDNF_CLI_ARGUMENT_PARSER_HPP
 
-#include "libdnf-cli/exception.hpp"
-
-#include "libdnf/conf/option.hpp"
+#include "libdnf5-cli/exception.hpp"
+#include "libdnf5/conf/option.hpp"
 
 #include <functional>
 #include <memory>

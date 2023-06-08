@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "copr_config.hpp"
 #include "copr_repo.hpp"
 
-#include <libdnf/base/base.hpp>
+#include <libdnf5/base/base.hpp>
 
 #include <filesystem>
 #include <regex>

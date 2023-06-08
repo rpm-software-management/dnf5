@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "info.hpp"
 
-#include <libdnf-cli/output/package_info_sections.hpp>
+#include <libdnf5-cli/output/package_info_sections.hpp>
 
 namespace dnf5 {
 

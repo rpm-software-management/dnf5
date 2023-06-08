@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "changelog.hpp"
 
-#include <libdnf-cli/output/changelogs.hpp>
-#include <libdnf/conf/const.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include <libdnf/rpm/package.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5-cli/output/changelogs.hpp>
+#include <libdnf5/conf/const.hpp>
+#include <libdnf5/conf/option_string.hpp>
+#include <libdnf5/rpm/package.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <ctime>
 #include <iomanip>

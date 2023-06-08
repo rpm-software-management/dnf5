@@ -18,9 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/base/goal_elements.hpp"
+#include "libdnf5/base/goal_elements.hpp"
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 namespace libdnf5 {
 
