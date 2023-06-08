@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
-#include <libdnf/repo/repo.hpp>
+#include <libdnf5/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 #include <unistd.h>
 

@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_info.hpp"
 
-#include <libdnf-cli/output/advisoryinfo.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5-cli/output/advisoryinfo.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <iostream>
 

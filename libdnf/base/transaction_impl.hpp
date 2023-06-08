@@ -24,13 +24,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module/module_db.hpp"
 #include "rpm/solv/goal_private.hpp"
 
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/base/transaction_environment.hpp"
-#include "libdnf/base/transaction_group.hpp"
-#include "libdnf/base/transaction_module.hpp"
-#include "libdnf/base/transaction_package.hpp"
-#include "libdnf/module/module_sack.hpp"
-#include "libdnf/rpm/rpm_signature.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/base/transaction_environment.hpp"
+#include "libdnf5/base/transaction_group.hpp"
+#include "libdnf5/base/transaction_module.hpp"
+#include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/rpm/rpm_signature.hpp"
 
 #include <solv/transaction.h>
 

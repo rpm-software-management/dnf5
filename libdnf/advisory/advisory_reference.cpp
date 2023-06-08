@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/advisory/advisory_reference.hpp"
+#include "libdnf5/advisory/advisory_reference.hpp"
 
 #include "rpm/package_sack_impl.hpp"
 

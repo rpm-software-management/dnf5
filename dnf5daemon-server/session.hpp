@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "threads_manager.hpp"
 #include "utils.hpp"
 
-#include <libdnf/base/base.hpp>
-#include <libdnf/base/goal.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/base/goal.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>

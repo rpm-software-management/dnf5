@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_DOWNLOAD_CALLBACKS_HPP
 #define DNF5_DOWNLOAD_CALLBACKS_HPP
 
-#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
-#include <libdnf/repo/download_callbacks.hpp>
+#include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
+#include <libdnf5/repo/download_callbacks.hpp>
 
 #include <chrono>
 

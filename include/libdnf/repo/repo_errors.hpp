@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_ERRORS_HPP
 #define LIBDNF_RPM_REPO_ERRORS_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 
 namespace libdnf5::repo {

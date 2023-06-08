@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 
 #include "../shared/base_test_case.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package_sack.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/rpm/package_sack.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

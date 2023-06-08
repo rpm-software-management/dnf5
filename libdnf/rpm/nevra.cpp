@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/rpm/nevra.hpp"
+#include "libdnf5/rpm/nevra.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 

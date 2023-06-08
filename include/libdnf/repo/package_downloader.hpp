@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP
 #define LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP
 
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/rpm/package.hpp"
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/rpm/package.hpp"
 
 #include <memory>
 #include <optional>

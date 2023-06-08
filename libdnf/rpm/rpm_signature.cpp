@@ -17,17 +17,16 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/rpm/rpm_signature.hpp"
+#include "libdnf5/rpm/rpm_signature.hpp"
 
+#include "libdnf5/repo/file_downloader.hpp"
+#include "libdnf5/repo/repo.hpp"
 #include "repo/repo_pgp.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
 #include "utils/url.hpp"
-
-#include "libdnf/repo/file_downloader.hpp"
-#include "libdnf/repo/repo.hpp"
 
 #include <rpm/rpmcli.h>
 #include <rpm/rpmdb.h>

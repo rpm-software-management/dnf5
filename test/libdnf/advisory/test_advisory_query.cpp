@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_advisory_query.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/rpm/package_query.hpp"
-#include "libdnf/rpm/package_set.hpp"
+#include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/package_set.hpp"
 
 #include <filesystem>
 #include <set>

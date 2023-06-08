@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/logger/log_router.hpp"
+#include "libdnf5/logger/log_router.hpp"
 
 namespace libdnf5 {
 

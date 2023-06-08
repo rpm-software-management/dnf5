@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_UTILS_HPP
 #define DNF5_UTILS_HPP
 
-#include <libdnf/base/goal.hpp>
+#include <libdnf5/base/goal.hpp>
 #include <sys/types.h>
 
 #include <string>

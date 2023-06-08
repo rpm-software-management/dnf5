@@ -21,15 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
-#include "libdnf-cli/tty.hpp"
-#include "libdnf-cli/utils/units.hpp"
-
-#include "libdnf/common/exception.hpp"
-#include "libdnf/utils/to_underlying.hpp"
+#include "libdnf5-cli/tty.hpp"
+#include "libdnf5-cli/utils/units.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/to_underlying.hpp"
 
 #include <fmt/format.h>
-#include <libdnf/base/transaction.hpp>
-#include <libdnf/rpm/nevra.hpp>
+#include <libdnf5/base/transaction.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 #include <libsmartcols/libsmartcols.h>
 
 #include <iostream>

@@ -23,9 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../shared/base_test_case.hpp"
-
-#include "libdnf/advisory/advisory_collection.hpp"
-#include "libdnf/advisory/advisory_module.hpp"
+#include "libdnf5/advisory/advisory_collection.hpp"
+#include "libdnf5/advisory/advisory_module.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

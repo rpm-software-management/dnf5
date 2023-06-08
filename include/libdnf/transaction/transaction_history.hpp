@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_HISTORY_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_HISTORY_HPP
 
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
 #include "transaction.hpp"
-
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/weak_ptr.hpp"
 
 
 namespace libdnf5::transaction {

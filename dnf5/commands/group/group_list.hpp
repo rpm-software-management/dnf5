@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/comps/group/query.hpp>
+#include <libdnf5/comps/group/query.hpp>
 
 #include <memory>
 

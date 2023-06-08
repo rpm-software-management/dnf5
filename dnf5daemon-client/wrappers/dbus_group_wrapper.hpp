@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/utils.hpp>
-#include <libdnf/comps/group/package.hpp>
+#include <libdnf5/comps/group/package.hpp>
 
 #include <set>
 #include <vector>

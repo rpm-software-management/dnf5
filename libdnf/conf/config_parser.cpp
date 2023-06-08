@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/conf/config_parser.hpp"
+#include "libdnf5/conf/config_parser.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"

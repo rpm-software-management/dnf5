@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction.hpp"
 
-#include <libdnf/common/exception.hpp>
-#include <libdnf/rpm/transaction_callbacks.hpp>
+#include <libdnf5/common/exception.hpp>
+#include <libdnf5/rpm/transaction_callbacks.hpp>
 
 #include <type_traits>
 

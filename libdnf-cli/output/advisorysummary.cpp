@@ -18,9 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/output/advisorysummary.hpp"
+#include "libdnf5-cli/output/advisorysummary.hpp"
 
-#include "libdnf-cli/output/key_value_table.hpp"
+#include "libdnf5-cli/output/key_value_table.hpp"
 
 #include <iostream>
 

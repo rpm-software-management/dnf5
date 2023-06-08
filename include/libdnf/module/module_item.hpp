@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_ITEM_HPP
 #define LIBDNF_MODULE_MODULE_ITEM_HPP
 
-#include "libdnf/module/module_dependency.hpp"
-#include "libdnf/module/module_profile.hpp"
-#include "libdnf/module/module_sack_weak.hpp"
+#include "libdnf5/module/module_dependency.hpp"
+#include "libdnf5/module/module_profile.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 
 #include <string>
 #include <vector>

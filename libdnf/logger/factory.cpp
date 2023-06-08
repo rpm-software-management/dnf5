@@ -17,9 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/logger/factory.hpp"
+#include "libdnf5/logger/factory.hpp"
 
-#include "libdnf/logger/stream_logger.hpp"
+#include "libdnf5/logger/stream_logger.hpp"
 
 #include <filesystem>
 #include <fstream>

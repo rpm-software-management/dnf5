@@ -20,12 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_QUERY_HPP
 #define LIBDNF_MODULE_MODULE_QUERY_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/sack/query.hpp"
-#include "libdnf/common/sack/query_cmp.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/module/module_item.hpp"
-#include "libdnf/module/nsvcap.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/query.hpp"
+#include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/module/module_item.hpp"
+#include "libdnf5/module/nsvcap.hpp"
 
 #include <string>
 #include <vector>

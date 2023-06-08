@@ -21,11 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_group.hpp"
 
 #include "../shared/utils.hpp"
+#include "libdnf5/comps/comps.hpp"
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/comps/group/query.hpp"
 #include "utils/fs/file.hpp"
-
-#include "libdnf/comps/comps.hpp"
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/comps/group/query.hpp"
 
 #include <filesystem>
 

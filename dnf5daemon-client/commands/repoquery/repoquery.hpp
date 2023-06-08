@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
-#include <libdnf-cli/session.hpp>
-#include <libdnf/conf/option.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/conf/option.hpp>
+#include <libdnf5/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>

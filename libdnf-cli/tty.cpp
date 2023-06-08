@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 #include <sys/ioctl.h>
 #include <termios.h>

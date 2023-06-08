@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf4convert.hpp"
 
 #include "config_module.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/conf/config_parser.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/conf/config_parser.hpp"
 
 #include <filesystem>
 

@@ -1,5 +1,5 @@
 /* includes; won't compile in tests, in the docs we leave out the comment lines to show them
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 */
 
 // Create a package query.

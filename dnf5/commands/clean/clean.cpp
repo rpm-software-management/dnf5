@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include <libdnf-cli/argument_parser.hpp>
-#include <libdnf/repo/repo_cache.hpp>
+#include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5/repo/repo_cache.hpp>
 
 #include <filesystem>
 #include <iostream>

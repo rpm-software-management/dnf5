@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 
-#include <libdnf/comps/environment/environment.hpp>
+#include <libdnf5/comps/environment/environment.hpp>
 
 #include <string>
 #include <vector>

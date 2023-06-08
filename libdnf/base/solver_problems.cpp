@@ -18,12 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "libdnf5/utils/format.hpp"
 #include "solver_problems_internal.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
-
-#include "libdnf/utils/format.hpp"
 
 
 namespace libdnf5::base {

@@ -21,14 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_TRANSACTION_GROUP_HPP
 #define LIBDNF_BASE_TRANSACTION_GROUP_HPP
 
-#include "libdnf/base/goal_elements.hpp"
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/comps/group/group.hpp"
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/rpm/package.hpp"
-#include "libdnf/transaction/transaction_item_action.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
-#include "libdnf/transaction/transaction_item_state.hpp"
+#include "libdnf5/base/goal_elements.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/comps/group/group.hpp"
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/rpm/package.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
+#include "libdnf5/transaction/transaction_item_state.hpp"
 
 #include <optional>
 

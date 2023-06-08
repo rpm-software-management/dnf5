@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_COMPS_HPP
 #define LIBDNF_COMPS_COMPS_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/comps/environment/sack.hpp"
-#include "libdnf/comps/group/sack.hpp"
-#include "libdnf/repo/repo.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/comps/environment/sack.hpp"
+#include "libdnf5/comps/group/sack.hpp"
+#include "libdnf5/repo/repo.hpp"
 
 
 namespace libdnf5 {

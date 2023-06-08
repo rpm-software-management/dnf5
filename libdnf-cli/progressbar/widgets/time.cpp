@@ -18,11 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/progressbar/widgets/time.hpp"
+#include "libdnf5-cli/progressbar/widgets/time.hpp"
 
 #include "common.hpp"
-
-#include "libdnf-cli/progressbar/progress_bar.hpp"
+#include "libdnf5-cli/progressbar/progress_bar.hpp"
 
 #include <cmath>
 #include <iomanip>

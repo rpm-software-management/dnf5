@@ -19,6 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/conf/const.hpp"
+#include "libdnf5/logger/logger.hpp"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
@@ -26,10 +29,6 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
-
-#include "libdnf/common/exception.hpp"
-#include "libdnf/conf/const.hpp"
-#include "libdnf/logger/logger.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>

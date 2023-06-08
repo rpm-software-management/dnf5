@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_EXCEPTION_HPP
 
 #include "exit-codes.hpp"
-
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/common/exception.hpp"
 
 namespace libdnf5::cli {
 

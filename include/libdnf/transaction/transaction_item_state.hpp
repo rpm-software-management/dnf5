@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include <string>
 

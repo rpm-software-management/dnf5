@@ -18,14 +18,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 #include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"
 #include "repo/solv_repo.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
-
-#include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/package_query.hpp"
 
 #include <sys/utsname.h>
 

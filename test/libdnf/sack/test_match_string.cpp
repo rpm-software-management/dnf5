@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_match_string.hpp"
 
-#include "libdnf/common/exception.hpp"
-#include "libdnf/common/sack/match_string.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/sack/match_string.hpp"
 
 
 using namespace libdnf::sack;

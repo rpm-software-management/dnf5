@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_HPP
 #define LIBDNF_RPM_RELDEP_HPP
 
-#include "libdnf/base/base_weak.hpp"
+#include "libdnf5/base/base_weak.hpp"
 
 #include <memory>
 #include <string>

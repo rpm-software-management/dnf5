@@ -19,9 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "fmt/args.h"
+#include "libdnf5-cli/output/repoquery.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf-cli/output/repoquery.hpp"
 
 #include <set>
 #include <variant>

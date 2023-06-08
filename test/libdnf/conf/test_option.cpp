@@ -21,15 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_option.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/conf/option_bool.hpp"
-#include "libdnf/conf/option_child.hpp"
-#include "libdnf/conf/option_enum.hpp"
-#include "libdnf/conf/option_number.hpp"
-#include "libdnf/conf/option_path.hpp"
-#include "libdnf/conf/option_seconds.hpp"
-#include "libdnf/conf/option_string.hpp"
-#include "libdnf/conf/option_string_list.hpp"
+#include "libdnf5/conf/option_bool.hpp"
+#include "libdnf5/conf/option_child.hpp"
+#include "libdnf5/conf/option_enum.hpp"
+#include "libdnf5/conf/option_number.hpp"
+#include "libdnf5/conf/option_path.hpp"
+#include "libdnf5/conf/option_seconds.hpp"
+#include "libdnf5/conf/option_string.hpp"
+#include "libdnf5/conf/option_string_list.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OptionTest);

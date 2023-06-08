@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_LIST_IMPL_HPP
 #define LIBDNF_RPM_RELDEP_LIST_IMPL_HPP
 
+#include "libdnf5/rpm/reldep_list.hpp"
 #include "solv/id_queue.hpp"
-
-#include "libdnf/rpm/reldep_list.hpp"
 
 
 namespace libdnf5::rpm {

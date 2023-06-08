@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "distro-sync.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <libdnf/conf/option_string.hpp>
+#include <libdnf5/conf/option_string.hpp>
 
 namespace dnf5 {
 

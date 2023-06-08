@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/module/module_profile.hpp"
+#include "libdnf5/module/module_profile.hpp"
 
 #include "utils/string.hpp"
 

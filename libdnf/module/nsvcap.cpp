@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MODULE_SPECIAL "+._\\-"
 #define GLOB           "][*?!"
 
-#include "libdnf/module/nsvcap.hpp"
+#include "libdnf5/module/nsvcap.hpp"
 
 #include "utils/regex.hpp"
 

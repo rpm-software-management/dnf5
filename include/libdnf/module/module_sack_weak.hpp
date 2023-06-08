@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_SACK_WEAK_HPP
 #define LIBDNF_MODULE_MODULE_SACK_WEAK_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
 
 
 namespace libdnf5::module {

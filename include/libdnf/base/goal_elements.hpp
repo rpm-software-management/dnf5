@@ -21,11 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_GOAL_ELEMENTS_HPP
 
 
-#include "libdnf/advisory/advisory_query.hpp"
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/rpm/nevra.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
+#include "libdnf5/advisory/advisory_query.hpp"
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/rpm/nevra.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <cstdint>
 #include <optional>

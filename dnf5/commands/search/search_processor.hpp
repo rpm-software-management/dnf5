@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_SEARCH_PROCESSOR_HPP
 #define DNF5_COMMANDS_SEARCH_PROCESSOR_HPP
 
-#include <libdnf-cli/output/search.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
+#include <libdnf5-cli/output/search.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <unordered_map>
 #include <vector>

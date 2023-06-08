@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_FILE_DOWNLOADER_HPP
 #define LIBDNF_REPO_FILE_DOWNLOADER_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/repo/repo_weak.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/repo/repo_weak.hpp"
 
 #include <memory>
 

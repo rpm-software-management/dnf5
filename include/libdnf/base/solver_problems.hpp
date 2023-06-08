@@ -23,8 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "goal_elements.hpp"
-
-#include "libdnf/common/impl_ptr.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 
 namespace libdnf5::base {

@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils.hpp"
 
-#include <libdnf/common/proc.hpp>
+#include <libdnf5/common/proc.hpp>
 #include <unistd.h>
 
 namespace dnf5 {

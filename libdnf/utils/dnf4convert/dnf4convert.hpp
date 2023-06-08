@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_DNF4CONVERT_DNF4CONVERT_HPP
 #define LIBDNF_UTILS_DNF4CONVERT_DNF4CONVERT_HPP
 
+#include "libdnf5/base/base_weak.hpp"
 #include "system/state.hpp"
-
-#include "libdnf/base/base_weak.hpp"
 
 #include <map>
 #include <string>

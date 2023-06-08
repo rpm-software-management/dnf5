@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CONF_CONFIG_MAIN_HPP
 
 #include "config.hpp"
+#include "libdnf5/logger/logger.hpp"
 #include "option_bool.hpp"
 #include "option_enum.hpp"
 #include "option_number.hpp"
@@ -28,8 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option_seconds.hpp"
 #include "option_string.hpp"
 #include "option_string_list.hpp"
-
-#include "libdnf/logger/logger.hpp"
 
 #include <memory>
 

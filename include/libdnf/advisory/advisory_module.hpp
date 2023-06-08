@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_MODULE_HPP
 
 #include "advisory.hpp"
-
-#include "libdnf/common/impl_ptr.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 
 namespace libdnf5::advisory {

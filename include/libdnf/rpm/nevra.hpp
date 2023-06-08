@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_NEVRA_HPP
 #define LIBDNF_RPM_NEVRA_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include <sstream>
 #include <string>

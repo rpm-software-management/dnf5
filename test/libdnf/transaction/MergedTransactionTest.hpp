@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
 #define LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "libdnf5/utils/sqlite3/sqlite3.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

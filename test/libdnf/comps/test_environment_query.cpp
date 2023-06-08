@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_environment_query.hpp"
 
 #include "../shared/utils.hpp"
-
-#include "libdnf/comps/environment/query.hpp"
+#include "libdnf5/comps/environment/query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsEnvironmentQueryTest);

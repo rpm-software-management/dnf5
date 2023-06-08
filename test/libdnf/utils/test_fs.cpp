@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_fs.hpp"
 
+#include "libdnf5/common/exception.hpp"
 #include "utils/fs/utils.hpp"
-
-#include "libdnf/common/exception.hpp"
 
 #include <fcntl.h>
 

@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "wrappers/dbus_repo_wrapper.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
-#include <libdnf-cli/output/repo_info.hpp>
-#include <libdnf-cli/output/repolist.hpp>
-#include <libdnf/conf/option_string.hpp>
+#include <libdnf5-cli/output/repo_info.hpp>
+#include <libdnf5-cli/output/repolist.hpp>
+#include <libdnf5/conf/option_string.hpp>
 
 #include <iostream>
 #include <numeric>

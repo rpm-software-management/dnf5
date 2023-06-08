@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/utils.hpp>
-#include <libdnf/rpm/package_set.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 #include <locale.h>
 #include <sdbus-c++/sdbus-c++.h>
 

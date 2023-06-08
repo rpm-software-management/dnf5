@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"

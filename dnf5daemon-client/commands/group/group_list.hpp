@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
-#include <libdnf/conf/option_enum.hpp>
+#include <libdnf5/conf/option_enum.hpp>
 
 #include <memory>
 #include <vector>

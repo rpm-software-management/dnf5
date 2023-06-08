@@ -21,17 +21,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_UTILS_HPP
 #define TEST_LIBDNF_UTILS_HPP
 
+#include "libdnf5/advisory/advisory_set.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/comps/environment/environment.hpp"
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/group.hpp"
+#include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/package_set.hpp"
 #include "system/state.hpp"
-
-#include "libdnf/advisory/advisory_set.hpp"
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/base/transaction_package.hpp"
-#include "libdnf/comps/environment/environment.hpp"
-#include "libdnf/comps/environment/query.hpp"
-#include "libdnf/comps/group/group.hpp"
-#include "libdnf/comps/group/query.hpp"
-#include "libdnf/rpm/package_query.hpp"
-#include "libdnf/rpm/package_set.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

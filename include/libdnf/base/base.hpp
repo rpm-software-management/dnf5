@@ -20,20 +20,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_HPP
 #define LIBDNF_BASE_BASE_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/common/impl_ptr.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/comps/comps.hpp"
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/conf/vars.hpp"
-#include "libdnf/logger/log_router.hpp"
-#include "libdnf/module/module_sack.hpp"
-#include "libdnf/plugin/iplugin.hpp"
-#include "libdnf/repo/download_callbacks.hpp"
-#include "libdnf/repo/repo_sack.hpp"
-#include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/transaction/transaction_history.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/comps/comps.hpp"
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/conf/vars.hpp"
+#include "libdnf5/logger/log_router.hpp"
+#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/plugin/iplugin.hpp"
+#include "libdnf5/repo/download_callbacks.hpp"
+#include "libdnf5/repo/repo_sack.hpp"
+#include "libdnf5/rpm/package_sack.hpp"
+#include "libdnf5/transaction/transaction_history.hpp"
 
 #include <functional>
 #include <map>

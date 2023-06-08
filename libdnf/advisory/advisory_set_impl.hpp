@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP
 
 
+#include "libdnf5/advisory/advisory_set.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
-
-#include "libdnf/advisory/advisory_set.hpp"
 
 extern "C" {
 #include <solv/pool.h>

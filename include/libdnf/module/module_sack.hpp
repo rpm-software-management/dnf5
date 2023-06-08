@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_SACK_HPP
 #define LIBDNF_MODULE_MODULE_SACK_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/module/module_item.hpp"
-#include "libdnf/module/module_sack_weak.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/module/module_item.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 
 #include <map>
 #include <memory>

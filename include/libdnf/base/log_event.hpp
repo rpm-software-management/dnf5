@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_LOG_EVENT_HPP
 
 
-#include "libdnf/base/goal_elements.hpp"
-#include "libdnf/base/solver_problems.hpp"
-#include "libdnf/transaction/transaction_item_type.hpp"
+#include "libdnf5/base/goal_elements.hpp"
+#include "libdnf5/base/solver_problems.hpp"
+#include "libdnf5/transaction/transaction_item_type.hpp"
 
 #include <optional>
 #include <set>

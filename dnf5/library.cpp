@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-lib.h"
 
 #include <dlfcn.h>
-#include <libdnf/utils/format.hpp>
+#include <libdnf5/utils/format.hpp>
 
 namespace dnf5::utils {
 

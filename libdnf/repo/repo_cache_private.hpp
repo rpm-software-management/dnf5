@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_REPO_CACHE_PRIVATE_HPP
 #define LIBDNF_REPO_REPO_CACHE_PRIVATE_HPP
 
-#include "libdnf/repo/repo_cache.hpp"
+#include "libdnf5/repo/repo_cache.hpp"
 
 
 namespace libdnf5::repo {

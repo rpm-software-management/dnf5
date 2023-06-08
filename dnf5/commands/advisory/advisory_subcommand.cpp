@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
-#include <libdnf-cli/output/advisorysummary.hpp>
-#include <libdnf/conf/const.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5-cli/output/advisorysummary.hpp>
+#include <libdnf5/conf/const.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 namespace dnf5 {
 

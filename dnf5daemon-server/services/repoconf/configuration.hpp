@@ -21,11 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 #define DNF5DAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 
+#include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/conf/config_parser.hpp"
+#include "libdnf5/repo/config_repo.hpp"
 #include "session.hpp"
-
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/conf/config_parser.hpp"
-#include "libdnf/repo/config_repo.hpp"
 
 #include <map>
 #include <memory>

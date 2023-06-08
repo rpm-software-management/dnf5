@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <fmt/format.h>
-#include <libdnf/base/base.hpp>
-#include <libdnf/base/transaction.hpp>
-#include <libdnf/common/exception.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/base/transaction.hpp>
+#include <libdnf5/common/exception.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 #include <sys/wait.h>
 #include <unistd.h>
 

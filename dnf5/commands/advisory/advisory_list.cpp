@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_list.hpp"
 
-#include "libdnf-cli/output/advisorylist.hpp"
+#include "libdnf5-cli/output/advisorylist.hpp"
 
-#include <libdnf/advisory/advisory_package.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/advisory/advisory_package.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 namespace dnf5 {
 

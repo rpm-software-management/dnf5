@@ -38,11 +38,10 @@ struct Swdb;
 //#include "../hy-types.h"
 //#include "../sack/query.hpp"
 #include "comps_group.hpp"
+#include "libdnf5/rpm/package_set.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
-
-#include "libdnf/rpm/package_set.hpp"
 
 namespace libdnf::transaction {
 

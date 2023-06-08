@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "search_processor.hpp"
 
-#include <libdnf/utils/patterns.hpp>
+#include <libdnf5/utils/patterns.hpp>
 
 #include <functional>
 #include <map>

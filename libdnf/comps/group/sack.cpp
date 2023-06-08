@@ -17,11 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/comps/group/sack.hpp"
+#include "libdnf5/comps/group/sack.hpp"
 
-#include "libdnf/comps/comps.hpp"
-#include "libdnf/comps/group/group.hpp"
-#include "libdnf/comps/group/query.hpp"
+#include "libdnf5/comps/comps.hpp"
+#include "libdnf5/comps/group/group.hpp"
+#include "libdnf5/comps/group/query.hpp"
 
 
 namespace libdnf5::comps {

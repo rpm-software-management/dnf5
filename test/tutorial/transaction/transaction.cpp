@@ -1,6 +1,6 @@
 /* includes; won't compile in tests, in the docs we leave out the comment lines to show them
-#include <libdnf/base/goal.hpp>
-#include <libdnf/repo/package_downloader.hpp>
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/repo/package_downloader.hpp>
 */
 
 // Create a goal, which is a class that allows to add items for resolving into

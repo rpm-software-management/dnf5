@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_LIST_LIST_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf-cli/output/package_list_sections.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/rpm/package_set.hpp>
+#include <libdnf5-cli/output/package_list_sections.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <memory>
 #include <vector>

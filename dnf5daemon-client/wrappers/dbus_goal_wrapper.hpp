@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus_transaction_module_wrapper.hpp"
 #include "dbus_transaction_package_wrapper.hpp"
 
-#include <libdnf/transaction/transaction_item_action.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
 
 #include <vector>
 

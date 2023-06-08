@@ -17,14 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/comps/environment/query.hpp"
+#include "libdnf5/comps/environment/query.hpp"
 
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/comps/comps.hpp"
+#include "libdnf5/comps/environment/environment.hpp"
+#include "libdnf5/comps/environment/sack.hpp"
 #include "solv/pool.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/comps/comps.hpp"
-#include "libdnf/comps/environment/environment.hpp"
-#include "libdnf/comps/environment/sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>

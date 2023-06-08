@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_SET_IMPL_HPP
 
 
+#include "libdnf5/rpm/package_set.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
-
-#include "libdnf/rpm/package_set.hpp"
 
 extern "C" {
 #include <solv/pool.h>

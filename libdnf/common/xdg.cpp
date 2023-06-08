@@ -17,11 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/common/xdg.hpp"
+#include "libdnf5/common/xdg.hpp"
 
+#include "libdnf5/common/exception.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/common/exception.hpp"
 
 #include <pwd.h>
 #include <unistd.h>

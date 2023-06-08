@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/progressbar/widgets/widget.hpp"
+#include "libdnf5-cli/progressbar/widgets/widget.hpp"
 
 #include <iostream>
 #include <string>

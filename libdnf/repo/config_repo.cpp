@@ -17,12 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/repo/config_repo.hpp"
+#include "libdnf5/repo/config_repo.hpp"
 
 #include "conf/config_utils.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/conf/const.hpp"
 
 #include <solv/chksum.h>
 #include <solv/util.h>

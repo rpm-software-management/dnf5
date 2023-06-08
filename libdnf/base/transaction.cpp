@@ -33,13 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/comps/group/query.hpp"
-#include "libdnf/repo/package_downloader.hpp"
-#include "libdnf/rpm/package_query.hpp"
-#include "libdnf/utils/format.hpp"
-
 #include <fmt/format.h>
 #include <unistd.h>
 

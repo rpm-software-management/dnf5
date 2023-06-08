@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMMON_SACK_SACK_HPP
 #define LIBDNF_COMMON_SACK_SACK_HPP
 
-#include "libdnf/common/set.hpp"
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf5/common/set.hpp"
+#include "libdnf5/common/weak_ptr.hpp"
 
 #include <memory>
 #include <vector>

@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "helpers.hpp"
 #include "json.hpp"
 
-#include <libdnf/base/base.hpp>
+#include <libdnf5/base/base.hpp>
 
 #include <filesystem>
 

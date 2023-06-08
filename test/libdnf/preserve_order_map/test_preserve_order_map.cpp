@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_preserve_order_map.hpp"
 
-#include "libdnf/common/preserve_order_map.hpp"
+#include "libdnf5/common/preserve_order_map.hpp"
 
 #include <string>
 #include <vector>

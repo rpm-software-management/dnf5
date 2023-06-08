@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/progressbar/progress_bar.hpp"
+#include "libdnf5-cli/progressbar/progress_bar.hpp"
 
 
 namespace libdnf5::cli::progressbar {

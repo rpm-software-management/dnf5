@@ -4,7 +4,7 @@
 
 #include "utils/bgettext/bgettext-lib.h"
 
-#include <libdnf-cli/session.hpp>
+#include <libdnf5-cli/session.hpp>
 
 
 namespace dnf5 {

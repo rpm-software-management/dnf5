@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_HPP
 
 #include "checksum.hpp"
+#include "libdnf5/repo/repo_weak.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 #include "reldep_list.hpp"
-
-#include "libdnf/repo/repo_weak.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <string>
 #include <vector>

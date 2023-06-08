@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_CONFIG_PRIVATE_HPP
 #define LIBDNF_CONF_CONFIG_PRIVATE_HPP
 
-#include "libdnf/conf/option.hpp"
+#include "libdnf5/conf/option.hpp"
 
 namespace libdnf5 {
 

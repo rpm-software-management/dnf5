@@ -17,14 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/rpm/reldep_list.hpp"
+#include "libdnf5/rpm/reldep_list.hpp"
 
 #include "../base/base_private.hpp"
+#include "libdnf5/rpm/reldep.hpp"
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/reldep_parser.hpp"
-
-#include "libdnf/rpm/reldep.hpp"
 
 // libsolv
 extern "C" {

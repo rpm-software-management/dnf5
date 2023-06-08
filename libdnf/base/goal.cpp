@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/base/goal.hpp"
+#include "libdnf5/base/goal.hpp"
 
 #include "advisory/advisory_package_private.hpp"
 #include "base_private.hpp"
@@ -34,13 +34,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
-#include "libdnf/common/exception.hpp"
-#include "libdnf/comps/environment/query.hpp"
-#include "libdnf/comps/group/query.hpp"
-#include "libdnf/module/module_errors.hpp"
-#include "libdnf/rpm/package_query.hpp"
-#include "libdnf/rpm/reldep.hpp"
-#include "libdnf/utils/patterns.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/module/module_errors.hpp"
+#include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/reldep.hpp"
+#include "libdnf5/utils/patterns.hpp"
 
 #include <filesystem>
 #include <iostream>

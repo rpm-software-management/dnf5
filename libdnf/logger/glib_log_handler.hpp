@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
 #define LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
 
-#include <libdnf/logger/logger.hpp>
+#include <libdnf5/logger/logger.hpp>
 
 #include <string>
 

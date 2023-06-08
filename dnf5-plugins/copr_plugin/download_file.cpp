@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download_file.hpp"
 
-#include "libdnf/repo/file_downloader.hpp"
+#include "libdnf5/repo/file_downloader.hpp"
 
 #include <filesystem>
 

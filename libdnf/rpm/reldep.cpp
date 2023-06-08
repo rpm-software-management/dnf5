@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/rpm/reldep.hpp"
+#include "libdnf5/rpm/reldep.hpp"
 
 #include "solv/pool.hpp"
 #include "solv/reldep_parser.hpp"

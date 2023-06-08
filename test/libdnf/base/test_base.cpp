@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_base.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package_query.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseTest);

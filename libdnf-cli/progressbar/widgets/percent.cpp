@@ -18,9 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf-cli/progressbar/widgets/percent.hpp"
+#include "libdnf5-cli/progressbar/widgets/percent.hpp"
 
-#include "libdnf-cli/progressbar/progress_bar.hpp"
+#include "libdnf5-cli/progressbar/progress_bar.hpp"
 
 #include <cmath>
 #include <iomanip>

@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_COMPS_GROUP_HPP
 #define LIBDNF_TRANSACTION_COMPS_GROUP_HPP
 
+#include "libdnf5/comps/group/package.hpp"
 #include "transaction_item.hpp"
-
-#include "libdnf/comps/group/package.hpp"
 
 #include <memory>
 #include <vector>

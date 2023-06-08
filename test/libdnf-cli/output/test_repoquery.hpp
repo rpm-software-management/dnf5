@@ -23,8 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../../shared/base_test_case.hpp"
-
-#include "libdnf/rpm/package_query.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

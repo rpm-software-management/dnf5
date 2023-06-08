@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP
 #define LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP
 
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <string>
 

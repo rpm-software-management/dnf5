@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "copr.hpp"
 #include "copr_repo.hpp"
 
-#include <libdnf/conf/const.hpp>
+#include <libdnf5/conf/const.hpp>
 
 using namespace libdnf5::cli;
 

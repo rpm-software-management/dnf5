@@ -20,12 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SYSTEM_STATE_HPP
 #define LIBDNF_SYSTEM_STATE_HPP
 
-#include "libdnf/common/exception.hpp"
-#include "libdnf/comps/group/package.hpp"
-#include "libdnf/module/module_sack.hpp"
-#include "libdnf/rpm/nevra.hpp"
-#include "libdnf/rpm/package.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/rpm/nevra.hpp"
+#include "libdnf5/rpm/package.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <filesystem>
 #include <map>

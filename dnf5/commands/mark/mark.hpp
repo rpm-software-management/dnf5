@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_MARK_MARK_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf/transaction/transaction_item_reason.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 
 #include <optional>
 #include <string>

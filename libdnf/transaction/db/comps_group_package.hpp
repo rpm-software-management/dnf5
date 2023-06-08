@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
 
 
+#include "libdnf5/transaction/comps_group.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
-
-#include "libdnf/transaction/comps_group.hpp"
 
 
 namespace libdnf5::transaction {

@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMMON_EXCEPTION_HPP
 #define LIBDNF_COMMON_EXCEPTION_HPP
 
+#include "libdnf5/utils/format.hpp"
 #include "utils/bgettext/bgettext-mark-common.h"
-
-#include "libdnf/utils/format.hpp"
 
 #include <fmt/format.h>
 

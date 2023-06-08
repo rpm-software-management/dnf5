@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_CLIENT_COMMANDS_SHARED_OPTIONS_HPP
 #define DNF5DAEMON_CLIENT_COMMANDS_SHARED_OPTIONS_HPP
 
-#include <libdnf-cli/argument_parser.hpp>
+#include <libdnf5-cli/argument_parser.hpp>
 
 libdnf5::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
     libdnf5::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs);

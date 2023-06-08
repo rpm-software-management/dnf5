@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "search_processor.hpp"
 
-#include <libdnf-cli/output/search.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
+#include <libdnf5-cli/output/search.hpp>
+#include <libdnf5/conf/option_string.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 namespace dnf5 {
 

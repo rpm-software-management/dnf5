@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include <libdnf-cli/output/package_list_sections.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5-cli/output/package_list_sections.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <iostream>
 

@@ -1,5 +1,5 @@
 /* includes; won't compile in tests, in the docs we leave out the comment lines to show them
-#include <libdnf/base/base.hpp>
+#include <libdnf5/base/base.hpp>
 */
 
 // Create a new Base object.

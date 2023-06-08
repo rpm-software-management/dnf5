@@ -21,12 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_TRANSACTION_HPP
 #define LIBDNF_BASE_TRANSACTION_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/base/goal_elements.hpp"
-#include "libdnf/base/log_event.hpp"
-#include "libdnf/base/solver_problems.hpp"
-#include "libdnf/common/proc.hpp"
-#include "libdnf/rpm/transaction_callbacks.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/base/goal_elements.hpp"
+#include "libdnf5/base/log_event.hpp"
+#include "libdnf5/base/solver_problems.hpp"
+#include "libdnf5/common/proc.hpp"
+#include "libdnf5/rpm/transaction_callbacks.hpp"
 
 #include <optional>
 

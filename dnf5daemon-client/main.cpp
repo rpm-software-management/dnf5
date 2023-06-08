@@ -31,11 +31,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnf5daemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
-#include <libdnf-cli/exit-codes.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/base/base.hpp>
-#include <libdnf/logger/memory_buffer_logger.hpp>
-#include <libdnf/logger/stream_logger.hpp>
+#include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/logger/stream_logger.hpp>
 #include <locale.h>
 #include <string.h>
 

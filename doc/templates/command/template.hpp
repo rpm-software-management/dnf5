@@ -4,7 +4,7 @@
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf5/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>

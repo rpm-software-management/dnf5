@@ -17,12 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/common/sack/match_string.hpp"
+#include "libdnf5/common/sack/match_string.hpp"
 
 #include "common/sack/query_cmp_private.hpp"
+#include "libdnf5/common/exception.hpp"
 #include "utils/string.hpp"
-
-#include "libdnf/common/exception.hpp"
 
 #include <fnmatch.h>
 

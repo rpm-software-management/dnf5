@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "upgrade.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <libdnf/conf/const.hpp>
+#include <libdnf5/conf/const.hpp>
 
 namespace dnf5 {
 

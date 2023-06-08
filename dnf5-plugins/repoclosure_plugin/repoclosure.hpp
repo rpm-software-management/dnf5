@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 #include <dnf5/shared_options.hpp>
-#include <libdnf-cli/session.hpp>
-#include <libdnf/conf/option_string_list.hpp>
+#include <libdnf5-cli/session.hpp>
+#include <libdnf5/conf/option_string_list.hpp>
 
 #include <vector>
 

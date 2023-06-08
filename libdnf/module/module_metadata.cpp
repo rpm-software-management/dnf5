@@ -19,12 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module/module_metadata.hpp"
 
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/logger/logger.hpp"
+#include "libdnf5/module/module_errors.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/logger/logger.hpp"
-#include "libdnf/module/module_errors.hpp"
-#include "libdnf/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd-module-index.h>
 #include <modulemd-2.0/modulemd.h>

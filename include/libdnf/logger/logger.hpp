@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_LOGGER_HPP
 #define LIBDNF_LOGGER_LOGGER_HPP
 
-#include "libdnf/utils/format.hpp"
+#include "libdnf5/utils/format.hpp"
 
 #include <unistd.h>
 

@@ -21,11 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_goal.hpp"
 
 #include "../shared/utils.hpp"
+#include "libdnf5/base/goal.hpp"
+#include "libdnf5/base/transaction_package.hpp"
 
-#include "libdnf/base/goal.hpp"
-#include "libdnf/base/transaction_package.hpp"
-
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseGoalTest);

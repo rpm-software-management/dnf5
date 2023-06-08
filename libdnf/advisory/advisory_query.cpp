@@ -17,16 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/advisory/advisory_query.hpp"
+#include "libdnf5/advisory/advisory_query.hpp"
 
 #include "advisory_package_private.hpp"
 #include "advisory_set_impl.hpp"
 #include "base/base_impl.hpp"
 #include "common/sack/query_cmp_private.hpp"
+#include "libdnf5/utils/patterns.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
-
-#include "libdnf/utils/patterns.hpp"
 
 #include <solv/evr.h>
 

@@ -21,12 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 #define LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 
-#include "libdnf-cli/tty.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 // TODO(lukash) include from common in a public libdnf-cli header
 #include "utils/string.hpp"
 
-#include <libdnf/comps/group/package.hpp>
+#include <libdnf5/comps/group/package.hpp>
 #include <libsmartcols/libsmartcols.h>
 
 

@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_LIBREPO_PRIVATE_HPP
 #define LIBDNF_REPO_LIBREPO_PRIVATE_HPP
 
-#include "libdnf/common/exception.hpp"
-#include "libdnf/repo/config_repo.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/repo/config_repo.hpp"
 
 #include <librepo/librepo.h>
 

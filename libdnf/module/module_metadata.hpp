@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_METADATA_HPP
 #define LIBDNF_MODULE_MODULE_METADATA_HPP
 
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/module/module_item.hpp"
-#include "libdnf/module/module_sack_weak.hpp"
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/module/module_item.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd-module-index.h>
 #include <modulemd-2.0/modulemd.h>

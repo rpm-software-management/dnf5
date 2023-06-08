@@ -21,13 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_HPP
 #define LIBDNF_RPM_TRANSACTION_HPP
 
+#include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/package.hpp"
+#include "libdnf5/rpm/transaction_callbacks.hpp"
 #include "rpm_log_guard.hpp"
-
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/base/transaction_package.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/package.hpp"
-#include "libdnf/rpm/transaction_callbacks.hpp"
 
 #include <rpm/header.h>
 #include <rpm/rpmprob.h>

@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SWDB_RPMITEM_TEST_HPP
 #define LIBDNF_SWDB_RPMITEM_TEST_HPP
 
-#include "libdnf/transaction/Transformer.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "libdnf5/transaction/Transformer.hpp"
+#include "libdnf5/utils/sqlite3/sqlite3.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

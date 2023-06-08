@@ -18,12 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/transaction/transaction_item.hpp"
+#include "libdnf5/transaction/transaction_item.hpp"
 
 #include "db/repo.hpp"
-
-#include "libdnf/transaction/transaction.hpp"
-#include "libdnf/transaction/transaction_item_action.hpp"
+#include "libdnf5/transaction/transaction.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
 
 
 namespace libdnf5::transaction {

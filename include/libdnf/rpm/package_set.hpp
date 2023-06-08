@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_SET_HPP
 
 
+#include "libdnf5/common/exception.hpp"
 #include "package.hpp"
 #include "package_set_iterator.hpp"
-
-#include "libdnf/common/exception.hpp"
 
 #include <cstddef>
 #include <memory>

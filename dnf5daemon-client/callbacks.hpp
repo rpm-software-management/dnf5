@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_CLIENT_CALLBACKS_HPP
 #define DNF5DAEMON_CLIENT_CALLBACKS_HPP
 
-#include <libdnf-cli/progressbar/download_progress_bar.hpp>
-#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
+#include <libdnf5-cli/progressbar/download_progress_bar.hpp>
+#include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>

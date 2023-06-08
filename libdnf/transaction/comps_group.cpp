@@ -18,13 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/transaction/comps_group.hpp"
+#include "libdnf5/transaction/comps_group.hpp"
 
 #include "db/comps_group.hpp"
 #include "db/comps_group_package.hpp"
-
-#include "libdnf/transaction/transaction.hpp"
-#include "libdnf/transaction/transaction_item.hpp"
+#include "libdnf5/transaction/transaction.hpp"
+#include "libdnf5/transaction/transaction_item.hpp"
 
 #include <algorithm>
 

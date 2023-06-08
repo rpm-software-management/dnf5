@@ -20,15 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory/advisory_package_private.hpp"
 #include "base/base_private.hpp"
 #include "common/sack/query_cmp_private.hpp"
+#include "libdnf5/advisory/advisory_query.hpp"
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/patterns.hpp"
 #include "package_query_impl.hpp"
 #include "package_set_impl.hpp"
 #include "solv/solver.hpp"
 #include "utils/convert.hpp"
-
-#include "libdnf/advisory/advisory_query.hpp"
-#include "libdnf/base/base.hpp"
-#include "libdnf/common/exception.hpp"
-#include "libdnf/utils/patterns.hpp"
 
 extern "C" {
 #include <solv/evr.h>

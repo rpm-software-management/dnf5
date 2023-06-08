@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_query.hpp"
 
-#include "libdnf/common/sack/query.hpp"
+#include "libdnf5/common/sack/query.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(QueryTest);
 

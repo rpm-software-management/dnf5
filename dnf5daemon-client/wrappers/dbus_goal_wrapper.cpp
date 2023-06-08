@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus_goal_wrapper.hpp"
 
-#include <libdnf/transaction/transaction_item_type.hpp>
+#include <libdnf5/transaction/transaction_item_type.hpp>
 
 #include <iostream>
 

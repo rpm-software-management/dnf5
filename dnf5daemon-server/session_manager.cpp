@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus.hpp"
 #include "session.hpp"
 
-#include <libdnf/logger/stream_logger.hpp>
+#include <libdnf5/logger/stream_logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>

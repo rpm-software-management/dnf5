@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_info.hpp"
 
-#include <libdnf-cli/output/groupinfo.hpp>
+#include <libdnf5-cli/output/groupinfo.hpp>
 
 namespace dnf5 {
 

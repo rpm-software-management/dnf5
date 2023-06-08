@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _LIBDNF_UTILS_LIBRARY_HPP
 #define _LIBDNF_UTILS_LIBRARY_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include <string>
 

@@ -23,8 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "os_release.hpp"
 
 #include <glob.h>
-#include <libdnf/base/base.hpp>
-#include <libdnf/conf/config_parser.hpp>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/conf/config_parser.hpp>
 
 namespace dnf5 {
 

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_CLI_UTILS_UTF8_HPP
 
 
-#include "libdnf/rpm/package_set.hpp"
+#include "libdnf5/rpm/package_set.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

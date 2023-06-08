@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../advisory_shared.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf5/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>
