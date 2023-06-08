@@ -16,9 +16,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::UserAssertionError & e) {
+    } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf::Error & e) {
+    } catch (const libdnf5::Error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
@@ -29,24 +29,24 @@ typedef int64_t time_t;
 typedef int32_t pid_t;
 
 %{
-    #include "libdnf/common/weak_ptr.hpp"
-    #include "libdnf/logger/log_router.hpp"
-    #include "libdnf/logger/global_logger.hpp"
-    #include "libdnf/logger/memory_buffer_logger.hpp"
-    #include "libdnf/logger/factory.hpp"
+    #include "libdnf5/common/weak_ptr.hpp"
+    #include "libdnf5/logger/log_router.hpp"
+    #include "libdnf5/logger/global_logger.hpp"
+    #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/logger/factory.hpp"
 %}
 
 #define CV __perl_CV
 
-wrap_unique_ptr(LoggerUniquePtr, libdnf::Logger);
-wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf::MemoryBufferLogger);
+wrap_unique_ptr(LoggerUniquePtr, libdnf5::Logger);
+wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
 
-%template(LogRouterWeakPtr) libdnf::WeakPtr<libdnf::LogRouter, false>;
+%template(LogRouterWeakPtr) libdnf5::WeakPtr<libdnf5::LogRouter, false>;
 
 %feature("director") Logger;
-%include "libdnf/logger/logger.hpp"
+%include "libdnf5/logger/logger.hpp"
 
-%extend libdnf::Logger {
+%extend libdnf5::Logger {
     inline void critical(const std::string & msg) { self->critical(msg); }
     inline void error(const std::string & msg) { self->error(msg); }
     inline void warning(const std::string & msg) { self->warning(msg); }
@@ -57,7 +57,7 @@ wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf::MemoryBufferLogger);
     inline void log(Level level, const std::string & msg) { self->log(level, msg); }
 }
 
-%include "libdnf/logger/log_router.hpp"
-%include "libdnf/logger/global_logger.hpp"
-%include "libdnf/logger/memory_buffer_logger.hpp"
-%include "libdnf/logger/factory.hpp"
+%include "libdnf5/logger/log_router.hpp"
+%include "libdnf5/logger/global_logger.hpp"
+%include "libdnf5/logger/memory_buffer_logger.hpp"
+%include "libdnf5/logger/factory.hpp"

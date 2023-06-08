@@ -11,5 +11,5 @@ foreach(abspath ${LIBDNF5_CLI_HEADERS})
     file(RELATIVE_PATH relpath ${CMAKE_CURRENT_SOURCE_DIR} ${abspath})
     # dirname of the relative path
     get_filename_component(relpath_dir ${relpath} DIRECTORY)
-    install(FILES ${abspath} DESTINATION include/libdnf-cli/${relpath_dir})
+    install(FILES ${abspath} DESTINATION include/libdnf5-cli/${relpath_dir})
 endforeach()

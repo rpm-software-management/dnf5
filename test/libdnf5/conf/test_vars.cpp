@@ -32,7 +32,7 @@ void VarsTest::setUp() {
 
 void VarsTest::test_vars() {
     base->get_config().get_varsdir_option().set(
-        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/vars"});
     // Load all variables.
     base->setup();
 
@@ -43,8 +43,8 @@ void VarsTest::test_vars() {
 
 void VarsTest::test_vars_multiple_dirs() {
     base->get_config().get_varsdir_option().set(std::vector<std::string>{
-        PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars",
-        PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars2",
+        PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/vars",
+        PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/vars2",
     });
     // Load all variables.
     base->setup();
@@ -54,7 +54,7 @@ void VarsTest::test_vars_multiple_dirs() {
 
 void VarsTest::test_vars_env() {
     base->get_config().get_varsdir_option().set(
-        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/vars"});
     // Setting environment variables.
     // Environment variables have higher priority than variables from files.
     setenv("DNF0", "foo0", 1);

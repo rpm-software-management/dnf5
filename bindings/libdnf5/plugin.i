@@ -15,7 +15,7 @@
 %import "conf.i"
 
 %{
-    #include "libdnf/plugin/iplugin.hpp"
+    #include "libdnf5/plugin/iplugin.hpp"
 %}
 
 #define CV __perl_CV
@@ -27,11 +27,11 @@
 %ignore libdnf_plugin_new_instance;
 %ignore libdnf_plugin_delete_instance;
 %feature("director") IPlugin;
-%include "libdnf/plugin/iplugin.hpp"
+%include "libdnf5/plugin/iplugin.hpp"
 
-%extend libdnf::plugin::Version {
+%extend libdnf5::plugin::Version {
     Version(std::uint16_t major, std::uint16_t minor, std::uint16_t micro) {
-        libdnf::plugin::Version * ver = new libdnf::plugin::Version({major, minor, micro});
+        libdnf5::plugin::Version * ver = new libdnf5::plugin::Version({major, minor, micro});
         return ver;
     }
 }

@@ -21,8 +21,8 @@ target_link_libraries(
     ${DNF5DAEMON_CLIENT_BIN}
     PUBLIC
         common
-        libdnf
-        libdnf-cli
+        libdnf5
+        libdnf5-cli
         ${SDBUS_CPP_LIBRARIES}
         pthread
 )

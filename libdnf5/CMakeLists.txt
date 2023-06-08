@@ -19,25 +19,25 @@ add_definitions(-DLIBSOLV_SOLVABLE_PREPEND_DEP)
 
 include_directories(.)
 
-# build libdnf.so
-add_library(libdnf SHARED ${LIBDNF5_SOURCES})
+# build libdnf5.so
+add_library(libdnf5 SHARED ${LIBDNF5_SOURCES})
 set(DNF_SO_VERSION 1)
-set_target_properties(libdnf PROPERTIES OUTPUT_NAME "dnf5")
-set_target_properties(libdnf PROPERTIES SOVERSION ${DNF_SO_VERSION})
+set_target_properties(libdnf5 PROPERTIES OUTPUT_NAME "dnf5")
+set_target_properties(libdnf5 PROPERTIES SOVERSION ${DNF_SO_VERSION})
 # required to have dlopen symbol
-target_link_libraries(libdnf ${CMAKE_DL_LIBS})
+target_link_libraries(libdnf5 ${CMAKE_DL_LIBS})
 
 # required by clang
-target_link_libraries(libdnf stdc++)
+target_link_libraries(libdnf5 stdc++)
 
 # link stdc++fs to make experimental std::filesystem available on gcc 8:
 # https://gcc.gnu.org/onlinedocs/libstdc++/manual/using.html
-target_link_libraries(libdnf stdc++fs)
+target_link_libraries(libdnf5 stdc++fs)
 
-# install libdnf.so
-install(TARGETS libdnf LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+# install libdnf5.so
+install(TARGETS libdnf5 LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
-target_link_libraries(libdnf common)
+target_link_libraries(libdnf5 common)
 
 # link libraries and set pkg-config requires
 
@@ -45,33 +45,33 @@ find_package(toml11 REQUIRED)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
-target_link_libraries(libdnf ${LIBFMT_LIBRARIES})
+target_link_libraries(libdnf5 ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(JSONC REQUIRED json-c)
 include_directories(${JSONC_INCLUDE_DIRS})
-target_link_libraries(libdnf ${JSONC_LIBRARIES})
+target_link_libraries(libdnf5 ${JSONC_LIBRARIES})
 
 pkg_check_modules(LIBMODULEMD REQUIRED modulemd-2.0>=2.11.2)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
-target_link_libraries(libdnf ${LIBMODULEMD_LIBRARIES})
+target_link_libraries(libdnf5 ${LIBMODULEMD_LIBRARIES})
 
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
-target_link_libraries(libdnf ${LIBSOLV_LIBRARIES})
+target_link_libraries(libdnf5 ${LIBSOLV_LIBRARIES})
 
 pkg_check_modules(LIBSOLVEXT REQUIRED libsolvext>=0.7.7)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
-target_link_libraries(libdnf ${LIBSOLVEXT_LIBRARIES})
+target_link_libraries(libdnf5 ${LIBSOLVEXT_LIBRARIES})
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${RPM_MODULE_NAME}")
-target_link_libraries(libdnf ${RPM_LIBRARIES})
+target_link_libraries(libdnf5 ${RPM_LIBRARIES})
 
 if(WITH_COMPS)
     pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
     list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
     include_directories(${LIBXML2_INCLUDE_DIRS})
-    target_link_libraries(libdnf ${LIBXML2_LIBRARIES})
+    target_link_libraries(libdnf5 ${LIBXML2_LIBRARIES})
 endif()
 
 if (WITH_ZCHUNK)
@@ -82,17 +82,17 @@ endif()
 # GLIB librepo and libmodulemd uses glib2 in API :(
 pkg_check_modules (GLIB2 glib-2.0>=2.46.0)
 include_directories(${GLIB2_INCLUDE_DIRS})
-target_link_libraries(libdnf ${GLIB2_LIBRARIES})
+target_link_libraries(libdnf5 ${GLIB2_LIBRARIES})
 
 pkg_check_modules(LIBREPO REQUIRED librepo>=1.15.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
-target_include_directories(libdnf PRIVATE ${LIBREPO_INCLUDE_DIRS})
-target_link_libraries(libdnf ${LIBREPO_LDFLAGS})
+target_include_directories(libdnf5 PRIVATE ${LIBREPO_INCLUDE_DIRS})
+target_link_libraries(libdnf5 ${LIBREPO_LDFLAGS})
 
 # SQLite3
 pkg_check_modules(SQLite3 REQUIRED sqlite3>=3.35.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${SQLite3_MODULE_NAME}")
-target_link_libraries(libdnf ${SQLite3_LIBRARIES})
+target_link_libraries(libdnf5 ${SQLite3_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string
@@ -106,8 +106,8 @@ list(JOIN LIBDNF5_PC_REQUIRES_PRIVATE ", " LIBDNF5_PC_REQUIRES_PRIVATE_STRING)
 configure_file("libdnf5.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
 
-# Makes an empty directory for libdnf cache
-install(DIRECTORY DESTINATION ${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf)
+# Makes an empty directory for libdnf5 cache
+install(DIRECTORY DESTINATION ${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf5)
 
 
 add_subdirectory(po)

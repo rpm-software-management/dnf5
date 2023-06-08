@@ -11,12 +11,12 @@ file(GLOB TEST_COPR_SOURCES *.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/dnf5-plugins/copr_plugin)
-include_directories(${PROJECT_SOURCE_DIR}/libdnf)
+include_directories(${PROJECT_SOURCE_DIR}/libdnf5)
 
 include_directories(${JSONC_INCLUDE_DIRS})
 
 add_executable(run_tests_copr ${TEST_COPR_SOURCES})
-target_link_libraries(run_tests_copr stdc++ libdnf libdnf-cli test_shared)
+target_link_libraries(run_tests_copr stdc++ libdnf5 libdnf5-cli test_shared)
 
 add_compile_definitions(TEST_DATADIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 

@@ -68,7 +68,7 @@ struct CommandToRun {
 
 class Actions : public plugin::IPlugin {
 public:
-    Actions(libdnf::Base & base, libdnf::ConfigParser &) : IPlugin(base) {}
+    Actions(libdnf5::Base & base, libdnf5::ConfigParser &) : IPlugin(base) {}
     virtual ~Actions() = default;
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -94,11 +94,11 @@ public:
 
     void post_base_setup() override { on_base_setup(post_base_setup_actions); }
 
-    void pre_transaction(const libdnf::base::Transaction & transaction) override {
+    void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
     }
 
-    void post_transaction(const libdnf::base::Transaction & transaction) override {
+    void post_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, post_trans_actions);
     }
 
@@ -141,7 +141,7 @@ private:
 
 class ActionsPluginError : public libdnf5::Error {
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::plugin"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::plugin"; }
     const char * get_name() const noexcept override { return "ActionsPluginError"; }
 };
 
@@ -731,7 +731,7 @@ plugin::Version libdnf_plugin_get_version(void) {
 }
 
 plugin::IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] LibraryVersion library_version, libdnf::Base & base, libdnf::ConfigParser & parser) try {
+    [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
     return new Actions(base, parser);
 } catch (...) {
     return nullptr;

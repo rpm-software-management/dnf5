@@ -17,9 +17,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::UserAssertionError & e) {
+    } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf::Error & e) {
+    } catch (const libdnf5::Error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::out_of_range & e) {
         SWIG_exception(SWIG_IndexError, e.what());
@@ -29,14 +29,14 @@
 }
 
 %{
-    #include "libdnf/conf/const.hpp"
-    #include "libdnf/conf/option_child.hpp"
-    #include "libdnf/conf/config_main.hpp"
-    #include "libdnf/conf/config_parser.hpp"
-    #include "libdnf/common/weak_ptr.hpp"
-    #include "libdnf/logger/log_router.hpp"
-    #include "libdnf/logger/memory_buffer_logger.hpp"
-    #include "libdnf/version.hpp"
+    #include "libdnf5/conf/const.hpp"
+    #include "libdnf5/conf/option_child.hpp"
+    #include "libdnf5/conf/config_main.hpp"
+    #include "libdnf5/conf/config_parser.hpp"
+    #include "libdnf5/common/weak_ptr.hpp"
+    #include "libdnf5/logger/log_router.hpp"
+    #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/version.hpp"
 %}
 
 #define CV __perl_CV
@@ -44,72 +44,72 @@
 
 wrap_unique_ptr(StringUniquePtr, std::string);
 
-%include "libdnf/version.hpp"
+%include "libdnf5/version.hpp"
 
-%include "libdnf/conf/const.hpp"
+%include "libdnf5/conf/const.hpp"
 
-%ignore libdnf::OptionError;
-%ignore libdnf::OptionInvalidValueError;
-%ignore libdnf::OptionValueNotAllowedError;
-%ignore libdnf::OptionValueNotSetError;
-%include "libdnf/conf/option.hpp"
-%include "libdnf/conf/option_bool.hpp"
-%include "libdnf/conf/option_enum.hpp"
-%template(OptionEnumString) libdnf::OptionEnum<std::string>;
+%ignore libdnf5::OptionError;
+%ignore libdnf5::OptionInvalidValueError;
+%ignore libdnf5::OptionValueNotAllowedError;
+%ignore libdnf5::OptionValueNotSetError;
+%include "libdnf5/conf/option.hpp"
+%include "libdnf5/conf/option_bool.hpp"
+%include "libdnf5/conf/option_enum.hpp"
+%template(OptionEnumString) libdnf5::OptionEnum<std::string>;
 
-%include "libdnf/conf/option_number.hpp"
-%template(OptionNumberInt32) libdnf::OptionNumber<std::int32_t>;
-%template(OptionNumberUInt32) libdnf::OptionNumber<std::uint32_t>;
-%template(OptionNumberInt64) libdnf::OptionNumber<std::int64_t>;
-%template(OptionNumberUInt64) libdnf::OptionNumber<std::uint64_t>;
-%template(OptionNumberFloat) libdnf::OptionNumber<float>;
+%include "libdnf5/conf/option_number.hpp"
+%template(OptionNumberInt32) libdnf5::OptionNumber<std::int32_t>;
+%template(OptionNumberUInt32) libdnf5::OptionNumber<std::uint32_t>;
+%template(OptionNumberInt64) libdnf5::OptionNumber<std::int64_t>;
+%template(OptionNumberUInt64) libdnf5::OptionNumber<std::uint64_t>;
+%template(OptionNumberFloat) libdnf5::OptionNumber<float>;
 
-%include "libdnf/conf/option_seconds.hpp"
-%include "libdnf/conf/option_string.hpp"
-%include "libdnf/conf/option_string_list.hpp"
-%template(OptionStringSet) libdnf::OptionStringContainer<std::set<std::string>>;
-%template(OptionStringList) libdnf::OptionStringContainer<std::vector<std::string>>;
+%include "libdnf5/conf/option_seconds.hpp"
+%include "libdnf5/conf/option_string.hpp"
+%include "libdnf5/conf/option_string_list.hpp"
+%template(OptionStringSet) libdnf5::OptionStringContainer<std::set<std::string>>;
+%template(OptionStringList) libdnf5::OptionStringContainer<std::vector<std::string>>;
 
-%ignore libdnf::OptionPathNotFoundError;
-%include "libdnf/conf/option_path.hpp"
+%ignore libdnf5::OptionPathNotFoundError;
+%include "libdnf5/conf/option_path.hpp"
 
-%include "libdnf/conf/option_child.hpp"
-%template(OptionChildBool) libdnf::OptionChild<libdnf::OptionBool>;
-%template(OptionChildString) libdnf::OptionChild<libdnf::OptionString>;
-%template(OptionChildStringList) libdnf::OptionChild<libdnf::OptionStringList>;
-%template(OptionChildStringSet) libdnf::OptionChild<libdnf::OptionStringSet>;
-%template(OptionChildNumberInt32) libdnf::OptionChild<libdnf::OptionNumber<std::int32_t>>;
-%template(OptionChildNumberUInt32) libdnf::OptionChild<libdnf::OptionNumber<std::uint32_t>>;
-%template(OptionChildNumberFloat) libdnf::OptionChild<libdnf::OptionNumber<float>>;
-%template(OptionChildEnumString) libdnf::OptionChild<libdnf::OptionEnum<std::string>>;
-%template(OptionChildSeconds) libdnf::OptionChild<libdnf::OptionSeconds>;
+%include "libdnf5/conf/option_child.hpp"
+%template(OptionChildBool) libdnf5::OptionChild<libdnf5::OptionBool>;
+%template(OptionChildString) libdnf5::OptionChild<libdnf5::OptionString>;
+%template(OptionChildStringList) libdnf5::OptionChild<libdnf5::OptionStringList>;
+%template(OptionChildStringSet) libdnf5::OptionChild<libdnf5::OptionStringSet>;
+%template(OptionChildNumberInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::int32_t>>;
+%template(OptionChildNumberUInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::uint32_t>>;
+%template(OptionChildNumberFloat) libdnf5::OptionChild<libdnf5::OptionNumber<float>>;
+%template(OptionChildEnumString) libdnf5::OptionChild<libdnf5::OptionEnum<std::string>>;
+%template(OptionChildSeconds) libdnf5::OptionChild<libdnf5::OptionSeconds>;
 
 
-%rename (OptionBinds_Item) libdnf::OptionBinds::Item;
-%ignore libdnf::OptionBindsError;
-%ignore libdnf::OptionBindsOptionNotFoundError;
-%ignore libdnf::OptionBindsOptionAlreadyExistsError;
-%ignore libdnf::OptionBinds::add(const std::string & id, Option & option,
+%rename (OptionBinds_Item) libdnf5::OptionBinds::Item;
+%ignore libdnf5::OptionBindsError;
+%ignore libdnf5::OptionBindsOptionNotFoundError;
+%ignore libdnf5::OptionBindsOptionAlreadyExistsError;
+%ignore libdnf5::OptionBinds::add(const std::string & id, Option & option,
     Item::NewStringFunc new_string_func, Item::GetValueStringFunc get_value_string_func, bool add_value);
-%ignore libdnf::OptionBinds::begin;
-%ignore libdnf::OptionBinds::cbegin;
-%ignore libdnf::OptionBinds::end;
-%ignore libdnf::OptionBinds::cend;
-%ignore libdnf::OptionBinds::find;
-%include "libdnf/conf/option_binds.hpp"
+%ignore libdnf5::OptionBinds::begin;
+%ignore libdnf5::OptionBinds::cbegin;
+%ignore libdnf5::OptionBinds::end;
+%ignore libdnf5::OptionBinds::cend;
+%ignore libdnf5::OptionBinds::find;
+%include "libdnf5/conf/option_binds.hpp"
 
-%ignore libdnf::ConfigParserError;
-%ignore libdnf::InaccessibleConfigError;
-%ignore libdnf::MissingConfigError;
-%ignore libdnf::InvalidConfigError;
+%ignore libdnf5::ConfigParserError;
+%ignore libdnf5::InaccessibleConfigError;
+%ignore libdnf5::MissingConfigError;
+%ignore libdnf5::InvalidConfigError;
 %ignore ConfigParserSectionNotFoundError;
 %ignore ConfigParserOptionNotFoundError;
-%include "libdnf/conf/config_parser.hpp"
+%include "libdnf5/conf/config_parser.hpp"
 
-%include "libdnf/conf/vars.hpp"
+%include "libdnf5/conf/vars.hpp"
 
-%include "libdnf/conf/config.hpp"
-%include "libdnf/conf/config_main.hpp"
+%include "libdnf5/conf/config.hpp"
+%include "libdnf5/conf/config_main.hpp"
 
 // The following adds shortcuts in Python for getting or setting
 // the configuration options using the configuration class attributes.

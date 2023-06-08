@@ -10,13 +10,13 @@ pkg_check_modules(CPPUNIT REQUIRED cppunit)
 file(GLOB_RECURSE TEST_LIBDNF5_CLI_SOURCES *.cpp)
 
 include_directories(.)
-include_directories(${PROJECT_SOURCE_DIR}/libdnf-cli)
-include_directories(${PROJECT_SOURCE_DIR}/libdnf)
+include_directories(${PROJECT_SOURCE_DIR}/libdnf5-cli)
+include_directories(${PROJECT_SOURCE_DIR}/libdnf5)
 
 
 add_executable(run_tests_cli ${TEST_LIBDNF5_CLI_SOURCES})
-target_link_directories(run_tests_cli PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
-target_link_libraries(run_tests_cli stdc++ libdnf libdnf-cli cppunit test_shared)
+target_link_directories(run_tests_cli PUBLIC ${CMAKE_BINARY_DIR}/libdnf5)
+target_link_libraries(run_tests_cli stdc++ libdnf5 libdnf5-cli cppunit test_shared)
 
 
 add_test(NAME test_libdnf_cli COMMAND run_tests_cli)

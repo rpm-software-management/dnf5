@@ -28,11 +28,11 @@
 }
 
 %{
-    #include "libdnf/common/weak_ptr.hpp"
+    #include "libdnf5/common/weak_ptr.hpp"
 %}
-%include "libdnf/common/weak_ptr.hpp"
+%include "libdnf5/common/weak_ptr.hpp"
 #if defined(SWIGPYTHON)
-%extend libdnf::WeakPtr {
+%extend libdnf5::WeakPtr {
     intptr_t __hash__() const {
         return reinterpret_cast<intptr_t>($self->get());
     }
@@ -136,32 +136,32 @@ del ClassName##__iter__
 
 
 %{
-    #include "libdnf/common/sack/query.hpp"
-    #include "libdnf/common/sack/query_cmp.hpp"
-    #include "libdnf/common/sack/sack.hpp"
-    #include "libdnf/common/sack/match_int64.hpp"
-    #include "libdnf/common/sack/match_string.hpp"
-    #include "libdnf/common/set.hpp"
+    #include "libdnf5/common/sack/query.hpp"
+    #include "libdnf5/common/sack/query_cmp.hpp"
+    #include "libdnf5/common/sack/sack.hpp"
+    #include "libdnf5/common/sack/match_int64.hpp"
+    #include "libdnf5/common/sack/match_string.hpp"
+    #include "libdnf5/common/set.hpp"
 %}
 
-%ignore libdnf::Set::Set;
-%ignore libdnf::sack::operator|(QueryCmp lhs, QueryCmp rhs);
-%ignore libdnf::sack::operator&(QueryCmp lhs, QueryCmp rhs);
-%include "libdnf/common/sack/query_cmp.hpp"
-%include "libdnf/common/sack/query.hpp"
-%include "libdnf/common/sack/sack.hpp"
-%include "libdnf/common/sack/match_int64.hpp"
-%include "libdnf/common/sack/match_string.hpp"
+%ignore libdnf5::Set::Set;
+%ignore libdnf5::sack::operator|(QueryCmp lhs, QueryCmp rhs);
+%ignore libdnf5::sack::operator&(QueryCmp lhs, QueryCmp rhs);
+%include "libdnf5/common/sack/query_cmp.hpp"
+%include "libdnf5/common/sack/query.hpp"
+%include "libdnf5/common/sack/sack.hpp"
+%include "libdnf5/common/sack/match_int64.hpp"
+%include "libdnf5/common/sack/match_string.hpp"
 
-%rename(next) libdnf::SetConstIterator::operator++();
-%rename(prev) libdnf::SetConstIterator::operator--();
-%rename(value) libdnf::SetConstIterator::operator*() const;
-%ignore libdnf::SetConstIterator::operator++(int);
-%ignore libdnf::SetConstIterator::operator--(int);
-%ignore libdnf::SetConstIterator::operator->() const;
-%include "libdnf/common/set.hpp"
+%rename(next) libdnf5::SetConstIterator::operator++();
+%rename(prev) libdnf5::SetConstIterator::operator--();
+%rename(value) libdnf5::SetConstIterator::operator*() const;
+%ignore libdnf5::SetConstIterator::operator++(int);
+%ignore libdnf5::SetConstIterator::operator--(int);
+%ignore libdnf5::SetConstIterator::operator->() const;
+%include "libdnf5/common/set.hpp"
 #if defined(SWIGPYTHON)
-%extend libdnf::Set {
+%extend libdnf5::Set {
     size_type __len__() const noexcept {
         return $self->size();
     }
@@ -169,25 +169,25 @@ del ClassName##__iter__
 #endif
 
 %{
-    #include "libdnf/common/preserve_order_map.hpp"
+    #include "libdnf5/common/preserve_order_map.hpp"
 %}
 
 #if defined(SWIGPYTHON) || defined(SWIGRUBY)
-%extend libdnf::PreserveOrderMap {
-    %fragment(SWIG_Traits_frag(libdnf::PreserveOrderMap<Key, T, KeyEqual>), "header", fragment="SwigPyIterator_T", fragment=SWIG_Traits_frag(T), fragment="LibdnfPreserveOrderMapTraits") {
+%extend libdnf5::PreserveOrderMap {
+    %fragment(SWIG_Traits_frag(libdnf5::PreserveOrderMap<Key, T, KeyEqual>), "header", fragment="SwigPyIterator_T", fragment=SWIG_Traits_frag(T), fragment="LibdnfPreserveOrderMapTraits") {
         namespace swig {
-            template <>  struct traits<libdnf::PreserveOrderMap<Key, T, KeyEqual>> {
+            template <>  struct traits<libdnf5::PreserveOrderMap<Key, T, KeyEqual>> {
                 typedef pointer_category category;
                 static const char* type_name() {
-                    return "libdnf::PreserveOrderMap<" #Key "," #T "," #KeyEqual " >";
+                    return "libdnf5::PreserveOrderMap<" #Key "," #T "," #KeyEqual " >";
                 }
             };
         }
     }
 
     %typemaps_asptr(SWIG_TYPECHECK_VECTOR, swig::asptr,
-                    SWIG_Traits_frag(libdnf::PreserveOrderMap<Key, T, KeyEqual>),
-                    libdnf::PreserveOrderMap<Key, T, KeyEqual>);
+                    SWIG_Traits_frag(libdnf5::PreserveOrderMap<Key, T, KeyEqual>),
+                    libdnf5::PreserveOrderMap<Key, T, KeyEqual>);
 
     inline bool __contains__(const Key & key) const { return $self->count(key) > 0; }
 
@@ -245,15 +245,15 @@ del ClassName##__iter__
 }
 #endif
 #if defined(SWIGRUBY)
-%rename("empty?") libdnf::PreserveOrderMap::empty;
-%rename("include?") libdnf::PreserveOrderMap::__contains__ const;
+%rename("empty?") libdnf5::PreserveOrderMap::empty;
+%rename("include?") libdnf5::PreserveOrderMap::__contains__ const;
 #endif
-%include "libdnf/common/preserve_order_map.hpp"
+%include "libdnf5/common/preserve_order_map.hpp"
 
-%template(PreserveOrderMapStringString) libdnf::PreserveOrderMap<std::string, std::string>;
-%template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf::PreserveOrderMap<std::string, libdnf::PreserveOrderMap<std::string, std::string>>;
+%template(PreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, std::string>;
+%template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, libdnf5::PreserveOrderMap<std::string, std::string>>;
 
 %exception;  // beware this resets all exception handlers if you import this file after defining any
 
 // Base weak ptr is used across the codebase
-%include "libdnf/base/base_weak.hpp"
+%include "libdnf5/base/base_weak.hpp"
