@@ -316,7 +316,6 @@ Summary:        Development files for libdnf
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
-Conflicts:      libdnf-devel < 5
 
 %description -n libdnf5-devel
 Development files for libdnf.
@@ -325,7 +324,7 @@ Development files for libdnf.
 %{_includedir}/libdnf/
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so
-%{_libdir}/pkgconfig/libdnf.pc
+%{_libdir}/pkgconfig/libdnf5.pc
 %license COPYING.md
 %license lgpl-2.1.txt
 
