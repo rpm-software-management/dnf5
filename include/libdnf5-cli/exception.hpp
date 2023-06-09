@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli {
 
-/// Base class for libdnf-cli exceptions.
+/// Base class for libdnf5-cli exceptions.
 class Error : public libdnf5::Error {
 public:
     using libdnf5::Error::Error;
@@ -43,7 +43,7 @@ public:
 };
 
 
-/// Exception is thrown when libdnf fails to resolve the transaction.
+/// Exception is thrown when libdnf5 fails to resolve the transaction.
 class GoalResolveError : public Error {
 public:
     /// Construct Error from a list of string representations of resolve logs.

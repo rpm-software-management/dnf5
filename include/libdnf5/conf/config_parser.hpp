@@ -38,7 +38,7 @@ namespace libdnf5 {
 class InaccessibleConfigError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "InaccessibleConfigError"; }
 };
 
@@ -46,7 +46,7 @@ public:
 class MissingConfigError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "MissingConfigError"; }
 };
 
@@ -54,14 +54,14 @@ public:
 class InvalidConfigError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "InvalidConfigError"; }
 };
 
 class ConfigParserError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "ConfigParserError"; }
 };
 

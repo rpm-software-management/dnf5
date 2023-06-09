@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// TODO(pkratoch): Similar regexes are also defined in libdnf/conf/vars.cpp. Define them only once.
+// TODO(pkratoch): Similar regexes are also defined in libdnf5/conf/vars.cpp. Define them only once.
 #define LETTERS        "a-zA-Z"
 #define DIGITS         "0-9"
 #define MODULE_SPECIAL "+._\\-"
