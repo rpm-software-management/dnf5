@@ -32,7 +32,7 @@ void ConfTest::setUp() {
     TestCaseFixture::setUp();
     base = get_preconfigured_base();
     ConfigParser parser;
-    parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
+    parser.read(PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/main.conf");
     config.load_from_parser(parser, "main", *base->get_vars(), logger);
 }
 
@@ -47,9 +47,9 @@ void ConfTest::test_config_main() {
 void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
-    parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
+    parser.read(PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/main.conf");
     base->get_config().get_varsdir_option().set(
-        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf5/conf/data/vars"});
     base->setup();
     config_repo.load_from_parser(parser, "repo-1", *base->get_vars(), logger);
 

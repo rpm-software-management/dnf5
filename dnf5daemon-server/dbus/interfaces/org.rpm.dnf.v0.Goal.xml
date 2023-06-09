@@ -63,8 +63,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Return all problems found during the transaction resolution as structures. This is the list of problem keys:
         always present:
-        action - see include/libdnf/base/goal_elements.hpp: GoalAction
-        problem - see include/libdnf/base/goal_elements.hpp: GoalProblem
+        action - see include/libdnf5/base/goal_elements.hpp: GoalAction
+        problem - see include/libdnf5/base/goal_elements.hpp: GoalProblem
         optional:
         goal_job_settings - {string: variant}, settings used to resolve the goal
         spec - string, usually nevra of affected package

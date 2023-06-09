@@ -148,7 +148,7 @@ public:
     virtual const char * get_name() const noexcept { return "Error"; }
 
     /// @return The domain name (namespace and enclosing class names) of the exception.
-    virtual const char * get_domain_name() const noexcept { return "libdnf"; }
+    virtual const char * get_domain_name() const noexcept { return "libdnf5"; }
 
 protected:
     mutable std::string message;
@@ -180,7 +180,7 @@ public:
 
     const char * what() const noexcept override;
 
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "SystemError"; }
 
     /// @return The error code (`errno`) of the error.
