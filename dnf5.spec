@@ -321,7 +321,7 @@ Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
 Development files for libdnf.
 
 %files -n libdnf5-devel
-%{_includedir}/libdnf/
+%{_includedir}/libdnf5/
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so
 %{_libdir}/pkgconfig/libdnf5.pc
