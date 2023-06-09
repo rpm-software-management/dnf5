@@ -34,7 +34,7 @@ class InvalidTransactionItemType : public libdnf5::Error {
 public:
     InvalidTransactionItemType(const std::string & type);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
     const char * get_name() const noexcept override { return "InvalidTransactionItemType"; }
 };
 

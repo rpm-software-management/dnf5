@@ -129,7 +129,7 @@ public:
 protected:
     /// Construct the Advisory object
     ///
-    /// @param base   WeakPtr to libdnf::base::Base instance which this object belongs to.
+    /// @param base   WeakPtr to libdnf5::base::Base instance which this object belongs to.
     /// @param id     AdvisoryId into libsolv pool.
     /// @return New Advisory instance.
     Advisory(const BaseWeakPtr & base, AdvisoryId id);

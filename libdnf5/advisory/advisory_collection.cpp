@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::advisory {
 
-AdvisoryCollection::AdvisoryCollection(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
+AdvisoryCollection::AdvisoryCollection(const libdnf5::BaseWeakPtr & base, AdvisoryId advisory, int index)
     : base(base),
       advisory(advisory),
       index(index) {}

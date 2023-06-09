@@ -3,7 +3,7 @@
 */
 
 // Create a package query.
-libdnf::rpm::PackageQuery query(base);
+libdnf5::rpm::PackageQuery query(base);
 
 // Filter the packages, the filters can be stacked one after another.
 query.filter_name({"one"});

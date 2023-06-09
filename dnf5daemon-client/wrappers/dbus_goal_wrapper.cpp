@@ -31,14 +31,14 @@ DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> tra
     std::map<int, size_t> transaction_packages_by_id;
 
     for (const auto & ti : transaction) {
-        auto object_type = libdnf::transaction::transaction_item_type_from_string(std::get<0>(ti));
-        if (object_type == libdnf::transaction::TransactionItemType::PACKAGE) {
+        auto object_type = libdnf5::transaction::transaction_item_type_from_string(std::get<0>(ti));
+        if (object_type == libdnf5::transaction::TransactionItemType::PACKAGE) {
             transaction_packages.push_back(DbusTransactionPackageWrapper(ti));
             transaction_packages_by_id.emplace(
                 transaction_packages.back().get_package().get_id(), transaction_packages.size() - 1);
-        } else if (object_type == libdnf::transaction::TransactionItemType::GROUP) {
+        } else if (object_type == libdnf5::transaction::TransactionItemType::GROUP) {
             transaction_groups.push_back(DbusTransactionGroupWrapper(ti));
-        } else if (object_type == libdnf::transaction::TransactionItemType::ENVIRONMENT) {
+        } else if (object_type == libdnf5::transaction::TransactionItemType::ENVIRONMENT) {
             transaction_environments.push_back(DbusTransactionEnvironmentWrapper(ti));
         } else if (object_type == libdnf::transaction::TransactionItemType::MODULE) {
             transaction_modules.push_back(DbusTransactionModuleWrapper(ti));

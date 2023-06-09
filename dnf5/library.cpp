@@ -31,7 +31,7 @@ Library::Library(const std::string & path) : path(path) {
     if (!handle) {
         const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
         throw std::runtime_error(
-            libdnf::utils::sformat(_("Cannot load shared library \"{}\": {}"), path, std::string(err_msg)));
+            libdnf5::utils::sformat(_("Cannot load shared library \"{}\": {}"), path, std::string(err_msg)));
     }
 }
 
@@ -45,7 +45,7 @@ void * Library::get_address(const char * symbol) const {
     if (!address) {
         const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
         if (err_msg) {
-            throw std::runtime_error(libdnf::utils::sformat(
+            throw std::runtime_error(libdnf5::utils::sformat(
                 _("Cannot obtain address of symbol \"{}\": {}"), std::string(symbol), std::string(err_msg)));
         }
     }

@@ -200,7 +200,7 @@ ModuleSack::Impl::collect_data_for_modular_filtering() {
     std::vector<std::string> exclude_NEVRAs;
     std::vector<std::string> names;
     std::vector<std::string> src_names;
-    libdnf::rpm::ReldepList reldep_name_list(base);
+    libdnf5::rpm::ReldepList reldep_name_list(base);
     for (const auto & module : get_modules()) {
         auto artifacts = module->get_artifacts();
         if (module->is_active()) {
@@ -286,24 +286,24 @@ void ModuleSack::Impl::module_filtering() {
     auto [include_NEVRAs, exclude_NEVRAs, names, src_names, reldep_name_list] = collect_data_for_modular_filtering();
 
     // Pakages from system, commandline, and hotfix repositories are not targets for modular filterring
-    libdnf::rpm::PackageQuery target_packages(base);
+    libdnf5::rpm::PackageQuery target_packages(base);
 
     // TODO(replace) "@System", "@commandline" by defined variables like in dnf4
     std::vector<std::string> keep_repo_ids = {"@System", "@commandline"};
 
-    libdnf::repo::RepoQuery hotfix_repos(base);
+    libdnf5::repo::RepoQuery hotfix_repos(base);
     hotfix_repos.filter_enabled(true);
     hotfix_repos.filter(
-        [](const libdnf::repo::RepoWeakPtr & repo) {
+        [](const libdnf5::repo::RepoWeakPtr & repo) {
             return repo->get_config().get_module_hotfixes_option().get_value();
         },
         true,
-        libdnf::sack::QueryCmp::EQ);
+        libdnf5::sack::QueryCmp::EQ);
     for (auto & repo : hotfix_repos) {
         keep_repo_ids.push_back(repo->get_id());
     }
 
-    target_packages.filter_repo_id(keep_repo_ids, libdnf::sack::QueryCmp::NEQ);
+    target_packages.filter_repo_id(keep_repo_ids, libdnf5::sack::QueryCmp::NEQ);
 
     libdnf5::rpm::PackageQuery include_query(base);
     libdnf5::rpm::PackageQuery exclude_query(target_packages);
@@ -504,7 +504,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     // TODO(pkratoch): Write debugdata if debug_solver config option is set to true.
 
-    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+    if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_strict);
         return make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
     }
@@ -514,14 +514,14 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     ret = goal_best.resolve();
 
-    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+    if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_best);
         return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS);
     }
 
     ret = goal.resolve();
 
-    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+    if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal);
         return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
     }
@@ -533,7 +533,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     ret = goal_weak.resolve();
 
-    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+    if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_weak);
         return make_pair(problems, ModuleSack::ModuleErrorType::ERROR);
     }
@@ -560,9 +560,9 @@ static std::pair<std::string, std::string> parse_platform_id_from_string(const s
 
 
 /// @brief Custom exception to recognize an error in platform id string format.
-class PlatformIdFormatError : public libdnf::Error {
+class PlatformIdFormatError : public libdnf5::Error {
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::module"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
     const char * get_name() const noexcept override { return "PlatformIdFormatError"; }
 };
 
@@ -649,12 +649,12 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
         }
     }
 
-    libdnf::rpm::PackageQuery base_query(base);
+    libdnf5::rpm::PackageQuery base_query(base);
     base_query.filter_provides({"system-release"});
     base_query.filter_latest_evr();
 
     // try to detect platform id from available packages
-    libdnf::rpm::PackageQuery available_query(base_query);
+    libdnf5::rpm::PackageQuery available_query(base_query);
     available_query.filter_available();
     auto available_provides = get_strings_from_provide(available_query, "base-module");
     if (available_provides.size() == 1) {
@@ -671,7 +671,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
     }
 
     // try to detect platform id from installed packages
-    libdnf::rpm::PackageQuery installed_query(base_query);
+    libdnf5::rpm::PackageQuery installed_query(base_query);
     installed_query.filter_installed();
     auto installed_provides = get_strings_from_provide(installed_query, "base-module");
     if (installed_provides.size() == 1) {
@@ -718,7 +718,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
 ModuleSack::resolve_active_module_items() {
     p_impl->considered_uptodate = false;
-    p_impl->excludes.reset(new libdnf::solv::SolvMap(p_impl->pool->nsolvables));
+    p_impl->excludes.reset(new libdnf5::solv::SolvMap(p_impl->pool->nsolvables));
     p_impl->module_db->initialize();
 
     ModuleStatus status;
@@ -814,7 +814,7 @@ void ModuleSack::Impl::reset(const ModuleItem * module_item, bool count) {
 
 
 InvalidModuleStatus::InvalidModuleStatus(const std::string & status)
-    : libdnf::Error(M_("Invalid module status: {}"), status) {}
+    : libdnf5::Error(M_("Invalid module status: {}"), status) {}
 
 
 std::string module_status_to_string(ModuleStatus status) {

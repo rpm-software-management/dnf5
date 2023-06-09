@@ -38,7 +38,7 @@ void WeakPtrTest::tearDown() {}
 void WeakPtrTest::test_weak_ptr() {
     class Sack {
     public:
-        using DataItemWeakPtr = libdnf::WeakPtr<std::string, false>;
+        using DataItemWeakPtr = libdnf5::WeakPtr<std::string, false>;
 
         DataItemWeakPtr add_item_with_return(std::unique_ptr<std::string> && item) {
             auto ret = DataItemWeakPtr(item.get(), &data_guard);
@@ -46,7 +46,7 @@ void WeakPtrTest::test_weak_ptr() {
             return ret;
         }
 
-        libdnf::WeakPtrGuard<std::string, false> data_guard;
+        libdnf5::WeakPtrGuard<std::string, false> data_guard;
 
     private:
         std::vector<std::unique_ptr<std::string>>
@@ -83,8 +83,8 @@ void WeakPtrTest::test_weak_ptr() {
     // data from sack1 must be still accesible, but access to data from sack2 must throw exception
     CPPUNIT_ASSERT(*item1_weak_ptr.get() == "sack1_item1");
     CPPUNIT_ASSERT(item2_weak_ptr->compare("sack1_item2") == 0);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr.get() == "sack2_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(item4_weak_ptr->compare("sack2_item2") == 0), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr.get() == "sack2_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(item4_weak_ptr->compare("sack2_item2") == 0), libdnf5::AssertionError);
 
     // test is_valid() method
     CPPUNIT_ASSERT(item1_weak_ptr.is_valid());
@@ -138,12 +138,12 @@ void WeakPtrTest::test_weak_ptr() {
     sack1->data_guard.clear();
     CPPUNIT_ASSERT(sack1->data_guard.empty());
     CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(0));
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item1_weak_ptr.get() == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item2_weak_ptr.get() == "sack1_item2"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr.get() == "sack1_item2"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr.get() == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item5_weak_ptr.get() == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item6_weak_ptr.get() == "sack1_item1"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item1_weak_ptr.get() == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item2_weak_ptr.get() == "sack1_item2"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr.get() == "sack1_item2"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr.get() == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item5_weak_ptr.get() == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item6_weak_ptr.get() == "sack1_item1"), libdnf5::AssertionError);
 }
 
 
@@ -155,7 +155,7 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
 
     class Sack {
     public:
-        using DataItemWeakPtr = libdnf::WeakPtr<DependentItem, true>;
+        using DataItemWeakPtr = libdnf5::WeakPtr<DependentItem, true>;
 
         DataItemWeakPtr add_item_with_return(std::unique_ptr<std::string> && item) {
             auto ret = DataItemWeakPtr(new DependentItem{item.get()}, &data_guard);
@@ -163,7 +163,7 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
             return ret;
         }
 
-        libdnf::WeakPtrGuard<DependentItem, true> data_guard;
+        libdnf5::WeakPtrGuard<DependentItem, true> data_guard;
 
     private:
         std::vector<std::unique_ptr<std::string>>
@@ -201,8 +201,8 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     CPPUNIT_ASSERT(*item1_weak_ptr.get()->remote_data == "sack1_item1");
     CPPUNIT_ASSERT(*item2_weak_ptr->remote_data == "sack1_item2");
     CPPUNIT_ASSERT_THROW(
-        static_cast<void>(*item3_weak_ptr.get()->remote_data == "sack2_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr->remote_data == "sack2_item2"), libdnf::AssertionError);
+        static_cast<void>(*item3_weak_ptr.get()->remote_data == "sack2_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr->remote_data == "sack2_item2"), libdnf5::AssertionError);
 
     // test is_valid() method
     CPPUNIT_ASSERT(item1_weak_ptr.is_valid());
@@ -219,7 +219,7 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     // there move constructor
     auto item6_weak_ptr(std::move(item5_weak_ptr));
     CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(3));
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item5_weak_ptr->remote_data == "sack1_item1"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item5_weak_ptr->remote_data == "sack1_item1"), libdnf5::AssertionError);
     CPPUNIT_ASSERT(*item6_weak_ptr->remote_data == "sack1_item1");
 
     // test copy assignment operator =
@@ -236,7 +236,7 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     // test move assignment operator =
     item4_weak_ptr = std::move(item2_weak_ptr);
     CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(4));
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item2_weak_ptr->remote_data == "sack1_item2"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item2_weak_ptr->remote_data == "sack1_item2"), libdnf5::AssertionError);
     CPPUNIT_ASSERT(*item4_weak_ptr->remote_data == "sack1_item2");
 
     // test move self-assignment operator =
@@ -274,8 +274,8 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     sack1->data_guard.clear();
     CPPUNIT_ASSERT(sack1->data_guard.empty());
     CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(0));
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item1_weak_ptr->remote_data == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr->remote_data == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr->remote_data == "sack1_item1"), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(static_cast<void>(*item6_weak_ptr->remote_data == "sack1_item2"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item1_weak_ptr->remote_data == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr->remote_data == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item4_weak_ptr->remote_data == "sack1_item1"), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(static_cast<void>(*item6_weak_ptr->remote_data == "sack1_item2"), libdnf5::AssertionError);
 }

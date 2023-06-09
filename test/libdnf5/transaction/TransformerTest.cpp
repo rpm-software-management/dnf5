@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <string>
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransformerTest);
 
@@ -49,8 +49,8 @@ static const char * groups_json =
     ;
 
 void TransformerTest::setUp() {
-    swdb = new libdnf::utils::SQLite3(":memory:");
-    history = new libdnf::utils::SQLite3(":memory:");
+    swdb = new libdnf5::utils::SQLite3(":memory:");
+    history = new libdnf5::utils::SQLite3(":memory:");
     Transformer::createDatabase(*swdb);
     history->exec(create_history_sql);
 }

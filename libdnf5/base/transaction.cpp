@@ -156,7 +156,7 @@ GoalProblem Transaction::Impl::report_not_found(
     GoalAction action,
     const std::string & pkg_spec,
     const GoalJobSettings & settings,
-    libdnf::Logger::Level log_level) {
+    libdnf5::Logger::Level log_level) {
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     if (action == GoalAction::REMOVE) {
@@ -169,7 +169,7 @@ GoalProblem Transaction::Impl::report_not_found(
             action,
             GoalProblem::NOT_FOUND,
             settings,
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             pkg_spec,
             {},
             log_level);
@@ -190,10 +190,10 @@ GoalProblem Transaction::Impl::report_not_found(
                         action,
                         GoalProblem::HINT_ICASE,
                         settings,
-                        libdnf::transaction::TransactionItemType::PACKAGE,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
                         pkg_spec,
                         {(*icase.begin()).get_name()},
-                        libdnf::Logger::Level::WARNING);
+                        libdnf5::Logger::Level::WARNING);
                 }
             }
             rpm::PackageQuery alternatives(hints);
@@ -208,10 +208,10 @@ GoalProblem Transaction::Impl::report_not_found(
                     action,
                     GoalProblem::HINT_ALTERNATIVES,
                     settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
                     pkg_spec,
                     hints,
-                    libdnf::Logger::Level::WARNING);
+                    libdnf5::Logger::Level::WARNING);
             }
         }
         return GoalProblem::NOT_FOUND;
@@ -222,7 +222,7 @@ GoalProblem Transaction::Impl::report_not_found(
             action,
             GoalProblem::ONLY_SRC,
             settings,
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             pkg_spec,
             {},
             log_level);
@@ -233,7 +233,7 @@ GoalProblem Transaction::Impl::report_not_found(
         action,
         GoalProblem::EXCLUDED,
         settings,
-        libdnf::transaction::TransactionItemType::PACKAGE,
+        libdnf5::transaction::TransactionItemType::PACKAGE,
         pkg_spec,
         {},
         log_level);
@@ -244,10 +244,10 @@ void Transaction::Impl::add_resolve_log(
     GoalAction action,
     GoalProblem problem,
     const GoalJobSettings & settings,
-    const libdnf::transaction::TransactionItemType spec_type,
+    const libdnf5::transaction::TransactionItemType spec_type,
     const std::string & spec,
     const std::set<std::string> & additional_data,
-    libdnf::Logger::Level log_level) {
+    libdnf5::Logger::Level log_level) {
     resolve_logs.emplace_back(LogEvent(action, problem, additional_data, settings, spec_type, spec));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
@@ -255,7 +255,8 @@ void Transaction::Impl::add_resolve_log(
 }
 
 void Transaction::Impl::add_resolve_log(
-    GoalProblem problem, std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems) {
+    GoalProblem problem,
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems) {
     resolve_logs.emplace_back(LogEvent(problem, problems));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
@@ -290,10 +291,10 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 }
 
 void Transaction::download() {
-    libdnf::repo::PackageDownloader downloader(p_impl->base);
+    libdnf5::repo::PackageDownloader downloader(p_impl->base);
     for (auto & tspkg : this->get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
             downloader.add(tspkg.get_package());
         }
     }
@@ -312,7 +313,7 @@ std::vector<std::string> Transaction::get_transaction_problems() const noexcept 
     return p_impl->transaction_problems;
 }
 
-void Transaction::set_callbacks(std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks) {
+void Transaction::set_callbacks(std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks) {
     this->callbacks = std::move(callbacks);
 }
 
@@ -329,14 +330,14 @@ void Transaction::set_comment(const std::string & comment) {
 }
 
 bool Transaction::check_gpg_signatures(bool import_keys) {
-    std::function<bool(const libdnf::rpm::KeyInfo &)> import_confirm_func = [=](const libdnf::rpm::KeyInfo &) {
+    std::function<bool(const libdnf5::rpm::KeyInfo &)> import_confirm_func = [=](const libdnf5::rpm::KeyInfo &) {
         return import_keys;
     };
 
     return p_impl->check_gpg_signatures(import_confirm_func);
 }
 
-bool Transaction::check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+bool Transaction::check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
     return p_impl->check_gpg_signatures(import_confirm_func);
 }
 
@@ -512,11 +513,11 @@ static void process_scriptlets_output(int fd, Logger * logger) {
 }
 
 Transaction::TransactionRunResult Transaction::Impl::test() {
-    return this->_run(std::make_unique<libdnf::rpm::TransactionCallbacks>(), "", std::nullopt, "", true);
+    return this->_run(std::make_unique<libdnf5::rpm::TransactionCallbacks>(), "", std::nullopt, "", true);
 }
 
 Transaction::TransactionRunResult Transaction::Impl::run(
-    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+    std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
     const std::optional<uint32_t> user_id,
     const std::string & comment) {
@@ -524,7 +525,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 }
 
 Transaction::TransactionRunResult Transaction::Impl::_run(
-    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+    std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
     const std::optional<uint32_t> user_id,
     const std::string & comment,
@@ -535,7 +536,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
     // only successfully resolved transaction can be run
-    if (transaction->get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
+    if (transaction->get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
         return TransactionRunResult::ERROR_RESOLVE;
     }
 
@@ -546,13 +547,13 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     lock_file_path /= "run/dnf/rpmtransaction.lock";
     std::filesystem::create_directories(lock_file_path.parent_path());
 
-    libdnf::utils::Locker locker(lock_file_path);
+    libdnf5::utils::Locker locker(lock_file_path);
     if (!locker.write_lock()) {
         return TransactionRunResult::ERROR_LOCK;
     }
 
     // fill and check the rpm transaction
-    libdnf::rpm::Transaction rpm_transaction(base);
+    libdnf5::rpm::Transaction rpm_transaction(base);
     rpm_transaction.fill(*transaction);
     if (!rpm_transaction.check()) {
         for (auto it : rpm_transaction.get_problems()) {
@@ -741,7 +742,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
                 // We need to filter out packages that are being removed in the transaction
                 // (the installed query still contains the packages before this transaction)
-                installed_query.filter_nevra({pkg.get_nevra()}, libdnf::sack::QueryCmp::NEQ);
+                installed_query.filter_nevra({pkg.get_nevra()}, libdnf5::sack::QueryCmp::NEQ);
 
                 rpm::PackageQuery query(installed_query);
                 query.filter_name({pkg.get_name()});
@@ -771,7 +772,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             auto group = tsgroup.get_group();
             auto group_xml_path = comps_xml_dir / (group.get_groupid() + ".xml");
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
-                libdnf::system::GroupState state;
+                libdnf5::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
                 state.package_types = tsgroup.get_package_types();
                 // Remember packages installed by this group
@@ -812,7 +813,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             auto environment = tsenvironment.get_environment();
             auto environment_xml_path = comps_xml_dir / (environment.get_environmentid() + ".xml");
             if (transaction_item_action_is_inbound(tsenvironment.get_action())) {
-                libdnf::system::EnvironmentState state;
+                libdnf5::system::EnvironmentState state;
                 // Remember groups installed by this environmental group
                 for (const auto & grpid : environment.get_groups()) {
                     state.groups.emplace_back(grpid);
@@ -846,13 +847,13 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     //               Possibility to detect rpm database change without the need for a history database.
     db_transaction.set_rpmdb_version_end(rpm_transaction.get_db_cookie());
     db_transaction.finish(
-        ret == 0 ? libdnf::transaction::TransactionState::OK : libdnf::transaction::TransactionState::ERROR);
+        ret == 0 ? libdnf5::transaction::TransactionState::OK : libdnf5::transaction::TransactionState::ERROR);
 
     plugins.post_transaction(*transaction);
 
     if (ret == 0) {
         // removes any temporarily stored packages from the system
-        libdnf::repo::TempFilesMemory temp_files_memory(config.get_cachedir_option().get_value());
+        libdnf5::repo::TempFilesMemory temp_files_memory(config.get_cachedir_option().get_value());
         auto temp_files = temp_files_memory.get_files();
         for (auto & file : temp_files) {
             try {
@@ -888,7 +889,7 @@ static std::string import_repo_keys_result_to_string(const ImportRepoKeysResult 
 }
 
 ImportRepoKeysResult Transaction::Impl::import_repo_keys(
-    libdnf::repo::Repo & repo, std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+    libdnf5::repo::Repo & repo, std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
     auto key_urls = repo.get_config().get_gpgkey_option().get_value();
     if (!key_urls.size()) {
         return ImportRepoKeysResult::NO_KEYS;
@@ -916,7 +917,7 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(
                 if (rpm_signature.import_key(key_info)) {
                     continue;
                 }
-            } catch (const libdnf::rpm::KeyImportError & ex) {
+            } catch (const libdnf5::rpm::KeyImportError & ex) {
                 signature_problems.push_back(
                     utils::sformat(_("An error occurred importing key \"{}\": {}"), key_url, ex.what()));
             }
@@ -940,7 +941,7 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(
     return ImportRepoKeysResult::OK;
 }
 
-bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
     auto & config = base->get_config();
     if (!config.get_gpgcheck_option().get_value()) {
         // gpg check switched off by configuration / command line option
@@ -948,7 +949,7 @@ bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rp
     }
     // TODO(mblaha): DNSsec key verification
     bool result{true};
-    libdnf::rpm::RpmSignature rpm_signature(base);
+    libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
     for (const auto & trans_pkg : packages) {
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
@@ -960,11 +961,11 @@ bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rp
                 pkg.get_package_path(),
                 repo->get_id());
             auto check_result = rpm_signature.check_package_signature(pkg);
-            if (check_result != libdnf::rpm::RpmSignature::CheckResult::OK) {
+            if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                 // these two errors are possibly recoverable by importing the correct public key
                 auto is_error_recoverable =
-                    check_result == libdnf::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING ||
-                    check_result == libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED;
+                    check_result == libdnf5::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING ||
+                    check_result == libdnf5::rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED;
                 if (is_error_recoverable) {
                     // do not try to import keys for the same repo twice
                     auto repo_id = repo->get_id();
@@ -979,7 +980,7 @@ bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rp
                     auto import_result = import_repo_keys(*repo, import_confirm_func);
                     if (import_result == ImportRepoKeysResult::OK) {
                         auto check_again = rpm_signature.check_package_signature(pkg);
-                        if (check_again != libdnf::rpm::RpmSignature::CheckResult::OK) {
+                        if (check_again != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                             signature_problems.push_back(err_msg + _("Import of the key didn't help, wrong key?"));
                             result = false;
                         }

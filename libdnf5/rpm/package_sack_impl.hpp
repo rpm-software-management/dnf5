@@ -192,7 +192,7 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
     return cached_sorted_icase_solvables;
 }
 
-inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
+inline libdnf5::solv::SolvMap & PackageSack::Impl::get_solvables() {
     auto & spool = get_rpm_pool(base);
     ::Pool * pool = *spool;
 
@@ -201,7 +201,7 @@ inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
         return cached_solvables;
     }
     if (nsolvables > cached_solvables.allocated_size()) {
-        cached_solvables = libdnf::solv::SolvMap(nsolvables);
+        cached_solvables = libdnf5::solv::SolvMap(nsolvables);
     } else {
         cached_solvables.clear();
     }

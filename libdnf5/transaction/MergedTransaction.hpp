@@ -30,17 +30,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class MergedTransaction;
 typedef std::shared_ptr<MergedTransaction> MergedTransactionPtr;
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #include "rpm_package.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 class MergedTransaction {
 public:
@@ -82,7 +82,7 @@ protected:
     void resolveAltered(ItemPair & previousItemPair, TransactionItem * mTransItem);
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_HPP
 

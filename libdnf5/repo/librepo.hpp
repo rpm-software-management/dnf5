@@ -42,7 +42,7 @@ namespace libdnf5::repo {
 class LibrepoError : public Error {
 public:
     LibrepoError(std::unique_ptr<GError> && lr_error);
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::repo"; }
     const char * get_name() const noexcept override { return "LibrepoError"; }
     int get_code() const noexcept { return code; }
 

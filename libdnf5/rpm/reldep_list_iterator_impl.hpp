@@ -44,7 +44,7 @@ private:
 
 
 inline ReldepListIterator::Impl::Impl(const ReldepList & reldep_list)
-    : libdnf::solv::IdQueue::iterator(&(reldep_list.p_impl->get_idqueue().get_queue())),
+    : libdnf5::solv::IdQueue::iterator(&(reldep_list.p_impl->get_idqueue().get_queue())),
       reldep_list{reldep_list} {}
 
 inline ReldepListIterator::Impl & ReldepListIterator::Impl::operator++() {

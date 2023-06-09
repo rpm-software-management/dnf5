@@ -30,12 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-class TransformerMock : protected libdnf::transaction::Transformer {
+class TransformerMock : protected libdnf5::transaction::Transformer {
 public:
     TransformerMock();
-    using libdnf::transaction::Transformer::Exception;
-    using libdnf::transaction::Transformer::processGroupPersistor;
-    using libdnf::transaction::Transformer::transformTrans;
+    using libdnf5::transaction::Transformer::Exception;
+    using libdnf5::transaction::Transformer::processGroupPersistor;
+    using libdnf5::transaction::Transformer::transformTrans;
 };
 
 class TransformerTest : public CppUnit::TestCase {
@@ -53,8 +53,8 @@ public:
 
 protected:
     TransformerMock transformer;
-    libdnf::utils::SQLite3 * swdb;
-    libdnf::utils::SQLite3 * history;
+    libdnf5::utils::SQLite3 * swdb;
+    libdnf5::utils::SQLite3 * history;
 };
 
 #endif  // LIBDNF_SWDB_RPMITEM_TEST_HPP

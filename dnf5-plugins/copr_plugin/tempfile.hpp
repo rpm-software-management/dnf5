@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-/// TODO: make copr plugin work with libdnf::utils::fs::TempFile (not a libdnf API ATM)
+/// TODO: make copr plugin work with libdnf5::utils::fs::TempFile (not a libdnf5 API ATM)
 class TempFile {
 public:
     std::filesystem::path path;

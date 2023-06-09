@@ -48,7 +48,7 @@ std::vector<libdnf5::advisory::Advisory> to_vector(const libdnf5::advisory::Advi
 }
 
 
-std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf::comps::Environment> & environment_set) {
+std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf5::comps::Environment> & environment_set) {
     std::vector<libdnf5::comps::Environment> res;
     for (const auto & environment : environment_set) {
         res.push_back(environment);
@@ -57,7 +57,7 @@ std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf::co
 }
 
 
-std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf::comps::Group> & group_set) {
+std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::Group> & group_set) {
     std::vector<libdnf5::comps::Group> res;
     for (const auto & group : group_set) {
         res.push_back(group);

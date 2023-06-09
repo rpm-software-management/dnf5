@@ -46,7 +46,7 @@ namespace libdnf5::comps {
 Group::Group(const BaseWeakPtr & base) : base(base) {}
 
 
-Group::Group(libdnf::Base & base) : base(base.get_weak_ptr()) {}
+Group::Group(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
 
 
 Group & Group::operator+=(const Group & rhs) {
@@ -119,7 +119,7 @@ std::vector<Package> Group::get_packages() {
         return packages;
     }
 
-    libdnf::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
 
     // Use only the first (highest priority) solvable for package lists
     Solvable * solvable = pool.id2solvable(group_ids[0].id);
@@ -280,7 +280,7 @@ void Group::serialize(const std::string & path) {
             M_("Failed to save xml document for group \"{}\" to file \"{}\": {}"),
             get_groupid(),
             path,
-            libdnf::utils::string::join(xml_errors, ", "));
+            libdnf5::utils::string::join(xml_errors, ", "));
     }
 
     // Memory free

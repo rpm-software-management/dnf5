@@ -46,7 +46,7 @@ public:
     ///
     /// @return Vector of problems encountered by the solver. Each problem is described by a vector of "rule breakages"
     /// (TODO(lukash) try to find a better name for this) stored
-    /// in a `std::pair<libdnf::ProblemRules, std::vector<std::string>>`, where the first of the pair is a rule breakage
+    /// in a `std::pair<libdnf5::ProblemRules, std::vector<std::string>>`, where the first of the pair is a rule breakage
     /// identifier and the second is a list of string identifiers which are the subjects of the rule breakage. These can
     /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);

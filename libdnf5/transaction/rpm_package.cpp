@@ -50,7 +50,7 @@ std::string Package::to_string() const {
 
 /*
 TransactionItemReason Package::resolveTransactionItemReason(
-    libdnf::utils::SQLite3 & conn,
+    libdnf5::utils::SQLite3 & conn,
     const std::string & name,
     const std::string & arch,
     [[maybe_unused]] int64_t maxTransactionId) {
@@ -75,10 +75,10 @@ TransactionItemReason Package::resolveTransactionItemReason(
     )**";
 
     if (arch != "") {
-        libdnf::utils::SQLite3::Query query(conn, sql);
+        libdnf5::utils::SQLite3::Query query(conn, sql);
         query.bindv(name, arch);
 
-        if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto action = static_cast<TransactionItemAction>(query.get<int64_t>("action"));
             if (action == TransactionItemAction::REMOVE) {
                 return TransactionItemReason::UNKNOWN;
@@ -96,17 +96,17 @@ TransactionItemReason Package::resolveTransactionItemReason(
                 name = ?
         )**";
 
-        libdnf::utils::SQLite3::Query arch_query(conn, arch_sql);
+        libdnf5::utils::SQLite3::Query arch_query(conn, arch_sql);
         arch_query.bindv(name);
 
         TransactionItemReason result = TransactionItemReason::UNKNOWN;
 
-        while (arch_query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        while (arch_query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto rpm_arch = arch_query.get<std::string>("arch");
 
-            libdnf::utils::SQLite3::Query query(conn, sql);
+            libdnf5::utils::SQLite3::Query query(conn, sql);
             query.bindv(name, rpm_arch);
-            while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+            while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
                 auto action = static_cast<TransactionItemAction>(query.get<int64_t>("action"));
                 if (action == TransactionItemAction::REMOVE) {
                     continue;
@@ -151,7 +151,7 @@ bool Package::operator<(const Package & other) const {
 
 /*
 std::vector<int64_t> Package::searchTransactions(
-    libdnf::utils::SQLite3 & conn, const std::vector<std::string> & patterns) {
+    libdnf5::utils::SQLite3 & conn, const std::vector<std::string> & patterns) {
     std::vector<int64_t> result;
 
     const char * sql = R"**(
@@ -175,10 +175,10 @@ std::vector<int64_t> Package::searchTransactions(
         ORDER BY
            trans_id DESC
     )**";
-    libdnf::utils::SQLite3::Query query(conn, sql);
+    libdnf5::utils::SQLite3::Query query(conn, sql);
     for (auto pattern : patterns) {
         query.bindv(pattern, pattern, pattern, pattern, pattern);
-        while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             result.push_back(query.get<int64_t>("id"));
         }
     }

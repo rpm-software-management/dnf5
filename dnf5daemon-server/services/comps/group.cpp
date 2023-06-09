@@ -135,11 +135,11 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     std::vector<std::string> patterns =
         key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
 
-    libdnf::comps::GroupQuery query(base->get_weak_ptr());
+    libdnf5::comps::GroupQuery query(base->get_weak_ptr());
     if (patterns.size() > 0) {
-        libdnf::comps::GroupQuery query_names(query);
-        query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
-        query.filter_groupid(patterns, libdnf::sack::QueryCmp::IGLOB);
+        libdnf5::comps::GroupQuery query_names(query);
+        query_names.filter_name(patterns, libdnf5::sack::QueryCmp::IGLOB);
+        query.filter_groupid(patterns, libdnf5::sack::QueryCmp::IGLOB);
         query |= query_names;
     }
 

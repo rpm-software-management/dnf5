@@ -31,7 +31,7 @@ std::string ModuleProfile::get_name() const {
     if (!profile) {
         return {};
     }
-    return libdnf::utils::string::c_to_str(modulemd_profile_get_name(profile));
+    return libdnf5::utils::string::c_to_str(modulemd_profile_get_name(profile));
 }
 
 
@@ -39,7 +39,7 @@ std::string ModuleProfile::get_description() const {
     if (!profile) {
         return {};
     }
-    return libdnf::utils::string::c_to_str(modulemd_profile_get_description(profile, NULL));
+    return libdnf5::utils::string::c_to_str(modulemd_profile_get_description(profile, NULL));
 }
 
 

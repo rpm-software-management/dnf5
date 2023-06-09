@@ -31,16 +31,16 @@ extern "C" {
 }
 
 
-namespace libdnf::advisory {
+namespace libdnf5::advisory {
 
 
-class AdvisorySet::Impl : public libdnf::solv::SolvMap {
+class AdvisorySet::Impl : public libdnf5::solv::SolvMap {
 public:
     /// Initialize with an empty map
     explicit Impl(const BaseWeakPtr & base);
 
     /// Clone from an existing map
-    explicit Impl(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
+    explicit Impl(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
 
     /// Copy constructor: clone from an existing AdvisorySet::Impl
     Impl(const Impl & other);
@@ -50,8 +50,8 @@ public:
 
     Impl & operator=(const Impl & other);
     Impl & operator=(Impl && other);
-    Impl & operator=(const libdnf::solv::SolvMap & map);
-    Impl & operator=(libdnf::solv::SolvMap && map);
+    Impl & operator=(const libdnf5::solv::SolvMap & map);
+    Impl & operator=(libdnf5::solv::SolvMap && map);
 
 private:
     friend AdvisorySet;
@@ -62,42 +62,42 @@ private:
 
 
 inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base)
-    : libdnf::solv::SolvMap::SolvMap(get_rpm_pool(base).get_nsolvables()),
+    : libdnf5::solv::SolvMap::SolvMap(get_rpm_pool(base).get_nsolvables()),
       base(base) {}
 
-inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map)
-    : libdnf::solv::SolvMap::SolvMap(solv_map),
+inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map)
+    : libdnf5::solv::SolvMap::SolvMap(solv_map),
       base(base) {}
 
-inline AdvisorySet::Impl::Impl(const Impl & other) : libdnf::solv::SolvMap::SolvMap(other), base(other.base) {}
+inline AdvisorySet::Impl::Impl(const Impl & other) : libdnf5::solv::SolvMap::SolvMap(other), base(other.base) {}
 
 inline AdvisorySet::Impl::Impl(Impl && other)
-    : libdnf::solv::SolvMap::SolvMap(std::move(other)),
+    : libdnf5::solv::SolvMap::SolvMap(std::move(other)),
       base(std::move(other.base)) {}
 
 inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(const Impl & other) {
-    libdnf::solv::SolvMap::operator=(other);
+    libdnf5::solv::SolvMap::operator=(other);
     base = other.base;
     return *this;
 }
 
 inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(Impl && other) {
-    libdnf::solv::SolvMap::operator=(std::move(other));
+    libdnf5::solv::SolvMap::operator=(std::move(other));
     base = std::move(other.base);
     return *this;
 }
 
-inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(const libdnf::solv::SolvMap & map) {
-    libdnf::solv::SolvMap::operator=(map);
+inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(const libdnf5::solv::SolvMap & map) {
+    libdnf5::solv::SolvMap::operator=(map);
     return *this;
 }
 
-inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(libdnf::solv::SolvMap && map) {
-    libdnf::solv::SolvMap::operator=(std::move(map));
+inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(libdnf5::solv::SolvMap && map) {
+    libdnf5::solv::SolvMap::operator=(std::move(map));
     return *this;
 }
 
-}  // namespace libdnf::advisory
+}  // namespace libdnf5::advisory
 
 
 #endif  // LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP

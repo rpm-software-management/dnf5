@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fstream>
 #include <iostream>
 
-Json::Json(libdnf::Base & base, const std::string & url) {
+Json::Json(libdnf5::Base & base, const std::string & url) {
     auto temp_file = TempFile();
     download_file(base, url, temp_file.path);
     std::ifstream file(temp_file.path);

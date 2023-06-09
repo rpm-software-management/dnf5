@@ -119,7 +119,7 @@ std::string CoprConfig::get_repo_url(
     return get_hub_url(hubspec) + "/api_3/rpmrepo/" + ownername + "/" + dirname + "/" + name_version + "/";
 }
 
-CoprConfig::CoprConfig(libdnf::Base & base) : libdnf::ConfigParser(), base(base) {
+CoprConfig::CoprConfig(libdnf5::Base & base) : libdnf5::ConfigParser(), base(base) {
     load_all_configuration();
 }
 

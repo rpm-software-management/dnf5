@@ -563,7 +563,7 @@ static void warn_weird_copr_repo(libdnf5::repo::RepoWeakPtr dnfRepo) {
 void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb) {
     std::map<std::string, CoprRepo> copr_repos;
 
-    libdnf::repo::RepoQuery query(base);
+    libdnf5::repo::RepoQuery query(base);
     for (const auto & repo : query.get_data()) {
         auto repo_file_path = repo->get_repo_file_path();
 
@@ -580,7 +580,7 @@ void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb) {
 }
 
 
-static std::string repo_id_from_project_spec(libdnf::Base & base, const std::string & project_spec_string) {
+static std::string repo_id_from_project_spec(libdnf5::Base & base, const std::string & project_spec_string) {
     std::string hubspec, ownername, dirname;
     parse_project_spec(project_spec_string, &hubspec, &ownername, nullptr, &dirname);
 
@@ -593,18 +593,18 @@ static std::string repo_id_from_project_spec(libdnf::Base & base, const std::str
 class RepoDisableCB : public CoprRepoCallback {
 private:
     std::string id;
-    libdnf::ConfigParser & parser;
+    libdnf5::ConfigParser & parser;
 
 public:
     int count = 0;
-    explicit RepoDisableCB(const std::string & id, libdnf::ConfigParser & cp) : id(id), parser(cp) {}
+    explicit RepoDisableCB(const std::string & id, libdnf5::ConfigParser & cp) : id(id), parser(cp) {}
     dnf5::CoprRepoCallback disable = [&](dnf5::CoprRepo & cr) {
         if (id == cr.get_id()) {
             cr.load_raw_values(parser);
             cr.disable();
             cr.save();
             count++;
-            std::cout << libdnf::utils::sformat(
+            std::cout << libdnf5::utils::sformat(
                              _("Copr repository '{}' in '{}' disabled."), cr.get_id(), cr.get_repo_file_path().native())
                       << std::endl;
         }
@@ -619,7 +619,7 @@ void copr_repo_disable(libdnf5::Base & base, const std::string & project_spec_st
     installed_copr_repositories(base, disable.disable);
 
     if (disable.count == 0)
-        throw std::runtime_error(libdnf::utils::sformat(_("Repository '{}' not found on this system"), repo_id));
+        throw std::runtime_error(libdnf5::utils::sformat(_("Repository '{}' not found on this system"), repo_id));
 }
 
 
@@ -644,7 +644,7 @@ void copr_repo_remove(libdnf5::Base & base, const std::string & project_spec_str
     installed_copr_repositories(base, remover.remove);
 
     if (remover.count == 0)
-        throw std::runtime_error(libdnf::utils::sformat(_("Repository '{}' not found on this system"), repo_id));
+        throw std::runtime_error(libdnf5::utils::sformat(_("Repository '{}' not found on this system"), repo_id));
 }
 
 

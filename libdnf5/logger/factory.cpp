@@ -45,7 +45,7 @@ std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
     // Throw exceptions if there is an error while writing to the log stream
     log_stream->exceptions(std::ios::badbit | std::ios::failbit);
 
-    return std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
+    return std::make_unique<libdnf5::StreamLogger>(std::move(log_stream));
 }
 
 }  // namespace libdnf5

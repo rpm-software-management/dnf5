@@ -662,7 +662,7 @@ public:
     /// Resolve spec according to provided settings. It tests whether spec is NEVRA type, provide, file or binary.
     /// It retuns only the first mach type. If spec has a mathes as NEVRA and provide type it only keeps matches with
     /// the first tested type (NEVRA).
-    // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
+    // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf5::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf5::rpm::Nevra> resolve_pkg_spec(
         const std::string & pkg_spec, const libdnf5::ResolveSpecSettings & settings, bool with_src);

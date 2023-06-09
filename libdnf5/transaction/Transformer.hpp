@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 /**
  * Class providing an interface to the database transformation
@@ -53,20 +53,20 @@ public:
     Transformer(const std::string & inputDir, const std::string & outputFile);
     void transform();
 
-    static void createDatabase(libdnf::utils::SQLite3 & conn);
+    static void createDatabase(libdnf5::utils::SQLite3 & conn);
 
     static TransactionItemReason getReason(const std::string & reason);
 
 protected:
-    void transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite3 & history);
+    void transformTrans(libdnf5::utils::SQLite3 & swdb, libdnf5::utils::SQLite3 & history);
 
-    void transformGroups(libdnf::utils::SQLite3 & swdb);
-    void processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct json_object * root);
+    void transformGroups(libdnf5::utils::SQLite3 & swdb);
+    void processGroupPersistor(libdnf5::utils::SQLite3 & swdb, struct json_object * root);
 
 private:
-    void transformPackages(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
-    void transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
-    void transformTransWith(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
+    void transformPackages(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans);
+    void transformOutput(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans);
+    void transformTransWith(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans);
     std::shared_ptr<CompsGroup> processGroup(Transaction & trans, const char * groupId, struct json_object * group);
     std::shared_ptr<CompsEnvironment> processEnvironment(
         Transaction & trans, const char * envId, struct json_object * env);
@@ -76,7 +76,7 @@ private:
     const std::string transformFile;
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif
 

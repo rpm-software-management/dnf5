@@ -52,7 +52,7 @@ void CoprListCommand::set_argument_parser() {
     cmd.set_description(desc);
     cmd.set_long_description(desc);
 
-    // this->installed = std::make_unique<libdnf::cli::session::BoolOption>(*this, "installed", 'i', "installed", false);
+    // this->installed = std::make_unique<libdnf5::cli::session::BoolOption>(*this, "installed", 'i', "installed", false);
 
     // --installed           List all installed Copr repositories (default)
     // --enabled             List enabled Copr repositories

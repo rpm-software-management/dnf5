@@ -84,7 +84,7 @@ public:
     void test_multilib_identity();
 
 private:
-    libdnf::utils::SQLite3 * conn;
+    libdnf5::utils::SQLite3 * conn;
 };
 
 #endif  // LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP

@@ -39,23 +39,23 @@ using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
 class EnvironmentQuery : public libdnf5::sack::Query<Environment> {
 public:
     // Create new query with newly composed environments (using only solvables from currently enabled repositories)
-    explicit EnvironmentQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
-    explicit EnvironmentQuery(libdnf::Base & base, bool empty = false);
+    explicit EnvironmentQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
+    explicit EnvironmentQuery(libdnf5::Base & base, bool empty = false);
 
-    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::environmentid, pattern, cmp);
     }
 
     void filter_environmentid(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::environmentid, patterns, cmp);
     }
 
-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::name, pattern, cmp);
     }
 
-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::name, patterns, cmp);
     }
 

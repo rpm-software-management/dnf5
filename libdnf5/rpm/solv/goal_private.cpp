@@ -139,7 +139,7 @@ static void same_name_subqueue(libdnf5::solv::RpmPool & pool, Queue * in, Queue 
 
 
 struct InstallonlyCmpData {
-    libdnf::solv::RpmPool & pool;
+    libdnf5::solv::RpmPool & pool;
     Id running_kernel;
 };
 
@@ -426,7 +426,7 @@ void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
 // Goal::listUnneeded()
 // {
 //     PackageSet pset(p_impl->sack);
-//     libdnf::solv::IdQueue queue;
+//     libdnf5::solv::IdQueue queue;
 //     Solver *solv = p_impl->solv;
 //
 //     solver_get_unneeded(solv, queue.getQueue(), 0);
@@ -438,7 +438,7 @@ void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
 // Goal::listSuggested()
 // {
 //     PackageSet pset(p_impl->sack);
-//     libdnf::solv::IdQueue queue;
+//     libdnf5::solv::IdQueue queue;
 //     Solver *solv = p_impl->solv;
 //
 //     solver_get_recommendations(solv, NULL, queue.getQueue(), 0);
@@ -565,7 +565,7 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
 }
 
 libdnf5::GoalProblem GoalPrivate::protected_in_removals() {
-    libdnf5::GoalProblem ret = libdnf::GoalProblem::NO_PROBLEM;
+    libdnf5::GoalProblem ret = libdnf5::GoalProblem::NO_PROBLEM;
     if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
         removal_of_protected.reset();
         return ret;

@@ -98,7 +98,7 @@ private:
 
     // TODO(dmach): rewrite into TransactionSack.list_installed_environments(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
-    //    libdnf::utils::SQLite3Ptr conn,
+    //    libdnf5::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
 
 

@@ -36,7 +36,7 @@ CompsGroup::CompsGroup(const Transaction & trans) : TransactionItem::Transaction
 
 /*
 std::vector< TransactionItemPtr >
-CompsGroup::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const std::string &pattern)
+CompsGroup::getTransactionItemsByPattern(libdnf5::utils::SQLite3Ptr conn, const std::string &pattern)
 {
     const char *sql = R"**(
         SELECT DISTINCT
@@ -53,12 +53,12 @@ CompsGroup::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const s
 
     // HACK: create a private connection to avoid undefined behavior
     // after forking process in Anaconda
-    libdnf::utils::SQLite3 privateConn(conn->get_path());
-    libdnf::utils::SQLite3::Query query(privateConn, sql);
+    libdnf5::utils::SQLite3 privateConn(conn->get_path());
+    libdnf5::utils::SQLite3::Query query(privateConn, sql);
     std::string pattern_sql = pattern;
     std::replace(pattern_sql.begin(), pattern_sql.end(), '*', '%');
     query.bindv(pattern, pattern, pattern);
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto groupid = query.get< std::string >("groupid");
         auto trans_item = getTransactionItem(conn, groupid);
         if (!trans_item) {

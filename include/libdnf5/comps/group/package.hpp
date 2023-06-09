@@ -40,7 +40,7 @@ public:
     InvalidPackageType(const std::string & type);
     InvalidPackageType(const PackageType type);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::comps"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::comps"; }
     const char * get_name() const noexcept override { return "InvalidPackageType"; }
 };
 

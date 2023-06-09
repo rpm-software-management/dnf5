@@ -67,7 +67,7 @@ class InvalidTransactionState : public libdnf5::Error {
 public:
     InvalidTransactionState(const std::string & state);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
     const char * get_name() const noexcept override { return "InvalidTransactionState"; }
 };
 

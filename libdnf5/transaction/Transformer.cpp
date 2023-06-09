@@ -47,13 +47,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 static const char * sql_create_tables =
 #include "sql/create_tables.sql"
     ;
 
-void Transformer::createDatabase(libdnf::utils::SQLite3 & conn) {
+void Transformer::createDatabase(libdnf5::utils::SQLite3 & conn) {
     conn.exec(sql_create_tables);
 }
 
@@ -110,7 +110,7 @@ Transformer::Transformer(const std::string & inputDir, const std::string & outpu
  * Final scheme is dumped into outputFile
  */
 void Transformer::transform() {
-    libdnf::utils::SQLite3 swdb(":memory:");
+    libdnf5::utils::SQLite3 swdb(":memory:");
 
     if (std::filesystem::exists(outputFile.c_str())) {
         throw std::runtime_error("DB file already exists:" + outputFile);
@@ -125,7 +125,7 @@ void Transformer::transform() {
     // migrate history db if it exists
     try {
         // make a copy of source database to make creating indexes temporary
-        libdnf::utils::SQLite3 history(":memory:");
+        libdnf5::utils::SQLite3 history(":memory:");
         history.restore(historyPath().c_str());
 
         // create additional indexes in the source database to increase conversion speed
@@ -152,7 +152,7 @@ void Transformer::transform() {
  * \param swdb pointer to swdb SQLite3 object
  * \param swdb pointer to history database SQLite3 object
  */
-void Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite3 & history) {
+void Transformer::transformTrans(libdnf5::utils::SQLite3 & swdb, libdnf5::utils::SQLite3 & history) {
     std::vector<std::shared_ptr<TransformerTransaction>> result;
 
     // we need to left join with trans_cmdline
@@ -189,15 +189,15 @@ void Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::S
 
     // get release version for all the transactions
     std::map<int64_t, std::string> releasever;
-    libdnf::utils::SQLite3::Query releasever_query(history, releasever_sql);
-    while (releasever_query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    libdnf5::utils::SQLite3::Query releasever_query(history, releasever_sql);
+    while (releasever_query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         std::string releaseVerStr = releasever_query.get<std::string>("releasever");
         releasever[releasever_query.get<int64_t>("tid")] = releaseVerStr;
     }
 
     // iterate over history transactions
-    libdnf::utils::SQLite3::Query query(history, trans_sql);
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    libdnf5::utils::SQLite3::Query query(history, trans_sql);
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         TransformerTransaction trans(swdb);
         trans.set_id(query.get<int>("id"));
         trans.set_dt_begin(query.get<int64_t>("dt_begin"));
@@ -227,7 +227,7 @@ void Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::S
     }
 }
 
-static void fillPackage(std::shared_ptr<Package> rpm, libdnf::utils::SQLite3::Query & query) {
+static void fillPackage(std::shared_ptr<Package> rpm, libdnf5::utils::SQLite3::Query & query) {
     rpm->set_name(query.get<std::string>("name"));
     rpm->set_epoch(std::to_string(query.get<uint32_t>("epoch")));
     rpm->set_version(query.get<std::string>("version"));
@@ -241,7 +241,7 @@ static void fillPackage(std::shared_ptr<Package> rpm, libdnf::utils::SQLite3::Qu
  * \param swdb pointer to swdb SQLite3 object
  * \param swdb pointer to history database SQLite3 object
  */
-void Transformer::transformTransWith(libdnf::utils::SQLite3 & history, TransformerTransaction & trans) {
+void Transformer::transformTransWith(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans) {
     const char * sql = R"**(
         SELECT
             name,
@@ -257,13 +257,13 @@ void Transformer::transformTransWith(libdnf::utils::SQLite3 & history, Transform
     )**";
 
     // transform stdout
-    libdnf::utils::SQLite3::Query query(history, sql);
+    libdnf5::utils::SQLite3::Query query(history, sql);
     query.bindv(trans.get_id());
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         // create RPM item object
         auto rpm = std::make_shared<Package>(trans);
         fillPackage(rpm, query);
-        trans.add_runtime_package(libdnf::rpm::to_nevra_string(*rpm));
+        trans.add_runtime_package(libdnf5::rpm::to_nevra_string(*rpm));
     }
 }
 
@@ -271,7 +271,7 @@ void Transformer::transformTransWith(libdnf::utils::SQLite3 & history, Transform
  * Transform transaction console outputs.
  * \param swdb pointer to history database SQLite3 object
  */
-void Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans) {
+void Transformer::transformOutput(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans) {
     const char * sql = R"**(
         SELECT
             line
@@ -284,9 +284,9 @@ void Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerT
     )**";
 
     // transform stdout
-    libdnf::utils::SQLite3::Query query(history, sql);
+    libdnf5::utils::SQLite3::Query query(history, sql);
     query.bindv(trans.get_id());
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         trans.add_console_output_line(1, query.get<std::string>("line"));
     }
 
@@ -302,15 +302,15 @@ void Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerT
     )**";
 
     // transform stderr
-    libdnf::utils::SQLite3::Query errorQuery(history, sql);
+    libdnf5::utils::SQLite3::Query errorQuery(history, sql);
     errorQuery.bindv(trans.get_id());
-    while (errorQuery.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (errorQuery.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         trans.add_console_output_line(2, errorQuery.get<std::string>("msg"));
     }
 }
 
 static void getYumdbData(
-    int64_t itemId, libdnf::utils::SQLite3 & history, TransactionItemReason & reason, std::string & repoid) {
+    int64_t itemId, libdnf5::utils::SQLite3 & history, TransactionItemReason & reason, std::string & repoid) {
     const char * sql = R"**(
         SELECT
             yumdb_key as key,
@@ -323,9 +323,9 @@ static void getYumdbData(
     )**";
 
     // load reason and repoid data from yumdb
-    libdnf::utils::SQLite3::Query query(history, sql);
+    libdnf5::utils::SQLite3::Query query(history, sql);
     query.bindv(itemId);
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         std::string key = query.get<std::string>("key");
         if (key == "reason") {
             reason = Transformer::getReason(query.get<std::string>("value"));
@@ -341,7 +341,7 @@ static void getYumdbData(
  * \param swdb pointer to history database SQLite3 objects
  * \param trans Transaction whose items should be transformed
  */
-void Transformer::transformPackages(libdnf::utils::SQLite3 & history, TransformerTransaction & trans) {
+void Transformer::transformPackages(libdnf5::utils::SQLite3 & history, TransformerTransaction & trans) {
     // the order is important here - its Update, Updated
     const char * pkg_sql = R"**(
         SELECT
@@ -360,7 +360,7 @@ void Transformer::transformPackages(libdnf::utils::SQLite3 & history, Transforme
             t.tid=?
     )**";
 
-    libdnf::utils::SQLite3::Query query(history, pkg_sql);
+    libdnf5::utils::SQLite3::Query query(history, pkg_sql);
     query.bindv(trans.get_id());
 
     TransactionItemPtr last = nullptr;
@@ -376,7 +376,7 @@ void Transformer::transformPackages(libdnf::utils::SQLite3 & history, Transforme
     std::map<int64_t, TransactionItemPtr> obsoletedItems;
 
     // iterate over transaction packages in the history database
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         // create RPM item object
         auto rpm = std::make_shared<Package>(trans);
         fillPackage(rpm, query);
@@ -535,7 +535,7 @@ std::shared_ptr<CompsEnvironment> Transformer::processEnvironment(
  * \param swdb pointer to swdb SQLite3 object
  * \param root group persistor root node
  */
-void Transformer::processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct json_object * root) {
+void Transformer::processGroupPersistor(libdnf5::utils::SQLite3 & swdb, struct json_object * root) {
     // there is no rpmdb change in this transaction,
     // use rpmdb version from the last converted transaction
     Swdb swdbObj(swdb, false);
@@ -598,7 +598,7 @@ void Transformer::processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct js
  * Load group persistor into JSON object and perform transformation
  * \param swdb pointer to swdb SQLite3 object
  */
-void Transformer::transformGroups(libdnf::utils::SQLite3 & swdb) {
+void Transformer::transformGroups(libdnf5::utils::SQLite3 & swdb) {
     std::string groupsFile(inputDir);
 
     // create the groups.json path
@@ -649,8 +649,8 @@ std::string Transformer::historyPath() {
     // iterate over history directory and look for 'history-*.sqlite' files
     while ((dp = readdir(dirp.get())) != nullptr) {
         std::string fileName(dp->d_name);
-        if (libdnf::utils::string::starts_with(fileName, "history-") &&
-            libdnf::utils::string::ends_with(fileName, ".sqlite")) {
+        if (libdnf5::utils::string::starts_with(fileName, "history-") &&
+            libdnf5::utils::string::ends_with(fileName, ".sqlite")) {
             possibleFiles.push_back(fileName);
         }
     }
@@ -666,6 +666,6 @@ std::string Transformer::historyPath() {
     return historyDir + "/" + possibleFiles.back();
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif

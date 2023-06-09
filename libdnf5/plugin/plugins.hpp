@@ -34,7 +34,7 @@ namespace libdnf5::plugin {
 class PluginError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::plugin"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::plugin"; }
     const char * get_name() const noexcept override { return "PluginError"; }
 };
 

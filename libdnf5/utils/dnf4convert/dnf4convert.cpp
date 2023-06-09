@@ -165,12 +165,12 @@ std::map<std::string, libdnf5::system::ModuleState> Dnf4Convert::read_module_sta
             libdnf5::system::ModuleState state;
             state.enabled_stream = module_config.stream.get_value();
             state.installed_profiles = module_config.profiles.get_value();
-            state.status = libdnf::module::ModuleStatus::AVAILABLE;
+            state.status = libdnf5::module::ModuleStatus::AVAILABLE;
             auto status_value = module_config.state.get_value();
             if (status_value == "enabled") {
-                state.status = libdnf::module::ModuleStatus::ENABLED;
+                state.status = libdnf5::module::ModuleStatus::ENABLED;
             } else if (status_value == "disabled") {
-                state.status = libdnf::module::ModuleStatus::DISABLED;
+                state.status = libdnf5::module::ModuleStatus::DISABLED;
             }
             module_states.emplace(name, state);
         }
@@ -180,10 +180,10 @@ std::map<std::string, libdnf5::system::ModuleState> Dnf4Convert::read_module_sta
 
 
 bool Dnf4Convert::read_package_states_from_history(
-    std::map<std::string, libdnf::system::PackageState> & package_states,
-    std::map<std::string, libdnf::system::NevraState> & nevra_states,
-    std::map<std::string, libdnf::system::GroupState> & group_states,
-    std::map<std::string, libdnf::system::EnvironmentState> & environment_states) {
+    std::map<std::string, libdnf5::system::PackageState> & package_states,
+    std::map<std::string, libdnf5::system::NevraState> & nevra_states,
+    std::map<std::string, libdnf5::system::GroupState> & group_states,
+    std::map<std::string, libdnf5::system::EnvironmentState> & environment_states) {
     auto & logger = *base->get_logger();
     // get dnf4 history database path (installroot/persistdir/history.sqlite)
     auto & config = base->get_config();
@@ -194,7 +194,7 @@ bool Dnf4Convert::read_package_states_from_history(
     logger.debug("Loading system state from dnf4 history database \"{}\"", path.string());
 
     // These arrays temporarily hold data read from sqlite database. They are converted
-    // to libdnf::system::* objects once everything is read from db.
+    // to libdnf5::system::* objects once everything is read from db.
     std::vector<std::tuple<rpm::Nevra, transaction::TransactionItemReason, std::string>> installed_packages;
     std::vector<std::tuple<std::string, transaction::TransactionItemReason, std::set<std::string>, int64_t>>
         installed_groups;
@@ -209,18 +209,18 @@ bool Dnf4Convert::read_package_states_from_history(
 
     // First mine all the data from sqlite database.
     try {
-        auto conn = std::make_unique<libdnf::utils::SQLite3>(path.native());
+        auto conn = std::make_unique<libdnf5::utils::SQLite3>(path.native());
 
         auto query_environments =
-            std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_ENVIRONMENTS);
+            std::make_unique<libdnf5::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_ENVIRONMENTS);
         std::set<std::string> groups_in_environments;
-        while (query_environments->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        while (query_environments->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto environment_id = query_environments->get<std::string>("environmentid");
             auto item_id = query_environments->get<int64_t>("item_id");
-            auto grps_query = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_ENVIRONMENT_GROUPS);
+            auto grps_query = std::make_unique<libdnf5::utils::SQLite3::Query>(*conn, SQL_ENVIRONMENT_GROUPS);
             grps_query->bindv(item_id);
             std::set<std::string> groups;
-            while (grps_query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+            while (grps_query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
                 std::string groupid = grps_query->get<std::string>("groupid");
                 groups.emplace(groupid);
                 groups_in_environments.insert(std::move(groupid));
@@ -228,15 +228,15 @@ bool Dnf4Convert::read_package_states_from_history(
             installed_environments.emplace_back(environment_id, std::move(groups));
         }
 
-        auto query_groups = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_GROUPS);
-        while (query_groups->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        auto query_groups = std::make_unique<libdnf5::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_GROUPS);
+        while (query_groups->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto group_id = query_groups->get<std::string>("groupid");
             auto item_id = query_groups->get<int64_t>("item_id");
             auto pkg_types = query_groups->get<int64_t>("pkg_types");
-            auto pkgs_query = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_GROUP_PACKAGES);
+            auto pkgs_query = std::make_unique<libdnf5::utils::SQLite3::Query>(*conn, SQL_GROUP_PACKAGES);
             pkgs_query->bindv(item_id);
             std::set<std::string> packages;
-            while (pkgs_query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+            while (pkgs_query->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
                 auto pkg_name = pkgs_query->get<std::string>("name");
                 packages.emplace(pkg_name);
                 // keep track of every group the package is part of
@@ -252,8 +252,8 @@ bool Dnf4Convert::read_package_states_from_history(
                 pkg_types);
         }
 
-        auto query_pkgs = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_PACKAGES);
-        while (query_pkgs->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        auto query_pkgs = std::make_unique<libdnf5::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_PACKAGES);
+        while (query_pkgs->step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto reason = static_cast<transaction::TransactionItemReason>(query_pkgs->get<int>("reason"));
             auto repo_id = query_pkgs->get<std::string>("repoid");
             rpm::Nevra pkg_nevra;
@@ -267,7 +267,7 @@ bool Dnf4Convert::read_package_states_from_history(
             installed_packages.emplace_back(pkg_nevra, reason, repo_id);
         }
 
-    } catch (const libdnf::utils::SQLite3Error & e) {
+    } catch (const libdnf5::utils::SQLite3Error & e) {
         logger.debug("Reading from history database failed: {}", e.what());
         return false;
     }
@@ -282,7 +282,7 @@ bool Dnf4Convert::read_package_states_from_history(
 
     for (const auto & [pkg_nevra, original_reason, repo_id] : installed_packages) {
         // set from_repo attribute in nevras.toml
-        libdnf::system::NevraState nevra_state;
+        libdnf5::system::NevraState nevra_state;
         nevra_state.from_repo = repo_id;
         nevra_states.emplace(rpm::to_nevra_string(pkg_nevra), std::move(nevra_state));
 
@@ -301,20 +301,20 @@ bool Dnf4Convert::read_package_states_from_history(
             reason = transaction::TransactionItemReason::EXTERNAL_USER;
         }
         // for non-group packages save the reason in packages.toml
-        libdnf::system::PackageState package_state;
+        libdnf5::system::PackageState package_state;
         package_state.reason = transaction::transaction_item_reason_to_string(reason);
         package_states.emplace(pkg_nevra.get_name() + "." + pkg_nevra.get_arch(), std::move(package_state));
     }
 
     // Store the groups state in groups.toml.
     for (const auto & [group_id, reason, candidate_packages, pkg_types] : installed_groups) {
-        libdnf::system::GroupState group_state;
+        libdnf5::system::GroupState group_state;
         if (reason == transaction::TransactionItemReason::USER) {
             group_state.userinstalled = true;
         } else {
             group_state.userinstalled = false;
         }
-        group_state.package_types = static_cast<libdnf::comps::PackageType>(pkg_types);
+        group_state.package_types = static_cast<libdnf5::comps::PackageType>(pkg_types);
         for (const auto & candidate_pkg : candidate_packages) {
             // store only actually installed group packages
             if (installed_packages_names.contains(candidate_pkg)) {
@@ -326,7 +326,7 @@ bool Dnf4Convert::read_package_states_from_history(
 
     // Finally store the environmental groups state in environments.toml.
     for (const auto & [environment_id, candidate_groups] : installed_environments) {
-        libdnf::system::EnvironmentState environment_state;
+        libdnf5::system::EnvironmentState environment_state;
         for (const auto & candidate_grp : candidate_groups) {
             // store only actually installed groups
             if (group_states.contains(candidate_grp)) {

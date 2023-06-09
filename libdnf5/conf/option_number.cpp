@@ -83,7 +83,7 @@ T OptionNumber<T>::from_string(const std::string & value) const {
         return from_string_user(value);
     }
     ValueType val;
-    if (libdnf::from_string<ValueType>(val, value, std::dec)) {
+    if (libdnf5::from_string<ValueType>(val, value, std::dec)) {
         return val;
     }
     throw OptionInvalidValueError(M_("Invalid number option value \"{}\""), value);

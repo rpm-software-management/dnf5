@@ -77,7 +77,7 @@ bool AdvisoryPackage::get_relogin_suggested() const {
 
 // AdvisoryPackage::Impl
 AdvisoryPackage::Impl::Impl(
-    const libdnf::BaseWeakPtr & base,
+    const libdnf5::BaseWeakPtr & base,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,
@@ -115,7 +115,7 @@ std::string AdvisoryPackage::Impl::get_arch() const {
     return get_rpm_pool(base).id2str(arch);
 }
 
-bool AdvisoryPackage::Impl::is_resolved_in(const libdnf::rpm::PackageSet & pkgs) const {
+bool AdvisoryPackage::Impl::is_resolved_in(const libdnf5::rpm::PackageSet & pkgs) const {
     auto & pool = get_rpm_pool(base);
     auto sack = base->get_rpm_package_sack();
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
@@ -124,7 +124,7 @@ bool AdvisoryPackage::Impl::is_resolved_in(const libdnf::rpm::PackageSet & pkgs)
         sorted_solvables.begin(),
         sorted_solvables.end(),
         *this,
-        libdnf::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
+        libdnf5::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
     while (low != sorted_solvables.end() && (*low)->name == get_name_id() && (*low)->arch == get_arch_id()) {
         int libsolv_cmp = pool.evrcmp((*low)->evr, get_evr_id(), EVRCMP_COMPARE);
         if (libsolv_cmp >= 0) {  // We are interested only in lower or equal evr

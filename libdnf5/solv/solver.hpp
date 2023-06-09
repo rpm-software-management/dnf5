@@ -30,7 +30,7 @@ extern "C" {
 }
 
 
-namespace libdnf::solv {
+namespace libdnf5::solv {
 
 class Solver {
 public:
@@ -52,7 +52,7 @@ public:
     void init(Pool & pool);
 
     /// Used in ModuleGoalPrivate::resolve()
-    /// If ModuleSack::Impl moves from libsolv `Pool *` to `libdnf::solv::Pool`,
+    /// If ModuleSack::Impl moves from libsolv `Pool *` to `libdnf5::solv::Pool`,
     /// this method can be dropped.
     void init(::Pool * pool);
 
@@ -115,6 +115,6 @@ protected:
 };
 
 
-}  // namespace libdnf::solv
+}  // namespace libdnf5::solv
 
 #endif  // LIBDNF_SOLV_SOLVER_HPP

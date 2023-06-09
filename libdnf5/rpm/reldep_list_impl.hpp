@@ -31,7 +31,7 @@ class ReldepList::Impl {
 public:
     Impl(const ReldepList::Impl & src) = default;
     Impl(const BaseWeakPtr & base) : base(base) {}
-    Impl(const BaseWeakPtr & base, libdnf::solv::IdQueue queue_src) : base(base), queue(queue_src) {}
+    Impl(const BaseWeakPtr & base, libdnf5::solv::IdQueue queue_src) : base(base), queue(queue_src) {}
     ~Impl() = default;
 
     BaseWeakPtr get_base() const { return base; }

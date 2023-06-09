@@ -65,7 +65,7 @@ static CompsGroup & create_comps_group(Transaction & trans) {
     (grp.*get(set_group_id{}))("core");
     (grp.*get(set_name{}))("Smallest possible installation");
     (grp.*get(set_translated_name{}))("translated(Smallest possible installation)");
-    (grp.*get(set_package_types{}))(libdnf::comps::PackageType::DEFAULT);
+    (grp.*get(set_package_types{}))(libdnf5::comps::PackageType::DEFAULT);
 
     (grp.*get(set_repoid{}))("repoid");
     (grp.*get(set_action{}))(TransactionItemAction::INSTALL);
@@ -75,7 +75,7 @@ static CompsGroup & create_comps_group(Transaction & trans) {
     auto & pkg1 = (grp.*get(new_package{}))();
     (pkg1.*get(set_name_pkg{}))("bash");
     (pkg1.*get(set_installed{}))(true);
-    (pkg1.*get(set_package_type{}))(libdnf::comps::PackageType::MANDATORY);
+    (pkg1.*get(set_package_type{}))(libdnf5::comps::PackageType::MANDATORY);
 
     auto & pkg2 = (grp.*get(new_package{}))();
     (pkg2.*get(set_name_pkg{}))("rpm");
@@ -116,7 +116,7 @@ void TransactionCompsGroupTest::test_save_load() {
     //CPPUNIT_ASSERT_EQUAL(std::string("core"), grp2.get_group_id());
     //CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), grp2.get_name());
     //CPPUNIT_ASSERT_EQUAL(std::string("translated(Smallest possible installation)"), grp2.get_translated_name());
-    //CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::DEFAULT, grp2.get_package_types());
+    //CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::DEFAULT, grp2.get_package_types());
     //CPPUNIT_ASSERT_EQUAL(std::string("repoid"), grp2.get_repoid());
     //CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, grp2.get_action());
     //CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, grp2.get_reason());
@@ -128,10 +128,10 @@ void TransactionCompsGroupTest::test_save_load() {
     //auto & grp2_pkg2 = grp2.get_packages().at(0);
     //CPPUNIT_ASSERT_EQUAL(std::string("bash"), grp2_pkg2.get_name());
     //CPPUNIT_ASSERT_EQUAL(true, grp2_pkg2.get_installed());
-    //CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::MANDATORY, grp2_pkg2.get_package_type());
+    //CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::MANDATORY, grp2_pkg2.get_package_type());
 
     //auto & grp2_pkg1 = grp2.get_packages().at(1);
     //CPPUNIT_ASSERT_EQUAL(std::string("rpm"), grp2_pkg1.get_name());
     //CPPUNIT_ASSERT_EQUAL(false, grp2_pkg1.get_installed());
-    //CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::OPTIONAL, grp2_pkg1.get_package_type());
+    //CPPUNIT_ASSERT_EQUAL(libdnf5::comps::PackageType::OPTIONAL, grp2_pkg1.get_package_type());
 }

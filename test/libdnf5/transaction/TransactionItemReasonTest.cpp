@@ -35,12 +35,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionItemReasonTest);
 
 void TransactionItemReasonTest::setUp() {
-    conn = new libdnf::utils::SQLite3(":memory:");
+    conn = new libdnf5::utils::SQLite3(":memory:");
     Transformer::createDatabase(*conn);
 }
 

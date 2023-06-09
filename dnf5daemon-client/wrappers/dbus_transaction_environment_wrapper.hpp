@@ -34,17 +34,17 @@ namespace dnfdaemon::client {
 class DbusTransactionEnvironmentWrapper {
 public:
     explicit DbusTransactionEnvironmentWrapper(const dnfdaemon::DbusTransactionItem & dti)
-        : action(libdnf::transaction::transaction_item_action_from_string(std::get<1>(dti))),
-          reason(libdnf::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
+        : action(libdnf5::transaction::transaction_item_action_from_string(std::get<1>(dti))),
+          reason(libdnf5::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
           environment(std::get<4>(dti)) {}
 
     DbusEnvironmentWrapper get_environment() const { return environment; }
-    libdnf::transaction::TransactionItemAction get_action() const { return action; }
-    libdnf::transaction::TransactionItemReason get_reason() const { return reason; }
+    libdnf5::transaction::TransactionItemAction get_action() const { return action; }
+    libdnf5::transaction::TransactionItemReason get_reason() const { return reason; }
 
 private:
-    libdnf::transaction::TransactionItemAction action;
-    libdnf::transaction::TransactionItemReason reason;
+    libdnf5::transaction::TransactionItemAction action;
+    libdnf5::transaction::TransactionItemReason reason;
     DbusEnvironmentWrapper environment;
 };
 

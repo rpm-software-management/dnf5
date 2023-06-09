@@ -53,7 +53,7 @@ using VarsWeakPtr = WeakPtr<Vars, false>;
 
 class InternalBaseUser;
 
-/// Instances of :class:`libdnf::Base` are the central point of functionality supplied by libdnf.
+/// Instances of :class:`libdnf5::Base` are the central point of functionality supplied by libdnf.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {

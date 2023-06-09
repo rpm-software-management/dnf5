@@ -145,7 +145,7 @@ class InvalidModuleStatus : public libdnf5::Error {
 public:
     InvalidModuleStatus(const std::string & status);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::module"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
     const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
 };
 

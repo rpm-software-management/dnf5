@@ -56,31 +56,31 @@ static inline void reldeps_for(Solvable * solvable, libdnf5::solv::IdQueue & que
 namespace libdnf5::rpm {
 
 std::string Package::get_name() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_name(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_name(id.id));
 }
 
 std::string Package::get_epoch() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_epoch(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_epoch(id.id));
 }
 
 std::string Package::get_version() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_version(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_version(id.id));
 }
 
 std::string Package::get_release() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_release(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_release(id.id));
 }
 
 std::string Package::get_arch() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_arch(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_arch(id.id));
 }
 
 std::string Package::get_evr() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_evr(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_evr(id.id));
 }
 
 std::string Package::get_nevra() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_nevra(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_nevra(id.id));
 }
 
 std::string Package::get_full_nevra() const {
@@ -95,7 +95,7 @@ std::string Package::get_na() const {
 }
 
 std::string Package::get_group() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
 }
 
 unsigned long long Package::get_download_size() const {
@@ -107,7 +107,7 @@ unsigned long long Package::get_install_size() const {
 }
 
 std::string Package::get_license() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
 }
 
 std::string Package::get_source_name() const {
@@ -116,7 +116,7 @@ std::string Package::get_source_name() const {
 }
 
 std::string Package::get_sourcerpm() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).get_sourcerpm(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_sourcerpm(id.id));
 }
 
 std::string Package::get_debugsource_name() const {
@@ -128,12 +128,12 @@ std::string Package::get_debuginfo_name_of_source() const {
 }
 
 std::string Package::get_debuginfo_name() const {
-    if (libdnf::utils::string::ends_with(get_name(), DEBUGINFO_SUFFIX)) {
+    if (libdnf5::utils::string::ends_with(get_name(), DEBUGINFO_SUFFIX)) {
         return get_name();
     }
 
     auto name = get_name();
-    if (libdnf::utils::string::ends_with(name, DEBUGSOURCE_SUFFIX)) {
+    if (libdnf5::utils::string::ends_with(name, DEBUGSOURCE_SUFFIX)) {
         name.resize(name.size() - strlen(DEBUGSOURCE_SUFFIX));
     }
     return name + DEBUGINFO_SUFFIX;
@@ -145,34 +145,34 @@ unsigned long long Package::get_build_time() const {
 
 // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
 //std::string Package::get_build_host() {
-//    return libdnf::utils::string::c_to_str(lookup_cstring(get_rpm_pool(base).id2solvable(id.id), SOLVABLE_BUILDHOST));
+//    return libdnf5::utils::string::c_to_str(lookup_cstring(get_rpm_pool(base).id2solvable(id.id), SOLVABLE_BUILDHOST));
 //}
 
 std::string Package::get_packager() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
 }
 
 std::string Package::get_vendor() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
 }
 
 std::string Package::get_url() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_URL));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_URL));
 }
 
 std::string Package::get_summary() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Package::get_description() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 std::vector<std::string> Package::get_files() const {
     auto & pool = get_rpm_pool(base);
 
     Solvable * solvable = pool.id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).internalize();
+    libdnf5::solv::get_repo(solvable).internalize();
 
     std::vector<std::string> ret;
 
@@ -187,11 +187,11 @@ std::vector<std::string> Package::get_files() const {
     return ret;
 }
 
-std::vector<libdnf::rpm::Changelog> Package::get_changelogs() const {
-    std::vector<libdnf::rpm::Changelog> changelogs;
+std::vector<libdnf5::rpm::Changelog> Package::get_changelogs() const {
+    std::vector<libdnf5::rpm::Changelog> changelogs;
     auto & pool = get_rpm_pool(base);
     Solvable * solvable = pool.id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).internalize();
+    libdnf5::solv::get_repo(solvable).internalize();
 
     Dataiterator di;
     dataiterator_init(&di, *pool, solvable->repo, id.id, SOLVABLE_CHANGELOG, nullptr, 0);
@@ -218,7 +218,7 @@ ReldepList Package::get_requires() const {
     ReldepList list(base);
     reldeps_for(solvable, list.p_impl->queue, SOLVABLE_REQUIRES);
 
-    libdnf::solv::IdQueue tmp_queue;
+    libdnf5::solv::IdQueue tmp_queue;
     reldeps_for(solvable, tmp_queue, SOLVABLE_PREREQMARKER);
     list.p_impl->queue += tmp_queue;
 
@@ -290,13 +290,13 @@ ReldepList Package::get_regular_requires() const {
 }
 
 std::string Package::get_baseurl() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
 }
 
 std::string Package::get_location() const {
     Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).internalize();
-    return libdnf::utils::string::c_to_str(solvable_lookup_location(solvable, nullptr));
+    libdnf5::solv::get_repo(solvable).internalize();
+    return libdnf5::utils::string::c_to_str(solvable_lookup_location(solvable, nullptr));
 }
 
 //TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
@@ -370,7 +370,7 @@ unsigned long long Package::get_rpmdbid() const {
     return get_rpm_pool(base).lookup_num(id.id, RPM_RPMDBID);
 }
 
-libdnf::repo::RepoWeakPtr Package::get_repo() const {
+libdnf5::repo::RepoWeakPtr Package::get_repo() const {
     return get_rpm_pool(base).get_repo(id.id).get_weak_ptr();
 }
 
@@ -395,7 +395,7 @@ std::string Package::get_from_repo_id() const {
 }
 
 
-libdnf::transaction::TransactionItemReason Package::get_reason() const {
+libdnf5::transaction::TransactionItemReason Package::get_reason() const {
     // TODO(lukash) this query is a temporary solution.
     // The logic should be moved to the system::State, where a cache of
     // installed NAs needs to be created (perhaps still as a query), as it is
@@ -407,20 +407,20 @@ libdnf::transaction::TransactionItemReason Package::get_reason() const {
     if (!installed_query.empty()) {
         auto reason = base->p_impl->get_system_state().get_package_reason(get_na());
 
-        if (reason == libdnf::transaction::TransactionItemReason::NONE) {
-            return libdnf::transaction::TransactionItemReason::EXTERNAL_USER;
+        if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
+            return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
         }
 
         return reason;
     }
 
-    return libdnf::transaction::TransactionItemReason::NONE;
+    return libdnf5::transaction::TransactionItemReason::NONE;
 }
 
 Checksum Package::get_checksum() const {
     Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
     int type;
-    libdnf::solv::get_repo(solvable).internalize();
+    libdnf5::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
     Checksum checksum(chksum, type);
 
@@ -430,7 +430,7 @@ Checksum Package::get_checksum() const {
 Checksum Package::get_hdr_checksum() const {
     Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
     int type;
-    libdnf::solv::get_repo(solvable).internalize();
+    libdnf5::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
     Checksum checksum(chksum, type);
 

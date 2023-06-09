@@ -65,7 +65,7 @@ enum class ProblemRules {
     RULE_PKG_REMOVAL_OF_RUNNING_KERNEL
 };
 
-/// Define a type of information, hint, or problem gathered during libdnf::Goal::resolve()
+/// Define a type of information, hint, or problem gathered during libdnf5::Goal::resolve()
 enum class GoalProblem : uint32_t {
     NO_PROBLEM = 0,
     SOLVER_ERROR = (1 << 0),
@@ -192,13 +192,13 @@ private:
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_skip_broken(const libdnf5::ConfigMain & cfg_main);
     /// Resolve skip_broken value and store the result as the value used. When GoalSetting::auto it returns false
     ///
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored
+    /// @exception libdnf5::AssertionError When a different value already stored
     /// @since 1.0
     bool resolve_skip_broken();
 
@@ -206,7 +206,7 @@ private:
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_skip_unavailable(const libdnf5::ConfigMain & cfg_main);
 
@@ -214,26 +214,26 @@ private:
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_best(const libdnf5::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_clean_requirements_on_remove(const libdnf5::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @return Resolved value.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_clean_requirements_on_remove();
 
     /// Compute and store effective group_package_types value. Used only for goal jobs operating on groups.
     /// @return group_package_types value if set, cfg_main.group_package_types value otherwise.
-    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     libdnf5::comps::PackageType resolve_group_package_types(const libdnf5::ConfigMain & cfg_main);
 
     GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};

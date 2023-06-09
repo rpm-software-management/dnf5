@@ -401,9 +401,9 @@ void RepoqueryCommand::load_additional_packages() {
 
 // In case of input being nevras -> resolve them to packages
 static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
-    libdnf5::Base & base, const std::vector<std::string> & nevra_globs, const libdnf::rpm::PackageQuery & base_query) {
-    auto resolved_nevras_set = libdnf::rpm::PackageSet(base);
-    auto settings = libdnf::ResolveSpecSettings();
+    libdnf5::Base & base, const std::vector<std::string> & nevra_globs, const libdnf5::rpm::PackageQuery & base_query) {
+    auto resolved_nevras_set = libdnf5::rpm::PackageSet(base);
+    auto settings = libdnf5::ResolveSpecSettings();
     settings.with_provides = false;
     settings.with_filenames = false;
     for (const auto & nevra : nevra_globs) {
@@ -418,16 +418,16 @@ static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
 static libdnf5::rpm::PackageQuery get_installonly_query(libdnf5::Base & base) {
     auto & cfg_main = base.get_config();
     const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
-    libdnf::rpm::PackageQuery installonly_query(base);
-    installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
+    libdnf5::rpm::PackageQuery installonly_query(base);
+    installonly_query.filter_provides(installonly_packages, libdnf5::sack::QueryCmp::GLOB);
     return installonly_query;
 }
 
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::rpm::PackageSet result_pset(ctx.base);
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf5::rpm::PackageSet result_pset(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
 
     if (leaves_option->get_value()) {
         full_package_query.filter_leaves();
@@ -448,7 +448,7 @@ void RepoqueryCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     if (advisories.has_value()) {
-        full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::GTE);
+        full_package_query.filter_advisories(advisories.value(), libdnf5::sack::QueryCmp::GTE);
     }
 
     if (latest_limit_option->get_value() != 0) {
@@ -456,27 +456,27 @@ void RepoqueryCommand::run() {
     }
 
     if (!whatdepends->get_value().empty()) {
-        auto matched_reldeps = libdnf::rpm::ReldepList(ctx.base);
+        auto matched_reldeps = libdnf5::rpm::ReldepList(ctx.base);
         for (const auto & reldep_glob : whatdepends->get_value()) {
             matched_reldeps.add_reldep_with_glob(reldep_glob);
         }
 
         // Filter requires by reldeps
         auto dependsquery = full_package_query;
-        dependsquery.filter_requires(matched_reldeps, libdnf::sack::QueryCmp::EQ);
+        dependsquery.filter_requires(matched_reldeps, libdnf5::sack::QueryCmp::EQ);
 
         // Filter weak deps via reldeps
         auto recommends_reldep_query = full_package_query;
-        recommends_reldep_query.filter_recommends(matched_reldeps, libdnf::sack::QueryCmp::EQ);
+        recommends_reldep_query.filter_recommends(matched_reldeps, libdnf5::sack::QueryCmp::EQ);
         dependsquery |= recommends_reldep_query;
         auto enhances_reldep_query = full_package_query;
-        enhances_reldep_query.filter_enhances(matched_reldeps, libdnf::sack::QueryCmp::EQ);
+        enhances_reldep_query.filter_enhances(matched_reldeps, libdnf5::sack::QueryCmp::EQ);
         dependsquery |= enhances_reldep_query;
         auto supplements_reldep_query = full_package_query;
-        supplements_reldep_query.filter_supplements(matched_reldeps, libdnf::sack::QueryCmp::EQ);
+        supplements_reldep_query.filter_supplements(matched_reldeps, libdnf5::sack::QueryCmp::EQ);
         dependsquery |= supplements_reldep_query;
         auto suggests_reldep_query = full_package_query;
-        suggests_reldep_query.filter_suggests(matched_reldeps, libdnf::sack::QueryCmp::EQ);
+        suggests_reldep_query.filter_suggests(matched_reldeps, libdnf5::sack::QueryCmp::EQ);
         dependsquery |= suggests_reldep_query;
 
         if (!exactdeps->get_value()) {
@@ -490,16 +490,16 @@ void RepoqueryCommand::run() {
 
             // Filter weak deps by packages from resolved nevras
             auto recommends_pkg_query = full_package_query;
-            recommends_pkg_query.filter_recommends(pkgs_from_resolved_nevras, libdnf::sack::QueryCmp::EQ);
+            recommends_pkg_query.filter_recommends(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= recommends_pkg_query;
             auto enhances_pkg_query = full_package_query;
-            enhances_pkg_query.filter_enhances(pkgs_from_resolved_nevras, libdnf::sack::QueryCmp::EQ);
+            enhances_pkg_query.filter_enhances(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= enhances_pkg_query;
             auto supplements_pkg_query = full_package_query;
-            supplements_pkg_query.filter_supplements(pkgs_from_resolved_nevras, libdnf::sack::QueryCmp::EQ);
+            supplements_pkg_query.filter_supplements(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= supplements_pkg_query;
             auto suggests_pkg_query = full_package_query;
-            suggests_pkg_query.filter_suggests(pkgs_from_resolved_nevras, libdnf::sack::QueryCmp::EQ);
+            suggests_pkg_query.filter_suggests(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= suggests_pkg_query;
         }
         //TODO(amatej): add recurisve option call
@@ -508,36 +508,36 @@ void RepoqueryCommand::run() {
     }
     if (!whatprovides->get_value().empty()) {
         auto provides_query = full_package_query;
-        provides_query.filter_provides(whatprovides->get_value(), libdnf::sack::QueryCmp::GLOB);
+        provides_query.filter_provides(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
         if (!provides_query.empty()) {
             full_package_query = provides_query;
         } else {
             // If provides query doesn't match anything try matching files
-            full_package_query.filter_file(whatprovides->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_file(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
         }
     }
     if (!whatrequires->get_value().empty()) {
         if (exactdeps->get_value()) {
-            full_package_query.filter_requires(whatrequires->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
         } else {
             auto requires_resolved = full_package_query;
             requires_resolved.filter_requires(
                 resolve_nevras_to_packges(ctx.base, whatrequires->get_value(), full_package_query));
 
-            full_package_query.filter_requires(whatrequires->get_value(), libdnf::sack::QueryCmp::GLOB);
+            full_package_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
             full_package_query |= requires_resolved;
             //TODO(amatej): add recurisve option call
         }
     }
     if (!whatobsoletes->get_value().empty()) {
-        full_package_query.filter_obsoletes(whatobsoletes->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_obsoletes(whatobsoletes->get_value(), libdnf5::sack::QueryCmp::GLOB);
     }
     if (!whatconflicts->get_value().empty()) {
         auto conflicts_resolved = full_package_query;
         conflicts_resolved.filter_conflicts(
             resolve_nevras_to_packges(ctx.base, whatconflicts->get_value(), full_package_query));
 
-        full_package_query.filter_conflicts(whatconflicts->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_conflicts(whatconflicts->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= conflicts_resolved;
     }
     if (!whatrecommends->get_value().empty()) {
@@ -545,7 +545,7 @@ void RepoqueryCommand::run() {
         recommends_resolved.filter_recommends(
             resolve_nevras_to_packges(ctx.base, whatrecommends->get_value(), full_package_query));
 
-        full_package_query.filter_recommends(whatrecommends->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_recommends(whatrecommends->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= recommends_resolved;
     }
     if (!whatenhances->get_value().empty()) {
@@ -553,7 +553,7 @@ void RepoqueryCommand::run() {
         enhances_resolved.filter_enhances(
             resolve_nevras_to_packges(ctx.base, whatenhances->get_value(), full_package_query));
 
-        full_package_query.filter_enhances(whatenhances->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_enhances(whatenhances->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= enhances_resolved;
     }
     if (!whatsupplements->get_value().empty()) {
@@ -561,7 +561,7 @@ void RepoqueryCommand::run() {
         supplements_resolved.filter_supplements(
             resolve_nevras_to_packges(ctx.base, whatsupplements->get_value(), full_package_query));
 
-        full_package_query.filter_supplements(whatsupplements->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_supplements(whatsupplements->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= supplements_resolved;
     }
     if (!whatsuggests->get_value().empty()) {
@@ -569,16 +569,16 @@ void RepoqueryCommand::run() {
         suggests_resolved.filter_suggests(
             resolve_nevras_to_packges(ctx.base, whatsuggests->get_value(), full_package_query));
 
-        full_package_query.filter_suggests(whatsuggests->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_suggests(whatsuggests->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= suggests_resolved;
     }
 
     if (!arch->get_value().empty()) {
-        full_package_query.filter_arch(arch->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_arch(arch->get_value(), libdnf5::sack::QueryCmp::GLOB);
     }
 
     if (!file->get_value().empty()) {
-        full_package_query.filter_file(file->get_value(), libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_file(file->get_value(), libdnf5::sack::QueryCmp::GLOB);
     }
 
     if (duplicates->get_value()) {
@@ -618,28 +618,28 @@ void RepoqueryCommand::run() {
             }
         }
 
-        const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
+        const libdnf5::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(full_package_query);
+            libdnf5::rpm::PackageQuery package_query(full_package_query);
             package_query.resolve_pkg_spec(spec, settings, true);
             result_pset |= package_query;
         }
     }
 
     if (querytags_option->get_value()) {
-        libdnf::cli::output::print_available_pkg_attrs(stdout);
+        libdnf5::cli::output::print_available_pkg_attrs(stdout);
     } else if (changelogs->get_value()) {
-        libdnf::rpm::PackageQuery wrapped(result_pset);
-        libdnf::cli::output::print_changelogs(wrapped, full_package_query, false, 0, 0);
+        libdnf5::rpm::PackageQuery wrapped(result_pset);
+        libdnf5::cli::output::print_changelogs(wrapped, full_package_query, false, 0, 0);
     } else if (info_option->get_value()) {
         for (auto package : result_pset) {
-            libdnf::cli::output::print_package_info_table(package);
+            libdnf5::cli::output::print_package_info_table(package);
             std::cout << '\n';
         }
     } else if (!pkg_attr_option->get_value().empty()) {
-        libdnf::cli::output::print_pkg_attr_uniq_sorted(stdout, result_pset, pkg_attr_option->get_value());
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, result_pset, pkg_attr_option->get_value());
     } else {
-        libdnf::cli::output::print_pkg_set_with_format(stdout, result_pset, query_format_option->get_value());
+        libdnf5::cli::output::print_pkg_set_with_format(stdout, result_pset, query_format_option->get_value());
     }
 }
 

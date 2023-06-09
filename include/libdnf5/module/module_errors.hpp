@@ -28,7 +28,7 @@ namespace libdnf5::module {
 
 class ModuleError : public Error {
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::module"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
     const char * get_name() const noexcept override { return "ModuleError"; }
 };
 

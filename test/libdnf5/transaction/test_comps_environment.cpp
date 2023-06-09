@@ -76,7 +76,7 @@ CompsEnvironment & create_comps_environment(Transaction & trans) {
     (env.*get(set_environment_id{}))("minimal");
     (env.*get(set_name{}))("Minimal Environment");
     (env.*get(set_translated_name{}))("translated(Minimal Environment)");
-    (env.*get(set_package_types{}))(libdnf::comps::PackageType::DEFAULT);
+    (env.*get(set_package_types{}))(libdnf5::comps::PackageType::DEFAULT);
 
     (env.*get(set_repoid{}))("repoid");
     (env.*get(set_action{}))(TransactionItemAction::INSTALL);
@@ -86,7 +86,7 @@ CompsEnvironment & create_comps_environment(Transaction & trans) {
     auto & grp_core = (env.*get(new_group{}))();
     (grp_core.*get(set_group_id{}))("core");
     (grp_core.*get(set_installed{}))(true);
-    (grp_core.*get(set_group_type{}))(libdnf::comps::PackageType::MANDATORY);
+    (grp_core.*get(set_group_type{}))(libdnf5::comps::PackageType::MANDATORY);
 
     auto & grp_base = (env.*get(new_group{}))();
     (grp_base.*get(set_group_id{}))("base");

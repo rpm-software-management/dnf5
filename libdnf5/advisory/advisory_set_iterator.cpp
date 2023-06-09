@@ -29,11 +29,11 @@ namespace libdnf5::advisory {
 class AdvisorySetIterator::Impl : private libdnf5::solv::SolvMap::iterator {
 private:
     Impl(const AdvisorySet & advisory_set)
-        : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
+        : libdnf5::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
           advisory_set{&advisory_set} {}
 
     AdvisorySetIterator::Impl & operator++() {
-        libdnf::solv::SolvMap::iterator::operator++();
+        libdnf5::solv::SolvMap::iterator::operator++();
         return *this;
     }
 
@@ -80,7 +80,7 @@ void AdvisorySetIterator::end() {
 
 
 Advisory AdvisorySetIterator::operator*() {
-    return {p_impl->advisory_set->get_base(), libdnf::advisory::AdvisoryId(**p_impl)};
+    return {p_impl->advisory_set->get_base(), libdnf5::advisory::AdvisoryId(**p_impl)};
 }
 
 

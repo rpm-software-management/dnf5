@@ -40,7 +40,8 @@ PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl
 PackageSet::PackageSet(PackageSet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-PackageSet::PackageSet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map) : p_impl(new Impl(base, solv_map)) {}
+PackageSet::PackageSet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map)
+    : p_impl(new Impl(base, solv_map)) {}
 
 
 PackageSet::~PackageSet() = default;

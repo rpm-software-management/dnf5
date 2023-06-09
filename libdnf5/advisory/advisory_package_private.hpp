@@ -62,11 +62,11 @@ public:
     }
 
     //TODO(amatej): Is this the correct name?
-    /// Compare Name and Architecture of AdvisoryPackage and libdnf::rpm::Package
+    /// Compare Name and Architecture of AdvisoryPackage and libdnf5::rpm::Package
     ///
     /// @param adv_pkg      AdvisoryPackage to compare.
-    /// @param pkg          libdnf::rpm::Package to compare.
-    /// @return True if AdvisoryPackage has smaller name or architecture than libdnf::rpm::package, False otherwise.
+    /// @param pkg          libdnf5::rpm::Package to compare.
+    /// @return True if AdvisoryPackage has smaller name or architecture than libdnf5::rpm::package, False otherwise.
     static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
         const auto & pool = get_rpm_pool(adv_pkg.p_impl->base);
         Solvable * s = pool.id2solvable(pkg.get_id().id);
@@ -108,7 +108,7 @@ public:
     /// Check whether this AdvisoryPackage is resolved (meaning there is a counterpart
     /// package with lower or equal EVR and matching name and arch) in pkgs PacakgeSet.
     ///
-    /// @param pkgs             libdnf::rpm::PackageSet of packages to check
+    /// @param pkgs             libdnf5::rpm::PackageSet of packages to check
     ///
     /// @return true or false whether this AdvisoryPackage is resolved in pkgs
     bool is_resolved_in(const libdnf5::rpm::PackageSet & pkgs) const;

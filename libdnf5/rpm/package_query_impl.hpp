@@ -54,27 +54,27 @@ public:
         PackageSet & pkg_set,
         const Nevra & pattern,
         bool cmp_glob,
-        libdnf::sack::QueryCmp cmp_type,
-        libdnf::solv::SolvMap & filter_result,
+        libdnf5::sack::QueryCmp cmp_type,
+        libdnf5::solv::SolvMap & filter_result,
         bool with_src);
     static void filter_nevra(
         PackageSet & pkg_set,
         const std::vector<Solvable *> & sorted_solvables,
         const std::string & pattern,
         bool cmp_glob,
-        libdnf::sack::QueryCmp cmp_type,
-        libdnf::solv::SolvMap & filter_result);
-    /// Provide libdnf::sack::QueryCmp without NOT flag
+        libdnf5::sack::QueryCmp cmp_type,
+        libdnf5::solv::SolvMap & filter_result);
+    /// Provide libdnf5::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
         ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern);
-    /// Provide libdnf::sack::QueryCmp without NOT flag
+    /// Provide libdnf5::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
         ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
     /// Filter PackageSet by vector of SORTED advisory packages
     static void filter_sorted_advisory_pkgs(
         PackageSet & pkg_set,
-        const std::vector<libdnf::advisory::AdvisoryPackage> & adv_pkgs,
+        const std::vector<libdnf5::advisory::AdvisoryPackage> & adv_pkgs,
         libdnf5::sack::QueryCmp cmp_type);
 
 private:

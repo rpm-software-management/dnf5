@@ -32,7 +32,7 @@ const std::map<std::string, EnvironmentAttribute> environment_attributes{
 
 
 dnfdaemon::KeyValueMap environment_to_map(
-    const libdnf::comps::Environment & libdnf_environment, const std::vector<std::string> & attributes) {
+    const libdnf5::comps::Environment & libdnf_environment, const std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_environment;
     // add environment id by default
     dbus_environment.emplace(std::make_pair("environmentid", libdnf_environment.get_environmentid()));

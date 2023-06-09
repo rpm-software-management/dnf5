@@ -45,7 +45,7 @@ namespace libdnf5::comps {
 Environment::Environment(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
 
-Environment::Environment(libdnf::Base & base) : base(base.get_weak_ptr()) {}
+Environment::Environment(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
 
 
 Environment & Environment::operator+=(const Environment & rhs) {
@@ -98,7 +98,7 @@ std::string Environment::get_order() const {
 
 
 std::vector<std::string> load_groups_from_pool(
-    libdnf::solv::CompsPool & pool, Id environment_id, bool required = true) {
+    libdnf5::solv::CompsPool & pool, Id environment_id, bool required = true) {
     Solvable * solvable = pool.id2solvable(environment_id);
     Offset offset;
     if (required) {

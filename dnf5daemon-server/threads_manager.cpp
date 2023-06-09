@@ -92,12 +92,12 @@ locale_t ThreadsManager::set_thread_locale(const std::string & thread_locale, lo
     auto no_locale = static_cast<locale_t>(0);
     new_locale = newlocale(LC_ALL_MASK, thread_locale.c_str(), no_locale);
     if (new_locale == no_locale) {
-        throw libdnf::SystemError(errno, M_("Failed to create locale \"{}\"."), thread_locale);
+        throw libdnf5::SystemError(errno, M_("Failed to create locale \"{}\"."), thread_locale);
     }
     locale_t orig_locale = uselocale(new_locale);
     if (orig_locale == no_locale) {
         freelocale(new_locale);
-        throw libdnf::SystemError(errno, M_("Failed to use locale \"{}\"."), thread_locale);
+        throw libdnf5::SystemError(errno, M_("Failed to use locale \"{}\"."), thread_locale);
     }
     return orig_locale;
 }

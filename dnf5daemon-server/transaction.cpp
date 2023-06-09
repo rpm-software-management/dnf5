@@ -27,31 +27,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon {
 
-RpmTransactionItemActions transaction_package_to_action(const libdnf::base::TransactionPackage & tspkg) {
+RpmTransactionItemActions transaction_package_to_action(const libdnf5::base::TransactionPackage & tspkg) {
     switch (tspkg.get_action()) {
-        case libdnf::base::TransactionPackage::Action::INSTALL:
+        case libdnf5::base::TransactionPackage::Action::INSTALL:
             return RpmTransactionItemActions::INSTALL;
-        case libdnf::transaction::TransactionItemAction::UPGRADE:
+        case libdnf5::transaction::TransactionItemAction::UPGRADE:
             return RpmTransactionItemActions::UPGRADE;
-        case libdnf::base::TransactionPackage::Action::DOWNGRADE:
+        case libdnf5::base::TransactionPackage::Action::DOWNGRADE:
             return RpmTransactionItemActions::DOWNGRADE;
-        case libdnf::base::TransactionPackage::Action::REINSTALL:
+        case libdnf5::base::TransactionPackage::Action::REINSTALL:
             return RpmTransactionItemActions::REINSTALL;
-        case libdnf::base::TransactionPackage::Action::REMOVE:
-        case libdnf::transaction::TransactionItemAction::REPLACED:
+        case libdnf5::base::TransactionPackage::Action::REMOVE:
+        case libdnf5::transaction::TransactionItemAction::REPLACED:
             return RpmTransactionItemActions::ERASE;
-        case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
-        case libdnf::base::TransactionPackage::Action::ENABLE:
-        case libdnf::base::TransactionPackage::Action::DISABLE:
-        case libdnf::base::TransactionPackage::Action::RESET:
+        case libdnf5::base::TransactionPackage::Action::REASON_CHANGE:
+        case libdnf5::base::TransactionPackage::Action::ENABLE:
+        case libdnf5::base::TransactionPackage::Action::DISABLE:
+        case libdnf5::base::TransactionPackage::Action::RESET:
             // TODO(lukash) handle cases
             libdnf_throw_assertion(
                 "Unexpected action in RpmTransactionItem: {}",
-                static_cast<std::underlying_type_t<libdnf::base::TransactionPackage::Action>>(tspkg.get_action()));
+                static_cast<std::underlying_type_t<libdnf5::base::TransactionPackage::Action>>(tspkg.get_action()));
     }
     libdnf_throw_assertion(
         "Unknown action in RpmTransactionItem: {}",
-        static_cast<std::underlying_type_t<libdnf::base::TransactionPackage::Action>>(tspkg.get_action()));
+        static_cast<std::underlying_type_t<libdnf5::base::TransactionPackage::Action>>(tspkg.get_action()));
 }
 
 }  // namespace dnfdaemon

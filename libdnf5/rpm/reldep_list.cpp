@@ -32,7 +32,7 @@ extern "C" {
 }
 
 
-namespace libdnf::rpm {
+namespace libdnf5::rpm {
 
 ReldepList::ReldepList(const ReldepList & src) : p_impl(new Impl(*src.p_impl)) {}
 
@@ -40,7 +40,7 @@ ReldepList::ReldepList(ReldepList && src) noexcept : p_impl(std::move(src.p_impl
 
 ReldepList::ReldepList(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 
-ReldepList::ReldepList(libdnf::Base & base) : ReldepList(base.get_weak_ptr()) {}
+ReldepList::ReldepList(libdnf5::Base & base) : ReldepList(base.get_weak_ptr()) {}
 
 ReldepList::~ReldepList() = default;
 
@@ -88,7 +88,7 @@ void ReldepList::add(ReldepId id) {
 }
 
 bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
-    libdnf::solv::ReldepParser dep_splitter;
+    libdnf5::solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str))
         return false;
 
@@ -165,4 +165,4 @@ BaseWeakPtr ReldepList::get_base() const {
     return p_impl->get_base();
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf5::rpm

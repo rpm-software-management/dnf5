@@ -44,23 +44,23 @@ AdvisoryQuery::~AdvisoryQuery() = default;
 
 static int libsolv_cmp_flags(libdnf5::sack::QueryCmp cmp_type, const char * pattern) {
     // Remove GLOB when the pattern is not a glob
-    if ((cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB &&
-        !libdnf::utils::is_glob_pattern(pattern)) {
-        cmp_type = (cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+    if ((cmp_type & libdnf5::sack::QueryCmp::GLOB) == libdnf5::sack::QueryCmp::GLOB &&
+        !libdnf5::utils::is_glob_pattern(pattern)) {
+        cmp_type = (cmp_type - libdnf5::sack::QueryCmp::GLOB) | libdnf5::sack::QueryCmp::EQ;
     }
 
     switch (cmp_type) {
-        case libdnf::sack::QueryCmp::EQ:
+        case libdnf5::sack::QueryCmp::EQ:
             return SEARCH_STRING;
-        case libdnf::sack::QueryCmp::IEXACT:
+        case libdnf5::sack::QueryCmp::IEXACT:
             return SEARCH_NOCASE | SEARCH_STRING;
-        case libdnf::sack::QueryCmp::GLOB:
+        case libdnf5::sack::QueryCmp::GLOB:
             return SEARCH_GLOB;
-        case libdnf::sack::QueryCmp::IGLOB:
+        case libdnf5::sack::QueryCmp::IGLOB:
             return SEARCH_NOCASE | SEARCH_GLOB;
-        case libdnf::sack::QueryCmp::CONTAINS:
+        case libdnf5::sack::QueryCmp::CONTAINS:
             return SEARCH_SUBSTRING;
-        case libdnf::sack::QueryCmp::ICONTAINS:
+        case libdnf5::sack::QueryCmp::ICONTAINS:
             return SEARCH_NOCASE | SEARCH_SUBSTRING;
         default:
             libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
@@ -70,15 +70,15 @@ static int libsolv_cmp_flags(libdnf5::sack::QueryCmp cmp_type, const char * patt
 static void filter_dataiterator_internal(
     Pool * pool,
     Id keyname,
-    libdnf::solv::SolvMap & candidates,
-    libdnf::sack::QueryCmp cmp_type,
+    libdnf5::solv::SolvMap & candidates,
+    libdnf5::sack::QueryCmp cmp_type,
     const std::vector<std::string> & patterns) {
-    libdnf::solv::SolvMap filter_result(pool->nsolvables);
+    libdnf5::solv::SolvMap filter_result(pool->nsolvables);
 
-    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and more effective
-        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
     for (auto & pattern : patterns) {
@@ -103,17 +103,17 @@ static void filter_dataiterator_internal(
 }
 
 static void filter_reference_by_type_and_id(
-    libdnf::solv::RpmPool & pool,
-    libdnf::solv::SolvMap & candidates,
-    libdnf::sack::QueryCmp cmp_type,
+    libdnf5::solv::RpmPool & pool,
+    libdnf5::solv::SolvMap & candidates,
+    libdnf5::sack::QueryCmp cmp_type,
     const std::vector<std::string> & patterns,
     const std::optional<std::string> type) {
-    libdnf::solv::SolvMap filter_result((*pool)->nsolvables);
+    libdnf5::solv::SolvMap filter_result((*pool)->nsolvables);
 
-    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and more effective
-        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
     for (auto & pattern : patterns) {
@@ -155,13 +155,13 @@ void AdvisoryQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp_
         SOLVABLE_NAME,
         *p_impl,
         cmp_type,
-        {std::string(libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern});
+        {std::string(libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern});
 }
 
 void AdvisoryQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     std::vector<std::string> prefixed_patterns;
     for (std::string pattern : patterns) {
-        prefixed_patterns.push_back(std::string(libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern);
+        prefixed_patterns.push_back(std::string(libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern);
     }
     filter_dataiterator_internal(*get_rpm_pool(base), SOLVABLE_NAME, *p_impl, cmp_type, prefixed_patterns);
 }
@@ -195,25 +195,25 @@ void AdvisoryQuery::filter_severity(const std::vector<std::string> & severities,
     filter_dataiterator_internal(*get_rpm_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, severities);
 }
 
-void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
+void AdvisoryQuery::filter_packages(const libdnf5::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & pool = get_rpm_pool(base);
-    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
+    libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
     std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
 
-    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and more effective
-        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
     switch (cmp_type) {
-        case libdnf::sack::QueryCmp::EQ:
+        case libdnf5::sack::QueryCmp::EQ:
             //TODO(amatej): faster EQ specific version (we can compare whole NEVRA)
-        case libdnf::sack::QueryCmp::GT:
-        case libdnf::sack::QueryCmp::LT:
-        case libdnf::sack::QueryCmp::GTE:
-        case libdnf::sack::QueryCmp::LTE: {
-            for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
+        case libdnf5::sack::QueryCmp::GT:
+        case libdnf5::sack::QueryCmp::LT:
+        case libdnf5::sack::QueryCmp::GTE:
+        case libdnf5::sack::QueryCmp::LTE: {
+            for (libdnf5::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
                 Solvable * solvable = pool.id2solvable((*package).get_id().id);
                 auto low = std::lower_bound(
@@ -244,20 +244,20 @@ void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set,
 }
 
 std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages_sorted(
-    const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) const {
+    const libdnf5::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) const {
     std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<AdvisoryPackage> after_filter;
 
     auto & pool = get_rpm_pool(base);
 
     switch (cmp_type) {
-        case libdnf::sack::QueryCmp::EQ:
+        case libdnf5::sack::QueryCmp::EQ:
             //TODO(amatej): faster EQ specific version (we can compare whole NEVRA)
-        case libdnf::sack::QueryCmp::GT:
-        case libdnf::sack::QueryCmp::LT:
-        case libdnf::sack::QueryCmp::GTE:
-        case libdnf::sack::QueryCmp::LTE: {
-            for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
+        case libdnf5::sack::QueryCmp::GT:
+        case libdnf5::sack::QueryCmp::LT:
+        case libdnf5::sack::QueryCmp::GTE:
+        case libdnf5::sack::QueryCmp::LTE: {
+            for (libdnf5::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
                 Solvable * solvable = pool.id2solvable((*package).get_id().id);
                 auto low = std::lower_bound(

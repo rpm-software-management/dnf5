@@ -43,19 +43,19 @@ enum { COL_NAME, COL_ARCH, COL_EVR, COL_REPO, COL_SIZE };
 
 static const char * action_color(libdnf5::transaction::TransactionItemAction action) {
     switch (action) {
-        case libdnf::transaction::TransactionItemAction::INSTALL:
-        case libdnf::transaction::TransactionItemAction::UPGRADE:
-        case libdnf::transaction::TransactionItemAction::REINSTALL:
-        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-        case libdnf::transaction::TransactionItemAction::ENABLE:
+        case libdnf5::transaction::TransactionItemAction::INSTALL:
+        case libdnf5::transaction::TransactionItemAction::UPGRADE:
+        case libdnf5::transaction::TransactionItemAction::REINSTALL:
+        case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
+        case libdnf5::transaction::TransactionItemAction::ENABLE:
             return "green";
-        case libdnf::transaction::TransactionItemAction::DOWNGRADE:
-        case libdnf::transaction::TransactionItemAction::RESET:
+        case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
+        case libdnf5::transaction::TransactionItemAction::RESET:
             return "magenta";
-        case libdnf::transaction::TransactionItemAction::REMOVE:
-        case libdnf::transaction::TransactionItemAction::DISABLE:
+        case libdnf5::transaction::TransactionItemAction::REMOVE:
+        case libdnf5::transaction::TransactionItemAction::DISABLE:
             return "red";
-        case libdnf::transaction::TransactionItemAction::REPLACED:
+        case libdnf5::transaction::TransactionItemAction::REPLACED:
             return "halfbright";
     }
 
@@ -77,8 +77,8 @@ public:
     template <class T>
     struct libscols_line * print(const T & tspkg) {
         if (!current_action || *current_action != tspkg.get_action() ||
-            ((*current_action == libdnf::transaction::TransactionItemAction::INSTALL ||
-              *current_action == libdnf::transaction::TransactionItemAction::REMOVE) &&
+            ((*current_action == libdnf5::transaction::TransactionItemAction::INSTALL ||
+              *current_action == libdnf5::transaction::TransactionItemAction::REMOVE) &&
              *current_reason != tspkg.get_reason())) {
             auto reason = tspkg.get_reason();
             auto action = tspkg.get_action();
@@ -86,40 +86,40 @@ public:
             std::string text;
 
             switch (action) {
-                case libdnf::transaction::TransactionItemAction::INSTALL:
+                case libdnf5::transaction::TransactionItemAction::INSTALL:
                     text = "Installing";
-                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                    if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
                         text += " dependencies";
-                    } else if (reason == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
+                    } else if (reason == libdnf5::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
                         text += " weak dependencies";
-                    } else if (reason == libdnf::transaction::TransactionItemReason::GROUP) {
+                    } else if (reason == libdnf5::transaction::TransactionItemReason::GROUP) {
                         text += " group/module packages";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                case libdnf5::transaction::TransactionItemAction::UPGRADE:
                     text = "Upgrading";
                     break;
-                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+                case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
                     text = "Downgrading";
                     break;
-                case libdnf::transaction::TransactionItemAction::REINSTALL:
+                case libdnf5::transaction::TransactionItemAction::REINSTALL:
                     text = "Reinstalling";
                     break;
-                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf5::transaction::TransactionItemAction::REMOVE:
                     text = "Removing";
-                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                    if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
                         text += " dependent packages";
-                    } else if (reason == libdnf::transaction::TransactionItemReason::CLEAN) {
+                    } else if (reason == libdnf5::transaction::TransactionItemReason::CLEAN) {
                         text += " unused dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
                     text = "Changing reason";
                     break;
-                case libdnf::transaction::TransactionItemAction::REPLACED:
-                case libdnf::transaction::TransactionItemAction::ENABLE:
-                case libdnf::transaction::TransactionItemAction::DISABLE:
-                case libdnf::transaction::TransactionItemAction::RESET:
+                case libdnf5::transaction::TransactionItemAction::REPLACED:
+                case libdnf5::transaction::TransactionItemAction::ENABLE:
+                case libdnf5::transaction::TransactionItemAction::DISABLE:
+                case libdnf5::transaction::TransactionItemAction::RESET:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }

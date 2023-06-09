@@ -64,7 +64,7 @@ TransactionItem::saveReplacedBy()
         return;
     }
     const char *sql = "INSERT OR REPLACE INTO item_replaced_by VALUES (?, ?)";
-    libdnf::utils::SQLite3::Statement replacedByQuery(trans.get_connection(), sql);
+    libdnf5::utils::SQLite3::Statement replacedByQuery(trans.get_connection(), sql);
     bool first = true;
     for (const auto &newItem : replacedBy) {
         if (!first) {
@@ -89,7 +89,7 @@ TransactionItem::saveState()
           id = ?
     )**";
 
-    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
+    libdnf5::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(static_cast< int >(get_state()), get_id());
     query.step();
 }
@@ -122,7 +122,7 @@ TransactionItem::dbUpdate()
     }
 
 
-    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
+    libdnf5::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(trans.get_id(),
                 getItem()->getId(),
                 repo_id,

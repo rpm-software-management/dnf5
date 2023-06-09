@@ -75,8 +75,8 @@ public:
     void test_iterator_performance_4bits();
 
 private:
-    libdnf::solv::SolvMap * map1;
-    libdnf::solv::SolvMap * map2;
+    libdnf5::solv::SolvMap * map1;
+    libdnf5::solv::SolvMap * map2;
 };
 
 
