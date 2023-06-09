@@ -73,6 +73,7 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
     {base::Transaction::TransactionRunResult::ERROR_LOCK,
      M_("Failed to obtain rpm transaction lock. Another transaction is in progress.")},
     {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
+    {base::Transaction::TransactionRunResult::ERROR_GPG_CHECK, M_("Signature verification failed.")},
 };
 
 const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RESULT_DICT = {
@@ -292,6 +293,7 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
         case TransactionRunResult::ERROR_CHECK:
         case TransactionRunResult::ERROR_LOCK:
         case TransactionRunResult::ERROR_RPM_RUN:
+        case TransactionRunResult::ERROR_GPG_CHECK:
             return TM_(TRANSACTION_RUN_RESULT_DICT.at(result), 1);
     }
     return {};
@@ -537,6 +539,10 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     // only successfully resolved transaction can be run
     if (transaction->get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
         return TransactionRunResult::ERROR_RESOLVE;
+    }
+
+    if (!check_gpg_signatures()) {
+        return TransactionRunResult::ERROR_GPG_CHECK;
     }
 
     auto & config = base->get_config();
