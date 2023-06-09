@@ -78,7 +78,7 @@ To report an issue, use either of the following methods:
 Developing DNF5 by building and testing the code
 ------------------------------------------------
 
-For details about building and testing DNF5, see the [Development environment setup](https://github.com/rpm-software-management/dnf5/blob/main#development-environment-setup) section.
+For details about building and testing DNF5, see the [Development environment setup](CONTRIBUTING.md#setting-up-a-development-environment) section.
 
 Translating
 -----------
