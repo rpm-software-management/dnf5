@@ -85,7 +85,7 @@ bool PackageListSections::add_section(
         for (const auto & pkg : pkg_set) {
             packages.emplace_back(std::move(pkg));
         }
-        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf::rpm::Package>);
+        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
 
         struct libscols_line * first_line = nullptr;
         struct libscols_line * last_line = nullptr;

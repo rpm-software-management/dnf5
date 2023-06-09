@@ -483,7 +483,7 @@ void Repo::load_available_repo() {
     libdnf5::utils::fs::File file;
     std::string yaml_content;
 
-    // TODO(pkratoch): Replace this by implementation in libdnf::utils::fs::File.
+    // TODO(pkratoch): Replace this by implementation in libdnf5::utils::fs::File.
     // If the file is comressed, `std::fseek` doesn't work with the way libsolv decompresses the file, so read it by
     // chunks.
     if (solv_xfopen_iscompressed(ext_fn.c_str()) == 1) {

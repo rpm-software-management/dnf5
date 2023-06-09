@@ -99,7 +99,7 @@ private:
 
     // TODO(dmach): rewrite into TransactionSack.list_installed_groups(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
-    //    libdnf::utils::SQLite3Ptr conn,
+    //    libdnf5::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
 
     /// Get string representation of the object, which equals to group_id
@@ -162,7 +162,7 @@ private:
     libdnf5::comps::PackageType get_package_type() const noexcept { return package_type; }
 
     /// Set type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
-    /// See `enum class libdnf::comps::PackageType` documentation for more details.
+    /// See `enum class libdnf5::comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
     void set_package_type(libdnf5::comps::PackageType value) { package_type = value; }

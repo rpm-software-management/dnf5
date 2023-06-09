@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::transaction {
 
 InvalidTransactionItemType::InvalidTransactionItemType(const std::string & type)
-    : libdnf::Error(M_("Invalid transaction item type: {}"), type) {}
+    : libdnf5::Error(M_("Invalid transaction item type: {}"), type) {}
 
 
 std::string transaction_item_type_to_string(TransactionItemType type) {

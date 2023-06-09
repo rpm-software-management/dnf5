@@ -3,7 +3,7 @@
 */
 
 // Create a new Base object.
-libdnf::Base base;
+libdnf5::Base base;
 
 // Optionally load configuration from the config file.
 //

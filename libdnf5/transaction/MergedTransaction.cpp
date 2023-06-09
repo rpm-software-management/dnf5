@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 /**
  * Create a new MergedTransaction object with a single transaction
@@ -451,5 +451,5 @@ void MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * m
     }
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 #endif

@@ -58,7 +58,7 @@ protected:
     std::unique_ptr<CveOption> advisory_cve;
 
 private:
-    virtual std::unique_ptr<libdnf::cli::output::PackageListSections> create_output();
+    virtual std::unique_ptr<libdnf5::cli::output::PackageListSections> create_output();
 };
 
 }  // namespace dnf5

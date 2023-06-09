@@ -100,7 +100,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
 // converts Repo object to dbus map
 dnfdaemon::KeyValueMap repo_to_map(
     libdnf5::Base & base,
-    const libdnf::WeakPtr<libdnf::repo::Repo, false> libdnf_repo,
+    const libdnf5::WeakPtr<libdnf5::repo::Repo, false> libdnf_repo,
     std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_repo;
     // attributes required by client
@@ -117,7 +117,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 break;
             case RepoAttribute::size: {
                 uint64_t size = 0;
-                libdnf::rpm::PackageQuery query(base);
+                libdnf5::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 for (auto pkg : query) {
@@ -144,13 +144,13 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
             case RepoAttribute::pkgs: {
-                libdnf::rpm::PackageQuery query(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+                libdnf5::rpm::PackageQuery query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
-                libdnf::rpm::PackageQuery query(base);
+                libdnf5::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 dbus_repo.emplace(attr, query.size());
@@ -266,12 +266,12 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
         repos_query.filter_enabled(false);
     }
 
-    repos_query.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+    repos_query.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
 
     if (patterns.size() > 0) {
         auto query_names = repos_query;
-        query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
-        repos_query.filter_id(patterns, libdnf::sack::QueryCmp::IGLOB);
+        query_names.filter_name(patterns, libdnf5::sack::QueryCmp::IGLOB);
+        repos_query.filter_id(patterns, libdnf5::sack::QueryCmp::IGLOB);
         repos_query |= query_names;
     }
 

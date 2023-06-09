@@ -32,7 +32,7 @@ extern "C" {
 }
 
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 ModuleQuery::ModuleQuery(const BaseWeakPtr & base, bool empty) : base(base) {
@@ -48,55 +48,55 @@ ModuleQuery::ModuleQuery(const BaseWeakPtr & base, bool empty) : base(base) {
 }
 
 
-ModuleQuery::ModuleQuery(libdnf::Base & base, bool empty) : ModuleQuery(base.get_weak_ptr(), empty) {}
+ModuleQuery::ModuleQuery(libdnf5::Base & base, bool empty) : ModuleQuery(base.get_weak_ptr(), empty) {}
 
 
-void ModuleQuery::filter_name(const std::string & pattern, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_name(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
     filter(Get::name, pattern, cmp);
 }
 
 
-void ModuleQuery::filter_name(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_name(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
     filter(Get::name, patterns, cmp);
 }
 
 
-void ModuleQuery::filter_stream(const std::string & pattern, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_stream(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
     filter(Get::stream, pattern, cmp);
 }
 
 
-void ModuleQuery::filter_stream(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_stream(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
     filter(Get::stream, patterns, cmp);
 }
 
 
-void ModuleQuery::filter_version(const std::string & pattern, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_version(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
     filter(Get::version, pattern, cmp);
 }
 
 
-void ModuleQuery::filter_version(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_version(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
     filter(Get::version, patterns, cmp);
 }
 
 
-void ModuleQuery::filter_context(const std::string & pattern, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_context(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
     filter(Get::context, pattern, cmp);
 }
 
 
-void ModuleQuery::filter_context(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_context(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
     filter(Get::context, patterns, cmp);
 }
 
 
-void ModuleQuery::filter_arch(const std::string & pattern, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_arch(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
     filter(Get::arch, pattern, cmp);
 }
 
 
-void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
     filter(Get::arch, patterns, cmp);
 }
 
@@ -160,7 +160,7 @@ void ModuleQuery::filter_latest(int limit) {
 }
 
 
-void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp) {
+void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf5::sack::QueryCmp cmp) {
     const std::string & name = nsvcap.get_name();
     if (!name.empty()) {
         filter_name(name, cmp);
@@ -185,8 +185,8 @@ void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp
 
 
 std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & module_spec) {
-    libdnf::sack::QueryCmp cmp =
-        libdnf::utils::is_glob_pattern(module_spec.c_str()) ? libdnf::sack::QueryCmp::GLOB : libdnf::sack::QueryCmp::EQ;
+    libdnf5::sack::QueryCmp cmp = libdnf5::utils::is_glob_pattern(module_spec.c_str()) ? libdnf5::sack::QueryCmp::GLOB
+                                                                                       : libdnf5::sack::QueryCmp::EQ;
 
     std::vector<Nsvcap> possible_nsvcaps = Nsvcap::parse(module_spec);
     for (Nsvcap & nsvcap : possible_nsvcaps) {
@@ -203,4 +203,4 @@ std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & mod
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

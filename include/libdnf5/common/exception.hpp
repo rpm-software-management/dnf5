@@ -31,31 +31,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_LOCATION \
     { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
 
-/// An assert macro that throws `libdnf::AssertionError`.
+/// An assert macro that throws `libdnf5::AssertionError`.
 ///
 /// @param msg_format The format string for the message.
 /// @param ... The format arguments.
-/// @exception libdnf::AssertionError Thrown always.
+/// @exception libdnf5::AssertionError Thrown always.
 #define libdnf_throw_assertion(msg_format, ...) \
     (throw libdnf5::AssertionError(nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
-/// An assert macro that throws `libdnf::AssertionError` when `condition` is not met.
+/// An assert macro that throws `libdnf5::AssertionError` when `condition` is not met.
 ///
 /// @param condition The assertion condition. Throws AssertionError if it's not met.
 /// @param msg_format The format string for the message.
 /// @param ... The format arguments.
-/// @exception libdnf::AssertionError Thrown when condition is not met.
+/// @exception libdnf5::AssertionError Thrown when condition is not met.
 #define libdnf_assert(condition, msg_format, ...) \
     (static_cast<bool>(condition)                 \
          ? void(0)                                \
          : throw libdnf5::AssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
-/// An assert macro that throws `libdnf::UserAssertionError` when `condition` is not met.
+/// An assert macro that throws `libdnf5::UserAssertionError` when `condition` is not met.
 ///
 /// @param condition The assertion condition. Throws UserAssertionError if it's not met.
 /// @param msg_format The format string for the message.
 /// @param ... The format arguments.
-/// @exception libdnf::UserAssertionError Thrown when condition is not met.
+/// @exception libdnf5::UserAssertionError Thrown when condition is not met.
 #define libdnf_user_assert(condition, msg_format, ...) \
     (static_cast<bool>(condition)                      \
          ? void(0)                                     \

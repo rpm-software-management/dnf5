@@ -78,7 +78,7 @@ std::vector<libdnf5::transaction::Transaction> list_transactions_from_specs(
     libdnf5::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs) {
     std::vector<int64_t> trans_id_cache;
     std::vector<int64_t> single_ids_to_get;
-    std::vector<libdnf::transaction::Transaction> result;
+    std::vector<libdnf5::transaction::Transaction> result;
 
     using trans_id_cache_it_type = std::vector<int64_t>::iterator::difference_type;
 

@@ -32,7 +32,7 @@ namespace libdnf5::advisory {
 
 AdvisorySet::AdvisorySet(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 
-AdvisorySet::AdvisorySet(libdnf::Base & base) : AdvisorySet(base.get_weak_ptr()) {}
+AdvisorySet::AdvisorySet(libdnf5::Base & base) : AdvisorySet(base.get_weak_ptr()) {}
 
 AdvisorySet::AdvisorySet(const AdvisorySet & other) : p_impl(new Impl(*other.p_impl)) {}
 
@@ -40,7 +40,7 @@ AdvisorySet::AdvisorySet(const AdvisorySet & other) : p_impl(new Impl(*other.p_i
 AdvisorySet::AdvisorySet(AdvisorySet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-AdvisorySet::AdvisorySet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map)
+AdvisorySet::AdvisorySet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map)
     : p_impl(new Impl(base, solv_map)) {}
 
 

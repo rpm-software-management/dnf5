@@ -94,7 +94,7 @@ ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & rel
         return ReldepId(id);
     }
 
-    libdnf::solv::ReldepParser dep_splitter;
+    libdnf5::solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str)) {
         throw RuntimeError(M_("Cannot parse a dependency string"));
     }

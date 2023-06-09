@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 /**
  * Class overrides default behavior with
@@ -41,6 +41,6 @@ public:
     }
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP

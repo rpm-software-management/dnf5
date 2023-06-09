@@ -29,11 +29,11 @@ namespace libdnf5::rpm {
 class PackageSetIterator::Impl : private libdnf5::solv::SolvMap::iterator {
 private:
     Impl(const PackageSet & package_set)
-        : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
+        : libdnf5::solv::SolvMap::iterator(package_set.p_impl->get_map()),
           package_set{&package_set} {}
 
     PackageSetIterator::Impl & operator++() {
-        libdnf::solv::SolvMap::iterator::operator++();
+        libdnf5::solv::SolvMap::iterator::operator++();
         return *this;
     }
 
@@ -80,7 +80,7 @@ void PackageSetIterator::end() {
 
 
 Package PackageSetIterator::operator*() {
-    return {p_impl->package_set->get_base(), libdnf::rpm::PackageId(**p_impl)};
+    return {p_impl->package_set->get_base(), libdnf5::rpm::PackageId(**p_impl)};
 }
 
 

@@ -118,12 +118,12 @@ struct assertion_traits<libdnf5::comps::Environment> {
 };
 
 template <>
-struct assertion_traits<libdnf5::Set<libdnf::comps::Environment>> {
-    inline static std::string toString(const libdnf::Set<libdnf::comps::Environment> & environments) {
+struct assertion_traits<libdnf5::Set<libdnf5::comps::Environment>> {
+    inline static std::string toString(const libdnf5::Set<libdnf5::comps::Environment> & environments) {
         std::string result;
 
         for (const auto & environment : environments) {
-            result += "\n    " + assertion_traits<libdnf::comps::Environment>::toString(environment);
+            result += "\n    " + assertion_traits<libdnf5::comps::Environment>::toString(environment);
         }
 
         return result;
@@ -150,12 +150,12 @@ struct assertion_traits<libdnf5::comps::Group> {
 };
 
 template <>
-struct assertion_traits<libdnf5::Set<libdnf::comps::Group>> {
-    inline static std::string toString(const libdnf::Set<libdnf::comps::Group> & groups) {
+struct assertion_traits<libdnf5::Set<libdnf5::comps::Group>> {
+    inline static std::string toString(const libdnf5::Set<libdnf5::comps::Group> & groups) {
         std::string result;
 
         for (const auto & group : groups) {
-            result += "\n    " + assertion_traits<libdnf::comps::Group>::toString(group);
+            result += "\n    " + assertion_traits<libdnf5::comps::Group>::toString(group);
         }
 
         return result;
@@ -279,8 +279,8 @@ struct assertion_traits<libdnf5::system::ModuleState> {
 
 
 std::vector<libdnf5::advisory::Advisory> to_vector(const libdnf5::advisory::AdvisorySet & advisory_set);
-std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf::comps::Environment> & environment_set);
-std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf::comps::Group> & group_set);
+std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf5::comps::Environment> & environment_set);
+std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::Group> & group_set);
 std::vector<libdnf5::rpm::Reldep> to_vector(const libdnf5::rpm::ReldepList & reldep_list);
 std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & package_set);
 

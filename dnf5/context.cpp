@@ -378,14 +378,14 @@ private:
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
-static bool user_confirm_key(libdnf5::ConfigMain & config, const libdnf::rpm::KeyInfo & key_info) {
+static bool user_confirm_key(libdnf5::ConfigMain & config, const libdnf5::rpm::KeyInfo & key_info) {
     std::cout << "Importing PGP key 0x" << key_info.get_short_key_id() << std::endl;
     for (auto & user_id : key_info.get_user_ids()) {
         std::cout << " UserId     : \"" << user_id << "\"" << std::endl;
     }
     std::cout << " Fingerprint: " << key_info.get_fingerprint() << std::endl;
     std::cout << " From       : " << key_info.get_url() << std::endl;
-    return libdnf::cli::utils::userconfirm::userconfirm(config);
+    return libdnf5::cli::utils::userconfirm::userconfirm(config);
 }
 
 }  // namespace

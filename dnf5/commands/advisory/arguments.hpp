@@ -95,9 +95,9 @@ public:
 }  // namespace dnf5
 
 
-class AdvisoryWithBzOption : public libdnf::cli::session::BoolOption {
+class AdvisoryWithBzOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AdvisoryWithBzOption(libdnf::cli::session::Command & command)
+    explicit AdvisoryWithBzOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "with-bz", '\0', _("Show only advisories referencing a bugzilla."), false) {}
 };
 

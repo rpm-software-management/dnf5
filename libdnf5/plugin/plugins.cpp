@@ -137,7 +137,7 @@ void Plugins::load_plugin_library(ConfigParser && parser, const std::string & fi
 void Plugins::load_plugin(const std::string & config_file_path) {
     auto & logger = *base->get_logger();
 
-    libdnf::ConfigParser parser;
+    libdnf5::ConfigParser parser;
     parser.read(config_file_path);
 
     enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
@@ -222,7 +222,7 @@ void Plugins::post_base_setup() {
     }
 }
 
-void Plugins::pre_transaction(const libdnf::base::Transaction & transaction) {
+void Plugins::pre_transaction(const libdnf5::base::Transaction & transaction) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
             plugin->pre_transaction(transaction);
@@ -230,7 +230,7 @@ void Plugins::pre_transaction(const libdnf::base::Transaction & transaction) {
     }
 }
 
-void Plugins::post_transaction(const libdnf::base::Transaction & transaction) {
+void Plugins::post_transaction(const libdnf5::base::Transaction & transaction) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
             plugin->post_transaction(transaction);

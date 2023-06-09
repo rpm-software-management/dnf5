@@ -48,7 +48,7 @@ class TransactionError : public Error {
 public:
     using Error::Error;
     /// @return Error class' domain name"
-    const char * get_domain_name() const noexcept override { return "libdnf::base"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::base"; }
     /// @return Error class' name"
     const char * get_name() const noexcept override { return "TransactionError"; }
 };

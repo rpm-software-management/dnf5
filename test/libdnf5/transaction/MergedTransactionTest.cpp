@@ -32,16 +32,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/transaction/rpm_package.hpp"
 #include "libdnf5/transaction/transaction.hpp"
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MergedTransactionTest);
 
 void MergedTransactionTest::setUp() {
-    conn = new libdnf::utils::SQLite3(":memory:");
+    conn = new libdnf5::utils::SQLite3(":memory:");
     Transformer::createDatabase(*conn);
 }
 
-static TransactionPtr initTransFirst(libdnf::utils::SQLite3 & conn) {
+static TransactionPtr initTransFirst(libdnf5::utils::SQLite3 & conn) {
     // create the first transaction
     auto first = std::make_shared<Transaction>(conn);
     first->set_dt_begin(1);
@@ -54,7 +54,7 @@ static TransactionPtr initTransFirst(libdnf::utils::SQLite3 & conn) {
     return first;
 }
 
-static TransactionPtr initTransSecond(libdnf::utils::SQLite3 & conn) {
+static TransactionPtr initTransSecond(libdnf5::utils::SQLite3 & conn) {
     // create the second transaction
     auto second = std::make_shared<Transaction>(conn);
     second->set_dt_begin(3);
@@ -122,7 +122,7 @@ void MergedTransactionTest::testMerge() {
 }
 
 static MergedTransactionPtr prepareMergedTransaction(
-    libdnf::utils::SQLite3 & conn,
+    libdnf5::utils::SQLite3 & conn,
     TransactionItemAction actionFirst,
     TransactionItemAction actionSecond,
     const std::string & versionFirst,
@@ -306,8 +306,8 @@ void MergedTransactionTest::testMergeAlterAlter() {
 
 
 static std::shared_ptr<Package> nevraToPackage(Transaction & trans, std::string nevra) {
-    libdnf::rpm::Nevra nevraObject;
-    if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
+    libdnf5::rpm::Nevra nevraObject;
+    if (!nevraObject.parse(nevra.c_str(), libdnf5::rpm::Nevra::Form::NEVRA)) {
         return nullptr;
     }
     if (nevraObject.get_epoch().empty()) {
@@ -315,13 +315,13 @@ static std::shared_ptr<Package> nevraToPackage(Transaction & trans, std::string 
     }
 
     auto rpm = std::make_shared<Package>(trans);
-    libdnf::rpm::copy_nevra_attributes(nevraObject, *rpm);
+    libdnf5::rpm::copy_nevra_attributes(nevraObject, *rpm);
     return rpm;
 }
 
 /*
 static TransactionPtr
-createTrans(libdnf::utils::SQLite3Ptr conn, std::string nevra, std::string repoid, TransactionItemAction action, TransactionItemReason reason, std::vector<std::string> obsoletes)
+createTrans(libdnf5::utils::SQLite3Ptr conn, std::string nevra, std::string repoid, TransactionItemAction action, TransactionItemReason reason, std::vector<std::string> obsoletes)
 {
     Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), HY_FORM_NEVRA)) {
@@ -344,7 +344,7 @@ createTrans(libdnf::utils::SQLite3Ptr conn, std::string nevra, std::string repoi
 }
 
 static TransactionPtr
-createTrans(libdnf::utils::SQLite3Ptr conn, std::string nevra, std::string repoid, TransactionItemAction action, TransactionItemReason reason)
+createTrans(libdnf5::utils::SQLite3Ptr conn, std::string nevra, std::string repoid, TransactionItemAction action, TransactionItemReason reason)
 {
     return createTrans(conn, nevra, repoid, action, reason, {});
 }

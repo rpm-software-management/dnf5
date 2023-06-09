@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <mutex>
 
-using namespace libdnf;
+using namespace libdnf5;
 
 namespace fs = std::filesystem;
 
@@ -40,7 +40,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public plugin::IPlugin {
 public:
-    PythonPluginLoader(libdnf::Base & base, libdnf::ConfigParser &) : IPlugin(base) {}
+    PythonPluginLoader(libdnf5::Base & base, libdnf5::ConfigParser &) : IPlugin(base) {}
     virtual ~PythonPluginLoader();
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -154,7 +154,7 @@ PycompString::PycompString(PyObject * str) {
 
 PythonPluginLoader::~PythonPluginLoader() {
     if (active) {
-        std::lock_guard<libdnf::Base> guard(get_base());
+        std::lock_guard<libdnf5::Base> guard(get_base());
         if (--python_ref_counter == 0) {
             Py_Finalize();
         }
@@ -278,7 +278,7 @@ void PythonPluginLoader::load_plugins() {
     }
     const fs::path path(plugin_dir);
 
-    std::lock_guard<libdnf::Base> guard(get_base());
+    std::lock_guard<libdnf5::Base> guard(get_base());
 
     if (python_ref_counter == 0) {
         Py_InitializeEx(0);
@@ -327,7 +327,7 @@ plugin::Version libdnf_plugin_get_version(void) {
 }
 
 plugin::IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] LibraryVersion library_version, libdnf::Base & base, libdnf::ConfigParser & parser) try {
+    [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
     return new PythonPluginLoader(base, parser);
 } catch (...) {
     return nullptr;

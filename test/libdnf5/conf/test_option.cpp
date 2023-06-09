@@ -510,11 +510,11 @@ void OptionTest::test_options_list_add() {
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3"}) == option.get_value());
 
     OptionStringSet::ValueType another_set{"4", "5", "6"};
-    option.add(libdnf::Option::Priority::RUNTIME, another_set);
+    option.add(libdnf5::Option::Priority::RUNTIME, another_set);
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6"}) == option.get_value());
 
     OptionStringSet::ValueType set_with_existing_values{"7", "5", "4"};
-    option.add(libdnf::Option::Priority::RUNTIME, set_with_existing_values);
+    option.add(libdnf5::Option::Priority::RUNTIME, set_with_existing_values);
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6", "7"}) == option.get_value());
 }
 
@@ -523,9 +523,9 @@ void OptionTest::test_options_list_add_item() {
     OptionStringSet option(initial);
     CPPUNIT_ASSERT(initial == option.get_value());
 
-    option.add_item(libdnf::Option::Priority::RUNTIME, "item2");
+    option.add_item(libdnf5::Option::Priority::RUNTIME, "item2");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"item1", "item2"}) == option.get_value());
 
-    option.add_item(libdnf::Option::Priority::RUNTIME, "item1");
+    option.add_item(libdnf5::Option::Priority::RUNTIME, "item1");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"item1", "item2"}) == option.get_value());
 }

@@ -30,10 +30,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 struct Swdb;
 //class Transformer;
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 //#include "../hy-types.h"
 //#include "../sack/query.hpp"
@@ -43,11 +43,11 @@ struct Swdb;
 #include "transaction_item.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
 struct Swdb {
 public:
-    explicit Swdb(libdnf::utils::SQLite3 & conn);
+    explicit Swdb(libdnf5::utils::SQLite3 & conn);
     explicit Swdb(const std::string & path);
     ~Swdb();
 
@@ -122,15 +122,15 @@ public:
     void setReleasever(std::string value);
     void add_console_output_line(int file_descriptor, const std::string & line);
 
-    libdnf::utils::SQLite3 & get_connection() const { return *conn; }
+    libdnf5::utils::SQLite3 & get_connection() const { return *conn; }
 
     Transaction * get_transaction_in_progress() { return transactionInProgress.get(); }
 
 protected:
     //friend class Transformer;
 
-    explicit Swdb(libdnf::utils::SQLite3 & conn, bool autoClose);
-    libdnf::utils::SQLite3 * conn;
+    explicit Swdb(libdnf5::utils::SQLite3 & conn, bool autoClose);
+    libdnf5::utils::SQLite3 * conn;
     bool autoClose;
     std::unique_ptr<Transaction> transactionInProgress = nullptr;
     std::map<std::string, TransactionItemPtr> itemsInProgress;
@@ -138,7 +138,7 @@ protected:
 private:
 };
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif  // LIBDNF_TRANSACTION_SWDB_HPP
 

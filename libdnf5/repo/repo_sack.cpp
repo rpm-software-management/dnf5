@@ -86,7 +86,7 @@ RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, 
 RepoWeakPtr RepoSack::get_cmdline_repo() {
     if (!cmdline_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
-        repo->get_config().get_build_cache_option().set(libdnf::Option::Priority::RUNTIME, false);
+        repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
         cmdline_repo = repo.get();
         add_item(std::move(repo));
     }
@@ -95,14 +95,14 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 }
 
 
-std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(
+std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     const std::vector<std::string> & paths, bool calculate_checksum) {
     // find remote URLs and local file paths in the input
     std::vector<std::string> rpm_urls;
     std::vector<std::string> rpm_filepaths;
     const std::string_view ext(".rpm");
     for (const auto & spec : paths) {
-        if (libdnf::utils::url::is_url(spec)) {
+        if (libdnf5::utils::url::is_url(spec)) {
             rpm_urls.emplace_back(spec);
         } else if (spec.length() > ext.length() && spec.ends_with(ext)) {
             rpm_filepaths.emplace_back(spec);
@@ -154,7 +154,7 @@ std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(
     if (!url_to_path.empty()) {
         auto & logger = *base->get_logger();
         // download remote URLs
-        libdnf::repo::FileDownloader downloader(base);
+        libdnf5::repo::FileDownloader downloader(base);
         for (auto & [url, dest_path] : url_to_path) {
             logger.debug("Downloading package \"{}\" to file \"{}\"", url, dest_path.string());
             // TODO(mblaha): temporarily used the dummy DownloadCallbacks instance
@@ -187,7 +187,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
     if (!system_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
         // TODO(mblaha): re-enable caching once we can reliably detect whether system repo is up-to-date
-        repo->get_config().get_build_cache_option().set(libdnf::Option::Priority::RUNTIME, false);
+        repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
         system_repo = repo.get();
         add_item(std::move(repo));
     }
@@ -196,7 +196,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool import_keys) {
+void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
     auto logger = base->get_logger();
 
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
@@ -472,11 +472,11 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
         base->get_repo_sack()->get_system_repo();
     }
 
-    libdnf::repo::RepoQuery repos(base);
+    libdnf5::repo::RepoQuery repos(base);
     repos.filter_enabled(true);
 
     if (!load_system) {
-        repos.filter_type(Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
+        repos.filter_type(Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
     }
 
     update_and_load_repos(repos);
@@ -487,7 +487,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 
 
 void RepoSack::dump_debugdata(const std::string & dir) {
-    libdnf::solv::Solver solver{get_rpm_pool(base)};
+    libdnf5::solv::Solver solver{get_rpm_pool(base)};
     solver.write_debugdata(dir, false);
 }
 
@@ -568,7 +568,7 @@ void RepoSack::enable_source_repos() {
         // There is no way how to find source (or debuginfo) repository for
         // given repo. This is only guessing according to the current practice:
         auto repoid = repo->get_id();
-        if (libdnf::utils::string::ends_with(repoid, "-rpms")) {
+        if (libdnf5::utils::string::ends_with(repoid, "-rpms")) {
             source_query.filter_id(repoid.substr(0, repoid.size() - 5) + "-source-rpms");
         } else {
             source_query.filter_id(repoid + "-source");
@@ -616,19 +616,19 @@ void RepoSack::fix_group_missing_xml() {
             directory_exists = false;
         }
         if (!group_missing_xml.empty()) {
-            libdnf::comps::GroupQuery available_groups(base);
+            libdnf5::comps::GroupQuery available_groups(base);
             available_groups.filter_installed(false);
             for (const auto & group_id : group_missing_xml) {
                 bool xml_saved = false;
                 if (directory_exists) {
                     // try to find the group id in availables
-                    libdnf::comps::GroupQuery group_query(available_groups);
+                    libdnf5::comps::GroupQuery group_query(available_groups);
                     group_query.filter_groupid(group_id);
                     if (group_query.size() == 1) {
                         // GroupQuery is basically a set thus iterators and `.get()` method
                         // return `const Group` objects.
                         // To call non-const serialize method we need to make a copy here.
-                        libdnf::comps::Group group = group_query.get();
+                        libdnf5::comps::Group group = group_query.get();
                         auto xml_file_name = comps_xml_dir / (group_id + ".xml");
                         logger.debug(
                             "Re-creating installed group \"{}\" definition to file \"{}\".",
@@ -652,16 +652,16 @@ void RepoSack::fix_group_missing_xml() {
             }
         }
         if (!environments_missing_xml.empty()) {
-            libdnf::comps::EnvironmentQuery available_environments(base);
+            libdnf5::comps::EnvironmentQuery available_environments(base);
             available_environments.filter_installed(false);
             for (const auto & environment_id : environments_missing_xml) {
                 bool xml_saved = false;
                 if (directory_exists) {
                     // try to find the environment id in availables
-                    libdnf::comps::EnvironmentQuery environment_query(available_environments);
+                    libdnf5::comps::EnvironmentQuery environment_query(available_environments);
                     environment_query.filter_environmentid(environment_id);
                     if (environment_query.size() == 1) {
-                        libdnf::comps::Environment environment = environment_query.get();
+                        libdnf5::comps::Environment environment = environment_query.get();
                         auto xml_file_name = comps_xml_dir / (environment_id + ".xml");
                         logger.debug(
                             "Re-creating installed environmental group \"{}\" definition to file \"{}\".",

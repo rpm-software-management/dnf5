@@ -106,11 +106,11 @@ private:
     /*
     // TODO(dmach): Implement TransactionSack.new_filter().filter_package_pattern()
     static std::vector<int64_t> searchTransactions(
-        libdnf::utils::SQLite3 & conn, const std::vector<std::string> & patterns);
+        libdnf5::utils::SQLite3 & conn, const std::vector<std::string> & patterns);
 
     // TODO(dmach): Implement as a precomputed map of reasons associated to TransactionSack.
     static TransactionItemReason resolveTransactionItemReason(
-        libdnf::utils::SQLite3 & conn, const std::string & name, const std::string & arch, int64_t maxTransactionId);
+        libdnf5::utils::SQLite3 & conn, const std::string & name, const std::string & arch, int64_t maxTransactionId);
     */
 
     bool operator<(const Package & other) const;

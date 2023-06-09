@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PreserveOrderMapTest);
 
 void PreserveOrderMapTest::test_basics() {
     // test default constructor
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     CPPUNIT_ASSERT(map1.empty());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), map1.size());
 
@@ -41,7 +41,7 @@ void PreserveOrderMapTest::test_basics() {
 }
 
 void PreserveOrderMapTest::test_insert() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
 
     // test insert first item
     // Returns a pair consisting of an iterator to the inserted element and true.
@@ -75,7 +75,7 @@ void PreserveOrderMapTest::test_insert() {
 }
 
 void PreserveOrderMapTest::test_count() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     map1.insert({1, "1"});
     map1.insert({5, "5"});
 
@@ -88,18 +88,18 @@ void PreserveOrderMapTest::test_count() {
 }
 
 void PreserveOrderMapTest::test_copy_move() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     map1.insert({1, "1"});
     map1.insert({5, "5"});
 
     // test copy constructor
-    libdnf::PreserveOrderMap<int, std::string> map2 = map1;
+    libdnf5::PreserveOrderMap<int, std::string> map2 = map1;
     CPPUNIT_ASSERT(!map2.empty());
     CPPUNIT_ASSERT_EQUAL(map2.size(), static_cast<size_t>(2));
     CPPUNIT_ASSERT(map2.count(1) == 1 && map2.count(5) == 1 && map2.count(8) == 0);
 
     // test move constructor
-    libdnf::PreserveOrderMap<int, std::string> map3 = std::move(map2);
+    libdnf5::PreserveOrderMap<int, std::string> map3 = std::move(map2);
     CPPUNIT_ASSERT(!map3.empty());
     CPPUNIT_ASSERT(map2.empty());
     CPPUNIT_ASSERT_EQUAL(map3.size(), static_cast<size_t>(2));
@@ -107,7 +107,7 @@ void PreserveOrderMapTest::test_copy_move() {
 }
 
 void PreserveOrderMapTest::test_find() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     map1.insert({1, "1"});
     map1.insert({8, "8"});
     map1.insert({5, "5"});
@@ -122,7 +122,7 @@ void PreserveOrderMapTest::test_find() {
 }
 
 void PreserveOrderMapTest::test_access() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     map1.insert({1, "1"});
     map1.insert({5, "5"});
 
@@ -153,7 +153,7 @@ void PreserveOrderMapTest::test_access() {
 }
 
 void PreserveOrderMapTest::test_erase_clear() {
-    libdnf::PreserveOrderMap<int, int> map1;
+    libdnf5::PreserveOrderMap<int, int> map1;
     for (int i = 0; i < 20; ++i) {
         map1.insert({i, i});
     }
@@ -184,7 +184,7 @@ void PreserveOrderMapTest::test_erase_clear() {
 }
 
 void PreserveOrderMapTest::test_iterators() {
-    libdnf::PreserveOrderMap<int, std::string> map1;
+    libdnf5::PreserveOrderMap<int, std::string> map1;
     map1.insert({1, "1"});
     map1.insert({6, "6"});
     map1[4] = "4";

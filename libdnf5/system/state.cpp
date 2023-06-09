@@ -237,7 +237,7 @@ static std::pair<uint64_t, uint64_t> parse_version(const std::string & version) 
 
 
 StateNotFoundError::StateNotFoundError(const std::string & type, const std::string & key)
-    : libdnf::Error(M_("{} state for \"{}\" not found."), type, key) {}
+    : libdnf5::Error(M_("{} state for \"{}\" not found."), type, key) {}
 
 
 State::State(const std::filesystem::path & path) : path(path) {
@@ -562,10 +562,10 @@ std::filesystem::path State::get_system_state_path() {
 }
 
 void State::reset_packages_states(
-    std::map<std::string, libdnf::system::PackageState> && package_states,
-    std::map<std::string, libdnf::system::NevraState> && nevra_states,
-    std::map<std::string, libdnf::system::GroupState> && group_states,
-    std::map<std::string, libdnf::system::EnvironmentState> && environment_states) {
+    std::map<std::string, libdnf5::system::PackageState> && package_states,
+    std::map<std::string, libdnf5::system::NevraState> && nevra_states,
+    std::map<std::string, libdnf5::system::GroupState> && group_states,
+    std::map<std::string, libdnf5::system::EnvironmentState> && environment_states) {
     this->package_states = std::move(package_states);
     this->nevra_states = std::move(nevra_states);
     this->group_states = std::move(group_states);

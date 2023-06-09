@@ -119,7 +119,7 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
     }
     if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
         // TODO(lukash) not the best class for the error, possibly check in config parser?
-        throw libdnf::repo::RepoDownloadError(
+        throw libdnf5::repo::RepoDownloadError(
             M_("Maximum download speed is lower than minimum, "
                "please change configuration of minrate or throttle"));
     }
@@ -202,11 +202,11 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
 }
 
 
-void LibrepoHandle::init_remote(const libdnf::ConfigMain & config) {
+void LibrepoHandle::init_remote(const libdnf5::ConfigMain & config) {
     repo::init_remote(*this, config);
 }
 
-void LibrepoHandle::init_remote(const libdnf::repo::ConfigRepo & config) {
+void LibrepoHandle::init_remote(const libdnf5::repo::ConfigRepo & config) {
     repo::init_remote(*this, config);
 }
 

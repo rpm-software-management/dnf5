@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
 
-using namespace libdnf::transaction;
+using namespace libdnf5::transaction;
 
 namespace dnfdaemon::client {
 

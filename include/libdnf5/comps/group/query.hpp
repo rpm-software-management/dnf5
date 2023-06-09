@@ -39,18 +39,18 @@ using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 class GroupQuery : public libdnf5::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
-    explicit GroupQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
-    explicit GroupQuery(libdnf::Base & base, bool empty = false);
+    explicit GroupQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
+    explicit GroupQuery(libdnf5::Base & base, bool empty = false);
 
-    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::groupid, pattern, cmp);
     }
 
-    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::groupid, patterns, cmp);
     }
 
-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::name, pattern, cmp);
     }
 
@@ -60,9 +60,9 @@ public:
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.12
     void filter_package_name(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
         filter(F::name, patterns, cmp);
     }
 

@@ -78,7 +78,7 @@ public:
         const libdnf5::comps::Group & group,
         transaction::TransactionItemAction action,
         transaction::TransactionItemReason reason,
-        libdnf::comps::PackageType package_types);
+        libdnf5::comps::PackageType package_types);
 
     /// Add environmental group action to the transaction.
     /// @param environment Environmental group to be added
@@ -100,7 +100,7 @@ public:
         libdnf5::comps::Group,
         transaction::TransactionItemAction,
         transaction::TransactionItemReason,
-        libdnf::comps::PackageType>>
+        libdnf5::comps::PackageType>>
     list_groups() {
         return groups;
     };
@@ -177,7 +177,7 @@ public:
     void add_exclude_from_weak(const libdnf5::solv::SolvMap & solvmap);
 
 private:
-    bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
+    bool limit_installonly_packages(libdnf5::solv::IdQueue & job, Id running_kernel);
 
     libdnf5::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
 
@@ -215,7 +215,7 @@ private:
         libdnf5::comps::Group,
         transaction::TransactionItemAction,
         transaction::TransactionItemReason,
-        libdnf::comps::PackageType>>
+        libdnf5::comps::PackageType>>
         groups;
 
     std::vector<std::tuple<
@@ -229,7 +229,7 @@ private:
     std::vector<std::tuple<libdnf5::rpm::Package, transaction::TransactionItemReason, std::optional<std::string>>>
         reason_changes;
 
-    /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
+    /// Return libdnf5::GoalProblem::NO_PROBLEM when no problems in protected
     libdnf5::GoalProblem protected_in_removals();
 };
 
@@ -274,7 +274,8 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
             transaction_free(libsolv_transaction);
             libsolv_transaction = nullptr;
         }
-        protected_packages.reset(src.protected_packages ? new libdnf::solv::SolvMap(*src.protected_packages) : nullptr);
+        protected_packages.reset(
+            src.protected_packages ? new libdnf5::solv::SolvMap(*src.protected_packages) : nullptr);
         removal_of_protected.reset();
         protected_running_kernel = src.protected_running_kernel;
         allow_downgrade = src.allow_downgrade;
@@ -293,7 +294,7 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
     }
 }
 
-inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
+inline void GoalPrivate::add_install(libdnf5::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     clean_deps_present = clean_deps_present || clean_deps;
     Id what = get_rpm_pool().queuetowhatprovides(queue);
@@ -304,7 +305,7 @@ inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_br
 }
 
 inline void GoalPrivate::add_provide_install(
-    libdnf::rpm::ReldepId reldepid, bool skip_broken, bool best, bool clean_deps) {
+    libdnf5::rpm::ReldepId reldepid, bool skip_broken, bool best, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
@@ -312,7 +313,7 @@ inline void GoalPrivate::add_provide_install(
         reldepid.id);
 }
 
-inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps) {
+inline void GoalPrivate::add_remove(const libdnf5::solv::IdQueue & queue, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (Id what : queue) {
@@ -320,7 +321,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool cl
     }
 }
 
-inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps) {
+inline void GoalPrivate::add_remove(const libdnf5::solv::SolvMap & solv_map, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (auto what : solv_map) {
@@ -328,7 +329,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool
     }
 }
 
-inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps) {
+inline void GoalPrivate::add_upgrade(libdnf5::solv::IdQueue & queue, bool best, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = get_rpm_pool().queuetowhatprovides(queue);
@@ -338,7 +339,7 @@ inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, b
         what);
 }
 
-inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
+inline void GoalPrivate::add_distro_sync(libdnf5::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = get_rpm_pool().queuetowhatprovides(queue);
@@ -349,20 +350,20 @@ inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool ski
 }
 
 inline void GoalPrivate::add_group(
-    const libdnf::comps::Group & group,
+    const libdnf5::comps::Group & group,
     transaction::TransactionItemAction action,
     transaction::TransactionItemReason reason,
-    libdnf::comps::PackageType package_types) {
+    libdnf5::comps::PackageType package_types) {
     groups.emplace_back(group, action, reason, package_types);
 }
 
 inline void GoalPrivate::add_environment(
-    const libdnf::comps::Environment & environment, transaction::TransactionItemAction action, bool with_optional) {
+    const libdnf5::comps::Environment & environment, transaction::TransactionItemAction action, bool with_optional) {
     environments.emplace_back(environment, action, transaction::TransactionItemReason::USER, with_optional);
 }
 
 inline void GoalPrivate::add_reason_change(
-    const libdnf::rpm::Package & pkg, transaction::TransactionItemReason reason, std::optional<std::string> group_id) {
+    const libdnf5::rpm::Package & pkg, transaction::TransactionItemReason reason, std::optional<std::string> group_id) {
     reason_changes.emplace_back(pkg, reason, group_id);
 }
 

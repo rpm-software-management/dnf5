@@ -36,16 +36,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
 
-namespace libdnf::transaction {
+namespace libdnf5::transaction {
 
-Swdb::Swdb(libdnf::utils::SQLite3 & conn) : conn{&conn}, autoClose(true) {}
+Swdb::Swdb(libdnf5::utils::SQLite3 & conn) : conn{&conn}, autoClose(true) {}
 
-Swdb::Swdb(libdnf::utils::SQLite3 & conn, bool autoClose) : conn{&conn}, autoClose(autoClose) {}
+Swdb::Swdb(libdnf5::utils::SQLite3 & conn, bool autoClose) : conn{&conn}, autoClose(autoClose) {}
 
 Swdb::Swdb(const std::string & path) : conn(nullptr), autoClose(true) {
     if (path == ":memory:") {
         // writing to an in-memory database
-        conn = new libdnf::utils::SQLite3(path);
+        conn = new libdnf5::utils::SQLite3(path);
         Transformer::createDatabase(*conn);
     } else if (!std::filesystem::exists(path.c_str())) {
         // writing to a file that doesn't exist and must be created
@@ -56,10 +56,10 @@ Swdb::Swdb(const std::string & path) : conn(nullptr), autoClose(true) {
         Transformer transformer(path.substr(0, found), path);
         transformer.transform();
 
-        conn = new libdnf::utils::SQLite3(path);
+        conn = new libdnf5::utils::SQLite3(path);
     } else {
         // writing to an existing file
-        conn = new libdnf::utils::SQLite3(path);
+        conn = new libdnf5::utils::SQLite3(path);
     }
 }
 
@@ -184,12 +184,12 @@ TransactionItemReason Swdb::resolveRPMTransactionItemReason(
 }
 
 const std::string Swdb::getRPMRepo(const std::string & nevra) {
-    libdnf::rpm::Nevra nevraObject;
-    if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
+    libdnf5::rpm::Nevra nevraObject;
+    if (!nevraObject.parse(nevra.c_str(), libdnf5::rpm::Nevra::Form::NEVRA)) {
         return "";
     }
     // TODO: hy_nevra_possibility should set epoch to 0 if epoch is not specified
-    // and libdnf::rpm::Nevra::Form::NEVRA is used
+    // and libdnf5::rpm::Nevra::Form::NEVRA is used
     if (nevraObject.get_epoch().empty()) {
         nevraObject.set_epoch(0);
     }
@@ -215,14 +215,14 @@ const std::string Swdb::getRPMRepo(const std::string & nevra) {
         LIMIT 1;
     )**";
     // TODO: where trans.done != 0
-    libdnf::utils::SQLite3::Query query(*conn, sql);
+    libdnf5::utils::SQLite3::Query query(*conn, sql);
     query.bindv(
         nevraObject.get_name(),
         nevraObject.get_epoch(),
         nevraObject.get_version(),
         nevraObject.get_release(),
         nevraObject.get_arch());
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto repoid = query.get<std::string>("repoid");
         return repoid;
     }
@@ -239,8 +239,8 @@ TransactionPtr Swdb::getLastTransaction() {
             id DESC
         LIMIT 1
     )**";
-    libdnf::utils::SQLite3::Statement query(get_connection(), sql);
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    libdnf5::utils::SQLite3::Statement query(get_connection(), sql);
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto transId = query.get<int64_t>(0);
         auto transaction = std::make_shared<Transaction>(get_connection(), transId);
         return transaction;
@@ -257,9 +257,9 @@ std::vector<TransactionPtr> Swdb::listTransactions() {
         ORDER BY
             id
     )**";
-    libdnf::utils::SQLite3::Statement query(get_connection(), sql);
+    libdnf5::utils::SQLite3::Statement query(get_connection(), sql);
     std::vector<TransactionPtr> result;
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto transId = query.get<int64_t>(0);
         auto transaction = std::make_shared<Transaction>(get_connection(), transId);
         result.push_back(transaction);
@@ -338,23 +338,23 @@ std::vector<std::string> Swdb::getPackageCompsGroups(const std::string & package
     std::vector<std::string> result;
 
     // list all relevant groups
-    libdnf::utils::SQLite3::Query query_all_groups(*conn, sql_all_groups);
+    libdnf5::utils::SQLite3::Query query_all_groups(*conn, sql_all_groups);
     query_all_groups.bindv(packageName);
 
-    while (query_all_groups.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query_all_groups.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto groupid = query_all_groups.get<std::string>("groupid");
-        libdnf::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
+        libdnf5::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
         query_trans_items.bindv(groupid);
-        if (query_trans_items.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        if (query_trans_items.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto action = static_cast<TransactionItemAction>(query_trans_items.get<int64_t>("action"));
             // if the last record is group removal, skip
             if (action == TransactionItemAction::REMOVE) {
                 continue;
             }
             auto groupId = query_trans_items.get<int64_t>("group_id");
-            libdnf::utils::SQLite3::Query query_group_package(*conn, sql_group_package);
+            libdnf5::utils::SQLite3::Query query_group_package(*conn, sql_group_package);
             query_group_package.bindv(groupId);
-            if (query_group_package.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+            if (query_group_package.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
                 result.push_back(groupid);
             }
         }
@@ -410,23 +410,23 @@ std::vector<std::string> Swdb::getCompsGroupEnvironments(const std::string & gro
     std::vector<std::string> result;
 
     // list all relevant groups
-    libdnf::utils::SQLite3::Query query_all_environments(*conn, sql_all_environments);
+    libdnf5::utils::SQLite3::Query query_all_environments(*conn, sql_all_environments);
     query_all_environments.bindv(groupId);
 
-    while (query_all_environments.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+    while (query_all_environments.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
         auto envid = query_all_environments.get<std::string>("environmentid");
-        libdnf::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
+        libdnf5::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
         query_trans_items.bindv(envid);
-        if (query_trans_items.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        if (query_trans_items.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
             auto action = static_cast<TransactionItemAction>(query_trans_items.get<int64_t>("action"));
             // if the last record is group removal, skip
             if (action == TransactionItemAction::REMOVE) {
                 continue;
             }
             auto envId = query_trans_items.get<int64_t>("environment_id");
-            libdnf::utils::SQLite3::Query query_environment_group(*conn, sql_environment_group);
+            libdnf5::utils::SQLite3::Query query_environment_group(*conn, sql_environment_group);
             query_environment_group.bindv(envId);
-            if (query_environment_group.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+            if (query_environment_group.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
                 result.push_back(envid);
             }
         }
@@ -467,6 +467,6 @@ std::vector<int64_t> Swdb::searchTransactionsByRPM(const std::vector<std::string
     return Package::searchTransactions(get_connection(), patterns);
 }
 
-}  // namespace libdnf::transaction
+}  // namespace libdnf5::transaction
 
 #endif

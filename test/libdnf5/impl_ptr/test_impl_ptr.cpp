@@ -62,23 +62,23 @@ int CTest::instance_counter = 0;
 }  // namespace
 
 
-static_assert(std::is_nothrow_default_constructible_v<libdnf::ImplPtr<CTest>>);
-static_assert(std::is_nothrow_default_constructible_v<libdnf::ImplPtr<CTest>>);
-static_assert(std::is_copy_constructible_v<libdnf::ImplPtr<CTest>>);
-static_assert(std::is_copy_assignable_v<libdnf::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_default_constructible_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_default_constructible_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_copy_constructible_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_copy_assignable_v<libdnf5::ImplPtr<CTest>>);
 
 // `ImplPtr` is_nothrow_move_constructible, is_nothrow_move_assignable, and nothrow_swappable, even if CTest is not.
 static_assert(!std::is_move_constructible_v<CTest>);
 static_assert(!std::is_move_assignable_v<CTest>);
 static_assert(!std::is_swappable_v<CTest>);
-static_assert(std::is_nothrow_move_constructible_v<libdnf::ImplPtr<CTest>>);
-static_assert(std::is_nothrow_move_assignable_v<libdnf::ImplPtr<CTest>>);
-static_assert(std::is_nothrow_swappable_v<libdnf::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_move_constructible_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_move_assignable_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_swappable_v<libdnf5::ImplPtr<CTest>>);
 
 
 void ImplPtrTest::test_default_constructor() {
     // Tests an empty constructor. `p_impl` is` nullptr`. No new CTest instance is created.
-    libdnf::ImplPtr<CTest> empty_object;
+    libdnf5::ImplPtr<CTest> empty_object;
     CPPUNIT_ASSERT(nullptr == empty_object.get());
     CPPUNIT_ASSERT_EQUAL(0, CTest::get_instance_counter());
 }
@@ -86,7 +86,7 @@ void ImplPtrTest::test_default_constructor() {
 void ImplPtrTest::test_constructor_from_pointer() {
     {
         // Tests constructor that takes ownership of existing `CTtest` instance.
-        libdnf::ImplPtr<CTest> object(new CTest);
+        libdnf5::ImplPtr<CTest> object(new CTest);
         CPPUNIT_ASSERT(nullptr != object.get());
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
     }
@@ -98,7 +98,7 @@ void ImplPtrTest::test_constructor_from_pointer() {
 void ImplPtrTest::test_access_to_managed_object() {
     {
         // Constructs mutable (non-constant) object.
-        libdnf::ImplPtr<CTest> object(new CTest(10));
+        libdnf5::ImplPtr<CTest> object(new CTest(10));
 
         // Tests the `T * operator->()`.
         static_assert(!std::is_const_v<std::remove_pointer_t<decltype(object.operator->())>>);
@@ -126,7 +126,7 @@ void ImplPtrTest::test_access_to_managed_object() {
 void ImplPtrTest::test_const_access_to_managed_object() {
     {
         // Constructs constant object.
-        const libdnf::ImplPtr<CTest> const_object(new CTest(10));
+        const libdnf5::ImplPtr<CTest> const_object(new CTest(10));
 
         // Tests the `const T * operator->() const`
         static_assert(std::is_const_v<std::remove_pointer_t<decltype(const_object.operator->())>>);
@@ -147,12 +147,12 @@ void ImplPtrTest::test_const_access_to_managed_object() {
 
 void ImplPtrTest::test_copy_constructor() {
     {
-        libdnf::ImplPtr<CTest> src_object(new CTest(10));
+        libdnf5::ImplPtr<CTest> src_object(new CTest(10));
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
 
         // Tests the copy constructor. The source object remains unchanged.
         // A new `CTest` instance is created.
-        libdnf::ImplPtr<CTest> new_object(src_object);
+        libdnf5::ImplPtr<CTest> new_object(src_object);
         CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
         CPPUNIT_ASSERT_EQUAL(10, new_object->get_a());
         CPPUNIT_ASSERT(nullptr != src_object.get());
@@ -165,13 +165,13 @@ void ImplPtrTest::test_copy_constructor() {
 
 void ImplPtrTest::test_move_constructor() {
     {
-        libdnf::ImplPtr<CTest> src_object(new CTest(10));
+        libdnf5::ImplPtr<CTest> src_object(new CTest(10));
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
 
         // Tests the move constructor. Ownership is transferred from the source object to `*this`.
         // `p_impl` in the source object becomes `nullptr`.
         // No new `CTest` instances are created.
-        libdnf::ImplPtr<CTest> new_object(std::move(src_object));
+        libdnf5::ImplPtr<CTest> new_object(std::move(src_object));
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
         CPPUNIT_ASSERT_EQUAL(10, new_object->get_a());
         CPPUNIT_ASSERT(nullptr == src_object.get());
@@ -183,8 +183,8 @@ void ImplPtrTest::test_move_constructor() {
 
 void ImplPtrTest::test_copy_assignment() {
     {
-        libdnf::ImplPtr<CTest> src_object(new CTest(10));
-        libdnf::ImplPtr<CTest> dst_object(new CTest(5));
+        libdnf5::ImplPtr<CTest> src_object(new CTest(10));
+        libdnf5::ImplPtr<CTest> dst_object(new CTest(5));
         CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
 
         // Tests the copy assignment operator. The source object remains unchanged.
@@ -203,7 +203,7 @@ void ImplPtrTest::test_copy_assignment() {
 
         // Tests the copy assignment to empty (moved from) object. The source object remains unchanged.
         // A new `CTest` instance is created.
-        libdnf::ImplPtr<CTest> empty_object;
+        libdnf5::ImplPtr<CTest> empty_object;
         CPPUNIT_ASSERT(nullptr == empty_object.get());
         empty_object = dst_object;
         CPPUNIT_ASSERT_EQUAL(3, CTest::get_instance_counter());
@@ -217,8 +217,8 @@ void ImplPtrTest::test_copy_assignment() {
 
 void ImplPtrTest::test_move_assignment() {
     {
-        libdnf::ImplPtr<CTest> src_object(new CTest(10));
-        libdnf::ImplPtr<CTest> dst_object(new CTest(5));
+        libdnf5::ImplPtr<CTest> src_object(new CTest(10));
+        libdnf5::ImplPtr<CTest> dst_object(new CTest(5));
         CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
 
         // Tests the move assignment operator.
@@ -239,7 +239,7 @@ void ImplPtrTest::test_move_assignment() {
         // Tests the move assignment to empty (moved from) object.
         // `CTest` instance ownership is transferred from the source object to the destination.
         // `p_impl` in the original object becomes nullptr.
-        libdnf::ImplPtr<CTest> empty_object;
+        libdnf5::ImplPtr<CTest> empty_object;
         CPPUNIT_ASSERT(nullptr == empty_object.get());
         empty_object = std::move(dst_object);
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());

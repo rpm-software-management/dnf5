@@ -86,7 +86,7 @@ T OptionEnum<T>::from_string(const std::string & value) const {
         return from_string_user(value);
     }
     T val;
-    if (libdnf::from_string<ValueType>(val, value, std::dec)) {
+    if (libdnf5::from_string<ValueType>(val, value, std::dec)) {
         return val;
     }
     throw OptionInvalidValueError(M_("Invalid enum option value \"{}\""), value);

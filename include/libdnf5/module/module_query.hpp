@@ -40,7 +40,7 @@ public:
     ///
     /// @param base     A weak pointer to Base
     /// @param empty    `true` to create empty query, `false` to create query with all modules
-    explicit ModuleQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
+    explicit ModuleQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
 
     /// Create a new ModuleQuery instance.
     ///

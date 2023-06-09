@@ -50,7 +50,7 @@ Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
 std::vector<Key> RepoPgp::rawkey2infos(int fd) {
     std::vector<Key> key_infos;
 
-    libdnf::utils::fs::TempDir tmpdir("tmpdir");
+    libdnf5::utils::fs::TempDir tmpdir("tmpdir");
 
     GError * err = NULL;
     if (!lr_gpg_import_key_from_fd(fd, tmpdir.get_path().c_str(), &err)) {

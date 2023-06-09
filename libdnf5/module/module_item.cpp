@@ -48,7 +48,7 @@ const char * ModuleItem::get_name_cstr() const {
 
 
 std::string ModuleItem::get_name() const {
-    return libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream));
 }
 
 
@@ -58,7 +58,7 @@ const char * ModuleItem::get_stream_cstr() const {
 
 
 std::string ModuleItem::get_stream() const {
-    return libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream));
 }
 
 
@@ -78,7 +78,7 @@ const char * ModuleItem::get_context_cstr() const {
 
 
 std::string ModuleItem::get_context() const {
-    return libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream));
 }
 
 
@@ -88,23 +88,23 @@ const char * ModuleItem::get_arch_cstr() const {
 
 
 std::string ModuleItem::get_arch() const {
-    return libdnf::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream));
 }
 
 
 std::string ModuleItem::get_name_stream(ModulemdModuleStream * md_stream) {
     return fmt::format(
         "{}:{}",
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)));
 }
 
 
 std::string ModuleItem::get_name_stream_version() const {
     return fmt::format(
         "{}:{}:{}",
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
         std::to_string(modulemd_module_stream_get_version(md_stream)));
 }
 
@@ -112,16 +112,17 @@ std::string ModuleItem::get_name_stream_version() const {
 std::string ModuleItem::get_name_stream_staticcontext() const {
     // TODO(pkratoch): Find out what is the fastest way to concatenate strings.
     // TODO(pkratoch): fmt::format accepts char * but it is unable to handle nullptr. We can avoid allocating memory
-    //                 for temporary std::string by replacing libdnf::utils::string::c_to_str with something like this:
+    //                 for temporary std::string by replacing libdnf5::utils::string::c_to_str with something like this:
     //                 inline constexpr const char * null_to_empty(const char * str) noexcept {
     //                     return str ? str : "";
     //                 }
     return fmt::format(
         "{}:{}:{}",
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
-        computed_static_context.empty() ? libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
-                                        : computed_static_context);
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
+        computed_static_context.empty()
+            ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
+            : computed_static_context);
 }
 
 
@@ -129,29 +130,29 @@ std::string ModuleItem::get_name_stream_staticcontext_arch() const {
     return fmt::format(
         "{}:{}",
         get_name_stream_staticcontext(),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
 }
 
 
 std::string ModuleItem::get_full_identifier() const {
     return fmt::format(
         "{}:{}:{}:{}:{}",
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
         std::to_string(modulemd_module_stream_get_version(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
 }
 
 
 std::string ModuleItem::get_summary() const {
-    return libdnf::utils::string::c_to_str(
+    return libdnf5::utils::string::c_to_str(
         modulemd_module_stream_v2_get_summary((ModulemdModuleStreamV2 *)md_stream, NULL));
 }
 
 
 std::string ModuleItem::get_description() const {
-    return libdnf::utils::string::c_to_str(
+    return libdnf5::utils::string::c_to_str(
         modulemd_module_stream_v2_get_description((ModulemdModuleStreamV2 *)md_stream, NULL));
 }
 
@@ -368,7 +369,7 @@ void ModuleItem::create_solvable() {
     id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
     auto solvable = pool_id2solvable(pool, id.id);
     auto context = computed_static_context.empty()
-                       ? libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
+                       ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
                        : computed_static_context;
     auto arch = modulemd_module_stream_get_arch(md_stream);
 

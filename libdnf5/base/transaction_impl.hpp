@@ -66,13 +66,13 @@ public:
         GoalAction action,
         GoalProblem problem,
         const GoalJobSettings & settings,
-        const libdnf::transaction::TransactionItemType spec_type,
+        const libdnf5::transaction::TransactionItemType spec_type,
         const std::string & spec,
         const std::set<std::string> & additional_data,
-        libdnf::Logger::Level log_level);
+        libdnf5::Logger::Level log_level);
     void add_resolve_log(
         GoalProblem problem,
-        std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems);
+        std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems);
 
     TransactionRunResult test();
 
@@ -98,7 +98,7 @@ private:
     std::vector<TransactionModule> modules;
     module::ModuleDBWeakPtr module_db;
 
-    /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
+    /// <libdnf5::GoalAction, libdnf5::GoalProblem, libdnf5::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<LogEvent> resolve_logs;
 
     std::vector<std::string> transaction_problems{};

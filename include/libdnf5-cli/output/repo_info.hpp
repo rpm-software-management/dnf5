@@ -42,7 +42,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
 
     add_line("Status", repo.is_enabled() ? "enabled" : "disabled", repo.is_enabled() ? "green" : "red");
 
-    // TODO(dmach): implement in libdnf::repo::Repo
+    // TODO(dmach): implement in libdnf5::repo::Repo
     /*
     add_line("Priority", "");
     add_line("Cost", "");
@@ -99,14 +99,14 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     }
 
     if (show_sack_data) {
-        // TODO(dmach): implement in libdnf::repo::Repo
+        // TODO(dmach): implement in libdnf5::repo::Repo
         /*
         // the following lines require downloaded repodata loaded into sack
         auto group_repodata = add_line("Repodata info", "", nullptr);
         add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
         add_line("Total packages", repo.get_pkgs(), nullptr, group_repodata);
 
-        std::string size = libdnf::cli::utils::units::format_size(static_cast<int64_t>(repo.get_size()));
+        std::string size = libdnf5::cli::utils::units::format_size(static_cast<int64_t>(repo.get_size()));
         add_line("Size", size, nullptr, group_repodata);
 
         add_line("Content tags", repo.get_content_tags(), nullptr, group_repodata);

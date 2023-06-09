@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::transaction {
 
 InvalidTransactionItemAction::InvalidTransactionItemAction(const std::string & action)
-    : libdnf::Error(M_("Invalid transaction item action: {}"), action) {}
+    : libdnf5::Error(M_("Invalid transaction item action: {}"), action) {}
 
 
 std::string transaction_item_action_to_string(TransactionItemAction action) {

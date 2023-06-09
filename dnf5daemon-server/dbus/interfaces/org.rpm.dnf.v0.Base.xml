@@ -89,7 +89,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         download_end:
         @session_object_path: object path of the dnf5daemon session
         @download_id: unique id of downloaded object (repo or package)
-        @status: libdnf::repo::DownloadCallbacks::TransferStatus (0 - successful, 1 - already exists, 2 - error)
+        @status: libdnf5::repo::DownloadCallbacks::TransferStatus (0 - successful, 1 - already exists, 2 - error)
         @error: error message in case of failed download
 
         Downloading has ended.

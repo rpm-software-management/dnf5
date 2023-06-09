@@ -75,7 +75,7 @@ void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf
 }  // namespace
 
 
-namespace libdnf {
+namespace libdnf5 {
 
 namespace {
 
@@ -89,7 +89,7 @@ inline bool name_arch_compare_lower_solvable(const Solvable * first, const Solva
 
 }  // namespace
 
-using GroupSpec = std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>;
+using GroupSpec = std::tuple<GoalAction, libdnf5::transaction::TransactionItemReason, std::string, GoalJobSettings>;
 
 class Goal::Impl {
 public:
@@ -169,18 +169,18 @@ private:
     friend class Goal;
     BaseWeakPtr base;
     std::vector<std::string> module_enable_specs;
-    /// <libdnf::GoalAction, std::string pkg_spec, libdnf::GoalJobSettings settings>
+    /// <libdnf5::GoalAction, std::string pkg_spec, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
-    /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf::GoalJobSettings settings>
+    /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<
         libdnf5::transaction::TransactionItemReason,
         std::string,
         std::optional<std::string>,
         GoalJobSettings>>
         rpm_reason_change_specs;
-    /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
+    /// <libdnf5::GoalAction, rpm Ids, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf5::solv::IdQueue, GoalJobSettings>> rpm_ids;
-    /// <libdnf::GoalAction, std::string filepath, libdnf::GoalJobSettings settings>
+    /// <libdnf5::GoalAction, std::string filepath, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_filepaths;
 
     // (spec, reason, query, settings)
@@ -195,7 +195,7 @@ private:
 
     /// group_specs contain both comps groups and environments. These are resolved
     /// according to settings.group_search_type flags value.
-    /// <libdnf::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
+    /// <libdnf5::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
     std::vector<GroupSpec> group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
@@ -218,15 +218,15 @@ void Goal::add_module_enable(const std::string & spec) {
     p_impl->module_enable_specs.push_back(spec);
 }
 
-void Goal::add_install(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
     p_impl->add_spec(GoalAction::INSTALL, spec, settings);
 }
 
-void Goal::add_upgrade(const std::string & spec, const libdnf::GoalJobSettings & settings, bool minimal) {
+void Goal::add_upgrade(const std::string & spec, const libdnf5::GoalJobSettings & settings, bool minimal) {
     p_impl->add_spec(minimal ? GoalAction::UPGRADE_MINIMAL : GoalAction::UPGRADE, spec, settings);
 }
 
-void Goal::add_downgrade(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+void Goal::add_downgrade(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
     p_impl->add_spec(GoalAction::DOWNGRADE, spec, settings);
 }
 
@@ -337,9 +337,9 @@ void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJo
 
 void Goal::add_rpm_reason_change(
     const std::string & spec,
-    const libdnf::transaction::TransactionItemReason reason,
+    const libdnf5::transaction::TransactionItemReason reason,
     const std::string & group_id,
-    const libdnf::GoalJobSettings & settings) {
+    const libdnf5::GoalJobSettings & settings) {
     libdnf_user_assert(
         reason != libdnf5::transaction::TransactionItemReason::GROUP || !group_id.empty(),
         "group_id is required for setting reason \"GROUP\"");
@@ -355,7 +355,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
         // spec is a group, environment or a module
         // TODO(mblaha): detect and process modules
         std::string group_spec = spec.substr(1);
-        auto group_settings = libdnf::GoalJobSettings(settings);
+        auto group_settings = libdnf5::GoalJobSettings(settings);
         // for compatibility reasons '@group-spec' can mean also environment
         group_settings.group_search_environments = true;
         // support for kickstart environmental groups syntax - '@^environment-spec'
@@ -366,10 +366,10 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
             group_settings.group_search_groups = true;
         }
         group_specs.push_back(
-            std::make_tuple(action, libdnf::transaction::TransactionItemReason::USER, group_spec, group_settings));
+            std::make_tuple(action, libdnf5::transaction::TransactionItemReason::USER, group_spec, group_settings));
     } else {
         const std::string_view ext(".rpm");
-        if (libdnf::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
+        if (libdnf5::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
             // spec is a remote rpm file or a local rpm file
             if (action == GoalAction::REMOVE) {
                 throw RuntimeError(M_("Unsupported argument for REMOVE action: {}"), spec);
@@ -385,7 +385,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
     libdnf_assert_same_base(base, rpm_package.base);
 
-    libdnf::solv::IdQueue ids;
+    libdnf5::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
@@ -393,7 +393,7 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
     libdnf_assert_same_base(base, package_set.get_base());
 
-    libdnf::solv::IdQueue ids;
+    libdnf5::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id);
     }
@@ -403,8 +403,8 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_
 // @replaces part of libdnf/sack/query.cpp:method:filterAdvisory called with HY_EQG and HY_UPGRADE
 void Goal::Impl::filter_candidates_for_advisory_upgrade(
     const BaseWeakPtr & base,
-    libdnf::rpm::PackageQuery & candidates,
-    const libdnf::advisory::AdvisoryQuery & advisories,
+    libdnf5::rpm::PackageQuery & candidates,
+    const libdnf5::advisory::AdvisoryQuery & advisories,
     bool add_obsoletes) {
     rpm::PackageQuery installed(base);
     installed.filter_installed();
@@ -439,27 +439,27 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
     // Since we want to satisfy all advisory pacakges we can keep just the latest
     // (all lower EVR adv pkgs are satistified by the latests)
     // We also want to skip already resolved advisories.
-    candidates.filter_latest_unresolved_advisories(advisories, installed, libdnf::sack::QueryCmp::GTE);
+    candidates.filter_latest_unresolved_advisories(advisories, installed, libdnf5::sack::QueryCmp::GTE);
 }
 
 void Goal::add_group_install(
     const std::string & spec,
-    const libdnf::transaction::TransactionItemReason reason,
+    const libdnf5::transaction::TransactionItemReason reason,
     const GoalJobSettings & settings) {
     p_impl->group_specs.push_back(std::make_tuple(GoalAction::INSTALL, reason, spec, settings));
 }
 
 void Goal::add_group_remove(
     const std::string & spec,
-    const libdnf::transaction::TransactionItemReason reason,
+    const libdnf5::transaction::TransactionItemReason reason,
     const GoalJobSettings & settings) {
     p_impl->group_specs.push_back(std::make_tuple(GoalAction::REMOVE, reason, spec, settings));
 }
 
-void Goal::add_group_upgrade(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+void Goal::add_group_upgrade(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
     // upgrade keeps old reason, thus use NONE here
     p_impl->group_specs.push_back(
-        std::make_tuple(GoalAction::UPGRADE, libdnf::transaction::TransactionItemReason::NONE, spec, settings));
+        std::make_tuple(GoalAction::UPGRADE, libdnf5::transaction::TransactionItemReason::NONE, spec, settings));
 }
 
 GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
@@ -506,7 +506,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     query.filter_earliest_evr();
                 }
 
-                libdnf::solv::IdQueue upgrade_ids;
+                libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
                 }
@@ -515,7 +515,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(base);
-                libdnf::solv::IdQueue upgrade_ids;
+                libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
                 }
@@ -548,14 +548,14 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
     comps::EnvironmentQuery base_environments_query(base);
     for (auto & [action, reason, spec, settings] : specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-        auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+        auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
         if (action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_COMPS && action != GoalAction::REMOVE &&
             action != GoalAction::UPGRADE) {
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::UNSUPPORTED_ACTION,
                 settings,
-                libdnf::transaction::TransactionItemType::GROUP,
+                libdnf5::transaction::TransactionItemType::GROUP,
                 spec,
                 {},
                 log_level);
@@ -611,7 +611,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 action,
                 GoalProblem::NOT_FOUND,
                 settings,
-                libdnf::transaction::TransactionItemType::GROUP,
+                libdnf5::transaction::TransactionItemType::GROUP,
                 spec,
                 {},
                 log_level);
@@ -660,18 +660,18 @@ GoalProblem Goal::Impl::add_reason_change_specs_to_goal(base::Transaction & tran
     return ret;
 }
 
-std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
+std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
     auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+    auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
     bool best = settings.resolve_best(cfg_main);
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
     auto multilib_policy = cfg_main.get_multilib_policy_option().get_value();
-    libdnf::solv::IdQueue result_queue;
+    libdnf5::solv::IdQueue result_queue;
     rpm::PackageQuery base_query(base);
 
     rpm::PackageQuery query(base_query);
@@ -688,7 +688,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     // The correct evaluation of rich dependencies can be only performed by solver.
     // There are some limitations - solver is unable to handle whan operation is limited to packages from the
     // particular repository and multilib_policy `all`.
-    if (libdnf::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
+    if (libdnf5::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
         add_provide_install_to_goal(spec, settings);
         return {GoalProblem::NO_PROBLEM, result_queue};
     }
@@ -703,10 +703,10 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             action,
             GoalProblem::ALREADY_INSTALLED,
             settings,
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             spec,
             {pool.get_nevra(package_id)},
-            libdnf::Logger::Level::WARNING);
+            libdnf5::Logger::Level::WARNING);
     }
 
     bool skip_broken = settings.resolve_skip_broken(cfg_main);
@@ -719,7 +719,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                     action,
                     GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                     settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -730,7 +730,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
 
         // Apply advisory filters
         if (settings.advisory_filter.has_value()) {
-            query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+            query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
         }
 
         /// <name, <arch, std::vector<pkg Solvables>>>
@@ -808,7 +808,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         action,
                         GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
-                        libdnf::transaction::TransactionItemType::PACKAGE,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
                         spec,
                         {},
                         log_level);
@@ -819,7 +819,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
 
             // Apply advisory filters
             if (settings.advisory_filter.has_value()) {
-                query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+                query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
             }
 
             rpm::PackageQuery available(query);
@@ -861,7 +861,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 if (add_obsoletes) {
                     add_obsoletes_to_data(base_query, selected);
                 }
-                solv_map_to_id_queue(result_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
+                solv_map_to_id_queue(result_queue, static_cast<libdnf5::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
                 selected.clear();
                 selected.p_impl->add_unsafe(pool.solvable2id(*iter));
@@ -870,7 +870,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, selected);
             }
-            solv_map_to_id_queue(result_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
+            solv_map_to_id_queue(result_queue, static_cast<libdnf5::solv::SolvMap>(*selected.p_impl));
             rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
         } else {
             if (add_obsoletes) {
@@ -883,7 +883,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         action,
                         GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
-                        libdnf::transaction::TransactionItemType::PACKAGE,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
                         spec,
                         {},
                         log_level);
@@ -894,7 +894,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
 
             // Apply advisory filters
             if (settings.advisory_filter.has_value()) {
-                query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+                query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
             }
             solv_map_to_id_queue(result_queue, *query.p_impl);
             rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
@@ -921,7 +921,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     // Resolve all settings before the first report => they will be storred in settings
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+    auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
     bool best = settings.resolve_best(cfg_main);
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
     auto sack = base->get_rpm_package_sack();
@@ -940,7 +940,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             GoalAction::REINSTALL,
             GoalProblem::NOT_INSTALLED,
             settings,
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             spec,
             {},
             log_level);
@@ -954,7 +954,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             GoalAction::REINSTALL,
             GoalProblem::NOT_AVAILABLE,
             settings,
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             spec,
             {},
             log_level);
@@ -972,7 +972,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 GoalAction::REINSTALL,
                 GoalProblem::INSTALLED_IN_DIFFERENT_VERSION,
                 settings,
-                libdnf::transaction::TransactionItemType::PACKAGE,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
                 log_level);
@@ -985,7 +985,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     GoalAction::REINSTALL,
                     GoalProblem::NOT_INSTALLED,
                     settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -995,7 +995,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     GoalAction::REINSTALL,
                     GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                     settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -1013,7 +1013,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 GoalAction::REINSTALL,
                 GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                 settings,
-                libdnf::transaction::TransactionItemType::PACKAGE,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
                 log_level);
@@ -1069,7 +1069,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
             case GoalAction::INSTALL: {
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+                auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
@@ -1085,7 +1085,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         action,
                         GoalProblem::ALREADY_INSTALLED,
                         settings,
-                        libdnf::transaction::TransactionItemType::PACKAGE,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
                         {},
                         {pool.get_nevra(package_id)},
                         log_level);
@@ -1103,7 +1103,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 break;
             case GoalAction::REINSTALL: {
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+                auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
@@ -1117,7 +1117,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1149,10 +1149,10 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
-                            libdnf::Logger::Level::WARNING);
+                            libdnf5::Logger::Level::WARNING);
                         continue;
                     }
                     std::string arch = pool.get_arch(id);
@@ -1165,10 +1165,10 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                                 action,
                                 GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                                 settings,
-                                libdnf::transaction::TransactionItemType::PACKAGE,
+                                libdnf5::transaction::TransactionItemType::PACKAGE,
                                 {pool.get_nevra(id)},
                                 {},
-                                libdnf::Logger::Level::WARNING);
+                                libdnf5::Logger::Level::WARNING);
                             continue;
                         }
                     }
@@ -1179,10 +1179,10 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::ALREADY_INSTALLED,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {pool.get_name(id) + ("." + arch)},
-                            libdnf::Logger::Level::WARNING);
+                            libdnf5::Logger::Level::WARNING);
                         // include installed packages with higher or equal version into transaction to prevent downgrade
                         for (auto installed_id : *query.p_impl) {
                             ids.push_back(installed_id);
@@ -1193,7 +1193,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DOWNGRADE: {
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+                auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
@@ -1207,7 +1207,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1220,7 +1220,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1236,7 +1236,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {name_arch},
                             log_level);
@@ -1273,7 +1273,7 @@ void Goal::Impl::add_remove_to_goal(
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(GoalAction::REMOVE, spec, settings, libdnf::Logger::Level::WARNING);
+        transaction.p_impl->report_not_found(GoalAction::REMOVE, spec, settings, libdnf5::Logger::Level::WARNING);
         return;
     }
 
@@ -1302,11 +1302,11 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(base);
     auto obsoletes = base->get_config().get_obsoletes_option().get_value();
-    libdnf::solv::IdQueue tmp_queue;
+    libdnf5::solv::IdQueue tmp_queue;
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto problem = transaction.p_impl->report_not_found(action, spec, settings, libdnf::Logger::Level::WARNING);
+        auto problem = transaction.p_impl->report_not_found(action, spec, settings, libdnf5::Logger::Level::WARNING);
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
     // Report when package is not installed
@@ -1332,20 +1332,20 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
                     action,
                     GoalProblem::NOT_INSTALLED,
                     settings,
-                    libdnf::transaction::TransactionItemType::PACKAGE,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
-                    libdnf::Logger::Level::WARNING);
+                    libdnf5::Logger::Level::WARNING);
                 return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
             }
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                 settings,
-                libdnf::transaction::TransactionItemType::PACKAGE,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
-                libdnf::Logger::Level::WARNING);
+                libdnf5::Logger::Level::WARNING);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE;
         }
     }
@@ -1379,10 +1379,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
                 action,
                 GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                 settings,
-                libdnf::transaction::TransactionItemType::PACKAGE,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
-                libdnf::Logger::Level::WARNING);
+                libdnf5::Logger::Level::WARNING);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES;
         }
         query |= installed;
@@ -1465,10 +1465,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
                             action,
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
-                            libdnf::transaction::TransactionItemType::PACKAGE,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
                             spec,
                             {name_arch},
-                            libdnf::Logger::Level::WARNING);
+                            libdnf5::Logger::Level::WARNING);
                     } else {
                         rpm_goal.add_install(tmp_queue, skip_broken, best, clean_requirements_on_remove);
                     }
@@ -1481,7 +1481,7 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
-void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf::comps::Package pkg) {
+void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg) {
     auto pkg_settings = GoalJobSettings();
     pkg_settings.with_provides = false;
     pkg_settings.with_filenames = false;
@@ -1530,7 +1530,7 @@ void Goal::Impl::remove_group_packages(const rpm::PackageSet & remove_candidates
 
     // The second step of packages removal - filter out packages that are
     // dependencies of a package that is not also being removed.
-    libdnf::solv::IdQueue packages_to_remove_ids;
+    libdnf5::solv::IdQueue packages_to_remove_ids;
     for (const auto & pkg : remove_candidates) {
         // if the package is required by another installed package, it is
         // not removed, but it's reason is changed to DEPENDENCY
@@ -1559,7 +1559,7 @@ void Goal::Impl::add_group_install_to_goal(
         if (settings.group_no_packages) {
             continue;
         }
-        std::vector<libdnf::comps::Package> packages;
+        std::vector<libdnf5::comps::Package> packages;
         // TODO(mblaha): filter packages by p.arch attribute when supported by comps
         for (const auto & p : group.get_packages()) {
             if (any(allowed_package_types & p.get_type())) {
@@ -1654,10 +1654,10 @@ void Goal::Impl::add_group_upgrade_to_goal(
                 GoalAction::UPGRADE,
                 GoalProblem::NOT_AVAILABLE,
                 settings,
-                libdnf::transaction::TransactionItemType::GROUP,
+                libdnf5::transaction::TransactionItemType::GROUP,
                 group_id,
                 {},
-                libdnf::Logger::Level::WARNING);
+                libdnf5::Logger::Level::WARNING);
             continue;
         }
         auto available_group = available_group_query.get();
@@ -1718,8 +1718,8 @@ void Goal::Impl::add_group_upgrade_to_goal(
 void Goal::Impl::add_environment_install_to_goal(
     base::Transaction & transaction, comps::EnvironmentQuery environment_query, GoalJobSettings & settings) {
     auto & cfg_main = base->get_config();
-    bool with_optional = any(settings.resolve_group_package_types(cfg_main) & libdnf::comps::PackageType::OPTIONAL);
-    auto group_settings = libdnf::GoalJobSettings(settings);
+    bool with_optional = any(settings.resolve_group_package_types(cfg_main) & libdnf5::comps::PackageType::OPTIONAL);
+    auto group_settings = libdnf5::GoalJobSettings(settings);
     group_settings.group_search_environments = false;
     group_settings.group_search_groups = true;
     std::vector<GroupSpec> env_group_specs;
@@ -1761,7 +1761,7 @@ void Goal::Impl::add_environment_remove_to_goal(
     auto & system_state = base->p_impl->get_system_state();
     // groups that are candidates for removal
     std::vector<GroupSpec> remove_group_specs;
-    auto group_settings = libdnf::GoalJobSettings();
+    auto group_settings = libdnf5::GoalJobSettings();
     group_settings.group_search_environments = false;
     group_settings.group_search_groups = true;
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
@@ -1812,7 +1812,7 @@ void Goal::Impl::add_environment_upgrade_to_goal(
     std::vector<GroupSpec> remove_group_specs;
 
     std::vector<GroupSpec> env_group_specs;
-    auto group_settings = libdnf::GoalJobSettings(settings);
+    auto group_settings = libdnf5::GoalJobSettings(settings);
     group_settings.group_search_environments = false;
     group_settings.group_search_groups = true;
 
@@ -1827,10 +1827,10 @@ void Goal::Impl::add_environment_upgrade_to_goal(
                 GoalAction::UPGRADE,
                 GoalProblem::NOT_AVAILABLE,
                 settings,
-                libdnf::transaction::TransactionItemType::ENVIRONMENT,
+                libdnf5::transaction::TransactionItemType::ENVIRONMENT,
                 environment_id,
                 {},
-                libdnf::Logger::Level::WARNING);
+                libdnf5::Logger::Level::WARNING);
             continue;
         }
         auto available_environment = available_environment_query.get();
@@ -1912,7 +1912,7 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
     GoalJobSettings & settings) {
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
-    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
+    auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
     rpm::PackageQuery query(base);
     query.filter_installed();
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
@@ -1931,10 +1931,10 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
                 GoalAction::REASON_CHANGE,
                 GoalProblem::ALREADY_INSTALLED,
                 settings,
-                libdnf::transaction::TransactionItemType::PACKAGE,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
                 pkg.get_nevra(),
-                {libdnf::transaction::transaction_item_reason_to_string(reason)},
-                libdnf::Logger::Level::WARNING);
+                {libdnf5::transaction::transaction_item_reason_to_string(reason)},
+                libdnf5::Logger::Level::WARNING);
             continue;
         }
         rpm_goal.add_reason_change(pkg, reason, group_id);
@@ -1970,7 +1970,7 @@ void Goal::Impl::add_paths_to_goal() {
 void Goal::Impl::set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak) {
     for (const auto & exclude_weak : exclude_from_weak) {
         rpm::PackageQuery weak_query(base, rpm::PackageQuery::ExcludeFlags::APPLY_EXCLUDES);
-        libdnf::ResolveSpecSettings settings{
+        libdnf5::ResolveSpecSettings settings{
             .with_nevra = true, .with_provides = false, .with_filenames = true, .with_binaries = false};
         weak_query.resolve_pkg_spec(exclude_weak, settings, false);
         weak_query.filter_available();
@@ -1994,7 +1994,7 @@ void Goal::Impl::autodetect_unsatisfied_installed_weak_dependencies() {
     for (const auto & pkg : installed_query) {
         installed_names.push_back(pkg.get_name());
         for (const auto & recommend : pkg.get_recommends()) {
-            if (libdnf::rpm::Reldep::is_rich_dependency(recommend.to_string())) {
+            if (libdnf5::rpm::Reldep::is_rich_dependency(recommend.to_string())) {
                 // Rich dependencies are skipped because they are too complicated to provide correct result
                 continue;
             };
@@ -2036,7 +2036,7 @@ void Goal::Impl::autodetect_unsatisfied_installed_weak_dependencies() {
             continue;
         }
         for (const auto & supplement : supplements) {
-            if (libdnf::rpm::Reldep::is_rich_dependency(supplement.to_string())) {
+            if (libdnf5::rpm::Reldep::is_rich_dependency(supplement.to_string())) {
                 // Rich dependencies are skipped because they are too complicated to provide correct result
                 continue;
             };
@@ -2124,7 +2124,7 @@ base::Transaction Goal::resolve() {
     // Set user-installed packages (installed packages with reason USER or GROUP)
     // proceed only if the transaction could result in removal of unused dependencies
     if (p_impl->rpm_goal.is_clean_deps_present()) {
-        libdnf::solv::IdQueue user_installed_packages;
+        libdnf5::solv::IdQueue user_installed_packages;
         rpm::PackageQuery installed_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         installed_query.filter_installed();
         for (const auto & pkg : installed_query) {
@@ -2174,10 +2174,10 @@ base::Transaction Goal::resolve() {
             GoalAction::RESOLVE,
             GoalProblem::WRITE_DEBUG,
             {},
-            libdnf::transaction::TransactionItemType::PACKAGE,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
             "",
             {abs_debug_dir},
-            libdnf::Logger::Level::WARNING);
+            libdnf5::Logger::Level::WARNING);
     }
 
     transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
@@ -2200,4 +2200,4 @@ BaseWeakPtr Goal::get_base() const {
     return p_impl->base->get_weak_ptr();
 }
 
-}  // namespace libdnf
+}  // namespace libdnf5

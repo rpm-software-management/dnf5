@@ -28,10 +28,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 InvalidPackageType::InvalidPackageType(const std::string & type)
-    : libdnf::Error(M_("Invalid package type: {}"), type) {}
+    : libdnf5::Error(M_("Invalid package type: {}"), type) {}
 
 InvalidPackageType::InvalidPackageType(const PackageType type)
-    : libdnf::Error(M_("Invalid package type: {}"), static_cast<int>(type)) {}
+    : libdnf5::Error(M_("Invalid package type: {}"), static_cast<int>(type)) {}
 
 PackageType package_type_from_string(const std::string & type) {
     if (type == "mandatory") {

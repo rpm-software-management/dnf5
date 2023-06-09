@@ -30,7 +30,7 @@ namespace libdnf5::cli {
 class Error : public libdnf5::Error {
 public:
     using libdnf5::Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::cli"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::cli"; }
     const char * get_name() const noexcept override { return "Error"; }
 };
 

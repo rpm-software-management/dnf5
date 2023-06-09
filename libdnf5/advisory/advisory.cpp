@@ -37,16 +37,16 @@ std::string Advisory::get_name() const {
     name = get_rpm_pool(base).lookup_str(id.id, SOLVABLE_NAME);
 
     if (strncmp(
-            libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
+            libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
         0) {
         throw RuntimeError(
             M_("Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have advisory prefix \"{}\""),
             id.id,
             name,
-            libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX);
+            libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX);
     }
 
-    return std::string(name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);
+    return std::string(name + libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);
 }
 
 std::string Advisory::get_type() const {
@@ -57,7 +57,7 @@ std::string Advisory::get_severity() const {
     //TODO(amatej): should we call SolvPrivate::internalize_libsolv_repo(solvable->repo);
     //              before pool.lookup_str?
     //              If so do this just once in solv::advisroy_private
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_SEVERITY));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_SEVERITY));
 }
 
 unsigned long long Advisory::get_buildtime() const {
@@ -66,27 +66,27 @@ unsigned long long Advisory::get_buildtime() const {
 
 std::string Advisory::get_title() const {
     // SOLVABLE_SUMMARY is misnamed, it actually stores the title
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Advisory::get_vendor() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
 }
 
 std::string Advisory::get_rights() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_RIGHTS));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_RIGHTS));
 }
 
 std::string Advisory::get_status() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_STATUS));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_STATUS));
 }
 
 std::string Advisory::get_message() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_MESSAGE));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_MESSAGE));
 }
 
 std::string Advisory::get_description() const {
-    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 AdvisoryId Advisory::get_id() const {

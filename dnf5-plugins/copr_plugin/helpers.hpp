@@ -31,7 +31,7 @@ namespace dnf5 {
 std::vector<std::string> repo_fallbacks(const std::string & name_version);
 template <typename... Args>
 void warning(const char * format, Args &&... args) {
-    std::cerr << "WARNING: " + libdnf::utils::sformat(format, std::forward<Args>(args)...) << std::endl;
+    std::cerr << "WARNING: " + libdnf5::utils::sformat(format, std::forward<Args>(args)...) << std::endl;
 }
 
 }  // namespace dnf5

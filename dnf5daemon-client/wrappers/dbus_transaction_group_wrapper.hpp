@@ -34,17 +34,17 @@ namespace dnfdaemon::client {
 class DbusTransactionGroupWrapper {
 public:
     explicit DbusTransactionGroupWrapper(const dnfdaemon::DbusTransactionItem & dti)
-        : action(libdnf::transaction::transaction_item_action_from_string(std::get<1>(dti))),
-          reason(libdnf::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
+        : action(libdnf5::transaction::transaction_item_action_from_string(std::get<1>(dti))),
+          reason(libdnf5::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
           group(std::get<4>(dti)) {}
 
     DbusGroupWrapper get_group() const { return group; }
-    libdnf::transaction::TransactionItemAction get_action() const { return action; }
-    libdnf::transaction::TransactionItemReason get_reason() const { return reason; }
+    libdnf5::transaction::TransactionItemAction get_action() const { return action; }
+    libdnf5::transaction::TransactionItemReason get_reason() const { return reason; }
 
 private:
-    libdnf::transaction::TransactionItemAction action;
-    libdnf::transaction::TransactionItemReason reason;
+    libdnf5::transaction::TransactionItemAction action;
+    libdnf5::transaction::TransactionItemReason reason;
     DbusGroupWrapper group;
 };
 

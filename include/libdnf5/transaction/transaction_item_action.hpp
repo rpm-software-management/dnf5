@@ -50,7 +50,7 @@ class InvalidTransactionItemAction : public libdnf5::Error {
 public:
     InvalidTransactionItemAction(const std::string & action);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
     const char * get_name() const noexcept override { return "InvalidTransactionItemAction"; }
 };
 

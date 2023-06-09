@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/match_int64.hpp"
 
 
-using namespace libdnf::sack;
+using namespace libdnf5::sack;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SackMatchInt64Test);
@@ -61,18 +61,18 @@ void SackMatchInt64Test::test_invalid() {
     constexpr int64_t VALUE = 10;
     constexpr int64_t PATTERN = 5;
 
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::NOT, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ICASE, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::NOT | QueryCmp::ICASE, PATTERN), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::NOT, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ICASE, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::NOT | QueryCmp::ICASE, PATTERN), libdnf5::AssertionError);
 
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::GLOB, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IGLOB, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::REGEX, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IREGEX, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::CONTAINS, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ICONTAINS, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::STARTSWITH, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ISTARTSWITH, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ENDSWITH, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IENDSWITH, PATTERN), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::GLOB, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IGLOB, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::REGEX, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IREGEX, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::CONTAINS, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ICONTAINS, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::STARTSWITH, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ISTARTSWITH, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::ENDSWITH, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_int64(VALUE, QueryCmp::IENDSWITH, PATTERN), libdnf5::AssertionError);
 }

@@ -77,7 +77,7 @@ class StateNotFoundError : public libdnf5::Error {
 public:
     StateNotFoundError(const std::string & type, const std::string & key);
 
-    const char * get_domain_name() const noexcept override { return "libdnf::system"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::system"; }
     const char * get_name() const noexcept override { return "StateNotFoundError"; }
 };
 
@@ -86,7 +86,7 @@ class InvalidVersionError : public libdnf5::Error {
 public:
     using libdnf5::Error::Error;
 
-    const char * get_domain_name() const noexcept override { return "libdnf::system"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::system"; }
     const char * get_name() const noexcept override { return "InvalidVersionError"; }
 };
 
@@ -95,7 +95,7 @@ class UnsupportedVersionError : public libdnf5::Error {
 public:
     using libdnf5::Error::Error;
 
-    const char * get_domain_name() const noexcept override { return "libdnf::system"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::system"; }
     const char * get_name() const noexcept override { return "UnsupportedVersionError"; }
 };
 

@@ -77,7 +77,7 @@ libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo_solv(const std::string & repoi
 
 libdnf5::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) {
     // This is used for testing queries as well, hence we don't use the AdvisoryQuery facility for filtering
-    libdnf5::advisory::AdvisorySet advisories = libdnf::advisory::AdvisoryQuery(base);
+    libdnf5::advisory::AdvisorySet advisories = libdnf5::advisory::AdvisoryQuery(base);
 
     libdnf5::advisory::AdvisorySet found(base);
     for (auto advisory : advisories) {

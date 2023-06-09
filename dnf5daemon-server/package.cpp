@@ -57,7 +57,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"full_nevra", PackageAttribute::full_nevra},
     {"reason", PackageAttribute::reason}};
 
-std::vector<std::string> reldeplist_to_strings(const libdnf::rpm::ReldepList & reldeps) {
+std::vector<std::string> reldeplist_to_strings(const libdnf5::rpm::ReldepList & reldeps) {
     std::vector<std::string> lst;
     for (auto reldep : reldeps) {
         lst.emplace_back(reldep.to_string());
@@ -65,7 +65,7 @@ std::vector<std::string> reldeplist_to_strings(const libdnf::rpm::ReldepList & r
     return lst;
 }
 
-std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf::rpm::Package & libdnf_package) {
+std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf5::rpm::Package & libdnf_package) {
     std::vector<dnfdaemon::Changelog> changelogs;
 
     for (const auto & chlog : libdnf_package.get_changelogs()) {
@@ -76,7 +76,7 @@ std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf::rpm::Package 
 }
 
 dnfdaemon::KeyValueMap package_to_map(
-    const libdnf::rpm::Package & libdnf_package, const std::vector<std::string> & attributes) {
+    const libdnf5::rpm::Package & libdnf_package, const std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_package;
     // add package id by default
     dbus_package.emplace(std::make_pair("id", libdnf_package.get_id().id));
@@ -182,7 +182,7 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::reason:
                 dbus_package.emplace(
-                    attr, libdnf::transaction::transaction_item_reason_to_string(libdnf_package.get_reason()));
+                    attr, libdnf5::transaction::transaction_item_reason_to_string(libdnf_package.get_reason()));
                 break;
         }
     }

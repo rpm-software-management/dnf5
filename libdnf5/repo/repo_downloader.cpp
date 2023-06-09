@@ -138,7 +138,7 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
       code(lr_error->code) {}
 
 
-RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type)
+RepoDownloader::RepoDownloader(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type)
     : base(base),
       config(config),
       repo_type(repo_type),
@@ -174,7 +174,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
 bool RepoDownloader::is_metalink_in_sync() try {
     auto & logger = *base->get_logger();
 
-    libdnf::utils::fs::TempDir tmpdir("tmpdir");
+    libdnf5::utils::fs::TempDir tmpdir("tmpdir");
 
     LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
 
@@ -248,7 +248,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
     auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
 
-    libdnf::utils::fs::TempDir tmpdir("tmpdir");
+    libdnf5::utils::fs::TempDir tmpdir("tmpdir");
 
     const char * dlist[] = LR_YUM_REPOMDONLY;
 
@@ -279,7 +279,7 @@ void RepoDownloader::load_local() try {
 
     auto result = perform(h, config.get_repo_gpgcheck_option().get_value());
 
-    repomd_filename = libdnf::utils::string::c_to_str(get_yum_repo(result)->repomd);
+    repomd_filename = libdnf5::utils::string::c_to_str(get_yum_repo(result)->repomd);
 
     // copy the mirrors out of the handle (handle_get_info() allocates new
     // space and passes ownership, so we copy twice in this case, as we want to
@@ -293,13 +293,13 @@ void RepoDownloader::load_local() try {
     }
     g_strfreev(lr_mirrors);
 
-    revision = libdnf::utils::string::c_to_str(get_yum_repomd(result)->revision);
+    revision = libdnf5::utils::string::c_to_str(get_yum_repomd(result)->revision);
 
     GError * err_p{nullptr};
     // TODO(lukash) return time_t instead of converting to signed int
     max_timestamp = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(result), &err_p));
     if (err_p != nullptr) {
-        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+        throw libdnf5::repo::LibrepoError(std::unique_ptr<GError>(err_p));
     }
 
     for (auto elem = get_yum_repomd(result)->content_tags; elem; elem = g_slist_next(elem)) {
@@ -358,7 +358,7 @@ LibrepoHandle & RepoDownloader::get_cached_handle() {
 }
 
 
-void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && cbs) noexcept {
+void RepoDownloader::set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && cbs) noexcept {
     callbacks = std::move(cbs);
     pgp.set_callbacks(callbacks.get());
 }
@@ -476,19 +476,19 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
 #ifdef MODULEMD
     dlist.push_back(MD_FILENAME_MODULES);
 #endif
-    if (optional_metadata.extract(libdnf::METADATA_TYPE_FILELISTS)) {
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_FILELISTS)) {
         dlist.push_back(MD_FILENAME_FILELISTS);
     }
-    if (optional_metadata.extract(libdnf::METADATA_TYPE_OTHER)) {
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_OTHER)) {
         dlist.push_back(MD_FILENAME_OTHER);
     }
-    if (optional_metadata.extract(libdnf::METADATA_TYPE_PRESTO)) {
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_PRESTO)) {
         dlist.push_back(MD_FILENAME_PRESTODELTA);
     }
-    if (optional_metadata.extract(libdnf::METADATA_TYPE_COMPS)) {
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_COMPS)) {
         dlist.push_back(MD_FILENAME_GROUP_GZ);
     }
-    if (optional_metadata.extract(libdnf::METADATA_TYPE_UPDATEINFO)) {
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_UPDATEINFO)) {
         dlist.push_back(MD_FILENAME_UPDATEINFO);
     }
 
@@ -627,14 +627,14 @@ std::pair<std::string, std::string> RepoDownloader::get_source_info() const {
     } else if (!config.get_mirrorlist_option().empty() && !config.get_mirrorlist_option().get_value().empty()) {
         return {"mirrorlist", config.get_mirrorlist_option().get_value()};
     } else {
-        return {"baseurl", libdnf::utils::string::join(config.get_baseurl_option().get_value(), ", ")};
+        return {"baseurl", libdnf5::utils::string::join(config.get_baseurl_option().get_value(), ", ")};
     }
 }
 
 
 void RepoDownloader::import_repo_keys() {
     for (const auto & gpgkey_url : config.get_gpgkey_option().get_value()) {
-        auto tmp_file = libdnf::utils::fs::TempFile("repokey");
+        auto tmp_file = libdnf5::utils::fs::TempFile("repokey");
 
         download_url(gpgkey_url.c_str(), tmp_file.get_fd());
 
@@ -769,7 +769,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
 // TODO(jkolarik): currently all metadata are loaded for system repo, maybe we want it configurable?
 std::set<std::string> RepoDownloader::get_optional_metadata() const {
     if (repo_type == Repo::Type::SYSTEM) {
-        return libdnf::OPTIONAL_METADATA_TYPES;
+        return libdnf5::OPTIONAL_METADATA_TYPES;
     } else {
         return config.get_main_config().get_optional_metadata_types_option().get_value();
     }

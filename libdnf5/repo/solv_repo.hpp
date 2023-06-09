@@ -57,7 +57,7 @@ enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, COMPS, OTHER };
 class SolvError : public Error {
     using Error::Error;
 
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::repo"; }
     const char * get_name() const noexcept override { return "SolvError"; }
 };
 

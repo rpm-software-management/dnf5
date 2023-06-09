@@ -36,23 +36,23 @@ static bool set_cmp_type(libdnf5::rpm::Reldep::CmpType * cmp_type, std::string c
             return false;
         }
         if (cmp_type_string[0] == '<') {
-            *cmp_type = libdnf::rpm::Reldep::CmpType::LTE;
+            *cmp_type = libdnf5::rpm::Reldep::CmpType::LTE;
             return true;
         } else if (cmp_type_string[0] == '>') {
-            *cmp_type = libdnf::rpm::Reldep::CmpType::GTE;
+            *cmp_type = libdnf5::rpm::Reldep::CmpType::GTE;
             return true;
         } else {
             return false;
         }
     } else if (length == 1) {
         if (cmp_type_string[0] == '>') {
-            *cmp_type = libdnf::rpm::Reldep::CmpType::GT;
+            *cmp_type = libdnf5::rpm::Reldep::CmpType::GT;
             return true;
         } else if (cmp_type_string[0] == '<') {
-            *cmp_type = libdnf::rpm::Reldep::CmpType::LT;
+            *cmp_type = libdnf5::rpm::Reldep::CmpType::LT;
             return true;
         } else if (cmp_type_string[0] == '=') {
-            *cmp_type = libdnf::rpm::Reldep::CmpType::EQ;
+            *cmp_type = libdnf5::rpm::Reldep::CmpType::EQ;
             return true;
         } else {
             return false;
@@ -84,7 +84,7 @@ bool ReldepParser::parse(const std::string & reldep) {
                 auto cmp_type_string = cmp_type_sub_match.str();
                 return set_cmp_type(&cmp_type, cmp_type_string, cmp_type_length);
             } else {
-                cmp_type = libdnf::rpm::Reldep::CmpType::NONE;
+                cmp_type = libdnf5::rpm::Reldep::CmpType::NONE;
                 evr.clear();
                 return true;
             }

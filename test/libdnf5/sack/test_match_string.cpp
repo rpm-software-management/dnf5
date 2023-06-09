@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/match_string.hpp"
 
 
-using namespace libdnf::sack;
+using namespace libdnf5::sack;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SackMatchStringTest);
@@ -247,13 +247,13 @@ void SackMatchStringTest::test_invalid() {
     const std::string VALUE = "VALUE";
     const std::string PATTERN = "PATTERN";
 
-    CPPUNIT_ASSERT_THROW(match_string(VALUE, QueryCmp::NOT, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string(VALUE, QueryCmp::ICASE, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::NOT | QueryCmp::ICASE, PATTERN), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string(VALUE, QueryCmp::NOT, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string(VALUE, QueryCmp::ICASE, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::NOT | QueryCmp::ICASE, PATTERN), libdnf5::AssertionError);
 
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::ISNULL, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::GT, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::GTE, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::LT, PATTERN), libdnf::AssertionError);
-    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::LTE, PATTERN), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::ISNULL, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::GT, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::GTE, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::LT, PATTERN), libdnf5::AssertionError);
+    CPPUNIT_ASSERT_THROW(match_string("VALUE", QueryCmp::LTE, PATTERN), libdnf5::AssertionError);
 }

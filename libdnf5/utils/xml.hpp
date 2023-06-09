@@ -31,7 +31,7 @@ namespace libdnf5::utils::xml {
 
 struct XMLSaveError : public Error {
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::utils"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::utils"; }
     const char * get_name() const noexcept override { return "XMLSaveError"; }
 };
 

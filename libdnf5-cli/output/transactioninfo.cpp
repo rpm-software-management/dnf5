@@ -38,7 +38,7 @@ void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     info.add_line("End rpmdb", transaction.get_rpmdb_version_end());
 
     info.add_line("User", transaction.get_user_id());
-    info.add_line("Status", libdnf::transaction::transaction_state_to_string(transaction.get_state()));
+    info.add_line("Status", libdnf5::transaction::transaction_state_to_string(transaction.get_state()));
     info.add_line("Releasever", transaction.get_releasever());
     info.add_line("Description", transaction.get_description());
     info.add_line("Comment", transaction.get_comment());
@@ -46,7 +46,7 @@ void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     info.add_line("Packages altered", "");
 
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> item_list(scols_new_table(), &scols_unref_table);
-    if (libdnf::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(item_list.get(), 1);
     }
 
@@ -59,9 +59,9 @@ void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     for (auto & pkg : transaction.get_packages()) {
         struct libscols_line * ln = scols_table_new_line(item_list.get(), NULL);
         scols_line_set_data(
-            ln, 0, ("  " + libdnf::transaction::transaction_item_action_to_string(pkg.get_action())).c_str());
+            ln, 0, ("  " + libdnf5::transaction::transaction_item_action_to_string(pkg.get_action())).c_str());
         scols_line_set_data(ln, 1, pkg.to_string().c_str());
-        scols_line_set_data(ln, 2, libdnf::transaction::transaction_item_reason_to_string(pkg.get_reason()).c_str());
+        scols_line_set_data(ln, 2, libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()).c_str());
         scols_line_set_data(ln, 3, pkg.get_repoid().c_str());
     }
 

@@ -60,7 +60,7 @@ public:
 
     /// Resolve all operations.
     ///
-    /// @return libdnf::GoalProblem to indicate whether there was a solver error.
+    /// @return libdnf5::GoalProblem to indicate whether there was a solver error.
     /// @since 5.0
     libdnf5::GoalProblem resolve();
 

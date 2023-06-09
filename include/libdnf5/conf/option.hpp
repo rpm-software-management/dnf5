@@ -118,7 +118,7 @@ public:
     /// @since 1.0
     bool is_locked() const noexcept;
 
-    /// Asserts the option is not locked and throws a `libdnf::UserAssertionError` in case it is.
+    /// Asserts the option is not locked and throws a `libdnf5::UserAssertionError` in case it is.
     ///
     /// @since 1.0
     void assert_not_locked() const;

@@ -30,7 +30,7 @@ namespace libdnf5::transaction {
 TransactionHistory::TransactionHistory(const libdnf5::BaseWeakPtr & base) : base{base} {}
 
 
-TransactionHistory::TransactionHistory(libdnf::Base & base) : TransactionHistory(base.get_weak_ptr()) {}
+TransactionHistory::TransactionHistory(libdnf5::Base & base) : TransactionHistory(base.get_weak_ptr()) {}
 
 
 Transaction TransactionHistory::new_transaction() {

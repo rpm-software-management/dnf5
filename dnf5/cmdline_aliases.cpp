@@ -53,7 +53,7 @@ bool attach_named_args(
                 attached_arg_id_path = value.as_string();
                 try {
                     alias_arg.get_argument_parser().get_named_arg(*attached_arg_id_path, false);
-                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                     auto location = value.location();
                     auto msg = fmt::format(
                         "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
@@ -99,7 +99,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
     try {
         const auto arg_parser_elements =
-            toml::parse<::toml::discard_comments, libdnf::PreserveOrderMap, std::vector>(config_file_path);
+            toml::parse<::toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>(config_file_path);
 
         try {
             const auto version = toml::find<std::string>(arg_parser_elements, "version");
@@ -170,7 +170,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             ArgParser::Command * element_parent_cmd;
             try {
                 element_parent_cmd = &arg_parser.get_command(element_parent_id_path);
-            } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+            } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                 auto location = element_options.location();
                 auto msg = fmt::format(
                     "Parent commant \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
@@ -345,7 +345,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 const std::string source_id_path = value.as_string();
                                 try {
                                     source = &arg_parser.get_named_arg(source_id_path, false);
-                                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                                     auto location = value.location();
                                     auto msg = fmt::format(
                                         "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
@@ -362,7 +362,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 const std::string group_id = value.as_string();
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
-                                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                                     auto location = value.location();
                                     auto msg = fmt::format(
                                         "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
@@ -465,7 +465,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 const std::string group_id = value.as_string();
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
-                                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                                     auto location = value.location();
                                     auto msg = fmt::format(
                                         "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
@@ -553,7 +553,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 const std::string attached_command_id_path = value.as_string();
                                 try {
                                     attached_command = &arg_parser.get_command(attached_command_id_path);
-                                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                                     auto location = value.location();
                                     auto msg = fmt::format(
                                         "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
@@ -573,7 +573,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 const std::string group_id = value.as_string();
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
-                                } catch (const libdnf::cli::ArgumentParserNotFoundError & e) {
+                                } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                                     auto location = value.location();
                                     auto msg = fmt::format(
                                         "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",

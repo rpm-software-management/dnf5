@@ -5,7 +5,7 @@
 
 // Create a goal, which is a class that allows to add items for resolving into
 // a transaction.
-libdnf::Goal goal(base);
+libdnf5::Goal goal(base);
 
 // Add an RPM package named "one" for installation into the goal.
 goal.add_rpm_install("one");
@@ -29,8 +29,8 @@ for (const auto & tspkg : transaction.get_transaction_packages()) {
 // and overriding its methods.
 //
 // We only override one of the callbacks here, see
-// `libdnf::repo::DownloadCallbacks` documentation for a complete list.
-class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+// `libdnf5::repo::DownloadCallbacks` documentation for a complete list.
+class PackageDownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 private:
     int mirror_failure(
         [[maybe_unused]] void * user_cb_data,
@@ -50,10 +50,10 @@ transaction.download();
 // A class for defining the RPM transaction callbacks.
 //
 // Again, only a callback for when an RPM package installation starts, for a
-// complete list of the callbacks see `libdnf::rpm::TransactionCallbacks`
+// complete list of the callbacks see `libdnf5::rpm::TransactionCallbacks`
 // documentation.
-class TransactionCallbacks : public libdnf::rpm::TransactionCallbacks {
-    void install_start(const libdnf::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) override {
+class TransactionCallbacks : public libdnf5::rpm::TransactionCallbacks {
+    void install_start(const libdnf5::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) override {
         std::cout << transaction_item_action_to_string(item.get_action()) << " " << item.get_package().get_nevra()
                   << std::endl;
     }

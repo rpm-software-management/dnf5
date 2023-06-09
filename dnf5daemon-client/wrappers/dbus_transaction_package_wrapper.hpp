@@ -34,14 +34,14 @@ namespace dnfdaemon::client {
 class DbusTransactionPackageWrapper {
 public:
     explicit DbusTransactionPackageWrapper(const dnfdaemon::DbusTransactionItem & dti)
-        : action(libdnf::transaction::transaction_item_action_from_string(std::get<1>(dti))),
-          reason(libdnf::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
+        : action(libdnf5::transaction::transaction_item_action_from_string(std::get<1>(dti))),
+          reason(libdnf5::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
           transaction_item_attrs(std::get<3>(dti)),
           package(std::get<4>(dti)) {}
 
     DbusPackageWrapper & get_package() noexcept { return package; }
-    libdnf::transaction::TransactionItemAction get_action() const noexcept { return action; }
-    libdnf::transaction::TransactionItemReason get_reason() const noexcept { return reason; }
+    libdnf5::transaction::TransactionItemAction get_action() const noexcept { return action; }
+    libdnf5::transaction::TransactionItemReason get_reason() const noexcept { return reason; }
     dnfdaemon::KeyValueMap & get_transaction_item_attrs() noexcept { return transaction_item_attrs; }
     // TODO(jmracek) get_replaces() is only a dummy method. In future it requires a private setter and a way how to get
     // data from dnf-deamon server
@@ -49,8 +49,8 @@ public:
     void set_replaces(std::vector<DbusPackageWrapper> && replaces) { this->replaces = replaces; }
 
 private:
-    libdnf::transaction::TransactionItemAction action;
-    libdnf::transaction::TransactionItemReason reason;
+    libdnf5::transaction::TransactionItemAction action;
+    libdnf5::transaction::TransactionItemReason reason;
     dnfdaemon::KeyValueMap transaction_item_attrs;
     DbusPackageWrapper package;
     std::vector<DbusPackageWrapper> replaces;

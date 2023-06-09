@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::transaction {
 
 InvalidTransactionItemReason::InvalidTransactionItemReason(const std::string & reason)
-    : libdnf::Error(M_("Invalid transaction item reason: {}"), reason) {}
+    : libdnf5::Error(M_("Invalid transaction item reason: {}"), reason) {}
 
 
 std::string transaction_item_reason_to_string(TransactionItemReason reason) {

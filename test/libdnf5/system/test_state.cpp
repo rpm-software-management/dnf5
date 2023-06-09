@@ -124,19 +124,19 @@ void StateTest::test_state_read() {
     libdnf5::system::GroupState grp_state_1{
         .userinstalled = true,
         .packages = {"foo", "bar"},
-        .package_types = libdnf::comps::PackageType::MANDATORY | libdnf::comps::PackageType::OPTIONAL};
+        .package_types = libdnf5::comps::PackageType::MANDATORY | libdnf5::comps::PackageType::OPTIONAL};
     CPPUNIT_ASSERT_EQUAL(grp_state_1, state.get_group_state("group-1"));
     libdnf5::system::GroupState grp_state_2{
-        .userinstalled = false, .packages = {"pkg1", "pkg2"}, .package_types = libdnf::comps::PackageType::MANDATORY};
+        .userinstalled = false, .packages = {"pkg1", "pkg2"}, .package_types = libdnf5::comps::PackageType::MANDATORY};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 
     libdnf5::system::ModuleState module_state_1{
         .enabled_stream = "stream-1",
-        .status = libdnf::module::ModuleStatus::ENABLED,
+        .status = libdnf5::module::ModuleStatus::ENABLED,
         .installed_profiles = {"zigg", "zagg"}};
     CPPUNIT_ASSERT_EQUAL(module_state_1, state.get_module_state("module-1"));
     libdnf5::system::ModuleState module_state_2{
-        .enabled_stream = "stream-2", .status = libdnf::module::ModuleStatus::DISABLED};
+        .enabled_stream = "stream-2", .status = libdnf5::module::ModuleStatus::DISABLED};
     CPPUNIT_ASSERT_EQUAL(module_state_2, state.get_module_state("module-2"));
     CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
 }

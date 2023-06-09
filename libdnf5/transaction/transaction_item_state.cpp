@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::transaction {
 
 InvalidTransactionItemState::InvalidTransactionItemState(const std::string & state)
-    : libdnf::Error(M_("Invalid transaction item state: {}"), state) {}
+    : libdnf5::Error(M_("Invalid transaction item state: {}"), state) {}
 
 
 std::string transaction_item_state_to_string(TransactionItemState state) {

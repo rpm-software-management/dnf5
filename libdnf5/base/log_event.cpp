@@ -29,10 +29,10 @@ namespace libdnf5::base {
 
 LogEvent::LogEvent(
     libdnf5::GoalAction action,
-    libdnf::GoalProblem problem,
+    libdnf5::GoalProblem problem,
     const std::set<std::string> & additional_data,
-    const libdnf::GoalJobSettings & settings,
-    const libdnf::transaction::TransactionItemType spec_type,
+    const libdnf5::GoalJobSettings & settings,
+    const libdnf5::transaction::TransactionItemType spec_type,
     const std::string & spec)
     : action(action),
       problem(problem),
@@ -44,28 +44,28 @@ LogEvent::LogEvent(
         !(problem == libdnf5::GoalProblem::SOLVER_ERROR ||
           problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
         "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
-        "libdnf::GoalProblem::SOLVER_ERROR or libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
+        "libdnf5::GoalProblem::SOLVER_ERROR or libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
         "problems it is necesarry to provide SolverProblems in constructor");
 }
 
-LogEvent::LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems)
-    : action(libdnf::GoalAction::RESOLVE),
+LogEvent::LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems)
+    : action(libdnf5::GoalAction::RESOLVE),
       problem(problem),
       solver_problems(solver_problems) {
     libdnf_assert(
         problem == libdnf5::GoalProblem::SOLVER_ERROR ||
             problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
-        "LogEvent::LogEvent() called with incorrect problem, only libdnf::GoalProblem::SOLVER_ERROR or "
-        "libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
+        "LogEvent::LogEvent() called with incorrect problem, only libdnf5::GoalProblem::SOLVER_ERROR or "
+        "libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
 }
 
 
 std::string LogEvent::to_string(
-    libdnf::GoalAction action,
-    libdnf::GoalProblem problem,
+    libdnf5::GoalAction action,
+    libdnf5::GoalProblem problem,
     const std::set<std::string> & additional_data,
-    const std::optional<libdnf::GoalJobSettings> & settings,
-    const std::optional<libdnf::transaction::TransactionItemType> & spec_type,
+    const std::optional<libdnf5::GoalJobSettings> & settings,
+    const std::optional<libdnf5::transaction::TransactionItemType> & spec_type,
     const std::optional<std::string> & spec,
     const std::optional<SolverProblems> & solver_problems) {
     std::string ret;
@@ -75,22 +75,22 @@ std::string LogEvent::to_string(
             if (action == GoalAction::REMOVE) {
                 std::string spec_type_str;
                 switch (*spec_type) {
-                    case libdnf::transaction::TransactionItemType::PACKAGE:
+                    case libdnf5::transaction::TransactionItemType::PACKAGE:
                         spec_type_str = _("packages");
                         break;
-                    case libdnf::transaction::TransactionItemType::GROUP:
+                    case libdnf5::transaction::TransactionItemType::GROUP:
                         spec_type_str = _("groups");
                         break;
-                    case libdnf::transaction::TransactionItemType::ENVIRONMENT:
+                    case libdnf5::transaction::TransactionItemType::ENVIRONMENT:
                         spec_type_str = _("environmental groups");
                         break;
-                    case libdnf::transaction::TransactionItemType::MODULE:
+                    case libdnf5::transaction::TransactionItemType::MODULE:
                         spec_type_str = _("modules");
                         break;
                 }
                 return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
             } else if (action == GoalAction::INSTALL_BY_COMPS) {
-                if (spec_type && *spec_type == libdnf::transaction::TransactionItemType::GROUP) {
+                if (spec_type && *spec_type == libdnf5::transaction::TransactionItemType::GROUP) {
                     return ret.append(utils::sformat(_("No match for group from environment: {}"), *spec));
                 } else {
                     return ret.append(utils::sformat(_("No match for group package: {}"), *spec));

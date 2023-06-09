@@ -180,7 +180,7 @@ private:
 class TransactionError : public Error {
 public:
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::rpm"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
     const char * get_name() const noexcept override { return "TransactionError"; }
 };
 

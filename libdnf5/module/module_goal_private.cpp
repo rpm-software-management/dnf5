@@ -32,7 +32,7 @@ extern "C" {
 #include <solv/solver.h>
 }
 
-namespace libdnf::module {
+namespace libdnf5::module {
 
 
 void ModuleGoalPrivate::add_provide_install(Id reldepid, bool skip_broken, bool best) {
@@ -43,7 +43,7 @@ void ModuleGoalPrivate::add_provide_install(Id reldepid, bool skip_broken, bool 
 }
 
 
-void ModuleGoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best) {
+void ModuleGoalPrivate::add_install(libdnf5::solv::IdQueue & queue, bool skip_broken, bool best) {
     Id what = pool_queuetowhatprovides(module_sack->p_impl->pool, &queue.get_queue());
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
@@ -52,9 +52,9 @@ void ModuleGoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_bro
 }
 
 
-libdnf::GoalProblem ModuleGoalPrivate::resolve() {
+libdnf5::GoalProblem ModuleGoalPrivate::resolve() {
     Pool * pool = module_sack->p_impl->pool;
-    libdnf::solv::IdQueue job(staging);
+    libdnf5::solv::IdQueue job(staging);
 
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
@@ -64,16 +64,16 @@ libdnf::GoalProblem ModuleGoalPrivate::resolve() {
     libsolv_solver.init(pool);
 
     if (libsolv_solver.solve(job)) {
-        return libdnf::GoalProblem::SOLVER_ERROR;
+        return libdnf5::GoalProblem::SOLVER_ERROR;
     }
 
     libsolv_transaction = libsolv_solver.create_transaction();
 
-    return libdnf::GoalProblem::NO_PROBLEM;
+    return libdnf5::GoalProblem::NO_PROBLEM;
 }
 
 
-libdnf::solv::IdQueue ModuleGoalPrivate::list_results(Id type_filter1, Id type_filter2) {
+libdnf5::solv::IdQueue ModuleGoalPrivate::list_results(Id type_filter1, Id type_filter2) {
     /* no transaction */
     if (!libsolv_transaction) {
         libdnf_assert_goal_resolved();
@@ -82,7 +82,7 @@ libdnf::solv::IdQueue ModuleGoalPrivate::list_results(Id type_filter1, Id type_f
         throw RuntimeError(M_("no solution possible"));
     }
 
-    libdnf::solv::IdQueue result_ids;
+    libdnf5::solv::IdQueue result_ids;
     const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
 
     for (int i = 0; i < libsolv_transaction->steps.count; ++i) {
@@ -107,7 +107,7 @@ libdnf::solv::IdQueue ModuleGoalPrivate::list_results(Id type_filter1, Id type_f
 }
 
 
-libdnf::solv::IdQueue ModuleGoalPrivate::list_installs() {
+libdnf5::solv::IdQueue ModuleGoalPrivate::list_installs() {
     return list_results(SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
 }
 
@@ -232,8 +232,8 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Modu
 
 
 // Report packages that have a conflict
-libdnf::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
-    libdnf::solv::IdQueue result_ids;
+libdnf5::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
+    libdnf5::solv::IdQueue result_ids;
 
     for (auto problem : get_problems()) {
         for (auto i : problem) {
@@ -250,4 +250,4 @@ libdnf::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
 }
 
 
-}  // namespace libdnf::module
+}  // namespace libdnf5::module

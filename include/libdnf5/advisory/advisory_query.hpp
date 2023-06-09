@@ -95,7 +95,7 @@ public:
     /// Filter out advisories that don't contain at least one AdvisoryPackage that has a counterpart Package in package_set
     /// such that they have matching name and architecture and also their epoch-version-release complies to cmp_type.
     ///
-    /// @param package_set  libdnf::rpm::PackageSet used when filtering.
+    /// @param package_set  libdnf5::rpm::PackageSet used when filtering.
     /// @param cmp_type     Condition to fulfill when comparing epoch-version-release of packages.
     void filter_packages(
         const libdnf5::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -105,7 +105,7 @@ public:
     /// name and architecture and also their epoch-version-release complies to cmp_type.
     /// AdvisoryPackages are sorted in the std::vector by Name, Arch and EVR.
     ///
-    /// @param package_set  libdnf::rpm::PackageSet used when filtering.
+    /// @param package_set  libdnf5::rpm::PackageSet used when filtering.
     /// @param cmp_type     Condition to fulfill when comparing epoch-version-release of packages.
     /// @return std::vector of AdvisoryPackages
     std::vector<AdvisoryPackage> get_advisory_packages_sorted(

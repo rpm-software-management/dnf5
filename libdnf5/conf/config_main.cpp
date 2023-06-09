@@ -187,7 +187,7 @@ class ConfigMain::Impl {
     OptionStringList installonlypkgs{INSTALLONLYPKGS};
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
     OptionStringSet optional_metadata_types{
-        OptionStringSet::ValueType{libdnf::METADATA_TYPE_COMPS, libdnf::METADATA_TYPE_UPDATEINFO}};
+        OptionStringSet::ValueType{libdnf5::METADATA_TYPE_COMPS, libdnf5::METADATA_TYPE_UPDATEINFO}};
     OptionNumber<std::uint32_t> installonly_limit{3, 0, [](const std::string & value) -> std::uint32_t {
                                                       if (value == "<off>") {
                                                           return 0;
