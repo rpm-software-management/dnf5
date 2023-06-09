@@ -91,12 +91,7 @@ public:
 
 class RepoCallbacks : public libdnf5::repo::RepoCallbacks {
 public:
-    bool repokey_import(
-        [[maybe_unused]] const std::string & id,
-        [[maybe_unused]] const std::vector<std::string> & user_ids,
-        [[maybe_unused]] const std::string & fingerprint,
-        [[maybe_unused]] const std::string & url,
-        [[maybe_unused]] long int timestamp) override {
+    bool repokey_import([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
         ++repokey_import_cnt;
         return true;
     }

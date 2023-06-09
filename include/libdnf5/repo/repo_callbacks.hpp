@@ -23,6 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+namespace libdnf5::rpm {
+class KeyInfo;
+}
+
+
 namespace libdnf5::repo {
 
 /// Base class for repository callbacks.
@@ -40,20 +45,9 @@ public:
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
     /// GPG key import callback. Allows to confirm or deny the import.
-    /// @param id the key id
-    /// @param user_ids the list of the key user IDs
-    /// @param fingerprint the fingerprint of the key
-    /// @param url the URL from which the key was downloaded
-    /// @param timestamp the timestamp of the key
+    /// @param key_info The key that is about to be imported
     /// @return `true` to import the key, `false` to not import
-    virtual bool repokey_import(
-        const std::string & id,
-        const std::vector<std::string> & user_ids,
-        const std::string & fingerprint,
-        const std::string & url,
-        long int timestamp) {
-        return true;
-    }
+    virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) { return true; }
 #pragma GCC diagnostic pop
 };
 

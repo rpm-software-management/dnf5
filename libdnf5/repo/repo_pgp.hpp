@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/repo/config_repo.hpp"
 #include "libdnf5/repo/repo_callbacks.hpp"
+#include "libdnf5/rpm/rpm_signature.hpp"
 
 #include <librepo/librepo.h>
 
@@ -34,23 +35,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::repo {
 
-class Key {
+class Key : public libdnf5::rpm::KeyInfo {
 public:
-    Key(const LrGpgKey * key, const LrGpgSubkey * subkey);
-
-    const std::string & get_id() const noexcept { return id; }
-    const std::vector<std::string> & get_user_ids() const noexcept { return user_ids; }
-    const std::string & get_fingerprint() const noexcept { return fingerprint; }
-    long int get_timestamp() const noexcept { return timestamp; }
-    const std::string & get_raw_key() const noexcept { return raw_key; }
-
-
-private:
-    std::string id;
-    std::string fingerprint;
-    std::vector<std::string> user_ids;
-    long int timestamp;
-    std::string raw_key;
+    Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & url, const std::string & path);
 };
 
 /// Wraps pgp in a higher-level interface.
@@ -64,7 +51,7 @@ public:
     std::filesystem::path get_keyring_dir() const { return std::filesystem::path(config.get_cachedir()) / "pubring"; }
 
     void import_key(int fd, const std::string & url);
-    static std::vector<Key> rawkey2infos(int fd);
+    static std::vector<Key> rawkey2infos(int fd, const std::string & url, const std::string & path = "");
 
 private:
     std::vector<std::string> load_keys_ids_from_keyring();

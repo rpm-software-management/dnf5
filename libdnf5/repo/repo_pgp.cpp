@@ -30,11 +30,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::repo {
 
-Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
-    : id{lr_gpg_subkey_get_id(subkey)},
-      fingerprint{lr_gpg_subkey_get_fingerprint(subkey)},
-      timestamp{lr_gpg_subkey_get_timestamp(subkey)},
-      raw_key{lr_gpg_key_get_raw_key(key)} {
+Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & url, const std::string & path)
+    : KeyInfo(
+          url,
+          path,
+          lr_gpg_subkey_get_id(subkey),
+          {},
+          lr_gpg_subkey_get_fingerprint(subkey),
+          lr_gpg_subkey_get_timestamp(subkey),
+          lr_gpg_key_get_raw_key(key)) {
     for (auto * const * item = lr_gpg_key_get_userids(key); *item; ++item) {
         user_ids.push_back(*item);
     }
@@ -48,7 +52,7 @@ Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
 }
 
 
-std::vector<Key> RepoPgp::rawkey2infos(int fd) {
+std::vector<Key> RepoPgp::rawkey2infos(int fd, const std::string & url, const std::string & path) {
     std::vector<Key> key_infos;
 
     libdnf5::utils::fs::TempDir tmpdir("tmpdir");
@@ -69,7 +73,7 @@ std::vector<Key> RepoPgp::rawkey2infos(int fd) {
              lr_subkey = lr_gpg_subkey_get_next(lr_subkey)) {
             // get first signing subkey
             if (lr_gpg_subkey_get_can_sign(lr_subkey)) {
-                key_infos.emplace_back(lr_key, lr_subkey);
+                key_infos.emplace_back(lr_key, lr_subkey, url, path);
                 break;
             }
         }
@@ -113,23 +117,17 @@ RepoPgp::RepoPgp(const BaseWeakPtr & base, const ConfigRepo & config) : base(bas
 void RepoPgp::import_key(int fd, const std::string & url) {
     auto & logger = *base->get_logger();
 
-    auto key_infos = rawkey2infos(fd);
+    auto key_infos = rawkey2infos(fd, url);
 
     auto known_keys = load_keys_ids_from_keyring();
     for (auto & key_info : key_infos) {
-        if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-            logger.debug("Pgp key 0x{} for repository {} already imported.", key_info.get_id(), config.get_id());
+        if (std::find(known_keys.begin(), known_keys.end(), key_info.get_key_id()) != known_keys.end()) {
+            logger.debug("Pgp key 0x{} for repository {} already imported.", key_info.get_key_id(), config.get_id());
             continue;
         }
 
-        if (callbacks) {
-            if (!callbacks->repokey_import(
-                    key_info.get_id(),
-                    key_info.get_user_ids(),
-                    key_info.get_fingerprint(),
-                    url,
-                    key_info.get_timestamp()))
-                continue;
+        if (callbacks && !callbacks->repokey_import(key_info)) {
+            continue;
         }
 
         auto keyring_dir = get_keyring_dir();
@@ -144,7 +142,7 @@ void RepoPgp::import_key(int fd, const std::string & url) {
             throw_repo_pgp_error(M_("Failed to import pgp keys: {}"), err);
         }
 
-        logger.debug("Imported pgp key 0x{} for repository {}.", key_info.get_id(), config.get_id());
+        logger.debug("Imported pgp key 0x{} for repository {}.", key_info.get_key_id(), config.get_id());
     }
 }
 

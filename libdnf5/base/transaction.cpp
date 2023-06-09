@@ -336,16 +336,8 @@ void Transaction::set_comment(const std::string & comment) {
     this->comment = comment;
 }
 
-bool Transaction::check_gpg_signatures(bool import_keys) {
-    std::function<bool(const libdnf5::rpm::KeyInfo &)> import_confirm_func = [=](const libdnf5::rpm::KeyInfo &) {
-        return import_keys;
-    };
-
-    return p_impl->check_gpg_signatures(import_confirm_func);
-}
-
-bool Transaction::check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
-    return p_impl->check_gpg_signatures(import_confirm_func);
+bool Transaction::check_gpg_signatures() {
+    return p_impl->check_gpg_signatures();
 }
 
 std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcept {
@@ -895,8 +887,7 @@ static std::string import_repo_keys_result_to_string(const ImportRepoKeysResult 
     return {};
 }
 
-ImportRepoKeysResult Transaction::Impl::import_repo_keys(
-    libdnf5::repo::Repo & repo, std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
+ImportRepoKeysResult Transaction::Impl::import_repo_keys(libdnf5::repo::Repo & repo) {
     auto key_urls = repo.get_config().get_gpgkey_option().get_value();
     if (!key_urls.size()) {
         return ImportRepoKeysResult::NO_KEYS;
@@ -915,7 +906,8 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(
 
             all_keys_already_present = false;
 
-            if (!import_confirm_func(key_info)) {
+            auto & callbacks = repo.get_callbacks();
+            if (callbacks && !callbacks->repokey_import(key_info)) {
                 some_key_declined = true;
                 continue;
             }
@@ -948,14 +940,14 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(
     return ImportRepoKeysResult::OK;
 }
 
-bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func) {
+bool Transaction::Impl::check_gpg_signatures() {
+    bool result{true};
     auto & config = base->get_config();
     if (!config.get_gpgcheck_option().get_value()) {
         // gpg check switched off by configuration / command line option
-        return true;
+        return result;
     }
     // TODO(mblaha): DNSsec key verification
-    bool result{true};
     libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
     for (const auto & trans_pkg : packages) {
@@ -984,7 +976,7 @@ bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf5::r
                     }
                     processed_repos.emplace(repo_id);
 
-                    auto import_result = import_repo_keys(*repo, import_confirm_func);
+                    auto import_result = import_repo_keys(*repo);
                     if (import_result == ImportRepoKeysResult::OK) {
                         auto check_again = rpm_signature.check_package_signature(pkg);
                         if (check_again != libdnf5::rpm::RpmSignature::CheckResult::OK) {
