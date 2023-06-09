@@ -102,18 +102,14 @@ int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char
 }
 
 
-bool KeyImportRepoCB::repokey_import(
-    const std::string & id,
-    const std::vector<std::string> & user_ids,
-    const std::string & fingerprint,
-    const std::string & url,
-    long int timestamp) {
+bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
     bool confirmed;
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
-        signal << id << user_ids << fingerprint << url << static_cast<int64_t>(timestamp);
+        signal << key_info.get_short_key_id() << key_info.get_user_ids() << key_info.get_fingerprint()
+               << key_info.get_url() << static_cast<int64_t>(key_info.get_timestamp());
         // wait for client's confirmation
-        confirmed = session.wait_for_key_confirmation(id, signal);
+        confirmed = session.wait_for_key_confirmation(key_info.get_key_id(), signal);
     } catch (...) {
         confirmed = false;
     }

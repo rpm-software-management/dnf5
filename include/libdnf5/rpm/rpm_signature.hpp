@@ -53,8 +53,10 @@ public:
     const std::string & get_fingerprint() const noexcept { return fingerprint; }
     const std::string & get_url() const noexcept { return key_url; }
     const std::string & get_path() const noexcept { return key_path; }
+    const std::string & get_raw_key() const noexcept { return raw_key; }
+    const long int & get_timestamp() const noexcept { return timestamp; }
 
-private:
+protected:
     friend class RpmSignature;
     KeyInfo(
         const std::string & key_url,
@@ -62,12 +64,14 @@ private:
         const std::string & key_id,
         const std::vector<std::string> & user_ids,
         const std::string & fingerprint,
-        std::string raw_key);
+        long int timestamp,
+        const std::string & raw_key);
     std::string key_url;
     std::string key_path;
     std::string key_id;
     std::vector<std::string> user_ids;
     std::string fingerprint;
+    long int timestamp;
     std::string raw_key;
 };
 

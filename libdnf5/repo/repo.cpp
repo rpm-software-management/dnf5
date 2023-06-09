@@ -113,6 +113,10 @@ void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
     downloader->set_callbacks(std::move(callbacks));
 }
 
+std::unique_ptr<libdnf5::repo::RepoCallbacks> & Repo::get_callbacks() {
+    return downloader->callbacks;
+}
+
 void Repo::set_user_data(void * user_data) noexcept {
     downloader->set_user_data(user_data);
 }

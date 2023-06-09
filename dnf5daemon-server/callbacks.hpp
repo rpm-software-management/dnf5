@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/repo/download_callbacks.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/repo/repo_callbacks.hpp>
+#include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/rpm/transaction_callbacks.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -83,12 +84,7 @@ class KeyImportRepoCB : public DbusCallback, public libdnf5::repo::RepoCallbacks
 public:
     KeyImportRepoCB(Session & session) : DbusCallback(session) {}
 
-    bool repokey_import(
-        const std::string & id,
-        const std::vector<std::string> & user_ids,
-        const std::string & fingerprint,
-        const std::string & url,
-        long int timestamp) override;
+    bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) override;
 };
 
 

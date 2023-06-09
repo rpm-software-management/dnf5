@@ -100,6 +100,9 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
     void set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && callbacks);
 
+    /// Returns the currently registered callbacks for the repo.
+    std::unique_ptr<libdnf5::repo::RepoCallbacks> & get_callbacks();
+
     /// @brief Sets the associated user data. These are used in callbacks.
     /// @param user_data  Pointer to user data
     void set_user_data(void * user_data) noexcept;

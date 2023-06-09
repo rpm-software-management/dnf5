@@ -114,9 +114,8 @@ private:
         const std::string & comment,
         const bool test_only);
 
-    bool check_gpg_signatures(std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func);
-    ImportRepoKeysResult import_repo_keys(
-        libdnf5::repo::Repo & repo, std::function<bool(const libdnf5::rpm::KeyInfo &)> & import_confirm_func);
+    bool check_gpg_signatures();
+    ImportRepoKeysResult import_repo_keys(libdnf5::repo::Repo & repo);
 };
 
 
