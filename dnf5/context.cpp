@@ -376,38 +376,11 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 }  // namespace
 
 
-bool Context::check_gpg_signatures(libdnf5::base::Transaction & transaction) {
-    bool any_import_confirmed = false;
-    std::function<bool(const libdnf5::rpm::KeyInfo &)> bound_user_confirm =
-        [&](const libdnf5::rpm::KeyInfo & key_info) {
-            auto import_confirmed = user_confirm_key(base.get_config(), key_info);
-            if (import_confirmed) {
-                any_import_confirmed = true;
-            }
-            return import_confirmed;
-        };
-
-    auto check_succeeded = transaction.check_gpg_signatures(bound_user_confirm);
-    for (auto const & entry : transaction.get_gpg_signature_problems()) {
-        std::cerr << entry << std::endl;
-    }
-    if (check_succeeded && any_import_confirmed) {
-        std::cout << _("Keys were successfully imported.") << std::endl;
-    }
-    return check_succeeded;
-}
-
-
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     transaction.download();
 
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;
-    }
-
-    std::cout << std::endl << "Verifying PGP signatures" << std::endl;
-    if (!check_gpg_signatures(transaction)) {
-        throw libdnf5::cli::CommandExitError(1, M_("Signature verification failed"));
     }
 
     std::cout << std::endl << "Running transaction" << std::endl;
@@ -446,10 +419,15 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     auto result = transaction.run();
     std::cout << std::endl;
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cout << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
+        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
+        if (result == libdnf5::base::Transaction::TransactionRunResult::ERROR_GPG_CHECK) {
+            for (auto const & entry : transaction.get_gpg_signature_problems()) {
+                std::cerr << entry << std::endl;
+            }
+        }
         for (auto & problem : transaction.get_transaction_problems()) {
-            std::cout << "  - " << problem << std::endl;
+            std::cerr << "  - " << problem << std::endl;
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
