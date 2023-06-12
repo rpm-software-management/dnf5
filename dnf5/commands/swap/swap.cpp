@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "swap.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace fs = std::filesystem;
 
 namespace dnf5 {
@@ -66,6 +68,7 @@ void SwapCommand::set_argument_parser() {
     cmd.register_positional_arg(install_spec_arg);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    create_forcearch_option(*this);
 }
 
 void SwapCommand::configure() {

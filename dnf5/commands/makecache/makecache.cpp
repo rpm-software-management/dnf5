@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "makecache.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <fmt/format.h>
 
 #include <iostream>
@@ -35,6 +36,7 @@ void MakeCacheCommand::set_parent_command() {
 
 void MakeCacheCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Generate the metadata cache");
+    create_forcearch_option(*this);
 }
 
 void MakeCacheCommand::run() {
