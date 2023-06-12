@@ -178,6 +178,9 @@ int Transaction::run() {
     if (downgrade_requested) {
         ignore_set |= RPMPROB_FILTER_OLDPACKAGE;
     }
+    if (base->get_config().get_ignorearch_option().get_value()) {
+        ignore_set |= RPMPROB_FILTER_IGNOREARCH;
+    }
     rpmtsSetNotifyStyle(ts, 1);
     rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
     auto rc = rpmtsRun(ts, nullptr, ignore_set);

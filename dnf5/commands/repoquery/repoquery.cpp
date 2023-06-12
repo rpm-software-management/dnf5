@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/patterns.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_string.hpp>
@@ -234,6 +235,7 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
+    create_forcearch_option(*this);
     arch = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this, "arch", '\0', "Limit to packages of these architectures.", "ARCH,...", "", false, ",");
     file = std::make_unique<libdnf5::cli::session::AppendStringListOption>(

@@ -69,11 +69,11 @@ void create_forcearch_option(dnf5::Command & command) {
     forcearch->set_has_value(true);
     forcearch->set_arg_value_help("FORCEARCH");
     forcearch->set_parse_hook_func([&ctx](
-                                       [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                       [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                        [[maybe_unused]] const char * option,
                                        const char * value) {
-        ctx.base.get_config().get_ignorearch_option().set(libdnf::Option::Priority::COMMANDLINE, true);
-        ctx.base.get_vars()->set("arch", value, libdnf::Vars::Priority::COMMANDLINE);
+        ctx.base.get_config().get_ignorearch_option().set(libdnf5::Option::Priority::COMMANDLINE, true);
+        ctx.base.get_vars()->set("arch", value, libdnf5::Vars::Priority::COMMANDLINE);
         return true;
     });
     command.get_argument_parser_command()->register_named_arg(forcearch);
