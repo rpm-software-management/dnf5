@@ -60,6 +60,25 @@ void create_destdir_option(dnf5::Command & command) {
     command.get_argument_parser_command()->register_named_arg(destdir);
 }
 
+void create_forcearch_option(dnf5::Command & command) {
+    auto & ctx = command.get_context();
+    auto & parser = ctx.get_argument_parser();
+    auto forcearch = parser.add_new_named_arg("forcearch");
+    forcearch->set_long_name("forcearch");
+    forcearch->set_description("Force the use of a different architecture.");
+    forcearch->set_has_value(true);
+    forcearch->set_arg_value_help("FORCEARCH");
+    forcearch->set_parse_hook_func([&ctx](
+                                       [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                       [[maybe_unused]] const char * option,
+                                       const char * value) {
+        ctx.base.get_config().get_ignorearch_option().set(libdnf::Option::Priority::COMMANDLINE, true);
+        ctx.base.get_vars()->set("arch", value, libdnf::Vars::Priority::COMMANDLINE);
+        return true;
+    });
+    command.get_argument_parser_command()->register_named_arg(forcearch);
+}
+
 void create_downloadonly_option(dnf5::Command & command) {
     auto & parser = command.get_context().get_argument_parser();
     auto downloadonly = parser.add_new_named_arg("downloadonly");
