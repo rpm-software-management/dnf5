@@ -218,9 +218,9 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         std::string url;
         signal >> key_id >> user_ids >> fingerprint >> url;
 
-        std::cout << "Importing PGP key: " + key_id << std::endl;
+        std::cout << std::endl << "Importing PGP key 0x" + key_id << ":\n";
         for (auto & user_id : user_ids) {
-            std::cout << " Userid     : " + user_id << std::endl;
+            std::cout << " Userid     : \"" + user_id << "\"\n";
         }
         std::cout << " Fingerprint: " + fingerprint << std::endl;
         std::cout << " From       : " + url << std::endl;
@@ -237,7 +237,6 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         } catch (const sdbus::Error & ex) {
             std::cerr << ex.what() << std::endl;
         }
-        print();
     }
 }
 
