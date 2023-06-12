@@ -77,6 +77,10 @@ public:
         return libdnf5::cli::utils::userconfirm::userconfirm(*config);
     }
 
+    void repokey_imported([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
+        std::cout << _("The key was successfully imported.") << std::endl;
+    }
+
 private:
     libdnf5::ConfigMain * config;
 };
