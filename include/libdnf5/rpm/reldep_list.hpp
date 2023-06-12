@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_RELDEP_LIST_HPP
-#define LIBDNF_RPM_RELDEP_LIST_HPP
+#ifndef LIBDNF5_RPM_RELDEP_LIST_HPP
+#define LIBDNF5_RPM_RELDEP_LIST_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 #include "reldep.hpp"
@@ -131,4 +131,4 @@ inline bool ReldepList::add_reldep(const std::string & reldep_str) {
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_RELDEP_LIST_HPP
+#endif  // LIBDNF5_RPM_RELDEP_LIST_HPP

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_PROFILE_HPP
-#define LIBDNF_MODULE_MODULE_PROFILE_HPP
+#ifndef LIBDNF5_MODULE_MODULE_PROFILE_HPP
+#define LIBDNF5_MODULE_MODULE_PROFILE_HPP
 
 #include <memory>
 #include <string>
@@ -79,4 +79,4 @@ private:
 }  // namespace libdnf5::module
 
 
-#endif  // LIBDNF_MODULE_MODULE_PROFILE_HPP
+#endif  // LIBDNF5_MODULE_MODULE_PROFILE_HPP

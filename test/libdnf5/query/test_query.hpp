@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TEST_QUERY_HPP
-#define LIBDNF_TEST_QUERY_HPP
+#ifndef LIBDNF5_TEST_QUERY_HPP
+#define LIBDNF5_TEST_QUERY_HPP
 
 
 #include <cppunit/TestCase.h>

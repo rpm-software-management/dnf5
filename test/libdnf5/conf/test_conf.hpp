@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_CONF_CONF_HPP
-#define TEST_LIBDNF_CONF_CONF_HPP
+#ifndef TEST_LIBDNF5_CONF_CONF_HPP
+#define TEST_LIBDNF5_CONF_CONF_HPP
 
 #include "../shared/test_case_fixture.hpp"
 #include "libdnf5/base/base.hpp"

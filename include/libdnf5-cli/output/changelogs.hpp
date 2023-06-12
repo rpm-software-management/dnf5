@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP
-#define LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_CHANGELOGS_HPP
+#define LIBDNF5_CLI_OUTPUT_CHANGELOGS_HPP
 
 #include <libdnf5/rpm/package_query.hpp>
 
@@ -37,4 +37,4 @@ void print_changelogs(
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_CHANGELOGS_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_CHANGELOGS_HPP

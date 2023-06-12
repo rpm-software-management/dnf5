@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_CLI_UTILS_USERCONFIRM_HPP
-#define LIBDNF_CLI_UTILS_USERCONFIRM_HPP
+#ifndef LIBDNF5_CLI_UTILS_USERCONFIRM_HPP
+#define LIBDNF5_CLI_UTILS_USERCONFIRM_HPP
 
 #include "libdnf5/conf/config_main.hpp"
 
@@ -64,4 +64,4 @@ bool userconfirm(Config & config) {
 
 };  // namespace libdnf5::cli::utils::userconfirm
 
-#endif  // LIBDNF_CLI_UTILS_USERCONFIRM_HPP
+#endif  // LIBDNF5_CLI_UTILS_USERCONFIRM_HPP

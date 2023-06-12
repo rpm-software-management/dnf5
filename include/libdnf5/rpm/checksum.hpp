@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_CHECKSUM_HPP
-#define LIBDNF_RPM_CHECKSUM_HPP
+#ifndef LIBDNF5_RPM_CHECKSUM_HPP
+#define LIBDNF5_RPM_CHECKSUM_HPP
 
 #include <string>
 
@@ -56,4 +56,4 @@ inline Checksum::Checksum(const char * checksum, int libsolv_type) : libsolv_typ
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_CHECKSUM_HPP
+#endif  // LIBDNF5_RPM_CHECKSUM_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP
-#define LIBDNF_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP
+#ifndef LIBDNF5_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP
+#define LIBDNF5_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP
 
 
 #include <string>
@@ -55,4 +55,4 @@ private:
 }  // namespace libdnf5::cli::progressbar
 
 
-#endif  // LIBDNF_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP
+#endif  // LIBDNF5_CLI_PROGRESSBAR_WIDGETS_WIDGET_HPP

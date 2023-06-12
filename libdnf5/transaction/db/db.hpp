@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_DB_HPP
-#define LIBDNF_TRANSACTION_DB_DB_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_DB_HPP
+#define LIBDNF5_TRANSACTION_DB_DB_HPP
 
 
 #include "utils/sqlite3/sqlite3.hpp"
@@ -43,4 +43,4 @@ std::unique_ptr<libdnf5::utils::SQLite3> transaction_db_connect(libdnf5::Base & 
 }  // namespace libdnf5::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_DB_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_DB_HPP

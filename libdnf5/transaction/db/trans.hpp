@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_TRANS_HPP
-#define LIBDNF_TRANSACTION_DB_TRANS_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_TRANS_HPP
+#define LIBDNF5_TRANSACTION_DB_TRANS_HPP
 
 
 #include "libdnf5/base/base_weak.hpp"
@@ -63,4 +63,4 @@ public:
 }  // namespace libdnf5::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_TRANS_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_TRANS_HPP

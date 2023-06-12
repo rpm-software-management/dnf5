@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_CONF_OPTION_NUMBER_HPP
-#define LIBDNF_CONF_OPTION_NUMBER_HPP
+#ifndef LIBDNF5_CONF_OPTION_NUMBER_HPP
+#define LIBDNF5_CONF_OPTION_NUMBER_HPP
 
 #include "option.hpp"
 

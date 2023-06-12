@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TEST_FILE_LOGGER_HPP
-#define LIBDNF_TEST_FILE_LOGGER_HPP
+#ifndef LIBDNF5_TEST_FILE_LOGGER_HPP
+#define LIBDNF5_TEST_FILE_LOGGER_HPP
 
 #include "../shared/base_test_case.hpp"
 

@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // the whole file is disabled via the SKIP macro because it doesn't compile with the new code
 #ifdef SKIP
 
-#ifndef LIBDNF_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
-#define LIBDNF_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
+#ifndef LIBDNF5_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
+#define LIBDNF5_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
 
 #include "libdnf5/utils/sqlite3/sqlite3.hpp"
 
@@ -60,6 +60,6 @@ private:
     libdnf5::utils::SQLite3 * conn;
 };
 
-#endif  // LIBDNF_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
+#endif  // LIBDNF5_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
 
 #endif

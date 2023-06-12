@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_COMPS_COMPS_HPP
-#define LIBDNF_COMPS_COMPS_HPP
+#ifndef LIBDNF5_COMPS_COMPS_HPP
+#define LIBDNF5_COMPS_COMPS_HPP
 
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/comps/environment/sack.hpp"
@@ -65,4 +65,4 @@ private:
 
 }  // namespace libdnf5::comps
 
-#endif  // LIBDNF_COMPS_COMPS_HPP
+#endif  // LIBDNF5_COMPS_COMPS_HPP

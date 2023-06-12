@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_SOLV_MAP_HPP
-#define TEST_LIBDNF_SOLV_MAP_HPP
+#ifndef TEST_LIBDNF5_SOLV_MAP_HPP
+#define TEST_LIBDNF5_SOLV_MAP_HPP
 
 
 #include "solv/solv_map.hpp"
@@ -80,4 +80,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_SOLV_MAP_HPP
+#endif  // TEST_LIBDNF5_SOLV_MAP_HPP

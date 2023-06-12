@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_BASE_BASE_IMPL_HPP
-#define LIBDNF_BASE_BASE_IMPL_HPP
+#ifndef LIBDNF5_BASE_BASE_IMPL_HPP
+#define LIBDNF5_BASE_BASE_IMPL_HPP
 
 
 #include "../advisory/advisory_sack.hpp"
@@ -89,4 +89,4 @@ public:
 
 }  // namespace libdnf5
 
-#endif  // LIBDNF_BASE_BASE_IMPL_HPP
+#endif  // LIBDNF5_BASE_BASE_IMPL_HPP

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_SOLV_POOL_HPP
-#define LIBDNF_SOLV_POOL_HPP
+#ifndef LIBDNF5_SOLV_POOL_HPP
+#define LIBDNF5_SOLV_POOL_HPP
 
 #include "base/base_impl.hpp"
 #include "id_queue.hpp"
@@ -308,4 +308,4 @@ static inline solv::CompsPool & get_comps_pool(const libdnf5::BaseWeakPtr & base
 
 }  // namespace libdnf5
 
-#endif  // LIBDNF_SOLV_POOL_HPP
+#endif  // LIBDNF5_SOLV_POOL_HPP

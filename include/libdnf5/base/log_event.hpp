@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_BASE_LOG_EVENT_HPP
-#define LIBDNF_BASE_LOG_EVENT_HPP
+#ifndef LIBDNF5_BASE_LOG_EVENT_HPP
+#define LIBDNF5_BASE_LOG_EVENT_HPP
 
 
 #include "libdnf5/base/goal_elements.hpp"
@@ -89,4 +89,4 @@ private:
 
 }  // namespace libdnf5::base
 
-#endif  // LIBDNF_BASE_LOG_EVENT_HPP
+#endif  // LIBDNF5_BASE_LOG_EVENT_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_SESSION_HPP
-#define LIBDNF_CLI_SESSION_HPP
+#ifndef LIBDNF5_CLI_SESSION_HPP
+#define LIBDNF5_CLI_SESSION_HPP
 
 
 #include "argument_parser.hpp"
@@ -241,4 +241,4 @@ protected:
 }  // namespace libdnf5::cli::session
 
 
-#endif  // LIBDNF_CLI_SESSION_HPP
+#endif  // LIBDNF5_CLI_SESSION_HPP

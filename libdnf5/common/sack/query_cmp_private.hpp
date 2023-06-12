@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
-#define LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
+#ifndef LIBDNF5_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
+#define LIBDNF5_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
@@ -28,4 +28,4 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define libdnf_throw_assert_unsupported_query_cmp_type(cmp_type) \
     libdnf_throw_assertion("Unsupported sack::QueryCmp value {}", utils::to_underlying(cmp_type))
 
-#endif  // LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
+#endif  // LIBDNF5_COMMON_SACK_QUERY_CMP_PRIVATE_HPP

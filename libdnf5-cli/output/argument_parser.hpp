@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
-#define LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_ARGUMENT_PARSER_HPP
+#define LIBDNF5_CLI_OUTPUT_ARGUMENT_PARSER_HPP
 
 
 #include "libdnf5-cli/tty.hpp"
@@ -102,4 +102,4 @@ protected:
 }  // namespace libdnf5::cli::output
 
 
-#endif  // LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_ARGUMENT_PARSER_HPP

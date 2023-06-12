@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_CLI_ARGUMENT_PARSER_HPP
-#define TEST_LIBDNF_CLI_ARGUMENT_PARSER_HPP
+#ifndef TEST_LIBDNF5_CLI_ARGUMENT_PARSER_HPP
+#define TEST_LIBDNF5_CLI_ARGUMENT_PARSER_HPP
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif  // TEST_LIBDNF_CLI_ARGUMENT_PARSER_HPP
+#endif  // TEST_LIBDNF5_CLI_ARGUMENT_PARSER_HPP

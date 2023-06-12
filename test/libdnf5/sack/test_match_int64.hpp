@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TEST_SACK_MATCH_INT64_HPP
-#define LIBDNF_TEST_SACK_MATCH_INT64_HPP
+#ifndef LIBDNF5_TEST_SACK_MATCH_INT64_HPP
+#define LIBDNF5_TEST_SACK_MATCH_INT64_HPP
 
 
 #include <cppunit/TestCase.h>
@@ -38,4 +38,4 @@ public:
 };
 
 
-#endif  // LIBDNF_TEST_SACK_MATCH_INT64_HPP
+#endif  // LIBDNF5_TEST_SACK_MATCH_INT64_HPP

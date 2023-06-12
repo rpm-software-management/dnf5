@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_SOLV_MAP_HPP
-#define LIBDNF_SOLV_MAP_HPP
+#ifndef LIBDNF5_SOLV_MAP_HPP
+#define LIBDNF5_SOLV_MAP_HPP
 
 
 #include <solv/bitmap.h>
@@ -374,4 +374,4 @@ inline std::size_t SolvMap::size() const noexcept {
 
 }  // namespace libdnf5::solv
 
-#endif  // LIBDNF_SOLV_MAP_HPP
+#endif  // LIBDNF5_SOLV_MAP_HPP

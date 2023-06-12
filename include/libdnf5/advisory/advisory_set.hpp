@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_SET_HPP
-#define LIBDNF_ADVISORY_ADVISORY_SET_HPP
+#ifndef LIBDNF5_ADVISORY_ADVISORY_SET_HPP
+#define LIBDNF5_ADVISORY_ADVISORY_SET_HPP
 
 #include "advisory_package.hpp"
 #include "advisory_set_iterator.hpp"
@@ -128,4 +128,4 @@ private:
 
 }  // namespace libdnf5::advisory
 
-#endif  // LIBDNF_ADVISORY_ADVISORY_SET_HPP
+#endif  // LIBDNF5_ADVISORY_ADVISORY_SET_HPP

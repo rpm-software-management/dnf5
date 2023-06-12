@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_PACKAGE_HPP
-#define LIBDNF_RPM_PACKAGE_HPP
+#ifndef LIBDNF5_RPM_PACKAGE_HPP
+#define LIBDNF5_RPM_PACKAGE_HPP
 
 #include "checksum.hpp"
 #include "libdnf5/repo/repo_weak.hpp"
@@ -544,4 +544,4 @@ inline bool Package::operator!=(const Package & other) const noexcept {
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_PACKAGE_HPP
+#endif  // LIBDNF5_RPM_PACKAGE_HPP

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_CONF_CONFIG_HPP
-#define LIBDNF_CONF_CONFIG_HPP
+#ifndef LIBDNF5_CONF_CONFIG_HPP
+#define LIBDNF5_CONF_CONFIG_HPP
 
 #include "config_parser.hpp"
 #include "libdnf5/logger/logger.hpp"

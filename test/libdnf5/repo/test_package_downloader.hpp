@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TEST_REPO_PACKAGE_DOWNLOADER_HPP
-#define LIBDNF_TEST_REPO_PACKAGE_DOWNLOADER_HPP
+#ifndef LIBDNF5_TEST_REPO_PACKAGE_DOWNLOADER_HPP
+#define LIBDNF5_TEST_REPO_PACKAGE_DOWNLOADER_HPP
 
 #include "../shared/base_test_case.hpp"
 

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_QUERY_HPP
-#define LIBDNF_MODULE_MODULE_QUERY_HPP
+#ifndef LIBDNF5_MODULE_MODULE_QUERY_HPP
+#define LIBDNF5_MODULE_MODULE_QUERY_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query.hpp"
@@ -179,4 +179,4 @@ private:
 
 }  // namespace libdnf5::module
 
-#endif  // LIBDNF_MODULE_MODULE_QUERY_HPP
+#endif  // LIBDNF5_MODULE_MODULE_QUERY_HPP

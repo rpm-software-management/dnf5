@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_TESTCASE_FIXTURE_HPP
-#define TEST_LIBDNF_TESTCASE_FIXTURE_HPP
+#ifndef TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
+#define TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "utils/fs/temp.hpp"
@@ -39,4 +39,4 @@ public:
 };
 
 
-#endif  // TEST_LIBDNF_TESTCASE_FIXTURE_HPP
+#endif  // TEST_LIBDNF5_TESTCASE_FIXTURE_HPP

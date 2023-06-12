@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_RPM_SIGNATURE_HPP
-#define LIBDNF_RPM_RPM_SIGNATURE_HPP
+#ifndef LIBDNF5_RPM_RPM_SIGNATURE_HPP
+#define LIBDNF5_RPM_RPM_SIGNATURE_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
@@ -108,4 +108,4 @@ private:
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_RPM_SIGNATURE_HPP
+#endif  // LIBDNF5_RPM_RPM_SIGNATURE_HPP

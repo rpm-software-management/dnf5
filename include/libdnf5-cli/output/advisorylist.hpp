@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP
-#define LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP
+#define LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP
 
 #include "libdnf5/advisory/advisory_package.hpp"
 #include "libdnf5/advisory/advisory_reference.hpp"
@@ -37,4 +37,4 @@ void print_advisorylist_references_table(
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP

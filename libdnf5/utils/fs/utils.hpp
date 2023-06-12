@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_FS_UTILS_HPP
-#define LIBDNF_UTILS_FS_UTILS_HPP
+#ifndef LIBDNF5_UTILS_FS_UTILS_HPP
+#define LIBDNF5_UTILS_FS_UTILS_HPP
 
 #include <filesystem>
 #include <string>
@@ -37,4 +37,4 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
 
 }  // namespace libdnf5::utils::fs
 
-#endif  // LIBDNF_UTILS_FS_UTILS_HPP
+#endif  // LIBDNF5_UTILS_FS_UTILS_HPP

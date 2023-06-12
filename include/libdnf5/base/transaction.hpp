@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_BASE_TRANSACTION_HPP
-#define LIBDNF_BASE_TRANSACTION_HPP
+#ifndef LIBDNF5_BASE_TRANSACTION_HPP
+#define LIBDNF5_BASE_TRANSACTION_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/goal_elements.hpp"
@@ -192,4 +192,4 @@ private:
 
 }  // namespace libdnf5::base
 
-#endif  // LIBDNF_BASE_TRANSACTION_HPP
+#endif  // LIBDNF5_BASE_TRANSACTION_HPP

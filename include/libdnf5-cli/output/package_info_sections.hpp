@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
-#define LIBDNF_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
+#define LIBDNF5_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
 
 #include "libdnf5/rpm/package_set.hpp"
 #include "package_list_sections.hpp"
@@ -47,4 +47,4 @@ private:
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP

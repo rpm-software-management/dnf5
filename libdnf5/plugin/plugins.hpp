@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_PLUGIN_PLUGINS_HPP
-#define LIBDNF_PLUGIN_PLUGINS_HPP
+#ifndef LIBDNF5_PLUGIN_PLUGINS_HPP
+#define LIBDNF5_PLUGIN_PLUGINS_HPP
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/config_parser.hpp"

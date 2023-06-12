@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-#define LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#ifndef LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#define LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -44,4 +44,4 @@ TransactionItemState transaction_item_state_from_string(const std::string & stat
 
 }  // namespace libdnf5::transaction
 
-#endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#endif  // LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP

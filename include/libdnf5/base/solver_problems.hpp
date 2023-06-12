@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_BASE_SOLVER_PROBLEMS_HPP
-#define LIBDNF_BASE_SOLVER_PROBLEMS_HPP
+#ifndef LIBDNF5_BASE_SOLVER_PROBLEMS_HPP
+#define LIBDNF5_BASE_SOLVER_PROBLEMS_HPP
 
 
 #include "goal_elements.hpp"
@@ -69,4 +69,4 @@ private:
 
 }  // namespace libdnf5::base
 
-#endif  // LIBDNF_BASE_SOLVER_PROBLEMS_HPP
+#endif  // LIBDNF5_BASE_SOLVER_PROBLEMS_HPP

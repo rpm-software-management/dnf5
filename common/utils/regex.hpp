@@ -17,12 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_REGEX_HPP
-#define LIBDNF_UTILS_REGEX_HPP
+#ifndef LIBDNF5_UTILS_REGEX_HPP
+#define LIBDNF5_UTILS_REGEX_HPP
 
 
 // Limit the string legth, because GCC std::regex_match() exhausts a stack on very long strings.
 #define MAX_STRING_LENGTH_FOR_REGEX_MATCH 2 << 10
 
 
-#endif  // LIBDNF_UTILS_REGEX_HPP
+#endif  // LIBDNF5_UTILS_REGEX_HPP

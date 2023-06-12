@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_BASE_GOAL_ELEMENTS_HPP
-#define LIBDNF_BASE_GOAL_ELEMENTS_HPP
+#ifndef LIBDNF5_BASE_GOAL_ELEMENTS_HPP
+#define LIBDNF5_BASE_GOAL_ELEMENTS_HPP
 
 
 #include "libdnf5/advisory/advisory_query.hpp"
@@ -269,4 +269,4 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
 }  // namespace libdnf5
 
 
-#endif  // LIBDNF_BASE_GOAL_ELEMENTS_HPP
+#endif  // LIBDNF5_BASE_GOAL_ELEMENTS_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_CONF_OPTION_HPP
-#define TEST_LIBDNF_CONF_OPTION_HPP
+#ifndef TEST_LIBDNF5_CONF_OPTION_HPP
+#define TEST_LIBDNF5_CONF_OPTION_HPP
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

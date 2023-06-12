@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TEST_RPM_SOLV_RELDEP_PARSER_HPP
-#define LIBDNF_TEST_RPM_SOLV_RELDEP_PARSER_HPP
+#ifndef LIBDNF5_TEST_RPM_SOLV_RELDEP_PARSER_HPP
+#define LIBDNF5_TEST_RPM_SOLV_RELDEP_PARSER_HPP
 
 
 #include <cppunit/TestCase.h>
@@ -39,4 +39,4 @@ public:
 private:
 };
 
-#endif  // LIBDNF_TEST_RPM_SOLV_RELDEP_PARSER_HPP
+#endif  // LIBDNF5_TEST_RPM_SOLV_RELDEP_PARSER_HPP

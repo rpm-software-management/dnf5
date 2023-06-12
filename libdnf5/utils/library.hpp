@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _LIBDNF_UTILS_LIBRARY_HPP
-#define _LIBDNF_UTILS_LIBRARY_HPP
+#ifndef _LIBDNF5_UTILS_LIBRARY_HPP
+#define _LIBDNF5_UTILS_LIBRARY_HPP
 
 #include "libdnf5/common/exception.hpp"
 

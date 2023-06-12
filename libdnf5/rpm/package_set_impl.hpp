@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_PACKAGE_SET_IMPL_HPP
-#define LIBDNF_RPM_PACKAGE_SET_IMPL_HPP
+#ifndef LIBDNF5_RPM_PACKAGE_SET_IMPL_HPP
+#define LIBDNF5_RPM_PACKAGE_SET_IMPL_HPP
 
 
 #include "libdnf5/rpm/package_set.hpp"
@@ -100,4 +100,4 @@ inline PackageSet::Impl & PackageSet::Impl::operator=(libdnf5::solv::SolvMap && 
 }  // namespace libdnf5::rpm
 
 
-#endif  // LIBDNF_RPM_PACKAGE_SET_IMPL_HPP
+#endif  // LIBDNF5_RPM_PACKAGE_SET_IMPL_HPP

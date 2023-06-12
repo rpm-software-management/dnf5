@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_CONVERT_HPP
-#define LIBDNF_UTILS_CONVERT_HPP
+#ifndef LIBDNF5_UTILS_CONVERT_HPP
+#define LIBDNF5_UTILS_CONVERT_HPP
 
 #include <ctype.h>
 
@@ -42,4 +42,4 @@ inline std::string to_lowercase(const std::string & source) {
 
 }  // namespace libdnf5::utils
 
-#endif  // LIBDNF_UTILS_CONVERT_HPP
+#endif  // LIBDNF5_UTILS_CONVERT_HPP

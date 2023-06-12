@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_URL_HPP
-#define LIBDNF_UTILS_URL_HPP
+#ifndef LIBDNF5_UTILS_URL_HPP
+#define LIBDNF5_UTILS_URL_HPP
 
 #include <string>
 
@@ -29,4 +29,4 @@ bool is_url(std::string path);
 
 }  // namespace libdnf5::utils::url
 
-#endif  // LIBDNF_UTILS_URL_HPP
+#endif  // LIBDNF5_UTILS_URL_HPP

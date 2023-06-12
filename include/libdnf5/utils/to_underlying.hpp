@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_TO_UNDERLYING_HPP
-#define LIBDNF_UTILS_TO_UNDERLYING_HPP
+#ifndef LIBDNF5_UTILS_TO_UNDERLYING_HPP
+#define LIBDNF5_UTILS_TO_UNDERLYING_HPP
 
 #include <fmt/format.h>
 
@@ -35,4 +35,4 @@ constexpr std::underlying_type_t<Enum> to_underlying(Enum e) noexcept {
 
 }  // namespace libdnf5::utils
 
-#endif  // LIBDNF_UTILS_TO_UNDERLYING_HPP
+#endif  // LIBDNF5_UTILS_TO_UNDERLYING_HPP

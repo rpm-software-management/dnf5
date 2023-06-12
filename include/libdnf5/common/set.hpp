@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_COMMON_SET_HPP
-#define LIBDNF_COMMON_SET_HPP
+#ifndef LIBDNF5_COMMON_SET_HPP
+#define LIBDNF5_COMMON_SET_HPP
 
 #include <algorithm>
 #include <set>

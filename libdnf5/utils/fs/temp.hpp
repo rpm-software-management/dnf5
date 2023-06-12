@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_FS_TEMP_HPP
-#define LIBDNF_UTILS_FS_TEMP_HPP
+#ifndef LIBDNF5_UTILS_FS_TEMP_HPP
+#define LIBDNF5_UTILS_FS_TEMP_HPP
 
 #include "file.hpp"
 
@@ -109,4 +109,4 @@ private:
 
 }  // namespace libdnf5::utils::fs
 
-#endif  // LIBDNF_UTILS_FS_TEMP_HPP
+#endif  // LIBDNF5_UTILS_FS_TEMP_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_KEY_VALUE_TABLE_HPP
-#define LIBDNF_CLI_OUTPUT_KEY_VALUE_TABLE_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_KEY_VALUE_TABLE_HPP
+#define LIBDNF5_CLI_OUTPUT_KEY_VALUE_TABLE_HPP
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -71,4 +71,4 @@ private:
 }  // namespace libdnf5::cli::output
 
 
-#endif  // LIBDNF_CLI_OUTPUT_KEY_VALUE_TABLE_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_KEY_VALUE_TABLE_HPP

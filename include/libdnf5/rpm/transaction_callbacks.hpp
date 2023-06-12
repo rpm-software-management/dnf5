@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
-#define LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
+#ifndef LIBDNF5_RPM_TRANSACTION_CALLBACKS_HPP
+#define LIBDNF5_RPM_TRANSACTION_CALLBACKS_HPP
 
 #include "libdnf5/rpm/nevra.hpp"
 
@@ -94,4 +94,4 @@ public:
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
+#endif  // LIBDNF5_RPM_TRANSACTION_CALLBACKS_HPP

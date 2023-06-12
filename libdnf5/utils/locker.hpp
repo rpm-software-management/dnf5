@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_LOCKER_HPP
-#define LIBDNF_UTILS_LOCKER_HPP
+#ifndef LIBDNF5_UTILS_LOCKER_HPP
+#define LIBDNF5_UTILS_LOCKER_HPP
 
 #include <string>
 
@@ -41,4 +41,4 @@ private:
 
 }  // namespace libdnf5::utils
 
-#endif  // LIBDNF_UTILS_LOCKER_HPP
+#endif  // LIBDNF5_UTILS_LOCKER_HPP
