@@ -59,12 +59,16 @@ public:
 };
 
 /// Create two options (`--allow-downgrade` and `--no-allow-downgrade`) for a command provided as an argument command.
-/// The values are atored in the `allow_downgrade` configuration option
+/// The values are stored in the `allow_downgrade` configuration option
 void create_allow_downgrade_options(dnf5::Command & command);
 
 /// Create the `--destdir` option for a command provided as an argument.
 /// The values are stored in the `destdir` configuration option
 void create_destdir_option(dnf5::Command & command);
+
+/// Create the `--forcearch` option for a command provided as an argument.
+/// The values are stored in the `forcearch` configuration option
+void create_forcearch_option(dnf5::Command & command);
 
 /// Create the `--downloadonly` option for a command provided as an argument.
 /// The values are stored in the `downloadonly` configuration option
