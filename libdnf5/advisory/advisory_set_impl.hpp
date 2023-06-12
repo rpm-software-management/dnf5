@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP
-#define LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP
+#ifndef LIBDNF5_ADVISORY_ADVISORY_SET_IMPL_HPP
+#define LIBDNF5_ADVISORY_ADVISORY_SET_IMPL_HPP
 
 
 #include "libdnf5/advisory/advisory_set.hpp"
@@ -100,4 +100,4 @@ inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(libdnf5::solv::SolvMap &
 }  // namespace libdnf5::advisory
 
 
-#endif  // LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP
+#endif  // LIBDNF5_ADVISORY_ADVISORY_SET_IMPL_HPP

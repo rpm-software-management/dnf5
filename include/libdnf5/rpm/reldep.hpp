@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_RELDEP_HPP
-#define LIBDNF_RPM_RELDEP_HPP
+#ifndef LIBDNF5_RPM_RELDEP_HPP
+#define LIBDNF5_RPM_RELDEP_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 
@@ -148,4 +148,4 @@ inline bool Reldep::operator!=(const Reldep & other) const noexcept {
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_RELDEP_HPP
+#endif  // LIBDNF5_RPM_RELDEP_HPP

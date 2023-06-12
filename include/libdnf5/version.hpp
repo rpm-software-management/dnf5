@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_VERSION_HPP
-#define LIBDNF_VERSION_HPP
+#ifndef LIBDNF5_VERSION_HPP
+#define LIBDNF5_VERSION_HPP
 
 #include <cstdint>
 

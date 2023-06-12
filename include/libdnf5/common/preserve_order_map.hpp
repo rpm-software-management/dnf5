@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_PRESERVE_ORDER_MAP_HPP
-#define LIBDNF_UTILS_PRESERVE_ORDER_MAP_HPP
+#ifndef LIBDNF5_UTILS_PRESERVE_ORDER_MAP_HPP
+#define LIBDNF5_UTILS_PRESERVE_ORDER_MAP_HPP
 
 #include <cstddef>
 #include <iterator>

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
-#define LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
+#ifndef LIBDNF5_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
+#define LIBDNF5_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
 
 #include <libdnf5/logger/logger.hpp>
 
@@ -43,4 +43,4 @@ private:
 
 }  // namespace libdnf5
 
-#endif  // LIBDNF_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP
+#endif  // LIBDNF5_LOGGER_GLIB_LOG_HANDLER_PRIVATE_HPP

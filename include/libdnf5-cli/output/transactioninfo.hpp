@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_TRANSACTIONINFO_HPP
-#define LIBDNF_CLI_OUTPUT_TRANSACTIONINFO_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_TRANSACTIONINFO_HPP
+#define LIBDNF5_CLI_OUTPUT_TRANSACTIONINFO_HPP
 
 #include "libdnf5-cli/output/key_value_table.hpp"
 #include "libdnf5/transaction/transaction.hpp"
@@ -31,4 +31,4 @@ void print_transaction_info(libdnf5::transaction::Transaction & transaction);
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_TRANSACTIONINFO_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_TRANSACTIONINFO_HPP

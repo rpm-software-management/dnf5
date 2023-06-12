@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // the whole file is disabled via the SKIP macro because it doesn't compile with the new code
 #ifdef SKIP
 
-#ifndef LIBDNF_TRANSACTION_SWDB_HPP
-#define LIBDNF_TRANSACTION_SWDB_HPP
+#ifndef LIBDNF5_TRANSACTION_SWDB_HPP
+#define LIBDNF5_TRANSACTION_SWDB_HPP
 
 #include <sys/stat.h>
 
@@ -140,6 +140,6 @@ private:
 
 }  // namespace libdnf5::transaction
 
-#endif  // LIBDNF_TRANSACTION_SWDB_HPP
+#endif  // LIBDNF5_TRANSACTION_SWDB_HPP
 
 #endif

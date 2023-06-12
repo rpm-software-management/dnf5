@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_NEVRA_HPP
-#define LIBDNF_RPM_NEVRA_HPP
+#ifndef LIBDNF5_RPM_NEVRA_HPP
+#define LIBDNF5_RPM_NEVRA_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -271,4 +271,4 @@ bool cmp_naevr(const T & lhs, const T & rhs) {
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_NEVRA_HPP
+#endif  // LIBDNF5_RPM_NEVRA_HPP

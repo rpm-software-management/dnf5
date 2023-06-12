@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_RPM_PACKAGE_SACK_HPP
-#define TEST_LIBDNF_RPM_PACKAGE_SACK_HPP
+#ifndef TEST_LIBDNF5_RPM_PACKAGE_SACK_HPP
+#define TEST_LIBDNF5_RPM_PACKAGE_SACK_HPP
 
 
 #include "../shared/base_test_case.hpp"
@@ -58,4 +58,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_RPM_PACKAGE_SACK_HPP
+#endif  // TEST_LIBDNF5_RPM_PACKAGE_SACK_HPP

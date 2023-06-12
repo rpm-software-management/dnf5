@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_RPM_RELDEP_LIST_HPP
-#define TEST_LIBDNF_RPM_RELDEP_LIST_HPP
+#ifndef TEST_LIBDNF5_RPM_RELDEP_LIST_HPP
+#define TEST_LIBDNF5_RPM_RELDEP_LIST_HPP
 
 #include "../shared/base_test_case.hpp"
 #include "libdnf5/base/base.hpp"
@@ -49,4 +49,4 @@ public:
     void test_add_reldep_with_glob();
 };
 
-#endif  // TEST_LIBDNF_RPM_RELDEP_LIST_HPP
+#endif  // TEST_LIBDNF5_RPM_RELDEP_LIST_HPP

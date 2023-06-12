@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
-#define LIBDNF_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
+#ifndef LIBDNF5_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
+#define LIBDNF5_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
 
 #include "libdnf5/advisory/advisory.hpp"
 #include "libdnf5/advisory/advisory_module.hpp"
@@ -59,4 +59,4 @@ private:
 }  // namespace libdnf5::advisory
 
 
-#endif  // LIBDNF_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP
+#endif  // LIBDNF5_ADVISORY_ADVISORY_MODULE_PRIVATE_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_CLI_UTILS_UTF8_HPP
-#define TEST_LIBDNF_CLI_UTILS_UTF8_HPP
+#ifndef TEST_LIBDNF5_CLI_UTILS_UTF8_HPP
+#define TEST_LIBDNF5_CLI_UTILS_UTF8_HPP
 
 
 #include "libdnf5/rpm/package_set.hpp"
@@ -87,4 +87,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_CLI_UTILS_UTF8_HPP
+#endif  // TEST_LIBDNF5_CLI_UTILS_UTF8_HPP

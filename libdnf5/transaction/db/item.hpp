@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_ITEM_HPP
-#define LIBDNF_TRANSACTION_DB_ITEM_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_ITEM_HPP
+#define LIBDNF5_TRANSACTION_DB_ITEM_HPP
 
 
 #include "utils/sqlite3/sqlite3.hpp"
@@ -41,4 +41,4 @@ int64_t item_insert(libdnf5::utils::SQLite3::Statement & query);
 }  // namespace libdnf5::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_ITEM_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_ITEM_HPP

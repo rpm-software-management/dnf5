@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_SYSTEM_STATE_HPP
-#define TEST_LIBDNF_SYSTEM_STATE_HPP
+#ifndef TEST_LIBDNF5_SYSTEM_STATE_HPP
+#define TEST_LIBDNF5_SYSTEM_STATE_HPP
 
 
 #include "../shared/base_test_case.hpp"

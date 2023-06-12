@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_RPM_HPP
-#define LIBDNF_TRANSACTION_DB_RPM_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_RPM_HPP
+#define LIBDNF5_TRANSACTION_DB_RPM_HPP
 
 
 #include "utils/sqlite3/sqlite3.hpp"
@@ -65,4 +65,4 @@ public:
 }  // namespace libdnf5::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_RPM_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_RPM_HPP

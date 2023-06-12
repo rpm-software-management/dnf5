@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_PACKAGE_SET_HPP
-#define LIBDNF_RPM_PACKAGE_SET_HPP
+#ifndef LIBDNF5_RPM_PACKAGE_SET_HPP
+#define LIBDNF5_RPM_PACKAGE_SET_HPP
 
 
 #include "libdnf5/common/exception.hpp"
@@ -167,4 +167,4 @@ private:
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_PACKAGE_SET_HPP
+#endif  // LIBDNF5_RPM_PACKAGE_SET_HPP

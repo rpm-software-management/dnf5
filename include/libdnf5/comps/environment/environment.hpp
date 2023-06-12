@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
-#define LIBDNF_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
+#ifndef LIBDNF5_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
+#define LIBDNF5_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
@@ -162,4 +162,4 @@ private:
 }  // namespace libdnf5::comps
 
 
-#endif  // LIBDNF_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
+#endif  // LIBDNF5_COMPS_ENVIRONMENT_ENVIRONMENT_HPP

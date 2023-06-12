@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
-#define LIBDNF_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
+#ifndef LIBDNF5_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
+#define LIBDNF5_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
 
 
 #include "libdnf5/rpm/reldep_list_iterator.hpp"
@@ -56,4 +56,4 @@ inline ReldepListIterator::Impl & ReldepListIterator::Impl::operator++() {
 }  // namespace libdnf5::rpm
 
 
-#endif  // LIBDNF_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
+#endif  // LIBDNF5_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP

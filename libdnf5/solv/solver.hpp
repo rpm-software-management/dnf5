@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_SOLV_SOLVER_HPP
-#define LIBDNF_SOLV_SOLVER_HPP
+#ifndef LIBDNF5_SOLV_SOLVER_HPP
+#define LIBDNF5_SOLV_SOLVER_HPP
 
 #include "id_queue.hpp"
 #include "pool.hpp"
@@ -117,4 +117,4 @@ protected:
 
 }  // namespace libdnf5::solv
 
-#endif  // LIBDNF_SOLV_SOLVER_HPP
+#endif  // LIBDNF5_SOLV_SOLVER_HPP

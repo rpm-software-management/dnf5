@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // the whole file is disabled via the SKIP macro because it doesn't compile with the new code
 #ifdef SKIP
 
-#ifndef LIBDNF_TRANSACTION_TRANSFORMER_HPP
-#define LIBDNF_TRANSACTION_TRANSFORMER_HPP
+#ifndef LIBDNF5_TRANSACTION_TRANSFORMER_HPP
+#define LIBDNF5_TRANSACTION_TRANSFORMER_HPP
 
 #include "TransformerTransaction.hpp"
 #include "comps_environment.hpp"

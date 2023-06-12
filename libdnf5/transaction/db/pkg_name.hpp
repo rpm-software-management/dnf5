@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_DB_PKG_NAME_HPP
-#define LIBDNF_TRANSACTION_DB_PKG_NAME_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_PKG_NAME_HPP
+#define LIBDNF5_TRANSACTION_DB_PKG_NAME_HPP
 
 #include "utils/sqlite3/sqlite3.hpp"
 
@@ -34,4 +34,4 @@ int64_t pkg_name_insert_if_not_exists(utils::SQLite3::Statement & query, const s
 
 }  // namespace libdnf5::transaction
 
-#endif  // LIBDNF_TRANSACTION_DB_PKG_NAME_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_PKG_NAME_HPP

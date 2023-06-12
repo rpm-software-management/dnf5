@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
-#define LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_GROUPINFO_HPP
+#define LIBDNF5_CLI_OUTPUT_GROUPINFO_HPP
 
 #include "libdnf5-cli/tty.hpp"
 
@@ -134,4 +134,4 @@ void print_groupinfo_table(GroupType & group) {
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_GROUPINFO_HPP

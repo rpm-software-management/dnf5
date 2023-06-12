@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_SYSTEM_STATE_HPP
-#define LIBDNF_SYSTEM_STATE_HPP
+#ifndef LIBDNF5_SYSTEM_STATE_HPP
+#define LIBDNF5_SYSTEM_STATE_HPP
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/group/package.hpp"

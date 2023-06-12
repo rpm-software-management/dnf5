@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_SQLITE3_SQLITE3_HPP
-#define LIBDNF_UTILS_SQLITE3_SQLITE3_HPP
+#ifndef LIBDNF5_UTILS_SQLITE3_SQLITE3_HPP
+#define LIBDNF5_UTILS_SQLITE3_SQLITE3_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -363,4 +363,4 @@ using SQLite3Ptr = std::shared_ptr<SQLite3>;
 
 }  // namespace libdnf5::utils
 
-#endif  // LIBDNF_UTILS_SQLITE3_SQLITE3_HPP
+#endif  // LIBDNF5_UTILS_SQLITE3_SQLITE3_HPP

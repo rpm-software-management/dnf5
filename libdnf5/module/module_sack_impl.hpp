@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
-#define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
+#ifndef LIBDNF5_MODULE_MODULE_SACK_IMPL_HPP
+#define LIBDNF5_MODULE_MODULE_SACK_IMPL_HPP
 
 #include "base/base_impl.hpp"
 #include "libdnf5/base/base.hpp"
@@ -200,4 +200,4 @@ inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_mo
 
 }  // namespace libdnf5::module
 
-#endif  // LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
+#endif  // LIBDNF5_MODULE_MODULE_SACK_IMPL_HPP

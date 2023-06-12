@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
-#define LIBDNF_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
+#ifndef LIBDNF5_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
+#define LIBDNF5_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/solver_problems.hpp"
@@ -34,4 +34,4 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
 
 }  // namespace libdnf5::base
 
-#endif  // LIBDNF_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
+#endif  // LIBDNF5_BASE_SOLVER_PROBLEMS_INTERNAL_HPP

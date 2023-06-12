@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_REPO_SOLV_REPO_HPP
-#define LIBDNF_REPO_SOLV_REPO_HPP
+#ifndef LIBDNF5_REPO_SOLV_REPO_HPP
+#define LIBDNF5_REPO_SOLV_REPO_HPP
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
@@ -160,4 +160,4 @@ public:
 
 }  // namespace libdnf5::repo
 
-#endif  // LIBDNF_REPO_SOLV_REPO_HPP
+#endif  // LIBDNF5_REPO_SOLV_REPO_HPP

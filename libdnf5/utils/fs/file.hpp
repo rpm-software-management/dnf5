@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_FS_FILE_HPP
-#define LIBDNF_UTILS_FS_FILE_HPP
+#ifndef LIBDNF5_UTILS_FS_FILE_HPP
+#define LIBDNF5_UTILS_FS_FILE_HPP
 
 #include <filesystem>
 
@@ -166,4 +166,4 @@ private:
 
 }  // namespace libdnf5::utils::fs
 
-#endif  // LIBDNF_UTILS_FS_FILE_HPP
+#endif  // LIBDNF5_UTILS_FS_FILE_HPP

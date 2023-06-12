@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_XML_HPP
-#define LIBDNF_UTILS_XML_HPP
+#ifndef LIBDNF5_UTILS_XML_HPP
+#define LIBDNF5_UTILS_XML_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -40,4 +40,4 @@ xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std:
 
 }  // namespace libdnf5::utils::xml
 
-#endif  // LIBDNF_UTILS_XML_HPP
+#endif  // LIBDNF5_UTILS_XML_HPP

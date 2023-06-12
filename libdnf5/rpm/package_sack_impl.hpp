@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
-#define LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
+#ifndef LIBDNF5_RPM_PACKAGE_SACK_IMPL_HPP
+#define LIBDNF5_RPM_PACKAGE_SACK_IMPL_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/sack/exclude_flags.hpp"
@@ -220,4 +220,4 @@ inline libdnf5::solv::SolvMap & PackageSack::Impl::get_solvables() {
 }  // namespace libdnf5::rpm
 
 
-#endif  // LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
+#endif  // LIBDNF5_RPM_PACKAGE_SACK_IMPL_HPP

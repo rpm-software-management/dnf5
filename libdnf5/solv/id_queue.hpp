@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_SOLV_ID_QUEUE_HPP
-#define LIBDNF_SOLV_ID_QUEUE_HPP
+#ifndef LIBDNF5_SOLV_ID_QUEUE_HPP
+#define LIBDNF5_SOLV_ID_QUEUE_HPP
 
 #include "solv_map.hpp"
 
@@ -200,4 +200,4 @@ inline void IdQueue::sort(int (*cmp)(const Id * a, const Id * b, TData * data), 
 
 }  // namespace libdnf5::solv
 
-#endif  // LIBDNF_SOLV_ID_QUEUE_HPP
+#endif  // LIBDNF5_SOLV_ID_QUEUE_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_UTILS_HPP
-#define TEST_LIBDNF_UTILS_HPP
+#ifndef TEST_LIBDNF5_UTILS_HPP
+#define TEST_LIBDNF5_UTILS_HPP
 
 #include "libdnf5/advisory/advisory_set.hpp"
 #include "libdnf5/base/transaction.hpp"
@@ -284,4 +284,4 @@ std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::
 std::vector<libdnf5::rpm::Reldep> to_vector(const libdnf5::rpm::ReldepList & reldep_list);
 std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & package_set);
 
-#endif  // TEST_LIBDNF_UTILS_HPP
+#endif  // TEST_LIBDNF5_UTILS_HPP

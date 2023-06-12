@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
-#define LIBDNF_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
+#ifndef LIBDNF5_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
+#define LIBDNF5_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
 
 
 #include <chrono>
@@ -152,4 +152,4 @@ private:
 }  // namespace libdnf5::cli::progressbar
 
 
-#endif  // #define LIBDNF_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
+#endif  // #define LIBDNF5_CLI_PROGRESSBAR_PROGRESS_BAR_HPP

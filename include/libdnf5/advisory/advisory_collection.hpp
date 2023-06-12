@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_COLLECTION_HPP
-#define LIBDNF_ADVISORY_ADVISORY_COLLECTION_HPP
+#ifndef LIBDNF5_ADVISORY_ADVISORY_COLLECTION_HPP
+#define LIBDNF5_ADVISORY_ADVISORY_COLLECTION_HPP
 
 #include "advisory.hpp"
 #include "advisory_module.hpp"

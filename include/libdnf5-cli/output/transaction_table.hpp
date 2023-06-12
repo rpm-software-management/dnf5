@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
-#define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
+#define LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
 #include "libdnf5-cli/tty.hpp"
 #include "libdnf5-cli/utils/units.hpp"
@@ -600,4 +600,4 @@ bool print_transaction_table(Transaction & transaction) {
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP

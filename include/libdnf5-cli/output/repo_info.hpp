@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_REPO_INFO_HPP
-#define LIBDNF_CLI_OUTPUT_REPO_INFO_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_REPO_INFO_HPP
+#define LIBDNF5_CLI_OUTPUT_REPO_INFO_HPP
 
 
 #include "key_value_table.hpp"
@@ -138,4 +138,4 @@ general connection settings?
 }  // namespace libdnf5::cli::output
 
 
-#endif  // LIBDNF_CLI_OUTPUT_REPO_INFO_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_REPO_INFO_HPP

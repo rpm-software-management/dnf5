@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_COMMON_SACK_EXCLUDE_FLAGS_HPP
-#define LIBDNF_COMMON_SACK_EXCLUDE_FLAGS_HPP
+#ifndef LIBDNF5_COMMON_SACK_EXCLUDE_FLAGS_HPP
+#define LIBDNF5_COMMON_SACK_EXCLUDE_FLAGS_HPP
 
 #include <type_traits>
 
@@ -43,4 +43,4 @@ inline ExcludeFlags operator&(ExcludeFlags lhs, ExcludeFlags rhs) {
 
 }  // namespace libdnf5::sack
 
-#endif  // LIBDNF_COMMON_SACK_EXCLUDE_FLAGS_HPP
+#endif  // LIBDNF5_COMMON_SACK_EXCLUDE_FLAGS_HPP

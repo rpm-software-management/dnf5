@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_BASE_TEST_CASE_HPP
-#define TEST_LIBDNF_BASE_TEST_CASE_HPP
+#ifndef TEST_LIBDNF5_BASE_TEST_CASE_HPP
+#define TEST_LIBDNF5_BASE_TEST_CASE_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
@@ -77,4 +77,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_BASE_TEST_CASE_HPP
+#endif  // TEST_LIBDNF5_BASE_TEST_CASE_HPP

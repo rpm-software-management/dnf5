@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_CLI_EXCEPTION_HPP
-#define LIBDNF_CLI_EXCEPTION_HPP
+#ifndef LIBDNF5_CLI_EXCEPTION_HPP
+#define LIBDNF5_CLI_EXCEPTION_HPP
 
 #include "exit-codes.hpp"
 #include "libdnf5/base/transaction.hpp"

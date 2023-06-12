@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP
-#define LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_ENVIRONMENTINFO_HPP
+#define LIBDNF5_CLI_OUTPUT_ENVIRONMENTINFO_HPP
 
 #include "libdnf5-cli/tty.hpp"
 
@@ -116,4 +116,4 @@ void print_environmentinfo_table(EnvironmentType & environment) {
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_ENVIRONMENTINFO_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_ENVIRONMENTINFO_HPP

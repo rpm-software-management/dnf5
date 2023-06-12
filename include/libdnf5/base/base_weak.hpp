@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_BASE_BASE_WEAK_HPP
-#define LIBDNF_BASE_BASE_WEAK_HPP
+#ifndef LIBDNF5_BASE_BASE_WEAK_HPP
+#define LIBDNF5_BASE_BASE_WEAK_HPP
 
 #include "libdnf5/common/weak_ptr.hpp"
 

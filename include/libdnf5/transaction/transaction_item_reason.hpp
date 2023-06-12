@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
-#define LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
+#ifndef LIBDNF5_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
+#define LIBDNF5_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -66,4 +66,4 @@ bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs);
 
 }  // namespace libdnf5::transaction
 
-#endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
+#endif  // LIBDNF5_TRANSACTION_TRANSACTION_ITEM_REASON_HPP

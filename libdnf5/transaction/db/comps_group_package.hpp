@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
-#define LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#ifndef LIBDNF5_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#define LIBDNF5_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
 
 
 #include "libdnf5/transaction/comps_group.hpp"
@@ -42,4 +42,4 @@ public:
 }  // namespace libdnf5::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#endif  // LIBDNF5_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP

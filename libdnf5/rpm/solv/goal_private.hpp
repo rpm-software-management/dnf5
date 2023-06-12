@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
-#define LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
+#ifndef LIBDNF5_RPM_SOLV_GOAL_PRIVATE_HPP
+#define LIBDNF5_RPM_SOLV_GOAL_PRIVATE_HPP
 
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
@@ -369,4 +369,4 @@ inline void GoalPrivate::add_reason_change(
 
 }  // namespace libdnf5::rpm::solv
 
-#endif  // LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
+#endif  // LIBDNF5_RPM_SOLV_GOAL_PRIVATE_HPP

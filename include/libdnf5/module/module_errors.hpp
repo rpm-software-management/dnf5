@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_ERRORS_HPP
-#define LIBDNF_MODULE_MODULE_ERRORS_HPP
+#ifndef LIBDNF5_MODULE_MODULE_ERRORS_HPP
+#define LIBDNF5_MODULE_MODULE_ERRORS_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -78,4 +78,4 @@ public:
 }  // namespace libdnf5::module
 
 
-#endif  // LIBDNF_MODULE_MODULE_ERRORS_HPP
+#endif  // LIBDNF5_MODULE_MODULE_ERRORS_HPP

@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_TTY_HPP
-#define LIBDNF_CLI_TTY_HPP
+#ifndef LIBDNF5_CLI_TTY_HPP
+#define LIBDNF5_CLI_TTY_HPP
 
 
 #include <iostream>
@@ -57,4 +57,4 @@ bool is_interactive();
 }  // namespace libdnf5::cli::tty
 
 
-#endif  // LIBDNF_CLI_TTY_HPP
+#endif  // LIBDNF5_CLI_TTY_HPP

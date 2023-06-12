@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_ITEM_ACTION_HPP
-#define LIBDNF_TRANSACTION_ITEM_ACTION_HPP
+#ifndef LIBDNF5_TRANSACTION_ITEM_ACTION_HPP
+#define LIBDNF5_TRANSACTION_ITEM_ACTION_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -140,4 +140,4 @@ Reasons:
 * inherited = a package was installed in the past, re-use it's reason in existing transaction
 */
 
-#endif  // LIBDNF_TRANSACTION_TYPES_HPP
+#endif  // LIBDNF5_TRANSACTION_TYPES_HPP

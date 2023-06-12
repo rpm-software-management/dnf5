@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TEST_UTILS_FS_HPP
-#define LIBDNF_TEST_UTILS_FS_HPP
+#ifndef LIBDNF5_TEST_UTILS_FS_HPP
+#define LIBDNF5_TEST_UTILS_FS_HPP
 
 
 #include "utils/fs/file.hpp"
@@ -69,4 +69,4 @@ public:
 };
 
 
-#endif  // LIBDNF_TEST_UTILS_FS_HPP
+#endif  // LIBDNF5_TEST_UTILS_FS_HPP

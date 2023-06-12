@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_GOAL_PRIVATE_HPP
-#define LIBDNF_MODULE_MODULE_GOAL_PRIVATE_HPP
+#ifndef LIBDNF5_MODULE_MODULE_GOAL_PRIVATE_HPP
+#define LIBDNF5_MODULE_MODULE_GOAL_PRIVATE_HPP
 
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
@@ -124,4 +124,4 @@ inline ModuleGoalPrivate & ModuleGoalPrivate::operator=(const ModuleGoalPrivate 
 }  // namespace libdnf5::module
 
 
-#endif  // LIBDNF_MODULE_MODULE_GOAL_PRIVATE_HPP
+#endif  // LIBDNF5_MODULE_MODULE_GOAL_PRIVATE_HPP

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_ITEM_TYPE_HPP
-#define LIBDNF_TRANSACTION_ITEM_TYPE_HPP
+#ifndef LIBDNF5_TRANSACTION_ITEM_TYPE_HPP
+#define LIBDNF5_TRANSACTION_ITEM_TYPE_HPP
 
 #include "libdnf5/common/exception.hpp"
 
@@ -45,4 +45,4 @@ TransactionItemType transaction_item_type_from_string(const std::string & action
 
 }  // namespace libdnf5::transaction
 
-#endif  // LIBDNF_TRANSACTION_ITEM_TYPE_HPP
+#endif  // LIBDNF5_TRANSACTION_ITEM_TYPE_HPP

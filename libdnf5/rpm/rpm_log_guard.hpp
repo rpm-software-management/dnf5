@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_RPM_LOG_GUARD_HPP
-#define LIBDNF_RPM_RPM_LOG_GUARD_HPP
+#ifndef LIBDNF5_RPM_RPM_LOG_GUARD_HPP
+#define LIBDNF5_RPM_RPM_LOG_GUARD_HPP
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/logger/logger.hpp"

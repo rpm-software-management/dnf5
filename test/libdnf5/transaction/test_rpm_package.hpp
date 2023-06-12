@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_TRANSACTION_TEST_RPM_PACKAGE_HPP
-#define TEST_LIBDNF_TRANSACTION_TEST_RPM_PACKAGE_HPP
+#ifndef TEST_LIBDNF5_TRANSACTION_TEST_RPM_PACKAGE_HPP
+#define TEST_LIBDNF5_TRANSACTION_TEST_RPM_PACKAGE_HPP
 
 
 #include "transaction_test_base.hpp"
@@ -38,4 +38,4 @@ public:
 };
 
 
-#endif  // TEST_LIBDNF_TRANSACTION_TEST_RPM_PACKAGE_HPP
+#endif  // TEST_LIBDNF5_TRANSACTION_TEST_RPM_PACKAGE_HPP

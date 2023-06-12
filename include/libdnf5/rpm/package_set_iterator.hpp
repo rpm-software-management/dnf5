@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_PACKAGE_SET_ITERATOR_HPP
-#define LIBDNF_RPM_PACKAGE_SET_ITERATOR_HPP
+#ifndef LIBDNF5_RPM_PACKAGE_SET_ITERATOR_HPP
+#define LIBDNF5_RPM_PACKAGE_SET_ITERATOR_HPP
 
 #include "package.hpp"
 
@@ -69,4 +69,4 @@ private:
 
 }  // namespace libdnf5::rpm
 
-#endif  // LIBDNF_RPM_PACKAGE_SET_ITERATOR_HPP
+#endif  // LIBDNF5_RPM_PACKAGE_SET_ITERATOR_HPP

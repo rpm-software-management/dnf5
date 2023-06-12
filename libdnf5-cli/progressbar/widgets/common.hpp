@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP
-#define LIBDNF_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP
+#ifndef LIBDNF5_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP
+#define LIBDNF5_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP
 
 
 #include <cstdint>
@@ -36,4 +36,4 @@ std::string format_time(int64_t num, bool negative);
 }  // namespace libdnf5::cli::progressbar
 
 
-#endif  // LIBDNF_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP
+#endif  // LIBDNF5_CLI_PROGRESSBAR_WIDGETS_COMMON_HPP

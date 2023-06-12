@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_ADVISORY_ADVISORY_PACKAGE_HPP
-#define TEST_LIBDNF_ADVISORY_ADVISORY_PACKAGE_HPP
+#ifndef TEST_LIBDNF5_ADVISORY_ADVISORY_PACKAGE_HPP
+#define TEST_LIBDNF5_ADVISORY_ADVISORY_PACKAGE_HPP
 
 
 #include "../shared/base_test_case.hpp"
@@ -63,4 +63,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_ADVISORY_ADVISORY_PACKAGE_HPP
+#endif  // TEST_LIBDNF5_ADVISORY_ADVISORY_PACKAGE_HPP

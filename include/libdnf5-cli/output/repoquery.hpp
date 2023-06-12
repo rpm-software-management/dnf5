@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
-#define LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP
+#define LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP
 
 #include "libdnf5/rpm/package_set.hpp"
 
@@ -83,4 +83,4 @@ void print_available_pkg_attrs(std::FILE * target);
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP

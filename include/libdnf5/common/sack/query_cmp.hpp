@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_COMMON_SACK_QUERY_CMP_HPP
-#define LIBDNF_COMMON_SACK_QUERY_CMP_HPP
+#ifndef LIBDNF5_COMMON_SACK_QUERY_CMP_HPP
+#define LIBDNF5_COMMON_SACK_QUERY_CMP_HPP
 
 #include <cstdint>
 #include <type_traits>
@@ -146,4 +146,4 @@ inline constexpr QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) noexcept {
 
 }  // namespace libdnf5::sack
 
-#endif  // LIBDNF_COMMON_SACK_QUERY_CMP_HPP
+#endif  // LIBDNF5_COMMON_SACK_QUERY_CMP_HPP

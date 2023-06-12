@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_PRIVATE_ACCESSOR_HPP
-#define TEST_LIBDNF_PRIVATE_ACCESSOR_HPP
+#ifndef TEST_LIBDNF5_PRIVATE_ACCESSOR_HPP
+#define TEST_LIBDNF5_PRIVATE_ACCESSOR_HPP
 
 
 // A getter generating structure
@@ -44,4 +44,4 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     template struct PrivateGetter<AccessTag, class_member_type, class_member_ptr>
 
 
-#endif  // TEST_LIBDNF_PRIVATE_ACCESSOR_HPP
+#endif  // TEST_LIBDNF5_PRIVATE_ACCESSOR_HPP

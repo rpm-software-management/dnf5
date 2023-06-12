@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_INIPARSER_HPP
-#define LIBDNF_UTILS_INIPARSER_HPP
+#ifndef LIBDNF5_UTILS_INIPARSER_HPP
+#define LIBDNF5_UTILS_INIPARSER_HPP
 
 #include "libdnf5/common/exception.hpp"
 #include "utils/fs/file.hpp"
