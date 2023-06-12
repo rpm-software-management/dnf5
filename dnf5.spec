@@ -272,7 +272,7 @@ Package management library.
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
-%{_var}/cache/libdnf/
+%{_var}/cache/libdnf5/
 
 # ========== libdnf5-cli ==========
 
