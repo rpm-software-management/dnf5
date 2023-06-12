@@ -109,7 +109,7 @@ bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
         signal << key_info.get_short_key_id() << key_info.get_user_ids() << key_info.get_fingerprint()
                << key_info.get_url() << static_cast<int64_t>(key_info.get_timestamp());
         // wait for client's confirmation
-        confirmed = session.wait_for_key_confirmation(key_info.get_key_id(), signal);
+        confirmed = session.wait_for_key_confirmation(key_info.get_short_key_id(), signal);
     } catch (...) {
         confirmed = false;
     }
