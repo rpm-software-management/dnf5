@@ -142,6 +142,9 @@ void RepoPgp::import_key(int fd, const std::string & url) {
             throw_repo_pgp_error(M_("Failed to import pgp keys: {}"), err);
         }
 
+        if (callbacks) {
+            callbacks->repokey_imported(key_info);
+        }
         logger.debug("Imported pgp key 0x{} for repository {}.", key_info.get_key_id(), config.get_id());
     }
 }

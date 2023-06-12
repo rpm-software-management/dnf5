@@ -920,6 +920,9 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(libdnf5::repo::Repo & r
 
             try {
                 if (rpm_signature.import_key(key_info)) {
+                    if (callbacks) {
+                        callbacks->repokey_imported(key_info);
+                    }
                     continue;
                 }
             } catch (const libdnf5::rpm::KeyImportError & ex) {
