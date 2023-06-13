@@ -12,7 +12,7 @@ The complete text of the license is available in the gpl-2.0.txt file.
 
 LGPLv2.1+
 ---------
-Alternatively, all of the source code in 'libdnf', 'libdnf-cli', 'include'
+Alternatively, all of the source code in 'libdnf5', 'libdnf5-cli', 'include'
 and 'bindings' subdirectories of the libdnf source code distribution as well
 as any code derived from that code may instead be distributed under the
 GNU Lesser General Public License version 2.1 and any later version (LGPLv2.1+),

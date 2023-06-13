@@ -26,9 +26,9 @@ Includes
 
     #include "current-dir-include.hpp"
 
-    #include <libdnf-cli/.../*.hpp>
+    #include <libdnf5-cli/.../*.hpp>
 
-    #include <libdnf/.../*.hpp>
+    #include <libdnf5/.../*.hpp>
 
     #include <3rd party>
 
@@ -40,7 +40,7 @@ Includes
 
 * Other includes should use absolute paths::
 
-    #include <libdnf/.../*.hpp>
+    #include <libdnf5/.../*.hpp>
 
 * Includes within the same component should use the double-quote form. E.g. in dnf5::
 
@@ -48,4 +48,4 @@ Includes
 
 * Includes from a different component in the repository should use the angle-bracket form. E.g. in dnf5::
 
-    #include <libdnf/.../*.hpp>
+    #include <libdnf5/.../*.hpp>

@@ -4,7 +4,7 @@ C++
 
 
 .. toctree::
-    libdnf
-    libdnf_advisory
-    libdnf_repo
-    libdnf_rpm
+    libdnf5
+    libdnf5_advisory
+    libdnf5_repo
+    libdnf5_rpm
