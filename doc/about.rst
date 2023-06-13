@@ -5,7 +5,7 @@ About
 DNF5 is a command-line package manager that automates the process of installing, upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
-As part of the DNF5 stack, libdnf is the package management library.
+As part of the DNF5 stack, libdnf5 is the package management library.
 It was originally written to support the `DNF <https://github.com/rpm-software-management/dnf/>`_,
 package manager and grew up into a versatile library.
 Now we can use it for building custom tools that load repositories,

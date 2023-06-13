@@ -1,7 +1,7 @@
 Documentation strings
 =====================
 
-We use `doxygen <https://www.doxygen.nl/manual/commands.html>`_ + sphinx + breathe to render libdnf documentation.
+We use `doxygen <https://www.doxygen.nl/manual/commands.html>`_ + sphinx + breathe to render libdnf5 documentation.
 
 A typical docstring contains the following:
 
@@ -32,7 +32,7 @@ Example::
     std::vector<std::string> split(std::string text, std::string delimiter, int max_items);
 
 
-We also reference DNF 4 and libdnf 0.x API classes, methods, attributes or functions that the subject of the documentation replaces
+We also reference DNF 4 and libdnf5 0.x API classes, methods, attributes or functions that the subject of the documentation replaces
 by using @replaces command followed with a description of the replaced entity:
 
   * <project>:<path>:class:<ClassName>
@@ -47,5 +47,5 @@ Example::
     /// <docstring>
     //
     // @replaces dnf:dnf/package.py:attribute:Package.name
-    // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_name(DnfPackage *pkg);
+    // @replaces libdnf5:libdnf5/hy-package.h:function:dnf_package_get_name(DnfPackage *pkg);
     std::string get_name() const;

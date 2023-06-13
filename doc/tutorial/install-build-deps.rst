@@ -30,7 +30,7 @@ Ruby::
 
 
 .. note::
-    While the libdnf packages are always needed, we can omit installing the libdnf-cli
+    While the libdnf5 packages are always needed, we can omit installing the libdnf5-cli
     packages if we're not using any of the command-line features they implement.
 
 
