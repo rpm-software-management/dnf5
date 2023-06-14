@@ -38,7 +38,7 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/session/create_base.py", "r") as f:
             file += f.read()
 
-        exec(file, {'installroot': self.installroot})
+        exec(file, {'installroot': self.installroot, 'cachedir': self.cachedir})
 
     def test_load_repo(self):
         file = ""
@@ -48,7 +48,8 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/repo/load_repo.py", "r") as f:
             file += f.read()
 
-        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})
+        exec(file, {'installroot': self.installroot,
+                    'cachedir': self.cachedir, 'baseurl': self.baseurl})
 
     def test_load_system_repo(self):
         # TODO(nsella) This example does not 'compile' yet
@@ -73,7 +74,8 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/query/query.py", "r") as f:
             file += f.read()
 
-        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})
+        exec(file, {'installroot': self.installroot,
+                    'cachedir': self.cachedir, 'baseurl': self.baseurl})
 
     def test_transaction(self):
         file = ""
@@ -86,4 +88,5 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/transaction/transaction.py", "r") as f:
             file += f.read()
 
-        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})
+        exec(file, {'installroot': self.installroot,
+                    'cachedir': self.cachedir, 'baseurl': self.baseurl})
