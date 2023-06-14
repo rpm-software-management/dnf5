@@ -1,5 +1,16 @@
-# Next release
+# 5.0.14
 
+- Modify libdnf5-devel to generate pkgconf(libdnf5)
+- Handle unnamed environments in transaction table
+- Return error exit code on RPM transaction failure
+- Add `repoquery --file` option
+- Add `repoquery --arch` option
+- Add `repoquery --installonly` option
+- Add `repoquery --extras`, `--upgrades` and `--recent` options
+- Add `repoquery --changelogs` formatting option
+- Don't complete ls alias
+- Add rq command alias for `repoquery`
+- Exclude dnf.conf when not installed
 - Improve the download methods API
   - Switch to parameterless download methods and introduce setters for fail_fast and resume
   - Affected classes: libdnf::repo::FileDownloader, libdnf::repo::PackageDownloader
