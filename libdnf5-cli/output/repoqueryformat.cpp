@@ -34,9 +34,15 @@ using VecStrGetter = std::vector<std::string> (libdnf5::rpm::Package::*)() const
 using UnsignedLongLongGetter = unsigned long long (libdnf5::rpm::Package::*)() const;
 using ReldepListGetter = libdnf5::rpm::ReldepList (libdnf5::rpm::Package::*)() const;
 using TransactionItemReasonGetter = libdnf5::transaction::TransactionItemReason (libdnf5::rpm::Package::*)() const;
+using StrGetterLambda = std::function<std::string(const libdnf5::rpm::Package &)>;
 
-using Getter =
-    std::variant<StrGetter, VecStrGetter, UnsignedLongLongGetter, ReldepListGetter, TransactionItemReasonGetter>;
+using Getter = std::variant<
+    StrGetter,
+    VecStrGetter,
+    UnsignedLongLongGetter,
+    ReldepListGetter,
+    TransactionItemReasonGetter,
+    StrGetterLambda>;
 
 static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"name", &libdnf5::rpm::Package::get_name},
@@ -78,6 +84,14 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"debug_name", &libdnf5::rpm::Package::get_debuginfo_name},
     {"source_debug_name", &libdnf5::rpm::Package::get_debuginfo_name_of_source},
     {"files", &libdnf5::rpm::Package::get_files},
+    {"location",
+     [](const libdnf5::rpm::Package & pkg) -> std::string {
+         auto locs = pkg.get_remote_locations();
+         if (locs.empty()) {
+             return {};
+         }
+         return locs[0];
+     }},
 };
 
 void print_available_pkg_attrs(std::FILE * target) {
@@ -251,6 +265,8 @@ void print_pkg_set_with_format(
                         arg_store.push_back(joined);
                     } else if constexpr (std::is_same_v<T, TransactionItemReasonGetter>) {
                         arg_store.push_back(std::move(transaction_item_reason_to_string((package.*getter_func)())));
+                    } else if constexpr (std::is_same_v<T, StrGetterLambda>) {
+                        arg_store.push_back((getter_func)(package));
                     } else {
                         arg_store.push_back((package.*getter_func)());
                     }
@@ -289,6 +305,8 @@ void print_pkg_attr_uniq_sorted(
                     for (const auto & str : (package.*getter_func)()) {
                         output.insert(std::move(str));
                     }
+                } else if constexpr (std::is_same_v<T, StrGetterLambda>) {
+                    output.insert(std::move((getter_func)(package)));
                 } else {
                     output.insert(std::move((package.*getter_func)()));
                 }
