@@ -28,6 +28,12 @@ base.load_config_from_file()
 base_config = base.get_config()
 base_config.installroot = installroot
 
+# Optionally set cachedir.
+#
+# By default, system cachedir or user cachedir is used, but we can set it to a
+# different location. This is useful for tests.
+base_config.cachedir = cachedir
+
 # Load vars and do other initialization (of libsolv pool, etc.) based on the
 # configuration.  Locks the installroot and varsdir configuration values so
 # that they can't be changed.
