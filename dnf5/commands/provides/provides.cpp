@@ -60,7 +60,8 @@ void ProvidesCommand::set_argument_parser() {
 void ProvidesCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
-    context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
+    context.base.get_config().get_optional_metadata_types_option().add_item(
+        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
