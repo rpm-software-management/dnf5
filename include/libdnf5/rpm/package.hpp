@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -380,6 +381,14 @@ public:
     // @replaces dnf:dnf/package.py:attribute:Package.relativepath
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_location(DnfPackage * pkg)
     std::string get_location() const;
+
+    /// @return RPM package remote location where the package can be download from.
+    /// Returns empty vector for installed and commandline packages.
+    /// @since 5.1
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.remote_location
+    std::vector<std::string> get_remote_locations(
+        const std::set<std::string> & protocols = {"https", "http", "ftp", "file"}) const;
 
     /// @return Checksum object representing RPM package checksum and its type (`<checksum type="type">checksum</checksum>`).
     /// @since 5.0
