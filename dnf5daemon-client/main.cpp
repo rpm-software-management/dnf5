@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <fcntl.h>
@@ -217,19 +218,33 @@ int main(int argc, char * argv[]) {
     add_commands(context);
 
     // Parse command line arguments
-    try {
-        context.get_argument_parser().parse(argc, argv);
-    } catch (libdnf5::cli::ArgumentParserError & ex) {
-        std::cout << ex.what() << std::endl;
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (std::exception & ex) {
-        std::cout << ex.what() << std::endl;
-        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+    auto & arg_parser = context.get_argument_parser();
+    {
+        try {
+            arg_parser.parse(argc, argv);
+        } catch (libdnf5::cli::ArgumentParserError & ex) {
+            // Error during parsing arguments. Try to find "--help"/"-h".
+            for (int idx = 1; idx < argc; ++idx) {
+                if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
+                    arg_parser.get_selected_command()->help();
+                    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+                }
+            }
+            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+            return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+        }
+
+        // print help of the selected command if --help was used
+        if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
+            arg_parser.get_selected_command()->help();
+            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+        }
     }
 
+    auto command = context.get_selected_command();
+
     try {
-        context.get_selected_command()->pre_configure();
+        command->pre_configure();
 
         try {
             connection = sdbus::createSystemBusConnection();
@@ -250,17 +265,17 @@ int main(int argc, char * argv[]) {
         }
 
         // Run selected command
-        context.get_selected_command()->run();
-    } catch (libdnf5::cli::ArgumentParserMissingCommandError & ex) {
-        // print help if no command is provided
-        std::cout << ex.what() << std::endl;
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+        command->run();
     } catch (libdnf5::cli::ArgumentParserError & ex) {
-        std::cout << ex.what() << std::endl;
+        std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
         return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (std::exception & ex) {
-        std::cout << ex.what() << std::endl;
+    } catch (libdnf5::cli::CommandExitError & ex) {
+        std::cerr << ex.what() << std::endl;
+        return ex.get_exit_code();
+    } catch (libdnf5::cli::SilentCommandExitError & ex) {
+        return ex.get_exit_code();
+    } catch (std::runtime_error & ex) {
+        std::cerr << ex.what() << std::endl;
         return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
