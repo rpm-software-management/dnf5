@@ -130,6 +130,7 @@ man_pages = [
     ('dnf5_plugins/builddep.8', 'dnf5-builddep', 'Builddep Command', AUTHORS, 8),
     ('dnf5_plugins/copr.8', 'dnf5-copr', 'Copr Command', AUTHORS, 8),
     ('dnf5_plugins/repoclosure.8', 'dnf5-repoclosure', 'Repoclosure Command', AUTHORS, 8),
+    ('libdnf5_plugins/actions.8', 'libdnf5-actions', 'Actions plugin', AUTHORS, 8),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
     ('misc/filtering.7', 'dnf5-filtering', 'Packages Filtering', AUTHORS, 7),
     ('misc/installroot.7', 'dnf5-installroot', 'Installroot Parameter', AUTHORS, 7),
