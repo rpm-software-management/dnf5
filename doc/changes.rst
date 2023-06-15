@@ -64,6 +64,9 @@ options and implemented only for related commands
 Renaming boolean options to format `--<option>`, and `--no-<option>`
 `--nobest` -> `--no-best`. Proposing to keep `--nobest` as a deprecated option.
 
+To disable all configuration file excludes, the `*` glob character is used now instead of the `all` within
+the `disable_excludes` configuration option to unify the behavior with query objects on the API.
+
 strict configuration option deprecation
 ---------------------------------------
 `strict` config option is now deprecated. The problem with this option is that it does two things:
