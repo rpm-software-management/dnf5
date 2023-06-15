@@ -25,20 +25,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_query.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
+#include "libdnf5/module/nsvcap.hpp"
 #include "module/module_goal_private.hpp"
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
 #include "solv/solv_map.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
-
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/base/base_weak.hpp"
-#include "libdnf5/module/module_errors.hpp"
-#include "libdnf5/module/module_item.hpp"
-#include "libdnf5/module/module_query.hpp"
-#include "libdnf5/module/module_sack_weak.hpp"
-#include "libdnf5/module/nsvcap.hpp"
 
 #include <modulemd-2.0/modulemd.h>
 
@@ -772,7 +765,7 @@ bool ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
     }
 
     bool changed = false;
-    libdnf::solv::IdQueue queue;
+    libdnf5::solv::IdQueue queue;
     for (const auto & module_item : query) {
         queue.push_back(module_item.get_id().id);
         changed += enable(module_item.get_name(), module_item.get_stream(), count);
