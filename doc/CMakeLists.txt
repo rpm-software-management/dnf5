@@ -37,6 +37,10 @@ if(WITH_MAN)
     )
     add_dependencies(doc doc-man)
 
+    if(WITH_PLUGIN_ACTIONS)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/libdnf5-actions.8 DESTINATION share/man/man8)
+    endif()
+
     if(WITH_DNF5DAEMON_CLIENT)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-client.8 DESTINATION share/man/man8)
     endif()
