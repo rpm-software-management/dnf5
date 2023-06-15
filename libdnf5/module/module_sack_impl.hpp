@@ -156,7 +156,7 @@ public:
     void reset(const ModuleItem * module_item, bool count = true);
 
 private:
-    friend class libdnf::base::Transaction;
+    friend class libdnf5::base::Transaction;
     friend ModuleSack;
     friend ModuleItem;
     friend ModuleGoalPrivate;
@@ -183,7 +183,7 @@ private:
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf5::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
-    std::vector<libdnf::solv::IdQueue> modules_to_enable;
+    std::vector<libdnf5::solv::IdQueue> modules_to_enable;
 
     std::unique_ptr<ModuleDB> module_db;
 

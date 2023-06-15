@@ -56,7 +56,7 @@ public:
     /// @param skip_broken Whether solver can skip reldep with unmet dependencies
     /// @param best Whether the latest version is required or not.
     /// @since 5.0.14
-    void add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best);
+    void add_install(libdnf5::solv::IdQueue & queue, bool skip_broken, bool best);
 
     /// Resolve all operations.
     ///

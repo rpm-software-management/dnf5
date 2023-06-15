@@ -21,6 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory/advisory_package_private.hpp"
 #include "base_private.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/module/module_errors.hpp"
+#include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/reldep.hpp"
+#include "libdnf5/utils/patterns.hpp"
 #include "module/module_goal_private.hpp"
 #include "module/module_sack_impl.hpp"
 #include "rpm/package_query_impl.hpp"
@@ -33,14 +40,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
-
-#include "libdnf5/common/exception.hpp"
-#include "libdnf5/comps/environment/query.hpp"
-#include "libdnf5/comps/group/query.hpp"
-#include "libdnf5/module/module_errors.hpp"
-#include "libdnf5/rpm/package_query.hpp"
-#include "libdnf5/rpm/reldep.hpp"
-#include "libdnf5/utils/patterns.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -2076,7 +2075,7 @@ base::Transaction Goal::resolve() {
 
     // Resolve modules
     auto module_error = module_sack.resolve_active_module_items().second;
-    if (module_error != libdnf::module::ModuleSack::ModuleErrorType::NO_ERROR) {
+    if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
         throw module::ModuleResolveError(M_("Failed to resolve modules."));
     }
     module_sack.p_impl->enable_dependent_modules();

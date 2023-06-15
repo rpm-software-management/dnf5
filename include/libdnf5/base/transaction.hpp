@@ -93,7 +93,7 @@ public:
     std::vector<libdnf5::base::TransactionGroup> & get_transaction_groups() const;
 
     /// @return the transaction modules.
-    std::vector<libdnf::base::TransactionModule> & get_transaction_modules() const;
+    std::vector<libdnf5::base::TransactionModule> & get_transaction_modules() const;
 
     /// @return environmental groups that are part of the transaction.
     std::vector<libdnf5::base::TransactionEnvironment> & get_transaction_environments() const;

@@ -18,20 +18,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_BASE_TRANSACTION_MODULE_HPP
-#define LIBDNF_BASE_TRANSACTION_MODULE_HPP
+#ifndef LIBDNF5_BASE_TRANSACTION_MODULE_HPP
+#define LIBDNF5_BASE_TRANSACTION_MODULE_HPP
 
-#include "libdnf/base/goal_elements.hpp"
-#include "libdnf/base/transaction.hpp"
-#include "libdnf/module/module_item.hpp"
-#include "libdnf/transaction/transaction_item_action.hpp"
-#include "libdnf/transaction/transaction_item_reason.hpp"
-#include "libdnf/transaction/transaction_item_state.hpp"
+#include "libdnf5/base/goal_elements.hpp"
+#include "libdnf5/base/transaction.hpp"
+#include "libdnf5/module/module_item.hpp"
+#include "libdnf5/transaction/transaction_item_action.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
+#include "libdnf5/transaction/transaction_item_state.hpp"
 
 #include <optional>
 
 
-namespace libdnf::base {
+namespace libdnf5::base {
 
 class TransactionModule {
 public:
@@ -78,6 +78,6 @@ private:
     State state{State::STARTED};
 };
 
-}  // namespace libdnf::base
+}  // namespace libdnf5::base
 
-#endif  // LIBDNF_BASE_TRANSACTION_MODULE_HPP
+#endif  // LIBDNF5_BASE_TRANSACTION_MODULE_HPP

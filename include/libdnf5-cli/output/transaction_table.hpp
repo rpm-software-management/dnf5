@@ -261,18 +261,18 @@ public:
             std::string text;
 
             switch (action) {
-                case libdnf::transaction::TransactionItemAction::ENABLE:
+                case libdnf5::transaction::TransactionItemAction::ENABLE:
                     text = "Enabling module streams";
                     break;
-                case libdnf::transaction::TransactionItemAction::DISABLE:
+                case libdnf5::transaction::TransactionItemAction::DISABLE:
                     text = "Disabling module streams";
                     break;
-                case libdnf::transaction::TransactionItemAction::RESET:
+                case libdnf5::transaction::TransactionItemAction::RESET:
                     text = "Resetting module streams";
                     break;
                 default:
                     libdnf_throw_assertion(
-                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+                        "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }
 
             text += ":";
@@ -289,8 +289,8 @@ public:
 private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
-    std::optional<libdnf::transaction::TransactionItemAction> current_action;
-    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+    std::optional<libdnf5::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
 };
 
 
@@ -319,9 +319,9 @@ public:
             case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
                 reason_changes++;
                 break;
-            case libdnf::transaction::TransactionItemAction::ENABLE:
-            case libdnf::transaction::TransactionItemAction::DISABLE:
-            case libdnf::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::ENABLE:
+            case libdnf5::transaction::TransactionItemAction::DISABLE:
+            case libdnf5::transaction::TransactionItemAction::RESET:
                 // Only package change counts are reported.
                 break;
         }

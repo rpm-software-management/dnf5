@@ -21,9 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_BASE_TRANSACTION_IMPL_HPP
 
 
-#include "module/module_db.hpp"
-#include "rpm/solv/goal_private.hpp"
-
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/base/transaction_environment.hpp"
 #include "libdnf5/base/transaction_group.hpp"
@@ -31,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction_package.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/rpm/rpm_signature.hpp"
+#include "module/module_db.hpp"
+#include "rpm/solv/goal_private.hpp"
 
 #include <solv/transaction.h>
 
