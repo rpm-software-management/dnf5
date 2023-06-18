@@ -214,7 +214,7 @@ class ConfigMain::Impl {
     OptionSeconds metadata_timer_sync{60 * 60 * 3};  // 3 hours
     OptionStringList disable_excludes{std::vector<std::string>{}};
     OptionEnum<std::string> multilib_policy{"best", {"best", "all"}};  // :api
-    OptionBool best{false};                                            // :api
+    OptionBool best{true};                                             // :api
     OptionBool install_weak_deps{true};
     OptionBool allow_downgrade{true};
     OptionString bugtracker_url{BUGTRACKER};
