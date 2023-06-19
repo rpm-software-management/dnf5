@@ -160,9 +160,9 @@ bool Session::read_all_repos() {
 
     bool retval = true;
 
-    bool load_available_repo = session_configuration_value<bool>("load_available_repo", true);
+    bool load_available_repos = session_configuration_value<bool>("load_available_repos", true);
     bool load_system_repo = session_configuration_value<bool>("load_system_repo", true);
-    if (load_available_repo) {
+    if (load_available_repos) {
         //auto & logger = base->get_logger();
         libdnf5::repo::RepoQuery enabled_repos(*base);
         enabled_repos.filter_enabled(true);
