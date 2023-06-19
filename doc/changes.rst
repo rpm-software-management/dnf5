@@ -134,3 +134,11 @@ Upgrade command
    `upgrade --minimal`).
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the `--skip-unavailable` option.
+
+Changes of configuration:
+=========================
+
+Default of `best` configuration option changed to `true`
+--------------------------------------------------------
+The new default value ensures that important updates will not be skipped and issues in distribution will be reported
+earlier.
