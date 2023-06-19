@@ -143,6 +143,12 @@ Upgrade command
 Changes of configuration:
 =========================
 
+Default of `allow_vendor_change` configuration option changed to `false`
+-------------------------------------------------------------------------
+The new default value improves behavior for users that use third party repository (Copr). If they install a package from
+alternative provider, DNF will continue to consume updates from the same vendor. Additionally it enables to ship
+alternative streams using a different vendor.
+
 Default of `best` configuration option changed to `true`
 --------------------------------------------------------
 The new default value ensures that important updates will not be skipped and issues in distribution will be reported
