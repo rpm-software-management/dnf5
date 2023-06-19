@@ -4,3 +4,4 @@
 
 =Pkg: one 1 1 noarch
 =Prv: one = 1-1
+=Vnd: dnf5-test

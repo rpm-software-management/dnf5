@@ -2,6 +2,7 @@ Name:           one
 Epoch:          0
 Version:        1
 Release:        1
+Vendor:         dnf5-test
 
 License:        Public Domain
 URL:            http://example.com/

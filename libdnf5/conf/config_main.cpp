@@ -210,7 +210,7 @@ class ConfigMain::Impl {
     OptionBool gpgkey_dns_verification{false};
     OptionBool obsoletes{true};
     OptionBool exit_on_lock{false};
-    OptionBool allow_vendor_change{true};
+    OptionBool allow_vendor_change{false};
     OptionSeconds metadata_timer_sync{60 * 60 * 3};  // 3 hours
     OptionStringList disable_excludes{std::vector<std::string>{}};
     OptionEnum<std::string> multilib_policy{"best", {"best", "all"}};  // :api
