@@ -74,14 +74,15 @@ void InstallCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
     context.set_load_system_repo(true);
-    bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
-                             advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
-                             advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
-                             advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
-    if (updateinfo_needed) {
-        context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
-    }
+    context.update_repo_metadata_from_advisory_options(
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
