@@ -23,7 +23,7 @@ for tspkg in transaction.get_transaction_packages():
 # and overriding its methods.
 #
 # We only override one of the callbacks here, see
-# `libdnf.repo.DownloadCallbacks` documentation for a complete list.
+# `libdnf5.repo.DownloadCallbacks` documentation for a complete list.
 
 
 class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
@@ -42,7 +42,7 @@ transaction.download()
 # A class for defining the RPM transaction callbacks.
 #
 # Again, only a callback for when an RPM package installation starts, for a
-# complete list of the callbacks see `libdnf.rpm.TransactionCallbacks`
+# complete list of the callbacks see `libdnf5.rpm.TransactionCallbacks`
 # documentation.
 
 
