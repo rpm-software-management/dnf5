@@ -19,6 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "changelog.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
+#include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_string.hpp>
@@ -54,7 +57,8 @@ void ChangelogCommand::set_argument_parser() {
                 std::istringstream ss(value);
                 ss >> std::get_time(&time_m, "%Y-%m-%d");
                 if (ss.fail()) {
-                    throw std::runtime_error(fmt::format("Invalid date: {}", value));
+                    throw libdnf5::cli::ArgumentParserError(
+                        M_("Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"), value);
                 }
                 return static_cast<int64_t>(mktime(&time_m));
             }))));
