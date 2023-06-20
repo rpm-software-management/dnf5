@@ -250,11 +250,21 @@ void BuildDepCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
 
+    // Search only for solution in provides and files. Use buildrequire with name search migh result in inconsistent
+    // behavior with installing dependencies of RPMs
+    libdnf5::GoalJobSettings settings;
+    settings.with_nevra = false;
+    settings.with_binaries = false;
+
     for (const auto & spec : install_specs) {
         if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {
             goal->add_provide_install(spec);
         } else {
-            goal->add_rpm_install(spec);
+            // File provides could be satisfied by standard provides or files. With DNF5 we have to test both because
+            // we do not download filelists and some files could be explicitly mentioned in provide section. The best
+            // solution would be to merge result of provide and file search to prevent problems caused by modification
+            // during distro lifecycle.
+            goal->add_rpm_install(spec, settings);
         }
     }
 
