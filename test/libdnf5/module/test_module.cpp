@@ -20,10 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_module.hpp"
 
+#include "../shared/private_accessor.hpp"
 #include "../shared/utils.hpp"
+#include "base/base_impl.hpp"
 #include "module/module_db.hpp"
+#include "system/state.hpp"
 #include "utils/fs/file.hpp"
 
+#include <libdnf5/base/goal.hpp>
 #include <libdnf5/module/module_errors.hpp>
 #include <libdnf5/module/module_item.hpp>
 #include <libdnf5/module/module_query.hpp>
@@ -37,6 +41,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTest);
+
+
+namespace {
+
+// Accessor of private Base::p_impl, see private_accessor.hpp
+create_private_getter_template;
+create_getter(priv_impl, &libdnf5::Base::p_impl);
+
+}  // namespace
 
 
 using namespace libdnf5::module;
@@ -598,4 +611,45 @@ void ModuleTest::test_module_db() {
     CPPUNIT_ASSERT_EQUAL((size_t)1, module_db.get_all_newly_installed_profiles().size());
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>({"default"}), module_db.get_all_newly_installed_profiles()["meson"]);
     CPPUNIT_ASSERT(module_db.get_all_newly_removed_profiles().empty());
+}
+
+
+void ModuleTest::test_module_enable() {
+    add_repo_repomd("repomd-modules");
+
+    libdnf5::Goal goal(base);
+    goal.add_module_enable("fruit-salad:main");
+    auto transaction = goal.resolve();
+
+    // Active modules contain the enabled fruit-salad, its dependency gooseberry and the default stream of module berries
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:4:6c81f848:x86_64",
+        "fruit-salad:main:12:2241675a:x86_64",
+        "gooseberry:5.5:2:72aaf46b6:x86_64",
+        "gooseberry:5.5:3:72aaf46b6:x86_64"};
+    std::vector<std::string> active_module_specs;
+    for (auto & module_item : base.get_module_sack()->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
+
+    transaction.run();
+
+    auto system_state = (base.*get(priv_impl()))->get_system_state();
+
+    // Module fruit-salat is ENABLED because it was explicitly enabled
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}),
+        system_state.get_module_state("fruit-salad"));
+    // Module goosebery is ENABLED because module fruit-salad requires it
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf5::system::ModuleState({"5.5", ModuleStatus::ENABLED, {}}), system_state.get_module_state("gooseberry"));
+
+    // None of the other modules are ENABLED
+    for (auto [name, module_state] : system_state.get_module_states()) {
+        if (name != "fruit-salad" && name != "gooseberry") {
+            CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
+        }
+    }
 }

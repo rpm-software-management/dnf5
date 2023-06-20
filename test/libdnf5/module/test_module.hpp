@@ -37,6 +37,7 @@ class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_nsvcap);
     CPPUNIT_TEST(test_query_spec);
     CPPUNIT_TEST(test_module_db);
+    CPPUNIT_TEST(test_module_enable);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -48,6 +49,7 @@ public:
     void test_nsvcap();
     void test_query_spec();
     void test_module_db();
+    void test_module_enable();
 
     std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
