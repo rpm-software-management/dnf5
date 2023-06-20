@@ -86,6 +86,15 @@ void CheckUpgradeCommand::configure() {
         context.base.get_config().get_optional_metadata_types_option().add(
             libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
     }
+    context.update_repo_metadata_from_advisory_options(
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
 }
 
 std::unique_ptr<libdnf5::cli::output::PackageListSections> CheckUpgradeCommand::create_output() {
