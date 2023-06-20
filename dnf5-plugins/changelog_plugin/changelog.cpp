@@ -50,7 +50,7 @@ void ChangelogCommand::set_argument_parser() {
     since_option = dynamic_cast<libdnf5::OptionNumber<std::int64_t> *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionNumber<std::int64_t>>(
             new libdnf5::OptionNumber<int64_t>(0, [](const std::string & value) {
-                struct tm time_m;
+                struct tm time_m = {};
                 std::istringstream ss(value);
                 ss >> std::get_time(&time_m, "%Y-%m-%d");
                 if (ss.fail()) {
