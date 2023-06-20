@@ -181,7 +181,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // std::string python_code = "import " + file_path.stem().string() +";";
     // python_code += "import libdnf;";
     // python_code += "plug = " + file_path.stem().string() +".Plugin();";
-    // python_code += "locked_base = libdnf.base.Base.get_locked_base();";
+    // python_code += "locked_base = libdnf5.base.Base.get_locked_base();";
     // python_code += "locked_base.add_plugin(plug)";
     // PyRun_SimpleString(python_code.c_str());
 
