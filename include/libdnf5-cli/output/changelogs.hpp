@@ -24,16 +24,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 
 #include <string>
+#include <variant>
 
 
 namespace libdnf5::cli::output {
 
+enum class ChangelogFilterType { NONE, UPGRADES, COUNT, SINCE };
+
 void print_changelogs(
     libdnf5::rpm::PackageQuery & query,
-    libdnf5::rpm::PackageQuery & full_package_query,
-    bool upgrades,
-    int32_t count,
-    int64_t since);
+    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter);
 
 }  // namespace libdnf5::cli::output
 

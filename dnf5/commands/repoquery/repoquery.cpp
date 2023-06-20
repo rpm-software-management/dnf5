@@ -661,7 +661,8 @@ void RepoqueryCommand::run() {
     if (querytags_option->get_value()) {
         libdnf5::cli::output::print_available_pkg_attrs(stdout);
     } else if (changelogs->get_value()) {
-        libdnf5::cli::output::print_changelogs(full_package_query, full_package_query, false, 0, 0);
+        libdnf5::cli::output::print_changelogs(
+            full_package_query, {libdnf5::cli::output::ChangelogFilterType::NONE, 0});
     } else if (info_option->get_value()) {
         for (auto package : full_package_query) {
             libdnf5::cli::output::print_package_info_table(package);
