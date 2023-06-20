@@ -51,7 +51,7 @@ const std::map<rpm::RpmSignature::CheckResult, BgettextMessage> RPM_SIGNATURE_CH
 
 using RpmTransactionPtr = std::unique_ptr<rpmts_s, std::function<void(rpmts_s * ts)>>;
 // deleters for unique_ptrs that take ownership of rpm objects
-// once the ownership is transfered, rpm objects get automatically freed when out of scope
+// once the ownership is transferred, rpm objects get automatically freed when out of scope
 auto pkt_deleter = [](uint8_t * pkt) { free(pkt); };
 auto ts_deleter = [](rpmts_s * ts) { rpmtsFree(ts); };
 
