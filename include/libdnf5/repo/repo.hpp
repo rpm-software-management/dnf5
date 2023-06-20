@@ -23,13 +23,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MODULEMD
 
 #include "config_repo.hpp"
+#include "repo_callbacks.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/rpm/package.hpp"
-#include "repo_callbacks.hpp"
 
 #include <memory>
 

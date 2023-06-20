@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_goal.hpp"
 
 #include "../shared/utils.hpp"
+
 #include "libdnf5/base/goal.hpp"
 #include "libdnf5/base/transaction_package.hpp"
 

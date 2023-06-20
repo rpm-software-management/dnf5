@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_comps_environment.hpp"
 
 #include "../shared/private_accessor.hpp"
+
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/transaction/comps_environment.hpp"
 #include "libdnf5/transaction/transaction.hpp"

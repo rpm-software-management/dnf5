@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/comps/environment/environment.hpp"
 
-#include "libdnf5/base/base.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/xml.hpp"
+
+#include "libdnf5/base/base.hpp"
 
 extern "C" {
 #include <solv/dataiterator.h>

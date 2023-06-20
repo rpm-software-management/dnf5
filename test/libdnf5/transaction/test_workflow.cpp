@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_workflow.hpp"
 
 #include "../shared/private_accessor.hpp"
+
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/transaction/transaction.hpp"

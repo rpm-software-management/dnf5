@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5-cli/output/transactionlist.hpp"
 
 #include "fmt/chrono.h"
+
 #include "libdnf5-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>

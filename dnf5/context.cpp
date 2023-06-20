@@ -20,12 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/context.hpp"
 
 #include "download_callbacks.hpp"
-#include "libdnf5-cli/utils/userconfirm.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/url.hpp"
+
+#include "libdnf5-cli/utils/userconfirm.hpp"
 
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/transaction/rpm_package.hpp"
 
 #include "db/rpm.hpp"
+
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/transaction/transaction.hpp"
 

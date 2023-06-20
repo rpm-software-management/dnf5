@@ -22,12 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
+#include "rpm_package.hpp"
+#include "transaction_item.hpp"
+
 #include "libdnf5/base/transaction_environment.hpp"
 #include "libdnf5/base/transaction_group.hpp"
 #include "libdnf5/base/transaction_module.hpp"
 #include "libdnf5/base/transaction_package.hpp"
-#include "rpm_package.hpp"
-#include "transaction_item.hpp"
 
 #include <memory>
 #include <set>

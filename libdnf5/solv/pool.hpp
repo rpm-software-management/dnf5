@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base/base_impl.hpp"
 #include "id_queue.hpp"
+
 #include "libdnf5/repo/repo.hpp"
 
 #include <climits>

@@ -20,12 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv_repo.hpp"
 
 #include "base/base_impl.hpp"
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/utils/to_underlying.hpp"
 #include "repo_cache_private.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
+
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/utils/to_underlying.hpp"
 
 extern "C" {
 #include <solv/chksum.h>

@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/match_int64.hpp"
 
 #include "common/sack/query_cmp_private.hpp"
+
 #include "libdnf5/common/exception.hpp"
 
 #include <stdexcept>

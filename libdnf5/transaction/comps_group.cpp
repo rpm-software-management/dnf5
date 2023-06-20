@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "db/comps_group.hpp"
 #include "db/comps_group_package.hpp"
+
 #include "libdnf5/transaction/transaction.hpp"
 #include "libdnf5/transaction/transaction_item.hpp"
 

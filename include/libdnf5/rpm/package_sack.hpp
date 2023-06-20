@@ -21,13 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_PACKAGE_SACK_HPP
 #define LIBDNF5_RPM_PACKAGE_SACK_HPP
 
+#include "package.hpp"
+#include "package_set.hpp"
+#include "reldep.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
-#include "package.hpp"
-#include "package_set.hpp"
-#include "reldep.hpp"
 
 #include <map>
 #include <memory>

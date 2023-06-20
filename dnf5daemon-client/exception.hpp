@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/exception.hpp"
 #include "libdnf5-cli/exit-codes.hpp"
+
 #include "libdnf5/common/exception.hpp"
 
 namespace dnfdaemon::client {

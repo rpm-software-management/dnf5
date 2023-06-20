@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_ADVISORY_ADVISORY_PACKAGE_HPP
 
 #include "advisory.hpp"
+
 #include "libdnf5/common/impl_ptr.hpp"
 
 #include <vector>

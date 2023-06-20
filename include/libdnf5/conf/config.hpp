@@ -21,10 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CONF_CONFIG_HPP
 
 #include "config_parser.hpp"
-#include "libdnf5/logger/logger.hpp"
 #include "option.hpp"
 #include "option_binds.hpp"
 #include "vars.hpp"
+
+#include "libdnf5/logger/logger.hpp"
 
 
 namespace libdnf5 {

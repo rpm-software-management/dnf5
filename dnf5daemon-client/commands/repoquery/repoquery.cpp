@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repoquery.hpp"
 
 #include "context.hpp"
-#include "libdnf5-cli/output/repoquery.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
+
+#include "libdnf5-cli/output/repoquery.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <fmt/format.h>

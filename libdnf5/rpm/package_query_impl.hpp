@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_PACKAGE_QUERY_IMPL_HPP
 #define LIBDNF5_RPM_PACKAGE_QUERY_IMPL_HPP
 
-#include "libdnf5/rpm/package_query.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf5/rpm/package_query.hpp"
 
 extern "C" {
 #include <solv/solvable.h>

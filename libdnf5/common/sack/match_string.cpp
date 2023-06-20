@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/match_string.hpp"
 
 #include "common/sack/query_cmp_private.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf5/common/exception.hpp"
 
 #include <fnmatch.h>
 

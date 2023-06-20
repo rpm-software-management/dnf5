@@ -21,8 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 
 
-#include "libdnf5/transaction/db/trans_with.hpp"
 #include "transaction.hpp"
+
+#include "libdnf5/transaction/db/trans_with.hpp"
 
 
 namespace libdnf5::transaction {

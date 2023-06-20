@@ -21,12 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF5_BASE_TEST_CASE_HPP
 #define TEST_LIBDNF5_BASE_TEST_CASE_HPP
 
+#include "test_case_fixture.hpp"
+#include "utils/fs/temp.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
-#include "test_case_fixture.hpp"
-#include "utils/fs/temp.hpp"
 
 #include <string>
 

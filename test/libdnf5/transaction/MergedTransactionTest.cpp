@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 //#include "libdnf5/hy-subject.h"
 #include "MergedTransactionTest.hpp"
+
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/transaction/MergedTransaction.hpp"
 #include "libdnf5/transaction/Transformer.hpp"

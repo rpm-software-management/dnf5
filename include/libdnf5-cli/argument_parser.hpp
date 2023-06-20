@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CLI_ARGUMENT_PARSER_HPP
 
 #include "libdnf5-cli/exception.hpp"
+
 #include "libdnf5/conf/option.hpp"
 
 #include <functional>

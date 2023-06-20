@@ -22,10 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "arch.hpp"
 #include "item.hpp"
-#include "libdnf5/transaction/rpm_package.hpp"
-#include "libdnf5/transaction/transaction.hpp"
 #include "pkg_name.hpp"
 #include "trans_item.hpp"
+
+#include "libdnf5/transaction/rpm_package.hpp"
+#include "libdnf5/transaction/transaction.hpp"
 
 
 namespace libdnf5::transaction {

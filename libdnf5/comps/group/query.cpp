@@ -19,12 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/comps/group/query.hpp"
 
+#include "solv/pool.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/sack/match_string.hpp"
 #include "libdnf5/comps/comps.hpp"
 #include "libdnf5/comps/group/group.hpp"
 #include "libdnf5/comps/group/sack.hpp"
-#include "solv/pool.hpp"
 
 extern "C" {
 #include <solv/pool.h>

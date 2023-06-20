@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/module/module_dependency.hpp"
 
+#include "utils/string.hpp"
+
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
-#include "utils/string.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
 #include <modulemd-2.0/modulemd-profile.h>

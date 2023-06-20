@@ -20,13 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_REPO_DOWNLOADER_HPP
 #define LIBDNF5_REPO_REPO_DOWNLOADER_HPP
 
+#include "librepo.hpp"
+#include "repo_pgp.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/repo/config_repo.hpp"
 #include "libdnf5/repo/repo.hpp"
 #include "libdnf5/repo/repo_callbacks.hpp"
-#include "librepo.hpp"
-#include "repo_pgp.hpp"
 
 #include <librepo/librepo.h>
 

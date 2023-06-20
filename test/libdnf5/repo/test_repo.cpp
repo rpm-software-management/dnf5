@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_repo.hpp"
 
-#include "libdnf5/base/base.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf5/base/base.hpp"
 
 #include <filesystem>
 

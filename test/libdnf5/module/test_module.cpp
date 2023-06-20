@@ -21,14 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_module.hpp"
 
 #include "../shared/utils.hpp"
+#include "module/module_db.hpp"
+#include "utils/fs/file.hpp"
+
 #include "libdnf5/module/module_errors.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_query.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/module/nsvcap.hpp"
 #include "libdnf5/utils/format.hpp"
-#include "module/module_db.hpp"
-#include "utils/fs/file.hpp"
 
 #include <filesystem>
 #include <fstream>

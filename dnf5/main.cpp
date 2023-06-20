@@ -44,11 +44,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
-#include "libdnf5-cli/output/transaction_table.hpp"
-#include "libdnf5-cli/utils/userconfirm.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+
+#include "libdnf5-cli/output/transaction_table.hpp"
+#include "libdnf5-cli/utils/userconfirm.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>

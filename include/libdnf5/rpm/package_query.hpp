@@ -21,14 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_PACKAGE_QUERY_HPP
 
 
+#include "nevra.hpp"
+#include "package_sack.hpp"
+#include "package_set.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
-#include "nevra.hpp"
-#include "package_sack.hpp"
-#include "package_set.hpp"
 
 #include <string>
 #include <vector>

@@ -20,11 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_COMMON_SACK_QUERY_HPP
 #define LIBDNF5_COMMON_SACK_QUERY_HPP
 
-#include "libdnf5/common/exception.hpp"
-#include "libdnf5/common/set.hpp"
 #include "match_int64.hpp"
 #include "match_string.hpp"
 #include "query_cmp.hpp"
+
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/set.hpp"
 
 #include <cstdint>
 #include <map>

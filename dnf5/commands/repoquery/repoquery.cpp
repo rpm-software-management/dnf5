@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/changelogs.hpp"
 #include "libdnf5-cli/output/repoquery.hpp"
+
 #include "libdnf5/utils/patterns.hpp"
 
 #include <libdnf5/advisory/advisory_query.hpp>
