@@ -31,11 +31,11 @@ IncludeCategories:
   # system libraries
   - Regex:           '<.+>'
     Priority:        4
-  # project includes - libdnf absolute paths
-  - Regex:           '"libdnf/.+"'
+  # project includes - libdnf5 absolute paths
+  - Regex:           '"libdnf5/.+"'
     Priority:        3
-  # project includes - libdnf-cli absolute paths
-  - Regex:           '"libdnf-cli/.+"'
+  # project includes - libdnf5-cli absolute paths
+  - Regex:           '"libdnf5-cli/.+"'
     Priority:        2
   # project includes
   - Regex:           '".+"'
