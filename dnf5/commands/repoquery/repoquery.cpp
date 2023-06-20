@@ -352,14 +352,15 @@ void RepoqueryCommand::configure() {
                          extras->get_value() || upgrades->get_value() || recent->get_value() ||
                          installonly->get_value();
     context.set_load_system_repo(system_repo_needed);
-    bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
-                             advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
-                             advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
-                             advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
-    if (updateinfo_needed) {
-        context.base.get_config().get_optional_metadata_types_option().add_item(
-            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
-    }
+    context.update_repo_metadata_from_advisory_options(
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
         available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||

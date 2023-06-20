@@ -136,6 +136,22 @@ void Context::update_repo_metadata_from_specs(const std::vector<std::string> & p
     }
 }
 
+void Context::update_repo_metadata_from_advisory_options(
+    const std::vector<std::string> & names,
+    bool security,
+    bool bugfix,
+    bool enhancement,
+    bool newpackage,
+    const std::vector<std::string> & severity,
+    const std::vector<std::string> & bzs,
+    const std::vector<std::string> & cves) {
+    bool updateinfo_needed = !names.empty() || security || bugfix || enhancement || newpackage || !severity.empty() ||
+                             !bzs.empty() || !cves.empty();
+    if (updateinfo_needed) {
+        base.get_config().get_optional_metadata_types_option().add_item(
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
+    }
+}
 
 void Context::load_repos(bool load_system) {
     libdnf5::repo::RepoQuery repos(base);

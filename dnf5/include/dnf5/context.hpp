@@ -55,6 +55,17 @@ public:
     /// Update required metadata types according to the provided `pkg_specs`.
     /// If a `pkg_spec` is a file pattern, the file lists need to be loaded.
     void update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs);
+    /// Update required metadata types according to the provided advisory options.
+    /// If any of the options is set we need to load updateinfo xml.
+    void update_repo_metadata_from_advisory_options(
+        const std::vector<std::string> & names,
+        bool security,
+        bool bugfix,
+        bool enhancement,
+        bool newpackage,
+        const std::vector<std::string> & severity,
+        const std::vector<std::string> & bzs,
+        const std::vector<std::string> & cves);
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system);
