@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_DB_HPP
 #define LIBDNF5_MODULE_MODULE_DB_HPP
 
-#include "libdnf5/base/base_weak.hpp"
 #include "system/state.hpp"
+
+#include "libdnf5/base/base_weak.hpp"
 
 #include <string>
 #include <utility>

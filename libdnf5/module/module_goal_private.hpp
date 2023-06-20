@@ -20,10 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_GOAL_PRIVATE_HPP
 #define LIBDNF5_MODULE_MODULE_GOAL_PRIVATE_HPP
 
-#include "libdnf5/module/module_sack.hpp"
-#include "libdnf5/module/module_sack_weak.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solver.hpp"
+
+#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 
 extern "C" {
 #include <solv/solver.h>

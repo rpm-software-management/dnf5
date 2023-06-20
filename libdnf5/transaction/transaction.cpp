@@ -26,11 +26,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/rpm.hpp"
 #include "db/trans.hpp"
 #include "db/trans_item.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include "libdnf5/transaction/comps_environment.hpp"
 #include "libdnf5/transaction/comps_group.hpp"
 #include "libdnf5/transaction/rpm_package.hpp"
 #include "libdnf5/transaction/transaction_item.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 namespace libdnf5::transaction {
 

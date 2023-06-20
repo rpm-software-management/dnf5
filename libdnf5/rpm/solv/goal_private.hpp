@@ -20,16 +20,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_SOLV_GOAL_PRIVATE_HPP
 #define LIBDNF5_RPM_SOLV_GOAL_PRIVATE_HPP
 
+#include "solv/id_queue.hpp"
+#include "solv/pool.hpp"
+#include "solv/solv_map.hpp"
+#include "solv/solver.hpp"
+
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 #include "libdnf5/comps/group/group.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
 #include "libdnf5/rpm/reldep.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
-#include "solv/id_queue.hpp"
-#include "solv/pool.hpp"
-#include "solv/solv_map.hpp"
-#include "solv/solver.hpp"
 
 #include <solv/solver.h>
 

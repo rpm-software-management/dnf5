@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_LOGGER_FACTORY_HPP
 #define LIBDNF5_LOGGER_FACTORY_HPP
 
-#include "libdnf5/base/base.hpp"
 #include "logger.hpp"
+
+#include "libdnf5/base/base.hpp"
 
 
 namespace libdnf5 {

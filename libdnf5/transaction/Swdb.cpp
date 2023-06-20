@@ -26,15 +26,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 //#include "../hy-query-private.hpp"
 //#include "../hy-subject.h"
+#include "utils/bgettext/bgettext-lib.h"
+
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package_set.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 //#include "../utils/filesystem.hpp"
 #include "Swdb.hpp"
 #include "Transformer.hpp"
-#include "libdnf5/rpm/package_sack_impl.hpp"
 #include "rpm_package.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
+
+#include "libdnf5/rpm/package_sack_impl.hpp"
 
 namespace libdnf5::transaction {
 

@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 
 #include "context.hpp"
+
 #include "libdnf5-cli/utils/userconfirm.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>

@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_ADVISORY_ADVISORY_PACKAGE_PRIVATE_HPP
 #define LIBDNF5_ADVISORY_ADVISORY_PACKAGE_PRIVATE_HPP
 
-#include "libdnf5/advisory/advisory_package.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv/pool.hpp"
+
+#include "libdnf5/advisory/advisory_package.hpp"
 
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>

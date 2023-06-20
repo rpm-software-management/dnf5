@@ -19,12 +19,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoclosure.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include "libdnf5-cli/argument_parser.hpp"
+
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/utils/format.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <iostream>
 

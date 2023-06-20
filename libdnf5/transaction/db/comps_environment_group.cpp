@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_environment_group.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/transaction/transaction.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <algorithm>
 #include <memory>

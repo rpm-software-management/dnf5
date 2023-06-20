@@ -19,11 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/package_info_sections.hpp"
 
+#include "utils/string.hpp"
+
 #include "libdnf5-cli/tty.hpp"
 #include "libdnf5-cli/utils/units.hpp"
+
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package_set.hpp"
-#include "utils/string.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_rpm_package.hpp"
 
 #include "../shared/private_accessor.hpp"
+
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/transaction/rpm_package.hpp"
 #include "libdnf5/transaction/transaction.hpp"

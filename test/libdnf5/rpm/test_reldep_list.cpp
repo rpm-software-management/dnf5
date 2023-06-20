@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_reldep_list.hpp"
 
 #include "../shared/utils.hpp"
+
 #include "libdnf5/rpm/reldep_list.hpp"
 
 

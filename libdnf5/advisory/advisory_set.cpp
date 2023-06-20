@@ -23,8 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory/advisory_package_private.hpp"
 #include "advisory_set_impl.hpp"
 #include "base/base_private.hpp"
-#include "libdnf5/advisory/advisory_set_iterator.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf5/advisory/advisory_set_iterator.hpp"
 
 
 namespace libdnf5::advisory {

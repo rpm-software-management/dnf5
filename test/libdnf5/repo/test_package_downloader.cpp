@@ -20,12 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_package_downloader.hpp"
 
 #include "../shared/utils.hpp"
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/repo/package_downloader.hpp"
-#include "libdnf5/rpm/package_query.hpp"
 #include "repo/temp_files_memory.hpp"
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/repo/package_downloader.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 
 #include <filesystem>
 

@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_temp_files_memory.hpp"
 
 #include "../shared/utils.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "repo/temp_files_memory.hpp"
+
+#include "libdnf5/common/exception.hpp"
 
 #include <fmt/format.h>
 

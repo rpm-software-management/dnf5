@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_COMPS_ENVIRONMENT_HPP
 
 #include "comps_group.hpp"
+
 #include "libdnf5/comps/group/package.hpp"
 
 #include <memory>

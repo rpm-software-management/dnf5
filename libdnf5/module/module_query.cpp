@@ -20,12 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/module/module_query.hpp"
 
+#include "module/module_sack_impl.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/module/nsvcap.hpp"
 #include "libdnf5/utils/patterns.hpp"
-#include "module/module_sack_impl.hpp"
 
 extern "C" {
 #include <solv/pool.h>

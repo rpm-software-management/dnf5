@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/advisoryinfo.hpp"
 
+#include "utils/string.hpp"
+
 #include "libdnf5/advisory/advisory_collection.hpp"
 #include "libdnf5/advisory/advisory_reference.hpp"
-#include "utils/string.hpp"
 
 namespace libdnf5::cli::output {
 

@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "trans_item.hpp"
 
+#include "repo.hpp"
+
 #include "libdnf5/transaction/transaction.hpp"
 #include "libdnf5/transaction/transaction_item.hpp"
-#include "repo.hpp"
 
 
 namespace libdnf5::transaction {

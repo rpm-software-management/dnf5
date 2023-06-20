@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_package.hpp"
 #include "advisory_reference.hpp"
 #include "advisory_set.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/rpm/package.hpp"

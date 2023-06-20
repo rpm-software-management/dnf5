@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5-cli/output/changelogs.hpp"
 
 #include "libdnf5-cli/tty.hpp"
+
 #include "libdnf5/rpm/package_set.hpp"
 
 #include <ctime>

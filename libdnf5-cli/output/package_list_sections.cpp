@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5-cli/output/package_list_sections.hpp"
 
 #include "libdnf5-cli/tty.hpp"
+
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package_set.hpp"
 

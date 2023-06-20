@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_conf.hpp"
 
 #include "../shared/utils.hpp"
+
 #include "libdnf5/repo/config_repo.hpp"
 
 

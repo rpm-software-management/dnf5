@@ -21,10 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/rpm/package_set.hpp"
 
 #include "base/base_private.hpp"
-#include "libdnf5/rpm/package_sack.hpp"
-#include "libdnf5/rpm/package_set_iterator.hpp"
 #include "package_set_impl.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf5/rpm/package_sack.hpp"
+#include "libdnf5/rpm/package_set_iterator.hpp"
 
 
 namespace libdnf5::rpm {

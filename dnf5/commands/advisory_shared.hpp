@@ -22,9 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_ARGUMENTS_HPP
 
 
-#include "libdnf5/base/base_weak.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
+
+#include "libdnf5/base/base_weak.hpp"
 
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>

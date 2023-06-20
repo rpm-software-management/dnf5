@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
 #define LIBDNF5_BASE_SOLVER_PROBLEMS_INTERNAL_HPP
 
+#include "rpm/solv/goal_private.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/solver_problems.hpp"
-#include "rpm/solv/goal_private.hpp"
 
 
 namespace libdnf5::base {

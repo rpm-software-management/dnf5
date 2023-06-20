@@ -22,12 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "dnf5daemon-server/dbus.hpp"
 #include "dnf5daemon-server/utils.hpp"
-#include "libdnf5-cli/exception.hpp"
-#include "libdnf5-cli/output/transaction_table.hpp"
-#include "libdnf5-cli/utils/userconfirm.hpp"
 #include "utils.hpp"
 #include "wrappers/dbus_goal_wrapper.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
+
+#include "libdnf5-cli/exception.hpp"
+#include "libdnf5-cli/output/transaction_table.hpp"
+#include "libdnf5-cli/utils/userconfirm.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf5/base/goal.hpp>

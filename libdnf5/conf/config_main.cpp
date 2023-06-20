@@ -21,11 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config.h"
 #include "config_utils.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/fs/file.hpp"
+
 #include "libdnf5/common/xdg.hpp"
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
-#include "utils/fs/file.hpp"
 
 #include <glob.h>
 

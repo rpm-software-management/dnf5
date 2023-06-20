@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_ADVISORY_ADVISORY_SACK_HPP
 #define LIBDNF5_ADVISORY_ADVISORY_SACK_HPP
 
+#include "solv/solv_map.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
-#include "solv/solv_map.hpp"
 
 
 namespace libdnf5::advisory {

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CLI_OUTPUT_TRANSACTIONINFO_HPP
 
 #include "libdnf5-cli/output/key_value_table.hpp"
+
 #include "libdnf5/transaction/transaction.hpp"
 
 

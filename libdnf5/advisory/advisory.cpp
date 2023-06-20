@@ -19,12 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/advisory/advisory.hpp"
 
-#include "libdnf5/advisory/advisory_collection.hpp"
-#include "libdnf5/advisory/advisory_reference.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
+
+#include "libdnf5/advisory/advisory_collection.hpp"
+#include "libdnf5/advisory/advisory_reference.hpp"
+#include "libdnf5/common/exception.hpp"
 
 #include <fmt/format.h>
 

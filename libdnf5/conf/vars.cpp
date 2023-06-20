@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/vars.hpp"
 
-#include "libdnf5/common/exception.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
+
+#include "libdnf5/common/exception.hpp"
 
 #include <dirent.h>
 #include <rpm/rpmdb.h>

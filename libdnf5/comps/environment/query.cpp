@@ -19,11 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/comps/environment/query.hpp"
 
+#include "solv/pool.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/comps.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 #include "libdnf5/comps/environment/sack.hpp"
-#include "solv/pool.hpp"
 
 extern "C" {
 #include <solv/pool.h>

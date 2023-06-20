@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/transaction/transaction_history.hpp"
 
 #include "db/trans.hpp"
+
 #include "libdnf5/base/base.hpp"
 
 

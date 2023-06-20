@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "librepo.hpp"
 
-#include "libdnf5/repo/repo_errors.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+
+#include "libdnf5/repo/repo_errors.hpp"
 
 namespace libdnf5::repo {
 

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF5_RPM_RELDEP_LIST_HPP
 
 #include "../shared/base_test_case.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
 

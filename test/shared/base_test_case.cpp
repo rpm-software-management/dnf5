@@ -21,6 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base_test_case.hpp"
 
 #include "base/base_impl.hpp"
+#include "private_accessor.hpp"
+#include "utils.hpp"
+#include "utils/string.hpp"
+
 #include "libdnf5/comps/environment/environment.hpp"
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/group.hpp"
@@ -28,9 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package_query.hpp"
-#include "private_accessor.hpp"
-#include "utils.hpp"
-#include "utils/string.hpp"
 
 #include <filesystem>
 #include <map>

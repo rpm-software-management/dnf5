@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5-cli/progressbar/widgets/size.hpp"
 
 #include "common.hpp"
+
 #include "libdnf5-cli/progressbar/progress_bar.hpp"
 
 

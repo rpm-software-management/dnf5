@@ -20,13 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_sack.hpp"
 
 #include "../module/module_sack_impl.hpp"
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/common/exception.hpp"
-#include "libdnf5/comps/environment/query.hpp"
-#include "libdnf5/comps/group/query.hpp"
-#include "libdnf5/conf/config_parser.hpp"
-#include "libdnf5/conf/option_bool.hpp"
-#include "libdnf5/repo/file_downloader.hpp"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
@@ -38,6 +31,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 #include "utils/xml.hpp"
+
+#include "libdnf5/base/base.hpp"
+#include "libdnf5/common/exception.hpp"
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/conf/config_parser.hpp"
+#include "libdnf5/conf/option_bool.hpp"
+#include "libdnf5/repo/file_downloader.hpp"
 
 extern "C" {
 #include <solv/testcase.h>

@@ -19,11 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_pgp.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/fs/temp.hpp"
+
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/logger/logger.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
-#include "utils/fs/temp.hpp"
 
 #include <memory>
 

@@ -19,9 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/logger/global_logger.hpp"
 
-#include "libdnf5/common/exception.hpp"
 #include "logger/glib_log_handler.hpp"
 #include "repo/librepo.hpp"
+
+#include "libdnf5/common/exception.hpp"
 
 namespace libdnf5 {
 
