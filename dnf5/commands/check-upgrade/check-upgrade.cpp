@@ -84,7 +84,7 @@ void CheckUpgradeCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     if (changelogs->get_value()) {
         context.base.get_config().get_optional_metadata_types_option().add(
-            libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
+            libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
     }
     context.update_repo_metadata_from_advisory_options(
         advisory_name->get_value(),
