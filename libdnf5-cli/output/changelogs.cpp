@@ -34,18 +34,15 @@ namespace libdnf5::cli::output {
 
 void print_changelogs(
     libdnf5::rpm::PackageQuery & query,
-    libdnf5::rpm::PackageQuery & full_package_query,
-    bool upgrades,
-    int32_t count,
-    int64_t since) {
+    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter) {
     // by_srpm
     std::map<std::string, std::vector<libdnf5::rpm::Package>> by_srpm;
     for (auto pkg : query) {
         by_srpm[pkg.get_source_name() + '/' + pkg.get_evr()].push_back(pkg);
     }
-
-    libdnf5::rpm::PackageQuery installed(full_package_query);
-    installed.filter_installed();
+    if (filter.first == ChangelogFilterType::UPGRADES) {
+        std::get<libdnf5::rpm::PackageQuery>(filter.second).filter_installed();
+    }
 
     for (auto & [name, packages] : by_srpm) {
         // Print header
@@ -71,9 +68,11 @@ void print_changelogs(
             });
 
         // filter changelog
-        if (upgrades) {
+        if (filter.first == ChangelogFilterType::UPGRADES) {
+            auto & installed = std::get<libdnf5::rpm::PackageQuery>(filter.second);
             // Find the newest changelog on the installed version of the
             // package, and filter out any changelogs newer than that
+
             libdnf5::rpm::PackageQuery query(installed);
             query.filter_name({packages[0].get_name()});
             time_t newest_timestamp = 0;
@@ -88,7 +87,8 @@ void print_changelogs(
             for (idx = 0; idx < changelogs.size() && changelogs[idx].timestamp > newest_timestamp; ++idx) {
             }
             changelogs.erase(changelogs.begin() + static_cast<int>(idx), changelogs.end());
-        } else if (count != 0) {
+        } else if (filter.first == ChangelogFilterType::COUNT) {
+            int64_t count = std::get<int64_t>(filter.second);
             if (count > 0) {
                 if (static_cast<size_t>(count) < changelogs.size()) {
                     changelogs.erase(changelogs.begin() + count, changelogs.end());
@@ -100,7 +100,8 @@ void print_changelogs(
                     changelogs.clear();
                 }
             }
-        } else if (since > 0) {
+        } else if (filter.first == ChangelogFilterType::SINCE) {
+            int64_t since = std::get<int64_t>(filter.second);
             size_t idx;
             for (idx = 0; idx < changelogs.size() && changelogs[idx].timestamp >= since; ++idx) {
             }

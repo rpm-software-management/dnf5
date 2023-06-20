@@ -179,7 +179,8 @@ void CheckUpgradeCommand::run() {
         // If any upgrades were found, print a table of them, and optionally print changelogs. Return exit code 100.
         sections->print();
         if (changelogs->get_value()) {
-            libdnf5::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
+            libdnf5::cli::output::print_changelogs(
+                upgrades_query, {libdnf5::cli::output::ChangelogFilterType::UPGRADES, full_package_query});
         }
         throw libdnf5::cli::SilentCommandExitError(100);
     } else if (

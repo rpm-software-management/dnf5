@@ -114,16 +114,23 @@ void ChangelogCommand::configure() {
 void ChangelogCommand::run() {
     auto & ctx = get_context();
 
+    std::pair<libdnf5::cli::output::ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter = {
+        libdnf5::cli::output::ChangelogFilterType::NONE, 0};
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, false);
+
     auto since = since_option->get_value();
     auto count = count_option->get_value();
     auto upgrades = upgrades_option->get_value();
 
     if (since > 0) {
         const auto since_time = static_cast<time_t>(since);
+        filter = {libdnf5::cli::output::ChangelogFilterType::SINCE, since};
         std::cout << "Listing changelogs since " << std::put_time(std::localtime(&since_time), "%c") << std::endl;
     } else if (count != 0) {
+        filter = {libdnf5::cli::output::ChangelogFilterType::COUNT, count};
         std::cout << "Listing only latest changelogs" << std::endl;
     } else if (upgrades) {
+        filter = {libdnf5::cli::output::ChangelogFilterType::UPGRADES, full_package_query};
         std::cout << "Listing only new changelogs since installed version of the package" << std::endl;
     } else {
         std::cout << "Listing all changelogs" << std::endl;
@@ -131,7 +138,6 @@ void ChangelogCommand::run() {
 
     //query
     libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, false);
     libdnf5::ResolveSpecSettings settings{
         .ignore_case = true, .with_nevra = true, .with_provides = false, .with_filenames = false};
     if (pkgs_spec_to_show_options->size() > 0) {
@@ -151,7 +157,7 @@ void ChangelogCommand::run() {
         query.filter_available();
     }
 
-    libdnf5::cli::output::print_changelogs(query, full_package_query, upgrades, count, since);
+    libdnf5::cli::output::print_changelogs(query, filter);
 }
 
 }  // namespace dnf5
