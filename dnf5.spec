@@ -471,12 +471,12 @@ Ruby bindings for the libdnf5-cli library.
 
 %if %{with plugin_actions}
 %package -n libdnf5-plugin-actions
-Summary:        Libdnf plugin that allows to run actions (external executables) on hooks
+Summary:        Libdnf5 plugin that allows to run actions (external executables) on hooks
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n libdnf5-plugin-actions
-Libdnf plugin that allows to run actions (external executables) on hooks.
+Libdnf5 plugin that allows to run actions (external executables) on hooks.
 
 %files -n libdnf5-plugin-actions
 %{_libdir}/libdnf5/plugins/actions.*
@@ -487,13 +487,13 @@ Libdnf plugin that allows to run actions (external executables) on hooks.
 
 %if %{with python_plugins_loader}
 %package -n python3-libdnf5-python-plugins-loader
-Summary:        Libdnf plugin that allows loading Python plugins
+Summary:        Libdnf5 plugin that allows loading Python plugins
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n python3-libdnf5-python-plugins-loader
-Libdnf plugin that allows loading Python plugins.
+Libdnf5 plugin that allows loading Python plugins.
 
 %files -n python3-libdnf5-python-plugins-loader
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*

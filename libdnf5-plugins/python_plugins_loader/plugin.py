@@ -15,17 +15,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-import libdnf
+import libdnf5
 
 
-class Plugin(libdnf.plugin.IPlugin):
+class Plugin(libdnf5.plugin.IPlugin):
     def __init__(self):
         super(Plugin, self).__init__()
         self.base = None
 
     @staticmethod
     def get_api_version():
-        return libdnf.plugin.Version(0, 1, 0)
+        return libdnf5.plugin.Version(0, 1, 0)
 
     @staticmethod
     def get_name():
@@ -33,12 +33,12 @@ class Plugin(libdnf.plugin.IPlugin):
 
     @staticmethod
     def get_version():
-        return libdnf.plugin.Version(0, 1, 0)
+        return libdnf5.plugin.Version(0, 1, 0)
 
     def get_attribute(self, name):
         attributes = {'author_name': 'Jaroslav Rohel',
                       'author_email': 'jrohel@redhat.com',
-                      'description': 'Libdnf plugin written in Python. Processes the LOAD_CONFIG_FROM_FILE hook '
+                      'description': 'Libdnf5 plugin written in Python. Processes the LOAD_CONFIG_FROM_FILE hook '
                                      'and writes the current value of the "skip_if_unavailable" option to the log.'}
         return attributes.get(name, None)
 
@@ -46,7 +46,7 @@ class Plugin(libdnf.plugin.IPlugin):
         self.base = base
 
     def hook(self, plugin_hook_id):
-        if plugin_hook_id == libdnf.plugin.HookId_LOAD_CONFIG_FROM_FILE:
+        if plugin_hook_id == libdnf5.plugin.HookId_LOAD_CONFIG_FROM_FILE:
             logger = self.base.get_logger()
             config = self.base.get_config()
             logger.info(self.get_name() + ' - skip_if_unavailable = ' +
