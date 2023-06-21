@@ -91,6 +91,11 @@ Options
 ``--contains-pkgs``
     | Show only groups containing packges with specified names. List option, supports globs.
 
+``--forcearch=<arch>``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
+
 Examples
 ========
 

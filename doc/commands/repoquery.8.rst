@@ -99,6 +99,10 @@ Options
 ``--info``
     | Use the verbose format for the output.
 
+``--forcearch=<arch>``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
 
 Examples
 ========

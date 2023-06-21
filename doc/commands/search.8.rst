@@ -46,6 +46,10 @@ Options
     | Search patterns also inside `Description` and `URL` fields.
     | By applying this option the search lists packages that match at least one of the keys (OR operation).
 
+``--forcearch=<arch>``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
 
 Examples
 ========
