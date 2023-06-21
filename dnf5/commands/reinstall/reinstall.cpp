@@ -51,6 +51,7 @@ void ReinstallCommand::set_argument_parser() {
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
     cmd.register_positional_arg(keys);
 
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
     create_downloadonly_option(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
@@ -65,6 +66,7 @@ void ReinstallCommand::configure() {
 
 void ReinstallCommand::run() {
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
     for (const auto & spec : pkg_specs) {
         goal->add_reinstall(spec);
     }
