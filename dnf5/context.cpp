@@ -133,6 +133,11 @@ void Context::update_repo_metadata_from_specs(const std::vector<std::string> & p
                 libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
             return;
         }
+        if (spec.starts_with('@')) {
+            base.get_config().get_optional_metadata_types_option().add_item(
+                libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
+            return;
+        }
     }
 }
 
