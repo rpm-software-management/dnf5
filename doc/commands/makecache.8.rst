@@ -36,3 +36,11 @@ for enabled repositories.
 
 It tries to avoid downloading whenever possible, e.g. when the local metadata hasn't
 expired yet or when the metadata timestamp hasn't changed.
+
+
+Options
+=======
+
+``--forcearch=<arch>``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.

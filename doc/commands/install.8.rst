@@ -74,6 +74,10 @@ Options
 ``--newpackage``
     | Consider only content contained in newpackage advisories.
 
+``--forcearch=<arch>``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
 
 Examples
 ========

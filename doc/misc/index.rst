@@ -7,6 +7,7 @@ Miscellaneous
     :maxdepth: 1
 
     comps.7
+    forcearch.7
     installroot.7
     specs.7
 
