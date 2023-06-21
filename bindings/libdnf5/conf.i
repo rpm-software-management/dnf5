@@ -128,7 +128,10 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 import re
 
 def _config_option_getter(config_object, option_name):
-    return getattr(config_object, option_name)().get_value()
+    try:
+        return getattr(config_object, option_name)().get_value()
+    except RuntimeError:
+        return None
 
 def _config_option_setter(config_object, option_name, value):
     getattr(config_object, option_name)().set(value)
