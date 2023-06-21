@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_REINSTALL_REINSTALL_HPP
 
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 
 #include <memory>
 #include <vector>
@@ -40,6 +41,7 @@ public:
 
 private:
     std::vector<std::string> pkg_specs;
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 };
 
 
