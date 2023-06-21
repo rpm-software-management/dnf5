@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/package_list_sections.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
@@ -56,6 +57,8 @@ void ListCommand::set_argument_parser() {
         });
     specs->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, true, false, false); });
     cmd.register_positional_arg(specs);
+
+    create_forcearch_option(*this);
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
