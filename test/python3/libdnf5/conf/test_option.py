@@ -70,3 +70,12 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         option.lock('')
 
         self.assertRaises(RuntimeError, option.set, False)
+
+    def test_get_unset_option_by_attribute(self):
+        config = self.base.get_config()
+        destdir = config.destdir
+        self.assertEqual(destdir, None)
+
+    def test_get_unknown_option_by_attribute(self):
+        config = self.base.get_config()
+        self.assertRaises(AttributeError, lambda: config.xyz)
