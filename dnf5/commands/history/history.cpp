@@ -54,14 +54,14 @@ void HistoryCommand::register_subcommands() {
     register_subcommand(std::make_unique<HistoryInfoCommand>(get_context()), query_commands_group);
 
     // software management commands
-    auto * software_management_commands_group = parser.add_new_group("history_software_management_commands");
-    software_management_commands_group->set_header("Software Management Commands:");
-    cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryReplayCommand>(get_context()), software_management_commands_group);
+    // auto * software_management_commands_group = parser.add_new_group("history_software_management_commands");
+    // software_management_commands_group->set_header("Software Management Commands:");
+    // cmd.register_group(software_management_commands_group);
+    // register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
+    // register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
+    // register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
+    // register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
+    // register_subcommand(std::make_unique<HistoryReplayCommand>(get_context()), software_management_commands_group);
 }
 
 void HistoryCommand::pre_configure() {
