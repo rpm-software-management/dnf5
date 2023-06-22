@@ -21,12 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module/module_sack_impl.hpp"
 #include "rpm/solv/goal_private.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
 #include <solv/queue.h>

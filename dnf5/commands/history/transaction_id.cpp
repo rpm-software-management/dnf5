@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_id.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
+
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 
 namespace dnf5 {

@@ -2,9 +2,8 @@
 #define DNF5_COMMANDS_TEMPLATE_ARGUMENTS_HPP
 
 
-#include "utils/bgettext/bgettext-lib.h"
-
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 
 namespace dnf5 {

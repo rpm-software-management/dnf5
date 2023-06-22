@@ -1,5 +1,5 @@
 # use any sources found under the current directory
-file(GLOB_RECURSE LIBDNF5_SOURCES *.cpp)
+file(GLOB_RECURSE LIBDNF5_SOURCES *.cpp *.c)
 
 # create config header file
 configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)

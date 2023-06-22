@@ -21,13 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5-cli/argument_parser.hpp"
 
 #include "output/argument_parser.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
 
 #include <fmt/format.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <cstring>
 #include <iomanip>

@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "solver_problems_internal.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
 
 

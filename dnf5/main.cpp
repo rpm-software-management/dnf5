@@ -46,7 +46,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf5-cli/output/transaction_table.hpp"
 #include "libdnf5-cli/utils/userconfirm.hpp"
@@ -62,6 +61,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/factory.hpp>
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
 #include <string.h>
 

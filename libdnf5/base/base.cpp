@@ -22,11 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base_impl.hpp"
 #include "conf/config.h"
 #include "solv/pool.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/dnf4convert/dnf4convert.hpp"
 
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <algorithm>
 #include <atomic>

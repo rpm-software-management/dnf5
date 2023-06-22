@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "clean.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
-
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <filesystem>
 #include <iostream>

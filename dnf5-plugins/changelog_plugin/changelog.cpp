@@ -19,14 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "changelog.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
-
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <ctime>
 #include <iomanip>

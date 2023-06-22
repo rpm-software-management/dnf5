@@ -26,10 +26,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 //#include "../hy-query-private.hpp"
 //#include "../hy-subject.h"
-#include "utils/bgettext/bgettext-lib.h"
-
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package_set.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
 //#include "../utils/filesystem.hpp"
 #include "Swdb.hpp"
 #include "Transformer.hpp"

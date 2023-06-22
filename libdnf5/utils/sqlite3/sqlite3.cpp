@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "sqlite3.hpp"
 
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf5::utils {

@@ -23,9 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "dnf5/context.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 
 namespace dnf5 {

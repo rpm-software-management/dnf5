@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_ARGUMENTS_HPP
 #define DNF5_COMMANDS_HISTORY_ARGUMENTS_HPP
 
-#include "utils/bgettext/bgettext-lib.h"
-
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 
 namespace dnf5 {

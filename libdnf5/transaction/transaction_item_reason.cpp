@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf5::transaction {

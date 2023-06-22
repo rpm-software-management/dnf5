@@ -27,10 +27,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
 #include "libdnf5/rpm/nevra.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
 
 #include <dirent.h>
 

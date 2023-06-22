@@ -30,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "transaction_impl.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
@@ -40,6 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/module/module_errors.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/rpm/reldep.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/patterns.hpp"
 
 #include <filesystem>

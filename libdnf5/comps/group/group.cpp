@@ -20,12 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/group/group.hpp"
 
 #include "solv/pool.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 #include "utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
 #include <solv/dataiterator.h>

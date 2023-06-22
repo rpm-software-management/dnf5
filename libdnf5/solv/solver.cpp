@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solver.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <filesystem>
 

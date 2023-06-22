@@ -19,9 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "library.hpp"
 
-#include "utils/bgettext/bgettext-lib.h"
-
 #include <dlfcn.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/format.hpp>
 
 namespace dnf5::utils {
