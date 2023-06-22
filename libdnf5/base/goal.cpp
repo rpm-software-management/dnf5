@@ -436,7 +436,7 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
     // to unify behaviour of upgrade and upgrade-minimal
     candidates.filter_priority();
 
-    // Since we want to satisfy all advisory pacakges we can keep just the latest
+    // Since we want to satisfy all advisory packages we can keep just the latest
     // (all lower EVR adv pkgs are satistified by the latests)
     // We also want to skip already resolved advisories.
     candidates.filter_latest_unresolved_advisories(advisories, installed, libdnf5::sack::QueryCmp::GTE);

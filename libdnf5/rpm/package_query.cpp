@@ -130,7 +130,7 @@ inline libdnf5::sack::QueryCmp remove_glob_when_unneeded(
  * :: it is installed
  * :: has the same name as pkg
  * :: arch of the installed pkg is upgradable to the new pkg. In RPM world that
- *    roughly means: if both pacakges are colored (contains ELF binaries and was
+ *    roughly means: if both packages are colored (contains ELF binaries and was
  *    built with internal dependency generator), they are not upgradable to each
  *    other (i.e. i386 package can not be upgraded to x86_64, neither the other
  *    way round). If one of them is noarch and the other one colored then the

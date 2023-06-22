@@ -69,7 +69,7 @@ void AdvisoryInfo::add_advisory(libdnf5::advisory::Advisory & advisory) {
         auto packages = collection.get_packages();
         if (!packages.empty()) {
             auto package_iter = packages.begin();
-            add_line("Pacakges", package_iter->get_nevra(), nullptr, group_collection);
+            add_line("Packages", package_iter->get_nevra(), nullptr, group_collection);
             package_iter++;
             while (package_iter != packages.end()) {
                 add_line("", package_iter->get_nevra(), nullptr, group_collection);

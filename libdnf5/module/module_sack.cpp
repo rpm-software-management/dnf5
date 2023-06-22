@@ -280,7 +280,7 @@ void ModuleSack::Impl::module_filtering() {
 
     auto [include_NEVRAs, exclude_NEVRAs, names, src_names, reldep_name_list] = collect_data_for_modular_filtering();
 
-    // Pakages from system, commandline, and hotfix repositories are not targets for modular filterring
+    // Packages from system, commandline, and hotfix repositories are not targets for modular filterring
     libdnf5::rpm::PackageQuery target_packages(base);
 
     // TODO(replace) "@System", "@commandline" by defined variables like in dnf4

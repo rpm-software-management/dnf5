@@ -55,7 +55,7 @@ public:
     //TODO(amatej): we should be able to get advisory information from a collection,
     //              returning new advisory object is one option but it might be better
     //              to set up so sort of inheritance among Advisory, AdvisoryCollection
-    //              and possibly AdvisoryPacakge, AdvisoryModule.
+    //              and possibly AdvisoryPackage, AdvisoryModule.
     /// Get Advisory this AdvisoryCollection belongs to.
     ///
     /// @return newly construted Advisory object of this AdvisoryCollection.

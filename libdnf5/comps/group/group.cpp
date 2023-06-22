@@ -125,13 +125,13 @@ std::vector<Package> Group::get_packages() {
     // Use only the first (highest priority) solvable for package lists
     Solvable * solvable = pool.id2solvable(group_ids[0].id);
 
-    // Load MANDATORY pacakges from solvable->requires
+    // Load MANDATORY packages from solvable->requires
     if (solvable->dep_requires) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_requires; *r_id; ++r_id) {
             packages.push_back(Package(pool.id2str(*r_id), PackageType::MANDATORY, ""));
         }
     }
-    // Load DEFAULT and CONDITIONAL pacakges from solvable->recommends
+    // Load DEFAULT and CONDITIONAL packages from solvable->recommends
     if (solvable->dep_recommends) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_recommends; *r_id; ++r_id) {
             if (strcmp(pool.id2rel(*r_id), "") == 0) {
@@ -141,7 +141,7 @@ std::vector<Package> Group::get_packages() {
             }
         }
     }
-    // Load OPTIONAL pacakges from solvable->suggests
+    // Load OPTIONAL packages from solvable->suggests
     if (solvable->dep_suggests) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_suggests; *r_id; ++r_id) {
             if (strcmp(pool.id2rel(*r_id), "") == 0) {

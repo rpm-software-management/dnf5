@@ -107,7 +107,7 @@ public:
     }
 
     /// Check whether this AdvisoryPackage is resolved (meaning there is a counterpart
-    /// package with lower or equal EVR and matching name and arch) in pkgs PacakgeSet.
+    /// package with lower or equal EVR and matching name and arch) in pkgs PackageSet.
     ///
     /// @param pkgs             libdnf5::rpm::PackageSet of packages to check
     ///
