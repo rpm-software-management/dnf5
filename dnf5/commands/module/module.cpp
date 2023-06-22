@@ -48,28 +48,28 @@ void ModuleCommand::register_subcommands() {
     auto & cmd = *get_argument_parser_command();
 
     // query commands
-    auto * query_commands_group = parser.add_new_group("module_query_commands");
-    query_commands_group->set_header("Query Commands:");
-    cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<ModuleListCommand>(get_context()), query_commands_group);
-    register_subcommand(std::make_unique<ModuleInfoCommand>(get_context()), query_commands_group);
-    register_subcommand(std::make_unique<ModuleProvidesCommand>(get_context()), query_commands_group);
+    // auto * query_commands_group = parser.add_new_group("module_query_commands");
+    // query_commands_group->set_header("Query Commands:");
+    // cmd.register_group(query_commands_group);
+    // register_subcommand(std::make_unique<ModuleListCommand>(get_context()), query_commands_group);
+    // register_subcommand(std::make_unique<ModuleInfoCommand>(get_context()), query_commands_group);
+    // register_subcommand(std::make_unique<ModuleProvidesCommand>(get_context()), query_commands_group);
 
     // stream management commands
     auto * stream_management_commands_group = parser.add_new_group("module_stream_management_commands");
     stream_management_commands_group->set_header("Stream Management Commands:");
     cmd.register_group(stream_management_commands_group);
     register_subcommand(std::make_unique<ModuleEnableCommand>(get_context()), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleSwitchToCommand>(get_context()), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleResetCommand>(get_context()), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleDisableCommand>(get_context()), stream_management_commands_group);
+    // register_subcommand(std::make_unique<ModuleSwitchToCommand>(get_context()), stream_management_commands_group);
+    // register_subcommand(std::make_unique<ModuleResetCommand>(get_context()), stream_management_commands_group);
+    // register_subcommand(std::make_unique<ModuleDisableCommand>(get_context()), stream_management_commands_group);
 
     // software management commands
-    auto * software_management_commands_group = parser.add_new_group("module_software_management_commands");
-    software_management_commands_group->set_header("Software Management Commands:");
-    cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<ModuleInstallCommand>(get_context()), software_management_commands_group);
-    register_subcommand(std::make_unique<ModuleRemoveCommand>(get_context()), software_management_commands_group);
+    // auto * software_management_commands_group = parser.add_new_group("module_software_management_commands");
+    // software_management_commands_group->set_header("Software Management Commands:");
+    // cmd.register_group(software_management_commands_group);
+    // register_subcommand(std::make_unique<ModuleInstallCommand>(get_context()), software_management_commands_group);
+    // register_subcommand(std::make_unique<ModuleRemoveCommand>(get_context()), software_management_commands_group);
 }
 
 void ModuleCommand::pre_configure() {
