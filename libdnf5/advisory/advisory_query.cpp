@@ -78,7 +78,7 @@ static void filter_dataiterator_internal(
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and more effective
+        // Removal of NOT CmpType makes following comparisons easier and more effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -113,7 +113,7 @@ static void filter_reference_by_type_and_id(
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and more effective
+        // Removal of NOT CmpType makes following comparisons easier and more effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -203,7 +203,7 @@ void AdvisoryQuery::filter_packages(const libdnf5::rpm::PackageSet & package_set
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and more effective
+        // Removal of NOT CmpType makes following comparisons easier and more effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
