@@ -21,7 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv/pool.hpp"
 #include "solv/reldep_parser.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
+
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
 extern "C" {

@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/log_event.hpp"
 
-#include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/format.hpp"
 
 namespace libdnf5::base {

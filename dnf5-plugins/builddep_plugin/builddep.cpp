@@ -19,13 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "builddep.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf5-cli/exception.hpp"
 
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <rpm/rpmbuild.h>
 
 #include <iostream>

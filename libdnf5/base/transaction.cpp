@@ -28,8 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
 #include "transaction_impl.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
 
@@ -38,6 +36,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/repo/package_downloader.hpp"
 #include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
 
 #include <fmt/format.h>

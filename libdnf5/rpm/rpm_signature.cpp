@@ -21,13 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo/repo_pgp.hpp"
 #include "rpm/rpm_log_guard.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
 #include "utils/url.hpp"
 
 #include "libdnf5/repo/file_downloader.hpp"
 #include "libdnf5/repo/repo.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <rpm/rpmcli.h>
 #include <rpm/rpmdb.h>

@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "temp_files_memory.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <toml.hpp>
 

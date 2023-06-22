@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
 #include "solv/solv_map.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -33,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/module/module_query.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
 #include "libdnf5/module/nsvcap.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <modulemd-2.0/modulemd.h>
 

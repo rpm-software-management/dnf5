@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_COPR_CONSTANTS_HPP
 #define DNF5_COMMANDS_COPR_CONSTANTS_HPP
 
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 static const char * const COPR_COMMAND_DESCRIPTION =
     _("Manage Copr repositories (add-ons provided by users/community/third-party)");

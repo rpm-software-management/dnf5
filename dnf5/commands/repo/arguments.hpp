@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_REPO_ARGUMENTS_HPP
 
 
-#include "utils/bgettext/bgettext-lib.h"
-
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 
 namespace dnf5 {

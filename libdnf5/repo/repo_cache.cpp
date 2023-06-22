@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "repo_cache_private.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/logger/logger.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf5::repo {

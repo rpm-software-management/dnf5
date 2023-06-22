@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/option_path.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>

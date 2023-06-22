@@ -22,8 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/url.hpp"
 
 #include "libdnf5-cli/utils/userconfirm.hpp"
@@ -37,6 +35,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/patterns.hpp>
 
 #include <algorithm>

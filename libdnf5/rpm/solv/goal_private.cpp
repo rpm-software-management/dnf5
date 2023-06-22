@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "goal_private.hpp"
 
 #include "solv/pool.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
 #include <solv/evr.h>

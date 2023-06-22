@@ -17,13 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "utils/bgettext/bgettext-mark-domain.h"
-
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <sys/wait.h>
 #include <unistd.h>
 

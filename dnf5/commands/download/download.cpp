@@ -20,13 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download.hpp"
 
 #include "dnf5/shared_options.hpp"
-#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <iostream>
 #include <map>

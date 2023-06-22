@@ -19,9 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/xdg.hpp"
 
-#include "utils/bgettext/bgettext-mark-domain.h"
-
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <pwd.h>
 #include <unistd.h>
