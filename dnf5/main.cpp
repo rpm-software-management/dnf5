@@ -145,6 +145,26 @@ void RootCommand::set_argument_parser() {
     });
     global_options_group->register_argument(quiet);
 
+    // --repofrompath argument
+    auto repofrompath = parser.add_new_named_arg("repofrompath");
+    repofrompath->set_long_name("repofrompath");
+    repofrompath->set_has_value(true);
+    repofrompath->set_arg_value_help("REPO_ID,REPO_PATH");
+    repofrompath->set_description("create additional repository using id and path");
+    repofrompath->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            auto val = std::string_view(value);
+            auto comma = val.find(',', 1);
+            if (comma == std::string::npos || comma == (val.size() - 1)) {
+                throw libdnf5::cli::ArgumentParserError(
+                    M_("repofrompath: Incorrect repoid and path specification \"{}\""), value);
+            }
+            ctx.repos_from_path.emplace_back(val.substr(0, comma), val.substr(comma + 1));
+            return true;
+        });
+    global_options_group->register_argument(repofrompath);
+
     // --setopt argument support
     auto setopt = parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
@@ -735,8 +755,11 @@ int main(int argc, char * argv[]) try {
 
         base.setup();
 
-        base.get_repo_sack()->create_repos_from_system_configuration();
-        any_repos_from_system_configuration = base.get_repo_sack()->size() > 0;
+        auto repo_sack = base.get_repo_sack();
+        repo_sack->create_repos_from_system_configuration();
+        any_repos_from_system_configuration = repo_sack->size() > 0;
+
+        repo_sack->create_repos_from_paths(context.repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
 
         context.apply_repository_setopts();
 
@@ -746,7 +769,7 @@ int main(int argc, char * argv[]) try {
             if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
                 context.load_repos(context.get_load_system_repo());
             } else if (context.get_load_system_repo()) {
-                context.base.get_repo_sack()->get_system_repo()->load();
+                repo_sack->get_system_repo()->load();
                 // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
                 context.base.get_rpm_package_sack()->load_config_excludes_includes();
             }

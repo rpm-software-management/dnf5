@@ -61,6 +61,7 @@ public:
 
     libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
+    std::vector<std::pair<std::string, std::string>> repos_from_path;
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 

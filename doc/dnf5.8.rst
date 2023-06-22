@@ -210,6 +210,15 @@ Following options are applicable in the general context for any ``dnf5`` command
     | This is a list option which can be specified multiple times.
     | Accepted values are ids, or a glob of ids.
 
+``--repofrompath=REPO_ID,REPO_PATH``
+    Specify a repository to add to the repositories only for this run. Can be used multiple times.
+
+    The new repository id is specified by ``REPO_ID`` and its baseurl by ``REPO_PATH``. Variables in both values are before creating the repo substituted.
+
+    The configuration of the new repository can be adjusted using options ``--setopt=REPO_ID.option=value``.
+
+    If you want only packages from this repository to be available, combine this option with ``--repo=REPO_ID`` switch.
+
 ``--releasever=RELEASEVER``
     | Override the value of the distribution release in configuration files.
     | This can affect cache paths, values in configuration files and mirrorlist URLs.
