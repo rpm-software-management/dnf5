@@ -66,6 +66,12 @@ public:
     /// The files in the directories are read in alphabetical order.
     void create_repos_from_reposdir();
 
+    /// Create new repositories from ids and paths.
+    /// @param repos_paths Vector of <ID,PATH> pairs. The "baseurl" parameter of the new repo is set to the PATH, "name" and "id" to the ID. Both values can be enriched by the repository variables which are substituted before creating the repo.
+    /// @param priority Priority with which the name and baseurl attributes of the new repo are set.
+    void create_repos_from_paths(
+        const std::vector<std::pair<std::string, std::string>> & repos_paths, libdnf5::Option::Priority priority);
+
     /// Creates new repositories from the Base's configuration file (the /
     /// "config_file_path" configuration option) and from directories defined by
     /// the "reposdir" configuration option.
