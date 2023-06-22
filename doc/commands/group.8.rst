@@ -89,7 +89,7 @@ Options
     | Used with ``install`` and ``remove`` commands to operate exclusively on the groups without manipulating any packages.
 
 ``--contains-pkgs``
-    | Show only groups containing packges with specified names. List option, supports globs.
+    | Show only groups containing packages with specified names. List option, supports globs.
 
 ``--forcearch=<arch>``
     | Force the use of a specific architecture.

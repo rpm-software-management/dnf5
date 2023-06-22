@@ -97,7 +97,7 @@ public:
     //TODO(amatej): we should be able to get Advisory and AdvisoryCollection information
     //              from a package, returning new advisory object is one option but it might
     //              be better to set up so sort of inheritance among Advisory, AdvisoryCollection,
-    //              AdvisoryPacakge and AdvisoryModule.
+    //              AdvisoryPackage and AdvisoryModule.
     /// Get Advisory this AdvisoryPackage belongs to.
     ///
     /// @return newly construted Advisory object of this AdvisoryPackage.
