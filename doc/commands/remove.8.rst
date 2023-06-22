@@ -32,8 +32,8 @@ Description
 ===========
 
 The ``remove`` command in ``DNF5`` is used for removing installed packages from the system.
-If you want to remove also all dependencies that are no longer needed by any other package,
-set the ``clean_requirements_on_remove`` configuration parameter to ``True``.
+If you want to keep the dependencies that were installed together with the given package,
+set the ``clean_requirements_on_remove`` configuration option to ``False``.
 
 
 Examples
