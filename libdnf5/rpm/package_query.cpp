@@ -480,7 +480,7 @@ void PackageQuery::filter_name(const std::vector<std::string> & patterns, libdnf
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and more effective
+        // Removal of NOT CmpType makes following comparisons easier and more effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -686,7 +686,7 @@ void PackageQuery::filter_arch(const std::vector<std::string> & patterns, libdnf
     libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -864,7 +864,7 @@ inline static void filter_nevra_internal_str(
 void PackageQuery::filter_nevra(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -890,7 +890,7 @@ void PackageQuery::filter_nevra(const std::vector<std::string> & patterns, libdn
 void PackageQuery::filter_nevra(const libdnf5::rpm::Nevra & pattern, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -992,7 +992,7 @@ inline static void filter_version_internal(
 void PackageQuery::filter_version(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1060,7 +1060,7 @@ inline static void filter_release_internal(
 void PackageQuery::filter_release(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1110,7 +1110,7 @@ void PackageQuery::filter_release(const std::vector<std::string> & patterns, lib
 void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1170,7 +1170,7 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
 void PackageQuery::filter_sourcerpm(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1228,7 +1228,7 @@ void PackageQuery::filter_sourcerpm(const std::vector<std::string> & patterns, l
 void PackageQuery::filter_epoch(const std::vector<unsigned long> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1301,7 +1301,7 @@ void PackageQuery::filter_epoch(const std::vector<unsigned long> & patterns, lib
 void PackageQuery::filter_epoch(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1377,7 +1377,7 @@ static void filter_dataiterator_internal(
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and more effective
+        // Removal of NOT CmpType makes following comparisons easier and more effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1444,7 +1444,7 @@ void PackageQuery::filter_url(const std::vector<std::string> & patterns, libdnf5
 void PackageQuery::filter_location(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1479,7 +1479,7 @@ void PackageQuery::filter_location(const std::vector<std::string> & patterns, li
 void PackageQuery::filter_provides(const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1539,7 +1539,7 @@ void PackageQuery::PQImpl::str2reldep_internal(
 void PackageQuery::filter_provides(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1581,7 +1581,7 @@ void PackageQuery::PQImpl::filter_reldep(
     PackageSet & pkg_set, Id libsolv_key, libdnf5::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 
@@ -1971,7 +1971,7 @@ void PackageQuery::PQImpl::filter_sorted_advisory_pkgs(
 
     bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
     if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
+        // Removal of NOT CmpType makes following comparisons easier and effective
         cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
     }
 

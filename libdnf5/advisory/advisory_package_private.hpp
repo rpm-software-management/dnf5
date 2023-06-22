@@ -52,7 +52,7 @@ public:
     /// Compare NEVRAs of two AdvisoryPackages
     ///
     /// @param first        First AdvisoryPackage to compare.
-    /// @param second       Secondf AdvisoryPackage to compare.
+    /// @param second       Second AdvisoryPackage to compare.
     /// @return True if first AdvisoryPackage has smaller NEVRA, False otherwise.
     static bool nevra_compare_lower_id(const AdvisoryPackage & first, const AdvisoryPackage & second) {
         if (first.p_impl->name != second.p_impl->name)
