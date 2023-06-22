@@ -1,0 +1,124 @@
+# Georgian translation for libdnf5-cli.
+# Copyright (C) 2023, libdnf5-cli authors.
+# This file is distributed under the same license as the libdnf5-cli package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libdnf5-cli\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"PO-Revision-Date: 2023-06-21 20:45+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.1\n"
+
+#: argument_parser.cpp:63
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" დაუშვებელია მითითებულ არგუმენტთან \"{}\" ერთად"
+
+#: argument_parser.cpp:65
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "\"{}\" დაუშვებელია ბრძანებაში \"{}\""
+
+#: argument_parser.cpp:67
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" დაუშვებელია პოზიციურ არგუმენტთან \"{}\" ერთად"
+
+#: argument_parser.cpp:77
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "არგუმენტის id \"{}\" უკვე რეგისტრირებულია ჯგუფში \"{}\""
+
+#: argument_parser.cpp:85
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "არასწორი სიმბოლო '.' არგუმენტში id-ით \"{}\""
+
+#: argument_parser.cpp:200 argument_parser.cpp:205
+msgid "Too few values for positional argument \"{}\""
+msgstr "არასაკმარისი მნიშვნელობა პოზიციური არგუმენტისთვის \"{}\""
+
+#: argument_parser.cpp:245
+msgid "Missing value for named argument \"--{}\""
+msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
+
+#: argument_parser.cpp:253
+msgid "Unexpected value for named argumend \"--{}\""
+msgstr "მოულოდნელი მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
+
+#: argument_parser.cpp:297
+msgid "Missing value for named argument \"-{}\""
+msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"-{}\""
+
+#: argument_parser.cpp:433
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "ბრძანების ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:444
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "მითითებული არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:454
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "პოზიციური არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:464
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "ჯგუფის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:474
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" ქვებრძანებას ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:482
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" მითითებულ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:490
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" პოზიციურ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:497
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" ჯგუფს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:589 argument_parser.cpp:712
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "უცნობი არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:599 argument_parser.cpp:722
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "აკლია პოზიციური არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
+
+#. print usage
+#: argument_parser.cpp:784
+msgid "Usage:"
+msgstr "გამოყენება:"
+
+#: argument_parser.cpp:792
+msgid "Description:"
+msgstr "აღწერა:"
+
+#: argument_parser.cpp:1063
+msgid "Named argument with path id \"{}\" not found"
+msgstr "მითითებული არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+
+#: argument_parser.cpp:1118
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "პოზიციური არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+
+#: exception.cpp:29
+msgid "Operation aborted by the user."
+msgstr "ოპერაცია გაუქმებულია მომხმარებლის მიერ."
+
+#: exception.cpp:32
+msgid "Failed to resolve the transaction"
+msgstr "ტრანზაქციის ამოხსნის შეცდომა"
+
+#: session.cpp:81
+msgid "Missing command"
+msgstr "ნაკლული ბრძანება"

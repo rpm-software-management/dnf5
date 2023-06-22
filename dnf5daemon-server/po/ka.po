@@ -1,0 +1,27 @@
+# Georgian translation for dnf5daemon-server.
+# Copyright (C) 2023, dnf5daemon-server authors.
+# This file is distributed under the same license as the dnf5daemon-server package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dnf5daemon-server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"PO-Revision-Date: 2023-06-21 20:34+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.1\n"
+
+#: threads_manager.cpp:95
+msgid "Failed to create locale \"{}\"."
+msgstr "ლოკალის (\"{}\") შექმნის შეცდომა."
+
+#: threads_manager.cpp:100
+msgid "Failed to use locale \"{}\"."
+msgstr "ლოკალის (\"{}\") გამოყენების შეცდომა."

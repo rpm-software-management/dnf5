@@ -1,0 +1,248 @@
+# Georgian translation for dnf5.
+# Copyright (C) 2023, dnf5 authors.
+# This file is distributed under the same license as the dnf5 package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dnf5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"PO-Revision-Date: 2023-06-21 20:33+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.1\n"
+
+#: commands/advisory/advisory_info.hpp:33
+msgid "Print details about advisories"
+msgstr "რეკომენდაციების შესახებ დეტალების გამოტანა"
+
+#: commands/advisory/advisory_list.hpp:33
+msgid "List advisories"
+msgstr "რეკომენდაციების ჩვენება"
+
+#: commands/advisory/advisory_summary.cpp:39
+msgid "All"
+msgstr "ყველა"
+
+#: commands/advisory/advisory_summary.cpp:43
+msgid "Installed"
+msgstr "დაყენებული"
+
+#: commands/advisory/advisory_summary.cpp:47
+msgid "Updates"
+msgstr "განახლებები"
+
+#: commands/advisory/advisory_summary.cpp:55
+msgid "Available"
+msgstr "ხელმისაწვდომი"
+
+#: commands/advisory/advisory_summary.hpp:33
+msgid "Print summary of advisories"
+msgstr "რეკომენდაციების მიმოხილვის ჩვენება"
+
+#: commands/advisory/arguments.hpp:35
+msgid "Show advisories containing any version of installed packages."
+msgstr ""
+"დაყენებული პაკეტების ნებისმიერი ვერსიის შემცველი რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:46
+msgid "Show advisories containing newer versions of installed packages."
+msgstr ""
+"დაყენებული პაკეტების უფრო ახალი ვერსიის შემცველი რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:58
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"დაყენებული პაკეტების იგივე ან უფრო ძველი ვერსიის შემცველი რეკომენდაციების "
+"ჩვენება."
+
+#: commands/advisory/arguments.hpp:70
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ უფრო ახალ ვერსიებს დაყენებული "
+"პაკეტების, რომლებისთვისაც უფრო ახალი ვერსიებია ხელმისაწვდომი."
+
+#: commands/advisory/arguments.hpp:83
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"მხოლოდ იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც "
+"აქვთ შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
+
+#: commands/advisory/arguments.hpp:84
+msgid "PACKAGE_NAME,..."
+msgstr "PACKAGE_NAME,..."
+
+#: commands/advisory/arguments.hpp:91
+msgid "List of patterns matched against advisory names."
+msgstr "შაბლონების შია, რომლებიც რეკომენდაციის სახელებს ემთხვევა."
+
+#: commands/advisory/arguments.hpp:101
+msgid "Show only advisories referencing a bugzilla."
+msgstr "მხოლოდ Bugzilla-ზე მითითებული რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:108
+msgid "Show only advisories referencing a CVE."
+msgstr "მხოლოდ CVE-ზე მითითებული რეკომენდაციების ჩვენება."
+
+#: commands/advisory_shared.hpp:114
+msgid ""
+"Consider only content contained in advisories with specified name. List "
+"option."
+msgstr ""
+"მხოლოდ მითითებული სახელის მქონე რეკომენდაციებში არსებული შემცველობის "
+"გათვალისწინება. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:115
+msgid "ADVISORY_NAME,..."
+msgstr "ADVISORY_NAME,..."
+
+#: commands/advisory_shared.hpp:122
+msgid "Consider only content contained in security advisories."
+msgstr ""
+"მხოლოდ უსაფრთხოების რეკომენდაციებში არსებული შემცველობის გათვალისწინება."
+
+#: commands/advisory_shared.hpp:129
+msgid "Consider only content contained in bugfix advisories."
+msgstr ""
+"მხოლოდ შეცდომების გასწორების რეკომენდაციებში არსებული შემცველობის "
+"გათვალისწინება."
+
+#: commands/advisory_shared.hpp:137
+msgid "Consider only content contained in enhancement advisories."
+msgstr ""
+"მხოლოდ გაფართოების რეკომენდაციებში არსებული შემცველობის გათვალისწინება."
+
+#: commands/advisory_shared.hpp:145
+msgid "Consider only content contained in newpackage advisories."
+msgstr ""
+"მხოლოდ ახალი პაკეტის რეკომენდაციებში არსებული შემცველობის გათვალისწინება."
+
+#: commands/advisory_shared.hpp:156
+msgid ""
+"Consider only content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"მხოლოდ მითითებული სიმძიმის მქონე რეკომენდაციებში არსებული შემცველობის "
+"გათვალისწინება. სიის პარამეტრი. შეიძლება იყოს \"critical\" (კრიტიკული), "
+"\"important\" (მნიშვნელოვანი), \"moderate\" (საშუალო), \"low\" (დაბალი), ან "
+"\"none\" (არც ერთი)."
+
+#: commands/advisory_shared.hpp:158
+msgid "ADVISORY_SEVERITY,..."
+msgstr "ADVISORY_SEVERITY,..."
+
+#: commands/advisory_shared.hpp:182
+msgid ""
+"Consider only content contained in advisories that fix a Bugzilla ID, Eg. "
+"123123. List option."
+msgstr ""
+"მხოლოდ იმ შემცველობის გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ Bugzilla ID-ს ასწორებენ. მაგ: 123123. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:183
+msgid "BUGZILLA_ID,..."
+msgstr "BUGZILLA_ID,..."
+
+#: commands/advisory_shared.hpp:193
+msgid ""
+"Consider only content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"მხოლოდ იმ შემცველობის გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ CVE ID-ს (Common Vulnerabilities and Exposures) ასწორებენ. მაგ: "
+"CVE-2201-0123. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:195
+msgid "CVE_ID,..."
+msgstr "CVE_ID,..."
+
+#: commands/environment/arguments.hpp:34
+msgid "Show only available environments."
+msgstr "მხოლოდ ხელმისაწვდომი გარემოების ჩვენება."
+
+#: commands/environment/arguments.hpp:41
+msgid "Show only installed environments."
+msgstr "მხოლოდ დაყენებული გარემოების ჩვენება."
+
+#: commands/environment/arguments.hpp:48
+msgid "Pattern matching environment IDs."
+msgstr "გარემოს ID-ების შესაბამისი შაბლონი."
+
+#: commands/group/arguments.hpp:35
+msgid "Show only available groups."
+msgstr "მხოლოდ ხელმისაწვდომი ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:42
+msgid "Show also hidden groups."
+msgstr "დამალული ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:49
+msgid "Show only installed groups."
+msgstr "მხოლოდ დაყენებული ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:56
+msgid "Pattern matching group IDS."
+msgstr "ჯგუფის ID-ების შესაბამისი შაბლონი."
+
+#: commands/group/arguments.hpp:65
+msgid "Include optional packages from group."
+msgstr "ჯგუფიდან არასავალდებულო პაკეტების ჩართვა."
+
+#: commands/history/arguments.hpp:35
+msgid "Transaction ID"
+msgstr "ტრანსაქციის ID"
+
+#: commands/history/arguments.hpp:42
+msgid "Reverse the order of transactions."
+msgstr "ტრანზაქციების მიმდევრობის შებრუნება."
+
+#: commands/history/transaction_id.cpp:31
+msgid ""
+"Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
+"is \"NUMBER\", \"last\" or \"last-NUMBER\"."
+msgstr ""
+"არასწორი ტრანზაქციის ID-ის დიაპაზონი \"{}\". მოველოდი \"ID\"-ს ან \"ID.ID\"-"
+"ს, სადაც ID რიცხვი, \"last\" (ბოლო) ან \"last-რიცხვია\"."
+
+#: commands/repo/arguments.hpp:36
+msgid "Show all repositories."
+msgstr "ყველა რეპოზიტორიის ჩვენება."
+
+#: commands/repo/arguments.hpp:43
+msgid "Show enabled repositories (default)."
+msgstr "ჩართული რეპოზიტორიების ჩვენება (ნაგულისხმები)."
+
+#: commands/repo/arguments.hpp:50
+msgid "Show disabled repositories."
+msgstr "გამორთული რეპოზიტორიების ჩვენება."
+
+#: commands/repo/arguments.hpp:57
+msgid "Pattern matching repo IDs."
+msgstr "რეპოზიტორიის ID-ების შესაბამისი შაბლონი."
+
+#: commands/shared_options.hpp:33
+msgid "Allow erasing of installed packages to resolve problems"
+msgstr "პრობლემების გადასაჭრელად დაუშვით დაყენებული პაკეტების წაშლა"
+
+#: context.cpp:778
+msgid "Signature verification failed"
+msgstr "ხელმოწერის გადამოწმების შეცდომა"
+
+#: library.cpp:34
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "გაზიარებული ბიბლიოთეკის ფაილის ჩატვირთვის შეცდომა \"{}\": {}"
+
+#: library.cpp:49
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
