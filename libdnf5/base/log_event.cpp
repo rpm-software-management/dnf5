@@ -123,7 +123,7 @@ std::string LogEvent::to_string(
                 throw std::invalid_argument("Incorrect number of elements for INSTALLED_LOWEST_VERSION");
             }
             return ret.append(utils::sformat(
-                _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
+                _("The lowest available version of the \"{}\" package is already installed, cannot downgrade it."),
                 *additional_data.begin()));
         }
         case GoalProblem::INSTALLED_IN_DIFFERENT_VERSION:
