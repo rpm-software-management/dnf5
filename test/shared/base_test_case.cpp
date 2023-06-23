@@ -25,13 +25,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 #include "utils/string.hpp"
 
-#include "libdnf5/comps/environment/environment.hpp"
-#include "libdnf5/comps/environment/query.hpp"
-#include "libdnf5/comps/group/group.hpp"
-#include "libdnf5/comps/group/query.hpp"
-#include "libdnf5/conf/const.hpp"
-#include "libdnf5/rpm/nevra.hpp"
-#include "libdnf5/rpm/package_query.hpp"
+#include <libdnf5/comps/environment/environment.hpp>
+#include <libdnf5/comps/environment/query.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/comps/group/query.hpp>
+#include <libdnf5/conf/const.hpp>
+#include <libdnf5/rpm/nevra.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <filesystem>
 #include <map>

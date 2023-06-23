@@ -23,17 +23,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "system/state.hpp"
 
-#include "libdnf5/advisory/advisory_set.hpp"
-#include "libdnf5/base/transaction.hpp"
-#include "libdnf5/base/transaction_package.hpp"
-#include "libdnf5/comps/environment/environment.hpp"
-#include "libdnf5/comps/environment/query.hpp"
-#include "libdnf5/comps/group/group.hpp"
-#include "libdnf5/comps/group/query.hpp"
-#include "libdnf5/rpm/package_query.hpp"
-#include "libdnf5/rpm/package_set.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/advisory/advisory_set.hpp>
+#include <libdnf5/base/transaction.hpp>
+#include <libdnf5/base/transaction_package.hpp>
+#include <libdnf5/comps/environment/environment.hpp>
+#include <libdnf5/comps/environment/query.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/comps/group/query.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <iterator>
 #include <vector>

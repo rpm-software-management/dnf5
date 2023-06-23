@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../shared/utils.hpp"
 #include "repo/temp_files_memory.hpp"
 
-#include "libdnf5/common/exception.hpp"
-
 #include <fmt/format.h>
+#include <libdnf5/common/exception.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TempFilesMemoryTest);

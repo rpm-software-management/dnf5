@@ -19,18 +19,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
-#include "libdnf5-cli/output/changelogs.hpp"
-#include "libdnf5-cli/output/repoquery.hpp"
-
-#include "libdnf5/utils/patterns.hpp"
-
 #include <dnf5/shared_options.hpp>
+#include <libdnf5-cli/output/changelogs.hpp>
+#include <libdnf5-cli/output/repoquery.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/patterns.hpp>
 
 #include <iostream>
 

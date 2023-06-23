@@ -24,9 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/base_test_case.hpp"
 
-#include "libdnf5/rpm/package_set.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <memory>
 

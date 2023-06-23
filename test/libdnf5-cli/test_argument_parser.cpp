@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5-cli/argument_parser.hpp"
-
-#include "libdnf5/conf/option_bool.hpp"
-#include "libdnf5/conf/option_string.hpp"
+#include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/conf/option_string.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ArgumentParserTest);

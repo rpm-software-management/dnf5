@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
-#include "libdnf5/advisory/advisory_collection.hpp"
-#include "libdnf5/advisory/advisory_reference.hpp"
+#include <libdnf5/advisory/advisory_collection.hpp>
+#include <libdnf5/advisory/advisory_reference.hpp>
 
 namespace libdnf5::cli::output {
 

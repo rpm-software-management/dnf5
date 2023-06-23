@@ -24,10 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_case_fixture.hpp"
 #include "utils/fs/temp.hpp"
 
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/repo/repo_sack.hpp"
-#include "libdnf5/rpm/package.hpp"
-#include "libdnf5/rpm/package_sack.hpp"
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/repo/repo_sack.hpp>
+#include <libdnf5/rpm/package.hpp>
+#include <libdnf5/rpm/package_sack.hpp>
 
 #include <string>
 

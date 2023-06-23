@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_set.hpp"
 
-#include "libdnf5/common/set.hpp"
+#include <libdnf5/common/set.hpp>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SetTest);
 

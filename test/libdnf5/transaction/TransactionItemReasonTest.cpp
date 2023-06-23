@@ -23,13 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "TransactionItemReasonTest.hpp"
 
-#include "libdnf5/transaction/Swdb.hpp"
-#include "libdnf5/transaction/Transformer.hpp"
-#include "libdnf5/transaction/comps_environment.hpp"
-#include "libdnf5/transaction/comps_group.hpp"
-#include "libdnf5/transaction/rpm_package.hpp"
-#include "libdnf5/transaction/transaction.hpp"
-#include "libdnf5/transaction/transaction_item.hpp"
+#include <libdnf5/transaction/Swdb.hpp>
+#include <libdnf5/transaction/Transformer.hpp>
+#include <libdnf5/transaction/comps_environment.hpp>
+#include <libdnf5/transaction/comps_group.hpp>
+#include <libdnf5/transaction/rpm_package.hpp>
+#include <libdnf5/transaction/transaction.hpp>
+#include <libdnf5/transaction/transaction_item.hpp>
 
 #include <cstdio>
 #include <iostream>

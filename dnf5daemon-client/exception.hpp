@@ -16,10 +16,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_CLIENT_EXCEPTION_HPP
 #define DNF5DAEMON_CLIENT_EXCEPTION_HPP
 
-#include "libdnf5-cli/exception.hpp"
-#include "libdnf5-cli/exit-codes.hpp"
-
-#include "libdnf5/common/exception.hpp"
+#include <libdnf5-cli/exception.hpp>
+#include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5/common/exception.hpp>
 
 namespace dnfdaemon::client {
 

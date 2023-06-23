@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/comps/group/query.hpp"
+#include <libdnf5/comps/group/query.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupQueryTest);

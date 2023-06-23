@@ -47,15 +47,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "plugins.hpp"
 #include "utils.hpp"
 
-#include "libdnf5-cli/output/transaction_table.hpp"
-#include "libdnf5-cli/utils/userconfirm.hpp"
-
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/common/xdg.hpp>
 #include <libdnf5/logger/factory.hpp>

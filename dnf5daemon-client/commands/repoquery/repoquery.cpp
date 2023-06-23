@@ -22,10 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
 
-#include "libdnf5-cli/output/repoquery.hpp"
-
 #include <dnf5daemon-server/dbus.hpp>
 #include <fmt/format.h>
+#include <libdnf5-cli/output/repoquery.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>

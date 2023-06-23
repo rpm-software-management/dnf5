@@ -20,9 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_COPR_JSON_HPP
 #define DNF5_COMMANDS_COPR_JSON_HPP
 
-#include "libdnf5/base/base.hpp"
-
 #include <json.h>
+#include <libdnf5/base/base.hpp>
 
 
 class Json {

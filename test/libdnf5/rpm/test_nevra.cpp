@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/rpm/nevra.hpp"
+#include <libdnf5/rpm/nevra.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(NevraTest);

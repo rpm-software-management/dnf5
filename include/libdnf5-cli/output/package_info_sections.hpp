@@ -23,8 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_list_sections.hpp"
 
-#include "libdnf5/rpm/package_set.hpp"
-
+#include <libdnf5/rpm/package_set.hpp>
 #include <libsmartcols/libsmartcols.h>
 
 #include <string>

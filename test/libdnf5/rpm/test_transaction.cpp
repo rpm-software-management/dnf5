@@ -22,11 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/base/goal.hpp"
-#include "libdnf5/base/transaction_package.hpp"
-#include "libdnf5/repo/package_downloader.hpp"
-#include "libdnf5/rpm/transaction_callbacks.hpp"
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/transaction_package.hpp>
+#include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/rpm/transaction_callbacks.hpp>
 
 #include <filesystem>
 

@@ -24,10 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
-#include "libdnf5/base/base_weak.hpp"
-
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
+#include <libdnf5/base/base_weak.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 #include <optional>

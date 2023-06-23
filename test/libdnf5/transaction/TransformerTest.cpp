@@ -23,12 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "TransformerTest.hpp"
 
-#include "libdnf5/transaction/Swdb.hpp"
-#include "libdnf5/transaction/rpm_package.hpp"
-#include "libdnf5/transaction/transaction.hpp"
-#include "libdnf5/transaction/transaction_item.hpp"
-
 #include <json.h>
+#include <libdnf5/transaction/Swdb.hpp>
+#include <libdnf5/transaction/rpm_package.hpp>
+#include <libdnf5/transaction/transaction.hpp>
+#include <libdnf5/transaction/transaction_item.hpp>
 
 #include <set>
 #include <sstream>

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/exception.hpp"
 
-#include "libdnf5/conf/option.hpp"
+#include <libdnf5/conf/option.hpp>
 
 #include <functional>
 #include <memory>
