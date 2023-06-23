@@ -80,7 +80,7 @@ msgstr ""
 
 #: base/log_event.cpp:104
 msgid ""
-"Package \"{}\" of lowest version already installed, cannot downgrade it."
+"The lowest available version of the \"{}\" package is already installed, cannot downgrade it."
 msgstr ""
 
 #: base/log_event.cpp:110
