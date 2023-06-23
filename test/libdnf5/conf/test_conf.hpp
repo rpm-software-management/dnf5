@@ -23,10 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/test_case_fixture.hpp"
 
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/logger/log_router.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/logger/log_router.hpp>
 
 
 class ConfTest : public TestCaseFixture {

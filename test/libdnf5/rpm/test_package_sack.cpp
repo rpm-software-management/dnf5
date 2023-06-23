@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/rpm/package_sack.hpp"
-#include "libdnf5/rpm/package_set.hpp"
+#include <libdnf5/rpm/package_sack.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <filesystem>
 #include <set>

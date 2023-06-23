@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_reldep.hpp"
 
-#include "libdnf5/rpm/reldep.hpp"
+#include <libdnf5/rpm/reldep.hpp>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepTest);
 

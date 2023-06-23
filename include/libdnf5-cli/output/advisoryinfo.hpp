@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/key_value_table.hpp"
 
-#include "libdnf5/advisory/advisory.hpp"
+#include <libdnf5/advisory/advisory.hpp>
 
 
 namespace libdnf5::cli::output {

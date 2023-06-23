@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/repo/config_repo.hpp"
+#include <libdnf5/repo/config_repo.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConfTest);

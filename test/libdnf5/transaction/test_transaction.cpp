@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/private_accessor.hpp"
 
-#include "libdnf5/transaction/transaction.hpp"
+#include <libdnf5/transaction/transaction.hpp>
 
 #include <string>
 

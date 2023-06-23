@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_PKG_COLORIZER_HPP
 #define LIBDNF5_CLI_OUTPUT_PKG_COLORIZER_HPP
 
-#include "libdnf5/rpm/package_set.hpp"
-
 #include <libdnf5/rpm/nevra.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 
 #include <map>
 #include <string>

@@ -24,14 +24,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <string>
 
-//#include "libdnf5/hy-subject.h"
+//#include <libdnf5/hy-subject.h>
 #include "MergedTransactionTest.hpp"
 
-#include "libdnf5/rpm/nevra.hpp"
-#include "libdnf5/transaction/MergedTransaction.hpp"
-#include "libdnf5/transaction/Transformer.hpp"
-#include "libdnf5/transaction/rpm_package.hpp"
-#include "libdnf5/transaction/transaction.hpp"
+#include <libdnf5/rpm/nevra.hpp>
+#include <libdnf5/transaction/MergedTransaction.hpp>
+#include <libdnf5/transaction/Transformer.hpp>
+#include <libdnf5/transaction/rpm_package.hpp>
+#include <libdnf5/transaction/transaction.hpp>
 
 using namespace libdnf5::transaction;
 

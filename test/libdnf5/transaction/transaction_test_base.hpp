@@ -24,10 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/fs/temp.hpp"
 
-#include "libdnf5/base/base.hpp"
-
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/base/base.hpp>
 
 #include <memory>
 

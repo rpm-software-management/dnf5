@@ -24,10 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
 #define LIBDNF5_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP
 
-#include "libdnf5/utils/sqlite3/sqlite3.hpp"
-
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/utils/sqlite3/sqlite3.hpp>
 
 class TransactionItemReasonTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(TransactionItemReasonTest);

@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_list.hpp"
 
-#include "libdnf5-cli/output/repolist.hpp"
+#include <libdnf5-cli/output/repolist.hpp>
 
 namespace dnf5 {
 

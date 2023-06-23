@@ -23,10 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/base_test_case.hpp"
 
-#include "libdnf5/base/base.hpp"
-#include "libdnf5/rpm/package_sack.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/base/base.hpp>
+#include <libdnf5/rpm/package_sack.hpp>
 
 
 class ReldepListTest : public BaseTestCase {

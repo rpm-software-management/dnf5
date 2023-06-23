@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_file_logger.hpp"
 
-#include "libdnf5/logger/factory.hpp"
+#include <libdnf5/logger/factory.hpp>
 
 
 using namespace std::filesystem;

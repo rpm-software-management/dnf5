@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_loggers.hpp"
 
-#include "libdnf5/logger/log_router.hpp"
-#include "libdnf5/logger/memory_buffer_logger.hpp"
-#include "libdnf5/logger/stream_logger.hpp"
+#include <libdnf5/logger/log_router.hpp>
+#include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/logger/stream_logger.hpp>
 
 #include <memory>
 #include <sstream>

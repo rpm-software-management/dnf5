@@ -26,9 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "system/state.hpp"
 #include "utils/fs/temp.hpp"
 
-#include "libdnf5/comps/group/package.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/comps/group/package.hpp>
 
 #include <memory>
 

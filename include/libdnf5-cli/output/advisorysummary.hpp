@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_ADVISORYSUMMARY_HPP
 #define LIBDNF5_CLI_OUTPUT_ADVISORYSUMMARY_HPP
 
-#include "libdnf5/advisory/advisory_query.hpp"
+#include <libdnf5/advisory/advisory_query.hpp>
 
 namespace libdnf5::cli::output {
 

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_advisory_set.hpp"
 
-#include "libdnf5/advisory/advisory.hpp"
+#include <libdnf5/advisory/advisory.hpp>
 
 #include <filesystem>
 #include <vector>

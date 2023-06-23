@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_package_set.hpp"
 
-#include "libdnf5/rpm/package.hpp"
+#include <libdnf5/rpm/package.hpp>
 
 #include <filesystem>
 #include <vector>

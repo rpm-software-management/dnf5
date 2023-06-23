@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_TRANSACTION_ID_HPP
 #define DNF5_COMMANDS_HISTORY_TRANSACTION_ID_HPP
 
-#include "libdnf5/common/exception.hpp"
-#include "libdnf5/transaction/transaction_history.hpp"
+#include <libdnf5/common/exception.hpp>
+#include <libdnf5/transaction/transaction_history.hpp>
 
 #include <cstdint>
 #include <string>

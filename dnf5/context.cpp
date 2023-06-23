@@ -24,11 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 #include "utils/url.hpp"
 
-#include "libdnf5-cli/utils/userconfirm.hpp"
-
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/tty.hpp>
+#include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>

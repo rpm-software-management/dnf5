@@ -23,9 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "session.hpp"
 
-#include "libdnf5/conf/config_main.hpp"
-#include "libdnf5/conf/config_parser.hpp"
-#include "libdnf5/repo/config_repo.hpp"
+#include <libdnf5/conf/config_main.hpp>
+#include <libdnf5/conf/config_parser.hpp>
+#include <libdnf5/repo/config_repo.hpp>
 
 #include <map>
 #include <memory>

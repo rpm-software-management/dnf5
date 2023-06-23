@@ -23,9 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/test_case_fixture.hpp"
 
-#include "libdnf5/base/base.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+#include <libdnf5/base/base.hpp>
 
 
 class VarsTest : public TestCaseFixture {

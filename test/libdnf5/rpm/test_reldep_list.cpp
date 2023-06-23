@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/rpm/reldep_list.hpp"
+#include <libdnf5/rpm/reldep_list.hpp>
 
 
 using libdnf5::rpm::Reldep;

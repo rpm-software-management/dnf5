@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "exit-codes.hpp"
 
-#include "libdnf5/base/transaction.hpp"
-#include "libdnf5/common/exception.hpp"
+#include <libdnf5/base/transaction.hpp>
+#include <libdnf5/common/exception.hpp>
 
 namespace libdnf5::cli {
 

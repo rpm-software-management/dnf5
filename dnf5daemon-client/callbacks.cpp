@@ -21,11 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
-#include "libdnf5-cli/utils/userconfirm.hpp"
-
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/transaction.hpp>
 #include <libdnf5-cli/tty.hpp>
+#include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/repo/download_callbacks.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <sdbus-c++/sdbus-c++.h>

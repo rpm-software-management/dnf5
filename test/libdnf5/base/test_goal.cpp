@@ -22,9 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
-#include "libdnf5/base/goal.hpp"
-#include "libdnf5/base/transaction_package.hpp"
-
+#include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/transaction_package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
 
