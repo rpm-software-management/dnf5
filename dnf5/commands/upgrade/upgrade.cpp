@@ -44,7 +44,7 @@ void UpgradeCommand::set_argument_parser() {
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto minimal_opt = parser.add_new_named_arg("minimal");
     minimal_opt->set_long_name("minimal");
-    // TODO(dmach): Explain how this relates to options such as --security, --enhacement etc.
+    // TODO(dmach): Explain how this relates to options such as --security, --enhancement etc.
     minimal_opt->set_description(
         "Upgrade packages only to the lowest versions of packages that fix the problems affecting the system.");
     minimal_opt->set_const_value("true");

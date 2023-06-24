@@ -60,7 +60,7 @@ public:
     explicit KeyImportRepoCB(libdnf5::ConfigMain & config) : config(&config) {}
 
     bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) override {
-        // TODO(jrohel): In case `assumeno`==true, the key is not imported. Is it OK to skip import atempt information message?
+        // TODO(jrohel): In case `assumeno`==true, the key is not imported. Is it OK to skip import attempt information message?
         //               And what about `assumeyes`==true in silent mode? Print key import message or not?
         if (config->get_assumeno_option().get_value()) {
             return false;
@@ -98,7 +98,7 @@ Context::~Context() {
     clear();
 }
 
-// TODO(jrohel): Move logic into lidnf?
+// TODO(jrohel): Move logic into libdnf?
 void Context::apply_repository_setopts() {
     for (const auto & setopt : setopts) {
         auto last_dot_pos = setopt.first.rfind('.');

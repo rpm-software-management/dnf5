@@ -532,7 +532,7 @@ void RepoqueryCommand::run() {
             suggests_pkg_query.filter_suggests(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= suggests_pkg_query;
         }
-        //TODO(amatej): add recurisve option call
+        //TODO(amatej): add recursive option call
 
         full_package_query = dependsquery;
     }
@@ -556,7 +556,7 @@ void RepoqueryCommand::run() {
 
             full_package_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
             full_package_query |= requires_resolved;
-            //TODO(amatej): add recurisve option call
+            //TODO(amatej): add recursive option call
         }
     }
     if (!whatobsoletes->get_value().empty()) {

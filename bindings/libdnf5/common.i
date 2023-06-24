@@ -39,8 +39,8 @@
 }
 #endif
 
-// Cant use %include <catch_error.i> here, SWIG includes each file only once,
-// but the exception handler actually doesnt get registered when this file is
+// Cannot use %include <catch_error.i> here, SWIG includes each file only once,
+// but the exception handler actually does not get registered when this file is
 // %imported (as opposed to %included).
 %exception {
     try {

@@ -301,7 +301,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     } else {
         arg_value = const_val.c_str();
         consumed_args =
-            option[1] == '\0' ? 1 : 0;  // consume only if we are the last option in grop, example of 3 options: -cvf
+            option[1] == '\0' ? 1 : 0;  // consume only if we are the last option in group, example of 3 options: -cvf
     }
     if (store_value && value) {
         value->set(libdnf5::Option::Priority::COMMANDLINE, arg_value);
