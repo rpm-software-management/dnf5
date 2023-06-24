@@ -44,7 +44,7 @@ void LoggersTest::tearDown() {}
 // 2. Write messages into a LogRouter instance.
 // 3. Create two StreamLogger instances which replace (swap) MemoryBufferLogger instance in log_router.
 // 4. Write messages from original (replaced) MemoryBufferLoger instance into LogRouter instance.
-// 5. Write aditional message into LogRouter instance.
+// 5. Write additional message into LogRouter instance.
 // 6. Check content of streams of both StreamLogger instances.
 void LoggersTest::test_loggers() {
     const char * tz = "TZ=UTC";
@@ -124,7 +124,7 @@ void LoggersTest::test_loggers() {
     tmp_logger.reset();
 
     // ====================
-    // 5. Write aditional message into LogRouter instance.
+    // 5. Write additional message into LogRouter instance.
     // ====================
     log_router->write(msg_time += 1s, pid, libdnf5::Logger::Level::INFO, "Info additional message");
 

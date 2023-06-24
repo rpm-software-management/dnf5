@@ -37,7 +37,7 @@ constexpr const char * CONF_FILE_VERSION = "1.0";
 using ArgParser = libdnf5::cli::ArgumentParser;
 using BasicValue = toml::basic_value<toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>;
 
-// Attach aditional named arguments to the alias
+// Attach additional named arguments to the alias
 template <typename ArgT>
 bool attach_named_args(
     libdnf5::Logger & logger,
@@ -618,7 +618,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                         }
                         alias_cmd->set_complete(complete);
 
-                        // Attach aditional named arguments to the command alias
+                        // Attach additional named arguments to the command alias
                         if (attached_named_args) {
                             if (!attach_named_args(
                                     *logger, config_file_path, *alias_cmd, *attached_named_args, element_id_path)) {

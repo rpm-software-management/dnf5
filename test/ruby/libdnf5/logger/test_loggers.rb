@@ -151,7 +151,7 @@ class TestLoggers < Test::Unit::TestCase
         memory_buffer_logger.write_to_logger(log_router)
 
         # ====================
-        # 5. Write aditional message into LogRouter instance.
+        # 5. Write additional message into LogRouter instance.
         # ====================
         log_router.log(Logger::Logger::Level_INFO, "Info additional message")
 
