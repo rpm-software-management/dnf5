@@ -139,6 +139,7 @@ Upgrade command
    `upgrade --minimal`).
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the `--skip-unavailable` option.
+ * Dropped upgrade command aliases `upgrade-to` and `localupdate`.
 
 Changes of configuration:
 =========================
