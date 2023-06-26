@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo.hpp"
+#include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <librepo/librepo.h>
@@ -132,11 +133,21 @@ void FileDownloader::add(const std::string & url, const std::string & destinatio
 }
 
 void FileDownloader::download() try {
+    if (p_impl->targets.empty()) {
+        return;
+    }
+
+    auto & config = p_impl->base->get_config();
+    auto & cacheonly = config.get_cacheonly_option().get_value();
+    if (cacheonly == "all") {
+        throw RepoCacheonlyError(M_("Cannot download files, cacheonly option is activated."));
+    }
+
     std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
     lr_targets.reserve(p_impl->targets.size());
 
     LibrepoHandle local_handle;
-    local_handle.init_remote(p_impl->base->get_config());
+    local_handle.init_remote(config);
 
     auto * download_callbacks = p_impl->base->get_download_callbacks();
 
@@ -187,6 +198,8 @@ void FileDownloader::download() try {
     if (!lr_download(list, p_impl->fail_fast, &err)) {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
+} catch (const RepoCacheonlyError & e) {
+    throw;
 } catch (const std::runtime_error & e) {
     throw_with_nested(FileDownloadError(M_("Failed to download files")));
 }

@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo.hpp"
+#include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <librepo/librepo.h>
@@ -133,11 +134,20 @@ void PackageDownloader::download() try {
         return;
     }
 
+    auto & config = p_impl->base->get_config();
+    auto use_cache_only = config.get_cacheonly_option().get_value() == "all";
+
     GError * err{nullptr};
 
     std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
     lr_targets.reserve(p_impl->targets.size());
     for (auto & pkg_target : p_impl->targets) {
+        if (use_cache_only && !pkg_target.package.is_available_locally()) {
+            throw RepoCacheonlyError(
+                M_("Cannot download the \"{0}\" package, cacheonly option is activated."),
+                pkg_target.package.get_nevra());
+        }
+
         std::filesystem::create_directory(pkg_target.destination);
 
         if (auto * download_callbacks = pkg_target.package.get_base()->get_download_callbacks()) {
@@ -184,7 +194,6 @@ void PackageDownloader::download() try {
     }
 
     // Store file paths of packages we don't want to keep cached.
-    auto & config = p_impl->base->get_config();
     auto removal_configured = !config.get_keepcache_option().get_value();
     auto removal_enforced = p_impl->keep_packages.has_value() && !p_impl->keep_packages.value();
     auto keep_enforced = p_impl->keep_packages.has_value() && p_impl->keep_packages.value();
@@ -207,6 +216,8 @@ void PackageDownloader::download() try {
     if (!lr_download_packages(list, flags, &err)) {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
+} catch (const RepoCacheonlyError & e) {
+    throw;
 } catch (const std::runtime_error & e) {
     throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
 }
