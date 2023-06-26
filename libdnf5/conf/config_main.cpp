@@ -176,7 +176,7 @@ class ConfigMain::Impl {
     OptionNumber<std::int32_t> recent{7, 0};
     OptionBool reset_nice{true};
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
-    OptionBool cacheonly{false};
+    OptionEnum<std::string> cacheonly{"none", {"all", "metadata", "none"}};
     OptionBool keepcache{false};
     OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf5::xdg::get_user_state_dir()};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
@@ -689,10 +689,10 @@ const OptionPath & ConfigMain::get_system_cachedir_option() const {
     return p_impl->system_cachedir;
 }
 
-OptionBool & ConfigMain::get_cacheonly_option() {
+OptionEnum<std::string> & ConfigMain::get_cacheonly_option() {
     return p_impl->cacheonly;
 }
-const OptionBool & ConfigMain::get_cacheonly_option() const {
+const OptionEnum<std::string> & ConfigMain::get_cacheonly_option() const {
     return p_impl->cacheonly;
 }
 
