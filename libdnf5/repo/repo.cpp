@@ -99,6 +99,10 @@ Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type)
             throw RepoError(M_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
+    auto & cacheonly = base->get_config().get_cacheonly_option().get_value();
+    if (cacheonly != "none") {
+        sync_strategy = SyncStrategy::ONLY_CACHE;
+    }
 }
 
 Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get_weak_ptr(), id, type) {}
