@@ -66,7 +66,7 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_writing_to_locked_option(self):
         config = self.base.get_config()
 
-        option = config.get_cacheonly_option()
+        option = config.get_keepcache_option()
         option.lock('')
 
         self.assertRaises(RuntimeError, option.set, False)

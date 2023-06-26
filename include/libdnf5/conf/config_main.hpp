@@ -70,8 +70,8 @@ public:
     const OptionBool & get_reset_nice_option() const;
     OptionPath & get_system_cachedir_option();
     const OptionPath & get_system_cachedir_option() const;
-    OptionBool & get_cacheonly_option();
-    const OptionBool & get_cacheonly_option() const;
+    OptionEnum<std::string> & get_cacheonly_option();
+    const OptionEnum<std::string> & get_cacheonly_option() const;
     OptionBool & get_keepcache_option();
     const OptionBool & get_keepcache_option() const;
     OptionPath & get_logdir_option();
