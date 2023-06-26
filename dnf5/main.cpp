@@ -144,6 +144,15 @@ void RootCommand::set_argument_parser() {
     });
     global_options_group->register_argument(quiet);
 
+    auto cacheonly = parser.add_new_named_arg("cacheonly");
+    cacheonly->set_long_name("cacheonly");
+    cacheonly->set_short_name('C');
+    cacheonly->set_description(
+        "Run entirely from system cache, don't update the cache and use it even in case it is expired.");
+    cacheonly->set_const_value("all");
+    cacheonly->link_value(&config.get_cacheonly_option());
+    global_options_group->register_argument(cacheonly);
+
     // --repofrompath argument
     auto repofrompath = parser.add_new_named_arg("repofrompath");
     repofrompath->set_long_name("repofrompath");
