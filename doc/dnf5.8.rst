@@ -213,7 +213,7 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--repofrompath=REPO_ID,REPO_PATH``
     Specify a repository to add to the repositories only for this run. Can be used multiple times.
 
-    The new repository id is specified by ``REPO_ID`` and its baseurl by ``REPO_PATH``. Variables in both values are before creating the repo substituted.
+    The new repository id is specified by ``REPO_ID`` and its baseurl by ``REPO_PATH``. Variables in both values are substituted before creating the repo.
 
     The configuration of the new repository can be adjusted using options ``--setopt=REPO_ID.option=value``.
 
