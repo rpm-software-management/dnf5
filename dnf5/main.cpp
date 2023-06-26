@@ -60,6 +60,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/factory.hpp>
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
 #include <string.h>
@@ -152,6 +153,25 @@ void RootCommand::set_argument_parser() {
     cacheonly->set_const_value("all");
     cacheonly->link_value(&config.get_cacheonly_option());
     global_options_group->register_argument(cacheonly);
+
+    auto refresh = parser.add_new_named_arg("refresh");
+    refresh->set_long_name("refresh");
+    refresh->set_description("Force refreshing metadata before running the command.");
+    refresh->set_parse_hook_func([&ctx](
+                                     [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                     [[maybe_unused]] const char * option,
+                                     [[maybe_unused]] const char * value) {
+        std::filesystem::path cachedir{ctx.base.get_config().get_cachedir_option().get_value()};
+        std::error_code ec;
+        for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
+            libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
+            cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+        }
+        return true;
+    });
+    global_options_group->register_argument(refresh);
+
+    refresh->add_conflict_argument(*cacheonly);
 
     // --repofrompath argument
     auto repofrompath = parser.add_new_named_arg("repofrompath");
