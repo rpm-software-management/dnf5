@@ -154,15 +154,18 @@ public:
     /// @return `true` if metadata are in sync with the origin, `false` otherwise.
     bool is_in_sync();
 
+    /// @deprecated It is going to be removed without a warning
     /// Downloads repository metadata.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
 
+    /// @deprecated It is going to be removed without a warning
     /// Loads the repository objects into sacks.
     ///
     /// Also writes the libsolv's solv/solvx cache files.
     void load();
 
+    /// Not API, unsupported
     /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
     // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
     void load_extra_system_repo(const std::string & rootdir);
@@ -328,8 +331,12 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
+    /// @deprecated It is going to be removed without a warning
+    /// Not API, unsupported
     void add_libsolv_testcase(const std::string & path);
 
+    /// @deprecated It is going to be removed without a warning
+    /// Not API, unsupported
     /// Adds an RPM package at `path` to the repository.
     ///
     /// If `with_hdrid` is `true`, the RPM is loaded with the
