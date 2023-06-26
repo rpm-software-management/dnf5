@@ -100,6 +100,13 @@ Group command
    new `--no-packages` option of the `group install/remove` commands. So for example
    to mark a group as installed without touching any packages,
    `dnf5 group install --no-packages <group_id>` command can be used.
+ * Dropped `groupinstall` alias. It is replaced by `dnf group install`
+ * Dropped `groupinfo` alias. It is replaced by `dnf group info`
+ * Dropped `grouplist` alias. It is replaced by `dnf group list`
+ * Dropped `grouperase` alias. It is replaced by `dnf group remove`
+ * Dropped `groupremove` alias. It is replaced by `dnf group remove`
+ * Dropped `groupupdate` alias. It is replaced by `dnf group upgrade`
+ * Dropped `groups` alias. It is replaced by `dnf group`
 
 Help command
 ------------
