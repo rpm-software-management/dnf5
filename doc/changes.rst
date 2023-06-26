@@ -88,6 +88,7 @@ Distro-sync command
 -------------------
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the `--skip-unavailable` option.
+ * Dropped `distrosync` and `distribution-synchronization` aliases
 
 Downgrade command
 -----------------
