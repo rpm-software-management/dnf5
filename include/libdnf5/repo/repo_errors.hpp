@@ -32,6 +32,13 @@ class RepoError : public Error {
 };
 
 
+class RepoCacheonlyError : public RepoError {
+public:
+    using RepoError::RepoError;
+    const char * get_name() const noexcept override { return "RepoCacheonlyError"; }
+};
+
+
 class RepoDownloadError : public RepoError {
 public:
     using RepoError::RepoError;
