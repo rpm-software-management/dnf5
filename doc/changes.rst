@@ -101,6 +101,10 @@ Group command
    to mark a group as installed without touching any packages,
    `dnf5 group install --no-packages <group_id>` command can be used.
 
+Help command
+------------
+ * Dropped. The functionality is replaced by `--help` option
+
 List command
 ------------
  * Dropped `--all` option since this behavior is now the default one.
