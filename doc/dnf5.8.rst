@@ -150,6 +150,10 @@ Following options are applicable in the general context for any ``dnf5`` command
     directly requested (e.g. as a command line arguments), and the solver may use older
     versions of dependencies to meet their requirements.
 
+``-C, --cacheonly``
+    | Use only cached data for working with packages and repository metadata.
+    | Cache won't be updated, even if it is expired.
+
 ``--comment=COMMENT``
     | Add a comment to the transaction history.
 
@@ -204,6 +208,9 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``-q, --quiet``
     In combination with a non-interactive command, shows just the relevant content.
     Suppresses messages notifying about the current state or actions of ``DNF5``.
+
+``--refresh``
+    | Force refreshing metadata before running the command.
 
 ``--repo=REPO_ID,...``
     | Enable just specified repositories.
