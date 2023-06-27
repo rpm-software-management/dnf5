@@ -314,6 +314,8 @@ void RepoqueryCommand::set_argument_parser() {
     repoquery_formatting->set_header("Formatting:");
     cmd.register_group(repoquery_formatting);
 
+    auto * formatting_conflicts =
+        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
     // remove the last empty ("") option, it should not be an arg
     pkg_attrs_options.pop_back();
     for (auto & pkg_attr : pkg_attrs_options) {
@@ -327,14 +329,19 @@ void RepoqueryCommand::set_argument_parser() {
         arg->link_value(pkg_attr_option);
         repoquery_formatting->register_argument(arg);
         cmd.register_named_arg(arg);
+        formatting_conflicts->push_back(arg);
     }
     repoquery_formatting->register_argument(info);
     cmd.register_named_arg(info);
+    formatting_conflicts->push_back(info);
     repoquery_formatting->register_argument(query_format);
     cmd.register_named_arg(query_format);
+    formatting_conflicts->push_back(query_format);
     repoquery_formatting->register_argument(query_tags);
     cmd.register_named_arg(query_tags);
+    formatting_conflicts->push_back(query_tags);
     repoquery_formatting->register_argument(changelogs->arg);
+    formatting_conflicts->push_back(changelogs->arg);
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
@@ -343,6 +350,12 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(latest_limit);
 
     cmd.register_positional_arg(keys);
+
+    // Set conflicting args
+    // Only one formatting can be used at a time
+    for (auto * arg : *formatting_conflicts) {
+        arg->set_conflict_arguments(formatting_conflicts);
+    }
 }
 
 void RepoqueryCommand::configure() {
