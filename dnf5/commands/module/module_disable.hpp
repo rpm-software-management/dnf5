@@ -28,7 +28,11 @@ class ModuleDisableCommand : public Command {
 public:
     explicit ModuleDisableCommand(Context & context) : Command(context, "disable") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
+
+private:
+    std::vector<std::string> module_specs;
 };
 
 }  // namespace dnf5

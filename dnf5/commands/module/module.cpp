@@ -61,8 +61,8 @@ void ModuleCommand::register_subcommands() {
     cmd.register_group(stream_management_commands_group);
     register_subcommand(std::make_unique<ModuleEnableCommand>(get_context()), stream_management_commands_group);
     // register_subcommand(std::make_unique<ModuleSwitchToCommand>(get_context()), stream_management_commands_group);
-    // register_subcommand(std::make_unique<ModuleResetCommand>(get_context()), stream_management_commands_group);
-    // register_subcommand(std::make_unique<ModuleDisableCommand>(get_context()), stream_management_commands_group);
+    register_subcommand(std::make_unique<ModuleResetCommand>(get_context()), stream_management_commands_group);
+    register_subcommand(std::make_unique<ModuleDisableCommand>(get_context()), stream_management_commands_group);
 
     // software management commands
     // auto * software_management_commands_group = parser.add_new_group("module_software_management_commands");

@@ -218,6 +218,14 @@ void Goal::add_module_enable(const std::string & spec) {
     p_impl->module_specs.push_back(std::make_tuple(GoalAction::ENABLE, spec));
 }
 
+void Goal::add_module_disable(const std::string & spec) {
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::DISABLE, spec));
+}
+
+void Goal::add_module_reset(const std::string & spec) {
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::RESET, spec));
+}
+
 void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
     p_impl->add_spec(GoalAction::INSTALL, spec, settings);
 }
