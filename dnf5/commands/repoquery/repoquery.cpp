@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/patterns.hpp>
 
 #include <iostream>
@@ -414,6 +415,10 @@ void RepoqueryCommand::configure() {
                 return;
             }
         }
+    }
+    if (exactdeps->get_value() && (whatrequires->get_value().empty() && whatdepends->get_value().empty())) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--whatdepends\""));
     }
 }
 
