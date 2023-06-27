@@ -739,6 +739,18 @@ ModuleSack::resolve_active_module_items() {
 }
 
 
+static ModuleQuery module_spec_to_query(BaseWeakPtr & base, const std::string & module_spec) {
+    for (auto & nsvcap : Nsvcap::parse(module_spec)) {
+        ModuleQuery nsvcap_query(base, false);
+        nsvcap_query.filter_nsvca(nsvcap);
+        if (!nsvcap_query.empty()) {
+            return nsvcap_query;
+        }
+    }
+    throw NoModuleError(M_("No such module: {}"), module_spec);
+}
+
+
 bool ModuleSack::Impl::enable(const std::string & name, const std::string & stream, bool count) {
     module_db->initialize();
     bool changed = false;
@@ -753,24 +765,12 @@ bool ModuleSack::Impl::enable(const std::string & name, const std::string & stre
 
 bool ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
     module_db->initialize();
-    auto nsvcaps = Nsvcap::parse(module_spec);
-
-    ModuleQuery query(base, true);
-    for (auto & nsvcap : nsvcaps) {
-        ModuleQuery nsvcap_query(base, false);
-        nsvcap_query.filter_nsvca(nsvcap);
-        query |= nsvcap_query;
-    }
-
-    if (query.empty()) {
-        throw NoModuleError(M_("No such module: {}"), module_spec);
-    }
 
     bool changed = false;
     libdnf5::solv::IdQueue queue;
-    for (const auto & module_item : query) {
+    for (const auto & module_item : module_spec_to_query(base, module_spec)) {
         queue.push_back(module_item.get_id().id);
-        changed += enable(module_item.get_name(), module_item.get_stream(), count);
+        changed |= enable(module_item.get_name(), module_item.get_stream(), count);
     }
     modules_to_enable.push_back(queue);
 
@@ -778,33 +778,37 @@ bool ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
 }
 
 
-void ModuleSack::Impl::disable(const std::string & name, bool count) {
+bool ModuleSack::Impl::disable(const std::string & module_spec, bool count) {
     module_db->initialize();
-    module_db->change_stream(name, "", count);
-    if (module_db->change_status(name, ModuleStatus::DISABLED)) {
-        module_db->clear_profiles(name);
+
+    bool changed = false;
+    for (const auto & module_item : module_spec_to_query(base, module_spec)) {
+        const auto & name = module_item.get_name();
+        if (module_db->change_status(name, ModuleStatus::DISABLED)) {
+            module_db->change_stream(name, "", count);
+            module_db->clear_profiles(name);
+            changed = true;
+        }
     }
+
+    return changed;
 }
 
 
-void ModuleSack::Impl::disable(const ModuleItem * module_item, bool count) {
+bool ModuleSack::Impl::reset(const std::string & module_spec, bool count) {
     module_db->initialize();
-    disable(module_item->get_name(), count);
-}
 
-
-void ModuleSack::Impl::reset(const std::string & name, bool count) {
-    module_db->initialize();
-    module_db->change_stream(name, "", count);
-    if (module_db->change_status(name, ModuleStatus::AVAILABLE)) {
-        module_db->clear_profiles(name);
+    bool changed = false;
+    for (const auto & module_item : module_spec_to_query(base, module_spec)) {
+        const auto & name = module_item.get_name();
+        if (module_db->change_status(name, ModuleStatus::AVAILABLE)) {
+            module_db->change_stream(name, "", count);
+            module_db->clear_profiles(name);
+            changed = true;
+        }
     }
-}
 
-
-void ModuleSack::Impl::reset(const ModuleItem * module_item, bool count) {
-    module_db->initialize();
-    reset(module_item->get_name(), count);
+    return changed;
 }
 
 

@@ -134,29 +134,17 @@ public:
     /// @since 5.0.14
     bool enable(const std::string & module_spec, bool count = true);
     /// Disable module.
-    /// @param name module name to be disabled.
+    /// @param module_spec module to be disabled.
     /// @param count if `true`, count the change towards the limit of module status modifications.
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14
-    void disable(const std::string & name, bool count = true);
-    /// Disable module.
-    /// @param module_item module to be disabled.
-    /// @param count if `true`, count the change towards the limit of module status modifications.
-    /// @throw NoModuleError if the module doesn't exist.
-    /// @since 5.0.14
-    void disable(const ModuleItem * module_item, bool count = true);
+    bool disable(const std::string & module_spec, bool count = true);
     /// Reset module, so it's no longer enabled nor disabled.
-    /// @param name module name to be reset.
+    /// @param module_spec module to be reset.
     /// @param count if `true`, count the change towards the limit of module status modifications.
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14
-    void reset(const std::string & name, bool count = true);
-    /// Reset module, so it's no longer enabled nor disabled.
-    /// @param module_item module item to be reset.
-    /// @param count if `true`, count the change towards the limit of module status modifications.
-    /// @throw NoModuleError if the module doesn't exist.
-    /// @since 5.0.14
-    void reset(const ModuleItem * module_item, bool count = true);
+    bool reset(const std::string & module_spec, bool count = true);
 
 private:
     friend class libdnf5::base::Transaction;
