@@ -37,7 +37,9 @@ public:
     explicit Goal(libdnf5::Base & base);
     ~Goal();
 
-    // TODO(jmracek) Not yet implemented
+    /// Add module enable request to the goal.
+    /// @param spec             A string with module spec to enable.
+    // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().enable(self, module_specs)
     void add_module_enable(const std::string & spec);
 
     /// High level API for an artifact installation. A spec can be either a package
