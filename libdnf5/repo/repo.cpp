@@ -188,49 +188,6 @@ bool Repo::is_local() const {
     return false;
 }
 
-bool Repo::fetch_metadata() {
-    auto & logger = *base->get_logger();
-
-    if (downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
-        // cache hasn't been loaded yet, try to load it
-        try {
-            read_metadata_cache();
-        } catch (std::runtime_error & e) {
-            // TODO(lukash) ideally we'd log something here, but we don't want it to look like an error
-        }
-    }
-
-    if (!downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
-        // cache loaded
-        recompute_expired();
-        if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-            logger.debug("Using cache for repo \"{}\"", config.get_id());
-            return false;
-        }
-
-        if (is_in_sync()) {
-            // the expired metadata still reflect the origin:
-            utimes(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-            RepoCache(base, config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-            expired = false;
-            return true;
-        }
-    }
-    if (sync_strategy == SyncStrategy::ONLY_CACHE) {
-        throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
-    }
-
-    logger.debug("Downloading metadata for repo \"{}\"", config.get_id());
-    auto cache_dir = config.get_cachedir();
-    downloader->download_metadata(cache_dir);
-    RepoCache(base, config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-    timestamp = -1;
-    read_metadata_cache();
-
-    expired = false;
-    return true;
-}
-
 void Repo::read_metadata_cache() {
     downloader->reset_loaded();
     downloader->load_local();

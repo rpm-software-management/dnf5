@@ -358,11 +358,6 @@ private:
     friend class PackageDownloader;
     friend class solv::Pool;
 
-    /// Downloads repository metadata from the origin or reads the local metadata cache if still valid.
-    /// @return true if fresh metadata were downloaded, false otherwise.
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.load()
-    bool fetch_metadata();
-
     void make_solv_repo();
 
     void load_available_repo();
