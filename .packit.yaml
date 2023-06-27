@@ -8,14 +8,6 @@ files_to_sync:
   - dnf5.spec
   - .packit.yaml
 
-actions:
-  fix-spec-file:
-    # set the correct version for global project_version_{major,minor,patch} macros needed by %build
-    bash -c "sed -i -r \"s/^%global project_version_major (\s*)\S+/%global project_version_major \1`echo ${PACKIT_PROJECT_VERSION} | cut -d. -f1`/\" dnf5.spec"
-    bash -c "sed -i -r \"s/^%global project_version_minor (\s*)\S+/%global project_version_minor \1`echo ${PACKIT_PROJECT_VERSION} | cut -d. -f2`/\" dnf5.spec"
-    bash -c "sed -i -r \"s/^%global project_version_patch (\s*)\S+/%global project_version_patch \1`echo ${PACKIT_PROJECT_VERSION} | cut -d. -f3`/\" dnf5.spec"
-    bash -c "sed -i -r \"s/^Version:.*/Version:\t\t%{project_version_major}.%{project_version_minor}.%{project_version_patch}/\" dnf5.spec"
-
 # name in upstream package repository or registry (e.g. in PyPI)
 upstream_package_name: dnf5
 # downstream (Fedora) RPM package name
