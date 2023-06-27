@@ -103,7 +103,7 @@ public:
     GoalProblem resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction);
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
-    GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
+    void add_module_specs_to_goal();
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
@@ -168,7 +168,7 @@ public:
 private:
     friend class Goal;
     BaseWeakPtr base;
-    std::vector<std::string> module_enable_specs;
+    std::vector<std::tuple<GoalAction, std::string>> module_specs;
     /// <libdnf5::GoalAction, std::string pkg_spec, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
     /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf5::GoalJobSettings settings>
@@ -215,7 +215,7 @@ Goal::~Goal() = default;
 Goal::Impl::~Impl() = default;
 
 void Goal::add_module_enable(const std::string & spec) {
-    p_impl->module_enable_specs.push_back(spec);
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::ENABLE, spec));
 }
 
 void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
@@ -547,6 +547,28 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     }
     return ret;
 }
+
+
+void Goal::Impl::add_module_specs_to_goal() {
+    module::ModuleSack & module_sack = base->module_sack;
+
+    for (auto & [action, spec] : module_specs) {
+        switch (action) {
+            case GoalAction::ENABLE:
+                module_sack.p_impl->enable(spec);
+                break;
+            case GoalAction::DISABLE:
+                module_sack.p_impl->disable(spec);
+                break;
+            case GoalAction::RESET:
+                module_sack.p_impl->reset(spec);
+                break;
+            default:
+                libdnf_throw_assertion("Unsupported action \"{}\"", goal_action_to_string(action));
+        }
+    }
+}
+
 
 GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
@@ -2080,12 +2102,8 @@ bool Goal::get_allow_erasing() const {
 base::Transaction Goal::resolve() {
     libdnf_user_assert(p_impl->base->is_initialized(), "Base instance was not fully initialized by Base::setup()");
 
-    // Enable modules
     module::ModuleSack & module_sack = p_impl->base->module_sack;
-    for (auto module_enable_spec : p_impl->module_enable_specs) {
-        module_sack.p_impl->enable(module_enable_spec);
-    }
-
+    p_impl->add_module_specs_to_goal();
     // Resolve modules
     auto module_error = module_sack.resolve_active_module_items().second;
     if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
@@ -2198,7 +2216,7 @@ base::Transaction Goal::resolve() {
 }
 
 void Goal::reset() {
-    p_impl->module_enable_specs.clear();
+    p_impl->module_specs.clear();
     p_impl->rpm_specs.clear();
     p_impl->rpm_ids.clear();
     p_impl->group_specs.clear();
