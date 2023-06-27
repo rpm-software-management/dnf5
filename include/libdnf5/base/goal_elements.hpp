@@ -102,7 +102,10 @@ enum class GoalAction {
     DOWNGRADE,
     REMOVE,
     RESOLVE,
-    REASON_CHANGE
+    REASON_CHANGE,
+    ENABLE,
+    DISABLE,
+    RESET
 };
 
 /// Convert GoalAction enum to user-readable string

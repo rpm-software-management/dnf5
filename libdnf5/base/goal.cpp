@@ -534,6 +534,15 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::REASON_CHANGE: {
                 libdnf_throw_assertion("Unsupported action \"REASON_CHANGE\"");
             }
+            case GoalAction::ENABLE: {
+                libdnf_throw_assertion("Unsupported action \"ENABLE\"");
+            }
+            case GoalAction::DISABLE: {
+                libdnf_throw_assertion("Unsupported action \"DISABLE\"");
+            }
+            case GoalAction::RESET: {
+                libdnf_throw_assertion("Unsupported action \"RESET\"");
+            }
         }
     }
     return ret;
