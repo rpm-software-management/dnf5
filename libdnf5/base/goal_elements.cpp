@@ -187,6 +187,12 @@ std::string goal_action_to_string(GoalAction action) {
             return "Reason Change";
         case GoalAction::RESOLVE:
             return "Resolve";
+        case GoalAction::ENABLE:
+            return "Enable";
+        case GoalAction::DISABLE:
+            return "Disable";
+        case GoalAction::RESET:
+            return "Reset";
     }
     return "";
 }
