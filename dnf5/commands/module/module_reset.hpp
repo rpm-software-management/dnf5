@@ -28,7 +28,11 @@ class ModuleResetCommand : public Command {
 public:
     explicit ModuleResetCommand(Context & context) : Command(context, "reset") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
+
+private:
+    std::vector<std::string> module_specs;
 };
 
 }  // namespace dnf5

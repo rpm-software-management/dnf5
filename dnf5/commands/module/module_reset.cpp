@@ -21,11 +21,40 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
+using namespace libdnf5::cli;
+
 void ModuleResetCommand::set_argument_parser() {
+    auto & ctx = get_context();
+    auto & parser = ctx.get_argument_parser();
+
+    // TODO(dmach): shouldn't module disable work on streams rather than the whole module?
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Reset module state so it's no longer enabled or disabled.");
+
+    auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of module specs to reset");
+    keys->set_parse_hook_func(
+        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+            for (int i = 0; i < argc; ++i) {
+                module_specs.emplace_back(argv[i]);
+            }
+            return true;
+        });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
+    cmd.register_positional_arg(keys);
 }
 
-void ModuleResetCommand::run() {}
+void ModuleResetCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
+
+void ModuleResetCommand::run() {
+    auto goal = get_context().get_goal();
+    for (const auto & spec : module_specs) {
+        goal->add_module_reset(spec);
+    }
+}
 
 }  // namespace dnf5

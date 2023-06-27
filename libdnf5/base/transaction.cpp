@@ -432,6 +432,16 @@ void Transaction::Impl::set_transaction(
             name, stream, transaction::TransactionItemAction::ENABLE, transaction::TransactionItemReason::USER);
         modules.emplace_back(std::move(tsmodule));
     }
+    for (auto & name : module_db->get_all_newly_disabled_modules()) {
+        TransactionModule tsmodule(
+            name, "", transaction::TransactionItemAction::DISABLE, transaction::TransactionItemReason::USER);
+        modules.emplace_back(std::move(tsmodule));
+    }
+    for (auto & name : module_db->get_all_newly_reset_modules()) {
+        TransactionModule tsmodule(
+            name, "", transaction::TransactionItemAction::RESET, transaction::TransactionItemReason::USER);
+        modules.emplace_back(std::move(tsmodule));
+    }
 
     // Add reason change actions to the transaction
     for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {

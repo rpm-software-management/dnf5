@@ -42,6 +42,16 @@ public:
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().enable(self, module_specs)
     void add_module_enable(const std::string & spec);
 
+    /// Add module disable request to the goal.
+    /// @param spec             A string with module spec to disable.
+    // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().disable(self, module_specs)
+    void add_module_disable(const std::string & spec);
+
+    /// Add module reset request to the goal.
+    /// @param spec             A string with module spec to reset.
+    // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().reset(self, module_specs)
+    void add_module_reset(const std::string & spec);
+
     /// High level API for an artifact installation. A spec can be either a package
     /// specification matched against NEVRA, provides, and file provides, or it can
     /// be a path to local rpm file, or URL of rpm to be installed.
