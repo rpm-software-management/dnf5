@@ -222,6 +222,13 @@ void NevraTest::test_evrcmp() {
     TestPackage foo_0_1_2_noarch("foo-1-2.noarch");
     TestPackage foo_0_1_4_noarch("foo-1-4.noarch");
     TestPackage foo_0_1_1_1_noarch("foo-1.1-1.noarch");
+    TestPackage bar__1_1_noarch("bar-1-1.noarch");
+    TestPackage bar_0_1_1_noarch("bar-0:1-1.noarch");
+
+    // compare empty epoch with zero epoch
+    CPPUNIT_ASSERT_MESSAGE(
+        "Empty and zero epoch are considered different.",
+        libdnf5::rpm::cmp_nevra(bar__1_1_noarch, bar_0_1_1_noarch) == 0);
 
     // order by epoch
     std::vector<TestPackage> actual = {foo_1_1_1_noarch, foo_0_2_1_noarch};

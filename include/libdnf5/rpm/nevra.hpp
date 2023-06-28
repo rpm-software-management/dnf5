@@ -197,7 +197,10 @@ int rpmvercmp(const char * lhs, const char * rhs);
 /// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
 template <typename L, typename R>
 int evrcmp(const L & lhs, const R & rhs) {
-    int r = rpmvercmp(lhs.get_epoch().c_str(), rhs.get_epoch().c_str());
+    // handle empty epoch the same way as 0 epoch
+    auto lepoch = lhs.get_epoch();
+    auto repoch = rhs.get_epoch();
+    int r = rpmvercmp(lepoch.empty() ? "0" : lepoch.c_str(), repoch.empty() ? "0" : repoch.c_str());
     if (r != 0) {
         return r;
     }
