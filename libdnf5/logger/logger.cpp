@@ -24,18 +24,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
+using namespace std::chrono;
+
 void Logger::log_line(Level level, const std::string & message) noexcept {
-    write(std::chrono::system_clock::now(), getpid(), level, message);
+    write(system_clock::now(), getpid(), level, message);
 }
 
 
 void StringLogger::write(
-    const std::chrono::time_point<std::chrono::system_clock> & time,
-    pid_t pid,
-    Level level,
-    const std::string & message) noexcept {
+    const time_point<system_clock> & time, pid_t pid, Level level, const std::string & message) noexcept {
     try {
-        write(fmt::format("{:%FT%T%z} [{}] {} {}\n", time, pid, level_to_cstr(level), message).c_str());
+        write(fmt::format("{:%FT%T%z} [{}] {} {}\n", time_point_cast<seconds>(time), pid, level_to_cstr(level), message)
+                  .c_str());
     } catch (const std::exception & e) {
         write("Failed to format: ");
         write(message.c_str());
