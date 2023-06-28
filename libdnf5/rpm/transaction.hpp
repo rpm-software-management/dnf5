@@ -36,6 +36,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
+// Required for building with fmt >= 10
+// See: https://github.com/fmtlib/fmt/blob/10.0.0/ChangeLog.rst?plain=1#L68
+inline uint32_t format_as(rpmCallbackType type) {
+    return static_cast<uint32_t>(type);
+}
+
 
 namespace libdnf5::rpm {
 
