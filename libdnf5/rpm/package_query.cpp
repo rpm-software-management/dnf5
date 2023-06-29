@@ -2750,7 +2750,8 @@ void PackageQuery::filter_userinstalled() {
     for (const auto & pkg : *this) {
         auto reason = pkg.get_reason();
         if (reason != libdnf5::transaction::TransactionItemReason::WEAK_DEPENDENCY &&
-            reason != libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
+            reason != libdnf5::transaction::TransactionItemReason::DEPENDENCY &&
+            reason != libdnf5::transaction::TransactionItemReason::GROUP) {
             filter_result.add_unsafe(pkg.get_id().id);
         }
     }
