@@ -33,7 +33,7 @@ enum class ChangelogFilterType { NONE, UPGRADES, COUNT, SINCE };
 
 void print_changelogs(
     libdnf5::rpm::PackageQuery & query,
-    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter);
+    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t, int32_t>> filter);
 
 }  // namespace libdnf5::cli::output
 

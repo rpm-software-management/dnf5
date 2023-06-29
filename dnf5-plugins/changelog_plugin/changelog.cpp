@@ -117,8 +117,8 @@ void ChangelogCommand::configure() {
 void ChangelogCommand::run() {
     auto & ctx = get_context();
 
-    std::pair<libdnf5::cli::output::ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter = {
-        libdnf5::cli::output::ChangelogFilterType::NONE, 0};
+    std::pair<libdnf5::cli::output::ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t, int32_t>>
+        filter = {libdnf5::cli::output::ChangelogFilterType::NONE, 0};
     libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, false);
 
     auto since = since_option->get_value();
