@@ -34,7 +34,7 @@ namespace libdnf5::cli::output {
 
 void print_changelogs(
     libdnf5::rpm::PackageQuery & query,
-    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t>> filter) {
+    std::pair<ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t, int32_t>> filter) {
     // by_srpm
     std::map<std::string, std::vector<libdnf5::rpm::Package>> by_srpm;
     for (auto pkg : query) {
@@ -88,7 +88,7 @@ void print_changelogs(
             }
             changelogs.erase(changelogs.begin() + static_cast<int>(idx), changelogs.end());
         } else if (filter.first == ChangelogFilterType::COUNT) {
-            int64_t count = std::get<int64_t>(filter.second);
+            int32_t count = std::get<int32_t>(filter.second);
             if (count > 0) {
                 if (static_cast<size_t>(count) < changelogs.size()) {
                     changelogs.erase(changelogs.begin() + count, changelogs.end());
