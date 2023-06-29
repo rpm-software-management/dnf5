@@ -1,3 +1,25 @@
+# 5.0.15
+
+- Add `module enable` subcommand
+- Add `--repofrompath` option
+- Add `--forcearch` option to multiple commands
+- Add `reinstall --allowerasing` option
+- Add `repoquery --sourcerpm` option
+- Add `repoquery --srpm` option
+- Add `chacheonly` configuration option
+- Add `--cacheonly` option
+- Add `--refresh` option
+- Change default value for `best` configuration to true
+- Change default value for `allow_vendor_change` configuration to false
+- changelog: Fix behavior of `--since` option
+- builddep: Fix handling BuildRequires in spec files
+- swig: Return None for unset options in Python
+- Verify transaction PGP signatures automatically
+- Fix checking whether updateinfo metadata are required
+- Fix handling empty epoch when comparing nevra
+- Fix building with upcoming fmt-10 library
+- Rename namespace, includes and directories from libdnf to libdnf5
+
 # 5.0.14
 
 - Modify libdnf5-devel to generate pkgconf(libdnf5)
