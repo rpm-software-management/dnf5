@@ -12,18 +12,18 @@ Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-%if 0%{?fedora} <= 38
+%if ! (0%{?fedora} > 38 || 0%{?rhel} > 9)
 Requires:       dnf-data
 %endif
 Recommends:     bash-completion
 
 # Remove if condition when Fedora 37 is EOL
-%if 0%{?fedora} > 37
+%if 0%{?fedora} > 37 || 0%{?rhel} > 9
 Provides:       microdnf = %{version}-%{release}
 Obsoletes:      microdnf < 4
 %endif
 
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9
 Provides:       dnf = %{version}-%{release}
 Obsoletes:      dnf < 5
 
@@ -217,13 +217,13 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9
 %{_bindir}/dnf
 %{_bindir}/yum
 %endif
 
 # Remove if condition when Fedora 37 is EOL
-%if 0%{?fedora} > 37
+%if 0%{?fedora} > 37 || 0%{?rhel} > 9
 %{_bindir}/microdnf
 %endif
 
@@ -283,7 +283,7 @@ License:        LGPL-2.1-or-later
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9
 Conflicts:      dnf-data < 4.16.0
 %endif
 
@@ -291,7 +291,7 @@ Conflicts:      dnf-data < 4.16.0
 Package management library.
 
 %files -n libdnf5
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9
 %config(noreplace) %{_sysconfdir}/dnf/dnf.conf
 %dir %{_sysconfdir}/dnf/vars
 %dir %{_sysconfdir}/dnf/protected.d
@@ -563,7 +563,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dbus
 Requires:       polkit
-%if 0%{?fedora} <= 38
+%if ! (0%{?fedora} > 38 || 0%{?rhel} > 9)
 Requires:       dnf-data
 %endif
 
@@ -669,7 +669,7 @@ Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclos
 %install
 %cmake_install
 
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
 %endif
@@ -688,7 +688,7 @@ done
 #find_lang {name}
 
 # Remove if condition when Fedora 37 is EOL
-%if 0%{?fedora} > 37
+%if 0%{?fedora} > 37 || 0%{?rhel} > 9
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %endif
 
