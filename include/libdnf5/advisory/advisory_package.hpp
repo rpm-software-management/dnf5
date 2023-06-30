@@ -54,10 +54,20 @@ public:
     /// @return Name of this AdvisoryPackage as std::string.
     std::string get_name() const;
 
+    /// Get epoch of this AdvisoryPackage.
+    ///
+    /// @return Epoch of this AdvisoryPackage as std::string.
+    std::string get_epoch() const;
+
     /// Get version of this AdvisoryPackage.
     ///
     /// @return Version of this AdvisoryPackage as std::string.
     std::string get_version() const;
+
+    /// Get release version of this AdvisoryPackage.
+    ///
+    /// @return Release of this AdvisoryPackage as std::string.
+    std::string get_release() const;
 
     /// Get evr of this AdvisoryPackage.
     ///

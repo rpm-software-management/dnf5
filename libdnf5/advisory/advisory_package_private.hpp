@@ -36,7 +36,9 @@ namespace libdnf5::advisory {
 class AdvisoryPackage::Impl {
 public:
     std::string get_name() const;
+    std::string get_epoch() const;
     std::string get_version() const;
+    std::string get_release() const;
     std::string get_evr() const;
     std::string get_arch() const;
     Id get_name_id() const { return name; };
