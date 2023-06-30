@@ -25,12 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-
-// advisory list table columns
-enum { COL_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
-
-
-static struct libscols_table * create_advisorylist_table(std::string column_id_name) {
+struct libscols_table * create_advisorylist_table(std::string column_id_name) {
     struct libscols_table * table = scols_new_table();
     if (isatty(1)) {
         scols_table_enable_colors(table, 1);
@@ -45,7 +40,7 @@ static struct libscols_table * create_advisorylist_table(std::string column_id_n
 }
 
 
-static void add_line_into_advisorylist_table(
+void add_line_into_advisorylist_table(
     struct libscols_table * table,
     const char * name,
     const char * type,
@@ -65,38 +60,6 @@ static void add_line_into_advisorylist_table(
     }
 }
 
-
-void print_advisorylist_table(
-    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed) {
-    struct libscols_table * table = create_advisorylist_table("Name");
-    for (auto adv_pkg : advisory_package_list_not_installed) {
-        auto advisory = adv_pkg.get_advisory();
-        add_line_into_advisorylist_table(
-            table,
-            advisory.get_name().c_str(),
-            advisory.get_type().c_str(),
-            advisory.get_severity().c_str(),
-            adv_pkg.get_nevra().c_str(),
-            advisory.get_buildtime(),
-            false);
-    }
-    for (auto adv_pkg : advisory_package_list_installed) {
-        auto advisory = adv_pkg.get_advisory();
-        add_line_into_advisorylist_table(
-            table,
-            advisory.get_name().c_str(),
-            advisory.get_type().c_str(),
-            advisory.get_severity().c_str(),
-            adv_pkg.get_nevra().c_str(),
-            advisory.get_buildtime(),
-            true);
-    }
-    auto cl = scols_table_get_column(table, COL_ID);
-    scols_sort_table(table, cl);
-    scols_print_table(table);
-    scols_unref_table(table);
-}
 
 void print_advisorylist_references_table(
     std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
