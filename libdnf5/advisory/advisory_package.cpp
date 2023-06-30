@@ -43,8 +43,16 @@ std::string AdvisoryPackage::get_name() const {
     return p_impl->get_name();
 }
 
+std::string AdvisoryPackage::get_epoch() const {
+    return p_impl->get_epoch();
+}
+
 std::string AdvisoryPackage::get_version() const {
     return p_impl->get_version();
+}
+
+std::string AdvisoryPackage::get_release() const {
+    return p_impl->get_release();
 }
 
 std::string AdvisoryPackage::get_evr() const {
@@ -102,9 +110,19 @@ std::string AdvisoryPackage::Impl::get_name() const {
     return get_rpm_pool(base).id2str(name);
 }
 
+std::string AdvisoryPackage::Impl::get_epoch() const {
+    auto & pool = get_rpm_pool(base);
+    return pool.split_evr(pool.id2str(evr)).e_def();
+}
+
 std::string AdvisoryPackage::Impl::get_version() const {
     auto & pool = get_rpm_pool(base);
     return pool.split_evr(pool.id2str(evr)).v;
+}
+
+std::string AdvisoryPackage::Impl::get_release() const {
+    auto & pool = get_rpm_pool(base);
+    return pool.split_evr(pool.id2str(evr)).r;
 }
 
 std::string AdvisoryPackage::Impl::get_evr() const {
