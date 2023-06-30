@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "commands/advisory/advisory.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/group/group.hpp"
@@ -27,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <fcntl.h>
@@ -37,6 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
 #include <libdnf5/logger/stream_logger.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <locale.h>
 #include <string.h>
 
@@ -200,6 +201,8 @@ static void add_commands(Context & context) {
 
     context.add_and_initialize_command(std::make_unique<RepolistCommand>(context, "repolist"));
     context.add_and_initialize_command(std::make_unique<RepolistCommand>(context, "repoinfo"));
+
+    context.add_and_initialize_command(std::make_unique<AdvisoryCommand>(context));
 }
 
 }  // namespace dnfdaemon::client
