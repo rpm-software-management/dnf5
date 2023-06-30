@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "callbacks.hpp"
 #include "dbus.hpp"
+#include "services/advisory/advisory.hpp"
 #include "services/base/base.hpp"
 #include "services/comps/group.hpp"
 #include "services/goal/goal.hpp"
@@ -29,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/rpm/rpm.hpp"
 #include "utils.hpp"
 
+#include <libdnf5/conf/const.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -89,6 +91,7 @@ Session::Session(
     services.emplace_back(std::make_unique<Rpm>(*this));
     services.emplace_back(std::make_unique<Goal>(*this));
     services.emplace_back(std::make_unique<Group>(*this));
+    services.emplace_back(std::make_unique<dnfdaemon::Advisory>(*this));
 
     dbus_object = sdbus::createObject(connection, object_path);
     // Register all provided services on d-bus
@@ -162,7 +165,13 @@ bool Session::read_all_repos() {
 
     bool load_available_repos = session_configuration_value<bool>("load_available_repos", true);
     bool load_system_repo = session_configuration_value<bool>("load_system_repo", true);
+    std::vector<std::string> optional_metadata_str =
+        session_configuration_value<std::vector<std::string>>("optional_metadata_types", {});
     if (load_available_repos) {
+        auto optional_metadata_types_opt = base->get_config().get_optional_metadata_types_option();
+        for (const auto & type : optional_metadata_str) {
+            optional_metadata_types_opt.add_item(libdnf5::Option::Priority::RUNTIME, type);
+        }
         //auto & logger = base->get_logger();
         libdnf5::repo::RepoQuery enabled_repos(*base);
         enabled_repos.filter_enabled(true);

@@ -41,8 +41,11 @@ using DbusTransactionItem = sdbus::Struct<
                    // packages that are replaced by this transaction item
     KeyValueMap>;  // transaction object (package / group / module)
 
+// (timestamp, author, text)
 using Changelog = sdbus::Struct<int64_t, std::string, std::string>;
 
+// (id, type, title, url)
+using AdvisoryReference = sdbus::Struct<std::string, std::string, std::string, std::string>;
 
 // constants
 
@@ -56,6 +59,7 @@ const char * const INTERFACE_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf";
 const char * const INTERFACE_RPM = "org.rpm.dnf.v0.rpm.Rpm";
 const char * const INTERFACE_GOAL = "org.rpm.dnf.v0.Goal";
 const char * const INTERFACE_GROUP = "org.rpm.dnf.v0.comps.Group";
+const char * const INTERFACE_ADVISORY = "org.rpm.dnf.v0.Advisory";
 const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
 // signals
