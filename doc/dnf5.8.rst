@@ -118,6 +118,7 @@ Plugin commands
 ---------------
 
 Here is the list of the commands available as plugins.
+These are available after installing the ``dnf5-plugins`` package.
 
 :ref:`builddep <builddep_plugin_ref-label>`
     | Install missing dependencies for building an RPM package.
