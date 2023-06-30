@@ -27,10 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-// advisory list table columns
-enum { COL_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
-
 struct libscols_table * create_advisorylist_table(std::string column_id_name);
+
+void sort_advisorylist_table(libscols_table * table);
 
 void add_line_into_advisorylist_table(
     struct libscols_table * table,
@@ -68,8 +67,7 @@ void print_advisorylist_table(
             advisory.get_buildtime(),
             true);
     }
-    auto cl = scols_table_get_column(table, COL_ID);
-    scols_sort_table(table, cl);
+    sort_advisorylist_table(table);
     scols_print_table(table);
     scols_unref_table(table);
 }

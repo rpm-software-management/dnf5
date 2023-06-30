@@ -25,6 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
+// advisory list table columns
+enum { COL_ADVISORY_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
+
 struct libscols_table * create_advisorylist_table(std::string column_id_name) {
     struct libscols_table * table = scols_new_table();
     if (isatty(1)) {
@@ -39,6 +42,10 @@ struct libscols_table * create_advisorylist_table(std::string column_id_name) {
     return table;
 }
 
+void sort_advisorylist_table(libscols_table * table) {
+    auto cl = scols_table_get_column(table, COL_ADVISORY_ID);
+    scols_sort_table(table, cl);
+}
 
 void add_line_into_advisorylist_table(
     struct libscols_table * table,
@@ -49,7 +56,7 @@ void add_line_into_advisorylist_table(
     unsigned long long buildtime,
     bool installed) {
     struct libscols_line * ln = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln, COL_ID, name);
+    scols_line_set_data(ln, COL_ADVISORY_ID, name);
     scols_line_set_data(ln, COL_ADVISORY_TYPE, type);
     scols_line_set_data(ln, COL_ADVISORY_SEVERITY, severity);
     scols_line_set_data(ln, COL_ADVISORY_PACKAGE, package);
@@ -100,8 +107,7 @@ void print_advisorylist_references_table(
                 true);
         }
     }
-    auto cl = scols_table_get_column(table, COL_ID);
-    scols_sort_table(table, cl);
+    sort_advisorylist_table(table);
     scols_print_table(table);
     scols_unref_table(table);
 }
