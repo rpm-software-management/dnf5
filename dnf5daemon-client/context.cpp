@@ -75,5 +75,13 @@ void Context::on_repositories_ready(const bool & result) {
     }
 }
 
+void Context::reset_download_cb() {
+    if (download_cb) {
+        download_cb->reset_progress_bar();
+        download_cb->set_number_widget_visible(true);
+        download_cb->set_show_total_bar_limit(0);
+    }
+}
+
 
 }  // namespace dnfdaemon::client

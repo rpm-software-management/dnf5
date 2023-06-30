@@ -67,7 +67,7 @@ public:
     libdnf5::OptionString installroot{"/"};
     libdnf5::OptionString releasever{""};
 
-    DownloadCB * get_download_cb() { return download_cb.get(); }
+    void reset_download_cb();
 
 private:
     sdbus::ObjectPath session_object_path;
