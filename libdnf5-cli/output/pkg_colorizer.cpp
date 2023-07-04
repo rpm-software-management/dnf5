@@ -66,22 +66,4 @@ inline std::string PkgColorizer::to_escape(const std::string & color) {
 }
 
 
-std::string PkgColorizer::get_pkg_color(const libdnf5::rpm::Package & package) {
-    auto base_pkg = base_na_version.find(package.get_na());
-    std::string color = "";
-    if (base_pkg == base_na_version.end()) {
-        color = color_not_found;
-    } else {
-        auto vercmp = libdnf5::rpm::evrcmp(package, base_pkg->second);
-        if (vercmp < 0) {
-            color = color_lt;
-        } else if (vercmp == 0) {
-            color = color_eq;
-        } else {
-            color = color_gt;
-        }
-    }
-    return color;
-}
-
 }  // namespace libdnf5::cli::output
