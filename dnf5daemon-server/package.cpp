@@ -55,7 +55,8 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"evr", PackageAttribute::evr},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra},
-    {"reason", PackageAttribute::reason}};
+    {"reason", PackageAttribute::reason},
+    {"vendor", PackageAttribute::vendor}};
 
 std::vector<std::string> reldeplist_to_strings(const libdnf5::rpm::ReldepList & reldeps) {
     std::vector<std::string> lst;
@@ -183,6 +184,9 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::reason:
                 dbus_package.emplace(
                     attr, libdnf5::transaction::transaction_item_reason_to_string(libdnf_package.get_reason()));
+                break;
+            case PackageAttribute::vendor:
+                dbus_package.emplace(attr, libdnf_package.get_vendor());
                 break;
         }
     }

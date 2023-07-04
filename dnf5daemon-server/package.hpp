@@ -64,7 +64,8 @@ enum class PackageAttribute {
     evr,
     nevra,
     full_nevra,
-    reason
+    reason,
+    vendor
 };
 
 dnfdaemon::KeyValueMap package_to_map(
