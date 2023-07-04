@@ -34,6 +34,7 @@ public:
 
     int get_id() { return rawdata.at("id"); }
     std::string get_name() const { return rawdata.at("name"); }
+    std::string get_na() const { return get_name() + "." + get_arch(); }
     std::string get_epoch() const { return rawdata.at("epoch"); }
     std::string get_version() const { return rawdata.at("version"); }
     std::string get_release() const { return rawdata.at("release"); }
