@@ -121,7 +121,7 @@ void RepoqueryCommand::run() {
              "version",
              "release",
              "arch",
-             "repo",
+             "repo_id",
              "install_size",
              "download_size",
              "sourcerpm",
