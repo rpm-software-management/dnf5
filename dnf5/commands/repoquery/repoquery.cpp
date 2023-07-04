@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
+#include <libdnf5-cli/output/package_info_sections.hpp>
 #include <libdnf5-cli/output/repoquery.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -663,10 +664,10 @@ void RepoqueryCommand::run() {
         libdnf5::cli::output::print_changelogs(
             full_package_query, {libdnf5::cli::output::ChangelogFilterType::NONE, 0});
     } else if (info_option->get_value()) {
-        for (auto package : full_package_query) {
-            libdnf5::cli::output::print_package_info_table(package);
-            std::cout << '\n';
-        }
+        auto out = libdnf5::cli::output::PackageInfoSections();
+        out.setup_cols();
+        out.add_section("", full_package_query);
+        out.print();
     } else if (!pkg_attr_option->get_value().empty()) {
         libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, full_package_query, pkg_attr_option->get_value());
     } else {
