@@ -129,7 +129,8 @@ void RepoqueryCommand::run() {
              "summary",
              "url",
              "license",
-             "description"}));
+             "description",
+             "vendor"}));
     } else {
         options.insert(std::pair<std::string, std::vector<std::string>>("package_attrs", {"full_nevra"}));
     }

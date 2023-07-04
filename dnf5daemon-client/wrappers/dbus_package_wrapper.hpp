@@ -54,6 +54,7 @@ public:
     libdnf5::transaction::TransactionItemReason get_reason() const {
         return libdnf5::transaction::transaction_item_reason_from_string(rawdata.at("reason"));
     }
+    std::string get_vendor() const { return rawdata.at("vendor"); }
 
 private:
     dnfdaemon::KeyValueMap rawdata;
