@@ -19,10 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/package_info_sections.hpp"
 
-#include "utils/string.hpp"
-
 #include "libdnf5-cli/tty.hpp"
-#include "libdnf5-cli/utils/units.hpp"
 
 #include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/rpm/package_set.hpp>
@@ -65,57 +62,14 @@ bool PackageInfoSections::add_section(
         }
         std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
 
-        struct libscols_line * first_line = nullptr;
-        struct libscols_line * last_line = nullptr;
         auto tmp_heading = heading;
         for (const auto & pkg : packages) {
-            auto ln = add_line("Name", pkg.get_name());
-            if (colorizer) {
-                scols_line_set_color(ln, colorizer->get_pkg_color(pkg).c_str());
-            }
-            first_line = ln;
-
-            add_line("Epoch", pkg.get_epoch());
-            add_line("Version", pkg.get_version());
-            add_line("Release", pkg.get_release());
-            add_line("Architecture", pkg.get_arch());
             auto obsoletes_it = obsoletes.find(pkg.get_id());
-            if (obsoletes_it != obsoletes.end() && !obsoletes_it->second.empty()) {
-                auto iterator = obsoletes_it->second.begin();
-                add_line("Obsoletes", iterator->get_full_nevra());
-                ++iterator;
-                for (; iterator != obsoletes_it->second.end(); ++iterator) {
-                    ln = add_line("", iterator->get_full_nevra());
-                }
-            }
-            if (!pkg.is_installed()) {
-                add_line(
-                    "Download size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_download_size())));
-            }
-            add_line("Installed size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_install_size())));
-            if (pkg.get_arch() != "src") {
-                add_line("Source", pkg.get_sourcerpm());
-            }
-            if (pkg.is_installed()) {
-                add_line("From repository", pkg.get_from_repo_id());
+            if (obsoletes_it != obsoletes.end()) {
+                add_package(pkg, tmp_heading, colorizer, obsoletes_it->second);
             } else {
-                add_line("Repository", pkg.get_repo_id());
+                add_package(pkg, tmp_heading, colorizer, {});
             }
-            add_line("Summary", pkg.get_summary());
-            add_line("URL", pkg.get_url());
-            add_line("License", pkg.get_license());
-
-            auto lines = libdnf5::utils::string::split(pkg.get_description(), "\n");
-            auto iterator = lines.begin();
-            ln = add_line("Description", *iterator);
-            ++iterator;
-            for (; iterator != lines.end(); ++iterator) {
-                ln = add_line("", *iterator);
-            }
-            last_line = ln;
-            // for info output keep each package as a separate section, which means
-            // an empty line is printed between packages resulting in better readability
-            sections.emplace_back(tmp_heading, first_line, last_line);
             tmp_heading = "";
         }
         return true;
