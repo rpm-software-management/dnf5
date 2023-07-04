@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <fmt/format.h>
-#include <libdnf5-cli/output/repoquery.hpp>
+#include <libdnf5-cli/output/package_info_sections.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -147,8 +147,10 @@ void RepoqueryCommand::run() {
         --num_packages;
         DbusPackageWrapper package(raw_package);
         if (info_option->get_value()) {
-            // TODO(mblaha) use smartcols for this output
-            libdnf5::cli::output::print_package_info_table(package);
+            auto out = libdnf5::cli::output::PackageInfoSections();
+            out.setup_cols();
+            out.add_package(package);
+            out.print();
             if (num_packages) {
                 std::cout << std::endl;
             }
