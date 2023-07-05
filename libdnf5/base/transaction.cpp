@@ -951,11 +951,6 @@ ImportRepoKeysResult Transaction::Impl::import_repo_keys(libdnf5::repo::Repo & r
 
 bool Transaction::Impl::check_gpg_signatures() {
     bool result{true};
-    auto & config = base->get_config();
-    if (!config.get_gpgcheck_option().get_value()) {
-        // gpg check switched off by configuration / command line option
-        return result;
-    }
     // TODO(mblaha): DNSsec key verification
     libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
