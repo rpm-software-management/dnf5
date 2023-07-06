@@ -954,6 +954,7 @@ bool Transaction::Impl::check_gpg_signatures() {
     // TODO(mblaha): DNSsec key verification
     libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
+    int num_checks_skipped = 0;
     for (const auto & trans_pkg : packages) {
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
             auto const & pkg = trans_pkg.get_package();
@@ -964,7 +965,9 @@ bool Transaction::Impl::check_gpg_signatures() {
                 pkg.get_package_path(),
                 repo->get_id());
             auto check_result = rpm_signature.check_package_signature(pkg);
-            if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
+            if (check_result == libdnf5::rpm::RpmSignature::CheckResult::SKIPPED) {
+                num_checks_skipped += 1;
+            } else if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                 // these two errors are possibly recoverable by importing the correct public key
                 auto is_error_recoverable =
                     check_result == libdnf5::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING ||
@@ -997,6 +1000,10 @@ bool Transaction::Impl::check_gpg_signatures() {
                 }
             }
         }
+    }
+    if (num_checks_skipped > 0) {
+        auto warning_msg = utils::sformat(_("Warning: skipped PGP checks for {} package(s)."), num_checks_skipped);
+        signature_problems.push_back(warning_msg);
     }
     return result;
 }

@@ -77,7 +77,7 @@ protected:
 
 class RpmSignature {
 public:
-    enum class CheckResult { OK, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
+    enum class CheckResult { OK, SKIPPED, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
     explicit RpmSignature(const libdnf5::BaseWeakPtr & base) : base(base) {}
     explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
@@ -86,6 +86,7 @@ public:
     /// Check signature of the `package` using public keys stored in rpm database.
     /// @param package: package to check.
     /// @return CheckResult::OK - the check passed
+    ///         CheckResult::SKIPPED - the check was skipped
     ///         CheckResult::FAILED_KEY_MISSING - no corresponding key found in rpmdb
     ///         CheckResult::FAILED_NOT_TRUSTED - signature is valid but the key is not trusted
     ///         CheckResult::FAILED_NOT_SIGNED - package is not signed but signature is required

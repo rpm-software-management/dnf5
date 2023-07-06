@@ -108,12 +108,12 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
     auto repo = pkg.get_repo();
     if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
         if (!base->get_config().get_localpkg_gpgcheck_option().get_value()) {
-            return CheckResult::OK;
+            return CheckResult::SKIPPED;
         }
     } else {
         auto & repo_config = repo->get_config();
         if (!repo_config.get_gpgcheck_option().get_value()) {
-            return CheckResult::OK;
+            return CheckResult::SKIPPED;
         }
     }
 
@@ -241,6 +241,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
 std::string RpmSignature::check_result_to_string(CheckResult result) {
     switch (result) {
         case CheckResult::OK:
+        case CheckResult::SKIPPED:
             return {};
         case CheckResult::FAILED_KEY_MISSING:
         case CheckResult::FAILED_NOT_TRUSTED:
