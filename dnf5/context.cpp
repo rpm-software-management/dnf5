@@ -445,10 +445,8 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
-        if (result == libdnf5::base::Transaction::TransactionRunResult::ERROR_GPG_CHECK) {
-            for (auto const & entry : transaction.get_gpg_signature_problems()) {
-                std::cerr << entry << std::endl;
-            }
+        for (auto const & entry : transaction.get_gpg_signature_problems()) {
+            std::cerr << entry << std::endl;
         }
         for (auto & problem : transaction.get_transaction_problems()) {
             std::cerr << "  - " << problem << std::endl;
@@ -456,6 +454,9 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 
+    for (auto const & entry : transaction.get_gpg_signature_problems()) {
+        std::cerr << entry << std::endl;
+    }
     // TODO(mblaha): print a summary of successful transaction
 }
 
