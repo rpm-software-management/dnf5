@@ -979,7 +979,7 @@ bool Transaction::Impl::check_gpg_signatures() {
                         signature_problems.push_back(
                             err_msg + import_repo_keys_result_to_string(ImportRepoKeysResult::ALREADY_PRESENT));
                         result = false;
-                        continue;
+                        break;
                     }
                     processed_repos.emplace(repo_id);
 
@@ -989,14 +989,17 @@ bool Transaction::Impl::check_gpg_signatures() {
                         if (check_again != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                             signature_problems.push_back(err_msg + _("Import of the key didn't help, wrong key?"));
                             result = false;
+                            break;
                         }
                     } else {
                         signature_problems.push_back(err_msg + import_repo_keys_result_to_string(import_result));
                         result = false;
+                        break;
                     }
                 } else {
                     signature_problems.push_back(err_msg + rpm_signature.check_result_to_string(check_result));
                     result = false;
+                    break;
                 }
             }
         }
