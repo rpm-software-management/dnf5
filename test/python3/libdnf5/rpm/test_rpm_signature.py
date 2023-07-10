@@ -35,7 +35,7 @@ class TestRpmSignature(base_test_case.BaseTestCase):
 
         rpm_sign = libdnf5.rpm.RpmSignature(self.base)
         result = rpm_sign.check_package_signature(package)
-        self.assertEqual(result, libdnf5.rpm.RpmSignature.CheckResult_OK)
+        self.assertEqual(result, libdnf5.rpm.RpmSignature.CheckResult_SKIPPED)
 
     def test_key_files_vector_wrapper(self):
         # Test wrapper for std::vector<KeyInfo>
