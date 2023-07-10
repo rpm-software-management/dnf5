@@ -36,7 +36,9 @@ void BaseTransactionTest::test_check_gpg_signatures_no_gpgcheck() {
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, transaction.get_transaction_packages_count());
     CPPUNIT_ASSERT(transaction.check_gpg_signatures());
-    CPPUNIT_ASSERT(transaction.get_gpg_signature_problems().empty());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, transaction.get_gpg_signature_problems().size());
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("Warning: skipped PGP checks for 1 package(s)."), transaction.get_gpg_signature_problems()[0]);
 }
 
 void BaseTransactionTest::test_check_gpg_signatures_fail() {
