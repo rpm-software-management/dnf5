@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo/repo_pgp.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/fs/temp.hpp"
+#include "utils/string.hpp"
 #include "utils/url.hpp"
 
 #include "libdnf5/repo/file_downloader.hpp"
@@ -192,7 +193,7 @@ bool RpmSignature::key_present(const KeyInfo & key) const {
 }
 
 bool RpmSignature::import_key(const KeyInfo & key) const {
-    libdnf5::rpm::RpmLogGuard rpm_log_guard{base};
+    libdnf5::rpm::RpmLogGuardStrings rpm_log_guard;
 
     auto ts_ptr = create_transaction(base);
     if (!rpmdb_lookup(ts_ptr, key)) {
@@ -204,7 +205,8 @@ bool RpmSignature::import_key(const KeyInfo & key) const {
         }
         auto pkt_ptr = RpmKeyPktPtr{pkt, pkt_deleter};
         if (rpmtsImportPubkey(ts_ptr.get(), pkt_ptr.get(), pkt_len) != RPMRC_OK) {
-            throw KeyImportError(M_("Failed to import public key \"{}\" to rpmdb."), key.get_url());
+            auto rpm_logs = utils::string::join(rpm_log_guard.get_rpm_logs(), "\n");
+            throw KeyImportError(M_("Failed to import public key \"{}\" to rpmdb: {}"), key.get_url(), rpm_logs);
         }
         return true;
     }
