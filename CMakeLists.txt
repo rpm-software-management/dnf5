@@ -31,6 +31,7 @@ option(WITH_PYTHON_PLUGINS_LOADER "Build a special dnf5 plugin that loads Python
 option(WITH_COMPS "Build with comps groups and environments support" ON)
 option(WITH_MODULEMD "Build with modulemd modules support" ON)
 option(WITH_ZCHUNK "Build with zchunk delta compression support" ON)
+option(ENABLE_SOLV_URPMREORDER "Build with support for URPM-like solution reordering?" OFF)
 
 # build options - documentation
 option(WITH_HTML "Build HTML documentation" ON)
@@ -94,6 +95,11 @@ add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 add_definitions(-DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 add_definitions(-DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DPROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH})
+
+# libsolv options
+if(ENABLE_SOLV_URPMREORDER)
+    add_definitions(-DLIBSOLV_FLAG_URPMREORDER=1)
+endif()
 
 if(WITH_SANITIZERS)
     message(WARNING "Building with sanitizers enabled!")
