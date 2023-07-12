@@ -570,6 +570,10 @@ Package management service with a DBus interface.
 Summary:        Plugins for dnf5
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
+Provides:       dnf5-command(builddep)
+Provides:       dnf5-command(changelog)
+Provides:       dnf5-command(copr)
+Provides:       dnf5-command(repoclosure)
 
 %description -n dnf5-plugins
 Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclosure commands.
