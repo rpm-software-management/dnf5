@@ -77,11 +77,13 @@ private:
 
 class Pool {
 public:
-    /// Create libsolv pool and set POOL_FLAG_WHATPROVIDESWITHDISABLED to ensure excluded packages are not taken as
-    /// candidates for solver
+    /// Create libsolv pool and set the appropriate pool flags
     Pool() : considered(0) {
         pool = pool_create();
+        // Ensure excluded packages are not taken as candidates for solver
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
+        // Allow packages of the same name with different architectures to be installed in parallel
+        pool_set_flag(pool, POOL_FLAG_IMPLICITOBSOLETEUSESCOLORS, 1);
     }
 
     Pool(const Pool & pool) = delete;
