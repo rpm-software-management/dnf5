@@ -64,9 +64,22 @@ class ArgumentParserPositionalArgumentFormatError : public ArgumentParserError {
 
 /// Exception is generated in the case of an unexpected argument.
 class ArgumentParserUnknownArgumentError : public ArgumentParserError {
+private:
+    std::string command;
+    std::string argument;
+
 public:
     using ArgumentParserError::ArgumentParserError;
+
+    template <typename... Ss>
+    ArgumentParserUnknownArgumentError(
+        const std::string command, const std::string argument, const BgettextMessage & format, Ss &&... args)
+        : ArgumentParserError(format, std::forward<Ss>(args)...),
+          command(command),
+          argument(argument) {}
     const char * get_name() const noexcept override { return "ArgumentParserUnknownArgumentError"; }
+    const std::string & get_command() const { return command; };
+    const std::string & get_argument() const { return argument; };
 };
 
 
