@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <filesystem>
@@ -131,23 +132,34 @@ void CleanCommand::run() {
     std::error_code ec;
     libdnf5::repo::RepoCache::RemoveStatistics statistics{};
     for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
-        libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
-
-        if (required_actions & CLEAN_ALL) {
-            statistics += cache.remove_all();
+        if (!dir_entry.is_directory()) {
             continue;
         }
-        if (required_actions & CLEAN_METADATA) {
-            statistics += cache.remove_metadata();
-        }
-        if (required_actions & CLEAN_PACKAGES) {
-            statistics += cache.remove_packages();
-        }
-        if (required_actions & CLEAN_DBCACHE) {
-            statistics += cache.remove_solv_files();
-        }
-        if (required_actions & EXPIRE_CACHE) {
-            cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+        libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
+
+        try {
+            if (required_actions & CLEAN_ALL) {
+                statistics += cache.remove_all();
+                continue;
+            }
+            if (required_actions & CLEAN_METADATA) {
+                statistics += cache.remove_metadata();
+            }
+            if (required_actions & CLEAN_PACKAGES) {
+                statistics += cache.remove_packages();
+            }
+            if (required_actions & CLEAN_DBCACHE) {
+                statistics += cache.remove_solv_files();
+            }
+            if (required_actions & EXPIRE_CACHE) {
+                cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+            }
+        } catch (const std::exception & ex) {
+            std::cerr << libdnf5::utils::sformat(
+                             _("Failed to cleanup repository cache in path \"{0}\": {1}"),
+                             dir_entry.path().native(),
+                             ex.what())
+                      << std::endl;
         }
     }
 

@@ -164,8 +164,19 @@ void RootCommand::set_argument_parser() {
         std::filesystem::path cachedir{ctx.base.get_config().get_cachedir_option().get_value()};
         std::error_code ec;
         for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
+            if (!dir_entry.is_directory()) {
+                continue;
+            }
             libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
-            cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+            try {
+                cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+            } catch (const std::exception & ex) {
+                std::cerr << libdnf5::utils::sformat(
+                                 _("Failed to expire repository cache in path \"{0}\": {1}"),
+                                 dir_entry.path().native(),
+                                 ex.what())
+                          << std::endl;
+            }
         }
         return true;
     });
