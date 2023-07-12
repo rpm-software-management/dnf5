@@ -37,8 +37,15 @@ void HistoryInfoCommand::set_argument_parser() {
 }
 
 void HistoryInfoCommand::run() {
-    auto transactions =
-        list_transactions_from_specs(*get_context().base.get_transaction_history(), transaction_specs->get_value());
+    auto ts_specs = transaction_specs->get_value();
+    auto & history = *get_context().base.get_transaction_history();
+    std::vector<libdnf5::transaction::Transaction> transactions;
+
+    if (ts_specs.empty()) {
+        transactions = list_transactions_from_specs(history, {"last"});
+    } else {
+        transactions = list_transactions_from_specs(history, ts_specs);
+    }
 
     if (reverse->get_value()) {
         std::sort(transactions.begin(), transactions.end(), std::greater{});
