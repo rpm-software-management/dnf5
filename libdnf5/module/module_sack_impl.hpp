@@ -51,15 +51,17 @@ class ModuleGoalPrivate;
 
 class ModuleSack::Impl {
 public:
-    /// Create libsolv pool and set POOL_FLAG_WHATPROVIDESWITHDISABLED to ensure excluded packages are not taken as
-    /// candidates for solver
+    /// Create libsolv pool and set the appropriate pool flags
     Impl(ModuleSack & module_sack, const BaseWeakPtr & base)
         : module_sack(&module_sack),
           base(base),
           module_metadata(base),
           pool(pool_create()),
           module_db(new ModuleDB(base)) {
+        // Ensure excluded packages are not taken as candidates for solver
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
+        // Allow packages of the same name with different architectures to be installed in parallel
+        pool_set_flag(pool, POOL_FLAG_IMPLICITOBSOLETEUSESCOLORS, 1);
     }
     ~Impl() {
         //TODO(amatej): Perhaps it would be good to create and use ModulePool which would take care of considered.
