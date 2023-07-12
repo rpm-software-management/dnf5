@@ -41,7 +41,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
+constexpr plugin::Version PLUGIN_VERSION{0, 2, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -389,7 +389,7 @@ void Actions::parse_action_files() {
             auto pkg_filter_pos = line.find(':');
             if (pkg_filter_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_SPEC:DIRECTION:CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
                     path.native(),
                     line_number);
             }
@@ -397,15 +397,23 @@ void Actions::parse_action_files() {
             auto direction_pos = line.find(':', pkg_filter_pos);
             if (direction_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_SPEC:DIRECTION:CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
                     path.native(),
                     line_number);
             }
             ++direction_pos;
-            auto command_pos = line.find(':', direction_pos);
+            auto reserved_pos = line.find(':', direction_pos);
+            if (reserved_pos == std::string::npos) {
+                throw ActionsPluginError(
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
+                    path.native(),
+                    line_number);
+            }
+            ++reserved_pos;
+            auto command_pos = line.find(':', reserved_pos);
             if (command_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_SPEC:DIRECTION:CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
                     path.native(),
                     line_number);
             }
@@ -439,7 +447,7 @@ void Actions::parse_action_files() {
                 }
             }
 
-            auto direction = line.substr(direction_pos, command_pos - direction_pos - 1);
+            auto direction = line.substr(direction_pos, reserved_pos - direction_pos - 1);
             if (pkg_filter.empty() && !direction.empty()) {
                 throw ActionsPluginError(
                     M_("Error in file \"{}\" on line {}: Cannot use direction without package filter"),
