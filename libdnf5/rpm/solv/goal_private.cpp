@@ -103,7 +103,6 @@ void init_solver(libdnf5::solv::Pool & pool, libdnf5::solv::Solver & solver) {
     /* support package splits via obsoletes */
     solver.set_flag(SOLVER_FLAG_YUM_OBSOLETES, 1);
 
-// TODO Ask Neal whether it is needed. See https://bugs.mageia.org/show_bug.cgi?id=18315
 #if defined(LIBSOLV_FLAG_URPMREORDER)
     /* support urpm-like solution reordering */
     solver.set_flag(SOLVER_FLAG_URPM_REORDER, 1);
