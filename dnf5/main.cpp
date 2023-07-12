@@ -738,6 +738,14 @@ int main(int argc, char * argv[]) try {
                 }
             }
             std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+            if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
+                if (unknown_arg_ex->get_command() == "dnf5") {
+                    std::cout << fmt::format(
+                                     "It could be a command provided by a plugin, try: dnf install dnf5-command({})",
+                                     unknown_arg_ex->get_argument())
+                              << std::endl;
+                }
+            }
             return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
         }
 
