@@ -617,6 +617,7 @@ void ModuleTest::test_module_db() {
 void ModuleTest::test_module_enable() {
     add_repo_repomd("repomd-modules");
 
+    // Add module enable goal operation
     libdnf5::Goal goal(base);
     goal.add_module_enable("fruit-salad:main");
     auto transaction = goal.resolve();
@@ -634,7 +635,8 @@ void ModuleTest::test_module_enable() {
     std::sort(active_module_specs.begin(), active_module_specs.end());
     CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
 
-    transaction.run();
+    // Run the transaction
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, transaction.run());
 
     auto system_state = (base.*get(priv_impl()))->get_system_state();
 
@@ -651,5 +653,114 @@ void ModuleTest::test_module_enable() {
         if (name != "fruit-salad" && name != "gooseberry") {
             CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
         }
+    }
+}
+
+
+void ModuleTest::test_module_disable() {
+    add_repo_repomd("repomd-modules");
+
+    // Add module disable goal operation
+    libdnf5::Goal goal(base);
+    goal.add_module_disable("fruit-salad:main");
+    auto transaction = goal.resolve();
+
+    // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+    std::vector<std::string> active_module_specs;
+    for (auto & module_item : base.get_module_sack()->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
+
+    // Run the transaction
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, transaction.run());
+
+    auto system_state = (base.*get(priv_impl()))->get_system_state();
+
+    // Module fruit-salat is DISABLED because it was explicitly disabled
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf5::system::ModuleState({"", ModuleStatus::DISABLED, {}}), system_state.get_module_state("fruit-salad"));
+
+    // None of the other modules is DISABLED
+    for (auto [name, module_state] : system_state.get_module_states()) {
+        if (name != "fruit-salad") {
+            CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
+        }
+    }
+}
+
+
+void ModuleTest::test_module_disable_enabled() {
+    add_repo_repomd("repomd-modules");
+
+    // Set state of module berries to ENABLED
+    (base.*get(priv_impl()))
+        ->get_system_state()
+        .set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
+
+    // Add module disable goal operation
+    libdnf5::Goal goal(base);
+    goal.add_module_disable("berries");
+    auto transaction = goal.resolve();
+
+    // Active modules don't contain anything, because the only module that had a default stream was enabled
+    std::vector<std::string> active_module_specs;
+    for (auto & module_item : base.get_module_sack()->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    CPPUNIT_ASSERT_EQUAL(std::vector<std::string>{}, active_module_specs);
+
+    // Run the transaction
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, transaction.run());
+
+    auto system_state = (base.*get(priv_impl()))->get_system_state();
+
+    // Module berries is DISABLED because it was explicitly disabled
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf5::system::ModuleState({"", ModuleStatus::DISABLED, {}}), system_state.get_module_state("berries"));
+
+    // None of the other modules is DISABLED
+    for (auto [name, module_state] : system_state.get_module_states()) {
+        if (name != "berries") {
+            CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
+        }
+    }
+}
+
+
+void ModuleTest::test_module_reset() {
+    add_repo_repomd("repomd-modules");
+
+    // Set state of module berries to ENABLED
+    (base.*get(priv_impl()))
+        ->get_system_state()
+        .set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
+
+    // Add module reset goal operation
+    libdnf5::Goal goal(base);
+    goal.add_module_reset("berries");
+    auto transaction = goal.resolve();
+
+    // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+    std::vector<std::string> active_module_specs;
+    for (auto & module_item : base.get_module_sack()->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
+
+    // Run the transaction
+    CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, transaction.run());
+
+    auto system_state = (base.*get(priv_impl()))->get_system_state();
+
+    // None of the modules is DISABLED
+    for (auto [name, module_state] : system_state.get_module_states()) {
+        CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
     }
 }

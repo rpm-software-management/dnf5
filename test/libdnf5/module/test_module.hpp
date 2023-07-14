@@ -38,6 +38,9 @@ class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_query_spec);
     CPPUNIT_TEST(test_module_db);
     CPPUNIT_TEST(test_module_enable);
+    CPPUNIT_TEST(test_module_disable);
+    CPPUNIT_TEST(test_module_disable_enabled);
+    CPPUNIT_TEST(test_module_reset);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -50,6 +53,9 @@ public:
     void test_query_spec();
     void test_module_db();
     void test_module_enable();
+    void test_module_disable();
+    void test_module_disable_enabled();
+    void test_module_reset();
 
     std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
