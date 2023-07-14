@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/to_underlying.hpp"
@@ -140,10 +141,38 @@ std::string Transaction::get_db_cookie() const {
 
 void Transaction::fill(const base::Transaction & transaction) {
     transaction_items = transaction.get_transaction_packages();
+
+    // Auxilliary map name->package with the latest versions of currently
+    // installed installonly packages.
+    // Used to detect installation of a installonly package with lower version
+    // that is currently installed.
+    std::map<std::string, libdnf5::rpm::Package> installonly_versions;
+    const auto & installonlypkgs = base->get_config().get_installonlypkgs_option().get_value();
+    rpm::PackageQuery installonly_query(base);
+    installonly_query.filter_installed();
+    installonly_query.filter_latest_evr();
+    installonly_query.filter_provides(installonlypkgs, libdnf5::sack::QueryCmp::GLOB);
+    for (const auto & pkg : installonly_query) {
+        installonly_versions.insert(std::make_pair(pkg.get_name(), pkg));
+    }
+
     for (auto & tspkg : transaction_items) {
         switch (tspkg.get_action()) {
             case libdnf5::transaction::TransactionItemAction::INSTALL:
                 install(tspkg);
+                // Inbound installonly packages always have `INSTALL` action,
+                // there is no `DOWNGRADE`. We need to detect downgrade
+                // manually to correctly add RPMPROB_FILTER_OLDPACKAGE to rpm
+                // transaction later during run() execution.
+                if (!downgrade_requested) {
+                    auto pkg = tspkg.get_package();
+                    auto installonly_it = installonly_versions.find(pkg.get_name());
+                    if (installonly_it != installonly_versions.end()) {
+                        if (libdnf5::rpm::cmp_nevra(pkg, installonly_it->second) > 0) {
+                            downgrade_requested = true;
+                        }
+                    }
+                }
                 break;
             case libdnf5::transaction::TransactionItemAction::UPGRADE:
                 upgrade(tspkg);
