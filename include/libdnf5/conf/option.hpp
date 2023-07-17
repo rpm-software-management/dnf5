@@ -72,7 +72,6 @@ public:
         INSTALLROOT = 45,
         PLUGINDEFAULT = 50,
         PLUGINCONFIG = 60,
-        DROPINCONFIG = 65,
         COMMANDLINE = 70,
         RUNTIME = 80
     };
