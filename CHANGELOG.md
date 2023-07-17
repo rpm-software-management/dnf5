@@ -1,3 +1,17 @@
+# 5.1.0
+
+- Minor version update. API is considered stabile
+- Remove unneeded unused configuration priority
+- Don't show dnf5-command hint for unknown options, only commands
+- Add hint to install missing command with dnf5-command(<name>)
+- Add dnf5-command(<command-name>) provides to dnf5
+- Add dnf5-command(<command-name>) provides to dnf5-plugins
+- Document several methods as deprecated
+- Fix core dump on `--refresh` switch usage
+- Add `repoquery -l`/`--list` aliases for `--files` for rpm compat
+- Add `vendor` attr to package in `dnfdaemon-server`
+- Document `dnf5-plugins` package in man pages
+
 # 5.0.15
 
 - Add `module enable` subcommand
