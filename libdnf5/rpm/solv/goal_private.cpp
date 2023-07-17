@@ -580,12 +580,15 @@ libdnf5::GoalProblem GoalPrivate::protected_in_removals() {
     auto & pool = get_rpm_pool();
 
     libdnf5::solv::SolvMap pkg_remove_list(pool->nsolvables);
-    for (auto index = 0; index < removes.size(); ++index) {
-        pkg_remove_list.add_unsafe(removes[index]);
+    for (const auto & remove : removes) {
+        pkg_remove_list.add_unsafe(remove);
     }
-    for (auto index = 0; index < obsoleted.size(); ++index) {
-        pkg_remove_list.add_unsafe(obsoleted[index]);
-    }
+    // We want to allow obsoletion of protected packages, so we do not consider
+    // obsoletes here, only removes. Previously, obsoletion of protected
+    // packages was disallowed, but there needed to be some mechanism for
+    // obsoleting/swapping a protected package, such as to obsolete `dnf` in
+    // favor of `dnf5`. Obsoleting a package is much harder to do accidentally
+    // than removing it.
 
     libdnf5::solv::SolvMap protected_pkgs(pool->nsolvables);
     if (protected_packages) {
@@ -593,6 +596,13 @@ libdnf5::GoalProblem GoalPrivate::protected_in_removals() {
     }
     if (protected_running_kernel.id > 0) {
         protected_pkgs.add_unsafe(protected_running_kernel.id);
+        // Special case: consider the obsoletion of the running kernel as a
+        // removal. Obsoletion of other protected packages should be allowed.
+        for (const auto & obsolete : obsoleted) {
+            if (obsolete == protected_running_kernel.id) {
+                pkg_remove_list.add_unsafe(obsolete);
+            }
+        }
     }
 
     removal_of_protected.reset(new libdnf5::solv::SolvMap(std::move(pkg_remove_list)));
