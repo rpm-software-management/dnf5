@@ -1,6 +1,6 @@
 %global project_version_major 5
-%global project_version_minor 0
-%global project_version_patch 15
+%global project_version_minor 1
+%global project_version_patch 0
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -695,6 +695,9 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 
 %changelog
+* Mon Jul 17 2023 Packit Team <hello@packit.dev> - 5.1.0-1
+- New upstream release 5.1.0
+
 * Thu Jun 29 2023 Packit Team <hello@packit.dev> - 5.0.15-1
 - New upstream release 5.0.15
 
