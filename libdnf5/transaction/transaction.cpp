@@ -170,6 +170,7 @@ void Transaction::fill_transaction_environments(
     for (auto & tsenv : transaction_environments) {
         auto & new_env = new_comps_environment();
         auto environment = tsenv.get_environment();
+        new_env.set_environment_id(environment.get_environmentid());
         new_env.set_name(environment.get_name());
         new_env.set_translated_name(environment.get_translated_name());
         libdnf5::comps::PackageType package_types{libdnf5::comps::PackageType::MANDATORY};
@@ -177,6 +178,9 @@ void Transaction::fill_transaction_environments(
             package_types |= libdnf5::comps::PackageType::OPTIONAL;
         }
         new_env.set_package_types(package_types);
+        if (!tsenv.get_environment().get_repos().empty()) {
+            new_env.set_repoid(*tsenv.get_environment().get_repos().begin());
+        }
         for (const auto & group_id : environment.get_groups()) {
             auto & new_env_grp = new_env.new_group();
             new_env_grp.set_group_id(group_id);
@@ -201,10 +205,14 @@ void Transaction::fill_transaction_groups(
     for (auto & tsgrp : transaction_groups) {
         auto & new_grp = new_comps_group();
         auto group = tsgrp.get_group();
+        new_grp.set_group_id(group.get_groupid());
         new_grp.set_name(group.get_name());
         new_grp.set_action(tsgrp.get_action());
         new_grp.set_reason(tsgrp.get_reason());
         new_grp.set_translated_name(group.get_translated_name());
+        if (!tsgrp.get_group().get_repos().empty()) {
+            new_grp.set_repoid(*tsgrp.get_group().get_repos().begin());
+        }
 
         libdnf5::comps::PackageType package_types{0};
         for (const auto & group_package : group.get_packages()) {
