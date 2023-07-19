@@ -46,6 +46,8 @@ void AdvisoryInfoCommand::process_and_print_queries(
         packages.filter_installed();
         packages.filter_latest_evr();
 
+        add_running_kernel_packages(ctx.base, packages);
+
         advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
     }
 
