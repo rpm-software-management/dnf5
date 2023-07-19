@@ -41,6 +41,12 @@ class CompsEnvironmentGroupDbUtils;
 ///
 // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentItem
 class CompsEnvironment : public TransactionItem {
+public:
+    /// Get string representation of the object, which equals to environment_id
+    ///
+    // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.toStr()
+    std::string to_string() const { return get_environment_id(); }
+
 private:
     friend Transaction;
     friend CompsEnvironmentDbUtils;
@@ -101,12 +107,6 @@ private:
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf5::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
-
-
-    /// Get string representation of the object, which equals to environment_id
-    ///
-    // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.toStr()
-    std::string to_string() const { return get_environment_id(); }
 
     std::string environment_id;
     std::string name;

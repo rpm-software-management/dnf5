@@ -41,6 +41,12 @@ class CompsGroupPackageDbUtils;
 ///
 // @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupItem
 class CompsGroup : public TransactionItem {
+public:
+    /// Get string representation of the object, which equals to group_id
+    ///
+    // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
+    std::string to_string() const { return get_group_id(); }
+
 private:
     friend Transaction;
     friend CompsGroupPackage;
@@ -102,11 +108,6 @@ private:
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf5::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
-
-    /// Get string representation of the object, which equals to group_id
-    ///
-    // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
-    std::string to_string() const { return get_group_id(); }
 
     std::string group_id;
     std::string name;
