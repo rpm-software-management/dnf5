@@ -38,7 +38,9 @@ public:
 
 protected:
     virtual void process_and_print_queries(
-        Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) = 0;
+        Context & ctx,
+        libdnf5::advisory::AdvisoryQuery & advisories,
+        const std::vector<std::string> & package_specs) = 0;
 
     void add_running_kernel_packages(libdnf5::Base & base, libdnf5::rpm::PackageQuery & package_query);
 

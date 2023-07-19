@@ -81,13 +81,6 @@ void AdvisorySubCommand::configure() {
 void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::rpm::PackageQuery package_query(ctx.base);
-    auto package_specs_strs = contains_pkgs->get_value();
-    // Filter packages by name patterns if given
-    if (package_specs_strs.size() > 0) {
-        package_query.filter_name(package_specs_strs, libdnf5::sack::QueryCmp::IGLOB);
-    }
-
     auto advisories_opt = advisory_query_from_cli_input(
         ctx.base,
         advisory_specs->get_value(),
@@ -108,7 +101,7 @@ void AdvisorySubCommand::run() {
         advisories.filter_reference("*", {"cve"}, libdnf5::sack::QueryCmp::IGLOB);
     }
 
-    process_and_print_queries(ctx, advisories, package_query);
+    process_and_print_queries(ctx, advisories, contains_pkgs->get_value());
 }
 
 }  // namespace dnf5

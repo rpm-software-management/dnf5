@@ -27,8 +27,13 @@ namespace dnf5 {
 using namespace libdnf5::cli;
 
 void AdvisorySummaryCommand::process_and_print_queries(
-    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) {
+    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, const std::vector<std::string> & package_specs) {
     std::string mode;
+
+    libdnf5::rpm::PackageQuery packages(ctx.base);
+    if (package_specs.size() > 0) {
+        packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
+    }
 
     if (all->get_value()) {
         packages.filter_installed();
@@ -46,12 +51,17 @@ void AdvisorySummaryCommand::process_and_print_queries(
         advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
         mode = _("Updates");
     } else {  // available is the default
-        packages.filter_installed();
-        packages.filter_latest_evr();
+        libdnf5::rpm::PackageQuery installed_packages(ctx.base);
+        installed_packages.filter_installed();
+        installed_packages.filter_latest_evr();
 
-        add_running_kernel_packages(ctx.base, packages);
+        add_running_kernel_packages(ctx.base, installed_packages);
 
-        advisories.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
+        if (package_specs.size() > 0) {
+            installed_packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
+        }
+
+        advisories.filter_packages(installed_packages, libdnf5::sack::QueryCmp::GT);
         mode = _("Available");
     }
 
