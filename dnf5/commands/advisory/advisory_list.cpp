@@ -28,9 +28,7 @@ namespace dnf5 {
 using namespace libdnf5::cli;
 
 void AdvisoryListCommand::process_and_print_queries(
-    [[maybe_unused]] Context & ctx,
-    libdnf5::advisory::AdvisoryQuery & advisories,
-    libdnf5::rpm::PackageQuery & packages) {
+    Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, libdnf5::rpm::PackageQuery & packages) {
     std::vector<libdnf5::advisory::AdvisoryPackage> installed_pkgs;
     std::vector<libdnf5::advisory::AdvisoryPackage> not_installed_pkgs;
 
@@ -49,6 +47,8 @@ void AdvisoryListCommand::process_and_print_queries(
     } else {  // available is the default
         packages.filter_installed();
         packages.filter_latest_evr();
+
+        add_running_kernel_packages(ctx.base, packages);
 
         not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     }

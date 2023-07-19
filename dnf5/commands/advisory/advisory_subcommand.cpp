@@ -60,7 +60,7 @@ void AdvisorySubCommand::set_argument_parser() {
 // When the running kernel has available advisories show them because the system
 // is vulnerable (even if the newer fixed version of kernel is already installed).
 // DNF4 bug with behavior description: https://bugzilla.redhat.com/show_bug.cgi?id=1728004
-static void add_running_kernel_packages(libdnf5::Base & base, libdnf5::rpm::PackageQuery & package_query) {
+void AdvisorySubCommand::add_running_kernel_packages(libdnf5::Base & base, libdnf5::rpm::PackageQuery & package_query) {
     auto kernel = base.get_rpm_package_sack()->get_running_kernel();
     if (kernel.get_id().id > 0) {
         libdnf5::rpm::PackageQuery kernel_query(base);
@@ -82,13 +82,6 @@ void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
     libdnf5::rpm::PackageQuery package_query(ctx.base);
-
-    // When running with the default filter (available)
-    if (!all->get_value() && !installed->get_value() && !updates->get_value()) {
-        add_running_kernel_packages(ctx.base, package_query);
-    }
-
-
     auto package_specs_strs = contains_pkgs->get_value();
     // Filter packages by name patterns if given
     if (package_specs_strs.size() > 0) {
