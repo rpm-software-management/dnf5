@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/preserve_order_map.hpp"
 
+#include <filesystem>
 #include <istream>
 #include <map>
 #include <memory>
@@ -137,7 +138,10 @@ public:
     const Container & get_data() const noexcept;
     Container & get_data() noexcept;
 
+    void set_include_root_path(const std::string & path);
+
 private:
+    std::filesystem::path include_root_path;
     Container data;
     int item_number{0};
     std::string header;
@@ -261,6 +265,10 @@ inline const ConfigParser::Container & ConfigParser::get_data() const noexcept {
 
 inline ConfigParser::Container & ConfigParser::get_data() noexcept {
     return data;
+}
+
+inline void ConfigParser::set_include_root_path(const std::string & path) {
+    include_root_path = path;
 }
 
 }  // namespace libdnf5

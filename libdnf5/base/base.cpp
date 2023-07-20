@@ -85,6 +85,9 @@ void Base::load_defaults() {
 
 void Base::load_config_from_file(const std::string & path) {
     ConfigParser parser;
+    if (!config.get_use_host_config_option().get_value()) {
+        parser.set_include_root_path(config.get_installroot_option().get_value());
+    }
     parser.read(path);
     config.load_from_parser(parser, "main", vars, *get_logger());
 }

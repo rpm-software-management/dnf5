@@ -38,7 +38,11 @@ constexpr auto INCLUDE_KEY_LEN = INCLUDE_KEY.length();
 
 namespace libdnf5 {
 
-static void read(ConfigParser & cfg_parser, const std::string & file_path, bool included) try {
+static void read(
+    ConfigParser & cfg_parser,
+    const std::string & file_path,
+    bool included,
+    std::filesystem::path & include_root_path) try {
     IniParser parser(file_path);
     IniParser::ItemType readed_type;
     while ((readed_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
@@ -66,13 +70,17 @@ static void read(ConfigParser & cfg_parser, const std::string & file_path, bool 
                     throw Error(M_("\"{}{}\": Only absolute paths allowed."), INCLUDE_KEY, glob_path.native());
                 }
 
+                if (!include_root_path.empty() && include_root_path != "/") {
+                    glob_path = include_root_path / glob_path.relative_path();
+                }
+
                 glob_t glob_buf;
                 glob(glob_path.c_str(), GLOB_MARK, nullptr, &glob_buf);
                 utils::OnScopeExit free_glob_buf([&glob_buf]() noexcept { ::globfree(&glob_buf); });
                 for (size_t i = 0; i < glob_buf.gl_pathc; ++i) {
                     auto path = glob_buf.gl_pathv[i];
                     if (path[strlen(path) - 1] != '/') {  // directories are skipped
-                        ::libdnf5::read(cfg_parser, path, true);
+                        ::libdnf5::read(cfg_parser, path, true, include_root_path);
                     }
                 }
             }
@@ -98,7 +106,7 @@ ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
     : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
 
 void ConfigParser::read(const std::string & file_path) {
-    ::libdnf5::read(*this, file_path, false);
+    ::libdnf5::read(*this, file_path, false, include_root_path);
 }
 
 static std::string create_raw_item(const std::string & value, const std::string & old_raw_item) {
