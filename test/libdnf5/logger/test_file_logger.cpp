@@ -33,11 +33,11 @@ void FileLoggerTest::setUp() {
     BaseTestCase::setUp();
 
     auto & config = base.get_config();
-    auto & installroot = config.get_installroot_option().get_value();
-    auto & temp_logdir = "/var/log/FileLoggerTestLogDir";
-    config.get_logdir_option().set(temp_logdir);
+    auto installroot = path(config.get_installroot_option().get_value());
+    auto temp_logdir = path("/var/log/FileLoggerTestLogDir");
+    config.get_logdir_option().set(installroot / temp_logdir.relative_path());
 
-    full_log_path = path(installroot) / path(temp_logdir).relative_path() / libdnf5::FILE_LOGGER_FILENAME;
+    full_log_path = installroot / temp_logdir.relative_path() / libdnf5::FILE_LOGGER_FILENAME;
 }
 
 
