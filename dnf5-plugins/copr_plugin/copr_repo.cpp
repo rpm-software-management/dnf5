@@ -91,7 +91,7 @@ void available_directories_error(
     message << std::endl;
     bool first = true;
 
-    message << _("You can use one of these avaiable directories:") << std::endl;
+    message << _("You can use one of these available directories:") << std::endl;
     for (const auto & available : directories) {
         if (!first)
             message << std::endl;
@@ -120,7 +120,7 @@ void available_chroots_error(
             message << " " << attempted << std::endl;
     }
 
-    message << _("You can choose one of the avaiable chroots explicitly:") << std::endl;
+    message << _("You can choose one of the available chroots explicitly:") << std::endl;
     for (const auto & available : chroots) {
         if (!first)
             message << std::endl;
