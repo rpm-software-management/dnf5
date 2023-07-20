@@ -293,6 +293,7 @@ Package management library.
 %files -n libdnf5
 %if 0%{?fedora} > 38 || 0%{?rhel} > 9
 %config(noreplace) %{_sysconfdir}/dnf/dnf.conf
+%dir %{_sysconfdir}/dnf/libdnf5.conf.d
 %dir %{_sysconfdir}/dnf/vars
 %dir %{_sysconfdir}/dnf/protected.d
 %else

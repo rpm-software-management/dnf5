@@ -1,0 +1,8 @@
+# see `man dnf.conf` for defaults and possible options
+
+#
+# include all matching files
+#
+#!include_config @CMAKE_INSTALL_FULL_SYSCONFDIR@/dnf/libdnf5.conf.d/*.conf
+
+[main]

@@ -109,6 +109,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc DESTINATION ${CMAKE_INSTALL
 # Makes an empty directory for libdnf5 cache
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf5")
 
+# Creates "dnf.conf" configuration file
+configure_file("dnf.conf.in" ${CMAKE_CURRENT_BINARY_DIR}/dnf.conf @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/dnf.conf" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/")
+
+# Makes an empty directory for libdnf5 included configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5.conf.d")
+
 # Makes an empty directory for libdnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
 
