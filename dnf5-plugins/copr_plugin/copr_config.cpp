@@ -72,7 +72,10 @@ void CoprConfig::load_all_configuration() {
     }
 
     if (!this->has_option("main", "releasever")) {
+        auto distro = this->get_value("main", "distribution");
         this->set_value("main", "releasever", os_release.get_value("VERSION_ID"));
+        if (distro == "fedora" && os_release.get_value("REDHAT_SUPPORT_PRODUCT_VERSION") == "rawhide")
+            this->set_value("main", "releasever", "rawhide");
     }
 
     // Set the "name_version" for the later convenience
