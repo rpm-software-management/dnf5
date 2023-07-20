@@ -42,10 +42,11 @@ will be used.
 
 Note: When a path is specified within a command line argument
 (``--config=CONFIG_FILE_PATH`` in case of `configuration` file,
-``--setopt=reposdir=/path/to/repodir`` for `reposdir` or
+``--setopt=reposdir=/path/to/repodir`` for `reposdir`,
+``--setopt=logdir=/path/to/logdir`` for `logdir`, or
 ``--setopt=varsdir=/paths/to/varsdir`` for `vars`), then this path is always
-relative to the host with no exceptions.
-`pluginpath` and `pluginconfpath` are relative to the host.
+relative to the host with no exceptions. `pluginpath` and `pluginconfpath` are
+relative to the host.
 
 Note: You may also want to use the command-line option ``--releasever=RELEASEVER`` when creating
 the installroot, otherwise the $releasever value is taken from the rpmdb within the installroot
