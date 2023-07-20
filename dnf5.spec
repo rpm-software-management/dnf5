@@ -510,6 +510,8 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 
 %files -n libdnf5-plugin-actions
 %{_libdir}/libdnf5/plugins/actions.*
+%config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
+%dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
 %{_mandir}/man8/libdnf5-actions.8.*
 %endif
 
