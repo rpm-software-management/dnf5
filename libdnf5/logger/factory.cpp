@@ -31,12 +31,9 @@ using namespace std::filesystem;
 
 std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
     auto & config = base.get_config();
-    auto & installroot = config.get_installroot_option().get_value();
-    auto & logdir = config.get_logdir_option().get_value();
-    auto logdir_full_path = path(installroot) / path(logdir).relative_path();
-
-    create_directories(logdir_full_path);
-    auto log_file = logdir_full_path / FILE_LOGGER_FILENAME;
+    const std::filesystem::path logdir_path{config.get_logdir_option().get_value()};
+    create_directories(logdir_path);
+    auto log_file = logdir_path / FILE_LOGGER_FILENAME;
     auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
     if (!log_stream->is_open()) {
         throw std::runtime_error(fmt::format("Cannot open log file: {}: {}", log_file.c_str(), strerror(errno)));

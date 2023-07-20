@@ -159,14 +159,13 @@ void Base::setup() {
 
     // Resolve installroot configuration
     std::string vars_installroot{"/"};
+    const std::filesystem::path installroot_path{config.get_installroot_option().get_value()};
     if (!config.get_use_host_config_option().get_value()) {
         // Prepend installroot to each reposdir and varsdir
-        const std::filesystem::path installroot{config.get_installroot_option().get_value()};
-
         std::vector<std::string> installroot_reposdirs;
         for (const auto & reposdir : config.get_reposdir_option().get_value()) {
             std::filesystem::path reposdir_path{reposdir};
-            installroot_reposdirs.push_back((installroot / reposdir_path.relative_path()).string());
+            installroot_reposdirs.push_back((installroot_path / reposdir_path.relative_path()).string());
         }
         config.get_reposdir_option().set(Option::Priority::INSTALLROOT, installroot_reposdirs);
 
@@ -175,6 +174,13 @@ void Base::setup() {
         if (config.get_varsdir_option().get_priority() < Option::Priority::COMMANDLINE) {
             vars_installroot = config.get_installroot_option().get_value();
         }
+    }
+    // Unless the logdir is specified on the command line, logdir should be
+    // relative to the installroot
+    if (config.get_logdir_option().get_priority() < Option::Priority::COMMANDLINE) {
+        const std::filesystem::path logdir_path{config.get_logdir_option().get_value()};
+        const auto full_path = (installroot_path / logdir_path.relative_path()).string();
+        config.get_logdir_option().set(Option::Priority::INSTALLROOT, full_path);
     }
 
     load_plugins();

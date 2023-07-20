@@ -27,9 +27,10 @@ class TestFileLogger(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
         config = self.base.get_config()
-        config.logdir = "FileLoggerTestLogDir"
+        config.logdir = os.path.join(
+            config.installroot, "FileLoggerTestLogDir")
         self.full_log_path = os.path.join(
-            config.installroot, config.logdir, libdnf5.logger.FILE_LOGGER_FILENAME)
+            config.logdir, libdnf5.logger.FILE_LOGGER_FILENAME)
 
     def tearDown(self):
         super().tearDown()

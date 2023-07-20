@@ -794,13 +794,13 @@ int main(int argc, char * argv[]) try {
             close(fd);
         }
 
+        base.setup();
+
         auto file_logger = libdnf5::create_file_logger(base);
         // Swap to destination stream logger (log to file)
         log_router.swap_logger(file_logger, 0);
         // Write messages from memory buffer logger to stream logger
         dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
-
-        base.setup();
 
         auto repo_sack = base.get_repo_sack();
         repo_sack->create_repos_from_system_configuration();
