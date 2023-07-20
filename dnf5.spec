@@ -292,6 +292,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 # TODO(jkolarik): modularity is not ready yet
 # %%{_mandir}/man7/dnf5-modularity.7.*
 %{_mandir}/man7/dnf5-specs.7.*
+%{_mandir}/man5/dnf5.conf.5.*
+%{_mandir}/man5/dnf5.conf-todo.5.*
+%{_mandir}/man5/dnf5.conf-deprecated.5.*
 
 # ========== libdnf5 ==========
 %package -n libdnf5

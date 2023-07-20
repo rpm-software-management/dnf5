@@ -16,6 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+.. _command_ref-label:
+
 ################################
  DNF5 Package Management Utility
 ################################
@@ -389,6 +391,7 @@ Miscellaneous:
     | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
     | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
 
 ..
     # TODO(jkolarik): Filtering is not ready yet
