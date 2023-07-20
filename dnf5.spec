@@ -298,6 +298,7 @@ Package management library.
 %else
 %exclude %{_sysconfdir}/dnf/dnf.conf
 %endif
+%dir %{_sysconfdir}/dnf/libdnf5-plugins
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
