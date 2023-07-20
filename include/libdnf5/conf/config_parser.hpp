@@ -34,35 +34,35 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
-/// Error accessing config file other than ENOENT; e.g. we don't have read permission
-class InaccessibleConfigError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5"; }
-    const char * get_name() const noexcept override { return "InaccessibleConfigError"; }
-};
-
-/// Configuration file is missing
-class MissingConfigError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5"; }
-    const char * get_name() const noexcept override { return "MissingConfigError"; }
-};
-
-/// Configuration file is invalid
-class InvalidConfigError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5"; }
-    const char * get_name() const noexcept override { return "InvalidConfigError"; }
-};
-
 class ConfigParserError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "ConfigParserError"; }
+};
+
+/// Error accessing config file other than ENOENT; e.g. we don't have read permission
+class InaccessibleConfigError : public ConfigParserError {
+public:
+    using ConfigParserError::ConfigParserError;
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
+    const char * get_name() const noexcept override { return "InaccessibleConfigError"; }
+};
+
+/// Configuration file is missing
+class MissingConfigError : public ConfigParserError {
+public:
+    using ConfigParserError::ConfigParserError;
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
+    const char * get_name() const noexcept override { return "MissingConfigError"; }
+};
+
+/// Configuration file is invalid
+class InvalidConfigError : public ConfigParserError {
+public:
+    using ConfigParserError::ConfigParserError;
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
+    const char * get_name() const noexcept override { return "InvalidConfigError"; }
 };
 
 class ConfigParserSectionNotFoundError : public ConfigParserError {

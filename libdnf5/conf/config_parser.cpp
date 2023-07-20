@@ -21,14 +21,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/fs/file.hpp"
 #include "utils/iniparser.hpp"
+#include "utils/on_scope_exit.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <glob.h>
+
 #include <algorithm>
+
+namespace {
+
+constexpr std::string_view INCLUDE_KEY = "#!include_config ";
+constexpr auto INCLUDE_KEY_LEN = INCLUDE_KEY.length();
+
+}  // namespace
 
 namespace libdnf5 {
 
-static void read(ConfigParser & cfg_parser, IniParser & parser) {
+static void read(ConfigParser & cfg_parser, const std::string & file_path, bool included) try {
+    IniParser parser(file_path);
     IniParser::ItemType readed_type;
     while ((readed_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
         auto section = parser.get_section();
@@ -41,10 +52,42 @@ static void read(ConfigParser & cfg_parser, IniParser & parser) {
             if (section.empty()) {
                 cfg_parser.get_header() += parser.get_raw_item();
             } else {
-                cfg_parser.add_comment_line(section, std::move(parser.get_raw_item()));
+                cfg_parser.add_comment_line(section, parser.get_raw_item());
+            }
+
+            // Support for loading included configuration files.
+            if (!included && readed_type == IniParser::ItemType::COMMENT_LINE &&
+                parser.get_raw_item().starts_with(INCLUDE_KEY)) {
+                auto end_pos = parser.get_raw_item().find_first_of("\r\n");
+                std::filesystem::path glob_path =
+                    parser.get_raw_item().substr(INCLUDE_KEY_LEN, end_pos - INCLUDE_KEY_LEN);
+
+                if (glob_path.is_relative()) {
+                    throw Error(M_("\"{}{}\": Only absolute paths allowed."), INCLUDE_KEY, glob_path.native());
+                }
+
+                glob_t glob_buf;
+                glob(glob_path.c_str(), GLOB_MARK, nullptr, &glob_buf);
+                utils::OnScopeExit free_glob_buf([&glob_buf]() noexcept { ::globfree(&glob_buf); });
+                for (size_t i = 0; i < glob_buf.gl_pathc; ++i) {
+                    auto path = glob_buf.gl_pathv[i];
+                    if (path[strlen(path) - 1] != '/') {  // directories are skipped
+                        ::libdnf5::read(cfg_parser, path, true);
+                    }
+                }
             }
         }
     }
+} catch (const ConfigParserError &) {
+    throw;
+} catch (const std::filesystem::filesystem_error & e) {
+    if (e.code().value() == ENOENT) {
+        std::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
+    } else {
+        std::throw_with_nested(InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));
+    }
+} catch (const Error & e) {
+    std::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
 }
 
 ConfigParserSectionNotFoundError::ConfigParserSectionNotFoundError(const std::string & section)
@@ -54,17 +97,8 @@ ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
     const std::string & section, const std::string & option)
     : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
 
-void ConfigParser::read(const std::string & file_path) try {
-    IniParser parser(file_path);
-    ::libdnf5::read(*this, parser);
-} catch (const std::filesystem::filesystem_error & e) {
-    if (e.code().value() == ENOENT) {
-        std::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
-    } else {
-        std::throw_with_nested(InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));
-    }
-} catch (const Error & e) {
-    std::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
+void ConfigParser::read(const std::string & file_path) {
+    ::libdnf5::read(*this, file_path, false);
 }
 
 static std::string create_raw_item(const std::string & value, const std::string & old_raw_item) {
