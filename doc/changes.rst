@@ -113,6 +113,10 @@ Help command
 ------------
  * Dropped. The functionality is replaced by `--help` option
 
+Info command
+------------
+ * Dropped `if` alias.
+
 List command
 ------------
  * Dropped `--all` option since this behavior is now the default one.
