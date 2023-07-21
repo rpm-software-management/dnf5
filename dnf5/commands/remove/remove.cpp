@@ -37,6 +37,13 @@ void RemoveCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Remove (uninstall) software");
 
+    auto noautoremove = parser.add_new_named_arg("no-autoremove");
+    noautoremove->set_long_name("no-autoremove");
+    noautoremove->set_description("Disable removal of dependencies that are no longer used");
+    noautoremove->set_const_value("false");
+    noautoremove->link_value(&ctx.base.get_config().get_clean_requirements_on_remove_option());
+    cmd.register_named_arg(noautoremove);
+
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
     keys->set_description("List of package specs to remove");
     keys->set_parse_hook_func(
