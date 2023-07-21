@@ -134,6 +134,11 @@ Repoclosure command
 -------------------
  * Dropped `--pkg`` option. Positional arguments can be used to specify packages to check closure for.
 
+Repolist command
+----------------
+ * Option `-v` and `--verbose` were removed. The functionality is replaced by `repoinfo` command that was already
+   introduced in DNF4.
+
 Repoquery command
 -----------------
  * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
