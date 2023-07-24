@@ -501,6 +501,11 @@ public:
         /// Returns the pointer to the parent Command (as set by register_command()).
         Command * get_parent() const noexcept { return parent; }
 
+        /// Gets the list of command-line arguments needed to invoke the command.
+        /// Command aliases are resolved; so `get_invocation` for a
+        /// RepoListCommand would return `{"dnf5", "repo", "list"}`
+        virtual std::vector<std::string> get_invocation() const noexcept;
+
     private:
         friend class ArgumentParser;
 
@@ -598,6 +603,8 @@ public:
         void register_positional_arg(PositionalArg * arg) override { attached_command.register_positional_arg(arg); }
 
         void register_group(Group * grp) override { attached_command.register_group(grp); }
+
+        std::vector<std::string> get_invocation() const noexcept override { return attached_command.get_invocation(); }
 
         /// Gets a list of registered commands.
         const std::vector<Command *> & get_commands() const noexcept override {

@@ -754,6 +754,15 @@ static std::string get_named_arg_names(const ArgumentParser::NamedArg * arg) {
     return arg_names;
 }
 
+std::vector<std::string> ArgumentParser::Command::get_invocation() const noexcept {
+    std::vector<std::string> invocation = {get_id()};
+    if (parent) {
+        auto parent_invocation = parent->get_invocation();
+        invocation.insert(invocation.begin(), parent_invocation.begin(), parent_invocation.end());
+    }
+    return invocation;
+}
+
 void ArgumentParser::Command::help() const noexcept {
     auto & cmds = get_commands();
     auto & named_args = get_named_args();
@@ -763,8 +772,8 @@ void ArgumentParser::Command::help() const noexcept {
     libdnf5::cli::output::Usage usage_output;
 
     // generate usage
-    // start with the current command name
-    std::string usage = get_id();
+    // start with the invocation of the current command
+    std::string usage = utils::string::join(get_invocation(), " ");
 
     if (cmds.empty()) {
         // leaf command
@@ -772,13 +781,6 @@ void ArgumentParser::Command::help() const noexcept {
     } else {
         // command that has subcommands
         usage += " <COMMAND> [--help] ...";
-    }
-
-    // prepend parent commands to usage
-    Command * cmd = parent;
-    while (cmd) {
-        usage = cmd->get_id() + " " + usage;
-        cmd = cmd->parent;
     }
 
     // print usage
