@@ -151,7 +151,6 @@ Repoquery command
    rpm --query behavior.
  * --queryformat no longer supports `size` tag because it was printing install size for installed packages and download
    size for not-installed packages. This could be confusing.
- * Option `--list` which lists all files contained in packages was renamed to more appropriate `--files`.
  * Option `--source` was renamed to `--sourcerpm` and it now matches queryformat's `sourcerpm` tag.
 
 Upgrade command
