@@ -19,8 +19,10 @@ import unittest
 
 import libdnf5.base
 
+import base_test_case
 
-class TestGoal(unittest.TestCase):
+
+class TestGoal(base_test_case.BaseTestCase):
     def test_missing_setup_goal_resolve(self):
         # Create a new Base object
         base = libdnf5.base.Base()
@@ -33,39 +35,31 @@ class TestGoal(unittest.TestCase):
 
     def test_missing_rpm_goal_resolve(self):
         # Try to resolve the goal using unknown RPM package
-        base = libdnf5.base.Base()
-        base.setup()
 
-        goal = libdnf5.base.Goal(base)
+        goal = libdnf5.base.Goal(self.base)
         goal.add_install('unknown_pkg.rpm')
 
         self.assertRaises(RuntimeError, goal.resolve)
 
     def test_invalid_url_goal_resolve(self):
         # Try to resolve the goal using invalid URL
-        base = libdnf5.base.Base()
-        base.setup()
 
-        goal = libdnf5.base.Goal(base)
+        goal = libdnf5.base.Goal(self.base)
         goal.add_install('https://i-dont-exist.com')
 
         self.assertRaises(RuntimeError, goal.resolve)
 
     def test_unsupported_argument_add_remove(self):
         # Try passing unsupported argument to add_remove() method
-        base = libdnf5.base.Base()
-        base.setup()
 
-        goal = libdnf5.base.Goal(base)
+        goal = libdnf5.base.Goal(self.base)
 
         self.assertRaises(RuntimeError, goal.add_remove, 'pkg.rpm')
 
     def test_group_rpm_reason_change_without_id(self):
         # Try changing group reason without group_id
-        base = libdnf5.base.Base()
-        base.setup()
 
-        goal = libdnf5.base.Goal(base)
+        goal = libdnf5.base.Goal(self.base)
 
         self.assertRaises(RuntimeError, goal.add_rpm_reason_change, '@fake-group-spec',
                           libdnf5.base.transaction.TransactionItemReason_GROUP, '')
@@ -74,10 +68,7 @@ class TestGoal(unittest.TestCase):
         # Try accessing transaction.get_resolve_logs()
         spec = 'unknown_spec'
 
-        base = libdnf5.base.Base()
-        base.setup()
-
-        goal = libdnf5.base.Goal(base)
+        goal = libdnf5.base.Goal(self.base)
         goal.add_install(spec)
 
         transaction = goal.resolve()
