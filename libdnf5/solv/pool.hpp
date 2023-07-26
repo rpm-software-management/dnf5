@@ -84,6 +84,11 @@ public:
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
         // Allow packages of the same name with different architectures to be installed in parallel
         pool_set_flag(pool, POOL_FLAG_IMPLICITOBSOLETEUSESCOLORS, 1);
+        // Configures the pool_addfileprovides_queue() method to only add files from primary.xml.
+        // This ensures the method works correctly even if filelist.xml metadata are not loaded.
+        // At the same time when filelist.xml are loaded libsolv is able to search them for required
+        // files if needed.
+        pool_set_flag(pool, POOL_FLAG_ADDFILEPROVIDESFILTERED, 1);
     }
 
     Pool(const Pool & pool) = delete;
