@@ -327,6 +327,7 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getMirrors()
     std::vector<std::string> get_mirrors() const;
 
+    /// @deprecated It is redundant because repo class has direct access to Base and Vars
     /// Sets substitutions. Substitutions are used to substitute variables in repository configuration.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
