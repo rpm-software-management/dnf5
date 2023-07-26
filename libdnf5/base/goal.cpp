@@ -844,28 +844,29 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 Solvable * solvable = pool.id2solvable(package_id);
                 tmp_solvables.push_back(solvable);
             }
-            Id current_name = 0;
+
             rpm::PackageSet selected(base);
-            std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
-            {
+            if (!tmp_solvables.empty()) {
+                Id current_name = 0;
+                std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
                 auto * first = tmp_solvables[0];
                 current_name = first->name;
                 selected.p_impl->add_unsafe(pool.solvable2id(first));
-            }
 
-            for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
-                if ((*iter)->name == current_name) {
+                for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
+                    if ((*iter)->name == current_name) {
+                        selected.p_impl->add_unsafe(pool.solvable2id(*iter));
+                        continue;
+                    }
+                    if (add_obsoletes) {
+                        add_obsoletes_to_data(base_query, selected);
+                    }
+                    solv_map_to_id_queue(result_queue, static_cast<libdnf5::solv::SolvMap>(*selected.p_impl));
+                    rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
+                    selected.clear();
                     selected.p_impl->add_unsafe(pool.solvable2id(*iter));
-                    continue;
+                    current_name = (*iter)->name;
                 }
-                if (add_obsoletes) {
-                    add_obsoletes_to_data(base_query, selected);
-                }
-                solv_map_to_id_queue(result_queue, static_cast<libdnf5::solv::SolvMap>(*selected.p_impl));
-                rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
-                selected.clear();
-                selected.p_impl->add_unsafe(pool.solvable2id(*iter));
-                current_name = (*iter)->name;
             }
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, selected);
