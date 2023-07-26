@@ -511,8 +511,12 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
     h.set_opt(LRO_YUMSLIST, repomd_substs);
 
     LrUrlVars * substs = nullptr;
+    // Deprecated, we have direct access to base, therefore we don't need to set explicitly substitutions
     for (const auto & item : substitutions) {
         substs = lr_urlvars_set(substs, item.first.c_str(), item.second.c_str());
+    }
+    for (const auto & item : base->get_vars()->get_variables()) {
+        substs = lr_urlvars_set(substs, item.first.c_str(), item.second.value.c_str());
     }
     h.set_opt(LRO_VARSUB, substs);
 
