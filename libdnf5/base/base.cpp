@@ -183,6 +183,11 @@ void Base::setup() {
         config.get_logdir_option().set(Option::Priority::INSTALLROOT, full_path);
     }
 
+    // If cachedir is not explicitly specified and cacheonly is activated, use the system cachedir location.
+    if (config.get_cacheonly_option().get_value() == "all") {
+        config.get_cachedir_option().set(Option::Priority::DEFAULT, config.get_system_cachedir_option().get_value());
+    }
+
     load_plugins();
     p_impl->plugins.init();
 
