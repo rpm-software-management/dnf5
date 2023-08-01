@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory.hpp"
 
+#include "advisory_info.hpp"
 #include "advisory_list.hpp"
 
 namespace dnfdaemon::client {
@@ -38,6 +39,7 @@ void AdvisoryCommand::register_subcommands() {
     auto * query_commands_advisory = get_context().get_argument_parser().add_new_group("advisory_query_commands");
     query_commands_advisory->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_advisory);
+    register_subcommand(std::make_unique<AdvisoryInfoCommand>(get_context()), query_commands_advisory);
     register_subcommand(std::make_unique<AdvisoryListCommand>(get_context()), query_commands_advisory);
 }
 
