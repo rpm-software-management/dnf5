@@ -88,6 +88,12 @@ public:
 
     static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
+    /// @brief Split releasever on the first "." into its "major" and "minor" components
+    ///
+    /// @param releasever A releasever string, possibly containing a "."
+    /// @return releasever_major, releasever_minor
+    static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
+
 private:
     friend class Base;
 
@@ -120,6 +126,16 @@ private:
     /// Reads environment variables that match "DNF[0-9]" and
     /// "DNF_VAR_[A-Za-z0-9_]+" patterns. The "DNF_VAR_" prefix is cut off.
     void load_from_env();
+
+    /// @brief Set a variable to a value, only obtaining the value if needed using `get_value`
+    ///
+    /// @param name Name of the variable
+    /// @param get_value Function that returns the (optional) value for the variable
+    /// @param prio Source/Priority of the value
+    void set_lazy(
+        const std::string & name,
+        const std::function<const std::unique_ptr<const std::string>()> & get_value,
+        Priority prio);
 
     BaseWeakPtr base;
     std::map<std::string, Variable> variables;
