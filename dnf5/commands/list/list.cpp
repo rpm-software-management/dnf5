@@ -153,7 +153,8 @@ void ListCommand::run() {
     // pre-select by patterns
     if (!pkg_specs.empty()) {
         base_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        libdnf5::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
+        libdnf5::ResolveSpecSettings settings{
+            .with_nevra = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
         for (const auto & spec : pkg_specs) {
             libdnf5::rpm::PackageQuery pkg_query(full_package_query);
             pkg_query.resolve_pkg_spec(spec, settings, true);

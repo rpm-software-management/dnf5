@@ -142,7 +142,11 @@ void ChangelogCommand::run() {
     //query
     libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
     libdnf5::ResolveSpecSettings settings{
-        .ignore_case = true, .with_nevra = true, .with_provides = false, .with_filenames = false};
+        .ignore_case = true,
+        .with_nevra = true,
+        .with_provides = false,
+        .with_filenames = false,
+        .with_binaries = false};
     if (pkgs_spec_to_show_options->size() > 0) {
         for (auto & pattern : *pkgs_spec_to_show_options) {
             libdnf5::rpm::PackageQuery package_query(full_package_query);

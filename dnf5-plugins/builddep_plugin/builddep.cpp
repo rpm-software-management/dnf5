@@ -183,7 +183,9 @@ bool BuildDepCommand::add_from_pkg(
 
     libdnf5::rpm::PackageQuery pkg_query(ctx.base);
     pkg_query.resolve_pkg_spec(
-        pkg_spec, libdnf5::ResolveSpecSettings{.with_provides = false, .with_filenames = false}, false);
+        pkg_spec,
+        libdnf5::ResolveSpecSettings{.with_provides = false, .with_filenames = false, .with_binaries = false},
+        false);
 
     std::vector<std::string> source_names{pkg_spec};
     for (const auto & pkg : pkg_query) {

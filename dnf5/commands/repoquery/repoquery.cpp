@@ -438,6 +438,7 @@ static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
     auto settings = libdnf5::ResolveSpecSettings();
     settings.with_provides = false;
     settings.with_filenames = false;
+    settings.with_binaries = false;
     for (const auto & nevra : nevra_globs) {
         auto tmp_query = base_query;
         tmp_query.resolve_pkg_spec(nevra, settings, true);
@@ -471,7 +472,8 @@ void RepoqueryCommand::run() {
             }
         }
 
-        const libdnf5::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
+        const libdnf5::ResolveSpecSettings settings{
+            .ignore_case = true, .with_provides = false, .with_binaries = false};
         for (const auto & spec : pkg_specs) {
             libdnf5::rpm::PackageQuery package_query(base_query);
             package_query.resolve_pkg_spec(spec, settings, true);

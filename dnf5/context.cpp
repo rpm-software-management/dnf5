@@ -593,7 +593,9 @@ std::vector<std::string> match_specs(
     {
         libdnf5::rpm::PackageQuery matched_pkgs_query(base);
         matched_pkgs_query.resolve_pkg_spec(
-            pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
+            pattern + '*',
+            {.ignore_case = false, .with_provides = false, .with_filenames = false, .with_binaries = false},
+            true);
 
         for (const auto & package : matched_pkgs_query) {
             auto [it, inserted] = result_set.insert(package.get_name());
