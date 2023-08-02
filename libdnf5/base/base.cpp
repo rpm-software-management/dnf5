@@ -188,6 +188,11 @@ void Base::setup() {
         config.get_cachedir_option().set(Option::Priority::DEFAULT, config.get_system_cachedir_option().get_value());
     }
 
+    // If only cached metadata are used, disable rebuilding solv cache files.
+    if (config.get_cacheonly_option().get_value() != "none") {
+        config.get_build_cache_option().set(Option::Priority::RUNTIME, false);
+    }
+
     load_plugins();
     p_impl->plugins.init();
 
