@@ -73,7 +73,7 @@ std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, con
 
 libdnf5::rpm::PackageQuery resolve_nevras(libdnf5::rpm::PackageQuery base_query, std::vector<std::string> nevras) {
     libdnf5::rpm::PackageQuery result(base_query.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-    libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+    libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false, .with_binaries = false};
     for (const auto & nevra : nevras) {
         libdnf5::rpm::PackageQuery nevra_query(base_query);
         nevra_query.resolve_pkg_spec(nevra, settings, false);
@@ -124,7 +124,8 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
             .ignore_case = key_value_map_get<bool>(options, "icase", true),
             .with_nevra = key_value_map_get<bool>(options, "with_nevra", true),
             .with_provides = key_value_map_get<bool>(options, "with_provides", true),
-            .with_filenames = key_value_map_get<bool>(options, "with_filenames", true)};
+            .with_filenames = key_value_map_get<bool>(options, "with_filenames", true),
+            .with_binaries = key_value_map_get<bool>(options, "with_binaries", true)};
         for (auto & pattern : patterns) {
             libdnf5::rpm::PackageQuery package_query(query);
             package_query.resolve_pkg_spec(pattern, settings, with_src);

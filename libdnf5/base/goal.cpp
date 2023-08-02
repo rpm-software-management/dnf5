@@ -1486,6 +1486,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5:
     auto pkg_settings = GoalJobSettings();
     pkg_settings.with_provides = false;
     pkg_settings.with_filenames = false;
+    pkg_settings.with_binaries = false;
     pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
 
     // TODO(mblaha): apply pkg.basearchonly when available in comps
@@ -1685,6 +1686,7 @@ void Goal::Impl::add_group_upgrade_to_goal(
         auto pkg_settings = GoalJobSettings();
         pkg_settings.with_provides = false;
         pkg_settings.with_filenames = false;
+        pkg_settings.with_binaries = false;
         for (const auto & pkg_name : state_group.packages) {
             if (new_set.contains(pkg_name)) {
                 // upgrade all packages installed with the group

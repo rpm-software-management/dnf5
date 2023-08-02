@@ -192,6 +192,7 @@ GoalProblem Transaction::Impl::report_not_found(
                 settings_copy.ignore_case = true;
                 settings_copy.with_provides = false;
                 settings_copy.with_filenames = false;
+                settings_copy.with_binaries = false;
                 auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
                 if (nevra_pair_icase.first) {
                     add_resolve_log(
