@@ -38,7 +38,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <memory>
-#include <optional>
 
 #define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
 #define ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -230,17 +229,54 @@ std::string Vars::substitute(const std::string & text) const {
     return res;
 }
 
+std::tuple<std::string, std::string> Vars::split_releasever(const std::string & releasever) {
+    // Uses the same logic as splitReleaseverTo in libzypp
+    std::string releasever_major;
+    std::string releasever_minor;
+    const auto pos = releasever.find('.');
+    if (pos == std::string::npos) {
+        releasever_major = releasever;
+    } else {
+        releasever_major = releasever.substr(0, pos);
+        releasever_minor = releasever.substr(pos + 1);
+    }
+    return std::make_tuple(releasever_major, releasever_minor);
+}
+
 void Vars::set(const std::string & name, const std::string & value, Priority prio) {
     auto it = variables.find(name);
-    if (it != variables.end()) {
-        if (it->second.priority > prio) {
-            return;
-        }
-        it->second.value = value;
-        it->second.priority = prio;
+
+    // Do nothing if the var is already set with a higher priority
+    if (it != variables.end() && prio < it->second.priority) {
         return;
     }
-    variables.insert({name, {value, prio}});
+
+    // Whenever releasever is set, split it into major and minor parts
+    if (name == "releasever") {
+        const auto [releasever_major, releasever_minor] = split_releasever(value);
+        set("releasever_major", releasever_major, prio);
+        set("releasever_minor", releasever_minor, prio);
+    }
+
+    if (it == variables.end()) {
+        variables.insert({name, {value, prio}});
+    } else {
+        it->second.value = value;
+        it->second.priority = prio;
+    }
+}
+
+void Vars::set_lazy(
+    const std::string & name,
+    const std::function<const std::unique_ptr<const std::string>()> & get_value,
+    const Priority prio) {
+    auto it = variables.find(name);
+    if (it == variables.end() || prio > it->second.priority) {
+        const auto maybe_value = get_value();
+        if (maybe_value != nullptr) {
+            set(name, *maybe_value, prio);
+        }
+    }
 }
 
 void Vars::load(const std::string & installroot, const std::vector<std::string> & directories) {
@@ -255,47 +291,16 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 }
 
 void Vars::detect_vars(const std::string & installroot) {
-    auto it = variables.find("arch");
-    if (it == variables.end()) {
-        std::string arch = detect_arch();
-        if (!arch.empty()) {
-            variables.insert({"arch", {std::move(arch), Priority::AUTO}});
-        }
-    } else if (it->second.priority <= Priority::AUTO) {
-        std::string arch = detect_arch();
-        if (!arch.empty()) {
-            it->second.value = std::move(arch);
-            it->second.priority = Priority::AUTO;
-        }
-    }
+    set_lazy(
+        "arch", []() -> auto { return std::make_unique<std::string>(detect_arch()); }, Priority::AUTO);
 
-    it = variables.find("basearch");
-    if (it == variables.end()) {
-        const char * base_arch = get_base_arch(variables["arch"].value.c_str());
-        if (base_arch) {
-            variables.insert({"basearch", {base_arch, Priority::AUTO}});
-        }
-    } else if (it->second.priority <= Priority::AUTO) {
-        const char * base_arch = get_base_arch(variables["arch"].value.c_str());
-        if (base_arch) {
-            it->second.value = base_arch;
-            it->second.priority = Priority::AUTO;
-        }
-    }
+    set_lazy(
+        "basearch",
+        [this]() -> auto { return std::make_unique<std::string>(get_base_arch(variables["arch"].value.c_str())); },
+        Priority::AUTO);
 
-    it = variables.find("releasever");
-    if (it == variables.end()) {
-        auto release = detect_release(base, installroot);
-        if (release) {
-            variables.insert({"releasever", {*release, Priority::AUTO}});
-        }
-    } else if (it->second.priority <= Priority::AUTO) {
-        auto release = detect_release(base, installroot);
-        if (release) {
-            it->second.value = *release;
-            it->second.priority = Priority::AUTO;
-        }
-    }
+    set_lazy(
+        "releasever", [this, &installroot]() -> auto { return detect_release(base, installroot); }, Priority::AUTO);
 }
 
 static void dir_close(DIR * d) {
