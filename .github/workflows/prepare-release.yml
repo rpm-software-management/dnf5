@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Prepare release content
-        uses: inknos/prepare-release@v1
+        uses: inknos/prepare-release@v1.1
         with:
           version: ${{ inputs.version }}
           specfiles: dnf5.spec
