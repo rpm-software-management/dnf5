@@ -52,84 +52,18 @@ void RepoqueryCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Search for packages matching various criteria");
 
-    available_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(true))));
+    // OPTION GROUPS
 
-    installed_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto * repoquery_formatting = get_context().get_argument_parser().add_new_group("repoquery_formatting");
+    repoquery_formatting->set_header("Formatting:");
+    cmd.register_group(repoquery_formatting);
 
-    userinstalled_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    // CONFLICT GROUPS
 
-    leaves_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto * formatting_conflicts =
+        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
 
-    info_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
-
-    // The default format is full_nevra
-    query_format_option = dynamic_cast<libdnf5::OptionString *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionString>("%{full_nevra}\n")));
-
-    latest_limit_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionNumber<std::int32_t>>(0)));
-
-    querytags_option =
-        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
-
-
-    auto available = parser.add_new_named_arg("available");
-    available->set_long_name("available");
-    available->set_description("Limit to available packages (default).");
-    available->set_const_value("true");
-    available->link_value(available_option);
-
-    auto installed = parser.add_new_named_arg("installed");
-    installed->set_long_name("installed");
-    installed->set_description("Limit to installed packages.");
-    installed->set_const_value("true");
-    installed->link_value(installed_option);
-
-    auto userinstalled = parser.add_new_named_arg("userinstalled");
-    userinstalled->set_long_name("userinstalled");
-    userinstalled->set_description("Limit to packages that are not installed as dependencies or weak dependencies.");
-    userinstalled->set_const_value("true");
-    userinstalled->link_value(userinstalled_option);
-    userinstalled->add_conflict_argument(*installed);
-
-    auto leaves = parser.add_new_named_arg("leaves");
-    leaves->set_long_name("leaves");
-    leaves->set_description("Limit to groups of installed packages not required by other installed packages.");
-    leaves->set_const_value("true");
-    leaves->link_value(leaves_option);
-    leaves->add_conflict_argument(*available);
-
-    auto info = parser.add_new_named_arg("info");
-    info->set_long_name("info");
-    info->set_description("Show detailed information about the packages.");
-    info->set_const_value("true");
-    info->link_value(info_option);
-
-    auto query_tags = parser.add_new_named_arg("querytags");
-    query_tags->set_long_name("querytags");
-    query_tags->set_description("Display available tags for --queryformat.");
-    query_tags->set_const_value("true");
-    query_tags->link_value(querytags_option);
-
-    auto query_format = parser.add_new_named_arg("queryformat");
-    query_format->set_long_name("queryformat");
-    query_format->set_description("Display format for packages. Default is \"%{full_nevra}\".");
-    query_format->set_has_value(true);
-    query_format->set_arg_value_help("QUERYFORMAT");
-    query_format->link_value(query_format_option);
-
-    auto * latest_limit = parser.add_new_named_arg("latest-limit");
-    latest_limit->set_long_name("latest-limit");
-    latest_limit->set_description(
-        "Limit to N latest packages for a given name.arch (or all except N latest if N is negative).");
-    latest_limit->set_arg_value_help("N");
-    latest_limit->set_has_value(true);
-    latest_limit->link_value(latest_limit_option);
+    // ARGUMENT
 
     auto keys =
         parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
@@ -148,6 +82,106 @@ void RepoqueryCommand::set_argument_parser() {
             return match_specs(ctx, arg, false, true, true, false);
         }
     });
+    cmd.register_positional_arg(keys);
+
+    // OPTIONS:
+
+    create_forcearch_option(*this);
+
+    // QUERY SOURCES:
+
+    available_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(true))));
+    auto available = parser.add_new_named_arg("available");
+    available->set_long_name("available");
+    available->set_description("Limit to available packages (default).");
+    available->set_const_value("true");
+    available->link_value(available_option);
+    cmd.register_named_arg(available);
+
+    installed_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto installed = parser.add_new_named_arg("installed");
+    installed->set_long_name("installed");
+    installed->set_description("Limit to installed packages.");
+    installed->set_const_value("true");
+    installed->link_value(installed_option);
+    cmd.register_named_arg(installed);
+
+    // FILTERS ONLY FOR INSTALLED PACKAGES:
+
+    leaves_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto leaves = parser.add_new_named_arg("leaves");
+    leaves->set_long_name("leaves");
+    leaves->set_description("Limit to groups of installed packages not required by other installed packages.");
+    leaves->set_const_value("true");
+    leaves->link_value(leaves_option);
+    leaves->add_conflict_argument(*available);
+    cmd.register_named_arg(leaves);
+
+    userinstalled_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto userinstalled = parser.add_new_named_arg("userinstalled");
+    userinstalled->set_long_name("userinstalled");
+    userinstalled->set_description("Limit to packages that are not installed as dependencies or weak dependencies.");
+    userinstalled->set_const_value("true");
+    userinstalled->link_value(userinstalled_option);
+    userinstalled->add_conflict_argument(*installed);
+    cmd.register_named_arg(userinstalled);
+
+    duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this,
+        "duplicates",
+        '\0',
+        "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
+        "architecture). Installonly packages are excluded from this set.",
+        false);
+
+    unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this,
+        "unneeded",
+        '\0',
+        "Limit to unneeded installed packages (i.e. packages that were installed as "
+        "dependencies but are no longer needed).",
+        false);
+
+    installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "installonly", '\0', "Limit to installed installonly packages.", false);
+
+    // FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED:
+
+    extras = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
+
+    upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this,
+        "upgrades",
+        '\0',
+        "Limit to packages that provide an upgrade for some already installed package.",
+        false);
+
+    // SIMPLE FILTERS:
+
+    advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_security = std::make_unique<SecurityOption>(*this);
+    advisory_bugfix = std::make_unique<BugfixOption>(*this);
+    advisory_enhancement = std::make_unique<EnhancementOption>(*this);
+    advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
+
+    latest_limit_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionNumber<std::int32_t>>(0)));
+    auto * latest_limit = parser.add_new_named_arg("latest-limit");
+    latest_limit->set_long_name("latest-limit");
+    latest_limit->set_description(
+        "Limit to N latest packages for a given name.arch (or all except N latest if N is negative).");
+    latest_limit->set_arg_value_help("N");
+    latest_limit->set_has_value(true);
+    latest_limit->link_value(latest_limit_option);
+    cmd.register_named_arg(latest_limit);
 
     whatdepends = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this,
@@ -235,9 +269,10 @@ void RepoqueryCommand::set_argument_parser() {
         "",
         false,
         ",");
-    create_forcearch_option(*this);
+
     arch = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this, "arch", '\0', "Limit to packages of these architectures.", "ARCH,...", "", false, ",");
+
     file = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
         *this, "file", '\0', "Limit to packages that own these files.", "FILE,...", "", false, ",");
 
@@ -248,32 +283,12 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to packages that require <capability> specified by --whatrequires. This option is stackable "
         "with --whatrequires or --whatdepends only.",
         false);
-    duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this,
-        "duplicates",
-        '\0',
-        "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
-        "architecture). Installonly packages are excluded from this set.",
-        false);
-    unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this,
-        "unneeded",
-        '\0',
-        "Limit to unneeded installed packages (i.e. packages that were installed as "
-        "dependencies but are no longer needed).",
-        false);
-    extras = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
-    upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this,
-        "upgrades",
-        '\0',
-        "Limit to packages that provide an upgrade for some already installed package.",
-        false);
+
     recent = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "recent", '\0', "Limit to only recently changed packages.", false);
-    installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "installonly", '\0', "Limit to installed installonly packages.", false);
+
+    // TRANSFORMS:
+
     srpm = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "srpm",
@@ -283,17 +298,47 @@ void RepoqueryCommand::set_argument_parser() {
     disable_modular_filtering = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "disable-modular-filtering", '\0', "Include packages of inactive module streams.", false);
 
-    advisory_name = std::make_unique<AdvisoryOption>(*this);
-    advisory_security = std::make_unique<SecurityOption>(*this);
-    advisory_bugfix = std::make_unique<BugfixOption>(*this);
-    advisory_enhancement = std::make_unique<EnhancementOption>(*this);
-    advisory_newpackage = std::make_unique<NewpackageOption>(*this);
-    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
-    advisory_bz = std::make_unique<BzOption>(*this);
-    advisory_cve = std::make_unique<CveOption>(*this);
+    // FORMATTING OPTIONS:
+
+    info_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto info = parser.add_new_named_arg("info");
+    info->set_long_name("info");
+    info->set_description("Show detailed information about the packages.");
+    info->set_const_value("true");
+    info->link_value(info_option);
+    repoquery_formatting->register_argument(info);
+    cmd.register_named_arg(info);
+    formatting_conflicts->push_back(info);
+
+    querytags_option =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
+    auto query_tags = parser.add_new_named_arg("querytags");
+    query_tags->set_long_name("querytags");
+    query_tags->set_description("Display available tags for --queryformat.");
+    query_tags->set_const_value("true");
+    query_tags->link_value(querytags_option);
+    repoquery_formatting->register_argument(query_tags);
+    cmd.register_named_arg(query_tags);
+    formatting_conflicts->push_back(query_tags);
+
+    // The default format is full_nevra
+    query_format_option = dynamic_cast<libdnf5::OptionString *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionString>("%{full_nevra}\n")));
+    auto query_format = parser.add_new_named_arg("queryformat");
+    query_format->set_long_name("queryformat");
+    query_format->set_description("Display format for packages. Default is \"%{full_nevra}\".");
+    query_format->set_has_value(true);
+    query_format->set_arg_value_help("QUERYFORMAT");
+    query_format->link_value(query_format_option);
+    repoquery_formatting->register_argument(query_format);
+    cmd.register_named_arg(query_format);
+    formatting_conflicts->push_back(query_format);
 
     changelogs = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "changelogs", '\0', "Display package changelogs.", false);
+    repoquery_formatting->register_argument(changelogs->arg);
+    formatting_conflicts->push_back(changelogs->arg);
 
     std::vector<std::string> pkg_attrs_options{
         "conflicts",
@@ -313,13 +358,6 @@ void RepoqueryCommand::set_argument_parser() {
     };
     pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
-
-    auto * repoquery_formatting = get_context().get_argument_parser().add_new_group("repoquery_formatting");
-    repoquery_formatting->set_header("Formatting:");
-    cmd.register_group(repoquery_formatting);
-
-    auto * formatting_conflicts =
-        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
     // remove the last empty ("") option, it should not be an arg
     pkg_attrs_options.pop_back();
     for (auto & pkg_attr : pkg_attrs_options) {
@@ -335,25 +373,6 @@ void RepoqueryCommand::set_argument_parser() {
         cmd.register_named_arg(arg);
         formatting_conflicts->push_back(arg);
     }
-    repoquery_formatting->register_argument(info);
-    cmd.register_named_arg(info);
-    formatting_conflicts->push_back(info);
-    repoquery_formatting->register_argument(query_format);
-    cmd.register_named_arg(query_format);
-    formatting_conflicts->push_back(query_format);
-    repoquery_formatting->register_argument(query_tags);
-    cmd.register_named_arg(query_tags);
-    formatting_conflicts->push_back(query_tags);
-    repoquery_formatting->register_argument(changelogs->arg);
-    formatting_conflicts->push_back(changelogs->arg);
-
-    cmd.register_named_arg(available);
-    cmd.register_named_arg(installed);
-    cmd.register_named_arg(userinstalled);
-    cmd.register_named_arg(leaves);
-    cmd.register_named_arg(latest_limit);
-
-    cmd.register_positional_arg(keys);
 
     // Set conflicting args
     // Only one formatting can be used at a time
