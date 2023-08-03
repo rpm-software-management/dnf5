@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/fs/file.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -296,6 +297,7 @@ static void dir_close(DIR * d) {
 }
 
 void Vars::load_from_dir(const std::string & directory) {
+    auto & logger = *base->get_logger();
     if (DIR * dir = opendir(directory.c_str())) {
         std::unique_ptr<DIR, decltype(&dir_close)> dir_guard(dir, &dir_close);
         while (auto ent = readdir(dir)) {
@@ -309,9 +311,14 @@ void Vars::load_from_dir(const std::string & directory) {
             }
             full_path += dname;
 
-            utils::fs::File file(full_path, "r");
             std::string line;
-            file.read_line(line);
+            try {
+                utils::fs::File file(full_path, "r");
+                file.read_line(line);
+            } catch (const std::filesystem::filesystem_error & e) {
+                logger.warning("Cannot load variable from file \"{}\": {}", full_path.c_str(), e.what());
+                continue;
+            }
             set(dname, line, Priority::VARSDIR);
         }
     }
