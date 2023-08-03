@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/repoquery.hpp"
 
+#include <libdnf5/common/exception.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <set>
@@ -286,7 +287,7 @@ void print_pkg_attr_uniq_sorted(
     std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name) {
     auto getter = NAME_TO_GETTER.find(getter_name);
     if (getter == NAME_TO_GETTER.end()) {
-        throw RuntimeError(M_("package getter: %s not available"), getter_name);
+        libdnf_throw_assertion("Package attribute getter: \"{}\" not available", getter_name);
     }
     std::set<std::string> output;
     for (auto package : pkgs) {
