@@ -39,6 +39,10 @@ void VarsTest::test_vars() {
     CPPUNIT_ASSERT_EQUAL(std::string("foovalue123-bar"), base->get_vars()->substitute("foo$var1-bar"));
     CPPUNIT_ASSERT_EQUAL(
         std::string("$$$value123456-$nn-${nnn}"), base->get_vars()->substitute("$$$${var1}$var2-$nn-${nnn}"));
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("alternate-default-${nn:+n${nn:-${nnn:}"),
+        base->get_vars()->substitute("${var1:+alternate}-${unset:-default}-${nn:+n${nn:-${nnn:}"));
+    CPPUNIT_ASSERT_EQUAL(std::string("456"), base->get_vars()->substitute("${unset:-${var1:+${var2:+$var2}}}"));
 }
 
 void VarsTest::test_vars_multiple_dirs() {
