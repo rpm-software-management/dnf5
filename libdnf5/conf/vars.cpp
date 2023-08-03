@@ -38,6 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <memory>
+#include <optional>
 
 #define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
 #define ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -179,54 +180,170 @@ std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, cons
 
 Vars::Vars(Base & base) : Vars(base.get_weak_ptr()) {}
 
-
 std::string Vars::substitute(const std::string & text) const {
-    std::string res = text;
+    return substitute_expression(text, 0).first;
+}
 
-    if (variables.empty()) {
-        return res;
+const unsigned int MAXIMUM_EXPRESSION_DEPTH = 32;
+std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text, unsigned int depth) const {
+    if (depth > MAXIMUM_EXPRESSION_DEPTH) {
+        return std::make_pair(std::string(text), text.length());
     }
+    std::string res{text};
 
-    auto start = res.find_first_of('$');
-    while (start != std::string::npos) {
-        auto variable = start + 1;
-        if (variable >= res.length()) {
-            break;
+    // The total number of characters read in the replacee
+    size_t total_scanned = 0;
+
+    size_t pos = 0;
+    while (pos < res.length()) {
+        if (res[pos] == '}' && depth > 0) {
+            return std::make_pair(res.substr(0, pos), total_scanned);
         }
-        bool bracket;
-        if (res[variable] == '{') {
-            bracket = true;
-            if (++variable >= res.length()) {
+
+        if (res[pos] == '\\') {
+            // Escape the next character (if there is one)
+            if (pos + 1 >= res.length()) {
                 break;
             }
-        } else {
-            bracket = false;
-        }
-        auto it = std::find_if_not(res.begin() + static_cast<long>(variable), res.end(), [](char c) {
-            return std::isalnum(c) != 0 || c == '_';
-        });
-        if (bracket && it == res.end()) {
-            break;
-        }
-        auto past_variable = static_cast<unsigned long>(std::distance(res.begin(), it));
-        if (bracket && *it != '}') {
-            start = res.find_first_of('$', past_variable);
+            res.erase(pos, 1);
+            total_scanned += 2;
+            pos += 1;
             continue;
         }
-        auto subst = variables.find(res.substr(variable, past_variable - variable));
-        if (subst != variables.end()) {
-            if (bracket) {
-                ++past_variable;
+        if (res[pos] == '$') {
+            // variable expression starts after the $ and includes the braces
+            //     ${variable:-word}
+            //      ^-- pos_variable_expression
+            size_t pos_variable_expression = pos + 1;
+            if (pos_variable_expression >= res.length()) {
+                break;
             }
-            auto & subst_str = subst->second.value;
-            res.replace(start, past_variable - start, subst_str);
-            start = res.find_first_of('$', start + subst_str.length());
+
+            // Does the variable expression use braces? If so, the variable name
+            // starts one character after the start of the variable_expression
+            bool has_braces;
+            size_t pos_variable;
+            if (res[pos_variable_expression] == '{') {
+                has_braces = true;
+                pos_variable = pos_variable_expression + 1;
+                if (pos_variable >= res.length()) {
+                    break;
+                }
+            } else {
+                has_braces = false;
+                pos_variable = pos_variable_expression;
+            }
+
+            // Find the end of the variable name
+            auto it = std::find_if_not(res.begin() + static_cast<long>(pos_variable), res.end(), [](char c) {
+                return std::isalnum(c) != 0 || c == '_';
+            });
+            auto pos_after_variable = static_cast<size_t>(std::distance(res.begin(), it));
+
+            // Find the substituting string and the end of the variable expression
+            auto variable_mapping = variables.find(res.substr(pos_variable, pos_after_variable - pos_variable));
+            const std::string * subst_str = nullptr;
+
+            size_t pos_after_variable_expression;
+
+            if (has_braces) {
+                if (pos_after_variable >= res.length()) {
+                    break;
+                }
+                if (res[pos_after_variable] == ':') {
+                    if (pos_after_variable + 1 >= res.length()) {
+                        break;
+                    }
+                    char expansion_mode = res[pos_after_variable + 1];
+                    size_t pos_word = pos_after_variable + 2;
+                    if (pos_word >= res.length()) {
+                        break;
+                    }
+
+                    // Expand the default/alternate expression
+                    auto word_str = std::string_view(res).substr(pos_word);
+                    auto [expanded_word, scanned] = substitute_expression(word_str, depth + 1);
+                    auto pos_after_word = pos_word + scanned;
+                    if (pos_after_word >= res.length()) {
+                        break;
+                    }
+                    if (res[pos_after_word] != '}') {
+                        // The variable expression doesn't end in a '}',
+                        // continue after the word and don't expand it
+                        total_scanned += pos_after_word - pos;
+                        pos = pos_after_word;
+                        continue;
+                    }
+
+                    if (expansion_mode == '-') {
+                        // ${variable:-word} (default value)
+                        // If variable is unset or empty, the expansion of word is
+                        // substituted. Otherwise, the value of variable is
+                        // substituted.
+                        if (variable_mapping == variables.end() || variable_mapping->second.value.empty()) {
+                            subst_str = &expanded_word;
+                        } else {
+                            subst_str = &variable_mapping->second.value;
+                        }
+                    } else if (expansion_mode == '+') {
+                        // ${variable:+word} (alternate value)
+                        // If variable is unset or empty nothing is substituted.
+                        // Otherwise, the expansion of word is substituted.
+                        if (variable_mapping == variables.end() || variable_mapping->second.value.empty()) {
+                            const std::string empty{};
+                            subst_str = &empty;
+                        } else {
+                            subst_str = &expanded_word;
+                        }
+                    } else {
+                        // Unknown expansion mode, continue after the ':'
+                        pos = pos_after_variable + 1;
+                        continue;
+                    }
+                    pos_after_variable_expression = pos_after_word + 1;
+                } else if (res[pos_after_variable] == '}') {
+                    // ${variable}
+                    if (variable_mapping != variables.end()) {
+                        subst_str = &variable_mapping->second.value;
+                    }
+                    // Move past the closing '}'
+                    pos_after_variable_expression = pos_after_variable + 1;
+                } else {
+                    // Variable expression doesn't end in a '}', continue after the variable
+                    pos = pos_after_variable;
+                    continue;
+                }
+            } else {
+                // No braces, we have a $variable
+                if (variable_mapping != variables.end()) {
+                    subst_str = &variable_mapping->second.value;
+                }
+                pos_after_variable_expression = pos_after_variable;
+            }
+
+            // If there is no substitution to make, move past the variable expression and continue.
+            if (subst_str == nullptr) {
+                total_scanned += pos_after_variable_expression - pos;
+                pos = pos_after_variable_expression;
+                continue;
+            }
+
+            res.replace(pos, pos_after_variable_expression - pos, *subst_str);
+            total_scanned += pos_after_variable_expression - pos;
+            pos += subst_str->length();
         } else {
-            start = res.find_first_of('$', past_variable);
+            total_scanned += 1;
+            pos += 1;
         }
     }
 
-    return res;
+    // We have reached the end of the text
+    if (depth > 0) {
+        // If we are in a subexpression and we didn't find a closing '}', make no substitutions.
+        return std::make_pair(std::string{text}, text.length());
+    }
+
+    return std::make_pair(res, text.length());
 }
 
 std::tuple<std::string, std::string> Vars::split_releasever(const std::string & releasever) {

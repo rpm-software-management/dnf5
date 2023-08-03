@@ -137,6 +137,13 @@ private:
         const std::function<const std::unique_ptr<const std::string>()> & get_value,
         Priority prio);
 
+    /// @brief Expand variables in a subexpression
+    ///
+    /// @param text String with variable expressions
+    /// @param depth The recursive depth
+    /// @return Pair of the resulting string and the number of characters scanned in `text`
+    std::pair<std::string, size_t> substitute_expression(std::string_view text, unsigned int depth) const;
+
     BaseWeakPtr base;
     std::map<std::string, Variable> variables;
 };
