@@ -363,6 +363,10 @@ void RepoqueryCommand::set_argument_parser() {
 }
 
 void RepoqueryCommand::configure() {
+    if (querytags_option->get_value()) {
+        return;
+    }
+
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
     system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
