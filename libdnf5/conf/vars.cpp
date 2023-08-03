@@ -90,6 +90,7 @@ static const struct {
     {"sh4", {"sh4", "sh4a", nullptr}},
     {"sparc", {"sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", nullptr}},
     {"x86_64", {"x86_64", "amd64", "ia32e", nullptr}},
+    {"loongarch64", {"loongarch64", nullptr}},
     {nullptr, {nullptr}}};
 
 static const char * get_base_arch(const char * arch) {
