@@ -371,8 +371,7 @@ void RepoqueryCommand::configure() {
     context.update_repo_metadata_from_specs(pkg_specs);
     system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
                          duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
-                         extras->get_value() || upgrades->get_value() || recent->get_value() ||
-                         installonly->get_value();
+                         extras->get_value() || upgrades->get_value() || installonly->get_value();
     context.set_load_system_repo(system_repo_needed);
     context.update_repo_metadata_from_advisory_options(
         advisory_name->get_value(),
@@ -386,7 +385,7 @@ void RepoqueryCommand::configure() {
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
         available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
-                extras->get_value() || upgrades->get_value() || recent->get_value()
+                extras->get_value() || upgrades->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
