@@ -471,7 +471,7 @@ void RepoqueryCommand::run() {
     libdnf5::rpm::PackageQuery base_query(ctx.base, flags, false);
     libdnf5::rpm::PackageQuery full_package_query(ctx.base, flags, true);
 
-    // First filter by pkg_specs - it can narrow the query the most
+    // First filter by pkg_specs - it should be in SIMPLE FILTERS but it can narrow the query the most
     if (pkg_specs.empty()) {
         full_package_query |= base_query;
     } else {
@@ -490,6 +490,8 @@ void RepoqueryCommand::run() {
         }
     }
 
+    // APPLY FILTERS ONLY FOR INSTALLED PACKAGES
+
     if (leaves_option->get_value()) {
         full_package_query.filter_leaves();
     }
@@ -497,6 +499,31 @@ void RepoqueryCommand::run() {
     if (userinstalled_option->get_value()) {
         full_package_query.filter_userinstalled();
     }
+
+    if (duplicates->get_value()) {
+        full_package_query -= get_installonly_query(ctx.base);
+        full_package_query.filter_duplicates();
+    }
+
+    if (unneeded->get_value()) {
+        full_package_query.filter_unneeded();
+    }
+
+    if (installonly->get_value()) {
+        full_package_query &= get_installonly_query(ctx.base);
+    }
+
+    // APPLY FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED
+
+    if (extras->get_value()) {
+        full_package_query.filter_extras();
+    }
+
+    if (upgrades->get_value()) {
+        full_package_query.filter_upgrades();
+    }
+
+    // APPLY SIMPLE FILTERS - It doesn't matter if the packages are from system or available repo
 
     auto advisories = advisory_query_from_cli_input(
         ctx.base,
@@ -563,10 +590,10 @@ void RepoqueryCommand::run() {
             suggests_pkg_query.filter_suggests(pkgs_from_resolved_nevras, libdnf5::sack::QueryCmp::EQ);
             dependsquery |= suggests_pkg_query;
         }
-        //TODO(amatej): add recursive option call
 
         full_package_query = dependsquery;
     }
+
     if (!whatprovides->get_value().empty()) {
         auto provides_query = full_package_query;
         provides_query.filter_provides(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
@@ -577,6 +604,7 @@ void RepoqueryCommand::run() {
             full_package_query.filter_file(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
         }
     }
+
     if (!whatrequires->get_value().empty()) {
         if (exactdeps->get_value()) {
             full_package_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
@@ -587,12 +615,13 @@ void RepoqueryCommand::run() {
 
             full_package_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
             full_package_query |= requires_resolved;
-            //TODO(amatej): add recursive option call
         }
     }
+
     if (!whatobsoletes->get_value().empty()) {
         full_package_query.filter_obsoletes(whatobsoletes->get_value(), libdnf5::sack::QueryCmp::GLOB);
     }
+
     if (!whatconflicts->get_value().empty()) {
         auto conflicts_resolved = full_package_query;
         conflicts_resolved.filter_conflicts(
@@ -601,6 +630,7 @@ void RepoqueryCommand::run() {
         full_package_query.filter_conflicts(whatconflicts->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= conflicts_resolved;
     }
+
     if (!whatrecommends->get_value().empty()) {
         auto recommends_resolved = full_package_query;
         recommends_resolved.filter_recommends(
@@ -609,6 +639,7 @@ void RepoqueryCommand::run() {
         full_package_query.filter_recommends(whatrecommends->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= recommends_resolved;
     }
+
     if (!whatenhances->get_value().empty()) {
         auto enhances_resolved = full_package_query;
         enhances_resolved.filter_enhances(
@@ -617,6 +648,7 @@ void RepoqueryCommand::run() {
         full_package_query.filter_enhances(whatenhances->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= enhances_resolved;
     }
+
     if (!whatsupplements->get_value().empty()) {
         auto supplements_resolved = full_package_query;
         supplements_resolved.filter_supplements(
@@ -625,6 +657,7 @@ void RepoqueryCommand::run() {
         full_package_query.filter_supplements(whatsupplements->get_value(), libdnf5::sack::QueryCmp::GLOB);
         full_package_query |= supplements_resolved;
     }
+
     if (!whatsuggests->get_value().empty()) {
         auto suggests_resolved = full_package_query;
         suggests_resolved.filter_suggests(
@@ -642,23 +675,6 @@ void RepoqueryCommand::run() {
         full_package_query.filter_file(file->get_value(), libdnf5::sack::QueryCmp::GLOB);
     }
 
-    if (duplicates->get_value()) {
-        full_package_query -= get_installonly_query(ctx.base);
-        full_package_query.filter_duplicates();
-    }
-
-    if (unneeded->get_value()) {
-        full_package_query.filter_unneeded();
-    }
-
-    if (extras->get_value()) {
-        full_package_query.filter_extras();
-    }
-
-    if (upgrades->get_value()) {
-        full_package_query.filter_upgrades();
-    }
-
     if (recent->get_value()) {
         auto & cfg_main = ctx.base.get_config();
         auto recent_limit_days = cfg_main.get_recent_option().get_value();
@@ -666,11 +682,9 @@ void RepoqueryCommand::run() {
         full_package_query.filter_recent(now - (recent_limit_days * 86400));
     }
 
-    if (installonly->get_value()) {
-        full_package_query &= get_installonly_query(ctx.base);
-    }
+    // APPLY TRANSFORMS - these are not order independent and have to be applied last
+    // They take a set of packages and turn it into a different set of packages
 
-    // srpm filter has to be applied last because it is not order independent like the other filters
     if (srpm->get_value()) {
         libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         auto only_src_query = full_package_query;
@@ -686,7 +700,8 @@ void RepoqueryCommand::run() {
         full_package_query = srpms;
     }
 
-    // Output formatting section
+    // APPLY OUTPUT FORMATTING
+
     if (querytags_option->get_value()) {
         libdnf5::cli::output::print_available_pkg_attrs(stdout);
     } else if (changelogs->get_value()) {
