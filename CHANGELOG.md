@@ -1,3 +1,28 @@
+# 5.1.1
+
+- Postpone replace of DNF to Fedora 41
+- Add a description of `with_binaries` option for dnf5daemon
+- Include RPM logs in KeyImportError
+- Abort PGP checking immediately if any checks fail
+- Display warning message when any PGP checks skipped
+- Don't allow main gpgcheck=0 to override repo config
+- gups and environments to `history info` ouput
+- Store missing id and repoid in db for groups/environments
+- Fix out-of-bounds access in Goal::Impl::add_install_to_goal
+- Fix repoquery `--list`
+- `allow_vendor_change` was reverted back to true
+- Doc update to allow `logdir` outside the installroot
+- Remove `grouplist` and `groupinfo` aliases
+- Add `grp` alias for group command
+- `repoquery --exactdeps` needs `--whatdepends` or `--whatrequires`
+- Update and unify repoquery manpage
+- Document replace of `-v` option by `repoinfo` command
+- Add `remove --no-autoremove` option
+- Document dropped `if` alias of `info` command
+- document `actions` plugin
+- Fix printing advisories for the running kernel
+- Revert "advisory: add running kernel before pkg_specs filtering"
+
 # 5.1.0
 
 - Minor version update. API is considered stabile
