@@ -71,7 +71,12 @@ RepoSack::RepoSack(libdnf5::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
 
 RepoWeakPtr RepoSack::create_repo(const std::string & id) {
-    // TODO(jrohel): Test repo exists
+    for (const auto & existing_repo : get_data()) {
+        if (existing_repo->get_id() == id) {
+            throw RepoIdAlreadyExistsError(
+                M_("Failed to create repo \"{}\": Id is present more than once in the configuration"), id);
+        }
+    }
     auto repo = std::make_unique<Repo>(base, id, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }

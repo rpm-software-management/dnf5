@@ -58,6 +58,11 @@ class RepoRpmError : public RepoError {
     const char * get_name() const noexcept override { return "RepoRpmError"; }
 };
 
+class RepoIdAlreadyExistsError : public RepoError {
+    using RepoError::RepoError;
+    const char * get_name() const noexcept override { return "RepoIdAlreadyExistsError"; }
+};
+
 }  // namespace libdnf5::repo
 
 #endif
