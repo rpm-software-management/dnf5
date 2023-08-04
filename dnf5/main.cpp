@@ -807,6 +807,9 @@ int main(int argc, char * argv[]) try {
         any_repos_from_system_configuration = repo_sack->size() > 0;
 
         repo_sack->create_repos_from_paths(context.repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
+        for (const auto & [id, path] : context.repos_from_path) {
+            context.setopts.emplace_back(id + ".enabled", "1");
+        }
 
         context.apply_repository_setopts();
 
