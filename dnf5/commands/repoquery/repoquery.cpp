@@ -94,7 +94,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(true))));
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
-    available->set_description("Limit to available packages (default).");
+    available->set_description("Query available packages (default).");
     available->set_const_value("true");
     available->link_value(available_option);
     cmd.register_named_arg(available);
@@ -103,7 +103,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
-    installed->set_description("Limit to installed packages.");
+    installed->set_description("Query installed packages.");
     installed->set_const_value("true");
     installed->link_value(installed_option);
     cmd.register_named_arg(installed);
@@ -158,7 +158,7 @@ void RepoqueryCommand::set_argument_parser() {
         *this,
         "upgrades",
         '\0',
-        "Limit to packages that provide an upgrade for some already installed package.",
+        "Limit to available packages that provide an upgrade for some already installed package.",
         false);
 
     // SIMPLE FILTERS:
