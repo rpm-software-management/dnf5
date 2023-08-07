@@ -54,8 +54,9 @@ Options
     | This is a list option.
 
 ``--available``
-    | Limit to available packages.
+    | Query available packages.
     | This is the default behavior.
+    | Can be combined with ``--installed`` to query both installed and available packages.
 
 ``--bugfix``
     | Limit to packages in bugfix advisories.
@@ -96,7 +97,8 @@ Options
     | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
 
 ``--installed``
-    | Limit to installed packages.
+    | Query installed packages.
+    | Can be combined with ``--available`` to query both installed and available packages.
 
 ``--installonly``
     | Limit to installed installonly packages.
@@ -125,7 +127,7 @@ Options
     | This switch lists packages that are going to be removed after executing the `autoremove` command.
 
 ``--upgrades``
-    | Limit to packages that provide an upgrade for some already installed package.
+    | Limit to available packages that provide an upgrade for some already installed package.
 
 ``--userinstalled``
     | Limit to packages that are not installed as dependencies or weak dependencies.
