@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dirent.h>
 #include <rpm/rpmdb.h>
 #include <rpm/rpmlib.h>
+#include <rpm/rpmmacro.h>
 #include <rpm/rpmts.h>
 #include <sys/types.h>
 
@@ -125,9 +126,7 @@ static constexpr const char * DISTROVERPKGS[] = {
 
 static const char * detect_arch() {
     init_lib_rpm();
-    const char * value{nullptr};
-    // Can it return nullptr?
-    rpmGetArchInfo(&value, nullptr);
+    const char * value = rpmExpand("%{_host_cpu}", NULL);
     return value;
 }
 
