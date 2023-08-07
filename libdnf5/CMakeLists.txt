@@ -51,7 +51,7 @@ pkg_check_modules(LIBMODULEMD REQUIRED modulemd-2.0>=2.11.2)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${LIBMODULEMD_LIBRARIES})
 
-pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)
+pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.25)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
 target_link_libraries(libdnf5 PRIVATE ${LIBSOLV_LIBRARIES})
 
