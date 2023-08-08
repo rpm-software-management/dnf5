@@ -111,18 +111,6 @@ Base * Base::get_locked_base() noexcept {
     return locked_base;
 }
 
-void Base::load_defaults() {
-    const std::string file_path = LIBDNF5_DISTRIBUTION_CONFIG_FILE;
-    try {
-        log_router.debug("Loading default configuration from \"{}\"", file_path);
-        ConfigParser parser;
-        parser.read(file_path);
-        config.load_from_parser(parser, "main", vars, *get_logger(), Option::Priority::DEFAULT);
-    } catch (const libdnf5::MissingConfigError & ex) {
-        log_router.debug("Configuration file \"{}\" not found", file_path);
-    }
-}
-
 void Base::load_config() {
     fs::path conf_file_path{config.get_config_file_path_option().get_value()};
     fs::path conf_dir_path{CONF_DIRECTORY};
@@ -157,12 +145,6 @@ void Base::load_config() {
     }
 }
 
-void Base::load_config_from_file(const std::string & path) {
-    ConfigParser parser;
-    parser.read(path);
-    config.load_from_parser(parser, "main", vars, *get_logger());
-}
-
 void Base::with_config_file_path(std::function<void(const std::string &)> func) {
     std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
     const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
@@ -187,34 +169,6 @@ void Base::with_config_file_path(std::function<void(const std::string &)> func) 
 
 void Base::load_config_from_file() {
     load_config();
-}
-
-void Base::load_config_from_dir(const std::string & dir_path) {
-    std::vector<std::filesystem::path> paths;
-    std::error_code ec;
-    for (auto & dentry : std::filesystem::directory_iterator(dir_path, ec)) {
-        auto & path = dentry.path();
-        if (path.extension() == ".conf") {
-            paths.push_back(path);
-        }
-    }
-    if (ec) {
-        log_router.warning("Cannot read configuration from directory \"{}\": {}", dir_path, ec.message());
-        return;
-    }
-    std::sort(paths.begin(), paths.end());
-    for (auto & path : paths) {
-        load_config_from_file(path);
-    }
-}
-
-void Base::load_config_from_dir() {
-    std::filesystem::path conf_dir{libdnf5::CONF_DIRECTORY};
-    if (!config.get_use_host_config_option().get_value()) {
-        conf_dir = config.get_installroot_option().get_value() / conf_dir.relative_path();
-    }
-
-    load_config_from_dir(conf_dir);
 }
 
 void Base::load_plugins() {
