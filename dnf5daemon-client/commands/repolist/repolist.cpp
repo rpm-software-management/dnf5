@@ -108,20 +108,11 @@ void RepolistCommand::run() {
     std::vector<std::string> attrs{"id", "name", "enabled"};
     if (command == "repoinfo") {
         std::vector<std::string> repoinfo_attrs{
-            "size",
-            "revision",
-            "content_tags",
-            "distro_tags",
-            "updated",
-            "pkgs",
-            "available_pkgs",
-            "metalink",
-            "mirrorlist",
-            "baseurl",
-            "metadata_expire",
-            "excludepkgs",
-            "includepkgs",
-            "repofile"};
+            "type",          "priority",        "cost",          "baseurl",     "metalink",
+            "mirrorlist",    "metadata_expire", "excludepkgs",   "includepkgs", "skip_if_unavailable",
+            "gpgkey",        "gpgcheck",        "repo_gpgcheck", "repofile",    "revision",
+            "content_tags",  "distro_tags",     "updated",       "size",        "pkgs",
+            "available_pkgs"};
         attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
     }
     options["repo_attrs"] = attrs;
@@ -142,10 +133,10 @@ void RepolistCommand::run() {
     } else {
         // repoinfo command
 
-        for (auto & raw_repo : repositories) {
-            DbusRepoWrapper repo(raw_repo);
+        for (auto & repo : repositories) {
             auto repo_info = libdnf5::cli::output::RepoInfo();
-            repo_info.add_repo(repo, ctx.verbose.get_value(), ctx.verbose.get_value());
+            auto dbus_repo = DbusRepoWrapper(repo);
+            repo_info.add_repo(dbus_repo);
             repo_info.print();
             std::cout << std::endl;
         }
