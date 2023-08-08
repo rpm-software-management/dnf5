@@ -18,12 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_OUTPUT_PROVIDES_HPP
-#define LIBDNF_CLI_OUTPUT_PROVIDES_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_PROVIDES_HPP
+#define LIBDNF5_CLI_OUTPUT_PROVIDES_HPP
 
 #include <libsmartcols/libsmartcols.h>
 
-namespace libdnf::cli::output {
+namespace libdnf5::cli::output {
 
 
 static void add_line_into_provides_table(struct libscols_table * table, const char * key, const char * value) {
@@ -58,6 +58,6 @@ static void print_provides_table(Package & package) {
     scols_unref_table(table);
 }
 
-}  // namespace libdnf::cli::output
+}  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_PROVIDES_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_PROVIDES_HPP

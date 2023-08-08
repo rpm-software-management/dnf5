@@ -17,18 +17,18 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf-cli/output/provides.hpp"
+#include "libdnf5-cli/output/provides.hpp"
 
 #include "provides.hpp"
 
-#include <libdnf/conf/const.hpp>
-#include <libdnf/rpm/package_query.hpp>
+#include <libdnf5/conf/const.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 
 #include <iostream>
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
+using namespace libdnf5::cli;
 
 void ProvidesCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -61,37 +61,37 @@ void ProvidesCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
 void ProvidesCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::rpm::PackageSet result_pset(ctx.base);
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf5::rpm::PackageSet result_pset(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
     auto provides_query = full_package_query;
-    provides_query.filter_provides(pkg_specs, libdnf::sack::QueryCmp::GLOB);
+    provides_query.filter_provides(pkg_specs, libdnf5::sack::QueryCmp::GLOB);
     if (!provides_query.empty()) {
         full_package_query = provides_query;
     } else {
         // If provides query doesn't match anything try matching files
-        full_package_query.filter_file(pkg_specs, libdnf::sack::QueryCmp::GLOB);
+        full_package_query.filter_file(pkg_specs, libdnf5::sack::QueryCmp::GLOB);
     }
 
     if (pkg_specs.empty()) {
         result_pset |= full_package_query;
     } else {
-        const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
+        const libdnf5::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(full_package_query);
+            libdnf5::rpm::PackageQuery package_query(full_package_query);
             package_query.resolve_pkg_spec(spec, settings, true);
             result_pset |= package_query;
         }
     }
 
     for (auto package : result_pset) {
-        libdnf::cli::output::print_provides_table(package);
+        libdnf5::cli::output::print_provides_table(package);
     }
 }
 
