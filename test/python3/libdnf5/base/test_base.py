@@ -59,4 +59,4 @@ class TestBase(unittest.TestCase):
         base = libdnf5.base.Base()
         base.get_config().config_file_path = 'this-path-does-not-exist.conf'
 
-        self.assertRaises(RuntimeError, base.load_config_from_file)
+        self.assertRaises(RuntimeError, base.load_config)

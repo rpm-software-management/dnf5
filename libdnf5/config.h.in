@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _LIBDNF5_CONFIG_H_
 #define _LIBDNF5_CONFIG_H_
 
-#define LIBDNF5_DISTRIBUTION_CONFIG_FILE "@CMAKE_INSTALL_PREFIX@/share/dnf5/libdnf.conf"
+#define LIBDNF5_DISTRIBUTION_CONFIG_DIR "@CMAKE_INSTALL_PREFIX@/share/dnf5/libdnf.conf.d/"
 #define DEFAULT_LIBDNF5_PLUGINS_LIB_DIR "@CMAKE_INSTALL_FULL_LIBDIR@/libdnf5/plugins/"
 
 #endif // _LIBDNF5_CONFIG_H_

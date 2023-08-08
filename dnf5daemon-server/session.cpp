@@ -72,7 +72,7 @@ Session::Session(
     }
 
     // load configuration
-    base->load_config_from_file();
+    base->load_config();
 
     // set variables
     base->setup();

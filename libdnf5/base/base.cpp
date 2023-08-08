@@ -33,7 +33,49 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <filesystem>
 #include <mutex>
+#include <string_view>
 #include <vector>
+
+namespace fs = std::filesystem;
+
+namespace {
+
+// Creates an alphabetically sorted list of all files with `file_extension` from `directories`.
+// If a file with the same name is in multiple directories, only the first file found is added to the list.
+// Directories are traversed in the same order as they are in the input vector.
+[[nodiscard]] std::vector<fs::path> create_sorted_file_list(
+    const std::vector<fs::path> & directories, std::string_view file_extension) {
+    std::vector<fs::path> paths;
+
+    for (const auto & dir : directories) {
+        std::error_code ec;
+        for (const auto & dentry : fs::directory_iterator(dir, ec)) {
+            const auto & path = dentry.path();
+            if (dentry.is_regular_file() && path.extension() == file_extension) {
+                const auto & path_fname = path.filename();
+                bool found{false};
+                for (const auto & path_in_list : paths) {
+                    if (path_fname == path_in_list.filename()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    paths.push_back(path);
+                }
+            }
+        }
+    }
+
+    // sort all drop-in configuration files alphabetically by their names
+    std::sort(paths.begin(), paths.end(), [](const fs::path & p1, const fs::path & p2) {
+        return p1.filename() < p2.filename();
+    });
+
+    return paths;
+}
+
+}  // namespace
 
 namespace libdnf5 {
 
@@ -46,9 +88,7 @@ Base::Base(std::vector<std::unique_ptr<Logger>> && loggers)
       repo_sack(get_weak_ptr()),
       rpm_package_sack(get_weak_ptr()),
       transaction_history(get_weak_ptr()),
-      vars(get_weak_ptr()) {
-    load_defaults();
-}
+      vars(get_weak_ptr()) {}
 
 Base::~Base() = default;
 
@@ -83,6 +123,40 @@ void Base::load_defaults() {
     }
 }
 
+void Base::load_config() {
+    fs::path conf_file_path{config.get_config_file_path_option().get_value()};
+    fs::path conf_dir_path{CONF_DIRECTORY};
+    fs::path distribution_conf_dir_path{LIBDNF5_DISTRIBUTION_CONFIG_DIR};
+
+    const auto conf_file_path_priority{config.get_config_file_path_option().get_priority()};
+    const bool use_installroot_config{!config.get_use_host_config_option().get_value()};
+    const bool user_defined_config_file_name = conf_file_path_priority >= Option::Priority::COMMANDLINE;
+    if (use_installroot_config) {
+        fs::path installroot_path{config.get_installroot_option().get_value()};
+        if (!user_defined_config_file_name) {
+            conf_file_path = installroot_path / conf_file_path.relative_path();
+        }
+        conf_dir_path = installroot_path / conf_dir_path.relative_path();
+        distribution_conf_dir_path = installroot_path / distribution_conf_dir_path.relative_path();
+    }
+
+    // Loads configuration from drop-in directories
+    const auto paths = create_sorted_file_list({conf_dir_path, distribution_conf_dir_path}, ".conf");
+    for (const auto & path : paths) {
+        ConfigParser parser;
+        parser.read(path);
+        config.load_from_parser(parser, "main", vars, *get_logger());
+    }
+
+    // Finally, if a user configuration filename is defined or the file exists in the default location,
+    // it will be loaded.
+    if (user_defined_config_file_name || fs::exists(conf_file_path)) {
+        ConfigParser parser;
+        parser.read(conf_file_path);
+        config.load_from_parser(parser, "main", vars, *get_logger());
+    }
+}
+
 void Base::load_config_from_file(const std::string & path) {
     ConfigParser parser;
     parser.read(path);
@@ -112,8 +186,7 @@ void Base::with_config_file_path(std::function<void(const std::string &)> func) 
 }
 
 void Base::load_config_from_file() {
-    with_config_file_path(
-        std::function<void(const std::string &)>{[this](const std::string & path) { load_config_from_file(path); }});
+    load_config();
 }
 
 void Base::load_config_from_dir(const std::string & dir_path) {
