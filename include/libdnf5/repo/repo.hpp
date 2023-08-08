@@ -356,6 +356,9 @@ public:
     /// @since 5.0
     libdnf5::BaseWeakPtr get_base() const;
 
+    /// Return string representation of the Type enum
+    static std::string type_to_string(Type type);
+
 private:
     class Impl;
     friend class RepoSack;
