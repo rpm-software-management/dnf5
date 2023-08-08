@@ -40,61 +40,79 @@ enum class RepoAttribute {
     // from repo configuration
     id,
     name,
+    type,
     enabled,
+    priority,
+    cost,
     baseurl,
     metalink,
     mirrorlist,
     metadata_expire,
     excludepkgs,
     includepkgs,
-    repofile,
+    skip_if_unavailable,
 
-    // require metadata loading
-    revision,
-    content_tags,
-    distro_tags,
-    updated,
-    pkgs,
-    available_pkgs,  // number of not excluded packages
-    size,
+    gpgkey,
+    gpgcheck,
+    repo_gpgcheck,
 
     proxy,
     proxy_username,
     proxy_password,
+
+    // require metadata loading
+    repofile,
+    revision,
+    content_tags,
+    distro_tags,
+    updated,
+    size,
+    pkgs,
+    available_pkgs,  // number of not excluded packages
 };
 
 std::vector<RepoAttribute> metadata_required_attributes{
+    RepoAttribute::repofile,
     RepoAttribute::revision,
     RepoAttribute::content_tags,
     RepoAttribute::distro_tags,
     RepoAttribute::updated,
+    RepoAttribute::size,
     RepoAttribute::pkgs,
-    RepoAttribute::available_pkgs,
-    RepoAttribute::size};
+    RepoAttribute::available_pkgs};
 
 // map string package attribute name to actual attribute
 const static std::map<std::string, RepoAttribute> repo_attributes{
     {"id", RepoAttribute::id},
     {"name", RepoAttribute::name},
+    {"type", RepoAttribute::type},
     {"enabled", RepoAttribute::enabled},
+    {"priority", RepoAttribute::priority},
+    {"cost", RepoAttribute::cost},
     {"baseurl", RepoAttribute::baseurl},
     {"metalink", RepoAttribute::metalink},
     {"mirrorlist", RepoAttribute::mirrorlist},
     {"metadata_expire", RepoAttribute::metadata_expire},
     {"excludepkgs", RepoAttribute::excludepkgs},
     {"includepkgs", RepoAttribute::includepkgs},
+    {"skip_if_unavailable", RepoAttribute::skip_if_unavailable},
+
+    {"gpgkey", RepoAttribute::gpgkey},
+    {"gpgcheck", RepoAttribute::gpgcheck},
+    {"repo_gpgcheck", RepoAttribute::repo_gpgcheck},
+
+    {"proxy", RepoAttribute::proxy},
+    {"proxy_username", RepoAttribute::proxy_username},
+    {"proxy_password", RepoAttribute::proxy_password},
+
     {"repofile", RepoAttribute::repofile},
     {"revision", RepoAttribute::revision},
     {"content_tags", RepoAttribute::content_tags},
     {"distro_tags", RepoAttribute::distro_tags},
     {"updated", RepoAttribute::updated},
+    {"size", RepoAttribute::size},
     {"pkgs", RepoAttribute::pkgs},
     {"available_pkgs", RepoAttribute::available_pkgs},
-    {"size", RepoAttribute::size},
-
-    {"proxy", RepoAttribute::proxy},
-    {"proxy_username", RepoAttribute::proxy_username},
-    {"proxy_password", RepoAttribute::proxy_password},
 };
 
 // converts Repo object to dbus map
@@ -106,25 +124,76 @@ dnfdaemon::KeyValueMap repo_to_map(
     // attributes required by client
     for (auto & attr : attributes) {
         switch (repo_attributes.at(attr)) {
+            // configuration
             case RepoAttribute::id:
                 dbus_repo.emplace(attr, libdnf_repo->get_id());
                 break;
             case RepoAttribute::name:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_name_option().get_value());
                 break;
+            case RepoAttribute::type:
+                dbus_repo.emplace(attr, libdnf_repo->type_to_string(libdnf_repo->get_type()));
+                break;
             case RepoAttribute::enabled:
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
                 break;
-            case RepoAttribute::size: {
-                uint64_t size = 0;
-                libdnf5::rpm::PackageQuery query(base);
-                std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.filter_repo_id(reponames);
-                for (auto pkg : query) {
-                    size += pkg.get_download_size();
-                }
-                dbus_repo.emplace(attr, size);
+            case RepoAttribute::priority:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_priority_option().get_value());
+                break;
+            case RepoAttribute::cost:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_cost_option().get_value());
+                break;
+            case RepoAttribute::baseurl:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_baseurl_option().get_value());
+                break;
+            case RepoAttribute::metalink: {
+                auto & opt = libdnf_repo->get_config().get_metalink_option();
+                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
             } break;
+            case RepoAttribute::mirrorlist: {
+                auto & opt = libdnf_repo->get_config().get_mirrorlist_option();
+                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
+            } break;
+            case RepoAttribute::metadata_expire:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_metadata_expire_option().get_value());
+                break;
+            case RepoAttribute::excludepkgs:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_excludepkgs_option().get_value());
+                break;
+            case RepoAttribute::includepkgs:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_includepkgs_option().get_value());
+                break;
+            case RepoAttribute::skip_if_unavailable:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_skip_if_unavailable_option().get_value());
+                break;
+
+            // pgp
+            case RepoAttribute::gpgkey:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_gpgkey_option().get_value());
+                break;
+            case RepoAttribute::gpgcheck:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_gpgcheck_option().get_value());
+                break;
+            case RepoAttribute::repo_gpgcheck:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_repo_gpgcheck_option().get_value());
+                break;
+
+            // proxy
+            case RepoAttribute::proxy:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_option().get_value());
+                break;
+            case RepoAttribute::proxy_username:
+                //                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_username_option().get_value());
+                dbus_repo.emplace(attr, "user foo");
+                break;
+            case RepoAttribute::proxy_password:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_password_option().get_value());
+                break;
+
+            // require metadata loading
+            case RepoAttribute::repofile:
+                dbus_repo.emplace(attr, libdnf_repo->get_repo_file_path());
+                break;
             case RepoAttribute::revision:
                 dbus_repo.emplace(attr, libdnf_repo->get_revision());
                 break;
@@ -143,53 +212,26 @@ dnfdaemon::KeyValueMap repo_to_map(
             case RepoAttribute::updated:
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
-            case RepoAttribute::pkgs: {
-                libdnf5::rpm::PackageQuery query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+            case RepoAttribute::size: {
+                uint64_t size = 0;
+                libdnf5::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
+                for (auto pkg : query) {
+                    size += pkg.get_download_size();
+                }
+                dbus_repo.emplace(attr, size);
+            } break;
+            case RepoAttribute::pkgs: {
+                libdnf5::rpm::PackageQuery query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+                query.filter_repo_id({libdnf_repo->get_id()});
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
                 libdnf5::rpm::PackageQuery query(base);
-                std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.filter_repo_id(reponames);
+                query.filter_repo_id({libdnf_repo->get_id()});
                 dbus_repo.emplace(attr, query.size());
             } break;
-            case RepoAttribute::metalink: {
-                auto opt = libdnf_repo->get_config().get_metalink_option();
-                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
-            } break;
-            case RepoAttribute::mirrorlist: {
-                auto opt = libdnf_repo->get_config().get_mirrorlist_option();
-                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
-            } break;
-            case RepoAttribute::baseurl:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_baseurl_option().get_value());
-                break;
-            case RepoAttribute::metadata_expire:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_metadata_expire_option().get_value());
-                break;
-            case RepoAttribute::excludepkgs:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_excludepkgs_option().get_value());
-                break;
-            case RepoAttribute::includepkgs:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_includepkgs_option().get_value());
-                break;
-            case RepoAttribute::repofile:
-                dbus_repo.emplace(attr, libdnf_repo->get_repo_file_path());
-                break;
-
-            // proxy
-            case RepoAttribute::proxy:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_option().get_value());
-                break;
-            case RepoAttribute::proxy_username:
-                //                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_username_option().get_value());
-                dbus_repo.emplace(attr, "user foo");
-                break;
-            case RepoAttribute::proxy_password:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_password_option().get_value());
-                break;
         }
     }
     return dbus_repo;
