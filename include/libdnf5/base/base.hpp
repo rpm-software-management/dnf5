@@ -79,10 +79,16 @@ public:
     /// Returns a pointer to a locked "Base" instance or "nullptr" if no instance is locked.
     static Base * get_locked_base() noexcept;
 
+    /// Loads main configuration.
+    /// The file defined in the current configuration and files in the drop-in directories are used.
+    void load_config();
+
+    /// @deprecated Don't use it! It will be removed in Fedora 40. It was intended for internal use only.
     /// Call a function that loads the config file, catching errors appropriately
     void with_config_file_path(std::function<void(const std::string &)> func);
 
-    /// Loads main configuration from file defined by the current configuration.
+    /// @deprecated It is redundant. It calls `load_config()`.
+    /// Loads main configuration.
     void load_config_from_file();
 
     /// @return a reference to configuration

@@ -12,13 +12,16 @@ libdnf5::Base base;
 // installroot directory tree as its root for the rest of its lifetime.
 base.get_config().get_installroot_option().set(installroot);
 
-// Optionally load configuration from the config file.
+// Optionally load configuration from the config files.
 //
 // The Base's config is initialized with default values, one of which is
-// `config_file_path()`. This contains the default path to the config file
-// ("/etc/dnf/dnf.conf"). Set a custom value relative to installroot and
-// call the below method to load configuration from a different location.
-base.load_config_from_file();
+// "config_file_path". This contains the default path to the config file
+// ("/etc/dnf/dnf.conf"). If the file does not exist the distribution config file
+// is loaded. Function also loads configuration files from distribution and
+// user ("/etc/dnf/libdnf5.conf.d") drop-in directories.
+// Optionally set a custom value to "config_file_path" before calling this method
+// to load configuration from a anoher configuration file.
+base.load_config();
 
 // Load vars and do other initialization (of libsolv pool, etc.) based on the
 // configuration.  Locks the installroot and varsdir configuration values so

@@ -549,7 +549,7 @@ std::vector<std::string> match_specs(
     base.get_config().get_assumeno_option().set(libdnf5::Option::Priority::RUNTIME, true);
     ctx.set_quiet(true);
 
-    base.load_config_from_file();
+    base.load_config();
     base.setup();
 
     // optimization - disable the search for matching installed and available packages for file patterns

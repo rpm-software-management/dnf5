@@ -32,7 +32,7 @@ constexpr const char * SYSTEM_STATE_DIR = "/usr/lib/sysimage/libdnf5";
 constexpr const char * SYSTEM_CACHEDIR = "/var/cache/libdnf5";
 
 constexpr const char * CONF_FILENAME = "/etc/dnf/dnf.conf";
-constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
+constexpr const char * CONF_DIRECTORY = "/etc/dnf/libdnf5.conf.d";
 
 constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
 
