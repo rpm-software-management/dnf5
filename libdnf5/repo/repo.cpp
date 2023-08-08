@@ -535,4 +535,16 @@ void Repo::recompute_expired() {
     }
 }
 
+std::string Repo::type_to_string(Type type) {
+    switch (type) {
+        case Type::AVAILABLE:
+            return "available";
+        case Type::COMMANDLINE:
+            return "commandline";
+        case Type::SYSTEM:
+            return "system";
+    }
+    return "";
+}
+
 }  // namespace libdnf5::repo
