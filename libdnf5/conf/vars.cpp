@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmlib.h>
 #include <rpm/rpmmacro.h>
 #include <rpm/rpmts.h>
+#include <stdlib.h>
 #include <sys/types.h>
 
 #include <algorithm>
@@ -124,9 +125,14 @@ static constexpr const char * DISTROVERPKGS[] = {
     "redhat-release",
     "suse-release"};
 
-static const char * detect_arch() {
+static std::string detect_arch() {
     init_lib_rpm();
-    const char * value = rpmExpand("%{_host_cpu}", NULL);
+    std::string value{};
+    char * tmp = rpmExpand("%{_host_cpu}", NULL);
+    if (tmp != nullptr) {
+        value = tmp;
+        free(tmp);
+    }
     return value;
 }
 
@@ -251,14 +257,14 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 void Vars::detect_vars(const std::string & installroot) {
     auto it = variables.find("arch");
     if (it == variables.end()) {
-        const char * arch = detect_arch();
-        if (arch) {
-            variables.insert({"arch", {arch, Priority::AUTO}});
+        std::string arch = detect_arch();
+        if (!arch.empty()) {
+            variables.insert({"arch", {std::move(arch), Priority::AUTO}});
         }
     } else if (it->second.priority <= Priority::AUTO) {
-        const char * arch = detect_arch();
-        if (arch) {
-            it->second.value = arch;
+        std::string arch = detect_arch();
+        if (!arch.empty()) {
+            it->second.value = std::move(arch);
             it->second.priority = Priority::AUTO;
         }
     }
