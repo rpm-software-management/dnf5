@@ -36,6 +36,8 @@ public:
         get_argument_parser_command()->set_description("Print details about repositories");
     }
 
+    void configure() override;
+
 protected:
     void print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;
 };

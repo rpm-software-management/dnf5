@@ -25,6 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
+void RepoInfoCommand::configure() {
+    auto & context = get_context();
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
+
 void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
     for (auto & repo : query.get_data()) {
         libdnf5::cli::output::RepoInfo repo_info;
