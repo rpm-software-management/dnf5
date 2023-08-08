@@ -62,6 +62,8 @@ void RepoqueryCommand::set_argument_parser() {
 
     auto * formatting_conflicts =
         parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
+    auto * only_outputs_installed =
+        parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
 
     // ARGUMENT
 
@@ -119,6 +121,7 @@ void RepoqueryCommand::set_argument_parser() {
     leaves->link_value(leaves_option);
     leaves->add_conflict_argument(*available);
     cmd.register_named_arg(leaves);
+    only_outputs_installed->push_back(leaves);
 
     userinstalled_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
@@ -129,6 +132,7 @@ void RepoqueryCommand::set_argument_parser() {
     userinstalled->link_value(userinstalled_option);
     userinstalled->add_conflict_argument(*installed);
     cmd.register_named_arg(userinstalled);
+    only_outputs_installed->push_back(userinstalled);
 
     duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -137,6 +141,7 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
+    only_outputs_installed->push_back(duplicates->arg);
 
     unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -145,14 +150,17 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to unneeded installed packages (i.e. packages that were installed as "
         "dependencies but are no longer needed).",
         false);
+    only_outputs_installed->push_back(unneeded->arg);
 
     installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installonly", '\0', "Limit to installed installonly packages.", false);
+    only_outputs_installed->push_back(installonly->arg);
 
     // FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED:
 
     extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
+    only_outputs_installed->push_back(extras->arg);
 
     upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -379,6 +387,17 @@ void RepoqueryCommand::set_argument_parser() {
     for (auto * arg : *formatting_conflicts) {
         arg->set_conflict_arguments(formatting_conflicts);
     }
+
+    // Options that configure how repos should be loaded are incompatible
+    // with --available and --installed options.
+    available->set_conflict_arguments(only_outputs_installed);
+    available->add_conflict_argument(*upgrades->arg);
+    installed->set_conflict_arguments(only_outputs_installed);
+    installed->add_conflict_argument(*upgrades->arg);
+
+    // --upgrades option returns only available packages, conflict with options
+    // that return only installed packages
+    upgrades->arg->set_conflict_arguments(only_outputs_installed);
 }
 
 void RepoqueryCommand::configure() {
