@@ -300,6 +300,8 @@ Package management library.
 %else
 %exclude %{_sysconfdir}/dnf/dnf.conf
 %endif
+%dir %{_datadir}/dnf5/libdnf.conf.d
+%dir %{_sysconfdir}/dnf/libdnf5.conf.d
 %dir %{_sysconfdir}/dnf/libdnf5-plugins
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
