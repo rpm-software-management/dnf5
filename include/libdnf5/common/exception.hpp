@@ -204,10 +204,15 @@ public:
     virtual const char * get_description() const noexcept;
 };
 
+enum FormatDetailLevel {
+    Plain,
+    WithName,
+    WithDomainAndName,
+};
 
 /// Formats the error message of an exception.
 /// If the exception is nested, recurses to format the message of the exception it holds.
-std::string format(const std::exception & e, bool with_domain);
+std::string format(const std::exception & e, FormatDetailLevel detail);
 
 }  // namespace libdnf5
 

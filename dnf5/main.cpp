@@ -880,7 +880,7 @@ int main(int argc, char * argv[]) try {
     } catch (libdnf5::cli::SilentCommandExitError & ex) {
         return ex.get_exit_code();
     } catch (std::runtime_error & ex) {
-        std::cerr << ex.what() << std::endl;
+        std::cerr << libdnf5::format(ex, libdnf5::FormatDetailLevel::Plain);
         log_router.error("Command returned error: {}", ex.what());
         return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
@@ -889,6 +889,6 @@ int main(int argc, char * argv[]) try {
 
     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
 } catch (const libdnf5::Error & e) {
-    std::cerr << libdnf5::format(e, false);
+    std::cerr << libdnf5::format(e, libdnf5::FormatDetailLevel::WithName);
     return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
 }

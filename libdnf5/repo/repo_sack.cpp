@@ -280,11 +280,14 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             except_in_main_thread = true;
             finish_sack_loader();
             throw;
-        } else {
-            base->get_logger()->warning(
-                "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
-                repo->get_id(),
-                e.what());  // TODO(jrohel) we should print nested exceptions
+        }
+        base->get_logger()->warning(
+            "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"):", repo->get_id());
+        const auto & error_lines = utils::string::split(format(e, FormatDetailLevel::Plain), "\n");
+        for (const auto & line : error_lines) {
+            if (!line.empty()) {
+                base->get_logger()->warning(' ' + line);
+            }
         }
         return false;
     };
