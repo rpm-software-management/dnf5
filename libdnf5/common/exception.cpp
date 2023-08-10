@@ -81,14 +81,20 @@ std::string SystemError::get_error_message() const {
     return std::system_category().default_error_condition(error_code).message();
 }
 
-
-static std::string format(const std::exception & e, std::size_t level, bool with_domain) {
+static std::string format(const std::exception & e, std::size_t level, FormatDetailLevel detail) {
     std::string ret(level, ' ');
-    if (auto ex = dynamic_cast<const Error *>(&e)) {
-        if (with_domain) {
-            ret += fmt::format("{}::{}: {}\n", ex->get_domain_name(), ex->get_name(), ex->what());
-        } else {
-            ret += fmt::format("{}: {}\n", ex->get_name(), ex->what());
+    if (const auto * ex = dynamic_cast<const Error *>(&e)) {
+        switch (detail) {
+            case FormatDetailLevel::WithDomainAndName: {
+                ret += fmt::format("{}::{}: {}\n", ex->get_domain_name(), ex->get_name(), ex->what());
+            } break;
+            case FormatDetailLevel::WithName: {
+                ret += fmt::format("{}: {}\n", ex->get_name(), ex->what());
+            } break;
+            case FormatDetailLevel::Plain: {
+                ret += e.what();
+                ret += '\n';
+            } break;
         }
     } else {
         ret += e.what();
@@ -97,15 +103,15 @@ static std::string format(const std::exception & e, std::size_t level, bool with
     try {
         std::rethrow_if_nested(e);
     } catch (const std::exception & e) {
-        ret += format(e, level + 1, with_domain);
+        ret += format(e, level + 1, detail);
     } catch (...) {
     }
 
     return ret;
 }
 
-std::string format(const std::exception & e, bool with_domain) {
-    return format(e, 0, with_domain);
+std::string format(const std::exception & e, FormatDetailLevel detail) {
+    return format(e, 0, detail);
 }
 
 Error::Error(const Error & e) noexcept : std::runtime_error(e) {
