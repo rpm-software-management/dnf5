@@ -122,6 +122,7 @@ void DownloadCB::add_new_download(sdbus::Signal & signal) {
         progress_bar->set_auto_finish(false);
         progress_bars.emplace(download_id, progress_bar.get());
         multi_progress_bar->add_bar(std::move(progress_bar));
+        print();
     }
 }
 
