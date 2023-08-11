@@ -257,7 +257,12 @@ void RootCommand::set_argument_parser() {
                 throw libdnf5::cli::ArgumentParserError(M_("setvar: Badly formatted argument value \"{}\""), value);
             }
             auto name = std::string(value, val);
-            ctx.base.get_vars()->set(name, val + 1, libdnf5::Vars::Priority::COMMANDLINE);
+            try {
+                ctx.base.get_vars()->set(name, val + 1, libdnf5::Vars::Priority::COMMANDLINE);
+            } catch (libdnf5::Error & ex) {
+                std::string message{ex.what()};
+                throw libdnf5::cli::ArgumentParserError(M_("setvar: {}"), message);
+            }
             return true;
         });
     global_options_group->register_argument(setvar);

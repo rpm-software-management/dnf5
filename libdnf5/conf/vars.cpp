@@ -49,6 +49,8 @@ extern char ** environ;
 
 namespace libdnf5 {
 
+static const std::unordered_set<std::string> READ_ONLY_VARIABLES = {"releasever_major", "releasever_minor"};
+
 // ==================================================================
 // The following helper functions should be moved e.g. into a library
 
@@ -180,11 +182,13 @@ std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, cons
 
 Vars::Vars(Base & base) : Vars(base.get_weak_ptr()) {}
 
-std::string Vars::substitute(const std::string & text) const {
-    return substitute_expression(text, 0).first;
-}
-
 const unsigned int MAXIMUM_EXPRESSION_DEPTH = 32;
+
+// Expand variables in a subexpression
+//
+// @param text String with variable expressions
+// @param depth The recursive depth
+// @return Pair of the resulting string and the number of characters scanned in `text`
 std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text, unsigned int depth) const {
     if (depth > MAXIMUM_EXPRESSION_DEPTH) {
         return std::make_pair(std::string(text), text.length());
@@ -346,6 +350,10 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
     return std::make_pair(res, text.length());
 }
 
+std::string Vars::substitute(const std::string & text) const {
+    return substitute_expression(text, 0).first;
+}
+
 std::tuple<std::string, std::string> Vars::split_releasever(const std::string & releasever) {
     // Uses the same logic as splitReleaseverTo in libzypp
     std::string releasever_major;
@@ -360,27 +368,44 @@ std::tuple<std::string, std::string> Vars::split_releasever(const std::string & 
     return std::make_tuple(releasever_major, releasever_minor);
 }
 
+bool Vars::is_read_only(const std::string & name) const {
+    return READ_ONLY_VARIABLES.contains(name);
+}
+
 void Vars::set(const std::string & name, const std::string & value, Priority prio) {
-    auto it = variables.find(name);
-
-    // Do nothing if the var is already set with a higher priority
-    if (it != variables.end() && prio < it->second.priority) {
-        return;
+    if (is_read_only(name)) {
+        throw RuntimeError(M_("Variable \"{}\" is read-only"), name);
     }
 
-    // Whenever releasever is set, split it into major and minor parts
-    if (name == "releasever") {
-        const auto [releasever_major, releasever_minor] = split_releasever(value);
-        set("releasever_major", releasever_major, prio);
-        set("releasever_minor", releasever_minor, prio);
-    }
+    // set_unsafe sets the variable without checking whether it's read-only
+    std::function<void(const std::string, const std::string, Priority)> set_unsafe =
+        [&](const std::string & name, const std::string & value, Priority prio) {
+            auto it = variables.find(name);
 
-    if (it == variables.end()) {
-        variables.insert({name, {value, prio}});
-    } else {
-        it->second.value = value;
-        it->second.priority = prio;
-    }
+            // Do nothing if the var is already set with a higher priority
+            if (it != variables.end() && prio < it->second.priority) {
+                return;
+            }
+
+            // Whenever releasever is set, split it into major and minor parts
+            if (name == "releasever") {
+                const auto [releasever_major, releasever_minor] = split_releasever(value);
+                if (!releasever_major.empty()) {
+                    set_unsafe("releasever_major", releasever_major, prio);
+                }
+                if (!releasever_minor.empty()) {
+                    set_unsafe("releasever_minor", releasever_minor, prio);
+                }
+            }
+
+            if (it == variables.end()) {
+                variables.insert({name, {value, prio}});
+            } else {
+                it->second.value = value;
+                it->second.priority = prio;
+            }
+        };
+    set_unsafe(name, value, prio);
 }
 
 void Vars::set_lazy(
