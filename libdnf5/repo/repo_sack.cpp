@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_sack.hpp"
 
 #include "../module/module_sack_impl.hpp"
+#include "conf/config.h"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
@@ -36,6 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/conf/config_parser.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "libdnf5/conf/option_bool.hpp"
 #include "libdnf5/repo/file_downloader.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -55,6 +57,8 @@ extern "C" {
 
 using LibsolvRepo = ::Repo;
 
+namespace fs = std::filesystem;
+
 namespace {
 
 // Names of special repositories
@@ -62,6 +66,41 @@ constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
+
+// Creates an alphabetically sorted list of all files with `file_extension` from `directories`.
+// If a file with the same name is in multiple directories, only the first file found is added to the list.
+// Directories are traversed in the same order as they are in the input vector.
+[[nodiscard]] std::vector<fs::path> create_sorted_file_list(
+    const std::vector<fs::path> & directories, std::string_view file_extension) {
+    std::vector<fs::path> paths;
+
+    for (const auto & dir : directories) {
+        std::error_code ec;
+        for (const auto & dentry : fs::directory_iterator(dir, ec)) {
+            const auto & path = dentry.path();
+            if (dentry.is_regular_file() && path.extension() == file_extension) {
+                const auto & path_fname = path.filename();
+                bool found{false};
+                for (const auto & path_in_list : paths) {
+                    if (path_fname == path_in_list.filename()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    paths.push_back(path);
+                }
+            }
+        }
+    }
+
+    // sort all drop-in configuration files alphabetically by their names
+    std::sort(paths.begin(), paths.end(), [](const fs::path & p1, const fs::path & p2) {
+        return p1.filename() < p2.filename();
+    });
+
+    return paths;
+}
 
 }  // namespace
 
@@ -590,6 +629,40 @@ void RepoSack::create_repos_from_paths(
 void RepoSack::create_repos_from_system_configuration() {
     create_repos_from_config_file();
     create_repos_from_reposdir();
+    load_repos_configuration_overrides();
+}
+
+void RepoSack::load_repos_configuration_overrides() {
+    auto loger = base->get_logger();
+
+    fs::path repos_override_dir_path{REPOS_OVERRIDE_DIR};
+    fs::path repos_distrib_override_dir_path{LIBDNF5_REPOS_DISTRIBUTION_OVERRIDE_DIR};
+
+    const auto & config = base->get_config();
+    const bool use_installroot_config{!config.get_use_host_config_option().get_value()};
+    if (use_installroot_config) {
+        const fs::path installroot_path{config.get_installroot_option().get_value()};
+        repos_override_dir_path = installroot_path / repos_override_dir_path.relative_path();
+        repos_distrib_override_dir_path = installroot_path / repos_distrib_override_dir_path.relative_path();
+    }
+
+    const auto paths = create_sorted_file_list({repos_override_dir_path, repos_distrib_override_dir_path}, ".repo");
+
+    for (const auto & path : paths) {
+        ConfigParser parser;
+        parser.read(path);
+        const auto & cfg_parser_data = parser.get_data();
+        for (const auto & cfg_parser_data_iter : cfg_parser_data) {
+            const auto & section = cfg_parser_data_iter.first;
+            const auto repo_id_pattern = base->get_vars()->substitute(section);
+
+            RepoQuery repo_query(base);
+            repo_query.filter_id(repo_id_pattern, sack::QueryCmp::GLOB);
+            for (auto & repo : repo_query) {
+                repo->get_config().load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
+            }
+        }
+    }
 }
 
 BaseWeakPtr RepoSack::get_base() const {

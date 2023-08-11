@@ -74,9 +74,10 @@ public:
 
     /// Creates new repositories from the Base's configuration file (the /
     /// "config_file_path" configuration option) and from directories defined by
-    /// the "reposdir" configuration option.
+    /// the "reposdir" configuration option. Repository overrides are then applied.
     ///
-    /// Calls `create_repos_from_config_file()` and `create_repos_from_reposdir()`.
+    /// Calls `create_repos_from_config_file()`, `create_repos_from_reposdir()`,
+    /// and loads repository configuration overrides.
     void create_repos_from_system_configuration();
 
     /// Creates a new repository from a libsolv testcase file.
@@ -154,6 +155,10 @@ private:
 
     explicit RepoSack(const libdnf5::BaseWeakPtr & base) : base(base) {}
     explicit RepoSack(libdnf5::Base & base);
+
+    /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
+    /// Only the configuration of the coresponding existing repositories is modified.
+    void load_repos_configuration_overrides();
 
     WeakPtrGuard<RepoSack, false> sack_guard;
 
