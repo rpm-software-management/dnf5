@@ -512,7 +512,13 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 
         logger.debug("Creating repo \"{}\" from config file \"{}\" section \"{}\"", repo_id, path, section);
 
-        auto repo = create_repo(repo_id);
+        RepoWeakPtr repo;
+        try {
+            repo = create_repo(repo_id);
+        } catch (const RepoIdAlreadyExistsError & ex) {
+            logger.error(ex.what());
+            continue;
+        }
         repo->set_repo_file_path(path);
         auto & repo_cfg = repo->get_config();
         repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
