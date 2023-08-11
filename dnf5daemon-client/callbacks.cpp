@@ -87,6 +87,7 @@ void DownloadCB::print() {
 
 
 void DownloadCB::reset_progress_bar() {
+    std::cout << "XXX reset XXX";
     multi_progress_bar.reset();
     if (printed) {
         std::cout << std::endl;
