@@ -23,9 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
-
 
 namespace libdnf5 {
 
@@ -69,6 +69,12 @@ public:
     /// @param value Value to be stored in variable
     /// @param prio Source/Priority of the value
     void set(const std::string & name, const std::string & value, Priority prio = Priority::RUNTIME);
+
+    /// @brief Checks whether a variable is read-only
+    ///
+    /// @param name Name of the variable
+    /// @return true if the variable is read-only, false if it is writable
+    bool is_read_only(const std::string & name) const;
 
     /// @brief Checks if there is an variable with name equivalent to name in the container.
     ///
