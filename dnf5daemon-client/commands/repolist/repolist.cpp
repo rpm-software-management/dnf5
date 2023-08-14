@@ -129,7 +129,8 @@ void RepolistCommand::run() {
             "updated",
             "size",
             "pkgs",
-            "available_pkgs"};
+            "available_pkgs",
+            "mirrors"};
         attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
     }
     options["repo_attrs"] = attrs;

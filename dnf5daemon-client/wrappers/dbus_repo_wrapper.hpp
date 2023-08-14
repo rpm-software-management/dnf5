@@ -55,6 +55,7 @@ public:
     uint64_t get_size() const { return rawdata.at("size"); }
     uint64_t get_pkgs() const { return rawdata.at("pkgs"); }
     uint64_t get_available_pkgs() const { return rawdata.at("available_pkgs"); }
+    std::vector<std::string> get_mirrors() const { return rawdata.at("mirrors"); }
 
 private:
     dnfdaemon::KeyValueMap rawdata;

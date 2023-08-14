@@ -90,6 +90,11 @@ void RepoInfo::add_repo(Repo & repo) {
     auto base_url = repo.get_baseurl();
     if (!base_url.empty()) {
         add_line("Base URL", base_url, nullptr, group_urls);
+    } else {
+        auto mirrors = repo.get_mirrors();
+        if (!mirrors.empty()) {
+            add_line("Base URL", fmt::format("{} ({} more)", mirrors.front(), mirrors.size()), nullptr, group_urls);
+        }
     }
 
     auto metalink = repo.get_metalink();
