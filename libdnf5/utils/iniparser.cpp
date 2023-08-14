@@ -148,8 +148,6 @@ IniParser::ItemType IniParser::next() {
             line_ready = false;
         }
     }
-    trim_value();
-    return previous_line_with_key_val ? ItemType::KEY_VAL : ItemType::END_OF_INPUT;
 }
 
 }  // namespace libdnf5
