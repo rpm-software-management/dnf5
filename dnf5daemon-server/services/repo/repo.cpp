@@ -222,7 +222,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 break;
             case RepoAttribute::size: {
                 uint64_t size = 0;
-                libdnf5::rpm::PackageQuery query(base);
+                libdnf5::rpm::PackageQuery query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 for (auto pkg : query) {
