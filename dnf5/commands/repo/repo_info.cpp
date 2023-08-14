@@ -76,6 +76,7 @@ public:
     uint64_t get_size() const { return size; }
     uint64_t get_pkgs() const { return pkgs; }
     uint64_t get_available_pkgs() const { return available_pkgs; }
+    std::vector<std::string> get_mirrors() const { return repo.get_mirrors(); }
 
 private:
     libdnf5::repo::Repo & repo;

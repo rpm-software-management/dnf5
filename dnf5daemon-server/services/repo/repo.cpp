@@ -70,6 +70,7 @@ enum class RepoAttribute {
     size,
     pkgs,
     available_pkgs,  // number of not excluded packages
+    mirrors,
 };
 
 std::vector<RepoAttribute> metadata_required_attributes{
@@ -80,7 +81,8 @@ std::vector<RepoAttribute> metadata_required_attributes{
     RepoAttribute::updated,
     RepoAttribute::size,
     RepoAttribute::pkgs,
-    RepoAttribute::available_pkgs};
+    RepoAttribute::available_pkgs,
+    RepoAttribute::mirrors};
 
 // map string package attribute name to actual attribute
 const static std::map<std::string, RepoAttribute> repo_attributes{
@@ -115,6 +117,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
     {"size", RepoAttribute::size},
     {"pkgs", RepoAttribute::pkgs},
     {"available_pkgs", RepoAttribute::available_pkgs},
+    {"mirrors", RepoAttribute::mirrors},
 };
 
 // converts Repo object to dbus map
@@ -237,6 +240,9 @@ dnfdaemon::KeyValueMap repo_to_map(
                 query.filter_repo_id({libdnf_repo->get_id()});
                 dbus_repo.emplace(attr, query.size());
             } break;
+            case RepoAttribute::mirrors:
+                dbus_repo.emplace(attr, libdnf_repo->get_mirrors());
+                break;
         }
     }
     return dbus_repo;
