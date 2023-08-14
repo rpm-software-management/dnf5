@@ -99,7 +99,7 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
         available_pkgs.filter_repo_id({repo->get_id()});
 
         uint64_t repo_size = 0;
-        for (const auto & pkg : available_pkgs) {
+        for (const auto & pkg : pkgs) {
             repo_size += pkg.get_download_size();
         }
 
