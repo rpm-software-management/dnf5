@@ -71,6 +71,7 @@ public:
     std::string get_revision() const { return repo.get_revision(); }
     std::vector<std::string> get_content_tags() const { return repo.get_content_tags(); }
     std::vector<std::pair<std::string, std::string>> get_distro_tags() const { return repo.get_distro_tags(); }
+    int64_t get_timestamp() const { return repo.get_timestamp(); }
     int get_max_timestamp() const { return repo.get_max_timestamp(); }
     uint64_t get_size() const { return size; }
     uint64_t get_pkgs() const { return pkgs; }

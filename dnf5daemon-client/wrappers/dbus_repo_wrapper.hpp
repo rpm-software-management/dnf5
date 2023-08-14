@@ -50,6 +50,7 @@ public:
     std::string get_revision() const { return rawdata.at("revision"); }
     std::vector<std::string> get_content_tags() const { return rawdata.at("content_tags"); }
     std::vector<std::pair<std::string, std::string>> get_distro_tags() const;
+    int64_t get_timestamp() const { return rawdata.at("cache_updated"); }
     int get_max_timestamp() const { return rawdata.at("updated"); }
     uint64_t get_size() const { return rawdata.at("size"); }
     uint64_t get_pkgs() const { return rawdata.at("pkgs"); }
