@@ -25,6 +25,33 @@ namespace libdnf5 {
 
 constexpr char DELIMITER = '\n';
 
+namespace {
+
+// Returns the position of the first ']' character that does not define a list/range.
+std::size_t find_end_of_section_name(const std::string & str, std::size_t pos) {
+    if (pos >= str.size()) {
+        return std::string::npos;
+    }
+
+    bool range = false;
+    for (std::size_t idx = pos;; ++idx) {
+        const auto ch = str[idx];
+        if (ch == ']') {
+            if (range) {
+                range = false;
+            } else {
+                return idx;
+            }
+        } else if (ch == '[') {
+            range = true;
+        } else if (ch == '\0' || ch == '\n' || ch == '\r') {
+            return std::string::npos;
+        }
+    }
+}
+
+}  // namespace
+
 IniParser::IniParser(const std::string & file_path) : file(file_path, "r") {}
 
 void IniParser::trim_value() noexcept {
@@ -94,7 +121,7 @@ IniParser::ItemType IniParser::next() {
         }
 
         if (line[start] == '[') {
-            auto end_sect_pos = line.find(']', ++start);
+            auto end_sect_pos = find_end_of_section_name(line, ++start);
             if (end_sect_pos == std::string::npos) {
                 throw IniParserMissingBracketError(M_("Missing ']' on line {}"), line_number);
             }
