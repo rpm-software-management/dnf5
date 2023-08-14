@@ -40,29 +40,59 @@ public:
 
 template <typename Repo>
 void RepoInfo::add_repo(Repo & repo) {
+    auto enabled = repo.is_enabled();
+
     add_line("Repo ID", repo.get_id(), "bold");
     add_line("Name", repo.get_name());
 
-    add_line("Status", repo.is_enabled() ? "enabled" : "disabled", repo.is_enabled() ? "green" : "red");
+    add_line("Status", enabled ? "enabled" : "disabled", enabled ? "green" : "red");
 
     add_line("Priority", repo.get_priority());
     add_line("Cost", repo.get_cost());
     add_line("Type", repo.get_type());
-    add_line("Exclude packages", repo.get_excludepkgs());
-    add_line("Include packages", repo.get_includepkgs());
+
+    auto exclude_packages = repo.get_excludepkgs();
+    if (!exclude_packages.empty()) {
+        add_line("Exclude packages", exclude_packages);
+    }
+
+    auto include_packages = repo.get_includepkgs();
+    if (!include_packages.empty()) {
+        add_line("Include packages", include_packages);
+    }
+
     add_line("Metadata expire", fmt::format("{} seconds", repo.get_metadata_expire()));
     add_line("Skip if unavailable", fmt::format("{}", repo.get_skip_if_unavailable()));
-    add_line("Config file", repo.get_repo_file_path());
+
+    auto repo_file_path = repo.get_repo_file_path();
+    if (!repo_file_path.empty()) {
+        add_line("Config file", repo_file_path);
+    }
 
     // URLs
     auto group_urls = add_line("URLs", "", nullptr);
-    add_line("Base URL", repo.get_baseurl(), nullptr, group_urls);
-    add_line("Mirrorlist", repo.get_mirrorlist(), nullptr, group_urls);
-    add_line("Metalink", repo.get_metalink(), nullptr, group_urls);
+
+    auto base_url = repo.get_baseurl();
+    if (!base_url.empty()) {
+        add_line("Base URL", base_url, nullptr, group_urls);
+    }
+
+    auto metalink = repo.get_metalink();
+    auto mirrorlist = repo.get_mirrorlist();
+    if (!metalink.empty()) {
+        add_line("Metalink", metalink, nullptr, group_urls);
+    } else if (!mirrorlist.empty()) {
+        add_line("Mirrorlist", mirrorlist, nullptr, group_urls);
+    }
 
     // PGP
     auto group_gpg = add_line("PGP", "", nullptr);
-    add_line("Keys", repo.get_gpgkey(), nullptr, group_gpg);
+
+    auto gpg_keys = repo.get_gpgkey();
+    if (!gpg_keys.empty()) {
+        add_line("Keys", gpg_keys, nullptr, group_gpg);
+    }
+
     add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
     add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
 
@@ -100,28 +130,37 @@ void RepoInfo::add_repo(Repo & repo) {
     // }
 
     // Repodata
-    auto group_repodata = add_line("Repodata info", "", nullptr);
-    add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
-    add_line("Total packages", repo.get_pkgs(), nullptr, group_repodata);
+    if (enabled) {
+        auto group_repodata = add_line("Repodata info", "", nullptr);
+        add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
+        add_line("Total packages", repo.get_pkgs(), nullptr, group_repodata);
 
-    std::string size = libdnf5::cli::utils::units::format_size_aligned(static_cast<int64_t>(repo.get_size()));
-    add_line("Size", size, nullptr, group_repodata);
+        std::string size = libdnf5::cli::utils::units::format_size_aligned(static_cast<int64_t>(repo.get_size()));
+        add_line("Size", size, nullptr, group_repodata);
 
-    add_line("Content tags", repo.get_content_tags(), nullptr, group_repodata);
+        auto content_tags = repo.get_content_tags();
+        if (!content_tags.empty()) {
+            add_line("Content tags", content_tags, nullptr, group_repodata);
+        }
 
-    std::vector<std::string> distro_tags;
-    for (auto & key_value : repo.get_distro_tags()) {
-        distro_tags.push_back(key_value.second + " (" + key_value.first + ")");
+        auto distro_tags_flat = repo.get_distro_tags();
+        if (!distro_tags_flat.empty()) {
+            std::vector<std::string> distro_tags;
+            for (auto & key_value : distro_tags_flat) {
+                distro_tags.push_back(key_value.second + " (" + key_value.first + ")");
+            }
+            add_line("Distro tags", distro_tags, nullptr, group_repodata);
+        }
+
+        add_line("Revision", repo.get_revision(), nullptr, group_repodata);
+
+        const auto updated_time = static_cast<time_t>(repo.get_max_timestamp());
+        add_line(
+            "Cache updated",
+            fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(updated_time)),
+            nullptr,
+            group_repodata);
     }
-    add_line("Distro tags", distro_tags, nullptr, group_repodata);
-    add_line("Revision", repo.get_revision(), nullptr, group_repodata);
-
-    const auto updated_time = static_cast<time_t>(repo.get_max_timestamp());
-    add_line(
-        "Cache updated",
-        fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(updated_time)),
-        nullptr,
-        group_repodata);
 
     /*
 general connection settings?
