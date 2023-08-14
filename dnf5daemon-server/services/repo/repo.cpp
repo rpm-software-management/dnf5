@@ -48,6 +48,7 @@ enum class RepoAttribute {
     metalink,
     mirrorlist,
     metadata_expire,
+    cache_updated,
     excludepkgs,
     includepkgs,
     skip_if_unavailable,
@@ -93,6 +94,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
     {"metalink", RepoAttribute::metalink},
     {"mirrorlist", RepoAttribute::mirrorlist},
     {"metadata_expire", RepoAttribute::metadata_expire},
+    {"cache_updated", RepoAttribute::cache_updated},
     {"excludepkgs", RepoAttribute::excludepkgs},
     {"includepkgs", RepoAttribute::includepkgs},
     {"skip_if_unavailable", RepoAttribute::skip_if_unavailable},
@@ -156,6 +158,9 @@ dnfdaemon::KeyValueMap repo_to_map(
             } break;
             case RepoAttribute::metadata_expire:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_metadata_expire_option().get_value());
+                break;
+            case RepoAttribute::cache_updated:
+                dbus_repo.emplace(attr, libdnf_repo->get_timestamp());
                 break;
             case RepoAttribute::excludepkgs:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_excludepkgs_option().get_value());

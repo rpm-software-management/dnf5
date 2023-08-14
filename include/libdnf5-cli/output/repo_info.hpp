@@ -61,7 +61,22 @@ void RepoInfo::add_repo(Repo & repo) {
         add_line("Include packages", include_packages);
     }
 
-    add_line("Metadata expire", fmt::format("{} seconds", repo.get_metadata_expire()));
+    auto cache_updated = repo.get_timestamp();
+    std::string last_update = "unknown";
+    if (cache_updated > 0) {
+        last_update = fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(cache_updated));
+    }
+
+    auto metadata_expire = repo.get_metadata_expire();
+    std::string expire_value;
+    if (metadata_expire <= -1) {
+        expire_value = "Never";
+    } else if (metadata_expire == 0) {
+        expire_value = "Instant";
+    } else {
+        expire_value = fmt::format("{} seconds", metadata_expire);
+    }
+    add_line("Metadata expire", fmt::format("{} (last: {})", expire_value, last_update));
     add_line("Skip if unavailable", fmt::format("{}", repo.get_skip_if_unavailable()));
 
     auto repo_file_path = repo.get_repo_file_path();
@@ -156,7 +171,7 @@ void RepoInfo::add_repo(Repo & repo) {
 
         const auto updated_time = static_cast<time_t>(repo.get_max_timestamp());
         add_line(
-            "Cache updated",
+            "Updated",
             fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(updated_time)),
             nullptr,
             group_repodata);

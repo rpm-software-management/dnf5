@@ -108,10 +108,27 @@ void RepolistCommand::run() {
     std::vector<std::string> attrs{"id", "name", "enabled"};
     if (command == "repoinfo") {
         std::vector<std::string> repoinfo_attrs{
-            "type",          "priority",        "cost",          "baseurl",     "metalink",
-            "mirrorlist",    "metadata_expire", "excludepkgs",   "includepkgs", "skip_if_unavailable",
-            "gpgkey",        "gpgcheck",        "repo_gpgcheck", "repofile",    "revision",
-            "content_tags",  "distro_tags",     "updated",       "size",        "pkgs",
+            "type",
+            "priority",
+            "cost",
+            "baseurl",
+            "metalink",
+            "mirrorlist",
+            "metadata_expire",
+            "cache_updated",
+            "excludepkgs",
+            "includepkgs",
+            "skip_if_unavailable",
+            "gpgkey",
+            "gpgcheck",
+            "repo_gpgcheck",
+            "repofile",
+            "revision",
+            "content_tags",
+            "distro_tags",
+            "updated",
+            "size",
+            "pkgs",
             "available_pkgs"};
         attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
     }
