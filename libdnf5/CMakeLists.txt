@@ -111,6 +111,12 @@ install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/libdnf.conf.d"
 # Makes an empty directory for libdnf5 user drop-in configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5.conf.d")
 
+# Creates an empty directory for distribution-supplied repositories configuration overrides
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/repos.override.d")
+
+# Creates an empty directory for user-defined repositories configuration overrides
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/repos.override.d")
+
 # Makes an empty directory for libdnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
 
