@@ -139,7 +139,7 @@ key3 = multi line
     
     value3
 key4 = value4
-[section2]; Test section2
+[sect[i]on2]; Test section2
   
 key1 = value1)**";
 
@@ -157,10 +157,10 @@ key1 = value1)**";
          "multi line\nwith\n\nvalue3",
          "key3 = multi line\n    with\n    \n    value3\n"},
         {ItemType::KEY_VAL, "section1", "key4", "value4", "key4 = value4\n"},
-        {ItemType::SECTION, "section2", "", "", "[section2]; Test section2\n"},
-        {ItemType::EMPTY_LINE, "section2", "", "", "  \n"},
-        {ItemType::KEY_VAL, "section2", "key1", "value1", "key1 = value1\n"},
-        {ItemType::END_OF_INPUT, "section2", "", "", ""}};
+        {ItemType::SECTION, "sect[i]on2", "", "", "[sect[i]on2]; Test section2\n"},
+        {ItemType::EMPTY_LINE, "sect[i]on2", "", "", "  \n"},
+        {ItemType::KEY_VAL, "sect[i]on2", "key1", "value1", "key1 = value1\n"},
+        {ItemType::END_OF_INPUT, "sect[i]on2", "", "", ""}};
 
     parse_and_check_results(ini_file_content, expected_items);
 }
