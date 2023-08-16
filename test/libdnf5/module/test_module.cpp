@@ -619,7 +619,7 @@ void ModuleTest::test_module_enable() {
 
     // Add module enable goal operation
     libdnf5::Goal goal(base);
-    goal.add_module_enable("fruit-salad:main");
+    goal.add_module_enable("fruit-salad:main", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
     // Active modules contain the enabled fruit-salad, its dependency gooseberry and the default stream of module berries
@@ -662,7 +662,7 @@ void ModuleTest::test_module_disable() {
 
     // Add module disable goal operation
     libdnf5::Goal goal(base);
-    goal.add_module_disable("fruit-salad:main");
+    goal.add_module_disable("fruit-salad:main", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
     // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5
@@ -703,7 +703,7 @@ void ModuleTest::test_module_disable_enabled() {
 
     // Add module disable goal operation
     libdnf5::Goal goal(base);
-    goal.add_module_disable("berries");
+    goal.add_module_disable("berries", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
     // Active modules don't contain anything, because the only module that had a default stream was enabled
@@ -741,7 +741,7 @@ void ModuleTest::test_module_reset() {
 
     // Add module reset goal operation
     libdnf5::Goal goal(base);
-    goal.add_module_reset("berries");
+    goal.add_module_reset("berries", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
     // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5

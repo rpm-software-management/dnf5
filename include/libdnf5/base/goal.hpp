@@ -39,18 +39,21 @@ public:
 
     /// Add module enable request to the goal.
     /// @param spec             A string with module spec to enable.
+    /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().enable(self, module_specs)
-    void add_module_enable(const std::string & spec);
+    void add_module_enable(const std::string & spec, const libdnf5::GoalJobSettings & settings);
 
     /// Add module disable request to the goal.
     /// @param spec             A string with module spec to disable.
+    /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().disable(self, module_specs)
-    void add_module_disable(const std::string & spec);
+    void add_module_disable(const std::string & spec, const libdnf5::GoalJobSettings & settings);
 
     /// Add module reset request to the goal.
     /// @param spec             A string with module spec to reset.
+    /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().reset(self, module_specs)
-    void add_module_reset(const std::string & spec);
+    void add_module_reset(const std::string & spec, const libdnf5::GoalJobSettings & settings);
 
     /// High level API for an artifact installation. A spec can be either a package
     /// specification matched against NEVRA, provides, and file provides, or it can
