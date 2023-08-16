@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::solv {
 
-static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
+static const std::regex RELDEP_REGEX("^(\\S*)\\s*(<=|>=|<|>|=)?\\s*(\\S*)$");
 
 static bool set_cmp_type(libdnf5::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
