@@ -1,3 +1,14 @@
+# 5.1.2
+
+- Print error messages in nested errors
+- Implement `dnf5daemon-server` introspection xml for Advisory interface
+- Implement `dnf5daemon-client advisory info` command
+- Implement `dnf5daemon-client advisory list` command
+- Implement `dnf5daemon-server` advisory service
+- Improve `dnf5daemon-client --help`
+- Enable `--repofrompath` repos by default
+- Fix error on creating repo with duplicate id
+
 # 5.1.1
 
 - Postpone replace of DNF to Fedora 41
