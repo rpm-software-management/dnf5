@@ -165,6 +165,7 @@ private:
 
     repo::Repo * system_repo{nullptr};
     repo::Repo * cmdline_repo{nullptr};
+    bool repos_updated_and_loaded{false};
 };
 
 }  // namespace libdnf5::repo

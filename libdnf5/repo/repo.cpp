@@ -212,6 +212,11 @@ void Repo::download_metadata(const std::string & destdir) {
 }
 
 void Repo::load() {
+    // Each repository can only be loaded once. This one has already loaded, so just return instantly
+    if (loaded) {
+        return;
+    }
+
     make_solv_repo();
 
     if (type == Type::AVAILABLE) {
@@ -222,6 +227,8 @@ void Repo::load() {
 
     solv_repo->set_needs_internalizing();
     base->get_rpm_package_sack()->p_impl->invalidate_provides();
+
+    loaded = true;
 }
 
 void Repo::load_extra_system_repo(const std::string & rootdir) {

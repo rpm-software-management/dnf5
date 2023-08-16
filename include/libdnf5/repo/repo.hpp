@@ -396,6 +396,7 @@ private:
     std::unique_ptr<SolvRepo> solv_repo;
 
     WeakPtrGuard<Repo, false> data_guard;
+    bool loaded{false};
 };
 
 }  // namespace libdnf5::repo
