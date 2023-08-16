@@ -201,7 +201,12 @@ RepoWeakPtr RepoSack::get_system_repo() {
     return system_repo->get_weak_ptr();
 }
 
-
+/**
+ *
+ * @param repos Set of repositories to load
+ * @param import_keys Whether or not to import signing keys
+ * @warning This function should not be used to load and update repositories. Instead, use `RepoSack::update_and_load_enabled_repos`
+ */
 void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
     auto logger = base->get_logger();
 
@@ -476,11 +481,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
-    static bool called = false;
-
-    if (called) {
-        libdnf_throw_assertion("RepoSack::updated_and_load_enabled_repos has already been called.");
-    }
+    libdnf_user_assert(!repos_updated_and_loaded, "RepoSack::updated_and_load_enabled_repos has already been called.");
 
     if (load_system) {
         // create the system repository if it does not exist
@@ -499,7 +500,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
     // TODO(jmracek) Replace by call that will resolve active modules and apply modular filterring
     base->get_module_sack()->p_impl->module_filtering();
 
-    called = true;
+    repos_updated_and_loaded = true;
 }
 
 
