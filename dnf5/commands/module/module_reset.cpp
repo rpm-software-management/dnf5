@@ -52,8 +52,10 @@ void ModuleResetCommand::configure() {
 
 void ModuleResetCommand::run() {
     auto goal = get_context().get_goal();
+
+    libdnf5::GoalJobSettings settings;
     for (const auto & spec : module_specs) {
-        goal->add_module_reset(spec);
+        goal->add_module_reset(spec, settings);
     }
 }
 

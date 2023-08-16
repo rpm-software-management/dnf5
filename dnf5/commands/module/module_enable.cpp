@@ -51,8 +51,10 @@ void ModuleEnableCommand::configure() {
 
 void ModuleEnableCommand::run() {
     auto goal = get_context().get_goal();
+
+    libdnf5::GoalJobSettings settings;
     for (const auto & spec : module_specs) {
-        goal->add_module_enable(spec);
+        goal->add_module_enable(spec, settings);
     }
 }
 

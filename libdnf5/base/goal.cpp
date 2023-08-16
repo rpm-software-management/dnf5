@@ -168,7 +168,7 @@ public:
 private:
     friend class Goal;
     BaseWeakPtr base;
-    std::vector<std::tuple<GoalAction, std::string>> module_specs;
+    std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> module_specs;
     /// <libdnf5::GoalAction, std::string pkg_spec, libdnf5::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
     /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf5::GoalJobSettings settings>
@@ -214,16 +214,16 @@ Goal::~Goal() = default;
 
 Goal::Impl::~Impl() = default;
 
-void Goal::add_module_enable(const std::string & spec) {
-    p_impl->module_specs.push_back(std::make_tuple(GoalAction::ENABLE, spec));
+void Goal::add_module_enable(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::ENABLE, spec, settings));
 }
 
-void Goal::add_module_disable(const std::string & spec) {
-    p_impl->module_specs.push_back(std::make_tuple(GoalAction::DISABLE, spec));
+void Goal::add_module_disable(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::DISABLE, spec, settings));
 }
 
-void Goal::add_module_reset(const std::string & spec) {
-    p_impl->module_specs.push_back(std::make_tuple(GoalAction::RESET, spec));
+void Goal::add_module_reset(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+    p_impl->module_specs.push_back(std::make_tuple(GoalAction::RESET, spec, settings));
 }
 
 void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
@@ -562,7 +562,7 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
     module::ModuleSack & module_sack = base->module_sack;
 
     std::vector<std::string> missing_module_specs;
-    for (auto & [action, spec] : module_specs) {
+    for (auto & [action, spec, settings] : module_specs) {
         try {
             switch (action) {
                 case GoalAction::ENABLE:
@@ -578,7 +578,8 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
                     libdnf_throw_assertion("Unsupported action \"{}\"", goal_action_to_string(action));
             }
         } catch (const module::NoModuleError &) {
-            auto log_level = libdnf5::Logger::Level::ERROR;
+            bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
+            auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
             transaction.p_impl->add_resolve_log(
                 action,
                 GoalProblem::NOT_FOUND,
@@ -587,7 +588,9 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
                 spec,
                 {},
                 log_level);
-            ret |= GoalProblem::NOT_FOUND;
+            if (!skip_unavailable) {
+                ret |= GoalProblem::NOT_FOUND;
+            }
         }
     }
     return ret;
