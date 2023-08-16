@@ -2,7 +2,7 @@
 %global project_version_minor 1
 %global project_version_patch 2
 
-%bcond obsolete_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
+%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -14,7 +14,7 @@ Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-%if %{with obsolete_dnf}
+%if %{without dnf5_obsoletes_dnf}
 Requires:       dnf-data
 %endif
 Recommends:     bash-completion
@@ -25,7 +25,7 @@ Provides:       microdnf = %{version}-%{release}
 Obsoletes:      microdnf < 4
 %endif
 
-%if %{without obsolete_dnf}
+%if %{with dnf5_obsoletes_dnf}
 Provides:       dnf = %{version}-%{release}
 Obsoletes:      dnf < 5
 
@@ -219,7 +219,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
-%if %{without obsolete_dnf}
+%if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf
 %{_bindir}/yum
 %endif
@@ -285,7 +285,7 @@ License:        LGPL-2.1-or-later
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
-%if %{without obsolete_dnf}
+%if %{with dnf5_obsoletes_dnf}
 Conflicts:      dnf-data < 4.16.0
 %endif
 
@@ -293,7 +293,7 @@ Conflicts:      dnf-data < 4.16.0
 Package management library.
 
 %files -n libdnf5
-%if %{without obsolete_dnf}
+%if %{with dnf5_obsoletes_dnf}
 %config(noreplace) %{_sysconfdir}/dnf/dnf.conf
 %dir %{_sysconfdir}/dnf/vars
 %dir %{_sysconfdir}/dnf/protected.d
@@ -568,7 +568,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dbus
 Requires:       polkit
-%if %{with obsolete_dnf}
+%if %{without dnf5_obsoletes_dnf}
 Requires:       dnf-data
 %endif
 
@@ -674,7 +674,7 @@ Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclos
 %install
 %cmake_install
 
-%if %{without obsolete_dnf}
+%if %{with dnf5_obsoletes_dnf}
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
 %endif
