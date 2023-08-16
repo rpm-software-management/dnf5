@@ -103,7 +103,7 @@ public:
     GoalProblem resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction);
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
-    void add_module_specs_to_goal();
+    GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
@@ -557,24 +557,40 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 }
 
 
-void Goal::Impl::add_module_specs_to_goal() {
+GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction) {
+    auto ret = GoalProblem::NO_PROBLEM;
     module::ModuleSack & module_sack = base->module_sack;
 
+    std::vector<std::string> missing_module_specs;
     for (auto & [action, spec] : module_specs) {
-        switch (action) {
-            case GoalAction::ENABLE:
-                module_sack.p_impl->enable(spec);
-                break;
-            case GoalAction::DISABLE:
-                module_sack.p_impl->disable(spec);
-                break;
-            case GoalAction::RESET:
-                module_sack.p_impl->reset(spec);
-                break;
-            default:
-                libdnf_throw_assertion("Unsupported action \"{}\"", goal_action_to_string(action));
+        try {
+            switch (action) {
+                case GoalAction::ENABLE:
+                    module_sack.p_impl->enable(spec);
+                    break;
+                case GoalAction::DISABLE:
+                    module_sack.p_impl->disable(spec);
+                    break;
+                case GoalAction::RESET:
+                    module_sack.p_impl->reset(spec);
+                    break;
+                default:
+                    libdnf_throw_assertion("Unsupported action \"{}\"", goal_action_to_string(action));
+            }
+        } catch (const module::NoModuleError &) {
+            auto log_level = libdnf5::Logger::Level::ERROR;
+            transaction.p_impl->add_resolve_log(
+                action,
+                GoalProblem::NOT_FOUND,
+                GoalJobSettings(),
+                libdnf5::transaction::TransactionItemType::GROUP,
+                spec,
+                {},
+                log_level);
+            ret |= GoalProblem::NOT_FOUND;
         }
     }
+    return ret;
 }
 
 
@@ -2110,15 +2126,6 @@ bool Goal::get_allow_erasing() const {
 base::Transaction Goal::resolve() {
     libdnf_user_assert(p_impl->base->is_initialized(), "Base instance was not fully initialized by Base::setup()");
 
-    module::ModuleSack & module_sack = p_impl->base->module_sack;
-    p_impl->add_module_specs_to_goal();
-    // Resolve modules
-    auto module_error = module_sack.resolve_active_module_items().second;
-    if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
-        throw module::ModuleResolveError(M_("Failed to resolve modules."));
-    }
-    module_sack.p_impl->enable_dependent_modules();
-
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
     p_impl->add_paths_to_goal();
@@ -2130,6 +2137,14 @@ base::Transaction Goal::resolve() {
     sack->p_impl->recompute_considered_in_pool();
     sack->p_impl->make_provides_ready();
     // TODO(jmracek) Apply modules first
+    module::ModuleSack & module_sack = p_impl->base->module_sack;
+    ret |= p_impl->add_module_specs_to_goal(transaction);
+    // Resolve modules
+    auto module_error = module_sack.resolve_active_module_items().second;
+    if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
+        throw module::ModuleResolveError(M_("Failed to resolve modules."));
+    }
+    module_sack.p_impl->enable_dependent_modules();
     // TODO(jmracek) Apply comps second or later
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
     ret |= p_impl->add_specs_to_goal(transaction);
