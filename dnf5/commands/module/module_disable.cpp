@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_disable.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -42,6 +44,8 @@ void ModuleDisableCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
     cmd.register_positional_arg(keys);
+
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
 }
 
 void ModuleDisableCommand::configure() {
