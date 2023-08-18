@@ -30,12 +30,14 @@ class RepoTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_system_repo);
     CPPUNIT_TEST(test_load_repo);
     CPPUNIT_TEST(test_load_repo_nonexistent);
+    CPPUNIT_TEST(test_load_repo_twice);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_load_system_repo();
     void test_load_repo();
     void test_load_repo_nonexistent();
+    void test_load_repo_twice();
 };
 
 #endif

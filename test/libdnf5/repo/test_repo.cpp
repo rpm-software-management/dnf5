@@ -138,3 +138,46 @@ void RepoTest::test_load_repo_nonexistent() {
     repos.filter_id(repoid);
     CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf5::repo::RepoDownloadError);
 }
+
+void RepoTest::test_load_repo_twice() {
+    std::string repoid("repomd-repo1");
+    auto repo = add_repo_repomd(repoid, false);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    repo->set_callbacks(std::move(callbacks));
+
+    libdnf5::repo::RepoQuery repos(base);
+    repos.filter_id(repoid);
+    repo_sack->update_and_load_repos(repos);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
+    CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->end_cnt);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), dl_callbacks_ptr->end_error_message);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(1, dl_callbacks_ptr->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_import_cnt);
+
+    // after calling a second time, all of these values should be unchanged because the load method for this repo
+    // returns early
+    repo_sack->update_and_load_repos(repos);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
+    CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->end_cnt);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), dl_callbacks_ptr->end_error_message);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(1, dl_callbacks_ptr->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_import_cnt);
+}
