@@ -31,6 +31,7 @@ class RepoTest : public BaseTestCase {
     CPPUNIT_TEST(test_load_repo);
     CPPUNIT_TEST(test_load_repo_nonexistent);
     CPPUNIT_TEST(test_load_repo_twice);
+    CPPUNIT_TEST(test_update_and_load_enabled_repos_twice_fails);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -38,6 +39,7 @@ public:
     void test_load_repo();
     void test_load_repo_nonexistent();
     void test_load_repo_twice();
+    void test_update_and_load_enabled_repos_twice_fails();
 };
 
 #endif
