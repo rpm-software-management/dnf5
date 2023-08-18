@@ -115,6 +115,8 @@ public:
     /// @param load_system Whether to load the system repository
     void update_and_load_enabled_repos(bool load_system);
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    ///
     /// Downloads (if necessary) repository metadata and loads them in parallel.
     ///
     /// Launches a thread that picks repos from a queue and loads them into
