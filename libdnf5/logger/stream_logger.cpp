@@ -39,4 +39,23 @@ void StdCStreamLogger::write(const char * line) noexcept {
     }
 }
 
+void StdCStreamPlainLogger::write(
+    [[maybe_unused]] const std::chrono::time_point<std::chrono::system_clock> & time,
+    [[maybe_unused]] pid_t pid,
+    Level level,
+    const std::string & message) noexcept {
+    if (!is_enabled_for(level)) {
+        return;
+    }
+    try {
+        write(fmt::format("{} {}\n", level_to_cstr(level), message).c_str());
+    } catch (const std::exception & e) {
+        write("Failed to format: ");
+        write(message.c_str());
+        write(" (");
+        write(e.what());
+        write(")\n");
+    }
+}
+
 }  // namespace libdnf5

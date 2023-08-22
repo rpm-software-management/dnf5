@@ -51,6 +51,18 @@ private:
     std::ostream & log_stream;
 };
 
+/// Logger that logs only messages without timestamp and pid.
+class StdCStreamPlainLogger : public StdCStreamLogger {
+public:
+    using StdCStreamLogger::StdCStreamLogger;
+    using StdCStreamLogger::write;
+    void write(
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept override;
+};
+
 }  // namespace libdnf5
 
 #endif
