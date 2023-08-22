@@ -60,6 +60,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/factory.hpp>
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
+#include <libdnf5/logger/stream_logger.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
@@ -698,6 +699,10 @@ int main(int argc, char * argv[]) try {
     const std::size_t max_log_items_to_keep = 10000;
     const std::size_t prealloc_log_items = 256;
     loggers.emplace_back(std::make_unique<libdnf5::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
+
+    auto stderr_logger = std::make_unique<libdnf5::StdCStreamPlainLogger>(std::cerr);
+    stderr_logger->set_level(libdnf5::Logger::Level::ERROR);
+    loggers.emplace_back(std::move(stderr_logger));
 
     loggers.front()->info("DNF5 start");
 
