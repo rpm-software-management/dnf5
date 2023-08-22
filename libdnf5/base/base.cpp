@@ -173,6 +173,7 @@ void Base::setup() {
     }
 
     load_plugins();
+    p_impl->plugins.set_plugins_enabled(plugin_enablement);
     p_impl->plugins.init();
 
     p_impl->plugins.pre_base_setup();
@@ -229,6 +230,18 @@ void Base::setup() {
 
 bool Base::is_initialized() {
     return p_impl->pool.get() != nullptr;
+}
+
+void Base::disable_plugins(const std::vector<std::string> & disabled_plugin_ids) {
+    for (const auto & plugin_id : disabled_plugin_ids) {
+        this->plugin_enablement.insert({plugin_id, false});
+    }
+}
+
+void Base::enable_plugins(const std::vector<std::string> & enabled_plugin_ids) {
+    for (const auto & plugin_id : enabled_plugin_ids) {
+        this->plugin_enablement.insert({plugin_id, true});
+    }
 }
 
 }  // namespace libdnf5
