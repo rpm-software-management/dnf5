@@ -35,6 +35,9 @@ void MemoryBufferLogger::write(
     pid_t pid,
     Level level,
     const std::string & message) noexcept {
+    if (!is_enabled_for(level)) {
+        return;
+    }
     try {
         std::lock_guard<std::mutex> guard(items_mutex);
         if (max_items == 0 || items.size() < max_items) {

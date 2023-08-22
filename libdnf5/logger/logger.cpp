@@ -30,9 +30,28 @@ void Logger::log_line(Level level, const std::string & message) noexcept {
     write(system_clock::now(), getpid(), level, message);
 }
 
+Logger::Level Logger::get_level() {
+    if (level) {
+        return level.value();
+    } else {
+        // XXX throw proper exception
+        throw "XXX";
+    }
+}
+
+bool Logger::is_enabled_for(Level msg_level) {
+    if (this->level) {
+        return msg_level <= this->level;
+    } else {
+        return true;
+    }
+}
 
 void StringLogger::write(
     const time_point<system_clock> & time, pid_t pid, Level level, const std::string & message) noexcept {
+    if (!is_enabled_for(level)) {
+        return;
+    }
     try {
         write(fmt::format("{:%FT%T%z} [{}] {} {}\n", time_point_cast<seconds>(time), pid, level_to_cstr(level), message)
                   .c_str());

@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <array>
 #include <chrono>
+#include <optional>
 #include <string>
 
 
@@ -48,6 +49,19 @@ public:
         auto ilevel = static_cast<unsigned int>(level);
         return ilevel >= LEVEL_C_STR.size() ? "UNDEFINED" : LEVEL_C_STR[ilevel];
     }
+
+    /// Set logging level for the logger. If set, all messages with the level higher then this value are skipped.
+    /// @param level    Maximal level of log messages the logger will write.
+    void set_level(Level level) { this->level = level; }
+
+    /// Get logging level of the logger. LoggerErrorLevelNotSet is thrown in case the level is not set.
+    Level get_level();
+
+    /// Check whether logging level is set for the level.
+    bool is_level_set() { return level.has_value(); }
+
+    /// Check whether the message of given level will be logged.
+    bool is_enabled_for(Level msg_level);
 
     template <typename... Ss>
     void critical(std::string_view format, Ss &&... args) {
@@ -102,6 +116,8 @@ private:
     static constexpr std::array<const char *, static_cast<unsigned int>(Level::TRACE) + 1> LEVEL_C_STR = {
         "CRITICAL", "ERROR", "WARNING", "NOTICE", "INFO", "DEBUG", "TRACE"};
 #endif
+
+    std::optional<Level> level;
 };
 
 class StringLogger : public Logger {
