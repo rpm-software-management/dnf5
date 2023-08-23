@@ -125,6 +125,9 @@ Plugin commands
 Here is the list of the commands available as plugins.
 These are available after installing the ``dnf5-plugins`` package.
 
+:ref:`automatic <automatic_plugin_ref-label>`
+    | Alternative CLI to ``dnf upgrade`` suitable to be executed automatically and regularly from systemd timers, cron jobs and similar.
+
 :ref:`builddep <builddep_plugin_ref-label>`
     | Install missing dependencies for building an RPM package.
 

@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+# Compatibility wrapper to handle old "/usr/bin/dnf-automatic" name from dnf4.
+
+dnf5 automatic "$@"
