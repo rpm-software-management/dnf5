@@ -35,6 +35,12 @@ constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
 /// @return Instance of a new file logger.
 std::unique_ptr<libdnf5::Logger> create_file_logger(libdnf5::Base & base);
 
+/// @brief Helper method for creating a file logger in `logdir` location with given file name.
+/// @param base Reference to Base for loading the configured logger path.
+/// @param filename Name of the log file.
+/// @return Instance of a new file logger.
+std::unique_ptr<libdnf5::Logger> create_file_logger(libdnf5::Base & base, const std::string & filename);
+
 }  // namespace libdnf5
 
 #endif

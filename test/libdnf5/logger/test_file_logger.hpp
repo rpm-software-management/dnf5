@@ -37,6 +37,7 @@ public:
     void setUp() override;
     void tearDown() override;
     void test_file_logger_create();
+    void test_file_logger_create_name();
     void test_file_logger_add();
 
 private:
