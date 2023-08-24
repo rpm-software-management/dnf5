@@ -54,6 +54,13 @@ void FileLoggerTest::test_file_logger_create() {
 }
 
 
+void FileLoggerTest::test_file_logger_create_name() {
+    CPPUNIT_ASSERT(!exists(full_log_path));
+    auto file_logger = libdnf5::create_file_logger(base, libdnf5::FILE_LOGGER_FILENAME);
+    CPPUNIT_ASSERT(exists(full_log_path));
+}
+
+
 void FileLoggerTest::test_file_logger_add() {
     auto log_router = base.get_logger();
     auto loggers_count_before = log_router->get_loggers_count();

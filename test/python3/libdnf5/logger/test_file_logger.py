@@ -41,6 +41,12 @@ class TestFileLogger(base_test_case.BaseTestCase):
         _ = libdnf5.logger.create_file_logger(self.base)
         self.assertTrue(os.path.exists(self.full_log_path))
 
+    def test_file_logger_create_name(self):
+        self.assertFalse(os.path.exists(self.full_log_path))
+        _ = libdnf5.logger.create_file_logger(
+            self.base, libdnf5.logger.FILE_LOGGER_FILENAME)
+        self.assertTrue(os.path.exists(self.full_log_path))
+
     def test_file_logger_add(self):
         log_router = self.base.get_logger()
         loggers_count_before = log_router.get_loggers_count()

@@ -29,11 +29,11 @@ namespace libdnf5 {
 
 using namespace std::filesystem;
 
-std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
+std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base, const std::string & filename) {
     auto & config = base.get_config();
     const std::filesystem::path logdir_path{config.get_logdir_option().get_value()};
     create_directories(logdir_path);
-    auto log_file = logdir_path / FILE_LOGGER_FILENAME;
+    auto log_file = logdir_path / filename;
     auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
     if (!log_stream->is_open()) {
         throw std::runtime_error(fmt::format("Cannot open log file: {}: {}", log_file.c_str(), strerror(errno)));
@@ -43,6 +43,10 @@ std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
     log_stream->exceptions(std::ios::badbit | std::ios::failbit);
 
     return std::make_unique<libdnf5::StreamLogger>(std::move(log_stream));
+}
+
+std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
+    return create_file_logger(base, FILE_LOGGER_FILENAME);
 }
 
 }  // namespace libdnf5
