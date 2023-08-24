@@ -71,6 +71,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <iostream>
 
+constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -93,7 +95,6 @@ void register_group_with_args(
 }
 
 }  // namespace
-
 
 class RootCommand : public Command {
 public:
@@ -801,7 +802,7 @@ int main(int argc, char * argv[]) try {
 
         base.setup();
 
-        auto file_logger = libdnf5::create_file_logger(base);
+        auto file_logger = libdnf5::create_file_logger(base, DNF5_LOGGER_FILENAME);
         // Swap to destination stream logger (log to file)
         log_router.swap_logger(file_logger, 0);
         // Write messages from memory buffer logger to stream logger
