@@ -125,11 +125,6 @@ List command
    packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
    is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
-Remove command
---------------
- * Dropped `--noautoremove` option. The behavior for automatic removing of dependencies is now controlled by the
-   `clean_requirements_on_remove` configuration option which is set to `True` by default.
-
 Repoclosure command
 -------------------
  * Dropped `--pkg`` option. Positional arguments can be used to specify packages to check closure for.
