@@ -163,3 +163,101 @@ void IniparserTest::test_iniparser2() {
 
     parse_and_check_results(ini_file_content, expected_items);
 }
+
+
+void IniparserTest::test_iniparser_missing_section_header() {
+    constexpr std::string_view ini_file_content = "# Test comment1\nkey1 = value1";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::KEY_VAL, "", "key1", "value1", "key1 = value1\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserMissingSectionHeaderError);
+}
+
+
+void IniparserTest::test_iniparser_missing_bracket() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[section1\nkey1 = value1\n";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[section1\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserMissingBracketError);
+}
+
+
+void IniparserTest::test_iniparser_missing_bracket2() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[sect[ion1]\nkey1 = value1\n";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[sect[ion1]\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserMissingBracketError);
+}
+
+
+void IniparserTest::test_iniparser_empty_section_name() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[] # Test\nkey1 = value1";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"}, {ItemType::SECTION, "", "", "", "[] # Test\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserEmptySectionNameError);
+}
+
+
+void IniparserTest::test_iniparser_text_after_section() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[section1] Test\nkey1 = value1";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[section1] Test\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserTextAfterSectionError);
+}
+
+
+void IniparserTest::test_iniparser_illegal_continuation_line() {
+    constexpr std::string_view ini_file_content =
+        "# Test comment1\n[section1] # Test\n    key1 = value1\nkey2 = value2";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[section1] # Test\n"},
+        {ItemType::KEY_VAL, "section1", "key1", "value1", "    key1 = value1\n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserIllegalContinuationLineError);
+}
+
+
+void IniparserTest::test_iniparser_missing_key() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[section1] # Test\n= value1\nkey2 = value2";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[section1] # Test\n"},
+        {ItemType::KEY_VAL, "section1", "", "value1", "= value1\n"}};
+
+    CPPUNIT_ASSERT_THROW(parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserMissingKeyError);
+}
+
+
+void IniparserTest::test_iniparser_missing_equal() {
+    constexpr std::string_view ini_file_content = "# Test comment1\n[section1] # Test\nkey1 \nkey2 = value2";
+
+    const std::vector<Item> expected_items = {
+        {ItemType::COMMENT_LINE, "", "", "", "# Test comment1\n"},
+        {ItemType::SECTION, "section1", "", "", "[section1] # Test\n"},
+        {ItemType::KEY_VAL, "section1", "key1", "", "key1 \n"}};
+
+    CPPUNIT_ASSERT_THROW(
+        parse_and_check_results(ini_file_content, expected_items), libdnf5::IniParserMissingEqualError);
+}

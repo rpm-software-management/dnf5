@@ -30,6 +30,14 @@ class IniparserTest : public CppUnit::TestCase {
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_iniparser);
     CPPUNIT_TEST(test_iniparser2);
+    CPPUNIT_TEST(test_iniparser_missing_section_header);
+    CPPUNIT_TEST(test_iniparser_missing_bracket);
+    CPPUNIT_TEST(test_iniparser_missing_bracket2);
+    CPPUNIT_TEST(test_iniparser_empty_section_name);
+    CPPUNIT_TEST(test_iniparser_text_after_section);
+    CPPUNIT_TEST(test_iniparser_illegal_continuation_line);
+    CPPUNIT_TEST(test_iniparser_missing_key);
+    CPPUNIT_TEST(test_iniparser_missing_equal);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -40,6 +48,14 @@ public:
 
     void test_iniparser();
     void test_iniparser2();
+    void test_iniparser_missing_section_header();
+    void test_iniparser_missing_bracket();
+    void test_iniparser_missing_bracket2();
+    void test_iniparser_empty_section_name();
+    void test_iniparser_text_after_section();
+    void test_iniparser_illegal_continuation_line();
+    void test_iniparser_missing_key();
+    void test_iniparser_missing_equal();
 };
 
 #endif
