@@ -73,26 +73,25 @@ void parse_and_check_results(std::string_view ini_file_content, const std::vecto
 void IniparserTest::test_iniparser() {
     // Source data
     constexpr std::string_view ini_file_content =
-        R"**([section1]
-key1 = value1
-key2 =value2
-
-key3= value3
-# Comment1
-key4=value4
-;Comment2
-key5    = value5
-key6 = two line
- value1
-
-key7 = two line
- value2
-key8 = value8
-
-[section2]  # Test section2
-
-key1 = value1
-)**";
+        "[section1]\n"
+        "key1 = value1\n"
+        "key2 =value2\n"
+        "\n"
+        "key3= value3\n"
+        "# Comment1\n"
+        "key4=value4\n"
+        ";Comment2\n"
+        "key5    = value5\n"
+        "key6 = two line\n"
+        " value1\n"
+        "\n"
+        "key7 = two line\n"
+        " value2\n"
+        "key8 = value8\n"
+        "\n"
+        "[section2]  # Test section2\n"
+        "\n"
+        "key1 = value1\n";
 
     // Expected results from parser
     const std::vector<Item> expected_items = {
@@ -127,21 +126,21 @@ key1 = value1
 void IniparserTest::test_iniparser2() {
     // Source data
     constexpr std::string_view ini_file_content =
-        R"**(
-# Test comment1
-# Test comment2
-[section1]
-key1 = value1
-key2 = two line  
-    value2
-key3 = multi line
-    with
-    
-    value3
-key4 = value4
-[sect[i]on2]; Test section2
-  
-key1 = value1)**";
+        "\n"
+        "# Test comment1\n"
+        "# Test comment2\n"
+        "[section1]\n"
+        "key1 = value1\n"
+        "key2 = two line  \n"
+        "    value2\n"
+        "key3 = multi line\n"
+        "    with\n"
+        "    \n"
+        "    value3\n"
+        "key4 = value4\n"
+        "[sect[i]on2]; Test section2\n"
+        "  \n"
+        "key1 = value1";
 
     // Expected results from parser
     const std::vector<Item> expected_items = {
