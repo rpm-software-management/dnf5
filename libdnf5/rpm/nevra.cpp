@@ -45,8 +45,20 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
 
     // parse nevra
     const char * nevra_pattern = nevra_str.c_str();
+    // detect whether string contains a glob range [a-z]
+    bool start_range = false;
     for (end = nevra_pattern; *end != '\0'; ++end) {
-        if (*end == '-') {
+        // skip all characteres before glob range is closed
+        if (start_range) {
+            if (*end == ']') {
+                start_range = false;
+            } else {
+                continue;
+            }
+        }
+        if (*end == '[') {
+            start_range = true;
+        } else if (*end == '-') {
             before_last_delim = last_delim;
             last_delim = end;
         } else if (*end == '.') {
