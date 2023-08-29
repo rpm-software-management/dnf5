@@ -61,7 +61,7 @@ void RepoInfo::add_repo(Repo & repo) {
         add_line("Include packages", include_packages);
     }
 
-    auto cache_updated = repo.get_timestamp();
+    auto cache_updated = static_cast<time_t>(repo.get_timestamp());
     std::string last_update = "unknown";
     if (cache_updated > 0) {
         last_update = fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(cache_updated));
