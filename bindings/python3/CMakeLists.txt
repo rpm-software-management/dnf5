@@ -41,8 +41,8 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     target_compile_options(${TARGET_NAME} PUBLIC ${SWIG_COMPILE_OPTIONS})
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
-    swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
-    swig_link_libraries(${TARGET_NAME} ${Python3_LIBRARIES})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${C_LIBRARY_NAME})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${Python3_LIBRARIES})
 
     # generate a dist-info for the library (redundantly created for multi-module packages, oh well...)
     set(DISTINFO_PATH "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-${CMAKE_PROJECT_VERSION}.dist-info")
