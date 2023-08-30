@@ -18,7 +18,7 @@ add_executable(${DNF5DAEMON_SERVER_BIN} ${DNF5DAEMON_SERVER_SOURCES})
 
 target_link_libraries(
     ${DNF5DAEMON_SERVER_BIN}
-    PUBLIC
+    PRIVATE
         common
         libdnf5
         libdnf5-cli

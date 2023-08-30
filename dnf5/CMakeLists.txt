@@ -28,7 +28,7 @@ add_executable(dnf5 ${DNF5_SOURCES})
 # Enable symbol export. Needed for loadable modules (dnf5 plugins).
 set_property(TARGET dnf5 PROPERTY ENABLE_EXPORTS 1)
 
-target_link_libraries(dnf5 PUBLIC common libdnf5 libdnf5-cli Threads::Threads)
+target_link_libraries(dnf5 PRIVATE common libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 
