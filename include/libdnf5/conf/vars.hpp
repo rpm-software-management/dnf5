@@ -94,12 +94,6 @@ public:
 
     static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
-    /// @brief Split releasever on the first "." into its "major" and "minor" components
-    ///
-    /// @param releasever A releasever string, possibly containing a "."
-    /// @return releasever_major, releasever_minor
-    static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
-
 private:
     friend class Base;
 
@@ -149,6 +143,12 @@ private:
     /// @param depth The recursive depth
     /// @return Pair of the resulting string and the number of characters scanned in `text`
     std::pair<std::string, size_t> substitute_expression(std::string_view text, unsigned int depth) const;
+
+    /// @brief Split releasever on the first "." into its "major" and "minor" components
+    ///
+    /// @param releasever A releasever string, possibly containing a "."
+    /// @return releasever_major, releasever_minor
+    static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
 
     BaseWeakPtr base;
     std::map<std::string, Variable> variables;
