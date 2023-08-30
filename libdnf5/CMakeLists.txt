@@ -30,10 +30,6 @@ target_link_libraries(libdnf5 ${CMAKE_DL_LIBS})
 # required by clang
 target_link_libraries(libdnf5 stdc++)
 
-# link stdc++fs to make experimental std::filesystem available on gcc 8:
-# https://gcc.gnu.org/onlinedocs/libstdc++/manual/using.html
-target_link_libraries(libdnf5 stdc++fs)
-
 # install libdnf5.so
 install(TARGETS libdnf5 LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
