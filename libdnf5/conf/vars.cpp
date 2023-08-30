@@ -374,7 +374,7 @@ bool Vars::is_read_only(const std::string & name) const {
 
 void Vars::set(const std::string & name, const std::string & value, Priority prio) {
     if (is_read_only(name)) {
-        throw RuntimeError(M_("Variable \"{}\" is read-only"), name);
+        throw ReadOnlyVariableError(M_("Variable \"{}\" is read-only"), name);
     }
 
     // set_unsafe sets the variable without checking whether it's read-only

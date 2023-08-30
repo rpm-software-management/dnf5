@@ -29,6 +29,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
+// Thrown when attempting to set a read-only variable
+class ReadOnlyVariableError : public Error {
+    using Error::Error;
+
+    const char * get_domain_name() const noexcept override { return "libdnf5"; }
+    const char * get_name() const noexcept override { return "ReadOnlyVariableError"; }
+};
+
 /// @class Vars
 ///
 /// @brief Class for reading and substituting DNF vars (arch, releasever, etc.).
@@ -68,6 +76,7 @@ public:
     /// @param name Name of the variable
     /// @param value Value to be stored in variable
     /// @param prio Source/Priority of the value
+    /// @throw ReadOnlyVariableError if the variable is read-only
     void set(const std::string & name, const std::string & value, Priority prio = Priority::RUNTIME);
 
     /// @brief Checks whether a variable is read-only
@@ -132,6 +141,7 @@ private:
     /// @param name Name of the variable
     /// @param get_value Function that returns the (optional) value for the variable
     /// @param prio Source/Priority of the value
+    /// @throw ReadOnlyVariableError if the variable is read-only
     void set_lazy(
         const std::string & name,
         const std::function<const std::unique_ptr<const std::string>()> & get_value,

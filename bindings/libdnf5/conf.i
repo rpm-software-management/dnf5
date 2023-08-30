@@ -106,6 +106,7 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %ignore ConfigParserOptionNotFoundError;
 %include "libdnf5/conf/config_parser.hpp"
 
+%ignore libdnf5::ReadOnlyVariableError;
 %include "libdnf5/conf/vars.hpp"
 
 %include "libdnf5/conf/config.hpp"
