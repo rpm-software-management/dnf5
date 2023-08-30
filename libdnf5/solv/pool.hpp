@@ -181,9 +181,20 @@ public:
 
     const char * get_arch(Id id) const noexcept { return id2str(id2solvable(id)->arch); }
 
+    /// Construct package string ID without epoch when epoch is 0
+    /// Returns a temporary object allocated by pool_alloctmpspace
     const char * get_nevra(Id id) const noexcept { return solvable2str(id2solvable(id)); }
 
+    /// Construct package string ID containing always epoch
     std::string get_full_nevra(Id id) const;
+
+    /// Construct package string ID without epoch
+    /// Returns a temporary object allocated by pool_alloctmpspace
+    const char * get_nevra_without_epoch(Id id) const noexcept;
+
+    /// Construct package string ID containing always epoch
+    /// Returns a temporary object allocated by pool_alloctmpspace
+    const char * get_nevra_with_epoch(Id id) const noexcept;
 
     bool is_installed(Solvable * solvable) const { return solvable->repo == pool->installed; }
 

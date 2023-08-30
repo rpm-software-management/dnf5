@@ -1942,14 +1942,26 @@ void PackageQuery::PQImpl::filter_nevra(
         case libdnf5::sack::QueryCmp::LTE:
             filter_nevra_internal_str<cmp_lte>(pool, c_pattern, sorted_solvables, filter_result);
             break;
-        case libdnf5::sack::QueryCmp::GLOB:
-            filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra>(
-                pool, c_pattern, *pkg_set.p_impl, filter_result, 0);
-            break;
-        case libdnf5::sack::QueryCmp::IGLOB:
-            filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra>(
-                pool, c_pattern, *pkg_set.p_impl, filter_result, FNM_CASEFOLD);
-            break;
+        case libdnf5::sack::QueryCmp::GLOB: {
+            auto found = pattern.find(':');
+            if (found == std::string::npos) {
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra_without_epoch>(
+                    pool, c_pattern, *pkg_set.p_impl, filter_result, 0);
+            } else {
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra_with_epoch>(
+                    pool, c_pattern, *pkg_set.p_impl, filter_result, 0);
+            }
+        } break;
+        case libdnf5::sack::QueryCmp::IGLOB: {
+            auto found = pattern.find(':');
+            if (found == std::string::npos) {
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra_without_epoch>(
+                    pool, c_pattern, *pkg_set.p_impl, filter_result, FNM_CASEFOLD);
+            } else {
+                filter_glob_internal<&libdnf5::solv::RpmPool::get_nevra_with_epoch>(
+                    pool, c_pattern, *pkg_set.p_impl, filter_result, FNM_CASEFOLD);
+            }
+        } break;
         case libdnf5::sack::QueryCmp::IEXACT: {
             for (Id candidate_id : *pkg_set.p_impl) {
                 const char * nevra = pool.get_nevra(candidate_id);

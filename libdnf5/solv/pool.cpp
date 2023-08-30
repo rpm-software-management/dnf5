@@ -79,6 +79,71 @@ Pool::~Pool() {
 }
 
 
+/// Returns a temporary object allocated by pool_alloctmpspace
+const char * pool_solvable_epoch_optional_2str(
+    const Pool * pool, ::Pool * libsolv_pool, Id id, bool with_epoch) noexcept {
+    const char * e;
+    const char * name = pool->get_name(id);
+    const char * evr = pool->get_evr(id);
+    const char * arch = pool->get_arch(id);
+    bool present_epoch = false;
+
+    for (e = evr + 1; *e != '-' && *e != '\0'; ++e) {
+        if (*e == ':') {
+            present_epoch = true;
+            break;
+        }
+    }
+    char * output_string;
+    int evr_length, arch_length;
+    int extra_epoch_length = 0;
+    int name_length = static_cast<int>(strlen(name));
+    evr_length = static_cast<int>(strlen(evr));
+    arch_length = static_cast<int>(strlen(arch));
+    if (!present_epoch && with_epoch) {
+        extra_epoch_length = 2;
+    } else if (present_epoch && !with_epoch) {
+        extra_epoch_length = static_cast<int>(evr - e - 1);
+    }
+
+    output_string = pool_alloctmpspace(libsolv_pool, name_length + evr_length + extra_epoch_length + arch_length + 3);
+
+    strcpy(output_string, name);
+
+    if (evr_length || extra_epoch_length > 0) {
+        output_string[name_length++] = '-';
+
+        if (extra_epoch_length > 0) {
+            output_string[name_length++] = '0';
+            output_string[name_length++] = ':';
+            output_string[name_length] = '\0';
+        }
+    }
+
+    if (evr_length) {
+        if (extra_epoch_length >= 0) {
+            strcpy(output_string + name_length, evr);
+        } else {
+            strcpy(output_string + name_length, evr - extra_epoch_length);
+            evr_length = evr_length + extra_epoch_length;
+        }
+    }
+
+    if (arch_length) {
+        output_string[name_length + evr_length] = '.';
+        strcpy(output_string + name_length + evr_length + 1, arch);
+    }
+    return output_string;
+}
+
+const char * Pool::get_nevra_without_epoch(Id id) const noexcept {
+    return pool_solvable_epoch_optional_2str(this, pool, id, false);
+}
+
+const char * Pool::get_nevra_with_epoch(Id id) const noexcept {
+    return pool_solvable_epoch_optional_2str(this, pool, id, true);
+}
+
 const char * Pool::get_str_from_pool(Id keyname, Id advisory, int index) const {
     Dataiterator di;
     const char * str = NULL;
