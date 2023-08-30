@@ -20,9 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_UTILS_STRING_HPP
 #define LIBDNF5_UTILS_STRING_HPP
 
+#include "fmt/chrono.h"
+
 #include <algorithm>
 #include <ctime>
 #include <string>
+#include <utility>
 #include <vector>
 
 
@@ -107,12 +110,13 @@ inline std::string tolower(const std::string & s) {
     return result;
 }
 
-inline std::string format_epoch(unsigned long long epoch_num) {
-    const time_t epoch = static_cast<time_t>(epoch_num);
-    struct tm * ptm = gmtime(&epoch);
-    char buffer[20];
-    strftime(buffer, 20, "%F %T", ptm);
-    return std::string(buffer);
+template <typename T>
+inline std::string format_epoch(T epoch_num) {
+    if (std::in_range<time_t>(epoch_num)) {
+        const auto epoch = static_cast<time_t>(epoch_num);
+        return fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(epoch));
+    }
+    return "unrepresentable";
 }
 
 }  // namespace libdnf5::utils::string

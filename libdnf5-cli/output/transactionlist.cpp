@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/transactionlist.hpp"
 
-#include "fmt/chrono.h"
+#include "utils/string.hpp"
 
 #include "libdnf5-cli/tty.hpp"
 
@@ -43,12 +43,10 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
     }
 
     for (auto & ts : ts_list) {
-        const auto dt_start_time = static_cast<time_t>(ts.get_dt_start());
         struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
         scols_line_set_data(ln, 1, ts.get_description().c_str());
-        scols_line_set_data(
-            ln, 2, fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)).c_str());
+        scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
         scols_line_set_data(ln, 4, std::to_string(ts.get_packages().size()).c_str());
