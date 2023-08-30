@@ -23,7 +23,7 @@ set(DNF_CLI_SO_VERSION 1)
 set_target_properties(libdnf5-cli PROPERTIES OUTPUT_NAME "dnf5-cli")
 set_target_properties(libdnf5-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
 # required by clang
-target_link_libraries(libdnf5-cli stdc++)
+target_link_libraries(libdnf5-cli PUBLIC stdc++)
 
 # install libdnf5-cli.so
 install(TARGETS libdnf5-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
@@ -31,15 +31,15 @@ install(TARGETS libdnf5-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 # link libraries and set pkg-config requires
 
-target_link_libraries(libdnf5-cli common libdnf5)
+target_link_libraries(libdnf5-cli PUBLIC libdnf5)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
-target_link_libraries(libdnf5-cli ${LIBFMT_LIBRARIES})
+target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(SMARTCOLS REQUIRED smartcols)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE "${SMARTCOLS_MODULE_NAME}")
-target_link_libraries(libdnf5-cli ${SMARTCOLS_LIBRARIES})
+target_link_libraries(libdnf5-cli PUBLIC ${SMARTCOLS_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string

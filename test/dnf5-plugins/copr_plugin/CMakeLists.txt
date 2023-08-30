@@ -16,7 +16,11 @@ include_directories(${PROJECT_SOURCE_DIR}/libdnf5)
 include_directories(${JSONC_INCLUDE_DIRS})
 
 add_executable(run_tests_copr ${TEST_COPR_SOURCES})
-target_link_libraries(run_tests_copr stdc++ libdnf5 libdnf5-cli test_shared)
+target_link_libraries(run_tests_copr PRIVATE stdc++ libdnf5 libdnf5-cli test_shared)
+
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(${JSONC_INCLUDE_DIRS})
+target_link_libraries(run_tests_copr PRIVATE ${JSONC_LIBRARIES})
 
 add_compile_definitions(TEST_DATADIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 

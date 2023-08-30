@@ -15,12 +15,15 @@ target_compile_options(run_tests PRIVATE "-Wno-unused-value")
 target_compile_options(run_tests PRIVATE "-Wno-self-assign-overloaded")
 target_compile_options(run_tests PRIVATE "-Wno-self-move")
 
-target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf5)
-target_link_libraries(run_tests stdc++ libdnf5 cppunit test_shared)
+target_link_directories(run_tests PRIVATE ${CMAKE_BINARY_DIR}/libdnf5)
+target_link_libraries(run_tests PRIVATE stdc++ libdnf5 cppunit test_shared)
 
 pkg_check_modules(JSONC REQUIRED json-c)
 include_directories(${JSONC_INCLUDE_DIRS})
-target_link_libraries(run_tests ${JSONC_LIBRARIES})
+target_link_libraries(run_tests PRIVATE ${JSONC_LIBRARIES})
+
+pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)
+target_link_libraries(run_tests PRIVATE ${LIBSOLV_LIBRARIES})
 
 
 if(WITH_PERFORMANCE_TESTS)
