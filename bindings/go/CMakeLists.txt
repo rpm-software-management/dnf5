@@ -17,7 +17,7 @@ function(add_go_module LIBRARY_NAME MODULE_NAME)
     target_compile_options(${TARGET_NAME} PUBLIC ${SWIG_COMPILE_OPTIONS})
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
-    swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${C_LIBRARY_NAME})
 endfunction()
 
 

@@ -74,7 +74,8 @@ function(add_perl5_module LIBRARY_NAME MODULE_NAME)
     target_compile_options(${TARGET_NAME} PUBLIC ${SWIG_COMPILE_OPTIONS})
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
-    swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${C_LIBRARY_NAME})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${PERL_LIBRARY})
 
     install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION "${PERL_INSTALL_PATH}/auto/${LIBRARY_NAME}/${MODULE_NAME}")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pm" DESTINATION "${PERL_INSTALL_PATH}/${LIBRARY_NAME}")
