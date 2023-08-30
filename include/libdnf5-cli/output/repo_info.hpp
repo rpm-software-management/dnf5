@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CLI_OUTPUT_REPO_INFO_HPP
 
 
-#include "fmt/chrono.h"
 #include "key_value_table.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf5-cli/utils/units.hpp"
 
@@ -61,10 +61,10 @@ void RepoInfo::add_repo(Repo & repo) {
         add_line("Include packages", include_packages);
     }
 
-    auto cache_updated = static_cast<time_t>(repo.get_timestamp());
+    auto cache_updated = repo.get_timestamp();
     std::string last_update = "unknown";
     if (cache_updated > 0) {
-        last_update = fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(cache_updated));
+        last_update = libdnf5::utils::string::format_epoch(cache_updated);
     }
 
     auto metadata_expire = repo.get_metadata_expire();
@@ -174,12 +174,7 @@ void RepoInfo::add_repo(Repo & repo) {
 
         add_line("Revision", repo.get_revision(), nullptr, group_repodata);
 
-        const auto updated_time = static_cast<time_t>(repo.get_max_timestamp());
-        add_line(
-            "Updated",
-            fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(updated_time)),
-            nullptr,
-            group_repodata);
+        add_line("Updated", libdnf5::utils::string::format_epoch(repo.get_max_timestamp()), nullptr, group_repodata);
     }
 
     /*

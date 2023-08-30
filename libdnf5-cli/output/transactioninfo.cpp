@@ -20,20 +20,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/transactioninfo.hpp"
 
-#include "fmt/chrono.h"
+#include "utils/string.hpp"
 
 
 namespace libdnf5::cli::output {
 
 void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
-    const auto dt_start_time = static_cast<time_t>(transaction.get_dt_start());
-    const auto dt_end_time = static_cast<time_t>(transaction.get_dt_end());
-
     KeyValueTable info;
     info.add_line("Transaction ID", transaction.get_id(), "bold");
-    info.add_line("Begin time", fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)));
+    info.add_line("Begin time", libdnf5::utils::string::format_epoch(transaction.get_dt_start()));
     info.add_line("Begin rpmdb", transaction.get_rpmdb_version_begin());
-    info.add_line("End time", fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(dt_end_time)));
+    info.add_line("End time", libdnf5::utils::string::format_epoch(transaction.get_dt_end()));
     info.add_line("End rpmdb", transaction.get_rpmdb_version_end());
 
     info.add_line("User", transaction.get_user_id());
