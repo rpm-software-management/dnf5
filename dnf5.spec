@@ -70,6 +70,7 @@ Provides:       dnf5-command(makecache)
 %bcond_without dnf5
 %bcond_without dnf5_plugins
 %bcond_without plugin_actions
+%bcond_without plugin_rhsm
 %bcond_without python_plugins_loader
 
 %bcond_without comps
@@ -179,6 +180,11 @@ BuildRequires:  polkit
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(dbus-python)
 %endif
+%endif
+
+%if %{with plugin_rhsm}
+BuildRequires:  pkgconfig(librhsm) >= 0.0.3
+BuildRequires:  pkgconfig(glib-2.0) >= 2.44.0
 %endif
 
 # ========== language bindings section ==========
@@ -517,6 +523,26 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
 %dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
 %{_mandir}/man8/libdnf5-actions.8.*
+%endif
+
+
+# ========== libdnf5-plugin-plugin_rhsm ==========
+
+%if %{with plugin_rhsm}
+%package -n libdnf5-plugin-rhsm
+Summary:        Libdnf5 rhsm (Red Hat Subscription Manager) plugin
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+
+%description -n libdnf5-plugin-rhsm
+Libdnf5 plugin with basic support for Red Hat subscriptions.
+Synchronizes the the enrollment with the vendor system. This can change
+the contents of the repositories configuration files according
+to the subscription levels.
+
+%files -n libdnf5-plugin-rhsm
+%{_libdir}/libdnf5/plugins/rhsm.*
+%config %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
 %endif
 
 
