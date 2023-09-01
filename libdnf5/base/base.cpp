@@ -182,8 +182,9 @@ void Base::setup() {
     auto & config = get_config();
     auto & installroot = config.get_installroot_option();
     installroot.lock("Locked by Base::setup()");
+    auto vars = get_vars();
 
-    get_vars()->load(vars_installroot, config.get_varsdir_option().get_value());
+    vars->load(vars_installroot, config.get_varsdir_option().get_value());
 
     // TODO(mblaha) - move system state load closer to the system repo loading
     std::filesystem::path system_state_dir{config.get_system_state_dir_option().get_value()};
@@ -220,7 +221,7 @@ void Base::setup() {
     pool_setdisttype(**pool, DISTTYPE_RPM);
     // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked
-    pool_setarch(**pool, get_vars()->get_value("arch").c_str());
+    pool_setarch(**pool, vars->get_value("arch").c_str());
     pool_set_rootdir(**pool, installroot.get_value().c_str());
 
     p_impl->plugins.post_base_setup();
