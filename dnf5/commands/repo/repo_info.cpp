@@ -91,7 +91,14 @@ void RepoInfoCommand::configure() {
 }
 
 void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
+    // sort the query to always get the same results
+    std::vector<libdnf5::repo::RepoWeakPtr> repos;
     for (auto & repo : query) {
+        repos.emplace_back(repo);
+    }
+    std::sort(repos.begin(), repos.end(), [](const auto & l, const auto & r) { return l->get_id() < r->get_id(); });
+
+    for (auto & repo : repos) {
         libdnf5::rpm::PackageQuery pkgs(get_context().base, libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
         pkgs.filter_repo_id({repo->get_id()});
 
