@@ -109,10 +109,10 @@ static const char * get_base_arch(const char * arch) {
     return nullptr;
 }
 
-static void init_lib_rpm() {
+static void init_lib_rpm(const char * arch) {
     static bool lib_rpm_initiated{false};
     if (!lib_rpm_initiated) {
-        if (rpmReadConfigFiles(nullptr, nullptr) != 0) {
+        if (rpmReadConfigFiles(nullptr, arch) != 0) {
             throw RuntimeError(M_("failed to read rpm config files"));
         }
         lib_rpm_initiated = true;
@@ -128,7 +128,6 @@ static constexpr const char * DISTROVERPKGS[] = {
     "suse-release"};
 
 static std::string detect_arch() {
-    init_lib_rpm();
     std::string value{};
     char * tmp = rpmExpand("%{_host_cpu}", NULL);
     if (tmp != nullptr) {
@@ -143,7 +142,6 @@ static std::string detect_arch() {
 
 
 std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
-    init_lib_rpm();
     std::unique_ptr<std::string> release_ver;
 
     libdnf5::rpm::RpmLogGuard rpm_log_guard(base);
@@ -433,6 +431,12 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 }
 
 void Vars::detect_vars(const std::string & installroot) {
+    const char * arch = nullptr;
+    if (contains("arch")) {
+        arch = get_value("arch").c_str();
+    }
+    init_lib_rpm(arch);
+
     set_lazy(
         "arch", []() -> auto { return std::make_unique<std::string>(detect_arch()); }, Priority::AUTO);
 
