@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "conf/config.h"
 #include "solv/pool.hpp"
 #include "utils/dnf4convert/dnf4convert.hpp"
+#include "utils/fs/utils.hpp"
 
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
@@ -37,45 +38,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 namespace fs = std::filesystem;
-
-namespace {
-
-// Creates an alphabetically sorted list of all files with `file_extension` from `directories`.
-// If a file with the same name is in multiple directories, only the first file found is added to the list.
-// Directories are traversed in the same order as they are in the input vector.
-[[nodiscard]] std::vector<fs::path> create_sorted_file_list(
-    const std::vector<fs::path> & directories, std::string_view file_extension) {
-    std::vector<fs::path> paths;
-
-    for (const auto & dir : directories) {
-        std::error_code ec;
-        for (const auto & dentry : fs::directory_iterator(dir, ec)) {
-            const auto & path = dentry.path();
-            if (dentry.is_regular_file() && path.extension() == file_extension) {
-                const auto & path_fname = path.filename();
-                bool found{false};
-                for (const auto & path_in_list : paths) {
-                    if (path_fname == path_in_list.filename()) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    paths.push_back(path);
-                }
-            }
-        }
-    }
-
-    // sort all drop-in configuration files alphabetically by their names
-    std::sort(paths.begin(), paths.end(), [](const fs::path & p1, const fs::path & p2) {
-        return p1.filename() < p2.filename();
-    });
-
-    return paths;
-}
-
-}  // namespace
 
 namespace libdnf5 {
 
@@ -129,7 +91,7 @@ void Base::load_config() {
     }
 
     // Loads configuration from drop-in directories
-    const auto paths = create_sorted_file_list({conf_dir_path, distribution_conf_dir_path}, ".conf");
+    const auto paths = utils::fs::create_sorted_file_list({conf_dir_path, distribution_conf_dir_path}, ".conf");
     for (const auto & path : paths) {
         ConfigParser parser;
         parser.read(path);

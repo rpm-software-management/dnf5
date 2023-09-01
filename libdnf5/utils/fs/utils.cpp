@@ -23,12 +23,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <cstring>
 
 namespace libdnf5::utils::fs {
 
+namespace stdfs = std::filesystem;
 
-bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept {
+[[nodiscard]] bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept {
     static constexpr int block_size = 4096;
     bool ret = false;
     int fd1 = -1;
@@ -81,6 +83,38 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
         std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
         std::filesystem::remove_all(src);
     }
+}
+
+[[nodiscard]] std::vector<std::filesystem::path> create_sorted_file_list(
+    const std::vector<std::filesystem::path> & directories, std::string_view file_extension) {
+    std::vector<stdfs::path> paths;
+
+    for (const auto & dir : directories) {
+        std::error_code ec;
+        for (const auto & dentry : stdfs::directory_iterator(dir, ec)) {
+            const auto & path = dentry.path();
+            if (dentry.is_regular_file() && path.extension() == file_extension) {
+                const auto & path_fname = path.filename();
+                bool found{false};
+                for (const auto & path_in_list : paths) {
+                    if (path_fname == path_in_list.filename()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    paths.push_back(path);
+                }
+            }
+        }
+    }
+
+    // sort all drop-in configuration files alphabetically by their names
+    std::sort(paths.begin(), paths.end(), [](const stdfs::path & p1, const stdfs::path & p2) {
+        return p1.filename() < p2.filename();
+    });
+
+    return paths;
 }
 
 }  // namespace libdnf5::utils::fs
