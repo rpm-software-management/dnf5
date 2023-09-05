@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/shared_options.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+
+#include <libdnf5/rpm/arch.hpp>
 
 namespace dnf5 {
 
@@ -72,6 +75,21 @@ void create_forcearch_option(dnf5::Command & command) {
                                        [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                        [[maybe_unused]] const char * option,
                                        const char * value) {
+        auto supported_arches = libdnf5::rpm::get_supported_arches();
+        if (std::find(supported_arches.begin(), supported_arches.end(), value) == supported_arches.end()) {
+            std::string available_arches{};
+            auto it = supported_arches.begin();
+            if (it != supported_arches.end()) {
+                available_arches.append("\"" + *it + "\"");
+                ++it;
+                for (; it != supported_arches.end(); ++it) {
+                    available_arches.append(", ");
+                    available_arches.append("\"" + *it + "\"");
+                }
+            }
+            throw libdnf5::cli::ArgumentParserInvalidValueError(
+                M_("Unsupported architecture \"{0}\". Please choose one from {1}"), value, available_arches);
+        }
         ctx.base.get_config().get_ignorearch_option().set(libdnf5::Option::Priority::COMMANDLINE, true);
         ctx.base.get_vars()->set("arch", value, libdnf5::Vars::Priority::COMMANDLINE);
         return true;
