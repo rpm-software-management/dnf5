@@ -2218,13 +2218,13 @@ base::Transaction Goal::resolve() {
 
     // Write debug solver data
     if (cfg_main.get_debug_solver_option().get_value()) {
-        auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value()) / "packages";
-        auto abs_debug_dir = std::filesystem::absolute(debug_dir);
+        auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value());
+        auto pkgs_debug_dir = std::filesystem::absolute(debug_dir / "packages");
 
         // Ensures the presence of the directory.
-        std::filesystem::create_directories(abs_debug_dir);
+        std::filesystem::create_directories(pkgs_debug_dir);
 
-        p_impl->rpm_goal.write_debugdata(abs_debug_dir);
+        p_impl->rpm_goal.write_debugdata(pkgs_debug_dir);
 
         transaction.p_impl->add_resolve_log(
             GoalAction::RESOLVE,
@@ -2232,7 +2232,7 @@ base::Transaction Goal::resolve() {
             {},
             libdnf5::transaction::TransactionItemType::PACKAGE,
             "",
-            {abs_debug_dir},
+            {std::filesystem::canonical(debug_dir)},
             libdnf5::Logger::Level::WARNING);
     }
 
