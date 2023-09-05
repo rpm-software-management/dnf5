@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/vars.hpp"
 
+#include "rpm/arch_private.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/fs/file.hpp"
 
@@ -53,61 +54,6 @@ static const std::unordered_set<std::string> READ_ONLY_VARIABLES = {"releasever_
 
 // ==================================================================
 // The following helper functions should be moved e.g. into a library
-
-#define MAX_NATIVE_ARCHES 12
-
-// data taken from DNF
-static const struct {
-    const char * base;
-    const char * native[MAX_NATIVE_ARCHES];
-} ARCH_MAP[] = {
-    {"aarch64", {"aarch64", nullptr}},
-    {"alpha",
-     {"alpha",
-      "alphaev4",
-      "alphaev45",
-      "alphaev5",
-      "alphaev56",
-      "alphaev6",
-      "alphaev67",
-      "alphaev68",
-      "alphaev7",
-      "alphapca56",
-      nullptr}},
-    {"arm", {"armv5tejl", "armv5tel", "armv5tl", "armv6l", "armv7l", "armv8l", nullptr}},
-    {"armhfp", {"armv6hl", "armv7hl", "armv7hnl", "armv8hl", "armv8hnl", "armv8hcnl", nullptr}},
-    {"i386", {"i386", "athlon", "geode", "i386", "i486", "i586", "i686", nullptr}},
-    {"ia64", {"ia64", nullptr}},
-    {"mips", {"mips", nullptr}},
-    {"mipsel", {"mipsel", nullptr}},
-    {"mips64", {"mips64", nullptr}},
-    {"mips64el", {"mips64el", nullptr}},
-    {"noarch", {"noarch", nullptr}},
-    {"ppc", {"ppc", nullptr}},
-    {"ppc64", {"ppc64", "ppc64iseries", "ppc64p7", "ppc64pseries", nullptr}},
-    {"ppc64le", {"ppc64le", nullptr}},
-    {"riscv32", {"riscv32", nullptr}},
-    {"riscv64", {"riscv64", nullptr}},
-    {"riscv128", {"riscv128", nullptr}},
-    {"s390", {"s390", nullptr}},
-    {"s390x", {"s390x", nullptr}},
-    {"sh3", {"sh3", nullptr}},
-    {"sh4", {"sh4", "sh4a", nullptr}},
-    {"sparc", {"sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", nullptr}},
-    {"x86_64", {"x86_64", "amd64", "ia32e", nullptr}},
-    {"loongarch64", {"loongarch64", nullptr}},
-    {nullptr, {nullptr}}};
-
-static const char * get_base_arch(const char * arch) {
-    for (int i = 0; ARCH_MAP[i].base; ++i) {
-        for (int j = 0; ARCH_MAP[i].native[j]; ++j) {
-            if (std::strcmp(ARCH_MAP[i].native[j], arch) == 0) {
-                return ARCH_MAP[i].base;
-            }
-        }
-    }
-    return nullptr;
-}
 
 static void init_lib_rpm(const char * arch) {
     static bool lib_rpm_initiated{false};
@@ -443,7 +389,7 @@ void Vars::detect_vars(const std::string & installroot) {
     set_lazy(
         "basearch",
         [this]() -> auto {
-            auto base_arch = get_base_arch(variables["arch"].value.c_str());
+            auto base_arch = libdnf5::rpm::get_base_arch(variables["arch"].value.c_str());
             return base_arch ? std::make_unique<std::string>(base_arch) : nullptr;
         },
         Priority::AUTO);
