@@ -442,7 +442,10 @@ void Vars::detect_vars(const std::string & installroot) {
 
     set_lazy(
         "basearch",
-        [this]() -> auto { return std::make_unique<std::string>(get_base_arch(variables["arch"].value.c_str())); },
+        [this]() -> auto {
+            auto base_arch = get_base_arch(variables["arch"].value.c_str());
+            return base_arch ? std::make_unique<std::string>(base_arch) : nullptr;
+        },
         Priority::AUTO);
 
     set_lazy(
