@@ -104,7 +104,7 @@ public:
     void finish() noexcept;
 
 private:
-    std::string find_plugin_library(const std::string & plugin_conf_path);
+    std::string find_plugin_library(const std::string & plugin_name);
 
     /// Loads the plugin from the library defined by the file path.
     void load_plugin_library(ConfigParser && parser, const std::string & file_path);
