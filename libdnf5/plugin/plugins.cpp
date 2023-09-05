@@ -103,15 +103,14 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
-    auto library_name = std::filesystem::path(plugin_conf_path).stem();
-    library_name += ".so";
+std::string Plugins::find_plugin_library(const std::string & plugin_name) {
+    auto library_name = plugin_name + ".so";
     std::filesystem::path library_path = base->get_config().get_pluginpath_option().get_value();
     library_path /= library_name;
     if (std::filesystem::exists(library_path)) {
         return library_path;
     }
-    throw PluginError(M_("Cannot find plugin library \"{}\""), library_name.string());
+    throw PluginError(M_("Cannot find plugin library \"{}\""), library_name);
 }
 
 void Plugins::load_plugin_library(ConfigParser && parser, const std::string & file_path) {
@@ -141,6 +140,15 @@ void Plugins::load_plugin(const std::string & config_file_path) {
     libdnf5::ConfigParser parser;
     parser.read(config_file_path);
 
+    std::string plugin_name;
+    try {
+        plugin_name = parser.get_value("main", "name");
+    } catch (const ConfigParserError &) {
+        plugin_name = std::filesystem::path(config_file_path).stem();
+        logger.warning(
+            "Missing plugin name in configuration file \"{}\". \"{}\" will be used.", config_file_path, plugin_name);
+    }
+
     enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
     const auto & enabled_str = parser.get_value("main", "enabled");
     if (enabled_str == "host-only") {
@@ -162,7 +170,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
         return;
     }
 
-    auto library_path = find_plugin_library(config_file_path);
+    auto library_path = find_plugin_library(plugin_name);
     load_plugin_library(std::move(parser), library_path);
 }
 
