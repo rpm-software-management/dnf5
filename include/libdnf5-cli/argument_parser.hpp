@@ -143,6 +143,13 @@ public:
     const char * get_name() const noexcept override { return "ArgumentParserMissingDependentArgumentError"; }
 };
 
+/// Exception is thrown when the given argument value is not valid.
+class ArgumentParserInvalidValueError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserInvalidValueError"; }
+};
+
 /// Base class for user data used in ArgumentParser::Argument
 class ArgumentParserUserData {};
 
