@@ -251,4 +251,10 @@ libdnf5::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
 }
 
 
+void ModuleGoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
+    libdnf_assert_goal_resolved();
+    libsolv_solver.write_debugdata(abs_dest_dir);
+}
+
+
 }  // namespace libdnf5::module

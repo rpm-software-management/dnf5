@@ -82,6 +82,10 @@ public:
     /// @since 5.0
     ::Transaction * get_transaction() { return libsolv_transaction; }
 
+    /// Write solver debug data to the given directory.
+    /// @param abs_dest_dir Destination directory. Requires a full existing path.
+    void write_debugdata(const std::filesystem::path & abs_dest_dir);
+
 private:
     libdnf5::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
 

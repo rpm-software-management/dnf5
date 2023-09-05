@@ -497,7 +497,14 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     auto ret = goal_strict.resolve();
 
-    // TODO(pkratoch): Write debugdata if debug_solver config option is set to true.
+    // Store modules debug solver data
+    if (base->get_config().get_debug_solver_option().get_value()) {
+        auto debug_dir = std::filesystem::path(base->get_config().get_debugdir_option().get_value());
+        auto modules_debug_dir = std::filesystem::absolute(debug_dir / "modules");
+        std::filesystem::create_directories(modules_debug_dir);
+
+        goal_strict.write_debugdata(modules_debug_dir);
+    }
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_strict);
