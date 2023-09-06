@@ -107,7 +107,7 @@ private:
     std::string find_plugin_library(const std::string & plugin_name);
 
     /// Loads the plugin from the library defined by the file path.
-    void load_plugin_library(ConfigParser && parser, const std::string & file_path);
+    void load_plugin_library(ConfigParser && parser, const std::string & file_path, const std::string & plugin_name);
 
     Base * base;
     std::vector<std::unique_ptr<Plugin>> plugins;
