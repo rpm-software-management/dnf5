@@ -97,6 +97,11 @@ public:
 
     bool get_quiet() const { return quiet; }
 
+    /// Set to true to print information about variables
+    void set_dump_variables(bool enable) { this->dump_variables = enable; }
+
+    bool get_dump_variables() const { return dump_variables; }
+
     Plugins & get_plugins() { return *plugins; }
 
     libdnf5::Goal * get_goal(bool new_if_not_exist = true);
@@ -125,6 +130,7 @@ private:
     const char * comment{nullptr};
 
     bool quiet{false};
+    bool dump_variables{false};
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
