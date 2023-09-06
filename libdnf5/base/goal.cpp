@@ -2220,11 +2220,14 @@ base::Transaction Goal::resolve() {
     if (cfg_main.get_debug_solver_option().get_value()) {
         auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value());
         auto pkgs_debug_dir = std::filesystem::absolute(debug_dir / "packages");
+        auto comps_debug_dir = std::filesystem::absolute(debug_dir / "comps");
 
-        // Ensures the presence of the directory.
+        // Ensures the presence of the directories.
         std::filesystem::create_directories(pkgs_debug_dir);
+        std::filesystem::create_directories(comps_debug_dir);
 
         p_impl->rpm_goal.write_debugdata(pkgs_debug_dir);
+        p_impl->base->get_repo_sack()->dump_comps_debugdata(comps_debug_dir);
 
         transaction.p_impl->add_resolve_log(
             GoalAction::RESOLVE,
