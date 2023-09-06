@@ -510,6 +510,12 @@ void RepoSack::dump_debugdata(const std::string & dir) {
 }
 
 
+void RepoSack::dump_comps_debugdata(const std::string & dir) {
+    libdnf5::solv::Solver solver{get_comps_pool(base)};
+    solver.write_debugdata(dir, false);
+}
+
+
 void RepoSack::create_repos_from_file(const std::string & path) {
     auto & logger = *base->get_logger();
     ConfigParser parser;

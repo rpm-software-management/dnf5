@@ -102,10 +102,14 @@ public:
     /// @return `true` if the command line repository has been initialized (via `get_cmdline_repo()`).
     bool has_cmdline_repo() const noexcept { return cmdline_repo; }
 
-    /// Dumps libsolv's debugdata of all loaded repositories.
+    /// Dumps libsolv's rpm debugdata of all loaded repositories.
     /// @param dir The directory into which to dump the debugdata.
     // TODO (lukash): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);
+
+    /// Dumps libsolv's comps debugdata of all loaded repositories.
+    /// @param dir The directory into which to dump the debugdata.
+    void dump_comps_debugdata(const std::string & dir);
 
     /// Downloads (if necessary) all enabled repository metadata and loads them in parallel.
     ///
