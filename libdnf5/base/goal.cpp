@@ -2217,6 +2217,7 @@ base::Transaction Goal::resolve() {
     ret |= p_impl->rpm_goal.resolve();
 
     // Write debug solver data
+    // Note: Modules debug data are handled separately when resolving module goal in ModuleSack::Impl::module_solve()
     if (cfg_main.get_debug_solver_option().get_value()) {
         auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value());
         auto pkgs_debug_dir = std::filesystem::absolute(debug_dir / "packages");
