@@ -113,14 +113,21 @@ std::string Plugins::find_plugin_library(const std::string & plugin_name) {
     throw PluginError(M_("Cannot find plugin library \"{}\""), library_name);
 }
 
-void Plugins::load_plugin_library(ConfigParser && parser, const std::string & file_path) {
+void Plugins::load_plugin_library(
+    ConfigParser && parser, const std::string & file_path, const std::string & plugin_name) {
     auto & logger = *base->get_logger();
     logger.debug("Loading plugin library file=\"{}\"", file_path);
     auto plugin = std::make_unique<PluginLibrary>(*base, std::move(parser), file_path);
     auto * iplugin = plugin->get_iplugin();
-    plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
+    if (name != plugin_name) {
+        logger.warning(
+            "A mess in the plugin name. The name from the configuration file is \"{}\" and the real name is \"{}\".",
+            plugin_name,
+            name);
+    }
     auto version = iplugin->get_version();
+    plugins.emplace_back(std::move(plugin));
     logger.info(
         "Loaded libdnf plugin \"{}\" (\"{}\"), version=\"{}.{}.{}\"",
         name,
@@ -171,7 +178,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
     }
 
     auto library_path = find_plugin_library(plugin_name);
-    load_plugin_library(std::move(parser), library_path);
+    load_plugin_library(std::move(parser), library_path, plugin_name);
 }
 
 void Plugins::load_plugins(const std::string & config_dir_path) {
