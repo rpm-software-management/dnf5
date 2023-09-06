@@ -508,6 +508,20 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto dump_variables = parser.add_new_named_arg("dump-variables");
+        dump_variables->set_long_name("dump-variables");
+        dump_variables->set_description("Print variable values to stdout");
+        dump_variables->set_parse_hook_func([&ctx](
+                                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                [[maybe_unused]] const char * option,
+                                                [[maybe_unused]] const char * value) {
+            ctx.set_dump_variables(true);
+            return true;
+        });
+        global_options_group->register_argument(dump_variables);
+    }
+
+    {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
         version->set_description("Show DNF5 version and exit");
@@ -695,6 +709,14 @@ static void print_transaction_size_stats(Context & context) {
     }
 }
 
+static void dump_variables(Context & context) {
+    std::cout << _("======== Variables: ========") << std::endl;
+    for (const auto & var : context.base.get_vars()->get_variables()) {
+        const auto & val = var.second;
+        std::cout << fmt::format("{} = {}", var.first, val.value) << std::endl;
+    }
+}
+
 }  // namespace dnf5
 
 
@@ -809,6 +831,10 @@ int main(int argc, char * argv[]) try {
             log_router.swap_logger(file_logger, 0);
             // Write messages from memory buffer logger to stream logger
             dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
+
+            if (context.get_dump_variables()) {
+                dump_variables(context);
+            }
 
             auto repo_sack = base.get_repo_sack();
             repo_sack->create_repos_from_system_configuration();
