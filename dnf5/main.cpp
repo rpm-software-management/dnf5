@@ -522,6 +522,20 @@ void RootCommand::set_argument_parser() {
     }
 
     {
+        auto dump_config = parser.add_new_named_arg("dump-main-config");
+        dump_config->set_long_name("dump-main-config");
+        dump_config->set_description("Print main configuration values to stdout");
+        dump_config->set_parse_hook_func([&ctx](
+                                             [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                             [[maybe_unused]] const char * option,
+                                             [[maybe_unused]] const char * value) {
+            ctx.set_dump_main_config(true);
+            return true;
+        });
+        global_options_group->register_argument(dump_config);
+    }
+
+    {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
         version->set_description("Show DNF5 version and exit");
@@ -557,9 +571,13 @@ void RootCommand::set_argument_parser() {
 
 void RootCommand::pre_configure() {
     auto & arg_parser = get_context().get_argument_parser();
-    if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0) {
+
+    // With these options it is possible to run dnf5 without a command.
+    if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0 ||
+        arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0) {
         return;
     }
+
     throw_missing_command();
 }
 
@@ -725,6 +743,26 @@ static void dump_variables(Context & context) {
     }
 }
 
+static void dump_main_configuration(Context & context) {
+    libdnf5::Base & base = context.base;
+    std::cout << _("======== Main configuration: ========") << std::endl;
+    for (const auto & option : base.get_config().opt_binds()) {
+        const auto & val = option.second;
+        std::string value;
+        bool was_set{false};
+        try {
+            value = val.get_value_string();
+            was_set = true;
+        } catch (const libdnf5::OptionError &) {
+        }
+        if (was_set) {
+            std::cout << fmt::format("{} = {}", option.first, value) << std::endl;
+        } else {
+            std::cout << fmt::format("{}", option.first) << std::endl;
+        }
+    }
+}
+
 }  // namespace dnf5
 
 
@@ -857,6 +895,11 @@ int main(int argc, char * argv[]) try {
 
             // Run selected command
             command->configure();
+
+            if (context.get_dump_main_config()) {
+                dump_main_configuration(context);
+            }
+
             {
                 if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
                     context.load_repos(context.get_load_system_repo());
