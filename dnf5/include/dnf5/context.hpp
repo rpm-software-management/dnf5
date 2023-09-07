@@ -102,6 +102,11 @@ public:
 
     bool get_dump_variables() const { return dump_variables; }
 
+    /// Set to true to print information about main configuration
+    void set_dump_main_config(bool enable) { this->dump_main_config = enable; }
+
+    bool get_dump_main_config() const { return dump_main_config; }
+
     Plugins & get_plugins() { return *plugins; }
 
     libdnf5::Goal * get_goal(bool new_if_not_exist = true);
@@ -131,6 +136,7 @@ private:
 
     bool quiet{false};
     bool dump_variables{false};
+    bool dump_main_config{false};
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
