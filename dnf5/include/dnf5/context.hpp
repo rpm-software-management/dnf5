@@ -97,15 +97,22 @@ public:
 
     bool get_quiet() const { return quiet; }
 
-    /// Set to true to print information about variables
-    void set_dump_variables(bool enable) { this->dump_variables = enable; }
-
-    bool get_dump_variables() const { return dump_variables; }
-
     /// Set to true to print information about main configuration
     void set_dump_main_config(bool enable) { this->dump_main_config = enable; }
 
     bool get_dump_main_config() const { return dump_main_config; }
+
+    /// Set a list of repository IDs to print information about their configuration
+    void set_dump_repo_config_id_list(const std::vector<std::string> & repo_id_list) {
+        this->dump_repo_config_id_list = repo_id_list;
+    }
+
+    const std::vector<std::string> & get_dump_repo_config_id_list() const { return dump_repo_config_id_list; }
+
+    /// Set to true to print information about variables
+    void set_dump_variables(bool enable) { this->dump_variables = enable; }
+
+    bool get_dump_variables() const { return dump_variables; }
 
     Plugins & get_plugins() { return *plugins; }
 
@@ -135,8 +142,9 @@ private:
     const char * comment{nullptr};
 
     bool quiet{false};
-    bool dump_variables{false};
     bool dump_main_config{false};
+    std::vector<std::string> dump_repo_config_id_list;
+    bool dump_variables{false};
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;

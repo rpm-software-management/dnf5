@@ -508,20 +508,6 @@ void RootCommand::set_argument_parser() {
     }
 
     {
-        auto dump_variables = parser.add_new_named_arg("dump-variables");
-        dump_variables->set_long_name("dump-variables");
-        dump_variables->set_description("Print variable values to stdout");
-        dump_variables->set_parse_hook_func([&ctx](
-                                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                                                [[maybe_unused]] const char * option,
-                                                [[maybe_unused]] const char * value) {
-            ctx.set_dump_variables(true);
-            return true;
-        });
-        global_options_group->register_argument(dump_variables);
-    }
-
-    {
         auto dump_config = parser.add_new_named_arg("dump-main-config");
         dump_config->set_long_name("dump-main-config");
         dump_config->set_description("Print main configuration values to stdout");
@@ -533,6 +519,38 @@ void RootCommand::set_argument_parser() {
             return true;
         });
         global_options_group->register_argument(dump_config);
+    }
+
+    {
+        auto dump_repo_config = parser.add_new_named_arg("dump-repo-config");
+        dump_repo_config->set_long_name("dump-repo-config");
+        dump_repo_config->set_has_value(true);
+        dump_repo_config->set_arg_value_help("REPO_ID,...");
+        dump_repo_config->set_description(
+            "Print repository configuration values to stdout. List option. Supports globs");
+        dump_repo_config->set_parse_hook_func([&ctx](
+                                                  [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                  [[maybe_unused]] const char * option,
+                                                  [[maybe_unused]] const char * value) {
+            libdnf5::OptionStringList repoid_patterns(value);
+            ctx.set_dump_repo_config_id_list(repoid_patterns.get_value());
+            return true;
+        });
+        global_options_group->register_argument(dump_repo_config);
+    }
+
+    {
+        auto dump_variables = parser.add_new_named_arg("dump-variables");
+        dump_variables->set_long_name("dump-variables");
+        dump_variables->set_description("Print variable values to stdout");
+        dump_variables->set_parse_hook_func([&ctx](
+                                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                [[maybe_unused]] const char * option,
+                                                [[maybe_unused]] const char * value) {
+            ctx.set_dump_variables(true);
+            return true;
+        });
+        global_options_group->register_argument(dump_variables);
     }
 
     {
@@ -574,7 +592,8 @@ void RootCommand::pre_configure() {
 
     // With these options it is possible to run dnf5 without a command.
     if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0 ||
-        arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0) {
+        arg_parser.get_named_arg("dump-main-config", false).get_parse_count() > 0 ||
+        arg_parser.get_named_arg("dump-repo-config", false).get_parse_count() > 0) {
         return;
     }
 
@@ -735,14 +754,6 @@ static void print_transaction_size_stats(Context & context) {
     }
 }
 
-static void dump_variables(Context & context) {
-    std::cout << _("======== Variables: ========") << std::endl;
-    for (const auto & var : context.base.get_vars()->get_variables()) {
-        const auto & val = var.second;
-        std::cout << fmt::format("{} = {}", var.first, val.value) << std::endl;
-    }
-}
-
 static void dump_main_configuration(Context & context) {
     libdnf5::Base & base = context.base;
     std::cout << _("======== Main configuration: ========") << std::endl;
@@ -760,6 +771,57 @@ static void dump_main_configuration(Context & context) {
         } else {
             std::cout << fmt::format("{}", option.first) << std::endl;
         }
+    }
+}
+
+static void dump_repository_configuration(Context & context, const std::vector<std::string> & repo_id_list) {
+    libdnf5::Base & base = context.base;
+    auto & log_router = *base.get_logger();
+
+    std::set<libdnf5::repo::RepoWeakPtr> matching_repos;
+    std::set<std::string_view> not_matchind_repos_id;
+
+    for (const auto & repo_id : repo_id_list) {
+        libdnf5::repo::RepoQuery query(base);
+        query.filter_id(repo_id, libdnf5::sack::QueryCmp::GLOB);
+
+        if (query.empty()) {
+            not_matchind_repos_id.insert(repo_id);
+        } else {
+            matching_repos.insert(query.begin(), query.end());
+        }
+    }
+
+    for (auto repo_id : not_matchind_repos_id) {
+        log_router.warning("No matching repo to dump configuration: \"{}\"", repo_id);
+    }
+
+    for (auto & repo : matching_repos) {
+        std::cout << libdnf5::utils::sformat(_("======== \"{}\" repository configuration: ========"), repo->get_id())
+                  << std::endl;
+        for (const auto & option : repo->get_config().opt_binds()) {
+            const auto & val = option.second;
+            std::string value;
+            bool was_set{false};
+            try {
+                value = val.get_value_string();
+                was_set = true;
+            } catch (const libdnf5::OptionError &) {
+            }
+            if (was_set) {
+                std::cout << fmt::format("{} = {}", option.first, value) << std::endl;
+            } else {
+                std::cout << fmt::format("{}", option.first) << std::endl;
+            }
+        }
+    }
+}
+
+static void dump_variables(Context & context) {
+    std::cout << _("======== Variables: ========") << std::endl;
+    for (const auto & var : context.base.get_vars()->get_variables()) {
+        const auto & val = var.second;
+        std::cout << fmt::format("{} = {}", var.first, val.value) << std::endl;
     }
 }
 
@@ -898,6 +960,10 @@ int main(int argc, char * argv[]) try {
 
             if (context.get_dump_main_config()) {
                 dump_main_configuration(context);
+            }
+
+            if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
+                dump_repository_configuration(context, repo_id_list);
             }
 
             {
