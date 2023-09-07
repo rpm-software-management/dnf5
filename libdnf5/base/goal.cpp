@@ -1478,15 +1478,16 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
         filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value(), obsoletes);
     }
 
-    if (minimal) {
-        query.filter_earliest_evr();
-    }
-
     switch (action) {
         case GoalAction::UPGRADE_MINIMAL:
         case GoalAction::UPGRADE:
             query.filter_available();
             remove_older_versions(query);
+
+            if (minimal) {
+                query.filter_earliest_evr();
+            }
+
             // Given that we use libsolv's targeted transactions, we need to ensure that the transaction contains both
             // the new targeted version and also the current installed version (for the upgraded package). This is
             // because if it only contained the new version, libsolv would decide to reinstall the package even if it
