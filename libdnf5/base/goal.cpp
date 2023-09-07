@@ -71,6 +71,30 @@ void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf
     data |= obsoletes_query;
 }
 
+/// Removes from the query available packages with versions lower than or equal
+/// to the installed ones. Similar to filter_upgrades(), but retains also
+/// installed packages and packages whose names are not installed.
+/// The method is called during processing UPGRADE* actions to prune versions
+/// available to the solver only to real upgrades. There are edge cases
+/// where adding old versions to solver job cause problems.
+/// See https://issues.redhat.com/browse/RHEL-1448 for details about such case.
+static void remove_older_versions(libdnf5::rpm::PackageQuery & query) {
+    libdnf5::rpm::PackageQuery installed(query.get_base(), libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    installed.filter_installed();
+    installed.filter_latest_evr();
+
+    // Keep only packages from priority repositories. Otherwise libsolv may
+    // upgrade to higher version of package from non-priority repo.
+    // Previously we passed to libsolv all versions of package and it was libsolv's
+    // responsibility to select correct upgrade.
+    query.filter_priority();
+
+    libdnf5::rpm::PackageQuery to_remove(query);
+    to_remove.filter_available();
+    to_remove.filter_nevra(installed, libdnf5::sack::QueryCmp::LTE);
+
+    query.difference(to_remove);
+}
 
 }  // namespace
 
@@ -508,6 +532,8 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     filter_candidates_for_advisory_upgrade(
                         base, query, settings.advisory_filter.value(), cfg_main.get_obsoletes_option().get_value());
                 }
+
+                remove_older_versions(query);
 
                 // Make the smallest possible upgrade
                 if (action == GoalAction::UPGRADE_ALL_MINIMAL) {
@@ -1460,6 +1486,7 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
         case GoalAction::UPGRADE_MINIMAL:
         case GoalAction::UPGRADE:
             query.filter_available();
+            remove_older_versions(query);
             // Given that we use libsolv's targeted transactions, we need to ensure that the transaction contains both
             // the new targeted version and also the current installed version (for the upgraded package). This is
             // because if it only contained the new version, libsolv would decide to reinstall the package even if it
