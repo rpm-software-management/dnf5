@@ -170,6 +170,10 @@ BuildRequires:  libubsan
 BuildRequires:  pkgconfig(smartcols)
 %endif
 
+%if %{with dnf5_plugins}
+BuildRequires:  libcurl-devel >= 7.62.0
+%endif
+
 %if %{with dnf5daemon_server}
 # required for dnf5daemon-server
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
@@ -638,13 +642,16 @@ Package management service with a DBus interface.
 Summary:        Plugins for dnf5
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
+Requires:       libcurl%{?_isa} >= 7.62.0
 Provides:       dnf5-command(builddep)
 Provides:       dnf5-command(changelog)
+Provides:       dnf5-command(config-manager)
 Provides:       dnf5-command(copr)
 Provides:       dnf5-command(repoclosure)
 
 %description -n dnf5-plugins
-Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclosure commands.
+Core DNF5 plugins that enhance dnf5 with builddep, changelog,
+config-manager, copr, and repoclosure commands.
 
 %files -n dnf5-plugins
 %{_libdir}/dnf5/plugins/*.so
