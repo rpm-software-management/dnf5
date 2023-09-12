@@ -305,6 +305,8 @@ Package management library.
 %dir %{_datadir}/dnf5/repos.override.d
 %dir %{_sysconfdir}/dnf/repos.override.d
 %dir %{_sysconfdir}/dnf/libdnf5-plugins
+%dir %{_datadir}/dnf5/repos.d
+%dir %{_datadir}/dnf5/vars.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
