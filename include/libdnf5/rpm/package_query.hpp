@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -679,6 +680,9 @@ public:
     /// However, two or more installed packages might depend on each other in a dependency cycle. Packages
     /// in such cycles that are not required by any other installed package are also leaf.
     void filter_leaves();
+
+    /// TODO reboot suggested
+    void filter_reboot_suggested();
 
     /// Filter the leaf packages and return them grouped by their dependencies.
     ///
