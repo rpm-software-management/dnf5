@@ -2828,4 +2828,42 @@ void PackageQuery::filter_installonly() {
     filter_provides(installonly_packages, libdnf5::sack::QueryCmp::GLOB);
 }
 
+static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
+    "kernel",
+    "kernel-rt",
+    "kernel-core",
+    "glibc",
+    "linux-firmware",
+    "systemd",
+    "dbus",
+    "dbus-broker",
+    "dbus-daemon",
+};
+
+void PackageQuery::filter_reboot_suggested() {
+    auto & pool = get_rpm_pool(p_impl->base);
+    libdnf5::solv::SolvMap filter_result{pool.get_nsolvables()};
+
+    for (const auto & pkg : *this) {
+        if (CORE_PACKAGE_NAMES.contains(pkg.get_name())) {
+            filter_result.add_unsafe(pkg.get_id().id);
+        }
+    }
+
+    libdnf5::advisory::AdvisoryQuery advisories{p_impl->base};
+    auto reboot_advisories =
+        advisories.get_advisory_packages_sorted_by_name_arch_evr() |
+        std::views::filter([](const auto & advisory_pkg) { return advisory_pkg.get_reboot_suggested(); });
+
+    const auto & cmp_naevr = libdnf5::rpm::cmp_naevr<const advisory::AdvisoryPackage &, const Package &>;
+    for (const auto & pkg : *this) {
+        auto lower = std::lower_bound(reboot_advisories.begin(), reboot_advisories.end(), pkg, cmp_naevr);
+        if (lower != reboot_advisories.end() && lower->get_nevra() == pkg.get_nevra()) {
+            filter_result.add_unsafe(pkg.get_id().id);
+        }
+    }
+
+    *p_impl &= filter_result;
+}
+
 }  // namespace libdnf5::rpm

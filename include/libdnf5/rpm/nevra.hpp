@@ -213,16 +213,16 @@ int evrcmp(const L & lhs, const R & rhs) {
     return rpmvercmp(lhs.get_release().c_str(), rhs.get_release().c_str());
 }
 
-
 /// Compare two objects by their Name, Epoch:Version-Release and Arch.
 /// @return `true` if `lhs` < `rhs`. Return `false` otherwise.
-template <typename T>
-bool cmp_nevra(const T & lhs, const T & rhs) {
+template <typename L, typename R>
+bool cmp_nevra(const L & lhs, const R & rhs) {
     // compare by name
     int r = lhs.get_name().compare(rhs.get_name());
     if (r < 0) {
         return true;
-    } else if (r > 0) {
+    }
+    if (r > 0) {
         return false;
     }
 
@@ -230,28 +230,31 @@ bool cmp_nevra(const T & lhs, const T & rhs) {
     r = evrcmp(lhs, rhs);
     if (r < 0) {
         return true;
-    } else if (r > 0) {
+    }
+    if (r > 0) {
         return false;
     }
 
     // names and evrs are equal, compare by arch
     r = lhs.get_arch().compare(rhs.get_arch());
-    if (r < 0) {
-        return true;
-    }
-    return false;
+    return r < 0;
 };
 
+template <typename T>
+bool cmp_nevra(const T & lhs, const T & rhs) {
+    return cmp_nevra<T, T>(lhs, rhs);
+}
 
 /// Compare two objects by their Name, Arch and Epoch:Version-Release.
 /// @return `true` if `lhs` < `rhs`. Return `false` otherwise.
-template <typename T>
-bool cmp_naevr(const T & lhs, const T & rhs) {
+template <typename L, typename R>
+bool cmp_naevr(const L & lhs, const R & rhs) {
     // compare by name
     int r = lhs.get_name().compare(rhs.get_name());
     if (r < 0) {
         return true;
-    } else if (r > 0) {
+    }
+    if (r > 0) {
         return false;
     }
 
@@ -259,18 +262,20 @@ bool cmp_naevr(const T & lhs, const T & rhs) {
     r = lhs.get_arch().compare(rhs.get_arch());
     if (r < 0) {
         return true;
-    } else if (r > 0) {
+    }
+    if (r > 0) {
         return false;
     }
 
     // names and arches are equal, compare by evr
     r = evrcmp(lhs, rhs);
-    if (r < 0) {
-        return true;
-    }
-
-    return false;
+    return r < 0;
 };
+
+template <typename T>
+bool cmp_naevr(const T & lhs, const T rhs) {
+    return cmp_naevr<T, T>(lhs, rhs);
+}
 
 }  // namespace libdnf5::rpm
 
