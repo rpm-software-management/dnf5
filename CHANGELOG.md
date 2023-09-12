@@ -1,3 +1,21 @@
+# 5.1.3
+
+- Improved tests for IniParser
+- Add directories for repos configuration overrides to the package
+- Sort repos in 'repo info' command output
+- Fix algorithm in package NEVRA filter
+- Add drop-in configuration directories to package
+- Make releasever_major, releasever_minor read-only
+- Add option conflicts for repoquery
+- Improve documentation for `repoquery --{installed,available,updates}`
+- changes.rst: `--noautoremove` was added back
+- Add `--skip-unavailable` option for `module` commands
+- Implement `module disable` and `module reset`
+- repoquery: add `--location` and `location` querytag
+- repoquery: add `--disable-modular-filtering` option
+- Add `dsync` alias for `distro-sync`
+- Improved output of `repo_info`
+
 # 5.1.2
 
 - Print error messages in nested errors
