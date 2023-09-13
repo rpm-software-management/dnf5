@@ -417,12 +417,8 @@ bool print_transaction_table(Transaction & transaction) {
 
     // TODO (nsella) split function into create/print if possible
     //static struct libscols_table * create_transaction_table(bool with_status) {}
-    auto tspkgs = transaction.get_transaction_packages();
-    auto tsgrps = transaction.get_transaction_groups();
-    auto tsenvs = transaction.get_transaction_environments();
-    auto tsmodules = transaction.get_transaction_modules();
 
-    if (tspkgs.empty() && tsgrps.empty() && tsenvs.empty() && tsmodules.empty()) {
+    if (transaction.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
@@ -463,7 +459,9 @@ bool print_transaction_table(Transaction & transaction) {
     // TODO(dmach): consider reordering so the major changes (installs, obsoletes, removals) are at the bottom next to the confirmation question
     // TODO(jrohel): Print relations with obsoleted packages
 
+    auto tspkgs = transaction.get_transaction_packages();
     std::sort(tspkgs.begin(), tspkgs.end(), transaction_package_cmp<decltype(*tspkgs.begin())>);
+    auto tsgrps = transaction.get_transaction_groups();
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp<decltype(*tsgrps.begin())>);
 
     struct libscols_line * header_ln = nullptr;
@@ -563,7 +561,7 @@ bool print_transaction_table(Transaction & transaction) {
     }
 
     ActionHeaderPrinterEnvironment action_header_printer_environment(tb);
-    for (auto & tsenv : tsenvs) {
+    for (auto & tsenv : transaction.get_transaction_environments()) {
         auto env = tsenv.get_environment();
 
         header_ln = action_header_printer_environment.print(tsenv);
@@ -580,7 +578,7 @@ bool print_transaction_table(Transaction & transaction) {
     }
 
     ActionHeaderPrinterModule action_header_printer_module(tb);
-    for (auto & tsmodule : tsmodules) {
+    for (auto & tsmodule : transaction.get_transaction_modules()) {
         header_ln = action_header_printer_module.print(tsmodule);
 
         struct libscols_line * ln = scols_table_new_line(tb, header_ln);
