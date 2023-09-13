@@ -161,6 +161,11 @@ std::vector<TransactionModule> & Transaction::get_transaction_modules() const {
     return p_impl->modules;
 }
 
+bool Transaction::empty() const {
+    return p_impl->packages.empty() && p_impl->groups.empty() && p_impl->environments.empty() &&
+           p_impl->modules.empty();
+}
+
 GoalProblem Transaction::Impl::report_not_found(
     GoalAction action,
     const std::string & pkg_spec,

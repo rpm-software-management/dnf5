@@ -70,4 +70,9 @@ DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> tra
     }
 }
 
+bool DbusGoalWrapper::empty() const {
+    return transaction_packages.empty() && transaction_groups.empty() && transaction_environments.empty() &&
+           transaction_modules.empty();
+}
+
 }  // namespace dnfdaemon::client

@@ -99,6 +99,9 @@ public:
     /// @return environmental groups that are part of the transaction.
     std::vector<libdnf5::base::TransactionEnvironment> & get_transaction_environments() const;
 
+    /// @return `true` if the transaction is empty.
+    bool empty() const;
+
     /// Download all inbound packages (packages that are being installed on the
     /// system). Fails immediately on the first package download failure. Will
     /// try to resume downloads of any partially-downloaded RPMs.
