@@ -189,7 +189,7 @@ inline void ConfigParser::set_value(
     if (section_iter == data.end()) {
         throw ConfigParserSectionNotFoundError(section);
     }
-    if (raw_items.empty()) {
+    if (raw_item.empty()) {
         raw_items.erase(section + ']' + key);
     } else {
         raw_items[section + ']' + key] = raw_item;
@@ -203,7 +203,7 @@ inline void ConfigParser::set_value(
     if (section_iter == data.end()) {
         throw ConfigParserSectionNotFoundError(section);
     }
-    if (raw_items.empty()) {
+    if (raw_item.empty()) {
         raw_items.erase(section + ']' + key);
     } else {
         raw_items[section + ']' + key] = std::move(raw_item);
