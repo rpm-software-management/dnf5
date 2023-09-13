@@ -138,7 +138,7 @@ static void write_section(
     if (raw_item != raw_items.end()) {
         file.write(raw_item->second);
     } else {
-        file.write(fmt::format("[{}]\n", raw_item->second));
+        file.write(fmt::format("[{}]\n", section));
     }
     write_key_vals(file, section, key_val_map, raw_items);
 }
