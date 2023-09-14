@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-dnf5:
+  cmake-build:
     name: CMake Build
     runs-on: ubuntu-latest
     container:
@@ -69,6 +69,7 @@ jobs:
         run: CXX=${{ steps.configure_compiler.outputs.cxx }} CC=${{ steps.configure_compiler.outputs.cc }} cmake -S . -B build
 
       - name: Build DNF5
+        id: ccache-build
         run: cmake --build build
 
       - name: Display CCache statistics

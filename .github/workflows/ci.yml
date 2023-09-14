@@ -9,6 +9,9 @@ on:
 jobs:
   package-build:
     name: Package Build
+    needs: [ cmake-build ]
+    # If any of the jobs listed in needs return "failure" then run this job
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest
     container: ghcr.io/rpm-software-management/dnf-ci-host
     strategy:
