@@ -869,18 +869,21 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     if (ret == 0) {
         // removes any temporarily stored packages from the system
-        libdnf5::repo::TempFilesMemory temp_files_memory(config.get_cachedir_option().get_value());
-        auto temp_files = temp_files_memory.get_files();
-        for (auto & file : temp_files) {
-            try {
-                if (!std::filesystem::remove(file)) {
-                    logger->debug("Temporary file \"{}\" doesn't exist.", file);
+        if (!config.get_keepcache_option().get_value()) {
+            libdnf5::repo::TempFilesMemory temp_files_memory(config.get_cachedir_option().get_value());
+            auto temp_files = temp_files_memory.get_files();
+            for (auto & file : temp_files) {
+                try {
+                    if (!std::filesystem::remove(file)) {
+                        logger->debug("Temporary file \"{}\" doesn't exist.", file);
+                    }
+                } catch (const std::filesystem::filesystem_error & ex) {
+                    logger->debug(
+                        "An error occurred when trying to remove a temporary file \"{}\": {}", file, ex.what());
                 }
-            } catch (const std::filesystem::filesystem_error & ex) {
-                logger->debug("An error occurred when trying to remove a temporary file \"{}\": {}", file, ex.what());
             }
+            temp_files_memory.clear();
         }
-        temp_files_memory.clear();
 
         return TransactionRunResult::SUCCESS;
     } else {
