@@ -24,7 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
-#include <algorithm>
+#include <utility>
+
 
 namespace libdnf5 {
 
@@ -47,12 +48,15 @@ static void read(ConfigParser & cfg_parser, IniParser & parser) {
     }
 }
 
+
 ConfigParserSectionNotFoundError::ConfigParserSectionNotFoundError(const std::string & section)
     : ConfigParserError(M_("Section \"{}\" not found"), section) {}
+
 
 ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
     const std::string & section, const std::string & option)
     : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
+
 
 void ConfigParser::read(const std::string & file_path) try {
     IniParser parser(file_path);
@@ -67,6 +71,52 @@ void ConfigParser::read(const std::string & file_path) try {
     std::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
 }
 
+
+bool ConfigParser::add_section(const std::string & section, const std::string & raw_line) {
+    if (data.find(section) != data.end()) {
+        return false;
+    }
+    if (!raw_line.empty()) {
+        raw_items[section] = raw_line;
+    }
+    data[section] = {};
+    return true;
+}
+
+
+bool ConfigParser::add_section(const std::string & section) {
+    return add_section(section, "");
+}
+
+
+bool ConfigParser::add_section(std::string && section, std::string && raw_line) {
+    if (data.find(section) != data.end()) {
+        return false;
+    }
+    if (!raw_line.empty()) {
+        raw_items[section] = std::move(raw_line);
+    }
+    data[std::move(section)] = {};
+    return true;
+}
+
+
+bool ConfigParser::add_section(std::string && section) {
+    return add_section(std::move(section), "");
+}
+
+
+bool ConfigParser::has_section(const std::string & section) const noexcept {
+    return data.find(section) != data.end();
+}
+
+
+bool ConfigParser::has_option(const std::string & section, const std::string & key) const noexcept {
+    auto section_iter = data.find(section);
+    return section_iter != data.end() && section_iter->second.find(key) != section_iter->second.end();
+}
+
+
 static std::string create_raw_item(const std::string & value, const std::string & old_raw_item) {
     auto eql_pos = old_raw_item.find('=');
     if (eql_pos == std::string::npos) {
@@ -77,17 +127,90 @@ static std::string create_raw_item(const std::string & value, const std::string 
     return old_raw_item.substr(0, key_and_delim_length) + value + '\n';
 }
 
+
+void ConfigParser::set_value(
+    const std::string & section, const std::string & key, const std::string & value, const std::string & raw_item) {
+    auto section_iter = data.find(section);
+    if (section_iter == data.end()) {
+        throw ConfigParserSectionNotFoundError(section);
+    }
+    if (raw_item.empty()) {
+        raw_items.erase(section + ']' + key);
+    } else {
+        raw_items[section + ']' + key] = raw_item;
+    }
+    section_iter->second[key] = value;
+}
+
+
 void ConfigParser::set_value(const std::string & section, const std::string & key, const std::string & value) {
     auto raw_iter = raw_items.find(section + ']' + key);
     auto raw = create_raw_item(value, raw_iter != raw_items.end() ? raw_iter->second : "");
     set_value(section, key, value, raw);
 }
 
+
+void ConfigParser::set_value(
+    const std::string & section, std::string && key, std::string && value, std::string && raw_item) {
+    auto section_iter = data.find(section);
+    if (section_iter == data.end()) {
+        throw ConfigParserSectionNotFoundError(section);
+    }
+    if (raw_item.empty()) {
+        raw_items.erase(section + ']' + key);
+    } else {
+        raw_items[section + ']' + key] = std::move(raw_item);
+    }
+    section_iter->second[std::move(key)] = std::move(value);
+}
+
+
 void ConfigParser::set_value(const std::string & section, std::string && key, std::string && value) {
     auto raw_iter = raw_items.find(section + ']' + key);
     auto raw = create_raw_item(value, raw_iter != raw_items.end() ? raw_iter->second : "");
     set_value(section, std::move(key), std::move(value), std::move(raw));
 }
+
+
+bool ConfigParser::remove_section(const std::string & section) {
+    auto removed = data.erase(section) > 0;
+    if (removed) {
+        raw_items.erase(section);
+    }
+    return removed;
+}
+
+
+bool ConfigParser::remove_option(const std::string & section, const std::string & key) {
+    auto section_iter = data.find(section);
+    if (section_iter == data.end()) {
+        return false;
+    }
+    auto removed = section_iter->second.erase(key) > 0;
+    if (removed) {
+        raw_items.erase(section + ']' + key);
+    }
+    return removed;
+}
+
+
+void ConfigParser::add_comment_line(const std::string & section, const std::string & comment) {
+    auto section_iter = data.find(section);
+    if (section_iter == data.end()) {
+        throw ConfigParserSectionNotFoundError(section);
+    }
+    section_iter->second["#" + std::to_string(++item_number)] = comment;
+}
+
+
+void ConfigParser::add_comment_line(const std::string & section, std::string && comment) {
+    auto section_iter = data.find(section);
+    if (section_iter == data.end()) {
+        throw ConfigParserSectionNotFoundError(section);
+    }
+    section_iter->second["#" + std::to_string(++item_number)] = std::move(comment);
+}
+
 
 const std::string & ConfigParser::get_value(const std::string & section, const std::string & key) const {
     auto sect = data.find(section);
@@ -100,6 +223,27 @@ const std::string & ConfigParser::get_value(const std::string & section, const s
     }
     return key_val->second;
 }
+
+
+const std::string & ConfigParser::get_header() const noexcept {
+    return header;
+}
+
+
+std::string & ConfigParser::get_header() noexcept {
+    return header;
+}
+
+
+const ConfigParser::Container & ConfigParser::get_data() const noexcept {
+    return data;
+}
+
+
+ConfigParser::Container & ConfigParser::get_data() noexcept {
+    return data;
+}
+
 
 static void write_key_vals(
     utils::fs::File & file,
@@ -136,6 +280,7 @@ static void write_key_vals(
     }
 }
 
+
 static void write_section(
     utils::fs::File & file,
     const std::string & section,
@@ -157,6 +302,7 @@ static void write_section(
     write_key_vals(file, section, key_val_map, raw_items, prepend_new_line);
 }
 
+
 void ConfigParser::write(const std::string & file_path, bool append) const {
     utils::fs::File file(file_path, append ? "a" : "w");
 
@@ -177,6 +323,7 @@ void ConfigParser::write(const std::string & file_path, bool append) const {
         file.putc('\n');
     }
 }
+
 
 void ConfigParser::write(const std::string & file_path, bool append, const std::string & section) const {
     auto sit = data.find(section);
