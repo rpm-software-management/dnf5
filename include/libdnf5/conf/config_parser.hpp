@@ -23,13 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/preserve_order_map.hpp"
 
-#include <istream>
 #include <map>
-#include <memory>
-#include <ostream>
-#include <stdexcept>
 #include <string>
-#include <utility>
 
 
 namespace libdnf5 {
@@ -91,7 +86,6 @@ struct ConfigParser {
 public:
     using Container = PreserveOrderMap<std::string, PreserveOrderMap<std::string, std::string>>;
 
-
     /**
     * @brief Reads/parse one INI file
     *
@@ -143,125 +137,6 @@ private:
     std::string header;
     std::map<std::string, std::string> raw_items;
 };
-
-inline bool ConfigParser::add_section(const std::string & section, const std::string & raw_line) {
-    if (data.find(section) != data.end()) {
-        return false;
-    }
-    if (!raw_line.empty()) {
-        raw_items[section] = raw_line;
-    }
-    data[section] = {};
-    return true;
-}
-
-inline bool ConfigParser::add_section(const std::string & section) {
-    return add_section(section, "");
-}
-
-inline bool ConfigParser::add_section(std::string && section, std::string && raw_line) {
-    if (data.find(section) != data.end()) {
-        return false;
-    }
-    if (!raw_line.empty()) {
-        raw_items[section] = std::move(raw_line);
-    }
-    data[std::move(section)] = {};
-    return true;
-}
-
-inline bool ConfigParser::add_section(std::string && section) {
-    return add_section(std::move(section), "");
-}
-
-inline bool ConfigParser::has_section(const std::string & section) const noexcept {
-    return data.find(section) != data.end();
-}
-
-inline bool ConfigParser::has_option(const std::string & section, const std::string & key) const noexcept {
-    auto section_iter = data.find(section);
-    return section_iter != data.end() && section_iter->second.find(key) != section_iter->second.end();
-}
-
-inline void ConfigParser::set_value(
-    const std::string & section, const std::string & key, const std::string & value, const std::string & raw_item) {
-    auto section_iter = data.find(section);
-    if (section_iter == data.end()) {
-        throw ConfigParserSectionNotFoundError(section);
-    }
-    if (raw_item.empty()) {
-        raw_items.erase(section + ']' + key);
-    } else {
-        raw_items[section + ']' + key] = raw_item;
-    }
-    section_iter->second[key] = value;
-}
-
-inline void ConfigParser::set_value(
-    const std::string & section, std::string && key, std::string && value, std::string && raw_item) {
-    auto section_iter = data.find(section);
-    if (section_iter == data.end()) {
-        throw ConfigParserSectionNotFoundError(section);
-    }
-    if (raw_item.empty()) {
-        raw_items.erase(section + ']' + key);
-    } else {
-        raw_items[section + ']' + key] = std::move(raw_item);
-    }
-    section_iter->second[std::move(key)] = std::move(value);
-}
-
-inline bool ConfigParser::remove_section(const std::string & section) {
-    auto removed = data.erase(section) > 0;
-    if (removed) {
-        raw_items.erase(section);
-    }
-    return removed;
-}
-
-inline bool ConfigParser::remove_option(const std::string & section, const std::string & key) {
-    auto section_iter = data.find(section);
-    if (section_iter == data.end()) {
-        return false;
-    }
-    auto removed = section_iter->second.erase(key) > 0;
-    if (removed) {
-        raw_items.erase(section + ']' + key);
-    }
-    return removed;
-}
-
-inline void ConfigParser::add_comment_line(const std::string & section, const std::string & comment) {
-    auto section_iter = data.find(section);
-    if (section_iter == data.end()) {
-        throw ConfigParserSectionNotFoundError(section);
-    }
-    section_iter->second["#" + std::to_string(++item_number)] = comment;
-}
-
-inline void ConfigParser::add_comment_line(const std::string & section, std::string && comment) {
-    auto section_iter = data.find(section);
-    if (section_iter == data.end()) {
-        throw ConfigParserSectionNotFoundError(section);
-    }
-    section_iter->second["#" + std::to_string(++item_number)] = std::move(comment);
-}
-
-inline const std::string & ConfigParser::get_header() const noexcept {
-    return header;
-}
-
-inline std::string & ConfigParser::get_header() noexcept {
-    return header;
-}
-
-inline const ConfigParser::Container & ConfigParser::get_data() const noexcept {
-    return data;
-}
-
-inline ConfigParser::Container & ConfigParser::get_data() noexcept {
-    return data;
-}
 
 }  // namespace libdnf5
 
