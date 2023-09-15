@@ -2829,13 +2829,24 @@ void PackageQuery::filter_installonly() {
 }
 
 static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
+    // See https://access.redhat.com/solutions/27943. These packages should all
+    // also have a reboot_suggested advisory, but it's good to handle them
+    // explicitly, just to be sure.
     "kernel",
-    "kernel-rt",
     "kernel-core",
-    "glibc",
+    "kernel-PAE",
+    "kernel-rt",
+    "kernel-smp",
+    "kernel-xen",
     "linux-firmware",
-    "systemd",
     "dbus",
+    "glibc",
+    "hal",
+    "systemd",
+    "udev",
+    "gnutls",
+    "openssl-libs",
+
     "dbus-broker",
     "dbus-daemon",
 };
