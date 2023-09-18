@@ -171,6 +171,11 @@ void ConfigParser::write(const std::string & file_path, bool append) const {
     for (const auto & section : data) {
         write_section(file, section.first, section.second, raw_items, prepend_new_line);
     }
+
+    // Make sure file ends with newline character '\n'.
+    if (prepend_new_line) {
+        file.putc('\n');
+    }
 }
 
 void ConfigParser::write(const std::string & file_path, bool append, const std::string & section) const {
@@ -183,6 +188,11 @@ void ConfigParser::write(const std::string & file_path, bool append, const std::
 
     bool prepend_new_line = append;
     write_section(file, sit->first, sit->second, raw_items, prepend_new_line);
+
+    // Make sure file ends with newline character '\n'.
+    if (prepend_new_line) {
+        file.putc('\n');
+    }
 }
 
 }  // namespace libdnf5
