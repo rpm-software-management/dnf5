@@ -116,7 +116,7 @@ inline std::string format_epoch(T epoch_num) {
         const auto epoch = static_cast<time_t>(epoch_num);
         return fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(epoch));
     }
-    return "unrepresentable";
+    return fmt::format("{} seconds since Unix epoch", epoch_num);
 }
 
 }  // namespace libdnf5::utils::string
