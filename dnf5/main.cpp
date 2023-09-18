@@ -714,180 +714,188 @@ int main(int argc, char * argv[]) try {
 
     auto & log_router = *base.get_logger();
 
-    //TODO(jrohel) Logger verbosity is hardcoded to DEBUG. Use configuration.
-    libdnf5::GlobalLogger global_logger;
-    global_logger.set(log_router, libdnf5::Logger::Level::DEBUG);
-
-    context.set_prg_arguments(static_cast<size_t>(argc), argv);
-
-    dnf5::add_commands(context);
-    dnf5::load_plugins(context);
-    dnf5::load_cmdline_aliases(context);
-
-    // Argument completion handler
-    // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument
-    // at position <index>.
-    // The first two arguments are not subject to completion (skip them). The original arguments of the program
-    // (including the program name) start from position 2.
-    if (argc >= 2 && strncmp(argv[1], "--complete=", 11) == 0) {
-        context.get_argument_parser().complete(argc - 2, argv + 2, std::stoi(argv[1] + 11));
-        return 0;
-    }
-
-    auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
-    auto * download_callbacks = download_callbacks_uptr.get();
-    download_callbacks->set_show_total_bar_limit(static_cast<std::size_t>(-1));
-    if (!context.get_quiet()) {
-        base.set_download_callbacks(std::move(download_callbacks_uptr));
-    }
-
-    // Parse command line arguments
-    {
-        auto & arg_parser = context.get_argument_parser();
-        try {
-            arg_parser.parse(argc, argv);
-        } catch (libdnf5::cli::ArgumentParserError & ex) {
-            // Error during parsing arguments. Try to find "--help"/"-h".
-            for (int idx = 1; idx < argc; ++idx) {
-                if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
-                    arg_parser.get_selected_command()->help();
-                    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
-                }
-            }
-            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
-            if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
-                if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
-                    std::cout << fmt::format(
-                                     "It could be a command provided by a plugin, try: dnf install dnf5-command({})",
-                                     unknown_arg_ex->get_argument())
-                              << std::endl;
-                }
-            }
-            return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
-        }
-
-        // print help of the selected command if --help was used
-        if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
-            arg_parser.get_selected_command()->help();
-            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
-        }
-        // print version of program if --version was used
-        if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
-            dnf5::print_versions(context);
-            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
-        }
-    }
-
-    auto command = context.get_selected_command();
-
-    // Gets set to true when any repository is created from configuration or a
-    // .repo file
-    bool any_repos_from_system_configuration = false;
-
     try {
-        command->pre_configure();
+        //TODO(jrohel) Logger verbosity is hardcoded to DEBUG. Use configuration.
+        libdnf5::GlobalLogger global_logger;
+        global_logger.set(log_router, libdnf5::Logger::Level::DEBUG);
 
-        // Load main configuration
-        base.load_config();
+        context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
-        // Try to open the current directory to see if we have
-        // read and execute access. If not, chdir to /
-        auto fd = open(".", O_RDONLY);
-        if (fd == -1) {
-            log_router.warning("No read/execute access in current directory, moving to /");
-            std::filesystem::current_path("/");
-        } else {
-            close(fd);
+        dnf5::add_commands(context);
+        dnf5::load_plugins(context);
+        dnf5::load_cmdline_aliases(context);
+
+        // Argument completion handler
+        // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument
+        // at position <index>.
+        // The first two arguments are not subject to completion (skip them). The original arguments of the program
+        // (including the program name) start from position 2.
+        if (argc >= 2 && strncmp(argv[1], "--complete=", 11) == 0) {
+            context.get_argument_parser().complete(argc - 2, argv + 2, std::stoi(argv[1] + 11));
+            return 0;
         }
 
-        base.setup();
-
-        auto file_logger = libdnf5::create_file_logger(base, DNF5_LOGGER_FILENAME);
-        // Swap to destination stream logger (log to file)
-        log_router.swap_logger(file_logger, 0);
-        // Write messages from memory buffer logger to stream logger
-        dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
-
-        auto repo_sack = base.get_repo_sack();
-        repo_sack->create_repos_from_system_configuration();
-        any_repos_from_system_configuration = repo_sack->size() > 0;
-
-        repo_sack->create_repos_from_paths(context.repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
-        for (const auto & [id, path] : context.repos_from_path) {
-            context.setopts.emplace_back(id + ".enabled", "1");
+        auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
+        auto * download_callbacks = download_callbacks_uptr.get();
+        download_callbacks->set_show_total_bar_limit(static_cast<std::size_t>(-1));
+        if (!context.get_quiet()) {
+            base.set_download_callbacks(std::move(download_callbacks_uptr));
         }
 
-        context.apply_repository_setopts();
-
-        // Run selected command
-        command->configure();
+        // Parse command line arguments
         {
-            if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
-                context.load_repos(context.get_load_system_repo());
-            } else if (context.get_load_system_repo()) {
-                repo_sack->get_system_repo()->load();
-                // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-                context.base.get_rpm_package_sack()->load_config_excludes_includes();
-            }
-        }
-
-        command->load_additional_packages();
-
-        command->run();
-        if (auto goal = context.get_goal(false)) {
-            context.set_transaction(goal->resolve());
-
-            command->goal_resolved();
-
-            download_callbacks->reset_progress_bar();
-            download_callbacks->set_number_widget_visible(true);
-            download_callbacks->set_show_total_bar_limit(0);
-
-            if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
-                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
-            }
-
-            dnf5::print_transaction_size_stats(context);
-
-            if (base.get_config().get_downloadonly_option().get_value()) {
-                std::cout << "The operation will only download packages for the transaction." << std::endl;
-            } else {
-                for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
-                    if (tsflag == "test") {
-                        std::cout << "Test mode enabled: Only package downloads, pgp key installations and transaction "
-                                     "checks "
-                                     "will be performed."
-                                  << std::endl;
+            auto & arg_parser = context.get_argument_parser();
+            try {
+                arg_parser.parse(argc, argv);
+            } catch (libdnf5::cli::ArgumentParserError & ex) {
+                // Error during parsing arguments. Try to find "--help"/"-h".
+                for (int idx = 1; idx < argc; ++idx) {
+                    if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
+                        arg_parser.get_selected_command()->help();
+                        return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
                     }
                 }
+                std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+                if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
+                    if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
+                        std::cout
+                            << fmt::format(
+                                   "It could be a command provided by a plugin, try: dnf install dnf5-command({})",
+                                   unknown_arg_ex->get_argument())
+                            << std::endl;
+                    }
+                }
+                return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
             }
 
-            if (!libdnf5::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
-                throw libdnf5::cli::AbortedByUserError();
+            // print help of the selected command if --help was used
+            if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
+                arg_parser.get_selected_command()->help();
+                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+            }
+            // print version of program if --version was used
+            if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
+                dnf5::print_versions(context);
+                return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+            }
+        }
+
+        auto command = context.get_selected_command();
+
+        // Gets set to true when any repository is created from configuration or a
+        // .repo file
+        bool any_repos_from_system_configuration = false;
+
+        try {
+            command->pre_configure();
+
+            // Load main configuration
+            base.load_config();
+
+            // Try to open the current directory to see if we have
+            // read and execute access. If not, chdir to /
+            auto fd = open(".", O_RDONLY);
+            if (fd == -1) {
+                log_router.warning("No read/execute access in current directory, moving to /");
+                std::filesystem::current_path("/");
+            } else {
+                close(fd);
             }
 
-            context.download_and_run(*context.get_transaction());
+            base.setup();
+
+            auto file_logger = libdnf5::create_file_logger(base, DNF5_LOGGER_FILENAME);
+            // Swap to destination stream logger (log to file)
+            log_router.swap_logger(file_logger, 0);
+            // Write messages from memory buffer logger to stream logger
+            dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
+
+            auto repo_sack = base.get_repo_sack();
+            repo_sack->create_repos_from_system_configuration();
+            any_repos_from_system_configuration = repo_sack->size() > 0;
+
+            repo_sack->create_repos_from_paths(context.repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
+            for (const auto & [id, path] : context.repos_from_path) {
+                context.setopts.emplace_back(id + ".enabled", "1");
+            }
+
+            context.apply_repository_setopts();
+
+            // Run selected command
+            command->configure();
+            {
+                if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
+                    context.load_repos(context.get_load_system_repo());
+                } else if (context.get_load_system_repo()) {
+                    repo_sack->get_system_repo()->load();
+                    // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
+                    context.base.get_rpm_package_sack()->load_config_excludes_includes();
+                }
+            }
+
+            command->load_additional_packages();
+
+            command->run();
+            if (auto goal = context.get_goal(false)) {
+                context.set_transaction(goal->resolve());
+
+                command->goal_resolved();
+
+                download_callbacks->reset_progress_bar();
+                download_callbacks->set_number_widget_visible(true);
+                download_callbacks->set_show_total_bar_limit(0);
+
+                if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
+                    return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+                }
+
+                dnf5::print_transaction_size_stats(context);
+
+                if (base.get_config().get_downloadonly_option().get_value()) {
+                    std::cout << "The operation will only download packages for the transaction." << std::endl;
+                } else {
+                    for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
+                        if (tsflag == "test") {
+                            std::cout
+                                << "Test mode enabled: Only package downloads, pgp key installations and transaction "
+                                   "checks "
+                                   "will be performed."
+                                << std::endl;
+                        }
+                    }
+                }
+
+                if (!libdnf5::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
+                    throw libdnf5::cli::AbortedByUserError();
+                }
+
+                context.download_and_run(*context.get_transaction());
+            }
+        } catch (libdnf5::cli::GoalResolveError & ex) {
+            if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
+                !base.get_config().get_use_host_config_option().get_value()) {
+                std::cout
+                    << "No repositories were loaded from the installroot. To use the configuration and repositories "
+                       "of the host system, pass --use-host-config."
+                    << std::endl;
+            }
+            std::cerr << ex.what() << std::endl;
+            return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
+        } catch (libdnf5::cli::ArgumentParserError & ex) {
+            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+            return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+        } catch (libdnf5::cli::CommandExitError & ex) {
+            std::cerr << ex.what() << std::endl;
+            return ex.get_exit_code();
+        } catch (libdnf5::cli::SilentCommandExitError & ex) {
+            return ex.get_exit_code();
+        } catch (std::runtime_error & ex) {
+            std::cerr << libdnf5::format(ex, libdnf5::FormatDetailLevel::Plain);
+            log_router.error("Command returned error: {}", ex.what());
+            return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         }
-    } catch (libdnf5::cli::GoalResolveError & ex) {
-        if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
-            !base.get_config().get_use_host_config_option().get_value()) {
-            std::cout << "No repositories were loaded from the installroot. To use the configuration and repositories "
-                         "of the host system, pass --use-host-config."
-                      << std::endl;
-        }
-        std::cerr << ex.what() << std::endl;
-        return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
-    } catch (libdnf5::cli::ArgumentParserError & ex) {
-        std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
-        return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (libdnf5::cli::CommandExitError & ex) {
-        std::cerr << ex.what() << std::endl;
-        return ex.get_exit_code();
-    } catch (libdnf5::cli::SilentCommandExitError & ex) {
-        return ex.get_exit_code();
     } catch (std::runtime_error & ex) {
-        std::cerr << libdnf5::format(ex, libdnf5::FormatDetailLevel::Plain);
-        log_router.error("Command returned error: {}", ex.what());
+        std::cerr << libdnf5::format(ex, libdnf5::FormatDetailLevel::WithName);
         return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
