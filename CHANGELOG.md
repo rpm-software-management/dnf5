@@ -1,3 +1,11 @@
+# 5.1.4
+
+- Fix Builds on i386
+- Print error if unsupported architecture used
+- argument_parser: New error class for invalid value
+- Allow obsoletion of protected packages
+- Add support for repository configuration in /usr
+
 # 5.1.3
 
 - Improved tests for IniParser
