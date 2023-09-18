@@ -105,15 +105,21 @@ static void write_key_vals(
     utils::fs::File & file,
     const std::string & section,
     const ConfigParser::Container::mapped_type & key_val_map,
-    const std::map<std::string, std::string> & raw_items) {
+    const std::map<std::string, std::string> & raw_items,
+    bool & prepend_new_line) {
     for (const auto & key_val : key_val_map) {
+        if (prepend_new_line) {
+            file.putc('\n');
+        }
         auto first = key_val.first[0];
         if (first == '#' || first == ';') {
             file.write(key_val.second);
+            prepend_new_line = key_val.second.empty() || key_val.second.back() != '\n';
         } else {
             auto raw_item = raw_items.find(section + ']' + key_val.first);
             if (raw_item != raw_items.end()) {
                 file.write(raw_item->second);
+                prepend_new_line = raw_item->second.empty() || raw_item->second.back() != '\n';
             } else {
                 file.write(key_val.first);
                 file.putc('=');
@@ -124,6 +130,7 @@ static void write_key_vals(
                     }
                 }
                 file.putc('\n');
+                prepend_new_line = false;
             }
         }
     }
@@ -133,22 +140,36 @@ static void write_section(
     utils::fs::File & file,
     const std::string & section,
     const ConfigParser::Container::mapped_type & key_val_map,
-    const std::map<std::string, std::string> & raw_items) {
+    const std::map<std::string, std::string> & raw_items,
+    bool & prepend_new_line) {
+    if (prepend_new_line) {
+        file.putc('\n');
+    }
+
     auto raw_item = raw_items.find(section);
     if (raw_item != raw_items.end()) {
         file.write(raw_item->second);
+        prepend_new_line = raw_item->second.empty() || raw_item->second.back() != '\n';
     } else {
         file.write(fmt::format("[{}]\n", section));
+        prepend_new_line = false;
     }
-    write_key_vals(file, section, key_val_map, raw_items);
+    write_key_vals(file, section, key_val_map, raw_items, prepend_new_line);
 }
 
 void ConfigParser::write(const std::string & file_path, bool append) const {
     utils::fs::File file(file_path, append ? "a" : "w");
 
-    file.write(header);
+    bool prepend_new_line = append;
+    if (!header.empty()) {
+        if (prepend_new_line) {
+            file.putc('\n');
+        }
+        file.write(header);
+        prepend_new_line = header.back() != '\n';
+    }
     for (const auto & section : data) {
-        write_section(file, section.first, section.second, raw_items);
+        write_section(file, section.first, section.second, raw_items, prepend_new_line);
     }
 }
 
@@ -159,7 +180,9 @@ void ConfigParser::write(const std::string & file_path, bool append, const std::
     }
 
     utils::fs::File file(file_path, append ? "a" : "w");
-    write_section(file, sit->first, sit->second, raw_items);
+
+    bool prepend_new_line = append;
+    write_section(file, sit->first, sit->second, raw_items, prepend_new_line);
 }
 
 }  // namespace libdnf5
