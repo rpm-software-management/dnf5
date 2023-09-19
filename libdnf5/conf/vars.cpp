@@ -19,12 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/vars.hpp"
 
-#include "rpm/arch_private.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/fs/file.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/rpm/arch.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <dirent.h>
@@ -389,8 +389,8 @@ void Vars::detect_vars(const std::string & installroot) {
     set_lazy(
         "basearch",
         [this]() -> auto {
-            auto base_arch = libdnf5::rpm::get_base_arch(variables["arch"].value.c_str());
-            return base_arch ? std::make_unique<std::string>(base_arch) : nullptr;
+            auto base_arch = libdnf5::rpm::get_base_arch(variables["arch"].value);
+            return base_arch.empty() ? nullptr : std::make_unique<std::string>(std::move(base_arch));
         },
         Priority::AUTO);
 

@@ -67,8 +67,6 @@ static const struct {
     {"loongarch64", {"loongarch64", nullptr}},
     {nullptr, {nullptr}}};
 
-const char * get_base_arch(const char * arch);
-
 }  // namespace libdnf5::rpm
 
 #endif  // LIBDNF5_RPM_ARCH_PRIVATE_HPP

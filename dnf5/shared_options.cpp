@@ -83,8 +83,7 @@ void create_forcearch_option(dnf5::Command & command) {
                 available_arches.append("\"" + *it + "\"");
                 ++it;
                 for (; it != supported_arches.end(); ++it) {
-                    available_arches.append(", ");
-                    available_arches.append("\"" + *it + "\"");
+                    available_arches.append(", \"" + *it + "\"");
                 }
             }
             throw libdnf5::cli::ArgumentParserInvalidValueError(
