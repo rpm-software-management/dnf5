@@ -78,6 +78,8 @@ void ModuleTest::test_load() {
                     "waiting for the build system to actually start compiling code."),
         meson.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("ninja;platform:[f29,f30,f31]"), meson.get_module_dependencies_string());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, meson.get_profiles().size());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), meson.get_profiles()[0].get_name());
 
     CPPUNIT_ASSERT_EQUAL(std::string(""), module_sack->get_default_stream("meson"));
     CPPUNIT_ASSERT_EQUAL(std::string("main"), module_sack->get_default_stream("berries"));
