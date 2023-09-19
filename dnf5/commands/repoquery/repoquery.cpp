@@ -32,8 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/patterns.hpp>
 
-#include <iostream>
-
 namespace dnf5 {
 
 using namespace libdnf5::cli;
