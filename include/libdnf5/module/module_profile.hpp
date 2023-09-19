@@ -61,8 +61,6 @@ public:
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:ctor:ModuleProfile.ModuleProfile()
     ModuleProfile(const ModuleProfile & src);
     ModuleProfile & operator=(const ModuleProfile & src);
-    ModuleProfile(ModuleProfile && src) = default;
-    ModuleProfile & operator=(ModuleProfile && src) = default;
     ~ModuleProfile();
 
 private:
