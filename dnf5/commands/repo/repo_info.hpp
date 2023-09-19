@@ -31,12 +31,10 @@ class RepoInfoCommand : public RepoListCommand {
 public:
     explicit RepoInfoCommand(Context & context) : RepoListCommand(context, "info") {}
 
-    void set_argument_parser() override {
-        RepoListCommand::set_argument_parser();
-        get_argument_parser_command()->set_description("Print details about repositories");
-    }
-
+    void set_argument_parser() override;
     void configure() override;
+
+    std::unique_ptr<RepoAddValuesOption> add_values{nullptr};
 
 protected:
     void print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;

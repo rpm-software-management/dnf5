@@ -57,6 +57,18 @@ public:
 };
 
 
+class RepoAddValuesOption : public libdnf5::cli::session::AppendStringListOption {
+public:
+    explicit RepoAddValuesOption(libdnf5::cli::session::Command & command)
+        : AppendStringListOption(
+              command,
+              "add-values",
+              '\0',
+              _("Add specified repo values to the output. List option."),
+              _("VALUE_NAME,...")) {}
+};
+
+
 }  // namespace dnf5
 
 

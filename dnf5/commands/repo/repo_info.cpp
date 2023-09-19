@@ -59,10 +59,7 @@ public:
     }
     int get_metadata_expire() const { return repo.get_config().get_metadata_expire_option().get_value(); }
     std::vector<std::string> get_excludepkgs() const { return repo.get_config().get_excludepkgs_option().get_value(); }
-    std::vector<std::string> get_includepkgs() const {
-        return repo.get_config().get_includepkgs_option().get_value();
-        ;
-    }
+    std::vector<std::string> get_includepkgs() const { return repo.get_config().get_includepkgs_option().get_value(); }
     bool get_skip_if_unavailable() const { return repo.get_config().get_skip_if_unavailable_option().get_value(); }
     std::vector<std::string> get_gpgkey() const { return repo.get_config().get_gpgkey_option().get_value(); }
     bool get_gpgcheck() const { return repo.get_config().get_gpgcheck_option().get_value(); }
@@ -84,6 +81,14 @@ private:
     uint64_t pkgs;
     uint64_t available_pkgs;
 };
+
+void RepoInfoCommand::set_argument_parser() {
+    RepoListCommand::set_argument_parser();
+
+    add_values = std::make_unique<RepoAddValuesOption>(*this);
+
+    get_argument_parser_command()->set_description("Print details about repositories");
+}
 
 void RepoInfoCommand::configure() {
     auto & context = get_context();
