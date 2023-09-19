@@ -154,7 +154,7 @@ void RepolistCommand::run() {
         for (auto & repo : repositories) {
             auto repo_info = libdnf5::cli::output::RepoInfo();
             auto dbus_repo = DbusRepoWrapper(repo);
-            repo_info.add_repo(dbus_repo);
+            repo_info.add_repo(dbus_repo, {});
             repo_info.print();
             std::cout << std::endl;
         }

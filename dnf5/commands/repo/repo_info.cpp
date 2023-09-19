@@ -117,7 +117,7 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
 
         libdnf5::cli::output::RepoInfo repo_info;
         auto repo_wrapper = RepoInfoWrapper(*repo, repo_size, pkgs.size(), available_pkgs.size());
-        repo_info.add_repo(repo_wrapper);
+        repo_info.add_repo(repo_wrapper, add_values->get_value());
         repo_info.print();
         std::cout << std::endl;
     }

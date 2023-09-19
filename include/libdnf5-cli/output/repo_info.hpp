@@ -34,12 +34,12 @@ namespace libdnf5::cli::output {
 class RepoInfo : public KeyValueTable {
 public:
     template <typename Repo>
-    void add_repo(Repo & repo);
+    void add_repo(Repo & repo, const std::vector<std::string> & add_values);
 };
 
 
 template <typename Repo>
-void RepoInfo::add_repo(Repo & repo) {
+void RepoInfo::add_repo(Repo & repo, const std::vector<std::string> & add_values) {
     auto enabled = repo.is_enabled();
 
     add_line("Repo ID", repo.get_id(), "bold");
@@ -47,9 +47,15 @@ void RepoInfo::add_repo(Repo & repo) {
 
     add_line("Status", enabled ? "enabled" : "disabled", enabled ? "green" : "red");
 
-    add_line("Priority", repo.get_priority());
-    add_line("Cost", repo.get_cost());
-    add_line("Type", repo.get_type());
+    if (std::find(add_values.begin(), add_values.end(), "priority") != add_values.end()) {
+        add_line("Priority", repo.get_priority());
+    }
+    if (std::find(add_values.begin(), add_values.end(), "cost") != add_values.end()) {
+        add_line("Cost", repo.get_cost());
+    }
+    if (std::find(add_values.begin(), add_values.end(), "type") != add_values.end()) {
+        add_line("Type", repo.get_type());
+    }
 
     auto exclude_packages = repo.get_excludepkgs();
     if (!exclude_packages.empty()) {
@@ -77,7 +83,10 @@ void RepoInfo::add_repo(Repo & repo) {
         expire_value = fmt::format("{} seconds", metadata_expire);
     }
     add_line("Metadata expire", fmt::format("{} (last: {})", expire_value, last_update));
-    add_line("Skip if unavailable", fmt::format("{}", repo.get_skip_if_unavailable()));
+
+    if (std::find(add_values.begin(), add_values.end(), "skip_if_unavailable") != add_values.end()) {
+        add_line("Skip if unavailable", fmt::format("{}", repo.get_skip_if_unavailable()));
+    }
 
     auto repo_file_path = repo.get_repo_file_path();
     if (!repo_file_path.empty()) {
@@ -106,15 +115,23 @@ void RepoInfo::add_repo(Repo & repo) {
     }
 
     // PGP
-    auto group_gpg = add_line("PGP", "", nullptr);
+    if (std::any_of(add_values.begin(), add_values.end(), [](const std::string & value) {
+            return value.find("gpg") != std::string::npos;
+        })) {
+        auto group_gpg = add_line("PGP", "", nullptr);
 
-    auto gpg_keys = repo.get_gpgkey();
-    if (!gpg_keys.empty()) {
-        add_line("Keys", gpg_keys, nullptr, group_gpg);
+        auto gpg_keys = repo.get_gpgkey();
+        if (std::find(add_values.begin(), add_values.end(), "gpgkey") != add_values.end() && !gpg_keys.empty()) {
+            add_line("Keys", gpg_keys, nullptr, group_gpg);
+        }
+
+        if (std::find(add_values.begin(), add_values.end(), "repo_gpgcheck") != add_values.end()) {
+            add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
+        }
+        if (std::find(add_values.begin(), add_values.end(), "gpgcheck") != add_values.end()) {
+            add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
+        }
     }
-
-    add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
-    add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
 
     // TODO(jkolarik): Verbose is not implemented and not used yet
     // if (verbose) {
@@ -173,7 +190,6 @@ void RepoInfo::add_repo(Repo & repo) {
         }
 
         add_line("Revision", repo.get_revision(), nullptr, group_repodata);
-
         add_line("Updated", libdnf5::utils::string::format_epoch(repo.get_max_timestamp()), nullptr, group_repodata);
     }
 
