@@ -57,6 +57,8 @@ public:
         const char * color = nullptr,
         struct libscols_line * parent = nullptr);
 
+    void drop_line_if_no_children(struct libscols_line * line);
+
     template <typename V>
     struct libscols_line * add_line(
         const char * key, V value, const char * color = nullptr, struct libscols_line * parent = nullptr) {

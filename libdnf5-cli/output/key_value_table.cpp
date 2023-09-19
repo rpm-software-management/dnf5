@@ -102,5 +102,11 @@ struct libscols_line * KeyValueTable::add_lines(
     return added_key_line;
 }
 
+void KeyValueTable::drop_line_if_no_children(struct libscols_line * line) {
+    if (scols_line_has_children(line) == 0) {
+        scols_table_remove_line(tb, line);
+    }
+}
+
 
 }  // namespace libdnf5::cli::output
