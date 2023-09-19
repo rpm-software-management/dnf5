@@ -432,7 +432,7 @@ void RepoqueryCommand::configure() {
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
     }
 
-    if ((pkg_attr_option->get_value() == "files") ||
+    if (!file->get_value().empty() || (pkg_attr_option->get_value() == "files") ||
         (libdnf5::cli::output::requires_filelists(query_format_option->get_value()))) {
         context.base.get_config().get_optional_metadata_types_option().add_item(
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
