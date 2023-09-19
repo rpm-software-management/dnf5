@@ -115,23 +115,25 @@ void RepoInfo::add_repo(Repo & repo, const std::vector<std::string> & add_values
     }
 
     // PGP
-    if (std::any_of(add_values.begin(), add_values.end(), [](const std::string & value) {
-            return value.find("gpg") != std::string::npos;
-        })) {
-        auto group_gpg = add_line("PGP", "", nullptr);
+    auto group_gpg = add_line("PGP", "", nullptr);
 
+    if (std::find(add_values.begin(), add_values.end(), "gpgkey") != add_values.end()) {
         auto gpg_keys = repo.get_gpgkey();
-        if (std::find(add_values.begin(), add_values.end(), "gpgkey") != add_values.end() && !gpg_keys.empty()) {
+        if (!gpg_keys.empty()) {
             add_line("Keys", gpg_keys, nullptr, group_gpg);
-        }
-
-        if (std::find(add_values.begin(), add_values.end(), "repo_gpgcheck") != add_values.end()) {
-            add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
-        }
-        if (std::find(add_values.begin(), add_values.end(), "gpgcheck") != add_values.end()) {
-            add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
+        } else {
+            add_line("Keys", "N/A", nullptr, group_gpg);
         }
     }
+
+    if (std::find(add_values.begin(), add_values.end(), "repo_gpgcheck") != add_values.end()) {
+        add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
+    }
+    if (std::find(add_values.begin(), add_values.end(), "gpgcheck") != add_values.end()) {
+        add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
+    }
+
+    drop_line_if_no_children(group_gpg);
 
     // TODO(jkolarik): Verbose is not implemented and not used yet
     // if (verbose) {
