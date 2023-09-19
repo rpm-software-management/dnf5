@@ -88,6 +88,9 @@ public:
     /// Stores pointer to user comment.
     void set_comment(const char * comment) noexcept { this->comment = comment; }
 
+    /// Get command line used to run the dnf5 command
+    std::string get_cmdline();
+
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
     void download_and_run(libdnf5::base::Transaction & transaction);

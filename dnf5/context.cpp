@@ -408,6 +408,17 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 
 }  // namespace
 
+std::string Context::get_cmdline() {
+    std::string cmd_line;
+
+    for (size_t i = 0; i < argc; ++i) {
+        if (i > 0) {
+            cmd_line += " ";
+        }
+        cmd_line += argv[i];
+    }
+    return cmd_line;
+}
 
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     transaction.download();
@@ -417,14 +428,6 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     }
 
     std::cout << std::endl << "Running transaction" << std::endl;
-
-    std::string cmd_line;
-    for (size_t i = 0; i < argc; ++i) {
-        if (i > 0) {
-            cmd_line += " ";
-        }
-        cmd_line += argv[i];
-    }
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
@@ -443,7 +446,7 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
     transaction.set_callbacks(std::move(callbacks));
 
-    transaction.set_description(cmd_line);
+    transaction.set_description(get_cmdline());
 
     if (comment) {
         transaction.set_comment(comment);
