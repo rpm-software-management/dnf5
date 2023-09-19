@@ -300,6 +300,37 @@ void RepoqueryCommand::set_argument_parser() {
     disable_modular_filtering = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "disable-modular-filtering", '\0', "Include packages of inactive module streams.", false);
 
+    // Allowed values for --providers-of options (these package attributes return ReldepLists)
+    std::vector<std::string> pkg_attrs_options{
+        "conflicts",
+        "depends",
+        "enhances",
+        "obsoletes",
+        "provides",
+        "recommends",
+        "requires",
+        "requires_pre",
+        "suggests",
+        "supplements",
+        "",  // empty when option is not used
+    };
+    providers_of_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
+    auto * providers_of = parser.add_new_named_arg("providersof");
+    std::string allowed_values = libdnf5::utils::string::join(pkg_attrs_options, ", ");
+    // Drop the empty option from the description of supported values
+    allowed_values.pop_back();
+    allowed_values.back() = '.';
+    providers_of->set_description(
+        "After filtering is finished get selected attribute of packages and output packages that provide it. "
+        "Supports: " +
+        allowed_values);
+    providers_of->set_has_value(true);
+    providers_of->set_long_name("providers-of");
+    providers_of->link_value(providers_of_option);
+    providers_of->set_arg_value_help("PACKAGE_ATTRIBUTE");
+    cmd.register_named_arg(providers_of);
+
     // FORMATTING OPTIONS:
 
     info_option = dynamic_cast<libdnf5::OptionBool *>(
@@ -342,22 +373,9 @@ void RepoqueryCommand::set_argument_parser() {
     repoquery_formatting->register_argument(changelogs->arg);
     formatting_conflicts->push_back(changelogs->arg);
 
-    std::vector<std::string> pkg_attrs_options{
-        "conflicts",
-        "depends",
-        "enhances",
-        "obsoletes",
-        "provides",
-        "recommends",
-        "requires",
-        "requires_pre",
-        "suggests",
-        "supplements",
-        "files",
-        "sourcerpm",
-        "location",
-        "",  // empty when option is not used
-    };
+    // Add additional supported package attribute getters, all pkg_attrs_options get turned into options
+    pkg_attrs_options.insert(pkg_attrs_options.begin(), {"files", "sourcerpm", "location"});
+
     pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
     // remove the last empty ("") option, it should not be an arg
@@ -417,7 +435,7 @@ void RepoqueryCommand::configure() {
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
         available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
-                extras->get_value() || upgrades->get_value()
+                extras->get_value() || upgrades->get_value() || !providers_of_option->get_value().empty()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
@@ -711,6 +729,18 @@ void RepoqueryCommand::run() {
 
     // APPLY TRANSFORMS - these are not order independent and have to be applied last
     // They take a set of packages and turn it into a different set of packages
+
+    if (!providers_of_option->get_value().empty()) {
+        // Collect reldeps of selected packages
+        auto rels = libdnf5::cli::output::get_reldeplist_for_attr(result_query, providers_of_option->get_value());
+        libdnf5::rpm::PackageQuery providers(ctx.base);
+        if (!arch->get_value().empty()) {
+            providers.filter_arch(arch->get_value(), libdnf5::sack::QueryCmp::GLOB);
+        }
+        providers.filter_provides(rels);
+        providers.filter_latest_evr();
+        result_query = providers;
+    }
 
     if (srpm->get_value()) {
         libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);

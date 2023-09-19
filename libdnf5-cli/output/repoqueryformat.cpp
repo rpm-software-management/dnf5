@@ -321,4 +321,29 @@ void print_pkg_attr_uniq_sorted(
     }
 }
 
+libdnf5::rpm::ReldepList get_reldeplist_for_attr(
+    const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name) {
+    auto getter = NAME_TO_GETTER.find(getter_name);
+    if (getter == NAME_TO_GETTER.end()) {
+        libdnf_throw_assertion("Package attribute getter: \"{}\" not available", getter_name);
+    }
+    rpm::ReldepList output(pkgs.get_base());
+
+    for (auto package : pkgs) {
+        std::visit(
+            [&output, &package, &getter_name](const auto & getter_func) {
+                using T = std::decay_t<decltype(getter_func)>;
+                if constexpr (std::is_same_v<T, ReldepListGetter>) {
+                    auto rlds = (package.*getter_func)();
+                    output.append(rlds);
+                } else {
+                    libdnf_throw_assertion("Cannot get pkg attribute: \"{}\" as ReldepList", getter_name);
+                }
+            },
+            getter->second);
+    }
+
+    return output;
+}
+
 }  // namespace libdnf5::cli::output
