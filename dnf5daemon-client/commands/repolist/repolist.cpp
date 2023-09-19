@@ -76,6 +76,20 @@ void RepolistCommand::set_argument_parser() {
         patterns_options);
     repos->set_description("List of repos to show");
 
+    add_values_option = dynamic_cast<libdnf5::OptionStringList *>(parser.add_init_value(
+        std::unique_ptr<libdnf5::OptionStringList>(new libdnf5::OptionStringList(std::vector<std::string>()))));
+
+    auto add_values = parser.add_new_named_arg("add-values");
+    add_values->set_long_name("add-values");
+    add_values->set_description("add specified repo values to the output");
+    add_values->set_has_value(true);
+    add_values->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            add_values_option->add(libdnf5::Option::Priority::COMMANDLINE, value);
+            return true;
+        });
+
     all->add_conflict_argument(*enabled);
     all->add_conflict_argument(*disabled);
     enabled->add_conflict_argument(*disabled);
@@ -85,6 +99,7 @@ void RepolistCommand::set_argument_parser() {
     cmd.register_named_arg(all);
     cmd.register_named_arg(enabled);
     cmd.register_named_arg(disabled);
+    cmd.register_named_arg(add_values);
     cmd.register_positional_arg(repos);
 }
 
@@ -108,9 +123,6 @@ void RepolistCommand::run() {
     std::vector<std::string> attrs{"id", "name", "enabled"};
     if (command == "repoinfo") {
         std::vector<std::string> repoinfo_attrs{
-            "type",
-            "priority",
-            "cost",
             "baseurl",
             "metalink",
             "mirrorlist",
@@ -118,10 +130,6 @@ void RepolistCommand::run() {
             "cache_updated",
             "excludepkgs",
             "includepkgs",
-            "skip_if_unavailable",
-            "gpgkey",
-            "gpgcheck",
-            "repo_gpgcheck",
             "repofile",
             "revision",
             "content_tags",
@@ -132,6 +140,7 @@ void RepolistCommand::run() {
             "available_pkgs",
             "mirrors"};
         attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
+        attrs.insert(attrs.end(), add_values_option->get_value().begin(), add_values_option->get_value().end());
     }
     options["repo_attrs"] = attrs;
 
@@ -154,7 +163,7 @@ void RepolistCommand::run() {
         for (auto & repo : repositories) {
             auto repo_info = libdnf5::cli::output::RepoInfo();
             auto dbus_repo = DbusRepoWrapper(repo);
-            repo_info.add_repo(dbus_repo, {});
+            repo_info.add_repo(dbus_repo, add_values_option->get_value());
             repo_info.print();
             std::cout << std::endl;
         }
