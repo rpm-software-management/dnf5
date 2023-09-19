@@ -58,6 +58,11 @@ Options
 ``--disabled``
     | Show information only about disabled repositories.
 
+``--add-values=VALUE_NAME,...``
+    | Used with ``info`` command to append additional values to the output.
+    | This is a list option.
+    | Accepted values are: `priority`, `cost`, `type`, `skip_if_unavailable`, `gpgkey`, `gpgcheck`, `repo_gpgcheck`.
+
 ``--forcearch=<arch>``
     | Force the use of a specific architecture.
     | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
@@ -71,3 +76,6 @@ Examples
 
 ``dnf5 repo list --disabled *-debuginfo``
     | Print disabled repositories related to debugging.
+
+``dnf5 repo info my_repo --add-values=priority,cost,gpgkey``
+    | Print detailed info for the 'my_repo' repository, including specified additional values in the output.
