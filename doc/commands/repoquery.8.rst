@@ -116,6 +116,13 @@ Options
 ``--recent``
     | Limit to only recently changed packages.
 
+``--recursive``
+    | This option is stackable with --whatrequires or --providers-of=requires only.
+    | When used with --whatrequires: it extends the output with packages that require anything provided by outputted packages.
+    | When used with --providers-of=requires: it extends the output with packages that provide anything required by outputted packages.
+    | It repeats the output extension as long as new packages are being added.
+    | The added packages are limited by ``--available``, ``--installed`` and ``--arch`` options.
+
 ``--security``
     | Limit to packages in security advisories.
 
