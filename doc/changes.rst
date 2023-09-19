@@ -178,6 +178,9 @@ Repoquery command
  * --queryformat no longer supports ``size`` tag because it was printing install size for installed packages and download
    size for not-installed packages. This could be confusing.
  * Option ``--source`` was renamed to ``--sourcerpm`` and it now matches queryformat's ``sourcerpm`` tag.
+ * Option ``--resolve`` was changed to ``--providers-of=PACKAGE_ATTRIBUTE``. It no longer interacts with the formatting ``--requires``,
+   ``--provides``, ``--suggests``,... options instead it takes the PACKAGE_ATTRIBUTE value directly.
+   E.g., ``dnf rq --resolve --requires glibc`` -> ``dnf rq --providers-of=requires glibc``.
 
 Upgrade command
 ---------------

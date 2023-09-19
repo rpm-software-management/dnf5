@@ -36,6 +36,9 @@ void print_pkg_attr_uniq_sorted(
 
 void print_available_pkg_attrs(std::FILE * target);
 
+libdnf5::rpm::ReldepList get_reldeplist_for_attr(
+    const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name);
+
 }  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP

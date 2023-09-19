@@ -108,6 +108,11 @@ Options
 ``--newpackage``
     | Limit to packages in newpackage advisories.
 
+``--providers-of=PACKAGE_ATTRIBUTE``
+    | After filtering is finished get selected attribute of packages and output packages that provide it.
+    | The outputted packages are limited by ``--available``, ``--installed`` and ``--arch`` options.
+    | Supports: conflicts, depends, enhances, obsoletes, provides, recommends, requires, requires_pre, suggests, supplements.
+
 ``--recent``
     | Limit to only recently changed packages.
 

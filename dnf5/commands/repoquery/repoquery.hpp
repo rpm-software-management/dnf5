@@ -75,11 +75,12 @@ private:
     std::unique_ptr<libdnf5::cli::session::BoolOption> installonly{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> srpm{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> disable_modular_filtering{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> changelogs{nullptr};
 
     libdnf5::OptionBool * querytags_option{nullptr};
     libdnf5::OptionString * query_format_option{nullptr};
     libdnf5::OptionEnum<std::string> * pkg_attr_option{nullptr};
-    std::unique_ptr<libdnf5::cli::session::BoolOption> changelogs{nullptr};
+    libdnf5::OptionEnum<std::string> * providers_of_option{nullptr};
 
     std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
     std::unique_ptr<SecurityOption> advisory_security{nullptr};
