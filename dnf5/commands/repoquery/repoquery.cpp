@@ -36,6 +36,33 @@ namespace dnf5 {
 
 using namespace libdnf5::cli;
 
+namespace {
+
+libdnf5::rpm::PackageQuery repeat_filter(
+    const std::function<void(libdnf5::rpm::PackageQuery &, const libdnf5::rpm::PackageQuery &)> & filter,
+    libdnf5::rpm::PackageQuery & candidates,
+    const std::vector<std::string> & arches) {
+    // Create source query of all considered packages.
+    // To match dnf4 take arch filter into acccount.
+    // (filtering by repo and available/installed is done implicitly by loading only the required metadata)
+    libdnf5::rpm::PackageQuery all_considered(candidates.get_base());
+    if (!arches.empty()) {
+        all_considered.filter_arch(arches, libdnf5::sack::QueryCmp::GLOB);
+    }
+    libdnf5::rpm::PackageQuery done(candidates.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    while (!candidates.empty()) {
+        libdnf5::rpm::PackageQuery added = all_considered;
+        filter(added, candidates);
+        done.update(candidates);
+        added.difference(done);
+        candidates = added;
+    }
+
+    return done;
+}
+
+}  // namespace
+
 void RepoqueryCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
     auto * arg_parser_this_cmd = get_argument_parser_command();
@@ -331,6 +358,13 @@ void RepoqueryCommand::set_argument_parser() {
     providers_of->set_arg_value_help("PACKAGE_ATTRIBUTE");
     cmd.register_named_arg(providers_of);
 
+    recursive = std::make_unique<libdnf5::cli::session::BoolOption>(
+        *this,
+        "recursive",
+        '\0',
+        "Used with --whatrequires or --providers-of=requires options to query the packages recursively.",
+        false);
+
     // FORMATTING OPTIONS:
 
     info_option = dynamic_cast<libdnf5::OptionBool *>(
@@ -410,6 +444,9 @@ void RepoqueryCommand::set_argument_parser() {
     // --upgrades option returns only available packages, conflict with options
     // that return only installed packages
     upgrades->arg->set_conflict_arguments(only_outputs_installed);
+
+    // recursive is not compatible with exactdeps
+    recursive->arg->add_conflict_argument(*exactdeps->arg);
 }
 
 void RepoqueryCommand::configure() {
@@ -475,6 +512,11 @@ void RepoqueryCommand::configure() {
     if (exactdeps->get_value() && (whatrequires->get_value().empty() && whatdepends->get_value().empty())) {
         throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
             M_("Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--whatdepends\""));
+    }
+    if (recursive->get_value() &&
+        (whatrequires->get_value().empty() && providers_of_option->get_value() != "requires")) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--providers-of=requires\""));
     }
 }
 
@@ -730,6 +772,14 @@ void RepoqueryCommand::run() {
     // APPLY TRANSFORMS - these are not order independent and have to be applied last
     // They take a set of packages and turn it into a different set of packages
 
+    if (recursive->get_value() && !whatrequires->get_value().empty()) {
+        auto filter_requirers = [&](libdnf5::rpm::PackageQuery & q_in, const libdnf5::rpm::PackageSet & candidates) {
+            q_in.filter_requires(candidates);
+        };
+
+        result_query = repeat_filter(filter_requirers, result_query, arch->get_value());
+    }
+
     if (!providers_of_option->get_value().empty()) {
         // Collect reldeps of selected packages
         auto rels = libdnf5::cli::output::get_reldeplist_for_attr(result_query, providers_of_option->get_value());
@@ -738,6 +788,22 @@ void RepoqueryCommand::run() {
             providers.filter_arch(arch->get_value(), libdnf5::sack::QueryCmp::GLOB);
         }
         providers.filter_provides(rels);
+
+        // The recursive option is specific to --providers-of=requires
+        if (recursive->get_value() && providers_of_option->get_value() == "requires") {
+            auto filter_providers = [&](libdnf5::rpm::PackageQuery & q_in,
+                                        const libdnf5::rpm::PackageSet & candidates) {
+                libdnf5::rpm::ReldepList rels(candidates.get_base());
+                for (auto pkg : candidates) {
+                    auto rlds = pkg.get_requires();
+                    rels.append(rlds);
+                }
+                q_in.filter_provides(rels);
+            };
+
+            providers = repeat_filter(filter_providers, providers, arch->get_value());
+        }
+
         providers.filter_latest_evr();
         result_query = providers;
     }
