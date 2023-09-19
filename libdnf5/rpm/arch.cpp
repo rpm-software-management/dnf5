@@ -38,15 +38,16 @@ std::vector<std::string> get_supported_arches() {
     return arches;
 }
 
-const char * get_base_arch(const char * arch) {
+std::string get_base_arch(const std::string & arch) {
+    auto arch_c = arch.c_str();
     for (int i = 0; libdnf5::rpm::ARCH_MAP[i].base; ++i) {
         for (int j = 0; libdnf5::rpm::ARCH_MAP[i].native[j]; ++j) {
-            if (std::strcmp(libdnf5::rpm::ARCH_MAP[i].native[j], arch) == 0) {
+            if (std::strcmp(libdnf5::rpm::ARCH_MAP[i].native[j], arch_c) == 0) {
                 return libdnf5::rpm::ARCH_MAP[i].base;
             }
         }
     }
-    return nullptr;
+    return {};
 }
 
 }  // namespace libdnf5::rpm

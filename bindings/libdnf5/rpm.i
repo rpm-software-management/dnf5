@@ -30,6 +30,7 @@
 }
 
 %{
+    #include "libdnf5/rpm/arch.hpp"
     #include "libdnf5/rpm/checksum.hpp"
     #include "libdnf5/rpm/nevra.hpp"
     #include "libdnf5/rpm/package.hpp"
@@ -45,6 +46,8 @@
 %}
 
 #define CV __perl_CV
+
+%include "libdnf5/rpm/arch.hpp"
 
 %include "libdnf5/rpm/checksum.hpp"
 
