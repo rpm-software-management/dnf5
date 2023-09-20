@@ -19,12 +19,14 @@ jobs:
         with:
           repository: rpm-software-management/ci-dnf-stack
 
-      - name: Setup CI
-        id: setup-ci
-        uses: ./.github/actions/setup-ci
-        with:
-          copr-user: ${{secrets.COPR_USER}}
-          copr-api-token: ${{secrets.COPR_API_TOKEN}}
+      - name: Setup Copr
+        id: copr-setup
+        shell: bash
+        env:
+          COPR_API_TOKEN: ${{ secrets.COPR_API_TOKEN }}
+        run: |
+          mkdir -p "$HOME/.config"
+          echo "$COPR_API_TOKEN" > "$HOME/.config/copr"
 
       - name: Check out sources
         uses: actions/checkout@v2
@@ -37,7 +39,7 @@ jobs:
         id: copr-build
         uses: ./.github/actions/copr-build
         with:
-          copr-user: ${{steps.setup-ci.outputs.copr-user}}
+          copr-user: ${{vars.COPR_USER}}
           overlay: dnf5-ci
 
   integration-tests:
