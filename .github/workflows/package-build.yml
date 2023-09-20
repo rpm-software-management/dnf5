@@ -10,7 +10,7 @@ jobs:
     name: CCache Build
     runs-on: ubuntu-latest
     container:
-      image: fedora:rawhide
+      image: ghcr.io/rpm-software-management/dnf-ci-host
     strategy:
       fail-fast: false  # don't fail all matrix jobs if one of them fails
       matrix:
@@ -20,11 +20,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      # this step needs to be incorporated in our container that we use for testing
-      - name: Install dependencies
-        run: |
-          dnf install -y ccache clang && dnf builddep -y ./dnf5.spec
 
       - name: Configure CC CXX env variables
         id: configure_compiler
