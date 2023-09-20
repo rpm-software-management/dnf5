@@ -57,12 +57,9 @@ If you need any help when contributing to the project, reach out to us either of
 Once you have a contribution ready, complete the following steps to submit the contribution:
 
 1. Submit a pull request (PR).
-   1. Set the necessary [labels](https://github.com/rpm-software-management/dnf5/labels).
-      * If you need help while working on the PR, set the
-        [_work in progress_](https://github.com/rpm-software-management/dnf5/labels/work%20in%20progress) label
-        and wait for the PR to be triaged. Triaging usually happens on Mondays or Thursdays.
-      * If you are ready for a code review by one of the maintainers, set the
-        [_ready for review_](https://github.com/rpm-software-management/dnf5/labels/ready%20for%20review) label.
+    * If the PR is not yet ready to be reviewed by the maintainers, create a
+      "Draft Pull Request". Then, when it's ready, mark it as "Ready for
+      review".
 2. Review the PR.
    1. Discuss the PR with one of the maintainers. Note that the maintainers might request some changes.
    2. Review the PR again.
