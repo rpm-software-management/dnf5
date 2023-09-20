@@ -524,6 +524,15 @@ static void process_scriptlets_output(int fd, Logger * logger) {
     close(fd);
 }
 
+static bool contains_any_inbound_package(std::vector<TransactionPackage> & packages) {
+    for (const auto & package : packages) {
+        if (transaction_item_action_is_inbound(package.get_action())) {
+            return true;
+        }
+    }
+    return false;
+}
+
 Transaction::TransactionRunResult Transaction::Impl::test() {
     return this->_run(std::make_unique<libdnf5::rpm::TransactionCallbacks>(), "", std::nullopt, "", true);
 }
@@ -869,7 +878,10 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     if (ret == 0) {
         // removes any temporarily stored packages from the system
-        if (!config.get_keepcache_option().get_value()) {
+        // only if any inbound action takes place
+        auto keepcache = config.get_keepcache_option().get_value();
+        auto any_inbound_action_present = contains_any_inbound_package(packages);
+        if (!keepcache && any_inbound_action_present) {
             libdnf5::repo::TempFilesMemory temp_files_memory(config.get_cachedir_option().get_value());
             auto temp_files = temp_files_memory.get_files();
             for (auto & file : temp_files) {
