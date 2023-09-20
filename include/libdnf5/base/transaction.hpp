@@ -124,6 +124,10 @@ public:
     /// To watch progress or trigger actions during specific transactions events,
     /// setup the `callbacks` object.
     ///
+    /// After a successful transaction, any temporarily downloaded packages are removed
+    /// if the 'keepcache' option is set to 'false' and the transaction involved an inbound action.
+    /// Otherwise, the packages are preserved on the disk.
+    ///
     /// @return An enum describing the result of running the transaction.
     TransactionRunResult run();
 
