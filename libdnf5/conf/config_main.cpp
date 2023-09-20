@@ -293,7 +293,7 @@ class ConfigMain::Impl {
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
     OptionStringSet proxy_auth_method{"any", "any|none|basic|digest|negotiate|ntlm|digest_ie|ntlm_wb", false};
-    OptionStringList protected_packages{resolve_globs("dnf glob:/etc/dnf/protected.d/*.conf")};
+    OptionStringList protected_packages{resolve_globs("dnf5 glob:/etc/dnf/protected.d/*.conf")};
     OptionString username{""};
     OptionString password{""};
     OptionBool gpgcheck{false};
