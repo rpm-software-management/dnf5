@@ -101,7 +101,7 @@ public:
     explicit RootCommand(libdnf5::cli::session::Session & context) : Command(context, "dnf5") {}
     void set_parent_command() override { get_session().set_root_command(*this); }
     void set_argument_parser() override;
-    void pre_configure() override { throw_missing_command(); }
+    void pre_configure() override;
 };
 
 void RootCommand::set_argument_parser() {
@@ -553,6 +553,14 @@ void RootCommand::set_argument_parser() {
         subcommands_group->set_header("Subcommands:");
         cmd.register_group(subcommands_group);
     }
+}
+
+void RootCommand::pre_configure() {
+    auto & arg_parser = get_context().get_argument_parser();
+    if (arg_parser.get_named_arg("dump-variables", false).get_parse_count() > 0) {
+        return;
+    }
+    throw_missing_command();
 }
 
 static void add_commands(Context & context) {
