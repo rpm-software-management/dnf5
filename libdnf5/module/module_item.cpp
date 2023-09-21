@@ -444,4 +444,14 @@ bool ModuleItem::is_active() const {
 }
 
 
+ModuleStatus ModuleItem::get_status() const {
+    const ModuleStatus & module_status = module_sack->p_impl->module_db->get_status(get_name());
+    if (module_status == ModuleStatus::ENABLED &&
+        get_stream() != module_sack->p_impl->module_db->get_enabled_stream(get_name())) {
+        return ModuleStatus::AVAILABLE;
+    }
+    return module_status;
+}
+
+
 }  // namespace libdnf5::module
