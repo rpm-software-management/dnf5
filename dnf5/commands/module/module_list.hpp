@@ -28,6 +28,7 @@ class ModuleListCommand : public Command {
 public:
     explicit ModuleListCommand(Context & context) : Command(context, "list") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
 };
 
