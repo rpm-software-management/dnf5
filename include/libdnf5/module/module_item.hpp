@@ -35,6 +35,9 @@ class ModuleTest;
 namespace libdnf5::module {
 
 
+enum class ModuleStatus;
+
+
 struct ModuleItemId {
 public:
     ModuleItemId() = default;
@@ -166,6 +169,10 @@ public:
     /// The decision is performed by a modular solver.
     // TODO(jmracek) Read a real decision from the modular solver
     bool is_active() const;
+
+    /// @return The status of this ModuleItem.
+    /// @since 5.1.5
+    ModuleStatus get_status() const;
 
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
