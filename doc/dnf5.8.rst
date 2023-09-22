@@ -175,6 +175,14 @@ Following options are applicable in the general context for any ``dnf5`` command
     | This is a list option which can be specified multiple times.
     | Accepted values are ids, or a glob of ids.
 
+``--dump-main-config``
+    | Print main configuration values to stdout.
+
+``--dump-repo-config=REPO_ID,...``
+    | Print repository configuration values to stdout.
+    | This is a list option which can be specified multiple times.
+    | Accepted values are ids, or a glob of ids.
+
 ``--dump-variables``
     | Print variable values to stdout.
 
