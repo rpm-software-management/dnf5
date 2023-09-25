@@ -23,7 +23,7 @@ jobs:
         id: setup-ci
         uses: ./.github/actions/setup-ci
         with:
-          copr-user: ${{secrets.COPR_USER}}
+          copr-user: ${{vars.COPR_USER}}
           copr-api-token: ${{secrets.COPR_API_TOKEN}}
 
       - name: Check out sources
@@ -37,7 +37,7 @@ jobs:
         id: copr-build
         uses: ./.github/actions/copr-build
         with:
-          copr-user: ${{steps.setup-ci.outputs.copr-user}}
+          copr-user: ${{ vars.COPR_USER }}
           overlay: dnf5-ci
 
   integration-tests:
