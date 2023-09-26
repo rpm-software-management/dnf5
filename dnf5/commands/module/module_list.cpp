@@ -29,6 +29,8 @@ using namespace libdnf5::cli;
 void ModuleListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("List module streams");
+
+    module_specs = std::make_unique<ModuleSpecArguments>(*this);
 }
 
 void ModuleListCommand::configure() {
@@ -38,7 +40,22 @@ void ModuleListCommand::configure() {
 }
 
 void ModuleListCommand::run() {
-    libdnf5::module::ModuleQuery query(get_context().base);
+    libdnf5::module::ModuleQuery query(get_context().base, true);
+    auto module_specs_str = module_specs->get_value();
+    if (module_specs_str.size() > 0) {
+        for (const auto & module_spec : module_specs_str) {
+            for (const auto & nsvcap : libdnf5::module::Nsvcap::parse(module_spec)) {
+                libdnf5::module::ModuleQuery nsvcap_query(get_context().base, false);
+                nsvcap_query.filter_nsvca(nsvcap, libdnf5::sack::QueryCmp::GLOB);
+                if (!nsvcap_query.empty()) {
+                    query |= nsvcap_query;
+                }
+            }
+        }
+    } else {
+        query = libdnf5::module::ModuleQuery(get_context().base, false);
+    }
+
     output::print_modulelist_table(query.list());
 }
 

@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_LIST_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_LIST_HPP
 
+#include "arguments.hpp"
+
 #include <dnf5/context.hpp>
 
 namespace dnf5 {
@@ -30,6 +32,9 @@ public:
     void set_argument_parser() override;
     void configure() override;
     void run() override;
+
+private:
+    std::unique_ptr<ModuleSpecArguments> module_specs{nullptr};
 };
 
 }  // namespace dnf5
