@@ -152,6 +152,16 @@ public:
     /// @since 5.0.6
     void filter_nsvca(const Nsvcap & nsvcap, libdnf5::sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
+    /// Filter ModuleItems with ModuleStatus::ENABLED.
+    ///
+    /// @since 5.1.5
+    void filter_enabled();
+
+    /// Filter ModuleItems with ModuleStatus::DISABLED.
+    ///
+    /// @since 5.1.5
+    void filter_disabled();
+
     /// Filter ModuleItems by module_spec.
     ///
     /// @param module_spec      A module_spec the filter is matched against.
@@ -168,6 +178,8 @@ private:
         static std::string version(const ModuleItem & obj) { return obj.get_version_str(); }
         static std::string context(const ModuleItem & obj) { return obj.get_context(); }
         static std::string arch(const ModuleItem & obj) { return obj.get_arch(); }
+        static bool is_enabled(const ModuleItem & obj);
+        static bool is_disabled(const ModuleItem & obj);
     };
 
     friend ModuleItem;

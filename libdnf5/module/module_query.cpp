@@ -185,6 +185,16 @@ void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf5::sack::QueryCmp cm
 }
 
 
+void ModuleQuery::filter_enabled() {
+    filter(Get::is_enabled, true, libdnf5::sack::QueryCmp::EQ);
+}
+
+
+void ModuleQuery::filter_disabled() {
+    filter(Get::is_disabled, true, libdnf5::sack::QueryCmp::EQ);
+}
+
+
 std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & module_spec) {
     libdnf5::sack::QueryCmp cmp = libdnf5::utils::is_glob_pattern(module_spec.c_str()) ? libdnf5::sack::QueryCmp::GLOB
                                                                                        : libdnf5::sack::QueryCmp::EQ;
@@ -201,6 +211,16 @@ std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & mod
 
     clear();
     return {false, Nsvcap()};
+}
+
+
+bool ModuleQuery::Get::is_enabled(const ModuleItem & obj) {
+    return obj.get_status() == ModuleStatus::ENABLED;
+}
+
+
+bool ModuleQuery::Get::is_disabled(const ModuleItem & obj) {
+    return obj.get_status() == ModuleStatus::DISABLED;
 }
 
 

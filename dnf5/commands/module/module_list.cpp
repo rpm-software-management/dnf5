@@ -30,6 +30,8 @@ void ModuleListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("List module streams");
 
+    enabled = std::make_unique<ModuleEnabledOption>(*this);
+    disabled = std::make_unique<ModuleDisabledOption>(*this);
     module_specs = std::make_unique<ModuleSpecArguments>(*this);
 }
 
@@ -54,6 +56,12 @@ void ModuleListCommand::run() {
         }
     } else {
         query = libdnf5::module::ModuleQuery(get_context().base, false);
+    }
+
+    if (enabled->get_value()) {
+        query.filter_enabled();
+    } else if (disabled->get_value()) {
+        query.filter_disabled();
     }
 
     output::print_modulelist_table(query.list());
