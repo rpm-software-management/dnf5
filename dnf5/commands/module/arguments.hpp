@@ -30,6 +30,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
+class ModuleEnabledOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit ModuleEnabledOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "enabled", '\0', _("Show enabled modules."), false) {}
+};
+
+
+class ModuleDisabledOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit ModuleDisabledOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "disabled", '\0', _("Show disabled modules."), false) {}
+};
+
+
 class ModuleSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
     explicit ModuleSpecArguments(libdnf5::cli::session::Command & command)

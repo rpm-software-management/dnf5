@@ -34,6 +34,8 @@ public:
     void run() override;
 
 private:
+    std::unique_ptr<ModuleEnabledOption> enabled{nullptr};
+    std::unique_ptr<ModuleDisabledOption> disabled{nullptr};
     std::unique_ptr<ModuleSpecArguments> module_specs{nullptr};
 };
 
