@@ -52,14 +52,14 @@ This allows using a list of authentication methods in configuration files and th
 Changes on the command line:
 ============================
 
-Commands cannot have optional subcommands and optional arguments. Is some cases subcommand can have the same string as
-an argument. It means there is a difficulty to find advisory for package with the name `list`, `info`, or `summary`.
-`dnf history info <transaction ID>` -> `dnf history --info <transaction ID>`
-`dnf updateinfo info` -> `dnf updateinfo --info`
+Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous, it wasn't clear
+whether the input is a command argument or a subcommand. If present, subcommands are now mandatory.
+`dnf history <transaction ID>` -> `dnf history info <transaction ID>`
+`dnf updateinfo` -> `dnf updateinfo summary`
 
-Options that cannot be applied to all command or can be applied but without any effect should be removed from general
-options and implemented only for related commands
-`--best`, `--nobest` are only related several transaction commands
+Options that cannot be applied to all commands or can be applied but without any effect should be removed from general
+options and implemented only for related commands.
+For example: `--best`, `--nobest` are related to only several transaction commands.
 
 Renaming boolean options to format `--<option>`, and `--no-<option>`
 `--nobest` -> `--no-best`. Proposing to keep `--nobest` as a deprecated option.
@@ -159,6 +159,16 @@ Upgrade command
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the `--skip-unavailable` option.
  * Dropped upgrade command aliases `upgrade-to` and `localupdate`.
+
+Updateinfo command
+------------------
+ * The command has been renamed to `advisory` (but there is a compatibility `updateinfo` alias).
+ * It is required to always specify a subcommand: `dnf updateinfo` -> `dnf5 advisory summary`.
+ * Options `--summary`, `--list` and `--info` have been changed to subcommands. See `dnf5 advisory --help`.
+ * Option `--sec-severity` (`--secseverity`) has been renamed to `--advisory-severities=ADVISORY_SEVERITY,...`.
+ * The `advisory` commands now accept only advisory ID, in order to filter by packages use `--contains-pkgs=PACKAGE_NAME,...` option.
+ * Dropped deprecated aliases: `list-updateinfo`, `list-security`, `list-sec`, `info-updateinfo`, `info-security`, `info-sec`, `summary-updateinfo`.
+ * Dropped `upif` alias.
 
 Changes of configuration:
 =========================
