@@ -262,14 +262,4 @@ void Plugins::finish() noexcept {
     }
 }
 
-void Plugins::set_plugins_enabled(const std::unordered_map<std::string, bool> & configured_plugins) {
-    for (auto & plugin : plugins) {
-        std::string const plugin_name(plugin->get_iplugin()->get_name());
-
-        if (configured_plugins.contains(plugin_name)) {
-            plugin->set_enabled(configured_plugins.at(plugin_name));
-        }
-    }
-}
-
 }  // namespace libdnf5::plugin

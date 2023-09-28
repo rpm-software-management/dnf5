@@ -119,19 +119,6 @@ public:
 
     libdnf5::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
-    /**
-     * A collection of plugins that should disabled. If these plugins are loaded, they will not be initialized
-     * @param enabled_plugin_ids Plugin ids to explicitly disable
-     */
-    void disable_plugins(const std::vector<std::string> & enabled_plugin_ids);
-
-    /**
-     * A collectin of plugins that should be enabled. If these plugins are loaded and not enabled my default, then
-     * they will be enabled.
-     * @param enabled_plugin_ids Plugins to explicitly enable.
-     */
-    void enable_plugins(const std::vector<std::string> & enabled_plugin_ids);
-
     class Impl;
 
 private:
@@ -168,9 +155,6 @@ private:
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;
-
-    /// map of plugin ids that are either enabled (true) or disabled (false)
-    std::unordered_map<std::string, bool> plugin_enablement;
 };
 
 }  // namespace libdnf5

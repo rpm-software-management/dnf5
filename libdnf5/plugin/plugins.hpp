@@ -100,14 +100,6 @@ public:
 
     void post_transaction(const libdnf5::base::Transaction & transaction);
 
-    /**
-     * Sets plugins as enabled or disabled. This method takes a map of plugin ids and their enabled status.
-     * If a plugin id has the value false, it is disabled. If true, it is enabled.
-     *
-     * @param configured_plugins A map of plugin enablement
-     */
-    void set_plugins_enabled(const std::unordered_map<std::string, bool> & configured_plugins);
-
     /// Call finish of all allowed plugins in reverse order.
     void finish() noexcept;
 
