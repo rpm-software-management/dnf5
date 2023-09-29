@@ -141,7 +141,7 @@ void Plugins::load_plugin_library(
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugin(const std::string & config_file_path) {
+void Plugins::load_plugin(const std::string & config_file_path, const EnabledPlugins &plugin_enablement) {
     auto & logger = *base->get_logger();
 
     libdnf5::ConfigParser parser;
@@ -156,7 +156,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
             "Missing plugin name in configuration file \"{}\". \"{}\" will be used.", config_file_path, plugin_name);
     }
 
-    enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
+    PluginEnabled enabled;
     const auto & enabled_str = parser.get_value("main", "enabled");
     if (enabled_str == "host-only") {
         enabled = Enabled::HOST_ONLY;
@@ -170,8 +170,11 @@ void Plugins::load_plugin(const std::string & config_file_path) {
         }
     }
     const auto & installroot = base->get_config().get_installroot_option().get_value();
-    const bool is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
-                            (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
+
+    // try overriding the configuration file. If there's no override, use the config status
+    const bool is_enabled = plugin_enablement.plugin_enabled(plugin_name, installroot)
+                                .value_or(EnabledPlugins::plugin_status_is_enabled(enabled, installroot));
+
     if (!is_enabled) {
         logger.debug("Skip disabled plugin \"{}\"", config_file_path);
         return;
@@ -181,7 +184,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
     load_plugin_library(std::move(parser), library_path, plugin_name);
 }
 
-void Plugins::load_plugins(const std::string & config_dir_path) {
+void Plugins::load_plugins(const std::string & config_dir_path, const EnabledPlugins &plugin_enablement) {
     auto & logger = *base->get_logger();
     if (config_dir_path.empty())
         throw PluginError(M_("Plugins::load_plugins(): config_dir_path cannot be empty"));
@@ -198,7 +201,7 @@ void Plugins::load_plugins(const std::string & config_dir_path) {
     std::string failed_filenames;
     for (const auto & path : config_paths) {
         try {
-            load_plugin(path);
+            load_plugin(path, plugin_enablement);
         } catch (const std::exception & ex) {
             logger.error("Cannot load plugin \"{}\": {}", path.string(), ex.what());
             if (!failed_filenames.empty()) {
@@ -260,6 +263,40 @@ void Plugins::finish() noexcept {
             (*plugin)->finish();
         }
     }
+}
+
+// plugin enablement classes
+EnabledPlugins::EnabledPlugins(std::initializer_list<std::pair<std::string, PluginEnabled>> elements)
+    : enabled_plugins(elements)
+{}
+
+EnabledPlugins::EnabledPlugins(std::initializer_list<std::pair<std::string, bool>> elements) {
+    std::transform(elements.begin(), elements.end(), std::back_inserter(enabled_plugins), [](std::pair<std::string, bool> item) -> std::pair<std::string, PluginEnabled> {
+        return std::make_pair(item.first, item.second ? PluginEnabled::YES : PluginEnabled::NO);
+    });
+}
+
+void EnabledPlugins::push_back(std::string && plugin_pattern, libdnf5::plugin::PluginEnabled status) noexcept {
+    this->enabled_plugins.emplace_back(std::forward<std::string>(plugin_pattern), status);
+}
+
+void EnabledPlugins::push_back(std::string && plugin_pattern, bool enabled) noexcept {
+    this->push_back(std::forward<std::string>(plugin_pattern), enabled ? PluginEnabled::YES : PluginEnabled::NO);
+}
+
+bool EnabledPlugins::plugin_status_is_enabled(libdnf5::plugin::PluginEnabled status, const std::string & installroot) noexcept {
+    return status == PluginEnabled::YES || (status == PluginEnabled::HOST_ONLY && installroot == "/") ||
+           (status == PluginEnabled::INSTALLROOT_ONLY && installroot != "/");
+}
+
+std::optional<bool> EnabledPlugins::plugin_enabled(const std::string & plugin_name, const std::string & install_root) const noexcept {
+    for (const auto &[plugin_pattern, status] : enabled_plugins) {
+        if (sack::match_string(plugin_name, sack::QueryCmp::GLOB, plugin_pattern)) {
+            return {EnabledPlugins::plugin_status_is_enabled(status, install_root)};
+        }
+    }
+
+    return {};
 }
 
 }  // namespace libdnf5::plugin
