@@ -362,6 +362,7 @@ Plugins:
 
 Miscellaneous:
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
+    | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
     | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
 

@@ -278,6 +278,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf5-comps.7.*
 # TODO(jkolarik): filtering is not ready yet
 # %%{_mandir}/man7/dnf5-filtering.7.*
+%{_mandir}/man7/dnf5-forcearch.7.*
 %{_mandir}/man7/dnf5-installroot.7.*
 # TODO(jkolarik): modularity is not ready yet
 # %%{_mandir}/man7/dnf5-modularity.7.*
