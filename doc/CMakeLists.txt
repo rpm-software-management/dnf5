@@ -78,6 +78,7 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-comps.7 DESTINATION share/man/man7)
         # TODO(jkolarik): filtering is not ready yet
         # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-filtering.7 DESTINATION share/man/man7)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-forcearch.7 DESTINATION share/man/man7)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-installroot.7 DESTINATION share/man/man7)
         # TODO(jkolarik): modularity is not ready yet
         # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-modularity.7 DESTINATION share/man/man7)

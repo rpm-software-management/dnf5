@@ -133,6 +133,7 @@ man_pages = [
     ('libdnf5_plugins/actions.8', 'libdnf5-actions', 'Actions plugin', AUTHORS, 8),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
     ('misc/filtering.7', 'dnf5-filtering', 'Packages Filtering', AUTHORS, 7),
+    ('misc/forcearch.7', 'dnf5-forcearch', 'Forcearch Parameter', AUTHORS, 7),
     ('misc/installroot.7', 'dnf5-installroot', 'Installroot Parameter', AUTHORS, 7),
     ('misc/modularity.7', 'dnf5-modularity', 'Modularity Overview', AUTHORS, 7),
     ('misc/specs.7', 'dnf5-specs', 'Patterns Specification', AUTHORS, 7),
