@@ -772,15 +772,19 @@ void ArgumentParser::Command::help() const noexcept {
     libdnf5::cli::output::Usage usage_output;
 
     // generate usage
-    // start with the invocation of the current command
-    std::string usage = utils::string::join(get_invocation(), " ");
-
-    if (cmds.empty()) {
-        // leaf command
-        usage += " [GLOBAL OPTIONS] [OPTIONS] [ARGUMENTS]";
-    } else {
-        // command that has subcommands
-        usage += " <COMMAND> [--help] ...";
+    std::string usage;
+    for (const auto * cmd = this; cmd; cmd = cmd->parent) {
+        std::string tmp = cmd->get_id();
+        if (!cmd->get_named_args().empty()) {
+            tmp += cmd->parent ? " [OPTIONS]" : " [GLOBAL OPTIONS]";
+        }
+        if (!cmd->get_positional_args().empty()) {
+            tmp += " [ARGUMENTS]";
+        }
+        usage = tmp + ' ' + usage;
+    }
+    if (!cmds.empty()) {
+        usage += "<COMMAND> ...";
     }
 
     // print usage
