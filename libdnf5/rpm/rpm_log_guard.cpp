@@ -66,7 +66,9 @@ RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : RpmLogGuardBase() {
     rpmlogSetCallback(&rpmlog_callback, &*base->get_logger());
 
     // TODO(lukash) once Logger supports log mask, propagate to rpm
-    old_log_mask = rpmlogSetMask(0xff);
+    // logs everything up to RPMLOG_INFO -> everything except RPMLOG_DEBUG, which is fairly low-level
+    // and causes librpm to not remove auxiliary temporary files.
+    old_log_mask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_INFO)));
 }
 
 
