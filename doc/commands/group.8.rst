@@ -25,7 +25,9 @@
 Synopsis
 ========
 
-``dnf5 group <subcommand> [options] [<group-spec>...]``
+``dnf5 group {list|info} [options] [<group-spec>...]``
+
+``dnf5 group {install|remove} [options] <group-spec>...``
 
 
 Description
