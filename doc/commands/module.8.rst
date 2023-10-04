@@ -34,12 +34,14 @@ Synopsis
 Description
 ===========
 
+Optional ``module-spec`` arguments can be passed to select only specific modules.
+
 
 Subcommands
 ===========
 
 ``list``
-    | List module streams.
+    | List module streams. ``--enabled`` and ``--disabled`` options narrow down the requested list.
 
 ``info``
     | Print details about module streams.

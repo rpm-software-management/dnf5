@@ -125,6 +125,10 @@ List command
    packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
    is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
+Module command
+--------------
+ * Dropped `--all` option since this behavior is the default one.
+
 Repoclosure command
 -------------------
  * Dropped `--pkg`` option. Positional arguments can be used to specify packages to check closure for.
