@@ -58,12 +58,14 @@ struct Action {
     enum class Direction { IN, OUT, ALL } direction;
     std::string command;
     std::vector<std::string> args;
+    enum class Mode { PLAIN, JSON } mode;
 };
 
 
 // Represents one command to run
 struct CommandToRun {
     [[nodiscard]] bool operator<(const CommandToRun & other) const noexcept;
+    const Action & action;
     std::string command;
     std::vector<std::string> args;
 };
@@ -134,7 +136,10 @@ private:
     std::vector<std::pair<std::string, std::string>> get_conf(const std::string & key);
     std::vector<std::pair<std::string, std::string>> set_conf(const std::string & key, const std::string & value);
 
+    void process_plain_communication(int in_fd);
     void process_command_output_line(std::string_view line);
+
+    void process_json_communication(int in_fd, int out_fd);
 
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
@@ -446,7 +451,7 @@ void Actions::on_hook(const std::vector<Action> & actions) {
             for (auto & arg : substituted_args) {
                 unescape(arg);
             }
-            CommandToRun cmd_to_run{action.command, std::move(substituted_args)};
+            CommandToRun cmd_to_run{action, action.command, std::move(substituted_args)};
             if (auto [it, inserted] = unique_commands_to_run.insert(cmd_to_run); inserted) {
                 execute_command(cmd_to_run);
             }
@@ -515,6 +520,7 @@ void Actions::parse_action_files() {
             ++command_pos;
 
             bool action_enabled{true};
+            std::string mode = "plain";
             auto options_str = line.substr(options_pos, command_pos - options_pos - 1);
             const auto options = split(options_str);
             for (const auto & opt : options) {
@@ -535,6 +541,8 @@ void Actions::parse_action_files() {
                             line_number,
                             value);
                     }
+                } else if (opt.starts_with("mode=")) {
+                    mode = opt.substr(5);
                 } else {
                     throw ActionsPluginError(
                         M_("Error in file \"{}\" on line {}: Unknown option \"{}\""), path.native(), line_number, opt);
@@ -613,6 +621,14 @@ void Actions::parse_action_files() {
                     path.native(),
                     line_number,
                     direction);
+            }
+            if (mode == "plain") {
+                act.mode = Action::Mode::PLAIN;
+            } else if (mode == "json") {
+                act.mode = Action::Mode::JSON;
+            } else {
+                throw ActionsPluginError(
+                    M_("Error in file \"{}\" on line {}: Unknown mode \"{}\""), path.native(), line_number, mode);
             }
 
             act.args = split(line.substr(command_pos));
@@ -756,6 +772,40 @@ std::vector<std::pair<std::string, std::string>> Actions::set_conf(const std::st
 }
 
 
+void Actions::process_plain_communication(int in_fd) {
+    char read_buf[256];
+    std::string input;
+    std::size_t num_tested_chars = 0;
+    do {
+        auto len = read(in_fd, read_buf, sizeof(read_buf));
+        if (len > 0) {
+            std::size_t line_begin_pos = 0;
+            input.append(read_buf, static_cast<std::size_t>(len));
+            std::string_view input_view(input);
+            do {
+                auto line_end_pos = input_view.find('\n', num_tested_chars);
+                if (line_end_pos == std::string::npos) {
+                    num_tested_chars = input_view.size();
+                } else {
+                    process_command_output_line(input_view.substr(line_begin_pos, line_end_pos - line_begin_pos));
+                    num_tested_chars = line_begin_pos = line_end_pos + 1;
+                }
+            } while (num_tested_chars < input_view.size());
+
+            // shift - erase processed lines from the input buffer
+            input.erase(0, line_begin_pos);
+            num_tested_chars -= line_begin_pos;
+            line_begin_pos = 0;
+        } else {
+            if (!input.empty()) {
+                process_command_output_line(input);
+            }
+            break;
+        }
+    } while (true);
+}
+
+
 void Actions::process_command_output_line(std::string_view line) {
     auto & base = get_base();
 
@@ -793,6 +843,8 @@ void Actions::process_command_output_line(std::string_view line) {
             std::string(line));
     }
 }
+
+void Actions::process_json_communication(int /*in_fd*/, int /*out_fd*/) {}
 
 void Actions::execute_command(CommandToRun & command) {
     enum PipeEnd { READ = 0, WRITE = 1 };
@@ -857,41 +909,20 @@ void Actions::execute_command(CommandToRun & command) {
         _exit(255);
     } else {
         close(pipe_to_child[PipeEnd::READ]);
-        close(pipe_to_child[PipeEnd::WRITE]);
-
         close(pipe_out_from_child[PipeEnd::WRITE]);
-        char read_buf[256];
-        std::string input;
-        std::size_t num_tested_chars = 0;
-        do {
-            auto len = read(pipe_out_from_child[PipeEnd::READ], read_buf, sizeof(read_buf));
-            if (len > 0) {
-                std::size_t line_begin_pos = 0;
-                input.append(read_buf, static_cast<std::size_t>(len));
-                std::string_view input_view(input);
-                do {
-                    auto line_end_pos = input_view.find('\n', num_tested_chars);
-                    if (line_end_pos == std::string::npos) {
-                        num_tested_chars = input_view.size();
-                    } else {
-                        process_command_output_line(input_view.substr(line_begin_pos, line_end_pos - line_begin_pos));
-                        num_tested_chars = line_begin_pos = line_end_pos + 1;
-                    }
-                } while (num_tested_chars < input_view.size());
 
-                // shift - erase processed lines from the input buffer
-                input.erase(0, line_begin_pos);
-                num_tested_chars -= line_begin_pos;
-                line_begin_pos = 0;
-            } else {
-                if (!input.empty()) {
-                    process_command_output_line(input);
-                }
+        switch (command.action.mode) {
+            case Action::Mode::PLAIN:
+                close(pipe_to_child[PipeEnd::WRITE]);  // close immediately, don't send anything to child in PLAIN mode
+                process_plain_communication(pipe_out_from_child[PipeEnd::READ]);
                 break;
-            }
-        } while (true);
-        close(pipe_out_from_child[PipeEnd::READ]);
+            case Action::Mode::JSON:
+                process_json_communication(pipe_out_from_child[PipeEnd::READ], pipe_to_child[PipeEnd::WRITE]);
+                close(pipe_to_child[PipeEnd::WRITE]);
+                break;
+        }
 
+        close(pipe_out_from_child[PipeEnd::READ]);
         waitpid(child_pid, nullptr, 0);
     }
 }
@@ -938,7 +969,7 @@ void Actions::on_transaction(const libdnf5::base::Transaction & transaction, con
                 for (auto & arg : substituted_args) {
                     unescape(arg);
                 }
-                CommandToRun cmd_to_run{action.command, std::move(substituted_args)};
+                CommandToRun cmd_to_run{action, action.command, std::move(substituted_args)};
                 if (auto [it, inserted] = unique_commands_to_run.insert(cmd_to_run); inserted) {
                     execute_command(cmd_to_run);
                 }
@@ -962,7 +993,7 @@ void Actions::on_transaction(const libdnf5::base::Transaction & transaction, con
                 for (auto & arg : substituted_args) {
                     unescape(arg);
                 }
-                CommandToRun cmd_to_run{action.command, substituted_args};
+                CommandToRun cmd_to_run{action, action.command, substituted_args};
                 if (auto [it, inserted] = unique_commands_to_run.insert(cmd_to_run); inserted) {
                     commands_to_run.push_back(std::move(cmd_to_run));
                 }
