@@ -58,10 +58,6 @@ Options
 ``--disabled``
     | Show information only about disabled repositories.
 
-``--forcearch=<arch>``
-    | Force the use of a specific architecture.
-    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
-
 
 Examples
 ========

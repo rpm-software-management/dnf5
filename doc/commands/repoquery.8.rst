@@ -92,10 +92,6 @@ Options
     | Limit to packages that own these files.
     | This is a list option.
 
-``--forcearch=<arch>``
-    | Force the use of a specific architecture.
-    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
-
 ``--installed``
     | Query installed packages.
     | Can be combined with ``--available`` to query both installed and available packages.
