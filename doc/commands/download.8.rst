@@ -47,10 +47,6 @@ Options
 ``--destdir=<path>``
     Set directory used for downloading packages to. Default location is to the current working directory.
 
-``--forcearch=<arch>``
-    | Force the use of a specific architecture.
-    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
-
 
 Examples
 ========

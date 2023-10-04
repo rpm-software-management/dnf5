@@ -196,6 +196,10 @@ Following options are applicable in the general context for any ``dnf5`` command
     | This is a list option which can be specified multiple times.
     | Accepted values are ids, or a glob of ids.
 
+``--forcearch=ARCH``
+    | Force the use of a specific architecture.
+    | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
 ``-h, --help``
     | Show the help.
 
