@@ -625,6 +625,7 @@ void Actions::process_command_output_line(std::string_view line) {
 }
 
 void Actions::execute_command(CommandToRun & command) {
+    enum PipeEnd { READ = 0, WRITE = 1 };
     auto & base = get_base();
 
     int pipe_out_from_child[2];
@@ -635,8 +636,8 @@ void Actions::execute_command(CommandToRun & command) {
     }
     if (pipe(pipe_out_from_child) == -1) {
         auto errnum = errno;
-        close(pipe_to_child[1]);
-        close(pipe_to_child[0]);
+        close(pipe_to_child[PipeEnd::WRITE]);
+        close(pipe_to_child[PipeEnd::READ]);
         base.get_logger()->error("Actions plugin: Cannot create pipe: {}", std::strerror(errnum));
         return;
     }
@@ -644,28 +645,28 @@ void Actions::execute_command(CommandToRun & command) {
     auto child_pid = fork();
     if (child_pid == -1) {
         auto errnum = errno;
-        close(pipe_to_child[1]);
-        close(pipe_to_child[0]);
-        close(pipe_out_from_child[1]);
-        close(pipe_out_from_child[0]);
+        close(pipe_to_child[PipeEnd::WRITE]);
+        close(pipe_to_child[PipeEnd::READ]);
+        close(pipe_out_from_child[PipeEnd::WRITE]);
+        close(pipe_out_from_child[PipeEnd::READ]);
         base.get_logger()->error("Actions plugin: Cannot fork: {}", std::strerror(errnum));
     } else if (child_pid == 0) {
-        close(pipe_to_child[1]);        // close writing end of the pipe on the child side
-        close(pipe_out_from_child[0]);  // close reading end of the pipe on the child side
+        close(pipe_to_child[PipeEnd::WRITE]);       // close writing end of the pipe on the child side
+        close(pipe_out_from_child[PipeEnd::READ]);  // close reading end of the pipe on the child side
 
         // bind stdin of the child process to the reading end of the pipe
-        if (dup2(pipe_to_child[0], fileno(stdin)) == -1) {
+        if (dup2(pipe_to_child[PipeEnd::READ], fileno(stdin)) == -1) {
             base.get_logger()->error("Actions plugin: Cannot bind command stdin: {}", std::strerror(errno));
             _exit(255);
         }
-        close(pipe_to_child[0]);
+        close(pipe_to_child[PipeEnd::READ]);
 
         // bind stdout of the child process to the writing end of the pipe
-        if (dup2(pipe_out_from_child[1], fileno(stdout)) == -1) {
+        if (dup2(pipe_out_from_child[PipeEnd::WRITE], fileno(stdout)) == -1) {
             base.get_logger()->error("Actions plugin: Cannot bind command stdout: {}", std::strerror(errno));
             _exit(255);
         }
-        close(pipe_out_from_child[1]);
+        close(pipe_out_from_child[PipeEnd::WRITE]);
 
         std::vector<char *> args;
         args.reserve(command.args.size() + 1);
@@ -685,15 +686,15 @@ void Actions::execute_command(CommandToRun & command) {
             "Actions plugin: Cannot execute \"{}{}\": {}", command.command, args_string, std::strerror(errnum));
         _exit(255);
     } else {
-        close(pipe_to_child[0]);
-        close(pipe_to_child[1]);
+        close(pipe_to_child[PipeEnd::READ]);
+        close(pipe_to_child[PipeEnd::WRITE]);
 
-        close(pipe_out_from_child[1]);
+        close(pipe_out_from_child[PipeEnd::WRITE]);
         char read_buf[256];
         std::string input;
         std::size_t num_tested_chars = 0;
         do {
-            auto len = read(pipe_out_from_child[0], read_buf, sizeof(read_buf));
+            auto len = read(pipe_out_from_child[PipeEnd::READ], read_buf, sizeof(read_buf));
             if (len > 0) {
                 std::size_t line_begin_pos = 0;
                 input.append(read_buf, static_cast<std::size_t>(len));
@@ -719,7 +720,7 @@ void Actions::execute_command(CommandToRun & command) {
                 break;
             }
         } while (true);
-        close(pipe_out_from_child[0]);
+        close(pipe_out_from_child[PipeEnd::READ]);
 
         waitpid(child_pid, nullptr, 0);
     }
