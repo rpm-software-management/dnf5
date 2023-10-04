@@ -86,10 +86,6 @@ void RepoqueryCommand::set_argument_parser() {
     });
     cmd.register_positional_arg(keys);
 
-    // OPTIONS:
-
-    create_forcearch_option(*this);
-
     // QUERY SOURCES:
 
     available_option = dynamic_cast<libdnf5::OptionBool *>(

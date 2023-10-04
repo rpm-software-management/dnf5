@@ -48,8 +48,6 @@ void SearchCommand::set_argument_parser() {
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
-
-    create_forcearch_option(*this);
 }
 
 void SearchCommand::configure() {
