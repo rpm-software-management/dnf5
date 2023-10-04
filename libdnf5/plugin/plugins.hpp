@@ -84,10 +84,12 @@ public:
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
     /// Loads the plugin from the library defined by the configuration file config_file_path.
-    void load_plugin(const std::string & config_file_path);
+    void load_plugin(
+        const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
 
     /// Loads plugins defined by configuration files in the directory.
-    void load_plugins(const std::string & config_dir_path);
+    void load_plugins(
+        const std::string & config_dir_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
 
     /// Returns the number of registered plugins.
     size_t count() const noexcept;
