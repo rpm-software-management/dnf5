@@ -79,7 +79,6 @@ void DownloadCommand::set_argument_parser() {
 
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
-    create_forcearch_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
 }

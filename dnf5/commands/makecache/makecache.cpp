@@ -36,7 +36,6 @@ void MakeCacheCommand::set_parent_command() {
 
 void MakeCacheCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Generate the metadata cache");
-    create_forcearch_option(*this);
 }
 
 void MakeCacheCommand::run() {

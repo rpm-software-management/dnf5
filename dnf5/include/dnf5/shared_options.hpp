@@ -65,14 +65,13 @@ void create_allow_downgrade_options(dnf5::Command & command);
 /// The values are stored in the `destdir` configuration option
 void create_destdir_option(dnf5::Command & command);
 
-/// Create the `--forcearch` option for a command provided as an argument.
-/// The values are stored in the `forcearch` configuration option
-void create_forcearch_option(dnf5::Command & command);
-
 /// Create the `--downloadonly` option for a command provided as an argument.
 /// The values are stored in the `downloadonly` configuration option
 void create_downloadonly_option(dnf5::Command & command);
 
+/// Create the `--forcearch` option for a command provided as an argument.
+/// The values are stored in the `forcearch` configuration option
+[[deprecated("--forcearch is now a global argument")]] void create_forcearch_option(dnf5::Command & command);
 
 }  // namespace dnf5
 

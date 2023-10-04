@@ -35,7 +35,6 @@ void RepoCommand::set_parent_command() {
 
 void RepoCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Manage repositories");
-    create_forcearch_option(*this);
 }
 
 void RepoCommand::register_subcommands() {

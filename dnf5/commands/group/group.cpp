@@ -38,7 +38,6 @@ void GroupCommand::set_parent_command() {
 
 void GroupCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Manage comps groups");
-    create_forcearch_option(*this);
 }
 
 void GroupCommand::register_subcommands() {

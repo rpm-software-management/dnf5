@@ -61,6 +61,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
+#include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
@@ -574,6 +575,37 @@ void RootCommand::set_argument_parser() {
         version->set_long_name("version");
         version->set_description("Show DNF5 version and exit");
         global_options_group->register_argument(version);
+    }
+
+    {
+        auto forcearch = parser.add_new_named_arg("forcearch");
+        forcearch->set_long_name("forcearch");
+        forcearch->set_description("Force the use of a different architecture.");
+        forcearch->set_has_value(true);
+        forcearch->set_arg_value_help("FORCEARCH");
+        forcearch->set_parse_hook_func([&ctx](
+                                           [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                           [[maybe_unused]] const char * option,
+                                           const char * value) {
+            auto supported_arches = libdnf5::rpm::get_supported_arches();
+            if (std::find(supported_arches.begin(), supported_arches.end(), value) == supported_arches.end()) {
+                std::string available_arches{};
+                auto it = supported_arches.begin();
+                if (it != supported_arches.end()) {
+                    available_arches.append("\"" + *it + "\"");
+                    ++it;
+                    for (; it != supported_arches.end(); ++it) {
+                        available_arches.append(", \"" + *it + "\"");
+                    }
+                }
+                throw libdnf5::cli::ArgumentParserInvalidValueError(
+                    M_("Unsupported architecture \"{0}\". Please choose one from {1}"), value, available_arches);
+            }
+            ctx.base.get_config().get_ignorearch_option().set(libdnf5::Option::Priority::COMMANDLINE, true);
+            ctx.base.get_vars()->set("arch", value, libdnf5::Vars::Priority::COMMANDLINE);
+            return true;
+        });
+        global_options_group->register_argument(forcearch);
     }
 
     register_group_with_args(cmd, *global_options_group);
