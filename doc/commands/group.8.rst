@@ -27,7 +27,7 @@ Synopsis
 
 ``dnf5 group {list|info} [options] [<group-spec>...]``
 
-``dnf5 group {install|remove} [options] <group-spec>...``
+``dnf5 group {install|remove|upgrade} [options] <group-spec>...``
 
 
 Description
@@ -72,6 +72,15 @@ Subcommands
     If the ``--no-packages`` option is used, no packages will be removed by this
     command.
 
+``upgrade``
+    Upgrade a definition of the specified group and the packages belonging to
+    the group. If new packages have been added to the current definition of
+    the group since the group was installed, the new packages will be
+    installed. Likewise, if some packages have been removed from the group
+    definition, the packages will be uninstalled unless they were installed for
+    a different reason (e.g.  explicitly installed by a user or implicitly
+    installed as a dependency).
+
 Options
 =======
 
@@ -110,6 +119,9 @@ Examples
 ``dnf5 group install mysql --with-optional``
     | Install the ``mysql`` group including optional packages.
 
+``dnf5 group upgrade mysql``
+    | Bring packages of the ``mysql`` group to compliance with a current
+    | definition of the group.
 
 See Also
 ========
