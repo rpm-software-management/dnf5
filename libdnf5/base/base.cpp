@@ -141,9 +141,19 @@ void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     if (plugins_config_dir &&
         p_impl->config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
-        p_impl->plugins.load_plugins(plugins_config_dir);
+        p_impl->plugins.load_plugins(plugins_config_dir, p_impl->plugins_enablement);
     } else {
-        p_impl->plugins.load_plugins(p_impl->config.get_pluginconfpath_option().get_value());
+        p_impl->plugins.load_plugins(
+            p_impl->config.get_pluginconfpath_option().get_value(), p_impl->plugins_enablement);
+    }
+}
+
+void Base::enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable) {
+    libdnf_user_assert(!p_impl->pool, "Base::enable_disable_plugins must be called before Base::setup");
+
+    for (const auto & plugin_name : plugin_names) {
+        p_impl->plugins_enablement.erase(plugin_name);
+        p_impl->plugins_enablement.insert({plugin_name, enable});
     }
 }
 

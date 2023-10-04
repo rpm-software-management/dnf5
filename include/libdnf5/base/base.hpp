@@ -86,6 +86,15 @@ public:
     repo::RepoSackWeakPtr get_repo_sack();
     rpm::PackageSackWeakPtr get_rpm_package_sack();
 
+    /// Adds a request to enable/disable plugins that match the names (glob patterns) in the list.
+    /// Can be called multiple times. Requests (`plugin_names` and `enable` state) are queued.
+    /// The enable state of a plugin is set according to the last matching request.
+    /// Must be called before the Base::setup.
+    /// @param plugin_names Plugin names (glob patterns) to enable/disable
+    /// @param enable Request: true - enable plugins, false - disable plugins
+    /// @exception libdnf5::UserAssertionError When called after Base::setup
+    void enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable);
+
     /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
     /// configuration of protected_packages (glob:).
     /// To prevent differences between configuration and internal Base settings, following configurations

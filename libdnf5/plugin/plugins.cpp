@@ -141,7 +141,8 @@ void Plugins::load_plugin_library(
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugin(const std::string & config_file_path) {
+void Plugins::load_plugin(
+    const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement) {
     auto & logger = *base->get_logger();
 
     libdnf5::ConfigParser parser;
@@ -156,22 +157,34 @@ void Plugins::load_plugin(const std::string & config_file_path) {
             "Missing plugin name in configuration file \"{}\". \"{}\" will be used.", config_file_path, plugin_name);
     }
 
-    enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
-    const auto & enabled_str = parser.get_value("main", "enabled");
-    if (enabled_str == "host-only") {
-        enabled = Enabled::HOST_ONLY;
-    } else if (enabled_str == "installroot-only") {
-        enabled = Enabled::INSTALLROOT_ONLY;
-    } else {
-        try {
-            enabled = OptionBool(false).from_string(enabled_str) ? Enabled::YES : Enabled::NO;
-        } catch (OptionInvalidValueError & ex) {
-            throw OptionInvalidValueError(M_("Invalid option value: enabled={}"), enabled_str);
+    bool is_enabled;
+    bool is_enabled_set{false};
+    for (auto it = plugin_enablement.rbegin(); it != plugin_enablement.rend(); ++it) {
+        if (sack::match_string(plugin_name, sack::QueryCmp::GLOB, it->first)) {
+            is_enabled = it->second;
+            is_enabled_set = true;
+            break;
         }
     }
-    const auto & installroot = base->get_config().get_installroot_option().get_value();
-    const bool is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
-                            (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
+    if (!is_enabled_set) {
+        enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
+        const auto & enabled_str = parser.get_value("main", "enabled");
+        if (enabled_str == "host-only") {
+            enabled = Enabled::HOST_ONLY;
+        } else if (enabled_str == "installroot-only") {
+            enabled = Enabled::INSTALLROOT_ONLY;
+        } else {
+            try {
+                enabled = OptionBool(false).from_string(enabled_str) ? Enabled::YES : Enabled::NO;
+            } catch (OptionInvalidValueError & ex) {
+                throw OptionInvalidValueError(M_("Invalid option value: enabled={}"), enabled_str);
+            }
+        }
+        const auto & installroot = base->get_config().get_installroot_option().get_value();
+        is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
+                     (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
+    }
+
     if (!is_enabled) {
         logger.debug("Skip disabled plugin \"{}\"", config_file_path);
         return;
@@ -181,7 +194,8 @@ void Plugins::load_plugin(const std::string & config_file_path) {
     load_plugin_library(std::move(parser), library_path, plugin_name);
 }
 
-void Plugins::load_plugins(const std::string & config_dir_path) {
+void Plugins::load_plugins(
+    const std::string & config_dir_path, const PreserveOrderMap<std::string, bool> & plugin_enablement) {
     auto & logger = *base->get_logger();
     if (config_dir_path.empty())
         throw PluginError(M_("Plugins::load_plugins(): config_dir_path cannot be empty"));
@@ -198,7 +212,7 @@ void Plugins::load_plugins(const std::string & config_dir_path) {
     std::string failed_filenames;
     for (const auto & path : config_paths) {
         try {
-            load_plugin(path);
+            load_plugin(path, plugin_enablement);
         } catch (const std::exception & ex) {
             logger.error("Cannot load plugin \"{}\": {}", path.string(), ex.what());
             if (!failed_filenames.empty()) {

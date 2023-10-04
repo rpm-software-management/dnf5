@@ -90,6 +90,9 @@ private:
     Vars vars;
     std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
 
+    /// map of plugin names (global patterns) that we want to enable (true) or disable (false)
+    PreserveOrderMap<std::string, bool> plugins_enablement;
+
     WeakPtrGuard<LogRouter, false> log_router_guard;
     WeakPtrGuard<Vars, false> vars_guard;
 };
