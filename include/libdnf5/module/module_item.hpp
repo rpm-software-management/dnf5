@@ -174,6 +174,10 @@ public:
     /// @since 5.1.5
     ModuleStatus get_status() const;
 
+    /// @return Whether this ModuleItem is the default stream of the module.
+    /// @since 5.1.5
+    bool is_default() const;
+
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
     ModuleItem(ModuleItem && mpkg);
