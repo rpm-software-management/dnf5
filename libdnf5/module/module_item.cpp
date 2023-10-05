@@ -197,6 +197,11 @@ std::vector<ModuleProfile> ModuleItem::get_profiles_internal(const char * name) 
 }
 
 
+bool ModuleItem::is_default() const {
+    return module_sack->get_default_stream(get_name()) == get_stream();
+}
+
+
 bool ModuleItem::get_static_context() const {
     return modulemd_module_stream_v2_is_static_context((ModulemdModuleStreamV2 *)md_stream);
 }

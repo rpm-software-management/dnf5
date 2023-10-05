@@ -84,6 +84,8 @@ void print_modulelist_table(Query & module_list) {
                 stream_string.append(" [e]");
             } else if (status == module::ModuleStatus::DISABLED) {
                 stream_string.append(" [x]");
+            } else if (module_item.is_default()) {
+                stream_string.append(" [d]");
             }
 
             // Get profile strings (append [d] or [i] if needed)
