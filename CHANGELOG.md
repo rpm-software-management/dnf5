@@ -1,3 +1,17 @@
+# 5.1.5
+
+- Improved ConfigParser
+- Improved docs for `group install` and `group remove`
+- Fix man pages deployment
+- Update API doc related to keepcache
+- Implement `rhsm` (Red Hat Subscription Manager) plugin
+- Document `--dump-variables`
+- Implement `dnf5 --dump-variables`
+- Improve contributing guidelines: don't mention "ready-for-review"
+- Allow specifying upper-case tags in `repoquery --queryformat`
+- api: Make get_base_arch() public
+- Improve input for large epochs that don't fit into `time_t`
+
 # 5.1.4
 
 - Fix Builds on i386
