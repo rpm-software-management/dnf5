@@ -65,6 +65,7 @@ void ModuleListCommand::run() {
     }
 
     output::print_modulelist_table(query.list());
+    output::print_modulelist_table_hint();
 }
 
 }  // namespace dnf5
