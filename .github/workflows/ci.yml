@@ -1,7 +1,7 @@
 ---
 name: DNF 5 CI
 on:
-  pull_request:
+  pull_request_target:
   merge_group:
     types: [checks_requested]
 
@@ -21,6 +21,9 @@ jobs:
 
       - name: echo variable
         run: echo "${{ vars.TEST }}"
+
+      - name: echo variable
+        run: echo "${{ vars.COPR_USER }}"
 
       - name: Setup CI
         id: setup-ci
