@@ -132,11 +132,10 @@ public:
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getProfiles()
     std::vector<ModuleProfile> get_profiles() const;
 
-    // TODO(pkratoch): Similar implementation as in ModulePackageContainer::getDefaultProfiles().
     /// @return The default profiles.
     //
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getDefaultProfile()
-    std::vector<ModuleProfile> get_default_profiles() const;
+    std::vector<std::string> get_default_profiles() const;
 
     /// Get the `static_context` value (needed for proper behaviour of modular solver).
     ///
