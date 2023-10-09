@@ -1,9 +1,6 @@
 ---
 name: DNF 5 CI
-on:
-  pull_request:
-  merge_group:
-    types: [checks_requested]
+on: pull_request_target
 
 jobs:
   copr-build:
