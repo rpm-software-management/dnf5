@@ -22,7 +22,7 @@ jobs:
       - name: echo variable
         run: echo "${{ vars.TEST }}"
 
-      - name: echo variable
+      - name: echo user variable
         run: echo "${{ vars.COPR_USER }}"
 
       - name: Setup CI
