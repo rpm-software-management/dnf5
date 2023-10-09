@@ -19,6 +19,9 @@ jobs:
         with:
           repository: rpm-software-management/ci-dnf-stack
 
+      - name: echo variable
+        run: echo "${{ vars.TEST }}"
+
       - name: Setup CI
         id: setup-ci
         uses: ./.github/actions/setup-ci
