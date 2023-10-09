@@ -1,7 +1,6 @@
 ---
 name: DNF 5 CI
-on:
-  pull_request_target:
+on: pull_request_target
 
 jobs:
   copr-build:
