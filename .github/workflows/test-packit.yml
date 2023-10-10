@@ -1,0 +1,15 @@
+name: Test Packit
+on:
+  workflow_run:
+    workflows:
+      - "Packit-as-a-Service"
+    types:
+      - completed
+
+jobs:
+  test-packit:
+    name: Test if Packit is done
+    runs-on: ubuntu-latest
+    steps:
+      - name: print success
+        run: echo "success"
