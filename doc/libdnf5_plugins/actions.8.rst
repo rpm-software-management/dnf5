@@ -79,6 +79,7 @@ Each non-comment line defines an action and consists of five items separated by 
    The following variables in the command will be substituted:
 
    * ``${pid}`` - process ID
+   * ``${plugin.version}`` - version of the actions plugin (added in version 0.3.0)
    * ``${conf.<option_name>}`` - option from base configuration
    * ``${var.<variable_name>}`` - variable
    * ``${tmp.<actions_plugin_variable_name>}`` - variable exists only in actions plugin context

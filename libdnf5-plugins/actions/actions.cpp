@@ -215,6 +215,11 @@ std::pair<std::string, bool> Actions::substitute(
         std::optional<std::string> var_value;
         if (var_name == "pid") {
             var_value = std::to_string(getpid());
+        } else if (var_name.starts_with("plugin.")) {
+            auto plugin_key = var_name.substr(7);
+            if (plugin_key == "version") {
+                var_value = fmt::format("{}.{}.{}", PLUGIN_VERSION.major, PLUGIN_VERSION.minor, PLUGIN_VERSION.micro);
+            }
         } else if (var_name.starts_with("conf.")) {
             auto config_opts = base.get_config().opt_binds();
             auto it = config_opts.find(std::string(var_name.substr(5)));
