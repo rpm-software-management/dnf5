@@ -2846,7 +2846,6 @@ static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
     "udev",
     "gnutls",
     "openssl-libs",
-
     "dbus-broker",
     "dbus-daemon",
 };
