@@ -41,7 +41,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{0, 2, 0};
+constexpr plugin::Version PLUGIN_VERSION{0, 3, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -394,7 +394,7 @@ void Actions::parse_action_files() {
             auto pkg_filter_pos = line.find(':');
             if (pkg_filter_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
                     path.native(),
                     line_number);
             }
@@ -402,27 +402,57 @@ void Actions::parse_action_files() {
             auto direction_pos = line.find(':', pkg_filter_pos);
             if (direction_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
                     path.native(),
                     line_number);
             }
             ++direction_pos;
-            auto reserved_pos = line.find(':', direction_pos);
-            if (reserved_pos == std::string::npos) {
+            auto options_pos = line.find(':', direction_pos);
+            if (options_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
                     path.native(),
                     line_number);
             }
-            ++reserved_pos;
-            auto command_pos = line.find(':', reserved_pos);
+            ++options_pos;
+            auto command_pos = line.find(':', options_pos);
             if (command_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format expected"),
+                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
                     path.native(),
                     line_number);
             }
             ++command_pos;
+
+            bool action_enabled{true};
+            auto options_str = line.substr(options_pos, command_pos - options_pos - 1);
+            const auto options = split(options_str);
+            for (const auto & opt : options) {
+                if (opt.starts_with("enabled=")) {
+                    const auto value = opt.substr(8);
+                    auto installroot_path = config.get_installroot_option().get_value();
+                    bool installroot = installroot_path != "/";
+                    if (value == "1") {
+                        action_enabled = true;
+                    } else if (value == "host-only") {
+                        action_enabled = !installroot;
+                    } else if (value == "installroot-only") {
+                        action_enabled = installroot;
+                    } else {
+                        throw ActionsPluginError(
+                            M_("Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""),
+                            path.native(),
+                            line_number,
+                            value);
+                    }
+                } else {
+                    throw ActionsPluginError(
+                        M_("Error in file \"{}\" on line {}: Unknown option \"{}\""), path.native(), line_number, opt);
+                }
+            }
+            if (!action_enabled) {
+                continue;
+            }
 
             enum class Hooks { PRE_BASE_SETUP, POST_BASE_SETUP, PRE_TRANS, POST_TRANS } hook;
             if (line.starts_with("pre_base_setup:")) {
@@ -452,7 +482,7 @@ void Actions::parse_action_files() {
                 }
             }
 
-            auto direction = line.substr(direction_pos, reserved_pos - direction_pos - 1);
+            auto direction = line.substr(direction_pos, options_pos - direction_pos - 1);
             if (pkg_filter.empty() && !direction.empty()) {
                 throw ActionsPluginError(
                     M_("Error in file \"{}\" on line {}: Cannot use direction without package filter"),

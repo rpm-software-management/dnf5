@@ -45,7 +45,7 @@ Actions file format
 
 Empty lines and lines that start with a '#' character (comment line) are ignored.
 
-Each non-comment line defines an action and consists of five items separated by colons: ``callback_name:package_filter:direction:reserved:command``.
+Each non-comment line defines an action and consists of five items separated by colons: ``callback_name:package_filter:direction:options:command``.
 
 ``callback_name``
 
@@ -68,6 +68,15 @@ Each non-comment line defines an action and consists of five items separated by 
 
    * ``in`` - packages coming to the system (downgrade, install, reinstall, upgrade)
    * ``out`` - packages going out of the system (upgraded, downgraded, reinstalled, removed, replaced/obsoleted)
+
+``options``
+   Options are separated by spaces. A space within an option can be written using escaping.
+
+   * ``enabled=<value>`` - the value specifies when the action is enabled (added in version 0.3.0)
+
+      * ``1`` - action is always enabled
+      * ``host-only`` - the action is only enabled for operations on the host
+      * ``installroot-only`` - the action is only enabled for operations in the alternative "installroot"
 
 ``command``
    Any executable file with arguments.
@@ -119,9 +128,6 @@ Each non-comment line defines an action and consists of five items separated by 
    of when a particular ``package_filter`` is invoked depends on the position
    of the corresponding package in the transaction.
 
-``reserved``
-   Reserved for future use. Now empty.
-
 
 Action standard output format
 =============================
@@ -146,6 +152,7 @@ An example actions file:
    pre_base_setup::::/usr/bin/sh -c echo\ -------------------------------------\ >>/tmp/actions-trans.log
    pre_base_setup::::/usr/bin/sh -c date\ >>/tmp/actions-trans.log
    pre_base_setup::::/usr/bin/sh -c echo\ libdnf5\ pre_base_setup\ was\ called.\ Process\ ID\ =\ '${pid}'.\ >>/tmp/actions-trans.log
+   pre_base_setup:::enabled=installroot-only:/usr/bin/sh -c echo\ run\ in\ alternative\ "installroot":\ installroot\ =\ '${conf.installroot}'\ >>/tmp/actions-trans.log
 
    # Prints the value of the configuration option "defaultyes".
    pre_base_setup::::/bin/sh -c echo\ 'pre_base_setup:\ conf.defaultyes=${{conf.defaultyes}}'\ >>\ {context.dnf.installroot}/actions.log
