@@ -1,6 +1,8 @@
 ---
 name: DNF 5 CI
 on:
+  # pull_request_target is needed in order to have access to COPR_USER and
+  # COPR_API_TOKEN
   pull_request_target:
   merge_group:
     types: [checks_requested]
