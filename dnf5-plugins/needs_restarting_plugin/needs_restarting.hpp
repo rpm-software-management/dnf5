@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnf5/context.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
+#include <sdbus-c++/sdbus-c++.h>
 #include <sys/stat.h>
 
 #include <fstream>
@@ -40,6 +41,9 @@ public:
     void run() override;
 
 private:
+    libdnf5::OptionBool * services_option{nullptr};
+    static void system_needs_restarting(Context &);
+    static void services_need_restarting(Context &);
 };
 
 }  // namespace dnf5
