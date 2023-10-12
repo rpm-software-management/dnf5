@@ -147,11 +147,10 @@ void Transaction::fill(const base::Transaction & transaction) {
     // Used to detect installation of a installonly package with lower version
     // that is currently installed.
     std::map<std::string, libdnf5::rpm::Package> installonly_versions;
-    const auto & installonlypkgs = base->get_config().get_installonlypkgs_option().get_value();
     rpm::PackageQuery installonly_query(base);
     installonly_query.filter_installed();
     installonly_query.filter_latest_evr();
-    installonly_query.filter_provides(installonlypkgs, libdnf5::sack::QueryCmp::GLOB);
+    installonly_query.filter_installonly();
     for (const auto & pkg : installonly_query) {
         installonly_versions.insert(std::make_pair(pkg.get_name(), pkg));
     }
