@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
+#include "smartcols_table_wrapper.hpp"
+
 #include "libdnf5-cli/tty.hpp"
 #include "libdnf5-cli/utils/units.hpp"
 
@@ -62,10 +64,9 @@ static const char * action_color(libdnf5::transaction::TransactionItemAction act
     libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
 }
 
-
 class ActionHeaderPrinter {
 public:
-    ActionHeaderPrinter(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinter(SmartcolsTableWrapper & table) : table(table) {}
 
     // TODO(lukash) to bring more sanity into the templated functions here, it
     // would be better if the Transaction template type of
@@ -82,7 +83,7 @@ public:
              *current_reason != tspkg.get_reason())) {
             auto reason = tspkg.get_reason();
             auto action = tspkg.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -136,7 +137,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -145,7 +146,7 @@ private:
 
 class ActionHeaderPrinterEnvironment {
 public:
-    ActionHeaderPrinterEnvironment(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterEnvironment(SmartcolsTableWrapper & table) : table(table) {}
 
     template <class T>
     struct libscols_line * print(const T & tsgrp) {
@@ -153,7 +154,7 @@ public:
             *current_reason != tsgrp.get_reason()) {
             auto reason = tsgrp.get_reason();
             auto action = tsgrp.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -183,7 +184,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -192,7 +193,7 @@ private:
 
 class ActionHeaderPrinterGroup {
 public:
-    ActionHeaderPrinterGroup(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterGroup(SmartcolsTableWrapper & table) : table(table) {}
 
     // TODO(lukash) to bring more sanity into the templated functions here, it
     // would be better if the Transaction template type of
@@ -207,7 +208,7 @@ public:
             *current_reason != tsgrp.get_reason()) {
             auto reason = tsgrp.get_reason();
             auto action = tsgrp.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -240,7 +241,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -249,7 +250,7 @@ private:
 
 class ActionHeaderPrinterModule {
 public:
-    ActionHeaderPrinterModule(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterModule(SmartcolsTableWrapper & table) : table(table) {}
 
     template <class T>
     struct libscols_line * print(const T & tsmodule) {
@@ -257,7 +258,7 @@ public:
             *current_reason != tsmodule.get_reason()) {
             auto reason = tsmodule.get_reason();
             auto action = tsmodule.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -287,7 +288,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -409,50 +410,31 @@ void print_resolve_logs(Transaction transaction) {
 }
 
 template <class Transaction>
-bool print_transaction_table(Transaction & transaction) {
-    // even correctly resolved transaction can contain some warnings / hints / infos
-    // in resolve logs (e.g. the package user wanted to install is already installed).
-    // Present them to the user.
-    print_resolve_logs(transaction);
+SmartcolsTableWrapper create_transaction_table(Transaction & transaction, TransactionSummary & ts_summary) {
+    SmartcolsTableWrapper tb;
 
-    // TODO (nsella) split function into create/print if possible
-    //static struct libscols_table * create_transaction_table(bool with_status) {}
-
-    if (transaction.empty()) {
-        std::cout << "Nothing to do." << std::endl;
-        return false;
-    }
-
-    struct libscols_table * tb = scols_new_table();
-
-    auto column = scols_table_new_column(tb, "Package", 0.3, SCOLS_FL_TREE);
+    auto column = scols_table_new_column(*tb, "Package", 0.3, SCOLS_FL_TREE);
     auto header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Arch", 6, 0);
+    column = scols_table_new_column(*tb, "Arch", 6, 0);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Version", 0.3, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Version", 0.3, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Repository", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Repository", 0.1, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Size", 9, SCOLS_FL_RIGHT);
+    column = scols_table_new_column(*tb, "Size", 9, SCOLS_FL_RIGHT);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    scols_table_enable_maxout(tb, 1);
-    scols_table_enable_colors(tb, libdnf5::cli::tty::is_interactive());
-
-    struct libscols_symbols * sb = scols_new_symbols();
-    scols_symbols_set_branch(sb, " ");
-    scols_symbols_set_right(sb, " ");
-    scols_symbols_set_vertical(sb, " ");
-    scols_table_set_symbols(tb, sb);
+    scols_table_enable_maxout(*tb, 1);
+    scols_table_enable_colors(*tb, libdnf5::cli::tty::is_interactive());
 
     // TODO(dmach): use colors from config
     // TODO(dmach): highlight version changes (rebases)
@@ -465,7 +447,6 @@ bool print_transaction_table(Transaction & transaction) {
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp<decltype(*tsgrps.begin())>);
 
     struct libscols_line * header_ln = nullptr;
-    TransactionSummary ts_summary;
     ActionHeaderPrinter action_header_printer(tb);
 
     for (auto & tspkg : tspkgs) {
@@ -479,7 +460,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer.print(tspkg);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         scols_line_set_data(ln, COL_NAME, pkg.get_name().c_str());
         scols_line_set_data(ln, COL_ARCH, pkg.get_arch().c_str());
         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
@@ -496,7 +477,7 @@ bool print_transaction_table(Transaction & transaction) {
         ts_summary.add(tspkg.get_action());
         if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REASON_CHANGE) {
             auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
-            struct libscols_line * ln_reason = scols_table_new_line(tb, ln);
+            struct libscols_line * ln_reason = scols_table_new_line(*tb, ln);
             std::string reason = fmt::format(
                 "{} -> {}",
                 libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()),
@@ -512,7 +493,7 @@ bool print_transaction_table(Transaction & transaction) {
                 scols_cell_set_color(cl_evr, "bold");
             }
 
-            struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
+            struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
             // TODO(jmracek) Translate it
             std::string name("replacing ");
             name.append(replaced.get_name());
@@ -549,7 +530,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer_group.print(tsgrp);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const grp_name = grp.get_name();
         if (grp_name.empty()) {
             scols_line_set_data(ln, COL_NAME, "<name-unset>");
@@ -566,7 +547,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer_environment.print(tsenv);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const env_name = env.get_name();
         if (env_name.empty()) {
             scols_line_set_data(ln, COL_NAME, "<name-unset>");
@@ -581,15 +562,31 @@ bool print_transaction_table(Transaction & transaction) {
     for (auto & tsmodule : transaction.get_transaction_modules()) {
         header_ln = action_header_printer_module.print(tsmodule);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         scols_line_set_data(ln, COL_NAME, tsmodule.get_module_name().c_str());
         scols_line_set_data(ln, COL_EVR, tsmodule.get_module_stream().c_str());
         scols_cell_set_color(scols_line_get_cell(ln, COL_NAME), action_color(tsmodule.get_action()));
     }
 
-    scols_print_table(tb);
-    scols_unref_symbols(sb);
-    scols_unref_table(tb);
+    return tb;
+}
+
+template <class Transaction>
+bool print_transaction_table(Transaction & transaction) {
+    // even correctly resolved transaction can contain some warnings / hints / infos
+    // in resolve logs (e.g. the package user wanted to install is already installed).
+    // Present them to the user.
+    print_resolve_logs(transaction);
+
+    if (transaction.empty()) {
+        std::cout << "Nothing to do." << std::endl;
+        return false;
+    }
+
+    TransactionSummary ts_summary;
+    auto tb = create_transaction_table(transaction, ts_summary);
+
+    scols_print_table(*tb);
 
     ts_summary.print();
 
