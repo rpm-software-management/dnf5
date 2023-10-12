@@ -1,0 +1,39 @@
+summary: Run a specific feature to test if the CI stack is fine
+adjust:
+    - when: distro == fedora-37
+      environment:
+          BASE: "fedora:37"
+    - when: distro == fedora-38
+      environment:
+          BASE: "fedora:38"
+    - when: distro == fedora-39
+      environment:
+          BASE: "fedora:39"
+    - when: distro == fedora-rawhide
+      environment:
+          BASE: "fedora:rawhide"
+
+prepare:
+    - name: Install packages to build fedora container
+      how: install
+      package: [git, podman]
+
+    - name: download latest ci-dnf-stack
+      how: shell
+      script:
+        - git clone https://github.com/rpm-software-management/ci-dnf-stack.git ci-dnf-stack
+
+    - name: build testing container
+      how: shell
+      script: |
+        ./ci-dnf-stack/container-test build \
+        --base $BASE \
+        --container-arg="--env=COPR=$PACKIT_COPR_PROJECT" \
+        --container-arg="--env=RPMS=$PACKIT_COPR_RPMS"
+
+execute:
+    - name: Run a simple feature to test the ci-stack
+      # weirdly the dir is not there anymore but we need the scripts
+      script:
+        - git clone https://github.com/rpm-software-management/ci-dnf-stack.git ci-dnf-stack
+        - ./ci-dnf-stack/container-test run --tags dnf5 --command dnf5 upgrade.feature
