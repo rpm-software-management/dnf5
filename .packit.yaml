@@ -32,3 +32,13 @@ jobs:
     dist_git_branches:
       - fedora-39
       - fedora-38 # rawhide updates are created automatically
+  - job: copr_build
+    trigger: pull_request
+    targets:
+      - fedora-all
+  - job: tests
+    trigger: pull_request
+    targets:
+      - fedora-all
+    fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
+    fmf_ref: main
