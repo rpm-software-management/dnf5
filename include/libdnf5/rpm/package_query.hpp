@@ -690,6 +690,11 @@ public:
     /// @return  Groups of one or more interdependent leaf packages.
     std::vector<std::vector<Package>> filter_leaves_groups();
 
+    /// Filter installonly packages.
+    ///
+    /// Filter packages that provide a capability that matches with any value in installonlypkgs configuration option.
+    void filter_installonly();
+
 private:
     std::vector<std::vector<Package>> filter_leaves(bool return_grouped_leaves);
 

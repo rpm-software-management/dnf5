@@ -492,13 +492,6 @@ static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
     return resolved_nevras_set;
 }
 
-static libdnf5::rpm::PackageQuery get_installonly_query(libdnf5::Base & base) {
-    auto & cfg_main = base.get_config();
-    const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
-    libdnf5::rpm::PackageQuery installonly_query(base);
-    installonly_query.filter_provides(installonly_packages, libdnf5::sack::QueryCmp::GLOB);
-    return installonly_query;
-}
 
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
@@ -539,7 +532,9 @@ void RepoqueryCommand::run() {
     }
 
     if (duplicates->get_value()) {
-        result_query -= get_installonly_query(ctx.base);
+        libdnf5::rpm::PackageQuery installonly_query(ctx.base, flags, false);
+        installonly_query.filter_installonly();
+        result_query -= installonly_query;
         result_query.filter_duplicates();
     }
 
@@ -548,7 +543,9 @@ void RepoqueryCommand::run() {
     }
 
     if (installonly->get_value()) {
-        result_query &= get_installonly_query(ctx.base);
+        libdnf5::rpm::PackageQuery installonly_query(ctx.base, flags, false);
+        installonly_query.filter_installonly();
+        result_query &= installonly_query;
     }
 
     // APPLY FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED
