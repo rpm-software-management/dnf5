@@ -127,8 +127,6 @@ public:
     /// PackageId.id == 0 => not set
     /// PackageId.id == -1 => cannot be detected
     PackageId get_protect_running_kernel() { return protected_running_kernel; };
-    /// Set running kernel that mus be not removed
-    void set_protect_running_kernel(PackageId value) { protected_running_kernel = value; };
 
     // Get protected_packages. Running kernel is not included
     const libdnf5::solv::SolvMap * get_protected_packages() { return protected_packages.get(); };
@@ -138,6 +136,7 @@ public:
     void set_protected_packages(const libdnf5::solv::SolvMap & map);
     /// Reset all protected packages
     void reset_protected_packages();
+    /// Set running kernel that mus be not removed
     void set_protected_running_kernel(PackageId kernel) { protected_running_kernel = kernel; };
     /// Set Ids of user-installed packages
     void set_user_installed_packages(const libdnf5::solv::IdQueue & queue);
