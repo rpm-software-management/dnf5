@@ -169,6 +169,9 @@ public:
     /// If set to true, group operations (install / remove) will only work
     /// with the group itself, but will not add to the transaction any packages.
     bool group_no_packages{false};
+    /// If set to true, environment operations (install / remove) will only work
+    /// with the environment itself, but will not add to the transaction any groups.
+    bool environment_no_groups{false};
 
     /// Set whether hints should be reported
     bool report_hint{true};

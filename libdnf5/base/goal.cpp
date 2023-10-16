@@ -1786,6 +1786,9 @@ void Goal::Impl::add_environment_install_to_goal(
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        if (settings.environment_no_groups) {
+            continue;
+        }
         for (const auto & grp_id : environment.get_groups()) {
             env_group_specs.emplace_back(
                 GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
@@ -1828,6 +1831,9 @@ void Goal::Impl::add_environment_remove_to_goal(
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
         for (const auto & environment : environment_query) {
             rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
+            if (settings.environment_no_groups) {
+                continue;
+            }
             // get all groups installed by the environment
             comps::GroupQuery environment_groups(query_installed);
             environment_groups.filter_groupid(
