@@ -1036,11 +1036,12 @@ int main(int argc, char * argv[]) try {
             command->load_additional_packages();
 
             command->run();
-            if (auto goal = context.get_goal(false)) {
+            if (auto * goal = context.get_goal(false)) {
                 context.set_transaction(goal->resolve());
-
                 command->goal_resolved();
+            }
 
+            if (context.get_transaction()) {
                 download_callbacks->reset_progress_bar();
                 download_callbacks->set_number_widget_visible(true);
                 download_callbacks->set_show_total_bar_limit(0);
