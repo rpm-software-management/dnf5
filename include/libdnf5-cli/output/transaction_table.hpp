@@ -328,30 +328,30 @@ public:
         }
     }
 
-    void print() {
-        std::cout << "\nTransaction Summary:\n";
+    void print(std::ostream & stream = std::cout) {
+        stream << "\nTransaction Summary:\n";
         if (installs != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Installing:", installs);
+            stream << fmt::format(" {:15} {:4} packages\n", "Installing:", installs);
         }
         if (reinstalls != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls);
+            stream << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls);
         }
         if (upgrades != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
+            stream << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
         }
         if (replaced != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced);
+            stream << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced);
         }
         if (removes != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
+            stream << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
         }
         if (downgrades != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades);
+            stream << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades);
         }
         if (reason_changes != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes);
+            stream << fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes);
         }
-        std::cout << std::endl;
+        stream << std::endl;
     }
 
 private:
@@ -399,13 +399,13 @@ static bool transaction_group_cmp(const TransactionGroup & tsgrp1, const Transac
 
 /// Prints all transaction problems
 template <class Transaction>
-void print_resolve_logs(Transaction transaction) {
+void print_resolve_logs(Transaction transaction, std::ostream & stream = std::cerr) {
     const std::vector<std::string> logs = transaction.get_resolve_logs_as_strings();
     for (const auto & log : logs) {
-        std::cerr << log << std::endl;
+        stream << log << std::endl;
     }
     if (logs.size() > 0) {
-        std::cerr << std::endl;
+        stream << std::endl;
     }
 }
 
