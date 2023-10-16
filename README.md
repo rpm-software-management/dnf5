@@ -37,14 +37,29 @@ Note, however, that DNF5 cannot yet interface with the following programming lan
 Installing DNF5
 ---------------
 
-To install the DNF5 package manager, use either of the following commands, depending on your Fedora release:
+DNF5 is available since Fedora 38. To install the DNF5 package manager, use either of the following commands, depending on your Fedora release:
 
 | Fedora release | Command |
 | --------------------------- | ------- |
-| 36 | `sudo dnf copr enable rpmsoftwaremanagement/dnf5-unstable && sudo dnf install dnf5`[^copr] |
-| 37 | `sudo dnf copr enable rpmsoftwaremanagement/dnf5-unstable && sudo dnf install dnf5`[^copr] |
-| 38                 | `sudo dnf install dnf5` |
-[^copr]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf5-unstable/
+| 37 | `sudo dnf copr enable rpmsoftwaremanagement/dnf-nightly && sudo dnf install dnf5`[^dnf-nightly] |
+| 38 or newer                 | `sudo dnf install dnf5` |
+[^dnf-nightly]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nigthly
+
+Note: `dnf-nightly` provides nightly builds for the entire DNF stack. Once you enable this repository you will start receiving updates for DNF, libdnf, and for the other packages of the stack.
+
+### Testing DNF5 obsoletes DNF
+
+Optionally you can install DNF5 from these COPR repositories[^dnf5-testing][^dnf5-testing-nightly]. The packages are build using the copr option `--rpmbuilds-with dnf5_obsoletes_dnf`. By installing these packages DNF5 will be the default package manager in your system. You will still be able to use DNF running `dnf4`.
+
+Packages from `dnf5-testing` are versioned following Fedora release pace and are updated every two weeks. Packages from `dnf5-testing-nightly` are built nightly.
+
+| Command | DNF5 Version |
+| --- | --- |
+| sudo dnf copr enable rpmsoftwaremanagement/dnf5-testing[^dnf5-testing] | Fedora rawhide version |
+| sudo dnf copr enable rpmsoftwaremanagement/dnf5-testing-nightly[^dnf5-testing-nightly] | Nightly Builds |
+[^dnf5-testing]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf5-testing/
+[^dnf5-testing-nightly]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf5-testing-nightly/
+
 
 Documentation
 =============
