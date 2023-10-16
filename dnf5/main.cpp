@@ -879,16 +879,25 @@ int main(int argc, char * argv[]) try {
                 arg_parser.parse(argc, argv);
             } catch (libdnf5::cli::ArgumentParserError & ex) {
                 // Error during parsing arguments. Try to find "--help"/"-h".
+                bool help_printed{false};
                 for (int idx = 1; idx < argc; ++idx) {
                     if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
                         arg_parser.get_selected_command()->help();
-                        return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+                        help_printed = true;
+                        break;
                     }
                 }
-                std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+                if (help_printed) {
+                    std::cerr << ex.what() << "." << std::endl;
+                } else {
+                    std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.")
+                              << std::endl;
+                }
+                // If the error is an unknown top-level command, suggest
+                // installing a package that provides the command
                 if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
                     if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
-                        std::cout
+                        std::cerr
                             << fmt::format(
                                    "It could be a command provided by a plugin, try: dnf install dnf5-command({})",
                                    unknown_arg_ex->get_argument())
