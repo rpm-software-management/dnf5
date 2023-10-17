@@ -1580,7 +1580,8 @@ void Goal::Impl::remove_group_packages(const rpm::PackageSet & remove_candidates
         // removed together with removal candidates
         Goal goal_tmp(base);
         goal_tmp.add_rpm_remove(remove_candidates);
-        for (const auto & tspkg : goal_tmp.resolve().get_transaction_packages()) {
+        auto trans = goal_tmp.resolve();
+        for (const auto & tspkg : trans.get_transaction_packages()) {
             if (transaction_item_action_is_outbound(tspkg.get_action())) {
                 dependent_base.remove(tspkg.get_package());
             }

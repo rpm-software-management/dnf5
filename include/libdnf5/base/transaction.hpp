@@ -84,8 +84,7 @@ public:
     std::vector<std::string> get_resolve_logs_as_strings() const;
 
     /// @return the transaction packages.
-    // TODO(jrohel): Return reference instead of copy?
-    std::vector<libdnf5::base::TransactionPackage> get_transaction_packages() const;
+    std::vector<libdnf5::base::TransactionPackage> & get_transaction_packages() const;
 
     /// @return the number of transaction packages.
     std::size_t get_transaction_packages_count() const;
