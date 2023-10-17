@@ -2,7 +2,7 @@
 Changes in DNF5 in comparison to DNF
 ====================================
 
-The chapter describe differences between `DNF5` (https://github.com/rpm-software-management/dnf5) and `DNF`
+The chapter describe differences between ``DNF5`` (https://github.com/rpm-software-management/dnf5) and ``DNF``
 (https://github.com/rpm-software-management/dnf)
 
 Changes on the API:
@@ -15,7 +15,7 @@ Use PackageSet iterator to access the data instead.
 
 Package::get_epoch()
 --------------------
-The return type was changed from `unsigned long` to `std::string`.
+The return type was changed from ``unsigned long`` to ``std::string``.
 
 
 DNF: Package.size, libdnf: dnf_package_get_size()
@@ -32,18 +32,18 @@ The functions were dropped as unneeded. The installonly packages are taken direc
 Query::filter() - HY_PKG_UPGRADES_BY_PRIORITY, HY_PKG_OBSOLETES_BY_PRIORITY, HY_PKG_LATEST_PER_ARCH_BY_PRIORITY
 ---------------------------------------------------------------------------------------------------------------
 The priority filter was separated into a standalone method.
-Combine `query.filter_priority()` with `query.filter_latest_evr()` or another filter to achieve the original
+Combine ``query.filter_priority()`` with ``query.filter_latest_evr()`` or another filter to achieve the original
 functionality.
 
 
 Query::filter() - HY_PKG_LATEST
 -------------------------------
-The filter was replaced with `filter_latest_evr()` which has the same behavior as `HY_PKG_LATEST_PER_ARCH`
+The filter was replaced with ``filter_latest_evr()`` which has the same behavior as ``HY_PKG_LATEST_PER_ARCH``
 
 
 ConfigMain::proxy_auth_method() and ConfigRepo::proxy_auth_method()
 -------------------------------------------------------------------
-The return types were changed. `OptionEnum<std::string>` was replaced by `OptionStringSet`.
+The return types were changed. ``OptionEnum<std::string>`` was replaced by ``OptionStringSet``.
 A combination of several authentication methods (for example "basic" and "digest") can now be used.
 This allows using a list of authentication methods in configuration files and the DNF5 command line
 "--setopt=proxy_auth_method=".
@@ -54,126 +54,126 @@ Changes on the command line:
 
 Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous, it wasn't clear
 whether the input is a command argument or a subcommand. If present, subcommands are now mandatory.
-`dnf history <transaction ID>` -> `dnf history info <transaction ID>`
-`dnf updateinfo` -> `dnf updateinfo summary`
+``dnf history <transaction ID>`` -> ``dnf history info <transaction ID>``
+``dnf updateinfo`` -> ``dnf updateinfo summary``
 
 Options that cannot be applied to all commands or can be applied but without any effect should be removed from general
 options and implemented only for related commands.
-For example: `--best`, `--nobest` are related to only several transaction commands.
+For example: ``--best``, ``--nobest`` are related to only several transaction commands.
 
-Renaming boolean options to format `--<option>`, and `--no-<option>`
-`--nobest` -> `--no-best`. Proposing to keep `--nobest` as a deprecated option.
+Renaming boolean options to format ``--<option>``, and ``--no-<option>``
+``--nobest`` -> ``--no-best``. Proposing to keep ``--nobest`` as a deprecated option.
 
-To disable all configuration file excludes, the `*` glob character is used now instead of the `all` within
-the `disable_excludes` configuration option to unify the behavior with query objects on the API.
+To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` within
+the ``disable_excludes`` configuration option to unify the behavior with query objects on the API.
 
 strict configuration option deprecation
 ---------------------------------------
-`strict` config option is now deprecated. The problem with this option is that it does two things:
+``strict`` config option is now deprecated. The problem with this option is that it does two things:
 
  1. if disabled it allows the solver to skip uninstallable packages to resolve depsolv problems
- 2. if disabled it allows dnf to skip unavailable packages (this is for `install` command mostly)
+ 2. if disabled it allows dnf to skip unavailable packages (this is for ``install`` command mostly)
 
-The functionality is now split to two config options - `skip_broken` for the uninstallable packages and
-`skip_unavailable` for packages not present in repositories. Together with these new config options there are also
-corresponding command line options `--skip-broken` and `--skip-unavailable` for commands where it makes sense.
+The functionality is now split to two config options - ``skip_broken`` for the uninstallable packages and
+``skip_unavailable`` for packages not present in repositories. Together with these new config options there are also
+corresponding command line options ``--skip-broken`` and ``--skip-unavailable`` for commands where it makes sense.
 
 
 Autoremove command
 ------------------
- * Dropped `<spec>` positional argument since the usecase is sufficiently covered by the `remove` command.
- * Specific `autoremove-n`, `autoremove-na`, and `autoremove-nevra` variants of the command are not supported.
+ * Dropped ``<spec>`` positional argument since the usecase is sufficiently covered by the ``remove`` command.
+ * Specific ``autoremove-n``, ``autoremove-na``, and ``autoremove-nevra`` variants of the command are not supported.
 
 Distro-sync command
 -------------------
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the `--skip-unavailable` option.
- * Dropped `distrosync` and `distribution-synchronization` aliases
+   the ``--skip-unavailable`` option.
+ * Dropped ``distrosync`` and ``distribution-synchronization`` aliases
 
 Downgrade command
 -----------------
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the `--skip-unavailable` option.
+   the ``--skip-unavailable`` option.
 
 Group command
 -------------
- * Dropped `group mark install` and `group mark remove` subcommands in favour of the
-   new `--no-packages` option of the `group install/remove` commands. So for example
+ * Dropped ``group mark install`` and ``group mark remove`` subcommands in favour of the
+   new ``--no-packages`` option of the ``group install/remove`` commands. So for example
    to mark a group as installed without touching any packages,
-   `dnf5 group install --no-packages <group_id>` command can be used.
- * Dropped `groupinstall` alias. It is replaced by `dnf group install`
- * Dropped `groupinfo` alias. It is replaced by `dnf group info`
- * Dropped `grouplist` alias. It is replaced by `dnf group list`
- * Dropped `grouperase` alias. It is replaced by `dnf group remove`
- * Dropped `groupremove` alias. It is replaced by `dnf group remove`
- * Dropped `groupupdate` alias. It is replaced by `dnf group upgrade`
- * Dropped `groups` alias. It is replaced by `dnf group`
+   ``dnf5 group install --no-packages <group_id>`` command can be used.
+ * Dropped ``groupinstall`` alias. It is replaced by ``dnf group install``
+ * Dropped ``groupinfo`` alias. It is replaced by ``dnf group info``
+ * Dropped ``grouplist`` alias. It is replaced by ``dnf group list``
+ * Dropped ``grouperase`` alias. It is replaced by ``dnf group remove``
+ * Dropped ``groupremove`` alias. It is replaced by ``dnf group remove``
+ * Dropped ``groupupdate`` alias. It is replaced by ``dnf group upgrade``
+ * Dropped ``groups`` alias. It is replaced by ``dnf group``
 
 Help command
 ------------
- * Dropped. The functionality is replaced by `--help` option
+ * Dropped. The functionality is replaced by ``--help`` option
 
 Info command
 ------------
- * Dropped `if` alias.
+ * Dropped ``if`` alias.
 
 List command
 ------------
- * Dropped `--all` option since this behavior is now the default one.
- * Changed the list of `--available` packages. Previously, dnf4 only listed packages that are either not installed, or
+ * Dropped ``--all`` option since this behavior is now the default one.
+ * Changed the list of ``--available`` packages. Previously, dnf4 only listed packages that are either not installed, or
    whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip
-   packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier
+   packages already listed in the ``Installed Packages`` section to reduce duplicities. But if the ``--available`` modifier
    is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
 Module command
 --------------
- * Dropped `--all` option since this behavior is the default one.
+ * Dropped ``--all`` option since this behavior is the default one.
 
 Repoclosure command
 -------------------
- * Dropped `--pkg`` option. Positional arguments can be used to specify packages to check closure for.
+ * Dropped ``--pkg`` option. Positional arguments can be used to specify packages to check closure for.
 
 Repolist command
 ----------------
- * Option `-v` and `--verbose` were removed. The functionality is replaced by `repoinfo` command that was already
+ * Option ``-v`` and ``--verbose`` were removed. The functionality is replaced by ``repoinfo`` command that was already
    introduced in DNF4.
 
 Repoquery command
 -----------------
- * Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and
+ * Dropped: ``-a/--all``, ``--alldeps``, ``--nevra`` options, their behavior is and has been the default for both dnf4 and
    dnf5. The options are no longer needed.
- * Dropped: `--nvr`, `--envra` options. They are no longer supported.
- * Dropped: `--archlist` alias for `--arch`.
- * Dropped: `-f` alias for `--file` also the arguments to `--file` are separated by comma instead of a space.
- * Moved `--groupmember` option to the Group info and list commands and renamed to `--contains-pkgs`.
+ * Dropped: ``--nvr``, ``--envra`` options. They are no longer supported.
+ * Dropped: ``--archlist`` alias for ``--arch``.
+ * Dropped: ``-f`` alias for ``--file`` also the arguments to ``--file`` are separated by comma instead of a space.
+ * Moved ``--groupmember`` option to the Group info and list commands and renamed to ``--contains-pkgs``.
  * --queryformat/--qf no longer prints additional new line at the end of each formatted string, bringing it closer to
    rpm --query behavior.
- * --queryformat no longer supports `size` tag because it was printing install size for installed packages and download
+ * --queryformat no longer supports ``size`` tag because it was printing install size for installed packages and download
    size for not-installed packages. This could be confusing.
- * Option `--source` was renamed to `--sourcerpm` and it now matches queryformat's `sourcerpm` tag.
+ * Option ``--source`` was renamed to ``--sourcerpm`` and it now matches queryformat's ``sourcerpm`` tag.
 
 Upgrade command
 ---------------
- * New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for
-   `upgrade --minimal`).
+ * New dnf5 option ``--minimal`` (``upgrade-minimal`` command still exists as a compatibility alias for
+   ``upgrade --minimal``).
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the `--skip-unavailable` option.
- * Dropped upgrade command aliases `upgrade-to` and `localupdate`.
+   the ``--skip-unavailable`` option.
+ * Dropped upgrade command aliases ``upgrade-to`` and ``localupdate``.
 
 Updateinfo command
 ------------------
- * The command has been renamed to `advisory` (but there is a compatibility `updateinfo` alias).
- * It is required to always specify a subcommand: `dnf updateinfo` -> `dnf5 advisory summary`.
- * Options `--summary`, `--list` and `--info` have been changed to subcommands. See `dnf5 advisory --help`.
- * Option `--sec-severity` (`--secseverity`) has been renamed to `--advisory-severities=ADVISORY_SEVERITY,...`.
- * The `advisory` commands now accept only advisory ID, in order to filter by packages use `--contains-pkgs=PACKAGE_NAME,...` option.
- * Dropped deprecated aliases: `list-updateinfo`, `list-security`, `list-sec`, `info-updateinfo`, `info-security`, `info-sec`, `summary-updateinfo`.
- * Dropped `upif` alias.
+ * The command has been renamed to ``advisory`` (but there is a compatibility ``updateinfo`` alias).
+ * It is required to always specify a subcommand: ``dnf updateinfo`` -> ``dnf5 advisory summary``.
+ * Options ``--summary``, ``--list`` and ``--info`` have been changed to subcommands. See ``dnf5 advisory --help``.
+ * Option ``--sec-severity`` (``--secseverity``) has been renamed to ``--advisory-severities=ADVISORY_SEVERITY,...``.
+ * The ``advisory`` commands now accept only advisory ID, in order to filter by packages use ``--contains-pkgs=PACKAGE_NAME,...`` option.
+ * Dropped deprecated aliases: ``list-updateinfo``, ``list-security``, ``list-sec``, ``info-updateinfo``, ``info-security``, ``info-sec``, ``summary-updateinfo``.
+ * Dropped ``upif`` alias.
 
 Changes of configuration:
 =========================
 
-Default of `best` configuration option changed to `true`
+Default of ``best`` configuration option changed to ``true``
 --------------------------------------------------------
 The new default value ensures that important updates will not be skipped and issues in distribution will be reported
 earlier.
