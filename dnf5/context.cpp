@@ -130,7 +130,7 @@ void Context::apply_repository_setopts() {
 
 void Context::print_info(std::string_view msg) const {
     if (!quiet) {
-        std::cout << msg << std::endl;
+        output_stream.get() << msg << std::endl;
     }
 }
 
@@ -427,7 +427,7 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         return;
     }
 
-    std::cout << std::endl << "Running transaction" << std::endl;
+    print_info("\nRunning transaction");
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
@@ -453,7 +453,7 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     }
 
     auto result = transaction.run();
-    std::cout << std::endl;
+    print_info("");
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
