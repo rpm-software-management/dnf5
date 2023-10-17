@@ -973,6 +973,11 @@ int main(int argc, char * argv[]) try {
                     if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
                         arg_parser.get_selected_command()->help();
                         help_printed = true;
+                        // Ignore the error and exit 0 if it's just a missing
+                        // positional argument, e.g. `dnf5 install --help`
+                        if (dynamic_cast<libdnf5::cli::ArgumentParserMissingPositionalArgumentError *>(&ex)) {
+                            return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+                        }
                         break;
                     }
                 }
