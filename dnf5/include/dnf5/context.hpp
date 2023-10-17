@@ -30,6 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 
 #include <filesystem>
+#include <functional>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
@@ -141,6 +143,8 @@ public:
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(std::string_view msg) const;
 
+    void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
+
 private:
     /// Program arguments.
     size_t argc{0};
@@ -154,6 +158,8 @@ private:
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
     bool show_new_leaves{false};
+
+    std::reference_wrapper<std::ostream> output_stream = std::cout;
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
