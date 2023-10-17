@@ -39,6 +39,9 @@ public:
     void fill_goal(libdnf5::Goal & goal);
     void fix_reasons(libdnf5::base::Transaction * transaction);
 
+    // Use create_transaction to directly create transaction without resolving
+    libdnf5::base::Transaction create_transaction();
+
 private:
     friend libdnf5::base::Transaction::Impl;
 

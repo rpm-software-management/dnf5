@@ -347,6 +347,13 @@ TransactionReplay::TransactionReplay(
     }
 };
 
+libdnf5::base::Transaction TransactionReplay::create_transaction() {
+    base::Transaction transaction(this->base);
+    transaction.p_impl->set_transaction(*this);
+
+    return transaction;
+}
+
 void TransactionReplay::fill_goal(libdnf5::Goal & goal) {
     bool skip_unavailable = base->get_config().get_skip_unavailable_option().get_value();
 
