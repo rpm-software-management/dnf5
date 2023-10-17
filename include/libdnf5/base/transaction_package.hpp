@@ -75,6 +75,7 @@ public:
 
 private:
     friend class Transaction::Impl;
+    friend class libdnf5::transaction::TransactionReplay;
     friend class ::BaseGoalTest;
     friend class ::RpmTransactionTest;
 
