@@ -347,6 +347,52 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
     return p_impl->signature_problems;
 }
 
+//TODO(amatej): Maybe I should pass in already created transaction objects?
+// Even though we would have to create them somewhere else which might be pain
+// Perhaps we could unify the interface with goal (GoalPrivate)
+void Transaction::Impl::set_transaction(const libdnf5::transaction::TransactionReplay & trans_replay) {
+    // The order of packages in the vector matters, we rely on outbound actions
+    // being at the end in Transaction::Impl::run()
+    for (const auto & package_action : trans_replay.package_actions) {
+        transaction::TransactionItemAction action;
+        if (package_action.action == "Reinstalled" || package_action.action == "Upgraded" ||
+            package_action.action == "Obsoleted" || package_action.action == "Downgraded") {
+            //TODO(amatej): For the REPLACED actions we need to get the packages that replace them.
+            // - We could add them information to the serialized transaction json
+            // - We could compute it (guess)?
+            action = transaction::TransactionItemAction::REPLACED;
+        } else if (package_action.action == "Removed") {
+            action = transaction::TransactionItemAction::REMOVE;
+        } else {
+            action = transaction::transaction_item_action_from_string(package_action.action);
+        }
+        packages.emplace_back(TransactionPackage{package_action.package, action, package_action.reason});
+    }
+
+    for (const auto & group_action : trans_replay.group_actions) {
+        transaction::TransactionItemAction action;
+        if (group_action.action == "Removed") {
+            action = transaction::TransactionItemAction::REMOVE;
+        } else {
+            action = transaction::transaction_item_action_from_string(group_action.action);
+        }
+        TransactionGroup tsgrp(group_action.group, action, group_action.reason, group_action.pkg_types);
+        groups.emplace_back(std::move(tsgrp));
+    }
+
+    for (const auto & environment_action : trans_replay.environment_actions) {
+        transaction::TransactionItemAction action;
+        if (environment_action.action == "Removed") {
+            action = transaction::TransactionItemAction::REMOVE;
+        } else {
+            action = transaction::transaction_item_action_from_string(environment_action.action);
+        }
+        bool with_optional = any(environment_action.pkg_types & libdnf5::comps::PackageType::OPTIONAL);
+        TransactionEnvironment tsenv(environment_action.environment, action, environment_action.reason, with_optional);
+        environments.emplace_back(std::move(tsenv));
+    }
+}
+
 void Transaction::Impl::set_transaction(
     rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems) {
     auto solver_problems = process_solver_problems(base, solved_goal);

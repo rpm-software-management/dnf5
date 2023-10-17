@@ -35,6 +35,9 @@ namespace libdnf5::rpm {
 class KeyInfo;
 }  // namespace libdnf5::rpm
 
+namespace libdnf5::transaction {
+class TransactionReplay;
+}
 
 namespace libdnf5::base {
 
@@ -168,6 +171,7 @@ private:
     friend class TransactionModule;
     friend class TransactionPackage;
     friend class libdnf5::Goal;
+    friend class libdnf5::transaction::TransactionReplay;
 
     Transaction(const libdnf5::BaseWeakPtr & base);
 

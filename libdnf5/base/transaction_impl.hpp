@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction_package.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/rpm/rpm_signature.hpp"
+#include "libdnf5/transaction/transaction_replay.hpp"
 
 #include <solv/transaction.h>
 
@@ -49,6 +50,7 @@ public:
 
     /// Set transaction according resolved goal and problems to EventLog
     void set_transaction(rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems);
+    void set_transaction(const libdnf5::transaction::TransactionReplay & trans_replay);
 
     TransactionPackage make_transaction_package(
         Id id,
