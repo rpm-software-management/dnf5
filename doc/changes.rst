@@ -79,6 +79,11 @@ The functionality is now split to two config options - ``skip_broken`` for the u
 corresponding command line options ``--skip-broken`` and ``--skip-unavailable`` for commands where it makes sense.
 
 
+Alias command
+-------------
+* Dropped. The command is replaced by a different functionality, see
+  :ref:`Aliases for command line arguments <aliases_misc_ref-label>`.
+
 Autoremove command
 ------------------
  * Dropped ``<spec>`` positional argument since the usecase is sufficiently covered by the ``remove`` command.
