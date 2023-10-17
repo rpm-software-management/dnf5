@@ -21,8 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_REPLAY_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_REPLAY_HPP
 
-#include <dnf5/context.hpp>
+#include "arguments.hpp"
 
+#include <dnf5/context.hpp>
+#include <libdnf5/conf/option_bool.hpp>
+#include <libdnf5/transaction/transaction_replay.hpp>
 
 namespace dnf5 {
 
@@ -30,8 +33,18 @@ namespace dnf5 {
 class HistoryReplayCommand : public Command {
 public:
     explicit HistoryReplayCommand(Context & context) : Command(context, "replay") {}
+    void configure() override;
     void set_argument_parser() override;
     void run() override;
+    void goal_resolved() override;
+
+private:
+    std::string transaction_path;
+
+    std::unique_ptr<libdnf5::cli::session::BoolOption> resolve{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> ignore_installed{nullptr};
+
+    std::unique_ptr<libdnf5::transaction::TransactionReplay> replay{nullptr};
 };
 
 
