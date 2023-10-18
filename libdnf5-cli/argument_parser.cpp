@@ -265,15 +265,14 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
     // Invoke the attached named arguments
     for (auto & target_named_arg : attached_named_args) {
         auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
-        const char * args[2];
-        int args_count = 1;
+        std::string long_name = assign_ptr ? std::string(option, assign_ptr) : option;
         if (target_arg.get_has_value()) {
             std::string target_arg_val = target_named_arg.value;
             replace_all(target_arg_val, "${}", arg_value);
-            args[args_count++] = target_arg_val.c_str();
+            long_name += "=" + target_arg_val;
         }
-        args[0] = option;
-        target_arg.parse_long(option, args_count, args);
+        const char * const args[1] = {long_name.c_str()};
+        target_arg.parse_long(long_name.c_str(), 1, args);
     }
 
     return consumed_args;
