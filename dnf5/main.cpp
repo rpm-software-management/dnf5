@@ -200,7 +200,7 @@ void RootCommand::set_argument_parser() {
             auto comma = val.find(',', 1);
             if (comma == std::string::npos || comma == (val.size() - 1)) {
                 throw libdnf5::cli::ArgumentParserError(
-                    M_("repofrompath: Incorrect repoid and path specification \"{}\""), value);
+                    M_("repofrompath: Incorrect repoid and path specification \"{}\""), std::string(value));
             }
             ctx.repos_from_path.emplace_back(val.substr(0, comma), val.substr(comma + 1));
             return true;
@@ -222,14 +222,16 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw libdnf5::cli::ArgumentParserError(M_("setopt: Badly formatted argument value \"{}\""), value);
+                throw libdnf5::cli::ArgumentParserError(
+                    M_("setopt: Badly formatted argument value \"{}\""), std::string(value));
             }
             auto key = std::string(value, val);
             auto dot_pos = key.rfind('.');
             if (dot_pos != std::string::npos) {
                 if (dot_pos == key.size() - 1) {
                     throw libdnf5::cli::ArgumentParserError(
-                        M_("setopt: Badly formatted argument value: Last key character cannot be '.': {}"), value);
+                        M_("setopt: Badly formatted argument value: Last key character cannot be '.': {}"),
+                        std::string(value));
                 }
                 // Store repository option to vector. Use it later when repositories configuration will be loaded.
                 ctx.setopts.emplace_back(key, val + 1);
@@ -239,7 +241,8 @@ void RootCommand::set_argument_parser() {
                 try {
                     conf.opt_binds().at(key).new_string(libdnf5::Option::Priority::COMMANDLINE, val + 1);
                 } catch (const std::exception & ex) {
-                    throw libdnf5::cli::ArgumentParserError(M_("setopt: \"{0}\": {1}"), value, std::string(ex.what()));
+                    throw libdnf5::cli::ArgumentParserError(
+                        M_("setopt: \"{0}\": {1}"), std::string(value), std::string(ex.what()));
                 }
             }
             return true;
@@ -257,7 +260,8 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw libdnf5::cli::ArgumentParserError(M_("setvar: Badly formatted argument value \"{}\""), value);
+                throw libdnf5::cli::ArgumentParserError(
+                    M_("setvar: Badly formatted argument value \"{}\""), std::string(value));
             }
             auto name = std::string(value, val);
             try {
@@ -599,7 +603,9 @@ void RootCommand::set_argument_parser() {
                     }
                 }
                 throw libdnf5::cli::ArgumentParserInvalidValueError(
-                    M_("Unsupported architecture \"{0}\". Please choose one from {1}"), value, available_arches);
+                    M_("Unsupported architecture \"{0}\". Please choose one from {1}"),
+                    std::string(value),
+                    available_arches);
             }
             ctx.base.get_config().get_ignorearch_option().set(libdnf5::Option::Priority::COMMANDLINE, true);
             ctx.base.get_vars()->set("arch", value, libdnf5::Vars::Priority::COMMANDLINE);

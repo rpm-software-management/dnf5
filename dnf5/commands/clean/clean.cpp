@@ -99,7 +99,7 @@ void CleanCommand::set_argument_parser() {
                         first = false;
                     }
                     throw libdnf5::cli::ArgumentParserUnknownArgumentError(
-                        M_("Unknown cache type \"{0}\". Supported types: {1}"), argv[i], known_types);
+                        M_("Unknown cache type \"{0}\". Supported types: {1}"), std::string(argv[i]), known_types);
                 }
             }
             return true;

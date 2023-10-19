@@ -259,7 +259,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
             M_("Failed to load repomd for repo \"{}\" from \"{}\": {}."),
             config.get_id(),
             repomd_fn,
-            pool_errstr(*pool));
+            std::string(pool_errstr(*pool)));
     }
 
     if (repo_add_rpmmd(repo, primary_file.get(), 0, 0) != 0) {
@@ -267,7 +267,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
             M_("Failed to load primary for repo \"{}\" from \"{}\": {}."),
             config.get_id(),
             primary_fn,
-            pool_errstr(*pool));
+            std::string(pool_errstr(*pool)));
     }
 
     main_solvables_start = solvables_start;
@@ -280,7 +280,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 
 void SolvRepo::load_system_repo_ext(RepodataType type) {
-    auto type_name = repodata_type_to_name(type);
+    std::string type_name = repodata_type_to_name(type);
     switch (type) {
         case RepodataType::COMPS: {
             // get installed groups from system state and load respective xml files
@@ -319,9 +319,9 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
 
-    auto type_name = repodata_type_to_name(type);
+    std::string type_name = repodata_type_to_name(type);
 
-    std::string_view ext_fn;
+    std::string ext_fn;
 
     if (type == RepodataType::COMPS) {
         ext_fn = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
@@ -339,7 +339,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
 
     int solvables_start = pool->nsolvables;
 
-    if (load_solv_cache(pool, type_name, repodata_type_to_flags(type))) {
+    if (load_solv_cache(pool, type_name.c_str(), repodata_type_to_flags(type))) {
         if (type == RepodataType::UPDATEINFO) {
             updateinfo_solvables_start = solvables_start;
             updateinfo_solvables_end = pool->nsolvables;
@@ -379,7 +379,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             type_name,
             config.get_id(),
             ext_fn,
-            pool_errstr(*get_rpm_pool(base)));
+            std::string(pool_errstr(*get_rpm_pool(base))));
     }
 
     if (config.get_build_cache_option().get_value()) {
@@ -412,7 +412,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
         throw SolvError(
             M_("Failed to load system repo from root \"{}\": {}"),
             rootdir.empty() ? "/" : rootdir,
-            pool_errstr(*get_rpm_pool(base)));
+            std::string(pool_errstr(*get_rpm_pool(base))));
     }
 
     if (!rootdir.empty()) {
@@ -510,10 +510,10 @@ bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type_name, int fl
                     flags) != 0) {
                 throw SolvError(
                     M_("Failed to load {} cache for repo \"{}\" from \"{}\": {}"),
-                    type_name ? type_name : "primary",
+                    type_name ? std::string(type_name) : "primary",
                     config.get_id(),
                     path.native(),
-                    pool_errstr(*get_rpm_pool(base)));
+                    std::string(pool_errstr(*get_rpm_pool(base))));
             }
             return true;
         }
@@ -563,7 +563,7 @@ void SolvRepo::write_main(bool load_after_write) {
             M_("Failed to write primary cache for repo \"{}\" to \"{}\": {}"),
             config.get_id(),
             cache_tmp_file.get_path().native(),
-            pool_errstr(*pool));
+            std::string(pool_errstr(*pool)));
     }
 
     cache_tmp_file.close();
@@ -580,7 +580,7 @@ void SolvRepo::write_main(bool load_after_write) {
                 M_("Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"),
                 config.get_id(),
                 cache_tmp_file.get_path().native(),
-                pool_errstr(*pool));
+                std::string(pool_errstr(*pool)));
         }
     }
 
@@ -596,8 +596,8 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
 
-    const auto type_name = repodata_type_to_name(type);
-    const auto solvfile_path = solv_file_path(type_name);
+    const std::string type_name = repodata_type_to_name(type);
+    const auto solvfile_path = solv_file_path(type_name.c_str());
     const auto solvfile_parent_dir = solvfile_path.parent_path();
 
     std::filesystem::create_directory(solvfile_parent_dir);
@@ -641,7 +641,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
             type_name,
             config.get_id(),
             cache_tmp_file.get_path().native(),
-            pool_errstr(*pool));
+            std::string(pool_errstr(*pool)));
     }
 
     cache_tmp_file.close();
@@ -662,7 +662,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
                 type_name,
                 config.get_id(),
                 cache_tmp_file.get_path().native(),
-                pool_errstr(*pool));
+                std::string(pool_errstr(*pool)));
         }
         data->state = REPODATA_AVAILABLE;
     }

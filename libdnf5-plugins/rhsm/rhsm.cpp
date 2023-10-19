@@ -131,7 +131,9 @@ void Rhsm::setup_enrollments() {
         g_autoptr(GError) err = NULL;
         if (!g_key_file_save_to_file(repofile, repofname, &err)) {
             throw RhsmPluginError(
-                M_("Cannot save repository configuration to file \"{}\": {}"), repofname, std::string(err->message));
+                M_("Cannot save repository configuration to file \"{}\": {}"),
+                std::string(repofname),
+                std::string(err->message));
         }
     }
 }
