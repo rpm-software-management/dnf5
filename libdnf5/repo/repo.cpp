@@ -76,7 +76,7 @@ static void is_readable_rpm(const std::string & fn) {
     }
 
     if (access(fn.c_str(), R_OK) != 0) {
-        throw RepoRpmError(M_("Failed to access RPM \"{}\": {}"), fn, strerror(errno));
+        throw RepoRpmError(M_("Failed to access RPM \"{}\": {}"), fn, std::string(strerror(errno)));
     }
 }
 
@@ -502,7 +502,7 @@ rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
 
     Id new_id = repo_add_rpm(solv_repo->repo, path.c_str(), flags);
     if (new_id == 0) {
-        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), path, pool_errstr(solv_repo->repo->pool));
+        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), path, std::string(pool_errstr(solv_repo->repo->pool)));
     }
 
     solv_repo->set_needs_internalizing();

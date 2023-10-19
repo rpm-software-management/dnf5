@@ -99,7 +99,7 @@ void ModuleMetadata::add_metadata_from_string(const std::string & yaml, int prio
         }
     }
     if (error) {
-        throw ModuleResolveError(M_("Failed to update from string: {}"), error->message);
+        throw ModuleResolveError(M_("Failed to update from string: {}"), std::string(error->message));
     }
     if (!module_merger) {
         module_merger = modulemd_module_index_merger_new();
@@ -125,7 +125,8 @@ void ModuleMetadata::resolve_added_metadata() {
 
     resulting_module_index = modulemd_module_index_merger_resolve(module_merger, &error);
     if (error && !resulting_module_index) {
-        throw ModuleResolveError(M_("Failed to resolve: {}"), (error->message) ? error->message : "Unknown error");
+        throw ModuleResolveError(
+            M_("Failed to resolve: {}"), (error->message) ? std::string(error->message) : "Unknown error");
     }
     if (error) {
         auto & logger = *base->get_logger();
@@ -135,11 +136,11 @@ void ModuleMetadata::resolve_added_metadata() {
 
     modulemd_module_index_upgrade_defaults(resulting_module_index, MD_DEFAULTS_VERSION_ONE, &error);
     if (error) {
-        throw ModuleResolveError(M_("Failed to upgrade defaults: {}"), error->message);
+        throw ModuleResolveError(M_("Failed to upgrade defaults: {}"), std::string(error->message));
     }
     modulemd_module_index_upgrade_streams(resulting_module_index, MD_MODULESTREAM_VERSION_TWO, &error);
     if (error) {
-        throw ModuleResolveError(M_("Failed to upgrade streams: {}"), error->message);
+        throw ModuleResolveError(M_("Failed to upgrade streams: {}"), std::string(error->message));
     }
     g_clear_pointer(&module_merger, g_object_unref);
 

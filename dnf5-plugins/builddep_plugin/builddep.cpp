@@ -76,7 +76,8 @@ void BuildDepCommand::set_argument_parser() {
             auto split = libdnf5::utils::string::split(value, " ", 2);
             if (split.size() != 2) {
                 throw libdnf5::cli::ArgumentParserError(
-                    M_("Invalid value for macro definition \"{}\". \"macro expr\" format expected."), value);
+                    M_("Invalid value for macro definition \"{}\". \"macro expr\" format expected."),
+                    std::string(value));
             }
             rpm_macros.emplace_back(std::move(split[0]), std::move(split[1]));
             return true;

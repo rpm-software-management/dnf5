@@ -43,8 +43,8 @@ std::string Advisory::get_name() const {
         throw RuntimeError(
             M_("Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have advisory prefix \"{}\""),
             id.id,
-            name,
-            libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX);
+            std::string(name),
+            std::string(libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX));
     }
 
     return std::string(name + libdnf5::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);

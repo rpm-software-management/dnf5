@@ -171,7 +171,7 @@ unsigned long Pool::get_epoch_num(Id id) const {
 
         if (converted == ULONG_MAX || *endptr != '\0') {
             // TODO(lukash) throw proper exception class
-            throw RuntimeError(M_("Failed to convert epoch \"{}\" to number"), evr.e);
+            throw RuntimeError(M_("Failed to convert epoch \"{}\" to number"), std::string(evr.e));
         }
 
         return converted;

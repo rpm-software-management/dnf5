@@ -87,7 +87,9 @@ void create_forcearch_option(dnf5::Command & command) {
                 }
             }
             throw libdnf5::cli::ArgumentParserInvalidValueError(
-                M_("Unsupported architecture \"{0}\". Please choose one from {1}"), value, available_arches);
+                M_("Unsupported architecture \"{0}\". Please choose one from {1}"),
+                std::string(value),
+                available_arches);
         }
         ctx.base.get_config().get_ignorearch_option().set(libdnf5::Option::Priority::COMMANDLINE, true);
         ctx.base.get_vars()->set("arch", value, libdnf5::Vars::Priority::COMMANDLINE);

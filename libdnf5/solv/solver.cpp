@@ -75,7 +75,7 @@ void Solver::write_debugdata(std::filesystem::path debug_dir, bool with_transact
         NULL,
         NULL);
     if (ret == 0) {
-        const auto * libsolv_err_msg = ::pool_errstr(solver->pool);
+        std::string libsolv_err_msg = ::pool_errstr(solver->pool);
         throw RuntimeError(M_("Writing debugsolver data into \"{}\" failed: {}"), debug_dir.native(), libsolv_err_msg);
     }
 }

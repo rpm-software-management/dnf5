@@ -585,7 +585,11 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
         }
         if (!used) {
             throw ArgumentParserUnknownArgumentError(
-                std::string(id), std::string(argv[i]), M_("Unknown argument \"{}\" for command \"{}\""), argv[i], id);
+                std::string(id),
+                std::string(argv[i]),
+                M_("Unknown argument \"{}\" for command \"{}\""),
+                std::string(argv[i]),
+                id);
         }
     }
     ++parse_count;
@@ -709,7 +713,11 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
         }
         if (!used) {
             throw ArgumentParserUnknownArgumentError(
-                std::string(id), std::string(argv[i]), M_("Unknown argument \"{}\" for command \"{}\""), argv[i], id);
+                std::string(id),
+                std::string(argv[i]),
+                M_("Unknown argument \"{}\" for command \"{}\""),
+                std::string(argv[i]),
+                id);
         }
     }
     ++parse_count;
