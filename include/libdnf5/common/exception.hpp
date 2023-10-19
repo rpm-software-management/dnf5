@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <functional>
 #include <stdexcept>
+#include <type_traits>
 
 #define LIBDNF_LOCATION \
     { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
@@ -122,6 +123,21 @@ private:
 };
 
 
+// The exception stores the passed arguments and uses them in the catch phase.
+// A problem can occur if the stored argument points to a value in memory that it does not own.
+// The value that the stored argument points to may no longer be in memory - it is destroyed
+// when the program leaves the scope of the variable with the value.
+// A safer solution than passing a pointer is to use passing by value. For example, pass
+// "std::string" instead of `char *` or `std::string_view`.
+/// "Concept" defines safe types that can be passed by value as arguments to the `libdnf5::Error`
+/// and `libdnf5::SystemError` exception constructors.
+/// Pointers to void and nullptr are allowed because they are not dereferenced, but their value is printed.
+template <typename T>
+concept AllowedErrorArgTypes =
+    std::is_arithmetic_v<T> || std::is_base_of_v<std::string, T> || std::is_null_pointer_v<T> ||
+    std::is_same_v<const void *, T> || std::is_same_v<void *, T>;
+
+
 /// Base class for libdnf exceptions. Virtual methods `get_name()` and
 /// `get_domain_name()` should always return the exception's class name and its
 /// namespace (including enclosing class names in case the exception is nested in
@@ -132,7 +148,7 @@ public:
     ///
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template <typename... Args>
+    template <AllowedErrorArgTypes... Args>
     explicit Error(BgettextMessage format, Args... args)
         : std::runtime_error(b_gettextmsg_get_id(format)),
           format(format),
@@ -172,7 +188,7 @@ public:
     /// @param error_code The `errno` of the error.
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template <typename... Args>
+    template <AllowedErrorArgTypes... Args>
     explicit SystemError(int error_code, BgettextMessage format, Args... args)
         : Error(format, std::forward<Args>(args)...),
           error_code(error_code),
