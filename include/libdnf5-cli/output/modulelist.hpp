@@ -93,14 +93,9 @@ void print_modulelist_table(Query & module_list) {
 
             // Get profile strings (append [d] or [i] if needed)
             std::vector<std::string> profile_strings;
-            const auto & default_profiles = module_item.get_default_profiles();
             for (const auto & profile : module_item.get_profiles()) {
                 // TODO(pkratoch): Also show "[i]" for installed profiles
-                const auto & name = profile.get_name();
-                profile_strings.push_back(
-                    std::find(default_profiles.begin(), default_profiles.end(), name) != default_profiles.end()
-                        ? name + " [d]"
-                        : name);
+                profile_strings.push_back(profile.is_default() ? profile.get_name() + " [d]" : profile.get_name());
             }
 
             add_line_into_modulelist_table(
