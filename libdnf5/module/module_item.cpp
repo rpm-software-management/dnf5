@@ -187,9 +187,14 @@ std::vector<std::string> ModuleItem::get_demodularized_rpms() const {
 std::vector<ModuleProfile> ModuleItem::get_profiles_internal(const char * name) const {
     std::vector<ModuleProfile> result_profiles;
     GPtrArray * profiles = modulemd_module_stream_v2_search_profiles((ModulemdModuleStreamV2 *)md_stream, name);
+    const auto & default_profiles = module_sack->get_default_profiles(get_name(), get_stream());
 
     for (unsigned int i = 0; i < profiles->len; i++) {
-        result_profiles.push_back(ModuleProfile(static_cast<ModulemdProfile *>(g_ptr_array_index(profiles, i))));
+        const auto & modulemd_profile = static_cast<ModulemdProfile *>(g_ptr_array_index(profiles, i));
+        const bool & is_default =
+            std::find(default_profiles.begin(), default_profiles.end(), modulemd_profile_get_name(modulemd_profile)) !=
+            default_profiles.end();
+        result_profiles.push_back(ModuleProfile(modulemd_profile, is_default));
     }
 
     g_ptr_array_free(profiles, true);

@@ -67,10 +67,11 @@ private:
     friend class ModuleItem;
 
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:ctor:ModuleProfile.ModuleProfile(ModulemdProfile * profile)
-    ModuleProfile(_ModulemdProfile * profile);
+    ModuleProfile(_ModulemdProfile * profile, const bool is_default);
 
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:attribute:ModuleProfile.profile
     _ModulemdProfile * profile{nullptr};
+    bool is_default_profile = false;
 };
 
 
