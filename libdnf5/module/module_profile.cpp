@@ -68,12 +68,16 @@ bool ModuleProfile::is_default() const {
 }
 
 
-ModuleProfile::ModuleProfile(ModulemdProfile * profile) : profile(profile) {
+ModuleProfile::ModuleProfile(ModulemdProfile * profile, const bool is_default)
+    : profile(profile),
+      is_default_profile(is_default) {
     g_object_ref(profile);
 }
 
 
-ModuleProfile::ModuleProfile(const ModuleProfile & src) : profile(src.profile) {
+ModuleProfile::ModuleProfile(const ModuleProfile & src)
+    : profile(src.profile),
+      is_default_profile(src.is_default_profile) {
     if (profile != nullptr) {
         g_object_ref(profile);
     }
@@ -84,6 +88,7 @@ ModuleProfile & ModuleProfile::operator=(const ModuleProfile & src) {
     if (this != &src) {
         g_object_unref(profile);
         profile = src.profile;
+        is_default_profile = src.is_default_profile;
         if (profile != nullptr) {
             g_object_ref(profile);
         }
