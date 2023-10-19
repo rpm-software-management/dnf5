@@ -1,2 +1,3 @@
 breathe
 sphinx-autoapi
+sphinx_rtd_theme
