@@ -132,8 +132,8 @@ public:
     ///
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template <typename... Ss>
-    explicit Error(BgettextMessage format, Ss &&... args)
+    template <typename... Args>
+    explicit Error(BgettextMessage format, Args... args)
         : std::runtime_error(b_gettextmsg_get_id(format)),
           format(format),
           // stores the format args in the lambda's closure
@@ -172,9 +172,9 @@ public:
     /// @param error_code The `errno` of the error.
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template <typename... Ss>
-    explicit SystemError(int error_code, BgettextMessage format, Ss &&... args)
-        : Error(format, std::forward<Ss>(args)...),
+    template <typename... Args>
+    explicit SystemError(int error_code, BgettextMessage format, Args... args)
+        : Error(format, std::forward<Args>(args)...),
           error_code(error_code),
           has_user_message(true) {}
 
