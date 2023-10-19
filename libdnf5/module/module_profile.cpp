@@ -61,10 +61,7 @@ std::vector<std::string> ModuleProfile::get_rpms() const {
 
 
 bool ModuleProfile::is_default() const {
-    if (!profile) {
-        return {};
-    }
-    return modulemd_profile_is_default(profile);
+    return is_default_profile;
 }
 
 
