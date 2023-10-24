@@ -25,11 +25,10 @@
     }
 }
 
-// TODO(jkolarik): advisory modules skipped for now
-
 %{
     #include "libdnf5/advisory/advisory.hpp"
     #include "libdnf5/advisory/advisory_package.hpp"
+    #include "libdnf5/advisory/advisory_module.hpp"
     #include "libdnf5/advisory/advisory_set.hpp"
     #include "libdnf5/advisory/advisory_set_iterator.hpp"
     #include "libdnf5/advisory/advisory_collection.hpp"
@@ -47,11 +46,12 @@
 %rename(value) libdnf5::advisory::AdvisorySetIterator::operator*();
 %include "libdnf5/advisory/advisory_set_iterator.hpp"
 
-%ignore libdnf5::advisory::AdvisoryCollection::get_modules();
+%include "libdnf5/advisory/advisory_module.hpp"
 %include "libdnf5/advisory/advisory_collection.hpp"
 %include "libdnf5/advisory/advisory_query.hpp"
 %include "libdnf5/advisory/advisory_reference.hpp"
 
+%template(VectorAdvisoryModule) std::vector<libdnf5::advisory::AdvisoryModule>;
 %template(VectorAdvisoryCollection) std::vector<libdnf5::advisory::AdvisoryCollection>;
 %template(VectorAdvisoryPackage) std::vector<libdnf5::advisory::AdvisoryPackage>;
 %template(VectorAdvisoryReference) std::vector<libdnf5::advisory::AdvisoryReference>;
