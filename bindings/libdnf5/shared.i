@@ -12,4 +12,12 @@
 
     // From perl5 - utf8.h: conflicts with fmt/format.h header
     #undef utf8_to_utf16
+
+    // Recent versions of Perl (5.8.0) have namespace conflict problems.
+    // Perl defines a bunch of short macros to make the Perl API function names shorter.
+    // For example, in /usr/lib64/perl5/CORE/embed.h there is:
+    // #define get_context Perl_get_context
+    // We have to undefine that since we don't want our AdvisoryModule::get_context to
+    // be renamed to Perl_get_context
+    #undef get_context
 %}
