@@ -54,6 +54,12 @@ extensions = [
 breathe_projects = {'dnf5': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'dnf5'
 
+# Show undocumented members for both C++ and Python API docs
+breathe_default_members = ('members', 'undoc-members')
+autodoc_default_options = {
+    'undoc-members': True,
+}
+
 # The autoapi config is only used doc/setup.py in readthedocs workflow (not by cmake)
 autoapi_type = 'python'
 autoapi_dirs = ['@CMAKE_CURRENT_BINARY_DIR@/../bindings/python3/libdnf5', '@CMAKE_CURRENT_BINARY_DIR@/../bindings/python3/libdnf5_cli']
