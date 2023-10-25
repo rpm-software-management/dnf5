@@ -33,6 +33,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <sstream>
 
+const std::string SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
+const std::string SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -75,6 +78,43 @@ void NeedsRestartingCommand::configure() {
 }
 
 time_t get_boot_time() {
+    // We have three sources from which to derive the boot time. These values
+    // vary depending on containerization, existing of a Real Time Clock, etc:
+    // - UserspaceTimestamp property on /org/freedesktop/systemd1
+    //      The start time of the service manager, according to systemd itself.
+    //      Works unless the system was not booted with systemd, such as in (most)
+    //      containers.
+    // - st_mtime of /proc/1
+    //      Reflects the time the first process was run after booting. This works
+    //      for all known cases except (1) machines without a RTC---they awake at
+    //      the start of the epoch, and (2) machines with the RTC in local time
+    //      (see `timedatectl status`).
+    // - /proc/uptime
+    //      Seconds field of /proc/uptime subtracted from the current time.
+    //      Works for machines without RTC iff the current time is reasonably
+    //      correct. Does not work on containers which share their kernel with
+    //      the host---there, the host kernel uptime is returned
+
+    // First, ask systemd for the boot time. If systemd is available, this is
+    // the best option.
+    try {
+        std::unique_ptr<sdbus::IConnection> connection;
+        connection = sdbus::createSystemBusConnection();
+        auto proxy = sdbus::createProxy("org.freedesktop.systemd1", "/org/freedesktop/systemd1");
+
+        const uint64_t systemd_boot_time_us =
+            proxy->getProperty("UserspaceTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE);
+
+        const time_t systemd_boot_time = static_cast<long>(systemd_boot_time_us) / (1000L * 1000L);
+
+        if (systemd_boot_time != 0) {
+            return systemd_boot_time;
+        }
+    } catch (const sdbus::Error & ex) {
+        // Some D-Bus error, maybe we're inside a container.
+    }
+
+    // Otherwise, take the maximum of the st_mtime of /proc/1 and /proc/uptime.
     time_t proc_1_boot_time = 0;
     struct stat proc_1_stat = {};
     if (stat("/proc/1", &proc_1_stat) == 0) {
@@ -161,10 +201,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), ex.what());
     }
 
-    connection->enterEventLoopAsync();
     auto systemd_proxy = sdbus::createProxy("org.freedesktop.systemd1", "/org/freedesktop/systemd1");
-
-    const std::string manager_interface{"org.freedesktop.systemd1.Manager"};
 
     std::vector<sdbus::Struct<
         std::string,
@@ -178,9 +215,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
         std::string,
         sdbus::ObjectPath>>
         units;
-    systemd_proxy->callMethod("ListUnits").onInterface(manager_interface).storeResultsTo(units);
-
-    const std::string unit_interface{"org.freedesktop.systemd1.Unit"};
+    systemd_proxy->callMethod("ListUnits").onInterface(SYSTEMD_MANAGER_INTERFACE).storeResultsTo(units);
 
     struct Service {
         std::string name;
@@ -203,14 +238,15 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
         auto unit_proxy = sdbus::createProxy("org.freedesktop.systemd1", unit_object_path);
 
         // Only consider active (running) services
-        const auto active_state = unit_proxy->getProperty("ActiveState").onInterface(unit_interface);
+        const auto active_state = unit_proxy->getProperty("ActiveState").onInterface(SYSTEMD_UNIT_INTERFACE);
         if (std::string{active_state} != "active") {
             continue;
         }
 
         // FragmentPath is the path to the unit file that defines the service
-        const auto fragment_path = unit_proxy->getProperty("FragmentPath").onInterface(unit_interface);
-        const auto start_timestamp_us = unit_proxy->getProperty("ActiveEnterTimestamp").onInterface(unit_interface);
+        const auto fragment_path = unit_proxy->getProperty("FragmentPath").onInterface(SYSTEMD_UNIT_INTERFACE);
+        const auto start_timestamp_us =
+            unit_proxy->getProperty("ActiveEnterTimestamp").onInterface(SYSTEMD_UNIT_INTERFACE);
 
         unit_file_to_service.insert(std::make_pair(fragment_path, Service{unit_name, start_timestamp_us}));
     }
