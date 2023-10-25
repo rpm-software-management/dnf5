@@ -121,7 +121,8 @@ public:
     bool read_group_solvable_from_xml(const std::string & path);
 
 private:
-    bool load_solv_cache(solv::Pool & pool, const char * type, int flags);
+    // "type_name == nullptr" means load "primary" cache (.solv file)
+    bool load_solv_cache(solv::Pool & pool, const char * type_name, int flags);
 
     /// Writes libsolv's .solv cache file with main libsolv repodata.
     void write_main(bool load_after_write);
