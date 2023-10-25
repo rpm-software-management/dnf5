@@ -494,21 +494,23 @@ void SolvRepo::set_subpriority(int subpriority) {
 }
 
 
-bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type, int flags) {
+bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type_name, int flags) {
     auto & logger = *base->get_logger();
 
-    auto path = solv_file_path(type);
+    auto path = solv_file_path(type_name);
 
     try {
         fs::File cache_file(path, "r");
 
         if (can_use_solvfile_cache(pool, cache_file)) {
             logger.debug("Loading solv cache file: \"{}\"", path.native());
-            if (repo_add_solv(type == RepoDownloader::MD_FILENAME_GROUP ? comps_repo : repo, cache_file.get(), flags) !=
-                0) {
+            if (repo_add_solv(
+                    type_name && std::string_view(type_name) == RepoDownloader::MD_FILENAME_GROUP ? comps_repo : repo,
+                    cache_file.get(),
+                    flags) != 0) {
                 throw SolvError(
                     M_("Failed to load {} cache for repo \"{}\" from \"{}\": {}"),
-                    type ? type : "primary",
+                    type_name ? type_name : "primary",
                     config.get_id(),
                     path.native(),
                     pool_errstr(*get_rpm_pool(base)));
