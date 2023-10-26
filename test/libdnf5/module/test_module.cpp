@@ -80,12 +80,22 @@ void ModuleTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("ninja;platform:[f29,f30,f31]"), meson.get_module_dependencies_string());
     CPPUNIT_ASSERT_EQUAL((size_t)1, meson.get_profiles().size());
     CPPUNIT_ASSERT_EQUAL(std::string("default"), meson.get_profiles()[0].get_name());
+    CPPUNIT_ASSERT_EQUAL(false, meson.get_profiles()[0].is_default());
 
     CPPUNIT_ASSERT_EQUAL(std::string(""), module_sack->get_default_stream("meson"));
     CPPUNIT_ASSERT_EQUAL(std::string("main"), module_sack->get_default_stream("berries"));
     CPPUNIT_ASSERT_EQUAL((size_t)0, module_sack->get_default_profiles("meson", "master").size());
     CPPUNIT_ASSERT_EQUAL((size_t)1, module_sack->get_default_profiles("berries", "main").size());
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), module_sack->get_default_profiles("berries", "main")[0]);
+
+    ModuleQuery query_berries = ModuleQuery(base, false);
+    query_berries.filter_name("berries");
+    query_berries.filter_stream("main");
+    for (const auto & berries : query_berries.list()) {
+        for (const auto & berries_profile : berries.get_profiles()) {
+            CPPUNIT_ASSERT_EQUAL(true, berries_profile.is_default());
+        }
+    }
 }
 
 
