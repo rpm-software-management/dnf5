@@ -1,3 +1,26 @@
+# 5.1.6
+
+- Document aliases for command line arguments
+- Don't print missing positional argument error with `--help`
+- Improve error handling for missing arguments
+- Document `--forcearch` as a global argument
+- Make `--forcearch` a global argument
+- Avoid reinstalling installonly packages marked for ERASE
+- Add `filter_installonly` to PackageQuery
+- Implement new argument `--show-new-leaves`
+- advisory: document advisory command changes and few clean ups
+- Document `--dump-main-config` and `--dump-repo-config`
+- Implement new argument `--dump-repo-config`
+- Implement new argument `--dump-main-config`
+- Show default profiles in `module list`
+- Print hint for the `module list` table
+- Show information about default streams in `module list`
+- Document `module list` options
+- Add `enabled` and `disabled` arguments to `module list`
+- Add module spec filtering to `module list`
+- Add `module list` command
+- Document `group upgrade`
+
 # 5.1.5
 
 - Improved ConfigParser
