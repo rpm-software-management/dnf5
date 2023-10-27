@@ -22,6 +22,8 @@ prepare:
       how: shell
       script:
         - git clone https://github.com/rpm-software-management/ci-dnf-stack.git ci-dnf-stack
+        # necessary for $COPR and $RPMS variables
+        - git -C ci-dnf-stack checkout --track origin/tmt-test
 
     - name: build testing container
       how: shell
