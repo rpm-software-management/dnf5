@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 #include <stdlib.h>
 
+#include <filesystem>
 #include <iostream>
 #include <random>
 #include <set>
@@ -168,11 +169,26 @@ void AutomaticCommand::pre_configure() {
     base.set_download_callbacks(std::move(download_callbacks_uptr));
     download_callbacks_set = true;
 
-    libdnf5::ConfigParser parser;
-    parser.read(config_automatic.automatic_config_file_path.get_value());
-    base.get_config().load_from_parser(
-        parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
-    config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
+    auto & main_config = base.get_config();
+    bool use_host_config{main_config.get_use_host_config_option().get_value()};
+    bool user_defined_config_file_name{
+        config_automatic.automatic_config_file_path.get_priority() >= libdnf5::Option::Priority::COMMANDLINE};
+    std::filesystem::path conf_file_path{config_automatic.automatic_config_file_path.get_value()};
+    if (!use_host_config) {
+        if (!user_defined_config_file_name) {
+            // unless the --use-host-config was used or config file was passed on cmdline,
+            // prepend the installroot
+            std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
+            conf_file_path = installroot_path / conf_file_path.relative_path();
+        }
+    }
+    if (user_defined_config_file_name || std::filesystem::exists(conf_file_path)) {
+        libdnf5::ConfigParser parser;
+        parser.read(conf_file_path);
+        base.get_config().load_from_parser(
+            parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
+        config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
+    }
 
     context.set_output_stream(output_stream);
 }
