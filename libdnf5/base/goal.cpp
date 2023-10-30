@@ -193,8 +193,7 @@ private:
     using EnvironmentItem = std::tuple<std::string, comps::EnvironmentQuery, GoalJobSettings>;
     std::map<GoalAction, std::vector<EnvironmentItem>> resolved_environment_specs;
 
-    /// group_specs contain both comps groups and environments. These are resolved
-    /// according to settings.group_search_type flags value.
+    /// group_specs contain both comps groups and environments.
     /// <libdnf5::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
     std::vector<GroupSpec> group_specs;
 
