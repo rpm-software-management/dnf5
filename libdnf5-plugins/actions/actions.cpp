@@ -18,11 +18,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <fmt/format.h>
+#include <json.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/common/sack/match_string.hpp>
 #include <libdnf5/plugin/iplugin.hpp>
+#include <libdnf5/repo/repo_errors.hpp>
 #include <libdnf5/repo/repo_query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -45,7 +47,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{1, 1, 1};
+constexpr plugin::Version PLUGIN_VERSION{1, 2, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -103,11 +105,15 @@ public:
 
     void repos_loaded() override { on_hook(repos_loaded_actions); }
 
-    void pre_add_cmdline_packages(const std::vector<std::string> &) override {
+    void pre_add_cmdline_packages(const std::vector<std::string> & paths) override {
+        this->cmdline_packages_paths = &paths;
         on_hook(pre_add_cmdline_packages_actions);
     }
 
-    void post_add_cmdline_packages() override { on_hook(post_add_cmdline_packages_actions); }
+    void post_add_cmdline_packages() override {
+        this->cmdline_packages_paths = nullptr;
+        on_hook(post_add_cmdline_packages_actions);
+    }
 
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
@@ -140,6 +146,7 @@ private:
     void process_command_output_line(std::string_view line);
 
     void process_json_communication(int in_fd, int out_fd);
+    void process_json_command(struct json_object * request, int out_fd);
 
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
@@ -150,6 +157,9 @@ private:
     std::vector<Action> post_add_cmdline_packages_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
+
+    // During `pre_add_cmdline_packages` hook it points to paths to commandline packages. Otherwise it is nullptr.
+    const std::vector<std::string> * cmdline_packages_paths = nullptr;
 
     // cache for sharing between pre_transaction and post_transaction hooks
     bool transaction_cached = false;
@@ -844,7 +854,777 @@ void Actions::process_command_output_line(std::string_view line) {
     }
 }
 
-void Actions::process_json_communication(int /*in_fd*/, int /*out_fd*/) {}
+
+class JsonRequestError : public std::runtime_error {
+    using runtime_error::runtime_error;
+};
+
+
+class WriteError : public std::runtime_error {
+    using runtime_error::runtime_error;
+};
+
+
+void Actions::process_json_communication(int in_fd, int out_fd) {
+    auto & base = get_base();
+    char read_buf[256];
+    size_t read_offset = 0;
+    bool first_read = true;
+    auto * tok = json_tokener_new();
+    std::unique_ptr<json_tokener, decltype(&json_tokener_free)> tok_owner(tok, &json_tokener_free);
+    do {
+        auto ret = read(in_fd, read_buf + read_offset, sizeof(read_buf) - read_offset);
+        if (ret < 0) {
+            auto err = std::strerror(errno);
+            base.get_logger()->error("Actions plugin: Error reading from pipe: {}", err);
+            return;
+        }
+        auto len = static_cast<size_t>(ret) + read_offset;
+        if (len > 0) {
+            if (first_read) {
+                size_t i = 0;
+                while (i < len && read_buf[i] == '\n') {
+                    ++i;
+                }
+                if (i == len) {
+                    continue;
+                }
+                if (read_buf[i] != '{') {
+                    base.get_logger()->error("Actions plugin: Syntax error: Missing starting '{{' char in json input");
+                    return;
+                }
+                if (i > 0) {
+                    len -= i;
+                    memmove(read_buf, read_buf + i, len);
+                }
+                first_read = false;
+            }
+
+            auto * jobj = json_tokener_parse_ex(tok, read_buf, static_cast<int>(len));
+            if (jobj) {
+                std::unique_ptr<json_object, decltype(&json_object_put)> jobj_owner(jobj, &json_object_put);
+
+                auto parsed = json_tokener_get_parse_end(tok);
+                read_offset = len - parsed;
+                memmove(read_buf, read_buf + parsed, read_offset);
+                json_tokener_reset(tok);
+                first_read = true;
+
+                try {
+                    process_json_command(jobj, out_fd);
+                } catch (const WriteError & ex) {
+                    base.get_logger()->error("Actions plugin: {}", ex.what());
+                    return;
+                }
+            } else {
+                auto jerr = json_tokener_get_error(tok);
+                if (jerr != json_tokener_continue) {
+                    base.get_logger()->error("Actions plugin: Fatal json error");
+                    return;
+                }
+            }
+        } else {
+            if (!first_read) {
+                base.get_logger()->error("Actions plugin: Syntax error: Unterminated command in json input");
+            }
+            return;
+        }
+    } while (true);
+}
+
+
+inline struct json_object * get_any_object_or_null(json_object * container, const char * key) {
+    struct json_object * jobj;
+    if (json_object_object_get_ex(container, key, &jobj)) {
+        return jobj;
+    }
+    return nullptr;
+}
+
+
+inline struct json_object * get_any_object(json_object * container, const char * key) {
+    struct json_object * jobj;
+    if (!json_object_object_get_ex(container, key, &jobj)) {
+        throw JsonRequestError(fmt::format("Key \"{}\" not found", key));
+    }
+    return jobj;
+}
+
+
+std::string_view get_string_view(json_object * jobj) {
+    if (json_object_get_type(jobj) != json_type_string) {
+        throw JsonRequestError("Bad json type");
+    }
+    return json_object_get_string(jobj);
+}
+
+
+std::string_view get_string_view(json_object * container, const char * key) {
+    struct json_object * jobj = get_any_object(container, key);
+    if (json_object_get_type(jobj) != json_type_string) {
+        throw JsonRequestError(fmt::format("Bad json type of \"{}\" key", key));
+    }
+    return json_object_get_string(jobj);
+}
+
+
+json_object * get_object(json_object * container, const char * key) {
+    struct json_object * jobj = get_any_object(container, key);
+    if (json_object_get_type(jobj) != json_type_object) {
+        throw JsonRequestError(fmt::format("Bad json type of \"{}\" key", key));
+    }
+    return jobj;
+}
+
+
+json_object * get_array(json_object * container, const char * key) {
+    struct json_object * jobj = get_any_object(container, key);
+    if (json_object_get_type(jobj) != json_type_array) {
+        throw JsonRequestError(fmt::format("Bad json type of \"{}\" key", key));
+    }
+    return jobj;
+}
+
+
+[[__nodiscard__]] json_object * new_key_val_obj(
+    const char * key_id, const char * key_val, const char * val_id, const char * val) {
+    auto * jobj_key_val = json_object_new_object();
+    json_object_object_add_ex(jobj_key_val, key_id, json_object_new_string(key_val), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+    json_object_object_add_ex(jobj_key_val, val_id, json_object_new_string(val), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+    return jobj_key_val;
+}
+
+
+void write_buf(int out_fd, const char * buf, size_t length) {
+    auto to_write = length;
+    while (to_write > 0) {
+        const auto written = write(out_fd, buf + (length - to_write), to_write);
+        if (written < 0) {
+            throw WriteError(fmt::format("Cannot write response: {}", std::strerror(errno)));
+        }
+        to_write -= static_cast<size_t>(written);
+    }
+}
+
+
+void write_json_object(struct json_object * jobject, int out_fd) {
+    size_t json_length;
+    auto * result_json = json_object_to_json_string_length(jobject, JSON_C_TO_STRING_SPACED, &json_length);
+    write_buf(out_fd, result_json, json_length);
+    write_buf(out_fd, "\n", 1);
+}
+
+
+libdnf5::sack::QueryCmp cmp_operator_from_string(std::string_view str_operator) {
+    libdnf5::sack::QueryCmp ret =
+        str_operator.starts_with("NOT_") ? libdnf5::sack::QueryCmp::NOT : libdnf5::sack::QueryCmp{0};
+    std::string_view str = ret == libdnf5::sack::QueryCmp::NOT ? str_operator.substr(4) : str_operator;
+    if (str == "EQ") {
+        return ret | libdnf5::sack::QueryCmp::EQ;
+    }
+    if (str == "IEQ") {
+        return ret | libdnf5::sack::QueryCmp::IEXACT;
+    }
+    if (str_operator == "GT") {
+        return ret | libdnf5::sack::QueryCmp::GT;
+    }
+    if (str_operator == "GTE") {
+        return ret | libdnf5::sack::QueryCmp::GTE;
+    }
+    if (str_operator == "LT") {
+        return ret | libdnf5::sack::QueryCmp::LT;
+    }
+    if (str_operator == "LTE") {
+        return ret | libdnf5::sack::QueryCmp::LTE;
+    }
+    if (str_operator == "CONTAINS") {
+        return ret | libdnf5::sack::QueryCmp::CONTAINS;
+    }
+    if (str_operator == "ICONTAINS") {
+        return ret | libdnf5::sack::QueryCmp::ICONTAINS;
+    }
+    if (str_operator == "STARTSWITH") {
+        return ret | libdnf5::sack::QueryCmp::STARTSWITH;
+    }
+    if (str_operator == "ISTARTSWITH") {
+        return ret | libdnf5::sack::QueryCmp::ISTARTSWITH;
+    }
+    if (str_operator == "ENDSWITH") {
+        return ret | libdnf5::sack::QueryCmp::ENDSWITH;
+    }
+    if (str_operator == "IENDSWITH") {
+        return ret | libdnf5::sack::QueryCmp::IENDSWITH;
+    }
+    if (str_operator == "REGEX") {
+        return ret | libdnf5::sack::QueryCmp::REGEX;
+    }
+    if (str_operator == "IREGEX") {
+        return ret | libdnf5::sack::QueryCmp::IREGEX;
+    }
+    if (str_operator == "GLOB") {
+        return ret | libdnf5::sack::QueryCmp::GLOB;
+    }
+    if (str_operator == "IGLOB") {
+        return ret | libdnf5::sack::QueryCmp::IGLOB;
+    }
+    throw JsonRequestError(fmt::format("Bad compare operator \"{}\"", str_operator));
+}
+
+
+void Actions::process_json_command(struct json_object * request, int out_fd) {
+    auto & base = get_base();
+    auto logger = base.get_logger();
+
+    if (auto type = json_object_get_type(request); type != json_type_object) {
+        base.get_logger()->error("Actions plugin: Bad json type of command");
+        return;
+    }
+
+    auto * jresult = json_object_new_object();
+    std::unique_ptr<json_object, decltype(&json_object_put)> jresult_owner(jresult, &json_object_put);
+    json_object_object_add_ex(jresult, "op", json_object_new_string("reply"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+    auto * jreturn = json_object_new_object();
+    std::unique_ptr<json_object, decltype(&json_object_put)> jreturn_owner(jreturn, &json_object_put);
+
+    try {
+        auto op = get_string_view(request, "op");
+        json_object_object_add_ex(
+            jresult, "requested_op", json_object_new_string(op.data()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+        if (op == "get") {
+            auto domain = get_string_view(request, "domain");
+            json_object_object_add_ex(
+                jresult, "domain", json_object_new_string(domain.data()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            if (domain == "conf") {
+                auto * jargs = get_object(request, "args");
+                auto key = std::string(get_string_view(jargs, "key"));
+                try {
+                    const auto list_set_key_vals = get_conf(key);
+                    auto * jkeys_val = json_object_new_array();
+                    json_object_object_add_ex(jreturn, "keys_val", jkeys_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    for (auto & [set_key, set_value] : list_set_key_vals) {
+                        auto * jset_key_val = new_key_val_obj("key", set_key.c_str(), "value", set_value.c_str());
+                        json_object_array_add(jkeys_val, jset_key_val);
+                    }
+                    json_object_object_add_ex(
+                        jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                } catch (const ConfigError & ex) {
+                    logger->error("Actions plugin: {}", ex.what());
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                }
+            } else if (domain == "actions_attrs") {
+                auto * jargs = get_object(request, "args");
+                auto key_pattern = get_string_view(jargs, "key");
+                auto * jactions_attrs = json_object_new_array();
+                json_object_object_add_ex(jreturn, "actions_attrs", jactions_attrs, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+
+                for (const auto * const attr : {"pid", "version"}) {
+                    if (sack::match_string(attr, sack::QueryCmp::GLOB, std::string(key_pattern))) {
+                        if (std::string_view(attr) == "pid") {
+                            auto * jactions_attr =
+                                new_key_val_obj("key", attr, "value", std::to_string(getpid()).c_str());
+                            json_object_array_add(jactions_attrs, jactions_attr);
+                        } else if (std::string_view(attr) == "version") {
+                            auto version = fmt::format(
+                                "{}.{}.{}", PLUGIN_VERSION.major, PLUGIN_VERSION.minor, PLUGIN_VERSION.micro);
+                            auto * jactions_attr = new_key_val_obj("key", attr, "value", version.c_str());
+                            json_object_array_add(jactions_attrs, jactions_attr);
+                        }
+                    }
+                }
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else if (domain == "vars") {
+                auto * jargs = get_object(request, "args");
+                auto name_pattern = std::string(get_string_view(jargs, "name"));
+                auto * jnames_val = json_object_new_array();
+                json_object_object_add_ex(jreturn, "vars", jnames_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                for (const auto & [name, val_prio] : base.get_vars()->get_variables()) {
+                    if (sack::match_string(name, sack::QueryCmp::GLOB, name_pattern)) {
+                        auto * jname_val = new_key_val_obj("name", name.c_str(), "value", val_prio.value.c_str());
+                        json_object_array_add(jnames_val, jname_val);
+                    }
+                }
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else if (domain == "actions_vars") {
+                auto * jargs = get_object(request, "args");
+                auto name_pattern = std::string(get_string_view(jargs, "name"));
+                auto * jnames_val = json_object_new_array();
+                json_object_object_add_ex(jreturn, "actions_vars", jnames_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                for (const auto & [name, value] : tmp_variables) {
+                    if (sack::match_string(name, sack::QueryCmp::GLOB, name_pattern)) {
+                        auto * jname_val = new_key_val_obj("name", name.c_str(), "value", value.c_str());
+                        json_object_array_add(jnames_val, jname_val);
+                    }
+                }
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else if (domain == "packages" || domain == "trans_packages") {
+                auto * jargs = get_object(request, "args");
+
+                const std::pair<
+                    const char *,
+                    std::function<std::string(const base::TransactionPackage *, const rpm::Package &)>>
+                    attrs_list[] = {
+                        {"direction",
+                         [](const base::TransactionPackage * trans_pkg, const rpm::Package &) {
+                             if (!trans_pkg) {
+                                 return "";
+                             }
+                             return transaction_item_action_is_inbound(trans_pkg->get_action()) ? "IN" : "OUT";
+                         }},
+                        {"action",
+                         [](const base::TransactionPackage * trans_pkg, const rpm::Package &) {
+                             if (!trans_pkg) {
+                                 return std::string{};
+                             }
+                             return transaction::transaction_item_action_to_letter(trans_pkg->get_action());
+                         }},
+                        {"name",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_name(); }},
+                        {"arch",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_arch(); }},
+                        {"version",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_version(); }},
+                        {"release",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_release(); }},
+                        {"epoch",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_epoch(); }},
+                        {"na", [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_na(); }},
+                        {"evr",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_evr(); }},
+                        {"nevra",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_nevra(); }},
+                        {"full_nevra",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) {
+                             return pkg.get_full_nevra();
+                         }},
+                        {"download_size",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) {
+                             return std::to_string(pkg.get_download_size());
+                         }},
+                        {"install_size",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) {
+                             return std::to_string(pkg.get_install_size());
+                         }},
+                        {"repo_id",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_repo_id(); }},
+                        {"license",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_license(); }},
+                        {"location",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_location(); }},
+                        {"vendor",
+                         [](const base::TransactionPackage *, const rpm::Package & pkg) { return pkg.get_vendor(); }}};
+
+                unsigned int requested_attrs = 0;
+                auto * joutput = get_array(jargs, "output");
+                for (size_t idx = 0; idx < json_object_array_length(joutput); ++idx) {
+                    const auto requested_attr = get_string_view(json_object_array_get_idx(joutput, idx));
+                    for (std::size_t idx = 0; idx < sizeof(attrs_list) / sizeof(attrs_list[0]); ++idx) {
+                        if (attrs_list[idx].first == requested_attr) {
+                            requested_attrs |= 1 << idx;
+                        }
+                    }
+                }
+
+                libdnf5::sack::ExcludeFlags query_flags{0};
+                auto * jparams = get_any_object_or_null(jargs, "params");
+                if (jparams) {
+                    get_array(jargs, "params");  // check, must be array
+                    for (size_t idx = 0; idx < json_object_array_length(jparams); ++idx) {
+                        auto * jparam = json_object_array_get_idx(jparams, idx);
+                        const auto param_key = get_string_view(jparam, "key");
+                        if (param_key == "IGNORE_EXCLUDES") {
+                            query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES;
+                        } else if (param_key == "IGNORE_MODULAR_EXCLUDES") {
+                            query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES;
+                        } else if (param_key == "IGNORE_REGULAR_EXCLUDES") {
+                            query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES;
+                        } else if (param_key == "IGNORE_REGULAR_CONFIG_EXCLUDES") {
+                            query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES;
+                        } else if (param_key == "IGNORE_REGULAR_USER_EXCLUDES") {
+                            query_flags = query_flags | libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES;
+                        } else {
+                            throw JsonRequestError(fmt::format("Bad key \"{}\" for params", param_key));
+                        }
+                    }
+                }
+
+                auto * jfilters = get_any_object_or_null(jargs, "filters");
+                if (jfilters) {
+                    get_array(jargs, "filters");  // check, must be array
+                }
+
+                Action::Direction edirection = Action::Direction::ALL;
+                if (jfilters) {
+                    for (size_t idx = 0; idx < json_object_array_length(jfilters); ++idx) {
+                        auto * jfilter = json_object_array_get_idx(jfilters, idx);
+                        auto filter_key = get_string_view(jfilter, "key");
+                        if (filter_key == "direction") {
+                            auto direction = get_string_view(jfilter, "value");
+                            if (direction == "IN") {
+                                edirection = Action::Direction::IN;
+                            } else if (direction == "OUT") {
+                                edirection = Action::Direction::OUT;
+                            } else {
+                                throw JsonRequestError(
+                                    fmt::format("Bad \"{}\" value for \"direction\" filter", direction));
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Initializing a new query. Query_flags or direction for transactional packages are taken into account.
+                auto query = domain == "packages"
+                                 ? libdnf5::rpm::PackageQuery(get_base(), query_flags)
+                                 : (edirection == Action::Direction::IN
+                                        ? *in_full_query
+                                        : (edirection == Action::Direction::OUT ? *out_full_query : *all_full_query));
+
+                if (jfilters) {
+                    for (size_t idx = 0; idx < json_object_array_length(jfilters); ++idx) {
+                        auto * jfilter = json_object_array_get_idx(jfilters, idx);
+                        const auto filter_key = get_string_view(jfilter, "key");
+                        auto * jvalue = get_any_object_or_null(jfilter, "value");
+                        const auto value = jvalue ? std::string(get_string_view(jvalue)) : "";
+                        auto * joperator = get_any_object_or_null(jfilter, "operator");
+                        const auto oper = joperator ? cmp_operator_from_string(get_string_view(joperator))
+                                                    : libdnf5::sack::QueryCmp::EQ;
+                        if (filter_key == "direction") {
+                            // The directional filter was already taken into account when initializing the query.
+                        } else if (filter_key == "name") {
+                            query.filter_name(value, oper);
+                        } else if (filter_key == "arch") {
+                            query.filter_arch(value, oper);
+                        } else if (filter_key == "version") {
+                            query.filter_version(value, oper);
+                        } else if (filter_key == "release") {
+                            query.filter_release(value, oper);
+                        } else if (filter_key == "epoch") {
+                            query.filter_epoch(value, oper);
+                        } else if (filter_key == "nevra") {
+                            query.filter_nevra(value, oper);
+                        } else if (filter_key == "repo_id") {
+                            query.filter_repo_id(value, oper);
+                        } else if (filter_key == "available") {
+                            query.filter_available();
+                        } else if (filter_key == "installed") {
+                            query.filter_installed();
+                        } else if (filter_key == "userinstalled") {
+                            query.filter_userinstalled();
+                        } else if (filter_key == "installonly") {
+                            query.filter_installonly();
+                        } else if (filter_key == "description") {
+                            query.filter_description(value, oper);
+                        } else if (filter_key == "file") {
+                            query.filter_file(value, oper);
+                        } else if (filter_key == "upgradable") {
+                            query.filter_upgradable();
+                        } else if (filter_key == "upgrades") {
+                            query.filter_upgrades();
+                        } else if (filter_key == "downgradable") {
+                            query.filter_downgradable();
+                        } else if (filter_key == "downgrades") {
+                            query.filter_downgrades();
+                        } else {
+                            throw JsonRequestError(fmt::format("Unknown package filter key \"{}\"", filter_key));
+                        }
+                    }
+                }
+
+                auto * jnames_val = json_object_new_array();
+                json_object_object_add_ex(jreturn, domain.data(), jnames_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                for (auto pkg : query) {
+                    const auto * trans_pkg =
+                        domain == "trans_packages" ? pkg_id_to_trans_pkg.at(pkg.get_id()) : nullptr;
+                    auto * jobj_key_val = json_object_new_object();
+                    json_object_array_add(jnames_val, jobj_key_val);
+                    for (unsigned int attr_idx = 0; attr_idx < sizeof(attrs_list) / sizeof(attrs_list[0]); ++attr_idx) {
+                        if (requested_attrs & (1 << attr_idx)) {
+                            auto value = attrs_list[attr_idx].second(trans_pkg, pkg);
+                            json_object_object_add_ex(
+                                jobj_key_val,
+                                attrs_list[attr_idx].first,
+                                json_object_new_string(value.c_str()),
+                                JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                        }
+                    }
+                }
+
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else if (domain == "cmdline_packages_paths") {
+                auto * jargs = get_object(request, "args");
+
+                auto * jpaths = json_object_new_array();
+                json_object_object_add_ex(jreturn, "cmdline_packages_paths", jpaths, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+
+                const std::vector<std::string> empty_paths;
+                const auto & in_paths = cmdline_packages_paths ? *cmdline_packages_paths : empty_paths;
+                auto * jfilters = get_any_object_or_null(jargs, "filters");
+                if (jfilters) {
+                    get_array(jargs, "filters");  // check, must be array
+                    for (const auto & path : in_paths) {
+                        bool match_all_filters = true;
+                        for (size_t idx = 0; idx < json_object_array_length(jfilters); ++idx) {
+                            auto * jfilter = json_object_array_get_idx(jfilters, idx);
+                            const auto filter_key = get_string_view(jfilter, "key");
+                            const auto value = std::string(get_string_view(jfilter, "value"));
+                            auto * joperator = get_any_object_or_null(jfilter, "operator");
+                            const auto oper = joperator ? cmp_operator_from_string(get_string_view(joperator))
+                                                        : libdnf5::sack::QueryCmp::EQ;
+                            if (filter_key == "path") {
+                                if (!sack::match_string(path, oper, value)) {
+                                    match_all_filters = false;
+                                    break;
+                                }
+                            } else {
+                                throw JsonRequestError(
+                                    fmt::format("Unknown cmdline package path filter key \"{}\"", filter_key));
+                            }
+                        }
+                        if (match_all_filters) {
+                            json_object_array_add(jpaths, json_object_new_string(path.c_str()));
+                        }
+                    }
+                } else {
+                    for (const auto & path : in_paths) {
+                        json_object_array_add(jpaths, json_object_new_string(path.c_str()));
+                    }
+                }
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else {
+                throw JsonRequestError(fmt::format("Unknown domain \"{}\" for operation \"{}\"", domain, op));
+            }
+            write_json_object(jresult, out_fd);
+            return;
+        }
+        if (op == "set") {
+            auto domain = get_string_view(request, "domain");
+            json_object_object_add_ex(
+                jresult, "domain", json_object_new_string(domain.data()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            if (domain == "conf") {
+                auto * jargs = get_object(request, "args");
+                const auto key = std::string(get_string_view(jargs, "key"));
+                const auto value = std::string(get_string_view(jargs, "value"));
+                try {
+                    const auto list_set_key_vals = set_conf(key, value);
+                    auto * jkeys_val = json_object_new_array();
+                    json_object_object_add_ex(jreturn, "keys_val", jkeys_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    for (auto & [set_key, set_value] : list_set_key_vals) {
+                        auto * jset_key_val = new_key_val_obj("key", set_key.c_str(), "value", set_value.c_str());
+                        json_object_array_add(jkeys_val, jset_key_val);
+                    }
+                    json_object_object_add_ex(
+                        jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                } catch (const ConfigError & ex) {
+                    logger->error("Actions plugin: {}", ex.what());
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                }
+            } else if (domain == "vars") {
+                auto * jargs = get_object(request, "args");
+                auto name = std::string(get_string_view(jargs, "name"));
+                auto * jvalue = get_any_object_or_null(jargs, "value");
+                try {
+                    auto * jnames_val = json_object_new_array();
+                    json_object_object_add_ex(jreturn, "vars", jnames_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    if (jvalue) {
+                        const auto value = std::string(get_string_view(jvalue));
+                        base.get_vars()->set(name, value, Vars::Priority::PLUGIN);
+                        auto new_value = base.get_vars()->get(name).value;
+                        auto * jname_val = new_key_val_obj("name", name.c_str(), "value", new_value.c_str());
+                        json_object_array_add(jnames_val, jname_val);
+                    } else {
+                        auto vars = base.get_vars();
+                        if (vars->unset(name, Vars::Priority::PLUGIN)) {
+                            auto * jobj_key_val = json_object_new_object();
+                            json_object_object_add_ex(
+                                jobj_key_val,
+                                "name",
+                                json_object_new_string(name.c_str()),
+                                JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                            json_object_array_add(jnames_val, jobj_key_val);
+                        } else {
+                            auto new_value = base.get_vars()->get(name).value;
+                            auto * jname_val = new_key_val_obj("name", name.c_str(), "value", new_value.c_str());
+                            json_object_array_add(jnames_val, jname_val);
+                        }
+                    }
+                    json_object_object_add_ex(
+                        jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                } catch (const ReadOnlyVariableError & ex) {
+                    logger->error("Actions plugin: {}", ex.what());
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                }
+            } else if (domain == "actions_vars") {
+                auto * jargs = get_object(request, "args");
+                auto name = std::string(get_string_view(jargs, "name"));
+                auto * jvalue = get_any_object_or_null(jargs, "value");
+                auto * jnames_val = json_object_new_array();
+                json_object_object_add_ex(jreturn, "actions_vars", jnames_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                if (jvalue) {
+                    const auto value = std::string(get_string_view(jargs, "value"));
+                    tmp_variables[name] = value;
+                    auto * jname_val = new_key_val_obj("name", name.c_str(), "value", value.c_str());
+                    json_object_array_add(jnames_val, jname_val);
+                } else {
+                    tmp_variables.erase(name);
+                    auto * jobj_key_val = json_object_new_object();
+                    json_object_object_add_ex(
+                        jobj_key_val, "name", json_object_new_string(name.c_str()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_array_add(jnames_val, jobj_key_val);
+                }
+                json_object_object_add_ex(jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            } else {
+                throw JsonRequestError(fmt::format("Unknown domain \"{}\" for operation \"{}\"", domain, op));
+            }
+            write_json_object(jresult, out_fd);
+            return;
+        }
+        if (op == "new") {
+            auto domain = get_string_view(request, "domain");
+            json_object_object_add_ex(
+                jresult, "domain", json_object_new_string(domain.data()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            if (domain == "repoconf") {
+                auto * jargs = get_object(request, "args");
+                auto * jkeys_val = get_array(jargs, "keys_val");
+
+                // create repo with repo_id
+                std::string repo_id;
+                for (size_t idx = 0; idx < json_object_array_length(jkeys_val); ++idx) {
+                    const auto jkey_val = json_object_array_get_idx(jkeys_val, idx);
+                    const auto key = get_string_view(jkey_val, "key");
+                    if (key == "repo_id") {
+                        repo_id = get_string_view(jkey_val, "value");
+                    }
+                }
+                if (repo_id.empty()) {
+                    throw JsonRequestError("Missing \"repo_id\"");
+                }
+
+                try {
+                    libdnf5::repo::RepoWeakPtr repo;
+                    try {
+                        auto repo_sack = base.get_repo_sack();
+                        repo = repo_sack->create_repo(repo_id);
+                    } catch (const libdnf5::repo::RepoError & ex) {
+                        throw ConfigError(
+                            fmt::format("Cannot create new repo config with id \"{}\": {}", repo_id, ex.what()));
+                    }
+
+                    // new repository is disabled by default
+                    repo->get_config().get_enabled_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
+
+                    // set repository configuration
+                    auto * jret_keys_val = json_object_new_array();
+                    json_object_object_add_ex(jreturn, "keys_val", jret_keys_val, JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_array_add(jret_keys_val, new_key_val_obj("key", "repo_id", "value", repo_id.c_str()));
+                    auto config_opts = repo->get_config().opt_binds();
+                    for (size_t idx = 0; idx < json_object_array_length(jkeys_val); ++idx) {
+                        const auto jkey_val = json_object_array_get_idx(jkeys_val, idx);
+                        const std::string key = std::string{get_string_view(jkey_val, "key")};
+                        if (key != "repo_id") {
+                            const std::string value = std::string{get_string_view(jkey_val, "value")};
+                            auto it = config_opts.find(key);
+                            if (it == config_opts.end()) {
+                                throw ConfigError(fmt::format("Unknown repo config option: {}", key));
+                            }
+                            try {
+                                it->second.new_string(libdnf5::Option::Priority::PLUGINCONFIG, value);
+                            } catch (const libdnf5::OptionError & ex) {
+                                throw ConfigError(
+                                    fmt::format("Cannot set repo config option \"{}={}\": {}", key, value, ex.what()));
+                            }
+                            auto * jset_key_val = new_key_val_obj("key", key.c_str(), "value", value.c_str());
+                            json_object_array_add(jret_keys_val, jset_key_val);
+                        }
+                    }
+
+                    json_object_object_add_ex(
+                        jresult, "return", jreturn_owner.release(), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                } catch (const ConfigError & ex) {
+                    logger->error("Actions plugin: {}", ex.what());
+                    json_object_object_add_ex(
+                        jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                    json_object_object_add_ex(
+                        jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                }
+            } else {
+                throw JsonRequestError(fmt::format("Unknown domain \"{}\" for operation \"{}\"", domain, op));
+            }
+            write_json_object(jresult, out_fd);
+            return;
+        }
+        if (op == "log") {
+            json_object_object_add_ex(jresult, "domain", json_object_new_string("log"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            auto * jargs = get_object(request, "args");
+            auto level = get_string_view(jargs, "level");
+            auto message = std::string(get_string_view(jargs, "message"));
+            if (level == "CRITICAL") {
+                logger->critical("Actions plugin: {}", message);
+            } else if (level == "ERROR") {
+                logger->error("Actions plugin: {}", message);
+            } else if (level == "WARNING") {
+                logger->warning("Actions plugin: {}", message);
+            } else if (level == "NOTICE") {
+                logger->notice("Actions plugin: {}", message);
+            } else if (level == "INFO") {
+                logger->info("Actions plugin: {}", message);
+            } else if (level == "DEBUG") {
+                logger->debug("Actions plugin: {}", message);
+            } else if (level == "TRACE") {
+                logger->trace("Actions plugin: {}", message);
+            } else {
+                json_object_object_add_ex(
+                    jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                json_object_object_add_ex(
+                    jresult,
+                    "message",
+                    json_object_new_string(fmt::format("Unknown log level \"{}\"", level).c_str()),
+                    JSON_C_OBJECT_ADD_CONSTANT_KEY);
+                write_json_object(jresult, out_fd);
+                return;
+            }
+            json_object_object_add_ex(jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            write_json_object(jresult, out_fd);
+            return;
+        }
+        throw JsonRequestError(fmt::format("Unknown operation \"{}\"", op));
+    } catch (const JsonRequestError & ex) {
+        logger->error("Actions plugin: {}", ex.what());
+        json_object_object_add_ex(jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+        json_object_object_add_ex(
+            jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+        write_json_object(jresult, out_fd);
+    }
+}
+
 
 void Actions::execute_command(CommandToRun & command) {
     enum PipeEnd { READ = 0, WRITE = 1 };
@@ -926,6 +1706,7 @@ void Actions::execute_command(CommandToRun & command) {
         waitpid(child_pid, nullptr, 0);
     }
 }
+
 
 void Actions::on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & actions) {
     if (actions.empty()) {
