@@ -23,19 +23,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "emitters.hpp"
 #include "transaction_callbacks_simple.hpp"
 
+#include <curl/curl.h>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/format.hpp>
 #include <libsmartcols/libsmartcols.h>
+#include <netdb.h>
 #include <stdlib.h>
 
+#include <chrono>
 #include <filesystem>
 #include <iostream>
 #include <random>
 #include <set>
 #include <string>
+#include <thread>
 
 namespace {
 
@@ -59,10 +63,128 @@ static bool reboot_needed(const libdnf5::base::Transaction & transaction) {
     return false;
 }
 
+static bool server_available(std::string_view host, std::string_view service) {
+    // Resolve host name/service to IP address/port
+    struct addrinfo * server_info;
+    if (getaddrinfo(host.data(), service.data(), nullptr, &server_info) != 0) {
+        return false;
+    }
+
+    // Create a socket
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        freeaddrinfo(server_info);
+        return false;
+    }
+
+    // Attempt to connect to the server
+    bool retval = true;
+    struct timeval timeout;
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    if (connect(sockfd, server_info->ai_addr, server_info->ai_addrlen) < 0) {
+        retval = false;
+    }
+
+    close(sockfd);
+    freeaddrinfo(server_info);
+    return retval;
+}
+
 }  // namespace
 
 
 namespace dnf5 {
+
+void AutomaticCommand::wait_for_network() {
+    auto timeout = config_automatic.config_commands.network_online_timeout.get_value();
+    if (timeout <= 0) {
+        return;
+    }
+
+    auto & context = get_context();
+    auto & base = context.base;
+    auto & logger = *base.get_logger();
+    logger.debug("Waiting for internet connection...");
+
+    const auto time_0 = std::chrono::system_clock::now();
+    const auto time_end = time_0 + std::chrono::seconds(timeout);
+
+    // collect repository addresses to check network availability on
+    libdnf5::repo::RepoQuery repos(base);
+    repos.filter_enabled(true);
+    std::vector<std::string> urls{};
+    for (const auto & repo : repos) {
+        auto proxy = repo->get_config().get_proxy_option();
+        if (!proxy.empty() && !proxy.get_value().empty()) {
+            urls.emplace_back(proxy.get_value());
+            continue;
+        }
+        auto mirrorlist = repo->get_config().get_mirrorlist_option();
+        if (!mirrorlist.empty() && !mirrorlist.get_value().empty()) {
+            urls.emplace_back(mirrorlist.get_value());
+        }
+        auto metalink = repo->get_config().get_metalink_option();
+        if (!metalink.empty() && !metalink.get_value().empty()) {
+            urls.emplace_back(metalink.get_value());
+        }
+        auto baseurl = repo->get_config().get_baseurl_option();
+        if (!baseurl.empty()) {
+            for (auto u : baseurl.get_value()) {
+                if (!u.empty()) {
+                    urls.emplace_back(std::move(u));
+                }
+            }
+        }
+    }
+
+    // parse url to [(host, service(port number or scheme))] using libcurl
+    std::vector<std::tuple<std::string, std::string>> addresses;
+    CURLUcode rc;
+    CURLU * url = curl_url();
+    unsigned int set_flags = CURLU_NON_SUPPORT_SCHEME;
+    unsigned int get_flags = 0;
+    for (auto & u : urls) {
+        rc = curl_url_set(url, CURLUPART_URL, u.c_str(), set_flags);
+        if (!rc) {
+            std::string host;
+            std::string port;
+            char * val = nullptr;
+            rc = curl_url_get(url, CURLUPART_HOST, &val, get_flags);
+            if (rc != CURLUE_OK) {
+                continue;
+            }
+            host = val;
+            curl_free(val);
+            // service is port or (if not given) scheme
+            rc = curl_url_get(url, CURLUPART_PORT, &val, get_flags);
+            if (rc == CURLUE_OK) {
+                port = val;
+            } else {
+                rc = curl_url_get(url, CURLUPART_SCHEME, &val, get_flags);
+                if (rc != CURLUE_OK) {
+                    continue;
+                }
+                port = val;
+            }
+            curl_free(val);
+            addresses.emplace_back(std::move(host), std::move(port));
+        }
+    }
+    curl_url_cleanup(url);
+
+    while (std::chrono::system_clock::now() < time_end) {
+        for (auto const & [host, service] : addresses) {
+            if (server_available(host, service)) {
+                return;
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    logger.warning("No network connection detected.");
+}
 
 void AutomaticCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -158,8 +280,6 @@ void AutomaticCommand::pre_configure() {
     auto & context = get_context();
     auto & base = context.base;
 
-    // TODO wait for network
-
     auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
     if (timer->get_value() && random_sleep > 0) {
         random_wait(random_sleep);
@@ -199,6 +319,8 @@ void AutomaticCommand::configure() {
     context.update_repo_metadata_from_advisory_options(
         {}, config_automatic.config_commands.upgrade_type.get_value() == "security", false, false, false, {}, {}, {});
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+
+    wait_for_network();
 }
 
 void AutomaticCommand::run() {
