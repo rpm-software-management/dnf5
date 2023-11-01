@@ -937,6 +937,14 @@ int main(int argc, char * argv[]) try {
     loggers.emplace_back(std::make_unique<libdnf5::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
 
     loggers.front()->info("DNF5 start");
+    std::string cmdline;
+    for (int i = 0; i < argc; ++i) {
+        if (i > 0) {
+            cmdline += " ";
+        }
+        cmdline += argv[i];
+    }
+    loggers.front()->info("DNF5 command line: {}", cmdline);
 
     // Creates a context and passes the loggers to it. We want to capture all messages from the context in the log.
     dnf5::Context context(std::move(loggers));
