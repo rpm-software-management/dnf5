@@ -134,6 +134,14 @@ Module command
 --------------
  * Dropped ``--all`` option since this behavior is the default one.
 
+Needs-restarting command
+------------------------
+ * ``needs-restarting`` no longer scans for open files to determine whether any outdated files are still in use. The default behavior is now the ``--reboothint`` behavior of DNF 4 needs-restarting, which reports whether a system reboot is recommended depending on which packages have been updated since the most recent boot.
+ * Reboot will now be recommended if any package with an associated ``reboot_suggested`` advisory has been installed or updated.
+ * The ``-s, --services`` option no longer scans for open files. Instead, restarting a service is recommended if any dependency of the package that provides the service, or the package itself, has been updated since the service started.
+ * Dropped ``-r, --reboothint`` option; this is now the default behavior.
+ * Dropped ``-u, --useronly`` option.
+
 Repoclosure command
 -------------------
  * Dropped ``--pkg`` option. Positional arguments can be used to specify packages to check closure for.
