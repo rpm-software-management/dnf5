@@ -36,6 +36,7 @@ public:
 
 private:
     std::map<std::string, std::string> setvars;
+    bool create_missing_dirs{false};  // Allows to create missing directories.
 };
 
 }  // namespace dnf5

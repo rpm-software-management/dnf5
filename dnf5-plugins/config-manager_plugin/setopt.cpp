@@ -144,6 +144,16 @@ void ConfigManagerSetOptCommand::set_argument_parser() {
         return true;
     });
     cmd.register_positional_arg(opts_vals);
+
+    auto create_missing_dirs_opt = parser.add_new_named_arg("create-missing-dir");
+    create_missing_dirs_opt->set_long_name("create-missing-dir");
+    create_missing_dirs_opt->set_description("Allow to create missing directories");
+    create_missing_dirs_opt->set_has_value(false);
+    create_missing_dirs_opt->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
+        create_missing_dirs = true;
+        return true;
+    });
+    cmd.register_named_arg(create_missing_dirs_opt);
 }
 
 
@@ -181,6 +191,7 @@ void ConfigManagerSetOptCommand::configure() {
         ConfigParser parser;
 
         const auto & cfg_filepath = get_config_file_path(config);
+        resolve_missing_dir(cfg_filepath.parent_path(), create_missing_dirs);
 
         const bool exists = std::filesystem::exists(cfg_filepath);
         if (exists) {
@@ -197,6 +208,8 @@ void ConfigManagerSetOptCommand::configure() {
     // Write new and modify existing options in the repositories overrides configuration file.
     if (!matching_repos_setopts.empty()) {
         ConfigParser parser;
+
+        resolve_missing_dir(get_repos_config_override_dir_path(config), create_missing_dirs);
 
         auto repos_override_file_path = get_config_manager_repos_override_file_path(config);
 
