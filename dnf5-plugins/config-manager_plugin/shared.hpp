@@ -37,6 +37,32 @@ struct ConfigManagerError : public libdnf5::Error {
     const char * get_name() const noexcept override { return "ConfigManagerError"; }
 };
 
+// Checks if the `path` directory exists. If not, according to the `create_missing_dirs` argument,
+// the directories (missing paths elements) are created or `ConfigManagerError` exception is thrown.
+// The ConfigManagerError exception is also thrown when the path exists but is not a directory
+// or a symlink to a directory.
+inline void resolve_missing_dir(const std::filesystem::path & path, bool create_missing_dirs) {
+    auto status = std::filesystem::status(path);  // symlinks are followed to their targets
+    if (std::filesystem::exists(status)) {
+        if (!std::filesystem::is_directory(status)) {
+            throw ConfigManagerError(
+                M_("The path \"{}\" exists, but it is not a directory or a symlink to a directory."), path.string());
+        }
+    } else {
+        if (std::filesystem::is_symlink(path)) {
+            throw ConfigManagerError(
+                M_("The path \"{}\" exists, but it is a symlink to a non-existent object."), path.string());
+        }
+        if (create_missing_dirs) {
+            std::filesystem::create_directories(path);
+        } else {
+            throw ConfigManagerError(
+                M_("Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create missing directories."),
+                path.string());
+        }
+    }
+}
+
 inline void check_variable_name(const std::string & name) {
     if (name.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                "abcdefghijklmnopqrstuvwxyz"

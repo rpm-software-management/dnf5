@@ -75,6 +75,16 @@ void ConfigManagerSetVarCommand::set_argument_parser() {
             return true;
         });
     cmd.register_positional_arg(vars_vals);
+
+    auto create_missing_dirs_opt = parser.add_new_named_arg("create-missing-dir");
+    create_missing_dirs_opt->set_long_name("create-missing-dir");
+    create_missing_dirs_opt->set_description("Allow to create missing directories");
+    create_missing_dirs_opt->set_has_value(false);
+    create_missing_dirs_opt->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
+        create_missing_dirs = true;
+        return true;
+    });
+    cmd.register_named_arg(create_missing_dirs_opt);
 }
 
 
@@ -86,6 +96,7 @@ void ConfigManagerSetVarCommand::configure() {
         if (vars_dir.empty()) {
             throw ConfigManagerError(M_("Missing path to vars directory"));
         }
+        resolve_missing_dir(vars_dir, create_missing_dirs);
 
         for (const auto & [name, value] : setvars) {
             const auto filepath = vars_dir / name;

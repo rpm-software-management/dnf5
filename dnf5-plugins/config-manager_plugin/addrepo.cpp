@@ -209,6 +209,16 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
     });
     cmd.register_named_arg(set_opt);
 
+    auto create_missing_dirs_opt = parser.add_new_named_arg("create-missing-dir");
+    create_missing_dirs_opt->set_long_name("create-missing-dir");
+    create_missing_dirs_opt->set_description("Allow creation of missing directories");
+    create_missing_dirs_opt->set_has_value(false);
+    create_missing_dirs_opt->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
+        create_missing_dirs = true;
+        return true;
+    });
+    cmd.register_named_arg(create_missing_dirs_opt);
+
     auto overwrite_opt = parser.add_new_named_arg("overwrite");
     overwrite_opt->set_long_name("overwrite");
     overwrite_opt->set_description("Allow overwriting of existing repository configuration file");
@@ -246,8 +256,8 @@ void ConfigManagerAddRepoCommand::configure() {
     if (repo_dirs.empty()) {
         throw ConfigManagerError(M_("Missing path to repository configuration directory"));
     }
-
     std::filesystem::path dest_repo_dir = repo_dirs.front();
+    resolve_missing_dir(dest_repo_dir, create_missing_dirs);
 
     if (source_repofile.location.empty()) {
         create_repo(repo_id, repo_opts, dest_repo_dir);
