@@ -47,6 +47,8 @@ public:
     void run() override;
 
 private:
+    void wait_for_network();
+
     std::unique_ptr<libdnf5::cli::session::BoolOption> timer{nullptr};
     ConfigAutomatic config_automatic;
     bool download_callbacks_set{false};
