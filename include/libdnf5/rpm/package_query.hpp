@@ -681,7 +681,10 @@ public:
     /// in such cycles that are not required by any other installed package are also leaf.
     void filter_leaves();
 
-    /// TODO reboot suggested
+    /// Filter packages whose installation or upgrade should cause a system
+    /// reboot to be recommended. These are packages that either (1) belong to
+    /// a hardcoded set of "core packages", including the kernel and systemd,
+    /// or (2) have an associated `reboot_suggested` advisory.
     void filter_reboot_suggested();
 
     /// Filter the leaf packages and return them grouped by their dependencies.
