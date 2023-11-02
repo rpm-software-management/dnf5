@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"POT-Creation-Date: 2023-11-02 08:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,19 +25,19 @@ msgstr ""
 msgid "List advisories"
 msgstr ""
 
-#: commands/advisory/advisory_summary.cpp:39
+#: commands/advisory/advisory_summary.cpp:44
 msgid "All"
 msgstr ""
 
-#: commands/advisory/advisory_summary.cpp:43
+#: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
 msgstr ""
 
-#: commands/advisory/advisory_summary.cpp:47
+#: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
 msgstr ""
 
-#: commands/advisory/advisory_summary.cpp:55
+#: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
 msgstr ""
 
@@ -45,177 +45,285 @@ msgstr ""
 msgid "Print summary of advisories"
 msgstr ""
 
-#: commands/advisory/arguments.hpp:35
+#: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:46
+#: commands/advisory/arguments.hpp:45
 msgid "Show advisories containing newer versions of installed packages."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:58
+#: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:70
+#: commands/advisory/arguments.hpp:69
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:84
+#: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:91
+#: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:101
+#: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
 msgstr ""
 
-#: commands/advisory/arguments.hpp:108
+#: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
 msgstr ""
 
-#: commands/advisory_shared.hpp:114
-msgid ""
-"Consider only content contained in advisories with specified name. List "
-"option."
+#: commands/advisory_shared.hpp:113
+msgid "Limit to packages in advisories with specified name. List option."
 msgstr ""
 
-#: commands/advisory_shared.hpp:115
+#: commands/advisory_shared.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr ""
 
-#: commands/advisory_shared.hpp:122
-msgid "Consider only content contained in security advisories."
+#: commands/advisory_shared.hpp:121
+msgid "Limit to packages in security advisories."
 msgstr ""
 
-#: commands/advisory_shared.hpp:129
-msgid "Consider only content contained in bugfix advisories."
+#: commands/advisory_shared.hpp:128
+msgid "Limit to packages in bugfix advisories."
 msgstr ""
 
-#: commands/advisory_shared.hpp:137
-msgid "Consider only content contained in enhancement advisories."
+#: commands/advisory_shared.hpp:135
+msgid "Limit to packages in enhancement advisories."
 msgstr ""
 
-#: commands/advisory_shared.hpp:145
-msgid "Consider only content contained in newpackage advisories."
+#: commands/advisory_shared.hpp:142
+msgid "Limit to packages in newpackage advisories."
 msgstr ""
 
-#: commands/advisory_shared.hpp:156
+#: commands/advisory_shared.hpp:153
 msgid ""
-"Consider only content contained in advisories with specified severity. List "
-"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Limit to packages in advisories with specified severity. List option. Can be "
+"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 
-#: commands/advisory_shared.hpp:158
+#: commands/advisory_shared.hpp:155
 msgid "ADVISORY_SEVERITY,..."
 msgstr ""
 
-#: commands/advisory_shared.hpp:182
+#: commands/advisory_shared.hpp:179
 msgid ""
-"Consider only content contained in advisories that fix a Bugzilla ID, Eg. "
-"123123. List option."
+"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
+"option."
 msgstr ""
 
-#: commands/advisory_shared.hpp:183
+#: commands/advisory_shared.hpp:180
 msgid "BUGZILLA_ID,..."
 msgstr ""
 
-#: commands/advisory_shared.hpp:193
+#: commands/advisory_shared.hpp:190
 msgid ""
-"Consider only content contained in advisories that fix a CVE (Common "
-"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
+"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
+"Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
 
-#: commands/advisory_shared.hpp:195
+#: commands/advisory_shared.hpp:192
 msgid "CVE_ID,..."
 msgstr ""
 
-#: commands/environment/arguments.hpp:34
+#: commands/clean/clean.cpp:102
+msgid "Unknown cache type \"{0}\". Supported types: {1}"
+msgstr ""
+
+#: commands/clean/clean.cpp:159
+msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
+msgstr ""
+
+#. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
+#: commands/download/download.cpp:101
+msgid "Option \"--alldeps\" should be used with \"--resolve\""
+msgstr ""
+
+#: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
 msgstr ""
 
-#: commands/environment/arguments.hpp:41
+#: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
 msgstr ""
 
-#: commands/environment/arguments.hpp:48
+#: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
 msgstr ""
 
-#: commands/group/arguments.hpp:35
+#: commands/group/arguments.hpp:34
 msgid "Show only available groups."
 msgstr ""
 
-#: commands/group/arguments.hpp:42
+#: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
 msgstr ""
 
-#: commands/group/arguments.hpp:49
+#: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
 msgstr ""
 
-#: commands/group/arguments.hpp:56
+#: commands/group/arguments.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+
+#: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
 msgstr ""
 
-#: commands/group/arguments.hpp:65
+#: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
 msgstr ""
 
-#: commands/history/arguments.hpp:35
+#: commands/group/arguments.hpp:83
+msgid "Operate on groups only, no packages are changed."
+msgstr ""
+
+#: commands/history/arguments.hpp:34
 msgid "Transaction ID"
 msgstr ""
 
-#: commands/history/arguments.hpp:42
+#: commands/history/arguments.hpp:41
 msgid "Reverse the order of transactions."
 msgstr ""
 
-#: commands/history/transaction_id.cpp:31
+#: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
 
-#: commands/repo/arguments.hpp:36
+#: commands/list/list.cpp:256
+msgid "No matching packages to list"
+msgstr ""
+
+#: commands/module/arguments.hpp:36
+msgid "Show enabled modules."
+msgstr ""
+
+#: commands/module/arguments.hpp:43
+msgid "Show disabled modules."
+msgstr ""
+
+#: commands/module/arguments.hpp:50
+msgid "Pattern matching module NSVCAs."
+msgstr ""
+
+#: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
 msgstr ""
 
-#: commands/repo/arguments.hpp:43
+#: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
 msgstr ""
 
-#: commands/repo/arguments.hpp:50
+#: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
 msgstr ""
 
-#: commands/repo/arguments.hpp:57
+#: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
 msgstr ""
 
-#: commands/shared_options.hpp:33
+#: commands/repoquery/repoquery.cpp:461
+msgid ""
+"Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
+"whatdepends\""
+msgstr ""
+
+#: commands/search/arguments.hpp:37
+msgid "Search also package description and URL."
+msgstr ""
+
+#: commands/search/arguments.hpp:45
+msgid "Patterns"
+msgstr ""
+
+#: context.cpp:80
+msgid "The key was successfully imported."
+msgstr ""
+
+#: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
 msgstr ""
 
-#: context.cpp:778
-msgid "Signature verification failed"
+#: include/dnf5/shared_options.hpp:43
+msgid "Allow resolving of depsolve problems by skipping packages"
 msgstr ""
 
-#: library.cpp:34
+#: include/dnf5/shared_options.hpp:55
+msgid "Allow skipping unavailable packages"
+msgstr ""
+
+#: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
 msgstr ""
 
-#: library.cpp:49
+#: library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr ""
+
+#: main.cpp:178
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr ""
+
+#: main.cpp:203
+msgid "repofrompath: Incorrect repoid and path specification \"{}\""
+msgstr ""
+
+#: main.cpp:226
+msgid "setopt: Badly formatted argument value \"{}\""
+msgstr ""
+
+#: main.cpp:233
+msgid ""
+"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+
+#: main.cpp:245
+msgid "setopt: \"{0}\": {1}"
+msgstr ""
+
+#: main.cpp:264
+msgid "setvar: Badly formatted argument value \"{}\""
+msgstr ""
+
+#: main.cpp:271
+msgid "setvar: {}"
+msgstr ""
+
+#: main.cpp:606 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr ""
+
+#: main.cpp:813
+msgid "======== Main configuration: ========"
+msgstr ""
+
+#: main.cpp:854
+msgid "======== \"{}\" repository configuration: ========"
+msgstr ""
+
+#: main.cpp:875
+msgid "======== Variables: ========"
+msgstr ""
+
+#: main.cpp:993 main.cpp:1141
+msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
