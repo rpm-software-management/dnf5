@@ -1,5 +1,6 @@
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_repoclosure\")
+set(GETTEXT_DOMAIN dnf5-plugin-repoclosure)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 add_library(repoclosure_cmd_plugin MODULE repoclosure.cpp repoclosure_cmd_plugin.cpp)
 
@@ -10,3 +11,5 @@ target_link_libraries(repoclosure_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(repoclosure_cmd_plugin PRIVATE dnf5)
 
 install(TARGETS repoclosure_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
+
+add_subdirectory(po)

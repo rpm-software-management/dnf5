@@ -1,5 +1,6 @@
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_copr\")
+set(GETTEXT_DOMAIN dnf5-plugin-copr)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 file(GLOB COPR_SOURCES *.cpp)
 add_library(copr_cmd_plugin MODULE ${COPR_SOURCES})
@@ -15,3 +16,5 @@ target_link_libraries(copr_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(copr_cmd_plugin PRIVATE dnf5)
 
 install(TARGETS copr_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
+
+add_subdirectory(po)

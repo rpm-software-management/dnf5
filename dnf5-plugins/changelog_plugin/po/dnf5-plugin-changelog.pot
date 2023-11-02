@@ -17,10 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: threads_manager.cpp:94
-msgid "Failed to create locale \"{}\"."
-msgstr ""
-
-#: threads_manager.cpp:99
-msgid "Failed to use locale \"{}\"."
+#: changelog.cpp:60
+msgid ""
+"Invalid date passed: \"{}\". Dates in \"YYYY-MM-DD\" format are expected"
 msgstr ""

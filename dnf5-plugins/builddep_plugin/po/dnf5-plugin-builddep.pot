@@ -17,10 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: threads_manager.cpp:94
-msgid "Failed to create locale \"{}\"."
+#: builddep.cpp:79
+msgid ""
+"Invalid value for macro definition \"{}\". \"macro expr\" format expected."
 msgstr ""
 
-#: threads_manager.cpp:99
-msgid "Failed to use locale \"{}\"."
+#. failed to parse some of inputs (invalid spec, no package matched...)
+#: builddep.cpp:249
+msgid "Failed to parse some inputs."
 msgstr ""
