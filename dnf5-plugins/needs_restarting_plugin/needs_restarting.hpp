@@ -26,9 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 #include <sys/stat.h>
 
-#include <fstream>
-#include <memory>
-#include <vector>
 
 namespace dnf5 {
 
@@ -42,6 +39,7 @@ public:
 
 private:
     libdnf5::OptionBool * services_option{nullptr};
+    static time_t get_boot_time(Context &);
     static void system_needs_restarting(Context &);
     static void services_need_restarting(Context &);
 };

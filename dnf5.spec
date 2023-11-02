@@ -641,6 +641,7 @@ Requires:       dnf5%{?_isa} = %{version}-%{release}
 Provides:       dnf5-command(builddep)
 Provides:       dnf5-command(changelog)
 Provides:       dnf5-command(copr)
+Provides:       dnf5-command(needs-restarting)
 Provides:       dnf5-command(repoclosure)
 
 %description -n dnf5-plugins
@@ -650,6 +651,7 @@ Core DNF5 plugins that enhance dnf5 with builddep, changelog, copr, and repoclos
 %{_libdir}/dnf5/plugins/*.so
 %{_mandir}/man8/dnf5-builddep.8.*
 %{_mandir}/man8/dnf5-copr.8.*
+%{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
 %endif
 
