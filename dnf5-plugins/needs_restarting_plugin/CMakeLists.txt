@@ -1,5 +1,6 @@
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_needs_restarting\")
+set(GETTEXT_DOMAIN dnf5-plugin-needs-restarting)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 add_library(needs_restarting_cmd_plugin MODULE needs_restarting.cpp needs_restarting_cmd_plugin.cpp)
 
@@ -11,3 +12,5 @@ pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
 target_link_libraries(needs_restarting_cmd_plugin PRIVATE dnf5 libdnf5 libdnf5-cli ${SDBUS_CPP_LIBRARIES})
 
 install(TARGETS needs_restarting_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
+
+add_subdirectory(po)

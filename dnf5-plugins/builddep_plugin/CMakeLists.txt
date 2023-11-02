@@ -1,5 +1,6 @@
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_builddep\")
+set(GETTEXT_DOMAIN dnf5-plugin-builddep)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 add_library(builddep_cmd_plugin MODULE builddep.cpp builddep_cmd_plugin.cpp)
 
@@ -16,3 +17,5 @@ target_link_libraries(builddep_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(builddep_cmd_plugin PRIVATE dnf5)
 
 install(TARGETS builddep_cmd_plugin LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins/)
+
+add_subdirectory(po)

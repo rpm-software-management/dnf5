@@ -17,10 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: threads_manager.cpp:94
-msgid "Failed to create locale \"{}\"."
+#: repoclosure.cpp:45
+msgid "Print list of unresolved dependencies for repositories"
 msgstr ""
 
-#: threads_manager.cpp:99
-msgid "Failed to use locale \"{}\"."
+#: repoclosure.cpp:150
+msgid "No match for argument \"{}\"."
+msgstr ""
+
+#: repoclosure.cpp:156
+msgid "Failed to resolve package specifications."
+msgstr ""
+
+#: repoclosure.cpp:211
+msgid ""
+"Error: Repoclosure ended with unresolved dependencies ({}) across {} "
+"packages."
 msgstr ""
