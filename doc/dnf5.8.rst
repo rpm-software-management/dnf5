@@ -126,6 +126,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
+:ref:`needs-restarting <needs_restarting_plugin_ref-label>`
+    | Determine whether the system should be rebooted.
+
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
 
@@ -373,6 +376,7 @@ Commands in detail:
 Plugins:
     | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
     | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
+    | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-restarting command <needs_restarting_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
 
 Miscellaneous:

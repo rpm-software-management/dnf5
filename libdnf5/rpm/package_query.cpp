@@ -2861,9 +2861,8 @@ void PackageQuery::filter_reboot_suggested() {
     }
 
     libdnf5::advisory::AdvisoryQuery advisories{p_impl->base};
-    auto reboot_advisories =
-        advisories.get_advisory_packages_sorted_by_name_arch_evr() |
-        std::views::filter([](const auto & advisory_pkg) { return advisory_pkg.get_reboot_suggested(); });
+    auto reboot_advisories = advisories.get_advisory_packages_sorted_by_name_arch_evr();
+    std::erase_if(reboot_advisories, [](const auto & pkg) { return !pkg.get_reboot_suggested(); });
 
     const auto & cmp_naevr = libdnf5::rpm::cmp_naevr<const advisory::AdvisoryPackage &, const Package &>;
     for (const auto & pkg : *this) {

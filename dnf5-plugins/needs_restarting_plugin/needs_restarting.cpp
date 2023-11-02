@@ -29,10 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utils/string.hpp>
 
 #include <ctime>
-#include <iomanip>
+#include <fstream>
 #include <iostream>
-#include <sstream>
+#include <vector>
 
+const std::string SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
+const std::string SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
 const std::string SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
 const std::string SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
 
@@ -70,14 +72,13 @@ void NeedsRestartingCommand::configure() {
     context.set_load_system_repo(true);
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add(
-        libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
 
-    context.base.get_config().get_optional_metadata_types_option().add_item(
-        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
+    const std::set<std::string> metadata_types{libdnf5::METADATA_TYPE_FILELISTS, libdnf5::METADATA_TYPE_UPDATEINFO};
+    context.base.get_config().get_optional_metadata_types_option().add(
+        libdnf5::Option::Priority::RUNTIME, metadata_types);
 }
 
-time_t get_boot_time() {
+time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
     // We have three sources from which to derive the boot time. These values
     // vary depending on containerization, existing of a Real Time Clock, etc:
     // - UserspaceTimestamp property on /org/freedesktop/systemd1
@@ -85,22 +86,27 @@ time_t get_boot_time() {
     //      Works unless the system was not booted with systemd, such as in (most)
     //      containers.
     // - st_mtime of /proc/1
-    //      Reflects the time the first process was run after booting. This works
-    //      for all known cases except (1) machines without a RTC---they awake at
-    //      the start of the epoch, and (2) machines with the RTC in local time
-    //      (see `timedatectl status`).
+    //      Reflects the time the first process was run after booting. This
+    //      works for all known cases except (1) machines without a RTC---they
+    //      awake at the start of the epoch, and (2) machines with the RTC in
+    //      local time (see `timedatectl status`). This method will be correct
+    //      in container environments, even those running on hosts without an
+    //      RTC, since the correct time should be known by the time the
+    //      container is started.
     // - /proc/uptime
     //      Seconds field of /proc/uptime subtracted from the current time.
     //      Works for machines without RTC iff the current time is reasonably
     //      correct. Does not work on containers which share their kernel with
     //      the host---there, the host kernel uptime is returned
 
+    const auto & logger = ctx.base.get_logger();
+
     // First, ask systemd for the boot time. If systemd is available, this is
     // the best option.
     try {
         std::unique_ptr<sdbus::IConnection> connection;
         connection = sdbus::createSystemBusConnection();
-        auto proxy = sdbus::createProxy("org.freedesktop.systemd1", "/org/freedesktop/systemd1");
+        auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
         const uint64_t systemd_boot_time_us =
             proxy->getProperty("UserspaceTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE);
@@ -108,13 +114,17 @@ time_t get_boot_time() {
         const time_t systemd_boot_time = static_cast<long>(systemd_boot_time_us) / (1000L * 1000L);
 
         if (systemd_boot_time != 0) {
+            logger->debug("Got boot time from systemd: {}", systemd_boot_time);
             return systemd_boot_time;
         }
     } catch (const sdbus::Error & ex) {
         // Some D-Bus error, maybe we're inside a container.
+        logger->debug("D-Bus error getting boot time from systemd: {}", ex.what());
     }
 
     // Otherwise, take the maximum of the st_mtime of /proc/1 and /proc/uptime.
+    logger->debug("Couldn't get boot time from systemd, checking st_mtime of /proc/1 and /proc/uptime.");
+
     time_t proc_1_boot_time = 0;
     struct stat proc_1_stat = {};
     if (stat("/proc/1", &proc_1_stat) == 0) {
@@ -131,7 +141,12 @@ time_t get_boot_time() {
         }
     }
 
-    return std::max(proc_1_boot_time, uptime_boot_time);
+    const time_t boot_time = std::max(proc_1_boot_time, uptime_boot_time);
+
+    logger->debug("st_mtime of /proc/1: {}", proc_1_boot_time);
+    logger->debug("Boot time derived from /proc/uptime: {}", uptime_boot_time);
+    logger->debug("Using {} as the system boot time.", boot_time);
+    return boot_time;
 }
 
 libdnf5::rpm::PackageSet recursive_dependencies(
@@ -162,14 +177,10 @@ libdnf5::rpm::PackageSet recursive_dependencies(
 }
 
 void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
-    const auto boot_time = get_boot_time();
+    const auto boot_time = get_boot_time(ctx);
 
-    libdnf5::rpm::PackageQuery base_query{ctx.base};
-
-    libdnf5::rpm::PackageQuery installed{base_query};
-    installed.filter_installed();
-
-    libdnf5::rpm::PackageQuery reboot_suggested{installed};
+    libdnf5::rpm::PackageQuery reboot_suggested{ctx.base};
+    reboot_suggested.filter_installed();
     reboot_suggested.filter_reboot_suggested();
 
     std::vector<libdnf5::rpm::Package> need_reboot = {};
@@ -180,15 +191,16 @@ void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
     }
 
     if (need_reboot.empty()) {
-        std::cout << "No core libraries or services have been updated since boot-up.\n"
-                  << "Reboot should not be necessary.\n";
+        std::cout << "No core libraries or services have been updated since boot-up." << std::endl
+                  << "Reboot should not be necessary." << std::endl;
     } else {
-        std::cout << "Core libraries or services have been updated since boot-up:\n";
+        std::cout << "Core libraries or services have been updated since boot-up:" << std::endl;
         for (const auto & pkg : need_reboot) {
-            std::cout << "  * " << pkg.get_name() << '\n';
+            std::cout << "  * " << pkg.get_name() << std::endl;
         }
-        std::cout << "\nReboot is required to fully utilize these updates.\n"
-                  << "More information: https://access.redhat.com/solutions/27943\n";
+        std::cout << std::endl
+                  << "Reboot is required to fully utilize these updates." << std::endl
+                  << "More information: https://access.redhat.com/solutions/27943" << std::endl;
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 }
@@ -198,10 +210,11 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
     try {
         connection = sdbus::createSystemBusConnection();
     } catch (const sdbus::Error & ex) {
-        throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), ex.what());
+        const std::string error_message{ex.what()};
+        throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
 
-    auto systemd_proxy = sdbus::createProxy("org.freedesktop.systemd1", "/org/freedesktop/systemd1");
+    auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
     std::vector<sdbus::Struct<
         std::string,
@@ -235,7 +248,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
         }
 
         const auto unit_object_path = std::get<6>(unit);
-        auto unit_proxy = sdbus::createProxy("org.freedesktop.systemd1", unit_object_path);
+        auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
 
         // Only consider active (running) services
         const auto active_state = unit_proxy->getProperty("ActiveState").onInterface(SYSTEMD_UNIT_INTERFACE);
@@ -254,9 +267,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
     // Iterate over each file from each installed package and check whether it
     // is a unit file for a running service. This is much faster than running
     // filter_file on each unit file.
-    libdnf5::rpm::PackageQuery base_query{ctx.base};
-
-    libdnf5::rpm::PackageQuery installed{base_query};
+    libdnf5::rpm::PackageQuery installed{ctx.base};
     installed.filter_installed();
 
     std::vector<std::string> service_names;
@@ -287,7 +298,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
 
     if (!service_names.empty()) {
         for (const auto & service_name : service_names) {
-            std::cout << service_name << '\n';
+            std::cout << service_name << std::endl;
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
