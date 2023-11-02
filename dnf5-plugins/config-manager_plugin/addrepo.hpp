@@ -37,6 +37,13 @@ public:
     void configure() override;
 
 private:
+    // Defines what happens when the destination repository configuration file already exists.
+    enum class FilePolicy {
+        ERROR,          // Throw an error
+        OVERWRITE,      // Allow overwriting of existing repository configuration file
+        ADD_OR_REPLACE  // Allow adding or replacing a repository in the existing configuration file
+    };
+
     struct SourceRepofile {
         std::string location;
         bool is_local_path;
@@ -60,7 +67,7 @@ private:
     /// Tests if the file does not exist.
     /// @param path  Path to check.
     /// @throws ConfigManagerError  Trown if `path` already exist and overwriting is not allowed.
-    void test_if_filepath_not_exist(const std::filesystem::path & path) const;
+    void test_if_filepath_not_exist(const std::filesystem::path & path, bool show_hint_add_or_replace) const;
 
     /// Tests if the repositories IDs in the vector do not already exist in the configuration.
     /// @param repo_ids  List of repositories IDs to check.
@@ -72,10 +79,10 @@ private:
     libdnf5::ConfigMain tmp_config;
     libdnf5::repo::ConfigRepo tmp_repo_conf{tmp_config, "temporary_to_check_repository_options"};
 
-    SourceRepofile source_repofile;                // Location of source repository configuration file.
-    std::string repo_id;                           // The user-defined ID of the newly created repository.
-    bool create_missing_dirs{false};               // Allows to create missing directories.
-    bool overwrite{false};                         // Allows to overwrite an existing configuration file.
+    SourceRepofile source_repofile;   // Location of source repository configuration file.
+    std::string repo_id;              // The user-defined ID of the newly created repository.
+    bool create_missing_dirs{false};  // Allows to create missing directories.
+    FilePolicy file_policy{FilePolicy::ERROR};
     std::string save_filename;                     // User-defined name of newly saved configuration file.
     std::map<std::string, std::string> repo_opts;  // Options for the new repository.
 };
