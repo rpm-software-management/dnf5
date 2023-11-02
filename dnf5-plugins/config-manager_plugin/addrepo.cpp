@@ -209,6 +209,16 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
     });
     cmd.register_named_arg(set_opt);
 
+    auto add_or_replace = parser.add_new_named_arg("add-or-replace");
+    add_or_replace->set_long_name("add-or-replace");
+    add_or_replace->set_description("Allow adding or replacing a repository in the existing configuration file");
+    add_or_replace->set_has_value(false);
+    add_or_replace->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
+        file_policy = FilePolicy::ADD_OR_REPLACE;
+        return true;
+    });
+    cmd.register_named_arg(add_or_replace);
+
     auto create_missing_dirs_opt = parser.add_new_named_arg("create-missing-dir");
     create_missing_dirs_opt->set_long_name("create-missing-dir");
     create_missing_dirs_opt->set_description("Allow creation of missing directories");
@@ -224,7 +234,7 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
     overwrite_opt->set_description("Allow overwriting of existing repository configuration file");
     overwrite_opt->set_has_value(false);
     overwrite_opt->set_parse_hook_func([this](cli::ArgumentParser::NamedArg *, const char *, const char *) {
-        overwrite = true;
+        file_policy = FilePolicy::OVERWRITE;
         return true;
     });
     cmd.register_named_arg(overwrite_opt);
@@ -243,6 +253,7 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
     cmd.register_named_arg(save_filename_opt);
 
     // Set conflicting arguments
+    add_or_replace->add_conflict_argument(*from_repofile_opt);
     repo_id_opt->add_conflict_argument(*from_repofile_opt);
     set_opt->add_conflict_argument(*from_repofile_opt);
 }
@@ -285,7 +296,7 @@ void ConfigManagerAddRepoCommand::add_repos_from_repofile(
     }
     auto dest_path = dest_repo_dir / save_filename;
 
-    test_if_filepath_not_exist(dest_path);
+    test_if_filepath_not_exist(dest_path, false);
 
     // Creates an open temporary file. It then closes it but does not remove it.
     // In the following code, this temporary file is used to store the copied/downloaded configuration.
@@ -395,10 +406,19 @@ void ConfigManagerAddRepoCommand::create_repo(
     }
     auto dest_path = dest_repo_dir / save_filename;
 
-    test_if_filepath_not_exist(dest_path);
+    test_if_filepath_not_exist(dest_path, true);
     test_if_ids_not_already_exist({repo_id}, dest_path);
 
     ConfigParser parser;
+
+    if (file_policy == FilePolicy::ADD_OR_REPLACE && std::filesystem::exists(dest_path)) {
+        parser.read(dest_path);
+        if (parser.has_section(repo_id)) {
+            // If the repository with the id already exists, it will be removed.
+            parser.remove_section(repo_id);
+        }
+    }
+
     parser.add_section(repo_id);
 
     // Sets the default repository name. May be overwritten with "--set=name=<name>".
@@ -421,8 +441,9 @@ void ConfigManagerAddRepoCommand::create_repo(
 }
 
 
-void ConfigManagerAddRepoCommand::test_if_filepath_not_exist(const std::filesystem::path & path) const {
-    if (!overwrite && std::filesystem::exists(path)) {
+void ConfigManagerAddRepoCommand::test_if_filepath_not_exist(
+    const std::filesystem::path & path, bool show_hint_add_or_replace) const {
+    if (file_policy == FilePolicy::ERROR && std::filesystem::exists(path)) {
         ConfigParser parser;
         parser.read(path);
         std::string repo_ids;
@@ -435,11 +456,13 @@ void ConfigManagerAddRepoCommand::test_if_filepath_not_exist(const std::filesyst
             }
             repo_ids += repo_id;
         }
-        throw ConfigManagerError(
+        constexpr BgettextMessage msg1 =
             M_("File \"{}\" already exists and configures repositories with IDs \"{}\"."
-               " Add \"--overwrite\" to overwrite."),
-            path.string(),
-            repo_ids);
+               " Add \"--add-or-replace\" or \"--overwrite\".");
+        constexpr BgettextMessage msg2 =
+            M_("File \"{}\" already exists and configures repositories with IDs \"{}\"."
+               " Add \"--overwrite\" to overwrite.");
+        throw ConfigManagerError(show_hint_add_or_replace ? msg1 : msg2, path.string(), repo_ids);
     }
 }
 
