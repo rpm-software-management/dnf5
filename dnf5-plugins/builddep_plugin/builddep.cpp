@@ -26,6 +26,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <rpm/rpmbuild.h>
+#include <rpm/rpmds.h>
+#include <rpm/rpmio.h>
+#include <rpm/rpmlib.h>
+#include <rpm/rpmmacro.h>
+#include <rpm/rpmts.h>
 
 #include <iostream>
 

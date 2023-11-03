@@ -9,6 +9,9 @@ set_target_properties(builddep_cmd_plugin PROPERTIES PREFIX "")
 find_library(RPMBUILD NAMES rpmbuild REQUIRED)
 target_link_libraries(builddep_cmd_plugin PRIVATE ${RPMBUILD})
 
+pkg_check_modules(RPM REQUIRED rpm)
+target_link_libraries(builddep_cmd_plugin PRIVATE ${RPM_LIBRARIES})
+
 target_link_libraries(builddep_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(builddep_cmd_plugin PRIVATE dnf5)
 
