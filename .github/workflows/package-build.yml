@@ -55,8 +55,8 @@ jobs:
           # try to fetch cache from the same pr, 111 against devel. if no pr is
           # found it will try to fetch any pr against devel branch.
           restore-keys: |
-            ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}pr-${{ github.base_ref }}-${{ github.event.number }}-
-            ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}pr-${{ github.base_ref }}-
+            ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}-pr-${{ github.base_ref }}-${{ github.event.number }}-
+            ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}-pr-${{ github.base_ref }}-
 
       - name: Zero CCache statistics
         run: ccache -z
