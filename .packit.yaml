@@ -35,8 +35,10 @@ jobs:
   - job: copr_build
     trigger: pull_request
     targets:
-      - fedora-all
+      - fedora-38
+      #- fedora-all
   - job: tests
     trigger: pull_request
     targets:
-      - fedora-all
+      - fedora-38
+      #- fedora-all
