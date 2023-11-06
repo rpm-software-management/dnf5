@@ -1,0 +1,51 @@
+name: Weblate - *.pot synchronization
+on:
+  schedule:
+    # Run this every morning
+    - cron: '45 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  pot-upload:
+    name: Upload *.pot files to dnf5-l10n repository
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/rpm-software-management/dnf-ci-host
+      options: --user root
+    timeout-minutes: 10
+    steps:
+      - name: Clone source repository
+        uses: actions/checkout@v4
+        with:
+          path: src
+          fetch-depth: 1
+
+      - name: Generate fresh *.pot files
+        run: |
+          cd src
+          cmake -S . -B build
+          cmake --build build --target gettext-potfiles
+
+      - name: Clone weblate repository
+        uses: actions/checkout@v4
+        with:
+          path: l10n
+          repository: ${{ github.repository }}-l10n
+          ssh-key: ${{ secrets.L10N_SSH_KEY }}
+
+      - name: Commit .pot to weblate repo
+        run: |
+          git config --global user.name "GitHub Workflow"
+          git config --global user.email "github-actions@github.com"
+          pushd src
+          for f in $(find * -type f -name "*.pot"); do
+            potfile=$(basename $f)
+            component=${potfile%.*}
+            mkdir -p ../l10n/${component}
+            cp ${f} ../l10n/${component}/${potfile}
+            echo ${f%/*} > ../l10n/${component}/PATH
+          done
+          popd
+          git -C l10n add "*"
+          git -C l10n commit -m "Update source files"
+          git -C l10n push
