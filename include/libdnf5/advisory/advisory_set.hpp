@@ -117,6 +117,12 @@ public:
 
     void swap(AdvisorySet & other) noexcept;
 
+    /// Gather AdvisoryPackages for each Advisory in the set.
+    /// The AdvisoryPackages are sorted by libsolv `id`s of name, arch and evr.
+    /// This is a different sorting than sorting by the strings of AdvisoryPackages names, architectures and evrs.
+    ///
+    /// @param only_applicable Whether to return only AdvisoryPackages from applicable AdvisoryCollections.
+    /// @since 5.0
     std::vector<AdvisoryPackage> get_advisory_packages_sorted_by_name_arch_evr(bool only_applicable = false) const;
 
 private:
