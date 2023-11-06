@@ -2852,11 +2852,11 @@ static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
 
 void PackageQuery::filter_reboot_suggested() {
     auto & pool = get_rpm_pool(p_impl->base);
-    libdnf5::solv::SolvMap filter_result{pool.get_nsolvables()};
+    libdnf5::solv::SolvMap core_packages{pool.get_nsolvables()};
 
     for (const auto & pkg : *this) {
         if (CORE_PACKAGE_NAMES.contains(pkg.get_name())) {
-            filter_result.add_unsafe(pkg.get_id().id);
+            core_packages.add_unsafe(pkg.get_id().id);
         }
     }
 
@@ -2864,15 +2864,9 @@ void PackageQuery::filter_reboot_suggested() {
     auto reboot_advisories = advisories.get_advisory_packages_sorted_by_name_arch_evr();
     std::erase_if(reboot_advisories, [](const auto & pkg) { return !pkg.get_reboot_suggested(); });
 
-    const auto & cmp_naevr = libdnf5::rpm::cmp_naevr<const advisory::AdvisoryPackage &, const Package &>;
-    for (const auto & pkg : *this) {
-        auto lower = std::lower_bound(reboot_advisories.begin(), reboot_advisories.end(), pkg, cmp_naevr);
-        if (lower != reboot_advisories.end() && lower->get_nevra() == pkg.get_nevra()) {
-            filter_result.add_unsafe(pkg.get_id().id);
-        }
-    }
+    PQImpl::filter_sorted_advisory_pkgs(*this, reboot_advisories, libdnf5::sack::QueryCmp::EQ);
 
-    *p_impl &= filter_result;
+    *p_impl |= core_packages;
 }
 
 }  // namespace libdnf5::rpm

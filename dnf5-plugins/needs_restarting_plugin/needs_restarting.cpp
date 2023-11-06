@@ -195,8 +195,16 @@ void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
                   << "Reboot should not be necessary." << std::endl;
     } else {
         std::cout << "Core libraries or services have been updated since boot-up:" << std::endl;
+        std::vector<std::string> need_reboot_names;
         for (const auto & pkg : need_reboot) {
-            std::cout << "  * " << pkg.get_name() << std::endl;
+            need_reboot_names.emplace_back(pkg.get_name());
+        }
+        std::sort(need_reboot_names.begin(), need_reboot_names.end());
+        need_reboot_names.erase(
+            std::unique(need_reboot_names.begin(), need_reboot_names.end()), need_reboot_names.end());
+
+        for (const auto & pkg_name : need_reboot_names) {
+            std::cout << "  * " << pkg_name << std::endl;
         }
         std::cout << std::endl
                   << "Reboot is required to fully utilize these updates." << std::endl
