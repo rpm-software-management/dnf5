@@ -276,6 +276,30 @@ transaction::TransactionItemReason State::get_package_reason(const std::string &
     return packages_reason;
 }
 
+transaction::TransactionItemReason State::get_group_reason(const std::string & id) {
+    transaction::TransactionItemReason group_reason = transaction::TransactionItemReason::NONE;
+    auto it = group_states.find(id);
+    if (it != group_states.end()) {
+        if (it->second.userinstalled) {
+            group_reason = transaction::TransactionItemReason::USER;
+        } else {
+            group_reason = transaction::TransactionItemReason::DEPENDENCY;
+        }
+    }
+
+    return group_reason;
+}
+
+transaction::TransactionItemReason State::get_environment_reason(const std::string & id) {
+    transaction::TransactionItemReason environment_reason = transaction::TransactionItemReason::NONE;
+    auto it = environment_states.find(id);
+    if (it != environment_states.end()) {
+        environment_reason = transaction::TransactionItemReason::USER;
+    }
+
+    return environment_reason;
+}
+
 
 void State::set_package_reason(const std::string & na, transaction::TransactionItemReason reason) {
     auto reason_str = transaction::transaction_item_reason_to_string(reason);

@@ -125,12 +125,7 @@ public:
     /// @return Resolved reason why the Group was installed.
     ///         Groups can be installed due to multiple reasons, only the most significant is returned.
     /// @since 5.0
-    //
-    // TODO(dmach): return actual value from data in GroupSack
-    // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf5::transaction::TransactionItemReason get_reason() const {
-        return libdnf5::transaction::TransactionItemReason::NONE;
-    }
+    libdnf5::transaction::TransactionItemReason get_reason() const;
 
     /// Merge the Group with another one.
     /// @since 5.0

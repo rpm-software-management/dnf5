@@ -126,6 +126,8 @@ private:
     friend class libdnf5::base::Transaction;
     friend class libdnf5::Goal;
     friend class libdnf5::rpm::Package;
+    friend class libdnf5::comps::Group;
+    friend class libdnf5::comps::Environment;
     friend class libdnf5::advisory::AdvisoryQuery;
     friend class libdnf5::module::ModuleDB;
     friend class libdnf5::module::ModuleSack;
