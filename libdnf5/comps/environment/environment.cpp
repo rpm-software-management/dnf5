@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
@@ -135,6 +136,23 @@ std::vector<std::string> Environment::get_optional_groups() {
         optional_groups = load_groups_from_pool(get_comps_pool(base), environment_ids[0].id, false);
     }
     return optional_groups;
+}
+
+libdnf5::transaction::TransactionItemReason Environment::get_reason() const {
+    comps::EnvironmentQuery installed_query(base);
+    installed_query.filter_installed(true);
+    installed_query.filter_environmentid(get_environmentid());
+    if (!installed_query.empty()) {
+        auto reason = base->p_impl->get_system_state().get_environment_reason(get_environmentid());
+
+        if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
+            return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
+        }
+
+        return reason;
+    }
+
+    return libdnf5::transaction::TransactionItemReason::NONE;
 }
 
 

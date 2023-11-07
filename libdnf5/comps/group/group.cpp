@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
@@ -288,6 +289,23 @@ void Group::serialize(const std::string & path) {
     xmlFreeDoc(doc);
     // reset the error handler to default
     xmlSetGenericErrorFunc(NULL, NULL);
+}
+
+libdnf5::transaction::TransactionItemReason Group::get_reason() const {
+    comps::GroupQuery installed_query(base);
+    installed_query.filter_installed(true);
+    installed_query.filter_groupid(get_groupid());
+    if (!installed_query.empty()) {
+        auto reason = base->p_impl->get_system_state().get_group_reason(get_groupid());
+
+        if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
+            return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
+        }
+
+        return reason;
+    }
+
+    return libdnf5::transaction::TransactionItemReason::NONE;
 }
 
 }  // namespace libdnf5::comps

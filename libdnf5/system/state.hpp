@@ -116,6 +116,14 @@ public:
     /// @since 5.0
     transaction::TransactionItemReason get_package_reason(const std::string & na);
 
+    /// @return The reason for a group id.
+    /// @param id The group id to get the reason for.
+    transaction::TransactionItemReason get_group_reason(const std::string & id);
+
+    /// @return The reason for a environment id.
+    /// @param id The environment id to get the reason for.
+    transaction::TransactionItemReason get_environment_reason(const std::string & id);
+
     /// Sets the reason for a package NA (Name.Arch).
     /// @param na The NA to set the reason for.
     /// @param reason The reason to set.
