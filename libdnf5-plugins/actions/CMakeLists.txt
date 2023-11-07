@@ -3,7 +3,8 @@ if(NOT WITH_PLUGIN_ACTIONS)
 endif()
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf5\")
+set(GETTEXT_DOMAIN libdnf5-plugin-actions)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 add_library(actions MODULE actions.cpp)
 
@@ -16,3 +17,5 @@ install(TARGETS actions LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/libdnf
 
 install(FILES "actions.conf" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins/actions.d")
+
+add_subdirectory(po)
