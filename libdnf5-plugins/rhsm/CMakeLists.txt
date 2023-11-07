@@ -3,7 +3,8 @@ if(NOT WITH_PLUGIN_RHSM)
 endif()
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf5\")
+set(GETTEXT_DOMAIN libdnf5-plugin-rhsm)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 pkg_check_modules(RHSM REQUIRED librhsm>=0.0.3)
 include_directories(${RHSM_INCLUDE_DIRS})
@@ -26,3 +27,5 @@ target_link_libraries(rhsm_plugin PRIVATE libdnf5)
 install(TARGETS rhsm_plugin LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/libdnf5/plugins/")
 
 install(FILES "rhsm.conf" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/libdnf5-plugins")
+
+add_subdirectory(po)
