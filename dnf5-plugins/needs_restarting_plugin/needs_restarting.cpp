@@ -65,6 +65,15 @@ void NeedsRestartingCommand::set_argument_parser() {
     services_arg->set_const_value("true");
     services_arg->link_value(services_option);
     cmd.register_named_arg(services_arg);
+
+    auto * reboothint_arg = parser.add_new_named_arg("reboothint");
+    reboothint_arg->set_long_name("reboothint");
+    reboothint_arg->set_short_name('r');
+    reboothint_arg->set_description(
+        "Has no effect, kept for compatibility with DNF 4. \"dnf4 needs-restarting -r\" provides the same "
+        "functionality "
+        "as \"dnf5 needs-restarting\".");
+    cmd.register_named_arg(reboothint_arg);
 }
 
 void NeedsRestartingCommand::configure() {
