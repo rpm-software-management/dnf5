@@ -129,11 +129,11 @@ public:
     /// Enable module stream.
     /// @param module_spec module to be enabled.
     /// @param count if `true`, count the change towards the limit of module status modifications.
-    /// @return `true` if requested change really triggers a change in the ModuleDB, `false` otherwise.
-    /// @throw EnableMultipleStreamsError in case of conflicting enable requests.
+    /// @return `true` if requested change realy triggers a change in the ModuleDB, `false` otherwise,
+    ///         and a set of module:stream strings for modules with multiple streams and no enabled or default one.
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14
-    bool enable(const std::string & module_spec, bool count = true);
+    std::pair<bool, std::set<std::string>> enable(const std::string & module_spec, bool count = true);
     /// Disable module.
     /// @param module_spec module to be disabled.
     /// @param count if `true`, count the change towards the limit of module status modifications.
@@ -188,6 +188,12 @@ private:
     /// @return If platform id was detected, it returns a pair where the first item is the platform
     ///         module name and second is the platform stream. Otherwise std::nullopt is returned.
     std::optional<std::pair<std::string, std::string>> detect_platform_name_and_stream() const;
+
+    /// @brief Keep only one stream for each module. If more than one stream is originally there, keep only
+    // the enabled or default one if possible.
+    /// @return Set of module:stream strings for modules with multiple streams and no enabled or default one.
+    std::set<std::string> prune_module_dict(
+        std::unordered_map<std::string, std::unordered_map<std::string, libdnf5::solv::IdQueue>> & module_dict);
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {
