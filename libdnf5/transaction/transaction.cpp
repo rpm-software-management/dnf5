@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/rpm.hpp"
 #include "db/trans.hpp"
 #include "db/trans_item.hpp"
+#include "transaction/transaction_sr.hpp"
 
 #include "libdnf5/transaction/comps_environment.hpp"
 #include "libdnf5/transaction/comps_group.hpp"
@@ -277,6 +278,47 @@ void Transaction::finish(TransactionState state) {
         conn->exec("ROLLBACK");
         throw;
     }
+}
+
+std::string Transaction::serialize() {
+    TransactionReplay transaction_replay;
+
+    for (const auto & pkg : get_packages()) {
+        PackageReplay package_replay;
+
+        package_replay.nevra = pkg.to_string();
+        package_replay.action = pkg.get_action();
+        package_replay.reason = pkg.get_reason();
+        package_replay.repo_id = pkg.get_repoid();
+        //TODO(amatej): Add the group_id for reason change?
+
+        transaction_replay.packages.push_back(package_replay);
+    }
+
+    for (const auto & group : get_comps_groups()) {
+        GroupReplay group_replay;
+
+        group_replay.group_id = group.to_string();
+        group_replay.action = group.get_action();
+        group_replay.reason = group.get_reason();
+        group_replay.repo_id = group.get_repoid();
+
+        transaction_replay.groups.push_back(group_replay);
+    }
+
+    for (const auto & environment : get_comps_environments()) {
+        EnvironmentReplay environment_replay;
+
+        environment_replay.environment_id = environment.to_string();
+        environment_replay.action = environment.get_action();
+        environment_replay.repo_id = environment.get_repoid();
+
+        transaction_replay.environments.push_back(environment_replay);
+    }
+
+    ////TODO(amatej): potentially add modules
+
+    return json_serialize(transaction_replay);
 }
 
 }  // namespace libdnf5::transaction
