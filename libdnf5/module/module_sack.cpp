@@ -777,18 +777,96 @@ bool ModuleSack::Impl::enable(const std::string & name, const std::string & stre
 }
 
 
-bool ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
+// module dict { name : { stream : [solvable id] } }
+static std::unordered_map<std::string, std::unordered_map<std::string, libdnf5::solv::IdQueue>> create_module_dict(
+    const ModuleQuery & module_query) {
+    std::unordered_map<std::string, std::unordered_map<std::string, libdnf5::solv::IdQueue>> module_dict;
+    for (const auto & module_item : module_query.list()) {
+        module_dict[module_item.get_name()][module_item.get_stream()].push_back(module_item.get_id().id);
+    }
+    return module_dict;
+}
+
+
+std::set<std::string> ModuleSack::Impl::prune_module_dict(
+    std::unordered_map<std::string, std::unordered_map<std::string, libdnf5::solv::IdQueue>> & module_dict) {
+    // Vector of module names with multiple streams to enable
+    std::set<std::string> multiple_stream_modules;
+
+    for (auto & module_dict_iter : module_dict) {
+        auto name = module_dict_iter.first;
+        auto & stream_dict = module_dict_iter.second;
+        auto module_status = module_db->get_status(name);
+
+        // Multiple streams match the requested spec
+        if (stream_dict.size() > 1) {
+            // Get stream that is either enabled (for ENABLED module), or default (otherwise)
+            std::string enabled_or_default_stream;
+            if (module_status == ModuleStatus::ENABLED) {
+                enabled_or_default_stream = module_db->get_enabled_stream(name);
+            } else {
+                enabled_or_default_stream = module_sack->get_default_stream(name);
+            }
+
+            // Module doesn't have any enabled nor default stream
+            if (enabled_or_default_stream.empty()) {
+                for (const auto & stream_pair : stream_dict) {
+                    multiple_stream_modules.insert(fmt::format("{}:{}", name, stream_pair.first));
+                }
+                continue;
+            }
+
+            // The enabled or default stream is not one of the possible streams
+            if (stream_dict.find(enabled_or_default_stream) == stream_dict.end()) {
+                for (const auto & stream_pair : stream_dict) {
+                    multiple_stream_modules.insert(fmt::format("{}:{}", name, stream_pair.first));
+                }
+                continue;
+            }
+
+            // Remove all streams except for the enabled_or_default_stream
+            for (auto iter = stream_dict.begin(); iter != stream_dict.end();) {
+                if (iter->first != enabled_or_default_stream) {
+                    stream_dict.erase(iter++);
+                } else {
+                    ++iter;
+                }
+            }
+        }
+    }
+    return multiple_stream_modules;
+}
+
+
+std::pair<bool, std::set<std::string>> ModuleSack::Impl::enable(const std::string & module_spec, bool count) {
     module_db->initialize();
+
+    // For the given module_spec, create a dict { name : {stream : [solvable id] }
+    auto module_dict = create_module_dict(module_spec_to_query(base, module_spec));
+    // Keep only enabled or default streams if possible
+    auto multiple_stream_modules = prune_module_dict(module_dict);
+
+    // If there are any modules with multiple streams to be enabled, return immediately the set of these
+    // module:stream strings.
+    if (!multiple_stream_modules.empty()) {
+        return std::make_pair(false, multiple_stream_modules);
+    }
 
     bool changed = false;
     libdnf5::solv::IdQueue queue;
-    for (const auto & module_item : module_spec_to_query(base, module_spec)) {
-        queue.push_back(module_item.get_id().id);
-        changed |= enable(module_item.get_name(), module_item.get_stream(), count);
+    for (const auto & module_dict_iter : module_dict) {
+        std::string name = module_dict_iter.first;
+        for (const auto & stream_dict_iter : module_dict_iter.second) {
+            // Enable this stream
+            changed |= enable(name, stream_dict_iter.first, count);
+            // Create a queue of ids for the stream to be enabled, because it better matches user requirements
+            // than just "module(name:stream)" provides. (E.g. user might have requested specific context or version.)
+            queue += stream_dict_iter.second;
+        }
     }
     modules_to_enable.push_back(queue);
 
-    return changed;
+    return std::make_pair(changed, multiple_stream_modules);
 }
 
 

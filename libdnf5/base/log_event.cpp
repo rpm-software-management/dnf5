@@ -163,6 +163,27 @@ std::string LogEvent::to_string(
         case GoalProblem::UNSUPPORTED_ACTION:
             return ret.append(utils::sformat(
                 _("{} action for argument \"{}\" is not supported."), goal_action_to_string(action), *spec));
+        case GoalProblem::MULTIPLE_STREAMS: {
+            // Create module dict { name : { stream } } out of the additional data.
+            std::map<std::string, std::set<std::string>> module_dict;
+            for (const auto & module_stream : additional_data) {
+                const auto pos = module_stream.find(":");
+                module_dict[module_stream.substr(0, pos)].insert(module_stream.substr(pos + 1));
+            }
+            // Create the error message describing all the streams of modules that were matched.
+            std::string error_message;
+            for (const auto & module_dict_iter : module_dict) {
+                error_message.append(utils::sformat(
+                    _("\n  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the streams are "
+                      "enabled or "
+                      "default."),
+                    *spec,
+                    module_dict_iter.second.size(),
+                    utils::string::join(module_dict_iter.second, "', '"),
+                    module_dict_iter.first));
+            }
+            return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
+        }
     }
     return ret;
 }
