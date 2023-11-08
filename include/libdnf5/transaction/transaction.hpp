@@ -152,6 +152,11 @@ public:
     // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
     std::vector<Package> & get_packages();
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Serialize the transaction into a json data format which can be later loaded
+    /// into a `libdnf5::Goal` and replayed.
+    std::string serialize();
+
 private:
     friend Transformer;
     friend libdnf5::base::Transaction;
