@@ -749,7 +749,7 @@ ModuleSack::resolve_active_module_items() {
 static ModuleQuery module_spec_to_query(BaseWeakPtr & base, const std::string & module_spec) {
     for (auto & nsvcap : Nsvcap::parse(module_spec)) {
         ModuleQuery nsvcap_query(base, false);
-        nsvcap_query.filter_nsvca(nsvcap);
+        nsvcap_query.filter_nsvca(nsvcap, libdnf5::sack::QueryCmp::GLOB);
         if (!nsvcap_query.empty()) {
             return nsvcap_query;
         }
