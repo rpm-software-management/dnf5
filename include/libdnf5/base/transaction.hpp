@@ -163,6 +163,11 @@ public:
     /// Retrieve a list of the problems that occurred during `check_gpg_signatures` procedure.
     std::vector<std::string> get_gpg_signature_problems() const noexcept;
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Serialize the transaction into a json data format which can be later loaded
+    /// into a `libdnf5::Goal` and replayed.
+    std::string serialize();
+
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;
