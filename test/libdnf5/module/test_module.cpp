@@ -59,7 +59,7 @@ void ModuleTest::test_load() {
     add_repo_repomd("repomd-modules");
 
     auto module_sack = base.get_module_sack();
-    CPPUNIT_ASSERT_EQUAL((size_t)10, module_sack->get_modules().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)11, module_sack->get_modules().size());
 
     ModuleQuery query = ModuleQuery(base, false);
     query.filter_name("meson");
@@ -197,7 +197,7 @@ void ModuleTest::test_query_latest() {
 
     {  // Check we can see all the modules, even ones with duplicit nscva
         ModuleQuery query(base, false);
-        CPPUNIT_ASSERT_EQUAL((size_t)13, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)14, query.size());
     }
 
     {
@@ -209,13 +209,13 @@ void ModuleTest::test_query_latest() {
     {
         ModuleQuery query(base, false);
         query.filter_latest();
-        CPPUNIT_ASSERT_EQUAL((size_t)11, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)12, query.size());
     }
 
     {
         ModuleQuery query(base, false);
         query.filter_latest(-1);
-        CPPUNIT_ASSERT_EQUAL((size_t)10, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)11, query.size());
     }
 
     {
@@ -775,4 +775,29 @@ void ModuleTest::test_module_reset() {
     for (auto [name, module_state] : system_state.get_module_states()) {
         CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
     }
+}
+
+
+void ModuleTest::test_module_globs() {
+    add_repo_repomd("repomd-modules");
+
+    // Add module enable goal operation with module_spec containing globs
+    libdnf5::Goal goal(base);
+    goal.add_module_enable("*salad", libdnf5::GoalJobSettings());
+    auto transaction = goal.resolve();
+
+    // Active modules contain the enabled fruit-salad and vegetable-salad, its dependency gooseberry and the default
+    // stream of module berries
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:4:6c81f848:x86_64",
+        "fruit-salad:main:12:2241675a:x86_64",
+        "gooseberry:5.5:2:72aaf46b6:x86_64",
+        "gooseberry:5.5:3:72aaf46b6:x86_64",
+        "vegetable-salad:latest:1:aaa456b:x86_64"};
+    std::vector<std::string> active_module_specs;
+    for (auto & module_item : base.get_module_sack()->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
 }
