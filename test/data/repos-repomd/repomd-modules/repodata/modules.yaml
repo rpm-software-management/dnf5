@@ -227,6 +227,23 @@ data:
   document: modulemd
   version: 2
   data:
+    name: vegetable-salad
+    stream: latest
+    version: 1
+    context: aaa456b
+    arch: x86_64
+    summary: Test module
+    description: Test module
+    license:
+      module: [MIT]
+    profiles:
+      minimal:
+        rpms: []
+...
+---
+  document: modulemd
+  version: 2
+  data:
     name: NoStaticContext
     stream: main
     version: 1
