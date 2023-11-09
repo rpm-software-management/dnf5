@@ -1733,6 +1733,17 @@ void Goal::Impl::add_group_upgrade_to_goal(
             continue;
         }
         auto available_group = available_group_query.get();
+        // upgrade the group itself
+        rpm_goal.add_group(
+            available_group,
+            transaction::TransactionItemAction::UPGRADE,
+            installed_group.get_reason(),
+            allowed_package_types);
+
+        if (settings.group_no_packages) {
+            continue;
+        }
+
         auto state_group = system_state.get_group_state(group_id);
 
         // set of package names that are part of the installed version of the group
@@ -1776,12 +1787,6 @@ void Goal::Impl::add_group_upgrade_to_goal(
                 }
             }
         }
-        // upgrade the group itself
-        rpm_goal.add_group(
-            available_group,
-            transaction::TransactionItemAction::UPGRADE,
-            installed_group.get_reason(),
-            allowed_package_types);
     }
     if (!remove_candidates.empty()) {
         remove_group_packages(remove_candidates);

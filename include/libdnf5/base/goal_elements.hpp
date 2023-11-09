@@ -166,7 +166,7 @@ public:
         return group_package_types ? &group_package_types.value() : nullptr;
     }
 
-    /// If set to true, group operations (install / remove) will only work
+    /// If set to true, group operations (install / remove / upgrade) will only work
     /// with the group itself, but will not add to the transaction any packages.
     bool group_no_packages{false};
 
