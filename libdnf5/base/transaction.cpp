@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
+#include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
@@ -1053,6 +1054,58 @@ bool Transaction::Impl::check_gpg_signatures() {
         signature_problems.push_back(warning_msg);
     }
     return result;
+}
+
+std::string Transaction::serialize() {
+    transaction::TransactionReplay transaction_replay;
+
+    for (const auto & pkg : get_transaction_packages()) {
+        transaction::PackageReplay package_replay;
+
+        const auto & rpm_pkg = pkg.get_package();
+        package_replay.nevra = rpm_pkg.get_nevra();
+        package_replay.action = pkg.get_action();
+        package_replay.reason = pkg.get_reason();
+        package_replay.repo_id = rpm_pkg.get_repo_id();
+        if (pkg.get_reason_change_group_id()) {
+            package_replay.group_id = *pkg.get_reason_change_group_id();
+        }
+        if (rpm_pkg.is_cached()) {
+            package_replay.package_path = rpm_pkg.get_package_path();
+        }
+
+        transaction_replay.packages.push_back(package_replay);
+    }
+
+    for (const auto & group : get_transaction_groups()) {
+        transaction::GroupReplay group_replay;
+
+        group_replay.group_id = group.get_group().get_groupid();
+        group_replay.action = group.get_action();
+        group_replay.reason = group.get_reason();
+        // TODO(amatej): does each group has to have at least one repo?
+        group_replay.repo_id = *(group.get_group().get_repos().begin());
+
+        //TODO(amatej): add package types... if they are actually needed though... which I am not sure now.
+        // -> becuase if I plan to store the group jsons separately it will contain all information, so the pkg types shoudn't be here
+        transaction_replay.groups.push_back(group_replay);
+    }
+
+    for (const auto & environment : get_transaction_environments()) {
+        transaction::EnvironmentReplay environment_replay;
+
+        environment_replay.environment_id = environment.get_environment().get_environmentid();
+        environment_replay.action = environment.get_action();
+        // TODO(amatej): does each environment has to have at least one repo?
+        environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
+
+        transaction_replay.environments.push_back(environment_replay);
+    }
+
+    ////TODO(amatej): Allow using local sources (downloaded packages, groups..)
+    ////TODO(amatej): potentially add modules
+
+    return transaction::json_serialize(transaction_replay);
 }
 
 }  // namespace libdnf5::base
