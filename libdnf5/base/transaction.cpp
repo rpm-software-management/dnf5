@@ -448,6 +448,24 @@ void Transaction::Impl::set_transaction(
         TransactionPackage tspkg(pkg, TransactionPackage::Action::REASON_CHANGE, reason, group_id);
         packages.emplace_back(std::move(tspkg));
     }
+
+    // After all packages were added check rpm reason overrides
+    if (!rpm_reason_overrides.empty()) {
+        for (auto & pkg : packages) {
+            const auto reason_override = rpm_reason_overrides.find(pkg.get_package().get_nevra());
+            if (reason_override != rpm_reason_overrides.end()) {
+                // For UPGRADE, DOWNGRADE and REINSTALL change the reason only if it stronger.
+                // This is requierd because we don't want to for example mark some user installed
+                // package as a dependency (except when the user specifically asks for it - action REASON_CHANGE).
+                if (pkg.get_action() == transaction::TransactionItemAction::INSTALL ||
+                    pkg.get_action() == transaction::TransactionItemAction::REMOVE ||
+                    (reason_override->second > pkg.get_reason() &&
+                     pkg.get_action() != transaction::TransactionItemAction::REASON_CHANGE)) {
+                    pkg.reason = reason_override->second;
+                }
+            }
+        }
+    }
 }
 
 
