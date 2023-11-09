@@ -301,6 +301,14 @@ public:
         /// Gets the user function to complete the argument.
         const CompleteHookFunc & get_complete_hook_func() const noexcept { return complete_hook; }
 
+        /// Sets the required number of repetitions of this argument on the command line.
+        /// The special values OPTIONAL, UNLIMITED, AT_LEAST_ONE can be used.
+        void set_nrepeats(int nrepeats) { this->nrepeats = nrepeats; }
+
+        /// Gets the required number of repetitions of this argument on the command line.
+        /// May return special values: OPTIONAL, UNLIMITED, AT_LEAST_ONE
+        int get_nrepeats() const noexcept { return nrepeats; }
+
     private:
         friend class ArgumentParser;
 
@@ -317,12 +325,13 @@ public:
         /// Returns number of consumed arguments from the input.
         int parse(const char * option, int argc, const char * const argv[]);
 
-        int nvals;
+        int nvals;  // Number of values required by this positional argument on the command line
         libdnf5::Option * init_value;
         std::vector<std::unique_ptr<libdnf5::Option>> * values;
         bool store_value{true};
         ParseHookFunc parse_hook;
         CompleteHookFunc complete_hook;
+        int nrepeats{1};  // The required number of repetitions of this positional argument on the command line
     };
 
     class NamedArg : public Argument {

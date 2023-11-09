@@ -579,8 +579,12 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
             }
         }
         if (!used && *argv[i] != '-' && used_positional_arguments < pos_args.size()) {
-            i += pos_args[used_positional_arguments]->parse(argv[i], argc - i, &argv[i]);
-            ++used_positional_arguments;
+            auto * pos_arg = pos_args[used_positional_arguments];
+            i += pos_arg->parse(argv[i], argc - i, &argv[i]);
+            auto nrepeats = pos_arg->get_nrepeats();
+            if ((nrepeats > 0 && pos_arg->parse_count >= nrepeats) || nrepeats == PositionalArg::OPTIONAL) {
+                ++used_positional_arguments;
+            }
             used = true;
         }
         if (!used) {
@@ -596,10 +600,14 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
 
     // Test that all required positional arguments are present.
     for (const auto * pos_arg : pos_args) {
-        const auto nvals = pos_arg->get_nvals();
-        if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED && nvals != PositionalArg::OPTIONAL) {
-            throw ArgumentParserMissingPositionalArgumentError(
-                M_("Missing positional argument \"{}\" for command \"{}\""), pos_arg->get_id(), id);
+        const auto nrepeats = pos_arg->get_nrepeats();
+        if (nrepeats > 0 || nrepeats == PositionalArg::AT_LEAST_ONE) {
+            const auto nvals = pos_arg->get_nvals();
+            if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED &&
+                nvals != PositionalArg::OPTIONAL) {
+                throw ArgumentParserMissingPositionalArgumentError(
+                    M_("Missing positional argument \"{}\" for command \"{}\""), pos_arg->get_id(), id);
+            }
         }
     }
 
@@ -707,8 +715,12 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
             }
         }
         if (!used && *argv[i] != '-' && used_positional_arguments < pos_args.size()) {
-            i += pos_args[used_positional_arguments]->parse(argv[i], argc - i, &argv[i]);
-            ++used_positional_arguments;
+            auto * pos_arg = pos_args[used_positional_arguments];
+            i += pos_arg->parse(argv[i], argc - i, &argv[i]);
+            auto nrepeats = pos_arg->get_nrepeats();
+            if ((nrepeats > 0 && pos_arg->parse_count >= nrepeats) || nrepeats == PositionalArg::OPTIONAL) {
+                ++used_positional_arguments;
+            }
             used = true;
         }
         if (!used) {
@@ -724,10 +736,14 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
 
     // Test that all required positional arguments are present.
     for (const auto * pos_arg : pos_args) {
-        const auto nvals = pos_arg->get_nvals();
-        if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED && nvals != PositionalArg::OPTIONAL) {
-            throw ArgumentParserMissingPositionalArgumentError(
-                M_("Missing positional argument \"{}\" for command \"{}\""), pos_arg->get_id(), id);
+        const auto nrepeats = pos_arg->get_nrepeats();
+        if (nrepeats > 0 || nrepeats == PositionalArg::AT_LEAST_ONE) {
+            const auto nvals = pos_arg->get_nvals();
+            if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED &&
+                nvals != PositionalArg::OPTIONAL) {
+                throw ArgumentParserMissingPositionalArgumentError(
+                    M_("Missing positional argument \"{}\" for command \"{}\""), pos_arg->get_id(), id);
+            }
         }
     }
 
