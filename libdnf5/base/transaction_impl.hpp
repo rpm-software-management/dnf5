@@ -116,6 +116,9 @@ private:
 
     bool check_gpg_signatures();
     ImportRepoKeysResult import_repo_keys(libdnf5::repo::Repo & repo);
+
+    // Used during transaction replay to ensure stored reason are used
+    std::unordered_map<std::string, transaction::TransactionItemReason> rpm_reason_overrides;
 };
 
 
