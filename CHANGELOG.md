@@ -1,3 +1,20 @@
+# 5.1.7
+
+- Actions plugin's actions.conf can set "Enabled" for each action separately
+- Actions plugin now supports action options
+- Implement `get_reason()` for groups and environments
+- Disable the RHSM plugin by default and enable it in the RPM spec
+- Add missing docs for `get_advisory_packages_sorted_by_name_arch_evr(bool)`
+- Update documentation about maintained coprs
+- modules: Test `ModuleProfile::is_default()` method
+- modules: Simplify finding whether profile is default in module list
+- modules: Fix `ModuleProfile::is_default` method
+- modules: Store if profile is default in ModuleProfile object
+- Generate docs for undocummented functions so they at least show up
+- Add python advisory docs
+- Add advisory python API tests
+- Enable AdvisoryModule bindings
+
 # 5.1.6
 
 - Document aliases for command line arguments
