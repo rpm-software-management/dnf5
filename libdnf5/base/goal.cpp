@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/solv/goal_private.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
+#include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -104,6 +105,7 @@ public:
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
+    GoalProblem add_transaction_replay_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
@@ -203,6 +205,8 @@ private:
 
     void install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg);
     void remove_group_packages(const rpm::PackageSet & remove_candidates);
+
+    std::unique_ptr<std::pair<transaction::TransactionReplay, GoalJobSettings>> serialized_transaction;
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -594,6 +598,133 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
         }
     }
     return ret;
+}
+
+GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction & transaction) {
+    if (!serialized_transaction) {
+        return GoalProblem::NO_PROBLEM;
+    }
+    libdnf5::GoalJobSettings settings = serialized_transaction->second;
+    bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
+
+    for (const auto & package_replay : serialized_transaction->first.packages) {
+        libdnf5::GoalJobSettings settings_per_package = settings;
+        settings_per_package.clean_requirements_on_remove = libdnf5::GoalSetting::SET_FALSE;
+        if (!package_replay.repo_id.empty()) {
+            repo::RepoQuery enabled_repos(base);
+            enabled_repos.filter_enabled(true);
+            enabled_repos.filter_id(package_replay.repo_id);
+            if (!enabled_repos.empty()) {
+                settings_per_package.to_repo_ids = {package_replay.repo_id};
+            }
+        }
+
+        if (package_replay.action == transaction::TransactionItemAction::UPGRADE ||
+            package_replay.action == transaction::TransactionItemAction::INSTALL ||
+            package_replay.action == transaction::TransactionItemAction::DOWNGRADE) {
+            if (package_replay.package_path.empty()) {
+                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
+            } else {
+                rpm_filepaths.emplace_back(GoalAction::INSTALL, package_replay.package_path, settings_per_package);
+            }
+            transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
+        } else if (package_replay.action == transaction::TransactionItemAction::REINSTALL) {
+            if (package_replay.package_path.empty()) {
+                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
+            } else {
+                rpm_filepaths.emplace_back(GoalAction::REINSTALL, package_replay.package_path, settings_per_package);
+            }
+            transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
+        } else if (package_replay.action == transaction::TransactionItemAction::REMOVE) {
+            rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
+        } else if (package_replay.action == transaction::TransactionItemAction::REPLACED) {
+            if (!skip_unavailable) {
+                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            }
+        } else if (package_replay.action == transaction::TransactionItemAction::REASON_CHANGE) {
+            rpm_reason_change_specs.emplace_back(
+                package_replay.reason, package_replay.nevra, package_replay.group_id, settings_per_package);
+        } else {
+            libdnf_throw_assertion(
+                "Unsupported package replay action \"{}\"", transaction_item_action_to_string(package_replay.action));
+        }
+    }
+
+    for (const auto & group_replay : serialized_transaction->first.groups) {
+        libdnf5::GoalJobSettings settings_per_group = settings;
+        settings_per_group.group_no_packages = true;
+        settings_per_group.group_search_groups = true;
+        settings_per_group.group_search_environments = false;
+        if (!group_replay.repo_id.empty()) {
+            repo::RepoQuery enabled_repos(base);
+            enabled_repos.filter_enabled(true);
+            enabled_repos.filter_id(group_replay.repo_id);
+            if (!enabled_repos.empty()) {
+                //TODO(amatej): add ci test where we limit a group to repo
+                settings_per_group.to_repo_ids = {group_replay.repo_id};
+            }
+        }
+
+        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
+        if (group_replay.action == transaction::TransactionItemAction::INSTALL) {
+            group_specs.emplace_back(
+                GoalAction::INSTALL, group_replay.reason, group_replay.group_id, settings_per_group);
+        } else if (group_replay.action == transaction::TransactionItemAction::UPGRADE) {
+            group_specs.emplace_back(
+                GoalAction::UPGRADE, group_replay.reason, group_replay.group_id, settings_per_group);
+        } else if (group_replay.action == transaction::TransactionItemAction::REMOVE) {
+            group_specs.emplace_back(
+                GoalAction::REMOVE, group_replay.reason, group_replay.group_id, settings_per_group);
+        } else {
+            libdnf_throw_assertion(
+                "Unsupported group replay action \"{}\"", transaction_item_action_to_string(group_replay.action));
+        }
+    }
+
+    for (const auto & env_replay : serialized_transaction->first.environments) {
+        libdnf5::GoalJobSettings settings_per_environment = settings;
+        //TODO(amatej): add environment_no_groups to avoid handling groups twice
+        //              (once from the environment automatically and once from the replay)
+        //settings_per_environment.environment_no_groups = true;
+        settings_per_environment.group_search_groups = false;
+        settings_per_environment.group_search_environments = true;
+        if (!env_replay.repo_id.empty()) {
+            repo::RepoQuery enabled_repos(base);
+            enabled_repos.filter_enabled(true);
+            enabled_repos.filter_id(env_replay.repo_id);
+            if (!enabled_repos.empty()) {
+                //TODO(amatej): add ci test where we limit an env to a repo
+                settings_per_environment.to_repo_ids = {env_replay.repo_id};
+            }
+        }
+
+        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
+        if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
+            group_specs.emplace_back(
+                GoalAction::INSTALL,
+                transaction::TransactionItemReason::USER,
+                env_replay.environment_id,
+                settings_per_environment);
+        } else if (env_replay.action == transaction::TransactionItemAction::UPGRADE) {
+            group_specs.emplace_back(
+                GoalAction::UPGRADE,
+                transaction::TransactionItemReason::USER,
+                env_replay.environment_id,
+                settings_per_environment);
+        } else if (env_replay.action == transaction::TransactionItemAction::REMOVE) {
+            group_specs.emplace_back(
+                GoalAction::REMOVE,
+                transaction::TransactionItemReason::USER,
+                env_replay.environment_id,
+                settings_per_environment);
+        } else {
+            libdnf_throw_assertion(
+                "Unsupported environment replay action \"{}\"", transaction_item_action_to_string(env_replay.action));
+        }
+    }
+
+    return GoalProblem::NO_PROBLEM;
 }
 
 
@@ -2027,6 +2158,7 @@ void Goal::Impl::add_paths_to_goal() {
 
     // fill the command line repo with paths to rpm files
     std::vector<std::string> paths;
+
     for (const auto & [action, path, settings] : rpm_filepaths) {
         paths.emplace_back(path);
     }
@@ -2148,14 +2280,23 @@ base::Transaction Goal::resolve() {
 
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
-    p_impl->add_paths_to_goal();
-
-    auto sack = p_impl->base->get_rpm_package_sack();
     base::Transaction transaction(p_impl->base);
     auto ret = GoalProblem::NO_PROBLEM;
 
+    // Transaction replay has to be added first because it only adds to other vectors
+    // of specs, it doesn't resolve anything. Therefore it doesn't need any Sacks to be ready.
+    // In fact given that it can add to rpm_filepaths it has to be added before `add_paths_to_goal()`
+    // and thus before the provides are computed.
+    ret |= p_impl->add_transaction_replay_specs_to_goal(transaction);
+
+    p_impl->add_paths_to_goal();
+
+    auto sack = p_impl->base->get_rpm_package_sack();
+
     sack->p_impl->recompute_considered_in_pool();
     sack->p_impl->make_provides_ready();
+
+
     // TODO(jmracek) Apply modules first
     module::ModuleSack & module_sack = p_impl->base->module_sack;
     ret |= p_impl->add_module_specs_to_goal(transaction);
@@ -2257,9 +2398,18 @@ base::Transaction Goal::resolve() {
             libdnf5::Logger::Level::WARNING);
     }
 
+    //TODO(amatej): Add conditional check that no extra packages were added by the solver
+
     transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
 
     return transaction;
+}
+
+
+void Goal::add_serialized_transaction(const std::string & serialized_transaction, libdnf5::GoalJobSettings & settings) {
+    libdnf_user_assert(!p_impl->serialized_transaction, "Serialized transaction cannot be set multiple times.");
+    p_impl->serialized_transaction = std::make_unique<std::pair<transaction::TransactionReplay, GoalJobSettings>>(
+        transaction::parse_transaction_replay(serialized_transaction), settings);
 }
 
 void Goal::reset() {

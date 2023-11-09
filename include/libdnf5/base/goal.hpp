@@ -354,6 +354,13 @@ public:
     void add_provide_install(
         const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Add serialized transaction request to the goal. Only one serialized transaction can be added per goal.
+    ///
+    /// @param json_serialized_transaction      A string of JSON serialized transaction
+    /// @param settings                         A structure to override default goal settings.
+    void add_serialized_transaction(const std::string & serialized_transaction, libdnf5::GoalJobSettings & settings);
+
     /// When true it allows to remove installed packages to resolve dependency problems
     void set_allow_erasing(bool value);
 
