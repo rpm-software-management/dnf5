@@ -1,0 +1,38 @@
+name: Retrieve *.po files from weblate repository
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clone weblate repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}-l10n
+        path: .l10n
+
+    - name: Copy *.po files from weblate repository
+      shell: bash
+      run: |
+        pushd .l10n
+        for component in $(find . -mindepth 1 -maxdepth 1 -type d -not -path './.*'); do
+          source_path=""
+          if [ -f "${component}/PATH" ]; then
+            read -r source_path < "${component}/PATH"
+            for po in "${component}"/*.po; do
+              if [ -f "$po" ]; then
+                cp "${po}" "../${source_path}/"
+              fi
+            done
+            git -C .. add "${source_path}"
+          fi
+        done
+        popd
+
+    - name: Cleanup the weblate repository
+      shell: bash
+      run: |
+        rm -rf .l10n
+
+    - name: Commit *.po files
+      shell: bash
+      run: |
+        git -c user.name='GitHub Workflow' -c user.email='github-actions@github.com' commit -m "Update translations from weblate"
