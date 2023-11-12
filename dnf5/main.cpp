@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/advisory/advisory.hpp"
 #include "commands/autoremove/autoremove.hpp"
 #include "commands/check-upgrade/check-upgrade.hpp"
+#include "commands/check/check.hpp"
 #include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
@@ -674,6 +675,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<ListCommand>(context));
     context.add_and_initialize_command(std::make_unique<InfoCommand>(context));
     context.add_and_initialize_command(std::make_unique<CheckUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<CheckCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
     context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
