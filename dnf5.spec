@@ -42,6 +42,7 @@ Provides:       dnf5-command(reinstall)
 Provides:       dnf5-command(swap)
 Provides:       dnf5-command(mark)
 Provides:       dnf5-command(autoremove)
+Provides:       dnf5-command(check)
 Provides:       dnf5-command(check-upgrade)
 
 Provides:       dnf5-command(leaves)
