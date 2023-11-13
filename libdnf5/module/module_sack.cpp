@@ -432,8 +432,9 @@ void ModuleSack::Impl::enable_dependent_modules() {
             const auto & module_to_enable = modules_to_enable.find(module_name);
             // If this module_item is in the modules_to_enable, enable it + process its dependencies
             if (module_to_enable != modules_to_enable.end() &&
-                std::find(module_to_enable->second.begin(), module_to_enable->second.end(), module_stream) !=
-                    module_to_enable->second.end()) {
+                (module_to_enable->second.empty() ||
+                 std::find(module_to_enable->second.begin(), module_to_enable->second.end(), module_stream) !=
+                     module_to_enable->second.end())) {
                 modules_to_enable.erase(module_to_enable);
                 module_db->change_status(module_name, ModuleStatus::ENABLED);
                 module_db->change_stream(module_name, module_stream);
