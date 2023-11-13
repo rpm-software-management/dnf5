@@ -265,10 +265,10 @@ public:
                     text = "Enabling module streams";
                     break;
                 case libdnf5::transaction::TransactionItemAction::DISABLE:
-                    text = "Disabling module streams";
+                    text = "Disabling modules";
                     break;
                 case libdnf5::transaction::TransactionItemAction::RESET:
-                    text = "Resetting module streams";
+                    text = "Resetting modules";
                     break;
                 default:
                     libdnf_throw_assertion(
