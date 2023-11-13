@@ -130,14 +130,19 @@ void CheckCommand::run() {
             for (auto conflict : pkg.get_conflicts()) {
                 auto conflicted = installed;
                 conflicted.filter_provides(conflict);
-                auto conflict_str = conflict.to_string();
-                conflicted.filter_name({conflict_str.substr(0, conflict_str.find_first_of(" \t\n\r\f\v"))});
                 for (auto conflict_pkg : conflicted) {
+                    if (conflict_pkg == pkg) {
+                        // skip self conflicts
+                        continue;
+                    }
+                    // If A conflicts with B then B conflicts with A.
+                    // Prints the packages in a row sorted to find and remove duplicate rows.
+                    bool swap = cmp_nevra(conflict_pkg, pkg);
                     auto msg = fmt::format(
                         "{} has installed conflict \"{}\": {}",
-                        pkg.get_full_nevra(),
-                        conflict_str,
-                        conflict_pkg.get_full_nevra());
+                        swap ? conflict_pkg.get_full_nevra() : pkg.get_full_nevra(),
+                        conflict.to_string(),
+                        swap ? pkg.get_full_nevra() : conflict_pkg.get_full_nevra());
                     output_lines.insert(msg);
                 }
             }
