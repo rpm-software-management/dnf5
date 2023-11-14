@@ -604,7 +604,11 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
     comps::GroupQuery base_groups_query(base);
     comps::EnvironmentQuery base_environments_query(base);
     for (auto & [action, reason, spec, settings] : specs) {
-        bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+        // For the REMOVE action, skip_unavailable defaults to true, ensuring
+        // that the removal of a not-installed group is not treated as an error.
+        bool skip_unavailable = (action == GoalAction::REMOVE && settings.skip_unavailable == GoalSetting::AUTO)
+                                    ? true
+                                    : settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
         if (action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_COMPS && action != GoalAction::REMOVE &&
             action != GoalAction::UPGRADE) {
