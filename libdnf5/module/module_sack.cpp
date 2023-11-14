@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/exception.hpp"
 #include "libdnf5/module/module_errors.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_query.hpp"
@@ -425,7 +426,9 @@ void ModuleSack::Impl::enable_dependent_modules() {
     }
 
     // While there are some modules to enable, search for corresponding active module items and enable them + process their dependencies
-    while (!modules_to_enable.empty()) {
+    bool new_modules_to_enable = true;
+    while (new_modules_to_enable && !modules_to_enable.empty()) {
+        new_modules_to_enable = false;
         for (const auto & active_module : active_modules) {
             const auto & module_name = active_module.second->get_name();
             const auto & module_stream = active_module.second->get_stream();
@@ -441,6 +444,7 @@ void ModuleSack::Impl::enable_dependent_modules() {
                 for (const auto & dependency : active_module.second->get_module_dependencies()) {
                     try {
                         if (module_db->get_status(dependency.get_module_name()) == ModuleStatus::AVAILABLE) {
+                            new_modules_to_enable = true;
                             modules_to_enable.emplace(dependency.get_module_name(), dependency.get_streams());
                         }
                     } catch (NoModuleError &) {
@@ -450,6 +454,8 @@ void ModuleSack::Impl::enable_dependent_modules() {
             }
         }
     }
+    libdnf_assert(
+        modules_to_enable.empty(), "Some enabled modules or their dependencies were not found among active modules.");
 }
 
 
