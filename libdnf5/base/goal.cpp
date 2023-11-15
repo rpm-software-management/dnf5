@@ -111,7 +111,8 @@ public:
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
-    void add_remove_to_goal(base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
+    GoalProblem add_remove_to_goal(
+        base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_up_down_distrosync_to_goal(
         base::Transaction & transaction,
         GoalAction action,
@@ -488,7 +489,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 ret |= add_reinstall_to_goal(transaction, spec, settings);
                 break;
             case GoalAction::REMOVE:
-                add_remove_to_goal(transaction, spec, settings);
+                ret |= add_remove_to_goal(transaction, spec, settings);
                 break;
             case GoalAction::DISTRO_SYNC:
             case GoalAction::DOWNGRADE:
@@ -1327,7 +1328,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
 }
 
 
-void Goal::Impl::add_remove_to_goal(
+GoalProblem Goal::Impl::add_remove_to_goal(
     base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
     rpm::PackageQuery query(base);
@@ -1335,18 +1336,26 @@ void Goal::Impl::add_remove_to_goal(
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(GoalAction::REMOVE, spec, settings, libdnf5::Logger::Level::WARNING);
-        return;
+        auto & cfg_main = base->get_config();
+        bool skip_unavailable =
+            settings.skip_unavailable == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
+        auto problem = transaction.p_impl->report_not_found(
+            GoalAction::REMOVE,
+            spec,
+            settings,
+            skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR);
+        return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
     if (!settings.from_repo_ids.empty()) {
         // TODO(jmracek) keep only packages installed from repo_id -requires swdb
         if (query.empty()) {
             // TODO(jmracek) no solution for the spec => mark result - not from repository
-            return;
+            return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
         }
     }
     rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
+    return GoalProblem::NO_PROBLEM;
 }
 
 GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
