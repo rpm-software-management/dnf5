@@ -80,16 +80,15 @@ void print_modulelist_table(Query & module_list) {
         const std::string & name = module_item.get_name();
         const std::string & stream = module_item.get_stream();
         if (!name_stream_pairs.contains(make_pair(name, stream))) {
-            // Get stream string (append [e] or [x] if needed)
-            std::string stream_string = stream;
+            // Get stream string (append [d] and [e] or [x] if needed)
             const module::ModuleStatus & status = module_item.get_status();
+            std::string stream_string = module_item.is_default() ? "[d]" : "";
             if (status == module::ModuleStatus::ENABLED) {
-                stream_string.append(" [e]");
+                stream_string.append("[e]");
             } else if (status == module::ModuleStatus::DISABLED) {
-                stream_string.append(" [x]");
-            } else if (module_item.is_default()) {
-                stream_string.append(" [d]");
+                stream_string.append("[x]");
             }
+            stream_string = stream_string.empty() ? stream : stream + " " + stream_string;
 
             // Get profile strings (append [d] or [i] if needed)
             std::vector<std::string> profile_strings;
