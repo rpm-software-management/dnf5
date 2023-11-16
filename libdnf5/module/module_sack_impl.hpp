@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern "C" {
 #include <solv/pool.h>
+#include <solv/poolarch.h>
 }
 
 #include <optional>
@@ -145,6 +146,11 @@ public:
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14
     bool reset(const std::string & module_spec, bool count = true);
+    /// Set architecture for module pool
+    /// @param arch architecture.
+    /// @since 5.1.8
+    void set_arch(const char * arch) { pool_setarch(pool, arch); };
+
 
 private:
     friend class libdnf5::base::Transaction;

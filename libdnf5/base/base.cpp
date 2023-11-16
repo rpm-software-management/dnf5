@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base_impl.hpp"
 #include "conf/config.h"
+#include "module/module_sack_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/dnf4convert/dnf4convert.hpp"
 #include "utils/fs/utils.hpp"
@@ -221,7 +222,9 @@ void Base::setup() {
     pool_setdisttype(**pool, DISTTYPE_RPM);
     // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked
-    pool_setarch(**pool, vars->get_value("arch").c_str());
+    const char * arch = vars->get_value("arch").c_str();
+    pool_setarch(**pool, arch);
+    module_sack.p_impl->set_arch(arch);
     pool_set_rootdir(**pool, installroot.get_value().c_str());
 
     p_impl->plugins.post_base_setup();
