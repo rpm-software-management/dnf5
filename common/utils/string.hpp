@@ -114,7 +114,8 @@ template <typename T>
 inline std::string format_epoch(T epoch_num) {
     if (std::in_range<time_t>(epoch_num)) {
         const auto epoch = static_cast<time_t>(epoch_num);
-        return fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(epoch));
+        return fmt::format(
+            "{:%F %X}", std::chrono::round<std::chrono::seconds>(std::chrono::system_clock::from_time_t(epoch)));
     }
     return fmt::format("{} seconds since Unix epoch", epoch_num);
 }
