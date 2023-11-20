@@ -74,8 +74,6 @@ public:
     libdnf5::OptionString email_host{"localhost"};
     libdnf5::OptionNumber<std::int32_t> email_port{25};
     libdnf5::OptionEnum<std::string> email_tls{"no", {"no", "yes", "starttls"}};
-    libdnf5::OptionString email_username{""};
-    libdnf5::OptionString email_password{""};
 };
 
 
