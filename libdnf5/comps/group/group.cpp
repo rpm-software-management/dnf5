@@ -36,6 +36,7 @@ extern "C" {
 }
 
 #include <libxml/tree.h>
+#include <libxml/xmlerror.h>
 
 #include <set>
 #include <string>
