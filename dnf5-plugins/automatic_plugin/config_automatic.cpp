@@ -67,8 +67,6 @@ ConfigAutomaticEmail::ConfigAutomaticEmail() {
     opt_binds().add("email_host", email_host);
     opt_binds().add("email_port", email_port);
     opt_binds().add("email_tls", email_tls);
-    opt_binds().add("email_username", email_username);
-    opt_binds().add("email_password", email_password);
 }
 
 
