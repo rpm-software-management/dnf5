@@ -77,12 +77,11 @@ void CheckCommand::set_argument_parser() {
     cmd.register_named_arg(create_option(parser, "dependencies", "Show dependency problems", dependencies));
     cmd.register_named_arg(create_option(parser, "duplicates", "Show duplicate problems", duplicates));
     cmd.register_named_arg(create_option(parser, "obsoleted", "Show obsoleted package", obsoleted));
-    cmd.register_named_arg(create_option(parser, "provides", "Show problems with provides", provides));
 }
 
 void CheckCommand::configure() {
     auto & context = get_context();
-    all = !(dependencies || duplicates || obsoleted || provides);
+    all = !(dependencies || duplicates || obsoleted);
     context.set_load_system_repo(true);
 }
 
@@ -183,21 +182,6 @@ void CheckCommand::run() {
             }
         }
     }
-
-    if (all || provides) {
-        for (auto pkg : installed) {
-            for (auto provide : pkg.get_provides()) {
-                auto provides = installed;
-                provides.filter_provides(provide);
-                if (!provides.contains(pkg)) {
-                    auto msg =
-                        fmt::format("{} provides {} but it cannot be found", pkg.get_full_nevra(), provide.to_string());
-                    output_lines.insert(msg);
-                }
-            }
-        }
-    }
-
 
     if (!output_lines.empty()) {
         for (const auto & line : output_lines) {

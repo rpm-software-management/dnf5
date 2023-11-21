@@ -38,7 +38,6 @@ private:
     bool dependencies{false};
     bool duplicates{false};
     bool obsoleted{false};
-    bool provides{false};
 };
 
 }  // namespace dnf5
