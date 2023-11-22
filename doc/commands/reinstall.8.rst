@@ -38,8 +38,14 @@ The ``reinstall`` command in ``DNF5`` is used for reinstalling packages defined 
 Options
 =======
 
+``--allowerasing``
+    | Allow erasing of installed packages to resolve any potential dependency problems.
+
 ``--skip-broken``
     | Resolve any dependency problems by removing packages that are causing problems from the transaction.
+
+``--skip-unavailable``
+    | Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
 
 
 Examples

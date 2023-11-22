@@ -68,6 +68,13 @@ Subcommands
     is desired to be protected and handled as a group member like during ``group remove`` command.
 
 
+Options
+=======
+
+``--skip-unavailable``
+    | Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+
+
 Examples
 ========
 

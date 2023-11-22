@@ -45,6 +45,9 @@ Options
 ``--skip-broken``
     | Resolve any dependency problems by removing packages that are causing problems from the transaction.
 
+``--skip-unavailable``
+    | Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+
 ``--advisories=ADVISORY_NAME,...``
     | Consider only content contained in advisories with specified name.
     | This is a list option.
