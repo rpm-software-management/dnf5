@@ -47,5 +47,9 @@ jobs:
           done
           popd
           git -C l10n add "*"
+
+          # If only creation dates were changed do nothing
+          if git -C l10n diff --staged --ignore-matching-lines='"POT-Creation-Date:' --exit-code; then exit 0; fi
+
           git -C l10n commit -m "Update source files"
           git -C l10n push
