@@ -8,6 +8,8 @@ on:
 jobs:
   pot-upload:
     name: Upload *.pot files to dnf5-l10n repository
+    # do not run the cron job on forks
+    if: (github.event_name == 'schedule' && github.repository_owner == 'rpm-software-management') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/rpm-software-management/dnf-ci-host
