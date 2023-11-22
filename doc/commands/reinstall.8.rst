@@ -35,6 +35,13 @@ The ``reinstall`` command in ``DNF5`` is used for reinstalling packages defined 
 ``package-spec`` arguments.
 
 
+Options
+=======
+
+``--skip-broken``
+    | Resolve any dependency problems by removing packages that are causing problems from the transaction.
+
+
 Examples
 ========
 

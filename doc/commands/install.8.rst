@@ -42,6 +42,9 @@ Options
 ``--allowerasing``
     | Allow erasing of installed packages to resolve any potential dependency problems.
 
+``--skip-broken``
+    | Resolve any dependency problems by removing packages that are causing problems from the transaction.
+
 ``--advisories=ADVISORY_NAME,...``
     | Consider only content contained in advisories with specified name.
     | This is a list option.

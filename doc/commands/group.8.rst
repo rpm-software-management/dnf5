@@ -102,6 +102,9 @@ Options
 ``--contains-pkgs``
     | Show only groups containing packages with specified names. List option, supports globs.
 
+``--skip-broken``
+    | Used with ``install`` command to resolve any dependency problems by removing packages that are causing problems from the transaction.
+
 
 Examples
 ========

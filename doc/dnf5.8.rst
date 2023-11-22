@@ -263,9 +263,6 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--show-new-leaves``
     | Show newly installed leaf packages and packages that became leaves after a transaction.
 
-``--skip-broken``
-    | Resolve any dependency problems by removing packages that are causing problems from the transaction.
-
 ``-y, --assumeyes``
     | Automatically answer yes for all questions.
 
