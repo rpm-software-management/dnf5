@@ -1,0 +1,124 @@
+#: argument_parser.cpp:62
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" დაუშვებელია მითითებულ არგუმენტთან \"{}\" ერთად"
+
+#: argument_parser.cpp:64
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "\"{}\" დაუშვებელია ბრძანებაში \"{}\""
+
+#: argument_parser.cpp:66
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" დაუშვებელია პოზიციურ არგუმენტთან \"{}\" ერთად"
+
+#: argument_parser.cpp:76
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "არგუმენტის id \"{}\" უკვე რეგისტრირებულია ჯგუფში \"{}\""
+
+#: argument_parser.cpp:84
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "არასწორი სიმბოლო '.' არგუმენტში id-ით \"{}\""
+
+#: argument_parser.cpp:199 argument_parser.cpp:204
+msgid "Too few values for positional argument \"{}\""
+msgstr "არასაკმარისი მნიშვნელობა პოზიციური არგუმენტისთვის \"{}\""
+
+#: argument_parser.cpp:244
+msgid "Missing value for named argument \"--{}\""
+msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
+
+#: argument_parser.cpp:252
+msgid "Unexpected value for named argumend \"--{}\""
+msgstr "მოულოდნელი მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
+
+#: argument_parser.cpp:295
+msgid "Missing value for named argument \"-{}\""
+msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"-{}\""
+
+#: argument_parser.cpp:431
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "ბრძანების ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:442
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+"მითითებული არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:452
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+"პოზიციური არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:462
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "ჯგუფის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:472
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" ქვებრძანებას ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:480
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" მითითებულ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:488
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" პოზიციურ არგუმენტს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:495
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "ბრძანება ID-ით \"{}\" ჯგუფს ID-ით \"{}\" არ შეიცავს"
+
+#: argument_parser.cpp:590 argument_parser.cpp:718
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "უცნობი არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
+
+#: argument_parser.cpp:602 argument_parser.cpp:730
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "აკლია პოზიციური არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
+
+#. print usage
+#: argument_parser.cpp:798
+msgid "Usage:"
+msgstr "გამოყენება:"
+
+#: argument_parser.cpp:806
+msgid "Description:"
+msgstr "აღწერა:"
+
+#: argument_parser.cpp:1078
+msgid "Named argument with path id \"{}\" not found"
+msgstr "მითითებული არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+
+#: argument_parser.cpp:1133
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "პოზიციური არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "ოპერაცია გაუქმებულია მომხმარებლის მიერ."
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "ტრანზაქციის ამოხსნის შეცდომა"
+
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+#: exception.cpp:49
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-22 02:52+0000\n"
+"PO-Revision-Date: 2023-11-16 19:01+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/ka/>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2\n"
+
+#: session.cpp:79
+msgid "Missing command"
+msgstr "ნაკლული ბრძანება"
