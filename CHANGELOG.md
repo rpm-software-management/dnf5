@@ -1,3 +1,17 @@
+# 5.1.8
+
+- Update translations from weblate
+- Don't run infinitely when enabling dependent modules and module is not found
+- Always print "[d]" in module list for default streams
+- Fix transaction table headers for module operations
+- Implement `config-manager addrepo --add-or-replace`
+- Implement plugin `config-manager`
+- Allow globs in module_spec arguments
+- Document needs-restarting plugin
+- Add no-op `needs-restarting -r` for DNF 4 compat
+- Implement `needs-restarting --services`
+- Initial implementation of needs-restarting
+
 # 5.1.7
 
 - Actions plugin's actions.conf can set "Enabled" for each action separately
