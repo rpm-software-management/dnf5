@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-22 02:52+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
+msgid ""
+"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
+"format expected"
+msgstr ""
+
+#: actions.cpp:443
+msgid ""
+"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+msgstr ""
+
+#: actions.cpp:450
+msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+msgstr ""
+
+#: actions.cpp:468
+msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
+msgstr ""
+
+#: actions.cpp:478
+msgid ""
+"Error in file \"{}\" on line {}: Package filter can only be used in "
+"PRE_TRANS and POST_TRANS hooks"
+msgstr ""
+
+#: actions.cpp:488
+msgid ""
+"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+msgstr ""
+
+#: actions.cpp:505
+msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+msgstr ""
+
+#: actions.cpp:514
+msgid "Error in file \"{}\" on line {}: Missing command"
+msgstr ""

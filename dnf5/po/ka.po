@@ -1,0 +1,359 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-22 02:52+0000\n"
+"PO-Revision-Date: 2023-11-21 12:02+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5/ka/>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2\n"
+
+#: commands/advisory/advisory_info.hpp:33
+msgid "Print details about advisories"
+msgstr "რეკომენდაციების შესახებ დეტალების გამოტანა"
+
+#: commands/advisory/advisory_list.hpp:33
+msgid "List advisories"
+msgstr "რეკომენდაციების ჩვენება"
+
+#: commands/advisory/advisory_summary.cpp:44
+msgid "All"
+msgstr "ყველა"
+
+#: commands/advisory/advisory_summary.cpp:48
+msgid "Installed"
+msgstr "დაყენებულია"
+
+#: commands/advisory/advisory_summary.cpp:52
+msgid "Updates"
+msgstr "განახლებები"
+
+#: commands/advisory/advisory_summary.cpp:65
+msgid "Available"
+msgstr "ხელმისაწვდომია"
+
+#: commands/advisory/advisory_summary.hpp:33
+msgid "Print summary of advisories"
+msgstr "რეკომენდაციების მიმოხილვის ჩვენება"
+
+#: commands/advisory/arguments.hpp:34
+msgid "Show advisories containing any version of installed packages."
+msgstr ""
+"დაყენებული პაკეტების ნებისმიერი ვერსიის შემცველი რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:45
+msgid "Show advisories containing newer versions of installed packages."
+msgstr ""
+"დაყენებული პაკეტების უფრო ახალი ვერსიის შემცველი რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:57
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"დაყენებული პაკეტების იგივე ან უფრო ძველი ვერსიის შემცველი რეკომენდაციების "
+"ჩვენება."
+
+#: commands/advisory/arguments.hpp:69
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ უფრო ახალ ვერსიებს დაყენებული "
+"პაკეტების, რომლებისთვისაც უფრო ახალი ვერსიებია ხელმისაწვდომი."
+
+#: commands/advisory/arguments.hpp:82
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"მხოლოდ იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც "
+"აქვთ შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
+
+#: commands/advisory/arguments.hpp:83
+msgid "PACKAGE_NAME,..."
+msgstr "პაკეტის_სახელი,..."
+
+#: commands/advisory/arguments.hpp:90
+msgid "List of patterns matched against advisory names."
+msgstr "შაბლონების შია, რომლებიც რეკომენდაციის სახელებს ემთხვევა."
+
+#: commands/advisory/arguments.hpp:100
+msgid "Show only advisories referencing a bugzilla."
+msgstr "მხოლოდ Bugzilla-ზე მითითებული რეკომენდაციების ჩვენება."
+
+#: commands/advisory/arguments.hpp:107
+msgid "Show only advisories referencing a CVE."
+msgstr "მხოლოდ CVE-ზე მითითებული რეკომენდაციების ჩვენება."
+
+#: commands/advisory_shared.hpp:113
+msgid "Limit to packages in advisories with specified name. List option."
+msgstr ""
+"მხოლოდ მითითებული სახელის მქონე რეკომენდაციებში არსებული პაკეტების "
+"გათვალისწინება. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:114
+msgid "ADVISORY_NAME,..."
+msgstr "რეკომენდაციის_სახელი,..."
+
+#: commands/advisory_shared.hpp:121
+msgid "Limit to packages in security advisories."
+msgstr "შეზღუდვა უსაფრთხოების რეკომენდაციების პაკეტებზე."
+
+#: commands/advisory_shared.hpp:128
+msgid "Limit to packages in bugfix advisories."
+msgstr "შეზღუდვა შეცდომების გასწორების რეკომენდაციების პაკეტებზე."
+
+#: commands/advisory_shared.hpp:135
+msgid "Limit to packages in enhancement advisories."
+msgstr "შეზღუდვა დამატებითი ფუნქციონალის რეკომენდაციების პაკეტებზე."
+
+#: commands/advisory_shared.hpp:142
+msgid "Limit to packages in newpackage advisories."
+msgstr "შეზღუდვა ახალი პაკეტების რეკომენდაციების პაკეტებზე."
+
+#: commands/advisory_shared.hpp:153
+msgid ""
+"Limit to packages in advisories with specified severity. List option. Can be "
+"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"მხოლოდ მითითებული სიმძიმის მქონე რეკომენდაციებში არსებული პაკეტების "
+"გათვალისწინება. სიის პარამეტრი. შეიძლება იყოს \"critical\" (კრიტიკული), "
+"\"important\" (მნიშვნელოვანი), \"moderate\" (საშუალო), \"low\" (დაბალი), ან "
+"\"none\" (არც ერთი)."
+
+#: commands/advisory_shared.hpp:155
+msgid "ADVISORY_SEVERITY,..."
+msgstr "რეკომენდაციის_სიმძიმე,..."
+
+#: commands/advisory_shared.hpp:179
+msgid ""
+"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
+"option."
+msgstr ""
+"მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ Bugzilla ID-ს ასწორებენ. მაგ: 123123. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:180
+msgid "BUGZILLA_ID,..."
+msgstr "BUGZILLA_ID,..."
+
+#: commands/advisory_shared.hpp:190
+msgid ""
+"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
+"Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ CVE ID-ს (Common Vulnerabilities and Exposures) ასწორებენ. მაგ: "
+"CVE-2201-0123. სიის პარამეტრი."
+
+#: commands/advisory_shared.hpp:192
+msgid "CVE_ID,..."
+msgstr "CVE_ID,..."
+
+#: commands/clean/clean.cpp:102
+msgid "Unknown cache type \"{0}\". Supported types: {1}"
+msgstr "უცნობი კეშის ტიპი \"{0}\". მხარდაჭერილი ტიპებია: {1}"
+
+#: commands/clean/clean.cpp:159
+msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
+msgstr "რეპოზიტორიის კეშის გასუფთავება ჩავარდა ბილიკზე \"{0}\": {1}"
+
+#. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
+#: commands/download/download.cpp:101
+msgid "Option \"--alldeps\" should be used with \"--resolve\""
+msgstr ""
+"პარამეტრი \"--alldeps\" პარამეტრ \"--resolve\"-თან ერთად უნდა გამოიყენოთ"
+
+#: commands/environment/arguments.hpp:33
+msgid "Show only available environments."
+msgstr "მხოლოდ ხელმისაწვდომი გარემოების ჩვენება."
+
+#: commands/environment/arguments.hpp:40
+msgid "Show only installed environments."
+msgstr "მხოლოდ დაყენებული გარემოების ჩვენება."
+
+#: commands/environment/arguments.hpp:47
+msgid "Pattern matching environment IDs."
+msgstr "გარემოს ID-ების შესაბამისი შაბლონი."
+
+#: commands/group/arguments.hpp:34
+msgid "Show only available groups."
+msgstr "მხოლოდ ხელმისაწვდომი ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:41
+msgid "Show also hidden groups."
+msgstr "დამალული ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:48
+msgid "Show only installed groups."
+msgstr "მხოლოდ დაყენებული ჯგუფების ჩვენება."
+
+#: commands/group/arguments.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"მხოლოდ იმ ჯგუფების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც აქვთ "
+"შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
+
+#: commands/group/arguments.hpp:67
+msgid "Pattern matching group IDS."
+msgstr "ჯგუფის ID-ების შესაბამისი შაბლონი."
+
+#: commands/group/arguments.hpp:76
+msgid "Include optional packages from group."
+msgstr "ჯგუფიდან არასავალდებულო პაკეტების ჩართვა."
+
+#: commands/group/arguments.hpp:83
+msgid "Operate on groups only, no packages are changed."
+msgstr "ოპერაციების შესრულება მხოლოდ ჯგუფებზე. პაკეტები არ შეიცვლება."
+
+#: commands/history/arguments.hpp:34
+msgid "Transaction ID"
+msgstr "ტრანზაქციის ID"
+
+#: commands/history/arguments.hpp:41
+msgid "Reverse the order of transactions."
+msgstr "ტრანზაქციების მიმდევრობის შებრუნება."
+
+#: commands/history/transaction_id.cpp:32
+msgid ""
+"Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
+"is \"NUMBER\", \"last\" or \"last-NUMBER\"."
+msgstr ""
+"არასწორი ტრანზაქციის ID-ის შუალედი. \"{}\". მოველოდი \"ID\" ან \"ID..ID\", "
+"სადაც ID რიცხვია, \"last\" (ბოლო), ან \"last-რიცხვი\"."
+
+#: commands/list/list.cpp:256
+msgid "No matching packages to list"
+msgstr "არცერთი პაკეტი არ ემთხვევა"
+
+#: commands/module/arguments.hpp:36
+msgid "Show enabled modules."
+msgstr "ჩართული მოდულების ჩვენება."
+
+#: commands/module/arguments.hpp:43
+msgid "Show disabled modules."
+msgstr "გამორთული მოდულების ჩვენება."
+
+#: commands/module/arguments.hpp:50
+msgid "Pattern matching module NSVCAs."
+msgstr "ნიმუში, რომელიც მოდულის NSVCA-ებს ემთხვევა."
+
+#: commands/repo/arguments.hpp:35
+msgid "Show all repositories."
+msgstr "ყველა რეპოზიტორიის ჩვენება."
+
+#: commands/repo/arguments.hpp:42
+msgid "Show enabled repositories (default)."
+msgstr "ჩართული რეპოზიტორიების ჩვენება (ნაგულისხმები)."
+
+#: commands/repo/arguments.hpp:49
+msgid "Show disabled repositories."
+msgstr "გამორთული რეპოზიტორიების ჩვენება."
+
+#: commands/repo/arguments.hpp:56
+msgid "Pattern matching repo IDs."
+msgstr "რეპოზიტორიის ID-ების შესაბამისი შაბლონი."
+
+#: commands/repoquery/repoquery.cpp:461
+msgid ""
+"Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
+"whatdepends\""
+msgstr ""
+"პარამეტრი \"--exactdeps\", მხოლოდ, \"--whatrequires\" ან \"--whatdepends\" "
+"პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
+
+#: commands/search/arguments.hpp:37
+msgid "Search also package description and URL."
+msgstr "ძებნა ასევე მოხდება პაკეტის აღწერაში და ბმულში."
+
+#: commands/search/arguments.hpp:45
+msgid "Patterns"
+msgstr "შაბლონები"
+
+#: context.cpp:80
+msgid "The key was successfully imported."
+msgstr "გასაღები წარმატებით იქნა შემოტანილი."
+
+#: include/dnf5/shared_options.hpp:33
+msgid "Allow erasing of installed packages to resolve problems"
+msgstr "პრობლემების გადასაჭრელად დაუშვით დაყენებული პაკეტების წაშლის დაშვება"
+
+#: include/dnf5/shared_options.hpp:43
+msgid "Allow resolving of depsolve problems by skipping packages"
+msgstr ""
+"დამოკიდებულებების ამოხსნის პაკეტების გამოტოვების საშუალებით ამოხსნის დაშვება"
+
+#: include/dnf5/shared_options.hpp:55
+msgid "Allow skipping unavailable packages"
+msgstr "ხელმიუწვდომელი პაკეტების გამოტოვების დაშვება"
+
+#: library.cpp:33
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "გაზიარებული ბიბლიოთეკის ფაილის ჩატვირთვის შეცდომა \"{}\": {}"
+
+#: library.cpp:48
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
+
+#: main.cpp:178
+msgid "Failed to expire repository cache in path \"{0}\": {1}"
+msgstr "რეპოზიტორიის კეშის მოძველებულად მონიშვნა ჩავარდა ბილიკზე \"{0}\": {1}"
+
+#: main.cpp:203
+msgid "repofrompath: Incorrect repoid and path specification \"{}\""
+msgstr "repofrompath: არასწორი repoid და ბილიკის სპეციფიკაცია \"{}\""
+
+#: main.cpp:226
+msgid "setopt: Badly formatted argument value \"{}\""
+msgstr "setopt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+
+#: main.cpp:233
+msgid ""
+"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"setopt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო "
+"ვერ იქნება '.': {}"
+
+#: main.cpp:245
+msgid "setopt: \"{0}\": {1}"
+msgstr "setopt: \"{0}\": {1}"
+
+#: main.cpp:264
+msgid "setvar: Badly formatted argument value \"{}\""
+msgstr "setvar: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+
+#: main.cpp:271
+msgid "setvar: {}"
+msgstr "setvar: {}"
+
+#: main.cpp:606 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "მხარდაუჭერელი არქიტექტურა \"{0}\". აირჩიეთ ერთ-ერთი სიიდან {1}"
+
+#: main.cpp:813
+msgid "======== Main configuration: ========"
+msgstr "======== მთავარი კონფიგურაცია: ========"
+
+#: main.cpp:854
+msgid "======== \"{}\" repository configuration: ========"
+msgstr "======== \"{}\" რეპოზიტორიის კონფიგურაცია: ========"
+
+#: main.cpp:875
+msgid "======== Variables: ========"
+msgstr "======== ცვლადები: ========"
+
+#: main.cpp:993 main.cpp:1141
+msgid ". Add \"--help\" for more information about the arguments."
+msgstr "დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."
