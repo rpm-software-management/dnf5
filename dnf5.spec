@@ -227,7 +227,7 @@ DNF5 is a command-line package manager that automates the process of installing,
 upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
-%files
+%files -f dnf5.lang
 %{_bindir}/dnf5
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf
@@ -303,7 +303,7 @@ Conflicts:      dnf-data < 4.16.0
 %description -n libdnf5
 Package management library.
 
-%files -n libdnf5
+%files -n libdnf5 -f libdnf5.lang
 %if %{with dnf5_obsoletes_dnf}
 %config(noreplace) %{_sysconfdir}/dnf/dnf.conf
 %dir %{_sysconfdir}/dnf/vars
@@ -334,7 +334,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 %description -n libdnf5-cli
 Library for working with a terminal in a command-line package manager.
 
-%files -n libdnf5-cli
+%files -n libdnf5-cli -f libdnf5-cli.lang
 %{_libdir}/libdnf5-cli.so.1*
 %license COPYING.md
 %license lgpl-2.1.txt
@@ -527,7 +527,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 %description -n libdnf5-plugin-actions
 Libdnf5 plugin that allows to run actions (external executables) on hooks.
 
-%files -n libdnf5-plugin-actions
+%files -n libdnf5-plugin-actions -f libdnf5-plugin-actions.lang
 %{_libdir}/libdnf5/plugins/actions.*
 %config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
 %dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
@@ -549,7 +549,7 @@ Synchronizes the the enrollment with the vendor system. This can change
 the contents of the repositories configuration files according
 to the subscription levels.
 
-%files -n libdnf5-plugin-rhsm
+%files -n libdnf5-plugin-rhsm -f libdnf5-plugin-rhsm.lang
 %{_libdir}/libdnf5/plugins/rhsm.*
 %config %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
 %endif
@@ -587,7 +587,7 @@ Requires:       dnf5daemon-server
 %description -n dnf5daemon-client
 Command-line interface for dnf5daemon-server.
 
-%files -n dnf5daemon-client
+%files -n dnf5daemon-client -f dnf5daemon-client.lang
 %{_bindir}/dnf5daemon-client
 %license COPYING.md
 %license gpl-2.0.txt
@@ -621,7 +621,7 @@ Package management service with a DBus interface.
 %postun -n dnf5daemon-server
 %systemd_postun_with_restart dnf5daemon-server.service
 
-%files -n dnf5daemon-server
+%files -n dnf5daemon-server -f dnf5daemon-server.lang
 %{_sbindir}/dnf5daemon-server
 %{_unitdir}/dnf5daemon-server.service
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
@@ -654,7 +654,7 @@ Provides:       dnf5-command(repoclosure)
 Core DNF5 plugins that enhance dnf5 with builddep, changelog,
 config-manager, copr, and repoclosure commands.
 
-%files -n dnf5-plugins
+%files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang
 %{_libdir}/dnf5/plugins/*.so
 %{_mandir}/man8/dnf5-builddep.8.*
 %{_mandir}/man8/dnf5-copr.8.*
@@ -733,15 +733,26 @@ do
     touch %{buildroot}%{_prefix}/lib/sysimage/dnf/$files
 done
 
-#find_lang {name}
-
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37 || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %endif
 
-%ldconfig_scriptlets
+%find_lang dnf5
+%find_lang dnf5-plugin-builddep
+%find_lang dnf5-plugin-changelog
+%find_lang dnf5-plugin-config-manager
+%find_lang dnf5-plugin-copr
+%find_lang dnf5-plugin-needs-restarting
+%find_lang dnf5-plugin-repoclosure
+%find_lang dnf5daemon-client
+%find_lang dnf5daemon-server
+%find_lang libdnf5
+%find_lang libdnf5-cli
+%find_lang libdnf5-plugin-actions
+%find_lang libdnf5-plugin-rhsm
 
+%ldconfig_scriptlets
 
 %changelog
 * Thu Nov 23 2023 Packit Team <hello@packit.dev> - 5.1.8-1
