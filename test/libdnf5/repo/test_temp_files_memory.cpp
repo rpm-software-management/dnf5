@@ -79,6 +79,17 @@ void TempFilesMemoryTest::test_add_files_when_empty_storage() {
     CPPUNIT_ASSERT_EQUAL(new_paths, memory.get_files());
 }
 
+void TempFilesMemoryTest::test_add_no_files_when_empty_storage() {
+    // make sure that adding an empty vector will not cause crashing
+
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
+    CPPUNIT_ASSERT(memory.get_files().empty());
+
+    std::vector<std::string> empty_paths = {};
+    memory.add_files(empty_paths);
+    CPPUNIT_ASSERT(memory.get_files().empty());
+}
+
 void TempFilesMemoryTest::test_add_files_when_existing_storage() {
     std::vector<std::string> new_paths = {"path3", "path4"};
     libdnf5::utils::fs::File(full_path, "w")
