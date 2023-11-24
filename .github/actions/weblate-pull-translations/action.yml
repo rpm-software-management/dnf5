@@ -35,4 +35,7 @@ runs:
     - name: Commit *.po files
       shell: bash
       run: |
-        git -c user.name='GitHub Workflow' -c user.email='github-actions@github.com' commit -m "Update translations from weblate"
+        # only commit if there is any change in translations
+        if ! git diff --staged --exit-code; then
+          git -c user.name='GitHub Workflow' -c user.email='github-actions@github.com' commit -m "Update translations from weblate"
+        fi
