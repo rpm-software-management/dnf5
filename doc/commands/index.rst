@@ -8,6 +8,7 @@ DNF5 Commands
 
     advisory.8
     autoremove.8
+    check.8
     clean.8
     distro-sync.8
     downgrade.8

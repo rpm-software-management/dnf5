@@ -259,6 +259,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5.8.*
 %{_mandir}/man8/dnf5-advisory.8.*
 %{_mandir}/man8/dnf5-autoremove.8.*
+%{_mandir}/man8/dnf5-check.8.*
 %{_mandir}/man8/dnf5-clean.8.*
 %{_mandir}/man8/dnf5-distro-sync.8.*
 %{_mandir}/man8/dnf5-downgrade.8.*
