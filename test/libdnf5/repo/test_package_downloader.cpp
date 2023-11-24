@@ -107,7 +107,7 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     config.get_keepcache_option().set(false);
 
     auto & cachedir = config.get_cachedir_option().get_value();
-    libdnf5::repo::TempFilesMemory memory(cachedir);
+    libdnf5::repo::TempFilesMemory memory(base.get_weak_ptr(), cachedir);
 
     // check memory is empty before downloading
     CPPUNIT_ASSERT_EQUAL((size_t)0, memory.get_files().size());

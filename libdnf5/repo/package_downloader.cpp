@@ -209,7 +209,7 @@ void PackageDownloader::download() try {
             });
 
         auto & cachedir = config.get_cachedir_option().get_value();
-        TempFilesMemory temp_files_memory(cachedir);
+        TempFilesMemory temp_files_memory(p_impl->base, cachedir);
         temp_files_memory.add_files(package_paths);
     }
 
