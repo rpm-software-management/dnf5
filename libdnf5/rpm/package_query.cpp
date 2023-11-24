@@ -2839,6 +2839,7 @@ static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
     "kernel-smp",
     "kernel-xen",
     "linux-firmware",
+    "microcode_ctl",
     "dbus",
     "glibc",
     "hal",
