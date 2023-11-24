@@ -755,7 +755,7 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %ldconfig_scriptlets
 
 %changelog
-* Thu Nov 23 2023 Packit Team <hello@packit.dev> - 5.1.8-1
+* Fri Nov 24 2023 Packit Team <hello@packit.dev> - 5.1.8-1
 - New upstream release 5.1.8
 
 * Thu Nov 09 2023 Packit Team <hello@packit.dev> - 5.1.7-1
