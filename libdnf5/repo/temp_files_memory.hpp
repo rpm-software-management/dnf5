@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_TEMP_FILES_MEMORY_HPP
 #define LIBDNF5_REPO_TEMP_FILES_MEMORY_HPP
 
+#include "libdnf5/base/base_weak.hpp"
+
 #include <filesystem>
 #include <vector>
 
@@ -38,10 +40,11 @@ public:
     static constexpr const char * FILE_PATHS_TOML_KEY = "files";
 
     /// @brief Create the object for managing temporary files' paths.
+    /// @param base       A weak pointer to Base object.
     /// @param parent_dir Path to a directory where the memory file is or will be stored.
     ///                   If the directory doesn't exist yet, it will be created.
     /// @exception std::filesystem::filesystem_error When an error occurs during creating the parent directory.
-    TempFilesMemory(const std::string & parent_dir);
+    TempFilesMemory(const BaseWeakPtr & base, const std::string & parent_dir);
     ~TempFilesMemory();
 
     /// @brief Retrieve stored paths of temporary files.
@@ -64,6 +67,7 @@ public:
     void clear();
 
 private:
+    BaseWeakPtr base;
     std::filesystem::path full_memory_path;
 };
 

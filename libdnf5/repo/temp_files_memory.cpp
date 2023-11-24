@@ -20,7 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "temp_files_memory.hpp"
 
 #include "utils/fs/file.hpp"
+#include "utils/string.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -29,8 +31,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::repo {
 
-TempFilesMemory::TempFilesMemory(const std::string & parent_dir)
-    : full_memory_path(std::filesystem::path(parent_dir) / MEMORY_FILENAME) {
+TempFilesMemory::TempFilesMemory(const BaseWeakPtr & base, const std::string & parent_dir)
+    : base(base),
+      full_memory_path(std::filesystem::path(parent_dir) / MEMORY_FILENAME) {
     std::filesystem::create_directories(parent_dir);
 }
 
@@ -62,7 +65,17 @@ void TempFilesMemory::add_files(const std::vector<std::string> & paths) {
 
     // write new contents to a temporary file and then move the new file atomically
     auto temporary_path = full_memory_path.string() + ".temp";
-    utils::fs::File(temporary_path, "w").write(toml::format(toml::value({{FILE_PATHS_TOML_KEY, files}})));
+    auto new_data = toml::format(toml::value({{FILE_PATHS_TOML_KEY, files}}));
+    // Although it's not clear for the documentation if it is possible,
+    // it occurred, that the file was empty, which results in parsing error,
+    // see https://github.com/rpm-software-management/dnf5/issues/1001
+    if (new_data.empty()) {
+        auto & logger = *base->get_logger();
+        logger.error(
+            "Serializing temporary file paths failed for the input vector: \"{}\"", utils::string::join(files, ", "));
+        return;
+    }
+    utils::fs::File(temporary_path, "w").write(new_data);
     std::filesystem::rename(temporary_path, full_memory_path);
 }
 

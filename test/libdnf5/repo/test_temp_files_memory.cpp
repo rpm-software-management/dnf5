@@ -32,36 +32,30 @@ using namespace libdnf5::repo;
 
 
 void TempFilesMemoryTest::setUp() {
-    CppUnit::TestCase::setUp();
-    temp_dir = std::make_unique<libdnf5::utils::fs::TempDir>("libdnf_test_filesmemory");
-    parent_dir_path = temp_dir->get_path();
+    BaseTestCase::setUp();
+    parent_dir_path = temp->get_path();
     full_path = parent_dir_path / TempFilesMemory::MEMORY_FILENAME;
 }
 
-void TempFilesMemoryTest::tearDown() {
-    temp_dir.reset();
-    CppUnit::TestCase::tearDown();
-}
-
 void TempFilesMemoryTest::test_directory_is_created_when_not_exists() {
-    auto test_path = temp_dir->get_path() / "some/new/path";
+    auto test_path = parent_dir_path / "some/new/path";
     CPPUNIT_ASSERT(!std::filesystem::exists(test_path));
-    TempFilesMemory memory(test_path);
+    TempFilesMemory memory(base.get_weak_ptr(), test_path);
     CPPUNIT_ASSERT(std::filesystem::exists(test_path));
 }
 
 void TempFilesMemoryTest::test_get_files_when_empty_storage() {
-    TempFilesMemory memory(temp_dir->get_path() / "unknown/path");
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path / "unknown/path");
     CPPUNIT_ASSERT(memory.get_files().empty());
 }
 
 void TempFilesMemoryTest::test_get_files_throws_exception_when_invalid_format() {
     libdnf5::utils::fs::File(full_path, "w").write("");
-    TempFilesMemory memory_empty(parent_dir_path);
+    TempFilesMemory memory_empty(base.get_weak_ptr(), parent_dir_path);
     CPPUNIT_ASSERT_THROW(memory_empty.get_files(), libdnf5::Error);
 
     libdnf5::utils::fs::File(full_path, "w").write("[\"path1\", \"path2\", \"path3\"]");
-    TempFilesMemory memory_invalid(parent_dir_path);
+    TempFilesMemory memory_invalid(base.get_weak_ptr(), parent_dir_path);
     CPPUNIT_ASSERT_THROW(memory_invalid.get_files(), libdnf5::Error);
 }
 
@@ -70,7 +64,7 @@ void TempFilesMemoryTest::test_get_files_returns_stored_values() {
         .write(fmt::format(
             "{} = [\"path/to/package1.rpm\", \"different/path/to/package2.rpm\"]",
             TempFilesMemory::FILE_PATHS_TOML_KEY));
-    TempFilesMemory memory(parent_dir_path);
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
     std::vector<std::string> expected = {"path/to/package1.rpm", "different/path/to/package2.rpm"};
     CPPUNIT_ASSERT_EQUAL(expected, memory.get_files());
 }
@@ -78,7 +72,7 @@ void TempFilesMemoryTest::test_get_files_returns_stored_values() {
 void TempFilesMemoryTest::test_add_files_when_empty_storage() {
     std::vector<std::string> new_paths = {"path1", "path2"};
 
-    TempFilesMemory memory(parent_dir_path);
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
     CPPUNIT_ASSERT(memory.get_files().empty());
 
     memory.add_files(new_paths);
@@ -90,7 +84,7 @@ void TempFilesMemoryTest::test_add_files_when_existing_storage() {
     libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format("{} = [\"path1\", \"path2\"]", TempFilesMemory::FILE_PATHS_TOML_KEY));
 
-    TempFilesMemory memory(parent_dir_path);
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
     memory.add_files(new_paths);
     std::vector<std::string> expected = {"path1", "path2", "path3", "path4"};
     CPPUNIT_ASSERT_EQUAL(expected, memory.get_files());
@@ -101,7 +95,7 @@ void TempFilesMemoryTest::test_add_files_deduplicates_and_sorts_data() {
     libdnf5::utils::fs::File(full_path, "w")
         .write(fmt::format("{} = [\"path4\", \"path1\", \"path4\", \"path3\"]", TempFilesMemory::FILE_PATHS_TOML_KEY));
 
-    TempFilesMemory memory(parent_dir_path);
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
     memory.add_files(new_paths);
     std::vector<std::string> expected = {"path1", "path2", "path3", "path4"};
     CPPUNIT_ASSERT_EQUAL(expected, memory.get_files());
@@ -113,7 +107,7 @@ void TempFilesMemoryTest::test_clear_deletes_storage_content() {
             "{} = [\"/path/to/package1.rpm\", \"/different-path/to/package2.rpm\", "
             "\"/another-path/leading/to/pkg3.rpm\"]",
             TempFilesMemory::FILE_PATHS_TOML_KEY));
-    TempFilesMemory memory(parent_dir_path);
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path);
     std::vector<std::string> expected = {
         "/path/to/package1.rpm", "/different-path/to/package2.rpm", "/another-path/leading/to/pkg3.rpm"};
     CPPUNIT_ASSERT_EQUAL(expected, memory.get_files());
@@ -123,6 +117,6 @@ void TempFilesMemoryTest::test_clear_deletes_storage_content() {
 }
 
 void TempFilesMemoryTest::test_clear_when_empty_storage() {
-    TempFilesMemory memory(temp_dir->get_path() / "non-existing/path");
+    TempFilesMemory memory(base.get_weak_ptr(), parent_dir_path / "non-existing/path");
     memory.clear();
 }

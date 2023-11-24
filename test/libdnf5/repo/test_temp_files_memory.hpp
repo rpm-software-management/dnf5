@@ -20,15 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_TEST_REPO_TEMP_FILES_MEMORY_HPP
 #define LIBDNF5_TEST_REPO_TEMP_FILES_MEMORY_HPP
 
-#include "utils/fs/temp.hpp"
+#include "../shared/base_test_case.hpp"
 
-#include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <filesystem>
 
 
-class TempFilesMemoryTest : public CppUnit::TestCase {
+class TempFilesMemoryTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(TempFilesMemoryTest);
     CPPUNIT_TEST(test_directory_is_created_when_not_exists);
     CPPUNIT_TEST(test_get_files_when_empty_storage);
@@ -43,7 +42,6 @@ class TempFilesMemoryTest : public CppUnit::TestCase {
 
 public:
     void setUp() override;
-    void tearDown() override;
 
     void test_directory_is_created_when_not_exists();
     void test_get_files_when_empty_storage();
@@ -56,7 +54,6 @@ public:
     void test_clear_when_empty_storage();
 
 private:
-    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
     std::filesystem::path parent_dir_path;
     std::filesystem::path full_path;
 };
