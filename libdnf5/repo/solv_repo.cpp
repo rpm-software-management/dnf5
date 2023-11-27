@@ -585,6 +585,10 @@ void SolvRepo::write_main(bool load_after_write) {
         }
     }
 
+    std::filesystem::permissions(
+        cache_tmp_file.get_path(),
+        std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+        std::filesystem::perm_options::add);
     std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
 }
@@ -668,6 +672,10 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
         data->state = REPODATA_AVAILABLE;
     }
 
+    std::filesystem::permissions(
+        cache_tmp_file.get_path(),
+        std::filesystem::perms::group_read | std::filesystem::perms::others_read,
+        std::filesystem::perm_options::add);
     std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
 }
