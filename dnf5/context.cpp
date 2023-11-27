@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
-#include "utils.hpp"
 #include "utils/url.hpp"
 
 #include <fmt/format.h>

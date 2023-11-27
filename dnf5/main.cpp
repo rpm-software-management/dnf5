@@ -47,7 +47,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
-#include "utils.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
