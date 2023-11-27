@@ -17,19 +17,14 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNF5_UTILS_HPP
-#define DNF5_UTILS_HPP
+#include "auth.hpp"
 
-#include <libdnf5/base/goal.hpp>
-#include <sys/types.h>
+#include <unistd.h>
 
-#include <string>
+namespace libdnf5::utils {
 
-namespace dnf5 {
+bool am_i_root() noexcept {
+    return geteuid() == 0;
+}
 
-/// Returns "true" if program runs with effective user ID = 0
-bool am_i_root() noexcept;
-
-}  // namespace dnf5
-
-#endif
+}  // namespace libdnf5::utils
