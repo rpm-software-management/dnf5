@@ -2825,7 +2825,7 @@ void PackageQuery::filter_extras(const bool exact_evr) {
 void PackageQuery::filter_installonly() {
     auto & cfg_main = p_impl->base->get_config();
     const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
-    filter_provides(installonly_packages, libdnf5::sack::QueryCmp::GLOB);
+    filter_provides(installonly_packages, libdnf5::sack::QueryCmp::EQ);
 }
 
 static const std::unordered_set<std::string> CORE_PACKAGE_NAMES = {
