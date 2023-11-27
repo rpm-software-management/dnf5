@@ -382,6 +382,11 @@ private:
     /// Depending on the result, the repository may be marked as expired.
     void recompute_expired();
 
+    /// @brief  Clones repodata and solv files from the root cache. The original user repository cache is deleted.
+    ///         The intended use case is for cloning the root cache when the user one is invalid or empty.
+    /// @return Whether at least the repodata cache cloning was successful.
+    bool clone_root_metadata();
+
     libdnf5::BaseWeakPtr base;
     ConfigRepo config;
 

@@ -519,6 +519,71 @@ void Repo::internalize() {
 }
 
 
+bool Repo::clone_root_metadata() {
+    auto & logger = *base->get_logger();
+
+    auto repo_cachedir = config.get_cachedir();
+    auto base_cachedir = config.get_basecachedir_option().get_value();
+
+    auto base_path_pos = repo_cachedir.find(base_cachedir);
+    libdnf_assert(
+        base_path_pos != std::string::npos,
+        "Repo cachedir \"{}\" doesn't contain base cachedir \"{}\"",
+        repo_cachedir,
+        base_cachedir);
+
+    auto root_repo_cachedir = repo_cachedir;
+    root_repo_cachedir.replace(
+        base_path_pos, base_cachedir.size(), config.get_main_config().get_system_cachedir_option().get_value());
+
+    auto root_repodata_cachedir = std::filesystem::path(root_repo_cachedir) / CACHE_METADATA_DIR;
+    try {
+        if (!std::filesystem::exists(root_repodata_cachedir)) {
+            return false;
+        }
+    } catch (const std::filesystem::filesystem_error & e) {
+        logger.debug("Error when checking root repodata at \"{}\" : \"{}\"", root_repodata_cachedir.c_str(), e.what());
+        return false;
+    }
+
+    auto repo_cache = RepoCache(base, repo_cachedir);
+    repo_cache.remove_metadata();
+    repo_cache.remove_solv_files();
+
+    auto repodata_cachedir = std::filesystem::path(repo_cachedir) / CACHE_METADATA_DIR;
+    try {
+        std::filesystem::create_directories(repodata_cachedir);
+        std::filesystem::copy(root_repodata_cachedir, repodata_cachedir);
+    } catch (const std::filesystem::filesystem_error & e) {
+        logger.debug(
+            "Error when cloning root repodata from \"{}\" to \"{}\" : \"{}\"",
+            root_repodata_cachedir.c_str(),
+            repodata_cachedir.c_str(),
+            e.what());
+        repo_cache.remove_metadata();
+        return false;
+    }
+
+    auto root_solv_cachedir = std::filesystem::path(root_repo_cachedir) / CACHE_SOLV_FILES_DIR;
+    auto solv_cachedir = std::filesystem::path(repo_cachedir) / CACHE_SOLV_FILES_DIR;
+    try {
+        if (std::filesystem::exists(root_solv_cachedir)) {
+            std::filesystem::create_directories(solv_cachedir);
+            std::filesystem::copy(root_solv_cachedir, solv_cachedir);
+        }
+    } catch (const std::filesystem::filesystem_error & e) {
+        logger.debug(
+            "Error when cloning root solv data from \"{}\" to \"{}\" : \"{}\"",
+            root_solv_cachedir.c_str(),
+            solv_cachedir.c_str(),
+            e.what());
+        repo_cache.remove_solv_files();
+    }
+
+    return true;
+}
+
+
 void Repo::recompute_expired() {
     if (expired) {
         return;
