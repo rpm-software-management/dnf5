@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
+#include "utils/auth.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -377,9 +378,15 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             repos_for_processing = std::move(repos_with_bad_signature);
         }
 
+        std::string prev_repo_id;
+        bool root_cache_tried = false;
         // Prepares repositories that are not expired or have ONLY_CACHE or LAZY SynStrategy.
         for (std::size_t idx = 0; idx < repos_for_processing.size();) {
             auto * const repo = repos_for_processing[idx];
+            if (prev_repo_id != repo->get_id()) {
+                prev_repo_id = repo->get_id();
+                root_cache_tried = false;
+            }
             catch_thread_sack_loader_exceptions();
             try {
                 bool valid_metadata{false};
@@ -399,6 +406,12 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                     logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
                     send_to_sack_loader(repo);
                 } else {
+                    // Try reusing the root cache
+                    if (!root_cache_tried && !libdnf5::utils::am_i_root() && repo->clone_root_metadata()) {
+                        root_cache_tried = true;
+                        continue;
+                    }
+
                     if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
                         throw RepoDownloadError(
                             M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
