@@ -20,15 +20,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "json.hpp"
 
 #include "download_file.hpp"
-#include "tempfile.hpp"
+
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <fstream>
 #include <iostream>
 
 Json::Json(libdnf5::Base & base, const std::string & url) {
-    auto temp_file = TempFile();
-    download_file(base, url, temp_file.path);
-    std::ifstream file(temp_file.path);
+    auto temp_file = libdnf5::utils::fs::TempFile("/tmp", "dnf5-copr-plugin");
+    download_file(base, url, temp_file.get_path());
+    std::ifstream file(temp_file.get_path());
     std::stringstream buffer;
     buffer << file.rdbuf();
     root = json_tokener_parse(buffer.str().c_str());
