@@ -172,6 +172,10 @@ Upgrade command
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the ``--skip-unavailable`` option.
  * Dropped upgrade command aliases ``upgrade-to`` and ``localupdate``.
+ * Dropped ``--skip-broken`` option, as it was already available in DNF4 only for compatibility reasons with YUM,
+   but it has no effect. Instead, the decision about selecting the newer version of a package into the transaction
+   and skipping possible dependency issues is based on the :ref:`best <best_option_ref-label>` or
+   :ref:`no-best <no_best_option_ref-label>` option.
 
 Updateinfo command
 ------------------
