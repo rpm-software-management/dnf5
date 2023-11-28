@@ -126,6 +126,7 @@ man_pages = [
     ('commands/makecache.8', 'dnf5-makecache', 'Makecache Command', AUTHORS, 8),
     ('commands/mark.8', 'dnf5-mark', ' Mark Command', AUTHORS, 8),
     ('commands/module.8', 'dnf5-module', ' Module Command', AUTHORS, 8),
+    ('commands/provides.8', 'dnf5-provides', 'Provides Command', AUTHORS, 8),
     ('commands/reinstall.8', 'dnf5-reinstall', 'Reinstall Command', AUTHORS, 8),
     ('commands/remove.8', 'dnf5-remove', 'Remove Command', AUTHORS, 8),
     ('commands/repo.8', 'dnf5-repo', 'Repo Command', AUTHORS, 8),
