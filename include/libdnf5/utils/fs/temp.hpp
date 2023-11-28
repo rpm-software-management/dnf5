@@ -59,7 +59,7 @@ private:
 
 /// A mkstemp wrapper that creates and owns a temporary file, which will be
 /// deleted in the destructor unless released. Throws instances of
-/// `std::filesystem::filesystem_error` on any I/O failure.
+/// `libdnf5::FileSystemError` on any I/O failure.
 class TempFile {
 public:
     /// Creates a temporary file in the system temporary directory path.

@@ -580,7 +580,7 @@ class PlatformIdFormatError : public libdnf5::Error {
 /// @param os_release_path Full path to the 'os-release' file.
 /// @return Pair where first item is the platform module name and second is the platform stream.
 /// @throws PlatformIdFormatError when platform id in the file has incorrect format.
-/// @throws std::filesystem::filesystem_error when there is any error during reading a file.
+/// @throws libdnf5::FileSystemError when there is any error during reading a file.
 static std::pair<std::string, std::string> parse_platform_id_from_file(const std::string & os_release_path) {
     libdnf5::utils::fs::File file{os_release_path, "r"};
     std::string line;
@@ -709,7 +709,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
         } catch (const PlatformIdFormatError & id_except) {
             base->get_logger()->debug(
                 "Invalid format of PLATFORM_ID in '{}': {}", full_path, std::string(id_except.what()));
-        } catch (const std::filesystem::filesystem_error & fs_except) {
+        } catch (const FileSystemError & fs_except) {
             base->get_logger()->debug(
                 "Detection of module platform in '{}' failed: {}", full_path, std::string(fs_except.what()));
         }

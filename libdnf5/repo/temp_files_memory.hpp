@@ -59,7 +59,8 @@ public:
     /// The resulting list contains both existing and new paths and it's sorted and deduplicated before storing in the file.
     /// @param paths A list of file paths to be added into the memory file.
     /// @exception libdnf5::Error When an error occurs during parsing of the file with temporary files.
-    /// @exception std::filesystem::filesystem_error When an error occurs during accessing or writing the memory file.
+    /// @exception libdnf5::FileSystemprror When an error occurs during accessing or writing the memory file.
+    /// @exception std::filesystem::filesystem_error When an error occurs during renaming the memory file.
     void add_files(const std::vector<std::string> & paths);
 
     /// @brief Deletes the memory file.

@@ -695,7 +695,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
         module_db->save();
         try {
             base->p_impl->get_system_state().save();
-        } catch (const std::filesystem::filesystem_error & ex) {
+        } catch (const FileSystemError & ex) {
             logger->error("Cannot save system state: {}", ex.what());
         }
     }

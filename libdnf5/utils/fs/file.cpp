@@ -22,6 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+
 extern "C" {
 #include <solv/solv_xfopen.h>
 }
@@ -33,6 +36,7 @@ extern "C" {
 
 
 namespace libdnf5::utils::fs {
+
 
 File::File(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen) {
     open(path, mode, use_solv_xfopen);
@@ -77,8 +81,7 @@ void File::open(const std::filesystem::path & path, const char * mode, bool use_
 
     if (file == nullptr) {
         this->path = "";
-        throw std::filesystem::filesystem_error(
-            "cannot open file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("cannot open file"));
     }
 
     this->path = path;
@@ -91,8 +94,7 @@ void File::open(int fd, const std::filesystem::path & path, const char * mode, b
     file = use_solv_xfopen_fd ? solv_xfopen_fd(path.c_str(), fd, mode) : ::fdopen(fd, mode);
     if (file == nullptr) {
         this->path = "";
-        throw std::filesystem::filesystem_error(
-            "cannot open file from fd", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("cannot open file from fd"));
     }
 
     this->path = path;
@@ -102,8 +104,7 @@ void File::open(int fd, const std::filesystem::path & path, const char * mode, b
 void File::close() {
     if (file != nullptr) {
         if (std::fclose(file) != 0) {
-            throw std::filesystem::filesystem_error(
-                "cannot close file", path, std::error_code(errno, std::system_category()));
+            throw FileSystemError(errno, path, M_("cannot close file"));
         }
     }
 
@@ -133,8 +134,7 @@ std::size_t File::read(void * buffer, std::size_t count) {
         libdnf_assert(
             std::ferror(file) > 0, "Failed to read \"{}\", error expected but no error detected", path.native());
 
-        throw std::filesystem::filesystem_error(
-            "error reading file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error reading file"));
     }
 
     return res;
@@ -149,8 +149,7 @@ void File::write(const void * buffer, std::size_t count) {
         libdnf_assert(
             std::ferror(file) > 0, "Failed to write \"{}\", error expected but no error detected", path.native());
 
-        throw std::filesystem::filesystem_error(
-            "error writing file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error writing file"));
     }
 }
 
@@ -164,8 +163,7 @@ bool File::getc(char & c) {
             return false;
         }
 
-        throw std::filesystem::filesystem_error(
-            "error reading file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error reading file"));
     }
 
     c = static_cast<char>(res);
@@ -177,8 +175,7 @@ void File::putc(char c) {
     libdnf_assert_file_open();
 
     if (std::fputc(c, file) == EOF) {
-        throw std::filesystem::filesystem_error(
-            "error writing file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error writing file"));
     }
 }
 
@@ -187,8 +184,7 @@ void File::flush() {
     libdnf_assert_file_open();
 
     if (std::fflush(file) == -1) {
-        throw std::filesystem::filesystem_error(
-            "error flushing file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error flushing file"));
     }
 }
 
@@ -197,8 +193,7 @@ void File::seek(long offset, int whence) {
     libdnf_assert_file_open();
 
     if (std::fseek(file, offset, whence) == -1) {
-        throw std::filesystem::filesystem_error(
-            "error seeking in file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error seeking in file"));
     }
 }
 
@@ -209,8 +204,7 @@ long File::tell() const {
     auto res = std::ftell(file);
 
     if (res == -1) {
-        throw std::filesystem::filesystem_error(
-            "error retrieving file position", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error retrieving file position"));
     }
 
     return res;
@@ -263,8 +257,7 @@ bool File::read_line(std::string & line) {
             return false;
         }
 
-        throw std::filesystem::filesystem_error(
-            "error reading a line from file", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error reading a line from file"));
     }
 
     while (line_len > 0 && (buf[line_len - 1] == '\r' || buf[line_len - 1] == '\n')) {
@@ -287,8 +280,7 @@ int File::get_fd() const {
     int fd = ::fileno(file);
 
     if (fd == -1) {
-        throw std::filesystem::filesystem_error(
-            "error retrieving file descriptor", path, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, path, M_("error retrieving file descriptor"));
     }
 
     return fd;

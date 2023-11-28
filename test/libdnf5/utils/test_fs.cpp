@@ -368,7 +368,7 @@ void UtilsFsTest::test_file_seek() {
     CPPUNIT_ASSERT_EQUAL(9l, file.tell());
     CPPUNIT_ASSERT_EQUAL(data_w.substr(9), file.read());
 
-    CPPUNIT_ASSERT_THROW(file.seek(-1, SEEK_SET), std::filesystem::filesystem_error);
+    CPPUNIT_ASSERT_THROW(file.seek(-1, SEEK_SET), libdnf5::FileSystemError);
 }
 
 
