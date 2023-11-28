@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
 #define TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
 
-#include "utils/fs/temp.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <cppunit/TestCase.h>
 #include <libdnf5/base/base.hpp>

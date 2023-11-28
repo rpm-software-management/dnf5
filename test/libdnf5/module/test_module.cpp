@@ -25,7 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base/base_impl.hpp"
 #include "module/module_db.hpp"
 #include "system/state.hpp"
-#include "utils/fs/file.hpp"
+
+#include "libdnf5/utils/fs/file.hpp"
 
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/module/module_errors.hpp>

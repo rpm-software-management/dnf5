@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base/base_impl.hpp"
 #include "repo_cache_private.hpp"
 #include "solv/pool.hpp"
-#include "utils/fs/temp.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/temp.hpp"
 #include "libdnf5/utils/to_underlying.hpp"
 
 extern "C" {

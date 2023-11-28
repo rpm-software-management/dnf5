@@ -19,9 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_iniparser.hpp"
 
-#include "utils/fs/file.hpp"
-#include "utils/fs/temp.hpp"
 #include "utils/iniparser.hpp"
+
+#include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <string_view>
 #include <vector>

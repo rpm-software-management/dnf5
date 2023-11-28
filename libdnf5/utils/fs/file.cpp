@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "file.hpp"
+#include "libdnf5/utils/fs/file.hpp"
 
 #include "libdnf5/common/exception.hpp"
 

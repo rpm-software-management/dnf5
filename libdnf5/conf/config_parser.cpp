@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/config_parser.hpp"
 
-#include "utils/fs/file.hpp"
 #include "utils/iniparser.hpp"
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/file.hpp"
 
 #include <utility>
 

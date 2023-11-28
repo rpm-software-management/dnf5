@@ -21,8 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 #include "repo/temp_files_memory.hpp"
-#include "utils/fs/file.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf5/utils/fs/file.hpp"
 
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/repo/package_downloader.hpp>

@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_config_parser.hpp"
 
-#include "utils/fs/file.hpp"
-#include "utils/fs/temp.hpp"
+#include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <libdnf5/conf/config_parser.hpp>
 

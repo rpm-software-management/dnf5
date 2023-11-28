@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
-#include "utils/fs/file.hpp"
-#include "utils/fs/temp.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -42,6 +40,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/option_bool.hpp"
 #include "libdnf5/repo/file_downloader.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 extern "C" {
 #include <solv/testcase.h>
