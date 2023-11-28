@@ -601,7 +601,7 @@ void State::reset_packages_states(
     // In that case ignore the filesystem errors and only keep new system state in memory.
     try {
         save();
-    } catch (const std::filesystem::filesystem_error & e) {
+    } catch (const FileSystemError & e) {
         // TODO(mblaha) - log this? (will need access to the base)
     }
 }

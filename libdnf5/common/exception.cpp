@@ -174,6 +174,27 @@ const char * SystemError::what() const noexcept {
     return message.c_str();
 }
 
+const char * FileSystemError::what() const noexcept {
+    std::string error_message;
+    try {
+        error_message = std::system_category().default_error_condition(error_code).message();
+    } catch (...) {
+    }
+
+    try {
+        message = fmt::format(
+            "{}: ({}) - {} [{}]",
+            formatter ? formatter(TM_(format, 1)) : TM_(format, 1),
+            error_code,
+            error_message,
+            std::string(path));
+    } catch (...) {
+        return TM_(format, 1);
+    }
+
+    return message.c_str();
+}
+
 const char * RuntimeError::get_description() const noexcept {
     return _("General RuntimeError exception");
 }

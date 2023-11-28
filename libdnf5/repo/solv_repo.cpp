@@ -517,8 +517,9 @@ bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type_name, int fl
             }
             return true;
         }
-    } catch (const std::filesystem::filesystem_error & e) {
-        if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
+    } catch (const FileSystemError & e) {
+        if (std::error_code(e.get_error_code(), std::system_category()).default_error_condition() ==
+            std::errc::no_such_file_or_directory) {
             logger.trace("Cache file \"{}\" not found", path.native());
         } else {
             logger.warning("Error opening cache file, ignoring: {}", e.what());
@@ -692,7 +693,7 @@ bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     fs::File ext_file;
     try {
         ext_file = fs::File(path, "r", true);
-    } catch (std::filesystem::filesystem_error & e) {
+    } catch (FileSystemError & e) {
         logger.warning("Cannot load group extension for system repo from \"{}\": {}", path, e.what());
         read_success = false;
     }

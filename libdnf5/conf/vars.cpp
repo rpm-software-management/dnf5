@@ -421,7 +421,7 @@ void Vars::load_from_dir(const std::string & directory) {
             try {
                 utils::fs::File file(full_path, "r");
                 file.read_line(line);
-            } catch (const std::filesystem::filesystem_error & e) {
+            } catch (const FileSystemError & e) {
                 logger.warning("Cannot load variable from file \"{}\": {}", full_path.c_str(), e.what());
                 continue;
             }

@@ -22,10 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 
-#include <stdio.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <unistd.h>
-
-#include <cstdlib>
 
 
 namespace libdnf5::utils::fs {
@@ -41,8 +39,7 @@ TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix)
     std::string dest = destdir;
     const char * temp_path = mkdtemp(dest.data());
     if (temp_path == nullptr) {
-        throw std::filesystem::filesystem_error(
-            "cannot create temporary directory", destdir, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, destdir, M_("cannot create temporary directory"));
     }
     path = temp_path;
 }
@@ -89,8 +86,7 @@ TempFile::TempFile(std::filesystem::path destdir, const std::string & name_prefi
     std::string dest = destdir;
     fd = mkstemp(dest.data());
     if (fd == -1) {
-        throw std::filesystem::filesystem_error(
-            "cannot create temporary file", destdir, std::error_code(errno, std::system_category()));
+        throw FileSystemError(errno, destdir, M_("cannot create temporary file"));
     }
 
     path = dest;
@@ -143,8 +139,7 @@ void TempFile::close() {
         file.reset();
     } else if (fd != -1) {
         if (::close(fd) != 0) {
-            throw std::filesystem::filesystem_error(
-                "cannot close temporary file", path, std::error_code(errno, std::system_category()));
+            throw FileSystemError(errno, path, M_("cannot close temporary file"));
         }
     }
 

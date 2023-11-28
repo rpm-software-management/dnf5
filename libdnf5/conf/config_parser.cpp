@@ -61,8 +61,8 @@ ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
 void ConfigParser::read(const std::string & file_path) try {
     IniParser parser(file_path);
     ::libdnf5::read(*this, parser);
-} catch (const std::filesystem::filesystem_error & e) {
-    if (e.code().value() == ENOENT) {
+} catch (const FileSystemError & e) {
+    if (e.get_error_code() == ENOENT) {
         std::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
     } else {
         std::throw_with_nested(InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));

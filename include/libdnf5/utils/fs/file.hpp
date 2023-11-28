@@ -21,13 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_UTILS_FS_FILE_HPP
 
 #include <filesystem>
+#include <utility>
 
 
 namespace libdnf5::utils::fs {
 
 /// A wrapper for a `FILE *` that handles opening and closing a file in RAII
 /// fashion. Errors are handled by raising instances of
-/// `std::filesystem::filesystem_error` so that there's a single exception type
+/// `libdnf5::FileSystemError` so that there's a single exception type
 /// being raised for all filesystem-related errors.
 class File {
 public:

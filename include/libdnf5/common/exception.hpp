@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
+#include <filesystem>
 #include <functional>
 #include <stdexcept>
 #include <type_traits>
@@ -208,6 +209,35 @@ public:
 private:
     int error_code;
     bool has_user_message;
+};
+
+/// An exception class for file system errors represented by the `errno` error code and a path.
+class FileSystemError : public Error {
+public:
+    /// Constructs the error from the `errno` error code, filesystem path and a formatted message.
+    /// The formatted message is prepended to the generated system error message.
+    ///
+    /// @param error_code The `errno` of the error.
+    /// @param filesystem::path The `path` to the file.
+    /// @param format The format string for the message.
+    /// @param args The format arguments.
+    template <AllowedErrorArgTypes... Args>
+    explicit FileSystemError(int error_code, std::filesystem::path path, BgettextMessage format, Args... args)
+        : Error(format, std::forward<Args>(args)...),
+          error_code(error_code),
+          path(std::move(path)) {}
+
+    const char * what() const noexcept override;
+
+    const char * get_domain_name() const noexcept override { return "libdnf5::utils::fs"; }
+    const char * get_name() const noexcept override { return "FileSystemError"; }
+
+    /// @return The error code (`errno`) of the error.
+    int get_error_code() const noexcept { return error_code; }
+
+private:
+    int error_code;
+    std::filesystem::path path;
 };
 
 
