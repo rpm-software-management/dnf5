@@ -69,6 +69,7 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-mark.8 DESTINATION share/man/man8)
         # TODO(jkolarik): module is not ready yet
         # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-module.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-provides.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-reinstall.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-remove.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-repo.8 DESTINATION share/man/man8)

@@ -44,6 +44,7 @@ Provides:       dnf5-command(mark)
 Provides:       dnf5-command(autoremove)
 Provides:       dnf5-command(check)
 Provides:       dnf5-command(check-upgrade)
+Provides:       dnf5-command(provides)
 
 Provides:       dnf5-command(leaves)
 Provides:       dnf5-command(repoquery)
@@ -274,6 +275,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-mark.8.*
 # TODO(jkolarik): module is not ready yet
 # %%{_mandir}/man8/dnf5-module.8.*
+%{_mandir}/man8/dnf5-provides.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
 %{_mandir}/man8/dnf5-remove.8.*
 %{_mandir}/man8/dnf5-repo.8.*

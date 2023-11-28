@@ -83,6 +83,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`mark <mark_command_ref-label>`
     | Change the reason of an installed package.
 
+:ref:`provides <provides_command_ref-label>`
+    | Find what package provides the given value.
+
 :ref:`reinstall <reinstall_command_ref-label>`
     | Reinstall packages.
 
@@ -359,6 +362,7 @@ Commands in detail:
     | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
     | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
     | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`
+    | :manpage:`dnf5-provides(8)`, :ref:`Provides command <provides_command_ref-label>`
     | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
     | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
     | :manpage:`dnf5-repo(8)`, :ref:`Repo command <repo_command_ref-label>`
