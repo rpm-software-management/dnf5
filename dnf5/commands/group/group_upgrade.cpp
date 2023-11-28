@@ -38,7 +38,6 @@ void GroupUpgradeCommand::set_argument_parser() {
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
-    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     create_allow_downgrade_options(*this);
 }
 
