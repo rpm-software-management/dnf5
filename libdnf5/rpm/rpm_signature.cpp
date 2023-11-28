@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo/repo_pgp.hpp"
 #include "rpm/rpm_log_guard.hpp"
-#include "utils/fs/temp.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
@@ -29,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo.hpp"
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <rpm/rpmcli.h>
 #include <rpm/rpmdb.h>

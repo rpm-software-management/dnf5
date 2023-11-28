@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 
-#include "utils/fs/temp.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
@@ -27,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <librepo/librepo.h>
 #include <solv/chksum.h>

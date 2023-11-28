@@ -23,11 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
-#include "utils/fs/file.hpp"
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/repo/config_repo.hpp"
+#include "libdnf5/utils/fs/file.hpp"
 
 #include <solv/repo.h>
 

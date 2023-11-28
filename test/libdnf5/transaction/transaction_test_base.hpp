@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TEST_TRANSACTION_TRANSACTION_TEST_BASE_HPP
 
 
-#include "utils/fs/temp.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
