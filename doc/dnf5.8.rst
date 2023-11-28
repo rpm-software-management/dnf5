@@ -142,6 +142,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--assumeno``
     | Automatically answer no for all questions.
 
+.. _best_option_ref-label:
+
 ``--best``
     | Try the best available package versions in transactions.
 
@@ -210,6 +212,8 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Setup installroot path.
     | Absolute path is required.
     | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+
+.. _no_best_option_ref-label:
 
 ``--no-best``
     | Do not limit the transaction to the best candidates only.
