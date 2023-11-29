@@ -42,6 +42,7 @@ void CoprConfig::load_all_configuration() {
         // https://github.com/rpm-software-management/dnf5/issues/513
         etc_dir = "/etc";
 
+    load_copr_config_file("/usr/share/dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.conf");
     std::string pattern = etc_dir / "dnf/plugins/copr.d/*.conf";
