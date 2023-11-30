@@ -52,7 +52,7 @@ void ModuleCommand::register_subcommands() {
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
     register_subcommand(std::make_unique<ModuleListCommand>(get_context()), query_commands_group);
-    // register_subcommand(std::make_unique<ModuleInfoCommand>(get_context()), query_commands_group);
+    register_subcommand(std::make_unique<ModuleInfoCommand>(get_context()), query_commands_group);
     // register_subcommand(std::make_unique<ModuleProvidesCommand>(get_context()), query_commands_group);
 
     // stream management commands

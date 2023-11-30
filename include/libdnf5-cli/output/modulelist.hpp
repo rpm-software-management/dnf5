@@ -39,7 +39,7 @@ namespace libdnf5::cli::output {
 enum { COL_MODULE_NAME, COL_MODULE_STREAM, COL_MODULE_PROFILES, COL_MODULE_SUMMARY };
 
 
-const std::string MODULELIST_TABLE_HINT = _("\nHint: [d]efault, [e]nabled, [x]disabled, [i]nstalled");
+const std::string MODULELIST_TABLE_HINT = _("Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled");
 
 
 static struct libscols_table * create_modulelist_table() {
@@ -108,6 +108,9 @@ void print_modulelist_table(Query & module_list) {
     }
     scols_sort_table(table, scols_table_get_column(table, COL_MODULE_NAME));
     scols_print_table(table);
+    if (!module_list.empty()) {
+        std::cout << std::endl;
+    }
     scols_unref_table(table);
 }
 

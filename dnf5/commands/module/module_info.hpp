@@ -20,15 +20,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_INFO_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_INFO_HPP
 
-#include <dnf5/context.hpp>
+#include "module_list.hpp"
 
 namespace dnf5 {
 
-class ModuleInfoCommand : public Command {
+class ModuleInfoCommand : public ModuleListCommand {
 public:
-    explicit ModuleInfoCommand(Context & context) : Command(context, "info") {}
-    void set_argument_parser() override;
-    void run() override;
+    explicit ModuleInfoCommand(Context & context) : ModuleListCommand(context, "info") {}
+
+private:
+    void print(const libdnf5::module::ModuleQuery & query) override;
 };
 
 }  // namespace dnf5

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
+#include <libdnf5/module/module_query.hpp>
 
 namespace dnf5 {
 
@@ -33,10 +34,15 @@ public:
     void configure() override;
     void run() override;
 
+protected:
+    ModuleListCommand(Context & context, const std::string & name) : Command(context, name) {}
+
 private:
     std::unique_ptr<ModuleEnabledOption> enabled{nullptr};
     std::unique_ptr<ModuleDisabledOption> disabled{nullptr};
     std::unique_ptr<ModuleSpecArguments> module_specs{nullptr};
+
+    virtual void print(const libdnf5::module::ModuleQuery & query);
 };
 
 }  // namespace dnf5
