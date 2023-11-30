@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <rpm/header.h>
-#include <rpm/rpmcli.h>
+#include <rpm/rpmdb.h>
 #include <rpm/rpmps.h>
 #include <rpm/rpmtag.h>
 #include <rpm/rpmtd.h>
@@ -140,79 +140,76 @@ inline std::string ensure_full_nevra(const char * nevra) {
 
 // Finds problems for the installed package defined by Header h.
 // Principle: Adds the installed package to an empty transaction and checks for errors.
-int find_problems(QVA_t qva, rpmts ts, Header h) {
+void find_problems(rpmts ts, Header h) {
     int rc = 0;
 
-    if (qva->qva_flags & VERIFY_DEPS) {
-        rpmtsEmpty(ts);
-        (void)rpmtsAddInstallElement(ts, h, NULL, 0, NULL);
+    rpmtsEmpty(ts);
+    (void)rpmtsAddInstallElement(ts, h, NULL, 0, NULL);
 
-        (void)rpmtsCheck(ts);
-        auto te = rpmtsElement(ts, 0);
-        auto ps = rpmteProblems(te);
-        rc = rpmpsNumProblems(ps);
+    (void)rpmtsCheck(ts);
+    auto te = rpmtsElement(ts, 0);
+    auto ps = rpmteProblems(te);
+    rc = rpmpsNumProblems(ps);
 
-        if (rc > 0) {
-            auto rpmdb_idx = rpmteDBOffset(te);
-            rpmpsi psi = rpmpsInitIterator(ps);
-            while (auto p = rpmpsiNext(psi)) {
-                const auto * const problem_cstr = rpmProblemGetStr(p);
-                libdnf_assert(problem_cstr != NULL, "command \"check\": rpmProblemGetStr() returns NULL");
-                const auto * const cnevra = rpmProblemGetPkgNEVR(p);
-                libdnf_assert(cnevra != NULL, "command \"check\": rpmProblemGetPkgNEVR() returns NULL");
-                const auto * const alt_cnevra = rpmProblemGetAltNEVR(p);
-                libdnf_assert(alt_cnevra != NULL, "command \"check\": rpmProblemGetAltNEVR() returns NULL");
+    if (rc > 0) {
+        auto rpmdb_idx = rpmteDBOffset(te);
+        rpmpsi psi = rpmpsInitIterator(ps);
+        while (auto p = rpmpsiNext(psi)) {
+            const auto * const problem_cstr = rpmProblemGetStr(p);
+            libdnf_assert(problem_cstr != NULL, "command \"check\": rpmProblemGetStr() returns NULL");
+            const auto * const cnevra = rpmProblemGetPkgNEVR(p);
+            libdnf_assert(cnevra != NULL, "command \"check\": rpmProblemGetPkgNEVR() returns NULL");
+            const auto * const alt_cnevra = rpmProblemGetAltNEVR(p);
+            libdnf_assert(alt_cnevra != NULL, "command \"check\": rpmProblemGetAltNEVR() returns NULL");
 
-                switch (rpmProblemGetType(p)) {
-                    case RPMPROB_REQUIRES:
-                        if (all || dependencies) {
-                            problems[{ensure_full_nevra(alt_cnevra), rpmdb_idx}].insert(Problem{
-                                .type = ProblemType::MISSING_REQUIRE, .nevra = "", .file_or_provide = problem_cstr});
+            switch (rpmProblemGetType(p)) {
+                case RPMPROB_REQUIRES:
+                    if (all || dependencies) {
+                        problems[{ensure_full_nevra(alt_cnevra), rpmdb_idx}].insert(Problem{
+                            .type = ProblemType::MISSING_REQUIRE, .nevra = "", .file_or_provide = problem_cstr});
+                    }
+                    break;
+                case RPMPROB_CONFLICT:
+                    if (all || dependencies) {
+                        auto nevra = ensure_full_nevra(cnevra);
+                        auto alt_nevra = ensure_full_nevra(alt_cnevra);
+                        if (nevra == alt_nevra) {
+                            // skip self conflicts
+                            break;
                         }
-                        break;
-                    case RPMPROB_CONFLICT:
-                        if (all || dependencies) {
-                            auto nevra = ensure_full_nevra(cnevra);
-                            auto alt_nevra = ensure_full_nevra(alt_cnevra);
-                            if (nevra == alt_nevra) {
-                                // skip self conflicts
-                                break;
-                            }
-                            problems[{nevra, rpmdb_idx}].insert(Problem{
-                                .type = ProblemType::CONFLICT, .nevra = alt_nevra, .file_or_provide = problem_cstr});
+                        problems[{nevra, rpmdb_idx}].insert(Problem{
+                            .type = ProblemType::CONFLICT, .nevra = alt_nevra, .file_or_provide = problem_cstr});
+                    }
+                    break;
+                case RPMPROB_OBSOLETES:
+                    if (all || obsoleted) {
+                        auto nevra = ensure_full_nevra(cnevra);
+                        auto alt_nevra = ensure_full_nevra(alt_cnevra);
+                        if (nevra == alt_nevra) {
+                            // skip self obsolete
+                            break;
                         }
-                        break;
-                    case RPMPROB_OBSOLETES:
-                        if (all || obsoleted) {
-                            auto nevra = ensure_full_nevra(cnevra);
-                            auto alt_nevra = ensure_full_nevra(alt_cnevra);
-                            if (nevra == alt_nevra) {
-                                // skip self obsolete
-                                break;
-                            }
-                            problems[{nevra, rpmdb_idx}].insert(Problem{
-                                .type = ProblemType::OBSOLETED, .nevra = alt_nevra, .file_or_provide = problem_cstr});
-                        }
-                        break;
-                    default:;
-                }
+                        problems[{nevra, rpmdb_idx}].insert(Problem{
+                            .type = ProblemType::OBSOLETED, .nevra = alt_nevra, .file_or_provide = problem_cstr});
+                    }
+                    break;
+                default:;
             }
-            rpmpsFreeIterator(psi);
         }
-        rpmpsFree(ps);
-        rpmtsEmpty(ts);
+        rpmpsFreeIterator(psi);
     }
-    return rc;
+    rpmpsFree(ps);
+    rpmtsEmpty(ts);
 }
 
 
 // Groups packages with the same "name" and "architecture".
 // For "installonly" packages, only one "nevra" is inserted.
-int group_pkgs_same_name_arch([[maybe_unused]] QVA_t qva, [[maybe_unused]] rpmts ts, Header h) {
+void group_pkgs_same_name_arch(Header h) {
     const auto * const arch = headerGetString(h, RPMTAG_ARCH);
     if (!arch) {
         // skip any non-packages (such as gpg-pubkey) in the database
-        return 0;
+        return;
     }
 
     const auto * const name = headerGetString(h, RPMTAG_NAME);
@@ -230,8 +227,6 @@ int group_pkgs_same_name_arch([[maybe_unused]] QVA_t qva, [[maybe_unused]] rpmts
         auto rpmdb_idx = static_cast<decltype(PkgId::rpmdb_idx)>(headerGetInstance(h));
         nevras.push_back({fmt::format("{}-{}:{}-{}.{}", name, epoch, version, release, arch), rpmdb_idx});
     }
-
-    return 0;
 }
 
 }  // namespace
@@ -275,33 +270,19 @@ void CheckCommand::run() {
     auto & config = ctx.base.get_config();
     rpmtsSetRootDir(ts, config.get_installroot_option().get_value().c_str());
 
-    if (all || dependencies || obsoleted) {
-        QVA_t qva = &rpmQVKArgs;
-        qva->qva_mode = 'V';
-        qva->qva_flags = VERIFY_DEPS;
-        qva->qva_source = RPMQV_ALL;
-        qva->qva_sourceCount = 1;
-        qva->qva_showPackage = find_problems;
-
-        struct rpmInstallArguments_s * ia = &rpmIArgs;
-        rpmtsSetFlags(ts, rpmtsFlags(ts) | (ia->transFlags & RPMTRANS_FLAG_NOPLUGINS));
-
-        rpmcliVerify(ts, qva, NULL);
+    rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_PACKAGES, NULL, 0);
+    std::unique_ptr<std::remove_pointer_t<rpmdbMatchIterator>, decltype(&rpmdbFreeIterator)> mi_owner(
+        mi, &rpmdbFreeIterator);
+    while (Header h = rpmdbNextIterator(mi)) {
+        if (all || dependencies || obsoleted) {
+            find_problems(ts, h);
+        }
+        if (all || duplicates) {
+            group_pkgs_same_name_arch(h);
+        }
     }
 
     if (all || duplicates) {
-        QVA_t qva = &rpmQVKArgs;
-        qva->qva_mode = 'q';
-        qva->qva_flags = VERIFY_DEPS;
-        qva->qva_source = RPMQV_ALL;
-        qva->qva_sourceCount = 1;
-        qva->qva_showPackage = group_pkgs_same_name_arch;
-
-        struct rpmInstallArguments_s * ia = &rpmIArgs;
-        rpmtsSetFlags(ts, rpmtsFlags(ts) | (ia->transFlags & RPMTRANS_FLAG_NOPLUGINS));
-
-        rpmcliQuery(ts, qva, NULL);
-
         for (const auto & [na, packages] : installed_na_packages) {
             if (packages.size() > 1) {
                 for (const auto & package : packages) {
