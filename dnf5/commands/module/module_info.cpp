@@ -19,13 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_info.hpp"
 
+#include <libdnf5-cli/output/moduleinfo.hpp>
+#include <libdnf5/module/module_query.hpp>
+
 namespace dnf5 {
 
-void ModuleInfoCommand::set_argument_parser() {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Print details about module streams");
+void ModuleInfoCommand::print(const libdnf5::module::ModuleQuery & query) {
+    libdnf5::cli::output::print_moduleinfo_table(query.list());
 }
-
-void ModuleInfoCommand::run() {}
 
 }  // namespace dnf5

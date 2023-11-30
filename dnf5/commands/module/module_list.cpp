@@ -21,6 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5-cli/output/modulelist.hpp>
 #include <libdnf5/module/module_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
+#include <iostream>
 
 namespace dnf5 {
 
@@ -44,14 +47,21 @@ void ModuleListCommand::configure() {
 void ModuleListCommand::run() {
     libdnf5::module::ModuleQuery query(get_context().base, true);
     auto module_specs_str = module_specs->get_value();
+    std::set<std::string> unmatched_module_spec;
+
     if (module_specs_str.size() > 0) {
         for (const auto & module_spec : module_specs_str) {
+            bool module_spec_matched = false;
             for (const auto & nsvcap : libdnf5::module::Nsvcap::parse(module_spec)) {
                 libdnf5::module::ModuleQuery nsvcap_query(get_context().base, false);
                 nsvcap_query.filter_nsvca(nsvcap, libdnf5::sack::QueryCmp::GLOB);
                 if (!nsvcap_query.empty()) {
                     query |= nsvcap_query;
+                    module_spec_matched = true;
                 }
+            }
+            if (!module_spec_matched) {
+                unmatched_module_spec.insert(module_spec);
             }
         }
     } else {
@@ -64,8 +74,20 @@ void ModuleListCommand::run() {
         query.filter_disabled();
     }
 
-    output::print_modulelist_table(query.list());
-    output::print_modulelist_table_hint();
+    print(query);
+    if (!query.empty()) {
+        output::print_modulelist_table_hint();
+    }
+
+    if (!unmatched_module_spec.empty()) {
+        for (auto const & module_spec : unmatched_module_spec) {
+            std::cerr << libdnf5::utils::sformat(_("No matches found for \"{}\"."), module_spec) << std::endl;
+        }
+    }
+}
+
+void ModuleListCommand::print(const libdnf5::module::ModuleQuery & query) {
+    libdnf5::cli::output::print_modulelist_table(query.list());
 }
 
 }  // namespace dnf5
