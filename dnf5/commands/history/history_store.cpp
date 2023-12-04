@@ -19,14 +19,65 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_store.hpp"
 
+#include "commands/history/transaction_id.hpp"
+
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/fs/temp.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
 
 void HistoryStoreCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Store transaction to a file");
+    auto & cmd = *get_argument_parser_command();
+    cmd.set_description("[experimental] Store transaction to a file");
+    auto & ctx = get_context();
+    auto & parser = ctx.get_argument_parser();
+
+    output_option = dynamic_cast<libdnf5::OptionString *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionString>("./transaction.json")));
+    auto query_format = parser.add_new_named_arg("output");
+    query_format->set_long_name("output");
+    query_format->set_short_name('o');
+    query_format->set_description("File path for storing the transaction, default is \"./transaction.json\"");
+    query_format->set_has_value(true);
+    query_format->set_arg_value_help("PATH");
+    query_format->link_value(output_option);
+    cmd.register_named_arg(query_format);
+
+    transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }
 
-void HistoryStoreCommand::run() {}
+void HistoryStoreCommand::run() {
+    const auto ts_specs = transaction_specs->get_value();
+    auto & history = *get_context().base.get_transaction_history();
+    std::vector<libdnf5::transaction::Transaction> transactions;
+    auto logger = get_context().base.get_logger();
+
+    if (ts_specs.empty()) {
+        transactions = list_transactions_from_specs(history, {"last"});
+    } else {
+        transactions = list_transactions_from_specs(history, ts_specs);
+    }
+
+    if (transactions.empty()) {
+        throw libdnf5::cli::CommandExitError(1, M_("No transactions selected for storing, exactly one required."));
+    }
+    if (transactions.size() != 1) {
+        throw libdnf5::cli::CommandExitError(1, M_("Multiple transactions selected for storing, only one allowed."));
+    }
+
+    const std::string json = transactions[0].serialize();
+
+    std::filesystem::path tmp_path(output_option->get_value());
+    auto tmp_file = libdnf5::utils::fs::TempFile(tmp_path.parent_path(), tmp_path.filename());
+    auto & file = tmp_file.open_as_file("w+");
+    file.write(json);
+    file.close();
+
+    //TODO(amatej): add warning if file already exists?
+    std::filesystem::rename(tmp_file.get_path(), output_option->get_value());
+    tmp_file.release();
+}
 
 }  // namespace dnf5

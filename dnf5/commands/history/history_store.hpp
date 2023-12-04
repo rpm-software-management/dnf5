@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_STORE_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_STORE_HPP
 
+#include "commands/history/arguments.hpp"
+
 #include <dnf5/context.hpp>
 
 
@@ -32,6 +34,10 @@ public:
     explicit HistoryStoreCommand(Context & context) : Command(context, "store") {}
     void set_argument_parser() override;
     void run() override;
+
+private:
+    std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
+    libdnf5::OptionString * output_option{nullptr};
 };
 
 
