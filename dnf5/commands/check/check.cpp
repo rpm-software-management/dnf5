@@ -79,7 +79,6 @@ struct Problem {
 };
 
 // what the program will check
-bool all{true};
 bool dependencies{false};
 bool duplicates{false};
 bool obsoleted{false};
@@ -164,13 +163,13 @@ void find_problems(rpmts ts, Header h) {
 
             switch (rpmProblemGetType(p)) {
                 case RPMPROB_REQUIRES:
-                    if (all || dependencies) {
+                    if (dependencies) {
                         problems[{ensure_full_nevra(alt_cnevra), rpmdb_idx}].insert(Problem{
                             .type = ProblemType::MISSING_REQUIRE, .nevra = "", .file_or_provide = problem_cstr});
                     }
                     break;
                 case RPMPROB_CONFLICT:
-                    if (all || dependencies) {
+                    if (dependencies) {
                         auto nevra = ensure_full_nevra(cnevra);
                         auto alt_nevra = ensure_full_nevra(alt_cnevra);
                         if (nevra == alt_nevra) {
@@ -182,7 +181,7 @@ void find_problems(rpmts ts, Header h) {
                     }
                     break;
                 case RPMPROB_OBSOLETES:
-                    if (all || obsoleted) {
+                    if (obsoleted) {
                         auto nevra = ensure_full_nevra(cnevra);
                         auto alt_nevra = ensure_full_nevra(alt_cnevra);
                         if (nevra == alt_nevra) {
@@ -259,7 +258,9 @@ void CheckCommand::set_argument_parser() {
 
 void CheckCommand::configure() {
     installonly_pkgs_provides = get_context().base.get_config().get_installonlypkgs_option().get_value();
-    all = !(dependencies || duplicates || obsoleted);
+    if (!(dependencies || duplicates || obsoleted)) {
+        dependencies = duplicates = obsoleted = true;
+    }
 }
 
 
@@ -274,15 +275,15 @@ void CheckCommand::run() {
     std::unique_ptr<std::remove_pointer_t<rpmdbMatchIterator>, decltype(&rpmdbFreeIterator)> mi_owner(
         mi, &rpmdbFreeIterator);
     while (Header h = rpmdbNextIterator(mi)) {
-        if (all || dependencies || obsoleted) {
+        if (dependencies || obsoleted) {
             find_problems(ts, h);
         }
-        if (all || duplicates) {
+        if (duplicates) {
             group_pkgs_same_name_arch(h);
         }
     }
 
-    if (all || duplicates) {
+    if (duplicates) {
         for (const auto & [na, packages] : installed_na_packages) {
             if (packages.size() > 1) {
                 for (const auto & package : packages) {
