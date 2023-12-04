@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-04 09:45+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: automatic.cpp:208
+msgid ""
+"An alternative CLI to 'dnf upgrade' suitable to be executed automatically "
+"and regularly."
+msgstr ""
+
+#: automatic.cpp:215
+msgid "Path to dnf5-automatic config file."
+msgstr ""
+
+#: automatic.cpp:226
+msgid "Apply random delay before execution."
+msgstr ""
+
+#: automatic.cpp:231
+msgid "Automatically download updated packages"
+msgstr ""
+
+#: automatic.cpp:238
+msgid "Do not automatically download updated packages"
+msgstr ""
+
+#: automatic.cpp:247
+msgid "Automatically install downloaded updates"
+msgstr ""
+
+#: automatic.cpp:254
+msgid "Do not automatically install downloaded updates"
+msgstr ""
+
+#: automatic.cpp:358
+msgid "Resolved transaction:"
+msgstr ""
+
+#: automatic.cpp:380
+msgid "Downloading packages:"
+msgstr ""
+
+#: automatic.cpp:390
+msgid "Packages downloaded."
+msgstr ""
+
+#: automatic.cpp:393
+msgid "Running transaction:"
+msgstr ""
+
+#: automatic.cpp:406
+msgid "Transaction finished."
+msgstr ""
+
+#: automatic.cpp:408
+msgid "Transaction failed: "
+msgstr ""
+
+#: automatic.cpp:437
+msgid "Unknown report emitter for dnf5 automatic: \"{}\"."
+msgstr ""
+
+#: automatic.cpp:452
+msgid "Error: reboot command returned nonzero exit code: {}"
+msgstr ""
+
+#: emitters.cpp:63
+msgid "No new upgrades available."
+msgstr ""
+
+#: emitters.cpp:67
+msgid "{} packages can be upgraded."
+msgstr ""
+
+#: emitters.cpp:70
+msgid "{} new upgrades have been downloaded."
+msgstr ""
+
+#: emitters.cpp:73
+msgid "{} new upgrades have been installed."
+msgstr ""
+
+#: emitters.cpp:81
+msgid "Failed to check for upgrades."
+msgstr ""
+
+#: emitters.cpp:84
+msgid "Failed to download upgrades."
+msgstr ""
+
+#: emitters.cpp:87
+msgid "Failed to install upgrades."
+msgstr ""
+
+#: emitters.cpp:141 emitters.cpp:162
+msgid "[{}] dnf5-automatic: {}"
+msgstr ""
