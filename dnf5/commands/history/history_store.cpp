@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/history/transaction_id.hpp"
 
+#include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/temp.hpp>
 
@@ -54,6 +55,17 @@ void HistoryStoreCommand::run() {
     std::vector<libdnf5::transaction::Transaction> transactions;
     auto logger = get_context().base.get_logger();
 
+    std::filesystem::path tmp_path(output_option->get_value());
+
+    if (std::filesystem::exists(tmp_path)) {
+        std::cout << libdnf5::utils::sformat(
+            _("File \"{}\" already exists, it will be overwritten.\n"), tmp_path.string());
+        // ask user for the file overwride confirmation
+        if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().base.get_config())) {
+            throw libdnf5::cli::AbortedByUserError();
+        }
+    }
+
     if (ts_specs.empty()) {
         transactions = list_transactions_from_specs(history, {"last"});
     } else {
@@ -69,13 +81,11 @@ void HistoryStoreCommand::run() {
 
     const std::string json = transactions[0].serialize();
 
-    std::filesystem::path tmp_path(output_option->get_value());
     auto tmp_file = libdnf5::utils::fs::TempFile(tmp_path.parent_path(), tmp_path.filename());
     auto & file = tmp_file.open_as_file("w+");
     file.write(json);
     file.close();
 
-    //TODO(amatej): add warning if file already exists?
     std::filesystem::rename(tmp_file.get_path(), output_option->get_value());
     tmp_file.release();
 }
