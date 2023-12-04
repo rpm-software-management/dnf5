@@ -1,5 +1,6 @@
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_automatic\")
+set(GETTEXT_DOMAIN dnf5-plugin-automatic)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 file(GLOB_RECURSE AUTOMATIC_SOURCES *.cpp)
 add_library(automatic_cmd_plugin MODULE ${AUTOMATIC_SOURCES})
@@ -15,3 +16,5 @@ install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}")
 
 install(PROGRAMS bin/dnf-automatic TYPE BIN)
+
+add_subdirectory(po)

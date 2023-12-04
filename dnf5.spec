@@ -700,7 +700,7 @@ Conflicts:      dnf-automatic < 5
 Alternative command-line interface "dnf upgrade" suitable to be executed
 automatically and regularly from systemd timers, cron jobs or similar.
 
-%files plugin-automatic
+%files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
@@ -797,6 +797,7 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %endif
 
 %find_lang dnf5
+%find_lang dnf5-plugin-automatic
 %find_lang dnf5-plugin-builddep
 %find_lang dnf5-plugin-changelog
 %find_lang dnf5-plugin-config-manager
