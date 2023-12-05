@@ -78,12 +78,6 @@ public:
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 
-    /// Stores reference to program arguments.
-    void set_prg_arguments(size_t argc, const char * const * argv) {
-        this->argc = argc;
-        this->argv = argv;
-    }
-
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
 
@@ -91,7 +85,10 @@ public:
     void set_comment(const char * comment) noexcept { this->comment = comment; }
 
     /// Get command line used to run the dnf5 command
-    std::string get_cmdline();
+    std::string get_cmdline() { return cmdline; }
+
+    /// Set command line used to run the dnf5 command
+    void set_cmdline(std::string & cmdline) { this->cmdline = cmdline; }
 
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
@@ -146,9 +143,7 @@ public:
     void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
 
 private:
-    /// Program arguments.
-    size_t argc{0};
-    const char * const * argv{nullptr};
+    std::string cmdline;
 
     /// Points to user comment.
     const char * comment{nullptr};

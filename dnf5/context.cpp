@@ -408,18 +408,6 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 
 }  // namespace
 
-std::string Context::get_cmdline() {
-    std::string cmd_line;
-
-    for (size_t i = 0; i < argc; ++i) {
-        if (i > 0) {
-            cmd_line += " ";
-        }
-        cmd_line += argv[i];
-    }
-    return cmd_line;
-}
-
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     transaction.download();
 
