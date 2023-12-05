@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
+#include "utils/string.hpp"
 #include "utils/url.hpp"
 
 #include <fmt/format.h>
@@ -99,12 +100,16 @@ Context::~Context() {
 
 // TODO(jrohel): Move logic into libdnf?
 void Context::apply_repository_setopts() {
+    std::vector<std::string> missing_repo_ids;
     for (const auto & setopt : setopts) {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
         libdnf5::repo::RepoQuery query(base);
         query.filter_id(repo_pattern, libdnf5::sack::QueryCmp::GLOB);
         query.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
+        if (query.empty()) {
+            missing_repo_ids.push_back(repo_pattern);
+        }
         auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query) {
             try {
@@ -114,6 +119,11 @@ void Context::apply_repository_setopts() {
                 std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
             }
         }
+    }
+
+    if (!missing_repo_ids.empty()) {
+        throw libdnf5::cli::ArgumentParserError(
+            M_("No matching repositories for \"{}\""), libdnf5::utils::string::join(missing_repo_ids, ", "));
     }
 }
 
