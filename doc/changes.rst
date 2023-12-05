@@ -79,6 +79,11 @@ The functionality is now split to two config options - ``skip_broken`` for the u
 corresponding command line options ``--skip-broken`` and ``--skip-unavailable`` for commands where it makes sense.
 
 
+Global options
+--------------
+* Options ``--disable-repo=REPO_ID`` and ``--setopt=[REPO_ID.]OPTION=VALUE`` now always cause an error when provided with invalid ``REPO_ID``.
+  This makes them consistent with ``--repo=REPO_ID`` and ``--enable-repo=REPO_ID``. The ``strict`` configuration option is no longer taken into account.
+
 Alias command
 -------------
 * Dropped. The command is replaced by a different functionality, see
