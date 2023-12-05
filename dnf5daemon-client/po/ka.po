@@ -6,124 +6,148 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2023-12-05 02:52+0000\n"
+"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2.1\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "რეკომენდაციების შესახებ დეტალების გამოტანა"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr ""
+msgstr "რეკომენდაციების ჩვენება"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
 msgstr ""
+"დაყენებული პაკეტების ნებისმიერი ვერსიის შემცველი რეკომენდაციების ჩვენება."
 
 #: commands/advisory/arguments.hpp:43
 msgid "Show advisories containing newer versions of installed packages."
 msgstr ""
+"დაყენებული პაკეტების უფრო ახალი ვერსიის შემცველი რეკომენდაციების ჩვენება."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"დაყენებული პაკეტების იგივე ან უფრო ძველი ვერსიის შემცველი რეკომენდაციების "
+"ჩვენება."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ უფრო ახალ ვერსიებს დაყენებული "
+"პაკეტების, რომლებისთვისაც უფრო ახალი ვერსიებია ხელმისაწვდომი."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"მხოლოდ იმ რეკომენდაციების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც "
+"აქვთ შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "პაკეტის_სახელი,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "შაბლონების შია, რომლებიც რეკომენდაციის სახელებს ემთხვევა."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "მხოლოდ Bugzilla-ზე მითითებული რეკომენდაციების ჩვენება."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "მხოლოდ CVE-ზე მითითებული რეკომენდაციების ჩვენება."
 
 #: commands/advisory/arguments.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
 msgstr ""
+"მხოლოდ მითითებული სახელის მქონე რეკომენდაციებში არსებული პაკეტების "
+"გათვალისწინება. სიის პარამეტრი."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "რეკომენდაციის_სახელი,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr ""
+msgstr "შეზღუდვა უსაფრთხოების რეკომენდაციების პაკეტებზე."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr ""
+msgstr "შეზღუდვა შეცდომების გასწორების რეკომენდაციების პაკეტებზე."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr ""
+msgstr "შეზღუდვა დამატებითი ფუნქციონალის რეკომენდაციების პაკეტებზე."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr ""
+msgstr "შეზღუდვა ახალი პაკეტების რეკომენდაციების პაკეტებზე."
 
 #: commands/advisory/arguments.hpp:153
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"მხოლოდ მითითებული სიმძიმის მქონე რეკომენდაციებში არსებული პაკეტების "
+"გათვალისწინება. სიის პარამეტრი. შეიძლება იყოს \"critical\" (კრიტიკული), "
+"\"important\" (მნიშვნელოვანი), \"moderate\" (საშუალო), \"low\" (დაბალი), ან "
+"\"none\" (არც ერთი)."
 
 #: commands/advisory/arguments.hpp:155
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "რეკომენდაციის_სიმძიმე,..."
 
 #: commands/advisory/arguments.hpp:179
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
+"მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ Bugzilla ID-ს ასწორებენ. მაგ: 123123. სიის პარამეტრი."
 
 #: commands/advisory/arguments.hpp:180
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:190
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
+"მითითებულ CVE ID-ს (Common Vulnerabilities and Exposures) ასწორებენ. მაგ: "
+"CVE-2201-0123. სიის პარამეტრი."
 
 #: commands/advisory/arguments.hpp:192
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
+"აუცილებელია, ბრძანება ზემომხმარებლის პრივილეგიებით გაუშვათ (ძირითადად, "
+"მომხმარებლის სახელია root)."
 
 #: main.cpp:236 main.cpp:273
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად დაამატეთ \"--help\"."
