@@ -13,6 +13,10 @@ upstream_package_name: dnf5
 # downstream (Fedora) RPM package name
 downstream_package_name: dnf5
 
+actions:
+  fix-spec-file:
+    - bash -c "sed -i -r \"s/Version:(\s*)\S+/Version:\1%{project_version_major}.%{project_version_minor}.%{project_version_patch}/\" dnf5.spec"
+
 jobs:
   - job: propose_downstream
     trigger: release
