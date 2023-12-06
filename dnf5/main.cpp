@@ -1046,11 +1046,11 @@ int main(int argc, char * argv[]) try {
 
             base.setup();
 
-            auto file_logger = libdnf5::create_file_logger(base, DNF5_LOGGER_FILENAME);
-            // Swap to destination stream logger (log to file)
-            log_router.swap_logger(file_logger, 0);
-            // Write messages from memory buffer logger to stream logger
-            dynamic_cast<libdnf5::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
+            auto destination_logger = libdnf5::create_rotating_file_logger(base, DNF5_LOGGER_FILENAME);
+            // Swap to destination logger
+            log_router.swap_logger(destination_logger, 0);
+            // Write messages from memory buffer logger to destination logger
+            dynamic_cast<libdnf5::MemoryBufferLogger &>(*destination_logger).write_to_logger(log_router);
 
             if (context.get_dump_variables()) {
                 dump_variables(context);
