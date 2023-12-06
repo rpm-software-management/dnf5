@@ -411,14 +411,10 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 }
 
 void Vars::detect_vars(const std::string & installroot) {
-    const char * arch = nullptr;
-    if (contains("arch")) {
-        arch = get_value("arch").c_str();
-    }
-    init_lib_rpm(arch);
-
     set_lazy(
         "arch", []() -> auto { return std::make_unique<std::string>(detect_arch()); }, Priority::AUTO);
+
+    init_lib_rpm(get_value("arch").c_str());
 
     set_lazy(
         "basearch",
