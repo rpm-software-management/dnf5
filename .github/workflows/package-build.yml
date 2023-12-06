@@ -24,7 +24,7 @@ jobs:
       - name: Configure CC CXX env variables
         id: configure_compiler
         run: |
-          if [[ "${{matrix.compiler}}" -eq "clang" ]]; then
+          if [[ "${{matrix.compiler}}" == "clang" ]]; then
             echo "cxx=/usr/lib64/ccache/clang++" >> "$GITHUB_OUTPUT"
             echo "cc=/usr/lib64/ccache/clang" >> "$GITHUB_OUTPUT"
           else
