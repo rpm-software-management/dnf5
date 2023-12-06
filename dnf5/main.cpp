@@ -1060,6 +1060,11 @@ int main(int argc, char * argv[]) try {
             repo_sack->create_repos_from_system_configuration();
             any_repos_from_system_configuration = repo_sack->size() > 0;
 
+            auto vars = base.get_vars();
+            for (auto & id_path_pair : context.repos_from_path) {
+                id_path_pair.first = vars->substitute(id_path_pair.first);
+                id_path_pair.second = vars->substitute(id_path_pair.second);
+            }
             repo_sack->create_repos_from_paths(context.repos_from_path, libdnf5::Option::Priority::COMMANDLINE);
             for (const auto & [id, path] : context.repos_from_path) {
                 context.setopts.emplace_back(id + ".enabled", "1");
