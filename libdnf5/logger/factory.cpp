@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/logger/factory.hpp"
 
+#include "libdnf5/logger/rotating_file_logger.hpp"
 #include "libdnf5/logger/stream_logger.hpp"
 
 #include <filesystem>
@@ -44,6 +45,18 @@ std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base, const std::stri
 
     return std::make_unique<libdnf5::StreamLogger>(std::move(log_stream));
 }
+
+
+std::unique_ptr<libdnf5::Logger> create_rotating_file_logger(Base & base, const std::string & filename) {
+    auto & config = base.get_config();
+    const std::filesystem::path logdir_path{config.get_logdir_option().get_value()};
+    create_directories(logdir_path);
+    auto log_file = logdir_path / filename;
+
+    return std::make_unique<libdnf5::RotatingFileLogger>(
+        log_file, config.get_log_size_option().get_value(), config.get_log_rotate_option().get_value());
+}
+
 
 std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
     return create_file_logger(base, FILE_LOGGER_FILENAME);
