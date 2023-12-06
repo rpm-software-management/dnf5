@@ -601,13 +601,11 @@ void RepoSack::create_repos_from_reposdir() {
 
 void RepoSack::create_repos_from_paths(
     const std::vector<std::pair<std::string, std::string>> & repos_paths, libdnf5::Option::Priority priority) {
-    auto vars = base->get_vars();
     for (const auto & [id, path] : repos_paths) {
-        auto repo_id = vars->substitute(id);
-        auto new_repo = create_repo(repo_id);
+        auto new_repo = create_repo(id);
         auto & new_repo_config = new_repo->get_config();
-        new_repo_config.get_name_option().set(priority, repo_id);
-        new_repo_config.get_baseurl_option().set(priority, {vars->substitute(path)});
+        new_repo_config.get_name_option().set(priority, id);
+        new_repo_config.get_baseurl_option().set(priority, path);
     }
 }
 
