@@ -22,12 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/shared_options.hpp"
 #include "context.hpp"
 #include "exception.hpp"
-#include "utils.hpp"
+#include "utils/auth.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf5/conf/option_string.hpp>
 
-#include <iostream>
 #include <memory>
 
 namespace dnfdaemon::client {
@@ -55,7 +54,7 @@ void DistroSyncCommand::set_argument_parser() {
 void DistroSyncCommand::run() {
     auto & ctx = get_context();
 
-    if (!am_i_root()) {
+    if (!libdnf5::utils::am_i_root()) {
         throw UnprivilegedUserError();
     }
 
