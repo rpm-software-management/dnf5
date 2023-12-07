@@ -381,7 +381,7 @@ void AutomaticCommand::run() {
                 // TODO: handle downloadonly config option
                 if (apply_updates) {
                     output_stream << _("Running transaction:") << std::endl;
-                    transaction.set_callbacks(std::make_unique<TransactionCallbacksSimple>(output_stream));
+                    transaction.set_callbacks(std::make_unique<TransactionCallbacksSimple>(context, output_stream));
                     transaction.set_description(context.get_cmdline());
                     auto comment = context.get_comment();
                     if (comment) {
