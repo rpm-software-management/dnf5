@@ -27,6 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/format.hpp>
 #include <libsmartcols/libsmartcols.h>
@@ -52,15 +54,14 @@ static void random_wait(int max_value) {
     sleep(distribution(rng));
 }
 
-static bool reboot_needed(const libdnf5::base::Transaction & transaction) {
-    static const std::set<std::string> need_reboot = {
-        "kernel", "kernel-rt", "glibc", "linux-firmware", "systemd", "dbus", "dbus-broker", "dbus-daemon"};
+static bool reboot_needed(libdnf5::Base & base, const libdnf5::base::Transaction & transaction) {
+    libdnf5::rpm::PackageSet transaction_packages(base);
     for (const auto & pkg : transaction.get_transaction_packages()) {
-        if (need_reboot.find(pkg.get_package().get_name()) != need_reboot.end()) {
-            return true;
-        }
+        transaction_packages.add(pkg.get_package());
     }
-    return false;
+    libdnf5::rpm::PackageQuery reboot_suggested(transaction_packages);
+    reboot_suggested.filter_reboot_suggested();
+    return !reboot_suggested.empty();
 }
 
 static bool server_available(std::string_view host, std::string_view service) {
@@ -390,7 +391,8 @@ void AutomaticCommand::run() {
                     auto result = transaction.run();
                     if (result == libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
                         auto reboot = config_automatic.config_commands.reboot.get_value();
-                        if (reboot == "when-changed" || (reboot == "when-needed" and reboot_needed(transaction))) {
+                        if (reboot == "when-changed" ||
+                            (reboot == "when-needed" and reboot_needed(base, transaction))) {
                             do_reboot = true;
                         }
                         output_stream << _("Transaction finished.") << std::endl;
