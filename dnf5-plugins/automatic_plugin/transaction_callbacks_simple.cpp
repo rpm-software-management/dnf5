@@ -54,10 +54,12 @@ void TransactionCallbacksSimple::install_start(
         case libdnf5::transaction::TransactionItemAction::ENABLE:
         case libdnf5::transaction::TransactionItemAction::DISABLE:
         case libdnf5::transaction::TransactionItemAction::RESET:
-            throw std::logic_error(fmt::format(
+            auto & logger = *context.base.get_logger();
+            logger.warning(
                 "Unexpected action in TransactionPackage: {}",
                 static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
-                    item.get_action())));
+                    item.get_action()));
+            return;
     }
     output_stream << item.get_package().get_full_nevra() << std::endl;
 }

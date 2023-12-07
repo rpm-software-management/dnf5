@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_PLUGINS_AUTOMATIC_PLUGIN_TRANSACTION_CALLBACKS_SIMPLE_HPP
 #define DNF5_PLUGINS_AUTOMATIC_PLUGIN_TRANSACTION_CALLBACKS_SIMPLE_HPP
 
+#include <dnf5/context.hpp>
 #include <libdnf5/rpm/transaction_callbacks.hpp>
 
 #include <sstream>
@@ -30,7 +31,9 @@ namespace dnf5 {
 /// the rpm transaction error messages.
 class TransactionCallbacksSimple : public libdnf5::rpm::TransactionCallbacks {
 public:
-    explicit TransactionCallbacksSimple(std::stringstream & output_stream) : output_stream(output_stream) {}
+    explicit TransactionCallbacksSimple(Context & context, std::stringstream & output_stream)
+        : context(context),
+          output_stream(output_stream) {}
 
     void transaction_start(uint64_t total) override;
     void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
@@ -54,6 +57,7 @@ public:
 
 
 private:
+    Context & context;
     std::stringstream & output_stream;
 };
 

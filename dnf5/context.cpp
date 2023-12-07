@@ -188,7 +188,7 @@ namespace {
 
 class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
 public:
-    RpmTransCB() {
+    RpmTransCB(Context & context) : context(context) {
         multi_progress_bar.set_total_bar_visible_limit(
             libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
     }
@@ -235,10 +235,12 @@ public:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
-                throw std::logic_error(fmt::format(
+                auto & logger = *context.base.get_logger();
+                logger.warning(
                     "Unexpected action in TransactionPackage: {}",
                     static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
-                        item.get_action())));
+                        item.get_action()));
+                return;
         }
         if (!msg) {
             msg = "Installing ";
@@ -402,6 +404,7 @@ private:
 
     libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    Context & context;
 };
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
@@ -430,7 +433,7 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         }
     }
 
-    auto callbacks = std::make_unique<RpmTransCB>();
+    auto callbacks = std::make_unique<RpmTransCB>(*this);
     callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
     transaction.set_callbacks(std::move(callbacks));
 
