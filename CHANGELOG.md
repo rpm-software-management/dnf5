@@ -1,3 +1,28 @@
+# 5.1.9
+
+- Update translations from weblate
+- Fix builds for RISC-V arch
+- Fix architecture autodetection
+- Move `am_i_root` function to common library
+- Implement `module info` command
+- Add user confirmation request if `history store` overwrites a file
+- Add `history store` command
+- Add API to serialize base::transaction in JSON
+- Add API to serialize transaction::transaction in JSON
+- Add docs for `provides`
+- Implement command `provides`
+- Read `copr.vendor.conf` in `/usr/share` first
+- Add docs for `check` command
+- Implement `check` command
+- Expose `utis/fs/file.hpp` and `temp.hpp` on API
+- Document dropping of the `skip-broken` for `upgrade`
+- Update man pages with missing dependency resolving-related options
+- Document `skip-broken` option only for related commands
+- Test for adding an empty list to memory file
+- Check serialized temporary files memory is non-empty
+- Add `microcode_ctl` to needs-restarting's reboot list
+- Fix reporting spec matches only source
+
 # 5.1.8
 
 - Update translations from weblate
