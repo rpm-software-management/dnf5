@@ -8,6 +8,7 @@ Welcome to DNF5's documentation!
     about
     tutorial/index
     tutorial/bindings/index
+    tutorial/plugins/index
     api/index
     libdnf5_plugins/index
     commands/index
