@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 02:52+0000\n"
+"POT-Creation-Date: 2023-12-08 02:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -22,16 +22,16 @@ msgid ""
 "advisory prefix \"{}\""
 msgstr ""
 
-#: base/goal.cpp:383
+#: base/goal.cpp:387
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr ""
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:967
+#: base/goal.cpp:1098
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr ""
 
-#: base/goal.cpp:2160
+#: base/goal.cpp:2306
 msgid "Failed to resolve modules."
 msgstr ""
 
@@ -248,68 +248,68 @@ msgstr ""
 msgid "Problem {}: "
 msgstr ""
 
-#: base/transaction.cpp:70
+#: base/transaction.cpp:71
 msgid "This transaction has been already run before."
 msgstr ""
 
-#: base/transaction.cpp:71
+#: base/transaction.cpp:72
 msgid "Cannot run transaction with resolving problems."
 msgstr ""
 
-#: base/transaction.cpp:72
+#: base/transaction.cpp:73
 msgid "Rpm transaction check failed."
 msgstr ""
 
-#: base/transaction.cpp:74
+#: base/transaction.cpp:75
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 
-#: base/transaction.cpp:75
+#: base/transaction.cpp:76
 msgid "Rpm transaction failed."
 msgstr ""
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "Signature verification failed."
 msgstr ""
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "The repository does not have any PGP keys configured."
 msgstr ""
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Public key is not installed."
 msgstr ""
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Canceled by the user."
 msgstr ""
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid "Public key import failed."
 msgstr ""
 
-#: base/transaction.cpp:601
+#: base/transaction.cpp:620
 msgid "Invalid tsflag: {}"
 msgstr ""
 
-#: base/transaction.cpp:935
+#: base/transaction.cpp:954
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 
-#: base/transaction.cpp:956
+#: base/transaction.cpp:975
 msgid "An error occurred importing key \"{}\": {}"
 msgstr ""
 
-#: base/transaction.cpp:989
+#: base/transaction.cpp:1008
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 
-#: base/transaction.cpp:1016
+#: base/transaction.cpp:1035
 msgid "Import of the key didn't help, wrong key?"
 msgstr ""
 
-#: base/transaction.cpp:1034
+#: base/transaction.cpp:1053
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr ""
 
@@ -317,7 +317,7 @@ msgstr ""
 msgid "System error"
 msgstr ""
 
-#: common/exception.cpp:178
+#: common/exception.cpp:199
 msgid "General RuntimeError exception"
 msgstr ""
 
@@ -460,11 +460,15 @@ msgid ""
 "defined by regular expression \"{}\""
 msgstr ""
 
-#: conf/vars.cpp:62
+#: conf/vars.cpp:64
 msgid "failed to read rpm config files"
 msgstr ""
 
-#: conf/vars.cpp:321
+#: conf/vars.cpp:90
+msgid "Failed to execute uname()"
+msgstr ""
+
+#: conf/vars.cpp:355
 msgid "Variable \"{}\" is read-only"
 msgstr ""
 
@@ -634,25 +638,25 @@ msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
 
-#: repo/repo_pgp.cpp:62
+#: repo/repo_pgp.cpp:61
 msgid "Failed to import pgp keys into temporary keyring: {}"
 msgstr ""
 
-#: repo/repo_pgp.cpp:68 repo/repo_pgp.cpp:95
+#: repo/repo_pgp.cpp:67 repo/repo_pgp.cpp:94
 msgid "Failed to list pgp keys: {}"
 msgstr ""
 
-#: repo/repo_pgp.cpp:142
+#: repo/repo_pgp.cpp:141
 msgid "Failed to import pgp keys: {}"
 msgstr ""
 
-#: repo/repo_sack.cpp:82
+#: repo/repo_sack.cpp:83
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:404
+#: repo/repo_sack.cpp:417
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 
@@ -680,23 +684,23 @@ msgstr ""
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:564
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:581
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:640
+#: repo/solv_repo.cpp:645
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:661
+#: repo/solv_repo.cpp:666
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/temp_files_memory.cpp:49
+#: repo/temp_files_memory.cpp:52
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
@@ -861,11 +865,11 @@ msgstr ""
 msgid "Failed to insert record into table 'item' in history database"
 msgstr ""
 
-#: transaction/transaction.cpp:65
+#: transaction/transaction.cpp:66
 msgid "Invalid transaction state: {}"
 msgstr ""
 
-#: transaction/transaction.cpp:233
+#: transaction/transaction.cpp:234
 msgid "Transaction has already started!"
 msgstr ""
 
@@ -883,6 +887,70 @@ msgstr ""
 
 #: transaction/transaction_item_type.cpp:28
 msgid "Invalid transaction item type: {}"
+msgstr ""
+
+#: transaction/transaction_sr.cpp:55
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr ""
+
+#: transaction/transaction_sr.cpp:63
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr ""
+
+#: transaction/transaction_sr.cpp:73
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr ""
+
+#: utils/fs/file.cpp:84
+msgid "cannot open file"
+msgstr ""
+
+#: utils/fs/file.cpp:97
+msgid "cannot open file from fd"
+msgstr ""
+
+#: utils/fs/file.cpp:107
+msgid "cannot close file"
+msgstr ""
+
+#: utils/fs/file.cpp:137 utils/fs/file.cpp:166
+msgid "error reading file"
+msgstr ""
+
+#: utils/fs/file.cpp:152 utils/fs/file.cpp:178
+msgid "error writing file"
+msgstr ""
+
+#: utils/fs/file.cpp:187
+msgid "error flushing file"
+msgstr ""
+
+#: utils/fs/file.cpp:196
+msgid "error seeking in file"
+msgstr ""
+
+#: utils/fs/file.cpp:207
+msgid "error retrieving file position"
+msgstr ""
+
+#: utils/fs/file.cpp:260
+msgid "error reading a line from file"
+msgstr ""
+
+#: utils/fs/file.cpp:283
+msgid "error retrieving file descriptor"
+msgstr ""
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr ""
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr ""
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
 msgstr ""
 
 #: utils/iniparser.cpp:126
