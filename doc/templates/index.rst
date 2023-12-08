@@ -7,3 +7,5 @@ Templates
     :numbered:
 
     template-command
+    template-dnf5-plugin
+    template-libdnf5-plugin
