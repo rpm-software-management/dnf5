@@ -158,17 +158,6 @@ bool Plugins::init() {
     return true;
 }
 
-/*bool Plugins::hook(HookId id) {
-    for (auto & plugin : plugins) {
-        if (plugin->get_enabled()) {
-            if (!plugin->hook(id)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}*/
-
 void Plugins::finish() noexcept {
     for (auto plugin = plugins.rbegin(), stop = plugins.rend(); plugin != stop; ++plugin) {
         if ((*plugin)->get_enabled()) {

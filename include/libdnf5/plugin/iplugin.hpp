@@ -44,6 +44,7 @@ struct Version {
     std::uint16_t micro;
 };
 
+/// @brief A base class for implementing LIBDNF5 plugins that introduce additional logic into the library using hooks.
 class IPlugin {
 public:
     IPlugin(Base & base) : base(&base) {}
