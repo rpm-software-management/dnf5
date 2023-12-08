@@ -98,16 +98,14 @@ std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
 std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     const bool is_interactive{tty::is_interactive()};
 
-    if (is_interactive) {
-        if (mbar.num_of_lines_to_clear > 0) {
-            stream << tty::clear_line;
-            for (std::size_t i = 1; i < mbar.num_of_lines_to_clear; i++) {
-                stream << tty::cursor_up << tty::clear_line;
-            }
-            stream << "\r";
-        } else if (mbar.line_printed) {
-            stream << std::endl;
+    if (is_interactive && mbar.num_of_lines_to_clear > 0) {
+        stream << tty::clear_line;
+        for (std::size_t i = 1; i < mbar.num_of_lines_to_clear; i++) {
+            stream << tty::cursor_up << tty::clear_line;
         }
+        stream << "\r";
+    } else if (mbar.line_printed) {
+        stream << std::endl;
     }
     mbar.num_of_lines_to_clear = 0;
     mbar.line_printed = false;
