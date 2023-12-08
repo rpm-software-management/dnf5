@@ -1,3 +1,5 @@
+.. _command template:
+
 DNF5 Command Template
 =====================
 
