@@ -1,5 +1,7 @@
+.. _libdnf5 plugins:
+
 ===============
-libdnf5 Plugins
+LIBDNF5 Plugins
 ===============
 
 

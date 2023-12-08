@@ -1,3 +1,5 @@
+.. _dnf5 plugins:
+
 ============
 DNF5 Plugins
 ============
