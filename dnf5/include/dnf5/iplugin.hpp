@@ -34,6 +34,7 @@ struct PluginVersion {
     std::uint16_t micro;
 };
 
+/// @brief A base class for implementing DNF5 plugins that provide one or more commands to users.
 class IPlugin {
 public:
     IPlugin(Context & context) : context(&context) {}
@@ -64,10 +65,6 @@ public:
     virtual void init() {}
 
     virtual std::vector<std::unique_ptr<Command>> create_commands() = 0;
-
-    /// It is called when a hook is reached. The argument describes what happened.
-    // TODO(jrohel): Design an API for a different plugin type than command. For example, to modify or log output.
-    //virtual bool hook(HookId hook_id) = 0;
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept = 0;
