@@ -44,6 +44,7 @@ Kalev Lember <klember@redhat.com>
 Kevin Howell <khowell@redhat.com>
 Kevin Kofler <kevin.kofler@chello.at>
 Khem Raj <raj.khem@gmail.com>
+Kuntal Majumder <hellozee@disroot.org>
 Lukáš Hrázký <lhrazky@redhat.com>
 Lumir Balhar <lbalhar@redhat.com>
 Marek Blaha <mblaha@redhat.com>
