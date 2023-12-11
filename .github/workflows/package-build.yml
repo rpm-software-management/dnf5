@@ -56,7 +56,6 @@ jobs:
           # found it will try to fetch any pr against devel branch.
           restore-keys: |
             ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}-pr-${{ github.base_ref }}-${{ github.event.number }}-
-            ${{ github.event.repository.name }}-ccache-${{ matrix.compiler }}-pr-${{ github.base_ref }}-
 
       - name: Zero CCache statistics
         run: ccache -z
