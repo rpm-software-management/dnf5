@@ -716,6 +716,8 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             base->p_impl->get_system_state().save();
         } catch (const FileSystemError & ex) {
             logger->error("Cannot save system state: {}", ex.what());
+        } catch (const std::filesystem::filesystem_error & ex) {
+            logger->error("Cannot save system state: {}", ex.what());
         }
     }
 

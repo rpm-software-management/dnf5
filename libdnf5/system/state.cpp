@@ -603,6 +603,7 @@ void State::reset_packages_states(
         save();
     } catch (const FileSystemError & e) {
         // TODO(mblaha) - log this? (will need access to the base)
+    } catch (const std::filesystem::filesystem_error & e) {
     }
 }
 
