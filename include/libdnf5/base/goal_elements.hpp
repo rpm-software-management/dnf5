@@ -193,6 +193,13 @@ public:
     void set_with_binaries(bool with_binaries);
     bool get_with_binaries() const;
 
+    /// Set whether to expand globs in package specs using fnmatch
+    ///
+    /// Default: true
+    void set_expand_globs(bool expand_globs);
+    bool get_expand_globs() const;
+
+
     /// When matching packages' nevras is enabled specify allowed nevra forms.
     ///
     /// The default can be obtained from libdnf5::rpm::Nevra::get_default_pkg_spec_forms().

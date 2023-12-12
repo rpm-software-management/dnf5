@@ -192,6 +192,7 @@ bool BuildDepCommand::add_from_pkg(
     settings.set_with_provides(false);
     settings.set_with_filenames(false);
     settings.set_with_binaries(false);
+    settings.set_expand_globs(false);
     pkg_query.resolve_pkg_spec(pkg_spec, settings, false);
 
     std::vector<std::string> source_names{pkg_spec};
@@ -276,6 +277,11 @@ void BuildDepCommand::run() {
     libdnf5::GoalJobSettings settings;
     settings.set_with_nevra(false);
     settings.set_with_binaries(false);
+
+    // Don't expand globs in pkg specs. The special characters in a pkg spec
+    // such as the brackets in `python3dist(build[virtualenv])`, should be
+    // treated as literal.
+    settings.expand_globs = false;
 
     for (const auto & spec : install_specs) {
         if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {

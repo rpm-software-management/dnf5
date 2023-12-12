@@ -2591,7 +2591,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 
     libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
 
-    bool glob = libdnf5::utils::is_glob_pattern(pkg_spec.c_str());
+    bool glob = settings.expand_globs && libdnf5::utils::is_glob_pattern(pkg_spec.c_str());
     libdnf5::sack::QueryCmp cmp = glob ? libdnf5::sack::QueryCmp::GLOB : libdnf5::sack::QueryCmp::EQ;
     if (settings.get_with_nevra()) {
         const std::vector<Nevra::Form> & test_forms =
