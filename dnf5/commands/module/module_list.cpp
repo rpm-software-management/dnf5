@@ -76,7 +76,7 @@ void ModuleListCommand::run() {
 
     print(query);
     if (!query.empty()) {
-        output::print_modulelist_table_hint();
+        print_hint();
     }
 
     if (!unmatched_module_spec.empty()) {
@@ -88,6 +88,10 @@ void ModuleListCommand::run() {
 
 void ModuleListCommand::print(const libdnf5::module::ModuleQuery & query) {
     libdnf5::cli::output::print_modulelist_table(query.list());
+}
+
+void ModuleListCommand::print_hint() {
+    libdnf5::cli::output::print_modulelist_table_hint();
 }
 
 }  // namespace dnf5

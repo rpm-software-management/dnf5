@@ -28,12 +28,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/module/module_item.hpp>
 #include <libdnf5/module/module_sack.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libsmartcols/libsmartcols.h>
 
 #include <set>
 #include <string>
 
 namespace libdnf5::cli::output {
+
+
+const std::string MODULEINFO_TABLE_HINT = _("Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive");
 
 
 class ModuleInfo : public KeyValueTable {
@@ -100,6 +104,11 @@ void print_moduleinfo_table(Query & module_list) {
         module_info.print();
         std::cout << std::endl;
     }
+}
+
+
+void print_moduleinfo_table_hint() {
+    std::cout << MODULEINFO_TABLE_HINT << std::endl;
 }
 
 

@@ -43,6 +43,7 @@ private:
     std::unique_ptr<ModuleSpecArguments> module_specs{nullptr};
 
     virtual void print(const libdnf5::module::ModuleQuery & query);
+    virtual void print_hint();
 };
 
 }  // namespace dnf5
