@@ -66,6 +66,9 @@ void ModuleInfo::add_module_item(ModuleItem & module_item) {
     } else if (status == module::ModuleStatus::DISABLED) {
         stream_string.append("[x]");
     }
+    if (module_item.is_active()) {
+        stream_string.append("[a]");
+    }
     stream_string = stream_string.empty() ? module_item.get_stream() : module_item.get_stream() + " " + stream_string;
 
     // Trim summary and description
