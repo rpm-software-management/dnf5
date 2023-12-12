@@ -31,6 +31,7 @@ class ResolveSpecSettings::Impl {
     bool with_provides{true};
     bool with_filenames{true};
     bool with_binaries{true};
+    bool expand_globs{true};
     bool group_with_id{true};
     bool group_with_name{false};
     bool group_search_groups{true};
