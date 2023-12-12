@@ -30,6 +30,7 @@ public:
 
 private:
     void print(const libdnf5::module::ModuleQuery & query) override;
+    void print_hint() override;
 };
 
 }  // namespace dnf5

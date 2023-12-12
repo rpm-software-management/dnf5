@@ -28,4 +28,8 @@ void ModuleInfoCommand::print(const libdnf5::module::ModuleQuery & query) {
     libdnf5::cli::output::print_moduleinfo_table(query.list());
 }
 
+void ModuleInfoCommand::print_hint() {
+    libdnf5::cli::output::print_moduleinfo_table_hint();
+}
+
 }  // namespace dnf5
