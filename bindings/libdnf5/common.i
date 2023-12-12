@@ -19,6 +19,7 @@
 
 %include <shared.i>
 
+#ifndef SWIGGO
 %typemap(out) std::string * {
     if ($1 == nullptr) {
         $result = SWIG_FromCharPtrAndSize("", 0);
@@ -26,6 +27,7 @@
         $result = SWIG_FromCharPtrAndSize($1->c_str(), $1->size());
     }
 }
+#endif
 
 %{
     #include "libdnf5/common/weak_ptr.hpp"
@@ -87,6 +89,7 @@ namespace std {
   };
 }
 
+#ifndef SWIGGO
 %define wrap_unique_ptr(Name, Type)
   %newobject std::unique_ptr<Type>::release;
   %apply SWIGTYPE *DISOWN {Type * ptr};
@@ -98,6 +101,7 @@ namespace std {
   %}
 
 %enddef
+#endif
 
 #if defined(SWIGPYTHON)
 %pythoncode %{

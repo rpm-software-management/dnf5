@@ -47,9 +47,11 @@
 
 %include "libdnf5/repo/config_repo.hpp"
 
+#ifndef SWIGGO
 %feature("director") DownloadCallbacks;
 %include "libdnf5/repo/download_callbacks.hpp"
 wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
+#endif
 
 %ignore FileDownloadError;
 %include "libdnf5/repo/file_downloader.hpp"
@@ -68,9 +70,11 @@ wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 %template(SetRepoWeakPtr) libdnf5::Set<libdnf5::repo::RepoWeakPtr>;
 %template(SackQueryRepoWeakPtr) libdnf5::sack::Query<libdnf5::repo::RepoWeakPtr>;
 
+#ifndef SWIGGO
 %feature("director") RepoCallbacks;
 %include "libdnf5/repo/repo_callbacks.hpp"
 wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf5::repo::RepoCallbacks);
+#endif
 
 %include "libdnf5/repo/repo_query.hpp"
 %template(SackRepoRepoQuery) libdnf5::sack::Sack<libdnf5::repo::Repo>;

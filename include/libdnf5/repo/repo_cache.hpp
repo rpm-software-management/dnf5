@@ -53,8 +53,13 @@ class RepoCache {
 public:
     using RemoveStatistics = RepoCacheRemoveStatistics;
 
-    /// The name of the attribute used to mark the cache as expired.
+/// The name of the attribute used to mark the cache as expired.
+#ifndef SWIGGO
     static constexpr const char * ATTRIBUTE_EXPIRED = "expired";
+#else
+    // https://github.com/swig/swig/issues/2724
+    const char * ATTRIBUTE_EXPIRED = "expired";
+#endif
 
     /// Construct a new repository cache management instance.
     ///

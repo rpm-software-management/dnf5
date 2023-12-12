@@ -85,9 +85,11 @@
 add_iterator(PackageSet)
 add_iterator(ReldepList)
 
+#ifndef SWIGGO
 %feature("director") TransactionCallbacks;
 %include "libdnf5/rpm/transaction_callbacks.hpp"
 wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf5::rpm::TransactionCallbacks);
+#endif
 
 %ignore KeyImportError;
 %ignore SignatureCheckError;

@@ -101,7 +101,7 @@ public:
     /// @param name Name of the variable
     const Variable & get(const std::string & name) const { return variables.at(name); }
 
-    static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
+    static std::string detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
 private:
     friend class Base;

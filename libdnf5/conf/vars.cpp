@@ -121,8 +121,8 @@ static std::string detect_arch() {
 // ==================================================================
 
 
-std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
-    std::unique_ptr<std::string> release_ver;
+std::string Vars::detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
+    std::string release_ver;
 
     libdnf5::rpm::RpmLogGuard rpm_log_guard(base);
 
@@ -144,12 +144,12 @@ std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, cons
             }
             if (version) {
                 // Is the result of rpmdsEVR(ds) valid after rpmdsFree(ds)? Make a copy to be sure.
-                release_ver = std::make_unique<std::string>(version);
+                release_ver = version;
             }
             rpmdsFree(ds);
         }
         rpmdbFreeIterator(mi);
-        if (release_ver) {
+        if (release_ver.empty()) {
             break;
         }
     }
@@ -425,7 +425,9 @@ void Vars::detect_vars(const std::string & installroot) {
         Priority::AUTO);
 
     set_lazy(
-        "releasever", [this, &installroot]() -> auto { return detect_release(base, installroot); }, Priority::AUTO);
+        "releasever",
+        [this, &installroot]() -> auto { return std::make_unique<std::string>(detect_release(base, installroot)); },
+        Priority::AUTO);
 }
 
 static void dir_close(DIR * d) {
