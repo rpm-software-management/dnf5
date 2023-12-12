@@ -134,6 +134,15 @@ del ClassName##__iter__
 #endif
 %enddef
 
+%define add_str(ClassName)
+#if defined(SWIGPYTHON)
+%extend ClassName {
+    std::string __str__() const {
+        return $self->to_string();
+    }
+}
+#endif
+%enddef
 
 %{
     #include "libdnf5/common/sack/query.hpp"
