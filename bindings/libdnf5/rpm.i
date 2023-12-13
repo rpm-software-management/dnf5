@@ -63,6 +63,7 @@
 %template(PackageSackWeakPtr) libdnf5::WeakPtr<libdnf5::rpm::PackageSack, false>;
 
 add_str(libdnf5::rpm::Reldep)
+add_repr(libdnf5::rpm::Reldep)
 %include "libdnf5/rpm/reldep.hpp"
 
 %rename(next) libdnf5::rpm::ReldepListIterator::operator++();

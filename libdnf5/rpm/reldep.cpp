@@ -64,6 +64,10 @@ std::string Reldep::to_string() const {
     return cstring ? std::string(cstring) : std::string();
 }
 
+std::string Reldep::to_string_description() const {
+    return fmt::format("<libdnf5.rpm.Reldep object, {}, id: {}>", to_string(), get_id().id);
+}
+
 ReldepId Reldep::get_reldep_id(
     const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create) {
     static_assert(
