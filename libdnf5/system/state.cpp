@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 #include <libdnf5/comps/group/package.hpp>
 #include <toml.hpp>
@@ -247,6 +248,13 @@ State::State(const std::filesystem::path & path) : path(path) {
 
 
 bool State::packages_import_required() {
+    // Importing will require write permission
+    try {
+        utils::fs::TempFile(path, "permissions-test");
+    } catch (const FileSystemError & e) {
+        return false;
+    }
+
     // TODO(mblaha) - detect by absence of toml file instead of empty nevra_states?
     // Because even empty nevra_states is a valid state.
     return nevra_states.empty();
