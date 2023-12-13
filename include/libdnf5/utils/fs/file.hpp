@@ -33,7 +33,7 @@ namespace libdnf5::utils::fs {
 class File {
 public:
     /// Creates an instance of `File` without opening any file.
-    File() = default;
+    File();
 
     /// Creates an instance of `File` and opens the file at `path` using mode `mode`.
     ///
@@ -154,10 +154,19 @@ public:
     void write(std::string_view data);
 
     /// @return Whether this object contains an open file.
-    explicit operator bool() const noexcept { return file != nullptr; }
+    explicit operator bool() const noexcept;
 
-    const std::filesystem::path & get_path() const noexcept { return path; }
-    std::FILE * get() const noexcept { return file; }
+    /// Returns the associated file path.
+    /// @return The associated file path.
+    const std::filesystem::path & get_path() const noexcept;
+
+    /// Returns the associated open stream or nullptr.
+    /// @return The associated open stream or nullptr.
+    std::FILE * get() const noexcept;
+
+    /// Returns the associated open file descriptor.
+    /// The operation requires an open file. Throws a `libdnf5::FileSystemError` exception if an error occurs.
+    /// @return The associated open file descriptor.
     int get_fd() const;
 
 private:

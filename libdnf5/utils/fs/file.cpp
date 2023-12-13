@@ -37,6 +37,8 @@ extern "C" {
 
 namespace libdnf5::utils::fs {
 
+File::File() = default;
+
 
 File::File(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen) {
     open(path, mode, use_solv_xfopen);
@@ -271,6 +273,21 @@ bool File::read_line(std::string & line) {
 
 void File::write(std::string_view data) {
     write(data.data(), data.size());
+}
+
+
+File::operator bool() const noexcept {
+    return file != nullptr;
+}
+
+
+const std::filesystem::path & File::get_path() const noexcept {
+    return path;
+}
+
+
+std::FILE * File::get() const noexcept {
+    return file;
 }
 
 
