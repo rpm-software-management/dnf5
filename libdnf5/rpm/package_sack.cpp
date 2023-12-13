@@ -36,7 +36,6 @@ extern "C" {
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
 #include <solv/repo_write.h>
-#include <solv/solv_xfopen.h>
 #include <solv/solver.h>
 #include <solv/testcase.h>
 }
