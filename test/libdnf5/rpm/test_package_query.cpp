@@ -631,7 +631,7 @@ void RpmPackageQueryTest::test_filter_provides() {
 
     // packages with Provides == "libpkg.so.0()(64bit)"
     PackageQuery query1(base);
-    query1.filter_provides({"libpkg.so.0()(64bit)"});
+    query1.filter_provides("libpkg.so.0()(64bit)");
 
     std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
@@ -640,7 +640,7 @@ void RpmPackageQueryTest::test_filter_provides() {
 
     // packages without Provides == "libpkg.so.0()(64bit)"
     PackageQuery query2(base);
-    query2.filter_provides({"libpkg.so.0()(64bit)"}, libdnf5::sack::QueryCmp::NEQ);
+    query2.filter_provides("libpkg.so.0()(64bit)", libdnf5::sack::QueryCmp::NEQ);
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
@@ -749,7 +749,7 @@ void RpmPackageQueryTest::test_filter_chain() {
     query.filter_version({"1.2"});
     query.filter_release({"3"});
     query.filter_arch({"x86_64"});
-    query.filter_provides({"foo"}, libdnf5::sack::QueryCmp::NEQ);
+    query.filter_provides("foo", libdnf5::sack::QueryCmp::NEQ);
     query.filter_requires({"foo"}, libdnf5::sack::QueryCmp::NEQ);
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -939,6 +939,6 @@ void RpmPackageQueryTest::test_filter_provides_performance() {
 
     for (int i = 0; i < 100000; ++i) {
         PackageQuery query(base);
-        query.filter_provides({"prv-all"});
+        query.filter_provides("prv-all");
     }
 }
