@@ -154,6 +154,16 @@ del ClassName##__iter__
 #endif
 %enddef
 
+%define add_hash(ClassName)
+#if defined(SWIGPYTHON)
+%extend ClassName {
+    int __hash__() const {
+        return $self->get_hash();
+    }
+}
+#endif
+%enddef
+
 %{
     #include "libdnf5/common/sack/query.hpp"
     #include "libdnf5/common/sack/query_cmp.hpp"

@@ -95,7 +95,10 @@ public:
 
     /// @brief Test if pattern is rich dependency
     /// Return true if pattern start with "("
-    static bool is_rich_dependency(const std::string & pattern) { return pattern[0] == '('; }
+    static bool is_rich_dependency(const std::string & pattern) { return pattern[0] == '('; };
+
+    /// Return unique ID representing Reldep
+    int get_hash() const { return get_id().id; };
 
 protected:
     /// @brief Creates a reldep from Id
