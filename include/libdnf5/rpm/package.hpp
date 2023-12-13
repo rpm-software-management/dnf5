@@ -515,6 +515,15 @@ public:
     /// @since 5.0.5
     libdnf5::BaseWeakPtr get_base() const;
 
+    /// Return NEVRA -> 0 epoch is not shown in string
+    std::string to_string() const { return get_nevra(); };
+
+    /// Provide descriptive information about instance including NEVRA and ID
+    std::string to_string_description() const;
+
+    /// Return unique ID representing Package
+    int get_hash() const { return get_id().id; };
+
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
     Package(const BaseWeakPtr & base, PackageId id);
