@@ -144,6 +144,16 @@ del ClassName##__iter__
 #endif
 %enddef
 
+%define add_repr(ClassName)
+#if defined(SWIGPYTHON)
+%extend ClassName {
+    std::string __repr__() const {
+        return $self->to_string_description();
+    }
+}
+#endif
+%enddef
+
 %{
     #include "libdnf5/common/sack/query.hpp"
     #include "libdnf5/common/sack/query_cmp.hpp"

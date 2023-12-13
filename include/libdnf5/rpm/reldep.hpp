@@ -83,6 +83,9 @@ public:
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     std::string to_string() const;
 
+    /// Provide descriptive information about instance including string value and ID
+    std::string to_string_description() const;
+
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getId()
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     ReldepId get_id() const noexcept { return id; };
