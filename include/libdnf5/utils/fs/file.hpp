@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_UTILS_FS_FILE_HPP
 #define LIBDNF5_UTILS_FS_FILE_HPP
 
+#include <cstdio>
 #include <filesystem>
-#include <utility>
 
 
 namespace libdnf5::utils::fs {
@@ -88,7 +88,7 @@ public:
     void close();
 
     /// Releases the file, meaning it will no longer be closed on destruction.
-    FILE * release() noexcept;
+    std::FILE * release() noexcept;
 
     /// Reads at most `count` chars into `buffer`. If EOF is reached, returns a
     /// number smaller than `count`.
@@ -157,12 +157,12 @@ public:
     explicit operator bool() const noexcept { return file != nullptr; }
 
     const std::filesystem::path & get_path() const noexcept { return path; }
-    FILE * get() const noexcept { return file; }
+    std::FILE * get() const noexcept { return file; }
     int get_fd() const;
 
 private:
     std::filesystem::path path;
-    FILE * file = nullptr;
+    std::FILE * file = nullptr;
 };
 
 }  // namespace libdnf5::utils::fs

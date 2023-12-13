@@ -21,16 +21,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/fs/file.hpp"
 
 #include "libdnf5/common/exception.hpp"
-
-#include <libdnf5/utils/bgettext/bgettext-lib.h>
-#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+#include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 extern "C" {
 #include <solv/solv_xfopen.h>
 }
 
-#include <cstdio>
+#include <stdio.h>
 
+#include <algorithm>
 
 #define libdnf_assert_file_open() libdnf_assert(file != nullptr, "The operation requires an open file");
 
@@ -113,8 +113,8 @@ void File::close() {
 }
 
 
-FILE * File::release() noexcept {
-    FILE * p = file;
+std::FILE * File::release() noexcept {
+    auto * p = file;
     file = nullptr;
     path.clear();
     return p;
