@@ -71,6 +71,10 @@ add_hash(libdnf5::rpm::Reldep)
 %rename(value) libdnf5::rpm::ReldepListIterator::operator*();
 %include "libdnf5/rpm/reldep_list_iterator.hpp"
 %include "libdnf5/rpm/reldep_list.hpp"
+
+add_str(libdnf5::rpm::Package)
+add_repr(libdnf5::rpm::Package)
+add_hash(libdnf5::rpm::Package)
 %include "libdnf5/rpm/package.hpp"
 
 %template(VectorPackage) std::vector<libdnf5::rpm::Package>;

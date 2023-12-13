@@ -511,4 +511,8 @@ BaseWeakPtr Package::get_base() const {
     return base;
 }
 
+std::string Package::to_string_description() const {
+    return fmt::format("<libdnf5.rpm.Package object, {}, id: {}>", to_string(), get_id().id);
+}
+
 }  // namespace libdnf5::rpm
