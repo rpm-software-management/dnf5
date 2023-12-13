@@ -33,7 +33,6 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
-#include <solv/solv_xfopen.h>
 #include <solv/testcase.h>
 }
 
@@ -450,34 +449,10 @@ void Repo::load_available_repo() {
         logger.debug("No {} metadata available for repo {}", RepoDownloader::MD_FILENAME_MODULES, config.get_id());
         return;
     }
+
     logger.debug(
         "Loading {} extension for repo {} from \"{}\"", RepoDownloader::MD_FILENAME_MODULES, config.get_id(), ext_fn);
-
-    libdnf5::utils::fs::File file;
-    std::string yaml_content;
-
-    // TODO(pkratoch): Replace this by implementation in libdnf5::utils::fs::File.
-    // If the file is comressed, `std::fseek` doesn't work with the way libsolv decompresses the file, so read it by
-    // chunks.
-    if (solv_xfopen_iscompressed(ext_fn.c_str()) == 1) {
-        file = libdnf5::utils::fs::File(ext_fn, "r", true);
-
-        constexpr size_t buffer_size = 4096;
-        char buffer[buffer_size];
-        std::ostringstream ss;
-        size_t bytes_read;
-
-        do {
-            bytes_read = file.read(buffer, buffer_size);
-            ss.write(buffer, long(bytes_read));
-        } while (bytes_read == buffer_size);
-
-        yaml_content.append(ss.str());
-    } else {
-        file = libdnf5::utils::fs::File(ext_fn, "r", false);
-        yaml_content = file.read();
-    }
-
+    auto yaml_content = libdnf5::utils::fs::File(ext_fn, "r", true).read();
     base->get_module_sack()->add(yaml_content, config.get_id());
 #endif
 }

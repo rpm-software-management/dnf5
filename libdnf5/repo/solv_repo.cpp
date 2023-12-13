@@ -38,7 +38,6 @@ extern "C" {
 #include <solv/repo_solv.h>
 #include <solv/repo_updateinfoxml.h>
 #include <solv/repo_write.h>
-#include <solv/solv_xfopen.h>
 }
 
 
