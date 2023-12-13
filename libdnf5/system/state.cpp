@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/fs/temp.hpp"
@@ -501,7 +502,11 @@ static std::string toml_format(const toml::value & value) {
 
 
 void State::save() {
-    std::filesystem::create_directories(path);
+    std::error_code ec;
+    std::filesystem::create_directories(path, ec);
+    if (ec) {
+        throw FileSystemError(errno, path, M_("{}"), ec.message());
+    }
 
     utils::fs::File(get_package_state_path(), "w").write(toml_format(make_top_value("packages", package_states)));
     utils::fs::File(get_nevra_state_path(), "w").write(toml_format(make_top_value("nevras", nevra_states)));
