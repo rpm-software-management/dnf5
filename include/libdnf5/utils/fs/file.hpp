@@ -135,8 +135,11 @@ public:
     /// @return Whether the current position indicator is at the end of file (EOF).
     bool is_at_eof() const;
 
-    /// Reads the contents of the file from current position to the end or
-    /// until `count` chars are read.
+    /// Reads the contents of the file from current position to the end or until `count` chars are read.
+    ///
+    /// It will try to detect the number of characters in the file until the end. If the detection is successful,
+    /// the required memory is allocated at once. Otherwise, the fallback solution reads the file block by block
+    /// and reallocates memory.
     ///
     /// @param count The maximum number of characters to read, 0 to read till the end.
     /// @return The contents read from the file.

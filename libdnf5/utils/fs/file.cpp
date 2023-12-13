@@ -129,12 +129,12 @@ std::size_t File::read(void * buffer, std::size_t count) {
     auto res = std::fread(buffer, sizeof(char), count, file);
 
     if (res != count) {
-        if (std::feof(file)) {
+        if (std::feof(file) != 0) {
             return res;
         }
 
         libdnf_assert(
-            std::ferror(file) > 0, "Failed to read \"{}\", error expected but no error detected", path.native());
+            std::ferror(file) != 0, "Failed to read \"{}\", error expected but no error detected", path.native());
 
         throw FileSystemError(errno, path, M_("error reading file"));
     }
@@ -226,19 +226,54 @@ bool File::is_at_eof() const {
 
 
 std::string File::read(std::size_t count) {
-    // TODO(pkratoch): This fails for compressed files. Add a fallback for this method that doesn't need ftell and
-    // fseek. It can be then used in libdnf5::Repo::load_available_repo for loading modules.yaml.gz.
-    long cur_pos = tell();
-    seek(0, SEEK_END);
-    std::size_t length_till_end = static_cast<std::size_t>(tell() - cur_pos);
-    seek(cur_pos, SEEK_SET);
+    libdnf_assert_file_open();
 
-    std::size_t to_read = count == 0 ? length_till_end : std::min(length_till_end, count);
+    // Try to detect the length to the end of the file.
+    std::size_t length_to_end;
+    bool length_detected{false};
+    if (auto cur_pos = std::ftell(file); cur_pos != -1) {
+        if (std::fseek(file, 0, SEEK_END) != -1) {
+            if (auto end_pos = std::ftell(file); end_pos != -1) {
+                length_to_end = static_cast<std::size_t>(end_pos - cur_pos);
+                length_detected = true;
+            }
+        }
+        std::fseek(file, cur_pos, SEEK_SET);
+    }
+
     std::string res;
-    res.resize(to_read);
 
-    std::size_t size = read(res.data(), to_read);
-    libdnf_assert(size == to_read, "Short read occurred: expected to read {}, have read {}.", to_read, size);
+    if (length_detected) {
+        // The file length is known. Allocate memory at once and read data.
+        std::size_t to_read = count == 0 ? length_to_end : std::min(length_to_end, count);
+        res.resize(to_read);
+        std::size_t size = read(res.data(), to_read);
+        libdnf_assert(size == to_read, "Short read occurred: expected to read {}, have read {}.", to_read, size);
+    } else {
+        // Could not determine file length. A fallback solution, we read data in blocks and reallocate memory.
+        char buffer[4096];
+        if (count > 0) {
+            // We read at most `count` characters.
+            do {
+                std::size_t to_read = std::min(sizeof buffer, count);
+                auto chars_read = read(buffer, to_read);
+                res.append(buffer, chars_read);
+                if (chars_read < to_read) {
+                    break;
+                }
+                count -= chars_read;
+            } while (count > 0);
+        } else {
+            // We are reading the file to the end.
+            do {
+                auto chars_read = read(buffer, sizeof buffer);
+                res.append(buffer, chars_read);
+                if (chars_read < sizeof buffer) {
+                    break;
+                }
+            } while (true);
+        }
+    }
 
     return res;
 }
