@@ -659,7 +659,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
     }
 
     libdnf5::rpm::PackageQuery base_query(base);
-    base_query.filter_provides({"system-release"});
+    base_query.filter_provides("system-release");
     base_query.filter_latest_evr();
 
     // try to detect platform id from available packages
