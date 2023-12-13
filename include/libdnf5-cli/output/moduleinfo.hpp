@@ -68,6 +68,12 @@ void ModuleInfo::add_module_item(ModuleItem & module_item) {
     }
     stream_string = stream_string.empty() ? module_item.get_stream() : module_item.get_stream() + " " + stream_string;
 
+    // Trim summary and description
+    auto summary = module_item.get_summary();
+    libdnf5::utils::string::trim(summary);
+    auto description = module_item.get_description();
+    libdnf5::utils::string::trim(description);
+
     add_line("Name", module_item.get_name());
     add_line("Stream", stream_string);
     add_line("Version", module_item.get_version_str());
@@ -76,8 +82,8 @@ void ModuleInfo::add_module_item(ModuleItem & module_item) {
     add_line("Profiles", utils::string::join(profile_names, ", "));
     add_line("Default profiles", utils::string::join(module_item.get_default_profiles(), ", "));
     add_line("Repo", module_item.get_repo_id());
-    add_line("Summary", module_item.get_summary());
-    add_line("Description", module_item.get_description());
+    add_multiline_value("Summary", libdnf5::utils::string::split(summary, "\n"));
+    add_multiline_value("Description", libdnf5::utils::string::split(description, "\n"));
     add_multiline_value("Requires", dependency_strings);
     add_multiline_value("Artifacts", module_item.get_artifacts());
 }
