@@ -43,9 +43,6 @@ namespace libdnf5::module {
 
 
 std::string ModuleDependency::to_string() {
-    if (streams.empty()) {
-        return module_name;
-    }
     std::sort(streams.begin(), streams.end());
     return fmt::format("{}:[{}]", module_name, utils::string::join(streams, ","));
 }
