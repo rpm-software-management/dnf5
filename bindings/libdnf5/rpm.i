@@ -81,6 +81,15 @@
 
 %ignore libdnf5::rpm::PackageQuery::PackageQuery(PackageQuery && src);
 %include "libdnf5/rpm/package_query.hpp"
+#if defined(SWIGPYTHON)
+%extend libdnf5::rpm::PackageQuery {
+    void filter_provides(
+        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        std::vector<std::string> patterns{pattern};
+        $self->filter_provides(patterns, cmp_type);
+    }
+}
+#endif
 
 add_iterator(PackageSet)
 add_iterator(ReldepList)
