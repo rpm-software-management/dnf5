@@ -70,14 +70,25 @@ void CleanCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Remove or expire cached data");
 
+    std::string known_types;
+    bool first = true;
+    for (const auto & type : CACHE_TYPES) {
+        if (!first) {
+            known_types.append(", ");
+        }
+        known_types.append(type.name);
+        first = false;
+    }
+
     auto cache_types =
         parser.add_new_positional_arg("cache_types", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    cache_types->set_description("List of cache types to clean up");
+    cache_types->set_description(
+        libdnf5::utils::sformat(_("List of cache types to clean up. Supported types: {0}"), known_types));
 
     cache_types->set_parse_hook_func(
         // Parses arguments and sets the appropriate bits in the required_actions.
         // An exception is thrown if an unknown argument is found.
-        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+        [this, known_types]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
                 const std::string_view cache_type{argv[i]};
                 bool found{false};
@@ -89,15 +100,6 @@ void CleanCommand::set_argument_parser() {
                     }
                 }
                 if (!found) {
-                    std::string known_types;
-                    bool first = true;
-                    for (const auto & type : CACHE_TYPES) {
-                        if (!first) {
-                            known_types.append(", ");
-                        }
-                        known_types.append(type.name);
-                        first = false;
-                    }
                     throw libdnf5::cli::ArgumentParserUnknownArgumentError(
                         M_("Unknown cache type \"{0}\". Supported types: {1}"), std::string(argv[i]), known_types);
                 }
