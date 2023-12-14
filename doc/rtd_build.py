@@ -74,5 +74,3 @@ generate_bindings_from_dir(os.path.join(
 generate_bindings_from_dir(os.path.join(DIR + "/../bindings/libdnf5_cli"),
                            os.path.join(DIR + "/../bindings/python3/libdnf5_cli"))
 
-# no setup() is called
-# this file only configures files for building docs in Read the Docs
