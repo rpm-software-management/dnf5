@@ -6,14 +6,13 @@ build:
     - swig
   tools:
     python: "3.11"
+  jobs:
+    pre_build:
+      - python doc/rtd_build.py
 
 python:
   install:
     - requirements: doc/requirements.txt
-    # the 'setuptools' method calls doc/setup.py that configures files and runs doxygen
-    # the 'pip' method doesn't work this way
-    - method: setuptools
-      path: doc
 
 sphinx:
   builder: html
