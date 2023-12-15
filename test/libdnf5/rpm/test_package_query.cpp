@@ -509,7 +509,7 @@ void RpmPackageQueryTest::test_filter_release() {
 
     // packages with release == "3"
     PackageQuery query1(base);
-    query1.filter_release({"3"});
+    query1.filter_release("3");
 
     std::vector<Package> expected = {
         get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64"), get_pkg("pkg-libs-0:1.2-3.x86_64")};
@@ -519,7 +519,7 @@ void RpmPackageQueryTest::test_filter_release() {
 
     // packages with Release != "3"
     PackageQuery query2(base);
-    query2.filter_release({"3"}, libdnf5::sack::QueryCmp::NEQ);
+    query2.filter_release("3", libdnf5::sack::QueryCmp::NEQ);
 
     expected = {get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
@@ -655,7 +655,7 @@ void RpmPackageQueryTest::test_filter_chain() {
     query.filter_name("pkg");
     query.filter_epoch("0");
     query.filter_version("1.2");
-    query.filter_release({"3"});
+    query.filter_release("3");
     query.filter_arch({"x86_64"});
     query.filter_provides("foo", libdnf5::sack::QueryCmp::NEQ);
     query.filter_requires({"foo"}, libdnf5::sack::QueryCmp::NEQ);
@@ -747,7 +747,7 @@ void RpmPackageQueryTest::test_update() {
 
     // packages with Release == "3"
     PackageQuery query1(base);
-    query1.filter_release({"3"});
+    query1.filter_release("3");
 
     PackageQuery query2(base);
     query2.filter_name("pkg-libs");
@@ -772,7 +772,7 @@ void RpmPackageQueryTest::test_intersection() {
 
     // packages with Release == "3"
     PackageQuery query1(base);
-    query1.filter_release({"3"});
+    query1.filter_release("3");
     CPPUNIT_ASSERT_EQUAL((size_t)3, query1.size());
 
     // packages with Name == "pkg-libs"
@@ -794,12 +794,12 @@ void RpmPackageQueryTest::test_difference() {
 
     // packages with Release == "3"
     PackageQuery query1(base);
-    query1.filter_release({"3"});
+    query1.filter_release("3");
     CPPUNIT_ASSERT_EQUAL((size_t)3, query1.size());
 
     // packages with Release == "3" and name == "pkg-libs"
     PackageQuery query2(base);
-    query2.filter_release({"3"});
+    query2.filter_release("3");
     query2.filter_name("pkg-libs");
     CPPUNIT_ASSERT_EQUAL((size_t)1, query2.size());
 
