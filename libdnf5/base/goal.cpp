@@ -1386,7 +1386,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             continue;
                         }
                     }
-                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::GTE);
+                    query.filter_evr(pool.get_evr(id), sack::QueryCmp::GTE);
                     if (!query.empty()) {
                         // Report when package with higher or equal version is installed
                         transaction.p_impl->add_resolve_log(
@@ -1440,7 +1440,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             log_level);
                         continue;
                     }
-                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::LTE);
+                    query.filter_evr(pool.get_evr(id), sack::QueryCmp::LTE);
                     if (!query.empty()) {
                         // Report when package with lower or equal version is installed
                         std::string name_arch(pool.get_name(id));
