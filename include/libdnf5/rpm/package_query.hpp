@@ -800,12 +800,23 @@ public:
 
     /// Filter packages by `id` of the Repo they belong to.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
+    void filter_repo_id(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_repo_id(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by `id` of the Repo they belong to.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REPONAME
     void filter_repo_id(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
