@@ -301,7 +301,7 @@ void BuildDepCommand::run() {
         auto system_repo = ctx.base.get_repo_sack()->get_system_repo();
         auto rpm_package_sack = ctx.base.get_rpm_package_sack();
         libdnf5::rpm::PackageQuery conflicts_query_available(ctx.base);
-        conflicts_query_available.filter_name({conflicts_specs.begin(), conflicts_specs.end()});
+        conflicts_query_available.filter_name(std::vector<std::string>{conflicts_specs.begin(), conflicts_specs.end()});
         libdnf5::rpm::PackageQuery conflicts_query_installed(conflicts_query_available);
         conflicts_query_available.filter_repo_id({system_repo->get_id()}, libdnf5::sack::QueryCmp::NEQ);
         rpm_package_sack->add_user_excludes(conflicts_query_available);

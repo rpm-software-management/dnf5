@@ -6,7 +6,7 @@
 libdnf5::rpm::PackageQuery query(base);
 
 // Filter the packages, the filters can be stacked one after another.
-query.filter_name({"one"});
+query.filter_name("one");
 
 // Iterate over the filtered packages in the query.
 for (const auto & pkg : query) {
