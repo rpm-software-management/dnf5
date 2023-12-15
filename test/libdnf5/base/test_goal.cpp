@@ -230,7 +230,7 @@ void BaseGoalTest::test_install_installed_pkg() {
 
     libdnf5::rpm::PackageQuery query(base);
     query.filter_available();
-    query.filter_nevra({"one-0:1-1.noarch"});
+    query.filter_nevra("one-0:1-1.noarch");
 
     std::vector<libdnf5::rpm::Package> expected = {get_pkg("one-0:1-1.noarch")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -534,7 +534,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     libdnf5::Goal goal(base);
     libdnf5::rpm::PackageQuery query(base);
     query.filter_available();
-    query.filter_nevra({"one-0:1-1.noarch"});
+    query.filter_nevra("one-0:1-1.noarch");
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
     goal.add_rpm_install_or_reinstall(query);
     auto transaction = goal.resolve();
