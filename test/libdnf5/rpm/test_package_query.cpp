@@ -281,7 +281,7 @@ void RpmPackageQueryTest::test_filter_name_packgset() {
     // packages with Name == "pkg"
     PackageQuery query1(base);
     query1.filter_name("pkg");
-    query1.filter_arch({"src"});
+    query1.filter_arch("src");
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
@@ -382,7 +382,7 @@ void RpmPackageQueryTest::test_filter_name_arch() {
     // packages with Name == "pkg"
     PackageQuery query1(base);
     query1.filter_name("pkg");
-    query1.filter_arch({"src"});
+    query1.filter_arch("src");
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
@@ -656,7 +656,7 @@ void RpmPackageQueryTest::test_filter_chain() {
     query.filter_epoch("0");
     query.filter_version("1.2");
     query.filter_release("3");
-    query.filter_arch({"x86_64"});
+    query.filter_arch("x86_64");
     query.filter_provides("foo", libdnf5::sack::QueryCmp::NEQ);
     query.filter_requires({"foo"}, libdnf5::sack::QueryCmp::NEQ);
 
