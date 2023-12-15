@@ -1427,7 +1427,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             log_level);
                         continue;
                     }
-                    query.filter_arch({pool.get_arch(id)});
+                    query.filter_arch(pool.get_arch(id));
                     if (query.empty()) {
                         // Report when package with the same name is installed for a different architecture
                         transaction.p_impl->add_resolve_log(

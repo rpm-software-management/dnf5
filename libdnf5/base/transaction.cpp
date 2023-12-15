@@ -233,7 +233,7 @@ GoalProblem Transaction::Impl::report_not_found(
         }
         return GoalProblem::NOT_FOUND;
     }
-    query.filter_arch({"src", "nosrc"}, sack::QueryCmp::NEQ);
+    query.filter_arch(std::vector<std::string>{"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
         add_resolve_log(
             action,
