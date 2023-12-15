@@ -132,7 +132,7 @@ void CheckUpgradeCommand::run() {
     // Source RPMs should not be reported as upgrades, e.g. when the binary
     // package is marked exclude and only the source package is left in the
     // repo
-    upgrades_query.filter_arch({"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
+    upgrades_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
 
     libdnf5::rpm::PackageQuery installed_query(ctx.base);
     installed_query.filter_installed();
