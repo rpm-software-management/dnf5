@@ -1336,7 +1336,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         }
                     }
                     rpm::PackageQuery query(installed);
-                    query.filter_name({pool.get_name(id)});
+                    query.filter_name(pool.get_name(id));
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
@@ -1394,7 +1394,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 solv::IdQueue ids_downgrades;
                 for (auto id : ids) {
                     rpm::PackageQuery query(installed);
-                    query.filter_name({pool.get_name(id)});
+                    query.filter_name(pool.get_name(id));
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
