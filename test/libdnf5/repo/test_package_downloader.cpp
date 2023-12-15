@@ -74,7 +74,7 @@ void PackageDownloaderTest::test_package_downloader() {
     libdnf5::rpm::PackageQuery query(base);
     query.filter_name("one");
     query.filter_version("2");
-    query.filter_arch({"noarch"});
+    query.filter_arch("noarch");
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
     auto downloader = libdnf5::repo::PackageDownloader(base);

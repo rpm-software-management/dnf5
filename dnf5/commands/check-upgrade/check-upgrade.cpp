@@ -132,6 +132,8 @@ void CheckUpgradeCommand::run() {
 
     upgrades_query.filter_upgrades();
 
+    upgrades_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
+
     libdnf5::rpm::PackageQuery installed_query(ctx.base);
     installed_query.filter_installed();
 

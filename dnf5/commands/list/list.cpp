@@ -214,6 +214,7 @@ void ListCommand::run() {
         case PkgNarrow::UPGRADES:
             base_query.filter_priority();
             base_query.filter_upgrades();
+            base_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NEQ);
             base_query.filter_latest_evr();
             package_matched |= sections->add_section("Available upgrades", base_query, colorizer);
             break;
