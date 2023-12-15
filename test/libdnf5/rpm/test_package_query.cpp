@@ -534,7 +534,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
     // packages with version == "1.2"
     PackageQuery query1(base);
-    query1.filter_version({"1.2"});
+    query1.filter_version("1.2");
 
     std::vector<Package> expected = {
         get_pkg("pkg-0:1.2-3.src"),
@@ -547,7 +547,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
     // packages with version != "1.2"
     PackageQuery query2(base);
-    query2.filter_version({"1.2"}, libdnf5::sack::QueryCmp::NEQ);
+    query2.filter_version("1.2", libdnf5::sack::QueryCmp::NEQ);
 
     expected = {get_pkg("pkg-libs-1:1.3-4.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
@@ -746,7 +746,7 @@ void RpmPackageQueryTest::test_filter_chain() {
     PackageQuery query(base);
     query.filter_name("pkg");
     query.filter_epoch("0");
-    query.filter_version({"1.2"});
+    query.filter_version("1.2");
     query.filter_release({"3"});
     query.filter_arch({"x86_64"});
     query.filter_provides("foo", libdnf5::sack::QueryCmp::NEQ);
