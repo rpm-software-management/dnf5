@@ -200,7 +200,7 @@ bool BuildDepCommand::add_from_pkg(
     }
 
     libdnf5::rpm::PackageQuery source_pkgs(ctx.base);
-    source_pkgs.filter_arch({"src"});
+    source_pkgs.filter_arch(std::vector<std::string>{"src", "nosrc"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
         std::cerr << "No package matched \"" << pkg_spec << "\"." << std::endl;

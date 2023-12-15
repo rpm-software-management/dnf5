@@ -816,7 +816,7 @@ void RepoqueryCommand::run() {
     if (srpm->get_value()) {
         libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         auto only_src_query = result_query;
-        only_src_query.filter_arch({"src"});
+        only_src_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
         for (const auto & pkg : result_query) {
             if (!pkg.get_sourcerpm().empty()) {
                 auto tmp_q = only_src_query;

@@ -323,7 +323,7 @@ void ModuleSack::Impl::module_filtering() {
     // prevent filtering out of binary packages that has the same name as source package but binary package is not
     // in module (it prevents creation of broken dependenciers in the distribution)
     exclude_src_names_query.filter_name(src_names);
-    exclude_src_names_query.filter_arch({"src", "nosrc"});
+    exclude_src_names_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
 
     // Required to filtrate out source packages and packages with incompatible architectures.
     exclude_names_query.filter_name(names);
