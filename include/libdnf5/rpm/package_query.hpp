@@ -222,12 +222,23 @@ public:
 
     /// Filter packages by their `epoch:version-release`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
+    void filter_evr(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_evr(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `epoch:version-release`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `NEQ`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EVR
     void filter_evr(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
