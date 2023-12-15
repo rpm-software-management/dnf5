@@ -745,7 +745,7 @@ void RpmPackageQueryTest::test_filter_chain() {
 
     PackageQuery query(base);
     query.filter_name("pkg");
-    query.filter_epoch({"0"});
+    query.filter_epoch("0");
     query.filter_version({"1.2"});
     query.filter_release({"3"});
     query.filter_arch({"x86_64"});
