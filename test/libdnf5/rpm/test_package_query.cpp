@@ -372,7 +372,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset_cmp() {
 
     // prepare query to compare packages with
     PackageQuery patterns(base);
-    patterns.filter_nevra({"pkg-libs-1:1.2-4.x86_64"});
+    patterns.filter_nevra("pkg-libs-1:1.2-4.x86_64");
     std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64")};
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pattern preparation failed", expected, to_vector(patterns));
 
@@ -473,7 +473,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-1.2-3.src", "pkg-1.2-3.x86_64"});
+        query.filter_nevra(std::vector<std::string>{"pkg-1.2-3.src", "pkg-1.2-3.x86_64"});
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -481,7 +481,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"});
+        query.filter_nevra(std::vector<std::string>{"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"});
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -489,7 +489,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-1.2-3.src"});
+        query.filter_nevra("pkg-1.2-3.src");
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -497,7 +497,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument with 0 epoch - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-3.src"});
+        query.filter_nevra("pkg-0:1.2-3.src");
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -505,7 +505,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument with unknown release - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-unknown.src", "pkg-0:1.2-unknown1.x86_64"});
+        query.filter_nevra(std::vector<std::string>{"pkg-0:1.2-unknown.src", "pkg-0:1.2-unknown1.x86_64"});
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -513,7 +513,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument with unknown version - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-unknown2.x86_64"});
+        query.filter_nevra("pkg-0:1.2-unknown2.x86_64");
         CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -522,7 +522,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without epoch, but package with epoch - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-libs-1.2-4.x86_64"});
+        query.filter_nevra("pkg-libs-1.2-4.x86_64");
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
