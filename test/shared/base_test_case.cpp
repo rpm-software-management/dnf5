@@ -156,7 +156,7 @@ libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool inst
 libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char * repo) {
     libdnf5::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
-    query.filter_repo_id({repo});
+    query.filter_repo_id(repo);
     return first_query_pkg(query, nevra + " (repo: " + repo + ")");
 }
 
