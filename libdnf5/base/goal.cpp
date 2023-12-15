@@ -1324,7 +1324,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 solv::IdQueue ids_nevra_installed;
                 for (auto id : ids) {
                     rpm::PackageQuery query(installed);
-                    query.filter_nevra({pool.get_nevra(id)});
+                    query.filter_nevra(pool.get_nevra(id));
                     if (query.empty()) {
                         // Report when package with the same NEVRA is not installed
                         transaction.p_impl->add_resolve_log(
