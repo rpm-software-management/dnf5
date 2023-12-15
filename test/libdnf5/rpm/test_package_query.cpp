@@ -656,7 +656,7 @@ void RpmPackageQueryTest::test_filter_requires() {
 
     // packages with Requires == "pkg-libs"
     PackageQuery query1(base);
-    query1.filter_requires({"pkg-libs"});
+    query1.filter_requires("pkg-libs");
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
@@ -665,7 +665,7 @@ void RpmPackageQueryTest::test_filter_requires() {
 
     // packages without Requires == "pkg-libs"
     PackageQuery query2(base);
-    query2.filter_requires({"pkg-libs"}, libdnf5::sack::QueryCmp::NEQ);
+    query2.filter_requires("pkg-libs", libdnf5::sack::QueryCmp::NEQ);
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
@@ -750,7 +750,7 @@ void RpmPackageQueryTest::test_filter_chain() {
     query.filter_release("3");
     query.filter_arch("x86_64");
     query.filter_provides("foo", libdnf5::sack::QueryCmp::NEQ);
-    query.filter_requires({"foo"}, libdnf5::sack::QueryCmp::NEQ);
+    query.filter_requires("foo", libdnf5::sack::QueryCmp::NEQ);
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
