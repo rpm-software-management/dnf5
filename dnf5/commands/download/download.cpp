@@ -64,6 +64,9 @@ void DownloadCommand::set_argument_parser() {
     alldeps_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    url_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
     resolve->set_description("Resolve and download needed dependencies");
@@ -77,10 +80,17 @@ void DownloadCommand::set_argument_parser() {
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
 
+    auto url = parser.add_new_named_arg("url");
+    url->set_long_name("url");
+    url->set_description("Print the list of urls where the rpms can be downloaded instead of downloading");
+    url->set_const_value("true");
+    url->link_value(url_option);
+
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
+    cmd.register_named_arg(url);
 }
 
 void DownloadCommand::configure() {
@@ -146,20 +156,31 @@ void DownloadCommand::run() {
         }
     }
 
-    if (!download_pkgs.empty()) {
-        libdnf5::repo::PackageDownloader downloader(ctx.base);
-
-        // for download command, we don't want to mark the packages for removal
-        downloader.force_keep_packages(true);
-
-        for (auto & [nevra, pkg] : download_pkgs) {
-            downloader.add(pkg);
-        }
-
-        std::cout << "Downloading Packages:" << std::endl;
-        downloader.download();
-        std::cout << std::endl;
+    if (download_pkgs.empty()) {
+        return;
     }
+
+    if (url_option->get_value()) {
+        for (auto & [nerva, pkg] : download_pkgs) {
+            auto urls = pkg.get_remote_locations();
+            libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
+            std::cout << urls[0] << std::endl;
+        }
+        return;
+    }
+    libdnf5::repo::PackageDownloader downloader(ctx.base);
+
+    // for download command, we don't want to mark the packages for removal
+    downloader.force_keep_packages(true);
+
+    for (auto & [nevra, pkg] : download_pkgs) {
+        downloader.add(pkg);
+    }
+
+    std::cout << "Downloading Packages:" << std::endl;
+    downloader.download();
+    std::cout << std::endl;
 }
+
 
 }  // namespace dnf5
