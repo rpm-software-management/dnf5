@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libsmartcols/libsmartcols.h>
 
-#include <set>
+#include <map>
 #include <string>
 
 namespace libdnf5::cli::output {
@@ -98,9 +98,13 @@ void ModuleInfo::add_module_item(ModuleItem & module_item) {
 
 template <class Query>
 void print_moduleinfo_table(Query & module_list) {
-    for (auto & module_item : module_list) {
+    std::map<std::string, libdnf5::module::ModuleItem> module_map;
+    for (const auto & module_item : module_list) {
+        module_map.emplace(module_item.get_full_identifier() + ":" + module_item.get_repo_id(), module_item);
+    }
+    for (auto & module_item : module_map) {
         libdnf5::cli::output::ModuleInfo module_info;
-        module_info.add_module_item(module_item);
+        module_info.add_module_item(module_item.second);
         module_info.print();
         std::cout << std::endl;
     }

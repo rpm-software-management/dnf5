@@ -73,7 +73,6 @@ static void add_line_into_modulelist_table(
 
 template <class Query>
 void print_modulelist_table(Query & module_list) {
-    // TODO(pkratoch): Sort the table
     struct libscols_table * table = create_modulelist_table();
     std::set<std::pair<std::string, std::string>> name_stream_pairs;
     for (auto & module_item : module_list) {
