@@ -299,6 +299,40 @@ void PackageSack::Impl::clear_module_excludes() {
     considered_uptodate = false;
 }
 
+const PackageSet PackageSack::Impl::get_versionlock_excludes() {
+    if (versionlock_excludes) {
+        return PackageSet(base, *versionlock_excludes);
+    } else {
+        return PackageSet(base);
+    }
+}
+
+void PackageSack::Impl::add_versionlock_excludes(const PackageSet & excludes) {
+    if (versionlock_excludes) {
+        *versionlock_excludes |= *excludes.p_impl;
+        considered_uptodate = false;
+    } else {
+        set_versionlock_excludes(excludes);
+    }
+}
+
+void PackageSack::Impl::remove_versionlock_excludes(const PackageSet & excludes) {
+    if (versionlock_excludes) {
+        *versionlock_excludes -= *excludes.p_impl;
+        considered_uptodate = false;
+    }
+}
+
+void PackageSack::Impl::set_versionlock_excludes(const PackageSet & excludes) {
+    versionlock_excludes.reset(new libdnf5::solv::SolvMap(*excludes.p_impl));
+    considered_uptodate = false;
+}
+
+void PackageSack::Impl::clear_versionlock_excludes() {
+    versionlock_excludes.reset();
+    considered_uptodate = false;
+}
+
 std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
     libdnf5::sack::ExcludeFlags flags) const {
     if ((static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
@@ -448,6 +482,26 @@ void PackageSack::set_user_includes(const PackageSet & includes) {
 
 void PackageSack::clear_user_includes() {
     p_impl->clear_user_includes();
+}
+
+const PackageSet PackageSack::get_versionlock_excludes() {
+    return p_impl->get_versionlock_excludes();
+}
+
+void PackageSack::add_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->add_versionlock_excludes(excludes);
+}
+
+void PackageSack::remove_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->remove_versionlock_excludes(excludes);
+}
+
+void PackageSack::set_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->set_versionlock_excludes(excludes);
+}
+
+void PackageSack::clear_versionlock_excludes() {
+    p_impl->clear_versionlock_excludes();
 }
 
 static libdnf5::rpm::PackageQuery running_kernel_check_path(const libdnf5::BaseWeakPtr & base, const std::string & fn) {

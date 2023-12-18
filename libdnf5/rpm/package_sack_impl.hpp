@@ -109,6 +109,12 @@ public:
     void set_module_excludes(const PackageSet & excludes);
     void clear_module_excludes();
 
+    const PackageSet get_versionlock_excludes();
+    void add_versionlock_excludes(const PackageSet & excludes);
+    void remove_versionlock_excludes(const PackageSet & excludes);
+    void set_versionlock_excludes(const PackageSet & excludes);
+    void clear_versionlock_excludes();
+
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
     std::optional<libdnf5::solv::SolvMap> compute_considered_map(libdnf5::sack::ExcludeFlags flags) const;
@@ -136,6 +142,9 @@ private:
     std::unique_ptr<libdnf5::solv::SolvMap> repo_excludes;
 
     std::unique_ptr<libdnf5::solv::SolvMap> module_excludes;  // packages excluded by modularity
+
+    // packages excluded by versionlock feature
+    std::unique_ptr<libdnf5::solv::SolvMap> versionlock_excludes;  // packages excluded by versionlock
 
     bool considered_uptodate = true;
 

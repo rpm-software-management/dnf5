@@ -145,6 +145,24 @@ public:
     /// @since 5.0
     void clear_user_includes();
 
+    /// Returns versionlock excluded package set
+    const PackageSet get_versionlock_excludes();
+
+    /// Add package set to versionlock excluded packages
+    /// @param excludes: packages to add to excludes
+    void add_versionlock_excludes(const PackageSet & excludes);
+
+    /// Remove package set from versionlock excluded packages
+    /// @param excludes: packages to remove from excludes
+    void remove_versionlock_excludes(const PackageSet & excludes);
+
+    /// Resets versionlock excluded packages to a new value
+    /// @param excludes: packages to exclude
+    void set_versionlock_excludes(const PackageSet & excludes);
+
+    /// Clear versionlock excluded packages
+    void clear_versionlock_excludes();
+
     rpm::Package get_running_kernel();
 
 private:
