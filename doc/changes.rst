@@ -136,6 +136,10 @@ List command
    packages already listed in the ``Installed Packages`` section to reduce duplicities. But if the ``--available`` modifier
    is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
 
+Makecache command
+-----------------
+ * Metadata is stored in different directories now, see :ref:`cachedir changes`.
+
 Module command
 --------------
  * Dropped ``--all`` option since this behavior is the default one.
@@ -200,3 +204,16 @@ Default of ``best`` configuration option changed to ``true``
 --------------------------------------------------------
 The new default value ensures that important updates will not be skipped and issues in distribution will be reported
 earlier.
+
+.. _cachedir changes:
+
+cachedir and system_cachedir options
+------------------------------------
+The default root cache directory (``system_cachedir``) is now ``/var/cache/libdnf5``, while for users, the ``cachedir``
+is at ``/home/$USER/.cache/libdnf5``. Users no longer access the root's cache directly; instead, metadata is copied
+to the user's location if it's empty or invalid. For additional information, refer to the :ref:`Caching <caching_misc_ref-label>` man page.
+
+cacheonly option
+----------------
+The ``cacheonly`` option was changed from ``bool`` to ``enum`` with options ``all``, ``metadata`` and ``none``,
+enabling users to specify whether to use the cache exclusively for metadata or for both metadata and packages.
