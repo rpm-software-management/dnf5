@@ -715,6 +715,11 @@ public:
     /// Filter packages that provide a capability that matches with any value in installonlypkgs configuration option.
     void filter_installonly();
 
+    /// Filter out versionlock excluded packages.
+    ///
+    /// The packages versions excluded by versionlock are removed from the query.
+    void filter_versionlock();
+
 private:
     std::vector<std::vector<Package>> filter_leaves(bool return_grouped_leaves);
 

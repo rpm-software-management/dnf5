@@ -2907,4 +2907,10 @@ void PackageQuery::filter_reboot_suggested() {
     *p_impl |= core_packages;
 }
 
+void PackageQuery::filter_versionlock() {
+    auto sack = p_impl->base->get_rpm_package_sack();
+    auto versionlock_excludes = sack->get_versionlock_excludes();
+    *p_impl -= *versionlock_excludes.p_impl;
+}
+
 }  // namespace libdnf5::rpm
