@@ -294,11 +294,9 @@ To further reduce the bandwidth load, some of the commands where having up-to-da
 is not critical (e.g. the ``group list`` command) do not look at whether a repository is expired
 and whenever any version of it is locally available to the user's account, it will be used.
 
-For non-root usages it can be also useful running entirely from the system cache, don't update the
-cache and use it even in case it is expired by setting the ``cacheonly`` configuration option.
-``DNF5`` uses a separate cache for each user under which it executes. The cache for the root user
-is called the system cache. This option allows a regular user read-only access to the system cache,
-which usually is more fresh than the user's and thus he does not have to wait for metadata sync.
+:ref:`Refer to the <caching_misc_ref-label>` :manpage:`dnf5-caching(7)` for more info regarding
+metadata and packages caching.
+
 
 Configuration Files Replacement Policy
 ======================================
@@ -336,13 +334,13 @@ Files
 ``Main Configuration``
     /etc/dnf/dnf.conf
 
-``Repository Metadata``
+``Repository Configuration``
     /etc/yum.repos.d/
 
 ``Repository Persistence``
     /var/lib/dnf/
 
-``System state``
+``System State``
     /usr/lib/sysimage/libdnf5/
 
 
