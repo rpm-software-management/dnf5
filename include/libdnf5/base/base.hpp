@@ -97,7 +97,8 @@ public:
     repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
     rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
 
-    /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch).
+    /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
+    /// configuration of protected_packages (glob:).
     /// To prevent differences between configuration and internal Base settings, following configurations
     /// will be locked: installroot, varsdir.
     /// The method is supposed to be called after configuration is updated, application plugins applied
