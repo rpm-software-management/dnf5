@@ -535,7 +535,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
         protected_packages,
         [&](Option::Priority priority, const std::string & value) {
             if (priority >= protected_packages.get_priority()) {
-                protected_packages.set(priority, resolve_globs(value));
+                option_T_list_append(protected_packages, priority, resolve_globs(value));
             }
         },
         nullptr,
