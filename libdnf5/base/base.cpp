@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 
+#include "../conf/config_utils.hpp"
 #include "base_impl.hpp"
 #include "conf/config.h"
 #include "module/module_sack_impl.hpp"
@@ -181,6 +182,13 @@ void Base::setup() {
         const std::filesystem::path system_cachedir_path{config.get_system_cachedir_option().get_value()};
         const auto full_path = installroot_path / system_cachedir_path.relative_path();
         config.get_system_cachedir_option().set(Option::Priority::INSTALLROOT, full_path.string());
+    }
+
+    // Add protected packages from files from installroot
+    {
+        auto & protected_option = config.get_protected_packages_option();
+        auto resolved_protected_packages = resolve_path_globs(protected_option.get_value_string(), installroot_path);
+        protected_option.set(protected_option.get_priority(), resolved_protected_packages);
     }
 
     load_plugins();

@@ -373,7 +373,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``protected_packages``
     :ref:`list <list-label>`
 
-    List of packages that DNF5 should never completely remove.
+    This append list option contains names of packages that DNF5 should never completely remove.
 
     They are protected via Obsoletes as well as user/plugin removals.
 

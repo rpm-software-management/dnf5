@@ -22,7 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/option.hpp"
 
+
 namespace libdnf5 {
+
 
 template <typename T>
 static void option_T_list_append(T & option, Option::Priority priority, const std::string & value) {
@@ -46,6 +48,18 @@ static void option_T_list_append(T & option, Option::Priority priority, const st
         first = false;
     }
 }
+
+
+/// @brief Replaces globs (like /etc/foo.d/\\*.foo) by content of matching files.
+///
+/// Ignores comment lines (start with '#') and blank lines in files.
+/// Result:
+/// Words delimited by spaces. Characters ',' and '\n' are replaced by spaces.
+/// Extra spaces are removed.
+/// @param strWithGlobs Input string with globs
+/// @return Words delimited by space
+std::string resolve_path_globs(const std::string & str_with_globs, const std::filesystem::path & installroot);
+
 
 }  // namespace libdnf5
 
