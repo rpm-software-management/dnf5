@@ -6,6 +6,7 @@ Miscellaneous
 .. toctree::
     :maxdepth: 1
 
+    caching.7
     comps.7
     forcearch.7
     installroot.7
