@@ -340,7 +340,8 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
          (!user_excludes && !user_includes)) &&
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
-        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes) &&
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK) || !versionlock_excludes)) {
         return {};
     }
 
@@ -348,7 +349,7 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
     libdnf5::solv::SolvMap considered(pool.get_nsolvables());
 
-    // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes) and
+    // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes - versionlock) and
     //              (config_includes + user_includes + all_from_repos_not_using_includes)
     considered.set_all();
 
@@ -358,6 +359,10 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
         considered -= *repo_excludes;
+    }
+
+    if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK) && versionlock_excludes) {
+        considered -= *versionlock_excludes;
     }
 
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
