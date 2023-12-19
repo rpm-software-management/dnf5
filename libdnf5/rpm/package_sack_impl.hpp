@@ -91,6 +91,9 @@ public:
     // TODO(jrohel): Is param `only_main` needed? Used in DNF4 with commandline repo.
     void load_config_excludes_includes(bool only_main = false);
 
+    /// Load versionlock excludes from the config file.
+    void load_versionlock_excludes();
+
     const PackageSet get_user_excludes();
     void add_user_excludes(const PackageSet & excludes);
     void remove_user_excludes(const PackageSet & excludes);
