@@ -553,6 +553,8 @@ void RepoqueryCommand::run() {
     libdnf5::sack::ExcludeFlags flags = disable_modular_filtering->get_value()
                                             ? libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES
                                             : libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+    // XXX handle --upgrades
+    flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
     libdnf5::rpm::PackageQuery base_query(ctx.base, flags, false);
     libdnf5::rpm::PackageQuery result_query(ctx.base, flags, true);
 

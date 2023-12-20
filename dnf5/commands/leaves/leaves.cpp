@@ -61,7 +61,7 @@ void LeavesCommand::configure() {
 void LeavesCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::rpm::PackageQuery leaves_package_query(ctx.base);
+    libdnf5::rpm::PackageQuery leaves_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     auto leaves_package_groups = leaves_package_query.filter_leaves_groups();
 
     for (auto & package_group : leaves_package_groups) {
