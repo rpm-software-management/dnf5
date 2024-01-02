@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 1
-%global project_version_patch 9
+%global project_version_patch 10
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
 
@@ -759,6 +759,9 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %ldconfig_scriptlets
 
 %changelog
+* Tue Jan 02 2024 Packit Team <hello@packit.dev> - 5.1.10-1
+- New upstream release 5.1.10
+
 * Fri Dec 08 2023 Packit Team <hello@packit.dev> - 5.1.9-1
 - New upstream release 5.1.9
 
