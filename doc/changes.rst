@@ -155,6 +155,8 @@ Needs-restarting command
 Remove command
 --------------
  * Command does not remove packages according to provides, but only according NEVRA or file provide match
+ * Dropped commands ``remove-n``, ``remove-na``, ``remove-nevra``.
+ * Dropped erase aliases for the same ``erase``, ``erase-n`` , ``erase-na`` , ``erase-nevra``.
 
 Repoclosure command
 -------------------
