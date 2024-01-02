@@ -113,7 +113,10 @@ std::string LogEvent::to_string(
         case GoalProblem::EXCLUDED:
             return ret.append(utils::sformat(_("Argument '{}' matches only excluded packages."), *spec));
         case GoalProblem::HINT_ICASE:
-            return ret.append(utils::sformat(_("  * Maybe you meant: {}"), *spec));
+            if (additional_data.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for HINT_ICASE");
+            }
+            return ret.append(utils::sformat(_("  * Maybe you meant: {}"), *additional_data.begin()));
         case GoalProblem::HINT_ALTERNATIVES: {
             auto elements = utils::string::join(additional_data, ", ");
             return ret.append(utils::sformat(_("There are following alternatives for '{0}': {1}"), *spec, elements));
