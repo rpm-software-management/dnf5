@@ -148,6 +148,11 @@ Needs-restarting command
  * Dropped ``-r, --reboothint`` option; this is now the default behavior.
  * Dropped ``-u, --useronly`` option.
 
+Remove command
+--------------
+ * Dropped commands ``remove-n``, ``remove-na``, ``remove-nevra``.
+ * Dropped erase aliases for the same ``erase``, ``erase-n`` , ``erase-na`` , ``erase-nevra``.
+
 Repoclosure command
 -------------------
  * Dropped ``--pkg`` option. Positional arguments can be used to specify packages to check closure for.
