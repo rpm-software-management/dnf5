@@ -83,6 +83,7 @@ Global options
 --------------
 * Options ``--disable-repo=REPO_ID`` and ``--setopt=[REPO_ID.]OPTION=VALUE`` now always cause an error when provided with invalid ``REPO_ID``.
   This makes them consistent with ``--repo=REPO_ID`` and ``--enable-repo=REPO_ID``. The ``strict`` configuration option is no longer taken into account.
+* Option ``--help-cmd`` is Dropped as we already have ``--help`` and ``-h`` options.
 
 Alias command
 -------------
