@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 02:52+0000\n"
+"POT-Creation-Date: 2023-12-19 02:52+0000\n"
 "PO-Revision-Date: 2023-11-16 19:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -495,6 +495,12 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "ცვლადი '{}' მხოლოდ-კითხვადია"
 
+#: logger/rotating_file_logger.cpp:59
+#, fuzzy
+#| msgid "Failed to open lock file \"{}\""
+msgid "Cannot open log file"
+msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" გახსნისას"
+
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:764
 msgid "No such module: {}"
 msgstr "ასეთი მოდული არ არსებიბს: {}"
@@ -604,29 +610,29 @@ msgstr "პაკეტის \"{0}\" გადმოწერა შეუძ�
 msgid "Failed to download packages"
 msgstr "პაკეტების გადმოწერის შეცდომა"
 
-#: repo/repo.cpp:75
+#: repo/repo.cpp:74
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "RPM-ის \"{}\" ჩატვირთვის შეცდომა: \".rpm\" გაფართოება არ გააჩნია"
 
-#: repo/repo.cpp:79
+#: repo/repo.cpp:78
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "წვდომის შეცდომა RPM-თან \"{}\": {}"
 
-#: repo/repo.cpp:99
+#: repo/repo.cpp:98
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "არასწორი რეპოზიტორიის ID \"{}\": მოულოდნელი სიმბოლო '{}'"
 
-#: repo/repo.cpp:140
+#: repo/repo.cpp:139
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "რეპოზიტორიას \"{}\" წყარო (baseurl, mirrorlist ან metalink)მითითებული არ "
 "აქვს."
 
-#: repo/repo.cpp:151
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "რეპოზიტორიის \"{}\" ტიპი \"{}\" მხარდაჭერილი არაა. გამოტოვება."
 
-#: repo/repo.cpp:416
+#: repo/repo.cpp:415
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -634,7 +640,7 @@ msgstr ""
 "რეპოზიტორიის ჩატვირთვის შეცდომა; \"ძირითადი\" მონაცემები არ არსებობს ან მისი "
 "ფორმატი მხარდაჭერილი არაა"
 
-#: repo/repo.cpp:505
+#: repo/repo.cpp:480
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "RPM-ის \"{}\" ჩატვირთვის შეცდომა: {}"
 
@@ -701,47 +707,47 @@ msgstr ""
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "მხოლოდ-კეში ჩართულია, მაგრამ რეპოზიტორიას \"{}\" კეში არ გააჩნია"
 
-#: repo/solv_repo.cpp:259
+#: repo/solv_repo.cpp:258
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "რეპოზიტორიისთვის \"{}\" \"{}\"-დან repomd-ის ჩატვირთვის შეცდომა: {}."
 
-#: repo/solv_repo.cpp:267
+#: repo/solv_repo.cpp:266
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "რეპოზიტორიისთვის \"{}\" \"{}\"-დან primary-ის ჩატვირთვის შეცდომა: {}."
 
-#: repo/solv_repo.cpp:312
+#: repo/solv_repo.cpp:311
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "მხარდაუჭერელი გაფართოებული რეპოზიტორიის მონაცემების ტიპი სისტემური "
 "რეპოსთვის: \"{}\"."
 
-#: repo/solv_repo.cpp:378
+#: repo/solv_repo.cpp:377
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "შეცდომა გაფართოების {} ჩატვირთვისას რეპოზიტორიისთვის {} \"{}\"-დან: {}"
 
-#: repo/solv_repo.cpp:413
+#: repo/solv_repo.cpp:412
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "შეცდომა სისტემური რეპოზიტორიის ჩატვირთვისას root-დან \"{}\": {}"
 
-#: repo/solv_repo.cpp:512
+#: repo/solv_repo.cpp:511
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "შეცდომა {} კეშის ჩატვირთვისას რეპოზიტორიისთვის \"{}\" \"{}\"-დან: {}"
 
-#: repo/solv_repo.cpp:564
+#: repo/solv_repo.cpp:563
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "ძირითადი კეშის ჩაწერის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-ში: {}"
 
-#: repo/solv_repo.cpp:581
+#: repo/solv_repo.cpp:580
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "ძირითადი კეშის თავიდან ჩატვირთვის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-"
 "დან: {}"
 
-#: repo/solv_repo.cpp:645
+#: repo/solv_repo.cpp:644
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "{} კეშის ჩაწერის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-ში: {}"
 
-#: repo/solv_repo.cpp:666
+#: repo/solv_repo.cpp:665
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "{} კეშის თავიდან ჩატვირთვის პრობლემა რეპოზიტორიისთვის \"{}\" \"{}\"-დან: {}"
@@ -868,15 +874,19 @@ msgstr "ეპოქის \"{}\" რიცხვში გადაყვან
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "შეცდომა debugsolver-ის მონაცემების \"{}\"-ში ჩაწერისას: {}"
 
-#: system/state.cpp:224 system/state.cpp:233
+#: system/state.cpp:226 system/state.cpp:235
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "არასწორი TOML-ის ვერსია \"{}\", მოველოდი \"MAJOR.MINOR\""
 
-#: system/state.cpp:241
+#: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "{} მდგომარეობა \"{}\"-სთვის აღმოჩენილი არაა."
 
-#: system/state.cpp:522
+#: system/state.cpp:508
+msgid "{}"
+msgstr ""
+
+#: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
@@ -958,43 +968,43 @@ msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
 "TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
 
-#: utils/fs/file.cpp:84
+#: utils/fs/file.cpp:86
 msgid "cannot open file"
 msgstr ""
 
-#: utils/fs/file.cpp:97
+#: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
 msgstr ""
 
-#: utils/fs/file.cpp:107
+#: utils/fs/file.cpp:109
 msgid "cannot close file"
 msgstr ""
 
-#: utils/fs/file.cpp:137 utils/fs/file.cpp:166
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
 msgstr ""
 
-#: utils/fs/file.cpp:152 utils/fs/file.cpp:178
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
 msgstr ""
 
-#: utils/fs/file.cpp:187
+#: utils/fs/file.cpp:189
 msgid "error flushing file"
 msgstr ""
 
-#: utils/fs/file.cpp:196
+#: utils/fs/file.cpp:198
 msgid "error seeking in file"
 msgstr ""
 
-#: utils/fs/file.cpp:207
+#: utils/fs/file.cpp:209
 msgid "error retrieving file position"
 msgstr ""
 
-#: utils/fs/file.cpp:260
+#: utils/fs/file.cpp:297
 msgid "error reading a line from file"
 msgstr ""
 
-#: utils/fs/file.cpp:283
+#: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
 msgstr ""
 
