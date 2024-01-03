@@ -6,6 +6,7 @@ Miscellaneous
 .. toctree::
     :maxdepth: 1
 
+    aliases.7
     caching.7
     comps.7
     forcearch.7
