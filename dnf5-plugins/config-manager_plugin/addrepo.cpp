@@ -423,7 +423,7 @@ void ConfigManagerAddRepoCommand::create_repo(
     parser.add_section(repo_id);
 
     // Sets the default repository name. May be overwritten with "--set=name=<name>".
-    parser.set_value(repo_id, "name", "created by dnf5 config-manager");
+    parser.set_value(repo_id, "name", repo_id + " - Created by dnf5 config-manager");
     // Enables repository by default. The repository can be disabled with "--set=enabled=0".
     parser.set_value(repo_id, "enabled", "1");
 
