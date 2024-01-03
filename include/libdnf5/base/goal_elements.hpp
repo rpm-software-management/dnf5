@@ -25,10 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/rpm/nevra.hpp"
-#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <cstdint>
-#include <optional>
 
 
 namespace libdnf5 {
