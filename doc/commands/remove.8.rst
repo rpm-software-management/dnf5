@@ -25,13 +25,15 @@
 Synopsis
 ========
 
-``dnf5 remove [options] <package-spec>...``
+``dnf5 remove [options] [<spec>...]``
 
 
 Description
 ===========
 
 The ``remove`` command in ``DNF5`` is used for removing installed packages from the system.
+Arguments defined in ``spec`` list are used as ``<package-file-spec>``.
+
 If you want to keep the dependencies that were installed together with the given package,
 set the ``clean_requirements_on_remove`` configuration option to ``False``.
 

@@ -152,6 +152,10 @@ Needs-restarting command
  * Dropped ``-r, --reboothint`` option; this is now the default behavior.
  * Dropped ``-u, --useronly`` option.
 
+Remove command
+--------------
+ * Command does not remove packages according to provides, but only according NEVRA or file provide match
+
 Repoclosure command
 -------------------
  * Dropped ``--pkg`` option. Positional arguments can be used to specify packages to check closure for.
