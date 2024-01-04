@@ -412,7 +412,14 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
 
     // fill the goal
     auto & goal = session.get_goal();
+
+    // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
+    // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
     libdnf5::GoalJobSettings setting;
+    setting.with_nevra = true;
+    setting.with_provides = false;
+    setting.with_filenames = true;
+    setting.with_binaries = false;
     for (const auto & spec : specs) {
         goal.add_remove(spec, setting);
     }
