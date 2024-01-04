@@ -109,6 +109,7 @@ public:
     void set_module_excludes(const PackageSet & excludes);
     void clear_module_excludes();
 
+    VersionlockConfig get_versionlock_config() const;
     const PackageSet get_versionlock_excludes();
     void add_versionlock_excludes(const PackageSet & excludes);
     void remove_versionlock_excludes(const PackageSet & excludes);

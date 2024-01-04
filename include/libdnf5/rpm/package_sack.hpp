@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/rpm/versionlock_config.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <map>
@@ -144,6 +145,10 @@ public:
     /// Clear user included packages
     /// @since 5.0
     void clear_user_includes();
+
+
+    /// Returns versionlock configuration
+    VersionlockConfig get_versionlock_config() const;
 
     /// Returns versionlock excluded package set
     const PackageSet get_versionlock_excludes();
