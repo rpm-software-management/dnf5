@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/versionlock_config.hpp"
 
 #include <sys/utsname.h>
 
@@ -299,6 +300,16 @@ void PackageSack::Impl::clear_module_excludes() {
     considered_uptodate = false;
 }
 
+VersionlockConfig PackageSack::Impl::get_versionlock_config() const {
+    const auto & config = base->get_config();
+    std::filesystem::path conf_file_path{libdnf5::VERSIONLOCK_CONF_FILENAME};
+    if (!config.get_use_host_config_option().get_value()) {
+        const std::filesystem::path installroot_path{config.get_installroot_option().get_value()};
+        conf_file_path = installroot_path / conf_file_path.relative_path();
+    }
+    return VersionlockConfig(conf_file_path);
+}
+
 const PackageSet PackageSack::Impl::get_versionlock_excludes() {
     if (versionlock_excludes) {
         return PackageSet(base, *versionlock_excludes);
@@ -487,6 +498,10 @@ void PackageSack::set_user_includes(const PackageSet & includes) {
 
 void PackageSack::clear_user_includes() {
     p_impl->clear_user_includes();
+}
+
+VersionlockConfig PackageSack::get_versionlock_config() const {
+    return p_impl->get_versionlock_config();
 }
 
 const PackageSet PackageSack::get_versionlock_excludes() {
