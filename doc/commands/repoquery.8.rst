@@ -32,8 +32,8 @@ Description
 ===========
 
 The ``repoquery`` command in ``DNF5`` is used for querying packages by matching
-various input criteria from the user. Arguments defined in ``spec`` list could be
-either file paths or package specs.
+various input criteria from the user. Arguments defined in ``spec`` list are used
+as ``<package-file-spec>``.
 
 
 Options
