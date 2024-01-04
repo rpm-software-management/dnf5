@@ -982,7 +982,7 @@ inline static void filter_version_internal(
         std::string vr(pool.split_evr(pool.get_evr(candidate_id)).v);
         vr.append("-0");
         int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
-        if (cmp_eq(cmp)) {
+        if (cmp_fnc(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
@@ -1050,7 +1050,7 @@ inline static void filter_release_internal(
         std::string vr("0-");
         vr.append(pool.split_evr(pool.get_evr(candidate_id)).r);
         int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
-        if (cmp_eq(cmp)) {
+        if (cmp_fnc(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
