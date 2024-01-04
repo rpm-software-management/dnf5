@@ -90,6 +90,16 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wl,--as-needed)
 endif()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # TODO remove this block once the output header files are reworked
+    # This block silence this error
+    # dnf5/include/libdnf5-cli/output/provides.hpp:34:13: error: 'static' function 'add_line_into_provide
+    # s_table' declared in header file should be declared 'static inline' [-Werror,-Wunneeded-internal-declaration]
+    #    34 | static void add_line_into_provides_table(struct libscols_table * table, const char * key, const char * value) {
+    #       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    add_compile_options(-Wno-unneeded-internal-declaration)
+endif()
+
 add_definitions(-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}")
 add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
