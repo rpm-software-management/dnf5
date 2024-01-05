@@ -159,7 +159,7 @@ public:
     ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
-    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
+    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `NEQ`.
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
