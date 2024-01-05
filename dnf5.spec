@@ -77,7 +77,11 @@ Provides:       dnf5-command(makecache)
 
 %bcond_without comps
 %bcond_without modulemd
+%if 0%{?rhel}
+%bcond_with    zchunk
+%else
 %bcond_without zchunk
+%endif
 
 %bcond_with    html
 %if 0%{?rhel} == 8
