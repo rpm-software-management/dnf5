@@ -15,6 +15,11 @@
 %import "common.i"
 %import "conf.i"
 
+#if SWIG_VERSION == 0x040200
+// https://github.com/swig/swig/issues/2744
+%fragment("SwigPyIterator_T");
+#endif
+
 %exception {
     try {
         $action
