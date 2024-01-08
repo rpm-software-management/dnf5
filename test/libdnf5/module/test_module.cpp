@@ -60,7 +60,7 @@ void ModuleTest::test_load() {
     add_repo_repomd("repomd-modules");
 
     auto module_sack = base.get_module_sack();
-    CPPUNIT_ASSERT_EQUAL((size_t)11, module_sack->get_modules().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)12, module_sack->get_modules().size());
 
     ModuleQuery query = ModuleQuery(base, false);
     query.filter_name("meson");
@@ -108,7 +108,10 @@ void ModuleTest::test_resolve() {
     CPPUNIT_ASSERT_EQUAL(ModuleSack::ModuleErrorType::NO_ERROR, module_sack->resolve_active_module_items().second);
 
     std::vector<std::string> expected_active_module_specs{
-        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+        "NoStaticContext:latest:1::x86_64",
+        "berries:main:4:6c81f848:x86_64",
+        "gooseberry:5.5:2:72aaf46b6:x86_64",
+        "gooseberry:5.5:3:72aaf46b6:x86_64"};
     std::vector<std::string> active_module_specs;
 
     for (auto & module_item : module_sack->get_active_modules()) {
@@ -198,7 +201,7 @@ void ModuleTest::test_query_latest() {
 
     {  // Check we can see all the modules, even ones with duplicit nscva
         ModuleQuery query(base, false);
-        CPPUNIT_ASSERT_EQUAL((size_t)14, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)15, query.size());
     }
 
     {
@@ -210,13 +213,13 @@ void ModuleTest::test_query_latest() {
     {
         ModuleQuery query(base, false);
         query.filter_latest();
-        CPPUNIT_ASSERT_EQUAL((size_t)12, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)13, query.size());
     }
 
     {
         ModuleQuery query(base, false);
         query.filter_latest(-1);
-        CPPUNIT_ASSERT_EQUAL((size_t)11, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)12, query.size());
     }
 
     {
@@ -635,8 +638,10 @@ void ModuleTest::test_module_enable() {
     goal.add_module_enable("fruit-salad:main", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
-    // Active modules contain the enabled fruit-salad, its dependency gooseberry and the default stream of module berries
+    // Active modules contain the enabled fruit-salad, its dependency gooseberry and the default streams of modules
+    // NoStaticContext and berries
     std::vector<std::string> expected_active_module_specs{
+        "NoStaticContext:latest:1::x86_64",
         "berries:main:4:6c81f848:x86_64",
         "fruit-salad:main:12:2241675a:x86_64",
         "gooseberry:5.5:2:72aaf46b6:x86_64",
@@ -678,9 +683,12 @@ void ModuleTest::test_module_disable() {
     goal.add_module_disable("fruit-salad:main", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
-    // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5
+    // Active modules contain the the default streams of modules NoStaticContext and berries and their dependency gooseberry:5.5
     std::vector<std::string> expected_active_module_specs{
-        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+        "NoStaticContext:latest:1::x86_64",
+        "berries:main:4:6c81f848:x86_64",
+        "gooseberry:5.5:2:72aaf46b6:x86_64",
+        "gooseberry:5.5:3:72aaf46b6:x86_64"};
     std::vector<std::string> active_module_specs;
     for (auto & module_item : base.get_module_sack()->get_active_modules()) {
         active_module_specs.push_back(module_item->get_full_identifier());
@@ -709,17 +717,19 @@ void ModuleTest::test_module_disable() {
 void ModuleTest::test_module_disable_enabled() {
     add_repo_repomd("repomd-modules");
 
-    // Set state of module berries to ENABLED
-    (base.*get(priv_impl()))
-        ->get_system_state()
-        .set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
+    // Set state of modules NoStaticContext and berries to ENABLED
+    auto & system_state = (base.*get(priv_impl()))->get_system_state();
+    system_state.set_module_state(
+        "NoStaticContext", libdnf5::system::ModuleState({"latest", ModuleStatus::ENABLED, {}}));
+    system_state.set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
 
     // Add module disable goal operation
     libdnf5::Goal goal(base);
+    goal.add_module_disable("NoStaticContext", libdnf5::GoalJobSettings());
     goal.add_module_disable("berries", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
-    // Active modules don't contain anything, because the only module that had a default stream was enabled
+    // Active modules don't contain anything, because the only modules that had default streams were disabled
     std::vector<std::string> active_module_specs;
     for (auto & module_item : base.get_module_sack()->get_active_modules()) {
         active_module_specs.push_back(module_item->get_full_identifier());
@@ -729,15 +739,16 @@ void ModuleTest::test_module_disable_enabled() {
     // Run the transaction
     CPPUNIT_ASSERT_EQUAL(libdnf5::base::Transaction::TransactionRunResult::SUCCESS, transaction.run());
 
-    auto system_state = (base.*get(priv_impl()))->get_system_state();
-
-    // Module berries is DISABLED because it was explicitly disabled
+    // Modules NoStaticContext and berries are DISABLED because they were explicitly disabled
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf5::system::ModuleState({"", ModuleStatus::DISABLED, {}}),
+        system_state.get_module_state("NoStaticContext"));
     CPPUNIT_ASSERT_EQUAL(
         libdnf5::system::ModuleState({"", ModuleStatus::DISABLED, {}}), system_state.get_module_state("berries"));
 
     // None of the other modules is DISABLED
     for (auto [name, module_state] : system_state.get_module_states()) {
-        if (name != "berries") {
+        if (name != "NoStaticContext" && name != "berries") {
             CPPUNIT_ASSERT_EQUAL(libdnf5::system::ModuleState({"", ModuleStatus::AVAILABLE, {}}), module_state);
         }
     }
@@ -757,9 +768,13 @@ void ModuleTest::test_module_reset() {
     goal.add_module_reset("berries", libdnf5::GoalJobSettings());
     auto transaction = goal.resolve();
 
-    // Active modules contain the the default stream of module berries and its dependency gooseberry:5.5
+    // Active modules contain the the default streams of modules NoStaticContext and berries and their dependency
+    // gooseberry:5.5
     std::vector<std::string> expected_active_module_specs{
-        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+        "NoStaticContext:latest:1::x86_64",
+        "berries:main:4:6c81f848:x86_64",
+        "gooseberry:5.5:2:72aaf46b6:x86_64",
+        "gooseberry:5.5:3:72aaf46b6:x86_64"};
     std::vector<std::string> active_module_specs;
     for (auto & module_item : base.get_module_sack()->get_active_modules()) {
         active_module_specs.push_back(module_item->get_full_identifier());
@@ -788,8 +803,9 @@ void ModuleTest::test_module_globs() {
     auto transaction = goal.resolve();
 
     // Active modules contain the enabled fruit-salad and vegetable-salad, its dependency gooseberry and the default
-    // stream of module berries
+    // streams of modules NoStaticContext and berries
     std::vector<std::string> expected_active_module_specs{
+        "NoStaticContext:latest:1::x86_64",
         "berries:main:4:6c81f848:x86_64",
         "fruit-salad:main:12:2241675a:x86_64",
         "gooseberry:5.5:2:72aaf46b6:x86_64",
