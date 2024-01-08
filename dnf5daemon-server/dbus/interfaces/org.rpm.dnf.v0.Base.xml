@@ -94,7 +94,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Downloading has ended.
     -->
-    <signal name="repo_load_end">
+    <signal name="download_end">
         <arg name="session_object_path" type="o" />
         <arg name="download_id" type="s" />
         <arg name="status" type="i" />
