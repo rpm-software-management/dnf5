@@ -260,11 +260,39 @@ data:
         gooseberry: [5.4]
 ...
 ---
+  document: modulemd
+  version: 2
+  data:
+    name: NoStaticContext
+    stream: latest
+    version: 1
+    arch: x86_64
+    summary: Test module
+    description: Test module
+    license:
+      module: [MIT]
+    profiles:
+      minimal:
+        rpms: []
+    dependencies:
+    - requires:
+        gooseberry: [5.5]
+...
+---
 document: modulemd-defaults
 version: 1
 data:
     module: berries
     stream: main
+    profiles:
+      main: [minimal]
+...
+---
+document: modulemd-defaults
+version: 1
+data:
+    module: NoStaticContext
+    stream: latest
     profiles:
       main: [minimal]
 ...
