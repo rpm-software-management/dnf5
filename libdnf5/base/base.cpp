@@ -165,12 +165,22 @@ void Base::setup() {
             vars_installroot = config.get_installroot_option().get_value();
         }
     }
-    // Unless the logdir is specified on the command line, logdir should be
-    // relative to the installroot
+    // Unless the cachedir or logdir are specified on the command line, they
+    // should be relative to the installroot
     if (config.get_logdir_option().get_priority() < Option::Priority::COMMANDLINE) {
         const std::filesystem::path logdir_path{config.get_logdir_option().get_value()};
-        const auto full_path = (installroot_path / logdir_path.relative_path()).string();
-        config.get_logdir_option().set(Option::Priority::INSTALLROOT, full_path);
+        const auto full_path = installroot_path / logdir_path.relative_path();
+        config.get_logdir_option().set(Option::Priority::INSTALLROOT, full_path.string());
+    }
+    if (config.get_cachedir_option().get_priority() < Option::Priority::COMMANDLINE) {
+        const std::filesystem::path cachedir_path{config.get_cachedir_option().get_value()};
+        const auto full_path = installroot_path / cachedir_path.relative_path();
+        config.get_cachedir_option().set(Option::Priority::INSTALLROOT, full_path.string());
+    }
+    if (config.get_system_cachedir_option().get_priority() < Option::Priority::COMMANDLINE) {
+        const std::filesystem::path system_cachedir_path{config.get_system_cachedir_option().get_value()};
+        const auto full_path = installroot_path / system_cachedir_path.relative_path();
+        config.get_system_cachedir_option().set(Option::Priority::INSTALLROOT, full_path.string());
     }
 
     load_plugins();
