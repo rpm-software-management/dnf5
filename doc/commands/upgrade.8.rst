@@ -46,7 +46,7 @@ Options
     | Allow erasing of installed packages to resolve any potential dependency problems.
 
 ``--skip-unavailable``
-    | Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+    | Allow skipping packages that are not possible to upgrade. All remaining packages will be upgraded.
 
 ``--advisories=ADVISORY_NAME,...``
     | Consider only content contained in advisories with specified name.

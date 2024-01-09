@@ -72,7 +72,7 @@ Options
 =======
 
 ``--skip-unavailable``
-    | Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+    | Allow skipping packages that are not installed on the system. All remaining installed packages will be marked.
 
 
 Examples
