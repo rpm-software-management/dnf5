@@ -106,7 +106,8 @@ Options
     | Used with ``install`` command to resolve any dependency problems by removing packages that are causing problems from the transaction.
 
 ``--skip-unavailable``
-    | Used with ``install`` and ``upgrade`` to allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+    | Used with ``install`` and ``upgrade`` to allow skipping packages that are not possible to install or upgrade.
+    | All remaining packages will be installed or upgraded.
 
 
 Examples
