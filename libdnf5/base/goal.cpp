@@ -755,7 +755,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
             ret |= GoalProblem::UNSUPPORTED_ACTION;
             continue;
         }
-        sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
+        sack::QueryCmp cmp = settings.get_ignore_case() ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
         bool spec_resolved{false};
         if (settings.group_search_groups) {
             comps::GroupQuery group_query(base, true);
@@ -1685,10 +1685,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
 
 void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg) {
     auto pkg_settings = GoalJobSettings();
-    pkg_settings.with_provides = false;
-    pkg_settings.with_filenames = false;
-    pkg_settings.with_binaries = false;
-    pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+    pkg_settings.set_with_provides(false);
+    pkg_settings.set_with_filenames(false);
+    pkg_settings.set_with_binaries(false);
+    pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
 
     // TODO(mblaha): apply pkg.basearchonly when available in comps
     auto pkg_name = pkg.get_name();
@@ -1896,13 +1896,13 @@ void Goal::Impl::add_group_upgrade_to_goal(
         }
 
         auto pkg_settings = GoalJobSettings();
-        pkg_settings.with_provides = false;
-        pkg_settings.with_filenames = false;
-        pkg_settings.with_binaries = false;
+        pkg_settings.set_with_provides(false);
+        pkg_settings.set_with_filenames(false);
+        pkg_settings.set_with_binaries(false);
         for (const auto & pkg_name : state_group.packages) {
             if (new_set.contains(pkg_name)) {
                 // upgrade all packages installed with the group
-                pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+                pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
                 add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
             } else {
                 // remove those packages that are not part of the group any more
@@ -2180,8 +2180,11 @@ void Goal::Impl::add_paths_to_goal() {
 void Goal::Impl::set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak) {
     for (const auto & exclude_weak : exclude_from_weak) {
         rpm::PackageQuery weak_query(base, rpm::PackageQuery::ExcludeFlags::APPLY_EXCLUDES);
-        libdnf5::ResolveSpecSettings settings{
-            .with_nevra = true, .with_provides = false, .with_filenames = true, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_nevra(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(true);
+        settings.set_with_binaries(true);
         weak_query.resolve_pkg_spec(exclude_weak, settings, false);
         weak_query.filter_available();
         rpm_goal.add_exclude_from_weak(*weak_query.p_impl);

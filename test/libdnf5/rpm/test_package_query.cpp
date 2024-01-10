@@ -671,7 +671,10 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // test Name.Arch
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -681,8 +684,11 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test NA icase
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{
-            .ignore_case = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("Pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -692,7 +698,9 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test a provide
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{.with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("pkg >= 1", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -702,7 +710,10 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -712,7 +723,10 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob - icase == false, nothing found
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
         std::vector<Package> expected = {};
@@ -722,8 +736,11 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob - icase == true
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{
-            .ignore_case = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -733,8 +750,11 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA icase
         PackageQuery query(base);
-        libdnf5::ResolveSpecSettings settings{
-            .ignore_case = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", settings, true);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));

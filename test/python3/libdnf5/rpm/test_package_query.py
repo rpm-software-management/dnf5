@@ -124,7 +124,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         # Test passing an explicit list of forms
         query = libdnf5.rpm.PackageQuery(self.base)
         settings = libdnf5.base.ResolveSpecSettings()
-        settings.nevra_forms.append(libdnf5.rpm.Nevra.Form_NA)
+        settings.set_nevra_forms(
+            libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
 
         match, nevra = query.resolve_pkg_spec("pkg.x86_64", settings, True)
 

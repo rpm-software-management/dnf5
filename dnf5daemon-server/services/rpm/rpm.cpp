@@ -73,7 +73,10 @@ std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, con
 
 libdnf5::rpm::PackageQuery resolve_nevras(libdnf5::rpm::PackageQuery base_query, std::vector<std::string> nevras) {
     libdnf5::rpm::PackageQuery result(base_query.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-    libdnf5::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false, .with_binaries = false};
+    libdnf5::ResolveSpecSettings settings;
+    settings.set_with_provides(false);
+    settings.set_with_filenames(false);
+    settings.set_with_binaries(false);
     for (const auto & nevra : nevras) {
         libdnf5::rpm::PackageQuery nevra_query(base_query);
         nevra_query.resolve_pkg_spec(nevra, settings, false);
@@ -120,12 +123,12 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
         libdnf5::rpm::PackageQuery result(*base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         // packages matching flags
         bool with_src = key_value_map_get<bool>(options, "with_src", true);
-        libdnf5::ResolveSpecSettings settings{
-            .ignore_case = key_value_map_get<bool>(options, "icase", true),
-            .with_nevra = key_value_map_get<bool>(options, "with_nevra", true),
-            .with_provides = key_value_map_get<bool>(options, "with_provides", true),
-            .with_filenames = key_value_map_get<bool>(options, "with_filenames", true),
-            .with_binaries = key_value_map_get<bool>(options, "with_binaries", true)};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(key_value_map_get<bool>(options, "icase", true));
+        settings.set_with_nevra(key_value_map_get<bool>(options, "with_nevra", true));
+        settings.set_with_provides(key_value_map_get<bool>(options, "with_provides", true));
+        settings.set_with_filenames(key_value_map_get<bool>(options, "with_filenames", true));
+        settings.set_with_binaries(key_value_map_get<bool>(options, "with_binaries", true));
         for (auto & pattern : patterns) {
             libdnf5::rpm::PackageQuery package_query(query);
             package_query.resolve_pkg_spec(pattern, settings, with_src);
@@ -416,10 +419,10 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
     // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
     // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
     libdnf5::GoalJobSettings setting;
-    setting.with_nevra = true;
-    setting.with_provides = false;
-    setting.with_filenames = true;
-    setting.with_binaries = false;
+    setting.set_with_nevra(true);
+    setting.set_with_provides(false);
+    setting.set_with_filenames(true);
+    setting.set_with_binaries(false);
     for (const auto & spec : specs) {
         goal.add_remove(spec, setting);
     }
