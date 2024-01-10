@@ -62,7 +62,7 @@ void GroupInstallCommand::run() {
 
     libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {
-        settings.group_no_packages = true;
+        settings.set_group_no_packages(true);
     }
     if (with_optional->get_value()) {
         auto group_package_types = libdnf5::comps::package_type_from_string(

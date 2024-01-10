@@ -54,7 +54,7 @@ void GroupRemoveCommand::run() {
 
     libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {
-        settings.group_no_packages = true;
+        settings.set_group_no_packages(true);
     }
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_remove(spec, libdnf5::transaction::TransactionItemReason::USER, settings);
