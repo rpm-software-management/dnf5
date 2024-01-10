@@ -201,46 +201,85 @@ private:
 
 struct GoalJobSettings : public ResolveSpecSettings {
 public:
+    GoalJobSettings();
+    ~GoalJobSettings();
+
+    GoalJobSettings(const GoalJobSettings & src);
+    GoalJobSettings(GoalJobSettings && src) noexcept;
+    GoalJobSettings & operator=(const GoalJobSettings & src);
+    GoalJobSettings & operator=(GoalJobSettings && src) noexcept;
+
     /// Return used value for skip_broken
-    GoalUsedSetting get_used_skip_broken() const { return used_skip_broken; };
+    GoalUsedSetting get_used_skip_broken() const;
     /// Return used value for skip_unavailable
-    GoalUsedSetting get_used_skip_unavailable() const { return used_skip_unavailable; };
+    GoalUsedSetting get_used_skip_unavailable() const;
     /// Return used value for best
-    GoalUsedSetting get_used_best() const { return used_best; };
+    GoalUsedSetting get_used_best() const;
     /// Return used value for clean_requirements_on_remove
-    GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
+    GoalUsedSetting get_used_clean_requirements_on_remove() const;
 
-    /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
-    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
-    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const {
-        return advisory_filter ? &advisory_filter.value() : nullptr;
-    }
+    /// Optionally set AdvisoryQuery that is used to filter packages (used for upgrade).
+    /// Upgrades considers only packages that resolve some advisory in specified AdvisoryQuery.
+    ///
+    /// By default is is empty and no packages are filtered.
+    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter);
+    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const;
 
-    // Which types of group packages are going to be installed with the group.
-    // If not set, default is taken from ConfigMain.group_package_types
-    void set_group_package_types(const libdnf5::comps::PackageType type) { group_package_types = type; }
-    const libdnf5::comps::PackageType * get_group_package_types() const {
-        return group_package_types ? &group_package_types.value() : nullptr;
-    }
+    /// Which types of group packages are going to be installed with the group.
+    ///
+    /// Default is taken from ConfigMain.group_package_types
+    void set_group_package_types(libdnf5::comps::PackageType type);
+    const libdnf5::comps::PackageType * get_group_package_types() const;
 
     /// If set to true, group operations (install / remove / upgrade) will only work
     /// with the group itself, but will not add to the transaction any packages.
-    bool group_no_packages{false};
+    ///
+    /// Default: false
+    void set_group_no_packages(bool group_no_packages);
+    bool get_group_no_packages() const;
 
-    /// Set whether hints should be reported
-    bool report_hint{true};
-    /// Set skip_broken, AUTO means that it is handled according to the default behavior
-    GoalSetting skip_broken{GoalSetting::AUTO};
-    /// Set skip_unavailable, AUTO means that it is handled according to the default behavior
-    GoalSetting skip_unavailable{GoalSetting::AUTO};
-    /// Set best, AUTO means that it is handled according to the default behavior
-    GoalSetting best{GoalSetting::AUTO};
-    /// Set clean_requirements_on_remove, AUTO means that it is handled according to the default behavior
-    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
-    /// Define which installed packages should be modified according to repoid from which they were installed
-    std::vector<std::string> from_repo_ids;
-    /// Reduce candidates for the operation according repository ids
-    std::vector<std::string> to_repo_ids;
+    /// Set whether to report packages providing alternatives (``alternative-for(..)`` provide) and packages
+    /// with different letter capitalization when no matches are found.
+    ///
+    /// Default: true
+    void set_report_hint(bool report_hint);
+    bool get_report_hint() const;
+
+    /// Resolve any dependency problems by removing packages that are causing problems from the transaction.
+    ///
+    /// By default the value is taken from ``skip_broken`` configuration option.
+    void set_skip_broken(GoalSetting skip_broken);
+    GoalSetting get_skip_broken() const;
+
+    /// Allow skipping packages that are unavailable.
+    ///
+    /// By default the value is taken from a configuration option ``skip_unavailable`` except for remove action
+    /// which defaults to true.
+    void set_skip_unavailable(GoalSetting skip_unavailable);
+    GoalSetting get_skip_unavailable() const;
+
+    /// Try the best available package versions in transactions.
+    ///
+    /// By default the value is taken from ``best`` configuration option.
+    void set_best(GoalSetting best);
+    GoalSetting get_best() const;
+
+    /// Remove dependencies that are no longer used during ``dnf remove``.
+    ///
+    /// By default the value is false except for remove action which defaults to value from
+    /// clean_requirements_on_remove configuration option.
+    void set_clean_requirements_on_remove(GoalSetting clean_requirements_on_remove);
+    GoalSetting get_clean_requirements_on_remove() const;
+
+    /// Not implemented yet
+    void set_from_repo_ids(std::vector<std::string> from_repo_ids);
+    std::vector<std::string> get_from_repo_ids() const;
+
+    /// Limit available packages to specified repositories.
+    ///
+    /// Empty by default.
+    void set_to_repo_ids(std::vector<std::string> to_repo_ids);
+    std::vector<std::string> get_to_repo_ids() const;
 
 private:
     friend class Goal;
@@ -296,13 +335,8 @@ private:
     /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     libdnf5::comps::PackageType resolve_group_package_types(const libdnf5::ConfigMain & cfg_main);
 
-    GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
-    std::optional<libdnf5::comps::PackageType> used_group_package_types{std::nullopt};
-    std::optional<libdnf5::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
-    std::optional<libdnf5::comps::PackageType> group_package_types{std::nullopt};
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

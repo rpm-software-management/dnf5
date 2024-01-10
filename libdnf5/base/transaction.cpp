@@ -187,7 +187,7 @@ GoalProblem Transaction::Impl::report_not_found(
             pkg_spec,
             {},
             log_level);
-        if (settings.report_hint) {
+        if (settings.get_report_hint()) {
             rpm::PackageQuery hints(base);
             if (action == GoalAction::REMOVE) {
                 hints.filter_installed();

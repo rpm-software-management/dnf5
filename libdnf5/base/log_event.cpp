@@ -102,7 +102,7 @@ std::string LogEvent::to_string(
             return ret.append(utils::sformat(
                 _("No match for argument '{0}' in repositories '{1}'"),
                 *spec,
-                utils::string::join(settings->to_repo_ids, ", ")));
+                utils::string::join(settings->get_to_repo_ids(), ", ")));
         case GoalProblem::NOT_INSTALLED:
             return ret.append(utils::sformat(_("Packages for argument '{}' available, but not installed."), *spec));
         case GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE:
