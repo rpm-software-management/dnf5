@@ -196,7 +196,7 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
         goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
         if (log.get_job_settings()) {
             dnfdaemon::KeyValueMap goal_job_settings;
-            goal_job_settings["to_repo_ids"] = log.get_job_settings()->to_repo_ids;
+            goal_job_settings["to_repo_ids"] = log.get_job_settings()->get_to_repo_ids();
             goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
         }
         if (log.get_spec()) {

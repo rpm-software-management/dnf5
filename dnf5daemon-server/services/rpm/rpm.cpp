@@ -499,7 +499,7 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
     // fill the goal
     auto & goal = session.get_goal();
     libdnf5::GoalJobSettings setting;
-    setting.to_repo_ids = repo_ids;
+    setting.set_to_repo_ids(repo_ids);
     for (const auto & spec : specs) {
         goal.add_downgrade(spec, setting);
     }
@@ -536,9 +536,9 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
     // fill the goal
     auto & goal = session.get_goal();
     libdnf5::GoalJobSettings setting;
-    setting.skip_broken = skip_broken;
-    setting.skip_unavailable = skip_unavailable;
-    setting.to_repo_ids = repo_ids;
+    setting.set_skip_broken(skip_broken);
+    setting.set_skip_unavailable(skip_unavailable);
+    setting.set_to_repo_ids(repo_ids);
 
     for (const auto & spec : specs) {
         goal.add_install(spec, setting);
@@ -560,7 +560,7 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     // fill the goal
     auto & goal = session.get_goal();
     libdnf5::GoalJobSettings setting;
-    setting.to_repo_ids = repo_ids;
+    setting.set_to_repo_ids(repo_ids);
     if (specs.empty()) {
         goal.add_rpm_upgrade(setting);
     } else {
@@ -585,7 +585,7 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
     // fill the goal
     auto & goal = session.get_goal();
     libdnf5::GoalJobSettings setting;
-    setting.to_repo_ids = repo_ids;
+    setting.set_to_repo_ids(repo_ids);
     for (const auto & spec : specs) {
         goal.add_reinstall(spec, setting);
     }
