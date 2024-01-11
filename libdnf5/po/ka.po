@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 02:52+0000\n"
+"POT-Creation-Date: 2024-01-09 02:52+0000\n"
 "PO-Revision-Date: 2023-11-16 19:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -95,22 +95,22 @@ msgstr "არგუმენტი '{}' მხოლოდ საწყის�
 msgid "Argument '{}' matches only excluded packages."
 msgstr "არგუმენტი '{}' მხოლოდ ამოღებულ პაკეტებს ემთხვევა."
 
-#: base/log_event.cpp:116
+#: base/log_event.cpp:119
 msgid "  * Maybe you meant: {}"
 msgstr "  * შეიძლება იგულისხმეთ: {}"
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:122
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "არსებობს შემდეგი ალტერნატივები '{0}'-სთვის: {1}"
 
-#: base/log_event.cpp:126
+#: base/log_event.cpp:129
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
 "პაკეტი \"{}\" უკვე ყველაზე დაბალი ვერსიისაა. ვერსიის დაწევა შეუძლებელია."
 
-#: base/log_event.cpp:132
+#: base/log_event.cpp:135
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -118,30 +118,30 @@ msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია "
 "=> თავიდან დაყენება შეუძლებელია"
 
-#: base/log_event.cpp:137
+#: base/log_event.cpp:140
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია."
 
-#: base/log_event.cpp:139
+#: base/log_event.cpp:142
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "პაკეტი არგუმენტისთვის '{}' დაყენებულია, მაგრამ ხელმისაწვდომი არაა."
 
-#: base/log_event.cpp:148
+#: base/log_event.cpp:151
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია, მიზეზი: \"{}\"."
 
-#: base/log_event.cpp:150
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია."
 
-#: base/log_event.cpp:159
+#: base/log_event.cpp:162
 msgid "Debug data written to \"{}\""
 msgstr "გამართვის მონაცემები \"{}\"-ში ჩაიწერა"
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:165
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "ქმედება {} არგუმენტისთვის \"{}\" მხარდაჭერილი არაა."
 
