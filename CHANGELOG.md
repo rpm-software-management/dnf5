@@ -1,3 +1,23 @@
+# 5.1.11
+
+- Update translations from weblate
+- Fix `--skip-unavailable` documentation
+- Make `cachedir`, `system_cachedir` relative to `installroot`
+- Workaround for swig-4.2.0 missing fragment dependency
+- Add `repoquery --recursive` option
+- Add `repoquery --providers-of=PACKAGE_ATTRIBUTE` option
+- Update documentation of repoquery
+- Update documentation for remove command behavior
+- Limit search pattern for remove command to NEVRAs and files
+- Packaging: Require an exact release of libdnf5-cli by dnf5-plugins
+- Disable zchunk on RHEL
+- Add dnf5.conf man page
+- Add RPM package Group attribute to dnf5daemon-server
+- Document changes related to caching
+- Document caching man page
+- Document Global Option `--help-cmd` dropped
+- log_event: Correct message for HINT_ICASE
+
 # 5.1.10
 
 - Document dnf5 plugins
