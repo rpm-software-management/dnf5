@@ -46,7 +46,7 @@ void ConfigManagerSetVarCommand::set_argument_parser() {
                 auto val = strchr(value + 1, '=');
                 if (!val) {
                     throw cli::ArgumentParserError(
-                        M_("varval: Badly formatted argument value \"{}\""), std::string{value});
+                        M_("{}: Badly formatted argument value \"{}\""), 'varval', std::string{value});
                 }
                 std::string var_name{value, val};
                 std::string var_value{val + 1};

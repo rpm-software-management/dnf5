@@ -150,7 +150,9 @@ void RootCommand::set_argument_parser() {
         if (dot_pos != std::string::npos) {
             if (dot_pos == key.size() - 1) {
                 throw std::runtime_error(
-                    std::string("setopt: Badly formatted argument value: Last key character cannot be '.': ") + value);
+                    M_("{}: Badly formatted argument value: Last key character cannot be '.': {}"),
+                    'setopt',
+                    value;
             }
         }
         // Store option to vector for later use
