@@ -46,6 +46,6 @@ const char * GoalResolveError::what() const noexcept {
     return message.c_str();
 }
 
-SilentCommandExitError::SilentCommandExitError(int exit_code) : Error(M_("")), exit_code(exit_code) {}
+SilentCommandExitError::SilentCommandExitError(int exit_code) : Error(EMPTY_MESSAGE), exit_code(exit_code) {}
 
 }  // namespace libdnf5::cli

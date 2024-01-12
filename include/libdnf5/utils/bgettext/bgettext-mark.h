@@ -22,6 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "bgettext-mark-common.h"
 
+// clang-format off
+// Use EMPTY_MESSAGE instead of M_(""). Otherwise, xgettext breaks catalogs.
+#define EMPTY_MESSAGE \
+    { .bgettextMsg = "\000" "" }
 #define M_(msgId) \
     { .bgettextMsg = "\000" msgId }
 #define MP_(msgId, msgIdPlural) \
@@ -30,5 +34,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     { .bgettextMsg = "\002" context "\004" msgId }
 #define MCP_(context, msgId, msgIdPlural) \
     { .bgettextMsg = "\003" context "\004" msgId "\00" msgIdPlural }
+// clang-format on
 
 #endif /* _BGETTEXT_MARK_H_ */
