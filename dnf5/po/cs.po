@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
+"POT-Creation-Date: 2023-12-19 02:52+0000\n"
 "PO-Revision-Date: 2023-11-21 12:02+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
@@ -267,16 +267,10 @@ msgstr ""
 msgid "Pattern matching repo IDs."
 msgstr ""
 
-#: commands/repoquery/repoquery.cpp:514
+#: commands/repoquery/repoquery.cpp:461
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
-msgstr ""
-
-#: commands/repoquery/repoquery.cpp:519
-msgid ""
-"Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
-"providers-of=requires\""
 msgstr ""
 
 #: commands/search/arguments.hpp:37

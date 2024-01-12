@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
+"POT-Creation-Date: 2023-12-19 02:52+0000\n"
 "PO-Revision-Date: 2023-11-21 12:02+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -292,22 +292,10 @@ msgstr "გამორთული რეპოზიტორიების �
 msgid "Pattern matching repo IDs."
 msgstr "რეპოზიტორიის ID-ების შესაბამისი შაბლონი."
 
-#: commands/repoquery/repoquery.cpp:514
+#: commands/repoquery/repoquery.cpp:461
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
-msgstr ""
-"პარამეტრი \"--exactdeps\", მხოლოდ, \"--whatrequires\" ან \"--whatdepends\" "
-"პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
-
-#: commands/repoquery/repoquery.cpp:519
-#, fuzzy
-#| msgid ""
-#| "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or "
-#| "\"--whatdepends\""
-msgid ""
-"Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
-"providers-of=requires\""
 msgstr ""
 "პარამეტრი \"--exactdeps\", მხოლოდ, \"--whatrequires\" ან \"--whatdepends\" "
 "პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"

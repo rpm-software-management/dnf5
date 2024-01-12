@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
+"POT-Creation-Date: 2023-12-19 02:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -89,49 +89,49 @@ msgstr ""
 msgid "Argument '{}' matches only excluded packages."
 msgstr ""
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
 msgid "  * Maybe you meant: {}"
 msgstr ""
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:119
 msgid "There are following alternatives for '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:126
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:132
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
 msgstr ""
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:139
 msgid "Packages for argument '{}' installed, but not available."
 msgstr ""
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:148
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr ""
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:150
 msgid "Package \"{}\" is already installed."
 msgstr ""
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:159
 msgid "Debug data written to \"{}\""
 msgstr ""
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:162
 msgid "{} action for argument \"{}\" is not supported."
 msgstr ""
 
