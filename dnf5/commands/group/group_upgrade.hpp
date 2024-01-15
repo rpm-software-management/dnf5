@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 
 #include <memory>
 #include <vector>
@@ -37,6 +38,8 @@ public:
     void set_argument_parser() override;
     void configure() override;
     void run() override;
+
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
 };
