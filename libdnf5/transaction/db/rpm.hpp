@@ -44,7 +44,7 @@ public:
     static int64_t rpm_insert(libdnf5::utils::SQLite3::Statement & query, const Package & rpm);
 
 
-    /// Find a primary key of a recod in table 'rpm' that matches the Package.
+    /// Find a primary key of a record in table 'rpm' that matches the Package.
     /// Return an existing primary key or 0 if the record was not found.
     static int64_t rpm_select_pk(libdnf5::utils::SQLite3::Statement & query, const Package & rpm);
 

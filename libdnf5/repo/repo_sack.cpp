@@ -515,7 +515,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 
     update_and_load_repos(repos);
 
-    // TODO(jmracek) Replace by call that will resolve active modules and apply modular filterring
+    // TODO(jmracek) Replace by call that will resolve active modules and apply modular filtering
     base->get_module_sack()->p_impl->module_filtering();
 
     repos_updated_and_loaded = true;

@@ -127,7 +127,7 @@ void TransactionTest::test_update() {
     (trans.*get(set_state{}))(TransactionState::ERROR);
     (trans.*get(finish{}))(TransactionState::OK);
 
-    // load the transction from the database
+    // load the transaction from the database
     auto base2 = new_base();
     auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
     CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());

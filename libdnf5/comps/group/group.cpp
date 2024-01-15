@@ -242,7 +242,7 @@ void Group::serialize(const std::string & path) {
             if (keyname.rfind(summary_prefix, 0) == 0) {
                 lang = keyname.substr(summary_prefix.length());
                 // Add the lang into the set
-                // If it's succesful (wasn't already present), create an XML node for this translation
+                // If it's successful (wasn't already present), create an XML node for this translation
                 if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "name", std::string(di.kv.str));
                     xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
@@ -252,7 +252,7 @@ void Group::serialize(const std::string & path) {
             else if (keyname.rfind(description_prefix, 0) == 0) {
                 lang = keyname.substr(description_prefix.length());
                 // Add the lang into the set
-                // If it's succesful (wasn't already present), create an XML node for this translation
+                // If it's successful (wasn't already present), create an XML node for this translation
                 if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "description", std::string(di.kv.str));
                     xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());

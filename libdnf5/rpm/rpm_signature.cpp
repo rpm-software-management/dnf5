@@ -119,7 +119,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
     }
 
     // rpmcliVerifySignatures is the only API rpm provides for signature verification.
-    // Unfortunatelly to distinguish key_missing/not_signed/verification_failed cases
+    // Unfortunately to distinguish key_missing/not_signed/verification_failed cases
     // we need to temporarily increase log level to RPMLOG_INFO, collect the log
     // messages and parse them.
     // This code is only slightly better than running `rpmkeys --checksig` tool

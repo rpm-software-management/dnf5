@@ -321,8 +321,8 @@ void ConfigParserTest::test_create_with_comments_header() {
     create(items_with_comments_header, with_comments_header_content, false);
 }
 
-// Creates crazy (crazy custom formating) ini file.
-// Uses raw texts, ini file uses custom formating.
+// Creates crazy (crazy custom formatting) ini file.
+// Uses raw texts, ini file uses custom formatting.
 void ConfigParserTest::test_create_crazy() {
     create(crazy_items, crazy_ini_content, true);
 }

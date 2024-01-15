@@ -12,11 +12,11 @@ goal.add_rpm_install("one");
 
 // Resolve the goal, create a transaction object.
 //
-// The argument is `allow_erasing`, a flag indicating wheter to allow removing
+// The argument is `allow_erasing`, a flag indicating whether to allow removing
 // packages in the resolved transaction.
 auto transaction = goal.resolve();
 
-// We can iterate over the resolved transction and inspect the packages.
+// We can iterate over the resolved transaction and inspect the packages.
 std::cout << "Resolved transaction:" << std::endl;
 for (const auto & tspkg : transaction.get_transaction_packages()) {
     std::cout << tspkg.get_package().get_nevra() << ": " << transaction_item_action_to_string(tspkg.get_action())

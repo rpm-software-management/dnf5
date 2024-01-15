@@ -161,7 +161,7 @@ private:
     explicit RepoSack(libdnf5::Base & base);
 
     /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
-    /// Only the configuration of the coresponding existing repositories is modified.
+    /// Only the configuration of the corresponding existing repositories is modified.
     void load_repos_configuration_overrides();
 
     WeakPtrGuard<RepoSack, false> sack_guard;

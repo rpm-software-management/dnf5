@@ -25,7 +25,7 @@ Actions Plugin
 Description
 ===========
 
-This plugin allows defining actions to be executed throught libdnf5 callbacks hooks.
+This plugin allows defining actions to be executed through libdnf5 callbacks hooks.
 Each action is hooked to one specific callback. Actions for ``pre_transaction`` and
 ``post_transaction`` callbacks may define a (glob-like) filtering rule on the package
 NEVRA or package files, as well as whether the package is incoming or outgoing.
@@ -55,7 +55,7 @@ Each non-comment line defines an action and consists of five items separated by 
    * ``post_transaction``
 
 ``package_filter``
-   A (glob-like) filtering rule aplied on the package NEVRA (also in the shortened forms) or package files.
+   A (glob-like) filtering rule applied on the package NEVRA (also in the shortened forms) or package files.
 
    Empty filter means executing the command once with no information about the package.
    The "*" filter means executing the command for each package in the transaction that matches the ``direction`` filter.

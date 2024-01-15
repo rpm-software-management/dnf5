@@ -100,7 +100,7 @@ This section does not track any deprecated option. For such options see :ref:`De
 ``diskspacecheck``
     :ref:`boolean <boolean-label>`
 
-    If enabled, controls wheather rpm shoud check available disk space during the transaction.
+    If enabled, controls whether rpm should check available disk space during the transaction.
 
     Default: ``True``.
 

@@ -71,7 +71,7 @@ private:
 
     /// Tests if the repositories IDs in the vector do not already exist in the configuration.
     /// @param repo_ids  List of repositories IDs to check.
-    /// @param ignore_path  The file in this path will be ignored/skiped.
+    /// @param ignore_path  The file in this path will be ignored/skipped.
     /// @throws ConfigManagerError  Trown if an already existent repository ID was found.
     void test_if_ids_not_already_exist(
         const std::vector<std::string> & repo_ids, const std::filesystem::path & ignore_path) const;

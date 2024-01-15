@@ -246,7 +246,7 @@ public:
         /// Sets a pointer to user data in the argument.
         void set_user_data(ArgumentParserUserData * user_data) noexcept { this->user_data = user_data; }
 
-        /// Gets a pointer to the user data attached to the argment.
+        /// Gets a pointer to the user data attached to the argument.
         ArgumentParserUserData * get_user_data() const noexcept { return user_data; }
 
     private:
@@ -768,7 +768,7 @@ public:
     /// it will be searched in the parent command. E.g. "installroot" is global option -> instead
     /// of "repoquery.installroot" returns "installroot".
     /// @param id_path  named argument ID path, e.g. "installroot", "repoquery.installed"
-    /// @param search_in_parent  true - enable search in parrent command, false - disable
+    /// @param search_in_parent  true - enable search in parent command, false - disable
     /// @exception AssertionError  if root command is not set
     /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
     /// @exception ArgumentParser::Command::PositionalArgNotFound  if argument is not found.
@@ -780,7 +780,7 @@ public:
     /// it will be searched in the parent command. E.g. "installroot" is global option -> instead
     /// of "repoquery.installroot" returns "installroot".
     /// @param id_path  positional argument ID path, e.g. "repoquery.keys"
-    /// @param search_in_parent  true - enable search in parrent command, false - disable
+    /// @param search_in_parent  true - enable search in parent command, false - disable
     /// @exception AssertionError  if root command is not set
     /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
     /// @exception ArgumentParser::Command::NamedArgNotFound  if argument is not found.

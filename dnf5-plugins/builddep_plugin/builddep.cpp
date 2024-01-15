@@ -270,7 +270,7 @@ void BuildDepCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
 
-    // Search only for solution in provides and files. Use buildrequire with name search migh result in inconsistent
+    // Search only for solution in provides and files. Use buildrequire with name search might result in inconsistent
     // behavior with installing dependencies of RPMs
     libdnf5::GoalJobSettings settings;
     settings.with_nevra = false;

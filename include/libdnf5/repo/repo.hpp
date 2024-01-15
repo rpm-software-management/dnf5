@@ -220,7 +220,7 @@ public:
     std::string get_metadata_path(const std::string & metadata_type);
 
     /// Mark whatever is in the current cache expired.
-    /// This repo instance will alway try to fetch a fresh metadata after this
+    /// This repo instance will always try to fetch a fresh metadata after this
     /// method is called.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.expire()
     void expire();

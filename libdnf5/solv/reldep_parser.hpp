@@ -30,10 +30,10 @@ namespace libdnf5::solv {
 struct ReldepParser {
 public:
     /// Parses `reldep` into three elements: name, evr, and comparison type.
-    /// If parsing is not succesful, the object contains garbage (tm).
+    /// If parsing is not successful, the object contains garbage (tm).
     ///
     /// @param reldep The reldep string to parse.
-    /// @return `true` if parsing was succesful.
+    /// @return `true` if parsing was successful.
     bool parse(const std::string & reldep);
 
     const std::string & get_name() const noexcept { return name; }

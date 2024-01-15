@@ -43,7 +43,7 @@ libdnf5::rpm::PackageQuery repeat_filter(
     libdnf5::rpm::PackageQuery & candidates,
     const std::vector<std::string> & arches) {
     // Create source query of all considered packages.
-    // To match dnf4 take arch filter into acccount.
+    // To match dnf4 take arch filter into account.
     // (filtering by repo and available/installed is done implicitly by loading only the required metadata)
     libdnf5::rpm::PackageQuery all_considered(candidates.get_base());
     if (!arches.empty()) {

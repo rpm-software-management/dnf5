@@ -27,9 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 <interface name="org.rpm.dnf.v0.Base">
     <!--
         read_all_repos:
-        @retval: `true` if repositories were successfuly loaded, `false` otherwise.
+        @retval: `true` if repositories were successfully loaded, `false` otherwise.
 
-        Explicitely ask for loading repositories metadata.
+        Explicitly ask for loading repositories metadata.
     -->
     <method name="read_all_repos">
         <arg name="retval" type="b" direction="out"/>

@@ -44,7 +44,7 @@ std::string TimeWidget::to_string() const {
     std::ostringstream ss;
     ss << get_delimiter_before();
     if (get_bar()->is_finished() || get_bar()->get_total_ticks() < 0) {
-        // finshed or unknown total ticks -> display elapsed time
+        // finished or unknown total ticks -> display elapsed time
         ss << format_time(get_bar()->get_elapsed_seconds(), false);
     } else {
         // in progress -> display remaining time

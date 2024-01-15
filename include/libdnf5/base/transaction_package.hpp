@@ -45,7 +45,7 @@ public:
     /// @return the underlying package.
     libdnf5::rpm::Package get_package() const { return package; }
 
-    /// @return the action being preformed on the transaction package.
+    /// @return the action being performed on the transaction package.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
     Action get_action() const noexcept { return action; }

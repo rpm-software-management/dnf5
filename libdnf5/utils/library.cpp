@@ -28,7 +28,7 @@ namespace libdnf5::utils {
 Library::Library(const std::string & path) : path(path) {
     handle = dlopen(path.c_str(), RTLD_LAZY);
     if (!handle) {
-        const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
+        const char * err_msg = dlerror();  // returns localized message, problem with later translation
         throw LibraryLoadingError(M_("Cannot load shared library \"{}\": {}"), path, std::string(err_msg));
     }
 }
@@ -41,7 +41,7 @@ void * Library::get_address(const char * symbol) const {
     dlerror();  // Clear any existing error
     void * address = dlsym(handle, symbol);
     if (!address) {
-        const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
+        const char * err_msg = dlerror();  // returns localized message, problem with later translation
         if (err_msg) {
             throw LibrarySymbolNotFoundError(
                 M_("Cannot obtain address of symbol \"{}\": {}"), std::string(symbol), std::string(err_msg));

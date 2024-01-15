@@ -43,7 +43,7 @@ static std::string key_to_string(const matched_key_pair & key_pair) {
     }
 }
 
-/// Auxilliary method for aggregating a list of matched keys into a string.
+/// Auxiliary method for aggregating a list of matched keys into a string.
 static std::string concat_keys(const std::string & acc, const matched_key_pair & pair) {
     return acc.empty() ? key_to_string(pair) : acc + ", " + key_to_string(pair);
 }
@@ -53,7 +53,7 @@ static std::string construct_keys_string(const std::vector<matched_key_pair> & k
     return std::accumulate(key_pairs.begin(), key_pairs.end(), std::string{}, concat_keys);
 }
 
-/// Auxilliary method for aggregating a pattern matching expression into a string.
+/// Auxiliary method for aggregating a pattern matching expression into a string.
 static std::string concat_patterns(const std::string & acc, const std::string & pattern) {
     return acc.empty() ? pattern : acc + "|" + pattern;
 }

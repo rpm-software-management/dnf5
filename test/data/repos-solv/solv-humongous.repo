@@ -1,6 +1,6 @@
 =Ver: 3.0
 
-# a repo with 1000 packages for performace tests
+# a repo with 1000 packages for performance tests
 
 =Pkg: pkg-a 1 1 noarch
 =Prv: prv-a-1-1

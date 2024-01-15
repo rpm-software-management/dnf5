@@ -51,7 +51,7 @@ void RemoveCommand::set_argument_parser() {
     specs_arg->set_description("List of packages to remove");
     cmd.register_positional_arg(specs_arg);
 
-    // run remove command allways with allow_erasing on
+    // run remove command always with allow_erasing on
     context.allow_erasing.set(libdnf5::Option::Priority::RUNTIME, true);
 }
 

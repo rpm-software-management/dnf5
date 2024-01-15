@@ -109,7 +109,7 @@ void ListCommand::set_argument_parser() {
 }
 
 void ListCommand::configure() {
-    // TODO(mblaha): do not force expired metadata sync if not explicitely required
+    // TODO(mblaha): do not force expired metadata sync if not explicitly required
     pkg_narrow = PkgNarrow::ALL;
     Context::LoadAvailableRepos load_available = Context::LoadAvailableRepos::ENABLED;
     bool load_system = true;

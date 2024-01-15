@@ -4,7 +4,7 @@ This is an extension of the GNU gettext.
 
 At first I tried to use the glib extension of gettext. But glib is incomplete.
 * There are macros `_()`, `C_()`. But there are missing macros for plural forms. And there is not support of plural forms with context.
-* There are macros `N_()`, `NC_()` witch only marks string for translation. There is the same problem with plural. Moreover these macros are not useable as I needed.
+* There are macros `N_()`, `NC_()` witch only marks string for translation. There is the same problem with plural. Moreover these macros are not usable as I needed.
 * I do not want to depend on glib just for translation.
 
 ## So, I wrote my extension that offers everything I need.
@@ -54,7 +54,7 @@ If a translation was found in one of the specified catalogs, it is converted to 
 `label2 = C_("Insects", "Bug");`
 
 #### `CP_(context, msgId, msgIdPlural, n)`
-This is the most powerfull macro. It supports translation of message with context and plural forms. The macro encodes context and msgId and a dngettext is used internaly. See `P_()` and `C_()` macros for more informations about plural forms and context.
+This is the most powerful macro. It supports translation of message with context and plural forms. The macro encodes context and msgId and a dngettext is used internally. See `P_()` and `C_()` macros for more information about plural forms and context.
 If you are using the `CP_()` macro, you need to make sure that you pass `--keyword=CP_:1c,2,3` to xgettext when extracting messages. Note that this only works with GNU gettext >= 0.15.
 ##### Parameters
 `context` - a message context, must be a string literal

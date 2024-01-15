@@ -165,7 +165,7 @@ public:
     /// Filter ModuleItems by module_spec.
     ///
     /// @param module_spec      A module_spec the filter is matched against.
-    /// @return                 `true` and matched Nsvcap if the module_spec was parsed sucessfully,
+    /// @return                 `true` and matched Nsvcap if the module_spec was parsed successfully,
     ///                         `false` and empty Nsvcap otherwise.
     /// @since 5.0.6
     std::pair<bool, Nsvcap> resolve_module_spec(const std::string & module_spec);
