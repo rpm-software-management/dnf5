@@ -224,7 +224,7 @@ void RootCommand::set_argument_parser() {
             auto val = strchr(value + 1, '=');
             if (!val) {
                 throw libdnf5::cli::ArgumentParserError(
-                    M_("{}: Badly formatted argument value \"{}\""), 'setopt', std::string(value));
+                    M_("{}: Badly formatted argument value \"{}\""), std::string{"setopt"}, std::string(value));
             }
             auto key = std::string(value, val);
             auto dot_pos = key.rfind('.');
@@ -232,7 +232,7 @@ void RootCommand::set_argument_parser() {
                 if (dot_pos == key.size() - 1) {
                     throw libdnf5::cli::ArgumentParserError(
                         M_("{}: Badly formatted argument value: Last key character cannot be '.': {}"),
-                        'setopt',
+                        std::string{"setopt"},
                         std::string(value));
                 }
                 // Store repository option to vector. Use it later when repositories configuration will be loaded.
@@ -263,7 +263,7 @@ void RootCommand::set_argument_parser() {
             auto val = strchr(value + 1, '=');
             if (!val) {
                 throw libdnf5::cli::ArgumentParserError(
-                    M_("{}: Badly formatted argument value \"{}\""), 'setvar', std::string(value));
+                    M_("{}: Badly formatted argument value \"{}\""), std::string{"setvar"}, std::string(value));
             }
             auto name = std::string(value, val);
             try {
