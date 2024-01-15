@@ -71,7 +71,9 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                     auto repo_id = key.substr(0, dot_pos);
                     if (repo_id.empty()) {
                         throw cli::ArgumentParserError(
-                            M_("{}: Empty repository id is not allowed: {}"), std::string{"remove-opt"}, std::string{value});
+                            M_("{}: Empty repository id is not allowed: {}"),
+                            std::string{"remove-opt"},
+                            std::string{value});
                     }
                     auto repo_key = key.substr(dot_pos + 1);
 
