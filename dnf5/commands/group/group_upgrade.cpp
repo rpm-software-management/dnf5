@@ -37,6 +37,7 @@ void GroupUpgradeCommand::set_argument_parser() {
 
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
 }
@@ -52,7 +53,7 @@ void GroupUpgradeCommand::configure() {
 void GroupUpgradeCommand::run() {
     auto & ctx = get_context();
     auto goal = ctx.get_goal();
-    goal->set_allow_erasing(true);
+    goal->set_allow_erasing(allow_erasing->get_value());
 
     libdnf5::GoalJobSettings settings;
     for (const auto & spec : group_specs->get_value()) {

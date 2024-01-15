@@ -57,6 +57,9 @@ void GroupRemoveCommand::run() {
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_remove(spec, libdnf5::transaction::TransactionItemReason::USER, settings);
     }
+
+    // To enable removal of dependency packages it requires to use allow_erasing
+    goal->set_allow_erasing(true);
 }
 
 }  // namespace dnf5
