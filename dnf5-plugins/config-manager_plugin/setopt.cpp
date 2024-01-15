@@ -79,7 +79,8 @@ void ConfigManagerSetOptCommand::set_argument_parser() {
             auto value = argv[i];
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw cli::ArgumentParserError(M_("{}: Badly formatted argument value \"{}\""), std::string{"optval"}, std::string{value});
+                throw cli::ArgumentParserError(
+                    M_("{}: Badly formatted argument value \"{}\""), std::string{"optval"}, std::string{value});
             }
             std::string key{value, val};
             std::string key_value{val + 1};
@@ -88,7 +89,8 @@ void ConfigManagerSetOptCommand::set_argument_parser() {
                 if (dot_pos == key.size() - 1) {
                     throw cli::ArgumentParserError(
                         M_("{}: Badly formatted argument value: Last key character cannot be '.': {}"),
-                        std::string{"optval"}, std::string{value});
+                        std::string{"optval"},
+                        std::string{value});
                 }
 
                 // Save the repository option for later processing (solving glob pattern, writing to file).
