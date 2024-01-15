@@ -38,7 +38,7 @@ const char * b_gettextmsg_get_domain(struct BgettextMessage message);
 /// @return message id
 const char * b_gettextmsg_get_id(struct BgettextMessage message);
 
-/// Attemps to translate the 'message' into the user's language by searching for the translation in a message catalog.
+/// Attempts to translate the 'message' into the user's language by searching for the translation in a message catalog.
 /// @param domain message domain used for translation, argument is used only if the domain is not present in encoded message
 /// @param message message encoded for translation
 /// @param n defines plural form to be use (returns the base form if encoded message does not define plural form)

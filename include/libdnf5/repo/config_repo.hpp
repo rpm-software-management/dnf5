@@ -153,7 +153,7 @@ public:
     /// cached metadata are stored.
     std::string get_cachedir() const;
 
-    /// @return The path to the repository's perisistent directory, where its
+    /// @return The path to the repository's persistent directory, where its
     /// persistent data are stored.
     std::string get_persistdir() const;
 

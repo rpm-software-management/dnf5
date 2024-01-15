@@ -209,7 +209,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_content_tags());
                 break;
             case RepoAttribute::distro_tags: {
-                // sdbus::Variant cannot accomodate a std::pair
+                // sdbus::Variant cannot accommodate a std::pair
                 std::vector<std::string> distro_tags{};
                 for (auto & dt : libdnf_repo->get_distro_tags()) {
                     distro_tags.emplace_back(dt.first);

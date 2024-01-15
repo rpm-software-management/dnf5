@@ -135,7 +135,7 @@ Error & Error::operator=(const Error & e) noexcept {
 
 const char * Error::what() const noexcept {
     if (!formatter) {
-        // formatter not set means copy constructor or assigment operator failed
+        // formatter not set means copy constructor or assignment operator failed
         return TM_(format, 1);
     }
 

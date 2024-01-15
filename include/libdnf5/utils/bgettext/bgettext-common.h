@@ -29,8 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-/// Attemps to translate the 'msgId' into the user's language by searching for the translation in a message catalog.
-/// The use of C_() macro is prefered. But this macro don't support non-string-literals as 'context' and 'msgId' arguments.
+/// Attempts to translate the 'msgId' into the user's language by searching for the translation in a message catalog.
+/// The use of C_() macro is preferred. But this macro don't support non-string-literals as 'context' and 'msgId' arguments.
 /// This function is intended for this case.
 ///
 /// @param domain message domain used for translation, non-empty string or NULL
@@ -40,8 +40,8 @@ extern "C" {
 /// @return translated message (or msgId if translation was not found)
 const char * b_dpgettext(const char * domain, const char * context, const char * msgId);
 
-/// Attemps to translate the 'msgId' into the user's language by searching for the translation in a message catalog.
-/// The use of CP_() macro is prefered. But this macro don't support non-string-literals as 'context' and 'msgId' arguments.
+/// Attempts to translate the 'msgId' into the user's language by searching for the translation in a message catalog.
+/// The use of CP_() macro is preferred. But this macro don't support non-string-literals as 'context' and 'msgId' arguments.
 /// This function is intended for this case.
 ///
 /// @param domain message domain used for translation, non-empty string or NULL

@@ -185,7 +185,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // python_code += "locked_base.add_plugin(plug)";
     // PyRun_SimpleString(python_code.c_str());
 
-    // Similar but Pure Embeding
+    // Similar but Pure Embedding
     auto * module_name = file_path.stem().c_str();
     PyObject * plugin_module = PyImport_ImportModule(module_name);
     if (!plugin_module) {

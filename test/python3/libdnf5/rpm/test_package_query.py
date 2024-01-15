@@ -147,7 +147,7 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         # Create a new Base object
         base = libdnf5.base.Base()
 
-        # Try to create a packge query without running base.setup()
+        # Try to create a package query without running base.setup()
         self.assertRaises(RuntimeError, libdnf5.rpm.PackageQuery, base)
 
     def test_pkg_get_changelogs(self):

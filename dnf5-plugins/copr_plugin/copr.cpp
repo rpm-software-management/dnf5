@@ -62,7 +62,7 @@ void CoprCommand::register_subcommands() {
 
 
 std::string CoprSubCommandWithID::get_project_spec() {
-    // The HUB specified in the COPR SPEC arguement has precedence
+    // The HUB specified in the COPR SPEC argument has precedence
     // over the --hub argument.
     std::string hubspec = opt_hub;
     if (hubspec.empty())

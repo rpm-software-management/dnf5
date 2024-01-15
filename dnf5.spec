@@ -362,7 +362,7 @@ Requires:       libdnf5-devel%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli-devel%{?_isa} = %{version}-%{release}
 
 %description -n dnf5-devel
-Develpment files for dnf5.
+Development files for dnf5.
 
 %files -n dnf5-devel
 %{_includedir}/dnf5/

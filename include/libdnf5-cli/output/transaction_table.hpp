@@ -71,7 +71,7 @@ public:
     // would be better if the Transaction template type of
     // print_transaction_table() was required to have a TransactionItem type
     // defined inside, so that the ActionHeaderPrinter class could be templated
-    // instad of this method, and we could do (in print_transaction_table(),
+    // instead of this method, and we could do (in print_transaction_table(),
     // where this class is instantiated):
     // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
     template <class T>
@@ -198,7 +198,7 @@ public:
     // would be better if the Transaction template type of
     // print_transaction_table() was required to have a TransactionItem type
     // defined inside, so that the ActionHeaderPrinter class could be templated
-    // instad of this method, and we could do (in print_transaction_table(),
+    // instead of this method, and we could do (in print_transaction_table(),
     // where this class is instantiated):
     // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
     template <class T>
@@ -471,7 +471,7 @@ bool print_transaction_table(Transaction & transaction) {
     ActionHeaderPrinter action_header_printer(tb);
 
     for (auto & tspkg : tspkgs) {
-        // TODO(lukash) handle OBSOLETED correctly throught the transaction table output
+        // TODO(lukash) handle OBSOLETED correctly through the transaction table output
         if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
             ts_summary.add(tspkg.get_action());
             continue;

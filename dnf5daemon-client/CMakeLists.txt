@@ -10,7 +10,7 @@ set(GETTEXT_DOMAIN dnf5daemon-client)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 include_directories(.)
-# TODO(mblaha) workround for dnf5daemon-client using server's headers, fix
+# TODO(mblaha) workaround for dnf5daemon-client using server's headers, fix
 include_directories(..)
 
 pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)

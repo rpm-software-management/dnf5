@@ -260,11 +260,11 @@ Set what information is displayed about each package. The following are mutually
     | * ``provides`` - Display capabilities provided by the package. Separated by new lines.
     | * ``reason`` - Display reason why the packages was installed.
     | * ``recommends`` - Display capabilities recommended by the package. Separated by new lines.
-    | * ``regular_requires`` - Display capabilities requried by the package without its ``%pre``, ``%post``, ``%preun`` and ``%postun`` requirements. Separated by new lines.
+    | * ``regular_requires`` - Display capabilities required by the package without its ``%pre``, ``%post``, ``%preun`` and ``%postun`` requirements. Separated by new lines.
     | * ``release`` - Display release of the package.
     | * ``repoid`` - Display id of repository the package is in.
     | * ``reponame`` - Display name of repository the package is in.
-    | * ``requires`` - Display capabilities requried by the package (combines regular_requires and requires_pre).
+    | * ``requires`` - Display capabilities required by the package (combines regular_requires and requires_pre).
     | * ``requires_pre`` - For an installed package display capabilities that it depends on to run its ``%pre``, ``%post``, ``%preun`` and ``%postun`` scripts. For not installed package display just ``%pre`` and ``$post`` requirements. Separated by new lines.
     | * ``source_debug_name`` - Display name of debuginfo package for source package of the package.
     | * ``source_name`` - Display source RPM name of the package.

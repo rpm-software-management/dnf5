@@ -281,7 +281,7 @@ void ModuleSack::Impl::module_filtering() {
 
     auto [include_NEVRAs, exclude_NEVRAs, names, src_names, reldep_name_list] = collect_data_for_modular_filtering();
 
-    // Packages from system, commandline, and hotfix repositories are not targets for modular filterring
+    // Packages from system, commandline, and hotfix repositories are not targets for modular filtering
     libdnf5::rpm::PackageQuery target_packages(base);
 
     // TODO(replace) "@System", "@commandline" by defined variables like in dnf4
@@ -319,7 +319,7 @@ void ModuleSack::Impl::module_filtering() {
     exclude_provides_query.filter_provides(reldep_name_list);
     exclude_provides_query.difference(include_query);
 
-    // Search for source packages with same names as included source artifacts. Handling of sorce packages differently
+    // Search for source packages with same names as included source artifacts. Handling of source packages differently
     // prevent filtering out of binary packages that has the same name as source package but binary package is not
     // in module (it prevents creation of broken dependenciers in the distribution)
     exclude_src_names_query.filter_name(src_names);
@@ -535,7 +535,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
         return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
     }
 
-    // Conflicting modules has to be removed otherwice it could result than one of them will be active
+    // Conflicting modules has to be removed otherwise it could result than one of them will be active
     for (auto conflicting_module_id : goal.list_conflicting()) {
         excludes->add(conflicting_module_id);
     }

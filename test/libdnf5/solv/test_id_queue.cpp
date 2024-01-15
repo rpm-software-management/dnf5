@@ -44,7 +44,7 @@ void IdQueueTest::test_push_back() {
     id_queue.push_back(3, 2);
     CPPUNIT_ASSERT(id_queue.size() == 3);
 
-    // insert same valule like it is in queue will result in increase of elements
+    // insert same value like it is in queue will result in increase of elements
     id_queue.push_back(3);
     CPPUNIT_ASSERT(id_queue.size() == 4);
 
@@ -74,12 +74,12 @@ void IdQueueTest::test_operators() {
     CPPUNIT_ASSERT(id_queue_different4 != id_queue_different3);
     CPPUNIT_ASSERT(id_queue_different3 != id_queue_different4);
 
-    // test copy costructor
+    // test copy constructor
     auto copy = id_queue_same1;
     CPPUNIT_ASSERT(id_queue_same1 == copy);
     CPPUNIT_ASSERT(id_queue_same1.size() == 2);
 
-    // test move costructor
+    // test move constructor
     auto move = std::move(id_queue_same1);
     CPPUNIT_ASSERT(id_queue_same1 != move);
     CPPUNIT_ASSERT(id_queue_same1.size() == 0);

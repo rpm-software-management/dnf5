@@ -80,7 +80,7 @@ void WeakPtrTest::test_weak_ptr() {
     // delete sack2
     sack2.reset();
 
-    // data from sack1 must be still accesible, but access to data from sack2 must throw exception
+    // data from sack1 must be still accessible, but access to data from sack2 must throw exception
     CPPUNIT_ASSERT(*item1_weak_ptr.get() == "sack1_item1");
     CPPUNIT_ASSERT(item2_weak_ptr->compare("sack1_item2") == 0);
     CPPUNIT_ASSERT_THROW(static_cast<void>(*item3_weak_ptr.get() == "sack2_item1"), libdnf5::AssertionError);
@@ -197,7 +197,7 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     // delete sack2
     sack2.reset();
 
-    // data from sack1 must be still accesible, but access to data from sack2 must throw exception
+    // data from sack1 must be still accessible, but access to data from sack2 must throw exception
     CPPUNIT_ASSERT(*item1_weak_ptr.get()->remote_data == "sack1_item1");
     CPPUNIT_ASSERT(*item2_weak_ptr->remote_data == "sack1_item2");
     CPPUNIT_ASSERT_THROW(

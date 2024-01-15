@@ -46,7 +46,7 @@ public:
 
     ~CTest() { --instance_counter; }
 
-    // Returns the nuber of existing class instances.
+    // Returns the number of existing class instances.
     static int get_instance_counter() noexcept { return instance_counter; }
 
     int get_a() const noexcept { return a; }

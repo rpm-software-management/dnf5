@@ -207,7 +207,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Number of :ref:`installonly packages <installonlypkgs_options-label>` allowed to be installed
     concurrently.
 
-    ``1`` is explicitely not allowed since it complicates kernel upgrades due to protection of
+    ``1`` is explicitly not allowed since it complicates kernel upgrades due to protection of
     the running kernel from removal.
 
     Minimum is ``2``.
@@ -389,9 +389,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
 .. _protect_running_kernel_options-label:
 
 ``protect_running_kernel``
-	:ref:`boolean <boolean-label>`
+    :ref:`boolean <boolean-label>`
 
-	Controls whether the package corresponding to the running version of kernel is protected from removal.
+    Controls whether the package corresponding to the running version of kernel is protected from removal.
 
     Default: ``True``.
 
@@ -718,7 +718,7 @@ configuration.
     Inverse of :ref:`excludepkgs <excludepkgs_options-label>`, DNF5 will exclude any package in the repository
     that doesn't match this list.
 
-    This works in conjunction with ref:`excludepkgs <excludepkgs_options-label>` and doesn't override it,
+    This works in conjunction with :ref:`excludepkgs <excludepkgs_options-label>` and doesn't override it,
     so if you 'excludepkgs=*.i386' and 'includepkgs=python*' then only packages starting with python
     that do not have an i386 arch will be seen by DNF5 in this repo.
 
@@ -1048,7 +1048,7 @@ Types of Options
 .. _ip_address_type-label:
 
 ``ip address type``
-    String describing ip addresss types.
+    String describing ip address types.
 
     One of the following options can be used: ``4``, ``IPv4``, ``6``, ``IPv6``.
 
@@ -1117,7 +1117,7 @@ Users can define custom config options in this way.
    a file with the same name is present in both directories, only the file from
    the user configuration directory is added to the list. The
    distribution file is then masked by the user file.
-2. Options are retreived in order from the list The configuration from the next
+2. Options are retrieved in order from the list The configuration from the next
    file overrides the previous one. The last option wins.
 
 .. _user_configuration_dir-label:

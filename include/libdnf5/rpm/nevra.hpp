@@ -70,7 +70,7 @@ public:
     // NOTE: required by cppunit asserts
     friend std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
 
-    /// Returns false when parsing failed and stored data are in inconsistance state.
+    /// Returns false when parsing failed and stored data are in inconsistency state.
 
     void clear() noexcept;
 

@@ -48,7 +48,7 @@ public:
     /// @param key_info The key that is about to be imported
     /// @return `true` to import the key, `false` to not import
     virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) { return true; }
-    /// Called on successfull repo key import.
+    /// Called on successful repo key import.
     /// @param key_info The key that was successfully imported
     virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info) {}
 

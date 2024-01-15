@@ -82,7 +82,7 @@ bool attach_named_args(
         }
         if (!attached_arg_id_path) {
             auto msg = fmt::format(
-                "Mising attribute \"id_path\" for alias \"{}\" in file \"{}\"", alias_id_path, path.native());
+                "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\"", alias_id_path, path.native());
             logger.error("{}", msg);
             std::cerr << msg << std::endl;
             return false;
@@ -124,7 +124,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             std::cerr << msg << std::endl;
             return;
         } catch (const std::out_of_range & e) {
-            auto msg = fmt::format("Mising attribute \"version\" in file \"{}\"", config_file_path.native());
+            auto msg = fmt::format("Missing attribute \"version\" in file \"{}\"", config_file_path.native());
             logger->error("{}", msg);
             std::cerr << msg << std::endl;
             return;
@@ -173,7 +173,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
                 auto location = element_options.location();
                 auto msg = fmt::format(
-                    "Parent commant \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                    "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
                     element_parent_id_path,
                     e.what(),
                     config_file_path.native(),
@@ -211,7 +211,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 }
             } catch (const std::out_of_range & e) {
                 auto msg = fmt::format(
-                    "Mising attribute \"type\" for element \"{}\" in file \"{}\"",
+                    "Missing attribute \"type\" for element \"{}\" in file \"{}\"",
                     element_id_path,
                     config_file_path.native());
                 logger->error("{}", msg);
@@ -288,7 +288,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
                         if (!header) {
                             auto msg = fmt::format(
-                                "Mising attribute \"header\" for element \"{}\" in file \"{}\"",
+                                "Missing attribute \"header\" for element \"{}\" in file \"{}\"",
                                 element_id_path,
                                 config_file_path.native());
                             logger->error("{}", msg);
@@ -391,7 +391,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
                         if (!source) {
                             auto msg = fmt::format(
-                                "Mising attribute \"source\" for named argument \"{}\" in file \"{}\"",
+                                "Missing attribute \"source\" for named argument \"{}\" in file \"{}\"",
                                 element_id_path,
                                 config_file_path.native());
                             logger->error("{}", msg);
@@ -604,7 +604,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
                         if (!attached_command) {
                             auto msg = fmt::format(
-                                "Mising attribute \"attached_command\" for command \"{}\" in file \"{}\"",
+                                "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\"",
                                 element_id_path,
                                 config_file_path.native());
                             logger->error("{}", msg);

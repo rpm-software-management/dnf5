@@ -340,7 +340,7 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_supplements(DnfPackage * pkg)
     ReldepList get_supplements() const;
 
-    /// @return List of RPM package dependencies (requries + enhances + suggests + supplements + recommends).
+    /// @return List of RPM package dependencies (requires + enhances + suggests + supplements + recommends).
     /// @since 5.0.10
     ReldepList get_depends() const;
 

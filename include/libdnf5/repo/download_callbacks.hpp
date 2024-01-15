@@ -47,7 +47,7 @@ public:
         CACHELOADINGSTATUS,
 
         /// Detection (pinging) in progress. If all data was loaded from cache,
-        /// this stage is skiped. `ptr` is a pointer to `long`, the number of
+        /// this stage is skipped. `ptr` is a pointer to `long`, the number of
         /// mirrors which will be tested.
         DETECTION,
 

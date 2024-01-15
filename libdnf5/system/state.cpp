@@ -610,7 +610,7 @@ void State::reset_packages_states(
     this->environment_states = std::move(environment_states);
 
     // Try to save the new system state.
-    // dnf can be used without root priviledges or with read-only system state location.
+    // dnf can be used without root privileges or with read-only system state location.
     // In that case ignore the filesystem errors and only keep new system state in memory.
     try {
         save();

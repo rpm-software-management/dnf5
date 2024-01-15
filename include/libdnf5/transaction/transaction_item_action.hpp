@@ -137,7 +137,7 @@ Reason Change
 
 Reasons:
 * new = a brand new reason why a package was installed or removed
-* inherited = a package was installed in the past, re-use it's reason in existing transaction
+* inherited = a package was installed in the past, reuse it's reason in existing transaction
 */
 
 #endif  // LIBDNF5_TRANSACTION_TYPES_HPP

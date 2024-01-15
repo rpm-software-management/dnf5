@@ -38,15 +38,15 @@ public:
 // @replaces libdnf:conf/OptionPath.hpp:class:OptionPath
 class OptionPath : public OptionString {
 public:
-    /// Constructor sets default value and conditons.
+    /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, bool exists = false, bool absPath = false)
     explicit OptionPath(const std::string & default_value, bool exists = false, bool abs_path = false);
 
-    /// Constructor sets default value and conditons.
+    /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, bool exists = false, bool absPath = false)
     explicit OptionPath(const char * default_value, bool exists = false, bool abs_path = false);
 
-    /// Constructor sets default value and conditons.
+    /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
     OptionPath(
         const std::string & default_value,
@@ -55,7 +55,7 @@ public:
         bool exists = false,
         bool abs_path = false);
 
-    /// Constructor sets default value and conditons.
+    /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
     OptionPath(
         const char * default_value, const std::string & regex, bool icase, bool exists = false, bool abs_path = false);

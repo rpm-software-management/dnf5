@@ -72,7 +72,7 @@ public:
 
     /// Remember group action in the transaction
     /// @param group Group to be added
-    /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
+    /// @param action Action to be committed - INSTALL, REMOVE, UPGRADE
     /// @param reason Reason for the group action - USER, DEPENDENCY
     /// @param package_types Types of group packages requested to be installed along with the group. Used only for INSTALL action
     void add_group(
@@ -153,7 +153,7 @@ public:
     void set_allow_vendor_change(bool value) { allow_vendor_change = value; }
     void set_install_weak_deps(bool value) { install_weak_deps = value; }
     /// Remove SOLVER_WEAK and add SOLVER_BEST to all jobs to allow report skipped packages and best candidates
-    /// with broken dependenies
+    /// with broken dependencies
     void set_run_in_strict_mode(bool value) { run_in_strict_mode = value; }
     // TODO(jmracek)
     //     PackageSet listUnneeded();
@@ -189,7 +189,7 @@ private:
 
     // packages potentially installed by any group in this transaction
     std::unique_ptr<libdnf5::solv::SolvMap> transaction_group_installed;
-    // packages explicitely user-installed in this transaction
+    // packages explicitly user-installed in this transaction
     std::unique_ptr<libdnf5::solv::SolvMap> transaction_user_installed;
 
     // packages that should be not included to satisfy weak dependencies

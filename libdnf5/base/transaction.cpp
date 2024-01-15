@@ -354,7 +354,7 @@ void Transaction::Impl::set_transaction(
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
     } else {
-        // TODO(jmracek) To improve performance add a test whether it make sence to resolve transaction in strict mode
+        // TODO(jmracek) To improve performance add a test whether it make sense to resolve transaction in strict mode
         // Test whether there were skipped jobs or used not the best candidates due to broken dependencies
         rpm::solv::GoalPrivate solved_goal_copy(solved_goal);
         solved_goal_copy.set_run_in_strict_mode(true);
@@ -456,7 +456,7 @@ void Transaction::Impl::set_transaction(
             const auto reason_override = rpm_reason_overrides.find(pkg.get_package().get_nevra());
             if (reason_override != rpm_reason_overrides.end()) {
                 // For UPGRADE, DOWNGRADE and REINSTALL change the reason only if it stronger.
-                // This is requierd because we don't want to for example mark some user installed
+                // This is required because we don't want to for example mark some user installed
                 // package as a dependency (except when the user specifically asks for it - action REASON_CHANGE).
                 if (pkg.get_action() == transaction::TransactionItemAction::INSTALL ||
                     pkg.get_action() == transaction::TransactionItemAction::REMOVE ||
@@ -827,7 +827,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
                         state.packages.emplace_back(pkg_name);
                     } else {
                         // also group packages that were installed before this transaction
-                        // system state consideres as installed by group
+                        // system state considered as installed by group
                         rpm::PackageQuery query(installed_query);
                         query.filter_name({pkg_name});
                         if (!query.empty()) {
@@ -1087,7 +1087,7 @@ std::string Transaction::serialize() {
         group_replay.repo_id = *(group.get_group().get_repos().begin());
 
         //TODO(amatej): add package types... if they are actually needed though... which I am not sure now.
-        // -> becuase if I plan to store the group jsons separately it will contain all information, so the pkg types shoudn't be here
+        // -> because if I plan to store the group jsons separately it will contain all information, so the pkg types shouldn't be here
         transaction_replay.groups.push_back(group_replay);
     }
 

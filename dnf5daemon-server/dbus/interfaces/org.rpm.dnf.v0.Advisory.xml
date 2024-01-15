@@ -47,7 +47,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
             - severity: list of strings
                 Consider only advisories of given severity. Possible values are "critical", "important", "moderate", "low", and "none".
             - reference_bz: list of strings
-                Consider only advisories referencing given Bugzilla ticket ID. Exepcted values are numeric IDs, e.g. 123456.
+                Consider only advisories referencing given Bugzilla ticket ID. Expected values are numeric IDs, e.g. 123456.
             - reference_cve: list of strings
                 Consider only advisoried referencing given CVE ID. Expected values are strings IDs in CVE format, e.g. CVE-2201-0123.
             - with_bz: boolean

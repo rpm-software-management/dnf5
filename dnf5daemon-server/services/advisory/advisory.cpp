@@ -104,7 +104,7 @@ libdnf5::advisory::AdvisoryQuery Advisory::advisory_query_from_options(
         auto advisories_not_installed(advisories);
         advisories.filter_packages(package_query, libdnf5::sack::QueryCmp::LTE);
         // TODO(mblaha): add advisories.filter_packages(package_query), without cmp,
-        // to filter advisories with matching name.arch? Insted of unioning LTE
+        // to filter advisories with matching name.arch? Instead of unioning LTE
         // and GT results.
         advisories_not_installed.filter_packages(package_query, libdnf5::sack::QueryCmp::GT);
         advisories |= advisories_not_installed;

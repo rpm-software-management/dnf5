@@ -206,7 +206,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         }
 
         // print only part of the message that fits the terminal width
-        // substracted '4' relates to the '>>> ' prefix
+        // subtracted '4' relates to the '>>> ' prefix
         stream << message.substr(0, terminal_width - 4);
 
         if (color_used) {

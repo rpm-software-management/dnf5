@@ -106,7 +106,7 @@ public:
     /// Calling the method for the second time result in throwing an exception
     void setup();
 
-    /// Returns true when setup() (mandatory method in many workflows) was alredy called
+    /// Returns true when setup() (mandatory method in many workflows) was already called
     bool is_initialized();
 
     // TODO(jmracek) Remove from public API due to unstability of the code

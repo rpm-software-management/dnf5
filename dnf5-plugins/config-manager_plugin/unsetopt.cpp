@@ -66,7 +66,7 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                             std::string{value});
                     }
 
-                    // Save the repository option for later processing (solving glob patter, writing to file).
+                    // Save the repository option for later processing (solving glob pattern, writing to file).
                     auto repo_id = key.substr(0, dot_pos);
                     if (repo_id.empty()) {
                         throw cli::ArgumentParserError(

@@ -230,7 +230,7 @@ void Base::setup() {
 
     config.get_varsdir_option().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
-    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
+    // TODO(jmracek) - architecture variable is changeable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked
     const char * arch = vars->get_value("arch").c_str();
     pool_setarch(**pool, arch);

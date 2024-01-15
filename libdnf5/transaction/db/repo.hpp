@@ -43,7 +43,7 @@ int64_t repo_insert(libdnf5::utils::SQLite3::Statement & query, const std::strin
 std::unique_ptr<libdnf5::utils::SQLite3::Statement> repo_select_pk_new_query(libdnf5::utils::SQLite3 & conn);
 
 
-/// Find a primary key of a recod in table 'repo' that matches the Package.
+/// Find a primary key of a record in table 'repo' that matches the Package.
 /// Return an existing primary key or 0 if the record was not found.
 int64_t repo_select_pk(libdnf5::utils::SQLite3::Statement & query, const std::string & repoid);
 

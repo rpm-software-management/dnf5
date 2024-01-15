@@ -48,7 +48,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
     // detect whether string contains a glob range [a-z]
     bool start_range = false;
     for (end = nevra_pattern; *end != '\0'; ++end) {
-        // skip all characteres before glob range is closed
+        // skip all characters before glob range is closed
         if (start_range) {
             if (*end == ']') {
                 start_range = false;

@@ -113,7 +113,7 @@ public:
     /// Add install request to the goal. The operation will not result in a reinstall when requested package
     /// with the same NEVRA is already installed. By default uses `clean_requirements_on_remove` set to `false`.
     ///
-    /// @param package_set      A package_set containig candidates for the install action.
+    /// @param package_set      A package_set containing candidates for the install action.
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     void add_rpm_install(
         const libdnf5::rpm::PackageSet & package_set,
@@ -131,7 +131,7 @@ public:
 
     /// Add install or reinstall request to the goal. By default uses `clean_requirements_on_remove` set to `false`.
     ///
-    /// @param package_set      A package_set containig candidates for the install or reinstall action.
+    /// @param package_set      A package_set containing candidates for the install or reinstall action.
     /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
     // @replaces libdnf/hy-goal.h:function:hy_goal_install_selector(HyGoal goal, HySelector sltr, GError **error)
     // @replaces libdnf/hy-goal.h:function:hy_goal_install_selector_optional(HyGoal goal, HySelector sltr, GError **error)
@@ -202,7 +202,7 @@ public:
         const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings(),
         bool minimal = false);
 
-    // TODO(jmracek) Add suport `to_repo_ids`
+    // TODO(jmracek) Add support `to_repo_ids`
     /// Add upgrade job of all installed packages to the goal if not limited in `settings`. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
     ///
@@ -268,7 +268,7 @@ public:
     void add_rpm_distro_sync(
         const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
-    // TODO(jmracek) Add suport `to_repo_ids`
+    // TODO(jmracek) Add support `to_repo_ids`
     /// Add distrosync job of all installed packages to the goal if not limited in `settings`. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
     ///
@@ -302,7 +302,7 @@ public:
     /// @param spec      A string describing the requested package
     /// @param reason    New reason for the package
     /// @param group_id  Id of group the package belongs to (only relevant in case the reason is GROUP)
-    /// @param settings  A sructure to overrice default goal settings. Only ResolveSpecSettings values are used
+    /// @param settings  A structure to override default goal settings. Only ResolveSpecSettings values are used
     void add_rpm_reason_change(
         const std::string & spec,
         const libdnf5::transaction::TransactionItemReason reason,
@@ -368,7 +368,7 @@ public:
     bool get_allow_erasing() const;
 
     // TODO(jmracek) Move transaction reports to Transaction class
-    /// Resolve all jobs and return a transaction object. Everytime it resolves specs (strings) to packages
+    /// Resolve all jobs and return a transaction object. Every time it resolves specs (strings) to packages
     ///
     /// @return transaction object
     // @replaces libdnf/hy-goal.h:function:hy_goal_run_flags(HyGoal goal, DnfGoalActions flags)

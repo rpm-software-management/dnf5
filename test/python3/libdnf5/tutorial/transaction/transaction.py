@@ -7,11 +7,11 @@ goal.add_rpm_install("one")
 
 # Resolve the goal, create a transaction object.
 #
-# The argument is `allow_erasing`, a flag indicating wheter to allow removing
+# The argument is `allow_erasing`, a flag indicating whether to allow removing
 # packages in the resolved transaction.
 transaction = goal.resolve()
 
-# We can iterate over the resolved transction and inspect the packages.
+# We can iterate over the resolved transaction and inspect the packages.
 print("Resolved transaction:")
 for tspkg in transaction.get_transaction_packages():
     print(tspkg.get_package().get_nevra(), ": ",
