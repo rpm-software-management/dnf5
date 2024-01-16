@@ -49,7 +49,6 @@ extern "C" {
 }
 
 #include <atomic>
-#include <cerrno>
 #include <condition_variable>
 #include <filesystem>
 #include <mutex>
@@ -336,7 +335,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             std::vector<std::tuple<Repo *, std::string>> local_keys_files;
             std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> remote_keys_files;
             for (auto * repo : repos_with_bad_signature) {
-                for (const auto & key_url : repo->config.get_gpgkey_option().get_value()) {
+                for (const auto & key_url : repo->get_config().get_gpgkey_option().get_value()) {
                     if (key_url.starts_with("file:/")) {
                         local_keys_files.emplace_back(repo, key_url);
                     } else {
@@ -351,7 +350,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             for (auto & [repo, key_url] : local_keys_files) {
                 unsigned local_path_start_idx = key_url.starts_with("file:///") ? 7 : 5;
                 utils::fs::File file(key_url.substr(local_path_start_idx), "r");
-                repo->downloader->pgp.import_key(file.get_fd(), key_url);
+                repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
             }
 
             if (!remote_keys_files.empty()) {
@@ -369,7 +368,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 // import downloaded keys files
                 for (const auto & [repo, key_url, temp_file] : remote_keys_files) {
                     utils::fs::File file(temp_file.get_path(), "r");
-                    repo->downloader->pgp.import_key(file.get_fd(), key_url);
+                    repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
                 }
             }
 
@@ -392,18 +391,19 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 bool valid_metadata{false};
                 try {
                     repo->read_metadata_cache();
-                    if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+                    if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
                         // cache loaded
                         repo->recompute_expired();
-                        valid_metadata = !repo->expired || repo->sync_strategy == Repo::SyncStrategy::ONLY_CACHE ||
-                                         repo->sync_strategy == Repo::SyncStrategy::LAZY;
+                        valid_metadata = !repo->is_expired() ||
+                                         repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE ||
+                                         repo->get_sync_strategy() == Repo::SyncStrategy::LAZY;
                     }
                 } catch (const std::runtime_error & e) {
                 }
 
                 if (valid_metadata) {
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-                    logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
+                    logger->debug("Using cache for repo \"{}\"", repo->get_config().get_id());
                     send_to_sack_loader(repo);
                 } else {
                     // Try reusing the root cache
@@ -414,7 +414,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
                     if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
                         throw RepoDownloadError(
-                            M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
+                            M_("Cache-only enabled but no cache for repository \"{}\""), repo->get_config().get_id());
                     }
                     ++idx;
                 }
@@ -434,16 +434,18 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             auto * const repo = repos_for_processing[idx];
             catch_thread_sack_loader_exceptions();
             try {
-                if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
+                if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
                     repo->is_in_sync()) {
                     // the expired metadata still reflect the origin
-                    utimes(repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-                    RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                    repo->expired = false;
+                    utimes(
+                        repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+                    RepoCache(base, repo->get_config().get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                    repo->mark_fresh();
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
 
                     logger->debug(
-                        "Using cache for repo \"{}\". It is expired, but matches the original.", repo->config.get_id());
+                        "Using cache for repo \"{}\". It is expired, but matches the original.",
+                        repo->get_config().get_id());
                     send_to_sack_loader(repo);
                 } else {
                     ++idx;
@@ -466,12 +468,12 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             auto * const repo = repos_for_processing[idx];
             catch_thread_sack_loader_exceptions();
             try {
-                logger->debug("Downloading metadata for repo \"{}\"", repo->config.get_id());
-                auto cache_dir = repo->config.get_cachedir();
+                logger->debug("Downloading metadata for repo \"{}\"", repo->get_config().get_id());
+                auto cache_dir = repo->get_config().get_cachedir();
                 repo->download_metadata(cache_dir);
                 RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                repo->mark_fresh();
                 repo->read_metadata_cache();
-                repo->expired = false;
 
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                 send_to_sack_loader(repo);
@@ -691,9 +693,9 @@ void RepoSack::internalize_repos() {
 
 void RepoSack::fix_group_missing_xml() {
     if (has_system_repo()) {
-        auto & solv_repo = system_repo->solv_repo;
-        auto & group_missing_xml = solv_repo->get_groups_missing_xml();
-        auto & environments_missing_xml = solv_repo->get_environments_missing_xml();
+        auto & solv_repo = system_repo->get_solv_repo();
+        auto & group_missing_xml = solv_repo.get_groups_missing_xml();
+        auto & environments_missing_xml = solv_repo.get_environments_missing_xml();
         if (group_missing_xml.empty() && environments_missing_xml.empty()) {
             return;
         }
@@ -733,13 +735,13 @@ void RepoSack::fix_group_missing_xml() {
                             logger.debug(ex.what());
                         }
                         if (xml_saved) {
-                            solv_repo->read_group_solvable_from_xml(xml_file_name);
+                            solv_repo.read_group_solvable_from_xml(xml_file_name);
                         }
                     }
                 }
                 if (!xml_saved) {
                     // fall-back to creating solvables only from system state
-                    solv_repo->create_group_solvable(group_id, system_state.get_group_state(group_id));
+                    solv_repo.create_group_solvable(group_id, system_state.get_group_state(group_id));
                 }
             }
         }
@@ -766,13 +768,13 @@ void RepoSack::fix_group_missing_xml() {
                             logger.debug(ex.what());
                         }
                         if (xml_saved) {
-                            solv_repo->read_group_solvable_from_xml(xml_file_name);
+                            solv_repo.read_group_solvable_from_xml(xml_file_name);
                         }
                     }
                 }
                 if (!xml_saved) {
                     // fall-back to creating solvables only from system state
-                    solv_repo->create_environment_solvable(
+                    solv_repo.create_environment_solvable(
                         environment_id, system_state.get_environment_state(environment_id));
                 }
             }
