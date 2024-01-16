@@ -346,7 +346,7 @@ public:
     /// @return PackageId of the added package.
     libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
 
-    libdnf5::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
+    libdnf5::repo::RepoWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
@@ -383,20 +383,17 @@ private:
     /// @return Whether at least the repodata cache cloning was successful.
     bool clone_root_metadata();
 
-    libdnf5::BaseWeakPtr base;
-    ConfigRepo config;
+    RepoDownloader & get_downloader() const;
 
-    Type type;
-    bool use_includes{false};
-    std::string repo_file_path;
-    SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
-    bool expired{false};
+    bool is_loaded() const;
 
-    std::unique_ptr<RepoDownloader> downloader;
-    std::unique_ptr<SolvRepo> solv_repo;
+    /// Requires that the repo is loaded
+    SolvRepo & get_solv_repo() const;
 
-    WeakPtrGuard<Repo, false> data_guard;
-    bool loaded{false};
+    /// Mark this repository as fresh (it is not expired).
+    void mark_fresh();
+
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::repo

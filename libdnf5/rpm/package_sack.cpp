@@ -69,18 +69,16 @@ void PackageSack::Impl::make_provides_ready() {
 
     if (base->get_repo_sack()->has_system_repo() && !addedfileprovides_inst.empty()) {
         auto system_repo = base->get_repo_sack()->get_system_repo();
-        // TODO(lukash) handle the existence of solv_repo in a unified manner?
-        if (system_repo->solv_repo) {
-            system_repo->solv_repo->rewrite_repo(addedfileprovides_inst);
+        if (system_repo->is_loaded()) {
+            system_repo->get_solv_repo().rewrite_repo(addedfileprovides_inst);
         }
     }
 
     if (!addedfileprovides.empty()) {
         auto rq = repo::RepoQuery(base);
         for (auto & repo : rq.get_data()) {
-            // TODO(lukash) handle the existence of solv_repo in a unified manner?
-            if (repo->solv_repo) {
-                repo->solv_repo->rewrite_repo(addedfileprovides);
+            if (repo->is_loaded()) {
+                repo->get_solv_repo().rewrite_repo(addedfileprovides);
             }
         }
     }
@@ -470,11 +468,10 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
             // Add all solvables from repositories which do not use "includes"
             for (const auto & repo : base->get_repo_sack()->get_data()) {
-                // TODO(lukash) handle the existence of solv_repo in a unified manner?
-                if (!repo->get_use_includes() && repo->solv_repo) {
+                if (!repo->get_use_includes() && repo->is_loaded()) {
                     Id solvableid;
                     Solvable * solvable;
-                    FOR_REPO_SOLVABLES(repo->solv_repo->repo, solvableid, solvable) {
+                    FOR_REPO_SOLVABLES(repo->get_solv_repo().repo, solvableid, solvable) {
                         pkg_includes_tmp.add_unsafe(solvableid);
                     }
                 }
