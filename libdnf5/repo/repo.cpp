@@ -190,11 +190,6 @@ bool Repo::is_local() const {
 void Repo::read_metadata_cache() {
     downloader->reset_loaded();
     downloader->load_local();
-
-    // set timestamp unless explicitly expired
-    if (timestamp != 0) {
-        timestamp = mtime(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
-    }
 }
 
 
@@ -284,7 +279,6 @@ int64_t Repo::get_age() const {
 
 void Repo::expire() {
     expired = true;
-    timestamp = 0;
 }
 
 bool Repo::is_expired() const {
@@ -308,16 +302,16 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
     return downloader->get_metadata_path(metadata_type);
 }
 
-bool Repo::fresh() {
-    return timestamp >= 0;
-}
-
 void Repo::set_max_mirror_tries(int max_mirror_tries) {
     downloader->max_mirror_tries = max_mirror_tries;
 }
 
 int64_t Repo::get_timestamp() const {
-    return timestamp;
+    auto path = downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+    if (!path.empty()) {
+        return mtime(path.c_str());
+    }
+    return -1;
 }
 
 int Repo::get_max_timestamp() {
