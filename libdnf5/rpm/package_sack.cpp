@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
-#include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/package_query.hpp"
@@ -44,7 +43,6 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <filesystem>
 
 
 using LibsolvRepo = Repo;

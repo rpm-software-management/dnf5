@@ -23,13 +23,10 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv_repo.hpp"
-#include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/const.hpp"
-#include "libdnf5/logger/logger.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
-#include "libdnf5/utils/fs/file.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
@@ -48,23 +45,12 @@ extern "C" {
 #include <unistd.h>
 #include <utime.h>
 
-#include <array>
-#include <atomic>
-#include <cctype>
 #include <cerrno>
-#include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <list>
 #include <map>
 #include <set>
-#include <sstream>
-#include <system_error>
-#include <type_traits>
 
 
 namespace libdnf5::repo {
