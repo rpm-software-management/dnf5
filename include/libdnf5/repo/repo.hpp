@@ -236,14 +236,10 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getExpiresIn()
     int get_expires_in() const;
 
-    /// Gets repository freshness
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.fresh()
-    bool fresh();
-
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setMaxMirrorTries(int maxMirrorTries)
     void set_max_mirror_tries(int max_mirror_tries);
 
-    /// Gets timestamp of metadata "primary" file
+    /// Gets timestamp of metadata "primary" file, if the file is not present returns -1
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getTimestamp()
     int64_t get_timestamp() const;
 
@@ -391,7 +387,6 @@ private:
     ConfigRepo config;
 
     Type type;
-    int64_t timestamp{-1};  // 0 forces expiration on the next call to load(), -1 means undefined value
     bool use_includes{false};
     std::string repo_file_path;
     SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};

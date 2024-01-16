@@ -470,7 +470,6 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 auto cache_dir = repo->config.get_cachedir();
                 repo->download_metadata(cache_dir);
                 RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                repo->timestamp = -1;
                 repo->read_metadata_cache();
                 repo->expired = false;
 
