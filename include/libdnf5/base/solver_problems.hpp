@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_elements.hpp"
 
-#include "libdnf5/common/impl_ptr.hpp"
-
 
 namespace libdnf5::base {
 
@@ -52,9 +50,7 @@ public:
     /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> get_problems() const {
-        return problems;
-    };
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> get_problems() const;
 
     /// Convert SolverProblems class to string representative;
     std::string to_string() const;
@@ -65,7 +61,8 @@ public:
 private:
     friend class Transaction;
 
-    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::base

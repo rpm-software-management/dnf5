@@ -65,6 +65,7 @@ static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
      M_("The operation would result in removing"
         " of running kernel: {}")}};
 
+
 std::string string_join(
     const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & src, const std::string & delim) {
     if (src.empty()) {
@@ -174,13 +175,36 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_pr
 
 }  // namespace
 
-SolverProblems::SolverProblems(
+class SolverProblems::Impl {
+public:
+    Impl(const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems);
+
+private:
+    friend SolverProblems;
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
+};
+
+SolverProblems::Impl::Impl(
     const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems)
     : problems(problems) {}
 
-SolverProblems::SolverProblems(const SolverProblems & src) = default;
+SolverProblems::SolverProblems(
+    const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems)
+    : p_impl(std::make_unique<Impl>(problems)) {}
+
+SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*src.p_impl)) {}
 SolverProblems::SolverProblems(SolverProblems && src) noexcept = default;
-SolverProblems & SolverProblems::operator=(const SolverProblems & src) = default;
+SolverProblems & SolverProblems::operator=(const SolverProblems & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
 SolverProblems & SolverProblems::operator=(SolverProblems && src) noexcept = default;
 SolverProblems::~SolverProblems() = default;
 
@@ -241,22 +265,22 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
 
 
 std::string SolverProblems::to_string() const {
-    if (problems.empty()) {
+    if (p_impl->problems.empty()) {
         return {};
     }
     std::string output;
-    if (problems.size() == 1) {
+    if (p_impl->problems.size() == 1) {
         output.append(_("Problem: "));
-        output.append(string_join(*problems.begin(), "\n  - "));
+        output.append(string_join(*p_impl->problems.begin(), "\n  - "));
         return output;
     }
     const char * problem_prefix = _("Problem {}: ");
 
     output.append(utils::sformat(problem_prefix, 1));
-    output.append(string_join(*problems.begin(), "\n  - "));
+    output.append(string_join(*p_impl->problems.begin(), "\n  - "));
 
     int index = 2;
-    for (auto iter = std::next(problems.begin()); iter != problems.end(); ++iter) {
+    for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
         output.append("\n ");
         output.append(utils::sformat(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
@@ -361,5 +385,9 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
     return problems;
 }
 
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems()
+    const {
+    return p_impl->problems;
+};
 
 }  // namespace libdnf5::base
