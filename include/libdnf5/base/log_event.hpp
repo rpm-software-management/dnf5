@@ -44,27 +44,29 @@ public:
         const libdnf5::transaction::TransactionItemType spec_type,
         const std::string & spec);
     LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems);
-    ~LogEvent() = default;
+    ~LogEvent();
+
+    LogEvent(const LogEvent & src);
+    LogEvent & operator=(const LogEvent & src);
+
+    LogEvent(LogEvent && src) noexcept;
+    LogEvent & operator=(LogEvent && src) noexcept;
 
     /// @return GoalAction for which goal event was created
-    libdnf5::GoalAction get_action() const { return action; };
+    libdnf5::GoalAction get_action() const;
     /// @return GoalProblem that specify the type of report
-    libdnf5::GoalProblem get_problem() const { return problem; };
+    libdnf5::GoalProblem get_problem() const;
     /// @return Additional information (internal), that are required for formatted string
-    const std::set<std::string> get_additional_data() const { return additional_data; };
+    const std::set<std::string> & get_additional_data() const;
     /// @return GoalJobSetting if it is relevant for the particular GoalProblem
-    const libdnf5::GoalJobSettings * get_job_settings() const {
-        return job_settings ? &job_settings.value() : nullptr;
-    };
+    const libdnf5::GoalJobSettings * get_job_settings() const;
     /// @return SPEC if it is relevant for the particular GoalProblem
-    const std::string * get_spec() const { return spec ? &spec.value() : nullptr; };
+    const std::string * get_spec() const;
     /// @return SolverProblems if they are relevant for the particular GoalProblem
-    const SolverProblems * get_solver_problems() const { return solver_problems ? &solver_problems.value() : nullptr; };
+    const SolverProblems * get_solver_problems() const;
 
     /// Convert an element from resolve log to string;
-    std::string to_string() const {
-        return to_string(action, problem, additional_data, job_settings, spec_type, spec, solver_problems);
-    };
+    std::string to_string() const;
 
 private:
     /// Convert an element from resolve log to string;
@@ -77,14 +79,8 @@ private:
         const std::optional<std::string> & spec,
         const std::optional<SolverProblems> & solver_problems);
 
-    libdnf5::GoalAction action;
-    libdnf5::GoalProblem problem;
-
-    std::set<std::string> additional_data;
-    std::optional<libdnf5::GoalJobSettings> job_settings;
-    std::optional<libdnf5::transaction::TransactionItemType> spec_type;
-    std::optional<std::string> spec;
-    std::optional<SolverProblems> solver_problems;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::base
