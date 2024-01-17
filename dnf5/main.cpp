@@ -44,6 +44,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
+#include "commands/versionlock/versionlock.hpp"
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
@@ -689,6 +690,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<CleanCommand>(context));
     context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
+    context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
 }
 
 static void load_plugins(Context & context) {
