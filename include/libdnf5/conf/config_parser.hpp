@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/preserve_order_map.hpp"
 
-#include <map>
 #include <string>
 
 
@@ -86,6 +85,15 @@ struct ConfigParser {
 public:
     using Container = PreserveOrderMap<std::string, PreserveOrderMap<std::string, std::string>>;
 
+    ConfigParser();
+    ~ConfigParser();
+
+    ConfigParser(const ConfigParser & src);
+    ConfigParser & operator=(const ConfigParser & src);
+
+    ConfigParser(ConfigParser && src) noexcept;
+    ConfigParser & operator=(ConfigParser && src) noexcept;
+
     /**
     * @brief Reads/parse one INI file
     *
@@ -132,10 +140,8 @@ public:
     Container & get_data() noexcept;
 
 private:
-    Container data;
-    int item_number{0};
-    std::string header;
-    std::map<std::string, std::string> raw_items;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5
