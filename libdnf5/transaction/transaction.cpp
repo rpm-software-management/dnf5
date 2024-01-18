@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/db.hpp"
 #include "db/rpm.hpp"
 #include "db/trans.hpp"
-#include "db/trans_item.hpp"
 #include "transaction/transaction_sr.hpp"
 
 #include "libdnf5/transaction/comps_environment.hpp"
@@ -35,6 +34,37 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 namespace libdnf5::transaction {
+
+class Transaction::Impl {
+public:
+    Impl(const BaseWeakPtr & base, int64_t id = 0);
+
+private:
+    friend Transaction;
+
+    int64_t id{0};
+
+    int64_t dt_begin = 0;
+    int64_t dt_end = 0;
+    std::string rpmdb_version_begin;
+    std::string rpmdb_version_end;
+    // TODO(dmach): move to a new "vars" table?
+    std::string releasever;
+    uint32_t user_id = 0;
+    std::string description;
+    std::string comment;
+    TransactionState state = State::STARTED;
+
+    std::optional<std::vector<std::pair<int, std::string>>> console_output;
+
+    std::optional<std::vector<CompsEnvironment>> comps_environments;
+    std::optional<std::vector<CompsGroup>> comps_groups;
+    std::optional<std::vector<Package>> packages;
+
+    BaseWeakPtr base;
+};
+
+Transaction::Impl::Impl(const BaseWeakPtr & base, int64_t id) : id(id), base(base) {}
 
 std::string transaction_state_to_string(TransactionState state) {
     switch (state) {
@@ -66,11 +96,28 @@ InvalidTransactionState::InvalidTransactionState(const std::string & state)
     : libdnf5::Error(M_("Invalid transaction state: {}"), state) {}
 
 
-Transaction::Transaction(const BaseWeakPtr & base, int64_t id) : id(id), base(base) {}
+Transaction::Transaction(const BaseWeakPtr & base, int64_t id) : p_impl(std::make_unique<Impl>(base, id)) {}
 
 
-Transaction::Transaction(const BaseWeakPtr & base) : base{base} {}
+Transaction::Transaction(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
 
+Transaction::~Transaction() = default;
+
+Transaction::Transaction(const Transaction & src) : p_impl(new Impl(*src.p_impl)) {}
+Transaction::Transaction(Transaction && src) noexcept = default;
+
+Transaction & Transaction::operator=(const Transaction & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Transaction & Transaction::operator=(Transaction && src) noexcept = default;
 
 bool Transaction::operator==(const Transaction & other) const {
     return get_id() == other.get_id();
@@ -88,63 +135,64 @@ bool Transaction::operator>(const Transaction & other) const {
 
 
 std::vector<CompsEnvironment> & Transaction::get_comps_environments() {
-    if (comps_environments) {
-        return *comps_environments;
+    if (p_impl->comps_environments) {
+        return *p_impl->comps_environments;
     }
 
-    comps_environments =
-        CompsEnvironmentDbUtils::get_transaction_comps_environments(*transaction_db_connect(*base), *this);
-    return *comps_environments;
+    p_impl->comps_environments =
+        CompsEnvironmentDbUtils::get_transaction_comps_environments(*transaction_db_connect(*p_impl->base), *this);
+    return *p_impl->comps_environments;
 }
 
 
 CompsEnvironment & Transaction::new_comps_environment() {
-    if (!comps_environments) {
-        comps_environments.emplace();
+    if (!p_impl->comps_environments) {
+        p_impl->comps_environments.emplace();
     }
 
     CompsEnvironment comps_env(*this);
-    return comps_environments->emplace_back(std::move(comps_env));
+    return p_impl->comps_environments->emplace_back(std::move(comps_env));
 }
 
 
 std::vector<CompsGroup> & Transaction::get_comps_groups() {
-    if (comps_groups) {
-        return *comps_groups;
+    if (p_impl->comps_groups) {
+        return *p_impl->comps_groups;
     }
 
-    comps_groups = CompsGroupDbUtils::get_transaction_comps_groups(*transaction_db_connect(*base), *this);
-    return *comps_groups;
+    p_impl->comps_groups =
+        CompsGroupDbUtils::get_transaction_comps_groups(*transaction_db_connect(*p_impl->base), *this);
+    return *p_impl->comps_groups;
 }
 
 
 CompsGroup & Transaction::new_comps_group() {
-    if (!comps_groups) {
-        comps_groups.emplace();
+    if (!p_impl->comps_groups) {
+        p_impl->comps_groups.emplace();
     }
 
     CompsGroup comps_group(*this);
-    return comps_groups->emplace_back(comps_group);
+    return p_impl->comps_groups->emplace_back(comps_group);
 }
 
 
 std::vector<Package> & Transaction::get_packages() {
-    if (packages) {
-        return *packages;
+    if (p_impl->packages) {
+        return *p_impl->packages;
     }
 
-    packages = RpmDbUtils::get_transaction_packages(*transaction_db_connect(*base), *this);
-    return *packages;
+    p_impl->packages = RpmDbUtils::get_transaction_packages(*transaction_db_connect(*p_impl->base), *this);
+    return *p_impl->packages;
 }
 
 
 Package & Transaction::new_package() {
-    if (!packages) {
-        packages.emplace();
+    if (!p_impl->packages) {
+        p_impl->packages.emplace();
     }
 
     Package const pkg(*this);
-    return packages->emplace_back(pkg);
+    return p_impl->packages->emplace_back(pkg);
 }
 
 
@@ -230,11 +278,11 @@ void Transaction::fill_transaction_groups(
 }
 
 void Transaction::start() {
-    if (id != 0) {
+    if (p_impl->id != 0) {
         throw RuntimeError(M_("Transaction has already started!"));
     }
 
-    auto conn = transaction_db_connect(*base);
+    auto conn = transaction_db_connect(*p_impl->base);
     conn->exec("BEGIN");
     try {
         auto query = TransactionDbUtils::trans_insert_new_query(*conn);
@@ -267,7 +315,7 @@ void Transaction::finish(TransactionState state) {
     }
     */
 
-    auto conn = transaction_db_connect(*base);
+    auto conn = transaction_db_connect(*p_impl->base);
     conn->exec("BEGIN");
     try {
         set_state(state);
@@ -319,6 +367,72 @@ std::string Transaction::serialize() {
     ////TODO(amatej): potentially add modules
 
     return json_serialize(transaction_replay);
+}
+
+
+// Getters
+int64_t Transaction::get_id() const noexcept {
+    return p_impl->id;
+}
+int64_t Transaction::get_dt_start() const noexcept {
+    return p_impl->dt_begin;
+}
+int64_t Transaction::get_dt_end() const noexcept {
+    return p_impl->dt_end;
+}
+const std::string & Transaction::get_rpmdb_version_begin() const noexcept {
+    return p_impl->rpmdb_version_begin;
+}
+const std::string & Transaction::get_rpmdb_version_end() const noexcept {
+    return p_impl->rpmdb_version_end;
+}
+const std::string & Transaction::get_releasever() const noexcept {
+    return p_impl->releasever;
+}
+uint32_t Transaction::get_user_id() const noexcept {
+    return p_impl->user_id;
+}
+const std::string & Transaction::get_description() const noexcept {
+    return p_impl->description;
+}
+const std::string & Transaction::get_comment() const noexcept {
+    return p_impl->comment;
+}
+TransactionState Transaction::get_state() const noexcept {
+    return p_impl->state;
+}
+
+
+// Setters
+void Transaction::set_id(int64_t value) {
+    p_impl->id = value;
+}
+void Transaction::set_comment(const std::string & value) {
+    p_impl->comment = value;
+}
+void Transaction::set_dt_start(int64_t value) {
+    p_impl->dt_begin = value;
+}
+void Transaction::set_dt_end(int64_t value) {
+    p_impl->dt_end = value;
+}
+void Transaction::set_description(const std::string & value) {
+    p_impl->description = value;
+}
+void Transaction::set_user_id(uint32_t value) {
+    p_impl->user_id = value;
+}
+void Transaction::set_releasever(const std::string & value) {
+    p_impl->releasever = value;
+}
+void Transaction::set_rpmdb_version_end(const std::string & value) {
+    p_impl->rpmdb_version_end = value;
+}
+void Transaction::set_rpmdb_version_begin(const std::string & value) {
+    p_impl->rpmdb_version_begin = value;
+}
+void Transaction::set_state(State value) {
+    p_impl->state = value;
 }
 
 }  // namespace libdnf5::transaction
