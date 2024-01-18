@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_pgp.hpp"
 
 #include "libdnf5/base/base.hpp"
-#include "libdnf5/logger/logger.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/temp.hpp"
@@ -39,7 +38,7 @@ Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & u
           lr_gpg_subkey_get_timestamp(subkey),
           lr_gpg_key_get_raw_key(key)) {
     for (auto * const * item = lr_gpg_key_get_userids(key); *item; ++item) {
-        user_ids.push_back(*item);
+        add_user_id(*item);
     }
 }
 
