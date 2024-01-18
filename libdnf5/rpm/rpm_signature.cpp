@@ -82,6 +82,43 @@ static bool rpmdb_lookup(const RpmTransactionPtr & ts_ptr, const KeyInfo & key) 
     return retval;
 }
 
+class KeyInfo::Impl {
+public:
+    Impl(
+        std::string key_url,
+        std::string key_path,
+        std::string key_id,
+        std::vector<std::string> user_ids,
+        std::string fingerprint,
+        long int timestamp,
+        std::string raw_key);
+
+private:
+    friend KeyInfo;
+    std::string key_url;
+    std::string key_path;
+    std::string key_id;
+    std::vector<std::string> user_ids;
+    std::string fingerprint;
+    long int timestamp;
+    std::string raw_key;
+};
+
+KeyInfo::Impl::Impl(
+    std::string key_url,
+    std::string key_path,
+    std::string key_id,
+    std::vector<std::string> user_ids,
+    std::string fingerprint,
+    long int timestamp,
+    std::string raw_key)
+    : key_url(std::move(key_url)),
+      key_path(std::move(key_path)),
+      key_id(std::move(key_id)),
+      user_ids(std::move(user_ids)),
+      fingerprint(std::move(fingerprint)),
+      timestamp(timestamp),
+      raw_key(std::move(raw_key)) {}
 
 KeyInfo::KeyInfo(
     const std::string & key_url,
@@ -91,16 +128,28 @@ KeyInfo::KeyInfo(
     const std::string & fingerprint,
     long int timestamp,
     const std::string & raw_key)
-    : key_url(key_url),
-      key_path(key_path),
-      key_id(key_id),
-      user_ids(user_ids),
-      fingerprint(fingerprint),
-      timestamp(timestamp),
-      raw_key(raw_key) {}
+    : p_impl(std::make_unique<Impl>(key_url, key_path, key_id, user_ids, fingerprint, timestamp, raw_key)) {}
+
+KeyInfo::~KeyInfo() = default;
+
+KeyInfo::KeyInfo(const KeyInfo & src) : p_impl(new Impl(*src.p_impl)) {}
+KeyInfo::KeyInfo(KeyInfo && src) noexcept = default;
+
+KeyInfo & KeyInfo::operator=(const KeyInfo & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+KeyInfo & KeyInfo::operator=(KeyInfo && src) noexcept = default;
 
 std::string KeyInfo::get_short_key_id() const {
-    auto short_key_id = key_id.size() > 8 ? key_id.substr(key_id.size() - 8) : key_id;
+    auto short_key_id = p_impl->key_id.size() > 8 ? p_impl->key_id.substr(p_impl->key_id.size() - 8) : p_impl->key_id;
     return short_key_id;
 }
 
@@ -199,7 +248,7 @@ bool RpmSignature::import_key(const KeyInfo & key) const {
     if (!rpmdb_lookup(ts_ptr, key)) {
         uint8_t * pkt = nullptr;
         size_t pkt_len{0};
-        if (pgpParsePkts(key.raw_key.c_str(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
+        if (pgpParsePkts(key.get_raw_key().c_str(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
             free(pkt);
             throw KeyImportError(M_("\"{}\": key is not an armored public key."), key.get_url());
         }
@@ -252,6 +301,32 @@ std::string RpmSignature::check_result_to_string(CheckResult result) {
             return TM_(RPM_SIGNATURE_CHECK_RESULT_DICT.at(result), 1);
     }
     return {};
+}
+
+void KeyInfo::add_user_id(const char * user_id) {
+    p_impl->user_ids.emplace_back(user_id);
+}
+
+const std::string & KeyInfo::get_key_id() const noexcept {
+    return p_impl->key_id;
+}
+const std::vector<std::string> & KeyInfo::get_user_ids() const noexcept {
+    return p_impl->user_ids;
+}
+const std::string & KeyInfo::get_fingerprint() const noexcept {
+    return p_impl->fingerprint;
+}
+const std::string & KeyInfo::get_url() const noexcept {
+    return p_impl->key_url;
+}
+const std::string & KeyInfo::get_path() const noexcept {
+    return p_impl->key_path;
+}
+const std::string & KeyInfo::get_raw_key() const noexcept {
+    return p_impl->raw_key;
+}
+const long int & KeyInfo::get_timestamp() const noexcept {
+    return p_impl->timestamp;
 }
 
 }  // namespace libdnf5::rpm
