@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/utils/to_underlying.hpp>
 #include <libsmartcols/libsmartcols.h>
+#include <stdlib.h>
 
 #include <iostream>
 #include <vector>
@@ -429,7 +430,7 @@ bool print_transaction_table(Transaction & transaction) {
 
     struct libscols_table * tb = scols_new_table();
 
-    auto column = scols_table_new_column(tb, "Package", 0.3, SCOLS_FL_TREE);
+    auto column = scols_table_new_column(tb, "Package", 0.2, SCOLS_FL_TREE);
     auto header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
@@ -437,7 +438,7 @@ bool print_transaction_table(Transaction & transaction) {
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Version", 0.3, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(tb, "Version", 0.2, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
@@ -445,7 +446,7 @@ bool print_transaction_table(Transaction & transaction) {
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
-    column = scols_table_new_column(tb, "Size", 9, SCOLS_FL_RIGHT);
+    column = scols_table_new_column(tb, "Size", 0.1, SCOLS_FL_RIGHT);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "bold");
 
@@ -507,41 +508,73 @@ bool print_transaction_table(Transaction & transaction) {
             scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
         }
         for (auto & replaced : tspkg.get_replaces()) {
+            // highlight arch change
+            if (tspkg.get_package().get_arch() != replaced.get_arch()) {
+                auto cl_arch = scols_line_get_cell(ln, COL_ARCH);
+                scols_cell_set_color(cl_arch, "brown");
+                scols_cell_set_data(cl_arch, (pkg.get_arch() + " <- " + replaced.get_arch()).c_str());
+            }
+
             // highlight incoming packages with epoch/version change
             if (tspkg.get_package().get_epoch() != replaced.get_epoch() ||
                 tspkg.get_package().get_version() != replaced.get_version()) {
-                auto cl_evr = scols_line_get_cell(ln, COL_EVR);
-                scols_cell_set_color(cl_evr, "bold");
+                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "bold");
             }
 
-            struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
-            // TODO(jmracek) Translate it
-            std::string name("replacing ");
-            name.append(replaced.get_name());
-            scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
-            scols_line_set_data(ln_replaced, COL_ARCH, replaced.get_arch().c_str());
-            scols_line_set_data(ln_replaced, COL_EVR, replaced.get_evr().c_str());
-            scols_line_set_data(ln_replaced, COL_REPO, replaced.get_from_repo_id().c_str());
-
-            auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
-            scols_line_set_data(
-                ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
-            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
-            auto obsoleted_color = "brown";
-
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
-            if (pkg.get_arch() == replaced.get_arch()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
-            } else {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+            // highlight repo changed
+            if (pkg.get_repo_id() != replaced.get_from_repo_id()) {
+                scols_cell_set_color(scols_line_get_cell(ln, COL_REPO), "magenta");
+                scols_line_set_data(ln, COL_REPO, (pkg.get_repo_id() + " <- " + replaced.get_from_repo_id()).c_str());
             }
+
+            // highlight size changed >10%
+            double long difference =
+                abs((double long)100 - ((double long)100 / (double long)pkg.get_install_size() *
+                                        (double long)replaced.get_install_size()));
+            if (difference > 10) {
+                scols_cell_set_color(scols_line_get_cell(ln, COL_SIZE), "red");
+                auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
+                scols_line_set_data(
+                    ln,
+                    COL_SIZE,
+                    (libdnf5::cli::utils::units::format_size_aligned(tspkg_size) + " <- " +
+                     libdnf5::cli::utils::units::format_size_aligned(replaced_size))
+                        .c_str());
+            }
+
             if (pkg.get_name() == replaced.get_name()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+                auto cl_evr = scols_line_get_cell(ln, COL_EVR);
+                scols_cell_set_data(cl_evr, fmt::format("{:20s} <- {}", pkg.get_evr(), replaced.get_evr()).c_str());
             } else {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+                struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
+                // TODO(jmracek) Translate it
+                std::string name("replacing ");
+                name.append(replaced.get_name());
+                scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
+                scols_line_set_data(ln_replaced, COL_ARCH, replaced.get_arch().c_str());
+                scols_line_set_data(ln_replaced, COL_EVR, replaced.get_evr().c_str());
+                scols_line_set_data(ln_replaced, COL_REPO, replaced.get_from_repo_id().c_str());
+
+                auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
+                scols_line_set_data(
+                    ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
+                auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
+                auto obsoleted_color = "brown";
+
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
+                if (pkg.get_arch() == replaced.get_arch()) {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+                }
+                if (pkg.get_name() == replaced.get_name()) {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+                }
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
             }
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
         }
     }
 
