@@ -103,9 +103,9 @@ void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf5
 
 
 bool ModuleQuery::latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2) {
-    Pool * pool = module_item_1->module_sack->p_impl->pool;
-    const Solvable * s1 = pool_id2solvable(pool, module_item_1->id.id);
-    const Solvable * s2 = pool_id2solvable(pool, module_item_2->id.id);
+    Pool * pool = module_item_1->get_module_sack()->p_impl->pool;
+    const Solvable * s1 = pool_id2solvable(pool, module_item_1->get_id().id);
+    const Solvable * s2 = pool_id2solvable(pool, module_item_2->get_id().id);
     if (s1->name != s2->name) {
         return s1->name < s2->name;
     }
