@@ -567,11 +567,7 @@ bool print_transaction_table(Transaction & transaction) {
                 } else {
                     scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
                 }
-                if (pkg.get_name() == replaced.get_name()) {
-                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
-                } else {
-                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
-                }
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
                 scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
                 scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
             }
