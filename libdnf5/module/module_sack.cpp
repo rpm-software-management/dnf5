@@ -137,7 +137,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
         if (stream_iterator != static_context_map.end()) {
             auto context_iterator = stream_iterator->second.find(requires_string);
             if (context_iterator != stream_iterator->second.end()) {
-                module_item->computed_static_context = context_iterator->second[0]->get_context();
+                module_item->set_computed_static_context(context_iterator->second[0]->get_context());
                 module_item->create_solvable_and_dependencies();
                 modules.push_back(std::move(module_item));
                 continue;
@@ -149,7 +149,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
         if (requires_string.empty()) {
             requires_string.append("NoRequires");
         }
-        module_item->computed_static_context = requires_string;
+        module_item->set_computed_static_context(requires_string);
         module_item->create_solvable_and_dependencies();
         modules.push_back(std::move(module_item));
     }
@@ -399,7 +399,7 @@ void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
     for (const auto & module_item : modules) {
         std::string solvable_name = module_item->get_name_stream_staticcontext();
         if (solvable_names.contains(solvable_name)) {
-            active_modules[module_item->id.id] = module_item.get();
+            active_modules[module_item->get_id().id] = module_item.get();
         }
     }
 }
@@ -737,7 +737,7 @@ ModuleSack::resolve_active_module_items() {
         const auto & module_name = module_item->get_name();
         status = p_impl->module_db->get_status(module_name);
         if (status == ModuleStatus::DISABLED) {
-            p_impl->excludes->add(module_item->id.id);
+            p_impl->excludes->add(module_item->get_id().id);
         } else if (
             status == ModuleStatus::ENABLED &&
             p_impl->module_db->get_enabled_stream(module_name) == module_item->get_stream()) {
