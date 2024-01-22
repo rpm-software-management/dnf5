@@ -588,7 +588,7 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
                 action,
                 GoalProblem::NOT_FOUND,
                 GoalJobSettings(),
-                libdnf5::transaction::TransactionItemType::GROUP,
+                libdnf5::transaction::TransactionItemType::MODULE,
                 spec,
                 {},
                 log_level);
