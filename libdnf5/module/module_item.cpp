@@ -353,7 +353,8 @@ static void create_solvable_worker(
     const std::string & stream,
     const std::string & version,
     const std::string & context,
-    const char * arch) {
+    const char * arch,
+    const char * original_context) {
     // Name: $name:$stream:$context
     solvable_set_str(solvable, SOLVABLE_NAME, fmt::format("{}:{}:{}", name, stream, context).c_str());
     // Version: $version
@@ -363,6 +364,8 @@ static void create_solvable_worker(
     solvable_set_str(solvable, SOLVABLE_ARCH, arch ? arch : "noarch");
     // Store original $name:$stream in description
     solvable_set_str(solvable, SOLVABLE_DESCRIPTION, fmt::format("{}:{}", name, stream).c_str());
+    // Store the original context in summary
+    solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context ? original_context : "");
 
     // Create Provides: module($name)
     auto dep_id = pool_str2id(pool, fmt::format("module({})", name).c_str(), 1);
@@ -372,9 +375,6 @@ static void create_solvable_worker(
     // Create Provides: module($name:$stream)
     dep_id = pool_str2id(pool, fmt::format("module({}:{})", name, stream).c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
-
-    // TODO(pkratoch): Maybe store original context in summary
-    // solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context.c_str());
 }
 
 
@@ -384,12 +384,13 @@ void ModuleItem::create_solvable() {
     // Create new solvable and store its id
     id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
     auto solvable = pool_id2solvable(pool, id.id);
-    auto context = computed_static_context.empty()
-                       ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
-                       : computed_static_context;
+    auto original_context = modulemd_module_stream_get_context(md_stream);
+    auto context =
+        computed_static_context.empty() ? libdnf5::utils::string::c_to_str(original_context) : computed_static_context;
     auto arch = modulemd_module_stream_get_arch(md_stream);
 
-    create_solvable_worker(pool, solvable, get_name(), get_stream(), get_version_str(), std::move(context), arch);
+    create_solvable_worker(
+        pool, solvable, get_name(), get_stream(), get_version_str(), std::move(context), arch, original_context);
 }
 
 
@@ -401,7 +402,7 @@ void ModuleItem::create_platform_solvable(
     auto id = repo_add_solvable(repo_create(pool, "@System"));
     auto solvable = pool_id2solvable(pool, id);
 
-    create_solvable_worker(pool, solvable, name, stream, "0", "00000000", "noarch");
+    create_solvable_worker(pool, solvable, name, stream, "0", "00000000", "noarch", "");
 }
 
 
