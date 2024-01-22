@@ -353,7 +353,10 @@ void ModuleSack::Impl::make_provides_ready() {
     Map * considered = pool->considered;
     pool->considered = nullptr;
 
-    // TODO(pkratoch): Internalize repositories
+    // Internalize repositories
+    for (auto repo_pair : repositories) {
+        repo_internalize(pool_id2repo(pool, repo_pair.second));
+    }
 
     pool_createwhatprovides(pool);
     provides_ready = true;
