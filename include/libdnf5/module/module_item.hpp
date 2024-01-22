@@ -55,9 +55,9 @@ public:
 // @replaces libdnf:module/ModuleItem.hpp:class:ModuleItem
 class ModuleItem {
 public:
-    bool operator==(const ModuleItem & rhs) const noexcept { return id.id == rhs.id.id; }
-    bool operator!=(const ModuleItem & rhs) const noexcept { return id.id != rhs.id.id; }
-    bool operator<(const ModuleItem & rhs) const noexcept { return id.id < rhs.id.id; }
+    bool operator==(const ModuleItem & rhs) const noexcept;
+    bool operator!=(const ModuleItem & rhs) const noexcept;
+    bool operator<(const ModuleItem & rhs) const noexcept;
 
     ~ModuleItem();
 
@@ -156,10 +156,10 @@ public:
     /// @since 5.0
     //
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getRepoID()
-    const std::string & get_repo_id() const { return repo_id; };
+    const std::string & get_repo_id() const;
 
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getId()
-    ModuleItemId get_id() const { return id; };
+    ModuleItemId get_id() const;
 
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getYaml()
     std::string get_yaml() const;
@@ -179,8 +179,8 @@ public:
 
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
-    ModuleItem(ModuleItem && mpkg);
-    ModuleItem & operator=(ModuleItem && mpkg);
+    ModuleItem(ModuleItem && mpkg) noexcept;
+    ModuleItem & operator=(ModuleItem && mpkg) noexcept;
 
 private:
     friend class ModuleQuery;
@@ -246,41 +246,13 @@ private:
     static void create_platform_solvable(
         const ModuleSackWeakPtr & module_sack, const std::string & name, const std::string & stream);
 
-    // Corresponds to one yaml document
-    _ModulemdModuleStream * md_stream;
+    libdnf5::module::ModuleSackWeakPtr get_module_sack() const;
 
-    ModuleSackWeakPtr module_sack;
-    ModuleItemId id;
-    std::string repo_id;
+    void set_computed_static_context(const std::string & context);
 
-    // For compatibility with older modules that didn't have static contexts
-    std::string computed_static_context;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
-
-
-inline std::vector<ModuleProfile> ModuleItem::get_profiles(const std::string & name) const {
-    return get_profiles_internal(name.c_str());
-}
-
-
-inline std::vector<ModuleProfile> ModuleItem::get_profiles() const {
-    return get_profiles_internal(nullptr);
-}
-
-
-inline std::vector<ModuleDependency> ModuleItem::get_module_dependencies(bool remove_platform) const {
-    return get_module_dependencies(md_stream, remove_platform);
-}
-
-
-inline std::string ModuleItem::get_module_dependencies_string(bool remove_platform) const {
-    return get_module_dependencies_string(md_stream, remove_platform);
-}
-
-
-inline std::string ModuleItem::get_name_stream() const {
-    return get_name_stream(md_stream);
-}
 
 
 }  // namespace libdnf5::module
