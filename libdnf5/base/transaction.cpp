@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solver_problems_internal.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
+#include "transaction_package_impl.hpp"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
 
@@ -428,7 +429,7 @@ void Transaction::Impl::set_transaction(
         rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
         TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, obsoleted.get_reason());
         for (auto id : replaced_by_ids) {
-            tspkg.replaced_by.emplace_back(rpm::Package(base, rpm::PackageId(id)));
+            tspkg.p_impl->replaced_by_append(rpm::Package(base, rpm::PackageId(id)));
         }
         packages.emplace_back(std::move(tspkg));
     }
@@ -481,7 +482,7 @@ void Transaction::Impl::set_transaction(
                     pkg.get_action() == transaction::TransactionItemAction::REMOVE ||
                     (reason_override->second > pkg.get_reason() &&
                      pkg.get_action() != transaction::TransactionItemAction::REASON_CHANGE)) {
-                    pkg.reason = reason_override->second;
+                    pkg.p_impl->set_reason(reason_override->second);
                 }
             }
         }
@@ -523,10 +524,10 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     for (auto replaced_id : obs) {
         rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
         reason = std::max(reason, replaced_pkg.get_reason());
-        tspkg.replaces.emplace_back(std::move(replaced_pkg));
+        tspkg.p_impl->replaces_append(std::move(replaced_pkg));
         replaced[replaced_id].push_back(id);
     }
-    tspkg.set_reason(reason);
+    tspkg.p_impl->set_reason(reason);
 
     return tspkg;
 }
