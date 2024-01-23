@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_BASE_TRANSACTION_ENVIRONMENT_HPP
 #define LIBDNF5_BASE_TRANSACTION_ENVIRONMENT_HPP
 
-#include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
@@ -36,46 +35,42 @@ public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
     using Action = transaction::TransactionItemAction;
-    using PackageType = libdnf5::comps::PackageType;
 
     /// @return the underlying environment.
-    libdnf5::comps::Environment get_environment() const { return environment; }
+    libdnf5::comps::Environment get_environment() const;
 
     /// @return the action being performed on the transaction environment.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
-    Action get_action() const noexcept { return action; }
+    Action get_action() const noexcept;
 
     /// @return the state of the environment in the transaction.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
-    State get_state() const noexcept { return state; }
+    State get_state() const noexcept;
 
     /// @return the reason of the action being performed on the transaction environment.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
-    Reason get_reason() const noexcept { return reason; }
+    Reason get_reason() const noexcept;
 
     /// @return package types requested to be installed with the group.
-    bool get_with_optional() const noexcept { return with_optional; }
+    bool get_with_optional() const noexcept;
+
+    ~TransactionEnvironment();
+
+    TransactionEnvironment(const TransactionEnvironment & mpkg);
+    TransactionEnvironment & operator=(const TransactionEnvironment & mpkg);
+    TransactionEnvironment(TransactionEnvironment && mpkg) noexcept;
+    TransactionEnvironment & operator=(TransactionEnvironment && mpkg) noexcept;
 
 private:
     friend class Transaction::Impl;
 
-    TransactionEnvironment(
-        const libdnf5::comps::Environment & grp, Action action, Reason reason, const bool with_optional)
-        : environment(grp),
-          action(action),
-          reason(reason),
-          with_optional(with_optional) {}
+    TransactionEnvironment(const libdnf5::comps::Environment & grp, Action action, Reason reason, bool with_optional);
 
-    void set_state(State value) noexcept { state = value; }
-
-    libdnf5::comps::Environment environment;
-    Action action;
-    Reason reason;
-    State state{State::STARTED};
-    bool with_optional;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::base
