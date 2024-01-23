@@ -90,10 +90,11 @@ void NeedsRestartingCommand::configure() {
 time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
     // We have three sources from which to derive the boot time. These values
     // vary depending on containerization, existing of a Real Time Clock, etc:
-    // - UserspaceTimestamp property on /org/freedesktop/systemd1
+    // - UnitsLoadStartTimestamp property on /org/freedesktop/systemd1
     //      The start time of the service manager, according to systemd itself.
-    //      Works unless the system was not booted with systemd, such as in (most)
-    //      containers.
+    //      Seems to be more reliable than UserspaceTimestamp when the RTC is
+    //      in local time. Works unless the system was not booted with systemd,
+    //      such as in (most) containers.
     // - st_mtime of /proc/1
     //      Reflects the time the first process was run after booting. This
     //      works for all known cases except (1) machines without a RTC---they
@@ -118,7 +119,7 @@ time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
         auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
         const uint64_t systemd_boot_time_us =
-            proxy->getProperty("UserspaceTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE);
+            proxy->getProperty("UnitsLoadStartTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE);
 
         const time_t systemd_boot_time = static_cast<long>(systemd_boot_time_us) / (1000L * 1000L);
 
