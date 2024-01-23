@@ -653,17 +653,20 @@ Provides:       dnf5-command(config-manager)
 Provides:       dnf5-command(copr)
 Provides:       dnf5-command(needs-restarting)
 Provides:       dnf5-command(repoclosure)
+Provides:       dnf5-command(system-upgrade)
 
 %description -n dnf5-plugins
 Core DNF5 plugins that enhance dnf5 with builddep, changelog,
 config-manager, copr, and repoclosure commands.
 
 %files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang
+%config %{_unitdir}/dnf5-system-upgrade.service
 %{_libdir}/dnf5/plugins/*.so
 %{_mandir}/man8/dnf5-builddep.8.*
 %{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
+# %{_mandir}/man8/dnf5-system-upgrade.8.*
 %endif
 
 

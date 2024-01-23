@@ -24,20 +24,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option_path.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
-#include <sdbus-c++/sdbus-c++.h>
-#include <toml.hpp>
 
+#include <exception>
 #include <iostream>
 
-/* State::State(std::filesystem::path path) : path(std::move(path)) { */
-/*     read(); */
-/* } */
-/* void State::read() { */
-/*     auto toml_value = toml::parse(path); */
-/* } */
-/* void State::write() { */
-
-/* } */
+OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
+    read();
+}
+void OfflineTransactionState::read() {
+    try {
+        const auto & value = toml::parse(path);
+        data = toml::find<OfflineTransactionStateData>(value, STATE_HEADER);
+        if (data.state_version != STATE_VERSION) {
+            throw libdnf5::RuntimeError(M_("incompatible version of state data"));
+        }
+    } catch (const std::exception & ex) {
+        read_exception = std::current_exception();
+        data = OfflineTransactionStateData{};
+    }
+}
+void OfflineTransactionState::write() {
+    auto file = libdnf5::utils::fs::File(path, "w");
+    file.write(toml::format(toml::value{{STATE_HEADER, data}}));
+    file.close();
+}
 
 namespace dnf5 {
 
@@ -60,11 +70,12 @@ void SystemUpgradeCommand::set_argument_parser() {
 
 void SystemUpgradeCommand::register_subcommands() {
     register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
+    register_subcommand(std::make_unique<SystemUpgradeRebootCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeUpgradeCommand>(get_context()));
 }
 
 SystemUpgradeSubcommand::SystemUpgradeSubcommand(Context & context, const std::string & name) : Command(context, name) {
-    data_dir = std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "system-upgrade";
+    datadir = std::filesystem::path{libdnf5::SYSTEM_STATE_DIR} / "system-upgrade";
 }
 
 void SystemUpgradeSubcommand::set_argument_parser() {
@@ -72,13 +83,13 @@ void SystemUpgradeSubcommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    download_dir =
-        dynamic_cast<libdnf5::OptionPath *>(parser.add_init_value(std::make_unique<libdnf5::OptionPath>(data_dir)));
+    cachedir =
+        dynamic_cast<libdnf5::OptionPath *>(parser.add_init_value(std::make_unique<libdnf5::OptionPath>(datadir)));
 
     auto * download_dir_arg = parser.add_new_named_arg("downloaddir");
     download_dir_arg->set_long_name("downloaddir");
     download_dir_arg->set_description("Redirect download of packages to provided <path>");
-    download_dir_arg->link_value(download_dir);
+    download_dir_arg->link_value(cachedir);
     cmd.register_named_arg(download_dir_arg);
 }
 
@@ -117,11 +128,11 @@ void SystemUpgradeDownloadCommand::configure() {
 
     // Check --releasever
     const auto & installroot = conf.get_installroot_option().get_value();
-    const auto current_release = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
-    /* const auto & desired_release = ctx.base.get_vars()->get_value("releasever"); */
+    system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    target_releasever = ctx.base.get_vars()->get_value("releasever");
 
     // TODO: uncomment this. Easier to test with it commented out.
-    /* if (desired_release == current_release) { */
+    /* if (target_releasever == system_releasever) { */
     /*     throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version.")); */
     /* } */
 
@@ -129,7 +140,7 @@ void SystemUpgradeDownloadCommand::configure() {
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
     ctx.base.get_config().get_cachedir_option().set(
-        libdnf5::Option::Priority::PLUGINDEFAULT, get_download_dir()->get_value());
+        libdnf5::Option::Priority::PLUGINDEFAULT, get_cachedir()->get_value());
 }
 
 void SystemUpgradeDownloadCommand::run() {
@@ -159,11 +170,32 @@ void SystemUpgradeDownloadCommand::run() {
         throw libdnf5::cli::CommandExitError(1, M_("Transaction is empty."));
     }
 
-    const auto & transaction_json_path = std::filesystem::path(get_data_dir()) / "system-upgrade-transaction.json";
+    const auto & transaction_json_path = std::filesystem::path(get_datadir()) / "system-upgrade-transaction.json";
     auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
 
     transaction_json_file.write(json);
     transaction_json_file.close();
+
+    auto state = read_or_make_state();
+    state.get_data().cachedir = get_cachedir()->get_value();
+    state.get_data().system_releasever = system_releasever;
+    state.get_data().target_releasever = target_releasever;
+    state.get_data().status = STATUS_DOWNLOAD_COMPLETE;
+    state.write();
+}
+
+void check_state(const OfflineTransactionState & state) {
+    const auto & read_exception = state.get_read_exception();
+    if (read_exception != nullptr) {
+        try {
+            std::rethrow_exception(read_exception);
+        } catch (const std::exception & ex) {
+            std::cout << "ex.what rethrown is " << ex.what() << std::endl;
+            const std::string message{ex.what()};
+            throw libdnf5::cli::CommandExitError(
+                1, M_("Error reading state: {}. Rerun `dnf5 system-upgrade download [OPTIONS]`."), message);
+        }
+    }
 }
 
 void reboot(Context & ctx, bool poweroff = false) {
@@ -176,6 +208,7 @@ void reboot(Context & ctx, bool poweroff = false) {
         return;
     }
 
+    poweroff = !poweroff;
     std::unique_ptr<sdbus::IConnection> connection;
     try {
         connection = sdbus::createSystemBusConnection();
@@ -191,14 +224,53 @@ void reboot(Context & ctx, bool poweroff = false) {
     }
 }
 
+void SystemUpgradeRebootCommand::set_argument_parser() {
+    SystemUpgradeSubcommand::set_argument_parser();
+
+    auto & ctx = get_context();
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
+    cmd.set_description("Prepare the system to perform the upgrade and reboots to start the upgrade.");
+
+    poweroff_after =
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
+
+    auto * poweroff_after_arg = parser.add_new_named_arg("poweroff");
+    poweroff_after_arg->set_long_name("poweroff");
+    poweroff_after_arg->set_description("Power off the system after the operation is complete");
+    poweroff_after_arg->link_value(poweroff_after);
+
+    cmd.register_named_arg(poweroff_after_arg);
+}
+
 void SystemUpgradeRebootCommand::run() {
-    std::filesystem::create_symlink(get_data_dir(), get_magic_symlink());
-    reboot(get_context());
+    auto state = read_or_make_state();
+    check_state(state);
+    if (state.get_data().status != STATUS_DOWNLOAD_COMPLETE) {
+        throw libdnf5::cli::CommandExitError(1, M_("system is not ready for upgrade"));
+    }
+    if (std::filesystem::is_symlink(get_magic_symlink())) {
+        throw libdnf5::cli::CommandExitError(1, M_("upgrade is already scheduled"));
+    }
+
+    if (!std::filesystem::is_directory(get_datadir())) {
+        throw libdnf5::cli::CommandExitError(1, M_("data directory {} does not exist"), get_datadir().string());
+    }
+
+    std::filesystem::create_symlink(get_datadir(), get_magic_symlink());
+
+    state.get_data().status = STATUS_READY;
+    state.get_data().poweroff_after = poweroff_after->get_value();
+    state.write();
+
+    reboot(get_context(), poweroff_after->get_value());
 }
 
 void SystemUpgradeUpgradeCommand::set_argument_parser() {}
 
 void SystemUpgradeUpgradeCommand::configure() {
+    SystemUpgradeSubcommand::configure();
     auto & ctx = get_context();
 
     ctx.set_load_system_repo(true);
@@ -215,7 +287,24 @@ void SystemUpgradeUpgradeCommand::configure() {
 void SystemUpgradeUpgradeCommand::run() {
     auto & ctx = get_context();
 
-    const auto & transaction_json_path = std::filesystem::path(get_data_dir()) / "system-upgrade-transaction.json";
+    if (!std::filesystem::is_symlink(get_magic_symlink())) {
+        throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
+    }
+
+    const auto & symlinked_path = std::filesystem::read_symlink(get_magic_symlink());
+    if (symlinked_path != get_datadir()) {
+        throw libdnf5::cli::CommandExitError(0, M_("Another upgrade tool is running. Exiting."));
+    }
+
+    std::filesystem::remove(get_magic_symlink());
+
+    auto state = read_or_make_state();
+    check_state(state);
+    if (state.get_data().status != STATUS_READY) {
+        throw libdnf5::cli::CommandExitError(1, M_("Use `dnf5 system-upgrade reboot` to begin the upgrade."));
+    }
+
+    const auto & transaction_json_path = std::filesystem::path(get_datadir()) / "system-upgrade-transaction.json";
     auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "r");
 
     const auto & json = transaction_json_file.read();
@@ -231,7 +320,20 @@ void SystemUpgradeUpgradeCommand::run() {
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
-    transaction.run();
+    const auto result = transaction.run();
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
+                  << std::endl;
+        for (auto const & entry : transaction.get_gpg_signature_problems()) {
+            std::cerr << entry << std::endl;
+        }
+        for (auto & problem : transaction.get_transaction_problems()) {
+            std::cerr << "  - " << problem << std::endl;
+        }
+        throw libdnf5::cli::SilentCommandExitError(1);
+    }
 }
+
+void SystemUpgradeCleanCommand::run() {}
 
 }  // namespace dnf5

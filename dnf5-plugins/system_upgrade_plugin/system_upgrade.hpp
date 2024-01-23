@@ -21,21 +21,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_SYSTEM_UPGRADE_HPP
 
 #include <dnf5/context.hpp>
+#include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
+#include <sdbus-c++/sdbus-c++.h>
+#include <toml.hpp>
 
-/* #include <map> */
-/* #include <any> */
+const std::string STATUS_DOWNLOAD_INCOMPLETE{"download-incomplete"};
+const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
+const std::string STATUS_READY{"ready"};
+const std::string STATUS_UPGRADE_INCOMPLETE{"upgrade-incomplete"};
 
-/* class State { */
-/* public: */
-/*     State(std::filesystem::path path); */
-/* private: */
-/*     void read(); */
-/*     void write(); */
-/*     std::map<std::string, std::any> data; */
-/*     std::filesystem::path path; */
-/* }; */
+const int STATE_VERSION = 0;
+const std::string STATE_HEADER{"offline-transaction-state"};
+
+struct OfflineTransactionStateData {
+    int state_version = STATE_VERSION;
+    std::string status = STATUS_DOWNLOAD_INCOMPLETE;
+    std::string cachedir;
+    std::string target_releasever;
+    std::string system_releasever;
+    bool poweroff_after = false;
+};
+
+TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
+    OfflineTransactionStateData, state_version, status, cachedir, target_releasever, system_releasever, poweroff_after)
+
+class OfflineTransactionState {
+public:
+    void write();
+    OfflineTransactionState(std::filesystem::path path);
+    OfflineTransactionStateData & get_data() { return data; };
+    const std::exception_ptr & get_read_exception() const { return read_exception; };
+
+private:
+    void read();
+    std::exception_ptr read_exception;
+    std::filesystem::path path;
+    OfflineTransactionStateData data;
+};
+
+const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "system-upgrade"};
 
 namespace dnf5 {
 
@@ -55,19 +81,21 @@ public:
     void configure() override;
 
 protected:
-    libdnf5::OptionPath * get_download_dir() { return download_dir; };
-    std::filesystem::path get_data_dir() { return data_dir; };
+    libdnf5::OptionPath * get_cachedir() { return cachedir; };
+    std::filesystem::path get_datadir() { return datadir; };
+    void set_datadir(std::filesystem::path new_datadir) { datadir = std::move(new_datadir); };
     std::filesystem::path get_magic_symlink() { return magic_symlink; };
+    OfflineTransactionState read_or_make_state() { return OfflineTransactionState{datadir / "state.toml"}; };
 
 private:
-    libdnf5::OptionPath * download_dir{nullptr};
-    std::filesystem::path data_dir;
+    libdnf5::OptionPath * cachedir{nullptr};
+    std::filesystem::path datadir{DEFAULT_DATADIR};
     std::filesystem::path magic_symlink;
 };
 
 class SystemUpgradeDownloadCommand : public SystemUpgradeSubcommand {
 public:
-    explicit SystemUpgradeDownloadCommand(Context & context) : SystemUpgradeSubcommand(context, "download") {}
+    explicit SystemUpgradeDownloadCommand(Context & context) : SystemUpgradeSubcommand{context, "download"} {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
@@ -75,6 +103,9 @@ public:
 private:
     libdnf5::OptionBool * no_downgrade{nullptr};
     libdnf5::OptionBool * distro_sync{nullptr};
+    std::string target_releasever;
+    std::string system_releasever;
+    int state_version;
 };
 
 class SystemUpgradeRebootCommand : public SystemUpgradeSubcommand {
@@ -82,6 +113,9 @@ public:
     explicit SystemUpgradeRebootCommand(Context & context) : SystemUpgradeSubcommand(context, "reboot") {}
     void set_argument_parser() override;
     void run() override;
+
+private:
+    libdnf5::OptionBool * poweroff_after{nullptr};
 };
 
 class SystemUpgradeUpgradeCommand : public SystemUpgradeSubcommand {
