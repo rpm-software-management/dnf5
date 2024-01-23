@@ -94,7 +94,7 @@ void DownloadCommand::set_argument_parser() {
     urlprotocol->set_long_name("urlprotocol");
     urlprotocol->set_description("When running with --url, limit to specific protocols");
     urlprotocol->set_parse_hook_func(
-        [&ctx, &urlprotocol_option, &urlprotocol_valid_options](
+        [&ctx, this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
                 throw libdnf5::cli::ArgumentParserInvalidValueError(
@@ -196,7 +196,7 @@ void DownloadCommand::run() {
         for (auto & [nerva, pkg] : download_pkgs) {
             auto urls = pkg.get_remote_locations();
             libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
-            auto valid_url = std::find_if(urls.begin(), urls.end(), [&urlprotocol_option](std::string url) {
+            auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
                 for (auto protocol : urlprotocol_option) {
                     if (url.starts_with(protocol)) {
                         return true;
