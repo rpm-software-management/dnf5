@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_BASE_TRANSACTION_PACKAGE_HPP
 #define LIBDNF5_BASE_TRANSACTION_PACKAGE_HPP
 
-#include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
@@ -43,70 +42,55 @@ public:
     using State = transaction::TransactionItemState;
 
     /// @return the underlying package.
-    libdnf5::rpm::Package get_package() const { return package; }
+    libdnf5::rpm::Package get_package() const;
 
     /// @return the action being performed on the transaction package.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
-    Action get_action() const noexcept { return action; }
+    Action get_action() const noexcept;
 
     /// @return the state of the package in the transaction.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
-    State get_state() const noexcept { return state; }
+    State get_state() const noexcept;
 
     /// @return the reason of the action being performed on the transaction package.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
-    Reason get_reason() const noexcept { return reason; }
+    Reason get_reason() const noexcept;
 
     /// @return packages replaced by this transaction package.
-    const std::vector<rpm::Package> get_replaces() const noexcept { return replaces; }
+    std::vector<rpm::Package> get_replaces() const noexcept;
 
     /// @return packages that replace this transaction package (for transaction
     /// packages that are leaving the system).
-    const std::vector<rpm::Package> & get_replaced_by() const noexcept { return replaced_by; }
+    const std::vector<rpm::Package> & get_replaced_by() const noexcept;
 
     /// The REASON_CHANGE action requires group id in case the reason is changed to GROUP
     /// @return id of group the package belongs to
-    const std::string * get_reason_change_group_id() const noexcept {
-        return reason_change_group_id ? &reason_change_group_id.value() : nullptr;
-    }
+    const std::string * get_reason_change_group_id() const noexcept;
+
+    ~TransactionPackage();
+
+    TransactionPackage(const TransactionPackage & mpkg);
+    TransactionPackage & operator=(const TransactionPackage & mpkg);
+    TransactionPackage(TransactionPackage && mpkg) noexcept;
+    TransactionPackage & operator=(TransactionPackage && mpkg) noexcept;
 
 private:
     friend class Transaction::Impl;
     friend class ::BaseGoalTest;
     friend class ::RpmTransactionTest;
 
-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason)
-        : package(pkg),
-          action(action),
-          reason(reason) {}
+    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason);
 
-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state)
-        : package(pkg),
-          action(action),
-          reason(reason),
-          state(state) {}
+    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state);
 
     TransactionPackage(
-        const libdnf5::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)
-        : package(pkg),
-          action(action),
-          reason(reason),
-          reason_change_group_id(group_id) {}
+        const libdnf5::rpm::Package & pkg, Action action, Reason reason, const std::optional<std::string> & group_id);
 
-    void set_reason(Reason value) noexcept { reason = value; }
-    void set_state(State value) noexcept { state = value; }
-
-    libdnf5::rpm::Package package;
-    Action action;
-    Reason reason;
-    State state{State::STARTED};
-    std::optional<std::string> reason_change_group_id;
-
-    std::vector<rpm::Package> replaces;
-    std::vector<rpm::Package> replaced_by;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::base
