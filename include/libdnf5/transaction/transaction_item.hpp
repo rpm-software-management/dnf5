@@ -50,22 +50,28 @@ public:
     /// Get action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
-    Action get_action() const noexcept { return action; }
+    Action get_action() const noexcept;
 
     /// Get reason of the action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
-    Reason get_reason() const noexcept { return reason; }
+    Reason get_reason() const noexcept;
 
     /// Get transaction item repoid (text identifier of a repository)
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getRepoid()
-    const std::string & get_repoid() const noexcept { return repoid; }
+    const std::string & get_repoid() const noexcept;
 
     /// Get transaction item state
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
-    State get_state() const noexcept { return state; }
+    State get_state() const noexcept;
+
+    ~TransactionItem();
+    TransactionItem(const TransactionItem & src);
+    TransactionItem & operator=(const TransactionItem & src);
+    TransactionItem(TransactionItem && src) noexcept;
+    TransactionItem & operator=(TransactionItem && src) noexcept;
 
 private:
     friend RpmDbUtils;
@@ -82,15 +88,15 @@ private:
     explicit TransactionItem(const Transaction & trans);
 
     /// Get database id (primary key) of the transaction item (table 'trans_item')
-    int64_t get_id() const noexcept { return id; }
+    int64_t get_id() const noexcept;
 
     /// Set database id (primary key) of the transaction item (table 'trans_item')
-    void set_id(int64_t value) { id = value; }
+    void set_id(int64_t value);
 
     /// Set action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setAction(libdnf::TransactionItemAction value)
-    void set_action(Action value) { action = value; }
+    void set_action(Action value);
 
     /// Get name of the action associated with the transaction item in the transaction
     ///
@@ -105,17 +111,17 @@ private:
     /// Set reason of the action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
-    void set_reason(Reason value) { reason = value; }
+    void set_reason(Reason value);
 
     /// Set transaction item state
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setState(libdnf::TransactionItemState value)
-    void set_state(State value) { state = value; }
+    void set_state(State value);
 
     /// Get transaction item repoid (text identifier of a repository)
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setRepoid(const std::string & value)
-    void set_repoid(const std::string & value) { repoid = value; }
+    void set_repoid(const std::string & value);
 
     /// Has the item appeared on the system during the transaction?
     ///
@@ -139,29 +145,14 @@ private:
     // TODO(dmach): Review and bring back if needed
     //void saveState();
 
-    // TODO(dmach): move to sack, resolve for all packages; return the user who initially installed the package
-    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItem.getInstalledBy()
-    uint32_t getInstalledBy() const;
-
     /// Get database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    int64_t get_item_id() const noexcept { return item_id; }
+    int64_t get_item_id() const noexcept;
 
     /// Set database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    void set_item_id(int64_t value) { item_id = value; }
-    int64_t id = 0;
-    Action action = Action::INSTALL;
-    Reason reason = Reason::NONE;
-    State state = State::STARTED;
-    std::string repoid;
+    void set_item_id(int64_t value);
 
-    int64_t item_id = 0;
-
-    // TODO(lukash) this won't be safe in bindings (or in general when a
-    // TransactionItem is kept around after a Transaction is destroyed), but we
-    // can't easily use a WeakPtr here, since the Transactions are expected to
-    // be at least movable, and the WeakPtrGuard would make the Transaction
-    // unmovable
-    const Transaction * trans = nullptr;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::transaction
