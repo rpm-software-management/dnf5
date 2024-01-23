@@ -79,8 +79,6 @@ void DownloadCommand::set_argument_parser() {
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
 
-<<<<<<< HEAD
-=======
     auto url = parser.add_new_named_arg("url");
     url->set_long_name("url");
     url->set_description("Print the list of urls where the rpms can be downloaded instead of downloading");
@@ -106,17 +104,12 @@ void DownloadCommand::set_argument_parser() {
             urlprotocol_option.emplace(value);
             return true;
         });
-
->>>>>>> 31411c22 (Added urlprotocol)
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
-<<<<<<< HEAD
-=======
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
->>>>>>> 31411c22 (Added urlprotocol)
 }
 
 void DownloadCommand::configure() {
@@ -185,40 +178,37 @@ void DownloadCommand::run() {
     if (!download_pkgs.empty()) {
         libdnf5::repo::PackageDownloader downloader(ctx.base);
 
-<<<<<<< HEAD
         // for download command, we don't want to mark the packages for removal
         downloader.force_keep_packages(true);
 
         for (auto & [nevra, pkg] : download_pkgs) {
             downloader.add(pkg);
-=======
-    if (url_option->get_value()) {
-        // If no urlprotocols are specified, then any urlprotocol is acceptable
-        if (urlprotocol_option.empty()) {
-            urlprotocol_option = urlprotocol_valid_options;
-        }
-        for (auto & [nerva, pkg] : download_pkgs) {
-            auto urls = pkg.get_remote_locations();
-            libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
-            auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
-                for (auto protocol : urlprotocol_option) {
-                    if (url.starts_with(protocol)) {
-                        return true;
-                    }
+            if (url_option->get_value()) {
+                // If no urlprotocols are specified, then any urlprotocol is acceptable
+                if (urlprotocol_option.empty()) {
+                    urlprotocol_option = urlprotocol_valid_options;
                 }
-                return false;
-            });
-            if (valid_url == urls.end()) {
-                libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
+                for (auto & [nerva, pkg] : download_pkgs) {
+                    auto urls = pkg.get_remote_locations();
+                    libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
+                    auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
+                        for (auto protocol : urlprotocol_option) {
+                            if (url.starts_with(protocol)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                    if (valid_url == urls.end()) {
+                        libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
+                    }
+                    std::cout << *valid_url << std::endl;
+                }
+
+                std::cout << "Downloading Packages:" << std::endl;
+                downloader.download();
+                std::cout << std::endl;
             }
-            std::cout << *valid_url << std::endl;
->>>>>>> 31411c22 (Added urlprotocol)
         }
 
-        std::cout << "Downloading Packages:" << std::endl;
-        downloader.download();
-        std::cout << std::endl;
-    }
-}
-
-}  // namespace dnf5
+    }  // namespace dnf5
