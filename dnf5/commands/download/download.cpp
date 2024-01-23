@@ -87,6 +87,9 @@ void DownloadCommand::set_argument_parser() {
     url->set_const_value("true");
     url->link_value(url_option);
 
+
+    urlprotocol_valid_options = {"http", "https", "rsync", "ftp"};
+    urlprotocol_option = {};
     auto urlprotocol = parser.add_new_named_arg("urlprotocol");
     urlprotocol->set_long_name("urlprotocol");
     urlprotocol->set_description("When running with --url, limit to specific protocols");
@@ -95,7 +98,7 @@ void DownloadCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
                 throw libdnf5::cli::ArgumentParserInvalidValueError(
-                    _M(std::format("Invalid urlprotocol option: {}", value)))
+                    M_(std::format("Invalid urlprotocol option: {}", value)))
             }
             urlprotocol_option.emplace_back(value);
         });

@@ -41,8 +41,8 @@ public:
     void run() override;
 
 private:
-    std::set<std::string> urlprotocol_valid_options = {"http", "https", "rsync", "ftp"};
-    std::set<std::string> urlprotocol_option = {};
+    std::set<std::string> urlprotocol_valid_options;
+    std::set<std::string> urlprotocol_option;
     libdnf5::OptionBool * resolve_option{nullptr};
     libdnf5::OptionBool * alldeps_option{nullptr};
 
