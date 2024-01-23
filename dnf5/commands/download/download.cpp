@@ -94,13 +94,14 @@ void DownloadCommand::set_argument_parser() {
     urlprotocol->set_long_name("urlprotocol");
     urlprotocol->set_description("When running with --url, limit to specific protocols");
     urlprotocol->set_parse_hook_func(
-        [&ctx, this](
+        [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
                 throw libdnf5::cli::ArgumentParserInvalidValueError(
                     M_("Invalid urlprotocol option: {}"), std::string(value));
             }
             urlprotocol_option.emplace(value);
+            return true;
         });
 
 >>>>>>> 31411c22 (Added urlprotocol)
