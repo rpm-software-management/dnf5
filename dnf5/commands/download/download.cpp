@@ -82,15 +82,34 @@ void DownloadCommand::set_argument_parser() {
 
     auto url = parser.add_new_named_arg("url");
     url->set_long_name("url");
-    url->set_description("Print the list of urls where the rpms can be downloaded instead of downloading");
+    url->set_description("Print a URL where the rpms can be downloaded instead of downloading");
     url->set_const_value("true");
     url->link_value(url_option);
+
+    urlprotocol_valid_options = {"http", "https", "ftp", "file"};
+    urlprotocol_option = {};
+    auto urlprotocol = parser.add_new_named_arg("urlprotocol");
+    urlprotocol->set_long_name("urlprotocol");
+    urlprotocol->set_description("When running with --url, limit to specific protocols");
+    urlprotocol->set_has_value(true);
+    urlprotocol->set_arg_value_help("{http|https|ftp|file},...");
+    urlprotocol->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
+                throw libdnf5::cli::ArgumentParserInvalidValueError(
+                    M_("Invalid urlprotocol option: {}"), std::string(value));
+            }
+            urlprotocol_option.emplace(value);
+            return true;
+        });
 
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
     cmd.register_named_arg(url);
+    cmd.register_named_arg(urlprotocol);
 }
 
 void DownloadCommand::configure() {
@@ -161,9 +180,16 @@ void DownloadCommand::run() {
     }
 
     if (url_option->get_value()) {
+        // If no urlprotocols are specified, all values within the urlprotocol_valid_options will be used
+        if (urlprotocol_option.empty()) {
+            urlprotocol_option = urlprotocol_valid_options;
+        }
         for (auto & [nerva, pkg] : download_pkgs) {
-            auto urls = pkg.get_remote_locations();
-            libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
+            auto urls = pkg.get_remote_locations(urlprotocol_option);
+            if (urls.empty()) {
+                ctx.base.get_logger()->warning("Failed to get mirror for package: \"{}\"", pkg.get_name());
+                continue;
+            }
             std::cout << urls[0] << std::endl;
         }
         return;

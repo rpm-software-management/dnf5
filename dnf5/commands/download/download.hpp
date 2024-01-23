@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option.hpp>
 
 #include <memory>
+#include <set>
 #include <vector>
 
 
@@ -40,6 +41,8 @@ public:
     void run() override;
 
 private:
+    std::set<std::string> urlprotocol_valid_options;
+    std::set<std::string> urlprotocol_option;
     libdnf5::OptionBool * resolve_option{nullptr};
     libdnf5::OptionBool * alldeps_option{nullptr};
     libdnf5::OptionBool * url_option{nullptr};
