@@ -37,6 +37,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
+static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
+    "allow_downgrade",
+    "allow_vendor_change",
+    "best",
+    "clean_requirements_on_remove",
+    "disable_excludes",
+    "exclude_from_weak",
+    "exclude_from_weak_autodetect",
+    "excludepkgs",
+    "ignorearch",
+    "includepkgs",
+    "installonly_limit",
+    "installonlypkgs",
+    "install_weak_deps",
+    "keepcache",
+    "module_obsoletes",
+    "module_platform_id",
+    "module_stream_switch",
+    "multilib_policy",
+    "obsoletes",
+    "optional_metadata_types",
+    "protect_running_kernel",
+    "reposdir",
+    "skip_broken",
+    "skip_if_unavailable",
+    "skip_unavailable",
+    "strict",
+};
 
 Session::Session(
     std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
@@ -65,7 +93,12 @@ Session::Session(
         auto value = opt.second;
         auto bind = opt_binds.find(key);
         if (bind != opt_binds.end()) {
-            bind->second.new_string(libdnf5::Option::Priority::RUNTIME, value);
+            if (ALLOWED_MAIN_CONF_OVERRIDES.find(key) != ALLOWED_MAIN_CONF_OVERRIDES.end()) {
+                bind->second.new_string(libdnf5::Option::Priority::RUNTIME, value);
+            } else {
+                base->get_logger()->warning("Config option {} not allowed.", key);
+                continue;
+            }
         } else {
             base->get_logger()->warning("Unknown config option: {}", key);
         }
