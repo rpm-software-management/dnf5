@@ -66,6 +66,9 @@ void DownloadCommand::set_argument_parser() {
     alldeps_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    url_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
     resolve->set_description("Resolve and download needed dependencies");
@@ -85,7 +88,6 @@ void DownloadCommand::set_argument_parser() {
     url->set_const_value("true");
     url->link_value(url_option);
 
-
     urlprotocol_valid_options = {"http", "https", "rsync", "ftp"};
     urlprotocol_option = {};
     auto urlprotocol = parser.add_new_named_arg("urlprotocol");
@@ -104,6 +106,7 @@ void DownloadCommand::set_argument_parser() {
             urlprotocol_option.emplace(value);
             return true;
         });
+
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
@@ -175,40 +178,37 @@ void DownloadCommand::run() {
         }
     }
 
-    if (!download_pkgs.empty()) {
-        libdnf5::repo::PackageDownloader downloader(ctx.base);
-
-        // for download command, we don't want to mark the packages for removal
-        downloader.force_keep_packages(true);
-
-        for (auto & [nevra, pkg] : download_pkgs) {
-            downloader.add(pkg);
-            if (url_option->get_value()) {
-                // If no urlprotocols are specified, then any urlprotocol is acceptable
-                if (urlprotocol_option.empty()) {
-                    urlprotocol_option = urlprotocol_valid_options;
-                }
-                for (auto & [nerva, pkg] : download_pkgs) {
-                    auto urls = pkg.get_remote_locations();
-                    libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
-                    auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
-                        for (auto protocol : urlprotocol_option) {
-                            if (url.starts_with(protocol)) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    });
-                    if (valid_url == urls.end()) {
-                        libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
-                    }
-                    std::cout << *valid_url << std::endl;
-                }
-
-                std::cout << "Downloading Packages:" << std::endl;
-                downloader.download();
-                std::cout << std::endl;
+    if (download_pkgs.empty()) {
+        return;
+    }
+    for (auto & [nevra, pkg] : download_pkgs) {
+        downloader.add(pkg);
+        if (url_option->get_value()) {
+            // If no urlprotocols are specified, then any urlprotocol is acceptable
+            if (urlprotocol_option.empty()) {
+                urlprotocol_option = urlprotocol_valid_options;
             }
+            for (auto & [nerva, pkg] : download_pkgs) {
+                auto urls = pkg.get_remote_locations();
+                libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
+                auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
+                    for (auto protocol : urlprotocol_option) {
+                        if (url.starts_with(protocol)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (valid_url == urls.end()) {
+                    libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
+                }
+                std::cout << *valid_url << std::endl;
+            }
+
+            std::cout << "Downloading Packages:" << std::endl;
+            downloader.download();
+            std::cout << std::endl;
         }
+    }
 
     }  // namespace dnf5

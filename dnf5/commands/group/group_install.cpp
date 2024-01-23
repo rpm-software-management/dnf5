@@ -39,6 +39,7 @@ void GroupInstallCommand::set_argument_parser() {
     no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
 
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     create_allow_downgrade_options(*this);
@@ -56,6 +57,7 @@ void GroupInstallCommand::configure() {
 void GroupInstallCommand::run() {
     auto & ctx = get_context();
     auto goal = ctx.get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
 
     libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {

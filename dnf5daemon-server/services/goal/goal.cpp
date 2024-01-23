@@ -45,7 +45,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
-    // TODO(mblaha) Adjust resolve method to accomodate also groups, environments,
+    // TODO(mblaha) Adjust resolve method to accommodate also groups, environments,
     // and modules as part of the transaction
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(sssa{sv}a{sv})u", [this](sdbus::MethodCall call) -> void {
@@ -135,7 +135,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
                 environment_to_map(tsenv.get_environment(), grp_attrs)));
         }
         // there are transactions resolved without problems but still resolve_logs
-        // may contain some warnings / informations
+        // may contain some warnings / information
         if (transaction.get_resolve_logs().size() > 0) {
             overall_result = dnfdaemon::ResolveResult::WARNING;
         } else {
@@ -254,7 +254,7 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
                 static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(rpm_result)));
     }
 
-    // TODO(mblaha): clean up downloaded packages after successfull transaction
+    // TODO(mblaha): clean up downloaded packages after successful transaction
 
     auto reply = call.createReply();
     return reply;

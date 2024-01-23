@@ -254,7 +254,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
         // to `q` IdQueue those that are not marked for install and are not already
         // installed are added to available_unused_providers.
         FOR_PROVIDES(p, pp, installonly[i]) {
-            // TODO(jmracek)  Replase the test by cached data from sack.p_impl->get_solvables()
+            // TODO(jmracek)  Replace the test by cached data from sack.p_impl->get_solvables()
             if (!spool.is_package(p)) {
                 continue;
             }
@@ -378,7 +378,7 @@ libdnf5::GoalProblem GoalPrivate::resolve() {
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
 
-    // TODO make_provides_ready remove temporrary Ids for One_OF => what about to lock it?
+    // TODO make_provides_ready remove temporary Ids for One_OF => what about to lock it?
     //dnf_sack_make_provides_ready(sack);
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
@@ -388,7 +388,7 @@ libdnf5::GoalProblem GoalPrivate::resolve() {
     init_solver(pool, libsolv_solver);
 
     // Remove SOLVER_WEAK and add SOLVER_BEST to all transactions to allow report skipped packages and best candidates
-    // with broken dependenies
+    // with broken dependencies
     if (run_in_strict_mode) {
         for (int i = 0; i < job.size(); i += 2) {
             job[i] &= ~SOLVER_WEAK;
@@ -715,11 +715,11 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
 
     if ((reason == SOLVER_REASON_UNIT_RULE || reason == SOLVER_REASON_RESOLVE_JOB) &&
         (libsolv_solver.ruleclass(info) == SOLVER_RULE_JOB || libsolv_solver.ruleclass(info) == SOLVER_RULE_BEST)) {
-        // explicitely user-installed
+        // explicitly user-installed
         if (transaction_user_installed && transaction_user_installed->contains(id)) {
             return transaction::TransactionItemReason::USER;
         }
-        // explicitely group-installed
+        // explicitly group-installed
         if (transaction_group_installed && transaction_group_installed->contains(id)) {
             return transaction::TransactionItemReason::GROUP;
         }

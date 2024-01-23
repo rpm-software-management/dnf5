@@ -46,7 +46,7 @@ LogEvent::LogEvent(
           problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
         "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
         "libdnf5::GoalProblem::SOLVER_ERROR or libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
-        "problems it is necesarry to provide SolverProblems in constructor");
+        "problems it is necessary to provide SolverProblems in constructor");
 }
 
 LogEvent::LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems)

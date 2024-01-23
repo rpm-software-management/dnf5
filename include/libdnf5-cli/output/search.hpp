@@ -45,7 +45,7 @@ struct SearchOptions {
     bool show_duplicates;  ///< If multiple versions of the same package are allowed in the output.
 };
 
-/// Auxilliary structure for holding the set of result packages together with their comparator.
+/// Auxiliary structure for holding the set of result packages together with their comparator.
 struct SearchPackages {
     std::set<libdnf5::rpm::Package, decltype(&libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>)> packages{
         &libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>};

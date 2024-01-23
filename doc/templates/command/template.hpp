@@ -24,7 +24,7 @@ public:
     // command such as description, options or sub-commands.
     void set_argument_parser() override;
 
-    // This method needs to be overriden to run the command.
+    // This method needs to be overridden to run the command.
     void run() override;
 
 private:

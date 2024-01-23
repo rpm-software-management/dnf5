@@ -38,6 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/memory_buffer_logger.hpp>
 #include <libdnf5/logger/stream_logger.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <locale.h>
 #include <string.h>
 
@@ -149,8 +150,10 @@ void RootCommand::set_argument_parser() {
         auto dot_pos = key.rfind('.');
         if (dot_pos != std::string::npos) {
             if (dot_pos == key.size() - 1) {
-                throw std::runtime_error(
-                    std::string("setopt: Badly formatted argument value: Last key character cannot be '.': ") + value);
+                throw libdnf5::cli::ArgumentParserError(
+                    M_("{}: Badly formatted argument value: Last key character cannot be '.': {}"),
+                    std::string{"setopt"},
+                    std::string(value));
             }
         }
         // Store option to vector for later use

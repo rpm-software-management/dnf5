@@ -139,7 +139,7 @@ void RepoInfo::add_repo(Repo & repo) {
     //     add_line("SSL client key", "", nullptr, group_proxy);
     //     add_line("Verify SSL certificate", "", nullptr, group_proxy);
 
-    //     auto group_misc = add_line("Miscelaneous", "");
+    //     auto group_misc = add_line("Miscellaneous", "");
     //     add_line("Load comps groups", "", nullptr, group_misc);
     //     add_line("Report \"countme\" statistics", "", nullptr, group_misc);
     //     add_line("Enable DeltaRPM", "", nullptr, group_misc);

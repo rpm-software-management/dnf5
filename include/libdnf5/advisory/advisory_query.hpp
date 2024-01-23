@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::advisory {
 
-/// AdvisoryQuery is the only way how to acess advisories.
+/// AdvisoryQuery is the only way how to access advisories.
 /// It is constructed using Base and filled with advisories from enabled repositories in its RepoSack.
 class AdvisoryQuery : public AdvisorySet {
 public:
@@ -58,7 +58,7 @@ public:
 
     /// Filter Advisories by name.
     ///
-    /// @param pattern      Pattern used when matching agains advisory names.
+    /// @param pattern      Pattern used when matching against advisory names.
     /// @param cmp_type     What comparator to use with pattern, allows: EQ, GLOB, IGLOB.
     void filter_name(const std::string & pattern, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
     void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);

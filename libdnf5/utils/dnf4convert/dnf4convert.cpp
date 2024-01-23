@@ -34,7 +34,7 @@ namespace libdnf5::dnf4convert {
 // each NEVRA. Only REINSTALLED (10) action is skipped because it can be ordered
 // after respective REINSTALL action overwriting potential repoid change.
 // Packages with the latest action 3 (DOWNGRADED), 5 (OBSOLETED), 7 (UPGRADED), and
-// 8 (REMOVE) are eventually skiped as removed from the system.
+// 8 (REMOVE) are eventually skipped as removed from the system.
 static constexpr const char * SQL_CURRENTLY_INSTALLED_PACKAGES = R"**(
     SELECT
         "ti"."item_id",

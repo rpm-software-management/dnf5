@@ -84,75 +84,6 @@ static int str_to_bytes(const std::string & str) {
     return static_cast<int>(res);
 }
 
-static void add_from_file(std::ostream & out, const std::string & file_path) {
-    utils::fs::File file(file_path, "r");
-
-    std::string line;
-    while (file.read_line(line)) {
-        auto start = line.find_first_not_of(" \t\r");
-        if (start == std::string::npos) {
-            continue;
-        }
-        if (line[start] == '#') {
-            continue;
-        }
-        auto end = line.find_last_not_of(" \t\r");
-
-        out.write(line.c_str() + start, static_cast<int>(end - start + 1));
-        out.put(' ');
-    }
-}
-
-static void add_from_files(std::ostream & out, const std::string & glob_path) {
-    glob_t glob_buf;
-    glob(glob_path.c_str(), GLOB_MARK | GLOB_NOSORT, nullptr, &glob_buf);
-    for (size_t i = 0; i < glob_buf.gl_pathc; ++i) {
-        auto path = glob_buf.gl_pathv[i];
-        if (path[strlen(path) - 1] != '/') {
-            add_from_file(out, path);
-        }
-    }
-    globfree(&glob_buf);
-}
-
-/// @brief Replaces globs (like /etc/foo.d/\\*.foo) by content of matching files.
-///
-/// Ignores comment lines (start with '#') and blank lines in files.
-/// Result:
-/// Words delimited by spaces. Characters ',' and '\n' are replaced by spaces.
-/// Extra spaces are removed.
-/// @param strWithGlobs Input string with globs
-/// @return Words delimited by space
-static std::string resolve_globs(const std::string & str_with_globs) {
-    std::ostringstream res;
-    std::string::size_type start{0};
-    while (start < str_with_globs.length()) {
-        auto end = str_with_globs.find_first_of(" ,\n", start);
-        if (str_with_globs.compare(start, 5, "glob:") == 0) {
-            start += 5;
-            if (start >= str_with_globs.length()) {
-                break;
-            }
-            if (end == std::string::npos) {
-                add_from_files(res, str_with_globs.substr(start));
-                break;
-            }
-            if ((end - start) != 0) {
-                add_from_files(res, str_with_globs.substr(start, end - start));
-            }
-        } else {
-            if (end == std::string::npos) {
-                res << str_with_globs.substr(start);
-                break;
-            }
-            if ((end - start) != 0) {
-                res << str_with_globs.substr(start, end - start) << " ";
-            }
-        }
-        start = end + 1;
-    }
-    return res.str();
-}
 
 class ConfigMain::Impl {
     friend class ConfigMain;
@@ -293,7 +224,7 @@ class ConfigMain::Impl {
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
     OptionStringSet proxy_auth_method{"any", "any|none|basic|digest|negotiate|ntlm|digest_ie|ntlm_wb", false};
-    OptionStringList protected_packages{resolve_globs("dnf5 glob:/etc/dnf/protected.d/*.conf")};
+    OptionStringList protected_packages{std::vector<std::string>{"dnf5", "glob:/etc/dnf/protected.d/*.conf"}};
     OptionString username{""};
     OptionString password{""};
     OptionBool gpgcheck{false};
@@ -534,9 +465,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
         "protected_packages",
         protected_packages,
         [&](Option::Priority priority, const std::string & value) {
-            if (priority >= protected_packages.get_priority()) {
-                protected_packages.set(priority, resolve_globs(value));
-            }
+            option_T_list_append(protected_packages, priority, value);
         },
         nullptr,
         false);

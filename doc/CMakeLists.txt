@@ -80,6 +80,7 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-search.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-swap.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-upgrade.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-aliases.7 DESTINATION share/man/man7)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-caching.7 DESTINATION share/man/man7)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-comps.7 DESTINATION share/man/man7)
         # TODO(jkolarik): filtering is not ready yet

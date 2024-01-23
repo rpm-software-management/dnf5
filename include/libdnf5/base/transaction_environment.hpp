@@ -41,7 +41,7 @@ public:
     /// @return the underlying environment.
     libdnf5::comps::Environment get_environment() const { return environment; }
 
-    /// @return the action being preformed on the transaction environment.
+    /// @return the action being performed on the transaction environment.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
     Action get_action() const noexcept { return action; }

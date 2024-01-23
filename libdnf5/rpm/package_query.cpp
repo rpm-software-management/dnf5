@@ -746,7 +746,7 @@ struct NevraID {
     /// bool create_evr_id - when `false` it will store evr as std::string (evr_str), when `true` it sets Id evr. When string is unknown to pool it returns false
     /// evr is stored only as Id (create_evr_id==true, evr), or a string (evr_str) but not both.
     ///
-    /// @return bool Returns true if parsing succesful and all elements is known to pool but related to create_evr_id
+    /// @return bool Returns true if parsing successful and all elements is known to pool but related to create_evr_id
     bool parse(libdnf5::solv::RpmPool & pool, const char * nevra_pattern, bool create_evr_id);
 };
 
@@ -982,7 +982,7 @@ inline static void filter_version_internal(
         std::string vr(pool.split_evr(pool.get_evr(candidate_id)).v);
         vr.append("-0");
         int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
-        if (cmp_eq(cmp)) {
+        if (cmp_fnc(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
@@ -1050,7 +1050,7 @@ inline static void filter_release_internal(
         std::string vr("0-");
         vr.append(pool.split_evr(pool.get_evr(candidate_id)).r);
         int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
-        if (cmp_eq(cmp)) {
+        if (cmp_fnc(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
@@ -1683,7 +1683,7 @@ void PackageQuery::PQImpl::filter_reldep(
         selection_make_matchsolvable(*pool, &out.get_queue(), package_id, flags, libsolv_key, 0);
 
         // Queue from selection_make_matchsolvable is a selection, which means
-        // it conntains pairs <flags, Id>, flags refers to how was the Id
+        // it contains pairs <flags, Id>, flags refers to how was the Id
         // matched, that is not important here, so skip it and iterate just
         // over the Ids.
         for (int j = 1; j < out.size(); j += 2) {
@@ -2633,7 +2633,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
                 return {true, libdnf5::rpm::Nevra()};
             }
         }
-        // Seach for file provides - more expensive
+        // Search for file provides - more expensive
         for (auto & path : binary_paths_string) {
             filter_dataiterator(
                 *pool,

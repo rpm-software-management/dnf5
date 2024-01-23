@@ -97,7 +97,8 @@ public:
     repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
     rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
 
-    /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch).
+    /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
+    /// configuration of protected_packages (glob:).
     /// To prevent differences between configuration and internal Base settings, following configurations
     /// will be locked: installroot, varsdir.
     /// The method is supposed to be called after configuration is updated, application plugins applied
@@ -106,7 +107,7 @@ public:
     /// Calling the method for the second time result in throwing an exception
     void setup();
 
-    /// Returns true when setup() (mandatory method in many workflows) was alredy called
+    /// Returns true when setup() (mandatory method in many workflows) was already called
     bool is_initialized();
 
     // TODO(jmracek) Remove from public API due to unstability of the code

@@ -62,15 +62,18 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                 if (dot_pos != std::string::npos) {
                     if (dot_pos == key.size() - 1) {
                         throw cli::ArgumentParserError(
-                            M_("remove-opt: Badly formatted argument value: Last key character cannot be '.': {}"),
+                            M_("{}: Badly formatted argument value: Last key character cannot be '.': {}"),
+                            std::string{"remove-opt"},
                             std::string{value});
                     }
 
-                    // Save the repository option for later processing (solving glob patter, writing to file).
+                    // Save the repository option for later processing (solving glob pattern, writing to file).
                     auto repo_id = key.substr(0, dot_pos);
                     if (repo_id.empty()) {
                         throw cli::ArgumentParserError(
-                            M_("remove-opt: Empty repository id is not allowed: {}"), std::string{value});
+                            M_("{}: Empty repository id is not allowed: {}"),
+                            std::string{"remove-opt"},
+                            std::string{value});
                     }
                     auto repo_key = key.substr(dot_pos + 1);
 

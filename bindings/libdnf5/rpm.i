@@ -29,6 +29,7 @@
     }
 }
 
+
 %{
     #include "libdnf5/rpm/arch.hpp"
     #include "libdnf5/rpm/checksum.hpp"
@@ -61,12 +62,19 @@
 %include "libdnf5/rpm/package_sack.hpp"
 %template(PackageSackWeakPtr) libdnf5::WeakPtr<libdnf5::rpm::PackageSack, false>;
 
+add_str(libdnf5::rpm::Reldep)
+add_repr(libdnf5::rpm::Reldep)
+add_hash(libdnf5::rpm::Reldep)
 %include "libdnf5/rpm/reldep.hpp"
 
 %rename(next) libdnf5::rpm::ReldepListIterator::operator++();
 %rename(value) libdnf5::rpm::ReldepListIterator::operator*();
 %include "libdnf5/rpm/reldep_list_iterator.hpp"
 %include "libdnf5/rpm/reldep_list.hpp"
+
+add_str(libdnf5::rpm::Package)
+add_repr(libdnf5::rpm::Package)
+add_hash(libdnf5::rpm::Package)
 %include "libdnf5/rpm/package.hpp"
 
 %template(VectorPackage) std::vector<libdnf5::rpm::Package>;

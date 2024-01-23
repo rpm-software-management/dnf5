@@ -46,12 +46,12 @@ public:
     const char * get_name() const noexcept override { return "OptionBindsOptionAlreadyExistsError"; }
 };
 
-/// Maps the options names (text names readed from config file, command line, ...) to options objects.
+/// Maps the options names (text names read from config file, command line, ...) to options objects.
 /// Supports user defined functions for processing new value and converting value to string.
 class OptionBinds {
 public:
     /// Extends the option with user-defined functions for processing a new value and converting value to a string.
-    /// It is used as additional level of processing when the option is accesed by its text name.
+    /// It is used as additional level of processing when the option is accessed by its text name.
     class Item final {
     public:
         using NewStringFunc = std::function<void(Option::Priority, const std::string &)>;

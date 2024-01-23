@@ -89,7 +89,7 @@
 - modules: Simplify finding whether profile is default in module list
 - modules: Fix `ModuleProfile::is_default` method
 - modules: Store if profile is default in ModuleProfile object
-- Generate docs for undocummented functions so they at least show up
+- Generate docs for undocumented functions so they at least show up
 - Add python advisory docs
 - Add advisory python API tests
 - Enable AdvisoryModule bindings
@@ -176,7 +176,7 @@
 - Abort PGP checking immediately if any checks fail
 - Display warning message when any PGP checks skipped
 - Don't allow main gpgcheck=0 to override repo config
-- gups and environments to `history info` ouput
+- gups and environments to `history info` output
 - Store missing id and repoid in db for groups/environments
 - Fix out-of-bounds access in Goal::Impl::add_install_to_goal
 - Fix repoquery `--list`

@@ -94,7 +94,7 @@ static std::string detect_arch() {
         /* un.machine is armvXE, where X is version number and E is
          * endianness (b or l); we need to add modifiers such as
          * h (hardfloat), n (neon). Neon is a requirement of armv8 so
-         * as far as rpm is concerned armv8l is the equivilent of armv7hnl
+         * as far as rpm is concerned armv8l is the equivalent of armv7hnl
          * (or 7hnb) so we don't explicitly add 'n' for 8+ as it's expected. */
         char endian = un.machine[strlen(un.machine) - 1];
         char * modifier = un.machine + 5;

@@ -38,7 +38,7 @@ std::string SpeedWidget::to_string() const {
         return "";
     }
     if (get_bar()->is_finished() || get_bar()->get_total_ticks() < 0) {
-        // finshed -> display average speed
+        // finished -> display average speed
         return get_delimiter_before() + format_size(get_bar()->get_average_speed()) + "/s";
     } else {
         // in progress -> display current speed

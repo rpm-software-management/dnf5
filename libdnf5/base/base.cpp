@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 
+#include "../conf/config_utils.hpp"
 #include "base_impl.hpp"
 #include "conf/config.h"
 #include "module/module_sack_impl.hpp"
@@ -183,6 +184,13 @@ void Base::setup() {
         config.get_system_cachedir_option().set(Option::Priority::INSTALLROOT, full_path.string());
     }
 
+    // Add protected packages from files from installroot
+    {
+        auto & protected_option = config.get_protected_packages_option();
+        auto resolved_protected_packages = resolve_path_globs(protected_option.get_value_string(), installroot_path);
+        protected_option.set(protected_option.get_priority(), resolved_protected_packages);
+    }
+
     load_plugins();
     p_impl->plugins.init();
 
@@ -230,7 +238,7 @@ void Base::setup() {
 
     config.get_varsdir_option().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
-    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
+    // TODO(jmracek) - architecture variable is changeable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked
     const char * arch = vars->get_value("arch").c_str();
     pool_setarch(**pool, arch);

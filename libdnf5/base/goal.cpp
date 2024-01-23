@@ -879,7 +879,7 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     }
 
     // The correct evaluation of rich dependencies can be only performed by solver.
-    // There are some limitations - solver is unable to handle whan operation is limited to packages from the
+    // There are some limitations - solver is unable to handle when operation is limited to packages from the
     // particular repository and multilib_policy `all`.
     if (libdnf5::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
         add_provide_install_to_goal(spec, settings);
@@ -1198,7 +1198,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
         }
     }
 
-    // TODO(jmracek) Implement fitering from_repo_ids
+    // TODO(jmracek) Implement filtering from_repo_ids
 
     if (!settings.to_repo_ids.empty()) {
         relevant_available.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
@@ -1273,7 +1273,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 }
                 rpm::PackageQuery query(installed);
                 query.filter_nevra(nevras);
-                //  report aready installed packages with the same NEVRA
+                //  report already installed packages with the same NEVRA
                 for (auto package_id : *query.p_impl) {
                     transaction.p_impl->add_resolve_log(
                         action,
@@ -2316,7 +2316,7 @@ base::Transaction Goal::resolve() {
     // 2. group removal needs a list of all groups being removed to correctly remove packages
     ret |= p_impl->resolve_group_specs(p_impl->group_specs, transaction);
 
-    // Handle environments befor groups because they will add/remove groups
+    // Handle environments before groups because they will add/remove groups
     p_impl->add_resolved_environment_specs_to_goal(transaction);
 
     // Then handle groups

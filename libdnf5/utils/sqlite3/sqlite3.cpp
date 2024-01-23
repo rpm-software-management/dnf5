@@ -155,7 +155,7 @@ void SQLite3::restore(const std::string & input_file) {
     sqlite3_close(backup_db);
 
     if (result != SQLITE_OK) {
-        throw SQLite3SQLError(result, M_("Failed to restored database \"{}\""), input_file);
+        throw SQLite3SQLError(result, M_("Failed to restore database \"{}\""), input_file);
     }
 }
 

@@ -45,6 +45,7 @@ private:
     std::set<std::string> urlprotocol_option;
     libdnf5::OptionBool * resolve_option{nullptr};
     libdnf5::OptionBool * alldeps_option{nullptr};
+    libdnf5::OptionBool * url_option{nullptr};
 
     std::vector<std::unique_ptr<libdnf5::Option>> * patterns_to_download_options{nullptr};
 };

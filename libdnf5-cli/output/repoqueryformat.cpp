@@ -190,7 +190,7 @@ std::pair<std::vector<Getter>, std::string> parse_queryformat(const std::string 
             tag_name_start = format_size;
         } else if (qf_char == '}' && state == IN_TAG_NAME) {  // end of tag
             state = OUTSIDE;
-            // To get the name we add/subtract 2 becasue each tag name (after brace expansion) starts with "{{".
+            // To get the name we add/subtract 2 because each tag name (after brace expansion) starts with "{{".
             auto getter_name = format.substr(tag_name_start + 2, format_size - tag_name_start - 2);
             auto getter = NAME_TO_GETTER.find(libdnf5::utils::string::tolower(getter_name));
             if (getter != NAME_TO_GETTER.end()) {

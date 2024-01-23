@@ -20,7 +20,7 @@ base.get_config().get_installroot_option().set(installroot);
 // is loaded. Function also loads configuration files from distribution and
 // user ("/etc/dnf/libdnf5.conf.d") drop-in directories.
 // Optionally set a custom value to "config_file_path" before calling this method
-// to load configuration from a anoher configuration file.
+// to load configuration from a another configuration file.
 base.load_config();
 
 // Load vars and do other initialization (of libsolv pool, etc.) based on the

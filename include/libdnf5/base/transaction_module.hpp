@@ -45,7 +45,7 @@ public:
     /// @return the module stream.
     std::string get_module_stream() const { return module_stream; }
 
-    /// @return the action being preformed on the transaction module.
+    /// @return the action being performed on the transaction module.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
     Action get_action() const noexcept { return action; }

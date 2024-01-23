@@ -65,7 +65,7 @@ public:
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:add(Id id))
     void add(ReldepId id);
 
-    /// @brief Adds a reldep from Char*. Only globs in name are proccessed. The proccess is slow
+    /// @brief Adds a reldep from Char*. Only globs in name are processed. The process is slow
     /// therefore if reldepStr is not a glob please use addReldep() instead.
     ///
     /// @param reldep_str p_reldepStr: Char*

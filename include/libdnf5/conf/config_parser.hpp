@@ -78,7 +78,7 @@ public:
 * @brief Class for parsing dnf/yum .ini configuration files.
 *
 * ConfigParser is used for parsing files.
-* User can get both substituded and original parsed values.
+* User can get both substituted and original parsed values.
 * The parsed items are stored into the PreserveOrderMap.
 * ConfigParser preserve order of items. Comments and empty lines are kept.
 */

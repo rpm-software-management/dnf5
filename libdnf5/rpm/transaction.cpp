@@ -142,7 +142,7 @@ std::string Transaction::get_db_cookie() const {
 void Transaction::fill(const base::Transaction & transaction) {
     transaction_items = transaction.get_transaction_packages();
 
-    // Auxilliary map name->package with the latest versions of currently
+    // Auxiliary map name->package with the latest versions of currently
     // installed installonly packages.
     // Used to detect installation of a installonly package with lower version
     // that is currently installed.

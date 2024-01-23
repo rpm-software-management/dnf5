@@ -121,7 +121,7 @@ public:
     /// @param name module name to be enabled.
     /// @param stream module stream to be enabled.
     /// @param count if `true`, count the change towards the limit of module status modifications.
-    /// @return `true` if requested change realy triggers a change in the ModuleDB, `false` otherwise.
+    /// @return `true` if requested change really triggers a change in the ModuleDB, `false` otherwise.
     /// @throw EnableMultipleStreamsError in case of conflicting enable requests.
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14
@@ -129,7 +129,7 @@ public:
     /// Enable module stream.
     /// @param module_spec module to be enabled.
     /// @param count if `true`, count the change towards the limit of module status modifications.
-    /// @return `true` if requested change realy triggers a change in the ModuleDB, `false` otherwise.
+    /// @return `true` if requested change really triggers a change in the ModuleDB, `false` otherwise.
     /// @throw EnableMultipleStreamsError in case of conflicting enable requests.
     /// @throw NoModuleError if the module doesn't exist.
     /// @since 5.0.14

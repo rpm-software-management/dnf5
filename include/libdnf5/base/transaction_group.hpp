@@ -45,7 +45,7 @@ public:
     /// @return the underlying group.
     libdnf5::comps::Group get_group() const { return group; }
 
-    /// @return the action being preformed on the transaction group.
+    /// @return the action being performed on the transaction group.
     //
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
     Action get_action() const noexcept { return action; }

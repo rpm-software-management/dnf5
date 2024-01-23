@@ -150,6 +150,8 @@ public:
               command,
               "advisory-severities",
               '\0',
+              /* Note for translators: "critical" etc. quoted words are
+                 literals that should not be translated. */
               _("Limit to packages in advisories with specified severity. List option. Can be "
                 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."),
               _("ADVISORY_SEVERITY,..."),

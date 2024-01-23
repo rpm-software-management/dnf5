@@ -287,6 +287,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-search.8.*
 %{_mandir}/man8/dnf5-swap.8.*
 %{_mandir}/man8/dnf5-upgrade.8.*
+%{_mandir}/man7/dnf5-aliases.7.*
 %{_mandir}/man7/dnf5-caching.7.*
 %{_mandir}/man7/dnf5-comps.7.*
 # TODO(jkolarik): filtering is not ready yet
@@ -362,7 +363,7 @@ Requires:       libdnf5-devel%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli-devel%{?_isa} = %{version}-%{release}
 
 %description -n dnf5-devel
-Develpment files for dnf5.
+Development files for dnf5.
 
 %files -n dnf5-devel
 %{_includedir}/dnf5/

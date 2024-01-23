@@ -25,7 +25,7 @@ Example::
     /// @param text             Input text.
     /// @param delimiter        A delimiter we're using to split the text.
     /// @param max_items        Limit number of splits to produce a vector containing up to `max_items` items.
-    /// @return Splitted text.
+    /// @return Split text.
     ///         A continuation line for the return value description.
     /// @exception std::out_of_range    Value of the `max_items` argument is out of expected range.
     /// @since 5.0

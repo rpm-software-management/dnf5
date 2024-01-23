@@ -60,7 +60,7 @@ void HistoryStoreCommand::run() {
     if (std::filesystem::exists(tmp_path)) {
         std::cout << libdnf5::utils::sformat(
             _("File \"{}\" already exists, it will be overwritten.\n"), tmp_path.string());
-        // ask user for the file overwride confirmation
+        // ask user for the file overwrite confirmation
         if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().base.get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }

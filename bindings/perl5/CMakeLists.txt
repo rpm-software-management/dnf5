@@ -59,7 +59,7 @@ elseif(PERL_INSTALLDIRS STREQUAL "vendor")
 elseif(PERL_INSTALLDIRS STREQUAL "site")
     set(PERL_INSTALL_PATH "${PERL_SITEARCH}")
 else()
-    message(FATAL_ERROR "Uknown PERL_INSTALLDIRS value: ${PERL_INSTALLDIRS}")
+    message(FATAL_ERROR "Unknown PERL_INSTALLDIRS value: ${PERL_INSTALLDIRS}")
 endif()
 message(STATUS "Perl5 files will be installed to ${PERL_INSTALL_PATH}")
 
