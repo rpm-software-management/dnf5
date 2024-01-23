@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/transaction/transaction_item.hpp"
 
-
 #include "libdnf5/transaction/transaction.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 
@@ -67,8 +66,7 @@ TransactionItem & TransactionItem::operator=(const TransactionItem & mpkg) {
 }
 TransactionItem & TransactionItem::operator=(TransactionItem && mpkg) noexcept = default;
 
-TransactionItem::Impl::Impl(const Transaction & trans)
-    : trans(&trans) {}
+TransactionItem::Impl::Impl(const Transaction & trans) : trans(&trans) {}
 
 std::string TransactionItem::get_action_name() {
     return transaction_item_action_to_string(p_impl->action);
@@ -80,8 +78,7 @@ std::string TransactionItem::get_action_short() {
 }
 
 
-TransactionItem::TransactionItem(const Transaction & trans)
-    : p_impl(std::make_unique<Impl>(trans)) {}
+TransactionItem::TransactionItem(const Transaction & trans) : p_impl(std::make_unique<Impl>(trans)) {}
 
 
 bool TransactionItem::is_inbound_action() const {
@@ -99,26 +96,50 @@ const Transaction & TransactionItem::get_transaction() const {
     return *p_impl->trans;
 }
 
-TransactionItemAction TransactionItem::get_action() const noexcept { return p_impl->action; }
-TransactionItemReason TransactionItem::get_reason() const noexcept { return p_impl->reason; }
-const std::string & TransactionItem::get_repoid() const noexcept { return p_impl->repoid; }
-TransactionItemState TransactionItem::get_state() const noexcept { return p_impl->state; }
+TransactionItemAction TransactionItem::get_action() const noexcept {
+    return p_impl->action;
+}
+TransactionItemReason TransactionItem::get_reason() const noexcept {
+    return p_impl->reason;
+}
+const std::string & TransactionItem::get_repoid() const noexcept {
+    return p_impl->repoid;
+}
+TransactionItemState TransactionItem::get_state() const noexcept {
+    return p_impl->state;
+}
 
-int64_t TransactionItem::get_id() const noexcept { return p_impl->id; }
+int64_t TransactionItem::get_id() const noexcept {
+    return p_impl->id;
+}
 
-void TransactionItem::set_id(int64_t value) { p_impl->id = value; }
+void TransactionItem::set_id(int64_t value) {
+    p_impl->id = value;
+}
 
-void TransactionItem::set_action(Action value) { p_impl->action = value; }
+void TransactionItem::set_action(Action value) {
+    p_impl->action = value;
+}
 
-void TransactionItem::set_reason(Reason value) { p_impl->reason = value; }
+void TransactionItem::set_reason(Reason value) {
+    p_impl->reason = value;
+}
 
-void TransactionItem::set_state(State value) { p_impl->state = value; }
+void TransactionItem::set_state(State value) {
+    p_impl->state = value;
+}
 
-void TransactionItem::set_repoid(const std::string & value) { p_impl->repoid = value; }
+void TransactionItem::set_repoid(const std::string & value) {
+    p_impl->repoid = value;
+}
 
-int64_t TransactionItem::get_item_id() const noexcept { return p_impl->item_id; }
+int64_t TransactionItem::get_item_id() const noexcept {
+    return p_impl->item_id;
+}
 
-void TransactionItem::set_item_id(int64_t value) { p_impl->item_id = value; }
+void TransactionItem::set_item_id(int64_t value) {
+    p_impl->item_id = value;
+}
 
 /*
 void

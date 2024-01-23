@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/transaction/comps_environment.hpp"
 
 #include "db/comps_environment.hpp"
-#include "db/comps_environment_group.hpp"
 
 #include "libdnf5/transaction/transaction.hpp"
 #include "libdnf5/transaction/transaction_item.hpp"
@@ -30,7 +29,124 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::transaction {
 
 
-CompsEnvironment::CompsEnvironment(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+class CompsEnvironment::Impl {
+public:
+private:
+    friend CompsEnvironment;
+
+    std::string environment_id;
+    std::string name;
+    std::string translated_name;
+    libdnf5::comps::PackageType package_types = libdnf5::comps::PackageType::DEFAULT;
+    std::vector<CompsEnvironmentGroup> groups;
+};
+
+CompsEnvironment::CompsEnvironment(const Transaction & trans)
+    : TransactionItem::TransactionItem(trans),
+      p_impl(std::make_unique<Impl>()) {}
+
+CompsEnvironment::CompsEnvironment(const CompsEnvironment & src)
+    : TransactionItem(src),
+      p_impl(new Impl(*src.p_impl)) {}
+CompsEnvironment::CompsEnvironment(CompsEnvironment && src) noexcept = default;
+
+CompsEnvironment & CompsEnvironment::operator=(const CompsEnvironment & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+CompsEnvironment & CompsEnvironment::operator=(CompsEnvironment && src) noexcept = default;
+CompsEnvironment::~CompsEnvironment() = default;
+
+
+const std::string & CompsEnvironment::get_environment_id() const noexcept {
+    return p_impl->environment_id;
+}
+void CompsEnvironment::set_environment_id(const std::string & value) {
+    p_impl->environment_id = value;
+}
+const std::string & CompsEnvironment::get_name() const noexcept {
+    return p_impl->name;
+}
+void CompsEnvironment::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+const std::string & CompsEnvironment::get_translated_name() const noexcept {
+    return p_impl->translated_name;
+}
+void CompsEnvironment::set_translated_name(const std::string & value) {
+    p_impl->translated_name = value;
+}
+libdnf5::comps::PackageType CompsEnvironment::get_package_types() const noexcept {
+    return p_impl->package_types;
+}
+void CompsEnvironment::set_package_types(libdnf5::comps::PackageType value) {
+    p_impl->package_types = value;
+}
+CompsEnvironmentGroup & CompsEnvironment::new_group() {
+    return p_impl->groups.emplace_back();
+}
+std::vector<CompsEnvironmentGroup> & CompsEnvironment::get_groups() {
+    return p_impl->groups;
+}
+
+class CompsEnvironmentGroup::Impl {
+private:
+    friend CompsEnvironmentGroup;
+    int64_t id = 0;
+    std::string group_id;
+    bool installed = false;
+    libdnf5::comps::PackageType group_type;
+};
+
+
+CompsEnvironmentGroup::CompsEnvironmentGroup(const CompsEnvironmentGroup & src) : p_impl(new Impl(*src.p_impl)) {}
+CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironmentGroup && src) noexcept = default;
+
+CompsEnvironmentGroup & CompsEnvironmentGroup::operator=(const CompsEnvironmentGroup & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+CompsEnvironmentGroup & CompsEnvironmentGroup::operator=(CompsEnvironmentGroup && src) noexcept = default;
+CompsEnvironmentGroup::CompsEnvironmentGroup() : p_impl(std::make_unique<Impl>()) {}
+CompsEnvironmentGroup::~CompsEnvironmentGroup() = default;
+int64_t CompsEnvironmentGroup::get_id() const noexcept {
+    return p_impl->id;
+}
+void CompsEnvironmentGroup::set_id(int64_t value) {
+    p_impl->id = value;
+}
+const std::string & CompsEnvironmentGroup::get_group_id() const noexcept {
+    return p_impl->group_id;
+}
+void CompsEnvironmentGroup::set_group_id(const std::string & value) {
+    p_impl->group_id = value;
+}
+bool CompsEnvironmentGroup::get_installed() const noexcept {
+    return p_impl->installed;
+}
+void CompsEnvironmentGroup::set_installed(bool value) {
+    p_impl->installed = value;
+}
+libdnf5::comps::PackageType CompsEnvironmentGroup::get_group_type() const noexcept {
+    return p_impl->group_type;
+}
+void CompsEnvironmentGroup::set_group_type(libdnf5::comps::PackageType value) {
+    p_impl->group_type = value;
+}
 
 
 /*
@@ -68,11 +184,6 @@ CompsEnvironmentItem::getTransactionItemsByPattern(libdnf5::utils::SQLite3Ptr co
     return result;
 }
 */
-
-
-CompsEnvironmentGroup & CompsEnvironment::new_group() {
-    return groups.emplace_back();
-}
 
 
 }  // namespace libdnf5::transaction
