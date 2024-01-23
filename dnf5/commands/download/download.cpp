@@ -93,6 +93,8 @@ void DownloadCommand::set_argument_parser() {
     auto urlprotocol = parser.add_new_named_arg("urlprotocol");
     urlprotocol->set_long_name("urlprotocol");
     urlprotocol->set_description("When running with --url, limit to specific protocols");
+    urlprotocol->set_has_value(true);
+    urlprotocol->set_arg_value_help("{http, https, rsync, ftp},...");
     urlprotocol->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
