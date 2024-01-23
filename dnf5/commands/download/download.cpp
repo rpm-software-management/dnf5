@@ -98,7 +98,6 @@ void DownloadCommand::set_argument_parser() {
     urlprotocol->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            std::cout << "Values: " << option << value << std::endl;
             if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
                 throw libdnf5::cli::ArgumentParserInvalidValueError(
                     M_("Invalid urlprotocol option: {}"), std::string(value));
@@ -181,34 +180,43 @@ void DownloadCommand::run() {
     if (download_pkgs.empty()) {
         return;
     }
+
+    if (url_option->get_value()) {
+        // If no urlprotocols are specified, then any urlprotocol is acceptable
+        if (urlprotocol_option.empty()) {
+            urlprotocol_option = urlprotocol_valid_options;
+        }
+        for (auto & [nerva, pkg] : download_pkgs) {
+            auto urls = pkg.get_remote_locations();
+            libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
+            auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
+                for (auto protocol : urlprotocol_option) {
+                    if (url.starts_with(protocol)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            if (valid_url == urls.end()) {
+                libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
+            }
+            std::cout << *valid_url << std::endl;
+        }
+        return;
+    }
+    libdnf5::repo::PackageDownloader downloader(ctx.base);
+
+    // for download command, we don't want to mark the packages for removal
+    downloader.force_keep_packages(true);
+
     for (auto & [nevra, pkg] : download_pkgs) {
         downloader.add(pkg);
-        if (url_option->get_value()) {
-            // If no urlprotocols are specified, then any urlprotocol is acceptable
-            if (urlprotocol_option.empty()) {
-                urlprotocol_option = urlprotocol_valid_options;
-            }
-            for (auto & [nerva, pkg] : download_pkgs) {
-                auto urls = pkg.get_remote_locations();
-                libdnf_assert(!urls.empty(), "Failed to get mirror for package: \"{}\"", pkg.get_name());
-                auto valid_url = std::find_if(urls.begin(), urls.end(), [this](std::string url) {
-                    for (auto protocol : urlprotocol_option) {
-                        if (url.starts_with(protocol)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-                if (valid_url == urls.end()) {
-                    libdnf_assert(true, "Failed to get mirror for package: \"{}\"", pkg.get_name());
-                }
-                std::cout << *valid_url << std::endl;
-            }
-
-            std::cout << "Downloading Packages:" << std::endl;
-            downloader.download();
-            std::cout << std::endl;
-        }
     }
 
-    }  // namespace dnf5
+    std::cout << "Downloading Packages:" << std::endl;
+    downloader.download();
+    std::cout << std::endl;
+}
+
+
+}  // namespace dnf5
