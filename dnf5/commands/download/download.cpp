@@ -97,8 +97,7 @@ void DownloadCommand::set_argument_parser() {
         [&ctx, this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
-                throw libdnf5::cli::ArgumentParserInvalidValueError(
-                    M_(std::format("Invalid urlprotocol option: {}", value)));
+                throw libdnf5::cli::ArgumentParserInvalidValueError(M_("Invalid urlprotocol option: {}"), value)
             }
             urlprotocol_option.emplace_back(value);
         });
