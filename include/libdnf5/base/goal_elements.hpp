@@ -276,6 +276,13 @@ public:
     void set_group_no_packages(bool group_no_packages);
     bool get_group_no_packages() const;
 
+    /// If set to true, environments operations (install / remove / upgrade) will only work
+    /// with the environment itself, but will not add to any groups to the transaction.
+    ///
+    /// Default: false
+    void set_environment_no_groups(bool environment_no_groups);
+    bool get_environment_no_groups() const;
+
     /// Set whether to report packages providing alternatives (``alternative-for(..)`` provide) and packages
     /// with different letter capitalization when no matches are found.
     ///

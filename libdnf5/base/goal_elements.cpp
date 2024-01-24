@@ -141,6 +141,10 @@ class GoalJobSettings::Impl {
     /// with the group itself, but will not add to the transaction any packages.
     bool group_no_packages{false};
 
+    /// If set to true, environment operations (install / remove / upgrade) will only work
+    /// with the environment itself, but will not add any groups to the transaction.
+    bool environment_no_groups{false};
+
     /// Set whether hints should be reported
     bool report_hint{true};
 
@@ -426,6 +430,13 @@ void GoalJobSettings::set_group_no_packages(bool group_no_packages) {
 }
 bool GoalJobSettings::get_group_no_packages() const {
     return p_impl->group_no_packages;
+}
+
+void GoalJobSettings::set_environment_no_groups(bool environment_no_groups) {
+    p_impl->environment_no_groups = environment_no_groups;
+}
+bool GoalJobSettings::get_environment_no_groups() const {
+    return p_impl->environment_no_groups;
 }
 
 void GoalJobSettings::set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) {
