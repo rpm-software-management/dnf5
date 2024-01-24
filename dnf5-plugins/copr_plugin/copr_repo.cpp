@@ -381,7 +381,7 @@ static std::string nth_delimited_item(const std::string & string, size_t n, char
             return token;
         i++;
     }
-    std::string msg = libdnf5::utils::sformat(_("Can't find {} item in {}"), n, string);
+    std::string msg = libdnf5::utils::sformat(_("Can't find item {} in {}"), n, string);
     throw std::runtime_error(msg);
 }
 
