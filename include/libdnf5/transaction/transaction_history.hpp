@@ -36,8 +36,13 @@ class TransactionHistory {
 public:
     explicit TransactionHistory(const libdnf5::BaseWeakPtr & base);
     explicit TransactionHistory(libdnf5::Base & base);
+    ~TransactionHistory();
+    TransactionHistory(const TransactionHistory & src) = delete;
+    TransactionHistory & operator=(const TransactionHistory & src) = delete;
+    TransactionHistory(TransactionHistory && src) noexcept = delete;
+    TransactionHistory & operator=(TransactionHistory && src) noexcept = delete;
 
-    TransactionHistoryWeakPtr get_weak_ptr() { return TransactionHistoryWeakPtr(this, &guard); }
+    TransactionHistoryWeakPtr get_weak_ptr();
 
     /// Lists all transaction IDs from the transaction history database. The
     /// result is sorted in ascending order.
@@ -72,9 +77,8 @@ private:
     /// Create a new Transaction object.
     libdnf5::transaction::Transaction new_transaction();
 
-    BaseWeakPtr base;
-
-    WeakPtrGuard<TransactionHistory, false> guard;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::transaction
