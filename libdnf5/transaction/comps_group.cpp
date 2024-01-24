@@ -21,19 +21,128 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/transaction/comps_group.hpp"
 
 #include "db/comps_group.hpp"
-#include "db/comps_group_package.hpp"
 
 #include "libdnf5/transaction/transaction.hpp"
 #include "libdnf5/transaction/transaction_item.hpp"
 
-#include <algorithm>
-
 
 namespace libdnf5::transaction {
 
+class CompsGroup::Impl {
+private:
+    friend CompsGroup;
 
-CompsGroup::CompsGroup(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+    std::string group_id;
+    std::string name;
+    std::string translated_name;
+    libdnf5::comps::PackageType package_types;
+    std::vector<CompsGroupPackage> packages;
+};
 
+
+CompsGroup::CompsGroup(const Transaction & trans)
+    : TransactionItem::TransactionItem(trans),
+      p_impl(std::make_unique<Impl>()) {}
+
+CompsGroup::CompsGroup(const CompsGroup & src) : TransactionItem(src), p_impl(new Impl(*src.p_impl)) {}
+CompsGroup::CompsGroup(CompsGroup && src) noexcept = default;
+
+CompsGroup & CompsGroup::operator=(const CompsGroup & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+CompsGroup & CompsGroup::operator=(CompsGroup && src) noexcept = default;
+CompsGroup::~CompsGroup() = default;
+
+const std::string & CompsGroup::get_group_id() const noexcept {
+    return p_impl->group_id;
+}
+void CompsGroup::set_group_id(const std::string & value) {
+    p_impl->group_id = value;
+}
+const std::string & CompsGroup::get_name() const noexcept {
+    return p_impl->name;
+}
+void CompsGroup::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+const std::string & CompsGroup::get_translated_name() const noexcept {
+    return p_impl->translated_name;
+}
+void CompsGroup::set_translated_name(const std::string & value) {
+    p_impl->translated_name = value;
+}
+libdnf5::comps::PackageType CompsGroup::get_package_types() const noexcept {
+    return p_impl->package_types;
+}
+void CompsGroup::set_package_types(libdnf5::comps::PackageType value) {
+    p_impl->package_types = value;
+}
+CompsGroupPackage & CompsGroup::new_package() {
+    return p_impl->packages.emplace_back();
+}
+std::vector<CompsGroupPackage> & CompsGroup::get_packages() {
+    return p_impl->packages;
+}
+
+class CompsGroupPackage::Impl {
+private:
+    friend CompsGroupPackage;
+    int64_t id = 0;
+    std::string name;
+    bool installed = false;
+    libdnf5::comps::PackageType package_type = libdnf5::comps::PackageType::DEFAULT;
+};
+
+CompsGroupPackage::CompsGroupPackage(const CompsGroupPackage & src) : p_impl(new Impl(*src.p_impl)) {}
+CompsGroupPackage::CompsGroupPackage(CompsGroupPackage && src) noexcept = default;
+
+CompsGroupPackage & CompsGroupPackage::operator=(const CompsGroupPackage & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+CompsGroupPackage & CompsGroupPackage::operator=(CompsGroupPackage && src) noexcept = default;
+CompsGroupPackage::CompsGroupPackage() : p_impl(std::make_unique<Impl>()) {}
+CompsGroupPackage::~CompsGroupPackage() = default;
+
+int64_t CompsGroupPackage::get_id() const noexcept {
+    return p_impl->id;
+}
+void CompsGroupPackage::set_id(int64_t value) {
+    p_impl->id = value;
+}
+const std::string & CompsGroupPackage::get_name() const noexcept {
+    return p_impl->name;
+}
+void CompsGroupPackage::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+bool CompsGroupPackage::get_installed() const noexcept {
+    return p_impl->installed;
+}
+void CompsGroupPackage::set_installed(bool value) {
+    p_impl->installed = value;
+}
+libdnf5::comps::PackageType CompsGroupPackage::get_package_type() const noexcept {
+    return p_impl->package_type;
+}
+void CompsGroupPackage::set_package_type(libdnf5::comps::PackageType value) {
+    p_impl->package_type = value;
+}
 
 /*
 std::vector< TransactionItemPtr >
@@ -70,10 +179,6 @@ CompsGroup::getTransactionItemsByPattern(libdnf5::utils::SQLite3Ptr conn, const 
     return result;
 }
 */
-
-CompsGroupPackage & CompsGroup::new_package() {
-    return packages.emplace_back();
-}
 
 
 }  // namespace libdnf5::transaction
