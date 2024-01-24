@@ -21,10 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_RPM_PACKAGE_HPP
 
 #include "transaction_item.hpp"
-#include "transaction_item_reason.hpp"
 
 #include <memory>
-#include <vector>
 
 
 namespace libdnf5::transaction {
@@ -42,32 +40,38 @@ public:
     /// Get package name
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getName()
-    const std::string & get_name() const noexcept { return name; }
+    const std::string & get_name() const noexcept;
 
     /// Get package epoch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getEpoch()
-    const std::string & get_epoch() const noexcept { return epoch; }
+    const std::string & get_epoch() const noexcept;
 
     /// Get package release
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getRelease()
-    const std::string & get_release() const noexcept { return release; }
+    const std::string & get_release() const noexcept;
 
     /// Get package arch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getArch()
-    const std::string & get_arch() const noexcept { return arch; }
+    const std::string & get_arch() const noexcept;
 
     /// Get package version
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getVersion()
-    const std::string & get_version() const noexcept { return version; }
+    const std::string & get_version() const noexcept;
 
     /// Get string representation of the object, which equals to package NEVRA
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.toStr()
     std::string to_string() const;
+
+    ~Package();
+    Package(const Package & src);
+    Package & operator=(const Package & src);
+    Package(Package && src) noexcept;
+    Package & operator=(Package && src) noexcept;
 
 private:
     friend RpmDbUtils;
@@ -78,7 +82,7 @@ private:
     /// Set package name
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
-    void set_name(const std::string & value) { name = value; }
+    void set_name(const std::string & value);
 
     /// Get package epoch as an integer
     uint32_t get_epoch_int() const;
@@ -86,22 +90,22 @@ private:
     /// Set package epoch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setEpoch(int32_t value)
-    void set_epoch(const std::string & value) { epoch = value; }
+    void set_epoch(const std::string & value);
 
     /// Set package version
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setVersion(const std::string & value)
-    void set_version(const std::string & value) { version = value; }
+    void set_version(const std::string & value);
 
     /// Set package release
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setRelease(const std::string & value)
-    void set_release(const std::string & value) { release = value; }
+    void set_release(const std::string & value);
 
     /// Set package arch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setArch(const std::string & value)
-    void set_arch(const std::string & value) { arch = value; }
+    void set_arch(const std::string & value);
 
     /*
     // TODO(dmach): Implement TransactionSack.new_filter().filter_package_pattern()
@@ -115,11 +119,8 @@ private:
 
     bool operator<(const Package & other) const;
 
-    std::string name;
-    std::string epoch;
-    std::string version;
-    std::string release;
-    std::string arch;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::transaction
