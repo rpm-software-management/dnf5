@@ -705,9 +705,7 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
 
     for (const auto & env_replay : serialized_transaction->first.environments) {
         libdnf5::GoalJobSettings settings_per_environment = settings;
-        //TODO(amatej): add environment_no_groups to avoid handling groups twice
-        //              (once from the environment automatically and once from the replay)
-        //settings_per_environment.environment_no_groups = true;
+        settings_per_environment.set_environment_no_groups(true);
         settings_per_environment.set_group_search_groups(false);
         settings_per_environment.set_group_search_environments(true);
         if (!env_replay.repo_id.empty()) {
@@ -1955,6 +1953,9 @@ void Goal::Impl::add_environment_install_to_goal(
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
         for (const auto & grp_id : environment.get_groups()) {
             env_group_specs.emplace_back(
                 GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
@@ -1997,6 +1998,9 @@ void Goal::Impl::add_environment_remove_to_goal(
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
         for (const auto & environment : environment_query) {
             rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
+            if (settings.get_environment_no_groups()) {
+                continue;
+            }
             // get all groups installed by the environment
             comps::GroupQuery environment_groups(query_installed);
             environment_groups.filter_groupid(
@@ -2067,6 +2071,10 @@ void Goal::Impl::add_environment_upgrade_to_goal(
 
         // upgrade the environment itself
         rpm_goal.add_environment(available_environment, transaction::TransactionItemAction::UPGRADE, {});
+
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
 
         // group names that are part of the installed version of the environment
         auto old_groups = installed_environment.get_groups();
