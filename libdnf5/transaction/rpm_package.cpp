@@ -25,16 +25,73 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/transaction/transaction.hpp"
 
-#include <algorithm>
-#include <map>
 #include <sstream>
 
 
 namespace libdnf5::transaction {
 
+class Package::Impl {
+private:
+    friend Package;
+    std::string name;
+    std::string epoch;
+    std::string version;
+    std::string release;
+    std::string arch;
+};
 
-Package::Package(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+Package::Package(const Transaction & trans)
+    : TransactionItem::TransactionItem(trans),
+      p_impl(std::make_unique<Impl>()) {}
 
+Package::Package(const Package & src) : TransactionItem(src), p_impl(new Impl(*src.p_impl)) {}
+Package::Package(Package && src) noexcept = default;
+
+Package & Package::operator=(const Package & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Package & Package::operator=(Package && src) noexcept = default;
+Package::~Package() = default;
+
+const std::string & Package::get_name() const noexcept {
+    return p_impl->name;
+}
+const std::string & Package::get_epoch() const noexcept {
+    return p_impl->epoch;
+}
+const std::string & Package::get_release() const noexcept {
+    return p_impl->release;
+}
+const std::string & Package::get_arch() const noexcept {
+    return p_impl->arch;
+}
+const std::string & Package::get_version() const noexcept {
+    return p_impl->version;
+}
+
+void Package::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+void Package::set_epoch(const std::string & value) {
+    p_impl->epoch = value;
+}
+void Package::set_version(const std::string & value) {
+    p_impl->version = value;
+}
+void Package::set_release(const std::string & value) {
+    p_impl->release = value;
+}
+void Package::set_arch(const std::string & value) {
+    p_impl->arch = value;
+}
 
 uint32_t Package::get_epoch_int() const {
     if (get_epoch().empty()) {
