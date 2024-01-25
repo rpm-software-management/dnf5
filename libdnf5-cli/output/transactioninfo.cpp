@@ -22,8 +22,38 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include <pwd.h>
+
+#include <format>
+#include <sstream>
 
 namespace libdnf5::cli::output {
+
+namespace {
+std::string generate_user_info_str(uint32_t user_id) {
+    auto results = std::to_string(user_id);
+    auto user_info = getpwuid(user_id);
+
+    if (user_info == NULL) {
+        return results;
+    };
+
+    // If gecos information does exists, it is generally CSV formatted.
+    // This section assumes that the first entry in the gecos information is the display name.
+    if (user_info->pw_gecos && strlen(user_info->pw_gecos) > 0) {
+        std::stringstream s_stream(user_info->pw_gecos);
+        std::string display_name;
+        std::getline(s_stream, display_name, ',');
+        results += std::format(" {}", display_name);
+    };
+
+    if (user_info->pw_name && strlen(user_info->pw_name) > 0) {
+        results += std::format(" <{}>", user_info->pw_name);
+    };
+
+    return results;
+}
+}  // namespace
 
 void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     KeyValueTable info;
@@ -33,7 +63,7 @@ void print_transaction_info(libdnf5::transaction::Transaction & transaction) {
     info.add_line("End time", libdnf5::utils::string::format_epoch(transaction.get_dt_end()));
     info.add_line("End rpmdb", transaction.get_rpmdb_version_end());
 
-    info.add_line("User", transaction.get_user_id());
+    info.add_line("User", generate_user_info_str(transaction.get_user_id()));
     info.add_line("Status", libdnf5::transaction::transaction_state_to_string(transaction.get_state()));
     info.add_line("Releasever", transaction.get_releasever());
     info.add_line("Description", transaction.get_description());
