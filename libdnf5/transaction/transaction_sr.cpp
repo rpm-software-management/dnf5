@@ -57,10 +57,11 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
 
     TransactionReplay transaction_replay;
 
-    auto * data = json_tokener_parse(json_serialized_transaction.c_str());
+    enum json_tokener_error jerr = json_tokener_success;
+    auto * data = json_tokener_parse_verbose(json_serialized_transaction.c_str(), &jerr);
     if (data == nullptr) {
         throw TransactionReplayError(
-            M_("Error during transaction replay JSON parsing : {}"), std::string(json_util_get_last_err()));
+            M_("Error during transaction replay JSON parsing : {}"), std::string(json_tokener_error_desc(jerr)));
     }
 
     // parse json
