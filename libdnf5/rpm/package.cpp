@@ -329,7 +329,7 @@ std::vector<std::string> Package::get_remote_locations(const std::set<std::strin
     auto repo_mirrors = get_repo()->get_mirrors();
     for (const auto & mirror : repo_mirrors) {
         for (const auto & protocol : protocols) {
-            if (utils::string::starts_with(mirror, protocol)) {
+            if (utils::string::starts_with(mirror, protocol + ":")) {
                 auto path = lr_pathconcat(mirror.c_str(), location.c_str(), NULL);
                 remote_locations.emplace_back(path);
                 lr_free(path);
@@ -341,7 +341,7 @@ std::vector<std::string> Package::get_remote_locations(const std::set<std::strin
     auto repo_baseurls = get_repo()->get_config().get_baseurl_option().get_value();
     for (const auto & baseurl : repo_baseurls) {
         for (const auto & protocol : protocols) {
-            if (utils::string::starts_with(baseurl, protocol)) {
+            if (utils::string::starts_with(baseurl, protocol + ":")) {
                 auto path = lr_pathconcat(baseurl.c_str(), location.c_str(), NULL);
                 remote_locations.emplace_back(path);
                 lr_free(path);
