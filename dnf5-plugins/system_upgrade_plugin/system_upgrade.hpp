@@ -42,10 +42,20 @@ struct OfflineTransactionStateData {
     std::string target_releasever;
     std::string system_releasever;
     bool poweroff_after = false;
+    std::vector<std::string> enabled_repos;
+    std::vector<std::string> disabled_repos;
 };
 
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
-    OfflineTransactionStateData, state_version, status, cachedir, target_releasever, system_releasever, poweroff_after)
+    OfflineTransactionStateData,
+    state_version,
+    status,
+    cachedir,
+    target_releasever,
+    system_releasever,
+    poweroff_after,
+    enabled_repos,
+    disabled_repos)
 
 class OfflineTransactionState {
 public:
@@ -85,12 +95,13 @@ protected:
     std::filesystem::path get_datadir() { return datadir; };
     void set_datadir(std::filesystem::path new_datadir) { datadir = std::move(new_datadir); };
     std::filesystem::path get_magic_symlink() { return magic_symlink; };
-    OfflineTransactionState read_or_make_state() { return OfflineTransactionState{datadir / "state.toml"}; };
+    OfflineTransactionState get_state() { return state; };
 
 private:
     libdnf5::OptionPath * cachedir{nullptr};
     std::filesystem::path datadir{DEFAULT_DATADIR};
     std::filesystem::path magic_symlink;
+    OfflineTransactionState state;
 };
 
 class SystemUpgradeDownloadCommand : public SystemUpgradeSubcommand {

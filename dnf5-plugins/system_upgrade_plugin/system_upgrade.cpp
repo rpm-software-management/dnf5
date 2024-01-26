@@ -69,14 +69,16 @@ void SystemUpgradeCommand::set_argument_parser() {
 }
 
 void SystemUpgradeCommand::register_subcommands() {
+    register_subcommand(std::make_unique<SystemUpgradeCleanCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeRebootCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeUpgradeCommand>(get_context()));
 }
 
-SystemUpgradeSubcommand::SystemUpgradeSubcommand(Context & context, const std::string & name) : Command(context, name) {
-    datadir = std::filesystem::path{libdnf5::SYSTEM_STATE_DIR} / "system-upgrade";
-}
+SystemUpgradeSubcommand::SystemUpgradeSubcommand(Context & context, const std::string & name)
+    : Command(context, name),
+      datadir(std::filesystem::path{libdnf5::SYSTEM_STATE_DIR} / "system-upgrade"),
+      state(datadir / "state.toml") {}
 
 void SystemUpgradeSubcommand::set_argument_parser() {
     auto & ctx = get_context();
@@ -176,11 +178,23 @@ void SystemUpgradeDownloadCommand::run() {
     transaction_json_file.write(json);
     transaction_json_file.close();
 
-    auto state = read_or_make_state();
+    auto state = get_state();
     state.get_data().cachedir = get_cachedir()->get_value();
     state.get_data().system_releasever = system_releasever;
     state.get_data().target_releasever = target_releasever;
     state.get_data().status = STATUS_DOWNLOAD_COMPLETE;
+    libdnf5::repo::RepoQuery enabled_repos(ctx.base);
+    enabled_repos.filter_enabled(true);
+    enabled_repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
+    for (const auto & repo : enabled_repos) {
+        state.get_data().enabled_repos.emplace_back(repo->get_id());
+    }
+    libdnf5::repo::RepoQuery disabled_repos(ctx.base);
+    disabled_repos.filter_enabled(false);
+    disabled_repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
+    for (const auto & repo : disabled_repos) {
+        state.get_data().disabled_repos.emplace_back(repo->get_id());
+    }
     state.write();
 }
 
@@ -190,7 +204,6 @@ void check_state(const OfflineTransactionState & state) {
         try {
             std::rethrow_exception(read_exception);
         } catch (const std::exception & ex) {
-            std::cout << "ex.what rethrown is " << ex.what() << std::endl;
             const std::string message{ex.what()};
             throw libdnf5::cli::CommandExitError(
                 1, M_("Error reading state: {}. Rerun `dnf5 system-upgrade download [OPTIONS]`."), message);
@@ -224,6 +237,14 @@ void reboot(Context & ctx, bool poweroff = false) {
     }
 }
 
+void clean(Context & ctx, const std::filesystem::path & datadir) {
+    ctx.base.get_logger()->info("Cleaning up downloaded data...");
+
+    for (const auto & entry : std::filesystem::directory_iterator(datadir)) {
+        std::filesystem::remove_all(entry.path());
+    }
+}
+
 void SystemUpgradeRebootCommand::set_argument_parser() {
     SystemUpgradeSubcommand::set_argument_parser();
 
@@ -245,7 +266,7 @@ void SystemUpgradeRebootCommand::set_argument_parser() {
 }
 
 void SystemUpgradeRebootCommand::run() {
-    auto state = read_or_make_state();
+    auto state = get_state();
     check_state(state);
     if (state.get_data().status != STATUS_DOWNLOAD_COMPLETE) {
         throw libdnf5::cli::CommandExitError(1, M_("system is not ready for upgrade"));
@@ -276,9 +297,25 @@ void SystemUpgradeUpgradeCommand::configure() {
     ctx.set_load_system_repo(true);
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
+    auto state = get_state();
+    check_state(state);
+
+    // Set same set of enabled/disabled repos used during `system-upgrade download`
+    for (const auto & repo_id : state.get_data().enabled_repos) {
+        ctx.setopts.emplace_back(repo_id + ".enabled", "1");
+    }
+    for (const auto & repo_id : state.get_data().disabled_repos) {
+        ctx.setopts.emplace_back(repo_id + ".disabled", "1");
+    }
+
+    // Don't try to refresh metadata, we are offline
     ctx.base.get_config().get_cacheonly_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, "all");
-    ctx.base.get_config().get_assumeno_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
+    // Don't ask any questions
     ctx.base.get_config().get_assumeyes_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, true);
+    // Override `assumeno` too since it takes priority over `assumeyes`
+    ctx.base.get_config().get_assumeno_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
+    // Upgrade operation already removes all element that must be removed.
+    // Additional removal could trigger unwanted changes in transaction.
     ctx.base.get_config().get_clean_requirements_on_remove_option().set(
         libdnf5::Option::Priority::PLUGINDEFAULT, false);
     ctx.base.get_config().get_install_weak_deps_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
@@ -298,8 +335,7 @@ void SystemUpgradeUpgradeCommand::run() {
 
     std::filesystem::remove(get_magic_symlink());
 
-    auto state = read_or_make_state();
-    check_state(state);
+    auto state = get_state();
     if (state.get_data().status != STATUS_READY) {
         throw libdnf5::cli::CommandExitError(1, M_("Use `dnf5 system-upgrade reboot` to begin the upgrade."));
     }
@@ -332,8 +368,22 @@ void SystemUpgradeUpgradeCommand::run() {
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
+
+    // If the upgrade succeeded, remove downloaded data
+    clean(ctx, get_datadir());
+
+    if (state.get_data().poweroff_after) {
+        reboot(ctx, true);
+    }
 }
 
-void SystemUpgradeCleanCommand::run() {}
+void SystemUpgradeCleanCommand::set_argument_parser() {
+    SystemUpgradeSubcommand::set_argument_parser();
+}
+
+void SystemUpgradeCleanCommand::run() {
+    auto & ctx = get_context();
+    clean(ctx, get_datadir());
+}
 
 }  // namespace dnf5
