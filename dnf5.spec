@@ -136,7 +136,7 @@ BuildRequires:  toml11-static
 %if %{with clang}
 BuildRequires:  clang
 %else
-BuildRequires:  gcc-c++
+BuildRequires:  gcc-c++ >= 10.1
 %endif
 
 %if %{with tests}

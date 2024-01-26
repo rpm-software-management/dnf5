@@ -64,6 +64,9 @@ void DownloadCommand::set_argument_parser() {
     alldeps_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    url_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
     resolve->set_description("Resolve and download needed dependencies");
@@ -77,10 +80,36 @@ void DownloadCommand::set_argument_parser() {
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
 
+    auto url = parser.add_new_named_arg("url");
+    url->set_long_name("url");
+    url->set_description("Print a URL where the rpms can be downloaded instead of downloading");
+    url->set_const_value("true");
+    url->link_value(url_option);
+
+    urlprotocol_valid_options = {"http", "https", "ftp", "file"};
+    urlprotocol_option = {};
+    auto urlprotocol = parser.add_new_named_arg("urlprotocol");
+    urlprotocol->set_long_name("urlprotocol");
+    urlprotocol->set_description("When running with --url, limit to specific protocols");
+    urlprotocol->set_has_value(true);
+    urlprotocol->set_arg_value_help("{http|https|ftp|file},...");
+    urlprotocol->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            if (urlprotocol_valid_options.find(value) == urlprotocol_valid_options.end()) {
+                throw libdnf5::cli::ArgumentParserInvalidValueError(
+                    M_("Invalid urlprotocol option: {}"), std::string(value));
+            }
+            urlprotocol_option.emplace(value);
+            return true;
+        });
+
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
+    cmd.register_named_arg(url);
+    cmd.register_named_arg(urlprotocol);
 }
 
 void DownloadCommand::configure() {
@@ -146,20 +175,38 @@ void DownloadCommand::run() {
         }
     }
 
-    if (!download_pkgs.empty()) {
-        libdnf5::repo::PackageDownloader downloader(ctx.base);
-
-        // for download command, we don't want to mark the packages for removal
-        downloader.force_keep_packages(true);
-
-        for (auto & [nevra, pkg] : download_pkgs) {
-            downloader.add(pkg);
-        }
-
-        std::cout << "Downloading Packages:" << std::endl;
-        downloader.download();
-        std::cout << std::endl;
+    if (download_pkgs.empty()) {
+        return;
     }
+
+    if (url_option->get_value()) {
+        // If no urlprotocols are specified, all values within the urlprotocol_valid_options will be used
+        if (urlprotocol_option.empty()) {
+            urlprotocol_option = urlprotocol_valid_options;
+        }
+        for (auto & [nerva, pkg] : download_pkgs) {
+            auto urls = pkg.get_remote_locations(urlprotocol_option);
+            if (urls.empty()) {
+                ctx.base.get_logger()->warning("Failed to get mirror for package: \"{}\"", pkg.get_name());
+                continue;
+            }
+            std::cout << urls[0] << std::endl;
+        }
+        return;
+    }
+    libdnf5::repo::PackageDownloader downloader(ctx.base);
+
+    // for download command, we don't want to mark the packages for removal
+    downloader.force_keep_packages(true);
+
+    for (auto & [nevra, pkg] : download_pkgs) {
+        downloader.add(pkg);
+    }
+
+    std::cout << "Downloading Packages:" << std::endl;
+    downloader.download();
+    std::cout << std::endl;
 }
+
 
 }  // namespace dnf5
