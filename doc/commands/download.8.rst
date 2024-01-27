@@ -53,6 +53,8 @@ Options
 ``--urlprotocol``
     | To be used together with ``--url``. It filters out the URLs to the specified protocols: ``http``, ``https``, ``ftp``, or ``file``. This option can be used multiple times.
 
+``--arch``
+    | Limit to packages of given architectures. This option can be used multiple times.
 
 
 Examples
@@ -71,7 +73,10 @@ Examples
     | Download the ``maven-compiler-plugin`` package to ``/tmp/my_packages`` directory.
 
 ``dnf5 download --url --urlprotocol http python``
-    | List the http URL to download the python package
+    | List the http URL to download the python package.
+
+``dnf5 download python --arch x86_64``
+    | Downloads python with the ``x86_64`` architecture.
 
 
 See Also
