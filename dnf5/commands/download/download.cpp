@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <algorithm>
 #include <iostream>
 #include <map>
 
@@ -104,12 +106,43 @@ void DownloadCommand::set_argument_parser() {
             return true;
         });
 
+    arch_option = {};
+    auto arch = parser.add_new_named_arg("arch");
+    arch->set_long_name("arch");
+    arch->set_description("Limit to packages of given architectures.");
+    arch->set_has_value(true);
+    arch->set_arg_value_help("ARCH,...");
+    arch->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            auto supported_arches = libdnf5::rpm::get_supported_arches();
+            if (std::find(supported_arches.begin(), supported_arches.end(), value) == supported_arches.end()) {
+                std::string available_arches{};
+                auto it = supported_arches.begin();
+                if (it != supported_arches.end()) {
+                    available_arches.append("\"" + *it + "\"");
+                    ++it;
+                    for (; it != supported_arches.end(); ++it) {
+                        available_arches.append(", \"" + *it + "\"");
+                    }
+                }
+                throw libdnf5::cli::ArgumentParserInvalidValueError(
+                    M_("Unsupported architecture \"{0}\". Please choose one from {1}"),
+                    std::string(value),
+                    available_arches);
+            }
+            arch_option.emplace(value);
+            return true;
+        });
+
+
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
+    cmd.register_named_arg(arch);
 }
 
 void DownloadCommand::configure() {
@@ -150,6 +183,9 @@ void DownloadCommand::run() {
         pkg_query.filter_available();
         pkg_query.filter_priority();
         pkg_query.filter_latest_evr();
+        if (!arch_option.empty()) {
+            pkg_query.filter_arch(std::vector<std::string>(arch_option.begin(), arch_option.end()));
+        }
 
         for (const auto & pkg : pkg_query) {
             download_pkgs.insert(create_nevra_pkg_pair(pkg));
