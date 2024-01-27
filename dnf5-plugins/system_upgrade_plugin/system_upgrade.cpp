@@ -24,9 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option_path.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
+#include <sys/wait.h>
 
 #include <exception>
 #include <iostream>
+
+using namespace libdnf5::cli;
 
 OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
     read();
@@ -49,9 +52,122 @@ void OfflineTransactionState::write() {
     file.close();
 }
 
+int call(const std::string & command, const std::vector<std::string> & args) {
+    std::vector<char *> c_args;
+    c_args.emplace_back(const_cast<char *>(command.c_str()));
+    for (const auto & arg : args) {
+        c_args.emplace_back(const_cast<char *>(arg.c_str()));
+    }
+    c_args.emplace_back(nullptr);
+
+    const auto pid = fork();
+    if (pid == -1) {
+        return -1;
+    }
+    if (pid == 0) {
+        int rc = execvp(command.c_str(), c_args.data());
+        exit(rc == 0 ? 0 : -1);
+    } else {
+        int status;
+        int rc = waitpid(pid, &status, 0);
+        if (rc == -1) {
+            return -1;
+        }
+        if (WIFEXITED(status)) {
+            return WEXITSTATUS(status);
+        }
+        return -1;
+    }
+}
+
 namespace dnf5 {
 
-using namespace libdnf5::cli;
+
+/// Helper for displaying messages with Plymouth
+///
+/// Derived from DNF 4 system-upgrade PlymouthOutput implementation. Filters
+/// duplicate calls, and stops calling the plymouth binary if we fail to
+/// contact it.
+class PlymouthOutput {
+public:
+    bool ping() { return plymouth({"ping"}); }
+    bool set_mode() { return plymouth({"change-mode", "--system-upgrade"}); }
+    bool message(const std::string & message) {
+        if (last_message.has_value() && message == last_message) {
+            plymouth({"hide-message", "--text", last_message.value()});
+        }
+        last_message = message;
+        return plymouth({"display-message", "--text", message});
+    }
+    bool progress(const int percentage) {
+        return plymouth({"system-update", "--progress", std::to_string(percentage)});
+    }
+
+private:
+    bool alive = true;
+    std::map<std::string, std::vector<std::string>> last_subcommand_args;
+    std::optional<std::string> last_message;
+    bool plymouth(const std::vector<std::string> & args) {
+        const auto & command = args.at(0);
+        const auto & last_args = last_subcommand_args.find(command);
+
+        bool dupe_cmd = (last_args != last_subcommand_args.end() && args == last_args->second);
+        if ((alive && !dupe_cmd) || command == "--ping") {
+            alive = call(PATH_TO_PLYMOUTH, args) == 0;
+            last_subcommand_args[command] = args;
+        }
+        return alive;
+    }
+};
+
+/// Extend RpmTransCB to also display messages with Plymouth
+class PlymouthTransCB : public RpmTransCB {
+public:
+    void elem_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override {
+        RpmTransCB::elem_progress(item, amount, total);
+
+        plymouth.progress(static_cast<int>(100 * static_cast<double>(amount) / static_cast<double>(total)));
+
+        std::string action;
+        switch (item.get_action()) {
+            case libdnf5::transaction::TransactionItemAction::UPGRADE:
+                action = "Upgrading";
+                break;
+            case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
+                action = "Downgrading";
+                break;
+            case libdnf5::transaction::TransactionItemAction::REINSTALL:
+                action = "Reinstalling";
+                break;
+            case libdnf5::transaction::TransactionItemAction::INSTALL:
+                action = "Installing";
+                break;
+            case libdnf5::transaction::TransactionItemAction::REMOVE:
+                action = "Removing";
+                break;
+            case libdnf5::transaction::TransactionItemAction::REPLACED:
+                action = "Replacing";
+                break;
+            case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
+            case libdnf5::transaction::TransactionItemAction::ENABLE:
+            case libdnf5::transaction::TransactionItemAction::DISABLE:
+            case libdnf5::transaction::TransactionItemAction::RESET:
+                throw std::logic_error(fmt::format(
+                    "Unexpected action in TransactionPackage: {}",
+                    static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
+                        item.get_action())));
+                break;
+        }
+        const auto & message = fmt::format("[{}/{}] {} {}...", amount, total, action, item.get_package().get_name());
+        plymouth.message(message);
+    }
+
+private:
+    PlymouthOutput plymouth;
+};
 
 void SystemUpgradeCommand::pre_configure() {
     throw_missing_command();
@@ -133,10 +249,9 @@ void SystemUpgradeDownloadCommand::configure() {
     system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
     target_releasever = ctx.base.get_vars()->get_value("releasever");
 
-    // TODO: uncomment this. Easier to test with it commented out.
-    /* if (target_releasever == system_releasever) { */
-    /*     throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version.")); */
-    /* } */
+    if (target_releasever == system_releasever) {
+        throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version."));
+    }
 
     ctx.set_load_system_repo(true);
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
@@ -167,11 +282,12 @@ void SystemUpgradeDownloadCommand::run() {
 
     ctx.download_and_run(transaction);
 
-    const std::string json = transaction.serialize();
-    if (json.empty()) {
-        throw libdnf5::cli::CommandExitError(1, M_("Transaction is empty."));
+    if (!transaction.get_transaction_packages_count()) {
+        throw libdnf5::cli::CommandExitError(
+            1, M_("The system-upgrade transaction is empty; your system is already up-to-date."));
     }
 
+    const std::string json = transaction.serialize();
     const auto & transaction_json_path = std::filesystem::path(get_datadir()) / "system-upgrade-transaction.json";
     auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
 
@@ -196,6 +312,9 @@ void SystemUpgradeDownloadCommand::run() {
         state.get_data().disabled_repos.emplace_back(repo->get_id());
     }
     state.write();
+
+    std::cout << "Download complete! Use `dnf5 system-upgrade reboot` to start the upgrade." << std::endl
+              << "To remove cached metadata and transaction, use `dnf5 system-upgrade clean`." << std::endl;
 }
 
 void check_state(const OfflineTransactionState & state) {
@@ -356,7 +475,12 @@ void SystemUpgradeUpgradeCommand::run() {
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
+    auto callbacks = std::make_unique<PlymouthTransCB>();
+    /* callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions); */
+    transaction.set_callbacks(std::move(callbacks));
+
     const auto result = transaction.run();
+    std::cout << std::endl;
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
@@ -367,6 +491,10 @@ void SystemUpgradeUpgradeCommand::run() {
             std::cerr << "  - " << problem << std::endl;
         }
         throw libdnf5::cli::SilentCommandExitError(1);
+    }
+
+    for (auto const & entry : transaction.get_gpg_signature_problems()) {
+        std::cerr << entry << std::endl;
     }
 
     // If the upgrade succeeded, remove downloaded data

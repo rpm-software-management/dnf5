@@ -27,6 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 #include <toml.hpp>
 
+const std::filesystem::path PATH_TO_PLYMOUTH{"/usr/bin/plymouth"};
+
 const std::string STATUS_DOWNLOAD_INCOMPLETE{"download-incomplete"};
 const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
 const std::string STATUS_READY{"ready"};
