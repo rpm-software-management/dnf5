@@ -69,6 +69,9 @@ void DownloadCommand::set_argument_parser() {
     url_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    srpm_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     auto resolve = parser.add_new_named_arg("resolve");
     resolve->set_long_name("resolve");
     resolve->set_description("Resolve and download needed dependencies");
@@ -81,6 +84,12 @@ void DownloadCommand::set_argument_parser() {
         "When running with --resolve, download all dependencies (do not exclude already installed ones)");
     alldeps->set_const_value("true");
     alldeps->link_value(alldeps_option);
+
+    auto srpm = parser.add_new_named_arg("srpm");
+    srpm->set_long_name("srpm");
+    srpm->set_description("Download the src.rpm instead");
+    srpm->set_const_value("true");
+    srpm->link_value(srpm_option);
 
     auto url = parser.add_new_named_arg("url");
     url->set_long_name("url");
@@ -140,6 +149,7 @@ void DownloadCommand::set_argument_parser() {
     create_destdir_option(*this);
     cmd.register_named_arg(resolve);
     cmd.register_positional_arg(keys);
+    cmd.register_named_arg(srpm);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
     cmd.register_named_arg(arch);
@@ -164,6 +174,11 @@ void DownloadCommand::configure() {
     } else {
         context.set_load_system_repo(false);
     }
+
+    if (srpm_option->get_value()) {
+        context.base.get_repo_sack()->enable_source_repos();
+    }
+
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     // Default destination for downloaded rpms is the current directory
     context.base.get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, ".");
@@ -213,6 +228,38 @@ void DownloadCommand::run() {
 
     if (download_pkgs.empty()) {
         return;
+    }
+
+    if (srpm_option->get_value()) {
+        std::map<std::string, libdnf5::rpm::Package> source_pkgs;
+
+        libdnf5::rpm::PackageQuery source_pkg_query(ctx.base);
+        source_pkg_query.filter_arch({"src"});
+        source_pkg_query.filter_available();
+
+        for (auto & [nevra, pkg] : download_pkgs) {
+            auto sourcerpm = pkg.get_sourcerpm();
+
+            if (!sourcerpm.empty()) {
+                libdnf5::rpm::PackageQuery pkg_query(source_pkg_query);
+                pkg_query.filter_epoch({pkg.get_epoch()});
+
+                // Remove ".rpm" to get sourcerpm nevra
+                sourcerpm.erase(sourcerpm.length() - 4);
+                pkg_query.resolve_pkg_spec(sourcerpm, {}, true);
+
+                for (const auto & spkg : pkg_query) {
+                    source_pkgs.insert(create_nevra_pkg_pair(spkg));
+                }
+            } else if (pkg.get_arch() == "src") {
+                source_pkgs.insert(create_nevra_pkg_pair(pkg));
+            } else {
+                ctx.base.get_logger()->info("No source rpm defined for package: \"{}\"", pkg.get_name());
+                continue;
+            }
+        }
+
+        download_pkgs = source_pkgs;
     }
 
     if (url_option->get_value()) {
