@@ -56,6 +56,8 @@ Options
 ``--arch``
     | Limit to packages of given architectures. This option can be used multiple times.
 
+``--srpm``
+    | Download the source rpm. Enables source repositories of all enabled binary repositories.
 
 Examples
 ========
@@ -78,6 +80,8 @@ Examples
 ``dnf5 download python --arch x86_64``
     | Downloads python with the ``x86_64`` architecture.
 
+``dnf5 download dnf5 --srpm``
+    | Download the ``dnf5`` source rpm.
 
 See Also
 ========
