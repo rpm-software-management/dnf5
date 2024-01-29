@@ -142,82 +142,82 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Modu
                     const char * solv_string = nullptr;
                     switch (type) {
                         case SOLVER_RULE_DISTUPGRADE:
-                            rule = ProblemRules::RULE_DISTUPGRADE;
+                            rule = ProblemRules::RULE_MODULE_DISTUPGRADE;
                             break;
                         case SOLVER_RULE_INFARCH:
-                            rule = ProblemRules::RULE_INFARCH;
+                            rule = ProblemRules::RULE_MODULE_INFARCH;
                             break;
                         case SOLVER_RULE_UPDATE:
-                            rule = ProblemRules::RULE_UPDATE;
+                            rule = ProblemRules::RULE_MODULE_UPDATE;
                             break;
                         case SOLVER_RULE_JOB:
-                            rule = ProblemRules::RULE_JOB;
+                            rule = ProblemRules::RULE_MODULE_JOB;
                             break;
                         case SOLVER_RULE_JOB_UNSUPPORTED:
-                            rule = ProblemRules::RULE_JOB_UNSUPPORTED;
+                            rule = ProblemRules::RULE_MODULE_JOB_UNSUPPORTED;
                             break;
                         case SOLVER_RULE_JOB_NOTHING_PROVIDES_DEP:
-                            rule = ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP;
+                            rule = ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP;
                             break;
                         case SOLVER_RULE_JOB_UNKNOWN_PACKAGE:
-                            rule = ProblemRules::RULE_JOB_UNKNOWN_PACKAGE;
+                            rule = ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE;
                             break;
                         case SOLVER_RULE_JOB_PROVIDED_BY_SYSTEM:
-                            rule = ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM;
+                            rule = ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM;
                             break;
                         case SOLVER_RULE_PKG:
-                            rule = ProblemRules::RULE_PKG;
+                            rule = ProblemRules::RULE_MODULE_PKG;
                             break;
                         case SOLVER_RULE_BEST:
                             if (source > 0) {
-                                rule = ProblemRules::RULE_BEST_1;
+                                rule = ProblemRules::RULE_MODULE_BEST_1;
                                 break;
                             }
-                            rule = ProblemRules::RULE_BEST_2;
+                            rule = ProblemRules::RULE_MODULE_BEST_2;
                             break;
                         case SOLVER_RULE_PKG_NOT_INSTALLABLE: {
                             Solvable * solvable = pool_id2solvable(pool, source);
                             if (pool_disabled_solvable(pool, solvable)) {
                                 // TODO(jmracek) RULE_PKG_NOT_INSTALLABLE_4 not handled
-                                rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_1;
+                                rule = ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1;
                                 break;
                             }
                             if (solvable->arch && solvable->arch != ARCH_SRC && solvable->arch != ARCH_NOSRC &&
                                 pool->id2arch && (solvable->arch > pool->lastarch || !pool->id2arch[solvable->arch])) {
-                                rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_2;
+                                rule = ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2;
                                 break;
                             }
-                            rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_3;
+                            rule = ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3;
                         } break;
                         case SOLVER_RULE_PKG_NOTHING_PROVIDES_DEP:
-                            rule = ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP;
+                            rule = ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP;
                             break;
                         case SOLVER_RULE_PKG_SAME_NAME:
-                            rule = ProblemRules::RULE_PKG_SAME_NAME;
+                            rule = ProblemRules::RULE_MODULE_PKG_SAME_NAME;
                             break;
                         case SOLVER_RULE_PKG_CONFLICTS:
-                            rule = ProblemRules::RULE_PKG_CONFLICTS;
+                            rule = ProblemRules::RULE_MODULE_PKG_CONFLICTS;
                             break;
                         case SOLVER_RULE_PKG_OBSOLETES:
-                            rule = ProblemRules::RULE_PKG_OBSOLETES;
+                            rule = ProblemRules::RULE_MODULE_PKG_OBSOLETES;
                             break;
                         case SOLVER_RULE_PKG_INSTALLED_OBSOLETES:
-                            rule = ProblemRules::RULE_PKG_INSTALLED_OBSOLETES;
+                            rule = ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES;
                             break;
                         case SOLVER_RULE_PKG_IMPLICIT_OBSOLETES:
-                            rule = ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES;
+                            rule = ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES;
                             break;
                         case SOLVER_RULE_PKG_REQUIRES:
-                            rule = ProblemRules::RULE_PKG_REQUIRES;
+                            rule = ProblemRules::RULE_MODULE_PKG_REQUIRES;
                             break;
                         case SOLVER_RULE_PKG_SELF_CONFLICT:
-                            rule = ProblemRules::RULE_PKG_SELF_CONFLICT;
+                            rule = ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT;
                             break;
                         case SOLVER_RULE_YUMOBS:
-                            rule = ProblemRules::RULE_YUMOBS;
+                            rule = ProblemRules::RULE_MODULE_YUMOBS;
                             break;
                         default:
-                            rule = ProblemRules::RULE_UNKNOWN;
+                            rule = ProblemRules::RULE_MODULE_UNKNOWN;
                             solv_string = libsolv_solver.problemruleinfo2str(type, source, target, dep);
                             break;
                     }
@@ -238,11 +238,11 @@ libdnf5::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
 
     for (auto problem : get_problems()) {
         for (auto i : problem) {
-            if (std::get<0>(i) == ProblemRules::RULE_PKG_CONFLICTS ||
-                std::get<0>(i) == ProblemRules::RULE_PKG_SAME_NAME) {
+            if (std::get<0>(i) == ProblemRules::RULE_MODULE_PKG_CONFLICTS ||
+                std::get<0>(i) == ProblemRules::RULE_MODULE_PKG_SAME_NAME) {
                 result_ids.push_back(std::get<1>(i));
                 result_ids.push_back(std::get<3>(i));
-            } else if (std::get<0>(i) == ProblemRules::RULE_PKG_SELF_CONFLICT) {
+            } else if (std::get<0>(i) == ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT) {
                 result_ids.push_back(std::get<1>(i));
             }
         }
