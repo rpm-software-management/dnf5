@@ -63,7 +63,31 @@ static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
         " the following protected packages: {}")},
     {ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
      M_("The operation would result in removing"
-        " of running kernel: {}")}};
+        " of running kernel: {}")},
+    {ProblemRules::RULE_MODULE_DISTUPGRADE, M_("module {} does not belong to a distupgrade repository")},
+    {ProblemRules::RULE_MODULE_INFARCH, M_("module {} has inferior architecture")},
+    {ProblemRules::RULE_MODULE_UPDATE, M_("problem with installed module {}")},
+    {ProblemRules::RULE_MODULE_JOB, M_("conflicting requests")},
+    {ProblemRules::RULE_MODULE_JOB_UNSUPPORTED, M_("unsupported request")},
+    {ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP, M_("nothing provides requested {}")},
+    {ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE, M_("module {} does not exist")},
+    {ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM, M_("{} is provided by the system")},
+    {ProblemRules::RULE_MODULE_PKG, M_("some dependency problem")},
+    {ProblemRules::RULE_MODULE_BEST_1, M_("cannot install the best update candidate for module {}")},
+    {ProblemRules::RULE_MODULE_BEST_2, M_("cannot install the best candidate for the job")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1, M_("module {} is disabled")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2, M_("module {} does not have a compatible architecture")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3, M_("module {} is not installable")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4, M_("module {} is disabled")},
+    {ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP, M_("nothing provides {0} needed by module {1}")},
+    {ProblemRules::RULE_MODULE_PKG_SAME_NAME, M_("cannot install both modules {0} and {1}")},
+    {ProblemRules::RULE_MODULE_PKG_CONFLICTS, M_("module {0} conflicts with {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_OBSOLETES, M_("module {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES, M_("installed module {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES, M_("module {0} implicitly obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_REQUIRES, M_("module {1} requires {0}, but none of the providers can be installed")},
+    {ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT, M_("module {1} conflicts with {0} provided by itself")},
+    {ProblemRules::RULE_MODULE_YUMOBS, M_("both module {0} and {2} obsolete {1}")}};
 
 
 std::string string_join(
@@ -221,6 +245,17 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+        case ProblemRules::RULE_MODULE_DISTUPGRADE:
+        case ProblemRules::RULE_MODULE_INFARCH:
+        case ProblemRules::RULE_MODULE_UPDATE:
+        case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+        case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+        case ProblemRules::RULE_MODULE_BEST_1:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
             if (raw.second.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -229,6 +264,10 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_JOB_UNSUPPORTED:
         case ProblemRules::RULE_PKG:
         case ProblemRules::RULE_BEST_2:
+        case ProblemRules::RULE_MODULE_JOB:
+        case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+        case ProblemRules::RULE_MODULE_PKG:
+        case ProblemRules::RULE_MODULE_BEST_2:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -237,6 +276,10 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_REQUIRES:
         case ProblemRules::RULE_PKG_SELF_CONFLICT:
         case ProblemRules::RULE_PKG_SAME_NAME:
+        case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+        case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+        case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
             if (raw.second.size() != 2) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -246,11 +289,17 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
         case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
         case ProblemRules::RULE_YUMOBS:
+        case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+        case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+        case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+        case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+        case ProblemRules::RULE_MODULE_YUMOBS:
             if (raw.second.size() != 3) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
             return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
         case ProblemRules::RULE_UNKNOWN:
+        case ProblemRules::RULE_MODULE_UNKNOWN:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -367,6 +416,32 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
                 case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
                     // Rules are not generated by libsolv
                     break;
+                case ProblemRules::RULE_MODULE_DISTUPGRADE:
+                case ProblemRules::RULE_MODULE_INFARCH:
+                case ProblemRules::RULE_MODULE_UPDATE:
+                case ProblemRules::RULE_MODULE_JOB:
+                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+                case ProblemRules::RULE_MODULE_PKG:
+                case ProblemRules::RULE_MODULE_BEST_1:
+                case ProblemRules::RULE_MODULE_BEST_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+                case ProblemRules::RULE_MODULE_YUMOBS:
+                case ProblemRules::RULE_MODULE_UNKNOWN:
+                    libdnf_throw_assertion("Unexpected module problem rule in rpm goal");
             }
             if (is_unique(problem_output, tmp_rule, elements)) {
                 problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
