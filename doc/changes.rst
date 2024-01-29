@@ -208,7 +208,7 @@ Changes of configuration:
 =========================
 
 Default of ``best`` configuration option changed to ``true``
---------------------------------------------------------
+------------------------------------------------------------
 The new default value ensures that important updates will not be skipped and issues in distribution will be reported
 earlier.
 
