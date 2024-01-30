@@ -44,6 +44,7 @@
     #include "libdnf5/rpm/reldep_list_iterator.hpp"
     #include "libdnf5/rpm/rpm_signature.hpp"
     #include "libdnf5/rpm/transaction_callbacks.hpp"
+    #include "libdnf5/rpm/versionlock_config.hpp"
 %}
 
 #define CV __perl_CV
@@ -58,6 +59,11 @@
 %template(VectorNevra) std::vector<libdnf5::rpm::Nevra>;
 %template(VectorNevraForm) std::vector<libdnf5::rpm::Nevra::Form>;
 %template(PairBoolNevra) std::pair<bool, libdnf5::rpm::Nevra>;
+
+%include "libdnf5/rpm/versionlock_config.hpp"
+
+%template(VectorVersionlockCondition) std::vector<libdnf5::rpm::VersionlockCondition>;
+%template(VectorVersionlockPackage) std::vector<libdnf5::rpm::VersionlockPackage>;
 
 %include "libdnf5/rpm/package_sack.hpp"
 %template(PackageSackWeakPtr) libdnf5::WeakPtr<libdnf5::rpm::PackageSack, false>;
