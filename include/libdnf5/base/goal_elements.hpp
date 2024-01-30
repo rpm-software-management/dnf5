@@ -199,7 +199,6 @@ public:
     void set_expand_globs(bool expand_globs);
     bool get_expand_globs() const;
 
-
     /// When matching packages' nevras is enabled specify allowed nevra forms.
     ///
     /// The default can be obtained from libdnf5::rpm::Nevra::get_default_pkg_spec_forms().
