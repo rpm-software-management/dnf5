@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <json.h>
 #include <libdnf5/comps/environment/query.hpp>
 #include <libdnf5/comps/group/package.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 
 
 namespace libdnf5::transaction {
@@ -98,13 +99,21 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string environment_id;
         std::string repo_id;
 
+        if (json_object_is_type(json_environments, json_type_array) == 0) {
+            throw TransactionReplayError(M_("Unexpected type of \"environments\", array expected."));
+        }
+
         for (std::size_t i = 0; i < json_object_array_length(json_environments); ++i) {
             struct json_object * environment = json_object_array_get_idx(json_environments, i);
-            if (json_object_object_get_ex(environment, "action", &value) != 0) {
-                action = json_object_get_string(value);
-            }
             if (json_object_object_get_ex(environment, "id", &value) != 0) {
                 environment_id = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"id\" in an environment."));
+            }
+            if (json_object_object_get_ex(environment, "action", &value) != 0) {
+                action = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"action\" in an environment."));
             }
             if (json_object_object_get_ex(environment, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
@@ -124,16 +133,26 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string reason;
         std::string repo_id;
 
+        if (json_object_is_type(json_groups, json_type_array) == 0) {
+            throw TransactionReplayError(M_("Unexpected type of \"groups\", array expected."));
+        }
+
         for (std::size_t i = 0; i < json_object_array_length(json_groups); ++i) {
             struct json_object * group = json_object_array_get_idx(json_groups, i);
+            if (json_object_object_get_ex(group, "id", &value) != 0) {
+                group_id = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"id\" in a group."));
+            }
             if (json_object_object_get_ex(group, "action", &value) != 0) {
                 action = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"action\" in a group."));
             }
             if (json_object_object_get_ex(group, "reason", &value) != 0) {
                 reason = json_object_get_string(value);
-            }
-            if (json_object_object_get_ex(group, "id", &value) != 0) {
-                group_id = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"reason\" in a group."));
             }
             if (json_object_object_get_ex(group, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
@@ -147,7 +166,6 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         }
     }
 
-
     // PARSE PACKAGES
     struct json_object * json_packages = nullptr;
     if (json_object_object_get_ex(data, "rpms", &json_packages) != 0) {
@@ -158,22 +176,44 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string group_id;
         std::string package_path;
 
+        if (json_object_is_type(json_packages, json_type_array) == 0) {
+            throw TransactionReplayError(M_("Unexpected type of \"rpms\", array expected."));
+        }
+
         for (std::size_t i = 0; i < json_object_array_length(json_packages); ++i) {
             struct json_object * package = json_object_array_get_idx(json_packages, i);
-            if (json_object_object_get_ex(package, "action", &value) != 0) {
-                action = json_object_get_string(value);
-            }
-            if (json_object_object_get_ex(package, "reason", &value) != 0) {
-                reason = json_object_get_string(value);
-            }
-            if (json_object_object_get_ex(package, "group_id", &value) != 0) {
-                group_id = json_object_get_string(value);
-            }
             if (json_object_object_get_ex(package, "nevra", &value) != 0) {
                 nevra = json_object_get_string(value);
+                // Verify we have a full nevra
+                if (libdnf5::rpm::Nevra::parse(nevra, {libdnf5::rpm::Nevra::Form::NEVRA}).empty()) {
+                    throw TransactionReplayError(M_("Cannot parse NEVRA for rpm \"{}\"."), nevra);
+                }
             }
             if (json_object_object_get_ex(package, "package_path", &value) != 0) {
                 package_path = json_object_get_string(value);
+            }
+            if (nevra.empty() && package_path.empty()) {
+                throw TransactionReplayError(
+                    M_("Either \"nevra\" or \"package_path\" object key is required in an rpm."));
+            }
+            if (json_object_object_get_ex(package, "action", &value) != 0) {
+                action = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"action\" in an rpm."));
+            }
+            if (json_object_object_get_ex(package, "reason", &value) != 0) {
+                reason = json_object_get_string(value);
+            } else {
+                throw TransactionReplayError(M_("Missing object key \"reason\" in an rpm."));
+            }
+            if (json_object_object_get_ex(package, "group_id", &value) != 0) {
+                group_id = json_object_get_string(value);
+            } else {
+                if (reason == "Group" && action == "Reason Change") {
+                    throw TransactionReplayError(
+                        M_("Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" and action "
+                           "\"Reason Change\"."));
+                }
             }
             if (json_object_object_get_ex(package, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
