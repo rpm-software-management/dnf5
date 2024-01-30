@@ -25,6 +25,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
 
+extern "C" {
+#include <solv/pool.h>
+#include <solv/solvable.h>
+}
 
 namespace libdnf5::base {
 
@@ -464,5 +468,123 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
     const {
     return p_impl->problems;
 };
+
+
+static std::string module_solvid2str(Pool * pool, Id source) {
+    auto * solvable = pool_id2solvable(pool, source);
+    const char * summary = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
+    return fmt::format(
+        "{}:{}:{}.{}",
+        solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION),
+        pool_id2str(pool, solvable->evr),
+        summary ? summary : "",
+        pool_id2str(pool, solvable->arch));
+}
+
+
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_module_solver_problems(
+    Pool * pool, const std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> & solver_problems) {
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
+
+    for (auto & problem : solver_problems) {
+        std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+        for (auto & [rule, source, dep, target, description] : problem) {
+            std::vector<std::string> elements;
+            ProblemRules tmp_rule = rule;
+            switch (rule) {
+                case ProblemRules::RULE_MODULE_DISTUPGRADE:
+                case ProblemRules::RULE_MODULE_INFARCH:
+                case ProblemRules::RULE_MODULE_UPDATE:
+                case ProblemRules::RULE_MODULE_BEST_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_JOB:
+                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_MODULE_PKG:
+                case ProblemRules::RULE_MODULE_BEST_2:
+                    break;
+                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
+                    if (false) {
+                        // TODO (jmracek) (modularExclude && modularExclude->has(source))
+                    } else {
+                        tmp_rule = ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4;
+                    }
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+                    elements.push_back(module_solvid2str(pool, source));
+                    elements.push_back(module_solvid2str(pool, target));
+                    std::sort(elements.begin(), elements.end());
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_MODULE_YUMOBS:
+                    elements.push_back(module_solvid2str(pool, source));
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, target));
+                    break;
+                case ProblemRules::RULE_MODULE_UNKNOWN:
+                    elements.push_back(description);
+                    break;
+                case ProblemRules::RULE_DISTUPGRADE:
+                case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_UPDATE:
+                case ProblemRules::RULE_JOB:
+                case ProblemRules::RULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
+                case ProblemRules::RULE_PKG:
+                case ProblemRules::RULE_BEST_1:
+                case ProblemRules::RULE_BEST_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_PKG_SAME_NAME:
+                case ProblemRules::RULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                case ProblemRules::RULE_YUMOBS:
+                case ProblemRules::RULE_UNKNOWN:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+                    libdnf_throw_assertion("Unexpected rpm problem rule in module solver problems");
+            }
+            if (is_unique(problem_output, tmp_rule, elements)) {
+                problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
+            }
+        }
+        if (is_unique(problems, problem_output)) {
+            problems.push_back(std::move(problem_output));
+        }
+    }
+    return problems;
+}
+
 
 }  // namespace libdnf5::base
