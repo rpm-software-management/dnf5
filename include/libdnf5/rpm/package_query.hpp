@@ -618,12 +618,26 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_LATEST_PER_ARCH
     void filter_latest_evr(int limit = 1);
 
+    /// Group packages by `name`. Then within each group, keep packages that correspond with up to `limit` of (all but) latest `evr`s in the group.
+    ///
+    /// @param limit            If `limit` > 0, keep `limit` number `evr`s in each group.
+    ///                         If `limit` < 0, keep all **but** `limit` last `evr`s in each group.
+    /// @since 5.2
+    void filter_latest_evr_any_arch(int limit = 1);
+
     /// Group packages by `name` and `arch`. Then within each group, keep packages that correspond with up to `limit` of (all but) earliest `evr`s in the group.
     ///
     /// @param limit            If `limit` > 0, keep `limit` number `evr`s in each group.
     ///                         If `limit` < 0, keep all **but** `limit` last `evr`s in each group.
     /// @since 5.0
     void filter_earliest_evr(int limit = 1);
+
+    /// Group packages by `name`. Then within each group, keep packages that correspond with up to `limit` of (all but) earliest `evr`s in the group.
+    ///
+    /// @param limit            If `limit` > 0, keep `limit` number `evr`s in each group.
+    ///                         If `limit` < 0, keep all **but** `limit` last `evr`s in each group.
+    /// @since 5.2
+    void filter_earliest_evr_any_arch(int limit = 1);
 
     /// Group packages by `name` and `arch`. Then within each group, keep packages that belong to a repo with the highest priority (the lowest number).
     /// The filter works only on available packages, installed packages are not affected.

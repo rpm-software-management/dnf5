@@ -115,6 +115,31 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
     }
 }
 
+void RpmPackageQueryTest::test_filter_latest_evr_ignore_arch() {
+    add_repo_solv("solv-multiarch");
+
+    {
+        // Result of filter_latest_evr should include a package from each arch
+        PackageQuery query(base);
+        query.filter_latest_evr(1);
+        std::vector<Package> expected = {
+            get_pkg("foo-0:1.2-1.x86_64"),
+            get_pkg("foo-0:1.2-2.noarch"),
+            get_pkg("bar-0:4.5-1.noarch"),
+            get_pkg("bar-0:4.5-2.x86_64"),
+        };
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+    {
+        // Result of filter_latest_evr_ignore_arch should include only the latest
+        // packages, regardless of arch
+        PackageQuery query(base);
+        query.filter_latest_evr_any_arch(1);
+        std::vector<Package> expected = {get_pkg("foo-0:1.2-2.noarch"), get_pkg("bar-0:4.5-2.x86_64")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+}
+
 void RpmPackageQueryTest::test_filter_earliest_evr() {
     add_repo_solv("solv-repo1");
     add_repo_solv("solv-24pkgs");
@@ -169,6 +194,31 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
         PackageQuery query(base);
         query.filter_earliest_evr(-23);
         std::vector<Package> expected = {get_pkg("pkg-0:1-24.noarch")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+}
+
+void RpmPackageQueryTest::test_filter_earliest_evr_ignore_arch() {
+    add_repo_solv("solv-multiarch");
+
+    {
+        // Result of filter_earliest_evr should include a package from each arch
+        PackageQuery query(base);
+        query.filter_earliest_evr(1);
+        std::vector<Package> expected = {
+            get_pkg("foo-0:1.2-1.x86_64"),
+            get_pkg("foo-0:1.2-2.noarch"),
+            get_pkg("bar-0:4.5-1.noarch"),
+            get_pkg("bar-0:4.5-2.x86_64"),
+        };
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+    {
+        // Result of filter_earliest_evr_ignore_arch should include only the earliest
+        // packages, regardless of arch
+        PackageQuery query(base);
+        query.filter_earliest_evr_any_arch(1);
+        std::vector<Package> expected = {get_pkg("foo-0:1.2-1.x86_64"), get_pkg("bar-0:4.5-1.noarch")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 }
