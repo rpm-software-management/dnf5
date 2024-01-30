@@ -33,7 +33,9 @@ class RpmPackageQueryTest : public BaseTestCase {
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_size);
     CPPUNIT_TEST(test_filter_latest_evr);
+    CPPUNIT_TEST(test_filter_latest_evr_ignore_arch);
     CPPUNIT_TEST(test_filter_earliest_evr);
+    CPPUNIT_TEST(test_filter_earliest_evr_ignore_arch);
     CPPUNIT_TEST(test_filter_name);
     CPPUNIT_TEST(test_filter_name_packgset);
     CPPUNIT_TEST(test_filter_nevra_packgset);
@@ -66,7 +68,9 @@ public:
 
     void test_size();
     void test_filter_latest_evr();
+    void test_filter_latest_evr_ignore_arch();
     void test_filter_earliest_evr();
+    void test_filter_earliest_evr_ignore_arch();
     void test_filter_name();
     void test_filter_name_packgset();
     void test_filter_nevra_packgset();

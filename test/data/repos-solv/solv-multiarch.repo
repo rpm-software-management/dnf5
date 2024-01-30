@@ -1,0 +1,13 @@
+=Ver: 3.0
+
+=Pkg: foo 1.2 1 x86_64
+=Prv: foo = 1.2 1
+
+=Pkg: foo 1.2 2 noarch
+=Prv: foo = 1.2 2
+
+=Pkg: bar 4.5 1 noarch
+=Prv: bar = 4.5 1
+
+=Pkg: bar 4.5 2 x86_64
+=Prv: bar = 4.5 2
