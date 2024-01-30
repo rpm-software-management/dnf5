@@ -25,12 +25,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/solver_problems.hpp"
 
+extern "C" {
+#include <solv/pool.h>
+}
 
 namespace libdnf5::base {
 
 
 std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_solver_problems(
     const libdnf5::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal);
+
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_module_solver_problems(
+    Pool * pool, const std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> & solver_problems);
 
 
 }  // namespace libdnf5::base
