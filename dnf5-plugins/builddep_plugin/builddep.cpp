@@ -219,18 +219,6 @@ bool BuildDepCommand::add_from_pkg(
     }
 }
 
-std::string escape_glob(const std::string & in) {
-    // Escape fnmatch glob characters in a string
-    std::string out;
-    for (const auto ch : in) {
-        if (ch == '*' || ch == '?' || ch == '[' || ch == ']' || ch == '\\') {
-            out += '\\';
-        }
-        out += ch;
-    }
-    return out;
-}
-
 void BuildDepCommand::run() {
     // get build dependencies from various inputs
     std::set<std::string> install_specs{};
@@ -281,7 +269,7 @@ void BuildDepCommand::run() {
     // Don't expand globs in pkg specs. The special characters in a pkg spec
     // such as the brackets in `python3dist(build[virtualenv])`, should be
     // treated as literal.
-    settings.expand_globs = false;
+    settings.set_expand_globs(false);
 
     for (const auto & spec : install_specs) {
         if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {
@@ -291,13 +279,7 @@ void BuildDepCommand::run() {
             // we do not download filelists and some files could be explicitly mentioned in provide section. The best
             // solution would be to merge result of provide and file search to prevent problems caused by modification
             // during distro lifecycle.
-
-            // TODO(egoode) once we have a setting to disable expanding globs
-            // in resolve_pkg_spec, escaping the glob characters will no longer
-            // be needed:
-            // https://github.com/rpm-software-management/dnf5/pull/1085
-            const auto & escaped_spec = escape_glob(spec);
-            goal->add_rpm_install(escaped_spec, settings);
+            goal->add_rpm_install(spec, settings);
         }
     }
 

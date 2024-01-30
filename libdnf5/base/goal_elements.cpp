@@ -93,6 +93,13 @@ bool ResolveSpecSettings::get_with_binaries() const {
     return p_impl->with_binaries;
 }
 
+void ResolveSpecSettings::set_expand_globs(bool expand_globs) {
+    p_impl->expand_globs = expand_globs;
+}
+bool ResolveSpecSettings::get_expand_globs() const {
+    return p_impl->expand_globs;
+}
+
 void ResolveSpecSettings::set_nevra_forms(std::vector<libdnf5::rpm::Nevra::Form> nevra_forms) {
     p_impl->nevra_forms = std::move(nevra_forms);
 }
