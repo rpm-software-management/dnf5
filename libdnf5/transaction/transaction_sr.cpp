@@ -69,12 +69,25 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
     if (json_object_object_get_ex(data, "version", &value) != 0) {
         std::string version = json_object_get_string(value);
         auto versions = libdnf5::utils::string::split(version, ".", 2);
+        if (versions.size() != 2) {
+            throw TransactionReplayError(
+                M_("Unexpected version format: \"{}\", supported version is \"{}\""),
+                version,
+                std::string(VERSION_MAJOR) + "." + std::string(VERSION_MINOR));
+        }
         if (versions[0] != std::string(VERSION_MAJOR)) {
             throw TransactionReplayError(
                 M_("Incompatible major version: \"{}\", supported major version is \"{}\""),
                 versions[0],
                 std::string(VERSION_MAJOR));
         }
+        if (std::find_if(versions[1].begin(), versions[1].end(), [](unsigned char c) {
+                return std::isdigit(c) == 0;
+            }) != versions[1].end()) {
+            throw TransactionReplayError(M_("Invalid minor version: \"{}\", number expected."), versions[1]);
+        }
+    } else {
+        throw TransactionReplayError(M_("Missing key \"version\"."));
     }
 
 
