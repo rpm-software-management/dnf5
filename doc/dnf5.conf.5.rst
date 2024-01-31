@@ -92,7 +92,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``cachedir``
     :ref:`string <string-label>`
 
-    Path to a directory used by various DNF5 subsystems for storing cache data.
+    Path to a directory used by various DNF5 subsystems for storing cache data
+    including repositories metadata and downloaded packages.
     Has a reasonable root-writable default depending on the distribution. DNF5
     needs to be able to create files and directories at this location.
 
