@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release') && github.repository_owner == 'rpm-software-management'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Create GitHub release
         run: |
           VERSION=$(grep -oP '^# \K[0-9.]*' CHANGELOG.md | head -n 1)
