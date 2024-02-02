@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "system_upgrade.hpp"
 
+#include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_path.hpp>
@@ -81,7 +82,6 @@ int call(const std::string & command, const std::vector<std::string> & args) {
 }
 
 namespace dnf5 {
-
 
 /// Helper for displaying messages with Plymouth
 ///
@@ -266,11 +266,10 @@ void SystemUpgradeDownloadCommand::run() {
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.base);
 
     auto & conf = ctx.base.get_config();
-    conf.opt_binds().at("tsflags").new_string(libdnf5::Option::Priority::RUNTIME, "test");
+    conf.get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
 
     if (no_downgrade->get_value()) {
-        const auto & settings = libdnf5::GoalJobSettings();
-        goal->add_rpm_upgrade(settings);
+        goal->add_rpm_upgrade();
     } else {
         goal->add_rpm_distro_sync();
     }
@@ -314,7 +313,8 @@ void SystemUpgradeDownloadCommand::run() {
     state.write();
 
     std::cout << "Download complete! Use `dnf5 system-upgrade reboot` to start the upgrade." << std::endl
-              << "To remove cached metadata and transaction, use `dnf5 system-upgrade clean`." << std::endl;
+              << "To cancel the upgrade and delete the downloaded upgrade files, use `dnf5 system-upgrade clean`."
+              << std::endl;
 }
 
 void check_state(const OfflineTransactionState & state) {
@@ -385,6 +385,8 @@ void SystemUpgradeRebootCommand::set_argument_parser() {
 }
 
 void SystemUpgradeRebootCommand::run() {
+    auto & ctx = get_context();
+
     auto state = get_state();
     check_state(state);
     if (state.get_data().status != STATUS_DOWNLOAD_COMPLETE) {
@@ -396,6 +398,12 @@ void SystemUpgradeRebootCommand::run() {
 
     if (!std::filesystem::is_directory(get_datadir())) {
         throw libdnf5::cli::CommandExitError(1, M_("data directory {} does not exist"), get_datadir().string());
+    }
+
+    std::cout << "The system will now reboot to upgrade to release version " << state.get_data().target_releasever
+              << ". Do you want to continue?" << std::endl;
+    if (!libdnf5::cli::utils::userconfirm::userconfirm(ctx.base.get_config())) {
+        return;
     }
 
     std::filesystem::create_symlink(get_datadir(), get_magic_symlink());
@@ -500,9 +508,7 @@ void SystemUpgradeUpgradeCommand::run() {
     // If the upgrade succeeded, remove downloaded data
     clean(ctx, get_datadir());
 
-    if (state.get_data().poweroff_after) {
-        reboot(ctx, true);
-    }
+    reboot(ctx, state.get_data().poweroff_after);
 }
 
 void SystemUpgradeCleanCommand::set_argument_parser() {

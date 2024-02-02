@@ -95,7 +95,6 @@ public:
 protected:
     libdnf5::OptionPath * get_cachedir() { return cachedir; };
     std::filesystem::path get_datadir() { return datadir; };
-    void set_datadir(std::filesystem::path new_datadir) { datadir = std::move(new_datadir); };
     std::filesystem::path get_magic_symlink() { return magic_symlink; };
     OfflineTransactionState get_state() { return state; };
 
