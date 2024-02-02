@@ -252,6 +252,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %config %{_datadir}/dnf5/aliases.d/compatibility.conf
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
+%dir %{_datadir}/dnf5/dnf5-plugins
+%dir %{_sysconfdir}/dnf/dnf5-plugins
 %doc %{_libdir}/dnf5/plugins/README
 %dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
@@ -702,7 +704,6 @@ automatically and regularly from systemd timers, cron jobs or similar.
 
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
-%config(noreplace) %{_sysconfdir}/dnf/automatic.conf
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
 %{_unitdir}/dnf-automatic-download.service
 %{_unitdir}/dnf-automatic-download.timer
