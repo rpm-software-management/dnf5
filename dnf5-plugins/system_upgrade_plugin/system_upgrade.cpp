@@ -84,6 +84,9 @@ int call(const std::string & command, const std::vector<std::string> & args) {
         if (WIFEXITED(status)) {
             return WEXITSTATUS(status);
         }
+        if (WIFSIGNALED(status)) {
+            return 128 + WTERMSIG(status);
+        }
         return -1;
     }
 }
@@ -632,7 +635,7 @@ void show_log(size_t boot_index) {
     const auto & boot_id = boot_entries[boot_index].boot_id;
     const auto rc = call(PATH_TO_JOURNALCTL, {"--boot", boot_id});
 
-    if (rc != 0) {
+    if (rc != 0 && rc != 141) {
         throw libdnf5::cli::CommandExitError(1, M_("Unable to match systemd journal entry."));
     }
 }
