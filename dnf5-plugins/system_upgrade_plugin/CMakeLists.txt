@@ -10,8 +10,9 @@ add_library(system_upgrade_cmd_plugin MODULE ${SYSTEM_UPGRADE_SOURCES})
 set_target_properties(system_upgrade_cmd_plugin PROPERTIES PREFIX "")
 
 pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
 
-target_link_libraries(system_upgrade_cmd_plugin PRIVATE dnf5 libdnf5 libdnf5-cli ${SDBUS_CPP_LIBRARIES})
+target_link_libraries(system_upgrade_cmd_plugin PRIVATE dnf5 libdnf5 libdnf5-cli ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
 
 install(FILES "dnf5-system-upgrade.service" DESTINATION ${SYSTEMD_UNIT_DIR})
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink

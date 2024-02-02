@@ -174,6 +174,7 @@ BuildRequires:  pkgconfig(smartcols)
 
 %if %{with dnf5_plugins}
 BuildRequires:  libcurl-devel >= 7.62.0
+BuildRequires:  systemd-devel
 %endif
 
 %if %{with dnf5daemon_server}

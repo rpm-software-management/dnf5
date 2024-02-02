@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "system_upgrade.hpp"
 
+#include "utils/string.hpp"
+
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -26,11 +28,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
+#include <systemd/sd-journal.h>
 
+#include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <string>
 
 using namespace libdnf5::cli;
+
+const std::string & ID_TO_IDENTIFY_BOOTS = OFFLINE_STARTED_ID;
 
 OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
     read();
@@ -123,6 +130,7 @@ private:
 /// Extend RpmTransCB to also display messages with Plymouth
 class PlymouthTransCB : public RpmTransCB {
 public:
+    PlymouthTransCB(PlymouthOutput plymouth) : plymouth(std::move(plymouth)) {}
     void elem_progress(
         [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
         [[maybe_unused]] uint64_t amount,
@@ -189,6 +197,7 @@ void SystemUpgradeCommand::register_subcommands() {
     register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeRebootCommand>(get_context()));
     register_subcommand(std::make_unique<SystemUpgradeUpgradeCommand>(get_context()));
+    register_subcommand(std::make_unique<SystemUpgradeLogCommand>(get_context()));
 }
 
 SystemUpgradeSubcommand::SystemUpgradeSubcommand(Context & context, const std::string & name)
@@ -215,6 +224,26 @@ void SystemUpgradeSubcommand::configure() {
     auto & ctx = get_context();
     const std::filesystem::path installroot{ctx.base.get_config().get_installroot_option().get_value()};
     magic_symlink = installroot / "system-update";
+
+    system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    target_releasever = ctx.base.get_vars()->get_value("releasever");
+}
+
+void SystemUpgradeSubcommand::log_status(const std::string & message, const std::string & message_id) const {
+    const auto & version = get_application_version();
+    const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
+    sd_journal_send(
+        "MESSAGE=%s",
+        message.c_str(),
+        "MESSAGE_ID=%s",
+        message_id.c_str(),
+        "SYSTEM_RELEASEVER=%s",
+        get_system_releasever().c_str(),
+        "TARGET_RELEASEVER=%s",
+        get_target_releasever().c_str(),
+        "DNF_VERSION=%s",
+        version_string.c_str(),
+        NULL);
 }
 
 void SystemUpgradeDownloadCommand::set_argument_parser() {
@@ -242,14 +271,9 @@ void SystemUpgradeDownloadCommand::configure() {
     SystemUpgradeSubcommand::configure();
 
     auto & ctx = get_context();
-    auto & conf = ctx.base.get_config();
 
     // Check --releasever
-    const auto & installroot = conf.get_installroot_option().get_value();
-    system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
-    target_releasever = ctx.base.get_vars()->get_value("releasever");
-
-    if (target_releasever == system_releasever) {
+    if (get_target_releasever() == get_system_releasever()) {
         throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version."));
     }
 
@@ -281,7 +305,7 @@ void SystemUpgradeDownloadCommand::run() {
 
     ctx.download_and_run(transaction);
 
-    if (!transaction.get_transaction_packages_count()) {
+    if (transaction.get_transaction_packages_count() == 0) {
         throw libdnf5::cli::CommandExitError(
             1, M_("The system-upgrade transaction is empty; your system is already up-to-date."));
     }
@@ -295,8 +319,8 @@ void SystemUpgradeDownloadCommand::run() {
 
     auto state = get_state();
     state.get_data().cachedir = get_cachedir()->get_value();
-    state.get_data().system_releasever = system_releasever;
-    state.get_data().target_releasever = target_releasever;
+    state.get_data().system_releasever = get_system_releasever();
+    state.get_data().target_releasever = get_target_releasever();
     state.get_data().status = STATUS_DOWNLOAD_COMPLETE;
     libdnf5::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
@@ -451,6 +475,8 @@ void SystemUpgradeUpgradeCommand::configure() {
 void SystemUpgradeUpgradeCommand::run() {
     auto & ctx = get_context();
 
+    log_status("Starting offline transaction. This will take a while.", OFFLINE_STARTED_ID);
+
     if (!std::filesystem::is_symlink(get_magic_symlink())) {
         throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
     }
@@ -483,7 +509,8 @@ void SystemUpgradeUpgradeCommand::run() {
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
-    auto callbacks = std::make_unique<PlymouthTransCB>();
+    PlymouthOutput plymouth;
+    auto callbacks = std::make_unique<PlymouthTransCB>(plymouth);
     /* callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions); */
     transaction.set_callbacks(std::move(callbacks));
 
@@ -505,6 +532,15 @@ void SystemUpgradeUpgradeCommand::run() {
         std::cerr << entry << std::endl;
     }
 
+    std::string upgrade_complete_message;
+    if (state.get_data().poweroff_after) {
+        upgrade_complete_message = "Upgrade complete! Cleaning up and powering off...";
+    } else {
+        upgrade_complete_message = "Upgrade complete! Cleaning up and rebooting...";
+    }
+    plymouth.message(upgrade_complete_message);
+    log_status(upgrade_complete_message, OFFLINE_STARTED_ID);
+
     // If the upgrade succeeded, remove downloaded data
     clean(ctx, get_datadir());
 
@@ -518,6 +554,116 @@ void SystemUpgradeCleanCommand::set_argument_parser() {
 void SystemUpgradeCleanCommand::run() {
     auto & ctx = get_context();
     clean(ctx, get_datadir());
+}
+
+struct BootEntry {
+    std::string boot_id;
+    std::string timestamp;
+    std::string system_releasever;
+    std::string target_releasever;
+};
+
+std::string get_journal_field(sd_journal * journal, const std::string & field) {
+    const char * data = nullptr;
+    size_t length = 0;
+    auto rc = sd_journal_get_data(journal, field.c_str(), reinterpret_cast<const void **>(&data), &length);
+    if (rc < 0 || data == nullptr) {
+        return "";
+    }
+    const auto prefix_length = field.length() + 1;
+    return std::string{data + prefix_length, length - prefix_length};
+}
+
+std::vector<BootEntry> find_boots(const std::string & message_id) {
+    std::vector<BootEntry> boots{};
+
+    sd_journal * journal = nullptr;
+    auto rc = sd_journal_open(&journal, SD_JOURNAL_LOCAL_ONLY);
+    if (rc < 0) {
+        throw libdnf5::RuntimeError(M_("Error reading journal: {}"), std::string{std::strerror(-rc)});
+    }
+
+    const auto & uid_filter_string = fmt::format("MESSAGE_ID={}", message_id);
+    rc = sd_journal_add_match(journal, uid_filter_string.c_str(), 0);
+    if (rc < 0) {
+        throw libdnf5::RuntimeError(M_("Add journal match failed: {}"), std::string{std::strerror(-rc)});
+    }
+    SD_JOURNAL_FOREACH(journal) {
+        uint64_t usec = 0;
+        rc = sd_journal_get_realtime_usec(journal, &usec);
+        auto sec = usec / (1000 * 1000);
+        boots.emplace_back(BootEntry{
+            get_journal_field(journal, "_BOOT_ID"),
+            libdnf5::utils::string::format_epoch(sec),
+            get_journal_field(journal, "SYSTEM_RELEASEVER"),
+            get_journal_field(journal, "TARGET_RELEASEVER"),
+        });
+    }
+
+    return boots;
+}
+
+void list_logs() {
+    const auto & boot_entries = find_boots(ID_TO_IDENTIFY_BOOTS);
+
+    std::cout << "The following boots appear to contain upgrade logs:" << std::endl;
+    for (size_t index = 0; index < boot_entries.size(); index += 1) {
+        const auto & entry = boot_entries[index];
+        std::cout << fmt::format(
+                         "{} / {}: {} {}→{}",
+                         index + 1,
+                         entry.boot_id,
+                         entry.timestamp,
+                         entry.system_releasever,
+                         entry.target_releasever)
+                  << std::endl;
+    }
+    if (boot_entries.empty()) {
+        std::cout << "No logs were found." << std::endl;
+    }
+}
+
+void show_log(size_t boot_index) {
+    const auto & boot_entries = find_boots(ID_TO_IDENTIFY_BOOTS);
+    if (boot_index >= boot_entries.size()) {
+        throw libdnf5::cli::CommandExitError(1, M_("Cannot find logs with this index."));
+    }
+
+    const auto & boot_id = boot_entries[boot_index].boot_id;
+    const auto rc = call(PATH_TO_JOURNALCTL, {"--boot", boot_id});
+
+    if (rc != 0) {
+        throw libdnf5::cli::CommandExitError(1, M_("Unable to match systemd journal entry."));
+    }
+}
+
+void SystemUpgradeLogCommand::set_argument_parser() {
+    SystemUpgradeSubcommand::set_argument_parser();
+
+    auto & ctx = get_context();
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
+    cmd.set_description("Show logs from past upgrades");
+
+    number = dynamic_cast<libdnf5::OptionString *>(parser.add_init_value(std::make_unique<libdnf5::OptionString>("")));
+
+    auto * number_arg = parser.add_new_named_arg("number");
+    number_arg->set_long_name("number");
+    number_arg->set_has_value(true);
+
+    number_arg->set_description("Which log to show. Run without any arguments to get a list of available logs.");
+    number_arg->link_value(number);
+    cmd.register_named_arg(number_arg);
+}
+
+void SystemUpgradeLogCommand::run() {
+    if (number->get_value().empty()) {
+        list_logs();
+    } else {
+        std::string number_string{number->get_value()};
+        show_log(std::stoul(number_string) - 1);
+    }
 }
 
 }  // namespace dnf5

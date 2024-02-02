@@ -28,6 +28,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <toml.hpp>
 
 const std::filesystem::path PATH_TO_PLYMOUTH{"/usr/bin/plymouth"};
+const std::filesystem::path PATH_TO_JOURNALCTL{"/usr/bin/journalctl"};
+const std::string OFFLINE_STARTED_ID{"3e0a5636d16b4ca4bbe5321d06c6aa62"};
+const std::string OFFLINE_FINISHED_ID{"8cec00a1566f4d3594f116450395f06c"};
 
 const std::string STATUS_DOWNLOAD_INCOMPLETE{"download-incomplete"};
 const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
@@ -93,16 +96,21 @@ public:
     void configure() override;
 
 protected:
-    libdnf5::OptionPath * get_cachedir() { return cachedir; };
-    std::filesystem::path get_datadir() { return datadir; };
-    std::filesystem::path get_magic_symlink() { return magic_symlink; };
-    OfflineTransactionState get_state() { return state; };
+    libdnf5::OptionPath * get_cachedir() const { return cachedir; };
+    std::filesystem::path get_datadir() const { return datadir; };
+    std::filesystem::path get_magic_symlink() const { return magic_symlink; };
+    OfflineTransactionState get_state() const { return state; };
+    std::string get_system_releasever() const { return system_releasever; };
+    std::string get_target_releasever() const { return target_releasever; };
+    void log_status(const std::string & message, const std::string & message_id) const;
 
 private:
     libdnf5::OptionPath * cachedir{nullptr};
     std::filesystem::path datadir{DEFAULT_DATADIR};
     std::filesystem::path magic_symlink;
     OfflineTransactionState state;
+    std::string target_releasever;
+    std::string system_releasever;
 };
 
 class SystemUpgradeDownloadCommand : public SystemUpgradeSubcommand {
@@ -115,8 +123,6 @@ public:
 private:
     libdnf5::OptionBool * no_downgrade{nullptr};
     libdnf5::OptionBool * distro_sync{nullptr};
-    std::string target_releasever;
-    std::string system_releasever;
     int state_version;
 };
 
@@ -150,6 +156,9 @@ public:
     explicit SystemUpgradeLogCommand(Context & context) : SystemUpgradeSubcommand(context, "log") {}
     void set_argument_parser() override;
     void run() override;
+
+private:
+    libdnf5::OptionString * number{nullptr};
 };
 
 }  // namespace dnf5
