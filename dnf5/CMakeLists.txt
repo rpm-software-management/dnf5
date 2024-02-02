@@ -48,6 +48,11 @@ install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/pl
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
 
+# Makes an empty directory for dnf5-plugins configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/dnf5-plugins")
+# Makes an empty directory for distribution dnf5-plugins configuration files
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/dnf5-plugins")
+
 
 add_subdirectory(po)
 add_subdirectory("include")

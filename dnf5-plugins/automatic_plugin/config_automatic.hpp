@@ -112,8 +112,6 @@ public:
         libdnf5::Logger & logger,
         libdnf5::Option::Priority priority = libdnf5::Option::Priority::AUTOMATICCONFIG);
 
-    libdnf5::OptionString automatic_config_file_path{"/etc/dnf/automatic.conf"};
-
     ConfigAutomaticCommands config_commands;
     ConfigAutomaticEmitters config_emitters;
     ConfigAutomaticEmail config_email;

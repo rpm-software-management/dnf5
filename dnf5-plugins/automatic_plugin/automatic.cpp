@@ -201,18 +201,6 @@ void AutomaticCommand::set_argument_parser() {
     auto & context = get_context();
     auto & parser = context.get_argument_parser();
 
-    auto arg_config_file = parser.add_new_positional_arg(
-        "config_path", libdnf5::cli::ArgumentParser::PositionalArg::OPTIONAL, nullptr, nullptr);
-    arg_config_file->set_description(_("Path to dnf5-automatic config file."));
-    arg_config_file->set_parse_hook_func(
-        [&]([[maybe_unused]] libdnf5::cli::ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            if (argc > 0) {
-                config_automatic.automatic_config_file_path.set(argv[0]);
-            }
-            return true;
-        });
-    cmd.register_positional_arg(arg_config_file);
-
     timer = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "timer", '\0', _("Apply random delay before execution."), false);
     auto downloadupdates = std::make_unique<libdnf5::cli::session::BoolOption>(
@@ -290,25 +278,26 @@ void AutomaticCommand::pre_configure() {
     base.set_download_callbacks(std::move(download_callbacks_uptr));
     download_callbacks_set = true;
 
+    // read the config file, use the first existing file in following locations:
+    //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf
+    //      - [installroot]/usr/share/dnf5/d  nf5-plugins/automatic.conf
     auto & main_config = base.get_config();
     bool use_host_config{main_config.get_use_host_config_option().get_value()};
-    bool user_defined_config_file_name{
-        config_automatic.automatic_config_file_path.get_priority() >= libdnf5::Option::Priority::COMMANDLINE};
-    std::filesystem::path conf_file_path{config_automatic.automatic_config_file_path.get_value()};
-    if (!use_host_config) {
-        if (!user_defined_config_file_name) {
-            // unless the --use-host-config was used or config file was passed on cmdline,
-            // prepend the installroot
-            std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
+    std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
+    std::vector<std::filesystem::path> possible_paths{"/etc/dnf/dnf5-plugins", "/usr/share/dnf5/dnf5-plugins"};
+    for (const auto & pth : possible_paths) {
+        std::filesystem::path conf_file_path{pth / "automatic.conf"};
+        if (!use_host_config) {
             conf_file_path = installroot_path / conf_file_path.relative_path();
         }
-    }
-    if (user_defined_config_file_name || std::filesystem::exists(conf_file_path)) {
-        libdnf5::ConfigParser parser;
-        parser.read(conf_file_path);
-        base.get_config().load_from_parser(
-            parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
-        config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
+        if (std::filesystem::exists(conf_file_path)) {
+            libdnf5::ConfigParser parser;
+            parser.read(conf_file_path);
+            base.get_config().load_from_parser(
+                parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
+            config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
+            break;
+        }
     }
 
     context.set_output_stream(output_stream);

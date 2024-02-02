@@ -25,7 +25,7 @@
 Synopsis
 ==========
 
-``dnf5 automatic [options] [<config file>]``
+``dnf5 automatic [options]``
 
 
 Options
@@ -46,12 +46,6 @@ Options
 ``--no-installupdates``
     Do not automatically install downloaded updates.
 
-
-Arguments
-=========
-
-``<config file>``
-    Path to configuration file. Defaults to ``/etc/dnf/automatic.conf``.
 
 
 Description
@@ -97,7 +91,7 @@ Setting the mode of operation of the program.
     Whether packages comprising the available updates should be applied by ``dnf-automatic.timer``, i.e. installed via RPM. Implies ``download_updates``. Note that if this is set to ``False``, downloaded packages will be left in the cache till the next successful DNF transaction. Note that the other timer units override this setting.
 
 ``download_updates``
-    boolean, default: False
+    boolean, default: True
 
     Whether packages comprising the available updates should be downloaded by ``dnf-automatic.timer``. Note that the other timer units override this setting.
 
