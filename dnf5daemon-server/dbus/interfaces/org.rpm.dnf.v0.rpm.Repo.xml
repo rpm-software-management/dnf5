@@ -60,6 +60,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="confirmed" type="b" direction="in"/>
     </method>
 
+    <!--
+        enable:
+        @ids: array of strings containing all repo ids to be enabled
+
+        Enable repositories based on the list of given ids.
+    -->
+    <method name="enable">
+        <arg name="ids" type="as" direction="in"/>
+    </method>
+
+    <!--
+        disable:
+        @ids: array of strings containing all repo ids to be disabled
+
+        Disable repositories based on the list of given ids.
+    -->
+    <method name="disable">
+        <arg name="ids" type="as" direction="in"/>
+    </method>
+
 </interface>
 
 </node>

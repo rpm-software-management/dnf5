@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/comps/group.hpp"
 #include "services/goal/goal.hpp"
 #include "services/repo/repo.hpp"
-#include "services/repoconf/repo_conf.hpp"
 #include "services/rpm/rpm.hpp"
 #include "utils.hpp"
 
@@ -130,7 +129,6 @@ Session::Session(
 
     // instantiate all services provided by the daemon
     services.emplace_back(std::make_unique<Base>(*this));
-    services.emplace_back(std::make_unique<RepoConf>(*this));
     services.emplace_back(std::make_unique<Repo>(*this));
     services.emplace_back(std::make_unique<Rpm>(*this));
     services.emplace_back(std::make_unique<Goal>(*this));
