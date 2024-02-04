@@ -548,15 +548,6 @@ bool print_transaction_table(Transaction & transaction) {
                 }
             }
 
-            // highlight incoming packages with epoch/version change
-            if (tspkg.get_package().get_epoch() != replaced.get_epoch() ||
-                tspkg.get_package().get_version() != replaced.get_version()) {
-                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "lightblue");
-                if (termwidth < single_line_min) {
-                    scols_cell_set_color(scols_line_get_cell(ln_pre, COL_EVR), "lightblue");
-                }
-            }
-
             // print SIZE, filter changes on small package, bigger pakages need 10% of size change
             double long difference =
                 abs((double long)100 - ((double long)100 / (double long)pkg.get_install_size() *
@@ -584,6 +575,18 @@ bool print_transaction_table(Transaction & transaction) {
                         (libdnf5::cli::utils::units::format_size_aligned(tspkg_size) + arrow +
                          libdnf5::cli::utils::units::format_size_aligned(replaced_size))
                             .c_str());
+                }
+            }
+
+            // highlight incoming packages with epoch, major/minor version change
+            std::string tmpver = tspkg.get_package().get_version();
+            std::string tmprepver = replaced.get_version();
+            std::string version = tmpver.substr(0, tmpver.find_first_of(".-", tmpver.find('.') + 1));
+            std::string rep_version = tmprepver.substr(0, tmprepver.find_first_of(".-", tmprepver.find('.') + 1));
+            if (tspkg.get_package().get_epoch() != replaced.get_epoch() || version != rep_version) {
+                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "lightblue");
+                if (termwidth < single_line_min) {
+                    scols_cell_set_color(scols_line_get_cell(ln_pre, COL_EVR), "lightblue");
                 }
             }
 
