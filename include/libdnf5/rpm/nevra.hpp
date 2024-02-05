@@ -271,7 +271,7 @@ bool cmp_naevr(const L & lhs, const R & rhs) {
 };
 
 template <typename T>
-bool cmp_naevr(const T & lhs, const T rhs) {
+bool cmp_naevr(const T & lhs, const T & rhs) {
     return cmp_naevr<T, T>(lhs, rhs);
 }
 
