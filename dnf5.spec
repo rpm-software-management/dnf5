@@ -705,12 +705,8 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
-%{_unitdir}/dnf-automatic-download.service
-%{_unitdir}/dnf-automatic-download.timer
-%{_unitdir}/dnf-automatic-install.service
-%{_unitdir}/dnf-automatic-install.timer
-%{_unitdir}/dnf-automatic-notifyonly.service
-%{_unitdir}/dnf-automatic-notifyonly.timer
+%{_unitdir}/dnf5-automatic.service
+%{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
 %{_unitdir}/dnf-automatic.timer
 %if %{with dnf5_obsoletes_dnf}
