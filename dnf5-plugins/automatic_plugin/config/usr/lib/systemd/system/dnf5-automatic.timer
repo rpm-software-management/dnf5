@@ -1,5 +1,5 @@
 [Unit]
-Description=dnf-automatic-install timer
+Description=dnf-automatic timer
 ConditionPathExists=!/run/ostree-booted
 Wants=network-online.target
 

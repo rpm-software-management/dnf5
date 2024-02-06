@@ -1,5 +1,5 @@
 [Unit]
-Description=dnf automatic download updates
+Description=dnf5 automatic
 ConditionPathExists=!/run/ostree-booted
 After=network-online.target
 
@@ -8,4 +8,4 @@ Type=oneshot
 Nice=19
 IOSchedulingClass=2
 IOSchedulingPriority=7
-ExecStart=/usr/bin/dnf5 automatic /etc/dnf/automatic.conf --timer --downloadupdates --no-installupdates
+ExecStart=/usr/bin/dnf5 automatic --timer
