@@ -26,6 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
+namespace {
+
 // advisory list table columns
 enum { COL_ADVISORY_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
 
@@ -66,6 +68,40 @@ void add_line_into_advisorylist_table(
         struct libscols_cell * cl = scols_line_get_cell(ln, COL_ADVISORY_PACKAGE);
         scols_cell_set_color(cl, "green");
     }
+}
+
+}  // namespace
+
+
+void print_advisorylist_table(
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_not_installed,
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_installed) {
+    struct libscols_table * table = create_advisorylist_table("Name");
+    for (auto & adv_pkg : advisory_package_list_not_installed) {
+        auto advisory = adv_pkg->get_advisory();
+        add_line_into_advisorylist_table(
+            table,
+            advisory->get_name().c_str(),
+            advisory->get_type().c_str(),
+            advisory->get_severity().c_str(),
+            adv_pkg->get_nevra().c_str(),
+            advisory->get_buildtime(),
+            false);
+    }
+    for (auto & adv_pkg : advisory_package_list_installed) {
+        auto advisory = adv_pkg->get_advisory();
+        add_line_into_advisorylist_table(
+            table,
+            advisory->get_name().c_str(),
+            advisory->get_type().c_str(),
+            advisory->get_severity().c_str(),
+            adv_pkg->get_nevra().c_str(),
+            advisory->get_buildtime(),
+            true);
+    }
+    sort_advisorylist_table(table);
+    scols_print_table(table);
+    scols_unref_table(table);
 }
 
 
@@ -112,6 +148,5 @@ void print_advisorylist_references_table(
     scols_print_table(table);
     scols_unref_table(table);
 }
-
 
 }  // namespace libdnf5::cli::output

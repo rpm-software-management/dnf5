@@ -18,36 +18,37 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF5_CLI_OUTPUT_SMARTCOLS_TABLE_WRAPPER_HPP
-#define LIBDNF5_CLI_OUTPUT_SMARTCOLS_TABLE_WRAPPER_HPP
+#ifndef LIBDNF5_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_IMPL_HPP
+#define LIBDNF5_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_IMPL_HPP
+
+#include "libdnf5-cli/output/package_list_sections.hpp"
+#include "libdnf5-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
+#include <iostream>
 
 namespace libdnf5::cli::output {
 
-/// C++ wrapper around libscols_table * structure to correctly handle memory
-/// allocation/deallocation.
-class SmartcolsTableWrapper {
+class PackageListSections::Impl {
 public:
-    SmartcolsTableWrapper();
-    SmartcolsTableWrapper(SmartcolsTableWrapper && other) noexcept : tb(other.tb), sb(other.sb) {
-        other.sb = nullptr;  // Transfer ownership
-        other.tb = nullptr;
+    Impl() {
+        table = scols_new_table();
+        scols_table_enable_noheadings(table, 1);
+        if (libdnf5::cli::tty::is_interactive()) {
+            scols_table_enable_colors(table, 1);
+        }
     }
-    ~SmartcolsTableWrapper();
 
-    libscols_table * operator*() { return tb; }
+    ~Impl() { scols_unref_table(table); }
 
-private:
-    // Disallow copy operations
-    SmartcolsTableWrapper(const SmartcolsTableWrapper &) = delete;
-    SmartcolsTableWrapper & operator=(const SmartcolsTableWrapper &) = delete;
+    void print();
 
-    libscols_table * tb;
-    libscols_symbols * sb;
+    struct libscols_table * table = nullptr;
+    // keeps track of the first and the last line of sections
+    std::vector<std::tuple<std::string, struct libscols_line *, struct libscols_line *>> sections;
 };
 
 }  // namespace libdnf5::cli::output
 
-#endif  // LIBDNF5_CLI_OUTPUT_SMARTCOLS_TABLE_WRAPPER_HPP
+#endif  // LIBDNF5_CLI_OUTPUT_PACKAGE_LIST_SECTIONS_IMPL_HPP

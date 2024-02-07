@@ -19,7 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_info.hpp"
 
+#include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/groupinfo.hpp>
+
+#include <iostream>
 
 namespace dnf5 {
 
@@ -27,7 +30,8 @@ using namespace libdnf5::cli;
 
 void GroupInfoCommand::print(const libdnf5::comps::GroupQuery & query) {
     for (auto group : query.list()) {
-        libdnf5::cli::output::print_groupinfo_table(group);
+        libdnf5::cli::output::GroupAdapter cli_group(group);
+        libdnf5::cli::output::print_groupinfo_table(cli_group);
         std::cout << '\n';
     }
 }

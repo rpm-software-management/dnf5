@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf5-cli/exception.hpp>
+#include <libdnf5-cli/output/adapters/transaction_tmpl.hpp>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
@@ -68,7 +69,8 @@ void TransactionCommand::run_transaction() {
     ctx.reset_download_cb();
 
     // print the transaction to the user and ask for confirmation
-    if (!libdnf5::cli::output::print_transaction_table(dbus_goal_wrapper)) {
+    libdnf5::cli::output::TransactionAdapter cli_output_transaction(dbus_goal_wrapper);
+    if (!libdnf5::cli::output::print_transaction_table(cli_output_transaction)) {
         return;
     }
 
