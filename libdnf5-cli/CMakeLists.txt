@@ -39,7 +39,7 @@ target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(SMARTCOLS REQUIRED smartcols)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE "${SMARTCOLS_MODULE_NAME}")
-target_link_libraries(libdnf5-cli PUBLIC ${SMARTCOLS_LIBRARIES})
+target_link_libraries(libdnf5-cli PRIVATE ${SMARTCOLS_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string

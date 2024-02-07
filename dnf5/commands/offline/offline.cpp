@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/offline.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5-cli/output/adapters/transaction_tmpl.hpp"
+
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
@@ -468,7 +470,8 @@ void OfflineExecuteCommand::run() {
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
-    libdnf5::cli::output::print_transaction_table(transaction);
+    libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
+    libdnf5::cli::output::print_transaction_table(cli_output_transaction);
 
     PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);

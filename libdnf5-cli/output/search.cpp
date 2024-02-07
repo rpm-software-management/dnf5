@@ -31,10 +31,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
+namespace {
+
 using namespace libdnf5::cli::tty;
 
 /// Get a string representation of a key that was matched together with a type of the match.
-static std::string key_to_string(const matched_key_pair & key_pair) {
+std::string key_to_string(const matched_key_pair & key_pair) {
     auto & [key, key_match] = key_pair;
     if (key_match == SearchKeyMatch::PARTIAL) {
         return key;
@@ -43,36 +45,44 @@ static std::string key_to_string(const matched_key_pair & key_pair) {
     }
 }
 
+
 /// Auxiliary method for aggregating a list of matched keys into a string.
-static std::string concat_keys(const std::string & acc, const matched_key_pair & pair) {
+std::string concat_keys(const std::string & acc, const matched_key_pair & pair) {
     return acc.empty() ? key_to_string(pair) : acc + ", " + key_to_string(pair);
 }
 
+
 /// Construct a string representation of a list of matched keys.
-static std::string construct_keys_string(const std::vector<matched_key_pair> & key_pairs) {
+std::string construct_keys_string(const std::vector<matched_key_pair> & key_pairs) {
     return std::accumulate(key_pairs.begin(), key_pairs.end(), std::string{}, concat_keys);
 }
 
+
 /// Auxiliary method for aggregating a pattern matching expression into a string.
-static std::string concat_patterns(const std::string & acc, const std::string & pattern) {
+std::string concat_patterns(const std::string & acc, const std::string & pattern) {
     return acc.empty() ? pattern : acc + "|" + pattern;
 }
 
+
 /// Construct a regular expression for matching all occurrences of any given pattern in the text.
-static std::regex construct_patterns_regex(std::vector<std::string> patterns) {
+std::regex construct_patterns_regex(std::vector<std::string> patterns) {
     // Glob patterns are skipped from highlighting for now.
     std::erase_if(patterns, [](const auto & pattern) { return libdnf5::utils::is_glob_pattern(pattern.c_str()); });
     auto inner_patterns_regex_str = std::accumulate(patterns.begin(), patterns.end(), std::string{}, concat_patterns);
     return std::regex("(" + inner_patterns_regex_str + ")", std::regex_constants::icase);
 }
 
+
 /// Construct a highlighting regex replacement format string.
 /// In the end this is just wrapping all matched patterns with green highlighting markup.
-static std::string construct_highlight_regex_format() {
+std::string construct_highlight_regex_format() {
     std::stringstream replace_format;
     replace_format << green << "$1" << reset;
     return replace_format.str();
 }
+
+}  // namespace
+
 
 void print_search_results(const SearchResults & results) {
     if (results.group_results.empty()) {

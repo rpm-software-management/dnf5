@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "wrappers/dbus_group_wrapper.hpp"
 
+#include <libdnf5-cli/output/adapters/comps_tmpl.hpp>
 #include <libdnf5-cli/output/groupinfo.hpp>
 #include <libdnf5-cli/output/grouplist.hpp>
 #include <libdnf5/conf/option.hpp>
@@ -109,17 +110,20 @@ void GroupListCommand::run() {
         .storeResultsTo(raw_groups);
 
     std::vector<DbusGroupWrapper> groups{};
+    std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> cli_groups;
     for (auto & group : raw_groups) {
         groups.push_back(DbusGroupWrapper(group));
+        cli_groups.emplace_back(new libdnf5::cli::output::GroupAdapter(DbusGroupWrapper(group)));
     }
 
     if (command == "info") {
         for (auto & group : groups) {
-            libdnf5::cli::output::print_groupinfo_table(group);
+            libdnf5::cli::output::GroupAdapter cli_group(group);
+            libdnf5::cli::output::print_groupinfo_table(cli_group);
             std::cout << '\n';
         }
     } else {
-        libdnf5::cli::output::print_grouplist_table(groups);
+        libdnf5::cli::output::print_grouplist_table(cli_groups);
     }
 }
 

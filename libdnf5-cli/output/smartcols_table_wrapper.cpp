@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf5-cli/output/smartcols_table_wrapper.hpp"
+#include "smartcols_table_wrapper.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
