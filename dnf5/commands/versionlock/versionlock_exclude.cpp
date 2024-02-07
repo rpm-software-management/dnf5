@@ -125,7 +125,7 @@ void VersionlockExcludeCommand::run() {
     const libdnf5::ResolveSpecSettings settings{
         .with_nevra = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
     for (const auto & spec : pkg_specs) {
-        libdnf5::rpm::PackageQuery query(ctx.base);
+        libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
         query.resolve_pkg_spec(spec, settings, false);
         if (query.empty()) {
             std::cerr << libdnf5::utils::sformat(_("No package found for \"{}\"."), spec) << std::endl;
