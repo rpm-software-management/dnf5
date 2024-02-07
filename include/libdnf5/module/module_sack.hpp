@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_SACK_HPP
 #define LIBDNF5_MODULE_MODULE_SACK_HPP
 
+#include "module_status.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/solver_problems.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
@@ -52,14 +54,6 @@ class RepoSack;
 }  // namespace libdnf5::repo
 
 namespace libdnf5::module {
-
-
-// TODO(pkratoch): Make this a docstring.
-// ENABLED - a module that has an enabled stream.
-// DISABLED - a module that is disabled.
-// AVAILABLE - otherwise.
-enum class ModuleStatus { AVAILABLE, ENABLED, DISABLED };
-
 
 /// Container with data and methods related to modules
 class ModuleSack {
@@ -126,20 +120,6 @@ private:
 };
 
 
-class InvalidModuleStatus : public libdnf5::Error {
-public:
-    InvalidModuleStatus(const std::string & status);
-
-    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
-    const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
-};
-
-
-std::string module_status_to_string(ModuleStatus status);
-ModuleStatus module_status_from_string(const std::string & status);
-
-
 }  // namespace libdnf5::module
-
 
 #endif  // LIBDNF5_MODULE_MODULE_SACK_HPP
