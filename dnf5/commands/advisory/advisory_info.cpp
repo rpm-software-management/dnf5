@@ -30,7 +30,7 @@ using namespace libdnf5::cli;
 
 void AdvisoryInfoCommand::process_and_print_queries(
     Context & ctx, libdnf5::advisory::AdvisoryQuery & advisories, const std::vector<std::string> & package_specs) {
-    libdnf5::rpm::PackageQuery packages(ctx.base);
+    libdnf5::rpm::PackageQuery packages(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     if (package_specs.size() > 0) {
         packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
     }
