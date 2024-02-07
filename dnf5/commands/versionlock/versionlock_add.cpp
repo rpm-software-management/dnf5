@@ -90,10 +90,10 @@ void VersionlockAddCommand::run() {
     auto & ctx = get_context();
     auto package_sack = ctx.base.get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
+    auto orig_size = vl_config.get_packages().size();
 
     const auto comment = format_comment("add");
 
-    bool changed{false};
     const libdnf5::ResolveSpecSettings settings{
         .with_nevra = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
     for (const auto & spec : pkg_specs) {
@@ -118,7 +118,6 @@ void VersionlockAddCommand::run() {
             }
             versions.emplace(evr);
             if (lock_version(vl_config, pkg, comment)) {
-                changed = true;
                 std::cout << libdnf5::utils::sformat(_("Adding versionlock on \"{0} = {1}\"."), pkg.get_name(), evr)
                           << std::endl;
             } else {
@@ -126,7 +125,7 @@ void VersionlockAddCommand::run() {
             }
         }
     }
-    if (changed) {
+    if (vl_config.get_packages().size() != orig_size) {
         vl_config.save();
     }
 }
