@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_list.hpp"
 
+#include <libdnf5-cli/output/adapters/advisory.hpp>
 #include <libdnf5-cli/output/advisorylist.hpp>
 #include <libdnf5/advisory/advisory_package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -63,12 +64,22 @@ void AdvisoryListCommand::process_and_print_queries(
         not_installed_pkgs = advisories.get_advisory_packages_sorted(installed_packages, libdnf5::sack::QueryCmp::GT);
     }
 
+    std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_installed_pkgs;
+    std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_not_installed_pkgs;
     if (with_bz->get_value()) {
         libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
     } else if (with_cve->get_value()) {
         libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");
     } else {
-        libdnf5::cli::output::print_advisorylist_table(not_installed_pkgs, installed_pkgs);
+        cli_installed_pkgs.reserve(installed_pkgs.size());
+        for (const auto & obj : installed_pkgs) {
+            cli_installed_pkgs.emplace_back(new output::AdvisoryPackageAdapter(obj));
+        }
+        cli_not_installed_pkgs.reserve(not_installed_pkgs.size());
+        for (const auto & obj : not_installed_pkgs) {
+            cli_not_installed_pkgs.emplace_back(new output::AdvisoryPackageAdapter(obj));
+        }
+        libdnf5::cli::output::print_advisorylist_table(cli_not_installed_pkgs, cli_installed_pkgs);
     }
 }
 

@@ -21,12 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5DAEMON_CLIENT_WRAPPERS_DBUS_REPO_WRAPPER_HPP
 
 #include <dnf5daemon-server/dbus.hpp>
+#include <libdnf5-cli/output/interfaces/repo.hpp>
 
 #include <vector>
 
 namespace dnfdaemon::client {
 
-class DbusRepoWrapper {
+class DbusRepoWrapper : public libdnf5::cli::output::IRepoInfo {
 public:
     explicit DbusRepoWrapper(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
 

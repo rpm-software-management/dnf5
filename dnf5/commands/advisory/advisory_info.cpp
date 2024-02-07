@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_info.hpp"
 
+#include <libdnf5-cli/output/adapters/advisory.hpp>
 #include <libdnf5-cli/output/advisoryinfo.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
@@ -62,7 +63,8 @@ void AdvisoryInfoCommand::process_and_print_queries(
 
     for (auto advisory : advisories) {
         libdnf5::cli::output::AdvisoryInfo advisory_info;
-        advisory_info.add_advisory(advisory);
+        output::AdvisoryAdapter cli_advisory(advisory);
+        advisory_info.add_advisory(cli_advisory);
         advisory_info.print();
         std::cout << std::endl;
     }

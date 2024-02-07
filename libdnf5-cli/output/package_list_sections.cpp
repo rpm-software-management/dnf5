@@ -19,33 +19,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/package_list_sections.hpp"
 
-#include "libdnf5-cli/tty.hpp"
+#include "package_list_sections_impl.hpp"
+
+#include "libdnf5-cli/output/adapters/package.hpp"
 
 #include <libdnf5/rpm/nevra.hpp>
-#include <libdnf5/rpm/package_set.hpp>
-#include <libsmartcols/libsmartcols.h>
 
 #include <algorithm>
-#include <iostream>
-#include <string>
 
 namespace libdnf5::cli::output {
 
-PackageListSections::PackageListSections() {
-    table = scols_new_table();
-    scols_table_enable_noheadings(table, 1);
-    if (libdnf5::cli::tty::is_interactive()) {
-        scols_table_enable_colors(table, 1);
-    }
-}
-
-
-PackageListSections::~PackageListSections() {
-    scols_unref_table(table);
-}
-
-
-void PackageListSections::print() {
+void PackageListSections::Impl::print() {
     // smartcols does not support spanning the text among multiple cells to create
     // heading lines. To create sections, print the headings separately and than print
     // appropriate range of the table.
@@ -66,10 +50,21 @@ void PackageListSections::print() {
 }
 
 
+PackageListSections::PackageListSections() : p_impl{new Impl} {}
+
+
+PackageListSections::~PackageListSections() = default;
+
+
+void PackageListSections::print() {
+    p_impl->print();
+}
+
+
 void PackageListSections::setup_cols() {
-    scols_table_new_column(table, "Name", 1, 0);
-    scols_table_new_column(table, "Version", 1, 0);
-    scols_table_new_column(table, "Repository", 1, SCOLS_FL_TRUNC);
+    scols_table_new_column(p_impl->table, "Name", 1, 0);
+    scols_table_new_column(p_impl->table, "Version", 1, 0);
+    scols_table_new_column(p_impl->table, "Repository", 1, SCOLS_FL_TRUNC);
 }
 
 
@@ -90,13 +85,13 @@ bool PackageListSections::add_section(
         struct libscols_line * first_line = nullptr;
         struct libscols_line * last_line = nullptr;
         for (const auto & pkg : packages) {
-            struct libscols_line * ln = scols_table_new_line(table, NULL);
+            struct libscols_line * ln = scols_table_new_line(p_impl->table, NULL);
             if (first_line == nullptr) {
                 first_line = ln;
             }
             last_line = ln;
             if (colorizer) {
-                scols_line_set_color(ln, colorizer->get_pkg_color(pkg).c_str());
+                scols_line_set_color(ln, colorizer->get_pkg_color(PackageAdapter(pkg)).c_str());
             }
             scols_line_set_data(ln, COL_NA, pkg.get_na().c_str());
             scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
@@ -109,7 +104,7 @@ bool PackageListSections::add_section(
             auto obsoletes_it = obsoletes.find(pkg.get_id());
             if (obsoletes_it != obsoletes.end() && !obsoletes_it->second.empty()) {
                 for (const auto & pkg_ob : obsoletes_it->second) {
-                    struct libscols_line * ln = scols_table_new_line(table, NULL);
+                    struct libscols_line * ln = scols_table_new_line(p_impl->table, NULL);
                     last_line = ln;
                     scols_line_set_data(ln, COL_NA, ("    " + pkg_ob.get_na()).c_str());
                     scols_line_set_data(ln, COL_EVR, pkg_ob.get_evr().c_str());
@@ -117,12 +112,11 @@ bool PackageListSections::add_section(
                 }
             }
         }
-        sections.emplace_back(heading, first_line, last_line);
+        p_impl->sections.emplace_back(heading, first_line, last_line);
         return true;
     } else {
         return false;
     }
 }
-
 
 }  // namespace libdnf5::cli::output

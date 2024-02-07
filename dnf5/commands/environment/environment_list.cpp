@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment_list.hpp"
 
+#include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/environmentlist.hpp>
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/environment/query.hpp>
@@ -66,7 +67,11 @@ void EnvironmentListCommand::run() {
         query.filter_installed(false);
     }
 
-    libdnf5::cli::output::print_environmentlist_table(query.list());
+    std::vector<std::unique_ptr<libdnf5::cli::output::IEnvironment>> cli_envs;
+    for (auto & env : query.list()) {
+        cli_envs.emplace_back(new libdnf5::cli::output::EnvironmentAdapter(env));
+    }
+    libdnf5::cli::output::print_environmentlist_table(cli_envs);
 }
 
 }  // namespace dnf5

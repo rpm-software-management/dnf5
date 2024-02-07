@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP
 
 #include <libdnf5/rpm/package_set.hpp>
-#include <libsmartcols/libsmartcols.h>
 
 namespace libdnf5::cli::output {
 

@@ -20,12 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/output/advisorysummary.hpp"
 
-#include "libdnf5-cli/output/key_value_table.hpp"
+#include "key_value_table.hpp"
 
 #include <iostream>
 
 namespace libdnf5::cli::output {
-
 
 void print_advisorysummary_table(const libdnf5::advisory::AdvisoryQuery & advisories, const std::string & mode) {
     KeyValueTable output_table;
@@ -73,6 +72,5 @@ void print_advisorysummary_table(const libdnf5::advisory::AdvisoryQuery & adviso
 
     output_table.print();
 }
-
 
 }  // namespace libdnf5::cli::output

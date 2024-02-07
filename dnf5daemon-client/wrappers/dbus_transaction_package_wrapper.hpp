@@ -39,6 +39,7 @@ public:
           transaction_item_attrs(std::get<3>(dti)),
           package(std::get<4>(dti)) {}
 
+    const DbusPackageWrapper & get_package() const noexcept { return package; }
     DbusPackageWrapper & get_package() noexcept { return package; }
     libdnf5::transaction::TransactionItemAction get_action() const noexcept { return action; }
     libdnf5::transaction::TransactionItemReason get_reason() const noexcept { return reason; }

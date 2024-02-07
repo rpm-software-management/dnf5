@@ -23,10 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pkg_colorizer.hpp"
 
+#include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_set.hpp>
-#include <libsmartcols/libsmartcols.h>
 
+#include <map>
+#include <memory>
 #include <string>
+#include <vector>
 
 namespace libdnf5::cli::output {
 
@@ -45,21 +48,19 @@ public:
     /// @param colorizer Optional class to select color for packages in output
     /// @param obsoletes Optional map of obsoleted packages by obsoleter
     /// @return Returns `true` in case at least one package was added, `false` otherwise
-    bool virtual add_section(
+    virtual bool add_section(
         const std::string & heading,
         const libdnf5::rpm::PackageSet & pkg_set,
         const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
         const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {});
 
     /// Setup table columns
-    void virtual setup_cols();
+    virtual void setup_cols();
 
 protected:
-    struct libscols_table * table = nullptr;
-    // keeps track of the first and the last line of sections
-    std::vector<std::tuple<std::string, struct libscols_line *, struct libscols_line *>> sections;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
-
 
 }  // namespace libdnf5::cli::output
 

@@ -88,6 +88,21 @@ void RepolistCommand::set_argument_parser() {
     cmd.register_positional_arg(repos);
 }
 
+
+class CliRepoAdapter : public libdnf5::cli::output::IRepo {
+public:
+    CliRepoAdapter(const DbusRepoWrapper * repo) : repo{repo} {}
+
+    std::string get_id() const override { return repo->get_id(); }
+
+    bool is_enabled() const override { return repo->is_enabled(); }
+
+    std::string get_name() const override { return repo->get_name(); }
+
+private:
+    const DbusRepoWrapper * repo;
+};
+
 void RepolistCommand::run() {
     auto & ctx = get_context();
 
@@ -146,8 +161,15 @@ void RepolistCommand::run() {
     if (command == "repolist") {
         // print the output table
         bool with_status = enable_disable_option->get_value() == "all";
-        libdnf5::cli::output::print_repolist_table(
-            DbusQueryRepoWrapper(repositories), with_status, libdnf5::cli::output::COL_REPO_ID);
+
+        std::vector<std::unique_ptr<libdnf5::cli::output::IRepo>> cli_repos;
+        auto repo_query = DbusQueryRepoWrapper(repositories);
+        cli_repos.reserve(repo_query.get_data().size());
+        for (const auto & repo : repo_query.get_data()) {
+            cli_repos.emplace_back(new CliRepoAdapter(repo.get()));
+        }
+
+        libdnf5::cli::output::print_repolist_table(cli_repos, with_status, libdnf5::cli::output::COL_REPO_ID);
     } else {
         // repoinfo command
 

@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_list.hpp"
 
+#include <libdnf5-cli/output/adapters/module.hpp>
 #include <libdnf5-cli/output/modulelist.hpp>
 #include <libdnf5/module/module_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -87,7 +88,12 @@ void ModuleListCommand::run() {
 }
 
 void ModuleListCommand::print(const libdnf5::module::ModuleQuery & query) {
-    libdnf5::cli::output::print_modulelist_table(query.list());
+    std::vector<std::unique_ptr<output::IModuleItem>> items;
+    items.reserve(query.list().size());
+    for (auto & obj : query.list()) {
+        items.emplace_back(new output::ModuleItemAdapter(obj));
+    }
+    libdnf5::cli::output::print_modulelist_table(items);
 }
 
 void ModuleListCommand::print_hint() {

@@ -31,6 +31,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
+namespace {
+
 using StrGetter = std::string (libdnf5::rpm::Package::*)() const;
 using VecStrGetter = std::vector<std::string> (libdnf5::rpm::Package::*)() const;
 using UnsignedLongLongGetter = unsigned long long (libdnf5::rpm::Package::*)() const;
@@ -46,7 +48,7 @@ using Getter = std::variant<
     TransactionItemReasonGetter,
     StrGetterLambda>;
 
-static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
+const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"name", &libdnf5::rpm::Package::get_name},
     {"epoch", &libdnf5::rpm::Package::get_epoch},
     {"version", &libdnf5::rpm::Package::get_version},
@@ -96,20 +98,11 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
      }},
 };
 
-void print_available_pkg_attrs(std::FILE * target) {
-    std::set<std::string> output;
-    for (const auto & pair : NAME_TO_GETTER) {
-        output.insert(pair.first);
-    }
-    for (const auto & line : output) {
-        fmt::print(target, "{}\n", line);
-    }
-}
 
 // Argument format contains partially copied and converted queryformat, for example: "name: %-30{{name".
 // We know the tag "name" is valid so this function check align spec "-30" and if it is valid
 // it overwrites the format with fmt formatting: "name: {:<30}".
-static bool replace_tag_in_format(
+bool replace_tag_in_format(
     std::string & format,
     std::string::size_type & format_size,
     std::string::size_type tag_start,
@@ -162,6 +155,7 @@ static bool replace_tag_in_format(
     format_size++;
     return true;
 }
+
 
 std::pair<std::vector<Getter>, std::string> parse_queryformat(const std::string & queryformat) {
     std::vector<Getter> getters;
@@ -225,6 +219,8 @@ std::pair<std::vector<Getter>, std::string> parse_queryformat(const std::string 
     return {getters, format};
 }
 
+}  // namespace
+
 bool requires_filelists(const std::string & queryformat) {
     auto [getters, _] = parse_queryformat(queryformat);
     for (auto getter : getters) {
@@ -236,6 +232,7 @@ bool requires_filelists(const std::string & queryformat) {
 
     return false;
 }
+
 
 void print_pkg_set_with_format(
     std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & queryformat) {
@@ -284,6 +281,7 @@ void print_pkg_set_with_format(
     }
 }
 
+
 void print_pkg_attr_uniq_sorted(
     std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name) {
     auto getter = NAME_TO_GETTER.find(getter_name);
@@ -320,6 +318,18 @@ void print_pkg_attr_uniq_sorted(
         fmt::print(target, "{}\n", line);
     }
 }
+
+
+void print_available_pkg_attrs(std::FILE * target) {
+    std::set<std::string> output;
+    for (const auto & pair : NAME_TO_GETTER) {
+        output.insert(pair.first);
+    }
+    for (const auto & line : output) {
+        fmt::print(target, "{}\n", line);
+    }
+}
+
 
 libdnf5::rpm::ReldepList get_reldeplist_for_attr(
     const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name) {

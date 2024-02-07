@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_list.hpp"
 
+#include <libdnf5-cli/output/adapters/repo.hpp>
 #include <libdnf5-cli/output/repolist.hpp>
 
 namespace dnf5 {
@@ -74,7 +75,14 @@ void RepoListCommand::run() {
 }
 
 void RepoListCommand::print(const libdnf5::repo::RepoQuery & query, bool with_status) {
-    libdnf5::cli::output::print_repolist_table(query, with_status, libdnf5::cli::output::COL_REPO_ID);
+    std::vector<std::unique_ptr<libdnf5::cli::output::IRepo>> cli_repos;
+    auto & repos = query.get_data();
+    cli_repos.reserve(query.size());
+    for (const auto & repo : repos) {
+        cli_repos.emplace_back(new libdnf5::cli::output::RepoAdapter<libdnf5::repo::RepoWeakPtr>(repo));
+    }
+
+    libdnf5::cli::output::print_repolist_table(cli_repos, with_status, libdnf5::cli::output::COL_REPO_ID);
 }
 
 }  // namespace dnf5
