@@ -85,7 +85,15 @@ add_compile_options(-Werror=unused-result -Wodr)
 add_compile_options(-Wconversion)
 
 # linker options
-if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # TODO(jkolarik): Remove when the needed ABI breaking change is merged (see https://github.com/rpm-software-management/dnf5/issues/1091)
+    # This block silence this error
+    # dnf5/include/libdnf5-cli/output/provides.hpp:34:13: error: 'static' function 'add_line_into_provide
+    # s_table' declared in header file should be declared 'static inline' [-Werror,-Wunneeded-internal-declaration]
+    #    34 | static void add_line_into_provides_table(struct libscols_table * table, const char * key, const char * value) {
+    #       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    add_compile_options(-Wno-unneeded-internal-declaration)
+else()
     # clang doesn't support this option
     add_compile_options(-Wl,--as-needed)
 endif()
