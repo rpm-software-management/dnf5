@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf5-cli/output/key_value_table.hpp"
+#include "key_value_table.hpp"
 
 #include "utils/string.hpp"
 
@@ -30,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf5::cli::output {
-
 
 KeyValueTable::KeyValueTable() {
     tb = scols_new_table();
@@ -88,6 +87,7 @@ struct libscols_line * KeyValueTable::add_line(
     return add_line(key, libdnf5::utils::string::join(value, " "), color, parent);
 }
 
+
 struct libscols_line * KeyValueTable::add_lines(
     const char * key, const std::vector<std::string> & values, const char * color, struct libscols_line * parent) {
     struct libscols_line * added_key_line = NULL;
@@ -102,11 +102,11 @@ struct libscols_line * KeyValueTable::add_lines(
     return added_key_line;
 }
 
+
 void KeyValueTable::drop_line_if_no_children(struct libscols_line * line) {
     if (scols_line_has_children(line) == 0) {
         scols_table_remove_line(tb, line);
     }
 }
-
 
 }  // namespace libdnf5::cli::output

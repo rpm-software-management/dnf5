@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <json-c/json.h>
 #include <libdnf5-cli/exception.hpp>
+#include <libdnf5-cli/output/adapters/package_tmpl.hpp>
 #include <libdnf5-cli/output/package_info_sections.hpp>
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/conf/option_string.hpp>
@@ -263,9 +264,10 @@ void RepoqueryCommand::run() {
                         total_bytes_read += bytes_read;
                         for (const auto & package : json_to_packages(message)) {
                             if (info_option->get_value()) {
+                                libdnf5::cli::output::PackageAdapter cli_pkg(package);
                                 auto out = libdnf5::cli::output::PackageInfoSections();
                                 out.setup_cols();
-                                out.add_package(package);
+                                out.add_package(cli_pkg);
                                 out.print();
                                 std::cout << std::endl;
                             } else {

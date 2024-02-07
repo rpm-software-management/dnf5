@@ -21,56 +21,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP
 #define LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP
 
+#include "interfaces/advisory.hpp"
+
 #include <libdnf5/advisory/advisory_package.hpp>
 #include <libdnf5/advisory/advisory_reference.hpp>
-#include <libsmartcols/libsmartcols.h>
 
 namespace libdnf5::cli::output {
 
-struct libscols_table * create_advisorylist_table(std::string column_id_name);
-
-void sort_advisorylist_table(libscols_table * table);
-
-void add_line_into_advisorylist_table(
-    struct libscols_table * table,
-    const char * name,
-    const char * type,
-    const char * severity,
-    const char * package,
-    unsigned long long buildtime,
-    bool installed);
-
-template <class AdvisoryPackage>
 void print_advisorylist_table(
-    std::vector<AdvisoryPackage> & advisory_package_list_not_installed,
-    std::vector<AdvisoryPackage> & advisory_package_list_installed) {
-    struct libscols_table * table = create_advisorylist_table("Name");
-    for (auto adv_pkg : advisory_package_list_not_installed) {
-        auto advisory = adv_pkg.get_advisory();
-        add_line_into_advisorylist_table(
-            table,
-            advisory.get_name().c_str(),
-            advisory.get_type().c_str(),
-            advisory.get_severity().c_str(),
-            adv_pkg.get_nevra().c_str(),
-            advisory.get_buildtime(),
-            false);
-    }
-    for (auto adv_pkg : advisory_package_list_installed) {
-        auto advisory = adv_pkg.get_advisory();
-        add_line_into_advisorylist_table(
-            table,
-            advisory.get_name().c_str(),
-            advisory.get_type().c_str(),
-            advisory.get_severity().c_str(),
-            adv_pkg.get_nevra().c_str(),
-            advisory.get_buildtime(),
-            true);
-    }
-    sort_advisorylist_table(table);
-    scols_print_table(table);
-    scols_unref_table(table);
-}
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_not_installed,
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_installed);
 
 void print_advisorylist_references_table(
     std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,

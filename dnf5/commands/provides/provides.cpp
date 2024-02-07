@@ -16,13 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "libdnf5-cli/output/provides.hpp"
-
 #include "provides.hpp"
 
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/conf/option_string.hpp"
 
+#include <libdnf5-cli/output/adapters/package.hpp>
+#include <libdnf5-cli/output/provides.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
@@ -116,7 +116,8 @@ void ProvidesCommand::run() {
         auto matched = filter_spec(spec, full_package_query);
         for (auto package : matched.first) {
             if (matched.second != libdnf5::cli::output::ProvidesMatchedBy::NO_MATCH) {
-                libdnf5::cli::output::print_provides_table(package, spec.c_str(), matched.second);
+                libdnf5::cli::output::PackageAdapter cli_package(package);
+                libdnf5::cli::output::print_provides_table(cli_package, spec.c_str(), matched.second);
                 any_match = true;
             } else {
                 unmatched_specs.insert(spec);

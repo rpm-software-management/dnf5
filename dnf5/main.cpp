@@ -56,8 +56,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5-cli/output/adapters/transaction.hpp>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/common/xdg.hpp>
@@ -1226,7 +1228,9 @@ int main(int argc, char * argv[]) try {
                 download_callbacks->set_number_widget_visible(true);
                 download_callbacks->set_show_total_bar_limit(0);
 
-                if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
+                libdnf5::cli::output::TransactionAdapter cli_output_transaction(*context.get_transaction());
+                if (!libdnf5::cli::output::print_transaction_table(
+                        static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction))) {
                     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
                 }
 

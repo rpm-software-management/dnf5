@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../wrappers/dbus_advisory_wrapper.hpp"
 
+#include <libdnf5-cli/output/adapters/advisory_tmpl.hpp>
 #include <libdnf5-cli/output/advisorylist.hpp>
 
 #include <iostream>
@@ -28,8 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 void AdvisoryListCommand::process_and_print_queries(const std::vector<DbusAdvisoryWrapper> & advisories) {
-    std::vector<DbusAdvisoryPackageWrapper> installed_pkgs;
-    std::vector<DbusAdvisoryPackageWrapper> not_installed_pkgs;
+    std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> installed_pkgs;
+    std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> not_installed_pkgs;
 
     for (const auto & advisory : advisories) {
         // TODO(mblaha): filter the output according contains_pkgs?
@@ -45,9 +46,9 @@ void AdvisoryListCommand::process_and_print_queries(const std::vector<DbusAdviso
             for (const auto & pkg : col.get_packages()) {
                 auto applicability = pkg.get_applicability();
                 if (applicability == "installed") {
-                    installed_pkgs.push_back(pkg);
+                    installed_pkgs.emplace_back(new libdnf5::cli::output::AdvisoryPackageAdapter(pkg));
                 } else if (applicability == "available") {
-                    not_installed_pkgs.push_back(pkg);
+                    not_installed_pkgs.emplace_back(new libdnf5::cli::output::AdvisoryPackageAdapter(pkg));
                 }
             }
         }
