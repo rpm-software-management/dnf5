@@ -67,36 +67,27 @@ bool exclude_versions(
         if (!vl_package.is_valid() || vl_package.get_name() != name) {
             continue;
         }
-        bool conditions_break = false;
         auto vl_conditions = vl_package.get_conditions();
-        for (const auto & vl_cond : vl_conditions) {
-            if (vl_cond.get_key() != libdnf5::rpm::VersionlockCondition::Keys::EVR ||
-                vl_cond.get_comparator() != libdnf5::sack::QueryCmp::NEQ) {
-                conditions_break = true;
-                break;
-            }
-        }
-        if (conditions_break) {
+        if (std::any_of(vl_conditions.begin(), vl_conditions.end(), [](const auto & vl_cond) {
+                return vl_cond.get_key() != libdnf5::rpm::VersionlockCondition::Keys::EVR ||
+                       vl_cond.get_comparator() != libdnf5::sack::QueryCmp::NEQ;
+            })) {
             continue;
         }
         // add missing versions and return
         bool changed = false;
         for (const auto & pkg : packages) {
-            bool pkg_found = false;
             const auto evr = pkg.get_evr();
-            for (const auto & vl_cond : vl_conditions) {
-                if (vl_cond.get_value() == evr) {
-                    pkg_found = true;
-                    break;
-                }
-            }
-            if (pkg_found) {
+            if (std::any_of(vl_conditions.begin(), vl_conditions.end(), [&evr](const auto & vl_cond) {
+                    return vl_cond.get_value() == evr;
+                })) {
+                // condition for this evr is already present
                 continue;
             }
-            changed = true;
             vl_package.add_condition(libdnf5::rpm::VersionlockCondition{"evr", "!=", evr});
             std::cout << libdnf5::utils::sformat(_("Adding versionlock exclude on \"{0} = {1}\"."), name, evr)
                       << std::endl;
+            changed = true;
         }
         return changed;
     }
