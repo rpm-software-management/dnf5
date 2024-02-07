@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/group/package.hpp"
-#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/module/module_status.hpp"
 #include "libdnf5/rpm/nevra.hpp"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"

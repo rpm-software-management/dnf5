@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "system/state.hpp"
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/module/module_sack.hpp"
 
 #include <string>
 #include <utility>
