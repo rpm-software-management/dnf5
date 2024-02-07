@@ -57,7 +57,7 @@ public:
     std::string get_comparator_str() const { return comparator_str; }
 
     /// Get list of errors found during parsing the entry from configuration file.
-    std::vector<std::string> get_errors() const { return errors; }
+    const std::vector<std::string> & get_errors() const { return errors; }
 
     /// Converts the condition to "key operator value" string usable for printing.
     /// @param with_errors Include also error messages for invalid entries
@@ -97,13 +97,13 @@ public:
     void set_comment(std::string_view comment);
 
     /// Get the list of conditions configured for the package.
-    std::vector<VersionlockCondition> get_conditions() const { return conditions; }
+    const std::vector<VersionlockCondition> & get_conditions() const { return conditions; }
 
     /// Add a new condition for the package
     void add_condition(VersionlockCondition && condition);
 
     /// Get list of errors found during parsing the entry from configuration file.
-    std::vector<std::string> get_errors() const { return errors; }
+    const std::vector<std::string> & get_errors() const { return errors; }
 
     /// Converts the package configuration to string usable for printing.
     /// @param with_errors Include also error messages for invalid entries
