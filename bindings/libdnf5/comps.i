@@ -40,6 +40,7 @@
 
 #define CV __perl_CV
 
+%include "libdnf5/comps/group/package_type.hpp"
 %include "libdnf5/comps/group/package.hpp"
 %include "libdnf5/comps/group/group.hpp"
 %template(VectorPackage) std::vector<libdnf5::comps::Package>;
