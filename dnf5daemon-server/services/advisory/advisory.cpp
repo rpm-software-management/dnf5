@@ -92,7 +92,7 @@ libdnf5::advisory::AdvisoryQuery Advisory::advisory_query_from_options(
         advisories.filter_reference("*", {"cve"}, libdnf5::sack::QueryCmp::IGLOB);
     }
 
-    libdnf5::rpm::PackageQuery package_query(base);
+    libdnf5::rpm::PackageQuery package_query(base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     auto opt_contains_pkgs = key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", {});
     if (!opt_contains_pkgs.empty()) {
         package_query.filter_name(opt_contains_pkgs, libdnf5::sack::QueryCmp::IGLOB);
