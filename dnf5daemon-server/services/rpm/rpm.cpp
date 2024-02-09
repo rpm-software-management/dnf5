@@ -61,6 +61,15 @@ void Rpm::dbus_register() {
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
         });
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, "osut");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, "ostt");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, "ost");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, "os");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, "ost");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, "ost");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "ot");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS, "ott");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "ot");
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
