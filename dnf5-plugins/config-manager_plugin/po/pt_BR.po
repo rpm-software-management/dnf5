@@ -2,189 +2,190 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-08 02:52+0000\n"
 "PO-Revision-Date: 2024-01-18 02:47+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5-plugin-config-manager/sv/>\n"
-"Language: sv\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5-plugin-config-manager/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.3.1\n"
 
 #: addrepo.cpp:152
 msgid "from-repofile: \"{}\" file does not exist"
-msgstr "från-förrådfil \"{}\" fil existerar inte"
+msgstr "from-repofile: o arquivo \"{}\" não existe"
 
 #: addrepo.cpp:155
 msgid "from-repofile: {}"
-msgstr "från-förrådfil: {}"
+msgstr "from-repofile: {}"
 
 #: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
+msgstr "{}: Formatação inválida no valor de argumento \"{}\""
 
 #: addrepo.cpp:195
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr "Kan inte ställa in förrådsalternativ \"{}={}\": {}"
+msgstr "Não foi possível definir a opção de repositório \"{}={}\": {}"
 
 #: addrepo.cpp:203 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
-"Ställer in alternativet \"{}\" igen med ett annat värde: \"{}\" != \"{}\""
+"Define a opção \"{}\" novamente com um valor diferente: \"{}\" != \"{}\""
 
 #: addrepo.cpp:269
 msgid "Missing path to repository configuration directory"
-msgstr "Saknar sökväg till förrådskonfigurations katalog"
+msgstr "Faltando caminho para o diretório de configuração de repositório"
 
 #: addrepo.cpp:319
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr "Misslyckades att kopiera förrådets konfigurationsfil \"{}\": {}"
+msgstr "Falha ao copiar o arquivo de configuração de repositório \"{}\": {}"
 
 #: addrepo.cpp:330
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr "Misslyckades att ladda ner förrådets konfigurationsfil \"{}\": {}"
+msgstr "Falha ao baixar o arquivo de configuração de repositório \"{}\": {}"
 
 #: addrepo.cpp:352
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
-"Fel i tillagd konfigurationsfil för förråd. Kan inte ställa in "
-"lagringsalternativ \"{}={}\": {}"
+"Erro no arquivo de configuração de repositório adicionado. Não é possível "
+"definir a opção de repositório \"{}={}\": {}"
 
 #: addrepo.cpp:386
 msgid "Bad baseurl: {}={}"
-msgstr "Dålig basurl: {}={}"
+msgstr "baseurl inválida: {}={}"
 
 #: addrepo.cpp:394
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
-"En av --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
-"set=metalink=<URL> måste vara inställd på en icke-tom URL"
+"Uma entre --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> deve ser definida com uma URL não "
+"vazia"
 
 #: addrepo.cpp:439
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr "Misslyckades att spara konfigurationsfil för förråd \"{}: {}"
+msgstr "Falha ao salvar o arquivo de configuração de repositório \"{}\": {}"
 
 #: addrepo.cpp:461
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
-"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
-"\"--add-or-replace\" eller \"--overwrite\"."
+"O arquivo \"{}\" já existe e configura repositórios com IDs \"{}\". Adicione "
+"\"--add-or-replace\" ou \"--overwrite\"."
 
 #: addrepo.cpp:464
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
-"Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
-"--overwrite\" för att skriva över."
+"O arquivo \"{}\" já existe e configura repositórios com IDs \"{}\". Adicione "
+"\"--overwrite\" para sobrescrever."
 
 #: addrepo.cpp:484 addrepo.cpp:509
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr "Ett förråd med id \"{}\" är redan konfigurerat i fil {}"
+msgstr "Um repositório com id \"{}\" já configurado no arquivo: {}"
 
 #: setopt.cpp:91 unsetopt.cpp:65
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
-"'.': {}"
+"{}: Formatação inválida no valor de argumento: O último caractere da chave "
+"não pode ser '.': {}"
 
 #: setopt.cpp:100 unsetopt.cpp:74
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr "{}: Tomt förråds-ID är inte tillåtet: {}"
+msgstr "{}: ID de repositório vazio não é permitido: {}"
 
 #: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"
-msgstr "Kan inte ställa in förråds alternativ \"{}\": {}"
+msgstr "Não é possível definir a opção de repositório \"{}\": {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Ställer in \"{}\" alternativ för förråd \"{} igen med ett annat värde: {}\" !"
-"=\"{}\""
+"Define a opção \"{}\" do repositório \"{}\" novamente com um valor "
+"diferente: \"{}\" != \"{}\""
 
 #: setopt.cpp:130
 msgid "Cannot set option: \"{}\": {}"
-msgstr "Kan inte ställa in alternativ: \"{}\":{}"
+msgstr "Não é possível definir a opção: \"{}\": {}"
 
 #: setopt.cpp:170
 msgid "No matching repository to modify: {}"
-msgstr "Inget matchande förråd att modifiera: {}"
+msgstr "Nenhum repositório correspondente para modificar: {}"
 
 #: setvar.cpp:60
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr "Kan inte ställa in \"{}\": Variabeln \"{}\" är skrivskyddad"
+msgstr "Não é possível definir \"{}\": A variável \"{}\" é somente leitura"
 
 #: setvar.cpp:68
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr "Ställer in variabeln \"{}\" igen med ett annat värde: \"{}\" != \"{}\""
+msgstr ""
+"Define a variável \"{}\" novamente com um valor diferente: \"{}\" != \"{}\""
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr "Saknar sökväg till vars katalog"
+msgstr "Faltando caminho para o diretório de variáveis"
 
 #: setvar.cpp:110
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr "Kan inte skriva variabel till fil \"{}\": {}"
+msgstr "Não é possível escrever a variável para o arquivo \"{}\": {}"
 
 #: shared.hpp:49
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
-"Sökväg \"{}\" existerar, men är inte en katalog eller en symbolisk länk till "
-"en katalog."
+"O caminho \"{}\" existe, mas ele não é um diretório ou um link simbólico "
+"para um diretório."
 
 #: shared.hpp:54
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
-"Sökväg \"{}\" existerar, men är en symbolisk länk till ett icke-existerande "
-"objekt."
+"O caminho \"{}\" existe, mas ele é um link simbólico para um objeto "
+"inexistente."
 
 #: shared.hpp:60
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
-"Katalogen \"{} existerar inte. Lägg till \"--create-missing-dir\" för att "
-"skapa saknade kataloger."
+"O diretório \"{}\" não existe. Adicione \"--create-missing-dir\" para criar "
+"diretórios em falta."
 
 #: shared.hpp:71
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
-msgstr "Variabelnamn kan endast innehålla ASCII-bokstäver, siffror och '_': {}"
+msgstr "Nome de variável pode conter apenas letras ASCII, números e '_': {}"
 
 #: unsetvar.cpp:76
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr "Kan inte ta bort variabelfil \"{}\": {}"
+msgstr "Não é possível remover o arquivo de variável \"{}\": {}"
 
 #~ msgid "optval: Badly formatted argument value \"{}\""
-#~ msgstr "optval: Felformaterat argumentvärde \"{}\""
+#~ msgstr "optval: Formatação inválida no valor de argumento \"{}\""
 
 #~ msgid "varval: Badly formatted argument value \"{}\""
-#~ msgstr "varval: Felaktigt formaterat argumentvärde \"{}\""
+#~ msgstr "varval: Formatação inválida no valor de argumento \"{}\""
 
 #~ msgid ""
 #~ "remove-opt: Badly formatted argument value: Last key character cannot be "
 #~ "'.': {}"
 #~ msgstr ""
-#~ "remove-opt: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan "
-#~ "inte vara '.': {}"
+#~ "remove-opt: Formatação inválida no valor de argumento: O último caractere "
+#~ "da chave não pode ser '.': {}"
 
 #~ msgid "remove-opt: Empty repository id is not allowed: {}"
-#~ msgstr "remove-opt: Tomt arkiv-id är inte tillåtet: {}"
+#~ msgstr "remove-opt: ID de repositório vazio não é permitido: {}"

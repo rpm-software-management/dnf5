@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"PO-Revision-Date: 2024-01-26 02:46+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -137,7 +137,7 @@ msgstr ""
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr "copr რეპოზიტორიების სია"
+msgstr "Copr რეპოზიტორიების სია"
 
 #: copr_remove.cpp:34
 msgid ""
@@ -181,7 +181,7 @@ msgid "Repo file {} successfully removed"
 msgstr "რეპო ფაილ {} წარმატებით წაიშალა"
 
 #: copr_repo.cpp:384
-msgid "Can't find {} item in {}"
+msgid "Can't find item {} in {}"
 msgstr "ვერ ვიპოვე {} ელემენტი {}-ში"
 
 #: copr_repo.cpp:440
