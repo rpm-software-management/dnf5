@@ -1,27 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-08 02:52+0000\n"
-"PO-Revision-Date: 2024-01-11 10:48+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5daemon-server/sv/>\n"
-"Language: sv\n"
+"PO-Revision-Date: 2024-01-11 22:23+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5daemon-server/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.3.1\n"
 
 #: threads_manager.cpp:94
 msgid "Failed to create locale \"{}\"."
-msgstr "Misslyckades att skapa lokal \"{}\"."
+msgstr "Falha ao criar localidade \"{}\"."
 
 #: threads_manager.cpp:99
 msgid "Failed to use locale \"{}\"."
-msgstr "Misslyckades att använda lokal \"{}\"."
+msgstr "Falha ao usar a localidade \"{}\"."

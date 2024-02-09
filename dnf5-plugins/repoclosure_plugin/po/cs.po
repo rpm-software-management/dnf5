@@ -1,36 +1,40 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Petr Ptacek <petr106@atlas.cz>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"PO-Revision-Date: 2024-02-02 13:11+0000\n"
+"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-repoclosure/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: repoclosure.cpp:45
 msgid "Print list of unresolved dependencies for repositories"
-msgstr ""
+msgstr "Zobrazí seznam nevyřešených závislostí pro repozitáře"
 
 #: repoclosure.cpp:150
 msgid "No match for argument \"{}\"."
-msgstr ""
+msgstr "Žádná schoda pro argument \"{}\"."
 
 #: repoclosure.cpp:156
 msgid "Failed to resolve package specifications."
-msgstr ""
+msgstr "Nepodařilo se vyřešit specifikace balíčku."
 
 #: repoclosure.cpp:211
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
+"Chyba: Opětovné uzavření skončilo s nevyřešenými závislostmi ({}) mezi {} "
+"balíčky."

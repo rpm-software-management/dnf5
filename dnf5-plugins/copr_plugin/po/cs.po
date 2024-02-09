@@ -1,25 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Petr Ptacek <petr106@atlas.cz>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"PO-Revision-Date: 2024-02-05 08:47+0000\n"
+"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
+"plugin-copr/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr ""
+"Název hostitele rozbočovače Copr (server webového uživatelského rozhraní/API)"
 
 #: copr.cpp:88
 msgid ""
@@ -31,15 +33,24 @@ msgid ""
 "fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
+"ID projektu Copr {}. Použijte buď formát OWNER/PROJECT or HUB/OWNER/PROJECT "
+"(pokud není zadán HUB, použije se výchozí nebo --hub <ARG>. OWNER je buď "
+"uživatelské jméno, nebo @groupname. PROJECT může být jednoduchý název "
+"projektu nebo „adresář projektu“ obsahující dvojtečky, např. 'project:"
+"custom:123'. HUB může být buď název hostitele frontendu Copr (např. copr."
+"fedorainfracloud.org ) nebo zkratka (např. fedora). Příklad: 'fedora' /"
+"@footeam/coolproject'."
 
 #: copr.cpp:106
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr ""
+msgstr "Neplatný formát PROJECT_SPEC '{}'"
 
 #: copr_constants.hpp:27
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
+"Správa repozitářů Copr (doplňky poskytované uživateli/komunitou/třetí "
+"stranou)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -55,6 +66,17 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
+"Povolení úložiště Copr. Upozorňujeme, že toto úložiště není součástí\n"
+"hlavní distribuce a kvalita se může lišit.\n"
+"\n"
+"Projekt Fedora nevykonává žádnou moc nad obsahem\n"
+"toto úložiště nad rámec pravidel uvedených v Copr FAQ na adrese\n"
+"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
+"in-copr>,\n"
+"a balíčky nemají žádnou úroveň kvality ani zabezpečení.\n"
+"\n"
+"Prosím, neposílejte zprávy o chybách o těchto balíčcích ve Fedoře\n"
+"Bugzilla. V případě problémů kontaktujte vlastníka tohoto úložiště.\n"
 
 #: copr_constants.hpp:41
 msgid ""
@@ -71,104 +93,124 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
+"Správce povoleného repozitáře Copr zjistil, že\n"
+"závisí na jiných úložištích. Takové repozitáře jsou\n"
+"obvykle nutné pro úspěšnou instalaci RPM z\n"
+"hlavní repozitáře Copr (poskytují běhové závislosti).\n"
+"\n"
+"Uvědomte si, že poznámka o kvalitě a hlášení chyb\n"
+"výše platí i zde, Fedora Project nekontroluje\n"
+"obsah. Zkontrolujte prosím seznam:\n"
+"\n"
+"{}\n"
+"Tyto repozitáře jsou povoleny společně s hlavním\n"
+"repozitářem.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "vytisknout užitečné informace o systému, užitečné pro ladění"
 
 #: copr_disable.cpp:34
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"zakázat zadaný repozitář Copr (pokud existuje), ponechat {}/*.repo soubor - "
+"stačí označit enabled=0"
 
 #: copr_enable.cpp:37
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr ""
+"stáhne informace o repozitáři ze serveru Copr a nainstaluje je jako soubor "
+"{}/*.repo"
 
 #: copr_enable.cpp:45
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"Chroot zadaný ve formátu NAME-RELEASE-ARCH, např. 'fedora-rawhide-ppc64le'. "
+"Pokud není zadán, příkaz 'dnf copr' se jej pokusí detekovat."
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr ""
+msgstr "seznam repozitářů Copr"
 
 #: copr_remove.cpp:34
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr ""
+msgstr "odebere zadaný repozitář Copr ze systému (odstraní soubor {}/*.repo)"
 
 #: copr_repo.cpp:88
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "Adresář '{}' nebyl v projektu '{}' Copr nalezen."
 
 #: copr_repo.cpp:94
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "Můžete použít jeden z těchto dostupných adresářů:"
 
 #: copr_repo.cpp:110
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "Chroot nebyl v daném projektu Copr nalezen"
 
 #: copr_repo.cpp:112
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "Nelze detekovat chroot, zadejte jej explicitně."
 
 #: copr_repo.cpp:118
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Snažili jsme se najít tyto repozitáře, ale bez úspěchu:"
 
 #: copr_repo.cpp:123
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Můžete si explicitně vybrat jeden z dostupných chrootů:"
 
 #: copr_repo.cpp:197
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Nelze parsovat specifikaci Copr repozitáře: "
 
 #: copr_repo.cpp:335
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Soubor repozitáře {} nelze odstranit"
 
 #: copr_repo.cpp:338
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "Soubor repozitáře {} byl úspěšně odstraněn"
 
 #: copr_repo.cpp:384
-msgid "Can't find {} item in {}"
-msgstr ""
+msgid "Can't find item {} in {}"
+msgstr "Nelze najít položku {} v {}"
 
 #: copr_repo.cpp:440
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Odstranění starého konfiguračního souboru '{}'"
 
 #: copr_repo.cpp:443
 msgid "Can't remove"
-msgstr ""
+msgstr "Nelze odstranit"
 
 #: copr_repo.cpp:517
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"Soubor repozitáře Copr '{}' má starý formát, opravte jej opětovným povolením "
+"$ {} copr enable {}"
 
 #: copr_repo.cpp:551
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "ID repozitáře '{}' v '{}' je podezřelé"
 
 #: copr_repo.cpp:558
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "ID repozitáře '{}' nepatří do souboru repozitáře '{}'"
 
 #: copr_repo.cpp:608
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Copr repozitář '{}' v '{}' je zakázán."
 
 #: copr_repo.cpp:622 copr_repo.cpp:647
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "Repozitář '{}' nebyl v tomto systému nalezen"
