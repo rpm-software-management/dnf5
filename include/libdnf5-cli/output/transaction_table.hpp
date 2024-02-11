@@ -592,13 +592,15 @@ bool print_transaction_table(Transaction & transaction) {
 
             // print Version
             if (pkg.get_name() == replaced.get_name()) {
-                if (termwidth < single_line_min) {
-                    scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
-                    scols_line_set_data(ln_pre, COL_EVR, replaced.get_evr().c_str());
-                } else {
-                    auto cl_evr = scols_line_get_cell(ln, COL_EVR);
-                    scols_cell_set_data(
-                        cl_evr, fmt::format("{:20s}{}{}", pkg.get_evr(), arrow, replaced.get_evr()).c_str());
+                if (pkg.get_evr() != replaced.get_evr()) {
+                    if (termwidth < single_line_min) {
+                        scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
+                        scols_line_set_data(ln_pre, COL_EVR, replaced.get_evr().c_str());
+                    } else {
+                        auto cl_evr = scols_line_get_cell(ln, COL_EVR);
+                        scols_cell_set_data(
+                            cl_evr, fmt::format("{:20s}{}{}", pkg.get_evr(), arrow, replaced.get_evr()).c_str());
+                    }
                 }
             } else {  // print replacing versions
                 struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
