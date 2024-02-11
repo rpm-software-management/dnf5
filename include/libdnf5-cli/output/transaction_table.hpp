@@ -513,7 +513,7 @@ bool print_transaction_table(Transaction & transaction) {
             scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
         }
 
-        struct libscols_line * ln_pre;
+        struct libscols_line * ln_pre = nullptr;
         for (auto & replaced : tspkg.get_replaces()) {
             if (pkg.get_name() == replaced.get_name() && termwidth < single_line_min) {
                 ln_pre = scols_table_new_line(tb, ln);
