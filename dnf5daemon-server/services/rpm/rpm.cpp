@@ -99,6 +99,14 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     session.fill_sack();
     auto base = session.get_base();
 
+    // add potential command-line packages
+    std::vector<libdnf5::rpm::Package> cmdline_packages;
+    std::vector<std::string> patterns =
+        key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
+    for (auto & [path, package] : base->get_repo_sack()->add_cmdline_packages(patterns)) {
+        cmdline_packages.push_back(std::move(package));
+    }
+
     std::string scope = key_value_map_get<std::string>(options, "scope", "all");
     // start with all packages
     libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
@@ -126,11 +134,14 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     // applying patterns filtering early can increase performance of slow
     // what* filters by reducing the size of their base query
-    std::vector<std::string> patterns =
-        key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
 
     if (patterns.size() > 0) {
         libdnf5::rpm::PackageQuery result(*base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        for (const auto & pkg : cmdline_packages) {
+            if (query.contains(pkg)) {
+                result.add(pkg);
+            }
+        }
         // packages matching flags
         bool with_src = key_value_map_get<bool>(options, "with_src", true);
         libdnf5::ResolveSpecSettings settings{
