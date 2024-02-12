@@ -2323,6 +2323,24 @@ base::Transaction Goal::resolve() {
 
     module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
     ret |= p_impl->add_module_specs_to_goal(transaction);
+
+    // Check for switched module streams
+    if (!p_impl->base->get_config().get_module_stream_switch_option().get_value()) {
+        auto switched_streams = module_sack.p_impl->module_db->get_all_newly_switched_streams();
+        if (!switched_streams.empty()) {
+            for (auto item : switched_streams) {
+                transaction.p_impl->add_resolve_log(
+                    GoalAction::ENABLE,
+                    GoalProblem::MODULE_CANNOT_SWITH_STREAMS,
+                    GoalJobSettings(),
+                    libdnf5::transaction::TransactionItemType::MODULE,
+                    item.first,
+                    {"0:" + item.second.first, "1:" + item.second.second},
+                    libdnf5::Logger::Level::ERROR);
+            }
+            ret |= GoalProblem::MODULE_CANNOT_SWITH_STREAMS;
+        }
+    }
     // Resolve modules
     auto result = module_sack.resolve_active_module_items();
     auto module_solver_problems = result.first;
