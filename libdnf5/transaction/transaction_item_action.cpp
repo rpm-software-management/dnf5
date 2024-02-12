@@ -50,6 +50,8 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
             return "Disable";
         case TransactionItemAction::RESET:
             return "Reset";
+        case TransactionItemAction::SWITCH:
+            return "Switch";
     }
     return "";
 }
@@ -76,6 +78,8 @@ TransactionItemAction transaction_item_action_from_string(const std::string & ac
         return TransactionItemAction::DISABLE;
     } else if (action == "Reset") {
         return TransactionItemAction::RESET;
+    } else if (action == "Switch") {
+        return TransactionItemAction::SWITCH;
     }
 
     throw InvalidTransactionItemAction(action);
@@ -104,6 +108,7 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
         case TransactionItemAction::ENABLE:
         case TransactionItemAction::DISABLE:
         case TransactionItemAction::RESET:
+        case TransactionItemAction::SWITCH:
             // TODO(pkratoch): Add letters for ENABLE, DISABLE and RESET
             return "";
     }

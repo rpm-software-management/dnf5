@@ -190,6 +190,7 @@ void Transaction::fill(const base::Transaction & transaction) {
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::SWITCH:
                 break;
         }
     }
