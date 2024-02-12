@@ -153,6 +153,7 @@ public:
 
 
 private:
+    friend class libdnf5::Goal;
     friend class libdnf5::base::Transaction;
     friend ModuleSack;
     friend ModuleItem;

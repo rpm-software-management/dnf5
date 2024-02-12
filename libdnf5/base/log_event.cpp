@@ -186,6 +186,28 @@ std::string LogEvent::to_string(
             }
             return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
         }
+        case GoalProblem::MODULE_CANNOT_SWITH_STREAMS: {
+            std::string original_stream;
+            std::string new_stream;
+            for (const auto & module_stream : additional_data) {
+                const auto pos = module_stream.find(":");
+                if (module_stream.substr(0, pos) == "0") {
+                    original_stream = module_stream.substr(pos + 1);
+                } else {
+                    new_stream = module_stream.substr(pos + 1);
+                }
+            }
+            ret.append(utils::sformat(
+                _("The operation would result in switching of module '{0}' stream '{1}' to stream '{2}'\n"),
+                *spec,
+                original_stream,
+                new_stream));
+            return ret.append(
+                _("Error: It is not possible to switch enabled streams of a module unless explicitly enabled via "
+                  "configuration option module_stream_switch.\nIt is recommended to rather remove all installed "
+                  "content from the module, and reset the module using 'dnf module reset <module_name>' command. After "
+                  "you reset the module, you can install the other stream."));
+        }
     }
     return ret;
 }
