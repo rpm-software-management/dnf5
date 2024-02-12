@@ -42,7 +42,8 @@ enum class TransactionItemAction : int {
     REASON_CHANGE = 7,  // a package is being kept on the system but its reason is changing
     ENABLE = 8,         // module enable
     DISABLE = 9,        // module disable
-    RESET = 10          // module reset
+    RESET = 10,         // module reset
+    SWITCH = 11         // module switch
 };
 
 

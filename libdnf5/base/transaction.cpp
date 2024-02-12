@@ -461,6 +461,14 @@ void Transaction::Impl::set_transaction(
             name, "", transaction::TransactionItemAction::RESET, transaction::TransactionItemReason::USER);
         modules.emplace_back(std::move(tsmodule));
     }
+    for (auto & name_streams : module_db->get_all_newly_switched_streams()) {
+        TransactionModule tsmodule(
+            name_streams.first,
+            name_streams.second.first + " -> " + name_streams.second.second,
+            transaction::TransactionItemAction::SWITCH,
+            transaction::TransactionItemReason::USER);
+        modules.emplace_back(std::move(tsmodule));
+    }
 
     // Add reason change actions to the transaction
     for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
