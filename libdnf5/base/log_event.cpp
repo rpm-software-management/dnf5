@@ -269,6 +269,26 @@ std::string LogEvent::to_string(
             ret.append(utils::sformat(_("Modular dependency problems with the defaults:\n")));
             return ret.append(solver_problems->to_string());
         }
+        case GoalProblem::MODULE_CANNOT_SWITH_STREAMS: {
+            std::string original_stream;
+            std::string new_stream;
+            for (const auto & module_stream : additional_data) {
+                const auto pos = module_stream.find(":");
+                if (module_stream.substr(0, pos) == "0") {
+                    original_stream = module_stream.substr(pos + 1);
+                } else {
+                    new_stream = module_stream.substr(pos + 1);
+                }
+            }
+            ret.append(utils::sformat(
+                _("The operation would result in switching of module '{0}' stream '{1}' to stream '{2}'\n"),
+                *spec,
+                original_stream,
+                new_stream));
+            return ret.append(
+                _("Error: It is not possible to switch enabled streams of a module unless explicitly enabled via "
+                  "configuration option module_stream_switch."));
+        }
     }
     return ret;
 }

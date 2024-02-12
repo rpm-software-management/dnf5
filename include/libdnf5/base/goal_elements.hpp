@@ -114,7 +114,8 @@ enum class GoalProblem : uint32_t {
     /// Problem with latest modules during resolvement of module dependencies
     MODULE_SOLVER_ERROR_LATEST = (1 << 19),
     /// Error detected during resolvement of module dependencies
-    MODULE_SOLVER_ERROR = (1 << 20)
+    MODULE_SOLVER_ERROR = (1 << 20),
+    MODULE_CANNOT_SWITH_STREAMS = (1 << 21)
 };
 
 /// Types of Goal actions
