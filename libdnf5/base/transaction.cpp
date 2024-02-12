@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solver_problems_internal.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
+#include "transaction_module_impl.hpp"
 #include "transaction_package_impl.hpp"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
@@ -472,6 +473,15 @@ void Transaction::Impl::set_transaction(
     for (auto & name : module_db->get_all_newly_reset_modules()) {
         TransactionModule tsmodule(
             name, "", transaction::TransactionItemAction::RESET, transaction::TransactionItemReason::USER);
+        modules.emplace_back(std::move(tsmodule));
+    }
+    for (auto & name_streams : module_db->get_all_newly_switched_streams()) {
+        TransactionModule tsmodule(
+            name_streams.first,
+            name_streams.second.first,
+            transaction::TransactionItemAction::SWITCH,
+            transaction::TransactionItemReason::USER);
+        tsmodule.p_impl->replaces_append(std::string(name_streams.first), std::string(name_streams.second.second));
         modules.emplace_back(std::move(tsmodule));
     }
 
