@@ -35,8 +35,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <chrono>
 #include <iostream>
+#include <optional>
 #include <string>
 
+// config options that regular user can override for their session.
 static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
     "allow_downgrade",
     "allow_vendor_change",
@@ -88,6 +90,7 @@ Session::Session(
     std::map<std::string, std::string> default_overrides{};
     auto conf_overrides = session_configuration_value<std::map<std::string, std::string>>("config", default_overrides);
     auto opt_binds = config.opt_binds();
+    std::optional<bool> am_i_root;
     for (auto & opt : conf_overrides) {
         auto key = opt.first;
         auto value = opt.second;
@@ -96,8 +99,16 @@ Session::Session(
             if (ALLOWED_MAIN_CONF_OVERRIDES.find(key) != ALLOWED_MAIN_CONF_OVERRIDES.end()) {
                 bind->second.new_string(libdnf5::Option::Priority::RUNTIME, value);
             } else {
-                base->get_logger()->warning("Config option {} not allowed.", key);
-                continue;
+                if (!am_i_root.has_value()) {
+                    // check the authorization lazily only once really needed
+                    am_i_root = check_authorization(dnfdaemon::POLKIT_CONFIG_OVERRIDE, sender, false);
+                }
+                // restricted config options override is allowed only for root
+                if (am_i_root.value()) {
+                    bind->second.new_string(libdnf5::Option::Priority::RUNTIME, value);
+                } else {
+                    base->get_logger()->warning("Config option {} not allowed.", key);
+                }
             }
         } else {
             base->get_logger()->warning("Unknown config option: {}", key);
@@ -231,13 +242,13 @@ bool Session::read_all_repos() {
     return retval;
 }
 
-bool Session::check_authorization(const std::string & actionid, const std::string & sender) {
+bool Session::check_authorization(
+    const std::string & actionid, const std::string & sender, bool allow_user_interaction) {
     // create proxy for PolicyKit1 object
     const std::string destination_name = "org.freedesktop.PolicyKit1";
     const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
     const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
     // allow polkit to ask user to enter root password
-    const uint ALLOW_USER_INTERACTION = 1;
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
     polkit_proxy->finishRegistration();
 
@@ -245,7 +256,7 @@ bool Session::check_authorization(const std::string & actionid, const std::strin
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
     sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
     std::map<std::string, std::string> details{};
-    uint flags = ALLOW_USER_INTERACTION;
+    uint flags = allow_user_interaction ? 1 : 0;
     std::string cancelation_id = "";
     polkit_proxy->callMethod("CheckAuthorization")
         .onInterface(interface_name)
