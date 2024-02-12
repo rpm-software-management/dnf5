@@ -48,6 +48,7 @@ const char * action_color(libdnf5::transaction::TransactionItemAction action) {
         case libdnf5::transaction::TransactionItemAction::REINSTALL:
         case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
         case libdnf5::transaction::TransactionItemAction::ENABLE:
+        case libdnf5::transaction::TransactionItemAction::SWITCH:
             return "green";
         case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
         case libdnf5::transaction::TransactionItemAction::RESET:
@@ -112,6 +113,7 @@ public:
                 case libdnf5::transaction::TransactionItemAction::ENABLE:
                 case libdnf5::transaction::TransactionItemAction::DISABLE:
                 case libdnf5::transaction::TransactionItemAction::RESET:
+                case libdnf5::transaction::TransactionItemAction::SWITCH:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
             }
@@ -252,6 +254,9 @@ public:
                 case libdnf5::transaction::TransactionItemAction::RESET:
                     text = "Resetting modules";
                     break;
+                case libdnf5::transaction::TransactionItemAction::SWITCH:
+                    text = "Switching module streams";
+                    break;
                 default:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
@@ -304,6 +309,7 @@ public:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::SWITCH:
                 // Only package change counts are reported.
                 break;
         }

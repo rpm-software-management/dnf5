@@ -44,6 +44,7 @@ RpmTransactionItemActions transaction_package_to_action(const libdnf5::base::Tra
         case libdnf5::base::TransactionPackage::Action::ENABLE:
         case libdnf5::base::TransactionPackage::Action::DISABLE:
         case libdnf5::base::TransactionPackage::Action::RESET:
+        case libdnf5::base::TransactionPackage::Action::SWITCH:
             // TODO(lukash) handle cases
             libdnf_throw_assertion(
                 "Unexpected action in RpmTransactionItem: {}",
