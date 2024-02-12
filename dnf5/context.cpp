@@ -231,6 +231,7 @@ void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint6
         case libdnf5::transaction::TransactionItemAction::ENABLE:
         case libdnf5::transaction::TransactionItemAction::DISABLE:
         case libdnf5::transaction::TransactionItemAction::RESET:
+        case libdnf5::transaction::TransactionItemAction::SWITCH:
             auto & logger = *context.base.get_logger();
             logger.warning(
                 "Unexpected action in TransactionPackage: {}",

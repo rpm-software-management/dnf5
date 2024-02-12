@@ -160,6 +160,7 @@ public:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::SWITCH:
                 throw std::logic_error(fmt::format(
                     "Unexpected action in TransactionPackage: {}",
                     static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
