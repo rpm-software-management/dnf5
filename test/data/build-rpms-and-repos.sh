@@ -32,12 +32,14 @@ function build_rpms() {
 
     # Note: _build_name_fmt requires escaped %% for use in headerSprintf()
     rpmbuild -ba \
+        --dbpath "${RPMBUILD_TOPDIR}" \
         --define="_topdir ${RPMBUILD_TOPDIR}" \
         --define="_srcrpmdir ${TARGET_DIR}" \
         --define="_rpmdir ${TARGET_DIR}" \
         --define="_build_name_fmt %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
         --define="_source_payload w1.gzdio" \
         --define="_binary_payload w1.gzdio" \
+        --nodeps \
         "${SPEC}"
 
     rm -rf "${RPMBUILD_TOPDIR}"
