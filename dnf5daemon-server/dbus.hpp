@@ -90,6 +90,7 @@ const char * const SIGNAL_TRANSACTION_FINISHED = "transaction_finished";
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
 const char * const POLKIT_CONFIRM_KEY_IMPORT = "org.rpm.dnf.v0.rpm.Repo.confirm_key";
+const char * const POLKIT_CONFIG_OVERRIDE = "org.rpm.dnf.v0.base.Config.override";
 
 // errors
 const char * const ERROR = "org.rpm.dnf.v0.Error";

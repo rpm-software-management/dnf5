@@ -79,7 +79,8 @@ public:
     };
     std::string get_sender() const { return sender; };
 
-    bool check_authorization(const std::string & actionid, const std::string & sender);
+    bool check_authorization(
+        const std::string & actionid, const std::string & sender, bool allow_user_interaction = true);
     void fill_sack();
     bool read_all_repos();
     std::optional<std::string> session_locale;
