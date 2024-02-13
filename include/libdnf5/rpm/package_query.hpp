@@ -718,6 +718,7 @@ public:
     /// Filter out versionlock excluded packages.
     ///
     /// The packages versions excluded by versionlock are removed from the query.
+    /// @since 5.1.13
     void filter_versionlock();
 
 private:
