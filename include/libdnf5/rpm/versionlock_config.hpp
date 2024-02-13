@@ -34,6 +34,7 @@ namespace libdnf5::rpm {
 /// Each condition consist of three parts: key, comparison operator, and value.
 /// Key can be one of "epoch", "evr", "arch".
 /// Supported comparison operators are "<", "<=", "=", ">=", ">", "!=".
+/// @since 5.1.13
 class VersionlockCondition {
 public:
     enum class Keys { EPOCH, EVR, ARCH };
@@ -78,6 +79,7 @@ private:
 /// One versionlock configuration file entry. It consists of the
 /// package name and a set of conditions. All conditions must be true
 /// for package version to get locked.
+/// @since 5.1.13
 class VersionlockPackage {
 public:
     /// Creates an instance of `VersionlockPackage` class specifying the
@@ -119,6 +121,7 @@ private:
 
 
 /// Class contains parsed versionlock configuration file.
+/// @since 5.1.13
 class VersionlockConfig {
 public:
     /// Get list of configured versionlock entries.
