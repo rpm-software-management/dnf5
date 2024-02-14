@@ -733,15 +733,19 @@ static void print_versions(Context & context) {
     constexpr const char * appl_name = "dnf5";
     {
         const auto & version = get_application_version();
-        std::cout << fmt::format("{} version {}.{}.{}", appl_name, version.major, version.minor, version.micro)
-                  << std::endl;
+        std::cout
+            << fmt::format(
+                   "{} version {}.{}.{}.{}", appl_name, version.prime, version.major, version.minor, version.micro)
+            << std::endl;
         const auto & api_version = get_plugin_api_version();
         std::cout << fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor)
                   << std::endl;
     }
     {
         const auto & version = libdnf5::get_library_version();
-        std::cout << fmt::format("libdnf5 version {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
+        std::cout << fmt::format(
+                         "libdnf5 version {}.{}.{}.{}", version.prime, version.major, version.minor, version.micro)
+                  << std::endl;
         const auto & api_version = libdnf5::get_plugin_api_version();
         std::cout << fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor) << std::endl;
     }
