@@ -24,7 +24,10 @@ namespace dnf5 {
 namespace {
 
 constexpr ApplicationVersion APPLICATION_VERSION{
-    .major = PROJECT_VERSION_MAJOR, .minor = PROJECT_VERSION_MINOR, .micro = PROJECT_VERSION_MICRO};
+    .prime = PROJECT_VERSION_PRIME,
+    .major = PROJECT_VERSION_MAJOR,
+    .minor = PROJECT_VERSION_MINOR,
+    .micro = PROJECT_VERSION_MICRO};
 
 }  // namespace
 
