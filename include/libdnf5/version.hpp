@@ -26,7 +26,12 @@ namespace libdnf5 {
 
 /// Library version
 /// @since 5.0
+/// PRIME version - completely changing API and everything in dnf (hopefully stays as a 5 for the foreseeable future)
+/// MAJOR version - incompatible API changes
+/// MINOR version - add functionality in a backward compatible manner
+/// MICRO version - make backward compatible bug fixes
 struct LibraryVersion {
+    std::uint16_t prime;
     std::uint16_t major;
     std::uint16_t minor;
     std::uint16_t micro;
