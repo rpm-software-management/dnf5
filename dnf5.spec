@@ -840,9 +840,9 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
     -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
     \
-    -DPROJECT_VERSION_MAJOR=%{project_version_major} \
-    -DPROJECT_VERSION_MINOR=%{project_version_minor} \
-    -DPROJECT_VERSION_PATCH=%{project_version_patch}
+    -DVERSION_MAJOR=%{project_version_major} \
+    -DVERSION_MINOR=%{project_version_minor} \
+    -DVERSION_PATCH=%{project_version_patch}
 %cmake_build
 %if %{with man}
     %cmake_build --target doc-man
