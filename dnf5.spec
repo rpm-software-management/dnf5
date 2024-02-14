@@ -5,7 +5,7 @@
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 11]
 
 Name:           dnf5
-Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
+Version:        %{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
@@ -842,7 +842,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     \
     -DVERSION_MAJOR=%{project_version_major} \
     -DVERSION_MINOR=%{project_version_minor} \
-    -DVERSION_PATCH=%{project_version_patch}
+    -DVERSION_MICRO=%{project_version_micro}
 %cmake_build
 %if %{with man}
     %cmake_build --target doc-man
