@@ -1,11 +1,12 @@
-%global project_version_major 5
-%global project_version_minor 1
-%global project_version_patch 17
+%global project_version_prime 5
+%global project_version_major 2
+%global project_version_minor 0
+%global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 11]
 
 Name:           dnf5
-Version:        %{project_version_major}.%{project_version_minor}.%{project_version_micro}
+Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
@@ -840,6 +841,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
     -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
     \
+    -DVERSION_PRIME=%{project_version_prime} \
     -DVERSION_MAJOR=%{project_version_major} \
     -DVERSION_MINOR=%{project_version_minor} \
     -DVERSION_MICRO=%{project_version_micro}
