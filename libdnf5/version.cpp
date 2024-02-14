@@ -24,7 +24,7 @@ namespace libdnf5 {
 namespace {
 
 constexpr LibraryVersion LIBRARY_VERSION{
-    .major = PROJECT_VERSION_MAJOR, .minor = PROJECT_VERSION_MINOR, .micro = PROJECT_VERSION_PATCH};
+    .major = PROJECT_VERSION_MAJOR, .minor = PROJECT_VERSION_MINOR, .micro = PROJECT_VERSION_MICRO};
 
 }  // namespace
 
