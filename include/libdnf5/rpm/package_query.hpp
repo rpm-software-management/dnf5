@@ -159,7 +159,7 @@ public:
     ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
-    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
+    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `NEQ`.
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
@@ -714,6 +714,12 @@ public:
     ///
     /// Filter packages that provide a capability that matches with any value in installonlypkgs configuration option.
     void filter_installonly();
+
+    /// Filter out versionlock excluded packages.
+    ///
+    /// The packages versions excluded by versionlock are removed from the query.
+    /// @since 5.1.13
+    void filter_versionlock();
 
 private:
     std::vector<std::vector<Package>> filter_leaves(bool return_grouped_leaves);

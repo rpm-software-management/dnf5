@@ -632,6 +632,10 @@ inline static bool cmp_eq(int cmp) {
     return cmp == 0;
 }
 
+inline static bool cmp_neq(int cmp) {
+    return cmp != 0;
+}
+
 inline static bool cmp_gte(int cmp) {
     return cmp >= 0;
 }
@@ -675,6 +679,9 @@ void PackageQuery::filter_evr(const std::vector<std::string> & patterns, libdnf5
             break;
         case libdnf5::sack::QueryCmp::EQ:
             filter_evr_internal<cmp_eq>(pool, patterns, *p_impl);
+            break;
+        case libdnf5::sack::QueryCmp::NEQ:
+            filter_evr_internal<cmp_neq>(pool, patterns, *p_impl);
             break;
         default:
             libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
@@ -2905,6 +2912,12 @@ void PackageQuery::filter_reboot_suggested() {
     PQImpl::filter_sorted_advisory_pkgs(*this, reboot_advisories, libdnf5::sack::QueryCmp::EQ);
 
     *p_impl |= core_packages;
+}
+
+void PackageQuery::filter_versionlock() {
+    auto sack = p_impl->base->get_rpm_package_sack();
+    auto versionlock_excludes = sack->get_versionlock_excludes();
+    *p_impl -= *versionlock_excludes.p_impl;
 }
 
 }  // namespace libdnf5::rpm

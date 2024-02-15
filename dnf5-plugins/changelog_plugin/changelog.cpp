@@ -119,7 +119,7 @@ void ChangelogCommand::run() {
 
     std::pair<libdnf5::cli::output::ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t, int32_t>>
         filter = {libdnf5::cli::output::ChangelogFilterType::NONE, 0};
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, false);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
 
     auto since = since_option->get_value();
     auto count = count_option->get_value();
@@ -140,7 +140,7 @@ void ChangelogCommand::run() {
     }
 
     //query
-    libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK, true);
     libdnf5::ResolveSpecSettings settings{
         .ignore_case = true,
         .with_nevra = true,

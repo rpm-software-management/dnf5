@@ -175,7 +175,7 @@ void DownloadCommand::run() {
     auto create_nevra_pkg_pair = [](const libdnf5::rpm::Package & pkg) { return std::make_pair(pkg.get_nevra(), pkg); };
 
     std::map<std::string, libdnf5::rpm::Package> download_pkgs;
-    libdnf5::rpm::PackageQuery full_pkg_query(ctx.base);
+    libdnf5::rpm::PackageQuery full_pkg_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf5::rpm::PackageQuery pkg_query(full_pkg_query);
         auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());

@@ -82,7 +82,8 @@ enum class GoalProblem : uint32_t {
     SOLVER_PROBLEM_STRICT_RESOLVEMENT = (1 << 13),
     WRITE_DEBUG = (1 << 14),
     UNSUPPORTED_ACTION = (1 << 15),
-    MULTIPLE_STREAMS = (1 << 16)
+    MULTIPLE_STREAMS = (1 << 16),
+    EXCLUDED_VERSIONLOCK = (1 << 17)
 };
 
 /// Types of Goal actions

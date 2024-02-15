@@ -238,16 +238,29 @@ GoalProblem Transaction::Impl::report_not_found(
             log_level);
         return GoalProblem::ONLY_SRC;
     }
-    // TODO(jmracek) make difference between regular excludes and modular excludes
-    add_resolve_log(
-        action,
-        GoalProblem::EXCLUDED,
-        settings,
-        libdnf5::transaction::TransactionItemType::PACKAGE,
-        pkg_spec,
-        {},
-        log_level);
-    return GoalProblem::EXCLUDED;
+    query.filter_versionlock();
+    if (query.empty()) {
+        add_resolve_log(
+            action,
+            GoalProblem::EXCLUDED_VERSIONLOCK,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            pkg_spec,
+            {},
+            log_level);
+        return GoalProblem::EXCLUDED_VERSIONLOCK;
+    } else {
+        // TODO(jmracek) make difference between regular excludes and modular excludes
+        add_resolve_log(
+            action,
+            GoalProblem::EXCLUDED,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            pkg_spec,
+            {},
+            log_level);
+        return GoalProblem::EXCLUDED;
+    }
 }
 
 void Transaction::Impl::add_resolve_log(

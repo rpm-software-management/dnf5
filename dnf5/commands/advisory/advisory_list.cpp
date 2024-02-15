@@ -32,7 +32,7 @@ void AdvisoryListCommand::process_and_print_queries(
     std::vector<libdnf5::advisory::AdvisoryPackage> installed_pkgs;
     std::vector<libdnf5::advisory::AdvisoryPackage> not_installed_pkgs;
 
-    libdnf5::rpm::PackageQuery packages(ctx.base);
+    libdnf5::rpm::PackageQuery packages(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     if (package_specs.size() > 0) {
         packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
     }

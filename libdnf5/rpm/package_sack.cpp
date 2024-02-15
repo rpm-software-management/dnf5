@@ -25,7 +25,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/rpm/versionlock_config.hpp"
 
 #include <sys/utsname.h>
 
@@ -88,6 +91,67 @@ void PackageSack::Impl::make_provides_ready() {
     // Sets the original considered map.
     get_rpm_pool(base).swap_considered_map(original_considered_map);
 }
+
+void PackageSack::Impl::load_versionlock_excludes() {
+    PackageSet locked_set(base);
+    PackageQuery base_query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    base_query.filter_available();
+
+    auto vl_conf = get_versionlock_config();
+    std::unordered_set<std::string> locked_names;
+    for (const auto & vl_pkg : vl_conf.get_packages()) {
+        if (!vl_pkg.is_valid()) {
+            // skip misconfigured package (e.g. missing name)
+            // TODO(mblaha): log skipped entries?
+            continue;
+        }
+        PackageQuery pkg_query(base_query);
+        pkg_query.filter_name({vl_pkg.get_name()}, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & pkg : pkg_query) {
+            locked_names.emplace(pkg.get_name());
+        }
+        for (const auto & vl_condition : vl_pkg.get_conditions()) {
+            if (!vl_condition.is_valid()) {
+                // skip misconfigured version condition
+                // TODO(mblaha): log skipped entries?
+                continue;
+            }
+            switch (vl_condition.get_key()) {
+                case VersionlockCondition::Keys::EPOCH:
+                    pkg_query.filter_epoch(
+                        std::vector<long unsigned int>{std::stoul(vl_condition.get_value())},
+                        vl_condition.get_comparator());
+                    break;
+                case VersionlockCondition::Keys::EVR:
+                    pkg_query.filter_evr({vl_condition.get_value()}, vl_condition.get_comparator());
+                    break;
+                case VersionlockCondition::Keys::ARCH:
+                    pkg_query.filter_arch({vl_condition.get_value()}, vl_condition.get_comparator());
+                    break;
+            }
+        }
+        locked_set |= pkg_query;
+    }
+
+    if (locked_names.empty()) {
+        return;
+    }
+
+    PackageQuery versionlock_excludes(base_query);
+    versionlock_excludes.filter_name(std::vector<std::string>(locked_names.begin(), locked_names.end()));
+    versionlock_excludes -= locked_set;
+
+    // exclude also anything that obsoletes the locked versions
+    PackageQuery obsoletes_query(base_query);
+    obsoletes_query.filter_obsoletes(locked_set);
+    // leave out obsoleters that are also part of locked versions. Otherwise the
+    // obsoleter package would not be installable at all.
+    obsoletes_query -= locked_set;
+    versionlock_excludes |= obsoletes_query;
+
+    set_versionlock_excludes(versionlock_excludes);
+}
+
 
 void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     considered_uptodate = false;
@@ -191,6 +255,8 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
         config_excludes.reset(new libdnf5::solv::SolvMap(0));
         *config_excludes = *excludes.p_impl;
     }
+
+    load_versionlock_excludes();
 }
 
 const PackageSet PackageSack::Impl::get_user_excludes() {
@@ -299,6 +365,50 @@ void PackageSack::Impl::clear_module_excludes() {
     considered_uptodate = false;
 }
 
+VersionlockConfig PackageSack::Impl::get_versionlock_config() const {
+    const auto & config = base->get_config();
+    std::filesystem::path conf_file_path{libdnf5::VERSIONLOCK_CONF_FILENAME};
+    if (!config.get_use_host_config_option().get_value()) {
+        const std::filesystem::path installroot_path{config.get_installroot_option().get_value()};
+        conf_file_path = installroot_path / conf_file_path.relative_path();
+    }
+    return VersionlockConfig(conf_file_path);
+}
+
+const PackageSet PackageSack::Impl::get_versionlock_excludes() {
+    if (versionlock_excludes) {
+        return PackageSet(base, *versionlock_excludes);
+    } else {
+        return PackageSet(base);
+    }
+}
+
+void PackageSack::Impl::add_versionlock_excludes(const PackageSet & excludes) {
+    if (versionlock_excludes) {
+        *versionlock_excludes |= *excludes.p_impl;
+        considered_uptodate = false;
+    } else {
+        set_versionlock_excludes(excludes);
+    }
+}
+
+void PackageSack::Impl::remove_versionlock_excludes(const PackageSet & excludes) {
+    if (versionlock_excludes) {
+        *versionlock_excludes -= *excludes.p_impl;
+        considered_uptodate = false;
+    }
+}
+
+void PackageSack::Impl::set_versionlock_excludes(const PackageSet & excludes) {
+    versionlock_excludes.reset(new libdnf5::solv::SolvMap(*excludes.p_impl));
+    considered_uptodate = false;
+}
+
+void PackageSack::Impl::clear_versionlock_excludes() {
+    versionlock_excludes.reset();
+    considered_uptodate = false;
+}
+
 std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
     libdnf5::sack::ExcludeFlags flags) const {
     if ((static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
@@ -306,7 +416,8 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
          (!user_excludes && !user_includes)) &&
         (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
-        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes) &&
+        (static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK) || !versionlock_excludes)) {
         return {};
     }
 
@@ -314,7 +425,7 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
     libdnf5::solv::SolvMap considered(pool.get_nsolvables());
 
-    // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes) and
+    // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes - versionlock) and
     //              (config_includes + user_includes + all_from_repos_not_using_includes)
     considered.set_all();
 
@@ -324,6 +435,10 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
         considered -= *repo_excludes;
+    }
+
+    if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK) && versionlock_excludes) {
+        considered -= *versionlock_excludes;
     }
 
     if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
@@ -448,6 +563,30 @@ void PackageSack::set_user_includes(const PackageSet & includes) {
 
 void PackageSack::clear_user_includes() {
     p_impl->clear_user_includes();
+}
+
+VersionlockConfig PackageSack::get_versionlock_config() const {
+    return p_impl->get_versionlock_config();
+}
+
+const PackageSet PackageSack::get_versionlock_excludes() {
+    return p_impl->get_versionlock_excludes();
+}
+
+void PackageSack::add_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->add_versionlock_excludes(excludes);
+}
+
+void PackageSack::remove_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->remove_versionlock_excludes(excludes);
+}
+
+void PackageSack::set_versionlock_excludes(const PackageSet & excludes) {
+    p_impl->set_versionlock_excludes(excludes);
+}
+
+void PackageSack::clear_versionlock_excludes() {
+    p_impl->clear_versionlock_excludes();
 }
 
 static libdnf5::rpm::PackageQuery running_kernel_check_path(const libdnf5::BaseWeakPtr & base, const std::string & fn) {
