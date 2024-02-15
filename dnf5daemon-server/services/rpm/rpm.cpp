@@ -99,13 +99,17 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     session.fill_sack();
     auto base = session.get_base();
 
+    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
     // start with all packages
-    libdnf5::rpm::PackageQuery query(*base);
+    libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+    if (scope != "upgrades" && scope != "upgradable") {
+        flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
+    }
+    libdnf5::rpm::PackageQuery query(*base, flags);
 
     // toplevel filtering - the scope
     // TODO(mblaha): support for other possible scopes?
     //     userinstalled, duplicates, unneeded, extras, installonly, recent, unsatisfied
-    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
     if (scope == "installed") {
         query.filter_installed();
     } else if (scope == "available") {

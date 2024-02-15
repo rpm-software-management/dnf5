@@ -31,13 +31,20 @@ enum class ExcludeFlags : unsigned {
     IGNORE_REGULAR_CONFIG_EXCLUDES = 1 << 1,
     IGNORE_REGULAR_USER_EXCLUDES = 1 << 2,
     USE_DISABLED_REPOSITORIES = 1 << 3,
+    IGNORE_VERSIONLOCK = 1 << 4,
     IGNORE_REGULAR_EXCLUDES = IGNORE_REGULAR_CONFIG_EXCLUDES | IGNORE_REGULAR_USER_EXCLUDES,
-    IGNORE_EXCLUDES = IGNORE_MODULAR_EXCLUDES | IGNORE_REGULAR_EXCLUDES | USE_DISABLED_REPOSITORIES
+    IGNORE_EXCLUDES = IGNORE_MODULAR_EXCLUDES | IGNORE_REGULAR_EXCLUDES | USE_DISABLED_REPOSITORIES | IGNORE_VERSIONLOCK
 };
 
 inline ExcludeFlags operator&(ExcludeFlags lhs, ExcludeFlags rhs) {
     return static_cast<ExcludeFlags>(
         static_cast<std::underlying_type<ExcludeFlags>::type>(lhs) &
+        static_cast<std::underlying_type<ExcludeFlags>::type>(rhs));
+}
+
+inline ExcludeFlags operator|(ExcludeFlags lhs, ExcludeFlags rhs) {
+    return static_cast<ExcludeFlags>(
+        static_cast<std::underlying_type<ExcludeFlags>::type>(lhs) |
         static_cast<std::underlying_type<ExcludeFlags>::type>(rhs));
 }
 

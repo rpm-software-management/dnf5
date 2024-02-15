@@ -34,6 +34,8 @@ constexpr const char * SYSTEM_CACHEDIR = "/var/cache/libdnf5";
 constexpr const char * CONF_FILENAME = "/etc/dnf/dnf.conf";
 constexpr const char * CONF_DIRECTORY = "/etc/dnf/libdnf5.conf.d";
 
+constexpr const char * VERSIONLOCK_CONF_FILENAME = "/etc/dnf/versionlock.toml";
+
 constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
 
 const std::vector<std::string> REPOSITORY_CONF_DIRS{

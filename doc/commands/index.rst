@@ -27,6 +27,7 @@ DNF5 Commands
     search.8
     swap.8
     upgrade.8
+    versionlock.8
 
 ..
     # TODO(jkolarik): history not ready yet
