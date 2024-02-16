@@ -93,6 +93,10 @@ public:
     explicit DbusTransactionCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusTransactionCB() = default;
 
+    // overall transaction progress
+    void before_begin(uint64_t total) override;
+    void after_complete(bool success) override;
+
     // transaction preparation
     void transaction_start(uint64_t total) override;
     void transaction_progress(uint64_t amount, uint64_t total) override;

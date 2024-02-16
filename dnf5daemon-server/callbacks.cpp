@@ -125,6 +125,24 @@ sdbus::Signal DbusTransactionCB::create_signal_pkg(
 }
 
 
+void DbusTransactionCB::before_begin(uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::after_complete(bool success) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_AFTER_COMPLETE);
+        signal << success;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
 void DbusTransactionCB::install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) {
     try {
         dnfdaemon::RpmTransactionItemActions action;
