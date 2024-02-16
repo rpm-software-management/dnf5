@@ -69,6 +69,13 @@ public:
 
     virtual ~TransactionCallbacks() = default;
 
+    /// Called right before the rpm transaction is run
+    /// @param total Number of elements in the rpm transaction
+    virtual void before_begin(uint64_t total) {}
+    /// Called after the transaction run finished
+    /// @param success Whether the rpm transaction was completed successfully
+    virtual void after_complete(bool success) {}
+
     virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void install_start(const TransactionItem & item, uint64_t total) {}
     virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
