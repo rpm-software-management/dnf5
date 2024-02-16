@@ -85,9 +85,14 @@ class RpmSignature {
 public:
     enum class CheckResult { OK, SKIPPED, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
-    explicit RpmSignature(const libdnf5::BaseWeakPtr & base) : base(base) {}
-    explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
-    ~RpmSignature(){};
+    explicit RpmSignature(const libdnf5::BaseWeakPtr & base);
+    explicit RpmSignature(Base & base);
+    ~RpmSignature();
+    RpmSignature(const RpmSignature & src);
+    RpmSignature & operator=(const RpmSignature & src);
+
+    RpmSignature(RpmSignature && src) noexcept;
+    RpmSignature & operator=(RpmSignature && src) noexcept;
 
     /// Check signature of the `package` using public keys stored in rpm database.
     /// @param package: package to check.
@@ -97,7 +102,7 @@ public:
     ///         CheckResult::FAILED_NOT_TRUSTED - signature is valid but the key is not trusted
     ///         CheckResult::FAILED_NOT_SIGNED - package is not signed but signature is required
     ///         CheckResult::FAILED - check failed for another reason
-    CheckResult check_package_signature(Package package) const;
+    CheckResult check_package_signature(const Package & pkg) const;
 
     /// Import public key into rpm database.
     /// @param key: GPG key to be imported into rpm database.
@@ -114,7 +119,8 @@ public:
     static std::string check_result_to_string(CheckResult result);
 
 private:
-    BaseWeakPtr base;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::rpm
