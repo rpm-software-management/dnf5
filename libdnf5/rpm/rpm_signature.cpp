@@ -153,11 +153,41 @@ std::string KeyInfo::get_short_key_id() const {
     return short_key_id;
 }
 
-RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg) const {
+class RpmSignature::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
+
+private:
+    friend RpmSignature;
+    BaseWeakPtr base;
+};
+
+RpmSignature::RpmSignature(const libdnf5::BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+RpmSignature::RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
+RpmSignature::~RpmSignature() = default;
+
+RpmSignature::RpmSignature(const RpmSignature & src) : p_impl(new Impl(*src.p_impl)) {}
+RpmSignature::RpmSignature(RpmSignature && src) noexcept = default;
+
+RpmSignature & RpmSignature::operator=(const RpmSignature & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+RpmSignature & RpmSignature::operator=(RpmSignature && src) noexcept = default;
+
+
+RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Package & pkg) const {
     // is package gpg check even required?
     auto repo = pkg.get_repo();
     if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
-        if (!base->get_config().get_localpkg_gpgcheck_option().get_value()) {
+        if (!p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value()) {
             return CheckResult::SKIPPED;
         }
     } else {
@@ -178,7 +208,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
     // the vector of strings.
     libdnf5::rpm::RpmLogGuardStrings rpm_log_guard;
 
-    auto ts_ptr = create_transaction(base);
+    auto ts_ptr = create_transaction(p_impl->base);
     auto oldmask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_INFO)));
 
     rpmtsSetVfyLevel(ts_ptr.get(), RPMSIG_SIGNATURE_TYPE);
@@ -236,15 +266,15 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
 }
 
 bool RpmSignature::key_present(const KeyInfo & key) const {
-    libdnf5::rpm::RpmLogGuard rpm_log_guard{base};
-    auto ts_ptr = create_transaction(base);
+    libdnf5::rpm::RpmLogGuard rpm_log_guard{p_impl->base};
+    auto ts_ptr = create_transaction(p_impl->base);
     return rpmdb_lookup(ts_ptr, key);
 }
 
 bool RpmSignature::import_key(const KeyInfo & key) const {
     libdnf5::rpm::RpmLogGuardStrings rpm_log_guard;
 
-    auto ts_ptr = create_transaction(base);
+    auto ts_ptr = create_transaction(p_impl->base);
     if (!rpmdb_lookup(ts_ptr, key)) {
         uint8_t * pkt = nullptr;
         size_t pkt_len{0};
@@ -271,7 +301,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
         } else {
             // download the remote key
             downloaded_key = std::make_unique<libdnf5::utils::fs::TempFile>("rpmkey");
-            libdnf5::repo::FileDownloader downloader(base);
+            libdnf5::repo::FileDownloader downloader(p_impl->base);
             downloader.add(key_url, downloaded_key->get_path());
             downloader.download();
             key_path = downloaded_key->get_path();
