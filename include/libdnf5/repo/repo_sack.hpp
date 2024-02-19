@@ -98,10 +98,10 @@ public:
         const std::vector<std::string> & paths, bool calculate_checksum = false);
 
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
-    bool has_system_repo() const noexcept { return system_repo; }
+    bool has_system_repo() const noexcept;
 
     /// @return `true` if the command line repository has been initialized (via `get_cmdline_repo()`).
-    bool has_cmdline_repo() const noexcept { return cmdline_repo; }
+    bool has_cmdline_repo() const noexcept;
 
     /// Dumps libsolv's rpm debugdata of all loaded repositories.
     /// @param dir The directory into which to dump the debugdata.
@@ -135,7 +135,7 @@ public:
     /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
     void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
 
-    RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
+    RepoSackWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
@@ -152,19 +152,19 @@ public:
     /// are created from info in system state.
     void fix_group_missing_xml();
 
+    ~RepoSack();
+
 private:
     friend class libdnf5::Base;
     friend class RepoQuery;
     friend class rpm::PackageSack;
 
-    explicit RepoSack(const libdnf5::BaseWeakPtr & base) : base(base) {}
+    explicit RepoSack(const libdnf5::BaseWeakPtr & base);
     explicit RepoSack(libdnf5::Base & base);
 
     /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
     /// Only the configuration of the corresponding existing repositories is modified.
     void load_repos_configuration_overrides();
-
-    WeakPtrGuard<RepoSack, false> sack_guard;
 
     /// If not created yet, creates the cmdline repository and returns it.
     /// @return The cmdline repository.
@@ -172,11 +172,8 @@ private:
 
     void internalize_repos();
 
-    BaseWeakPtr base;
-
-    repo::Repo * system_repo{nullptr};
-    repo::Repo * cmdline_repo{nullptr};
-    bool repos_updated_and_loaded{false};
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::repo
