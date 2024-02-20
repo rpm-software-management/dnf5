@@ -1,3 +1,18 @@
+# 5.1.13
+
+- Update translations from weblate
+- build: Adapt to changes in Fedora packaging of bash-completion
+- Change location of automatic.conf
+- Limit message log to one on dnf5 start
+- Implement waiting for network for dnf5 automatic
+- Write dnf5 commandline to the log
+- Implement dnf5-automatic: Tool for managing automatic upgrades
+- Parametrize output stream in transaction table
+- Add `download --srpm` option
+- Add missing dbus signal registations
+- Add new versionlock bindings
+- Implement `dnf5 versionlock` command
+
 # 5.1.12
 
 - Update translations from weblate
