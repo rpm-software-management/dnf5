@@ -118,7 +118,7 @@ Provides:       dnf5-command(makecache)
 
 # ========== build requires ==========
 
-%if 0%{?fedora} > 40 || 0 %{?rhel} > 10
+%if 0%{?fedora} > 40 || 0%{?rhel} > 10
 BuildRequires:  bash-completion-devel
 %else
 BuildRequires:  bash-completion
