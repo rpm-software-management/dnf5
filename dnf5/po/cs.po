@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
@@ -170,16 +170,16 @@ msgstr "Neznámý typ mezipaměti \"{0}\". Podporované typy: {1}"
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Nepodařilo se vyčistit mezipaměť repozitory na cestě \"{0}\": {1}"
 
-#: commands/download/download.cpp:103
+#: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
 msgstr "Neplatná volba protokolu adresy URL: {}"
 
-#: commands/download/download.cpp:130 main.cpp:608 shared_options.cpp:90
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Nepodporovaná architektura \"{0}\". Vyberte prosím jednu z {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:163
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "Volba \"--alldeps\" by měla být použita s \"--resolve\""
 
@@ -315,6 +315,67 @@ msgstr "Prohledá také popis balíčku a URL."
 msgid "Patterns"
 msgstr "Vzory"
 
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No package found for \"{}\"."
+msgstr "Nebyly nalezeny žádné shody pro \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr ""
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
+msgstr ""
+
 #: context.cpp:80
 msgid "The key was successfully imported."
 msgstr "Klíč byl úspěšně importován."
@@ -343,46 +404,46 @@ msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Selhalo vypršení platnosti mezipaměti repozitáře na cestě \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr ""
 "repofrompath: Nesprávné ID repozitáře a nesprávná specifikace cesty \"{}\""
 
-#: main.cpp:227 main.cpp:266
+#: main.cpp:228 main.cpp:267
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Špatně naformátovaná hodnota argumentu \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Špatně naformátovaná hodnota argumentu: Poslední klíčový znak nemůže být "
 "'.': {}"
 
-#: main.cpp:247
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:273
+#: main.cpp:274
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:817
+#: main.cpp:819
 msgid "======== Main configuration: ========"
 msgstr "======== Hlavní konfigurace: ========"
 
-#: main.cpp:858
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Konfigurace repozitáře \"{}\": ========"
 
-#: main.cpp:879
+#: main.cpp:881
 msgid "======== Variables: ========"
 msgstr "======== Proměnné: ========"
 
-#: main.cpp:997 main.cpp:1150
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Přidejte \"--help\" pro více informací o argumentech."

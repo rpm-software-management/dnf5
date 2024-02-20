@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
 "PO-Revision-Date: 2024-01-16 23:29+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -98,15 +98,21 @@ msgstr "O argumento '{}' corresponde apenas aos pacotes fonte."
 msgid "Argument '{}' matches only excluded packages."
 msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
+#, fuzzy
+#| msgid "Argument '{}' matches only excluded packages."
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
+
+#: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
 msgstr "  *Talvez você quisesse dizer: {}"
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:124
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Existem as seguintes alternativas para '{0}': {1}"
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:131
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -114,7 +120,7 @@ msgstr ""
 "A versão mais recente disponível do pacote \"{}\" já está instalada e não é "
 "possível fazer downgrade dela."
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -122,7 +128,7 @@ msgstr ""
 "Pacotes para o argumento '{}' instalados e disponíveis, mas em uma versão "
 "diferente => não é possível reinstalar"
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:142
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
@@ -130,34 +136,34 @@ msgstr ""
 "Pacotes para o argumento '{}' instalados e disponíveis, mas em uma versão "
 "diferente."
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:144
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Pacotes para o argumento '{}' instalados, mas não disponíveis."
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "O pacote \"{}\" já está instalado com o motivo \"{}\"."
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:155
 msgid "Package \"{}\" is already installed."
 msgstr "O pacote \"{}\" já está instalado."
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:164
 msgid "Debug data written to \"{}\""
 msgstr "Dados de depuração gravados em \"{}\""
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:167
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "A ação {} para o argumento \"{}\" não é compatível."
 
-#: base/log_event.cpp:177
+#: base/log_event.cpp:179
 msgid ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr ""
 
-#: base/log_event.cpp:185
+#: base/log_event.cpp:187
 #, fuzzy
 #| msgid "No {} to remove for argument: {}"
 msgid "Unable to resolve argument '{}':{}"
@@ -319,27 +325,27 @@ msgstr "Cancelada pelo usuário."
 msgid "Public key import failed."
 msgstr "Falha na importação da chave pública."
 
-#: base/transaction.cpp:620
+#: base/transaction.cpp:638
 msgid "Invalid tsflag: {}"
 msgstr "tsflag inválida: {}"
 
-#: base/transaction.cpp:954
+#: base/transaction.cpp:972
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "A chave pública \"{}\" já está presente, não será importada."
 
-#: base/transaction.cpp:975
+#: base/transaction.cpp:993
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ocorreu um erro ao importar a chave \"{}\": {}"
 
-#: base/transaction.cpp:1008
+#: base/transaction.cpp:1026
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "A verificação PGP do pacote \"{}\" ({}) do repositório \"{}\" falhou: "
 
-#: base/transaction.cpp:1035
+#: base/transaction.cpp:1053
 msgid "Import of the key didn't help, wrong key?"
 msgstr "A importação da chave não ajudou, chave errada?"
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1071
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "Aviso: ignoradas as verificações de PGP para {} pacote(s)."
 
@@ -883,6 +889,10 @@ msgstr "Não é possível remover o pacote \"{}\""
 msgid "Cannot {} package \"{}\""
 msgstr "Não é possível {} o pacote \"{}\""
 
+#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+msgid "{}"
+msgstr "{}"
+
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
@@ -899,10 +909,6 @@ msgstr "Versão TOML \"{}\" inválida, esperava-se \"MAJOR.MINOR\""
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "Estado {} para \"{}\" não encontrado."
-
-#: system/state.cpp:508
-msgid "{}"
-msgstr "{}"
 
 #: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""

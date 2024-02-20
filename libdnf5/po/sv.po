@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
-"PO-Revision-Date: 2024-02-02 09:36+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-16 04:35+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: advisory/advisory.cpp:44
 msgid ""
@@ -97,15 +97,19 @@ msgstr "Argumentet '{}' matchar endast källpaket."
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argumentet '{}' matchar endast exkluderade paket."
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "Argumentet '{}' matchar endast paket som exkluderas av versionslås."
+
+#: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
 msgstr "  *  Du kanske menade: {}"
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:124
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Det finns följande alternativ för '{0}': {1}"
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:131
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -113,7 +117,7 @@ msgstr ""
 "Den lägsta tillgängliga versionen av \"{}\"-paketet är redan installerad, "
 "kan inte nedgradera det."
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -121,34 +125,34 @@ msgstr ""
 "Paket för argument '{}' installerade och tillgängliga, men i en annan "
 "version => kan inte installera om"
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:142
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "Paket för argument'{}' installerade och tillgängliga, men i en annan version."
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:144
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Paket för argument '{}' installerade, men inte tillgängliga."
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Paketet \"{}\" är redan installerat med anledningen \"{}\"."
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:155
 msgid "Package \"{}\" is already installed."
 msgstr "Paketet \"{}\" är redan installerat."
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:164
 msgid "Debug data written to \"{}\""
 msgstr "Felsöknings data har skrivits till \"{}\""
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:167
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "{} åtgärd för argument \"{}\" stöds inte."
 
-#: base/log_event.cpp:177
+#: base/log_event.cpp:179
 msgid ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
@@ -158,7 +162,7 @@ msgstr ""
 "  - Argument '{}' matchar {} strömmar ('{}') av modul '{}', men ingen av "
 "strömmarna är aktiverade eller standard."
 
-#: base/log_event.cpp:185
+#: base/log_event.cpp:187
 msgid "Unable to resolve argument '{}':{}"
 msgstr "Kunde inte lösa argumentet '{}':{}"
 
@@ -318,28 +322,28 @@ msgstr "Avbröts av användaren."
 msgid "Public key import failed."
 msgstr "Import av publik nyckel misslyckades."
 
-#: base/transaction.cpp:620
+#: base/transaction.cpp:638
 msgid "Invalid tsflag: {}"
 msgstr "Ogiltig tsflag: {}"
 
-#: base/transaction.cpp:954
+#: base/transaction.cpp:972
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Publik nyckel \"{}\" finns redan, importerar inte."
 
-#: base/transaction.cpp:975
+#: base/transaction.cpp:993
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ett fel uppstod vid import av nyckeln \"{}\": {}"
 
-#: base/transaction.cpp:1008
+#: base/transaction.cpp:1026
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "PGP-kontroll för paket \"{}\" ({}) från förråd \"{}\" har misslyckats: "
 
-#: base/transaction.cpp:1035
+#: base/transaction.cpp:1053
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Importen av nyckeln hjälpte inte, fel nyckel?"
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1071
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "Varning: hoppade över PGP-kontroller för {} paket."
 
@@ -869,6 +873,10 @@ msgstr "Kunde inte ta bort paket \"{}\""
 msgid "Cannot {} package \"{}\""
 msgstr "Kan inte {} med paketet \"{}\""
 
+#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+msgid "{}"
+msgstr "{}"
+
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
@@ -885,10 +893,6 @@ msgstr "Ogiltig TOML version \"{}\", \"HUVUD.SMÄRRE\" förväntas"
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "{} tillstånd för \"{}\" hittades inte."
-
-#: system/state.cpp:508
-msgid "{}"
-msgstr "{}"
 
 #: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
