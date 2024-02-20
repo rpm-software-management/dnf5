@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -96,15 +96,21 @@ msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
+#, fuzzy
+#| msgid "Argument '{}' matches only excluded packages."
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
+
+#: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
 msgstr "  * Možná jste měli na mysli: {}"
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:124
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Existují následující alternativy pro '{0}': {1}"
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:131
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -112,7 +118,7 @@ msgstr ""
 "Nejnižší dostupná verze balíčku \"{}\" je již nainstalována, nelze ji "
 "downgradovat."
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -120,34 +126,34 @@ msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi => "
 "nelze přeinstalovat"
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:142
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi."
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:144
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Balíčky pro argument '{}' jsou nainstalovány, ale nejsou dostupné."
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Balíček \"{}\" je již nainstalován s důvodem \"{}\"."
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:155
 msgid "Package \"{}\" is already installed."
 msgstr "Balíček \"{}\" je již nainstalován."
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:164
 msgid "Debug data written to \"{}\""
 msgstr "Debug data zapsána do \"{}\""
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:167
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Akce {} pro argument \"{}\" není podporována."
 
-#: base/log_event.cpp:177
+#: base/log_event.cpp:179
 msgid ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
@@ -157,7 +163,7 @@ msgstr ""
 "  - Argument '{}' odpovídá {} streamům ('{}') modulu '{}', ale žádný ze "
 "streamů není povolen ani výchozí."
 
-#: base/log_event.cpp:185
+#: base/log_event.cpp:187
 msgid "Unable to resolve argument '{}':{}"
 msgstr "Nelze vyřešit argument '{}':{}"
 
@@ -317,28 +323,28 @@ msgstr "Zrušeno uživatelem."
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:620
+#: base/transaction.cpp:638
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:954
+#: base/transaction.cpp:972
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:975
+#: base/transaction.cpp:993
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1008
+#: base/transaction.cpp:1026
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1035
+#: base/transaction.cpp:1053
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1071
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
@@ -878,6 +884,10 @@ msgstr "Nelze odstranit balíček \"{}\""
 msgid "Cannot {} package \"{}\""
 msgstr "Nelze {} balíček \"{}\""
 
+#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+msgid "{}"
+msgstr "{}"
+
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
@@ -894,10 +904,6 @@ msgstr "Neplatná verze TOML \"{}\", očekává se \"MAJOR.MINOR\""
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "Stav {} pro \"{}\" nebyl nalezen."
-
-#: system/state.cpp:508
-msgid "{}"
-msgstr "{}"
 
 #: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""

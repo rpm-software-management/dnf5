@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
 "PO-Revision-Date: 2024-01-18 02:47+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -172,16 +172,16 @@ msgstr "Tipo de cache desconhecido \"{0}\". Tipos suportados: {1}"
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Falha para limpar o cache de repositório no caminho \"{0}\": {1}"
 
-#: commands/download/download.cpp:103
+#: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
 msgstr ""
 
-#: commands/download/download.cpp:130 main.cpp:608 shared_options.cpp:90
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Sem suporte à arquitetura \"{0}. Escolha uma entre {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:163
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "As opções \"--alldeps\" devem ser usadas com \"--resolve\""
 
@@ -318,6 +318,67 @@ msgstr "Pesquisa também a URL e a descrição do pacote."
 msgid "Patterns"
 msgstr "Padrões"
 
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No package found for \"{}\"."
+msgstr "Nenhuma correspondência encontrada para \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr ""
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
+msgstr ""
+
 #: context.cpp:80
 msgid "The key was successfully imported."
 msgstr "A chave foi importada com sucesso."
@@ -346,46 +407,46 @@ msgstr "Não foi possível carregar a biblioteca compartilhada \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Não foi possível obter o endereço de símbolo \"{}\": {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Falha ao expirar o cache do repositório no caminho \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: especificação de repoid e caminho incorretos \"{}\""
 
-#: main.cpp:227 main.cpp:266
+#: main.cpp:228 main.cpp:267
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Formatação inválida no valor de argumento \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Formatação inválida no valor de argumento: O último caractere da chave "
 "não pode ser '.': {}"
 
-#: main.cpp:247
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:273
+#: main.cpp:274
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:817
+#: main.cpp:819
 msgid "======== Main configuration: ========"
 msgstr "====== Configuração principal: ======"
 
-#: main.cpp:858
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "====== Configuração do repositório \"{}\": ======="
 
-#: main.cpp:879
+#: main.cpp:881
 msgid "======== Variables: ========"
 msgstr "======== Variáveis: ========"
 
-#: main.cpp:997 main.cpp:1150
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Adicione \"--help\" para mais informações sobre os argumentos."
 

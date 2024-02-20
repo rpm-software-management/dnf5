@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 02:52+0000\n"
-"PO-Revision-Date: 2024-01-31 02:46+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-16 04:35+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: advisory/advisory.cpp:44
 msgid ""
@@ -96,22 +96,26 @@ msgstr "არგუმენტი '{}' მხოლოდ საწყის�
 msgid "Argument '{}' matches only excluded packages."
 msgstr "არგუმენტი '{}' მხოლოდ ამოღებულ პაკეტებს ემთხვევა."
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "არგუმენტი '{}' მხოლოდ versionlock-ის მიერ ამოღებულ პაკეტებს ემთხვევა."
+
+#: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
 msgstr "  * შეიძლება იგულისხმეთ: {}"
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:124
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "არსებობს შემდეგი ალტერნატივები '{0}'-სთვის: {1}"
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:131
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
 "პაკეტი \"{}\" უკვე ყველაზე დაბალი ვერსიისაა. ვერსიის დაწევა შეუძლებელია."
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -119,34 +123,34 @@ msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია "
 "=> თავიდან დაყენება შეუძლებელია"
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:142
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია."
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:144
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "პაკეტი არგუმენტისთვის '{}' დაყენებულია, მაგრამ ხელმისაწვდომი არაა."
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია, მიზეზი: \"{}\"."
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:155
 msgid "Package \"{}\" is already installed."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია."
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:164
 msgid "Debug data written to \"{}\""
 msgstr "გამართვის მონაცემები \"{}\"-ში ჩაიწერა"
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:167
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "ქმედება {} არგუმენტისთვის \"{}\" მხარდაჭერილი არაა."
 
-#: base/log_event.cpp:177
+#: base/log_event.cpp:179
 msgid ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
@@ -156,7 +160,7 @@ msgstr ""
 "  - არგუმენტი '{}' ემთხვევა {} ნაკადს ('{}') მოდულისთვის '{}', მაგრამ ეს "
 "ნაკადები ნაგულისხმევად ჩართული არაა."
 
-#: base/log_event.cpp:185
+#: base/log_event.cpp:187
 msgid "Unable to resolve argument '{}':{}"
 msgstr "ვერ ამოვხსენი არგუმენტი '{}':{}"
 
@@ -316,27 +320,27 @@ msgstr "გაუქმდა მომხმარებლის მიერ.
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:620
+#: base/transaction.cpp:638
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:954
+#: base/transaction.cpp:972
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:975
+#: base/transaction.cpp:993
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1008
+#: base/transaction.cpp:1026
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "PGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1035
+#: base/transaction.cpp:1053
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1071
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "გაფრთხილება: PGP-ით შემოწმების გამოტოვება {} პაკეტისთვის."
 
@@ -878,6 +882,10 @@ msgstr "შეცდომა პაკეტის \"{}\" წაშლისა
 msgid "Cannot {} package \"{}\""
 msgstr "{}-ის შეცდომა პაკეტისთვის \"{}\""
 
+#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+msgid "{}"
+msgstr "{}"
+
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
@@ -894,10 +902,6 @@ msgstr "არასწორი TOML-ის ვერსია \"{}\", მო�
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "{} მდგომარეობა \"{}\"-სთვის აღმოჩენილი არაა."
-
-#: system/state.cpp:508
-msgid "{}"
-msgstr "{}"
 
 #: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
