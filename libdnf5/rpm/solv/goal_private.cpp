@@ -252,17 +252,18 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     ::Pool * pool = *spool;
     bool reresolve = false;
 
-    for (int i = 0; i < installonly.size(); ++i) {
+    // Use maps to handle each package just once
+    libdnf5::solv::SolvMap marked_for_install_providers_map(spool.get_nsolvables());
+    libdnf5::solv::SolvMap available_unused_providers_map(spool.get_nsolvables());
+
+    for (Id install_only_provide : installonly) {
         Id p;
         Id pp;
-        libdnf5::solv::IdQueue q;
-        std::vector<Solvable *> available_unused_providers;
-        libdnf5::solv::IdQueue installing;
 
         // Add all providers of installonly provides that are marked for install
-        // to `q` IdQueue those that are not marked for install and are not already
-        // installed are added to available_unused_providers.
-        FOR_PROVIDES(p, pp, installonly[i]) {
+        // to `marked_for_install_providers_map` SolvMap those that are not marked
+        // for install and are not already installed are added to available_unused_providers_map.
+        FOR_PROVIDES(p, pp, install_only_provide) {
             // TODO(jmracek)  Replace the test by cached data from sack.p_impl->get_solvables()
             if (!spool.is_package(p)) {
                 continue;
@@ -271,61 +272,57 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
             // and negative for conflicts (conflicts with another package or dependency
             // conflicts = dependencies cannot be met).
             if (libsolv_solver.get_decisionlevel(p) > 0) {
-                q.push_back(p);
+                marked_for_install_providers_map.add_unsafe(p);
             } else {
-                Solvable * solvable = spool.id2solvable(p);
-                if (!spool.is_installed(solvable)) {
-                    available_unused_providers.push_back(solvable);
-                }
+                available_unused_providers_map.add_unsafe(p);
             }
         }
-        if (q.size() <= static_cast<int>(installonly_limit)) {
+    }
+
+    libdnf5::solv::IdQueue marked_for_install_providers;
+    for (const auto & pkg_id : marked_for_install_providers_map) {
+        marked_for_install_providers.push_back(pkg_id);
+    }
+
+    std::vector<Solvable *> available_unused_providers;
+    for (const auto & pkg_id : available_unused_providers_map) {
+        Solvable * solvable = spool.id2solvable(pkg_id);
+        if (!spool.is_installed(solvable)) {
+            available_unused_providers.push_back(solvable);
+        }
+    }
+
+    const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
+    marked_for_install_providers.sort(&installonly_cmp, &installonly_cmp_data);
+    std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
+
+    libdnf5::solv::IdQueue same_names;
+    // For each set of `marked_for_install_providers` with the same name ensure at most `installonly_limit`
+    // are installed. Also for each name ensure `available_unused_providers` with that name are not installed.
+    while (!marked_for_install_providers.empty()) {
+        Id name = same_name_subqueue(spool, &marked_for_install_providers.get_queue(), &same_names.get_queue());
+        if (same_names.size() <= static_cast<int>(installonly_limit)) {
             continue;
         }
-        for (int k = 0; k < q.size(); ++k) {
-            Id id = q[k];
-            Solvable * s = spool.id2solvable(id);
-            if (spool->installed != s->repo) {
-                installing.push_back(id);
-                break;
-            }
-        }
-        if (!installing.size()) {
-            continue;
+
+        // We want to avoid reinstalling packages marked for ERASE, therefore
+        // if some unused provider is also available we need to mark it ERASE as well.
+        auto low = std::lower_bound(
+            available_unused_providers.begin(), available_unused_providers.end(), name, name_solvable_id_name_cmp_key);
+        while (low != available_unused_providers.end() && (*low)->name == name) {
+            job.push_back(SOLVER_ERASE | SOLVER_SOLVABLE, spool.solvable2id(*low));
+            ++low;
         }
 
-        const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
-        q.sort(&installonly_cmp, &installonly_cmp_data);
-        std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
-
-        libdnf5::solv::IdQueue same_names;
-        while (q.size() > 0) {
-            Id name = same_name_subqueue(spool, &q.get_queue(), &same_names.get_queue());
-            if (same_names.size() <= static_cast<int>(installonly_limit)) {
-                continue;
+        reresolve = true;
+        for (int j = 0; j < same_names.size(); ++j) {
+            Id id = same_names[j];
+            Id action = SOLVER_ERASE;
+            if (j < static_cast<int>(installonly_limit)) {
+                action = SOLVER_INSTALL;
             }
 
-            // We want to avoid reinstalling packages marked for ERASE, therefore
-            // if some unused provider is also available we need to mark it ERASE as well.
-            auto low = std::lower_bound(
-                available_unused_providers.begin(),
-                available_unused_providers.end(),
-                name,
-                name_solvable_id_name_cmp_key);
-            while (low != available_unused_providers.end() && (*low)->name == name) {
-                job.push_back(SOLVER_ERASE | SOLVER_SOLVABLE, spool.solvable2id(*low));
-                ++low;
-            }
-
-            reresolve = true;
-            for (int j = 0; j < same_names.size(); ++j) {
-                Id id = same_names[j];
-                Id action = SOLVER_ERASE;
-                if (j < static_cast<int>(installonly_limit)) {
-                    action = SOLVER_INSTALL;
-                }
-                job.push_back(action | SOLVER_SOLVABLE, id);
-            }
+            job.push_back(action | SOLVER_SOLVABLE, id);
         }
     }
     return reresolve;
