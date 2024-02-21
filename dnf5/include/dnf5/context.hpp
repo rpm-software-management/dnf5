@@ -30,6 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 
 #include <filesystem>
+#include <functional>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
@@ -76,17 +78,17 @@ public:
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 
-    /// Stores reference to program arguments.
-    void set_prg_arguments(size_t argc, const char * const * argv) {
-        this->argc = argc;
-        this->argv = argv;
-    }
-
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
 
     /// Stores pointer to user comment.
     void set_comment(const char * comment) noexcept { this->comment = comment; }
+
+    /// Get command line used to run the dnf5 command
+    std::string get_cmdline() { return cmdline; }
+
+    /// Set command line used to run the dnf5 command
+    void set_cmdline(std::string & cmdline) { this->cmdline = cmdline; }
 
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
@@ -138,10 +140,10 @@ public:
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(std::string_view msg) const;
 
+    void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
+
 private:
-    /// Program arguments.
-    size_t argc{0};
-    const char * const * argv{nullptr};
+    std::string cmdline;
 
     /// Points to user comment.
     const char * comment{nullptr};
@@ -151,6 +153,8 @@ private:
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
     bool show_new_leaves{false};
+
+    std::reference_wrapper<std::ostream> output_stream = std::cout;
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;

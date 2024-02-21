@@ -44,6 +44,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
+#include "commands/versionlock/versionlock.hpp"
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
@@ -689,6 +690,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<CleanCommand>(context));
     context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
+    context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
 }
 
 static void load_plugins(Context & context) {
@@ -934,7 +936,14 @@ int main(int argc, char * argv[]) try {
     const std::size_t prealloc_log_items = 256;
     loggers.emplace_back(std::make_unique<libdnf5::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
 
-    loggers.front()->info("DNF5 start");
+    std::string cmdline;
+    for (int i = 0; i < argc; ++i) {
+        if (i > 0) {
+            cmdline += " ";
+        }
+        cmdline += argv[i];
+    }
+    loggers.front()->info("--- DNF5 launched with arguments: \"{}\" ---", cmdline);
 
     // Creates a context and passes the loggers to it. We want to capture all messages from the context in the log.
     dnf5::Context context(std::move(loggers));
@@ -948,7 +957,7 @@ int main(int argc, char * argv[]) try {
         libdnf5::GlobalLogger global_logger;
         global_logger.set(log_router, libdnf5::Logger::Level::DEBUG);
 
-        context.set_prg_arguments(static_cast<size_t>(argc), argv);
+        context.set_cmdline(cmdline);
 
         dnf5::add_commands(context);
         dnf5::load_plugins(context);
@@ -1003,7 +1012,7 @@ int main(int argc, char * argv[]) try {
                     if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
                         std::cerr
                             << fmt::format(
-                                   "It could be a command provided by a plugin, try: dnf install dnf5-command({})",
+                                   "It could be a command provided by a plugin, try: dnf5 install dnf5-command({})",
                                    unknown_arg_ex->get_argument())
                             << std::endl;
                     }
@@ -1164,7 +1173,7 @@ int main(int argc, char * argv[]) try {
         return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
-    log_router.info("DNF5 end");
+    log_router.info("DNF5 finished");
 
     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
 } catch (const libdnf5::Error & e) {

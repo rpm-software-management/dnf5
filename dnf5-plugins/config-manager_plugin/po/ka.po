@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-19 02:47+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: addrepo.cpp:152
 msgid "from-repofile: \"{}\" file does not exist"
@@ -26,32 +26,32 @@ msgstr "რეპოფაილიდან: ფაილი \"{}\" არ ა�
 msgid "from-repofile: {}"
 msgstr "რეპოფაილიდან: {}"
 
-#: addrepo.cpp:184
-msgid "set: Badly formatted argument value \"{}\""
-msgstr "დაყენება: არასწორად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+#: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
 
-#: addrepo.cpp:194
+#: addrepo.cpp:195
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "ვერ დავაყენე რეპოზიტორიის პარამეტრი \"{}={}\": {}"
 
-#: addrepo.cpp:202 setopt.cpp:136
+#: addrepo.cpp:203 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "დააყენებს პარამეტრს \"{}\" კიდევ ერთხელ სხვა მნიშვნელობით: \"{}\" != \"{}\""
 
-#: addrepo.cpp:268
+#: addrepo.cpp:269
 msgid "Missing path to repository configuration directory"
 msgstr "აკლია რეპოზიტორიის კონფიგურაციის საქაღალდის ბილიკი"
 
-#: addrepo.cpp:318
+#: addrepo.cpp:319
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" კოპირება ჩავარდა: {}"
 
-#: addrepo.cpp:329
+#: addrepo.cpp:330
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" გადმოწერა ჩავარდა: {}"
 
-#: addrepo.cpp:351
+#: addrepo.cpp:352
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -59,11 +59,11 @@ msgstr ""
 "შეცდომა დამატებული რეპოზიტორიის კონფიგურაციის ფაილში. ვერ დავაყენე "
 "რეპოზიტორიის პარამეტრი \"{}={}\": {}"
 
-#: addrepo.cpp:385
+#: addrepo.cpp:386
 msgid "Bad baseurl: {}={}"
 msgstr "არასწორი baseurl: {}={}"
 
-#: addrepo.cpp:393
+#: addrepo.cpp:394
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -71,11 +71,11 @@ msgstr ""
 "ერთ-ერთი პარამეტრებიდან --from-repofile=<URL>, --set=baseurl=<URL>, --"
 "set=mirrorlist=<URL>, --set=metalink=<URL> არაცარიელ URL-ზე უნდა ეყენოს"
 
-#: addrepo.cpp:438
+#: addrepo.cpp:439
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" შენახვა ჩავარდა: {}"
 
-#: addrepo.cpp:460
+#: addrepo.cpp:461
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -83,7 +83,7 @@ msgstr ""
 "ფაილი \"{}\" უკვე არსებობს და მიუთითებს რეპოზიტორიებზე ID-ებით \"{}\". "
 "დაამატეთ \"--add-or-replace\" ან \"--overwrite\"."
 
-#: addrepo.cpp:463
+#: addrepo.cpp:464
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -91,30 +91,26 @@ msgstr ""
 "ფაილი \"{}\" უკვე არსებობს და მიუთითებს რეპოზიტორიებზე ID-ებით \"{}\". თავზე "
 "გადასაწერად დაამატეთ \"--overwrite\"."
 
-#: addrepo.cpp:483 addrepo.cpp:508
+#: addrepo.cpp:484 addrepo.cpp:509
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "რეპოზიტორია ID-ით \"{}\" უკვე მორგებულია ფაილში:{}"
 
-#: setopt.cpp:82
-msgid "optval: Badly formatted argument value \"{}\""
-msgstr "optval: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
-
-#: setopt.cpp:90
+#: setopt.cpp:91 unsetopt.cpp:65
 msgid ""
-"optval: Badly formatted argument value: Last key character cannot be '.': {}"
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"optval: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო "
-"ვერ იქნება '.': {}"
+"{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
+"იქნება '.': {}"
 
-#: setopt.cpp:98
-msgid "optval: Empty repository id is not allowed: {}"
-msgstr "optval: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"
+#: setopt.cpp:100 unsetopt.cpp:74
+msgid "{}: Empty repository id is not allowed: {}"
+msgstr "{}: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"
 
-#: setopt.cpp:107
+#: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"
 msgstr "ვერ დავაყენე რეპოზიტორიის პარამეტრი \"{}\": {}"
 
-#: setopt.cpp:114 setopt.cpp:177
+#: setopt.cpp:116 setopt.cpp:179
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
@@ -122,17 +118,13 @@ msgstr ""
 "დააყენებს პარამეტრს \"{}\" რეპოზიტორიისთვის \"{}\" კიდევ ერთხელ სხვა "
 "მნიშვნელობით: \"{}\" != \"{}\""
 
-#: setopt.cpp:128
+#: setopt.cpp:130
 msgid "Cannot set option: \"{}\": {}"
 msgstr "ვერ დავაყენე პარამეტრი: \"{}\": {}"
 
-#: setopt.cpp:168
+#: setopt.cpp:170
 msgid "No matching repository to modify: {}"
 msgstr "შესაცვლელად შესაბამისი რეპოზიტორია ვერ ვიპოვე: {}"
-
-#: setvar.cpp:49
-msgid "varval: Badly formatted argument value \"{}\""
-msgstr "varval: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
 
 #: setvar.cpp:60
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
@@ -176,18 +168,22 @@ msgstr ""
 "ცვლადის სახელი მხოლოდ ლათინურ სიმბოლოებს, ციფრებს და '_'-ს შეიძლება "
 "შეიცავდეს: {}"
 
-#: unsetopt.cpp:65
-msgid ""
-"remove-opt: Badly formatted argument value: Last key character cannot be "
-"'.': {}"
-msgstr ""
-"remove-opt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო "
-"სიმბოლო ვერ იქნება '.': {}"
-
-#: unsetopt.cpp:73
-msgid "remove-opt: Empty repository id is not allowed: {}"
-msgstr "remove-opt: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"
-
 #: unsetvar.cpp:76
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "ვერ წავშალე ცვლადის ფაილი \"{}\": {}"
+
+#~ msgid "optval: Badly formatted argument value \"{}\""
+#~ msgstr "optval: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+
+#~ msgid "varval: Badly formatted argument value \"{}\""
+#~ msgstr "varval: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+
+#~ msgid ""
+#~ "remove-opt: Badly formatted argument value: Last key character cannot be "
+#~ "'.': {}"
+#~ msgstr ""
+#~ "remove-opt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო "
+#~ "სიმბოლო ვერ იქნება '.': {}"
+
+#~ msgid "remove-opt: Empty repository id is not allowed: {}"
+#~ msgstr "remove-opt: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"

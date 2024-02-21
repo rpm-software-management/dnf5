@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2024-01-11 10:48+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-16 04:35+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
@@ -78,7 +78,7 @@ msgid ""
 "supports globs."
 msgstr ""
 "Visa endast rekommendationer som innehåller paket med angivna namn. "
-"Listflagga, stödjer globbar."
+"Listaflagga, stödjer ”glob”:ar."
 
 #: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
@@ -98,7 +98,8 @@ msgstr "Visa endast rekommendationer som refererar en CVE."
 
 #: commands/advisory_shared.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
-msgstr "Begränsa till paket i rekommendationer med angivna namn. Listflagga."
+msgstr ""
+"Begränsa till paket som har rekommendationer med angivna namn. Listflagga."
 
 #: commands/advisory_shared.hpp:114
 msgid "ADVISORY_NAME,..."
@@ -142,15 +143,15 @@ msgstr ""
 
 #: commands/advisory_shared.hpp:180
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,…"
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory_shared.hpp:190
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Begränsa till paket med varningar som fixar en CVE (Vanliga sårbarheter och "
-"exponeringar) ID, t.ex. CVE-2201-0123. Listalternativ."
+"Begränsa till paket med rekommendationer som fixar en CVE (Vanliga "
+"sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
 
 #: commands/advisory_shared.hpp:192
 msgid "CVE_ID,..."
@@ -172,8 +173,16 @@ msgstr "Okänd cachetyp \"{0}\". Typer som stöds: {1}"
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Misslyckades att rensa arkivets cache i sökväg \"{0}\": {1}"
 
+#: commands/download/download.cpp:112
+msgid "Invalid urlprotocol option: {}"
+msgstr "Ogiltigt urlprotocol alternativ: {}"
+
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "Arkitektur \"{0}\" som inte stöds. Välj en från {1}"
+
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:101
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "Alternativet \"--alldeps\" ska användas med \"--resolve\""
 
@@ -309,6 +318,66 @@ msgstr "Sök också i paketbeskrivning och URL."
 msgid "Patterns"
 msgstr "Mönster"
 
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr "Tillagt av 'versionlock {}'-kommandot på {}"
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr "Lägg till ny post i versionslåskonfigurationen"
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr "Lista över paketspecifikationer att lägga till versionslås för"
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+msgid "No package found for \"{}\"."
+msgstr "Inga paket hittades för \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr "Lägger till versionslås på \"{0}={1}\"."
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr "Paket \"{}\" är redan låst."
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr "Ta bort alla poster från versionlåskonfiguration"
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr "Ta bort alla matchande versionslåskonfigurationsposter"
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr "Lista över paketspecifikationer att ta bort versionslås för"
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr "Tar bort versionslåspost:"
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr "Lägg till ny exkluderingspost i versionslåskonfigurationen"
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr ""
+"Lista över paketspecifikationer att lägga till versionslås exkludering för"
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr "Lägger till versionslås exkludering på \"{0}={1}\"."
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
+msgstr "Paketet \"{}\" är redan exkluderat."
+
 #: context.cpp:80
 msgid "The key was successfully imported."
 msgstr "Nyckeln importerades framgångsrikt."
@@ -337,53 +406,48 @@ msgstr "Kan inte ladda delat bibliotek \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Det gick inte att upphöra förrådscache i sökväg \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Felaktigt förrådsid och sökvägsspecifikation \"{}\""
 
-#: main.cpp:227
-msgid "setopt: Badly formatted argument value \"{}\""
-msgstr "setopt: Felformaterat argumentvärde \"{}\""
+#: main.cpp:228 main.cpp:267
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
-"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"setopt: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte "
-"vara '.': {}"
+"{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
+"'.': {}"
 
-#: main.cpp:246
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:265
-msgid "setvar: Badly formatted argument value \"{}\""
-msgstr "setvar: Felaktigt formaterat argumentvärde \"{}\""
-
-#: main.cpp:272
+#: main.cpp:274
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:607 shared_options.cpp:90
-msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr "Arkitektur \"{0}\" som inte stöds. Välj en från {1}"
-
-#: main.cpp:816
+#: main.cpp:819
 msgid "======== Main configuration: ========"
 msgstr "======== Huvudkonfiguration: ========"
 
-#: main.cpp:857
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" Förrådskonfiguration: ========"
 
-#: main.cpp:878
+#: main.cpp:881
 msgid "======== Variables: ========"
 msgstr "======== Variabler: ========"
 
-#: main.cpp:996 main.cpp:1149
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ". Lägg till \"--help\" för mer information om dessa argument."
+msgstr ". Lägg till \"--help\" för mer information om argumenten."
+
+#~ msgid "setvar: Badly formatted argument value \"{}\""
+#~ msgstr "setvar: Felaktigt formaterat argumentvärde \"{}\""

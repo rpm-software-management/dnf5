@@ -2,33 +2,37 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-11 13:50+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: repoclosure.cpp:45
 msgid "Print list of unresolved dependencies for repositories"
-msgstr ""
+msgstr "Skriv ut lista över olösta beroenden för förråd"
 
 #: repoclosure.cpp:150
 msgid "No match for argument \"{}\"."
-msgstr ""
+msgstr "Ingen matching för argument \"{}\"."
 
 #: repoclosure.cpp:156
 msgid "Failed to resolve package specifications."
-msgstr ""
+msgstr "Misslyckades att lösa paketspecifikationer."
 
 #: repoclosure.cpp:211
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
-msgstr ""
+msgstr "Fel: Repoclosure avslutades med olösta beroenden ({}) mellan {} paket."

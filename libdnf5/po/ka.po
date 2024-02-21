@@ -1,13 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-16 19:01+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-16 04:35+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.4\n"
 
 #: advisory/advisory.cpp:44
 msgid ""
@@ -31,11 +32,11 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "მხარდაუჭერელი არგუმენტი ქმედებისთვის REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1098
+#: base/goal.cpp:1114
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "არასწორი კონფიგურაციის მნიშვნელობა multilib_policy-სთვის: {}"
 
-#: base/goal.cpp:2306
+#: base/goal.cpp:2322
 msgid "Failed to resolve modules."
 msgstr "მოდულების ამოხსნა ჩავარდა."
 
@@ -95,22 +96,26 @@ msgstr "არგუმენტი '{}' მხოლოდ საწყის�
 msgid "Argument '{}' matches only excluded packages."
 msgstr "არგუმენტი '{}' მხოლოდ ამოღებულ პაკეტებს ემთხვევა."
 
-#: base/log_event.cpp:119
+#: base/log_event.cpp:116
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "არგუმენტი '{}' მხოლოდ versionlock-ის მიერ ამოღებულ პაკეტებს ემთხვევა."
+
+#: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
 msgstr "  * შეიძლება იგულისხმეთ: {}"
 
-#: base/log_event.cpp:122
+#: base/log_event.cpp:124
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "არსებობს შემდეგი ალტერნატივები '{0}'-სთვის: {1}"
 
-#: base/log_event.cpp:129
+#: base/log_event.cpp:131
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
 "პაკეტი \"{}\" უკვე ყველაზე დაბალი ვერსიისაა. ვერსიის დაწევა შეუძლებელია."
 
-#: base/log_event.cpp:135
+#: base/log_event.cpp:137
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -118,32 +123,46 @@ msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია "
 "=> თავიდან დაყენება შეუძლებელია"
 
-#: base/log_event.cpp:140
+#: base/log_event.cpp:142
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "პაკეტი არგუმენტისთვის '{}' დაყენებული და ხელმისაწვდომია, მაგრამ სხვა ვერსია."
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:144
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "პაკეტი არგუმენტისთვის '{}' დაყენებულია, მაგრამ ხელმისაწვდომი არაა."
 
-#: base/log_event.cpp:151
+#: base/log_event.cpp:153
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია, მიზეზი: \"{}\"."
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:155
 msgid "Package \"{}\" is already installed."
 msgstr "პაკეტი \"{}\" უკვე დაყენებულია."
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:164
 msgid "Debug data written to \"{}\""
 msgstr "გამართვის მონაცემები \"{}\"-ში ჩაიწერა"
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:167
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "ქმედება {} არგუმენტისთვის \"{}\" მხარდაჭერილი არაა."
+
+#: base/log_event.cpp:179
+msgid ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr ""
+"\n"
+"  - არგუმენტი '{}' ემთხვევა {} ნაკადს ('{}') მოდულისთვის '{}', მაგრამ ეს "
+"ნაკადები ნაგულისხმევად ჩართული არაა."
+
+#: base/log_event.cpp:187
+msgid "Unable to resolve argument '{}':{}"
+msgstr "ვერ ამოვხსენი არგუმენტი '{}':{}"
 
 #: base/solver_problems.cpp:37
 msgid "{} does not belong to a distupgrade repository"
@@ -269,7 +288,7 @@ msgstr "შეუძლებელია ტრანზაქციის გ�
 
 #: base/transaction.cpp:73
 msgid "Rpm transaction check failed."
-msgstr "RPM-ის ტრანზაქციის შემოწმების შეცდომა."
+msgstr "Rpm-ის ტრანზაქციის შემოწმება ჩავარდა."
 
 #: base/transaction.cpp:75
 msgid ""
@@ -279,7 +298,7 @@ msgstr ""
 
 #: base/transaction.cpp:76
 msgid "Rpm transaction failed."
-msgstr "RPM-ის ტრანზაქციის შეცდომა."
+msgstr "Rpm-ის ტრანზაქცია ჩავარდა."
 
 #: base/transaction.cpp:77
 msgid "Signature verification failed."
@@ -301,27 +320,27 @@ msgstr "გაუქმდა მომხმარებლის მიერ.
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:620
+#: base/transaction.cpp:638
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:954
+#: base/transaction.cpp:972
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:975
+#: base/transaction.cpp:993
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1008
+#: base/transaction.cpp:1026
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "PGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1035
+#: base/transaction.cpp:1053
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1071
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "გაფრთხილება: PGP-ით შემოწმების გამოტოვება {} პაკეტისთვის."
 
@@ -376,7 +395,7 @@ msgstr "'{}'-ის ბაიტებად გარდაქმნის შ�
 msgid "Unknown unit '{}'"
 msgstr "უცნობი ერთეული '{}'"
 
-#: conf/config_main.cpp:327
+#: conf/config_main.cpp:258
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "შეზღუდვის მნიშვნელობა {} დაშვებული დიაპაზონის ({} ... {}) გარეთაა"
 
@@ -489,17 +508,15 @@ msgstr "rpm-ის კონფიგურაციის ფაილები
 
 #: conf/vars.cpp:90
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "ჩავარდა შესრულება ფუნქციისთვის uname()"
 
 #: conf/vars.cpp:355
 msgid "Variable \"{}\" is read-only"
 msgstr "ცვლადი '{}' მხოლოდ-კითხვადია"
 
 #: logger/rotating_file_logger.cpp:59
-#, fuzzy
-#| msgid "Failed to open lock file \"{}\""
 msgid "Cannot open log file"
-msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" გახსნისას"
+msgstr "ჟურნალის ფაილი ვერ გავხსენი"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:764
 msgid "No such module: {}"
@@ -516,7 +533,7 @@ msgstr "მოდულისთვის '{}' მრავალი ნაკ�
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:744
+#: rpm/solv/goal_private.cpp:741
 msgid "no solution possible"
 msgstr "გადაწყვეტა შეუძლებელია"
 
@@ -553,7 +570,7 @@ msgstr "მნიშვნელობაში აკლია '\"'"
 msgid "Missing ':' in the value"
 msgstr "მნიშვნელობაში ':' აკლია"
 
-#: module/module_sack.cpp:830
+#: module/module_sack.cpp:908
 msgid "Invalid module status: {}"
 msgstr "არასწორი მოდულის სტატუსი: {}"
 
@@ -599,8 +616,8 @@ msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
-"გადმოწერის მაქსიმალური სიჩქარე მინიმუმზე ნაკლება. გთხოვთ შეცვალოთ შეზღუდვის "
-"კონფიგურაცია"
+"გადმოწერის მაქსიმალური სიჩქარე მინიმუმზე ნაკლებია. გთხოვთ შეცვალოთ minrate-"
+"ის ან throttle -ისკონფიგურაცია"
 
 #: repo/package_downloader.cpp:147
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
@@ -664,7 +681,7 @@ msgstr ""
 #: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
-"შეცდომა შემოწმებისას, არის თუ არა მეტაბმული \"{}\" სინქრონიზებული, "
+"შეცდომა შემოწმებისას, არის თუ არა metalink \"{}\" სინქრონიზებული, "
 "რეპოზიტორიისთვის \"{}\""
 
 #: repo/repo_downloader.cpp:271
@@ -771,7 +788,7 @@ msgstr "არასწორი სიმბოლო '{}' NEVRA-ის სტ�
 msgid "Package with rpmdbid was not found"
 msgstr "პაკეტი, რომელიც rpmbdbid_ს შეიცავს, აღმოჩენილი არაა"
 
-#: rpm/reldep.cpp:93 rpm/reldep.cpp:100
+#: rpm/reldep.cpp:97 rpm/reldep.cpp:104
 msgid "Cannot parse a dependency string"
 msgstr "დამოკიდებულების სტრიქონის დამუშავება შეუძლებელია"
 
@@ -793,7 +810,7 @@ msgstr "პრობლემა პაკეტის გახსნისა�
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr "RPM-ის ტრანზაქციის rootDir-ის \"{}\"-ზე დაყენების შეცდომა."
+msgstr "'rpm'-ის ტრანზაქციის rootDir-ის \"{}\"-ზე დაყენების შეცდომა."
 
 #: rpm/rpm_signature.cpp:204
 msgid "\"{}\": key is not an armored public key."
@@ -819,7 +836,7 @@ msgstr "ფუნქციამ rpmdbCookie() rpm-ის ბაზის ქუ
 
 #: rpm/transaction.cpp:200
 msgid "Failed to order the rpm transaction."
-msgstr "RPM-ის ტრანზაქციის შეკვეთა ჩავარდა."
+msgstr "'rpm'-ის ტრანზაქციის შეკვეთა ჩავარდა."
 
 #: rpm/transaction.cpp:227
 msgid ""
@@ -844,11 +861,11 @@ msgstr "პაკეტის თავსართის ფაილიდა�
 
 #: rpm/transaction.cpp:297
 msgid "Cannot init rpm database iterator"
-msgstr "RPM ბაზის იტერატორის ინიციალიზაციის შეცდომა"
+msgstr "'rpm'-ის ბაზის იტერატორის ინიციალიზაციის შეცდომა"
 
 #: rpm/transaction.cpp:301
 msgid "Package was not found in rpm database"
-msgstr "პაკეტი RPM-ის ბაზაში ნაპოვნი არაა"
+msgstr "პაკეტი rpm-ის ბაზაში ნაპოვნი არაა"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:317
@@ -864,6 +881,10 @@ msgstr "შეცდომა პაკეტის \"{}\" წაშლისა
 #: rpm/transaction.cpp:371
 msgid "Cannot {} package \"{}\""
 msgstr "{}-ის შეცდომა პაკეტისთვის \"{}\""
+
+#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+msgid "{}"
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
@@ -881,10 +902,6 @@ msgstr "არასწორი TOML-ის ვერსია \"{}\", მო�
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
 msgstr "{} მდგომარეობა \"{}\"-სთვის აღმოჩენილი არაა."
-
-#: system/state.cpp:508
-msgid "{}"
-msgstr ""
 
 #: system/state.cpp:535
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
@@ -956,71 +973,68 @@ msgstr "არასწორი ტრანზაქციის ელემ�
 #: transaction/transaction_sr.cpp:55
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr ""
+"ტრანზაქციის თავიდან გაშვების JSON სერიალიზებული ტრანზქციის შეყვანა ცარიელია"
 
 #: transaction/transaction_sr.cpp:63
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "შეცდომა ტრანზაქციის თავიდან გაშვების JSON-ის დამუშავებისას: {}"
 
 #: transaction/transaction_sr.cpp:73
-#, fuzzy
-#| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
-"TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
+"მხარდაუჭერელი ძირითადი ვერსია \"{}\". მხარდაჭერილი ძირითადი ვერსიაა \"{}\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
-msgstr ""
+msgstr "ფაილი ვერ გავხსენი"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "ფაილი fd-დან ვერ გავხსენი"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "ფაილის დახურვის შეცდომა"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "ფაილის წაკითხვის შეცდომა"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "ფაილში ჩაწერის შეცდომა"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "ფაილის კეშის ჩაწერის შეცდომა"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "ფაილის გადახვევის შეცდომა"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "ფაილის მდებარეობის მიღების შეცდომა"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "ფაილიდან ხაზის წაკითხვის შეცდომა"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "ფაილის დესკრიპტორის მიღების შეცდომა"
 
 #: utils/fs/temp.cpp:42
-#, fuzzy
-#| msgid "Cannot set root directory \"{}\""
 msgid "cannot create temporary directory"
-msgstr "შეცდომა root საქაღალდის (\"{}\") დაყენებისას"
+msgstr "დროებითი საქაღალდის შექმნის შეცდომა"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "დროებითი ფაილის შექმნის შედცდომა: %s"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "დროებითი ფაილის დახურვა შეუძლებელია"
 
 #: utils/iniparser.cpp:126
 msgid "Missing ']' on line {}"
@@ -1050,7 +1064,7 @@ msgstr "აკლია პარამეტრის სახელი ხა
 msgid "Missing '=' on line {}"
 msgstr "აკლია '=' ხაზზე {}"
 
-#. returns localized mesage, problem with later translation
+#. returns localized message, problem with later translation
 #: utils/library.cpp:32
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "გაზიარებული ბიბლიოთეკის ფაილის ჩატვირთვის შეცდომა \"{}\": {}"
@@ -1143,5 +1157,5 @@ msgid "Failed to backup database \"{}\" into \"{}\""
 msgstr "შეცდომა ბაზის \"{}\" \"{}\"-ში დამარქაფებისას"
 
 #: utils/sqlite3/sqlite3.cpp:158
-msgid "Failed to restored database \"{}\""
+msgid "Failed to restore database \"{}\""
 msgstr "შეცდომა ბაზის \"{}\" აღდგენისას"

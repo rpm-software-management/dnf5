@@ -6,18 +6,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-26 02:46+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-copr/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
-msgstr ""
+msgstr "Copr hubb ((web-UI/API-serverns) värdnamn"
 
 #: copr.cpp:88
 msgid ""
@@ -29,15 +32,24 @@ msgid ""
 "fedorainfracloud.org ) or the shortcut (e.g. fedora).  Example: 'fedora/"
 "@footeam/coolproject'."
 msgstr ""
+"Copr projekt-ID för {}. Använd antingen formatet ÄGARE/PROJEKT eller HUBB/"
+"ÄGARE/PROJEKT (om HUBB inte är angivet, används standard, eller --hub <ARG>. "
+"ÄGARE är antingen ett användarnamn eller ett @gruppnamn. PROJEKT kan vara "
+"ett enkelt projektnamn eller en \"projektkatalog\" som innehåller kolon, t."
+"ex. 'projekt:anpassat:123'. HUBB kan vara antingen Copr-"
+"gränssnittsvärdnamnet (t.ex. copr.fedorainfracloud.org ) eller genvägen (t."
+"ex. fedora). Exempel: 'fedora /@exempelteam/cooltprojekt'."
 
 #: copr.cpp:106
 msgid "Invalid PROJECT_SPEC format '{}'"
-msgstr ""
+msgstr "Ogiltigt PROJECT_SPEC-format '{}'"
 
 #: copr_constants.hpp:27
 msgid ""
 "Manage Copr repositories (add-ons provided by users/community/third-party)"
 msgstr ""
+"Hantera Copr förråd (tillägg tillhandahållna av användare/gemenskap/tredje "
+"part)"
 
 #: copr_constants.hpp:29
 msgid ""
@@ -53,6 +65,18 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
+"Aktivera ett Copr-förråd. Observera att detta förråd inte är en del\n"
+"av huvuddistributionen, och kvaliteten kan variera.\n"
+"\n"
+"Fedora-projektet utövar ingen makt över innehållet i\n"
+"detta förråd utöver reglerna som beskrivs i Copr FAQ på\n"
+"<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
+"in-copr>,\n"
+"och paketen hålls inte tillbaka på grund av någon kvalitets eller "
+"säkerhetsnivå.\n"
+"\n"
+"Vänligen skicka inte felrapporter om dessa paket till Fedora\n"
+"Bugzilla. Vid problem, kontakta ägaren för detta förråd.\n"
 
 #: copr_constants.hpp:41
 msgid ""
@@ -69,104 +93,124 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
+"Underhållaren av det aktiverade Copr-förråd beslutade att göra\n"
+"det beroende av andra förråd. Sådana förråd är\n"
+"vanligtvis nödvändiga för framgångsrik installation av RPM från\n"
+"det huvudsakliga Copr-förrådet (de tillhandahåller körtidsberoenden).\n"
+"\n"
+"Var medveten om att noteringen om kvalitet och felrapportering\n"
+"ovan gäller här också, Fedora projektet kontrollerar inte\n"
+"innehållet. Granska listan:\n"
+"\n"
+"{}\n"
+"Dessa förråd aktiveras tillsammans med huvud\n"
+"förrådet.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "skriv ut användbar information om systemet, användbart för felsökning"
 
 #: copr_disable.cpp:34
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"inaktivera specificerat Copr-förråd (om det finns), behåll {}/*.repo-filen - "
+"markera bara enabled=0"
 
 #: copr_enable.cpp:37
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr ""
+"ladda ner förrådsinformationen från en Copr-server och installera den som en "
+"{}/*.repo-fil"
 
 #: copr_enable.cpp:45
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"Chroot som anges i formatet NAMN-SLÄPP-ARKITEKTUR, t.ex. 'fedora-rawhide-"
+"ppc64le'. När det inte anges försöker 'dnf copr'-kommandot att upptäcka det."
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr ""
+msgstr "lista Copr förråd"
 
 #: copr_remove.cpp:34
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr ""
+msgstr "Ta bort speciferade Copr förråd från systemet (tar bort {}/*.repo fil)"
 
 #: copr_repo.cpp:88
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "Katalog '{}' hittades inte i '{}' Copr projektet."
 
 #: copr_repo.cpp:94
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "Du kan använda en av dessa tillgängliga kataloger:"
 
 #: copr_repo.cpp:110
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "Chroot hittas inte i det angivna Copr-projektet"
 
 #: copr_repo.cpp:112
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "Kunde inte upptäcka chroot, ange det explicit."
 
 #: copr_repo.cpp:118
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Vi försökte hitta dessa förråd utan framgång:"
 
 #: copr_repo.cpp:123
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Du kan välja en av dessa tillgängliga chroots uttryckligen:"
 
 #: copr_repo.cpp:197
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Kunde inte analysera Copr-förråds-specifikation: "
 
 #: copr_repo.cpp:335
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Kunde inte ta bort {} förråds fil"
 
 #: copr_repo.cpp:338
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "Förråds fil {} har tagits bort framgångsrikt"
 
 #: copr_repo.cpp:384
-msgid "Can't find {} item in {}"
-msgstr ""
+msgid "Can't find item {} in {}"
+msgstr "Kan inte hitta objekt {} i {}"
 
 #: copr_repo.cpp:440
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Tar bort äldre konfigurationsfil '{}'"
 
 #: copr_repo.cpp:443
 msgid "Can't remove"
-msgstr ""
+msgstr "Kan inte ta bort"
 
 #: copr_repo.cpp:517
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"Copr förrådsfil '{}' har ett äldre format, fixa detta genom att återaktivera "
+"detta förråd med $ {} copr enable {}"
 
 #: copr_repo.cpp:551
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "Repo-id '{}' i '{}' är misstänkt"
 
 #: copr_repo.cpp:558
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "Repo-id '{}' tillhör inte '{}'-förrådsfilen"
 
 #: copr_repo.cpp:608
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Copr-förråd '{}' i '{}' är inaktiverat."
 
 #: copr_repo.cpp:622 copr_repo.cpp:647
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "Förråd '{}' hittas inte på detta system"

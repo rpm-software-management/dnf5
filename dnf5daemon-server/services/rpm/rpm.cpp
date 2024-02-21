@@ -61,6 +61,15 @@ void Rpm::dbus_register() {
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
         });
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, "osut");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, "ostt");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, "ost");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, "osu");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, "osut");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, "osut");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "ot");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS, "ott");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "ot");
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
@@ -90,13 +99,17 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     session.fill_sack();
     auto base = session.get_base();
 
+    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
     // start with all packages
-    libdnf5::rpm::PackageQuery query(*base);
+    libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+    if (scope != "upgrades" && scope != "upgradable") {
+        flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
+    }
+    libdnf5::rpm::PackageQuery query(*base, flags);
 
     // toplevel filtering - the scope
     // TODO(mblaha): support for other possible scopes?
     //     userinstalled, duplicates, unneeded, extras, installonly, recent, unsatisfied
-    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
     if (scope == "installed") {
         query.filter_installed();
     } else if (scope == "available") {

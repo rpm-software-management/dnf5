@@ -106,6 +106,10 @@ Downgrade command
  * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
    the ``--skip-unavailable`` option.
 
+Download command
+----------------
+ * Option ``--source`` was renamed to ``--srpm``.
+
 Group command
 -------------
  * Dropped ``group mark install`` and ``group mark remove`` subcommands in favour of the
@@ -155,6 +159,8 @@ Needs-restarting command
 Remove command
 --------------
  * Command does not remove packages according to provides, but only according NEVRA or file provide match
+ * Dropped commands ``remove-n``, ``remove-na``, ``remove-nevra``.
+ * Dropped erase aliases for the same ``erase``, ``erase-n`` , ``erase-na`` , ``erase-nevra``.
 
 Repoclosure command
 -------------------
@@ -208,7 +214,7 @@ Changes of configuration:
 =========================
 
 Default of ``best`` configuration option changed to ``true``
---------------------------------------------------------
+------------------------------------------------------------
 The new default value ensures that important updates will not be skipped and issues in distribution will be reported
 earlier.
 

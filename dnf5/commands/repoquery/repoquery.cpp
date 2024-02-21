@@ -45,7 +45,7 @@ libdnf5::rpm::PackageQuery repeat_filter(
     // Create source query of all considered packages.
     // To match dnf4 take arch filter into account.
     // (filtering by repo and available/installed is done implicitly by loading only the required metadata)
-    libdnf5::rpm::PackageQuery all_considered(candidates.get_base());
+    libdnf5::rpm::PackageQuery all_considered(candidates.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     if (!arches.empty()) {
         all_considered.filter_arch(arches, libdnf5::sack::QueryCmp::GLOB);
     }
@@ -553,6 +553,9 @@ void RepoqueryCommand::run() {
     libdnf5::sack::ExcludeFlags flags = disable_modular_filtering->get_value()
                                             ? libdnf5::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES
                                             : libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
+    if (!upgrades->get_value()) {
+        flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
+    }
     libdnf5::rpm::PackageQuery base_query(ctx.base, flags, false);
     libdnf5::rpm::PackageQuery result_query(ctx.base, flags, true);
 

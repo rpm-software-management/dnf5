@@ -1,3 +1,63 @@
+# 5.1.13
+
+- Update translations from weblate
+- build: Adapt to changes in Fedora packaging of bash-completion
+- Change location of automatic.conf
+- Limit message log to one on dnf5 start
+- Implement waiting for network for dnf5 automatic
+- Write dnf5 commandline to the log
+- Implement dnf5-automatic: Tool for managing automatic upgrades
+- Parametrize output stream in transaction table
+- Add `download --srpm` option
+- Add missing dbus signal registations
+- Add new versionlock bindings
+- Implement `dnf5 versionlock` command
+
+# 5.1.12
+
+- Update translations from weblate
+- Drop dnf obsoletion temporarily
+- Use regex for tmt plan names
+- Add tmt tests identifiers
+- PackageQuery: Add `filter_{latest,earliest}_evr_ignore_arch`
+- Suggest to use dnf5 command to install dnf5 plugins
+- Added arch option to the download command
+- CI: Upgrade action/checkout to a version with Node.js 20
+- Document explicit nevra remove commands and aliases dropped
+- build: Include <unistd.h> for isatty()
+- Change user info display on history command to include display name and username
+- Revert "Use focusbest: prefer latest deps versions over smaller transactions"
+- Fix a warning when building docs.
+- modules: Add a test for enabling default modules
+- modules: Add a new module stream to test data
+- modules: Respect defaults when enabling multiple streams of a module
+- modules: Fix TransactionItemType for not found modules
+- Build: Require GCC 10.1 for std::in_range<>()
+- Add --urlprotocol option to download command
+- dnfdaemon: Explicitly specify allowed config overrides
+- Disable dnf and dnf5daemon tests
+- needs-restarting: get systemd boot time from UnitsLoadStartTimestamp
+- doc: Add --destdir option to upgrade command manual
+- Move number placeholder to postposition in copr_repo.cpp
+- Added url option
+- Load protected packages from installroot
+- Make protected_packages an append options
+- doc: Create a man page for Aliases
+- I18N: Annotate literals in advisory command
+- Extend filter_release and filter_version tests
+- package_query: Fix filter_version with non EQ comparator
+- Fix clang format
+- Fix code for string deduplication
+- Use placeholders to deduplicate strings
+- Add __hash__(), __str__(), and __repr__() for Package
+- Add __hash__() for Reldep Python binding
+- Add __repr__() to python bindings of Reldep
+- Define tp_str slot for Reldep Class
+- group: Fix using allowerasing option
+- Fix misspellings
+- I18N: Remove duplicate empty message IDs from catalogs
+- I18N: Do not mark empty strings for a translation
+
 # 5.1.11
 
 - Update translations from weblate

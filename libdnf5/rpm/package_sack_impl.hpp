@@ -91,6 +91,9 @@ public:
     // TODO(jrohel): Is param `only_main` needed? Used in DNF4 with commandline repo.
     void load_config_excludes_includes(bool only_main = false);
 
+    /// Load versionlock excludes from the config file.
+    void load_versionlock_excludes();
+
     const PackageSet get_user_excludes();
     void add_user_excludes(const PackageSet & excludes);
     void remove_user_excludes(const PackageSet & excludes);
@@ -108,6 +111,13 @@ public:
     void remove_module_excludes(const PackageSet & excludes);
     void set_module_excludes(const PackageSet & excludes);
     void clear_module_excludes();
+
+    VersionlockConfig get_versionlock_config() const;
+    const PackageSet get_versionlock_excludes();
+    void add_versionlock_excludes(const PackageSet & excludes);
+    void remove_versionlock_excludes(const PackageSet & excludes);
+    void set_versionlock_excludes(const PackageSet & excludes);
+    void clear_versionlock_excludes();
 
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
@@ -136,6 +146,9 @@ private:
     std::unique_ptr<libdnf5::solv::SolvMap> repo_excludes;
 
     std::unique_ptr<libdnf5::solv::SolvMap> module_excludes;  // packages excluded by modularity
+
+    // packages excluded by versionlock feature
+    std::unique_ptr<libdnf5::solv::SolvMap> versionlock_excludes;  // packages excluded by versionlock
 
     bool considered_uptodate = true;
 

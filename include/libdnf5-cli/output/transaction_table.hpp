@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF5_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
+#include "smartcols_table_wrapper.hpp"
+
 #include "libdnf5-cli/tty.hpp"
 #include "libdnf5-cli/utils/units.hpp"
 
@@ -63,10 +65,9 @@ static const char * action_color(libdnf5::transaction::TransactionItemAction act
     libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
 }
 
-
 class ActionHeaderPrinter {
 public:
-    ActionHeaderPrinter(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinter(SmartcolsTableWrapper & table) : table(table) {}
 
     // TODO(lukash) to bring more sanity into the templated functions here, it
     // would be better if the Transaction template type of
@@ -83,7 +84,7 @@ public:
              *current_reason != tspkg.get_reason())) {
             auto reason = tspkg.get_reason();
             auto action = tspkg.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -137,7 +138,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -146,7 +147,7 @@ private:
 
 class ActionHeaderPrinterEnvironment {
 public:
-    ActionHeaderPrinterEnvironment(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterEnvironment(SmartcolsTableWrapper & table) : table(table) {}
 
     template <class T>
     struct libscols_line * print(const T & tsgrp) {
@@ -154,7 +155,7 @@ public:
             *current_reason != tsgrp.get_reason()) {
             auto reason = tsgrp.get_reason();
             auto action = tsgrp.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -184,7 +185,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -193,7 +194,7 @@ private:
 
 class ActionHeaderPrinterGroup {
 public:
-    ActionHeaderPrinterGroup(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterGroup(SmartcolsTableWrapper & table) : table(table) {}
 
     // TODO(lukash) to bring more sanity into the templated functions here, it
     // would be better if the Transaction template type of
@@ -208,7 +209,7 @@ public:
             *current_reason != tsgrp.get_reason()) {
             auto reason = tsgrp.get_reason();
             auto action = tsgrp.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -241,7 +242,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -250,7 +251,7 @@ private:
 
 class ActionHeaderPrinterModule {
 public:
-    ActionHeaderPrinterModule(struct libscols_table * table) : table(table) {}
+    ActionHeaderPrinterModule(SmartcolsTableWrapper & table) : table(table) {}
 
     template <class T>
     struct libscols_line * print(const T & tsmodule) {
@@ -258,7 +259,7 @@ public:
             *current_reason != tsmodule.get_reason()) {
             auto reason = tsmodule.get_reason();
             auto action = tsmodule.get_action();
-            current_header_line = scols_table_new_line(table, NULL);
+            current_header_line = scols_table_new_line(*table, NULL);
             std::string text;
 
             switch (action) {
@@ -288,7 +289,7 @@ public:
     }
 
 private:
-    struct libscols_table * table = nullptr;
+    SmartcolsTableWrapper & table;
     struct libscols_line * current_header_line = nullptr;
     std::optional<libdnf5::transaction::TransactionItemAction> current_action;
     std::optional<libdnf5::transaction::TransactionItemReason> current_reason;
@@ -328,30 +329,30 @@ public:
         }
     }
 
-    void print() {
-        std::cout << "\nTransaction Summary:\n";
+    void print(std::ostream & stream = std::cout) {
+        stream << "\nTransaction Summary:\n";
         if (installs != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Installing:", installs);
+            stream << fmt::format(" {:15} {:4} packages\n", "Installing:", installs);
         }
         if (reinstalls != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls);
+            stream << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls);
         }
         if (upgrades != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
+            stream << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
         }
         if (replaced != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced);
+            stream << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced);
         }
         if (removes != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
+            stream << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
         }
         if (downgrades != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades);
+            stream << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades);
         }
         if (reason_changes != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes);
+            stream << fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes);
         }
-        std::cout << std::endl;
+        stream << std::endl;
     }
 
 private:
@@ -399,22 +400,19 @@ static bool transaction_group_cmp(const TransactionGroup & tsgrp1, const Transac
 
 /// Prints all transaction problems
 template <class Transaction>
-void print_resolve_logs(Transaction transaction) {
+void print_resolve_logs(Transaction transaction, std::ostream & stream = std::cerr) {
     const std::vector<std::string> logs = transaction.get_resolve_logs_as_strings();
     for (const auto & log : logs) {
-        std::cerr << log << std::endl;
+        stream << log << std::endl;
     }
     if (logs.size() > 0) {
-        std::cerr << std::endl;
+        stream << std::endl;
     }
 }
 
 template <class Transaction>
-bool print_transaction_table(Transaction & transaction) {
-    // even correctly resolved transaction can contain some warnings / hints / infos
-    // in resolve logs (e.g. the package user wanted to install is already installed).
-    // Present them to the user.
-    print_resolve_logs(transaction);
+SmartcolsTableWrapper create_transaction_table(Transaction & transaction, TransactionSummary & ts_summary) {
+    SmartcolsTableWrapper tb;
 
     // TODO (nsella) split function into create/print if possible
     //static struct libscols_table * create_transaction_table(bool with_status) {}
@@ -425,56 +423,50 @@ bool print_transaction_table(Transaction & transaction) {
 
     if (tspkgs.empty() && tsgrps.empty() && tsenvs.empty() && tsmodules.empty()) {
         std::cout << "Nothing to do." << std::endl;
-        return false;
+        return tb;
     }
 
-    struct libscols_table * tb = scols_new_table();
-    auto termwidth = (int)scols_table_get_termwidth(tb);
+    auto termwidth = (int)scols_table_get_termwidth(*tb);
 
-    auto column = scols_table_new_column(tb, "Package", 0.2, SCOLS_FL_TRUNC);
+    auto column = scols_table_new_column(*tb, "Package", 0.2, SCOLS_FL_TRUNC);
     auto header = scols_column_get_header(column);
     scols_cell_set_color(header, "lightblue");
 
-    column = scols_table_new_column(tb, "Arch", 6, 0);
+    column = scols_table_new_column(*tb, "Arch", 6, 0);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "lightblue");
 
-    column = scols_table_new_column(tb, "Version", 0.2, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Version", 0.2, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "lightblue");
 
-    column = scols_table_new_column(tb, "Repository", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Repository", 0.1, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "lightblue");
 
-    column = scols_table_new_column(tb, "Size", 0.1, SCOLS_FL_RIGHT);
+    column = scols_table_new_column(*tb, "Size", 0.1, SCOLS_FL_RIGHT);
     header = scols_column_get_header(column);
     scols_cell_set_color(header, "lightblue");
 
-    scols_table_enable_maxout(tb, 1);
-    scols_table_enable_colors(tb, libdnf5::cli::tty::is_interactive());
-
-    struct libscols_symbols * sb = scols_new_symbols();
-    scols_symbols_set_branch(sb, " ");
-    scols_symbols_set_right(sb, " ");
-    scols_symbols_set_vertical(sb, " ");
-    scols_table_set_symbols(tb, sb);
+    scols_table_enable_maxout(*tb, 1);
+    scols_table_enable_colors(*tb, libdnf5::cli::tty::is_interactive());
 
     // TODO(dmach): use colors from config
     // TODO(dmach): highlight version changes (rebases)
     // TODO(dmach): consider reordering so the major changes (installs, obsoletes, removals) are at the bottom next to the confirmation question
     // TODO(jrohel): Print relations with obsoleted packages
 
+    tspkgs = transaction.get_transaction_packages();
     std::sort(tspkgs.begin(), tspkgs.end(), transaction_package_cmp<decltype(*tspkgs.begin())>);
+    tsgrps = transaction.get_transaction_groups();
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp<decltype(*tsgrps.begin())>);
 
     struct libscols_line * header_ln = nullptr;
-    TransactionSummary ts_summary;
     ActionHeaderPrinter action_header_printer(tb);
     int single_line_min = 130;
     std::string arrow = " <- ";
     if (termwidth < single_line_min) {
-        scols_column_set_whint(scols_table_get_column(tb, COL_NAME), 0.4);  // priorizize pakage name over versions
+        scols_column_set_whint(scols_table_get_column(*tb, COL_NAME), 0.4);  // priorizize pakage name over versions
     }
     for (auto & tspkg : tspkgs) {
         // TODO(lukash) handle OBSOLETED correctly through the transaction table output
@@ -487,7 +479,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer.print(tspkg);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         scols_line_set_data(ln, COL_NAME, pkg.get_name().c_str());
         scols_line_set_data(ln, COL_ARCH, pkg.get_arch().c_str());
         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
@@ -504,7 +496,7 @@ bool print_transaction_table(Transaction & transaction) {
         ts_summary.add(tspkg.get_action());
         if (tspkg.get_action() == libdnf5::transaction::TransactionItemAction::REASON_CHANGE) {
             auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
-            struct libscols_line * ln_reason = scols_table_new_line(tb, ln);
+            struct libscols_line * ln_reason = scols_table_new_line(*tb, ln);
             std::string reason = fmt::format(
                 "{} -> {}",
                 libdnf5::transaction::transaction_item_reason_to_string(pkg.get_reason()),
@@ -516,7 +508,7 @@ bool print_transaction_table(Transaction & transaction) {
         struct libscols_line * ln_pre = nullptr;
         for (auto & replaced : tspkg.get_replaces()) {
             if (pkg.get_name() == replaced.get_name() && termwidth < single_line_min) {
-                ln_pre = scols_table_new_line(tb, ln);
+                ln_pre = scols_table_new_line(*tb, ln);
             }
             // print ARCH
             if (tspkg.get_package().get_arch() != replaced.get_arch()) {
@@ -603,7 +595,7 @@ bool print_transaction_table(Transaction & transaction) {
                     }
                 }
             } else {  // print replacing versions
-                struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
+                struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
                 // TODO(jmracek) Translate it
                 std::string name(" replacing ");
                 name.append(replaced.get_name());
@@ -637,7 +629,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer_group.print(tsgrp);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const grp_name = grp.get_name();
         if (grp_name.empty()) {
             scols_line_set_data(ln, COL_NAME, "<name-unset>");
@@ -649,12 +641,12 @@ bool print_transaction_table(Transaction & transaction) {
     }
 
     ActionHeaderPrinterEnvironment action_header_printer_environment(tb);
-    for (auto & tsenv : tsenvs) {
+    for (auto & tsenv : transaction.get_transaction_environments()) {
         auto env = tsenv.get_environment();
 
         header_ln = action_header_printer_environment.print(tsenv);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const env_name = env.get_name();
         if (env_name.empty()) {
             scols_line_set_data(ln, COL_NAME, "<name-unset>");
@@ -666,18 +658,34 @@ bool print_transaction_table(Transaction & transaction) {
     }
 
     ActionHeaderPrinterModule action_header_printer_module(tb);
-    for (auto & tsmodule : tsmodules) {
+    for (auto & tsmodule : transaction.get_transaction_modules()) {
         header_ln = action_header_printer_module.print(tsmodule);
 
-        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         scols_line_set_data(ln, COL_NAME, tsmodule.get_module_name().c_str());
         scols_line_set_data(ln, COL_EVR, tsmodule.get_module_stream().c_str());
         scols_cell_set_color(scols_line_get_cell(ln, COL_NAME), action_color(tsmodule.get_action()));
     }
 
-    scols_print_table(tb);
-    scols_unref_symbols(sb);
-    scols_unref_table(tb);
+    return tb;
+}
+
+template <class Transaction>
+bool print_transaction_table(Transaction & transaction) {
+    // even correctly resolved transaction can contain some warnings / hints / infos
+    // in resolve logs (e.g. the package user wanted to install is already installed).
+    // Present them to the user.
+    print_resolve_logs(transaction);
+
+    if (transaction.empty()) {
+        std::cout << "Nothing to do." << std::endl;
+        return false;
+    }
+
+    TransactionSummary ts_summary;
+    auto tb = create_transaction_table(transaction, ts_summary);
+
+    scols_print_table(*tb);
 
     ts_summary.print();
 

@@ -135,6 +135,7 @@ man_pages = [
     ('commands/search.8', 'dnf5-search', 'Search Command', AUTHORS, 8),
     ('commands/swap.8', 'dnf5-swap', 'Swap Command', AUTHORS, 8),
     ('commands/upgrade.8', 'dnf5-upgrade', 'Upgrade Command', AUTHORS, 8),
+    ('dnf5_plugins/automatic.8', 'dnf5-automatic', 'Automatic Command', AUTHORS, 8),
     ('dnf5_plugins/builddep.8', 'dnf5-builddep', 'Builddep Command', AUTHORS, 8),
     ('dnf5_plugins/copr.8', 'dnf5-copr', 'Copr Command', AUTHORS, 8),
     ('dnf5_plugins/needs_restarting.8', 'dnf5-needs-restarting', 'Needs-restarting Command', AUTHORS, 8),

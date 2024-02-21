@@ -111,7 +111,7 @@ void ProvidesCommand::run() {
     std::set<std::string> unmatched_specs;
 
     for (auto & spec : pkg_specs) {
-        libdnf5::rpm::PackageQuery full_package_query(ctx.base);
+        libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
         // get the matched query first and the type of match (no_match, provides, file, binary) second
         auto matched = filter_spec(spec, full_package_query);
         for (auto package : matched.first) {

@@ -1,119 +1,123 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 10:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-11 13:50+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 3.11.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "\"{}\" inte tillåtet tillsammans med det namngivna argumentet \"{}\""
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "\"{}\" inte tillåtet i kommandot \"{}\""
 
 #: argument_parser.cpp:66
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr ""
+msgstr "\"{}\" inte tillåtet tillsammans med positionsargument \"{}\""
 
 #: argument_parser.cpp:76
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "Argument-id \"{}\" redan registrerat i gruppen \"{}\""
 
 #: argument_parser.cpp:84
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "Ogiltigt tecken '.' i argument-id \"{}\""
 
 #: argument_parser.cpp:199 argument_parser.cpp:204
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "För få värden för positionsargument \"{}\""
 
 #: argument_parser.cpp:244
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Saknar värde för det namngivna argumentet \"--{}\""
 
 #: argument_parser.cpp:252
 msgid "Unexpected value for named argumend \"--{}\""
-msgstr ""
+msgstr "Oväntat värde för det namngivna argumentet \"--{}\""
 
 #: argument_parser.cpp:295
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Saknar värde för det namngivna argumentet \"-{}\""
 
 #: argument_parser.cpp:431
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Kommando-id \"{}\" redan registrerat för kommando \"{}\""
 
 #: argument_parser.cpp:442
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Namngivet argument-id \"{}\" redan registrerat för kommando \"{}\""
 
 #: argument_parser.cpp:452
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Positionsargument-id \"{}\" har redan registrerats för kommando \"{}\""
 
 #: argument_parser.cpp:462
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Grupp-id \"{}\" redan registrerat för kommando \"{}\""
 
 #: argument_parser.cpp:472
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr ""
+msgstr "Kommando-id \"{}\" innehåller inte underkommando med id \"{}\""
 
 #: argument_parser.cpp:480
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
+"Kommando-id \"{}\" innehåller inte ett namngivet argument med id \"{}\""
 
 #: argument_parser.cpp:488
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr ""
+msgstr "Kommando-id \"{}\" innehåller inte positionsargument med id \"{}\""
 
 #: argument_parser.cpp:495
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr ""
+msgstr "Kommando-id \"{}\" innehåller inte grupp med id \"{}\""
 
 #: argument_parser.cpp:590 argument_parser.cpp:718
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Okänt argument \"{}\" för kommando \"{}\""
 
 #: argument_parser.cpp:602 argument_parser.cpp:730
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Saknar positionsargument \"{}\" för kommando \"{}\""
 
 #. print usage
 #: argument_parser.cpp:798
 msgid "Usage:"
-msgstr ""
+msgstr "Användning:"
 
 #: argument_parser.cpp:806
 msgid "Description:"
-msgstr ""
+msgstr "Beskrivning:"
 
 #: argument_parser.cpp:1078
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Det namngivna argumentet med sökvägs-id \"{}\" hittades inte"
 
 #: argument_parser.cpp:1133
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Positionsargument med sökvägs-id \"{}\" hittades inte"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr ""
+msgstr "Operation avbröts av användaren."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "Misslyckades att lösa transaktionen"
 
 #: session.cpp:79
 msgid "Missing command"
-msgstr ""
+msgstr "Saknar kommando"

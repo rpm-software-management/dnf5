@@ -1,0 +1,122 @@
+# Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-11 22:23+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5-cli/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.3.1\n"
+
+#: argument_parser.cpp:62
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" não permitido junto com o argumento nomeado \"{}\""
+
+#: argument_parser.cpp:64
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "\"{}\" não permitido no comando \"{}\""
+
+#: argument_parser.cpp:66
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" não permitido junto com o argumento posicional \"{}\""
+
+#: argument_parser.cpp:76
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "ID do argumento \"{}\" já registrado no grupo \"{}\""
+
+#: argument_parser.cpp:84
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "Caractere inválido '.' no ID de argumento \"{}\""
+
+#: argument_parser.cpp:199 argument_parser.cpp:204
+msgid "Too few values for positional argument \"{}\""
+msgstr "Quantidade insuficiente de valores para o argumento posicional \"{}\""
+
+#: argument_parser.cpp:244
+msgid "Missing value for named argument \"--{}\""
+msgstr "Faltando valor para o argumento nomeado \"--{}\""
+
+#: argument_parser.cpp:252
+msgid "Unexpected value for named argumend \"--{}\""
+msgstr "Valor inesperado para o argumento nomeado \"--{}\""
+
+#: argument_parser.cpp:295
+msgid "Missing value for named argument \"-{}\""
+msgstr "Faltando valor para o argumento nomeado \"-{}\""
+
+#: argument_parser.cpp:431
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "ID do comando \"{}\" já registrado para o comando \"{}\""
+
+#: argument_parser.cpp:442
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "ID do argumento nomeado \"{}\" já registrado para o comando \"{}\""
+
+#: argument_parser.cpp:452
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "ID do argumento posicional \"{}\" já registrado para o comando \"{}\""
+
+#: argument_parser.cpp:462
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "ID do grupo \"{}\" já registrado para o comando \"{}\""
+
+#: argument_parser.cpp:472
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "O ID do comando \"{}\" não contém subcomando com o ID \"{}\""
+
+#: argument_parser.cpp:480
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "O ID do comando \"{}\" não contém um argumento nomeado com ID \"{}\""
+
+#: argument_parser.cpp:488
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr ""
+"O ID do comando \"{}\" não contém um argumento posicional com ID \"{}\""
+
+#: argument_parser.cpp:495
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "O ID do comando \"{}\" não contém grupo com o ID \"{}\""
+
+#: argument_parser.cpp:590 argument_parser.cpp:718
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "Argumento desconhecido \"{}\" para o comando \"{}\""
+
+#: argument_parser.cpp:602 argument_parser.cpp:730
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "Faltando o argumento posicional \"{}\" para o comando \"{}\""
+
+#. print usage
+#: argument_parser.cpp:798
+msgid "Usage:"
+msgstr "Uso:"
+
+#: argument_parser.cpp:806
+msgid "Description:"
+msgstr "Descrição:"
+
+#: argument_parser.cpp:1078
+msgid "Named argument with path id \"{}\" not found"
+msgstr "Argumento nomeado com o ID de caminho \"{}\" não encontrado"
+
+#: argument_parser.cpp:1133
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "Argumento posicional com ID de comando \"{}\" não encontrado"
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "Operação abortada pelo usuário."
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "Falha ao resolver a transação"
+
+#: session.cpp:79
+msgid "Missing command"
+msgstr "Faltando comando"

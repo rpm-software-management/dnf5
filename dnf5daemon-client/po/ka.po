@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-19 02:47+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -101,7 +101,9 @@ msgstr "შეზღუდვა დამატებითი ფუნქც�
 msgid "Limit to packages in newpackage advisories."
 msgstr "შეზღუდვა ახალი პაკეტების რეკომენდაციების პაკეტებზე."
 
-#: commands/advisory/arguments.hpp:153
+#. Note for translators: "critical" etc. quoted words are
+#. literals that should not be translated.
+#: commands/advisory/arguments.hpp:155
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
@@ -111,11 +113,11 @@ msgstr ""
 "\"important\" (მნიშვნელოვანი), \"moderate\" (საშუალო), \"low\" (დაბალი), ან "
 "\"none\" (არც ერთი)."
 
-#: commands/advisory/arguments.hpp:155
+#: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
 msgstr "რეკომენდაციის_სიმძიმე,..."
 
-#: commands/advisory/arguments.hpp:179
+#: commands/advisory/arguments.hpp:181
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -123,11 +125,11 @@ msgstr ""
 "მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
 "მითითებულ Bugzilla ID-ს ასწორებენ. მაგ: 123123. სიის პარამეტრი."
 
-#: commands/advisory/arguments.hpp:180
+#: commands/advisory/arguments.hpp:182
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory/arguments.hpp:190
+#: commands/advisory/arguments.hpp:192
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -136,7 +138,7 @@ msgstr ""
 "მითითებულ CVE ID-ს (Common Vulnerabilities and Exposures) ასწორებენ. მაგ: "
 "CVE-2201-0123. სიის პარამეტრი."
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:194
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
@@ -148,6 +150,13 @@ msgstr ""
 "აუცილებელია, ბრძანება ზემომხმარებლის პრივილეგიებით გაუშვათ (ძირითადად, "
 "მომხმარებლის სახელია root)."
 
-#: main.cpp:236 main.cpp:273
+#: main.cpp:154
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
+"იქნება '.': {}"
+
+#: main.cpp:239 main.cpp:276
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ". არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად დაამატეთ \"--help\"."
+msgstr "დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."

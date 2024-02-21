@@ -43,6 +43,7 @@ public:
         return transaction_environments;
     };
     std::vector<DbusTransactionModuleWrapper> get_transaction_modules() const { return transaction_modules; };
+    bool empty() const;
     std::vector<std::string> get_resolve_logs_as_strings() const { return resolve_logs; }
     void set_resolve_logs(std::vector<std::string> logs) { resolve_logs = logs; }
 

@@ -14,10 +14,10 @@ jobs:
     strategy:
       fail-fast: false  # don't fail all matrix jobs if one of them fails
       matrix:
-        compiler: [gcc, clang]  # gcc is the default
+        compiler: [gcc]  # gcc is the default
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 

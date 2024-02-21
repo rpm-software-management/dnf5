@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include <libsmartcols/libsmartcols.h>
+#include <unistd.h>
 
 namespace libdnf5::cli::output {
 

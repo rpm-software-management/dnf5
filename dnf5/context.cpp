@@ -130,7 +130,7 @@ void Context::apply_repository_setopts() {
 
 void Context::print_info(std::string_view msg) const {
     if (!quiet) {
-        std::cout << msg << std::endl;
+        output_stream.get() << msg << std::endl;
     }
 }
 
@@ -188,7 +188,7 @@ namespace {
 
 class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
 public:
-    RpmTransCB() {
+    RpmTransCB(Context & context) : context(context) {
         multi_progress_bar.set_total_bar_visible_limit(
             libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
     }
@@ -235,10 +235,12 @@ public:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
-                throw std::logic_error(fmt::format(
+                auto & logger = *context.base.get_logger();
+                logger.warning(
                     "Unexpected action in TransactionPackage: {}",
                     static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
-                        item.get_action())));
+                        item.get_action()));
+                return;
         }
         if (!msg) {
             msg = "Installing ";
@@ -402,12 +404,12 @@ private:
 
     libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    Context & context;
 };
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
 }  // namespace
-
 
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     transaction.download();
@@ -416,15 +418,7 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         return;
     }
 
-    std::cout << std::endl << "Running transaction" << std::endl;
-
-    std::string cmd_line;
-    for (size_t i = 0; i < argc; ++i) {
-        if (i > 0) {
-            cmd_line += " ";
-        }
-        cmd_line += argv[i];
-    }
+    print_info("\nRunning transaction");
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
@@ -439,18 +433,18 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         }
     }
 
-    auto callbacks = std::make_unique<RpmTransCB>();
+    auto callbacks = std::make_unique<RpmTransCB>(*this);
     callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
     transaction.set_callbacks(std::move(callbacks));
 
-    transaction.set_description(cmd_line);
+    transaction.set_description(get_cmdline());
 
     if (comment) {
         transaction.set_comment(comment);
     }
 
     auto result = transaction.run();
-    std::cout << std::endl;
+    print_info("");
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;

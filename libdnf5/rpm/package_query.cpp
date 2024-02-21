@@ -632,6 +632,10 @@ inline static bool cmp_eq(int cmp) {
     return cmp == 0;
 }
 
+inline static bool cmp_neq(int cmp) {
+    return cmp != 0;
+}
+
 inline static bool cmp_gte(int cmp) {
     return cmp >= 0;
 }
@@ -675,6 +679,9 @@ void PackageQuery::filter_evr(const std::vector<std::string> & patterns, libdnf5
             break;
         case libdnf5::sack::QueryCmp::EQ:
             filter_evr_internal<cmp_eq>(pool, patterns, *p_impl);
+            break;
+        case libdnf5::sack::QueryCmp::NEQ:
+            filter_evr_internal<cmp_neq>(pool, patterns, *p_impl);
             break;
         default:
             libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
@@ -2435,6 +2442,19 @@ static int latest_cmp(const Id * ap, const Id * bp, libdnf5::solv::RpmPool * poo
     return *ap - *bp;
 }
 
+static int latest_ignore_arch_cmp(const Id * ap, const Id * bp, libdnf5::solv::RpmPool * pool) {
+    Solvable * sa = pool->id2solvable(*ap);
+    Solvable * sb = pool->id2solvable(*bp);
+    int r;
+    r = sa->name - sb->name;
+    if (r)
+        return r;
+    r = pool->evrcmp(sb->evr, sa->evr, EVRCMP_COMPARE);
+    if (r)
+        return r;
+    return *ap - *bp;
+}
+
 static int earliest_cmp(const Id * ap, const Id * bp, libdnf5::solv::RpmPool * pool) {
     Solvable * sa = pool->id2solvable(*ap);
     Solvable * sb = pool->id2solvable(*bp);
@@ -2453,11 +2473,27 @@ static int earliest_cmp(const Id * ap, const Id * bp, libdnf5::solv::RpmPool * p
     return *ap - *bp;
 }
 
+static int earliest_ignore_arch_cmp(const Id * ap, const Id * bp, libdnf5::solv::RpmPool * pool) {
+    Solvable * sa = pool->id2solvable(*ap);
+    Solvable * sb = pool->id2solvable(*bp);
+    int r;
+    r = sa->name - sb->name;
+    if (r)
+        return r;
+    r = pool->evrcmp(sb->evr, sa->evr, EVRCMP_COMPARE);
+    if (r > 0)
+        return -1;
+    if (r < 0)
+        return 1;
+    return *ap - *bp;
+}
+
 static void filter_first_sorted_by(
     libdnf5::solv::RpmPool & pool,
     int limit,
     int (*cmp)(const Id * a, const Id * b, libdnf5::solv::RpmPool * pool),
-    libdnf5::solv::SolvMap & data) {
+    libdnf5::solv::SolvMap & data,
+    bool group_by_arch = true) {
     libdnf5::solv::IdQueue samename;
     for (Id candidate_id : data) {
         samename.push_back(candidate_id);
@@ -2471,7 +2507,7 @@ static void filter_first_sorted_by(
     int i;
     for (i = 0; i < samename.size(); ++i) {
         Solvable * considered = pool.id2solvable(samename[i]);
-        if (!highest || highest->name != considered->name || highest->arch != considered->arch) {
+        if (!highest || highest->name != considered->name || (group_by_arch && (highest->arch != considered->arch))) {
             /* start of a new block */
             if (start_block == -1) {
                 highest = considered;
@@ -2492,8 +2528,16 @@ void PackageQuery::filter_latest_evr(int limit) {
     filter_first_sorted_by(get_rpm_pool(p_impl->base), limit, latest_cmp, *p_impl);
 }
 
+void PackageQuery::filter_latest_evr_any_arch(int limit) {
+    filter_first_sorted_by(get_rpm_pool(p_impl->base), limit, latest_ignore_arch_cmp, *p_impl, false);
+}
+
 void PackageQuery::filter_earliest_evr(int limit) {
     filter_first_sorted_by(get_rpm_pool(p_impl->base), limit, earliest_cmp, *p_impl);
+}
+
+void PackageQuery::filter_earliest_evr_any_arch(int limit) {
+    filter_first_sorted_by(get_rpm_pool(p_impl->base), limit, earliest_ignore_arch_cmp, *p_impl, false);
 }
 
 static inline bool priority_solvable_cmp_key(const Solvable * first, const Solvable * second) {
@@ -2868,6 +2912,12 @@ void PackageQuery::filter_reboot_suggested() {
     PQImpl::filter_sorted_advisory_pkgs(*this, reboot_advisories, libdnf5::sack::QueryCmp::EQ);
 
     *p_impl |= core_packages;
+}
+
+void PackageQuery::filter_versionlock() {
+    auto sack = p_impl->base->get_rpm_package_sack();
+    auto versionlock_excludes = sack->get_versionlock_excludes();
+    *p_impl -= *versionlock_excludes.p_impl;
 }
 
 }  // namespace libdnf5::rpm

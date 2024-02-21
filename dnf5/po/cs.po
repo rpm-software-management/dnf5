@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Petr Ptacek <petr106@atlas.cz>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-21 12:02+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-06 09:36+0000\n"
+"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,349 +17,433 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Vytiskne podrobnosti o doporučeních"
 
 #: commands/advisory/advisory_list.hpp:33
 msgid "List advisories"
-msgstr ""
+msgstr "Seznam doporučení"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
-msgstr ""
+msgstr "Všechno"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr ""
+msgstr "Nainstalováno"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
-msgstr ""
+msgstr "Aktualizace"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr ""
+msgstr "Dostupné"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr ""
+msgstr "Vytiskne souhrn doporučení"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Zobrazí doporučení obsahující jakoukoli verzi nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:45
 msgid "Show advisories containing newer versions of installed packages."
-msgstr ""
+msgstr "Zobrazí doporučení obsahující novější verze nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Zobrazí doporučení obsahující stejné a starší verze nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:69
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Zobrazí doporučení obsahující novější verze nainstalovaných balíčků, pro "
+"které je k dispozici novější verze."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Zobrazit pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
+"možností, podporuje globs."
 
 #: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PACKAGE_NAME,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Seznam vzorů porovnaných s doporučenými názvy."
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Zobrazí pouze doporučení odkazující na bugzillu."
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Zobrazí pouze doporučení odkazující na CVE."
 
 #: commands/advisory_shared.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
-msgstr ""
+msgstr "Omezí se na balíčky v doporučeních se zadaným názvem. Seznam možností."
 
 #: commands/advisory_shared.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory_shared.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr ""
+msgstr "Omezí se na balíčky v bezpečnostních doporučeních."
 
 #: commands/advisory_shared.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr ""
+msgstr "Omezí se na balíčky v doporučeních na opravu chyb."
 
 #: commands/advisory_shared.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr ""
+msgstr "Omezí se na balíčky v doporučeních pro vylepšení."
 
 #: commands/advisory_shared.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr ""
+msgstr "Omezí se na balíčky v doporučeních na nové balíčky."
 
 #: commands/advisory_shared.hpp:153
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Omezí se na balíčky v doporučeních se specifikovanou závažností. Seznamu "
+"možností. Může být \"critical\", \"important\", \"moderate\", \"low\", "
+"\"none\"."
 
 #: commands/advisory_shared.hpp:155
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "ADVISORY_SEVERITY,..."
 
 #: commands/advisory_shared.hpp:179
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
+"Omezí se na balíčky v doporučeních, které opravují Bugzilla ID, např. "
+"123123. Seznamu možností."
 
 #: commands/advisory_shared.hpp:180
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory_shared.hpp:190
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Omezí se na balíčky v doporučeních, které opravují ID CVE (Common "
+"Vulnerabilities and Exposures), např. CVE-2201-0123. Seznam možností."
 
 #: commands/advisory_shared.hpp:192
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr ""
+msgstr "Zkontroluje zjištěné {} problémy v {} balíčcích"
 
 #: commands/clean/clean.cpp:86
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr ""
+msgstr "Seznam typů mezipaměti k vyčištění. Podporované typy: {0}"
 
 #: commands/clean/clean.cpp:104
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr ""
+msgstr "Neznámý typ mezipaměti \"{0}\". Podporované typy: {1}"
 
 #: commands/clean/clean.cpp:161
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "Nepodařilo se vyčistit mezipaměť repozitory na cestě \"{0}\": {1}"
+
+#: commands/download/download.cpp:112
+msgid "Invalid urlprotocol option: {}"
+msgstr "Neplatná volba protokolu adresy URL: {}"
+
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "Nepodporovaná architektura \"{0}\". Vyberte prosím jednu z {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:101
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr ""
+msgstr "Volba \"--alldeps\" by měla být použita s \"--resolve\""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr ""
+msgstr "Zobrazí pouze dostupná prostředí."
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr ""
+msgstr "Zobrazí pouze nainstalovaná prostředí."
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr ""
+msgstr "ID prostředí odpovídající vzoru."
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "Zobrazí pouze dostupné skupiny."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Zobrazí také skryté skupiny."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Zobrazí pouze nainstalované skupiny."
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Zobrazí pouze skupiny obsahující balíčky se zadanými názvy. Seznam možností, "
+"podporuje globs."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr ""
+msgstr "ID skupiny odpovídající vzoru."
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr ""
+msgstr "Zahrnout volitelné balíčky ze skupiny."
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr ""
+msgstr "Pracuje pouze na skupinách, žádné balíčky se nemění."
 
 #: commands/history/arguments.hpp:34
 msgid "Transaction ID"
-msgstr ""
+msgstr "ID transakce"
 
 #: commands/history/arguments.hpp:41
 msgid "Reverse the order of transactions."
-msgstr ""
+msgstr "Obrací pořadí transakcí."
 
 #: commands/history/history_store.cpp:62
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "Soubor \"{}\" již existuje, bude přepsán.\n"
 
 #: commands/history/history_store.cpp:76
 msgid "No transactions selected for storing, exactly one required."
-msgstr ""
+msgstr "Nejsou vybrány žádné transakce k uložení, je vyžadována právě jedna."
 
 #: commands/history/history_store.cpp:79
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr ""
+msgstr "Pro uložení bylo vybráno více transakcí, povolena pouze jedna."
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
+"Neplatný rozsah ID transakce \"{}\", očekává se \"ID\" nebo \"ID..ID\", kde "
+"ID je \"NUMBER\", \"last\" nebo \"last-NUMBER\"."
 
 #: commands/list/list.cpp:256
 msgid "No matching packages to list"
-msgstr ""
+msgstr "Žádné odpovídající balíčky k seznamu"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Zobrazí povolené moduly."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Zobrazí zakázané moduly."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "Modul NSVCA odpovídající vzoru."
 
 #: commands/module/module_list.cpp:84
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "Nebyly nalezeny žádné shody pro \"{}\"."
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr ""
+msgstr "Zobrazí všechny repozitáře."
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr ""
+msgstr "Zobrazí povolené repozitáře (výchozí)."
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "Zobrazí zakázané repozitáře."
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
-msgstr ""
+msgstr "ID repozitáře odpovídající vzoru."
 
 #: commands/repoquery/repoquery.cpp:514
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
+"Volba \"--exactdeps\" musí být použita buď s \"--whatrequires\" nebo \"--"
+"whatdepends\""
 
 #: commands/repoquery/repoquery.cpp:519
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
+"Volba \"--recursive\" musí být použita buď s \"--whatrequires\" nebo \"--"
+"providers-of=requires\""
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
-msgstr ""
+msgstr "Prohledá také popis balíčku a URL."
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
+msgstr "Vzory"
+
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No package found for \"{}\"."
+msgstr "Nebyly nalezeny žádné shody pro \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr ""
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
 msgstr ""
 
 #: context.cpp:80
 msgid "The key was successfully imported."
-msgstr ""
+msgstr "Klíč byl úspěšně importován."
 
 #: context.cpp:126
 msgid "No matching repositories for \"{}\""
-msgstr ""
+msgstr "Žádné odpovídající repozitáře pro \"{}\""
 
 #: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
-msgstr ""
+msgstr "Chcete-li vyřešit problémy, povolte vymazání nainstalovaných balíčků"
 
 #: include/dnf5/shared_options.hpp:43
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr ""
+msgstr "Přeskakováním balíčků povolíte řešení depsolve problémů"
 
 #: include/dnf5/shared_options.hpp:55
 msgid "Allow skipping unavailable packages"
-msgstr ""
+msgstr "Povolit přeskočení nedostupných balíčků"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
 #: library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Nelze získat adresu symbolu \"{}\": {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "Selhalo vypršení platnosti mezipaměti repozitáře na cestě \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr ""
+"repofrompath: Nesprávné ID repozitáře a nesprávná specifikace cesty \"{}\""
 
-#: main.cpp:227
-msgid "setopt: Badly formatted argument value \"{}\""
-msgstr ""
+#: main.cpp:228 main.cpp:267
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Špatně naformátovaná hodnota argumentu \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
-"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Špatně naformátovaná hodnota argumentu: Poslední klíčový znak nemůže být "
+"'.': {}"
 
-#: main.cpp:246
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
-msgstr ""
+msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:265
-msgid "setvar: Badly formatted argument value \"{}\""
-msgstr ""
-
-#: main.cpp:272
+#: main.cpp:274
 msgid "setvar: {}"
-msgstr ""
+msgstr "setvar: {}"
 
-#: main.cpp:607 shared_options.cpp:90
-msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr ""
-
-#: main.cpp:816
+#: main.cpp:819
 msgid "======== Main configuration: ========"
-msgstr ""
+msgstr "======== Hlavní konfigurace: ========"
 
-#: main.cpp:857
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
-msgstr ""
+msgstr "======== Konfigurace repozitáře \"{}\": ========"
 
-#: main.cpp:878
+#: main.cpp:881
 msgid "======== Variables: ========"
-msgstr ""
+msgstr "======== Proměnné: ========"
 
-#: main.cpp:996 main.cpp:1149
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". Přidejte \"--help\" pro více informací o argumentech."

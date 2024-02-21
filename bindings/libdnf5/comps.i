@@ -37,6 +37,7 @@
     #include "libdnf5/comps/environment/query.hpp"
     #include "libdnf5/comps/environment/sack.hpp"
     #include "libdnf5/comps/comps.hpp"
+    #include "libdnf5/repo/repo_query.hpp"
     #include "libdnf5/repo/repo.hpp"
 %}
 

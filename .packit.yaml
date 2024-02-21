@@ -38,31 +38,35 @@ jobs:
       - fedora-all
   - job: tests
     trigger: pull_request
+    identifier: "dnf5-tests"
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
-    tmt_plan: /plans/integration/behave-dnf5
+    tmt_plan: "^/plans/integration/behave-dnf5$"
   - job: tests
     trigger: pull_request
+    identifier: "createrepo_c-tests"
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
-    tmt_plan: /plans/integration/behave-createrepo_c
+    tmt_plan: "^/plans/integration/behave-createrepo_c$"
   - job: tests
     trigger: pull_request
+    identifier: "dnf-tests"
     manual_trigger: true
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
-    tmt_plan: /plans/integration/behave-dnf
+    tmt_plan: "^/plans/integration/behave-dnf$"
   - job: tests
     trigger: pull_request
+    identifier: "dnf5daemon-tests"
     manual_trigger: true
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
-    tmt_plan: /plans/integration/behave-dnf5daemon
+    tmt_plan: "^/plans/integration/behave-dnf5daemon$"

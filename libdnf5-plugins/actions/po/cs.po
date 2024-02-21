@@ -1,56 +1,63 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Petr Ptacek <petr106@atlas.cz>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-02 13:11+0000\n"
+"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
 msgstr ""
+"Chyba v souboru \"{}\" na řádku {}: očekává se formát \"HOOK:PKG_FILTER:"
+"DIRECTION:OPTIONS:CMD\""
 
 #: actions.cpp:443
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
+"Chyba v souboru \"{}\" na řádku {}: Neznámá hodnota volby \"enabled\" \"{}\""
 
 #: actions.cpp:450
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr ""
+msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámá volba \"{}\""
 
 #: actions.cpp:468
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr ""
+msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámý háček \"{}\""
 
 #: actions.cpp:478
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
 msgstr ""
+"Chyba v souboru \"{}\" na řádku {}: Filtr balíčků lze použít pouze v háčcích "
+"PRE_TRANS a POST_TRANS"
 
 #: actions.cpp:488
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
+"Chyba v souboru \"{}\" na řádku {}: Nelze použít směr bez filtru balíčku"
 
 #: actions.cpp:505
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr ""
+msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámý směr balíčku \"{}\""
 
 #: actions.cpp:514
 msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr ""
+msgstr "Chyba v souboru \"{}\" na řádku {}: Chybějící příkaz"

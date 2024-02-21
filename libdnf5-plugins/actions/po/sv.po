@@ -2,53 +2,61 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-11 13:50+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
 msgstr ""
+"Fel i fil \"{}\" på rad {}: \"KROK:PKG_FILTER:RIKTNING:ALTERNATIV:KOMMANDO\" "
+"format förväntas"
 
 #: actions.cpp:443
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Okänt \"aktiverat\" alternativvärde \"{}\""
 
 #: actions.cpp:450
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Okänt alternativ \"{}\""
 
 #: actions.cpp:468
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Okänd krok \"{}\""
 
 #: actions.cpp:478
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
 msgstr ""
+"Fel i fil \"{}\" på rad {}: Paketfilter kan endast användas i PRE_TRANS och "
+"POST_TRANS krokar"
 
 #: actions.cpp:488
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Kan inte använda riktning utan paketfilter"
 
 #: actions.cpp:505
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Okänd paketriktning \"{}\""
 
 #: actions.cpp:514
 msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr ""
+msgstr "Fel i fil \"{}\" på rad {}: Saknar kommando"

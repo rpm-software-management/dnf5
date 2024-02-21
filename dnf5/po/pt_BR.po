@@ -2,360 +2,453 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-01-18 02:47+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Imprime detalhes sobre os avisos"
 
 #: commands/advisory/advisory_list.hpp:33
 msgid "List advisories"
-msgstr ""
+msgstr "Lista os avisos"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr ""
+msgstr "Instalado"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
-msgstr ""
+msgstr "Atualizações"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr ""
+msgstr "Disponível"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr ""
+msgstr "Imprime um resumo dos avisos"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "Mostra os avisos que contenham qualquer versão dos pacotes instalados."
 
 #: commands/advisory/arguments.hpp:45
 msgid "Show advisories containing newer versions of installed packages."
 msgstr ""
+"Mostra os avisos que contenham versões mais recentes dos pacotes instalados."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
+"Mostra os avisos que contenham versões iguais e mais antigas dos pacotes "
+"instalados."
 
 #: commands/advisory/arguments.hpp:69
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Mostra os avisos que contenham versões mais recentes dos pacotes instalados "
+"para os quais uma versão mais recente está disponível."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Mostra apenas os avisos que contenham pacotes com nomes específicos. Opção "
+"de lista, suporta caracteres curinga."
 
 #: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "NOME_PACOTE,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Lista de padrões correspondentes aos nomes dos avisos."
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Mostra apenas os avisos que fazem referência a um bugzilla."
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "Mostra apenas os avisos que fazem referência a um CVE."
 
 #: commands/advisory_shared.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
-msgstr ""
+msgstr "Limite para pacotes em avisos com o nome especificado. Opção de lista."
 
 #: commands/advisory_shared.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "NOME_AVISO,..."
 
 #: commands/advisory_shared.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr ""
+msgstr "Limite para pacotes em avisos de segurança."
 
 #: commands/advisory_shared.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr ""
+msgstr "Limite para pacotes em avisos de correção de bugs."
 
 #: commands/advisory_shared.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr ""
+msgstr "Limite para pacotes em avisos de melhorias."
 
 #: commands/advisory_shared.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr ""
+msgstr "Limite para pacotes em avisos de novos pacotes."
 
 #: commands/advisory_shared.hpp:153
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Limite para pacotes em avisos com a gravidade especificada. Opção de lista. "
+"Pode ser \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 
 #: commands/advisory_shared.hpp:155
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "GRAVIDADE_AVISO,..."
 
 #: commands/advisory_shared.hpp:179
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
+"Limite para pacotes em avisos que corrigem um Bugzilla ID, ex. 123123. Opção "
+"de lista."
 
 #: commands/advisory_shared.hpp:180
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory_shared.hpp:190
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"Limite para pacotes em avisos que corrigem um ID de CVE (Common "
+"Vulnerabilities and Exposures), ex. CVE-2201-0123. Opção de lista."
 
 #: commands/advisory_shared.hpp:192
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "ID_CVE,..."
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr ""
+msgstr "Verifique {} problema(s) descoberto(s) em {} pacote(s)"
 
 #: commands/clean/clean.cpp:86
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr ""
+msgstr "Lista de tipos de cache para limpar. Tipos suportados: {0}"
 
 #: commands/clean/clean.cpp:104
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr ""
+msgstr "Tipo de cache desconhecido \"{0}\". Tipos suportados: {1}"
 
 #: commands/clean/clean.cpp:161
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
+msgstr "Falha para limpar o cache de repositório no caminho \"{0}\": {1}"
+
+#: commands/download/download.cpp:112
+msgid "Invalid urlprotocol option: {}"
 msgstr ""
 
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "Sem suporte à arquitetura \"{0}. Escolha uma entre {1}"
+
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:101
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr ""
+msgstr "As opções \"--alldeps\" devem ser usadas com \"--resolve\""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr ""
+msgstr "Mostra apenas ambientes disponíveis."
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr ""
+msgstr "Mostra apenas ambientes instalados."
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr ""
+msgstr "Padrão correspondendo a IDs de ambientes."
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "Mostra apenas grupos disponíveis."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Mostra também grupos ocultos."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Mostra somente os grupos instalados."
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Mostra apenas grupos contendo pacotes com nomes especificados. Opção de "
+"lista, suporta caracteres curinga."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr ""
+msgstr "Padrão correspondendo a IDs de grupos."
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr ""
+msgstr "Inclui pacotes opcionais do grupo."
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr ""
+msgstr "Opera em apenas grupos, nenhum pacotes são alteradas."
 
 #: commands/history/arguments.hpp:34
 msgid "Transaction ID"
-msgstr ""
+msgstr "ID da transação"
 
 #: commands/history/arguments.hpp:41
 msgid "Reverse the order of transactions."
-msgstr ""
+msgstr "Inverte a ordem das transações."
 
 #: commands/history/history_store.cpp:62
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "O arquivo \"{}\" já existe, ele será sobrescritos.\n"
 
 #: commands/history/history_store.cpp:76
 msgid "No transactions selected for storing, exactly one required."
 msgstr ""
+"Nenhuma transação selecionada para armazenar, exatamente uma é exigida."
 
 #: commands/history/history_store.cpp:79
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr ""
+msgstr "Várias transações selecionadas para armazenar, apenas uma é permitida."
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
+"Esperava-se ID de transação de intervalo inválido \"{}\", \"ID\" ou \"ID.."
+"ID\", onde ID é \"NUMBER\", \"last\" ou \"last-NUMBER\"."
 
 #: commands/list/list.cpp:256
 msgid "No matching packages to list"
-msgstr ""
+msgstr "Nenhum pacote correspondente para listar"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Mostra módulos habilitados."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Mostra nódulos desabilitados."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "Padrão correspondendo a NSVCAs de módulos."
 
 #: commands/module/module_list.cpp:84
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "Nenhuma correspondência encontrada para \"{}\"."
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr ""
+msgstr "Mostra todos os repositórios."
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr ""
+msgstr "Mostra repositórios habilitados (padrão)."
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "Mostra repositórios desabilitados."
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
-msgstr ""
+msgstr "Padrão correspondendo a IDs de repositórios."
 
 #: commands/repoquery/repoquery.cpp:514
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
+"A opção \"--exactdeps\" tem que ser usada com \"--whatrequires\" ou \"--"
+"whatdepends\""
 
 #: commands/repoquery/repoquery.cpp:519
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
+"A opção \"--recursive\" tem que ser usada com \"--whatrequires\" ou \"--"
+"providers-of=requires\""
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
-msgstr ""
+msgstr "Pesquisa também a URL e a descrição do pacote."
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
+msgstr "Padrões"
+
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+#, fuzzy
+#| msgid "No matches found for \"{}\"."
+msgid "No package found for \"{}\"."
+msgstr "Nenhuma correspondência encontrada para \"{}\"."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr ""
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr ""
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr ""
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
 msgstr ""
 
 #: context.cpp:80
 msgid "The key was successfully imported."
-msgstr ""
+msgstr "A chave foi importada com sucesso."
 
 #: context.cpp:126
 msgid "No matching repositories for \"{}\""
-msgstr ""
+msgstr "Nenhum repositório correspondente para \"{}\""
 
 #: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
-msgstr ""
+msgstr "Permite apagar pacotes instalados para resolver problemas"
 
 #: include/dnf5/shared_options.hpp:43
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr ""
+msgstr "Permite resolver problemas com dependências pulando pacotes"
 
 #: include/dnf5/shared_options.hpp:55
 msgid "Allow skipping unavailable packages"
-msgstr ""
+msgstr "Permite pular pacotes indisponíveis"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "Não foi possível carregar a biblioteca compartilhada \"{}\": {}"
 
 #: library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "Não foi possível obter o endereço de símbolo \"{}\": {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "Falha ao expirar o cache do repositório no caminho \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
-msgstr ""
+msgstr "repofrompath: especificação de repoid e caminho incorretos \"{}\""
 
-#: main.cpp:227
-msgid "setopt: Badly formatted argument value \"{}\""
-msgstr ""
+#: main.cpp:228 main.cpp:267
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Formatação inválida no valor de argumento \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
-"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Formatação inválida no valor de argumento: O último caractere da chave "
+"não pode ser '.': {}"
 
-#: main.cpp:246
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
-msgstr ""
+msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:265
-msgid "setvar: Badly formatted argument value \"{}\""
-msgstr ""
-
-#: main.cpp:272
+#: main.cpp:274
 msgid "setvar: {}"
-msgstr ""
+msgstr "setvar: {}"
 
-#: main.cpp:607 shared_options.cpp:90
-msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr ""
-
-#: main.cpp:816
+#: main.cpp:819
 msgid "======== Main configuration: ========"
-msgstr ""
+msgstr "====== Configuração principal: ======"
 
-#: main.cpp:857
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
-msgstr ""
+msgstr "====== Configuração do repositório \"{}\": ======="
 
-#: main.cpp:878
+#: main.cpp:881
 msgid "======== Variables: ========"
-msgstr ""
+msgstr "======== Variáveis: ========"
 
-#: main.cpp:996 main.cpp:1149
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr ". Adicione \"--help\" para mais informações sobre os argumentos."
+
+#~ msgid "setvar: Badly formatted argument value \"{}\""
+#~ msgstr "setvar: Formatação inválida no valor de argumento \"{}\""

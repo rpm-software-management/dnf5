@@ -80,7 +80,7 @@ SearchProcessor::SearchProcessor(
     : base(base),
       patterns(patterns),
       search_all(search_all),
-      full_package_query(base),
+      full_package_query(base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK),
       showdupes(show_duplicates) {
     if (!showdupes) {
         full_package_query.filter_latest_evr();

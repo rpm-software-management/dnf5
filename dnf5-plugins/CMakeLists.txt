@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/dnf5/include/")
 # at link time and cannot pass "-z defs" linker check. Disable the check.
 set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,undefs")
 
+add_subdirectory("automatic_plugin")
 add_subdirectory("builddep_plugin")
 add_subdirectory("changelog_plugin")
 add_subdirectory("config-manager_plugin")

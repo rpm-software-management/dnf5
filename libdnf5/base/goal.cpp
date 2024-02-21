@@ -569,9 +569,25 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
     for (auto & [action, spec, settings] : module_specs) {
         try {
             switch (action) {
-                case GoalAction::ENABLE:
-                    module_sack.p_impl->enable(spec);
+                case GoalAction::ENABLE: {
+                    bool skip_broken = settings.resolve_skip_broken(base->get_config());
+                    auto log_level = skip_broken ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
+                    const auto & enable_ret = module_sack.p_impl->enable(spec);
+                    if (!enable_ret.second.empty()) {
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::MULTIPLE_STREAMS,
+                            GoalJobSettings(),
+                            libdnf5::transaction::TransactionItemType::MODULE,
+                            spec,
+                            enable_ret.second,
+                            log_level);
+                        if (!skip_broken) {
+                            ret |= GoalProblem::MULTIPLE_STREAMS;
+                        }
+                    }
                     break;
+                }
                 case GoalAction::DISABLE:
                     module_sack.p_impl->disable(spec);
                     break;
@@ -588,7 +604,7 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
                 action,
                 GoalProblem::NOT_FOUND,
                 GoalJobSettings(),
-                libdnf5::transaction::TransactionItemType::GROUP,
+                libdnf5::transaction::TransactionItemType::MODULE,
                 spec,
                 {},
                 log_level);

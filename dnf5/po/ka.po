@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-09 02:52+0000\n"
-"PO-Revision-Date: 2023-11-21 12:02+0000\n"
+"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"PO-Revision-Date: 2024-02-16 04:35+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
@@ -162,13 +162,11 @@ msgstr "CVE_ID,..."
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr ""
+msgstr "შეამოწმეთ {} აღმოჩენილი პრობლემა {} პაკეტში"
 
 #: commands/clean/clean.cpp:86
-#, fuzzy
-#| msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr "უცნობი კეშის ტიპი \"{0}\". მხარდაჭერილი ტიპებია: {1}"
+msgstr "გასასუფთავებელი კეშის ტიპების სია. მხარდაჭერილი ტიპებია: {0}"
 
 #: commands/clean/clean.cpp:104
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
@@ -178,8 +176,16 @@ msgstr "უცნობი კეშის ტიპი \"{0}\". მხარდ
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "რეპოზიტორიის კეშის გასუფთავება ჩავარდა ბილიკზე \"{0}\": {1}"
 
+#: commands/download/download.cpp:112
+msgid "Invalid urlprotocol option: {}"
+msgstr "არასწორი urlprotocol-ის პარამეტრი: {}"
+
+#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
+msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
+msgstr "მხარდაუჭერელი არქიტექტურა \"{0}\". აირჩიეთ ერთ-ერთი სიიდან {1}"
+
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:101
+#: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr ""
 "პარამეტრი \"--alldeps\" პარამეტრ \"--resolve\"-თან ერთად უნდა გამოიყენოთ"
@@ -238,15 +244,15 @@ msgstr "ტრანზაქციების მიმდევრობი�
 
 #: commands/history/history_store.cpp:62
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "ფაილი \"{}\" უკვე არსებობს. მას თავზე გადავაწერ.\n"
 
 #: commands/history/history_store.cpp:76
 msgid "No transactions selected for storing, exactly one required."
-msgstr ""
+msgstr "შესანახად ტრანზაქცია მონიშნული არაა. აუცილებელია ზუსტად ერთი."
 
 #: commands/history/history_store.cpp:79
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr ""
+msgstr "შესანახად მონიშნულია ერთზე მეტი ტრანზაქცია. დაშვებულია მხოლოდ ერთი."
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
@@ -274,7 +280,7 @@ msgstr "ნიმუში, რომელიც მოდულის NSVCA-�
 
 #: commands/module/module_list.cpp:84
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "\"{}\"-სთვის დამთხვევა აღმოჩენილი არაა."
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
@@ -301,16 +307,12 @@ msgstr ""
 "პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
 
 #: commands/repoquery/repoquery.cpp:519
-#, fuzzy
-#| msgid ""
-#| "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or "
-#| "\"--whatdepends\""
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
-"პარამეტრი \"--exactdeps\", მხოლოდ, \"--whatrequires\" ან \"--whatdepends\" "
-"პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
+"პარამეტრი \"--recursive\", მხოლოდ, \"--whatrequires\" ან \"--providers-"
+"of=requires\" პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
@@ -320,13 +322,72 @@ msgstr "ძებნა ასევე მოხდება პაკეტი
 msgid "Patterns"
 msgstr "შაბლონები"
 
+#. TODO(mblaha): add full command line
+#: commands/versionlock/utils.cpp:34
+msgid "Added by 'versionlock {}' command on {}"
+msgstr "დამატებულია ბრძანების 'versionlock {}' მიერ {}-ზე"
+
+#: commands/versionlock/versionlock_add.cpp:37
+msgid "Add new entry to versionlock configuration"
+msgstr "ახალი ჩანაწერის დამატება versionlock-ის კონფიგურაციაში"
+
+#: commands/versionlock/versionlock_add.cpp:43
+msgid "List of package specs to add versionlock for"
+msgstr "პაკეტის spec-ების სია versionlock-ის დასამატებლად"
+
+#: commands/versionlock/versionlock_add.cpp:103
+#: commands/versionlock/versionlock_exclude.cpp:122
+msgid "No package found for \"{}\"."
+msgstr "\"{}\"-სთვის პაკეტი ვერ ვიპოვე."
+
+#: commands/versionlock/versionlock_add.cpp:121
+msgid "Adding versionlock on \"{0} = {1}\"."
+msgstr "დაემატა versionlock \"{0}={1}\"-ზე."
+
+#: commands/versionlock/versionlock_add.cpp:124
+msgid "Package \"{}\" is already locked."
+msgstr "პაკეტი \"{}\" უკვე დაბლოკილია."
+
+#: commands/versionlock/versionlock_clear.cpp:32
+msgid "Remove all entries from versionlock configuration"
+msgstr "ყველა ჩანაწერის წაშლა versionlock-ის კონფიგურაციიდან"
+
+#: commands/versionlock/versionlock_delete.cpp:35
+msgid "Remove any matching versionlock configuration entries"
+msgstr "ყველა დამთხვეული versionlock-ის კონფიგურაციის ჩანაწერის წაშლა"
+
+#: commands/versionlock/versionlock_delete.cpp:41
+msgid "List of package specs to remove versionlock for"
+msgstr "პაკეტის spec-ების სია, რომლისთვისაც versionlock წაიშლება"
+
+#: commands/versionlock/versionlock_delete.cpp:55
+msgid "Deleting versionlock entry:"
+msgstr "იშლება versionlock-ის ჩანაწერი:"
+
+#: commands/versionlock/versionlock_exclude.cpp:37
+msgid "Add new exclude entry to versionlock configuration"
+msgstr "ახალი ამოღების ჩანაწერის ჩამატება versionlock-ის კონფიგურაციაში"
+
+#: commands/versionlock/versionlock_exclude.cpp:43
+msgid "List of package specs to add versionlock exclude for"
+msgstr "პაკეტის spec-ების სია versionlock-ის ამოღების დასამატებლად"
+
+#: commands/versionlock/versionlock_exclude.cpp:88
+#: commands/versionlock/versionlock_exclude.cpp:100
+msgid "Adding versionlock exclude on \"{0} = {1}\"."
+msgstr "Versionlock-ის ამოღების დამატება \"{0}={1}\"-სთვის."
+
+#: commands/versionlock/versionlock_exclude.cpp:136
+msgid "Package \"{}\" is already excluded."
+msgstr "პაკეტი \"{}\" უკვე ამოღებულია."
+
 #: context.cpp:80
 msgid "The key was successfully imported."
 msgstr "გასაღები წარმატებით იქნა შემოტანილი."
 
 #: context.cpp:126
 msgid "No matching repositories for \"{}\""
-msgstr ""
+msgstr "რეპოზიტორიები, რომლებიც \"{}\"-ს ემთხვევა, აღმოჩენილი არაა"
 
 #: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
@@ -349,53 +410,48 @@ msgstr "გაზიარებული ბიბლიოთეკის ფ�
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
 
-#: main.cpp:179
+#: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "რეპოზიტორიის კეშის მოძველებულად მონიშვნა ჩავარდა ბილიკზე \"{0}\": {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: არასწორი repoid და ბილიკის სპეციფიკაცია \"{}\""
 
-#: main.cpp:227
-msgid "setopt: Badly formatted argument value \"{}\""
-msgstr "setopt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
+#: main.cpp:228 main.cpp:267
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
 
-#: main.cpp:234
+#: main.cpp:235
 msgid ""
-"setopt: Badly formatted argument value: Last key character cannot be '.': {}"
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"setopt: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო "
-"ვერ იქნება '.': {}"
+"{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
+"იქნება '.': {}"
 
-#: main.cpp:246
+#: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:265
-msgid "setvar: Badly formatted argument value \"{}\""
-msgstr "setvar: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
-
-#: main.cpp:272
+#: main.cpp:274
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:607 shared_options.cpp:90
-msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr "მხარდაუჭერელი არქიტექტურა \"{0}\". აირჩიეთ ერთ-ერთი სიიდან {1}"
-
-#: main.cpp:816
+#: main.cpp:819
 msgid "======== Main configuration: ========"
 msgstr "======== მთავარი კონფიგურაცია: ========"
 
-#: main.cpp:857
+#: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" რეპოზიტორიის კონფიგურაცია: ========"
 
-#: main.cpp:878
+#: main.cpp:881
 msgid "======== Variables: ========"
 msgstr "======== ცვლადები: ========"
 
-#: main.cpp:996 main.cpp:1149
+#: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."
+
+#~ msgid "setvar: Badly formatted argument value \"{}\""
+#~ msgstr "setvar: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""

@@ -38,6 +38,7 @@ class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_query_spec);
     CPPUNIT_TEST(test_module_db);
     CPPUNIT_TEST(test_module_enable);
+    CPPUNIT_TEST(test_module_enable_default);
     CPPUNIT_TEST(test_module_disable);
     CPPUNIT_TEST(test_module_disable_enabled);
     CPPUNIT_TEST(test_module_reset);
@@ -54,6 +55,7 @@ public:
     void test_query_spec();
     void test_module_db();
     void test_module_enable();
+    void test_module_enable_default();
     void test_module_disable();
     void test_module_disable_enabled();
     void test_module_reset();
