@@ -45,9 +45,15 @@ public:
 /// An advisory, represents advisory used to track security updates
 class Advisory {
 public:
-    bool operator==(const Advisory & other) const noexcept { return id == other.id && base == other.base; }
+    Advisory(const Advisory & src);
+    Advisory & operator=(const Advisory & src);
 
-    bool operator!=(const Advisory & other) const noexcept { return !(*this == other); }
+    Advisory(Advisory && src) noexcept;
+    Advisory & operator=(Advisory && src) noexcept;
+
+    bool operator==(const Advisory & other) const noexcept;
+
+    bool operator!=(const Advisory & other) const noexcept;
 
     /// Destroy the Advisory object
     ~Advisory();
@@ -141,9 +147,8 @@ private:
     friend class AdvisorySetIterator;
     friend class AdvisorySet;
 
-    BaseWeakPtr base;
-
-    AdvisoryId id;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::advisory
