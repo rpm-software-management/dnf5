@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/install/install.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
+#include "commands/repo/repo.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
@@ -201,6 +202,8 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
+
+    context.add_and_initialize_command(std::make_unique<RepoCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<RepolistCommand>(context, "repolist"));
     context.add_and_initialize_command(std::make_unique<RepolistCommand>(context, "repoinfo"));
