@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
-#include "libdnf5/rpm/package.hpp"
 #include "libdnf5/rpm/package_set.hpp"
 
 
@@ -48,11 +47,11 @@ public:
     /// @param base     Reference to Base
     explicit AdvisoryQuery(libdnf5::Base & base);
 
-    AdvisoryQuery(const AdvisoryQuery & src) = default;
-    AdvisoryQuery & operator=(const AdvisoryQuery & src) = default;
+    AdvisoryQuery(const AdvisoryQuery & src);
+    AdvisoryQuery & operator=(const AdvisoryQuery & src);
 
-    AdvisoryQuery(AdvisoryQuery && src) = default;
-    AdvisoryQuery & operator=(AdvisoryQuery && src) = default;
+    AdvisoryQuery(AdvisoryQuery && src) noexcept;
+    AdvisoryQuery & operator=(AdvisoryQuery && src) noexcept;
 
     ~AdvisoryQuery();
 
@@ -113,7 +112,8 @@ public:
         const libdnf5::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) const;
 
 private:
-    BaseWeakPtr base;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::advisory
