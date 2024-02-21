@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/sack/match_string.hpp"
 #include "libdnf5/comps/group/group.hpp"
-#include "libdnf5/comps/group/sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>
