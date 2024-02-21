@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_environment.hpp"
 
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/environment/query.hpp>
 
 #include <filesystem>
