@@ -554,10 +554,10 @@ bool print_transaction_table(Transaction & transaction) {
                                         (double long)replaced.get_install_size()));
             unsigned long small = (pkg.get_install_size() < replaced.get_install_size()) ? pkg.get_install_size()
                                                                                          : replaced.get_install_size();
-            unsigned long test = (unsigned long)pow((double)small / 5000, 2);
+            unsigned long test = 1000 - (small / 200);
             unsigned long index = 10;
-            if (test < 990) {
-                index = 1000 - test;
+            if (test > 10) {
+                index = test;
             }
             if (difference > index) {
                 scols_cell_set_color(scols_line_get_cell(ln, COL_SIZE), "red");
