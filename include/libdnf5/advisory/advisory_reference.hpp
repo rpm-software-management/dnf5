@@ -23,13 +23,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory.hpp"
 
 #include <memory>
-#include <vector>
-
 
 namespace libdnf5::advisory {
 
 class AdvisoryReference {
 public:
+    AdvisoryReference(const AdvisoryReference & src);
+    AdvisoryReference & operator=(const AdvisoryReference & src);
+
+    AdvisoryReference(AdvisoryReference && src) noexcept;
+    AdvisoryReference & operator=(AdvisoryReference && src) noexcept;
+
+    ~AdvisoryReference();
+
     /// Get id of this advisory reference, this id is like a name of this reference
     /// (it is not libsolv id).
     ///
@@ -68,13 +74,8 @@ private:
     /// @return New AdvisoryReference instance.
     AdvisoryReference(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
-    BaseWeakPtr base;
-    AdvisoryId advisory;
-
-    /// We cannot store IDs of reference data (id, type, title, url) because they
-    /// don't have ids set in libsolv (they are only strings), therefore we store
-    /// index of the reference.
-    int index;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::advisory
