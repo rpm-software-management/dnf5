@@ -163,7 +163,6 @@ private:
 
     std::vector<Package> packages;
 
-    friend class GroupSack;
     friend class GroupQuery;
 };
 
