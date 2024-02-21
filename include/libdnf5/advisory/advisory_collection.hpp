@@ -33,6 +33,14 @@ namespace libdnf5::advisory {
 //TODO(amatej): add unit tests for AdvisoryCollection
 class AdvisoryCollection {
 public:
+    AdvisoryCollection(const AdvisoryCollection & src);
+    AdvisoryCollection & operator=(const AdvisoryCollection & src);
+
+    AdvisoryCollection(AdvisoryCollection && src) noexcept;
+    AdvisoryCollection & operator=(AdvisoryCollection && src) noexcept;
+
+    ~AdvisoryCollection();
+
     /// Whether this AdvisoryCollection is applicable. True when at least one AdvisoryModule in this
     /// AdvisoryCollection is active on the system, False otherwise.
     bool is_applicable() const;
@@ -70,7 +78,6 @@ private:
 
     AdvisoryCollection(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
-    //TODO(amatej): Hide into an Impl?
     /// Get all AdvisoryPackages stored in this AdvisoryCollection
     ///
     /// @param output           std::vector of AdvisorPackages used as output.
@@ -80,19 +87,8 @@ private:
     ///                         The filename is stored as a c string (not libsolv id) this incurs slowdown.
     void get_packages(std::vector<AdvisoryPackage> & output, bool with_filenames = false);
 
-    //TODO(amatej): Hide into an Impl?
-    /// Get all AdvisoryModules stored in this AdvisoryCollection
-    /// @param output           std::vector of AdvisorModules used as output.
-    ///                         This is much faster than returning new std::vector and later joining
-    ///                         them when collecting AdvisoryModules from multiple collections.
-    void get_modules(std::vector<AdvisoryModule> & output);
-
-    BaseWeakPtr base;
-
-    AdvisoryId advisory;
-
-    /// AdvisoryCollections don't have their own Id, therefore store it's index in its Advisory (just like AdvisoryReference)
-    int index;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::advisory
