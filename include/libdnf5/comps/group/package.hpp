@@ -80,55 +80,44 @@ std::vector<std::string> package_types_to_strings(const PackageType types);
 // @replaces dnf:dnf/comps.py:class:CompsTransPkg
 class Package {
 public:
-    explicit Package(const std::string & name, PackageType type, const std::string & condition)
-        : name(name),
-          type(type),
-          condition(condition) {}
+    Package(const std::string & name, PackageType type, const std::string & condition);
 
-    bool operator==(const Package & other) const noexcept {
-        return name == other.name && type == other.type && condition == other.condition;
-    }
+    ~Package();
 
-    bool operator!=(const Package & other) const noexcept { return !(*this == other); }
+    Package(const Package & src);
+    Package & operator=(const Package & src);
+
+    Package(Package && src) noexcept;
+    Package & operator=(Package && src) noexcept;
+
+    bool operator==(const Package & other) const noexcept;
+
+    bool operator!=(const Package & other) const noexcept;
 
     /// @return The Package name.
     /// @since 5.0
     //
     // @replaces dnf:dnf/comps.py:attribute:Package.name
-    std::string get_name() const { return name; }
-    void set_name(const std::string & value) { name = value; }
+    std::string get_name() const;
+    void set_name(const std::string & value);
 
     /// @return The PackageType.
     /// @since 5.0
-    PackageType get_type() const { return type; }
-    void set_type(const PackageType & value) { type = value; }
+    PackageType get_type() const;
+    void set_type(const PackageType & value);
 
     /// @return std::string that corresponds to the PackageType.
     /// @since 5.0
-    std::string get_type_string() const {
-        switch (type) {
-            case PackageType::MANDATORY:
-                return "mandatory";
-            case PackageType::DEFAULT:
-                return "default";
-            case PackageType::OPTIONAL:
-                return "optional";
-            case PackageType::CONDITIONAL:
-                return "conditional";
-        }
-        return "";
-    }
+    std::string get_type_string() const;
 
     /// @return The condition (name of package) under which the package gets installed.
     /// @since 5.0
-    std::string get_condition() const { return condition; }
-    void set_condition(const std::string & value) { condition = value; }
+    std::string get_condition() const;
+    void set_condition(const std::string & value);
 
 private:
-    std::string name;
-    PackageType type;
-    // Used only for CONDITIONAL packages
-    std::string condition;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 
