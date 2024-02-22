@@ -75,7 +75,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
         // Add installed environments directly, because there is only one solvable for each
         if (repoid == "@System") {
             Environment environment(base);
-            environment.environment_ids.push_back(EnvironmentId(solvable_id));
+            environment.add_environment_id(EnvironmentId(solvable_id));
             add(environment);
         } else {
             // Create map of available environments:
@@ -92,7 +92,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
         std::sort(item.second.begin(), item.second.end(), std::greater<>());
         // Create environment_ids vector from the sorted solvable_ids
         for (const auto & solvableid_repoid_pair : item.second) {
-            environment.environment_ids.emplace_back(solvableid_repoid_pair.second);
+            environment.add_environment_id(EnvironmentId(solvableid_repoid_pair.second));
         }
         add(environment);
     }

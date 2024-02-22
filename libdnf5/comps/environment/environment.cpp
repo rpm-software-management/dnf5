@@ -43,59 +43,113 @@ extern "C" {
 
 namespace libdnf5::comps {
 
+class Environment::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
-Environment::Environment(const libdnf5::BaseWeakPtr & base) : base(base) {}
+private:
+    friend Environment;
+
+    libdnf5::BaseWeakPtr base;
+
+    // Corresponds to solvable ids for this environment (libsolv doesn't merge groups, so there are multiple solvables
+    // for one environmentid).
+    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+    // definitions.
+    std::vector<EnvironmentId> environment_ids;
+
+    std::vector<std::string> groups;
+    std::vector<std::string> optional_groups;
+};
 
 
-Environment::Environment(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
+Environment::Environment(const libdnf5::BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
 
+Environment::Environment(libdnf5::Base & base) : Environment(base.get_weak_ptr()) {}
+
+Environment::~Environment() = default;
+
+Environment::Environment(const Environment & src) : p_impl(new Impl(*src.p_impl)) {}
+Environment::Environment(Environment && src) noexcept = default;
+
+Environment & Environment::operator=(const Environment & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Environment & Environment::operator=(Environment && src) noexcept = default;
 
 Environment & Environment::operator+=(const Environment & rhs) {
-    this->environment_ids.insert(this->environment_ids.begin(), rhs.environment_ids.begin(), rhs.environment_ids.end());
+    p_impl->environment_ids.insert(
+        p_impl->environment_ids.begin(), rhs.p_impl->environment_ids.begin(), rhs.p_impl->environment_ids.end());
     return *this;
 }
 
+bool Environment::operator==(const Environment & rhs) const noexcept {
+    return p_impl->environment_ids == rhs.p_impl->environment_ids && p_impl->base == rhs.p_impl->base;
+}
+
+bool Environment::operator!=(const Environment & rhs) const noexcept {
+    return p_impl->environment_ids != rhs.p_impl->environment_ids || p_impl->base != rhs.p_impl->base;
+}
+
+bool Environment::operator<(const Environment & rhs) const {
+    return get_environmentid() < rhs.get_environmentid() || get_repos() < rhs.get_repos();
+}
 
 std::string Environment::get_environmentid() const {
     return solv::CompsPool::split_solvable_name(
-               get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_NAME))
+               get_comps_pool(p_impl->base).lookup_first_id_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_NAME))
         .second;
 }
 
 
 std::string Environment::get_name() const {
-    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_description() const {
-    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(p_impl->base)
+        .lookup_first_id_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_translated_name(const char * lang) const {
-    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY, lang);
+    return get_comps_pool(p_impl->base)
+        .get_translated_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Environment::get_translated_name() const {
-    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(p_impl->base).get_translated_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_translated_description(const char * lang) const {
-    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION, lang);
+    return get_comps_pool(p_impl->base)
+        .get_translated_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Environment::get_translated_description() const {
-    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(p_impl->base)
+        .get_translated_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_order() const {
-    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_ORDER);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_ORDER);
 }
 
 
@@ -124,26 +178,27 @@ std::vector<std::string> load_groups_from_pool(
 
 
 std::vector<std::string> Environment::get_groups() {
-    if (groups.empty()) {
-        groups = load_groups_from_pool(get_comps_pool(base), environment_ids[0].id);
+    if (p_impl->groups.empty()) {
+        p_impl->groups = load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids[0].id);
     }
-    return groups;
+    return p_impl->groups;
 }
 
 
 std::vector<std::string> Environment::get_optional_groups() {
-    if (optional_groups.empty()) {
-        optional_groups = load_groups_from_pool(get_comps_pool(base), environment_ids[0].id, false);
+    if (p_impl->optional_groups.empty()) {
+        p_impl->optional_groups =
+            load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids[0].id, false);
     }
-    return optional_groups;
+    return p_impl->optional_groups;
 }
 
 libdnf5::transaction::TransactionItemReason Environment::get_reason() const {
-    comps::EnvironmentQuery installed_query(base);
+    comps::EnvironmentQuery installed_query(p_impl->base);
     installed_query.filter_installed(true);
     installed_query.filter_environmentid(get_environmentid());
     if (!installed_query.empty()) {
-        auto reason = base->p_impl->get_system_state().get_environment_reason(get_environmentid());
+        auto reason = p_impl->base->p_impl->get_system_state().get_environment_reason(get_environmentid());
 
         if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
             return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
@@ -158,8 +213,8 @@ libdnf5::transaction::TransactionItemReason Environment::get_reason() const {
 
 std::set<std::string> Environment::get_repos() const {
     std::set<std::string> result;
-    for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_comps_pool(base).id2solvable(environment_id.id);
+    for (EnvironmentId environment_id : p_impl->environment_ids) {
+        Solvable * solvable = get_comps_pool(p_impl->base).id2solvable(environment_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;
@@ -197,9 +252,9 @@ void Environment::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(p_impl->base);
 
-    for (auto environment_id : environment_ids) {
+    for (auto environment_id : p_impl->environment_ids) {
         Dataiterator di;
         dataiterator_init(&di, *pool, 0, environment_id.id, 0, 0, 0);
         // Iterate over all data in the environment solvable
@@ -254,6 +309,10 @@ void Environment::serialize(const std::string & path) {
 
     // Memory free
     xmlFreeDoc(doc);
+}
+
+void Environment::add_environment_id(const EnvironmentId & environment_id) {
+    p_impl->environment_ids.push_back(environment_id);
 }
 
 }  // namespace libdnf5::comps
