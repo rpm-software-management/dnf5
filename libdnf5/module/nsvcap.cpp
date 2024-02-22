@@ -87,13 +87,44 @@ static const std::vector<Nsvcap::Form> MODULE_SPEC_FORMS{
     Nsvcap::Form::NSVCA,
     Nsvcap::Form::NSVCAP};
 
+class Nsvcap::Impl {
+private:
+    friend Nsvcap;
+
+    std::string name;
+    std::string stream;
+    std::string version;
+    std::string context;
+    std::string arch;
+    std::string profile;
+};
+
+Nsvcap::Nsvcap() : p_impl(std::make_unique<Impl>()) {}
+
+Nsvcap::~Nsvcap() = default;
+
+Nsvcap::Nsvcap(const Nsvcap & src) : p_impl(new Impl(*src.p_impl)) {}
+Nsvcap::Nsvcap(Nsvcap && src) noexcept = default;
+
+Nsvcap & Nsvcap::operator=(const Nsvcap & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Nsvcap & Nsvcap::operator=(Nsvcap && src) noexcept = default;
 
 const std::vector<Nsvcap::Form> & Nsvcap::get_default_module_spec_forms() {
     return MODULE_SPEC_FORMS;
 }
 
 
-bool Nsvcap::parse(const std::string nsvcap_str, Nsvcap::Form form) {
+bool Nsvcap::parse(const std::string & nsvcap_str, Nsvcap::Form form) {
     enum { NAME = 1, STREAM = 2, VERSION = 3, CONTEXT = 4, ARCH = 5, PROFILE = 6, _LAST_ };
 
     if (nsvcap_str.length() > MAX_STRING_LENGTH_FOR_REGEX_MATCH) {
@@ -106,17 +137,17 @@ bool Nsvcap::parse(const std::string nsvcap_str, Nsvcap::Form form) {
     if (!matched || matched_result[NAME].str().size() == 0) {
         return false;
     }
-    name = matched_result[NAME].str();
-    version = matched_result[VERSION].str();
-    stream = matched_result[STREAM].str();
-    context = matched_result[CONTEXT].str();
-    arch = matched_result[ARCH].str();
-    profile = matched_result[PROFILE].str();
+    p_impl->name = matched_result[NAME].str();
+    p_impl->version = matched_result[VERSION].str();
+    p_impl->stream = matched_result[STREAM].str();
+    p_impl->context = matched_result[CONTEXT].str();
+    p_impl->arch = matched_result[ARCH].str();
+    p_impl->profile = matched_result[PROFILE].str();
     return true;
 }
 
 
-std::vector<Nsvcap> Nsvcap::parse(const std::string & pattern, std::vector<Nsvcap::Form> forms) {
+std::vector<Nsvcap> Nsvcap::parse(const std::string & pattern, const std::vector<Nsvcap::Form> & forms) {
     std::vector<Nsvcap> nsvcaps;
 
     Nsvcap nsvcap;
@@ -136,13 +167,69 @@ std::vector<Nsvcap> Nsvcap::parse(const std::string & pattern) {
 
 
 void Nsvcap::clear() {
-    name.clear();
-    stream.clear();
-    version.clear();
-    context.clear();
-    arch.clear();
-    profile.clear();
+    p_impl->name.clear();
+    p_impl->stream.clear();
+    p_impl->version.clear();
+    p_impl->context.clear();
+    p_impl->arch.clear();
+    p_impl->profile.clear();
 }
 
+const std::string & Nsvcap::get_name() const noexcept {
+    return p_impl->name;
+}
+const std::string & Nsvcap::get_stream() const noexcept {
+    return p_impl->stream;
+}
+const std::string & Nsvcap::get_version() const noexcept {
+    return p_impl->version;
+}
+const std::string & Nsvcap::get_context() const noexcept {
+    return p_impl->context;
+}
+const std::string & Nsvcap::get_arch() const noexcept {
+    return p_impl->arch;
+}
+const std::string & Nsvcap::get_profile() const noexcept {
+    return p_impl->profile;
+}
+
+void Nsvcap::set_name(const std::string & name) {
+    p_impl->name = name;
+}
+void Nsvcap::set_stream(const std::string & stream) {
+    p_impl->stream = stream;
+}
+void Nsvcap::set_version(const std::string & version) {
+    p_impl->version = version;
+}
+void Nsvcap::set_context(const std::string & context) {
+    p_impl->context = context;
+}
+void Nsvcap::set_arch(const std::string & arch) {
+    p_impl->arch = arch;
+}
+void Nsvcap::set_profile(const std::string & profile) {
+    p_impl->profile = profile;
+}
+
+void Nsvcap::set_name(std::string && name) {
+    p_impl->name = std::move(name);
+}
+void Nsvcap::set_stream(std::string && stream) {
+    p_impl->stream = std::move(stream);
+}
+void Nsvcap::set_version(std::string && version) {
+    p_impl->version = std::move(version);
+}
+void Nsvcap::set_context(std::string && context) {
+    p_impl->context = std::move(context);
+}
+void Nsvcap::set_arch(std::string && arch) {
+    p_impl->arch = std::move(arch);
+}
+void Nsvcap::set_profile(std::string && profile) {
+    p_impl->profile = std::move(profile);
+}
 
 }  // namespace libdnf5::module
