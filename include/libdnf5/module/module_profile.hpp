@@ -61,6 +61,8 @@ public:
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:ctor:ModuleProfile.ModuleProfile()
     ModuleProfile(const ModuleProfile & src);
     ModuleProfile & operator=(const ModuleProfile & src);
+    ModuleProfile(ModuleProfile && src) noexcept;
+    ModuleProfile & operator=(ModuleProfile && src) noexcept;
     ~ModuleProfile();
 
 private:
@@ -69,9 +71,8 @@ private:
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:ctor:ModuleProfile.ModuleProfile(ModulemdProfile * profile)
     ModuleProfile(_ModulemdProfile * profile, const bool is_default);
 
-    // @replaces libdnf:module:modulemd/ModuleProfile.hpp:attribute:ModuleProfile.profile
-    _ModulemdProfile * profile{nullptr};
-    bool is_default_profile = false;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 
