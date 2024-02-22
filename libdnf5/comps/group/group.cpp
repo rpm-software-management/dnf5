@@ -45,101 +45,149 @@ extern "C" {
 
 namespace libdnf5::comps {
 
+class Group::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
-Group::Group(const BaseWeakPtr & base) : base(base) {}
+private:
+    friend Group;
 
+    libdnf5::BaseWeakPtr base;
 
-Group::Group(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
+    // Corresponds to solvable ids for this group (libsolv doesn't merge groups, so there are multiple solvables
+    // for one groupid).
+    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+    // definitions.
+    std::vector<GroupId> group_ids;
+
+    std::vector<Package> packages;
+};
+
+Group::Group(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+
+Group::Group(libdnf5::Base & base) : Group(base.get_weak_ptr()) {}
+
+Group::~Group() = default;
+
+Group::Group(const Group & src) : p_impl(new Impl(*src.p_impl)) {}
+Group::Group(Group && src) noexcept = default;
+
+Group & Group::operator=(const Group & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Group & Group::operator=(Group && src) noexcept = default;
 
 
 Group & Group::operator+=(const Group & rhs) {
-    this->group_ids.insert(this->group_ids.begin(), rhs.group_ids.begin(), rhs.group_ids.end());
+    p_impl->group_ids.insert(p_impl->group_ids.begin(), rhs.p_impl->group_ids.begin(), rhs.p_impl->group_ids.end());
     return *this;
+}
+
+bool Group::operator==(const Group & rhs) const noexcept {
+    return p_impl->group_ids == rhs.p_impl->group_ids && p_impl->base == rhs.p_impl->base;
+}
+bool Group::operator!=(const Group & rhs) const noexcept {
+    return p_impl->group_ids != rhs.p_impl->group_ids || p_impl->base != rhs.p_impl->base;
+}
+// Compare Groups by groupid and then by repoids (the string ids, so that it's deterministic even when loaded in a different order).
+bool Group::operator<(const Group & rhs) const {
+    return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
 }
 
 
 std::string Group::get_groupid() const {
     return solv::CompsPool::split_solvable_name(
-               get_comps_pool(base).lookup_first_id_str<GroupId>(group_ids, SOLVABLE_NAME))
+               get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_NAME))
         .second;
 }
 
 
 std::string Group::get_name() const {
-    return get_comps_pool(base).lookup_first_id_str<GroupId>(group_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    return get_comps_pool(base).lookup_first_id_str<GroupId>(group_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
-    return get_comps_pool(base).get_translated_str<GroupId>(group_ids, SOLVABLE_SUMMARY, lang);
+    return get_comps_pool(p_impl->base).get_translated_str<GroupId>(p_impl->group_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    return get_comps_pool(base).get_translated_str<GroupId>(group_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(p_impl->base).get_translated_str<GroupId>(p_impl->group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    return get_comps_pool(base).get_translated_str<GroupId>(group_ids, SOLVABLE_DESCRIPTION, lang);
+    return get_comps_pool(p_impl->base).get_translated_str<GroupId>(p_impl->group_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Group::get_translated_description() const {
-    return get_comps_pool(base).get_translated_str<GroupId>(group_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(p_impl->base).get_translated_str<GroupId>(p_impl->group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_order() const {
-    return get_comps_pool(base).lookup_first_id_str<GroupId>(group_ids, SOLVABLE_ORDER);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    return get_comps_pool(base).lookup_first_id_str<GroupId>(group_ids, SOLVABLE_LANGONLY);
+    return get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_LANGONLY);
 }
 
 
 bool Group::get_uservisible() const {
-    return get_comps_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
+    return get_comps_pool(p_impl->base).lookup_void(p_impl->group_ids[0].id, SOLVABLE_ISVISIBLE);
 }
 
 
 bool Group::get_default() const {
-    return get_comps_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
+    return get_comps_pool(p_impl->base).lookup_void(p_impl->group_ids[0].id, SOLVABLE_ISDEFAULT);
 }
 
 
 std::vector<Package> Group::get_packages() {
     // Return packages if they are already loaded
-    if (!packages.empty()) {
-        return packages;
+    if (!p_impl->packages.empty()) {
+        return p_impl->packages;
     }
 
-    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(p_impl->base);
 
     // Use only the first (highest priority) solvable for package lists
-    Solvable * solvable = pool.id2solvable(group_ids[0].id);
+    Solvable * solvable = pool.id2solvable(p_impl->group_ids[0].id);
 
     // Load MANDATORY packages from solvable->requires
     if (solvable->dep_requires) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_requires; *r_id; ++r_id) {
-            packages.push_back(Package(pool.id2str(*r_id), PackageType::MANDATORY, ""));
+            p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::MANDATORY, "");
         }
     }
     // Load DEFAULT and CONDITIONAL packages from solvable->recommends
     if (solvable->dep_recommends) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_recommends; *r_id; ++r_id) {
             if (strcmp(pool.id2rel(*r_id), "") == 0) {
-                packages.push_back(Package(pool.id2str(*r_id), PackageType::DEFAULT, ""));
+                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::DEFAULT, "");
             } else {
-                packages.push_back(Package(pool.id2str(*r_id), PackageType::CONDITIONAL, pool.id2evr(*r_id)));
+                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::CONDITIONAL, pool.id2evr(*r_id));
             }
         }
     }
@@ -147,11 +195,11 @@ std::vector<Package> Group::get_packages() {
     if (solvable->dep_suggests) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_suggests; *r_id; ++r_id) {
             if (strcmp(pool.id2rel(*r_id), "") == 0) {
-                packages.push_back(Package(pool.id2str(*r_id), PackageType::OPTIONAL, ""));
+                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::OPTIONAL, "");
             }
         }
     }
-    return packages;
+    return p_impl->packages;
 }
 
 
@@ -168,8 +216,8 @@ std::vector<Package> Group::get_packages_of_type(PackageType type) {
 
 std::set<std::string> Group::get_repos() const {
     std::set<std::string> result;
-    for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_comps_pool(base).id2solvable(group_id.id);
+    for (GroupId group_id : p_impl->group_ids) {
+        Solvable * solvable = get_comps_pool(p_impl->base).id2solvable(group_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;
@@ -226,9 +274,9 @@ void Group::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf5::solv::CompsPool & pool = get_comps_pool(base);
+    libdnf5::solv::CompsPool & pool = get_comps_pool(p_impl->base);
 
-    for (auto group_id : group_ids) {
+    for (auto group_id : p_impl->group_ids) {
         Dataiterator di;
         dataiterator_init(&di, *pool, 0, group_id.id, 0, 0, 0);
         // Iterate over all data in the group solvable
@@ -293,11 +341,11 @@ void Group::serialize(const std::string & path) {
 }
 
 libdnf5::transaction::TransactionItemReason Group::get_reason() const {
-    comps::GroupQuery installed_query(base);
+    comps::GroupQuery installed_query(p_impl->base);
     installed_query.filter_installed(true);
     installed_query.filter_groupid(get_groupid());
     if (!installed_query.empty()) {
-        auto reason = base->p_impl->get_system_state().get_group_reason(get_groupid());
+        auto reason = p_impl->base->p_impl->get_system_state().get_group_reason(get_groupid());
 
         if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
             return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
@@ -307,6 +355,10 @@ libdnf5::transaction::TransactionItemReason Group::get_reason() const {
     }
 
     return libdnf5::transaction::TransactionItemReason::NONE;
+}
+
+void Group::add_group_id(const GroupId & group_id) {
+    p_impl->group_ids.push_back(group_id);
 }
 
 }  // namespace libdnf5::comps

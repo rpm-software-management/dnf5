@@ -76,7 +76,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
         // Add installed groups directly, because there is only one solvable for each
         if (repoid == "@System") {
             Group group(base);
-            group.group_ids.push_back(GroupId(solvable_id));
+            group.add_group_id(GroupId(solvable_id));
             add(group);
         } else {
             // Create map of available groups:
@@ -93,7 +93,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
         std::sort(item.second.begin(), item.second.end(), std::greater<>());
         // Create group_ids vector from the sorted solvable_ids
         for (const auto & solvableid_repoid_pair : item.second) {
-            group.group_ids.emplace_back(solvableid_repoid_pair.second);
+            group.add_group_id(GroupId(solvableid_repoid_pair.second));
         }
         add(group);
     }
