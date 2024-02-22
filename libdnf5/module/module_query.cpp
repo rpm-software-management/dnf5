@@ -35,8 +35,30 @@ extern "C" {
 
 namespace libdnf5::module {
 
+class ModuleQuery::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
-ModuleQuery::ModuleQuery(const BaseWeakPtr & base, bool empty) : base(base) {
+    static bool latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2);
+
+private:
+    friend ModuleQuery;
+
+    // Getter callbacks that return attribute values from an object. Used in query filters.
+    struct Get {
+        static std::string name(const ModuleItem & obj) { return obj.get_name(); }
+        static std::string stream(const ModuleItem & obj) { return obj.get_stream(); }
+        static std::string version(const ModuleItem & obj) { return obj.get_version_str(); }
+        static std::string context(const ModuleItem & obj) { return obj.get_context(); }
+        static std::string arch(const ModuleItem & obj) { return obj.get_arch(); }
+        static bool is_enabled(const ModuleItem & obj);
+        static bool is_disabled(const ModuleItem & obj);
+    };
+
+    BaseWeakPtr base;
+};
+
+ModuleQuery::ModuleQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_unique<Impl>(base)) {
     if (empty) {
         return;
     }
@@ -51,58 +73,82 @@ ModuleQuery::ModuleQuery(const BaseWeakPtr & base, bool empty) : base(base) {
 
 ModuleQuery::ModuleQuery(libdnf5::Base & base, bool empty) : ModuleQuery(base.get_weak_ptr(), empty) {}
 
+ModuleQuery::~ModuleQuery() = default;
 
-void ModuleQuery::filter_name(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::name, pattern, cmp);
+ModuleQuery::ModuleQuery(const ModuleQuery & src)
+    : libdnf5::sack::Query<ModuleItem>(src),
+      p_impl(new Impl(*src.p_impl)) {}
+ModuleQuery::ModuleQuery(ModuleQuery && src) noexcept = default;
+
+ModuleQuery & ModuleQuery::operator=(const ModuleQuery & src) {
+    libdnf5::sack::Query<ModuleItem>::operator=(src);
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+ModuleQuery & ModuleQuery::operator=(ModuleQuery && src) noexcept = default;
+
+libdnf5::BaseWeakPtr ModuleQuery::get_base() {
+    return p_impl->base;
+}
+
+void ModuleQuery::filter_name(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::name, pattern, cmp_type);
 }
 
 
-void ModuleQuery::filter_name(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::name, patterns, cmp);
+void ModuleQuery::filter_name(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::name, patterns, cmp_type);
 }
 
 
-void ModuleQuery::filter_stream(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::stream, pattern, cmp);
+void ModuleQuery::filter_stream(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::stream, pattern, cmp_type);
 }
 
 
-void ModuleQuery::filter_stream(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::stream, patterns, cmp);
+void ModuleQuery::filter_stream(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::stream, patterns, cmp_type);
 }
 
 
-void ModuleQuery::filter_version(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::version, pattern, cmp);
+void ModuleQuery::filter_version(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::version, pattern, cmp_type);
 }
 
 
-void ModuleQuery::filter_version(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::version, patterns, cmp);
+void ModuleQuery::filter_version(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::version, patterns, cmp_type);
 }
 
 
-void ModuleQuery::filter_context(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::context, pattern, cmp);
+void ModuleQuery::filter_context(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::context, pattern, cmp_type);
 }
 
 
-void ModuleQuery::filter_context(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::context, patterns, cmp);
+void ModuleQuery::filter_context(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::context, patterns, cmp_type);
 }
 
 
-void ModuleQuery::filter_arch(const std::string & pattern, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::arch, pattern, cmp);
+void ModuleQuery::filter_arch(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::arch, pattern, cmp_type);
 }
 
 
-void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp) {
-    filter(Get::arch, patterns, cmp);
+void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type) {
+    filter(Impl::Get::arch, patterns, cmp_type);
 }
 
 
-bool ModuleQuery::latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2) {
+bool ModuleQuery::Impl::latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2) {
     Pool * pool = module_item_1->get_module_sack()->p_impl->pool;
     const Solvable * s1 = pool_id2solvable(pool, module_item_1->get_id().id);
     const Solvable * s2 = pool_id2solvable(pool, module_item_2->get_id().id);
@@ -129,9 +175,9 @@ void ModuleQuery::filter_latest(int limit) {
         same_nsca_vector.push_back(&module_item);
     }
     if (limit > 0) {
-        sort(same_nsca_vector.begin(), same_nsca_vector.end(), latest_cmp);
+        sort(same_nsca_vector.begin(), same_nsca_vector.end(), Impl::latest_cmp);
     } else {
-        sort(same_nsca_vector.rbegin(), same_nsca_vector.rend(), latest_cmp);
+        sort(same_nsca_vector.rbegin(), same_nsca_vector.rend(), Impl::latest_cmp);
         limit *= -1;
     }
 
@@ -186,12 +232,12 @@ void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf5::sack::QueryCmp cm
 
 
 void ModuleQuery::filter_enabled() {
-    filter(Get::is_enabled, true, libdnf5::sack::QueryCmp::EQ);
+    filter(Impl::Get::is_enabled, true, libdnf5::sack::QueryCmp::EQ);
 }
 
 
 void ModuleQuery::filter_disabled() {
-    filter(Get::is_disabled, true, libdnf5::sack::QueryCmp::EQ);
+    filter(Impl::Get::is_disabled, true, libdnf5::sack::QueryCmp::EQ);
 }
 
 
@@ -214,12 +260,12 @@ std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & mod
 }
 
 
-bool ModuleQuery::Get::is_enabled(const ModuleItem & obj) {
+bool ModuleQuery::Impl::Get::is_enabled(const ModuleItem & obj) {
     return obj.get_status() == ModuleStatus::ENABLED;
 }
 
 
-bool ModuleQuery::Get::is_disabled(const ModuleItem & obj) {
+bool ModuleQuery::Impl::Get::is_disabled(const ModuleItem & obj) {
     return obj.get_status() == ModuleStatus::DISABLED;
 }
 
