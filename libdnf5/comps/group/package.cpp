@@ -27,6 +27,93 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::comps {
 
+class Package::Impl {
+public:
+    Impl(std::string name, PackageType type, std::string condition)
+        : name(std::move(name)),
+          type(type),
+          condition(std::move(condition)) {}
+
+private:
+    friend Package;
+
+    std::string name;
+    PackageType type;
+    // Used only for CONDITIONAL packages
+    std::string condition;
+};
+
+Package::Package(const std::string & name, PackageType type, const std::string & condition)
+    : p_impl(std::make_unique<Impl>(name, type, condition)) {}
+
+Package::~Package() = default;
+
+Package::Package(const Package & src) : p_impl(new Impl(*src.p_impl)) {}
+Package::Package(Package && src) noexcept = default;
+
+Package & Package::operator=(const Package & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+Package & Package::operator=(Package && src) noexcept = default;
+
+bool Package::operator==(const Package & other) const noexcept {
+    return p_impl->name == other.p_impl->name && p_impl->type == other.p_impl->type &&
+           p_impl->condition == other.p_impl->condition;
+}
+
+bool Package::operator!=(const Package & other) const noexcept {
+    return !(*this == other);
+}
+
+std::string Package::get_name() const {
+    return p_impl->name;
+}
+void Package::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+
+/// @return The PackageType.
+/// @since 5.0
+PackageType Package::get_type() const {
+    return p_impl->type;
+}
+void Package::set_type(const PackageType & value) {
+    p_impl->type = value;
+}
+
+/// @return std::string that corresponds to the PackageType.
+/// @since 5.0
+std::string Package::get_type_string() const {
+    switch (p_impl->type) {
+        case PackageType::MANDATORY:
+            return "mandatory";
+        case PackageType::DEFAULT:
+            return "default";
+        case PackageType::OPTIONAL:
+            return "optional";
+        case PackageType::CONDITIONAL:
+            return "conditional";
+    }
+    return "";
+}
+
+/// @return The condition (name of package) under which the package gets installed.
+/// @since 5.0
+std::string Package::get_condition() const {
+    return p_impl->condition;
+}
+void Package::set_condition(const std::string & value) {
+    p_impl->condition = value;
+}
+
 InvalidPackageType::InvalidPackageType(const std::string & type)
     : libdnf5::Error(M_("Invalid package type: {}"), type) {}
 
