@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_DEPENDENCY_HPP
 #define LIBDNF5_MODULE_MODULE_DEPENDENCY_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -28,30 +29,32 @@ namespace libdnf5::module {
 
 class ModuleDependency {
 public:
-    ModuleDependency(const std::string & module_name, const std::vector<std::string> & streams)
-        : module_name(module_name),
-          streams(streams) {}
+    ModuleDependency(const std::string & module_name, const std::vector<std::string> & streams);
 
-    ModuleDependency(std::string && module_name, std::vector<std::string> && streams)
-        : module_name(std::move(module_name)),
-          streams(std::move(streams)) {}
+    ModuleDependency(std::string && module_name, std::vector<std::string> && streams);
+
+    ~ModuleDependency();
+
+    ModuleDependency(const ModuleDependency & src);
+    ModuleDependency & operator=(const ModuleDependency & src);
+
+    ModuleDependency(ModuleDependency && src) noexcept;
+    ModuleDependency & operator=(ModuleDependency && src) noexcept;
 
     /// @return Name of the required module.
     /// @since 5.0
-    const std::string & get_module_name() const { return module_name; };
+    const std::string & get_module_name() const;
 
     /// @return Vector of streams. Prefix '-' denotes conflicting stream, otherwise, the stream is one of required.
     ///         If there are no other streams, any active stream of the module can satisfy the require.
     /// @since 5.0
-    const std::vector<std::string> & get_streams() const { return streams; };
+    const std::vector<std::string> & get_streams() const;
 
     std::string to_string();
 
 private:
-    friend class ModuleItem;
-
-    std::string module_name;
-    std::vector<std::string> streams;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 
