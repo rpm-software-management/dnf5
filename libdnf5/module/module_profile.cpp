@@ -26,28 +26,89 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::module {
 
+class ModuleProfile::Impl {
+public:
+    Impl(_ModulemdProfile * profile, const bool is_default) : profile(profile), is_default_profile(is_default) {
+        g_object_ref(profile);
+    }
+
+    ~Impl();
+    Impl(const Impl & src);
+    Impl & operator=(const Impl & src);
+    Impl(Impl && src) noexcept;
+    Impl & operator=(Impl && src) noexcept;
+
+private:
+    friend ModuleProfile;
+
+    // @replaces libdnf:module:modulemd/ModuleProfile.hpp:attribute:ModuleProfile.profile
+    _ModulemdProfile * profile{nullptr};
+    bool is_default_profile = false;
+};
+
+ModuleProfile::Impl::~Impl() {
+    if (profile != nullptr) {
+        g_object_unref(profile);
+    }
+}
+
+ModuleProfile::Impl::Impl(const Impl & src) : profile(src.profile), is_default_profile(src.is_default_profile) {
+    if (profile != nullptr) {
+        g_object_ref(profile);
+    }
+}
+
+ModuleProfile::Impl & ModuleProfile::Impl::operator=(const Impl & src) {
+    if (this != &src) {
+        if (profile != nullptr) {
+            g_object_unref(profile);
+        }
+        profile = src.profile;
+        is_default_profile = src.is_default_profile;
+        if (profile != nullptr) {
+            g_object_ref(profile);
+        }
+    }
+    return *this;
+}
+
+ModuleProfile::Impl::Impl(Impl && src) noexcept : profile(src.profile), is_default_profile(src.is_default_profile) {
+    src.profile = nullptr;
+}
+
+ModuleProfile::Impl & ModuleProfile::Impl::operator=(Impl && src) noexcept {
+    if (this != &src) {
+        if (profile != nullptr) {
+            g_object_unref(profile);
+        }
+        profile = src.profile;
+        is_default_profile = src.is_default_profile;
+        src.profile = nullptr;
+    }
+    return *this;
+}
 
 std::string ModuleProfile::get_name() const {
-    if (!profile) {
+    if (!p_impl->profile) {
         return {};
     }
-    return libdnf5::utils::string::c_to_str(modulemd_profile_get_name(profile));
+    return libdnf5::utils::string::c_to_str(modulemd_profile_get_name(p_impl->profile));
 }
 
 
 std::string ModuleProfile::get_description() const {
-    if (!profile) {
+    if (!p_impl->profile) {
         return {};
     }
-    return libdnf5::utils::string::c_to_str(modulemd_profile_get_description(profile, NULL));
+    return libdnf5::utils::string::c_to_str(modulemd_profile_get_description(p_impl->profile, NULL));
 }
 
 
 std::vector<std::string> ModuleProfile::get_rpms() const {
-    if (!profile) {
+    if (!p_impl->profile) {
         return {};
     }
-    gchar ** c_rpms = modulemd_profile_get_rpms_as_strv(profile);
+    gchar ** c_rpms = modulemd_profile_get_rpms_as_strv(p_impl->profile);
 
     std::vector<std::string> rpms;
     for (gchar ** item = c_rpms; *item; ++item) {
@@ -61,44 +122,33 @@ std::vector<std::string> ModuleProfile::get_rpms() const {
 
 
 bool ModuleProfile::is_default() const {
-    return is_default_profile;
+    return p_impl->is_default_profile;
 }
 
 
 ModuleProfile::ModuleProfile(ModulemdProfile * profile, const bool is_default)
-    : profile(profile),
-      is_default_profile(is_default) {
-    g_object_ref(profile);
-}
+    : p_impl(std::make_unique<Impl>(profile, is_default)) {}
 
 
-ModuleProfile::ModuleProfile(const ModuleProfile & src)
-    : profile(src.profile),
-      is_default_profile(src.is_default_profile) {
-    if (profile != nullptr) {
-        g_object_ref(profile);
-    }
-}
+ModuleProfile::ModuleProfile(const ModuleProfile & src) : p_impl(new Impl(*src.p_impl)) {}
+ModuleProfile::ModuleProfile(ModuleProfile && src) noexcept = default;
 
 
 ModuleProfile & ModuleProfile::operator=(const ModuleProfile & src) {
     if (this != &src) {
-        g_object_unref(profile);
-        profile = src.profile;
-        is_default_profile = src.is_default_profile;
-        if (profile != nullptr) {
-            g_object_ref(profile);
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
         }
     }
+
     return *this;
 }
+ModuleProfile & ModuleProfile::operator=(ModuleProfile && src) noexcept = default;
 
 
-ModuleProfile::~ModuleProfile() {
-    if (profile != nullptr) {
-        g_object_unref(profile);
-    }
-}
+ModuleProfile::~ModuleProfile() = default;
 
 
 }  // namespace libdnf5::module
