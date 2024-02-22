@@ -42,6 +42,14 @@ public:
     /// @param empty    `true` to create empty query, `false` to create query with all modules
     explicit ModuleQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
 
+    ~ModuleQuery();
+
+    ModuleQuery(const ModuleQuery & src);
+    ModuleQuery & operator=(const ModuleQuery & src);
+
+    ModuleQuery(ModuleQuery && src) noexcept;
+    ModuleQuery & operator=(ModuleQuery && src) noexcept;
+
     /// Create a new ModuleQuery instance.
     ///
     /// @param base     Reference to Base
@@ -50,7 +58,7 @@ public:
 
     /// @return Weak pointer to the Base object.
     /// @since 5.0
-    libdnf5::BaseWeakPtr get_base() { return base; }
+    libdnf5::BaseWeakPtr get_base();
 
     /// Filter ModuleItems by their `name`.
     ///
@@ -171,22 +179,10 @@ public:
     std::pair<bool, Nsvcap> resolve_module_spec(const std::string & module_spec);
 
 private:
-    // Getter callbacks that return attribute values from an object. Used in query filters.
-    struct Get {
-        static std::string name(const ModuleItem & obj) { return obj.get_name(); }
-        static std::string stream(const ModuleItem & obj) { return obj.get_stream(); }
-        static std::string version(const ModuleItem & obj) { return obj.get_version_str(); }
-        static std::string context(const ModuleItem & obj) { return obj.get_context(); }
-        static std::string arch(const ModuleItem & obj) { return obj.get_arch(); }
-        static bool is_enabled(const ModuleItem & obj);
-        static bool is_disabled(const ModuleItem & obj);
-    };
-
     friend ModuleItem;
 
-    static bool latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2);
-
-    BaseWeakPtr base;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::module
