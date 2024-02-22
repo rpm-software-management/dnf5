@@ -48,6 +48,14 @@ public:
 // @replaces dnf:dnf/comps.py:class:Group
 class Group {
 public:
+    ~Group();
+
+    Group(const Group & src);
+    Group & operator=(const Group & src);
+
+    Group(Group && src) noexcept;
+    Group & operator=(Group && src) noexcept;
+
     /// @return The Group id.
     /// @since 5.0
     std::string get_groupid() const;
@@ -132,12 +140,10 @@ public:
     Group & operator+=(const Group & rhs);
 
     // Groups are the same if they have the same group_ids (libsolv solvable_ids) in the same order, and the same base.
-    bool operator==(const Group & rhs) const noexcept { return group_ids == rhs.group_ids && base == rhs.base; }
-    bool operator!=(const Group & rhs) const noexcept { return group_ids != rhs.group_ids || base != rhs.base; }
+    bool operator==(const Group & rhs) const noexcept;
+    bool operator!=(const Group & rhs) const noexcept;
     // Compare Groups by groupid and then by repoids (the string ids, so that it's deterministic even when loaded in a different order).
-    bool operator<(const Group & rhs) const {
-        return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
-    }
+    bool operator<(const Group & rhs) const;
 
     /// Serialize the Group into an xml file.
     /// @param path Path of the output xml file.
@@ -150,20 +156,12 @@ protected:
     explicit Group(libdnf5::Base & base);
 
 private:
-    libdnf5::BaseWeakPtr base;
-
-    // Corresponds to solvable ids for this group (libsolv doesn't merge groups, so there are multiple solvables
-    // for one groupid).
-    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
-    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
-    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
-    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
-    // definitions.
-    std::vector<GroupId> group_ids;
-
-    std::vector<Package> packages;
-
     friend class GroupQuery;
+
+    void add_group_id(const GroupId & group_id);
+
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 
