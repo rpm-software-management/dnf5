@@ -47,6 +47,14 @@ public:
 // @replaces dnf:dnf/comps.py:class:Environment
 class Environment {
 public:
+    ~Environment();
+
+    Environment(const Environment & src);
+    Environment & operator=(const Environment & src);
+
+    Environment(Environment && src) noexcept;
+    Environment & operator=(Environment && src) noexcept;
+
     /// @return The Environment id.
     /// @since 5.0
     std::string get_environmentid() const;
@@ -113,16 +121,12 @@ public:
     Environment & operator+=(const Environment & rhs);
 
     // Environments are the same if they have the same environment_ids (libsolv solvable_ids) in the same order, and the same base.
-    bool operator==(const Environment & rhs) const noexcept {
-        return environment_ids == rhs.environment_ids && base == rhs.base;
-    }
-    bool operator!=(const Environment & rhs) const noexcept {
-        return environment_ids != rhs.environment_ids || base != rhs.base;
-    }
+    bool operator==(const Environment & rhs) const noexcept;
+
+    bool operator!=(const Environment & rhs) const noexcept;
+
     // Compare Environments by environmentid and then by repoids (the string ids, so that it's deterministic even when loaded in a different order).
-    bool operator<(const Environment & rhs) const {
-        return get_environmentid() < rhs.get_environmentid() || get_repos() < rhs.get_repos();
-    }
+    bool operator<(const Environment & rhs) const;
 
     /// Serialize the Environment into an xml file
     /// @param path Path of the output xml file.
@@ -135,21 +139,12 @@ protected:
     explicit Environment(libdnf5::Base & base);
 
 private:
-    libdnf5::BaseWeakPtr base;
-
-    // Corresponds to solvable ids for this environment (libsolv doesn't merge groups, so there are multiple solvables
-    // for one environmentid).
-    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
-    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
-    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
-    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
-    // definitions.
-    std::vector<EnvironmentId> environment_ids;
-
-    std::vector<std::string> groups;
-    std::vector<std::string> optional_groups;
-
     friend class EnvironmentQuery;
+
+    void add_environment_id(const EnvironmentId & environment_id);
+
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 
