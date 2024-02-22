@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
-#include "libdnf5/common/sack/match_string.hpp"
 #include "libdnf5/comps/group/group.hpp"
 
 extern "C" {
@@ -38,8 +37,25 @@ extern "C" {
 
 namespace libdnf5::comps {
 
+class GroupQuery::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
-GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
+private:
+    friend GroupQuery;
+
+    struct F {
+        static std::string groupid(const Group & obj) { return obj.get_groupid(); }
+        static std::string name(const Group & obj) { return obj.get_name(); }
+        static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
+        static bool is_default(const Group & obj) { return obj.get_default(); }
+        static bool is_installed(const Group & obj) { return obj.get_installed(); }
+    };
+
+    libdnf5::BaseWeakPtr base;
+};
+
+GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_unique<Impl>(base)) {
     if (empty) {
         return;
     }
@@ -101,6 +117,25 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
 
 GroupQuery::GroupQuery(libdnf5::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
 
+GroupQuery::~GroupQuery() = default;
+
+GroupQuery::GroupQuery(const GroupQuery & src) : libdnf5::sack::Query<Group>(src), p_impl(new Impl(*src.p_impl)) {}
+GroupQuery::GroupQuery(GroupQuery && src) noexcept = default;
+
+GroupQuery & GroupQuery::operator=(const GroupQuery & src) {
+    libdnf5::sack::Query<Group>::operator=(src);
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+GroupQuery & GroupQuery::operator=(GroupQuery && src) noexcept = default;
+
 void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         // Copy group so we can call `get_packages()`, this is needed because `it` is from a std::set and thus const
@@ -114,6 +149,32 @@ void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, 
             it = get_data().erase(it);
         }
     }
+}
+
+void GroupQuery::filter_groupid(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Impl::F::groupid, pattern, cmp);
+}
+
+void GroupQuery::filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Impl::F::groupid, patterns, cmp);
+}
+
+void GroupQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Impl::F::name, pattern, cmp);
+}
+
+void GroupQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Impl::F::name, patterns, cmp);
+}
+
+void GroupQuery::filter_uservisible(bool value) {
+    filter(Impl::F::is_uservisible, value, sack::QueryCmp::EQ);
+}
+void GroupQuery::filter_default(bool value) {
+    filter(Impl::F::is_default, value, sack::QueryCmp::EQ);
+}
+void GroupQuery::filter_installed(bool value) {
+    filter(Impl::F::is_installed, value, sack::QueryCmp::EQ);
 }
 
 }  // namespace libdnf5::comps
