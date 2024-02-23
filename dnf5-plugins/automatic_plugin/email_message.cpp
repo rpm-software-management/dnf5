@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "email_message.hpp"
 
+#include <fmt/chrono.h>
 #include <libdnf5/utils/format.hpp>
 
 #include <chrono>
@@ -37,7 +38,7 @@ constexpr const char * MESSAGE_TEMPLATE =
 
 std::string EmailMessage::str() {
     const auto now = std::chrono::system_clock::now();
-    std::string date = std::format("{:%a, %d %b %Y %H:%M:%S %z}", now);
+    std::string date = fmt::format("{:%a, %d %b %Y %H:%M:%S %z}", now);
 
     std::string to_str;
     for (const auto & eml : to) {
