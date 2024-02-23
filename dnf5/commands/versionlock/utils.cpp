@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/format.hpp>
 
 #include <chrono>
+#include <iomanip>
 
 std::string format_comment(std::string_view cmd) {
     // format the comment for new config file entries
