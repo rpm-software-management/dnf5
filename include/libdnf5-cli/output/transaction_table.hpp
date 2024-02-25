@@ -512,7 +512,7 @@ SmartcolsTableWrapper create_transaction_table(Transaction & transaction, Transa
             }
             // print ARCH
             if (tspkg.get_package().get_arch() != replaced.get_arch()) {
-                if (termwidth < single_line_min) {
+                if (ln_pre != nullptr) {
                     auto cl_arch = scols_line_get_cell(ln, COL_ARCH);
                     scols_cell_set_color(cl_arch, "brown");
                     scols_cell_set_data(cl_arch, pkg.get_arch().c_str());
@@ -528,7 +528,7 @@ SmartcolsTableWrapper create_transaction_table(Transaction & transaction, Transa
 
             // print REPO
             if (pkg.get_repo_id() != replaced.get_from_repo_id()) {
-                if (termwidth < single_line_min) {
+                if (ln_pre != nullptr) {
                     scols_cell_set_color(scols_line_get_cell(ln, COL_REPO), "magenta");
                     scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
                     scols_cell_set_color(scols_line_get_cell(ln_pre, COL_REPO), "magenta");
@@ -554,7 +554,7 @@ SmartcolsTableWrapper create_transaction_table(Transaction & transaction, Transa
             if (difference > index) {
                 scols_cell_set_color(scols_line_get_cell(ln, COL_SIZE), "red");
                 auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
-                if (termwidth < single_line_min) {
+                if (ln_pre != nullptr) {
                     scols_cell_set_color(scols_line_get_cell(ln_pre, COL_SIZE), "red");
                     scols_line_set_data(
                         ln, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(tspkg_size).c_str());
@@ -577,7 +577,7 @@ SmartcolsTableWrapper create_transaction_table(Transaction & transaction, Transa
             std::string rep_version = tmprepver.substr(0, tmprepver.find_first_of(".-", tmprepver.find('.') + 1));
             if (tspkg.get_package().get_epoch() != replaced.get_epoch() || version != rep_version) {
                 scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "lightblue");
-                if (termwidth < single_line_min) {
+                if (ln_pre != nullptr) {
                     scols_cell_set_color(scols_line_get_cell(ln_pre, COL_EVR), "lightblue");
                 }
             }
@@ -585,7 +585,7 @@ SmartcolsTableWrapper create_transaction_table(Transaction & transaction, Transa
             // print Version
             if (pkg.get_name() == replaced.get_name()) {
                 if (pkg.get_evr() != replaced.get_evr()) {
-                    if (termwidth < single_line_min) {
+                    if (ln_pre != nullptr) {
                         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
                         scols_line_set_data(ln_pre, COL_EVR, replaced.get_evr().c_str());
                     } else {
