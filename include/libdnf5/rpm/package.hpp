@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "checksum.hpp"
 #include "reldep_list.hpp"
 
+#include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
@@ -81,13 +82,20 @@ public:
 // @replaces dnf:dnf/package.py:class:Package
 class Package {
 public:
+    ~Package();
+    Package(const Package & src);
+    Package & operator=(const Package & src);
+
+    Package(Package && src) noexcept;
+    Package & operator=(Package && src) noexcept;
+
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_identical(DnfPackage * pkg)
     bool operator==(const Package & other) const noexcept;
     bool operator!=(const Package & other) const noexcept;
-    bool operator<(const Package & other) const noexcept { return id < other.id; }
+    bool operator<(const Package & other) const noexcept;
 
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_id(DnfPackage * pkg)
-    PackageId get_id() const noexcept { return id; };
+    PackageId get_id() const noexcept;
 
     /// @return RPM package Name (`RPMTAG_NAME`).
     /// @since 5.0
@@ -516,13 +524,13 @@ public:
     libdnf5::BaseWeakPtr get_base() const;
 
     /// Return NEVRA -> 0 epoch is not shown in string
-    std::string to_string() const { return get_nevra(); };
+    std::string to_string() const;
 
     /// Provide descriptive information about instance including NEVRA and ID
     std::string to_string_description() const;
 
     /// Return unique ID representing Package
-    int get_hash() const { return get_id().id; };
+    int get_hash() const;
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
@@ -536,30 +544,15 @@ private:
     friend class libdnf5::base::Transaction;
     friend class libdnf5::rpm::Transaction;
 
-    static constexpr const char * DEBUGINFO_SUFFIX = "-debuginfo";
-    static constexpr const char * DEBUGSOURCE_SUFFIX = "-debugsource";
-
     // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
     Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
 
     bool is_cached() const;
 
-    BaseWeakPtr base;
-    PackageId id;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
-
-inline Package::Package(const BaseWeakPtr & base, PackageId id) : base(base), id(id) {}
-
-
-inline bool Package::operator==(const Package & other) const noexcept {
-    return id == other.id && base == other.base;
-}
-
-
-inline bool Package::operator!=(const Package & other) const noexcept {
-    return id != other.id || base != other.base;
-}
 
 }  // namespace libdnf5::rpm
 
