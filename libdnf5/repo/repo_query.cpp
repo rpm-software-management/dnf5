@@ -26,6 +26,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::repo {
 
+class RepoQuery::Impl {
+public:
+    Impl(const BaseWeakPtr & base) : base(base){};
+
+private:
+    friend RepoQuery;
+
+    BaseWeakPtr base;
+};
 
 // Getter callbacks that return attribute values from an object. Used in query filters.
 struct Get {
@@ -40,13 +49,20 @@ struct Get {
 
 RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(*base) {}
 
-RepoQuery::RepoQuery(Base & base) : base{base.get_weak_ptr()} {
+RepoQuery::RepoQuery(Base & base) : p_impl(new Impl(base.get_weak_ptr())) {
     // copy all repos from RepoSack to the this object
     auto sack = base.get_repo_sack();
     for (auto & it : sack->get_data()) {
         add(RepoSack::DataItemWeakPtr(it.get(), &sack->get_data_guard()));
     }
 }
+
+RepoQuery::~RepoQuery() = default;
+
+RepoQuery::RepoQuery(const RepoQuery & src) = default;
+RepoQuery::RepoQuery(RepoQuery && src) noexcept = default;
+RepoQuery & RepoQuery::operator=(const RepoQuery & src) = default;
+RepoQuery & RepoQuery::operator=(RepoQuery && src) noexcept = default;
 
 void RepoQuery::filter_enabled(bool enabled) {
     filter(Get::enabled, enabled, sack::QueryCmp::EQ);
@@ -79,6 +95,10 @@ void RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::Que
 
 void RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
     filter(Get::type, static_cast<int64_t>(type), cmp);
+}
+
+libdnf5::BaseWeakPtr RepoQuery::get_base() {
+    return p_impl->base;
 }
 
 }  // namespace libdnf5::repo
