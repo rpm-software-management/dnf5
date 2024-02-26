@@ -395,7 +395,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    libdnf_assert_same_base(base, rpm_package.base);
+    libdnf_assert_same_base(base, rpm_package.get_base());
 
     libdnf5::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
