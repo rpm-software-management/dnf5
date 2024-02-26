@@ -25,13 +25,40 @@ extern "C" {
 
 namespace libdnf5::rpm {
 
+class Checksum::Impl {
+public:
+    Impl(const char * checksum, int libsolv_type) : libsolv_type(libsolv_type) {
+        if (checksum != nullptr) {
+            this->checksum = checksum;
+        }
+    }
+
+private:
+    friend Checksum;
+
+    std::string checksum;
+    int libsolv_type;
+};
+
+/// Constructor requires checksum in hex and libsolv checksum type
+Checksum::Checksum(const char * checksum, int libsolv_type) : p_impl(new Impl(checksum, libsolv_type)) {}
+
+Checksum::~Checksum() = default;
+
+Checksum::Checksum(const Checksum & src) = default;
+Checksum::Checksum(Checksum && src) noexcept = default;
+
+Checksum & Checksum::operator=(const Checksum & src) = default;
+Checksum & Checksum::operator=(Checksum && src) noexcept = default;
+
 std::string Checksum::get_type_str() const {
-    auto type_str = solv_chksum_type2str(libsolv_type);
+    auto type_str = solv_chksum_type2str(p_impl->libsolv_type);
     return type_str ? type_str : "unknown";
 }
 
+
 Checksum::Type Checksum::get_type() const noexcept {
-    switch (libsolv_type) {
+    switch (p_impl->libsolv_type) {
         case REPOKEY_TYPE_MD5:
             return Type::MD5;
         case REPOKEY_TYPE_SHA1:
@@ -48,5 +75,9 @@ Checksum::Type Checksum::get_type() const noexcept {
             return Type::UNKNOWN;
     }
 }
+
+const std::string & Checksum::get_checksum() const noexcept {
+    return p_impl->checksum;
+};
 
 }  // namespace libdnf5::rpm
