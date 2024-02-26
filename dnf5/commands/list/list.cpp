@@ -43,10 +43,10 @@ void ListCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Lists packages depending on the packages' relation to the system");
+    cmd.set_description(_("Lists packages depending on the packages' relation to the system"));
 
     auto specs = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    specs->set_description("List of keys to match");
+    specs->set_description(_("List of keys to match case insensitively"));
     specs->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
@@ -58,24 +58,24 @@ void ListCommand::set_argument_parser() {
     cmd.register_positional_arg(specs);
 
     show_duplicates = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
+        *this, "showduplicates", '\0', _("Show all versions of the packages, not only the latest ones."), false);
 
     auto conflicts =
         parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
 
     installed = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "installed", '\0', "List installed packages.", false);
+        *this, "installed", '\0', _("List installed packages."), false);
     conflicts->push_back(installed->arg);
 
     available = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "available", '\0', "List available packages.", false);
+        *this, "available", '\0', _("List available packages."), false);
     conflicts->push_back(available->arg);
 
     extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
         "extras",
         '\0',
-        "List extras, that is packages installed on the system that are not available in any known repository.",
+        _("List extras, that is packages installed on the system that are not available in any known repository."),
         false);
     conflicts->push_back(extras->arg);
 
@@ -83,20 +83,20 @@ void ListCommand::set_argument_parser() {
         *this,
         "obsoletes",
         '\0',
-        "List packages installed on the system that are obsoleted by packages in any known repository.",
+        _("List packages installed on the system that are obsoleted by packages in any known repository."),
         false);
     conflicts->push_back(obsoletes->arg);
 
     recent = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "recent", '\0', "List packages recently added into the repositories.", false);
+        *this, "recent", '\0', _("List packages recently added into the repositories."), false);
     conflicts->push_back(recent->arg);
 
     upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "upgrades", '\0', "List upgrades available for the installed packages.", false);
+        *this, "upgrades", '\0', _("List upgrades available for the installed packages."), false);
     conflicts->push_back(upgrades->arg);
 
     autoremove = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "autoremove", '\0', "List packages which will be removed by the 'dnf autoremove' command.", false);
+        *this, "autoremove", '\0', _("List packages which will be removed by the 'dnf autoremove' command."), false);
     conflicts->push_back(autoremove->arg);
 
     installed->arg->set_conflict_arguments(conflicts);
