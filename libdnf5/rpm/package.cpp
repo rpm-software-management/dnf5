@@ -57,36 +57,66 @@ static inline void reldeps_for(Solvable * solvable, libdnf5::solv::IdQueue & que
 
 namespace libdnf5::rpm {
 
+class Package::Impl {
+public:
+    static constexpr const char * DEBUGINFO_SUFFIX = "-debuginfo";
+    static constexpr const char * DEBUGSOURCE_SUFFIX = "-debugsource";
+
+
+    Impl(const BaseWeakPtr & base, PackageId id) : base(base), id(id) {}
+    Impl(const BaseWeakPtr & base, unsigned long long rpmdbid) : base(base) {
+        Pool * pool = *get_rpm_pool(base);
+        auto * installed_repo = pool->installed;
+
+        libdnf_assert(installed_repo, "Installed repo not loaded");
+
+        for (auto candidate_id = installed_repo->start; candidate_id < installed_repo->end; ++candidate_id) {
+            if (rpmdbid == repo_lookup_num(installed_repo, candidate_id, RPM_RPMDBID, 0)) {
+                id.id = candidate_id;
+                return;
+            }
+        }
+
+        throw RuntimeError(M_("Package with rpmdbid was not found"));
+    }
+
+private:
+    friend Package;
+
+    BaseWeakPtr base;
+    PackageId id;
+};
+
 std::string Package::get_name() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_name(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_name(p_impl->id.id));
 }
 
 std::string Package::get_epoch() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_epoch(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_epoch(p_impl->id.id));
 }
 
 std::string Package::get_version() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_version(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_version(p_impl->id.id));
 }
 
 std::string Package::get_release() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_release(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_release(p_impl->id.id));
 }
 
 std::string Package::get_arch() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_arch(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_arch(p_impl->id.id));
 }
 
 std::string Package::get_evr() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_evr(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_evr(p_impl->id.id));
 }
 
 std::string Package::get_nevra() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_nevra(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_nevra(p_impl->id.id));
 }
 
 std::string Package::get_full_nevra() const {
-    return get_rpm_pool(base).get_full_nevra(id.id);
+    return get_rpm_pool(p_impl->base).get_full_nevra(p_impl->id.id);
 }
 
 std::string Package::get_na() const {
@@ -97,52 +127,52 @@ std::string Package::get_na() const {
 }
 
 std::string Package::get_group() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_GROUP));
 }
 
 unsigned long long Package::get_download_size() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_DOWNLOADSIZE);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_DOWNLOADSIZE);
 }
 
 unsigned long long Package::get_install_size() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_INSTALLSIZE);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_INSTALLSIZE);
 }
 
 std::string Package::get_license() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_LICENSE));
 }
 
 std::string Package::get_source_name() const {
-    const char * source_name = get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SOURCENAME);
+    const char * source_name = get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_SOURCENAME);
     return source_name ? source_name : get_name();
 }
 
 std::string Package::get_sourcerpm() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).get_sourcerpm(id.id));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).get_sourcerpm(p_impl->id.id));
 }
 
 std::string Package::get_debugsource_name() const {
-    return get_source_name() + DEBUGSOURCE_SUFFIX;
+    return get_source_name() + p_impl->DEBUGSOURCE_SUFFIX;
 }
 
 std::string Package::get_debuginfo_name_of_source() const {
-    return get_source_name() + DEBUGINFO_SUFFIX;
+    return get_source_name() + p_impl->DEBUGINFO_SUFFIX;
 }
 
 std::string Package::get_debuginfo_name() const {
-    if (libdnf5::utils::string::ends_with(get_name(), DEBUGINFO_SUFFIX)) {
+    if (libdnf5::utils::string::ends_with(get_name(), p_impl->DEBUGINFO_SUFFIX)) {
         return get_name();
     }
 
     auto name = get_name();
-    if (libdnf5::utils::string::ends_with(name, DEBUGSOURCE_SUFFIX)) {
-        name.resize(name.size() - strlen(DEBUGSOURCE_SUFFIX));
+    if (libdnf5::utils::string::ends_with(name, p_impl->DEBUGSOURCE_SUFFIX)) {
+        name.resize(name.size() - strlen(p_impl->DEBUGSOURCE_SUFFIX));
     }
-    return name + DEBUGINFO_SUFFIX;
+    return name + p_impl->DEBUGINFO_SUFFIX;
 }
 
 unsigned long long Package::get_build_time() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_BUILDTIME);
 }
 
 // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
@@ -151,36 +181,36 @@ unsigned long long Package::get_build_time() const {
 //}
 
 std::string Package::get_packager() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_PACKAGER));
 }
 
 std::string Package::get_vendor() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_VENDOR));
 }
 
 std::string Package::get_url() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_URL));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_URL));
 }
 
 std::string Package::get_summary() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Package::get_description() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_DESCRIPTION));
 }
 
 std::vector<std::string> Package::get_files() const {
-    auto & pool = get_rpm_pool(base);
+    auto & pool = get_rpm_pool(p_impl->base);
 
-    Solvable * solvable = pool.id2solvable(id.id);
+    Solvable * solvable = pool.id2solvable(p_impl->id.id);
     libdnf5::solv::get_repo(solvable).internalize();
 
     std::vector<std::string> ret;
 
     Dataiterator di;
     dataiterator_init(
-        &di, *pool, solvable->repo, id.id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
+        &di, *pool, solvable->repo, p_impl->id.id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
     while (dataiterator_step(&di) != 0) {
         ret.emplace_back(di.kv.str);
     }
@@ -191,12 +221,12 @@ std::vector<std::string> Package::get_files() const {
 
 std::vector<libdnf5::rpm::Changelog> Package::get_changelogs() const {
     std::vector<libdnf5::rpm::Changelog> changelogs;
-    auto & pool = get_rpm_pool(base);
-    Solvable * solvable = pool.id2solvable(id.id);
+    auto & pool = get_rpm_pool(p_impl->base);
+    Solvable * solvable = pool.id2solvable(p_impl->id.id);
     libdnf5::solv::get_repo(solvable).internalize();
 
     Dataiterator di;
-    dataiterator_init(&di, *pool, solvable->repo, id.id, SOLVABLE_CHANGELOG, nullptr, 0);
+    dataiterator_init(&di, *pool, solvable->repo, p_impl->id.id, SOLVABLE_CHANGELOG, nullptr, 0);
     while (dataiterator_step(&di)) {
         dataiterator_setpos(&di);
         std::string author = pool_lookup_str(*pool, SOLVID_POS, SOLVABLE_CHANGELOG_AUTHOR);
@@ -210,14 +240,14 @@ std::vector<libdnf5::rpm::Changelog> Package::get_changelogs() const {
 }
 
 ReldepList Package::get_provides() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_PROVIDES);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_PROVIDES);
     return list;
 }
 
 ReldepList Package::get_requires() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
-    ReldepList list(base);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
+    ReldepList list(p_impl->base);
     reldeps_for(solvable, list.p_impl->queue, SOLVABLE_REQUIRES);
 
     libdnf5::solv::IdQueue tmp_queue;
@@ -228,82 +258,82 @@ ReldepList Package::get_requires() const {
 }
 
 ReldepList Package::get_requires_pre() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_PREREQMARKER);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_PREREQMARKER);
     return list;
 }
 
 ReldepList Package::get_conflicts() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_CONFLICTS);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_CONFLICTS);
     return list;
 }
 
 ReldepList Package::get_obsoletes() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_OBSOLETES);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_OBSOLETES);
     return list;
 }
 
 ReldepList Package::get_recommends() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_RECOMMENDS);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_RECOMMENDS);
     return list;
 }
 
 ReldepList Package::get_suggests() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUGGESTS);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_SUGGESTS);
     return list;
 }
 
 ReldepList Package::get_enhances() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_ENHANCES);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_ENHANCES);
     return list;
 }
 
 ReldepList Package::get_supplements() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUPPLEMENTS);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_SUPPLEMENTS);
     return list;
 }
 
 ReldepList Package::get_depends() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_REQUIRES);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_ENHANCES);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUGGESTS);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_SUPPLEMENTS);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_RECOMMENDS);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_REQUIRES);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_ENHANCES);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_SUGGESTS);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_SUPPLEMENTS);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_RECOMMENDS);
     return list;
 }
 
 ReldepList Package::get_prereq_ignoreinst() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_PREREQ_IGNOREINST);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_PREREQ_IGNOREINST);
     return list;
 }
 
 ReldepList Package::get_regular_requires() const {
-    ReldepList list(base);
-    reldeps_for(get_rpm_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_REQUIRES);
+    ReldepList list(p_impl->base);
+    reldeps_for(get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id), list.p_impl->queue, SOLVABLE_REQUIRES);
     return list;
 }
 
 std::string Package::get_baseurl() const {
-    return libdnf5::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
+    return libdnf5::utils::string::c_to_str(get_rpm_pool(p_impl->base).lookup_str(p_impl->id.id, SOLVABLE_MEDIABASE));
 }
 
 std::string Package::get_location() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     libdnf5::solv::get_repo(solvable).internalize();
     return libdnf5::utils::string::c_to_str(solvable_lookup_location(solvable, nullptr));
 }
 
 std::vector<std::string> Package::get_remote_locations(const std::set<std::string> & protocols) const {
     // For installed and commandline packages return empty
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     if (auto * repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
         if (repo->get_type() == repo::Repo::Type::COMMANDLINE || repo->get_type() == repo::Repo::Type::SYSTEM) {
             return {};
@@ -355,7 +385,7 @@ std::vector<std::string> Package::get_remote_locations(const std::set<std::strin
 
 //TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
 std::string Package::get_package_path() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     if (auto repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
         if (repo->get_type() == repo::Repo::Type::COMMANDLINE) {
             // Command line packages are used from their original location.
@@ -370,7 +400,7 @@ std::string Package::get_package_path() const {
 }
 
 bool Package::is_available_locally() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     if (auto repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
         if (repo->get_type() == repo::Repo::Type::COMMANDLINE || is_cached()) {
             return true;
@@ -400,40 +430,40 @@ bool Package::is_cached() const {
 }
 
 bool Package::is_installed() const {
-    return get_rpm_pool(base).is_installed(id.id);
+    return get_rpm_pool(p_impl->base).is_installed(p_impl->id.id);
 }
 
 bool Package::is_excluded() const {
-    base->get_rpm_package_sack()->p_impl->recompute_considered_in_pool();
-    return get_rpm_pool(base).is_solvable_excluded(id.id);
+    p_impl->base->get_rpm_package_sack()->p_impl->recompute_considered_in_pool();
+    return get_rpm_pool(p_impl->base).is_solvable_excluded(p_impl->id.id);
 }
 
 unsigned long long Package::get_hdr_end() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_HEADEREND);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_HEADEREND);
 }
 
 unsigned long long Package::get_install_time() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_INSTALLTIME);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_INSTALLTIME);
 }
 
 unsigned long long Package::get_media_number() const {
-    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_MEDIANR);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, SOLVABLE_MEDIANR);
 }
 
 unsigned long long Package::get_rpmdbid() const {
-    return get_rpm_pool(base).lookup_num(id.id, RPM_RPMDBID);
+    return get_rpm_pool(p_impl->base).lookup_num(p_impl->id.id, RPM_RPMDBID);
 }
 
 libdnf5::repo::RepoWeakPtr Package::get_repo() const {
-    return get_rpm_pool(base).get_repo(id.id).get_weak_ptr();
+    return get_rpm_pool(p_impl->base).get_repo(p_impl->id.id).get_weak_ptr();
 }
 
 std::string Package::get_repo_id() const {
-    return get_rpm_pool(base).get_repo(id.id).get_id();
+    return get_rpm_pool(p_impl->base).get_repo(p_impl->id.id).get_id();
 }
 
 std::string Package::get_repo_name() const {
-    return get_rpm_pool(base).get_repo(id.id).get_name();
+    return get_rpm_pool(p_impl->base).get_repo(p_impl->id.id).get_name();
 }
 
 std::string Package::get_from_repo_id() const {
@@ -442,7 +472,7 @@ std::string Package::get_from_repo_id() const {
     }
 
     try {
-        return base->p_impl->get_system_state().get_package_from_repo(get_nevra());
+        return p_impl->base->p_impl->get_system_state().get_package_from_repo(get_nevra());
     } catch (const std::runtime_error & e) {
         return "<unknown>";
     }
@@ -454,12 +484,12 @@ libdnf5::transaction::TransactionItemReason Package::get_reason() const {
     // The logic should be moved to the system::State, where a cache of
     // installed NAs needs to be created (perhaps still as a query), as it is
     // needed for transaction reason resolution anyway
-    rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    rpm::PackageQuery installed_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     installed_query.filter_installed();
     installed_query.filter_name({get_name()});
     installed_query.filter_arch({get_arch()});
     if (!installed_query.empty()) {
-        auto reason = base->p_impl->get_system_state().get_package_reason(get_na());
+        auto reason = p_impl->base->p_impl->get_system_state().get_package_reason(get_na());
 
         if (reason == libdnf5::transaction::TransactionItemReason::NONE) {
             return libdnf5::transaction::TransactionItemReason::EXTERNAL_USER;
@@ -472,7 +502,7 @@ libdnf5::transaction::TransactionItemReason Package::get_reason() const {
 }
 
 Checksum Package::get_checksum() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     int type;
     libdnf5::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
@@ -482,7 +512,7 @@ Checksum Package::get_checksum() const {
 }
 
 Checksum Package::get_hdr_checksum() const {
-    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     int type;
     libdnf5::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
@@ -491,28 +521,49 @@ Checksum Package::get_hdr_checksum() const {
     return checksum;
 }
 
-Package::Package(const BaseWeakPtr & base, unsigned long long rpmdbid) : base(base) {
-    Pool * pool = *get_rpm_pool(base);
-    auto * installed_repo = pool->installed;
+Package::Package(const BaseWeakPtr & base, unsigned long long rpmdbid) : p_impl(new Impl(base, rpmdbid)) {}
 
-    libdnf_assert(installed_repo, "Installed repo not loaded");
+Package::Package(const BaseWeakPtr & base, PackageId id) : p_impl(new Impl(base, id)) {}
 
-    for (auto candidate_id = installed_repo->start; candidate_id < installed_repo->end; ++candidate_id) {
-        if (rpmdbid == repo_lookup_num(installed_repo, candidate_id, RPM_RPMDBID, 0)) {
-            id.id = candidate_id;
-            return;
-        }
-    }
+Package::~Package() = default;
 
-    throw RuntimeError(M_("Package with rpmdbid was not found"));
+Package::Package(const Package & src) = default;
+Package::Package(Package && src) noexcept = default;
+
+Package & Package::operator=(const Package & src) = default;
+Package & Package::operator=(Package && src) noexcept = default;
+
+bool Package::operator==(const Package & other) const noexcept {
+    return p_impl->id == other.p_impl->id && p_impl->base == other.p_impl->base;
+}
+
+
+bool Package::operator!=(const Package & other) const noexcept {
+    return p_impl->id != other.p_impl->id || p_impl->base != other.p_impl->base;
+}
+
+bool Package::operator<(const Package & other) const noexcept {
+    return p_impl->id < other.p_impl->id;
 }
 
 BaseWeakPtr Package::get_base() const {
-    return base;
+    return p_impl->base;
 }
 
 std::string Package::to_string_description() const {
     return fmt::format("<libdnf5.rpm.Package object, {}, id: {}>", to_string(), get_id().id);
 }
+
+PackageId Package::get_id() const noexcept {
+    return p_impl->id;
+};
+
+std::string Package::to_string() const {
+    return get_nevra();
+};
+
+int Package::get_hash() const {
+    return get_id().id;
+};
 
 }  // namespace libdnf5::rpm
