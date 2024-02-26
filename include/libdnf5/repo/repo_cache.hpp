@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <filesystem>
 #include <string>
@@ -31,11 +32,26 @@ namespace libdnf5::repo {
 
 
 struct RepoCacheRemoveStatistics {
-    std::size_t files_removed;  // Number of removed files and links.
-    std::size_t dirs_removed;   // Number of removed directorires.
-    std::size_t errors;         // Numbes of errors.
+    RepoCacheRemoveStatistics();
+    ~RepoCacheRemoveStatistics();
+
+    RepoCacheRemoveStatistics(const RepoCacheRemoveStatistics & src);
+    RepoCacheRemoveStatistics & operator=(const RepoCacheRemoveStatistics & src);
+
+    RepoCacheRemoveStatistics(RepoCacheRemoveStatistics && src) noexcept;
+    RepoCacheRemoveStatistics & operator=(RepoCacheRemoveStatistics && src) noexcept;
+
+    std::size_t get_files_removed();  // Number of removed files and links.
+    std::size_t get_dirs_removed();   // Number of removed directorires.
+    std::size_t get_errors();         // Numbes of errors.
 
     RepoCacheRemoveStatistics & operator+=(const RepoCacheRemoveStatistics & rhs) noexcept;
+
+private:
+    friend class RepoCache;
+
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
@@ -61,6 +77,14 @@ public:
     /// @param base            WeakPtr on the Base instance.
     /// @param repo_cache_dir  Path to repository cache directory.
     RepoCache(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir);
+
+    ~RepoCache();
+
+    RepoCache(const RepoCache & src);
+    RepoCache & operator=(const RepoCache & src);
+
+    RepoCache(RepoCache && src) noexcept;
+    RepoCache & operator=(RepoCache && src) noexcept;
 
     /// Construct a new repository cache management instance.
     ///
@@ -124,8 +148,10 @@ public:
     std::string get_repoid();
 
 private:
-    libdnf5::BaseWeakPtr base;
-    std::filesystem::path cache_dir;
+    friend RepoCacheRemoveStatistics;
+
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
