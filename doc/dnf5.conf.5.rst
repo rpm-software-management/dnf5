@@ -432,6 +432,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     ``nocontexts``    ``RPMTRANS_FLAG_NOCONTEXTS``
     ``nocaps``        ``RPMTRANS_FLAG_NOCAPS``
     ``nocrypto``      ``RPMTRANS_FLAG_NOFILEDIGEST``
+    ``deploops``      ``RPMTRANS_FLAG_DEPLOOPS``
     ================  ===============================
 
     The ``nocrypto`` option will also set the ``_RPMVSF_NOSIGNATURES`` and
