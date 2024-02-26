@@ -44,6 +44,8 @@ public:
     virtual ~IDbusSessionService() = default;
     virtual void dbus_register() = 0;
 
+    Session & get_session() const noexcept { return session; }
+
 protected:
     Session & session;
 };
