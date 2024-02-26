@@ -171,9 +171,9 @@ void CleanCommand::run() {
 
     std::cout << fmt::format(
                      "Removed {} files, {} directories. {} errors occurred.",
-                     statistics.files_removed,
-                     statistics.dirs_removed,
-                     statistics.errors)
+                     statistics.get_files_removed(),
+                     statistics.get_dirs_removed(),
+                     statistics.get_errors())
               << std::endl;
 }
 
