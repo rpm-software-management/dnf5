@@ -80,19 +80,29 @@ LogEvent::LogEvent(
     : p_impl(std::make_unique<Impl>(action, problem, additional_data, settings, spec_type, spec)) {
     libdnf_assert(
         !(problem == libdnf5::GoalProblem::SOLVER_ERROR ||
-          problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
-        "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
-        "libdnf5::GoalProblem::SOLVER_ERROR or libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
-        "problems it is necessary to provide SolverProblems in constructor");
+          problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS),
+        "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow these problems: "
+        "libdnf5::GoalProblem::SOLVER_ERROR, libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR, libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS. "
+        "With those problems it is necessary to provide SolverProblems in constructor");
 }
 
 LogEvent::LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems)
     : p_impl(std::make_unique<Impl>(libdnf5::GoalAction::RESOLVE, problem, solver_problems)) {
     libdnf_assert(
         problem == libdnf5::GoalProblem::SOLVER_ERROR ||
-            problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
-        "LogEvent::LogEvent() called with incorrect problem, only libdnf5::GoalProblem::SOLVER_ERROR or "
-        "libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
+            problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS,
+        "LogEvent::LogEvent() called with incorrect problem, supported problems are only: "
+        "libdnf5::GoalProblem::SOLVER_ERROR, libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR, libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS.");
 }
 
 LogEvent::~LogEvent() = default;
@@ -237,6 +247,27 @@ std::string LogEvent::to_string(
                     module_dict_iter.first));
             }
             return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
+        }
+        case GoalProblem::MODULE_SOLVER_ERROR: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems:\n")));
+            return ret.append(solver_problems->to_string());
+        }
+        case GoalProblem::MODULE_SOLVER_ERROR_LATEST: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems with the latest modules:\n")));
+            return ret.append(solver_problems->to_string());
+        }
+        case GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems with the defaults:\n")));
+            return ret.append(solver_problems->to_string());
         }
     }
     return ret;

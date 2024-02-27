@@ -389,6 +389,14 @@ void Transaction::Impl::set_transaction(
         }
     }
     this->problems = problems;
+
+    if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||
+        ((problems & GoalProblem::MODULE_SOLVER_ERROR_LATEST) != GoalProblem::NO_PROBLEM &&
+         base->get_config().get_best_option().get_value())) {
+        // There is a fatal error in resolving modules
+        return;
+    }
+
     auto transaction = solved_goal.get_transaction();
     libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
     if (!libsolv_transaction) {
