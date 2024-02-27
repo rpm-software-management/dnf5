@@ -7,6 +7,7 @@ DefaultDependencies=no
 Requires=sysinit.target
 After=sysinit.target systemd-journald.socket system-update-pre.target
 Before=poweroff.target reboot.target shutdown.target system-update.target
+OnFailure=dnf5-offline-transaction-cleanup.service
 
 [Service]
 # We are done when the script exits, not before

@@ -412,6 +412,9 @@ void OfflineExecuteCommand::run() {
 
     auto transaction = goal->resolve();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
+        std::cerr << "Failed to resolve transaction. This indicates some bigger problem, since the offline transaction "
+                     "was already successfully resolved before. Was the cache at "
+                  << datadir << " modified?" << std::endl;
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 

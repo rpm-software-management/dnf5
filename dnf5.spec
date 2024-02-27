@@ -259,6 +259,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/dnf5/aliases.d
 %config %{_datadir}/dnf5/aliases.d/compatibility.conf
 %config %{_unitdir}/dnf5-offline-transaction.service
+%config %{_unitdir}/dnf5-offline-transaction-cleanup.service
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %dir %{_datadir}/dnf5/dnf5-plugins
