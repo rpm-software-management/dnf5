@@ -71,7 +71,7 @@ std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf5::rpm::Package
     std::vector<dnfdaemon::Changelog> changelogs;
 
     for (const auto & chlog : libdnf_package.get_changelogs()) {
-        changelogs.emplace_back(static_cast<int64_t>(chlog.timestamp), chlog.author, chlog.text);
+        changelogs.emplace_back(static_cast<int64_t>(chlog.get_timestamp()), chlog.get_author(), chlog.get_text());
     }
 
     return changelogs;
