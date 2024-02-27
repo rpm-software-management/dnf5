@@ -66,13 +66,21 @@ public:
 
 struct Changelog {
 public:
-    explicit Changelog(time_t timestamp, std::string author, std::string text)
-        : timestamp(timestamp),
-          author(std::move(author)),
-          text(std::move(text)) {}
-    time_t timestamp;
-    std::string author;
-    std::string text;
+    Changelog(time_t timestamp, const std::string & author, const std::string & text);
+    ~Changelog();
+    Changelog(const Changelog & src);
+    Changelog & operator=(const Changelog & src);
+
+    Changelog(Changelog && src) noexcept;
+    Changelog & operator=(Changelog && src) noexcept;
+
+    const time_t & get_timestamp() const;
+    const std::string & get_author() const;
+    const std::string & get_text() const;
+
+private:
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 // IMPORTANT: Package methods MUST NOT be 'noexcept'
