@@ -71,7 +71,7 @@ static std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf5::rpm::
     std::vector<dnfdaemon::Changelog> changelogs;
 
     for (const auto & chlog : libdnf_package.get_changelogs()) {
-        changelogs.emplace_back(static_cast<int64_t>(chlog.timestamp), chlog.author, chlog.text);
+        changelogs.emplace_back(static_cast<int64_t>(chlog.get_timestamp()), chlog.get_author(), chlog.get_text());
     }
 
     return changelogs;
@@ -278,9 +278,10 @@ std::string package_to_json(const libdnf5::rpm::Package & libdnf_package, const 
                 json_object_object_add(json_pkg, cattr, array);
                 for (const auto & libdnf_chlog : libdnf_package.get_changelogs()) {
                     json_object * chlog = json_object_new_array();
-                    json_object_array_add(chlog, json_object_new_int64(static_cast<int64_t>(libdnf_chlog.timestamp)));
-                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.author.c_str()));
-                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.text.c_str()));
+                    json_object_array_add(
+                        chlog, json_object_new_int64(static_cast<int64_t>(libdnf_chlog.get_timestamp())));
+                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.get_author().c_str()));
+                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.get_text().c_str()));
 
                     json_object_array_add(array, chlog);
                 }
