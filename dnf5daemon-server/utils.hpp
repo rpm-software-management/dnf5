@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
+namespace dnfdaemon {
 
 template <typename ItemType>
 ItemType key_value_map_get(const dnfdaemon::KeyValueMap & map, const std::string & key) {
@@ -55,5 +56,7 @@ ItemType key_value_map_get(
         throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Map item \"{}\" has incorrect type.", key));
     }
 }
+
+}  // namespace dnfdaemon
 
 #endif

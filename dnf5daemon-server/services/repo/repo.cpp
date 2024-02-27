@@ -253,7 +253,8 @@ dnfdaemon::KeyValueMap repo_to_map(
 }
 
 bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::KeyValueMap & second) {
-    return key_value_map_get<std::string>(first, "id") < key_value_map_get<std::string>(second, "id");
+    return dnfdaemon::key_value_map_get<std::string>(first, "id") <
+           dnfdaemon::key_value_map_get<std::string>(second, "id");
 }
 
 }  // namespace
@@ -310,11 +311,12 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     const std::vector<std::string> empty_list{};
 
     // read options from dbus call
-    std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
-    std::vector<std::string> patterns = key_value_map_get<std::vector<std::string>>(options, "patterns", empty_list);
+    std::string enable_disable = dnfdaemon::key_value_map_get<std::string>(options, "enable_disable", "enabled");
+    std::vector<std::string> patterns =
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", empty_list);
     // check demanded attributes
     std::vector<std::string> repo_attrs =
-        key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
     bool fill_sack_needed = false;
     for (auto & attr_str : repo_attrs) {
         if (repo_attributes.count(attr_str) == 0) {

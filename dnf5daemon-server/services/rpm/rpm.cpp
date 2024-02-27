@@ -168,7 +168,7 @@ void Rpm::dbus_register() {
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
-    auto filter_patterns = key_value_map_get<std::vector<std::string>>(options, option);
+    auto filter_patterns = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, option);
     if (filter_patterns.empty()) {
         throw sdbus::Error(dnfdaemon::ERROR, fmt::format("\"{}\" option expected an argument.", option));
     }
@@ -422,7 +422,7 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
     auto & goal = session.get_goal();
@@ -446,19 +446,20 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
 
     libdnf5::GoalSetting skip_broken;
     if (options.find("skip_broken") != options.end()) {
-        skip_broken = key_value_map_get<bool>(options, "skip_broken") ? libdnf5::GoalSetting::SET_TRUE
-                                                                      : libdnf5::GoalSetting::SET_FALSE;
+        skip_broken = dnfdaemon::key_value_map_get<bool>(options, "skip_broken") ? libdnf5::GoalSetting::SET_TRUE
+                                                                                 : libdnf5::GoalSetting::SET_FALSE;
     } else {
         skip_broken = libdnf5::GoalSetting::AUTO;
     }
     libdnf5::GoalSetting skip_unavailable;
     if (options.find("skip_unavailable") != options.end()) {
-        skip_unavailable = key_value_map_get<bool>(options, "skip_unavailable") ? libdnf5::GoalSetting::SET_TRUE
-                                                                                : libdnf5::GoalSetting::SET_FALSE;
+        skip_unavailable = dnfdaemon::key_value_map_get<bool>(options, "skip_unavailable")
+                               ? libdnf5::GoalSetting::SET_TRUE
+                               : libdnf5::GoalSetting::SET_FALSE;
     } else {
         skip_unavailable = libdnf5::GoalSetting::AUTO;
     }
-    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
     auto & goal = session.get_goal();
@@ -482,7 +483,7 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
     auto & goal = session.get_goal();
@@ -507,7 +508,7 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    std::vector<std::string> repo_ids = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
     // fill the goal
     auto & goal = session.get_goal();
