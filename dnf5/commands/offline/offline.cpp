@@ -377,6 +377,10 @@ void OfflineExecuteCommand::run() {
 
     log_status("Starting offline transaction. This will take a while.", libdnf5::offline::OFFLINE_STARTED_ID);
 
+    std::cout << "Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
+                 "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`."
+              << std::endl;
+
     if (!std::filesystem::is_symlink(get_magic_symlink())) {
         throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
     }
