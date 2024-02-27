@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/solv/goal_private.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
+#include "solver_problems_internal.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "utils/string.hpp"
@@ -2316,15 +2317,29 @@ base::Transaction Goal::resolve() {
     sack->p_impl->make_provides_ready();
 
 
-    // TODO(jmracek) Apply modules first
     module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
     ret |= p_impl->add_module_specs_to_goal(transaction);
     // Resolve modules
-    auto module_error = module_sack.resolve_active_module_items().second;
-    if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
-        throw module::ModuleResolveError(M_("Failed to resolve modules."));
+    auto result = module_sack.resolve_active_module_items();
+    auto module_solver_problems = result.first;
+    auto module_error = result.second;
+
+    if (module_error != GoalProblem::NO_PROBLEM) {
+        // Report problems from the module solver
+        transaction.p_impl->add_resolve_log(module_error, module_solver_problems);
+
+        // Ignore MODULE_SOLVER_ERROR_DEFAULTS and MODULE_SOLVER_ERROR_LATEST with best=false
+        // Other errors (MODULE_SOLVER_ERROR and MODULE_SOLVER_ERROR_LATEST with best=true) are returned
+        if (module_error != GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS &&
+            (module_error != GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+             p_impl->base->get_config().get_best_option().get_value())) {
+            ret |= module_error;
+        }
     }
+
     module_sack.p_impl->enable_dependent_modules();
+
+
     // TODO(jmracek) Apply comps second or later
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
     ret |= p_impl->add_specs_to_goal(transaction);

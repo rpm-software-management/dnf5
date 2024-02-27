@@ -108,7 +108,13 @@ enum class GoalProblem : uint32_t {
     WRITE_DEBUG = (1 << 14),
     UNSUPPORTED_ACTION = (1 << 15),
     MULTIPLE_STREAMS = (1 << 16),
-    EXCLUDED_VERSIONLOCK = (1 << 17)
+    EXCLUDED_VERSIONLOCK = (1 << 17),
+    /// Error in module defaults detected during resolvement of module dependencies
+    MODULE_SOLVER_ERROR_DEFAULTS = (1 << 18),
+    /// Problem with latest modules during resolvement of module dependencies
+    MODULE_SOLVER_ERROR_LATEST = (1 << 19),
+    /// Error detected during resolvement of module dependencies
+    MODULE_SOLVER_ERROR = (1 << 20)
 };
 
 /// Types of Goal actions
