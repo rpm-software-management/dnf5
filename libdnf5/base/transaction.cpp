@@ -286,6 +286,10 @@ void Transaction::Impl::add_resolve_log(
 void Transaction::Impl::add_resolve_log(
     GoalProblem problem,
     std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems) {
+    add_resolve_log(problem, SolverProblems(std::move(problems)));
+}
+
+void Transaction::Impl::add_resolve_log(GoalProblem problem, const SolverProblems & problems) {
     resolve_logs.emplace_back(LogEvent(problem, problems));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
