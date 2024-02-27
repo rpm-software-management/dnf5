@@ -29,6 +29,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::offline {
 
+// Unique identifiers used to mark and identify system-upgrade boots in
+// journald logs. These are the same as they are in `dnf4 system-upgrade`, so
+// `dnf5 offline log` will find offline transactions performed by DNF 4 and
+// vice-versa.
 const std::string OFFLINE_STARTED_ID{"3e0a5636d16b4ca4bbe5321d06c6aa62"};
 const std::string OFFLINE_FINISHED_ID{"8cec00a1566f4d3594f116450395f06c"};
 
