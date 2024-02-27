@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/module/module_sack.hpp"
 
+#include "base/solver_problems_internal.hpp"
 #include "module/module_goal_private.hpp"
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
@@ -462,9 +463,9 @@ void ModuleSack::Impl::enable_dependent_modules() {
 }
 
 
-std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> ModuleSack::Impl::module_solve(
-    std::vector<ModuleItem *> module_items) {
-    std::vector<std::vector<std::string>> problems;
+std::pair<std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>>, ModuleSack::ModuleErrorType>
+ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
+    std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
     if (module_items.empty()) {
         active_modules.clear();
         return std::make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
@@ -521,8 +522,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
         return make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
     }
 
-    // TODO(pkratoch): Get problems
-    // problems = goal.describe_all_problem_rules(false);
+    problems = goal_strict.get_problems();
 
     ret = goal_best.resolve();
 
@@ -727,8 +727,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 }
 
 
-std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
-ModuleSack::resolve_active_module_items() {
+std::pair<base::SolverProblems, ModuleSack::ModuleErrorType> ModuleSack::resolve_active_module_items() {
     p_impl->considered_uptodate = false;
     p_impl->excludes.reset(new libdnf5::solv::SolvMap(p_impl->pool->nsolvables));
     p_impl->module_db->initialize();
@@ -752,7 +751,8 @@ ModuleSack::resolve_active_module_items() {
 
     auto problems = p_impl->module_solve(module_items_to_solve);
     active_modules_resolved = true;
-    return problems;
+    return std::make_pair(
+        base::SolverProblems(base::process_module_solver_problems(p_impl->pool, problems.first)), problems.second);
 }
 
 
