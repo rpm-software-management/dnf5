@@ -81,7 +81,7 @@ ReldepList & ReldepList::operator=(const ReldepList & src) {
 
 void ReldepList::add(const Reldep & reldep) {
     libdnf_assert_same_base(p_impl->base, reldep.get_base());
-    p_impl->queue.push_back(reldep.id.id);
+    p_impl->queue.push_back(reldep.get_id().id);
 }
 
 void ReldepList::add(ReldepId id) {
