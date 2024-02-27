@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_private.hpp"
 
-#include "rpm/package_sack_impl.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf5/common/exception.hpp"
