@@ -273,6 +273,13 @@ void Transaction::Impl::add_resolve_log(
     logger.error(resolve_logs.back().to_string());
 }
 
+void Transaction::Impl::add_resolve_log(GoalProblem problem, SolverProblems problems) {
+    resolve_logs.emplace_back(LogEvent(problem, problems));
+    // TODO(jmracek) Use a logger properly
+    auto & logger = *base->get_logger();
+    logger.error(resolve_logs.back().to_string());
+}
+
 const std::vector<LogEvent> & Transaction::get_resolve_logs() const {
     return p_impl->resolve_logs;
 }
