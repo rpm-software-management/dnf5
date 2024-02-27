@@ -62,11 +62,11 @@ public:
 
     template <typename ItemType>
     ItemType session_configuration_value(const std::string & key, const ItemType & default_value) {
-        return key_value_map_get(session_configuration, key, default_value);
+        return dnfdaemon::key_value_map_get(session_configuration, key, default_value);
     }
     template <typename ItemType>
     ItemType session_configuration_value(const std::string & key) {
-        return key_value_map_get<ItemType>(session_configuration, key);
+        return dnfdaemon::key_value_map_get<ItemType>(session_configuration, key);
     }
 
     std::string get_object_path() { return object_path; };
