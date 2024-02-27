@@ -65,19 +65,6 @@ private:
     std::string system_releasever;
 };
 
-class OfflineDownloadCommand : public OfflineSubcommand {
-public:
-    explicit OfflineDownloadCommand(Context & context) : OfflineSubcommand{context, "download"} {}
-    void set_argument_parser() override;
-    void configure() override;
-    void run() override;
-
-private:
-    libdnf5::OptionBool * no_downgrade{nullptr};
-    libdnf5::OptionBool * distro_sync{nullptr};
-    int state_version;
-};
-
 class OfflineRebootCommand : public OfflineSubcommand {
 public:
     explicit OfflineRebootCommand(Context & context) : OfflineSubcommand(context, "reboot") {}
