@@ -463,12 +463,12 @@ void ModuleSack::Impl::enable_dependent_modules() {
 }
 
 
-std::pair<std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>>, ModuleSack::ModuleErrorType>
+std::pair<std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>>, GoalProblem>
 ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
     if (module_items.empty()) {
         active_modules.clear();
-        return std::make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+        return std::make_pair(problems, GoalProblem::NO_PROBLEM);
     }
 
     recompute_considered_in_pool();
@@ -519,7 +519,7 @@ ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_strict);
-        return make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+        return make_pair(problems, GoalProblem::NO_PROBLEM);
     }
 
     problems = goal_strict.get_problems();
@@ -528,14 +528,14 @@ ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_best);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS);
     }
 
     ret = goal.resolve();
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR_LATEST);
     }
 
     // Conflicting modules has to be removed otherwise it could result than one of them will be active
@@ -547,14 +547,14 @@ ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_weak);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR);
     }
 
     auto logger = base->get_logger();
     logger->critical("Modularity filtering totally broken\n");
 
     active_modules.clear();
-    return make_pair(problems, ModuleSack::ModuleErrorType::CANNOT_RESOLVE_MODULES);
+    return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR);
 }
 
 
@@ -727,7 +727,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 }
 
 
-std::pair<base::SolverProblems, ModuleSack::ModuleErrorType> ModuleSack::resolve_active_module_items() {
+std::pair<base::SolverProblems, GoalProblem> ModuleSack::resolve_active_module_items() {
     p_impl->considered_uptodate = false;
     p_impl->excludes.reset(new libdnf5::solv::SolvMap(p_impl->pool->nsolvables));
     p_impl->module_db->initialize();
