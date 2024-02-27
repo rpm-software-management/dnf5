@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_MODULE_MODULE_SACK_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/base/solver_problems.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
@@ -103,7 +104,7 @@ public:
     ///
     /// @return A pair of problems in resolving to report and ModuleErrorType.
     /// @since 5.0
-    std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
+    std::pair<base::SolverProblems, ModuleErrorType> resolve_active_module_items();
 
 private:
     friend class libdnf5::Base;
