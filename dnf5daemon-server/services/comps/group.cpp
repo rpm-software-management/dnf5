@@ -135,16 +135,17 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     libdnf5::comps::GroupQuery query(base->get_weak_ptr());
 
     // patterns to search
-    const auto patterns = key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
+    const auto patterns =
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
     if (patterns.size() > 0) {
         libdnf5::comps::GroupQuery patterns_query(base->get_weak_ptr(), true);
-        const auto match_group_id = key_value_map_get<bool>(options, "match_group_id", true);
+        const auto match_group_id = dnfdaemon::key_value_map_get<bool>(options, "match_group_id", true);
         if (match_group_id) {
             libdnf5::comps::GroupQuery query_id(query);
             query_id.filter_groupid(patterns, libdnf5::sack::QueryCmp::IGLOB);
             patterns_query |= query_id;
         }
-        const auto match_group_name = key_value_map_get<bool>(options, "match_group_name", false);
+        const auto match_group_name = dnfdaemon::key_value_map_get<bool>(options, "match_group_name", false);
         if (match_group_name) {
             libdnf5::comps::GroupQuery query_name(query);
             query_name.filter_name(patterns, libdnf5::sack::QueryCmp::IGLOB);
@@ -154,12 +155,12 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     }
 
     // filter hidden groups
-    const auto with_hidden = key_value_map_get<bool>(options, "with_hidden", false);
+    const auto with_hidden = dnfdaemon::key_value_map_get<bool>(options, "with_hidden", false);
     if (!with_hidden) {
         query.filter_uservisible(true);
     }
 
-    const auto scope = key_value_map_get<std::string>(options, "scope", "all");
+    const auto scope = dnfdaemon::key_value_map_get<std::string>(options, "scope", "all");
     if (scope == "installed") {
         query.filter_installed(true);
     } else if (scope == "available") {
@@ -181,7 +182,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
         throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Unsupported scope for group filtering \"{}\".", scope));
     }
 
-    const auto contains_pkgs = key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", {});
+    const auto contains_pkgs = dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "contains_pkgs", {});
     if (!contains_pkgs.empty()) {
         query.filter_package_name(contains_pkgs, libdnf5::sack::QueryCmp::IGLOB);
     }
@@ -189,7 +190,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     // create reply from the query
     dnfdaemon::KeyValueMapList out_groups;
     std::vector<std::string> attributes =
-        key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
     for (auto grp : query.list()) {
         out_groups.push_back(group_to_map(grp, attributes));
     }
