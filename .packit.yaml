@@ -17,21 +17,16 @@ jobs:
   - job: propose_downstream
     trigger: release
     dist_git_branches:
-      - fedora-rawhide
-      - fedora-39
-      - fedora-38
+      - fedora-all
     copy_upstream_release_description: true
   - job: koji_build
     trigger: commit
     dist_git_branches:
-      - fedora-rawhide
-      - fedora-39
-      - fedora-38
+      - fedora-all
   - job: bodhi_update
     trigger: commit
     dist_git_branches:
-      - fedora-39
-      - fedora-38 # rawhide updates are created automatically
+      - fedora-all
   - job: copr_build
     trigger: pull_request
     targets:
