@@ -31,36 +31,55 @@ extern "C" {
 #include <solv/util.h>
 }
 
-#include <stdexcept>
-
 namespace libdnf5::rpm {
 
+class Reldep::Impl {
+public:
+    Impl(const BaseWeakPtr & base, ReldepId dep_id) : base(base), id(dep_id) {}
 
-Reldep::Reldep(const BaseWeakPtr & base, ReldepId dependency_id) : base(base), id(dependency_id) {}
+private:
+    friend Reldep;
 
-Reldep::Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type) : base(base) {
-    id = get_reldep_id(base, name, version, cmp_type);
-}
+    BaseWeakPtr base;
+    ReldepId id;
+};
 
-Reldep::Reldep(const BaseWeakPtr & base, const std::string & reldep_string) : base(base) {
-    id = get_reldep_id(base, reldep_string);
-}
+Reldep::Reldep(const BaseWeakPtr & base, ReldepId dependency_id) : p_impl(new Impl(base, dependency_id)) {}
+
+Reldep::Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type)
+    : p_impl(new Impl(base, get_reldep_id(base, name, version, cmp_type))) {}
+
+Reldep::Reldep(const BaseWeakPtr & base, const std::string & reldep_string)
+    : p_impl(new Impl(base, get_reldep_id(base, reldep_string))) {}
+
+Reldep::~Reldep() = default;
 
 Reldep::Reldep(libdnf5::Base & base, const std::string & reldep_string) : Reldep(base.get_weak_ptr(), reldep_string) {}
 
-Reldep::Reldep(Reldep && reldep) : base(std::move(reldep.base)), id(std::move(reldep.id)) {}
+Reldep::Reldep(const Reldep & reldep) = default;
+Reldep::Reldep(Reldep && reldep) noexcept = default;
+
+Reldep & Reldep::operator=(const Reldep & other) = default;
+
+bool Reldep::operator==(const Reldep & other) const noexcept {
+    return p_impl->id == other.p_impl->id && p_impl->base == other.p_impl->base;
+}
+
+bool Reldep::operator!=(const Reldep & other) const noexcept {
+    return p_impl->id != other.p_impl->id || p_impl->base != other.p_impl->base;
+}
 
 const char * Reldep::get_name() const {
-    return get_rpm_pool(base).id2str(id.id);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->id.id);
 }
 const char * Reldep::get_relation() const {
-    return get_rpm_pool(base).id2rel(id.id);
+    return get_rpm_pool(p_impl->base).id2rel(p_impl->id.id);
 }
 const char * Reldep::get_version() const {
-    return get_rpm_pool(base).id2evr(id.id);
+    return get_rpm_pool(p_impl->base).id2evr(p_impl->id.id);
 }
 std::string Reldep::to_string() const {
-    auto * cstring = get_rpm_pool(base).dep2str(id.id);
+    auto * cstring = get_rpm_pool(p_impl->base).dep2str(p_impl->id.id);
     return cstring ? std::string(cstring) : std::string();
 }
 
@@ -106,5 +125,23 @@ ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & rel
     return get_reldep_id(
         base, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);
 }
+
+ReldepId Reldep::get_id() const noexcept {
+    return p_impl->id;
+};
+
+/// Return weak pointer to base
+BaseWeakPtr Reldep::get_base() const {
+    return p_impl->base;
+};
+
+bool Reldep::is_rich_dependency(const std::string & pattern) {
+    return pattern[0] == '(';
+};
+
+/// Return unique ID representing Reldep
+int Reldep::get_hash() const {
+    return get_id().id;
+};
 
 }  // namespace libdnf5::rpm
