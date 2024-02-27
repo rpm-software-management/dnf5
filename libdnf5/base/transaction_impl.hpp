@@ -73,6 +73,7 @@ public:
     void add_resolve_log(
         GoalProblem problem,
         std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems);
+    void add_resolve_log(GoalProblem problem, const SolverProblems & problems);
 
     TransactionRunResult test();
 
