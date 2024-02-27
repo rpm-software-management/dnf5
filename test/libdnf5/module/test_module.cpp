@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/fs/file.hpp"
 
 #include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/goal_elements.hpp>
 #include <libdnf5/module/module_errors.hpp>
 #include <libdnf5/module/module_item.hpp>
 #include <libdnf5/module/module_query.hpp>
@@ -105,7 +106,7 @@ void ModuleTest::test_resolve() {
 
     auto module_sack = base.get_module_sack();
 
-    CPPUNIT_ASSERT_EQUAL(ModuleSack::ModuleErrorType::NO_ERROR, module_sack->resolve_active_module_items().second);
+    CPPUNIT_ASSERT_EQUAL(libdnf5::GoalProblem::NO_PROBLEM, module_sack->resolve_active_module_items().second);
 
     std::vector<std::string> expected_active_module_specs{
         "NoStaticContext:latest:1::x86_64",
@@ -128,7 +129,7 @@ void ModuleTest::test_resolve_broken_defaults() {
     auto module_sack = base.get_module_sack();
 
     CPPUNIT_ASSERT_EQUAL(
-        ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS, module_sack->resolve_active_module_items().second);
+        libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS, module_sack->resolve_active_module_items().second);
 
     std::vector<std::string> expected_active_module_specs{
         "berries:main:3:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
