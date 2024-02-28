@@ -69,9 +69,6 @@ void create_destdir_option(dnf5::Command & command);
 /// The values are stored in the `downloadonly` configuration option
 void create_downloadonly_option(dnf5::Command & command);
 
-/// Create the `--forcearch` option for a command provided as an argument.
-/// The values are stored in the `forcearch` configuration option
-[[deprecated("--forcearch is now a global argument")]] void create_forcearch_option(dnf5::Command & command);
 
 /// Create the `--offline` option for a command provided as an argument.
 void create_offline_option(dnf5::Command & command);
