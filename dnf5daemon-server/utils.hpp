@@ -57,6 +57,13 @@ ItemType key_value_map_get(
     }
 }
 
+/// Write the message to the file descriptor opened for writing.
+/// @param Message
+/// @param out_fd Open file descriptor
+/// @param error_msg In case of error this string contains error description
+/// @return Bool whether the write succeeded
+bool write_to_fd(const std::string & message, int out_fd, std::string & error_msg);
+
 }  // namespace dnfdaemon
 
 #endif
