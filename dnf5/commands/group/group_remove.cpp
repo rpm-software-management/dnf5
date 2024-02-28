@@ -20,12 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_remove.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
-
-#include <iostream>
 
 namespace dnf5 {
 
