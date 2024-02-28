@@ -32,9 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class EnvironmentSack;
-using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
-
 
 class EnvironmentQuery : public libdnf5::sack::Query<Environment> {
 public:
@@ -71,7 +68,6 @@ private:
     libdnf5::BaseWeakPtr base;
 
     friend Environment;
-    friend EnvironmentSack;
 };
 
 
