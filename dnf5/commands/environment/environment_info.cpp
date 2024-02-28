@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "environment_info.hpp"
 
 #include <libdnf5-cli/output/environmentinfo.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/environment/query.hpp>
 #include <libdnf5/conf/const.hpp>

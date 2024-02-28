@@ -35,11 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf5::comps {
-class Comps;
-}
-
-
 namespace libdnf5::solv {
 class Pool;
 }
@@ -360,7 +355,6 @@ private:
     friend class RepoSack;
     friend class rpm::Package;
     friend class rpm::PackageSack;
-    friend class comps::Comps;
     friend class FileDownloader;
     friend class PackageDownloader;
     friend class solv::Pool;
