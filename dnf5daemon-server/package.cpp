@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package.hpp"
 
 #include <fmt/format.h>
+#include <json-c/json.h>
 
 #include <map>
-
 
 // map string package attribute name to actual attribute
 const std::map<std::string, PackageAttribute> package_attributes{
@@ -195,4 +195,158 @@ dnfdaemon::KeyValueMap package_to_map(
         }
     }
     return dbus_package;
+}
+
+void add_string_list(json_object * json_pkg, const char * cattr, const std::vector<std::string> & vector) {
+    json_object * array = json_object_new_array();
+    json_object_object_add(json_pkg, cattr, array);
+    for (const auto & elem : vector) {
+        json_object_array_add(array, json_object_new_string(elem.c_str()));
+    }
+}
+
+std::string package_to_json(const libdnf5::rpm::Package & libdnf_package, const std::vector<std::string> & attributes) {
+    json_object * json_pkg = json_object_new_object();
+
+    // add package id by default
+    json_object_object_add(json_pkg, "id", json_object_new_int(libdnf_package.get_id().id));
+
+    // attributes required by client
+    for (const auto & attr : attributes) {
+        const auto * const cattr = attr.c_str();
+        auto it = package_attributes.find(attr);
+        if (it == package_attributes.end()) {
+            throw std::runtime_error(fmt::format("Package attribute '{}' not supported", attr));
+        }
+        switch (it->second) {
+            case PackageAttribute::name:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_name().c_str()));
+
+                break;
+            case PackageAttribute::epoch:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_epoch().c_str()));
+                break;
+            case PackageAttribute::version:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_version().c_str()));
+                break;
+            case PackageAttribute::release:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_release().c_str()));
+                break;
+            case PackageAttribute::arch:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_arch().c_str()));
+                break;
+            case PackageAttribute::repo_id:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_repo_id().c_str()));
+                break;
+            case PackageAttribute::from_repo_id:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_string(libdnf_package.get_from_repo_id().c_str()));
+                break;
+            case PackageAttribute::is_installed:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_boolean(static_cast<json_bool>(libdnf_package.is_installed())));
+                break;
+            case PackageAttribute::install_size:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_int64(static_cast<int64_t>(libdnf_package.get_install_size())));
+                break;
+            case PackageAttribute::download_size:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_int64(static_cast<int64_t>(libdnf_package.get_download_size())));
+                break;
+            case PackageAttribute::sourcerpm:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_sourcerpm().c_str()));
+                break;
+            case PackageAttribute::summary:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_summary().c_str()));
+                break;
+            case PackageAttribute::url:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_url().c_str()));
+                break;
+            case PackageAttribute::license:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_license().c_str()));
+                break;
+            case PackageAttribute::description:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_string(libdnf_package.get_description().c_str()));
+                break;
+            case PackageAttribute::files:
+                add_string_list(json_pkg, cattr, libdnf_package.get_files());
+                break;
+            case PackageAttribute::changelogs: {
+                json_object * array = json_object_new_array();
+                json_object_object_add(json_pkg, cattr, array);
+                for (const auto & libdnf_chlog : libdnf_package.get_changelogs()) {
+                    json_object * chlog = json_object_new_array();
+                    json_object_array_add(chlog, json_object_new_int64(static_cast<int64_t>(libdnf_chlog.timestamp)));
+                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.author.c_str()));
+                    json_object_array_add(chlog, json_object_new_string(libdnf_chlog.text.c_str()));
+
+                    json_object_array_add(array, chlog);
+                }
+                break;
+            }
+            case PackageAttribute::provides:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_provides()));
+                break;
+            case PackageAttribute::requires_all:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_requires()));
+                break;
+            case PackageAttribute::requires_pre:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_requires_pre()));
+                break;
+            case PackageAttribute::prereq_ignoreinst:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_prereq_ignoreinst()));
+                break;
+            case PackageAttribute::regular_requires:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_regular_requires()));
+                break;
+            case PackageAttribute::conflicts:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_conflicts()));
+                break;
+            case PackageAttribute::obsoletes:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_obsoletes()));
+                break;
+            case PackageAttribute::recommends:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_recommends()));
+                break;
+            case PackageAttribute::suggests:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_suggests()));
+                break;
+            case PackageAttribute::enhances:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_enhances()));
+                break;
+            case PackageAttribute::supplements:
+                add_string_list(json_pkg, cattr, reldeplist_to_strings(libdnf_package.get_supplements()));
+                break;
+            case PackageAttribute::evr:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_evr().c_str()));
+                break;
+            case PackageAttribute::nevra:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_nevra().c_str()));
+                break;
+            case PackageAttribute::full_nevra:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_string(libdnf_package.get_full_nevra().c_str()));
+                break;
+            case PackageAttribute::reason:
+                json_object_object_add(
+                    json_pkg,
+                    cattr,
+                    json_object_new_string(
+                        libdnf5::transaction::transaction_item_reason_to_string(libdnf_package.get_reason()).c_str()));
+                break;
+            case PackageAttribute::vendor:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_vendor().c_str()));
+                break;
+            case PackageAttribute::group:
+                json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_group().c_str()));
+                break;
+        }
+    }
+
+    // do not add any extra white spaces, make it one-liner json
+    std::string res = json_object_to_json_string_ext(json_pkg, JSON_C_TO_STRING_PLAIN);
+    json_object_put(json_pkg);
+    return res;
 }

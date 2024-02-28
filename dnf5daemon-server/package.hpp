@@ -72,4 +72,10 @@ enum class PackageAttribute {
 dnfdaemon::KeyValueMap package_to_map(
     const libdnf5::rpm::Package & libdnf_package, const std::vector<std::string> & attributes);
 
+/// Convert given libdnf_package to a JSON string using requested attributes.
+/// @param libdnf_package Package to convert to JSON
+/// @param attributes A list of attributes of ligdnf_package that are included in JSON
+/// @return JSON String with the package represented as key:value dictionary.
+std::string package_to_json(const libdnf5::rpm::Package & libdnf_package, const std::vector<std::string> & attributes);
+
 #endif
