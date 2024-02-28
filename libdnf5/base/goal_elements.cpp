@@ -24,6 +24,109 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
+class ResolveSpecSettings::Impl {
+    friend ResolveSpecSettings;
+    bool ignore_case{false};
+    bool with_nevra{true};
+    bool with_provides{true};
+    bool with_filenames{true};
+    bool with_binaries{true};
+    bool group_with_id{true};
+    bool group_with_name{false};
+    bool group_search_groups{true};
+    bool group_search_environments{true};
+    std::vector<libdnf5::rpm::Nevra::Form> nevra_forms{};
+};
+
+ResolveSpecSettings::~ResolveSpecSettings() = default;
+
+ResolveSpecSettings::ResolveSpecSettings() : p_impl(std::make_unique<Impl>()) {}
+ResolveSpecSettings::ResolveSpecSettings(const ResolveSpecSettings & src) : p_impl(new Impl(*src.p_impl)) {}
+ResolveSpecSettings::ResolveSpecSettings(ResolveSpecSettings && src) noexcept = default;
+
+ResolveSpecSettings & ResolveSpecSettings::operator=(const ResolveSpecSettings & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+ResolveSpecSettings & ResolveSpecSettings::operator=(ResolveSpecSettings && src) noexcept = default;
+
+void ResolveSpecSettings::set_ignore_case(bool ignore_case) {
+    p_impl->ignore_case = ignore_case;
+}
+bool ResolveSpecSettings::get_ignore_case() const {
+    return p_impl->ignore_case;
+}
+
+void ResolveSpecSettings::set_with_nevra(bool with_nevra) {
+    p_impl->with_nevra = with_nevra;
+}
+bool ResolveSpecSettings::get_with_nevra() const {
+    return p_impl->with_nevra;
+}
+
+void ResolveSpecSettings::set_with_provides(bool with_provides) {
+    p_impl->with_provides = with_provides;
+}
+bool ResolveSpecSettings::get_with_provides() const {
+    return p_impl->with_provides;
+}
+
+void ResolveSpecSettings::set_with_filenames(bool with_filenames) {
+    p_impl->with_filenames = with_filenames;
+}
+bool ResolveSpecSettings::get_with_filenames() const {
+    return p_impl->with_filenames;
+}
+
+void ResolveSpecSettings::set_with_binaries(bool with_binaries) {
+    p_impl->with_binaries = with_binaries;
+}
+bool ResolveSpecSettings::get_with_binaries() const {
+    return p_impl->with_binaries;
+}
+
+void ResolveSpecSettings::set_nevra_forms(std::vector<libdnf5::rpm::Nevra::Form> nevra_forms) {
+    p_impl->nevra_forms = std::move(nevra_forms);
+}
+std::vector<libdnf5::rpm::Nevra::Form> ResolveSpecSettings::get_nevra_forms() const {
+    return p_impl->nevra_forms;
+}
+
+void ResolveSpecSettings::set_group_with_id(bool group_with_id) {
+    p_impl->group_with_id = group_with_id;
+}
+bool ResolveSpecSettings::get_group_with_id() const {
+    return p_impl->group_with_id;
+}
+
+void ResolveSpecSettings::set_group_with_name(bool group_with_name) {
+    p_impl->group_with_name = group_with_name;
+}
+bool ResolveSpecSettings::get_group_with_name() const {
+    return p_impl->group_with_name;
+}
+
+void ResolveSpecSettings::set_group_search_groups(bool search_groups) {
+    p_impl->group_search_groups = search_groups;
+}
+bool ResolveSpecSettings::get_group_search_groups() const {
+    return p_impl->group_search_groups;
+}
+
+void ResolveSpecSettings::set_group_search_environments(bool search_environments) {
+    p_impl->group_search_environments = search_environments;
+}
+bool ResolveSpecSettings::get_group_search_environments() const {
+    return p_impl->group_search_environments;
+}
+
 bool GoalJobSettings::resolve_skip_broken(const libdnf5::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (skip_broken) {

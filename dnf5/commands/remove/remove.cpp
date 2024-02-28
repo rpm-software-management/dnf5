@@ -73,10 +73,10 @@ void RemoveCommand::run() {
     // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
     // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
     libdnf5::GoalJobSettings settings;
-    settings.with_nevra = true;
-    settings.with_provides = false;
-    settings.with_filenames = true;
-    settings.with_binaries = false;
+    settings.set_with_nevra(true);
+    settings.set_with_provides(false);
+    settings.set_with_filenames(true);
+    settings.set_with_binaries(false);
     for (const auto & spec : pkg_specs) {
         goal->add_remove(spec, settings);
     }
