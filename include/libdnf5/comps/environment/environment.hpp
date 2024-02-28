@@ -149,7 +149,6 @@ private:
     std::vector<std::string> groups;
     std::vector<std::string> optional_groups;
 
-    friend class EnvironmentSack;
     friend class EnvironmentQuery;
 };
 
