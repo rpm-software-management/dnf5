@@ -2593,9 +2593,9 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 
     bool glob = libdnf5::utils::is_glob_pattern(pkg_spec.c_str());
     libdnf5::sack::QueryCmp cmp = glob ? libdnf5::sack::QueryCmp::GLOB : libdnf5::sack::QueryCmp::EQ;
-    if (settings.with_nevra) {
+    if (settings.get_with_nevra()) {
         const std::vector<Nevra::Form> & test_forms =
-            settings.nevra_forms.empty() ? Nevra::get_default_pkg_spec_forms() : settings.nevra_forms;
+            settings.get_nevra_forms().empty() ? Nevra::get_default_pkg_spec_forms() : settings.get_nevra_forms();
         try {
             auto nevras = rpm::Nevra::parse(pkg_spec, test_forms);
             for (auto & nevra_obj : nevras) {
@@ -2603,7 +2603,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
                     *this,
                     nevra_obj,
                     glob,
-                    settings.ignore_case ? (cmp | libdnf5::sack::QueryCmp::ICASE) : cmp,
+                    settings.get_ignore_case() ? (cmp | libdnf5::sack::QueryCmp::ICASE) : cmp,
                     filter_result,
                     with_src);
                 filter_result &= *p_impl;
@@ -2614,14 +2614,14 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
                 }
             }
             // When parsed nevra search failed only string with glob can match full nevra
-            if (settings.nevra_forms.empty() && glob) {
+            if (settings.get_nevra_forms().empty() && glob) {
                 auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
                 PQImpl::filter_nevra(
                     *this,
                     sorted_solvables,
                     pkg_spec,
                     glob,
-                    settings.ignore_case ? (cmp | libdnf5::sack::QueryCmp::ICASE) : cmp,
+                    settings.get_ignore_case() ? (cmp | libdnf5::sack::QueryCmp::ICASE) : cmp,
                     filter_result);
                 filter_result &= *p_impl;
                 if (!filter_result.empty()) {
@@ -2632,7 +2632,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         } catch (const NevraIncorrectInputError &) {
         }
     }
-    if (settings.with_provides) {
+    if (settings.get_with_provides()) {
         ReldepList reldep_list(p_impl->base);
         PQImpl::str2reldep_internal(reldep_list, cmp, glob, pkg_spec);
         if (reldep_list.size() != 0) {
@@ -2646,7 +2646,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         }
     }
     auto is_file_pattern = libdnf5::utils::is_file_pattern(pkg_spec);
-    if (settings.with_filenames && is_file_pattern) {
+    if (settings.get_with_filenames() && is_file_pattern) {
         filter_dataiterator(
             *pool,
             SOLVABLE_FILELIST,
@@ -2660,7 +2660,7 @@ std::pair<bool, libdnf5::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         }
     }
     // If spec is file path than it is not a binary
-    if (settings.with_binaries and !is_file_pattern) {
+    if (settings.get_with_binaries() and !is_file_pattern) {
         ReldepList reldep_list(p_impl->base);
         std::array<std::string, 2> binary_paths{"/usr/bin/", "/usr/sbin/"};
         std::vector<std::string> binary_paths_string;

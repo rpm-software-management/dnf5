@@ -169,12 +169,12 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     bool excludes_exist = false;  // found packages for exclude
     bool includes_exist = false;  // found packages for include
 
-    ResolveSpecSettings resolve_settings{
-        .ignore_case = false,
-        .with_nevra = true,
-        .with_provides = false,
-        .with_filenames = false,
-        .with_binaries = false};
+    ResolveSpecSettings resolve_settings;
+    resolve_settings.set_ignore_case(false);
+    resolve_settings.set_with_nevra(true);
+    resolve_settings.set_with_provides(false);
+    resolve_settings.set_with_filenames(false);
+    resolve_settings.set_with_binaries(false);
 
     // first evaluate repo specific includes/excludes
     if (!only_main) {

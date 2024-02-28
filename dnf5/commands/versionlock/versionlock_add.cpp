@@ -94,8 +94,11 @@ void VersionlockAddCommand::run() {
 
     const auto comment = format_comment("add");
 
-    const libdnf5::ResolveSpecSettings settings{
-        .with_nevra = true, .with_provides = false, .with_filenames = false, .with_binaries = false};
+    libdnf5::ResolveSpecSettings settings;
+    settings.set_with_nevra(true);
+    settings.set_with_provides(false);
+    settings.set_with_filenames(false);
+    settings.set_with_binaries(false);
     for (const auto & spec : pkg_specs) {
         libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
         query.resolve_pkg_spec(spec, settings, false);

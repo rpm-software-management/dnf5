@@ -640,10 +640,12 @@ std::vector<std::string> match_specs(
     std::set<std::string> result_set;
     {
         libdnf5::rpm::PackageQuery matched_pkgs_query(base);
-        matched_pkgs_query.resolve_pkg_spec(
-            pattern + '*',
-            {.ignore_case = false, .with_provides = false, .with_filenames = false, .with_binaries = false},
-            true);
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(false);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
+        matched_pkgs_query.resolve_pkg_spec(pattern + '*', settings, true);
 
         for (const auto & package : matched_pkgs_query) {
             auto [it, inserted] = result_set.insert(package.get_name());

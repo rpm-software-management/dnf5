@@ -193,13 +193,13 @@ GoalProblem Transaction::Impl::report_not_found(
             if (action == GoalAction::REMOVE) {
                 hints.filter_installed();
             }
-            if (!settings.ignore_case && settings.with_nevra) {
+            if (!settings.get_ignore_case() && settings.get_with_nevra()) {
                 rpm::PackageQuery icase(hints);
-                ResolveSpecSettings settings_copy = settings;
-                settings_copy.ignore_case = true;
-                settings_copy.with_provides = false;
-                settings_copy.with_filenames = false;
-                settings_copy.with_binaries = false;
+                ResolveSpecSettings settings_copy(settings);
+                settings_copy.set_ignore_case(true);
+                settings_copy.set_with_provides(false);
+                settings_copy.set_with_filenames(false);
+                settings_copy.set_with_binaries(false);
                 auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
                 if (nevra_pair_icase.first) {
                     add_resolve_log(

@@ -711,12 +711,12 @@ void Actions::on_transaction(
 
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
-    libdnf5::ResolveSpecSettings spec_settings{
-        .ignore_case = false,
-        .with_nevra = true,
-        .with_provides = false,
-        .with_filenames = true,
-        .with_binaries = false};
+    libdnf5::ResolveSpecSettings spec_settings;
+    spec_settings.set_ignore_case(false);
+    spec_settings.set_with_nevra(true);
+    spec_settings.set_with_provides(false);
+    spec_settings.set_with_filenames(true);
+    spec_settings.set_with_binaries(false);
     for (const auto & action : trans_actions) {
         if (action.pkg_filter.empty()) {
             // action without packages - the action is called regardless of the of number of packages in the transaction

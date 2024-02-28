@@ -188,10 +188,11 @@ bool BuildDepCommand::add_from_pkg(
     auto & ctx = get_context();
 
     libdnf5::rpm::PackageQuery pkg_query(ctx.base);
-    pkg_query.resolve_pkg_spec(
-        pkg_spec,
-        libdnf5::ResolveSpecSettings{.with_provides = false, .with_filenames = false, .with_binaries = false},
-        false);
+    libdnf5::ResolveSpecSettings settings;
+    settings.set_with_provides(false);
+    settings.set_with_filenames(false);
+    settings.set_with_binaries(false);
+    pkg_query.resolve_pkg_spec(pkg_spec, settings, false);
 
     std::vector<std::string> source_names{pkg_spec};
     for (const auto & pkg : pkg_query) {
@@ -273,8 +274,8 @@ void BuildDepCommand::run() {
     // Search only for solution in provides and files. Use buildrequire with name search might result in inconsistent
     // behavior with installing dependencies of RPMs
     libdnf5::GoalJobSettings settings;
-    settings.with_nevra = false;
-    settings.with_binaries = false;
+    settings.set_with_nevra(false);
+    settings.set_with_binaries(false);
 
     for (const auto & spec : install_specs) {
         if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {
