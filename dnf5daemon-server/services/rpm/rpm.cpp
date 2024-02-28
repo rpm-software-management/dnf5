@@ -65,6 +65,16 @@ void Rpm::dbus_register() {
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM,
+        "list_fd",
+        "a{sv}hs",
+        {"options", "file_descriptor", "transfer_id"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method_fd(*this, &Rpm::list_fd, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM,
         "install",
         "asa{sv}",
         {"pkg_specs", "options"},
@@ -186,23 +196,18 @@ libdnf5::rpm::PackageQuery resolve_nevras(libdnf5::rpm::PackageQuery base_query,
     return result;
 }
 
-sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
-    // read options from dbus call
-    dnfdaemon::KeyValueMap options;
-    call >> options;
-
-    session.fill_sack();
+libdnf5::rpm::PackageQuery Rpm::filter_packages(const dnfdaemon::KeyValueMap & options) {
     auto base = session.get_base();
 
     // add potential command-line packages
     std::vector<libdnf5::rpm::Package> cmdline_packages;
     std::vector<std::string> patterns =
-        key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
     for (auto & [path, package] : base->get_repo_sack()->add_cmdline_packages(patterns)) {
         cmdline_packages.push_back(std::move(package));
     }
 
-    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
+    std::string scope = dnfdaemon::key_value_map_get<std::string>(options, "scope", "all");
     // start with all packages
     libdnf5::sack::ExcludeFlags flags = libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES;
     if (scope != "upgrades" && scope != "upgradable") {
@@ -229,7 +234,6 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     // applying patterns filtering early can increase performance of slow
     // what* filters by reducing the size of their base query
-
     if (patterns.size() > 0) {
         libdnf5::rpm::PackageQuery result(*base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         for (const auto & pkg : cmdline_packages) {
@@ -238,13 +242,13 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
             }
         }
         // packages matching flags
-        bool with_src = key_value_map_get<bool>(options, "with_src", true);
+        bool with_src = dnfdaemon::key_value_map_get<bool>(options, "with_src", true);
         libdnf5::ResolveSpecSettings settings{
-            .ignore_case = key_value_map_get<bool>(options, "icase", true),
-            .with_nevra = key_value_map_get<bool>(options, "with_nevra", true),
-            .with_provides = key_value_map_get<bool>(options, "with_provides", true),
-            .with_filenames = key_value_map_get<bool>(options, "with_filenames", true),
-            .with_binaries = key_value_map_get<bool>(options, "with_binaries", true)};
+            .ignore_case = dnfdaemon::key_value_map_get<bool>(options, "icase", true),
+            .with_nevra = dnfdaemon::key_value_map_get<bool>(options, "with_nevra", true),
+            .with_provides = dnfdaemon::key_value_map_get<bool>(options, "with_provides", true),
+            .with_filenames = dnfdaemon::key_value_map_get<bool>(options, "with_filenames", true),
+            .with_binaries = dnfdaemon::key_value_map_get<bool>(options, "with_binaries", true)};
         for (auto & pattern : patterns) {
             libdnf5::rpm::PackageQuery package_query(query);
             package_query.resolve_pkg_spec(pattern, settings, with_src);
@@ -255,10 +259,10 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     // then apply specific filters
     if (options.find("arch") != options.end()) {
-        query.filter_arch(key_value_map_get<std::vector<std::string>>(options, "arch"));
+        query.filter_arch(dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "arch"));
     }
     if (options.find("repo") != options.end()) {
-        query.filter_repo_id(key_value_map_get<std::vector<std::string>>(options, "repo"));
+        query.filter_repo_id(dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "repo"));
     }
     if (options.find("whatprovides") != options.end()) {
         auto filter_patterns = get_filter_patterns(options, "whatprovides");
@@ -375,14 +379,26 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     // finally apply latest filter
     if (options.find("latest-limit") != options.end()) {
-        query.filter_latest_evr(key_value_map_get<int>(options, "latest-limit"));
+        query.filter_latest_evr(dnfdaemon::key_value_map_get<int>(options, "latest-limit"));
     }
+
+    return query;
+}
+
+sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+
+    session.fill_sack();
+
+    auto query = filter_packages(options);
 
     // create reply from the query
     dnfdaemon::KeyValueMapList out_packages;
     std::vector<std::string> default_attrs{};
     std::vector<std::string> package_attrs =
-        key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
     for (const auto & pkg : query) {
         out_packages.push_back(package_to_map(pkg, package_attrs));
     }
@@ -390,6 +406,59 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     auto reply = call.createReply();
     reply << out_packages;
     return reply;
+}
+
+void Rpm::list_fd(sdbus::MethodCall & call) {
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    // get the output pipe file descriptor
+    sdbus::UnixFd dbus_unix_fd;
+    call >> dbus_unix_fd;
+    // id of the output filedescriptor
+    std::string out_fd_id;
+    call >> out_fd_id;
+
+    int out_fd = dbus_unix_fd.get();
+
+    session.fill_sack();
+
+    auto query = filter_packages(options);
+
+    std::vector<std::string> package_attrs =
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "package_attrs", std::vector<std::string>());
+    std::string error_msg;
+    for (const auto & pkg : query) {
+        std::string jsonstr;
+        try {
+            jsonstr = package_to_json(pkg, package_attrs) + "\n";
+        } catch (const std::exception & ex) {
+            error_msg = fmt::format(
+                "Error serializing package \"{0}\" from repo \"{1}\": {2}",
+                pkg.get_nevra(),
+                pkg.get_repo_id(),
+                ex.what());
+            break;
+        }
+        std::string write_error;
+        if (!dnfdaemon::write_to_fd(jsonstr, out_fd, write_error)) {
+            error_msg = fmt::format("Error writing package list to the fd: {}", write_error);
+            break;
+        }
+    }
+    close(out_fd);
+
+    // signal client that the transfer has finished and the output file descriptor is closed
+    auto dbus_object = get_session().get_dbus_object();
+    auto signal = dbus_object->createSignal(call.getInterfaceName(), dnfdaemon::SIGNAL_WRITE_TO_FD_FINISHED);
+    signal << error_msg.empty();
+    signal << out_fd_id;
+    signal << error_msg;
+    try {
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+        // TODO(mblaha): log the error
+    }
 }
 
 sdbus::MethodReply Rpm::distro_sync(sdbus::MethodCall & call) {
