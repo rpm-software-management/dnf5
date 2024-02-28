@@ -88,8 +88,10 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                     try {
                         tmp_repo_conf.opt_binds().at(repo_key);
                     } catch (const OptionBindsOptionNotFoundError & ex) {
-                        ctx.base.get_logger()->warning(
-                            "config-manager: Request to remove unsupported repository option: {}", key);
+                        write_warning(
+                            *ctx.base.get_logger(),
+                            M_("config-manager: Request to remove unsupported repository option: {}"),
+                            key);
                     }
 
                     in_repos_opts_to_remove[repo_id].insert(repo_key);
@@ -98,8 +100,10 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                     try {
                         tmp_config.opt_binds().at(key);
                     } catch (const OptionBindsOptionNotFoundError & ex) {
-                        ctx.base.get_logger()->warning(
-                            "config-manager: Request to remove unsupported main option: {}", key);
+                        write_warning(
+                            *ctx.base.get_logger(),
+                            M_("config-manager: Request to remove unsupported main option: {}"),
+                            key);
                     }
 
                     // Save the global option for later removing from the file.
@@ -131,8 +135,10 @@ void ConfigManagerUnsetOptCommand::configure() {
             // Generate warning for unused options
             for (const auto & key : main_opts_to_remove) {
                 if (!used_keys.contains(key)) {
-                    ctx.base.get_logger()->warning(
-                        "config-manager: Request to remove main option but it is not present in the config file: {}",
+                    write_warning(
+                        *ctx.base.get_logger(),
+                        M_("config-manager: Request to remove main option but it is not present in the config file: "
+                           "{}"),
                         key);
                 }
             }
@@ -141,8 +147,10 @@ void ConfigManagerUnsetOptCommand::configure() {
                 parser.write(cfg_filepath, false);
             }
         } else {
-            ctx.base.get_logger()->warning(
-                "config-manager: Request to remove main option but config file not found: {}", cfg_filepath.string());
+            write_warning(
+                *ctx.base.get_logger(),
+                M_("config-manager: Request to remove main option but config file not found: {}"),
+                cfg_filepath.string());
         }
     }
 
@@ -173,16 +181,18 @@ void ConfigManagerUnsetOptCommand::configure() {
             for (const auto & [in_repoid, keys] : in_repos_opts_to_remove) {
                 if (const auto used_repoid_opts = used_repos_opts.find(in_repoid);
                     used_repoid_opts == used_repos_opts.end()) {
-                    ctx.base.get_logger()->warning(
-                        "config-manager: Request to remove repository option but repoid is not present "
-                        "in the overrides: {}",
+                    write_warning(
+                        *ctx.base.get_logger(),
+                        M_("config-manager: Request to remove repository option but repoid is not present "
+                           "in the overrides: {}"),
                         in_repoid);
                 } else {
                     for (const auto & key : keys) {
                         if (!used_repoid_opts->second.contains(key))
-                            ctx.base.get_logger()->warning(
-                                "config-manager: Request to remove repository option but it is not present "
-                                "in the overrides: {}.{}",
+                            write_warning(
+                                *ctx.base.get_logger(),
+                                M_("config-manager: Request to remove repository option but it is not present "
+                                   "in the overrides: {}.{}"),
                                 in_repoid,
                                 key);
                     }
@@ -199,8 +209,9 @@ void ConfigManagerUnsetOptCommand::configure() {
                 parser.write(repos_override_file_path, false);
             }
         } else {
-            ctx.base.get_logger()->warning(
-                "config-manager: Request to remove repository option but file with overrides not found: {}",
+            write_warning(
+                *ctx.base.get_logger(),
+                M_("config-manager: Request to remove repository option but file with overrides not found: {}"),
                 repos_override_file_path.string());
         }
     }
