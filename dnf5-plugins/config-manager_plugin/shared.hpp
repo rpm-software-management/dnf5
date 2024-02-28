@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/conf/config_main.hpp>
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
 #include <filesystem>
@@ -36,6 +37,14 @@ struct ConfigManagerError : public libdnf5::Error {
     const char * get_domain_name() const noexcept override { return "dnf5"; }
     const char * get_name() const noexcept override { return "ConfigManagerError"; }
 };
+
+// Writes the warning message to the log and to stderr.
+// The original message is written to the log and translated version to stderr.
+template <typename... Args>
+void write_warning(libdnf5::Logger & log, BgettextMessage msg, Args &&... args) {
+    log.warning(b_gettextmsg_get_id(msg), args...);
+    std::cerr << libdnf5::utils::sformat(TM_(msg, 1), args...) << std::endl;
+}
 
 // Checks if the `path` directory exists. If not, according to the `create_missing_dirs` argument,
 // the directories (missing paths elements) are created or `ConfigManagerError` exception is thrown.

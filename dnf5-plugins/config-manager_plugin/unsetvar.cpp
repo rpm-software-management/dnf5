@@ -64,8 +64,10 @@ void ConfigManagerUnsetVarCommand::configure() {
         }
 
         if (!std::filesystem::exists(vars_dir)) {
-            ctx.base.get_logger()->warning(
-                "config-manager: Request to remove variable but vars directory was not found: {}", vars_dir.string());
+            write_warning(
+                *ctx.base.get_logger(),
+                M_("config-manager: Request to remove variable but vars directory was not found: {}"),
+                vars_dir.string());
             return;
         }
 
@@ -75,8 +77,10 @@ void ConfigManagerUnsetVarCommand::configure() {
                 if (std::filesystem::exists(filepath)) {
                     std::filesystem::remove(filepath);
                 } else {
-                    ctx.base.get_logger()->warning(
-                        "config-manager: Request to remove variable but it is not present in the vars directory: {}",
+                    write_warning(
+                        *ctx.base.get_logger(),
+                        M_("config-manager: Request to remove variable but it is not present in the vars directory: "
+                           "{}"),
                         name);
                 }
             } catch (const std::filesystem::filesystem_error & e) {
