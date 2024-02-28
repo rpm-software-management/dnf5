@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_list.hpp"
 
 #include <libdnf5-cli/output/grouplist.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>

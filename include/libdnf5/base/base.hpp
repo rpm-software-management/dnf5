@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
-#include "libdnf5/comps/comps.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/logger/log_router.hpp"
@@ -114,7 +113,6 @@ public:
 
     // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
-    libdnf5::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
     libdnf5::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
@@ -151,7 +149,6 @@ private:
     ConfigMain config;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
-    comps::Comps comps{*this};
     module::ModuleSack module_sack{get_weak_ptr()};
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;

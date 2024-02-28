@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/fs/file.hpp"
 
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/package.hpp>
 #include <libdnf5/comps/group/query.hpp>
 
