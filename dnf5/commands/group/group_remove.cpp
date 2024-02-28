@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_remove.hpp"
 
+#include "dnf5/shared_options.hpp"
+
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -35,6 +37,7 @@ void GroupRemoveCommand::set_argument_parser() {
 
     no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
+    create_store_option(*this);
 }
 
 void GroupRemoveCommand::configure() {

@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
+#include "libdnf5/utils/fs/file.hpp"
+
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/tty.hpp>
@@ -412,7 +414,19 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 }  // namespace
 
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
-    transaction.download();
+    if (!transaction_store_path.empty()) {
+        auto & destdir_opt = base.get_config().get_destdir_option();
+        destdir_opt.set(transaction_store_path / "packages");
+        std::filesystem::create_directories(transaction_store_path);
+        transaction.download();
+        std::filesystem::path comps_path = transaction_store_path / "comps";
+        transaction.store_comps(comps_path);
+        libdnf5::utils::fs::File transfile(transaction_store_path / "transaction.json", "w");
+        transfile.write(transaction.serialize(destdir_opt.get_value(), comps_path));
+        return;
+    } else {
+        transaction.download();
+    }
 
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;

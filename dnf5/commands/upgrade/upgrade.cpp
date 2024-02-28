@@ -77,6 +77,8 @@ void UpgradeCommand::set_argument_parser() {
     advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
+
+    create_store_option(*this);
 }
 
 void UpgradeCommand::configure() {
