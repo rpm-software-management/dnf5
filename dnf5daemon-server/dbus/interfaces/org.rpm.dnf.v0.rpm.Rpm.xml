@@ -87,6 +87,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        list_fd:
+        @options: an array of key/value pairs
+        @file_descriptor: File descriptor opened for writing used to transfer data
+        @transfer_id: Identifier of this transfer. Used for signaling the end of transfer.
+
+        Get list of packages that match to given filters.
+        Packages are transfered in form of stream of JSON objects. Each JSON
+        object is a dictionary representing one package.
+
+        The same options as in list() method are supported.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="file_descriptor" type="h" direction="in"/>
+        <arg name="transfer_id" type="s" direction="in"/>
+    </method>
+
+    <!--
         install:
         @pkg_specs: an array of package specifications to be installed on the system
         @options: an array of key/value pairs to modify install behavior
@@ -382,6 +400,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <signal name="transaction_unpack_error">
         <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
+    </signal>
+
+    <!--
+        write_to_fd_finished:
+        @success: true if the tranfer finished successfully
+        @transfer_id: id of the tranfer was finished and its file descriptor closed
+        @error_msg: error message if the transfer was not successful.
+
+        Processing of the item has started.
+    -->
+    <signal name="write_to_fd_finished">
+        <arg name="success" type="b" />
+        <arg name="transfer_id" type="s" />
+        <arg name="error_msg" type="s" />
     </signal>
 </interface>
 
