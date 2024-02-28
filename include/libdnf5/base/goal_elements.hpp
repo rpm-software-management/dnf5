@@ -117,29 +117,86 @@ enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 /// Unresolved or resolved values based on GoalSetting
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
+/// Configure SPEC resolving.
+/// Important for queries that resolve SPEC.
 struct ResolveSpecSettings {
 public:
-    /// Important for queries that resolve SPEC
-    bool ignore_case{false};
-    /// Important for queries that resolve SPEC
-    bool with_nevra{true};
-    /// Important for queries that resolve SPEC
-    bool with_provides{true};
-    /// Important for queries that resolve SPEC
-    bool with_filenames{true};
-    /// Important for queries that resolve SPEC
-    /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
-    bool with_binaries{true};
-    /// Important for queries that resolve SPEC
-    std::vector<libdnf5::rpm::Nevra::Form> nevra_forms{};
+    ResolveSpecSettings();
+    ~ResolveSpecSettings();
 
-    /// these flags are used only for group resolving
-    bool group_with_id{true};
-    bool group_with_name{false};
-    /// Historically group spec could also mean an environment. These flags
+    ResolveSpecSettings(const ResolveSpecSettings & src);
+    ResolveSpecSettings & operator=(const ResolveSpecSettings & src);
+
+    ResolveSpecSettings(ResolveSpecSettings && src) noexcept;
+    ResolveSpecSettings & operator=(ResolveSpecSettings && src) noexcept;
+
+    /// Set whether to match case-insensitively
+    ///
+    /// Default: false
+    void set_ignore_case(bool ignore_case);
+    bool get_ignore_case() const;
+
+    /// Set whether packages' nevras should be considered during SPEC matching
+    ///
+    /// Default: true
+    void set_with_nevra(bool with_nevra);
+    bool get_with_nevra() const;
+
+    /// Set whether packages' provides should be considered during SPEC matching
+    ///
+    /// Default: true
+    void set_with_provides(bool with_provides);
+    bool get_with_provides() const;
+
+    /// Set whether package's files should be considered during SPEC matching
+    /// It will check if SPEC starts with "/" or "*/" and if it matches any file in a package
+    ///
+    /// Default: true
+    void set_with_filenames(bool with_filenames);
+    bool get_with_filenames() const;
+
+    /// Set whether package's binaries should be considered during SPEC matching
+    /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
+    ///
+    /// Default: true
+    void set_with_binaries(bool with_binaries);
+    bool get_with_binaries() const;
+
+    /// When matching packages' nevras is enabled specify allowed nevra forms.
+    ///
+    /// The default can be obtained from libdnf5::rpm::Nevra::get_default_pkg_spec_forms().
+    void set_nevra_forms(std::vector<libdnf5::rpm::Nevra::Form> nevra_forms);
+    std::vector<libdnf5::rpm::Nevra::Form> get_nevra_forms() const;
+
+    /// Set whether groups' ids should be considered during group SPEC matching
+    ///
+    /// Default: true
+    void set_group_with_id(bool group_with_id);
+    bool get_group_with_id() const;
+
+    /// Set whether groups' names should be considered during group SPEC matching
+    ///
+    /// Default: false
+    void set_group_with_name(bool group_with_name);
+    bool get_group_with_name() const;
+
+    /// Configure whether to search in groups when matching SPEC in group ids or names.
+    /// Historically group SPEC could also mean an environment. These flags
     /// configure in which entities the spec is searched for.
-    bool group_search_groups{true};
-    bool group_search_environments{true};
+    ///
+    /// Default: true
+    void set_group_search_groups(bool search_groups);
+    bool get_group_search_groups() const;
+
+    /// Configure whether to search in environments when matching SPEC in group ids or names.
+    ///
+    /// Default: true
+    void set_group_search_environments(bool search_environments);
+    bool get_group_search_environments() const;
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 struct GoalJobSettings : public ResolveSpecSettings {
