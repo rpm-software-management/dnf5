@@ -187,6 +187,85 @@ private:
     Actions action;
 };
 
+class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
+public:
+    RpmTransCB();
+    ~RpmTransCB();
+    libdnf5::cli::progressbar::MultiProgressBar * get_multi_progress_bar();
+
+    void install_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
+    void install_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override;
+
+    void transaction_start(uint64_t total) override;
+
+    void transaction_stop([[maybe_unused]] uint64_t total) override;
+
+    void uninstall_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
+
+    void uninstall_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+
+    void unpack_error(const libdnf5::rpm::TransactionItem & item) override;
+
+    void cpio_error(const libdnf5::rpm::TransactionItem & item) override;
+
+    void script_error(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
+        uint64_t return_code) override;
+
+    void script_start(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type) override;
+
+    void script_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
+        [[maybe_unused]] uint64_t return_code) override;
+
+    void elem_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override;
+
+    void verify_start([[maybe_unused]] uint64_t total) override;
+
+    void verify_stop([[maybe_unused]] uint64_t total) override;
+
+private:
+    void new_progress_bar(int64_t total, const std::string & descr);
+
+    static bool is_time_to_print();
+
+    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+};
+
 void run_transaction(libdnf5::rpm::Transaction & transaction);
 
 /// Returns the names of matching packages and paths of matching package file names and directories.

@@ -46,4 +46,4 @@ private:
 
 }  // namespace dnf5
 
-#endif  // DNF5_COMMANDS_CHANGELOG_HPP
+#endif  // DNF5_COMMANDS_NEEDS_RESTARTING_HPP

@@ -36,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/makecache/makecache.hpp"
 #include "commands/mark/mark.hpp"
 #include "commands/module/module.hpp"
+#include "commands/offline/offline.hpp"
 #include "commands/provides/provides.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -43,6 +44,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
+#include "commands/system-upgrade/system-upgrade.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "commands/versionlock/versionlock.hpp"
 #include "dnf5/context.hpp"
@@ -691,6 +693,8 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
     context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
+    context.add_and_initialize_command(std::make_unique<SystemUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineCommand>(context));
 }
 
 static void load_plugins(Context & context) {
