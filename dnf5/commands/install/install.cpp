@@ -67,6 +67,7 @@ void InstallCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     create_allow_downgrade_options(*this);
+    create_offline_option(*this);
 }
 
 void InstallCommand::configure() {

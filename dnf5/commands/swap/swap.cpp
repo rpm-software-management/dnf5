@@ -68,6 +68,8 @@ void SwapCommand::set_argument_parser() {
     cmd.register_positional_arg(install_spec_arg);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+
+    create_offline_option(*this);
 }
 
 void SwapCommand::configure() {

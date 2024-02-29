@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "version.hpp"
 
 #include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/goal.hpp>
@@ -77,6 +78,10 @@ public:
     std::vector<std::pair<std::string, std::string>> repos_from_path;
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
+
+    bool should_store_offline = false;
+
+    void store_offline(libdnf5::base::Transaction & transaction);
 
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
@@ -153,6 +158,7 @@ private:
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
     bool show_new_leaves{false};
+    std::string get_cmd_line();
 
     std::reference_wrapper<std::ostream> output_stream = std::cout;
 
@@ -189,7 +195,7 @@ private:
 
 class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
 public:
-    RpmTransCB();
+    RpmTransCB(Context & context);
     ~RpmTransCB();
     libdnf5::cli::progressbar::MultiProgressBar * get_multi_progress_bar();
 
@@ -264,6 +270,7 @@ private:
 
     libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    Context & context;
 };
 
 void run_transaction(libdnf5::rpm::Transaction & transaction);
