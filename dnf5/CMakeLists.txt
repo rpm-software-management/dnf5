@@ -2,6 +2,8 @@ if(NOT WITH_DNF5)
     return()
 endif()
 
+set(SYSTEMD_SYSTEM_UNIT_DIR /usr/lib/systemd/system)
+
 find_package(Threads)
 
 # set gettext domain for translations
@@ -32,7 +34,10 @@ target_link_libraries(dnf5 PRIVATE common libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
-target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES})
+pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
+
+target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES} ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
 
 
 find_package(bash-completion)
@@ -47,6 +52,11 @@ install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR}
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
+install(DIRECTORY "config/systemd/system/" DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}" PATTERN ".gitkeep" EXCLUDE)
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+    ${SYSTEMD_SYSTEM_UNIT_DIR}/dnf5-offline-transaction.service
+    ${SYSTEMD_SYSTEM_UNIT_DIR}/system-update.target.wants/dnf5-offline-transaction.service)"
+)
 
 # Makes an empty directory for dnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/dnf5-plugins")

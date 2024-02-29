@@ -62,6 +62,8 @@ Provides:       dnf5-command(advisory)
 Provides:       dnf5-command(clean)
 Provides:       dnf5-command(download)
 Provides:       dnf5-command(makecache)
+Provides:       dnf5-command(offline)
+Provides:       dnf5-command(system-upgrade)
 
 
 # ========== build options ==========
@@ -134,7 +136,9 @@ BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
 BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
 BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 BuildRequires:  pkgconfig(rpm) >= 4.17.0
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
+BuildRequires:  systemd-devel
 BuildRequires:  toml11-static
 
 %if %{with clang}
@@ -254,6 +258,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/dnf5
 %dir %{_datadir}/dnf5/aliases.d
 %config %{_datadir}/dnf5/aliases.d/compatibility.conf
+%config %{_unitdir}/dnf5-offline-transaction.service
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %dir %{_datadir}/dnf5/dnf5-plugins
