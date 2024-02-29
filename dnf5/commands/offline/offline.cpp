@@ -114,7 +114,7 @@ private:
 /// Extend RpmTransCB to also display messages with Plymouth
 class PlymouthTransCB : public RpmTransCB {
 public:
-    PlymouthTransCB(PlymouthOutput plymouth) : plymouth(std::move(plymouth)) {}
+    PlymouthTransCB(Context & context, PlymouthOutput plymouth) : RpmTransCB(context), plymouth(std::move(plymouth)) {}
     void elem_progress(
         [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
         [[maybe_unused]] uint64_t amount,
@@ -412,7 +412,7 @@ void OfflineExecuteCommand::run() {
     }
 
     PlymouthOutput plymouth;
-    auto callbacks = std::make_unique<PlymouthTransCB>(plymouth);
+    auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
     /* callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions); */
     transaction.set_callbacks(std::move(callbacks));
 

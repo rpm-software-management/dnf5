@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <libdnf5/offline/offline.hpp>
 #include <libdnf5/rpm/arch.hpp>
 
 namespace dnf5 {
@@ -106,6 +107,28 @@ void create_downloadonly_option(dnf5::Command & command) {
     downloadonly->set_const_value("true");
     downloadonly->link_value(&command.get_context().base.get_config().get_downloadonly_option());
     command.get_argument_parser_command()->register_named_arg(downloadonly);
+}
+
+void create_offline_option(dnf5::Command & command) {
+    auto & ctx = command.get_context();
+    auto & parser = command.get_context().get_argument_parser();
+    auto offline = parser.add_new_named_arg("offline");
+    offline->set_long_name("offline");
+    offline->set_description("Store the transaction to be performed offline");
+    offline->set_const_value("true");
+    offline->set_parse_hook_func([&ctx](
+                                     [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                     [[maybe_unused]] const char * option,
+                                     [[maybe_unused]] const char * value) {
+        const auto & installroot = ctx.base.get_config().get_installroot_option().get_value();
+        const auto & offline_datadir = libdnf5::offline::get_offline_datadir(installroot);
+        std::filesystem::create_directories(offline_datadir);
+
+        ctx.base.get_config().get_cachedir_option().set(libdnf5::Option::Priority::RUNTIME, offline_datadir);
+        ctx.should_store_offline = true;
+        return true;
+    });
+    command.get_argument_parser_command()->register_named_arg(offline);
 }
 
 

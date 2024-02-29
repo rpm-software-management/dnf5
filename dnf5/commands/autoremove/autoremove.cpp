@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "autoremove.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
 namespace dnf5 {
@@ -35,6 +36,7 @@ void AutoremoveCommand::set_parent_command() {
 void AutoremoveCommand::set_argument_parser() {
     get_argument_parser_command()->set_description(
         "Remove all unneeded packages originally installed as dependencies.");
+    create_offline_option(*this);
 }
 
 void AutoremoveCommand::configure() {

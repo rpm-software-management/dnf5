@@ -70,6 +70,7 @@ void UpgradeCommand::set_argument_parser() {
     create_destdir_option(*this);
     auto & destdir = parser.get_named_arg("upgrade.destdir", false);
     destdir.set_description(destdir.get_description() + " Automatically sets the --downloadonly option.");
+    create_offline_option(*this);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
