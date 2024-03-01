@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-20 02:52+0000\n"
-"PO-Revision-Date: 2024-01-18 02:47+0000\n"
+"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"PO-Revision-Date: 2024-02-21 13:24+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/pt_BR/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
@@ -174,7 +174,7 @@ msgstr "Falha para limpar o cache de repositório no caminho \"{0}\": {1}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
-msgstr ""
+msgstr "Opção inválida de urlprotocol: {}"
 
 #: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
@@ -258,7 +258,55 @@ msgstr ""
 "Esperava-se ID de transação de intervalo inválido \"{}\", \"ID\" ou \"ID.."
 "ID\", onde ID é \"NUMBER\", \"last\" ou \"last-NUMBER\"."
 
-#: commands/list/list.cpp:256
+#: commands/list/list.cpp:46
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr ""
+
+#: commands/list/list.cpp:49
+msgid "List of keys to match case insensitively"
+msgstr ""
+
+#: commands/list/list.cpp:61
+msgid "Show all versions of the packages, not only the latest ones."
+msgstr ""
+
+#: commands/list/list.cpp:67
+msgid "List installed packages."
+msgstr ""
+
+#: commands/list/list.cpp:71
+#, fuzzy
+#| msgid "Allow skipping unavailable packages"
+msgid "List available packages."
+msgstr "Permite pular pacotes indisponíveis"
+
+#: commands/list/list.cpp:78
+msgid ""
+"List extras, that is packages installed on the system that are not available "
+"in any known repository."
+msgstr ""
+
+#: commands/list/list.cpp:86
+msgid ""
+"List packages installed on the system that are obsoleted by packages in any "
+"known repository."
+msgstr ""
+
+#: commands/list/list.cpp:91
+#, fuzzy
+#| msgid "Limit to packages in enhancement advisories."
+msgid "List packages recently added into the repositories."
+msgstr "Limite para pacotes em avisos de melhorias."
+
+#: commands/list/list.cpp:95
+msgid "List upgrades available for the installed packages."
+msgstr ""
+
+#: commands/list/list.cpp:99
+msgid "List packages which will be removed by the 'dnf autoremove' command."
+msgstr ""
+
+#: commands/list/list.cpp:260
 msgid "No matching packages to list"
 msgstr "Nenhum pacote correspondente para listar"
 
@@ -319,65 +367,63 @@ msgid "Patterns"
 msgstr "Padrões"
 
 #. TODO(mblaha): add full command line
-#: commands/versionlock/utils.cpp:34
+#: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
-msgstr ""
+msgstr "Adicionado pelo comando 'versionlock {}' em {}"
 
 #: commands/versionlock/versionlock_add.cpp:37
 msgid "Add new entry to versionlock configuration"
-msgstr ""
+msgstr "Adiciona nova entrada ali configuração do versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:43
 msgid "List of package specs to add versionlock for"
-msgstr ""
+msgstr "Lista de specs de pacotes para adicionar versionlock"
 
 #: commands/versionlock/versionlock_add.cpp:103
 #: commands/versionlock/versionlock_exclude.cpp:122
-#, fuzzy
-#| msgid "No matches found for \"{}\"."
 msgid "No package found for \"{}\"."
-msgstr "Nenhuma correspondência encontrada para \"{}\"."
+msgstr "Nenhum pacote encontrado para \"{}\"."
 
 #: commands/versionlock/versionlock_add.cpp:121
 msgid "Adding versionlock on \"{0} = {1}\"."
-msgstr ""
+msgstr "Adicionando versionlock a \"{0} = {1}\"."
 
 #: commands/versionlock/versionlock_add.cpp:124
 msgid "Package \"{}\" is already locked."
-msgstr ""
+msgstr "O pacote \"{}\" já está bloqueado."
 
 #: commands/versionlock/versionlock_clear.cpp:32
 msgid "Remove all entries from versionlock configuration"
-msgstr ""
+msgstr "Remove todas as entradas da configuração do versionlock"
 
 #: commands/versionlock/versionlock_delete.cpp:35
 msgid "Remove any matching versionlock configuration entries"
-msgstr ""
+msgstr "Remove qualquer entrada de configuração do versionlock correspondente"
 
 #: commands/versionlock/versionlock_delete.cpp:41
 msgid "List of package specs to remove versionlock for"
-msgstr ""
+msgstr "Lista de specs de pacotes para remover versionlock"
 
 #: commands/versionlock/versionlock_delete.cpp:55
 msgid "Deleting versionlock entry:"
-msgstr ""
+msgstr "Excluir entrada versionlock:"
 
 #: commands/versionlock/versionlock_exclude.cpp:37
 msgid "Add new exclude entry to versionlock configuration"
-msgstr ""
+msgstr "Adiciona nova entrada de exclusão à configuração de versionlock"
 
 #: commands/versionlock/versionlock_exclude.cpp:43
 msgid "List of package specs to add versionlock exclude for"
-msgstr ""
+msgstr "Lista de specs de pacotes para adicionar exclusão de versionlock"
 
 #: commands/versionlock/versionlock_exclude.cpp:88
 #: commands/versionlock/versionlock_exclude.cpp:100
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
-msgstr ""
+msgstr "Adicionando exclusão de versionlock em \"{0} = {1}\"."
 
 #: commands/versionlock/versionlock_exclude.cpp:136
 msgid "Package \"{}\" is already excluded."
-msgstr ""
+msgstr "O pacote \"{}\" já foi excluído."
 
 #: context.cpp:80
 msgid "The key was successfully imported."
