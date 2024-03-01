@@ -71,6 +71,20 @@ bool PackageInfoSections::add_section(
                 add_package(pkg, tmp_heading, colorizer, {});
             }
             tmp_heading = "";
+            //TODO(amatej): This is a hacky workaround for a performance problem with
+            //`scols_table_print_range()`. Once the table is large (eg. all pkgs in fedora repo)
+            //calling `scols_table_print_range()` for each package is very slow.
+            //However we cannot print the whole table at once because it isn't possible
+            //to add an empty line into the table to separate the packages.
+            //
+            //To workaround this print each package right away after it is added and clear
+            //the table. This changes the behavior, the printing is done by `add_section()` and the
+            //final call to `print()` is a noop.
+            //This should be reworked for 5.2.0.0 where we can break API.
+            print();
+            std::cout << '\n';
+            sections.clear();
+            scols_table_remove_lines(table);
         }
         return true;
     } else {
