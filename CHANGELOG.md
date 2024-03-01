@@ -1,3 +1,13 @@
+# 5.1.14
+
+- Update translations from weblate
+- Make the error to resolve module metadata more descriptive
+- Switch off deltarpm support
+- Limit number of dnf5daemon simultaneously active sessions
+- Make info and list commands case insesitive
+- Allow dnf5daemon configuration overrides for root
+- Add repoquery.hpp for swig-4.2.1 support
+
 # 5.1.13
 
 - Update translations from weblate
