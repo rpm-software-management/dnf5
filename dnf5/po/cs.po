@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-20 02:52+0000\n"
+"POT-Creation-Date: 2024-02-27 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
@@ -255,7 +255,55 @@ msgstr ""
 "Neplatný rozsah ID transakce \"{}\", očekává se \"ID\" nebo \"ID..ID\", kde "
 "ID je \"NUMBER\", \"last\" nebo \"last-NUMBER\"."
 
-#: commands/list/list.cpp:256
+#: commands/list/list.cpp:46
+msgid "Lists packages depending on the packages' relation to the system"
+msgstr ""
+
+#: commands/list/list.cpp:49
+msgid "List of keys to match case insensitively"
+msgstr ""
+
+#: commands/list/list.cpp:61
+msgid "Show all versions of the packages, not only the latest ones."
+msgstr ""
+
+#: commands/list/list.cpp:67
+msgid "List installed packages."
+msgstr ""
+
+#: commands/list/list.cpp:71
+#, fuzzy
+#| msgid "Allow skipping unavailable packages"
+msgid "List available packages."
+msgstr "Povolit přeskočení nedostupných balíčků"
+
+#: commands/list/list.cpp:78
+msgid ""
+"List extras, that is packages installed on the system that are not available "
+"in any known repository."
+msgstr ""
+
+#: commands/list/list.cpp:86
+msgid ""
+"List packages installed on the system that are obsoleted by packages in any "
+"known repository."
+msgstr ""
+
+#: commands/list/list.cpp:91
+#, fuzzy
+#| msgid "Limit to packages in enhancement advisories."
+msgid "List packages recently added into the repositories."
+msgstr "Omezí se na balíčky v doporučeních pro vylepšení."
+
+#: commands/list/list.cpp:95
+msgid "List upgrades available for the installed packages."
+msgstr ""
+
+#: commands/list/list.cpp:99
+msgid "List packages which will be removed by the 'dnf autoremove' command."
+msgstr ""
+
+#: commands/list/list.cpp:260
 msgid "No matching packages to list"
 msgstr "Žádné odpovídající balíčky k seznamu"
 
@@ -316,7 +364,7 @@ msgid "Patterns"
 msgstr "Vzory"
 
 #. TODO(mblaha): add full command line
-#: commands/versionlock/utils.cpp:34
+#: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
 msgstr ""
 

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-20 02:52+0000\n"
-"PO-Revision-Date: 2024-01-16 23:29+0000\n"
+"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"PO-Revision-Date: 2024-02-22 13:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/pt_BR/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: advisory/advisory.cpp:44
 msgid ""
@@ -99,10 +99,9 @@ msgid "Argument '{}' matches only excluded packages."
 msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
 
 #: base/log_event.cpp:116
-#, fuzzy
-#| msgid "Argument '{}' matches only excluded packages."
 msgid "Argument '{}' matches only packages excluded by versionlock."
-msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
+msgstr ""
+"O argumento '{}' corresponde apenas a pacotes excluídos pelo versionlock."
 
 #: base/log_event.cpp:121
 msgid "  * Maybe you meant: {}"
@@ -162,12 +161,13 @@ msgid ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr ""
+"\n"
+"  - O argumento '{}' corresponde a {} fluxos ('{}') do módulo '{}', mas "
+"nenhum dos fluxos está ativado ou é padrão."
 
 #: base/log_event.cpp:187
-#, fuzzy
-#| msgid "No {} to remove for argument: {}"
 msgid "Unable to resolve argument '{}':{}"
-msgstr "Nenhum {} para remover para o argumento: {}"
+msgstr "Não foi possível resolver o argumento '{}': {}"
 
 #: base/solver_problems.cpp:37
 msgid "{} does not belong to a distupgrade repository"

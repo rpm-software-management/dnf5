@@ -1,18 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Göran Uddeborg <goeran@uddeborg.se>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Sabri Ünal <libreajans@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-02-28 03:35+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5/sv/>\n"
-"Language: sv\n"
+"PO-Revision-Date: 2024-02-26 01:35+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,481 +20,448 @@ msgstr ""
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
-msgstr "Skriv ut detaljer om rekommendationer"
+msgstr "Tavsiyeler hakkında ayrıntıları yazdır"
 
 #: commands/advisory/advisory_list.hpp:33
 msgid "List advisories"
-msgstr "Lista rekommendationer"
+msgstr "Tavsiyeleri listele"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
-msgstr "Alla"
+msgstr "Tümü"
 
 #: commands/advisory/advisory_summary.cpp:48
 msgid "Installed"
-msgstr "Installerade"
+msgstr "Kurulu"
 
 #: commands/advisory/advisory_summary.cpp:52
 msgid "Updates"
-msgstr "Uppdateringar"
+msgstr "Güncellemeler"
 
 #: commands/advisory/advisory_summary.cpp:65
 msgid "Available"
-msgstr "Tillgängliga"
+msgstr "Kullanılabilir"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr "Skriv ut en sammanfattning av rekommendationer"
+msgstr "Tavsiyelerin özetini yazdır"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
 msgstr ""
-"Visa rekommendationer som innehåller någon version av installerade paket."
 
 #: commands/advisory/arguments.hpp:45
 msgid "Show advisories containing newer versions of installed packages."
 msgstr ""
-"Visa rekommendationer som innehåller nyare versioner av installerade paket."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
 msgstr ""
-"Visa rekommendationer som innehåller samma eller äldre versioner av "
-"installerade paket."
 
 #: commands/advisory/arguments.hpp:69
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
-"Visa rekommendationer som innehåller nyare versioner av installerade paket "
-"för vilka en nyare version är tillgänglig."
 
 #: commands/advisory/arguments.hpp:82
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Visa endast rekommendationer som innehåller paket med angivna namn. "
-"Listaflagga, stödjer ”glob”:ar."
 
 #: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
-msgstr "PAKET_NAMN,..."
+msgstr "PAKET_ADI,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr "Lista av mönster matchade mot rekommendationsnamn."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
-msgstr "Visa endast rekommendationer som refererar en bugzilla."
+msgstr ""
 
 #: commands/advisory/arguments.hpp:107
 msgid "Show only advisories referencing a CVE."
-msgstr "Visa endast rekommendationer som refererar en CVE."
+msgstr ""
 
 #: commands/advisory_shared.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
 msgstr ""
-"Begränsa till paket som har rekommendationer med angivna namn. Listflagga."
 
 #: commands/advisory_shared.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr "REKOMMENDATIONSNAMN,…"
+msgstr "TAVSİYE_ADI,..."
 
 #: commands/advisory_shared.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr "Begränsa till paket i säkerhetsrekommendationer."
+msgstr ""
 
 #: commands/advisory_shared.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr "Begränsa till paket i felrättningsrekommendationer."
+msgstr ""
 
 #: commands/advisory_shared.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr "Begränsa till paket i förbättringsrekommendationer."
+msgstr ""
 
 #: commands/advisory_shared.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr "Begränsa till paket i nya pakets-rekommendationer."
+msgstr ""
 
 #: commands/advisory_shared.hpp:153
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Begränsa till paket i rekommendationer med den angivna allvarlighetsgraden. "
-"Listflagga. Kan vara ”critical”, ”important”, ”moderate”, ”low”, ”none”."
 
 #: commands/advisory_shared.hpp:155
 msgid "ADVISORY_SEVERITY,..."
-msgstr "REKOMMENDATIONSALLVARLIGHET,…"
+msgstr "TAVSİYE_ÖNEMİ,..."
 
 #: commands/advisory_shared.hpp:179
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
-"Begränsa till paket i rekommendationer som löser ett Bugzilla-ID, t.ex. "
-"123123. Listflagga."
 
 #: commands/advisory_shared.hpp:180
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "BUGZILLA_KİMLİĞİ,..."
 
 #: commands/advisory_shared.hpp:190
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Begränsa till paket med rekommendationer som fixar en CVE (Vanliga "
-"sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
 
 #: commands/advisory_shared.hpp:192
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "CVE_KİMLİĞİ,..."
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr "Kontrollen upptäckte {} problem i {} paket"
+msgstr ""
 
 #: commands/clean/clean.cpp:86
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr "Lista över cachetyper att rensa upp. Typer som stöds: {0}"
+msgstr ""
 
 #: commands/clean/clean.cpp:104
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr "Okänd cachetyp \"{0}\". Typer som stöds: {1}"
+msgstr ""
 
 #: commands/clean/clean.cpp:161
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
-msgstr "Misslyckades att rensa arkivets cache i sökväg \"{0}\": {1}"
+msgstr ""
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
-msgstr "Ogiltigt urlprotocol alternativ: {}"
+msgstr ""
 
 #: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr "Arkitektur \"{0}\" som inte stöds. Välj en från {1}"
+msgstr ""
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:173
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr "Alternativet \"--alldeps\" ska användas med \"--resolve\""
+msgstr ""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr "Visa endast tillgängliga miljöer."
+msgstr ""
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr "Visa endast installerade miljöer."
+msgstr ""
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr "Mönstermatchande miljö-IDn."
+msgstr ""
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr "Visa endast tillgängliga grupper."
+msgstr ""
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr "Visa också dolda grupper."
+msgstr ""
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr "Visa endast installerade grupper."
+msgstr ""
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Visa endast grupper som innehåller paket med angivna namn. Listalternativ, "
-"stöder globs."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr "Mönstermatchande grupp IDn."
+msgstr ""
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr "Inkludera valfria paket från grupp."
+msgstr ""
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr "Operera på grupper endast, inga paket ändras."
+msgstr ""
 
 #: commands/history/arguments.hpp:34
 msgid "Transaction ID"
-msgstr "Transaktions ID"
+msgstr "İşlem Kimliği"
 
 #: commands/history/arguments.hpp:41
 msgid "Reverse the order of transactions."
-msgstr "Vänd om ordningsföljden på transaktioner."
+msgstr ""
 
 #: commands/history/history_store.cpp:62
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr "Fil \"{}\" existerar redan, den kommer att skrivas över.\n"
+msgstr ""
 
 #: commands/history/history_store.cpp:76
 msgid "No transactions selected for storing, exactly one required."
-msgstr "Inga transaktioner valda för lagring, exakt en krävs."
+msgstr ""
 
 #: commands/history/history_store.cpp:79
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr "Multipla transaktioner valda för lagring, endast en tillåten."
+msgstr ""
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
-"Ogiltigt transaktions-ID-intervall \"{}\", \"ID\" eller \"ID..ID\" "
-"förväntas, där ID är \"NUMMER\", \"senaste\" eller \"senaste NUMMER\"."
 
 #: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
-msgstr "Listar paket beroende på paketens förhållande till systemet"
+msgstr ""
 
 #: commands/list/list.cpp:49
 msgid "List of keys to match case insensitively"
-msgstr "Lista över nycklar att matcha skiftlägeskänsligt"
+msgstr ""
 
 #: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr "Visa alla versioner av paketen, inte bara de senaste."
+msgstr ""
 
 #: commands/list/list.cpp:67
 msgid "List installed packages."
-msgstr "Lista installerade paket."
+msgstr ""
 
 #: commands/list/list.cpp:71
 msgid "List available packages."
-msgstr "Lista tillgängliga paket."
+msgstr ""
 
 #: commands/list/list.cpp:78
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
-"Lista extrafunktioner, det vill säga paket installerade på systemet som inte "
-"är tillgängliga i något känt förråd."
 
 #: commands/list/list.cpp:86
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
-"Lista paket installerade på systemet som är föråldrade av paket i något känt "
-"förråd."
 
 #: commands/list/list.cpp:91
 msgid "List packages recently added into the repositories."
-msgstr "Lista paket som nyligen lagts till i förråd."
+msgstr ""
 
 #: commands/list/list.cpp:95
 msgid "List upgrades available for the installed packages."
-msgstr "Lista tillgängliga uppgraderingar för de installerade paketen."
+msgstr ""
 
 #: commands/list/list.cpp:99
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr "Lista paket som kommer att tas bort med 'dnf autoremove' kommandot."
+msgstr ""
 
 #: commands/list/list.cpp:260
 msgid "No matching packages to list"
-msgstr "Inga matchande paket att lista"
+msgstr ""
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr "Visa aktiverade moduler."
+msgstr "Etkin modülleri göster."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr "Visa inaktiverade moduler."
+msgstr "Devre dışı bırakılmış modülleri göster."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr "Mönstermatchande modul NSVCA:er."
+msgstr ""
 
 #: commands/module/module_list.cpp:84
 msgid "No matches found for \"{}\"."
-msgstr "Inga matchningar hittades för \"{}\"."
+msgstr "\"{}\" için eşleşme bulunamadı."
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr "Visa alla förråd."
+msgstr "Tüm depoları göster."
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr "Visa aktiverade förråd (standard)."
+msgstr ""
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr "Visa inaktiverade förråd."
+msgstr "Devre dışı bırakılmış depoları göster."
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
-msgstr "Mönstermatchande repo-IDn."
+msgstr "Depo kimlikleriyle eşleşen desen."
 
 #: commands/repoquery/repoquery.cpp:514
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
-"Alternativet \"--exactdeps\" måste användas antingen med \"--whatrequires\" "
-"eller \"--whatdepends\""
 
 #: commands/repoquery/repoquery.cpp:519
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
-"Alternativet \"--recursive\" måste användas antingen med \"--whatrequires\" "
-"eller \"--providers-of=requires\""
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
-msgstr "Sök också i paketbeskrivning och URL."
+msgstr ""
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
-msgstr "Mönster"
+msgstr "Desenler"
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
-msgstr "Tillagt av 'versionlock {}'-kommandot på {}"
+msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:37
 msgid "Add new entry to versionlock configuration"
-msgstr "Lägg till ny post i versionslåskonfigurationen"
+msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:43
 msgid "List of package specs to add versionlock for"
-msgstr "Lista över paketspecifikationer att lägga till versionslås för"
+msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:103
 #: commands/versionlock/versionlock_exclude.cpp:122
 msgid "No package found for \"{}\"."
-msgstr "Inga paket hittades för \"{}\"."
+msgstr "\"{}\" için paket bulunamadı."
 
 #: commands/versionlock/versionlock_add.cpp:121
 msgid "Adding versionlock on \"{0} = {1}\"."
-msgstr "Lägger till versionslås på \"{0}={1}\"."
+msgstr ""
 
 #: commands/versionlock/versionlock_add.cpp:124
 msgid "Package \"{}\" is already locked."
-msgstr "Paket \"{}\" är redan låst."
+msgstr "\"{}\" paketi zaten kilitli."
 
 #: commands/versionlock/versionlock_clear.cpp:32
 msgid "Remove all entries from versionlock configuration"
-msgstr "Ta bort alla poster från versionlåskonfiguration"
+msgstr ""
 
 #: commands/versionlock/versionlock_delete.cpp:35
 msgid "Remove any matching versionlock configuration entries"
-msgstr "Ta bort alla matchande versionslåskonfigurationsposter"
+msgstr ""
 
 #: commands/versionlock/versionlock_delete.cpp:41
 msgid "List of package specs to remove versionlock for"
-msgstr "Lista över paketspecifikationer att ta bort versionslås för"
+msgstr ""
 
 #: commands/versionlock/versionlock_delete.cpp:55
 msgid "Deleting versionlock entry:"
-msgstr "Tar bort versionslåspost:"
+msgstr "Sürüm kilidi girişi siliniyor:"
 
 #: commands/versionlock/versionlock_exclude.cpp:37
 msgid "Add new exclude entry to versionlock configuration"
-msgstr "Lägg till ny exkluderingspost i versionslåskonfigurationen"
+msgstr ""
 
 #: commands/versionlock/versionlock_exclude.cpp:43
 msgid "List of package specs to add versionlock exclude for"
 msgstr ""
-"Lista över paketspecifikationer att lägga till versionslås exkludering för"
 
 #: commands/versionlock/versionlock_exclude.cpp:88
 #: commands/versionlock/versionlock_exclude.cpp:100
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
-msgstr "Lägger till versionslås exkludering på \"{0}={1}\"."
+msgstr ""
 
 #: commands/versionlock/versionlock_exclude.cpp:136
 msgid "Package \"{}\" is already excluded."
-msgstr "Paketet \"{}\" är redan exkluderat."
+msgstr "\"{}\" paketi zaten dışlanmış."
 
 #: context.cpp:80
 msgid "The key was successfully imported."
-msgstr "Nyckeln importerades framgångsrikt."
+msgstr ""
 
 #: context.cpp:126
 msgid "No matching repositories for \"{}\""
-msgstr "Inga matchande förråd för \"{}\""
+msgstr "\"{}\" için eşleşen depo yok"
 
 #: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
-msgstr "Tillåt radering av installerade paket för att lösa problem"
+msgstr ""
 
 #: include/dnf5/shared_options.hpp:43
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr "Tillåt lösning av depsolve problem genom att hoppa över paket"
+msgstr ""
 
 #: include/dnf5/shared_options.hpp:55
 msgid "Allow skipping unavailable packages"
-msgstr "Tillåt att du hoppar över otillgängliga paket"
+msgstr ""
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr "Kan inte ladda delat bibliotek \"{}\": {}"
+msgstr ""
 
 #: library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
+msgstr ""
 
 #: main.cpp:180
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr "Det gick inte att upphöra förrådscache i sökväg \"{0}\": {1}"
+msgstr ""
 
 #: main.cpp:205
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
-msgstr "repofrompath: Felaktigt förrådsid och sökvägsspecifikation \"{}\""
+msgstr ""
 
 #: main.cpp:228 main.cpp:267
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
+msgstr ""
 
 #: main.cpp:235
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
-"'.': {}"
 
 #: main.cpp:248
 msgid "setopt: \"{0}\": {1}"
-msgstr "setopt: \"{0}\": {1}"
+msgstr ""
 
 #: main.cpp:274
 msgid "setvar: {}"
-msgstr "setvar: {}"
+msgstr ""
 
 #: main.cpp:819
 msgid "======== Main configuration: ========"
-msgstr "======== Huvudkonfiguration: ========"
+msgstr "======== Ana yapılandırma: ========"
 
 #: main.cpp:860
 msgid "======== \"{}\" repository configuration: ========"
-msgstr "======== \"{}\" Förrådskonfiguration: ========"
+msgstr "======== \"{}\" repo yapılandırması: ========"
 
 #: main.cpp:881
 msgid "======== Variables: ========"
-msgstr "======== Variabler: ========"
+msgstr "======== Değişkenler: ========"
 
 #: main.cpp:1006 main.cpp:1159
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ". Lägg till \"--help\" för mer information om argumenten."
-
-#~ msgid "setvar: Badly formatted argument value \"{}\""
-#~ msgstr "setvar: Felaktigt formaterat argumentvärde \"{}\""
+msgstr ""
