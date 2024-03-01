@@ -31,6 +31,7 @@ jobs:
     trigger: pull_request
     targets:
       - fedora-all
+    specfile_path: https://$PACKIT_SOURCE_URL/raw/$PACKIT_SOURCE_BRANCH/dnf5.spec
   - job: tests
     trigger: pull_request
     identifier: "dnf5-tests"
