@@ -88,6 +88,18 @@ void BuildDepCommand::set_argument_parser() {
             return true;
         });
     cmd.register_named_arg(defs);
+
+    auto spec = parser.add_new_named_arg("spec");
+    spec->set_long_name("spec");
+    spec->set_has_value(false);
+    spec->set_description("Ignored (offered for backwards compatibility).");
+    cmd.register_named_arg(spec);
+
+    auto srpm = parser.add_new_named_arg("srpm");
+    srpm->set_long_name("srpm");
+    srpm->set_has_value(false);
+    srpm->set_description("Ignored (offered for backwards compatibility).");
+    cmd.register_named_arg(srpm);
 }
 
 void BuildDepCommand::configure() {
