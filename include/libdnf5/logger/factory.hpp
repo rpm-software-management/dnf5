@@ -27,16 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
-// File logger destination filename.
-/// @deprecated The filename should be set by API user.
-constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
-
-/// @deprecated It is going to be removed.
-/// @brief Helper method for creating a file logger.
-/// @param base Reference to Base for loading the configured logger path.
-/// @return Instance of a new file logger.
-std::unique_ptr<libdnf5::Logger> create_file_logger(libdnf5::Base & base);
-
 /// @brief Helper method for creating a file logger in `logdir` location with given file name.
 /// @param base Reference to Base for loading the configured logger path.
 /// @param filename Name of the log file.

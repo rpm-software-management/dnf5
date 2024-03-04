@@ -29,14 +29,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class FileLoggerTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(FileLoggerTest);
-    CPPUNIT_TEST(test_file_logger_create);
     CPPUNIT_TEST(test_file_logger_add);
+    CPPUNIT_TEST(test_file_logger_create_name);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp() override;
     void tearDown() override;
-    void test_file_logger_create();
     void test_file_logger_create_name();
     void test_file_logger_add();
 
