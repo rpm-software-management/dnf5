@@ -273,7 +273,7 @@ class ConfigMain::Impl {
     OptionBool proxy_sslverify{true};
     OptionString proxy_sslclientcert{""};
     OptionString proxy_sslclientkey{""};
-    OptionBool deltarpm{true};
+    OptionBool deltarpm{false};
     OptionNumber<std::uint32_t> deltarpm_percentage{75};
     OptionBool skip_if_unavailable{false};
 };
