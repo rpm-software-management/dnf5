@@ -28,6 +28,7 @@ using namespace std::filesystem;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileLoggerTest);
 
+constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
 
 void FileLoggerTest::setUp() {
     BaseTestCase::setUp();
@@ -37,7 +38,7 @@ void FileLoggerTest::setUp() {
     auto temp_logdir = path("/var/log/FileLoggerTestLogDir");
     config.get_logdir_option().set(installroot / temp_logdir.relative_path());
 
-    full_log_path = installroot / temp_logdir.relative_path() / libdnf5::FILE_LOGGER_FILENAME;
+    full_log_path = installroot / temp_logdir.relative_path() / FILE_LOGGER_FILENAME;
 }
 
 
@@ -47,16 +48,9 @@ void FileLoggerTest::tearDown() {
 }
 
 
-void FileLoggerTest::test_file_logger_create() {
-    CPPUNIT_ASSERT(!exists(full_log_path));
-    auto file_logger = libdnf5::create_file_logger(base);
-    CPPUNIT_ASSERT(exists(full_log_path));
-}
-
-
 void FileLoggerTest::test_file_logger_create_name() {
     CPPUNIT_ASSERT(!exists(full_log_path));
-    auto file_logger = libdnf5::create_file_logger(base, libdnf5::FILE_LOGGER_FILENAME);
+    auto file_logger = libdnf5::create_file_logger(base, FILE_LOGGER_FILENAME);
     CPPUNIT_ASSERT(exists(full_log_path));
 }
 
@@ -64,7 +58,7 @@ void FileLoggerTest::test_file_logger_create_name() {
 void FileLoggerTest::test_file_logger_add() {
     auto log_router = base.get_logger();
     auto loggers_count_before = log_router->get_loggers_count();
-    auto file_logger = libdnf5::create_file_logger(base);
+    auto file_logger = libdnf5::create_file_logger(base, FILE_LOGGER_FILENAME);
     log_router->add_logger(std::move(file_logger));
     CPPUNIT_ASSERT_EQUAL(loggers_count_before + 1, log_router->get_loggers_count());
 }
