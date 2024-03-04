@@ -567,7 +567,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 
 GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
-    module::ModuleSack & module_sack = base->module_sack;
+    module::ModuleSack & module_sack = *base->get_module_sack();
 
     std::vector<std::string> missing_module_specs;
     for (auto & [action, spec, settings] : module_specs) {
@@ -2321,7 +2321,7 @@ base::Transaction Goal::resolve() {
 
 
     // TODO(jmracek) Apply modules first
-    module::ModuleSack & module_sack = p_impl->base->module_sack;
+    module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
     ret |= p_impl->add_module_specs_to_goal(transaction);
     // Resolve modules
     auto module_error = module_sack.resolve_active_module_items().second;
