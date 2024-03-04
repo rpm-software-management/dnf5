@@ -80,10 +80,6 @@ public:
     /// The file defined in the current configuration and files in the drop-in directories are used.
     void load_config();
 
-    /// @deprecated Don't use it! It will be removed in Fedora 40. It was intended for internal use only.
-    /// Call a function that loads the config file, catching errors appropriately
-    void with_config_file_path(std::function<void(const std::string &)> func);
-
     /// @return a reference to configuration
     ConfigMain & get_config();
     LogRouterWeakPtr get_logger();
