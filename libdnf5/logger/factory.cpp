@@ -58,8 +58,4 @@ std::unique_ptr<libdnf5::Logger> create_rotating_file_logger(Base & base, const 
 }
 
 
-std::unique_ptr<libdnf5::Logger> create_file_logger(Base & base) {
-    return create_file_logger(base, FILE_LOGGER_FILENAME);
-}
-
 }  // namespace libdnf5
