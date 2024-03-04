@@ -58,7 +58,7 @@ public:
 
 private:
     friend class Base;
-    Impl(const libdnf5::BaseWeakPtr & base);
+    Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers);
 
     // RpmPool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
     std::unique_ptr<solv::RpmPool> pool;
@@ -77,6 +77,18 @@ private:
     libdnf5::advisory::AdvisorySack rpm_advisory_sack;
 
     plugin::Plugins plugins;
+    LogRouter log_router;
+    ConfigMain config;
+    repo::RepoSack repo_sack;
+    rpm::PackageSack rpm_package_sack;
+    module::ModuleSack module_sack;
+    std::map<std::string, std::string> variables;
+    transaction::TransactionHistory transaction_history;
+    Vars vars;
+    std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
+
+    WeakPtrGuard<LogRouter, false> log_router_guard;
+    WeakPtrGuard<Vars, false> vars_guard;
 };
 
 

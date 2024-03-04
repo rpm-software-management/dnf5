@@ -51,7 +51,7 @@ void ModuleDB::initialize() {
             state.first, RuntimeModuleState({.original = state.second, .changed = state.second}));
     }
 
-    for (const auto & module_item : base->module_sack.get_modules()) {
+    for (const auto & module_item : base->get_module_sack()->get_modules()) {
         auto module_name = module_item->get_name();
         if (runtime_module_states.find(module_name) == runtime_module_states.end()) {
             runtime_module_states.emplace(module_name, RuntimeModuleState());
