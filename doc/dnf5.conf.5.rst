@@ -661,7 +661,7 @@ configuration.
     files, rebuilding them to RPM locally. However, this is quite CPU and I/O
     intensive.
 
-    Default: ``True``.
+    Default: ``False``.
 
 .. _deltarpm_percentage_options-label:
 
