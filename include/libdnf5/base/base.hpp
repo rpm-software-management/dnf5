@@ -84,10 +84,6 @@ public:
     /// Call a function that loads the config file, catching errors appropriately
     void with_config_file_path(std::function<void(const std::string &)> func);
 
-    /// @deprecated It is redundant. It calls `load_config()`.
-    /// Loads main configuration.
-    void load_config_from_file();
-
     /// @return a reference to configuration
     ConfigMain & get_config();
     LogRouterWeakPtr get_logger();

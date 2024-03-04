@@ -31,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
-#include <algorithm>
 #include <atomic>
 #include <cstdlib>
 #include <filesystem>
@@ -131,10 +130,6 @@ void Base::with_config_file_path(std::function<void(const std::string &)> func) 
             throw;
         }
     }
-}
-
-void Base::load_config_from_file() {
-    load_config();
 }
 
 void Base::load_plugins() {
