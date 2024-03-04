@@ -110,7 +110,7 @@ void Base::load_config() {
     }
 }
 
-void Base::with_config_file_path(std::function<void(const std::string &)> func) {
+void Base::Impl::with_config_file_path(std::function<void(const std::string &)> func) {
     std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
     const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
     const auto & use_host_config = config.get_use_host_config_option().get_value();

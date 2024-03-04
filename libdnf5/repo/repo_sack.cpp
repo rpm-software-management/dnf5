@@ -588,7 +588,7 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 }
 
 void RepoSack::create_repos_from_config_file() {
-    p_impl->base->with_config_file_path(
+    p_impl->base->p_impl->with_config_file_path(
         std::function<void(const std::string &)>{[this](const std::string & path) { create_repos_from_file(path); }});
 }
 

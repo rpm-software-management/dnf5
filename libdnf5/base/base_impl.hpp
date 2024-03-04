@@ -56,6 +56,9 @@ public:
 
     plugin::Plugins & get_plugins() { return plugins; }
 
+    /// Call a function that loads the config file, catching errors appropriately
+    void with_config_file_path(std::function<void(const std::string &)> func);
+
 private:
     friend class Base;
     Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers);
