@@ -237,12 +237,6 @@ void Repo::load() {
     p_impl->loaded = true;
 }
 
-void Repo::load_extra_system_repo(const std::string & rootdir) {
-    libdnf_user_assert(p_impl->type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
-    libdnf_user_assert(p_impl->solv_repo, "repo must be loaded to load an extra system repo");
-    p_impl->solv_repo->load_system_repo(rootdir);
-}
-
 void Repo::add_libsolv_testcase(const std::string & path) {
     make_solv_repo();
 
@@ -304,10 +298,6 @@ bool Repo::is_expired() const {
 
 int Repo::get_expires_in() const {
     return p_impl->config.get_metadata_expire_option().get_value() - static_cast<int>(get_age());
-}
-
-void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
-    p_impl->downloader->substitutions = substitutions;
 }
 
 std::string Repo::get_metadata_path(const std::string & metadata_type) {
