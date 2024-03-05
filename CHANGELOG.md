@@ -1,3 +1,7 @@
+# 5.1.15
+
+- Update translations from weblate
+
 # 5.1.14
 
 - Update translations from weblate
