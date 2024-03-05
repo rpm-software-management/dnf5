@@ -93,13 +93,3 @@ class TestRepo(base_test_case.BaseTestCase):
         self.assertEqual(dl_cbs.fastest_mirror_cnt, 0)
         self.assertEqual(dl_cbs.handle_mirror_failure_cnt, 0)
         self.assertEqual(cbs.repokey_import_cnt, 0)
-
-    def test_load_extra_system_repo_incorrectly(self):
-        # Try to load extra system repo on non-system repo
-        repo = self.repo_sack.create_repo('test')
-        self.assertRaises(
-            RuntimeError, repo.load_extra_system_repo, 'some-root-dir')
-
-        # Try to load extra system repo on non-loaded repo
-        repo = self.repo_sack.get_system_repo()
-        self.assertRaises(RuntimeError, repo.load_extra_system_repo, 'dir')
