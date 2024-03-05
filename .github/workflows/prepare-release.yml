@@ -6,6 +6,10 @@ on:
       version:
         required: true
         description: Version number for the new release
+      base:
+        required: false
+        description: The base branch for the pull request
+        default: main
 
 jobs:
   prepare-release:
@@ -33,3 +37,6 @@ jobs:
           title: Release ${{ inputs.version }}
           body: Update the changelog and the specfile for release ${{ inputs.version }}.
           delete-branch: true
+          assignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}
+          base: ${{ inputs.base }}
