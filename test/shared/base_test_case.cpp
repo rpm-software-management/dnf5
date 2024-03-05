@@ -183,6 +183,7 @@ namespace {
 // Accessor of private Base::p_impl, see private_accessor.hpp
 create_private_getter_template;
 create_getter(priv_impl, &libdnf5::Base::p_impl);
+create_getter(add_rpm_package, &libdnf5::repo::Repo::add_rpm_package);
 
 }  // namespace
 
@@ -197,7 +198,8 @@ libdnf5::rpm::Package BaseTestCase::add_system_pkg(
 
     (base.*get(priv_impl()))->get_system_state().set_package_reason(na, reason);
 
-    return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    return (*(repo_sack->get_system_repo()).*get(add_rpm_package{}))(
+        PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 
