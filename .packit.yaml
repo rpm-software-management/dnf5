@@ -31,12 +31,6 @@ jobs:
     trigger: pull_request
     targets:
       - fedora-all
-    branch: 'main'
-  - job: copr_build
-    trigger: pull_request
-    targets:
-      - fedora-all
-    branch: 'create-pull-request/patch'
     actions:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
