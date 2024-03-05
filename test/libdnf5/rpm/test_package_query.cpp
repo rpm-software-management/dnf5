@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_package_query.hpp"
 
+#include "../shared/private_accessor.hpp"
 #include "../shared/utils.hpp"
 
 #include <libdnf5/rpm/package_query.hpp>
@@ -35,6 +36,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageQueryTest);
 using namespace libdnf5::rpm;
 
 namespace {
+
+create_private_getter_template;
+create_getter(add_rpm_package, &libdnf5::repo::Repo::add_rpm_package);
 
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public Package {
@@ -347,7 +351,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
     add_repo_solv("solv-repo1");
 
     std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
+    (*(repo_sack->get_system_repo()).*get(add_rpm_package{}))(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
     add_cmdline_pkg(rpm_path);
 
     PackageQuery query1(base);
@@ -447,7 +451,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
     add_repo_solv("solv-repo1");
 
     std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
+    (*(repo_sack->get_system_repo()).*get(add_rpm_package{}))(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
     add_cmdline_pkg(rpm_path);
 
     PackageQuery query1(base);
