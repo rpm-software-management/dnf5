@@ -554,7 +554,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
     // packages with version < "1.3"
     PackageQuery query3(base);
-    query3.filter_version({"1.3"}, libdnf5::sack::QueryCmp::LT);
+    query3.filter_version("1.3", libdnf5::sack::QueryCmp::LT);
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
@@ -565,7 +565,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
     // packages with version <= "1.3"
     PackageQuery query4(base);
-    query4.filter_version({"1.3"}, libdnf5::sack::QueryCmp::LTE);
+    query4.filter_version("1.3", libdnf5::sack::QueryCmp::LTE);
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
@@ -599,14 +599,14 @@ void RpmPackageQueryTest::test_filter_release() {
 
     // packages with release > "3"
     PackageQuery query3(base);
-    query3.filter_release({"3"}, libdnf5::sack::QueryCmp::GT);
+    query3.filter_release("3", libdnf5::sack::QueryCmp::GT);
 
     expected = {get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query3));
 
     // packages with release >= "3"
     PackageQuery query4(base);
-    query4.filter_release({"3"}, libdnf5::sack::QueryCmp::GTE);
+    query4.filter_release("3", libdnf5::sack::QueryCmp::GTE);
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
