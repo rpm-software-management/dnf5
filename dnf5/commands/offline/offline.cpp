@@ -205,17 +205,19 @@ void OfflineCommand::register_subcommands() {
 
 OfflineSubcommand::OfflineSubcommand(Context & context, const std::string & name) : Command(context, name) {}
 
-void OfflineSubcommand::pre_configure() {
-    magic_symlink = "/system-update";
-    datadir = dnf5::offline::get_offline_datadir();
-    std::filesystem::create_directories(datadir);
-    state = std::make_optional<dnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
-}
-
 void OfflineSubcommand::configure() {
     auto & ctx = get_context();
+    magic_symlink = "/system-update";
+
     const std::filesystem::path installroot = ctx.base.get_config().get_installroot_option().get_value();
-    system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+    std::filesystem::create_directories(datadir);
+    state = std::make_optional<dnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
+
+    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        system_releasever = *detected_releasever;
+    }
     target_releasever = ctx.base.get_vars()->get_value("releasever");
 }
 
@@ -343,10 +345,7 @@ void OfflineExecuteCommand::set_argument_parser() {
 }
 
 void OfflineExecuteCommand::pre_configure() {
-    OfflineSubcommand::pre_configure();
     auto & ctx = get_context();
-
-    check_state(*state);
 
     // Don't try to refresh metadata, we are offline
     ctx.base.get_config().get_cacheonly_option().set("all");
@@ -358,7 +357,19 @@ void OfflineExecuteCommand::pre_configure() {
     // Additional removal could trigger unwanted changes in transaction.
     ctx.base.get_config().get_clean_requirements_on_remove_option().set(false);
     ctx.base.get_config().get_install_weak_deps_option().set(false);
+}
+
+void OfflineExecuteCommand::configure() {
+    OfflineSubcommand::configure();
+    auto & ctx = get_context();
+
+    check_state(*state);
+
+    ctx.set_load_system_repo(true);
+    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+
     // Get the cache from the cachedir specified in the state file
+    ctx.base.get_config().get_system_cachedir_option().set(state->get_data().cachedir);
     ctx.base.get_config().get_cachedir_option().set(state->get_data().cachedir);
 
     // Set same set of enabled/disabled repos used during `system-upgrade download`
@@ -368,14 +379,6 @@ void OfflineExecuteCommand::pre_configure() {
     for (const auto & repo_id : state->get_data().disabled_repos) {
         ctx.setopts.emplace_back(repo_id + ".disabled", "1");
     }
-}
-
-void OfflineExecuteCommand::configure() {
-    OfflineSubcommand::configure();
-    auto & ctx = get_context();
-
-    ctx.set_load_system_repo(true);
-    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
 void OfflineExecuteCommand::run() {
@@ -407,7 +410,8 @@ void OfflineExecuteCommand::run() {
         throw libdnf5::cli::CommandExitError(1, M_("Use `dnf5 offline reboot` to begin the transaction."));
     }
 
-    const auto & datadir = dnf5::offline::get_offline_datadir();
+    const auto & installroot = get_context().base.get_config().get_installroot_option().get_value();
+    const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
     auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "r");

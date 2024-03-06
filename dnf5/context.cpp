@@ -457,7 +457,8 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
 }
 
 void Context::store_offline(libdnf5::base::Transaction & transaction) {
-    const auto & offline_datadir = dnf5::offline::get_offline_datadir();
+    const auto & installroot = base.get_config().get_installroot_option().get_value();
+    const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
 
     const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
@@ -493,8 +494,10 @@ void Context::store_offline(libdnf5::base::Transaction & transaction) {
     state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
     state.get_data().cmd_line = get_cmdline();
 
-    const auto & installroot = base.get_config().get_installroot_option().get_value();
-    state.get_data().system_releasever = *libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
+    const auto & detected_releasever = libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        state.get_data().system_releasever = *detected_releasever;
+    }
     state.get_data().target_releasever = base.get_vars()->get_value("releasever");
 
     state.write();

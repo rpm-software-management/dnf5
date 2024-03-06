@@ -43,7 +43,6 @@ public:
 
 private:
     libdnf5::OptionBool * no_downgrade{nullptr};
-    libdnf5::OptionPath * download_dir{nullptr};
     std::filesystem::path datadir{dnf5::offline::DEFAULT_DATADIR};
     std::string target_releasever;
     std::string system_releasever;

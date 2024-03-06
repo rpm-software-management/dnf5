@@ -53,8 +53,6 @@ const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTE
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
 const std::filesystem::path TRANSACTION_JSON_FILENAME{"offline-transaction.json"};
 
-std::filesystem::path get_offline_datadir();
-
 struct OfflineTransactionStateData {
     int state_version = STATE_VERSION;
     std::string status = STATUS_DOWNLOAD_INCOMPLETE;

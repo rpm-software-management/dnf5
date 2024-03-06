@@ -44,8 +44,4 @@ void OfflineTransactionState::write() {
     file.close();
 }
 
-std::filesystem::path get_offline_datadir() {
-    return DEFAULT_DATADIR;
-}
-
 }  // namespace dnf5::offline
