@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_SYSTEM_UPGRADE_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf5/offline/offline.hpp>
+#include <dnf5/offline.hpp>
 
 namespace dnf5 {
 
@@ -34,40 +34,19 @@ public:
     void pre_configure() override;
 };
 
-class SystemUpgradeSubcommand : public Command {
+class SystemUpgradeDownloadCommand : public Command {
 public:
-    explicit SystemUpgradeSubcommand(Context & context, const std::string & name);
-    void set_argument_parser() override;
-    void configure() override;
-
-protected:
-    libdnf5::OptionPath * get_cachedir() const { return cachedir; };
-    std::filesystem::path get_datadir() const { return datadir; };
-    std::filesystem::path get_magic_symlink() const { return magic_symlink; };
-    libdnf5::offline::OfflineTransactionState get_state() const { return state; };
-    std::string get_system_releasever() const { return system_releasever; };
-    std::string get_target_releasever() const { return target_releasever; };
-    void log_status(const std::string & message, const std::string & message_id) const;
-
-private:
-    libdnf5::OptionPath * cachedir{nullptr};
-    std::filesystem::path datadir{libdnf5::offline::DEFAULT_DATADIR};
-    std::filesystem::path magic_symlink;
-    libdnf5::offline::OfflineTransactionState state;
-    std::string target_releasever;
-    std::string system_releasever;
-};
-
-class SystemUpgradeDownloadCommand : public SystemUpgradeSubcommand {
-public:
-    explicit SystemUpgradeDownloadCommand(Context & context) : SystemUpgradeSubcommand{context, "download"} {}
+    explicit SystemUpgradeDownloadCommand(Context & context) : Command{context, "download"} {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
 
 private:
     libdnf5::OptionBool * no_downgrade{nullptr};
-    int state_version;
+    libdnf5::OptionPath * download_dir{nullptr};
+    std::filesystem::path datadir{dnf5::offline::DEFAULT_DATADIR};
+    std::string target_releasever;
+    std::string system_releasever;
 };
 
 }  // namespace dnf5

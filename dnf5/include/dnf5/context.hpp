@@ -79,8 +79,6 @@ public:
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 
-    bool should_store_offline = false;
-
     void store_offline(libdnf5::base::Transaction & transaction);
 
     /// Gets user comment.
@@ -147,11 +145,18 @@ public:
 
     void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
 
+    // Store the transaction to be run later in a minimal boot environment,
+    // using `dnf5 offline`
+    void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
+    bool get_should_store_offline() const { return should_store_offline; }
+
 private:
     std::string cmdline;
 
     /// Points to user comment.
     const char * comment{nullptr};
+
+    bool should_store_offline = false;
 
     bool quiet{false};
     bool dump_main_config{false};

@@ -21,12 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
-#include "libdnf5/offline/offline.hpp"
-
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_path.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
@@ -39,7 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 using namespace libdnf5::cli;
 
-const std::string & ID_TO_IDENTIFY_BOOTS = libdnf5::offline::OFFLINE_STARTED_ID;
+const std::string & ID_TO_IDENTIFY_BOOTS = dnf5::offline::OFFLINE_STARTED_ID;
 
 int call(const std::string & command, const std::vector<std::string> & args) {
     std::vector<char *> c_args;
@@ -73,6 +72,27 @@ int call(const std::string & command, const std::vector<std::string> & args) {
 }
 
 namespace dnf5 {
+
+void offline::log_status(
+    const std::string & message,
+    const std::string & message_id,
+    const std::string & system_releasever,
+    const std::string & target_releasever) {
+    const auto & version = get_application_version();
+    const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
+    sd_journal_send(
+        "MESSAGE=%s",
+        message.c_str(),
+        "MESSAGE_ID=%s",
+        message_id.c_str(),
+        "SYSTEM_RELEASEVER=%s",
+        system_releasever.c_str(),
+        "TARGET_RELEASEVER=%s",
+        target_releasever.c_str(),
+        "DNF_VERSION=%s",
+        version_string.c_str(),
+        NULL);
+}
 
 /// Helper for displaying messages with Plymouth
 ///
@@ -173,7 +193,7 @@ void OfflineCommand::set_parent_command() {
 }
 
 void OfflineCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage offline transactions");
+    get_argument_parser_command()->set_description(_("Manage offline transactions"));
 }
 
 void OfflineCommand::register_subcommands() {
@@ -185,51 +205,21 @@ void OfflineCommand::register_subcommands() {
 
 OfflineSubcommand::OfflineSubcommand(Context & context, const std::string & name) : Command(context, name) {}
 
-void OfflineSubcommand::set_argument_parser() {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-    auto & cmd = *get_argument_parser_command();
-
-    cachedir =
-        dynamic_cast<libdnf5::OptionPath *>(parser.add_init_value(std::make_unique<libdnf5::OptionPath>(datadir)));
-
-    auto * download_dir_arg = parser.add_new_named_arg("downloaddir");
-    download_dir_arg->set_long_name("downloaddir");
-    download_dir_arg->set_description("Redirect download of packages to provided <path>");
-    download_dir_arg->link_value(cachedir);
-    cmd.register_named_arg(download_dir_arg);
+void OfflineSubcommand::pre_configure() {
+    magic_symlink = "/system-update";
+    datadir = dnf5::offline::get_offline_datadir();
+    std::filesystem::create_directories(datadir);
+    state = std::make_optional<dnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
 }
 
 void OfflineSubcommand::configure() {
     auto & ctx = get_context();
-    const std::filesystem::path installroot{ctx.base.get_config().get_installroot_option().get_value()};
-    magic_symlink = installroot / "system-update";
-    datadir = libdnf5::offline::get_offline_datadir(installroot);
-    std::filesystem::create_directories(datadir);
-    state = std::make_optional<libdnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
-
+    const std::filesystem::path installroot = ctx.base.get_config().get_installroot_option().get_value();
     system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
     target_releasever = ctx.base.get_vars()->get_value("releasever");
 }
 
-void OfflineSubcommand::log_status(const std::string & message, const std::string & message_id) const {
-    const auto & version = get_application_version();
-    const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
-    sd_journal_send(
-        "MESSAGE=%s",
-        message.c_str(),
-        "MESSAGE_ID=%s",
-        message_id.c_str(),
-        "SYSTEM_RELEASEVER=%s",
-        get_system_releasever().c_str(),
-        "TARGET_RELEASEVER=%s",
-        get_target_releasever().c_str(),
-        "DNF_VERSION=%s",
-        version_string.c_str(),
-        NULL);
-}
-
-void check_state(const libdnf5::offline::OfflineTransactionState & state) {
+void check_state(const dnf5::offline::OfflineTransactionState & state) {
     const auto & read_exception = state.get_read_exception();
     if (read_exception != nullptr) {
         try {
@@ -286,14 +276,15 @@ void OfflineRebootCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_description("Prepare the system to perform the offline transaction and reboots to start the transaction.");
+    cmd.set_description(
+        _("Prepare the system to perform the offline transaction and reboots to start the transaction."));
 
     poweroff_after =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
 
     auto * poweroff_after_arg = parser.add_new_named_arg("poweroff");
     poweroff_after_arg->set_long_name("poweroff");
-    poweroff_after_arg->set_description("Power off the system after the operation is complete");
+    poweroff_after_arg->set_description(_("Power off the system after the operation is complete"));
     poweroff_after_arg->link_value(poweroff_after);
 
     cmd.register_named_arg(poweroff_after_arg);
@@ -303,11 +294,12 @@ void OfflineRebootCommand::run() {
     auto & ctx = get_context();
 
     check_state(*state);
-    if (state->get_data().status != libdnf5::offline::STATUS_DOWNLOAD_COMPLETE) {
+    if (state->get_data().status != dnf5::offline::STATUS_DOWNLOAD_COMPLETE &&
+        state->get_data().status != dnf5::offline::STATUS_READY) {
         throw libdnf5::cli::CommandExitError(1, M_("system is not ready for offline transaction"));
     }
     if (std::filesystem::is_symlink(get_magic_symlink())) {
-        throw libdnf5::cli::CommandExitError(1, M_("offline {} is already scheduled"), state->get_data().verb);
+        throw libdnf5::cli::CommandExitError(1, M_("offline `{}` is already scheduled"), state->get_data().verb);
     }
 
     if (!std::filesystem::is_directory(get_datadir())) {
@@ -315,12 +307,13 @@ void OfflineRebootCommand::run() {
     }
 
     if (state->get_data().verb == "system-upgrade download") {
-        std::cout << "The system will now reboot to upgrade to release version " << state->get_data().target_releasever
-                  << "." << std::endl;
+        std::cout << _("The system will now reboot to upgrade to release version ")
+                  << state->get_data().target_releasever << "." << std::endl;
     } else {
-        std::cout << "The system will now reboot to perform the offline transaction initiated by the following command:"
-                  << std::endl
-                  << "\t" << state->get_data().cmd_line << std::endl;
+        std::cout
+            << _("The system will now reboot to perform the offline transaction initiated by the following command:")
+            << std::endl
+            << "\t" << state->get_data().cmd_line << std::endl;
     }
     if (!libdnf5::cli::utils::userconfirm::userconfirm(ctx.base.get_config())) {
         return;
@@ -328,9 +321,15 @@ void OfflineRebootCommand::run() {
 
     std::filesystem::create_symlink(get_datadir(), get_magic_symlink());
 
-    state->get_data().status = libdnf5::offline::STATUS_READY;
+    state->get_data().status = dnf5::offline::STATUS_READY;
     state->get_data().poweroff_after = poweroff_after->get_value();
     state->write();
+
+    dnf5::offline::log_status(
+        "Rebooting to perform offline transaction.",
+        dnf5::offline::REBOOT_REQUESTED_ID,
+        get_system_releasever(),
+        get_target_releasever());
 
     reboot(poweroff_after->get_value());
 }
@@ -338,18 +337,29 @@ void OfflineRebootCommand::run() {
 void OfflineExecuteCommand::set_argument_parser() {
     OfflineSubcommand::set_argument_parser();
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description(
-        "Internal use only, not intended to be run by the user. Executes the transaction in the offline environment.");
+    cmd.set_complete(false);
+    cmd.set_description(_(
+        "Internal use only, not intended to be run by the user. Executes the transaction in the offline environment."));
 }
 
-void OfflineExecuteCommand::configure() {
-    OfflineSubcommand::configure();
+void OfflineExecuteCommand::pre_configure() {
+    OfflineSubcommand::pre_configure();
     auto & ctx = get_context();
 
-    ctx.set_load_system_repo(true);
-    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-
     check_state(*state);
+
+    // Don't try to refresh metadata, we are offline
+    ctx.base.get_config().get_cacheonly_option().set("all");
+    // Don't ask any questions
+    ctx.base.get_config().get_assumeyes_option().set(true);
+    // Override `assumeno` too since it takes priority over `assumeyes`
+    ctx.base.get_config().get_assumeno_option().set(false);
+    // Upgrade operation already removes all element that must be removed.
+    // Additional removal could trigger unwanted changes in transaction.
+    ctx.base.get_config().get_clean_requirements_on_remove_option().set(false);
+    ctx.base.get_config().get_install_weak_deps_option().set(false);
+    // Get the cache from the cachedir specified in the state file
+    ctx.base.get_config().get_cachedir_option().set(state->get_data().cachedir);
 
     // Set same set of enabled/disabled repos used during `system-upgrade download`
     for (const auto & repo_id : state->get_data().enabled_repos) {
@@ -358,28 +368,29 @@ void OfflineExecuteCommand::configure() {
     for (const auto & repo_id : state->get_data().disabled_repos) {
         ctx.setopts.emplace_back(repo_id + ".disabled", "1");
     }
+}
 
-    // Don't try to refresh metadata, we are offline
-    ctx.base.get_config().get_cacheonly_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, "all");
-    // Don't ask any questions
-    ctx.base.get_config().get_assumeyes_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, true);
-    // Override `assumeno` too since it takes priority over `assumeyes`
-    ctx.base.get_config().get_assumeno_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
-    // Upgrade operation already removes all element that must be removed.
-    // Additional removal could trigger unwanted changes in transaction.
-    ctx.base.get_config().get_clean_requirements_on_remove_option().set(
-        libdnf5::Option::Priority::PLUGINDEFAULT, false);
-    ctx.base.get_config().get_install_weak_deps_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, false);
+void OfflineExecuteCommand::configure() {
+    OfflineSubcommand::configure();
+    auto & ctx = get_context();
+
+    ctx.set_load_system_repo(true);
+    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
 void OfflineExecuteCommand::run() {
     auto & ctx = get_context();
 
-    log_status("Starting offline transaction. This will take a while.", libdnf5::offline::OFFLINE_STARTED_ID);
+    dnf5::offline::log_status(
+        "Starting offline transaction. This will take a while.",
+        dnf5::offline::OFFLINE_STARTED_ID,
+        get_system_releasever(),
+        get_target_releasever());
 
-    std::cout << "Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
-                 "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`."
-              << std::endl;
+    std::cout
+        << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
+             "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`.")
+        << std::endl;
 
     if (!std::filesystem::is_symlink(get_magic_symlink())) {
         throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
@@ -392,14 +403,13 @@ void OfflineExecuteCommand::run() {
 
     std::filesystem::remove(get_magic_symlink());
 
-    if (state->get_data().status != libdnf5::offline::STATUS_READY) {
+    if (state->get_data().status != dnf5::offline::STATUS_READY) {
         throw libdnf5::cli::CommandExitError(1, M_("Use `dnf5 offline reboot` to begin the transaction."));
     }
 
-    const auto & installroot = get_context().base.get_config().get_installroot_option().get_value();
-    const auto & datadir = libdnf5::offline::get_offline_datadir(installroot);
+    const auto & datadir = dnf5::offline::get_offline_datadir();
     std::filesystem::create_directories(datadir);
-    const auto & transaction_json_path = datadir / libdnf5::offline::TRANSACTION_JSON_FILENAME;
+    const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
     auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "r");
 
     const auto & json = transaction_json_file.read();
@@ -426,7 +436,7 @@ void OfflineExecuteCommand::run() {
     const auto result = transaction.run();
     std::cout << std::endl;
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
+        std::cerr << _("Transaction failed: ") << libdnf5::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
             std::cerr << entry << std::endl;
@@ -447,8 +457,13 @@ void OfflineExecuteCommand::run() {
     } else {
         transaction_complete_message = "Transaction complete! Cleaning up and rebooting...";
     }
-    plymouth.message(transaction_complete_message);
-    log_status(transaction_complete_message, libdnf5::offline::OFFLINE_STARTED_ID);
+
+    plymouth.message(_(transaction_complete_message.c_str()));
+    dnf5::offline::log_status(
+        transaction_complete_message,
+        dnf5::offline::OFFLINE_FINISHED_ID,
+        get_system_releasever(),
+        get_target_releasever());
 
     // If the transaction succeeded, remove downloaded data
     clean_datadir(ctx, get_datadir());
@@ -525,11 +540,11 @@ void list_logs() {
     const auto & boot_entries = find_boots(ID_TO_IDENTIFY_BOOTS);
 
     if (boot_entries.empty()) {
-        std::cout << "No logs were found." << std::endl;
+        std::cout << _("No logs were found.") << std::endl;
         return;
     }
 
-    std::cout << "The following boots appear to contain offline transaction logs:" << std::endl;
+    std::cout << _("The following boots appear to contain offline transaction logs:") << std::endl;
     for (size_t index = 0; index < boot_entries.size(); index += 1) {
         const auto & entry = boot_entries[index];
         std::cout << fmt::format(
@@ -564,7 +579,7 @@ void OfflineLogCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_description("Show logs from past offline transactions");
+    cmd.set_description(_("Show logs from past offline transactions"));
 
     number = dynamic_cast<libdnf5::OptionString *>(parser.add_init_value(std::make_unique<libdnf5::OptionString>("")));
 
@@ -572,7 +587,7 @@ void OfflineLogCommand::set_argument_parser() {
     number_arg->set_long_name("number");
     number_arg->set_has_value(true);
 
-    number_arg->set_description("Which log to show. Run without any arguments to get a list of available logs.");
+    number_arg->set_description(_("Which log to show. Run without any arguments to get a list of available logs."));
     number_arg->link_value(number);
     cmd.register_named_arg(number_arg);
 }

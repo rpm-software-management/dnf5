@@ -19,12 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include "dnf5/offline.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
-
-#include "libdnf5/offline/offline.hpp"
 
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
@@ -188,13 +187,11 @@ void Context::load_repos(bool load_system) {
 }
 
 RpmTransCB::RpmTransCB(Context & context) : context(context) {
-    multi_progress_bar.set_total_bar_visible_limit(
-        libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+    multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
 }
 
 RpmTransCB::~RpmTransCB() {
-    if (active_progress_bar &&
-        active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
         active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
     if (active_progress_bar) {
@@ -202,12 +199,12 @@ RpmTransCB::~RpmTransCB() {
     }
 }
 
-libdnf5::cli::progressbar::MultiProgressBar * RpmTransCB::get_multi_progress_bar() { return &multi_progress_bar; }
+libdnf5::cli::progressbar::MultiProgressBar * RpmTransCB::get_multi_progress_bar() {
+    return &multi_progress_bar;
+}
 
 void RpmTransCB::install_progress(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-    uint64_t amount,
-    [[maybe_unused]] uint64_t total) {
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
     active_progress_bar->set_ticks(static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
@@ -271,9 +268,7 @@ void RpmTransCB::transaction_stop([[maybe_unused]] uint64_t total) {
 }
 
 void RpmTransCB::uninstall_progress(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-    uint64_t amount,
-    [[maybe_unused]] uint64_t total) {
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
     active_progress_bar->set_ticks(static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
@@ -374,8 +369,7 @@ void RpmTransCB::verify_stop([[maybe_unused]] uint64_t total) {
 }
 
 void RpmTransCB::new_progress_bar(int64_t total, const std::string & descr) {
-    if (active_progress_bar &&
-        active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
         active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
     auto progress_bar =
@@ -463,14 +457,13 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
 }
 
 void Context::store_offline(libdnf5::base::Transaction & transaction) {
-    const auto & installroot = base.get_config().get_installroot_option().get_value();
-    const auto & offline_datadir = libdnf5::offline::get_offline_datadir(installroot);
+    const auto & offline_datadir = dnf5::offline::get_offline_datadir();
     std::filesystem::create_directories(offline_datadir);
 
-    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    libdnf5::offline::OfflineTransactionState state{state_path};
+    const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
+    dnf5::offline::OfflineTransactionState state{state_path};
 
-    if (state.get_data().status != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+    if (state.get_data().status != dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
         std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
                   << "\t" << state.get_data().cmd_line << std::endl
                   << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
@@ -479,7 +472,7 @@ void Context::store_offline(libdnf5::base::Transaction & transaction) {
         }
     }
 
-    const std::filesystem::path transaction_json_path{offline_datadir / libdnf5::offline::TRANSACTION_JSON_FILENAME};
+    const std::filesystem::path transaction_json_path{offline_datadir / dnf5::offline::TRANSACTION_JSON_FILENAME};
 
     const std::string json = transaction.serialize();
 
@@ -488,18 +481,19 @@ void Context::store_offline(libdnf5::base::Transaction & transaction) {
     transaction_json_file.write(json);
     transaction_json_file.close();
 
-    state.get_data().status = libdnf5::offline::STATUS_DOWNLOAD_COMPLETE;
+    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
     state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
 
     std::vector<std::string> command_vector;
     auto * current_command = get_selected_command();
     while (current_command != get_root_command()) {
-        command_vector.emplace_back(current_command->get_argument_parser_command()->get_id());
+        command_vector.insert(command_vector.begin(), current_command->get_argument_parser_command()->get_id());
         current_command = current_command->get_parent_command();
     }
     state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
     state.get_data().cmd_line = get_cmdline();
 
+    const auto & installroot = base.get_config().get_installroot_option().get_value();
     state.get_data().system_releasever = *libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
     state.get_data().target_releasever = base.get_vars()->get_value("releasever");
 

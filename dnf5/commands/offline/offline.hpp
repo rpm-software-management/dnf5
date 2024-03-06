@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_OFFLINE_HPP
 
 #include <dnf5/context.hpp>
+#include <dnf5/offline.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
-#include <libdnf5/offline/offline.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 #include <toml.hpp>
 
@@ -45,20 +45,17 @@ public:
 class OfflineSubcommand : public Command {
 public:
     explicit OfflineSubcommand(Context & context, const std::string & name);
-    void set_argument_parser() override;
+    void pre_configure() override;
     void configure() override;
 
 protected:
-    libdnf5::OptionPath * get_cachedir() const { return cachedir; };
     std::filesystem::path get_magic_symlink() const { return magic_symlink; };
     std::filesystem::path get_datadir() const { return datadir; };
-    std::optional<libdnf5::offline::OfflineTransactionState> state;
+    std::optional<dnf5::offline::OfflineTransactionState> state;
     std::string get_system_releasever() const { return system_releasever; };
     std::string get_target_releasever() const { return target_releasever; };
-    void log_status(const std::string & message, const std::string & message_id) const;
 
 private:
-    libdnf5::OptionPath * cachedir{nullptr};
     std::filesystem::path magic_symlink;
     std::filesystem::path datadir;
     std::string target_releasever;
@@ -79,6 +76,7 @@ class OfflineExecuteCommand : public OfflineSubcommand {
 public:
     explicit OfflineExecuteCommand(Context & context) : OfflineSubcommand(context, "_execute") {}
     void set_argument_parser() override;
+    void pre_configure() override;
     void configure() override;
     void run() override;
 };

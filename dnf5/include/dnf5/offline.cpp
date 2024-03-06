@@ -17,11 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <libdnf5/offline/offline.hpp>
+#include <dnf5/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 
-namespace libdnf5::offline {
+namespace dnf5::offline {
 
 OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
     read();
@@ -44,8 +44,8 @@ void OfflineTransactionState::write() {
     file.close();
 }
 
-std::filesystem::path get_offline_datadir(const std::filesystem::path & installroot) {
-    return installroot / DEFAULT_DATADIR.relative_path();
+std::filesystem::path get_offline_datadir() {
+    return DEFAULT_DATADIR;
 }
 
-}  // namespace libdnf5::offline
+}  // namespace dnf5::offline
