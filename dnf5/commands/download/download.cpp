@@ -234,7 +234,7 @@ void DownloadCommand::run() {
         std::map<std::string, libdnf5::rpm::Package> source_pkgs;
 
         libdnf5::rpm::PackageQuery source_pkg_query(ctx.base);
-        source_pkg_query.filter_arch({"src"});
+        source_pkg_query.filter_arch("src");
         source_pkg_query.filter_available();
 
         for (auto & [nevra, pkg] : download_pkgs) {
