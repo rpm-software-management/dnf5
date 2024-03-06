@@ -17,22 +17,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF5_OFFLINE_HPP
-#define LIBDNF5_OFFLINE_HPP
+#ifndef DNF5_OFFLINE_HPP
+#define DNF5_OFFLINE_HPP
+
+#include "dnf5/version.hpp"
 
 #include <dnf5/context.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
 #include <sdbus-c++/sdbus-c++.h>
+#include <systemd/sd-journal.h>
 #include <toml.hpp>
 
-namespace libdnf5::offline {
+namespace dnf5::offline {
 
 // Unique identifiers used to mark and identify system-upgrade boots in
 // journald logs. These are the same as they are in `dnf4 system-upgrade`, so
 // `dnf5 offline log` will find offline transactions performed by DNF 4 and
 // vice-versa.
+const std::string DOWNLOAD_FINISHED_ID{"9348174c5cc74001a71ef26bd79d302e"};
+const std::string REBOOT_REQUESTED_ID{"9348174c5cc74001a71ef26bd79d302e"};
 const std::string OFFLINE_STARTED_ID{"3e0a5636d16b4ca4bbe5321d06c6aa62"};
 const std::string OFFLINE_FINISHED_ID{"8cec00a1566f4d3594f116450395f06c"};
 
@@ -48,7 +53,7 @@ const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTE
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
 const std::filesystem::path TRANSACTION_JSON_FILENAME{"offline-transaction.json"};
 
-std::filesystem::path get_offline_datadir(const std::filesystem::path & installroot);
+std::filesystem::path get_offline_datadir();
 
 struct OfflineTransactionStateData {
     int state_version = STATE_VERSION;
@@ -77,10 +82,16 @@ private:
     OfflineTransactionStateData data;
 };
 
-}  // namespace libdnf5::offline
+void log_status(
+    const std::string & message,
+    const std::string & message_id,
+    const std::string & system_releasever,
+    const std::string & target_releasever);
+
+}  // namespace dnf5::offline
 
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
-    libdnf5::offline::OfflineTransactionStateData,
+    dnf5::offline::OfflineTransactionStateData,
     state_version,
     status,
     cachedir,
@@ -92,4 +103,4 @@ TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     enabled_repos,
     disabled_repos)
 
-#endif  // LIBDNF5_OFFLINE_HPP
+#endif  // DNF5_OFFLINE_HPP

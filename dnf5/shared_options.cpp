@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/shared_options.hpp"
 
+#include "dnf5/offline.hpp"
+
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
-#include <libdnf5/offline/offline.hpp>
 #include <libdnf5/rpm/arch.hpp>
 
 namespace dnf5 {
@@ -120,12 +121,11 @@ void create_offline_option(dnf5::Command & command) {
                                      [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                      [[maybe_unused]] const char * option,
                                      [[maybe_unused]] const char * value) {
-        const auto & installroot = ctx.base.get_config().get_installroot_option().get_value();
-        const auto & offline_datadir = libdnf5::offline::get_offline_datadir(installroot);
+        const auto & offline_datadir = dnf5::offline::get_offline_datadir();
         std::filesystem::create_directories(offline_datadir);
 
         ctx.base.get_config().get_cachedir_option().set(libdnf5::Option::Priority::RUNTIME, offline_datadir);
-        ctx.should_store_offline = true;
+        ctx.set_should_store_offline(true);
         return true;
     });
     command.get_argument_parser_command()->register_named_arg(offline);
