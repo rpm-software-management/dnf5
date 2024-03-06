@@ -45,7 +45,6 @@ public:
 class OfflineSubcommand : public Command {
 public:
     explicit OfflineSubcommand(Context & context, const std::string & name);
-    void pre_configure() override;
     void configure() override;
 
 protected:

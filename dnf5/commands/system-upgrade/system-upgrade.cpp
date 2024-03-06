@@ -68,16 +68,6 @@ void SystemUpgradeDownloadCommand::set_argument_parser() {
 
     cmd.set_description(_("Downloads everything needed to upgrade to a new release"));
 
-    download_dir = dynamic_cast<libdnf5::OptionPath *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionPath>(dnf5::offline::DEFAULT_DATADIR)));
-
-    auto * download_dir_arg = parser.add_new_named_arg("downloaddir");
-    download_dir_arg->set_long_name("downloaddir");
-    download_dir_arg->set_has_value(true);
-    download_dir_arg->set_description(_("Redirect download of packages to provided <path>"));
-    download_dir_arg->link_value(download_dir);
-    cmd.register_named_arg(download_dir_arg);
-
     no_downgrade =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
 
@@ -94,7 +84,11 @@ void SystemUpgradeDownloadCommand::configure() {
 
     const std::filesystem::path installroot{ctx.base.get_config().get_installroot_option().get_value()};
 
-    system_releasever = *libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    if (detected_releasever == nullptr) {
+        throw libdnf5::cli::CommandExitError(1, M_("Couldn't detect the current release version of the system."));
+    }
+    system_releasever = *detected_releasever;
     target_releasever = ctx.base.get_vars()->get_value("releasever");
 
     // Check --releasever
@@ -104,17 +98,6 @@ void SystemUpgradeDownloadCommand::configure() {
 
     ctx.set_load_system_repo(true);
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-
-    // Specifically for system-upgrade, the `downloaddir` argument should take
-    // priority over the `cachedir` specified by the user. We also prepend the
-    // installroot here since it won't be done in Base::setup if the option
-    // priority is greater than Priority::COMMANDLINE.
-    if (download_dir->get_priority() < libdnf5::Option::Priority::COMMANDLINE) {
-        ctx.base.get_config().get_cachedir_option().set(
-            libdnf5::Option::Priority::RUNTIME, installroot / download_dir->get_value());
-    } else {
-        ctx.base.get_config().get_cachedir_option().set(libdnf5::Option::Priority::RUNTIME, download_dir->get_value());
-    }
 }
 
 void SystemUpgradeDownloadCommand::run() {
