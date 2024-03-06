@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-05 02:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -505,8 +505,8 @@ msgstr ""
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr ""
 
@@ -515,14 +515,14 @@ msgid "Failed to update from string: {}"
 msgstr ""
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
+msgid "Failed to resolve module metadata: {}"
 msgstr ""
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr ""
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr ""
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-02-16 04:35+0000\n"
+"POT-Creation-Date: 2024-03-05 02:52+0000\n"
+"PO-Revision-Date: 2024-03-05 13:50+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -531,8 +531,8 @@ msgstr "Kan inte aktivera flera strömmar för modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr "ingen lösning möjlig"
 
@@ -541,14 +541,14 @@ msgid "Failed to update from string: {}"
 msgstr "Misslyckades med att uppdatera från sträng:{}"
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
-msgstr "Misslyckades med att lösa: {}"
+msgid "Failed to resolve module metadata: {}"
+msgstr "Misslyckades med att lösa modul metadata: {}"
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr "Misslyckades med att uppdatera standard: {}"
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr "Misslyckades med att uppgradera strömmar: {}"
 
@@ -1147,3 +1147,6 @@ msgstr "Misslyckades med att säkerhetskopiera databas \"{}\" till \"{}\""
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Misslyckades med att återställa databas \"{}\""
+
+#~ msgid "Failed to resolve: {}"
+#~ msgstr "Misslyckades med att lösa: {}"

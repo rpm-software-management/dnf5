@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-05 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -535,8 +535,8 @@ msgstr "Nelze povolit více streamů pro modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr "žádné řešení není možné"
 
@@ -545,14 +545,16 @@ msgid "Failed to update from string: {}"
 msgstr "Aktualizace z řetězce: {} se nezdařila"
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
-msgstr "Nepodařilo se vyřešit: {}"
+#, fuzzy
+#| msgid "Failed to resolve modules."
+msgid "Failed to resolve module metadata: {}"
+msgstr "Nepodařilo se vyřešit moduly."
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr "Nepodařilo se upgradovat výchozí hodnoty: {}"
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr "Nepodařilo se upgradovat streamy: {}"
 
@@ -1159,3 +1161,6 @@ msgstr "Zálohování databáze \"{}\" do \"{}\" se nezdařilo"
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Obnovení databáze \"{}\" se nezdařilo"
+
+#~ msgid "Failed to resolve: {}"
+#~ msgstr "Nepodařilo se vyřešit: {}"
