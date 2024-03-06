@@ -33,10 +33,18 @@ jobs:
       - fedora-all
     branch: 'main'
   - job: copr_build
+    trigger: commit
+    targets:
+      - fedora-all
+    branch: 'main'
+    actions:
+      get-current-version:
+        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
+  - job: copr_build
     trigger: pull_request
     targets:
       - fedora-all
-    branch: 'create-pull-request/patch'
+    branch: 'dnf5-5.2.0.0'
     actions:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
