@@ -175,6 +175,11 @@ void AutomaticCommand::wait_for_network() {
     }
     curl_url_cleanup(url);
 
+    if (addresses.size() == 0) {
+        // do not have any address to check availability for
+        return;
+    }
+
     while (std::chrono::system_clock::now() < time_end) {
         for (auto const & [host, service] : addresses) {
             if (server_available(host, service)) {
