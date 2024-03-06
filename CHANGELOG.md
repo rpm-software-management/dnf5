@@ -1,3 +1,9 @@
+# 5.1.15
+
+- Update translations from weblate
+- automatic: Skip network availability check without remote repo
+- dnf5daemon: Rpm.list() works with commandline pkgs
+
 # 5.1.14
 
 - Update translations from weblate
