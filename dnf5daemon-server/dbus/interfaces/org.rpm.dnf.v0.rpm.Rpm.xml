@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         list:
         @options: an array of key/value pairs
-        @data: array of returned packages with requested attributes
+        @packages: array of returned packages with requested attributes
 
         Get list of packages that match to given filters.
 
@@ -83,15 +83,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     -->
     <method name="list">
         <arg name="options" type="a{sv}" direction="in"/>
-        <arg name="data" type="aa{sv}" direction="out"/>
+        <arg name="packages" type="aa{sv}" direction="out"/>
     </method>
 
     <!--
         install:
-        @specs: an array of package specifications to be installed on the system
+        @pkg_specs: an array of package specifications to be installed on the system
         @options: an array of key/value pairs to modify install behavior
 
-        Mark packages specified by @specs for installation.
+        Mark packages specified by @pkg_specs for installation.
 
         Following @options are supported:
 
@@ -105,16 +105,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Unknown options are ignored.
     -->
     <method name="install">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
         upgrade:
-        @specs: an array of package specifications to be upgraded on the system
+        @pkg_specs: an array of package specifications to be upgraded on the system
         @options: an array of key/value pairs to modify upgrade behavior
 
-        Mark packages specified by @specs for upgrade.
+        Mark packages specified by @pkg_specs for upgrade.
 
         Following @options are supported:
 
@@ -124,27 +124,27 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Unknown options are ignored.
     -->
     <method name="upgrade">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
         remove:
-        @specs: an array of package specifications to be removed on the system
+        @pkg_specs: an array of package specifications to be removed on the system
         @options: an array of key/value pairs to modify remove behavior
 
-        Mark packages specified by @specs for removal.
+        Mark packages specified by @pkg_specs for removal.
 
         Unknown options are ignored.
     -->
     <method name="remove">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
         distro_sync:
-        @specs: array of package specifications to synchronize to the latest available versions
+        @pkg_specs: array of package specifications to synchronize to the latest available versions
         @options: an array of key/value pairs to modify distro_sync behavior
 
         Following @options are supported:
@@ -152,51 +152,69 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Unknown options are ignored.
     -->
     <method name="distro_sync">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
         downgrade:
-        @specs: an array of package specifications to be downgraded on the system
+        @pkg_specs: an array of package specifications to be downgraded on the system
         @options: an array of key/value pairs to modify downgrade behavior
 
-        Mark packages specified by @specs for downgrade.
+        Mark packages specified by @pkg_specs for downgrade.
 
         Following @options are supported:
 
         Unknown options are ignored.
     -->
     <method name="downgrade">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
         reinstall:
-        @specs: an array of package specifications to be reinstalled on the system
+        @pkg_specs: an array of package specifications to be reinstalled on the system
         @options: an array of key/value pairs to modify reinstall behavior
 
-        Mark packages specified by @specs for reinstall.
+        Mark packages specified by @pkg_specs for reinstall.
 
         Following @options are supported:
 
         Unknown options are ignored.
     -->
     <method name="reinstall">
-        <arg name="specs" type="as" direction="in" />
+        <arg name="pkg_specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
     <!--
+        transaction_elem_progress:
+        @session_object_path: object path of the dnf5daemon session
+        @nevra: full NEVRA of the package
+        @processed: amount already processed
+        @total: total to process
+
+        Overall progress in transaction item processing. Called right before an item is processed.
+    -->
+    <signal name="transaction_elem_progress">
+        <arg name="session_object_path" type="o" />
+        <arg name="nevra" type="s" />
+        <arg name="processed" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
         transaction_action_start:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
         @action: one of the dnfdaemon::RpmTransactionItem::Actions enum
         @total: total to process
 
-        Processing of the item has started.
+        Processing (installation or removal) of the package has started.
     -->
     <signal name="transaction_action_start">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
         <arg name="action" type="u" />
         <arg name="total" type="t" />
@@ -204,104 +222,165 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         transaction_action_progress:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
-        @amount: amount already processed
+        @processed: amount already processed
         @total: total to process
 
         Progress in processing of the package.
     -->
     <signal name="transaction_action_progress">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
-        <arg name="amount" type="t" />
+        <arg name="processed" type="t" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_action_stop:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
         @total: total processed
 
-        Processing of the item has finished.
+        Processing of the package has finished.
     -->
     <signal name="transaction_action_stop">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_script_start:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package script belongs to
+        @scriptlet_type: scriptlet type that started (pre, post,...)
 
         The scriptlet has started.
     -->
     <signal name="transaction_script_start">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
+        <arg name="scriptlet_type" type="u" />
     </signal>
 
     <!--
         transaction_script_stop:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package script belongs to
+        @scriptlet_type: scriptlet type that started (pre, post,...)
         @return_code: return value of the script
 
         The scriptlet has successfully finished.
     -->
     <signal name="transaction_script_stop">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
+        <arg name="scriptlet_type" type="u" />
         <arg name="return_code" type="t" />
     </signal>
 
     <!--
         transaction_script_error:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package script belongs to
+        @scriptlet_type: scriptlet type that started (pre, post,...)
         @return_code: return value of the script
 
         The scriptlet has finished with an error.
     -->
     <signal name="transaction_script_error">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
+        <arg name="scriptlet_type" type="u" />
         <arg name="return_code" type="t" />
     </signal>
 
     <!--
         transaction_verify_start:
+        @session_object_path: object path of the dnf5daemon session
         @total: total to process
 
         Package files verification has started.
     -->
     <signal name="transaction_verify_start">
+        <arg name="session_object_path" type="o" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_verify_progress:
-        @nevra: full NEVRA of the package
-        @amount: amount already processed
+        @session_object_path: object path of the dnf5daemon session
+        @processed: amount already processed
         @total: total to process
 
         Progress in processing of the package.
     -->
     <signal name="transaction_verify_progress">
-        <arg name="amount" type="t" />
+        <arg name="session_object_path" type="o" />
+        <arg name="processed" type="t" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_verify_stop:
-        @nevra: full NEVRA of the package
+        @session_object_path: object path of the dnf5daemon session
+        @total: total to process
 
         Package files verification has finished.
     -->
     <signal name="transaction_verify_stop">
+        <arg name="session_object_path" type="o" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_transaction_start:
+        @session_object_path: object path of the dnf5daemon session
+        @total: total to process
+
+        Preparation of transaction packages has started.
+    -->
+    <signal name="transaction_transaction_start">
+        <arg name="session_object_path" type="o" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_transaction_progress:
+        @session_object_path: object path of the dnf5daemon session
+        @processed: amount already processed
+        @total: total to process
+
+        Progress in preparation of transaction packages.
+    -->
+    <signal name="transaction_transaction_progress">
+        <arg name="session_object_path" type="o" />
+        <arg name="processed" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_transaction_stop:
+        @session_object_path: object path of the dnf5daemon session
+        @total: total to process
+
+        Preparation of transaction packages has finished.
+    -->
+    <signal name="transaction_transaction_stop">
+        <arg name="session_object_path" type="o" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_unpack_error:
+        @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package
 
         Error while unpacking the package.
     -->
     <signal name="transaction_unpack_error">
+        <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
     </signal>
 </interface>
