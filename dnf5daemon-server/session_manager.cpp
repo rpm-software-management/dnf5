@@ -48,11 +48,23 @@ SessionManager::~SessionManager() {
 void SessionManager::dbus_register() {
     dbus_object = sdbus::createObject(*connection, dnfdaemon::DBUS_OBJECT_PATH);
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_SESSION_MANAGER,
+        "open_session",
+        "a{sv}",
+        {"options"},
+        "o",
+        {"session_object_path"},
+        [this](sdbus::MethodCall call) -> void {
             threads_manager.handle_method(*this, &SessionManager::open_session, call);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_SESSION_MANAGER, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_SESSION_MANAGER,
+        "close_session",
+        "o",
+        {"session_object_path"},
+        "b",
+        {"success"},
+        [this](sdbus::MethodCall call) -> void {
             threads_manager.handle_method(*this, &SessionManager::close_session, call);
         });
     dbus_object->finishRegistration();
