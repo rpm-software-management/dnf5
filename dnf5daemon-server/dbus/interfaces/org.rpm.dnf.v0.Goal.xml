@@ -72,7 +72,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         solver_problems - problems reported by underlying libsolv
     -->
     <method name="get_transaction_problems">
-        <arg name="problems" type="a{sv}" direction="out" />
+        <arg name="problems" type="aa{sv}" direction="out" />
     </method>
 
 
