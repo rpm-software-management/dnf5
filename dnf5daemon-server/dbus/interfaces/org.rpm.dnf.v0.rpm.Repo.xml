@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         list:
         @options: an array of key/value pairs
-        @data: array of returned repositories with requested attributes
+        @repositories: array of returned repositories with requested attributes
 
         Get list of repositories that match to given filters.
 
@@ -45,7 +45,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     -->
     <method name="list">
         <arg name="options" type="a{sv}" direction="in"/>
-        <arg name="data" type="aa{sv}" direction="out"/>
+        <arg name="repositories" type="aa{sv}" direction="out"/>
     </method>
 
     <!--
@@ -53,7 +53,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @key_id: id of the key in question
         @confirmed: whether the key import is confirmed by user
 
-        Get list of repositories that match to given filters.
+        Confirm repository PGP key import.
     -->
     <method name="confirm_key">
         <arg name="key_id" type="s" direction="in"/>
@@ -62,23 +62,43 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         enable:
-        @ids: array of strings containing all repo ids to be enabled
+        @repo_ids: array of strings containing all repo ids to be enabled
 
         Enable repositories based on the list of given ids.
     -->
     <method name="enable">
-        <arg name="ids" type="as" direction="in"/>
+        <arg name="repo_ids" type="as" direction="in"/>
     </method>
 
     <!--
         disable:
-        @ids: array of strings containing all repo ids to be disabled
+        @repo_ids: array of strings containing all repo ids to be disabled
 
         Disable repositories based on the list of given ids.
     -->
     <method name="disable">
-        <arg name="ids" type="as" direction="in"/>
+        <arg name="repo_ids" type="as" direction="in"/>
     </method>
+
+    <!--
+        repo_key_import_request:
+        @session_object_path: object path of the dnf5daemon session
+        @key_id: PGP key id
+        @user_ids: User id
+        @key_fingerprint: Fingerprint of the PGP key
+        @key_url: URL of the PGP key
+        @timestamp: timestamp when the key was created
+
+        Request for repository key import confirmation.
+    -->
+    <signal name="repo_key_import_request">
+        <arg name="session_object_path" type="o" />
+        <arg name="key_id" type="s" />
+        <arg name="user_ids" type="as" />
+        <arg name="key_fingerprint" type="s" />
+        <arg name="key_url" type="s" />
+        <arg name="timestamp" type="x" />
+    </signal>
 
 </interface>
 
