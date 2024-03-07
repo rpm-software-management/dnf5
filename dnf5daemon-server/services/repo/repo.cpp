@@ -261,19 +261,39 @@ bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::
 void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_REPO,
+        "list",
+        "a{sv}",
+        {"options"},
+        "aa{sv}",
+        {"repositories"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::list, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_REPO, "confirm_key", "sb", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_REPO,
+        "confirm_key",
+        "sb",
+        {"key_id", "confirmed"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
         });
-    dbus_object->registerMethod(dnfdaemon::INTERFACE_REPO, "enable", "as", "", [this](sdbus::MethodCall call) -> void {
-        session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
-    });
-    dbus_object->registerMethod(dnfdaemon::INTERFACE_REPO, "disable", "as", "", [this](sdbus::MethodCall call) -> void {
-        session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
-    });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO, "enable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO, "disable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
+        });
+
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_REPO,
+        dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
+        "osasssx",
+        {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
 }
 
 sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {
