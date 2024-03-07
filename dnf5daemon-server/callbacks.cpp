@@ -81,7 +81,7 @@ int DownloadCB::progress(void * user_cb_data, double total_to_download, double d
 int DownloadCB::end(void * user_cb_data, TransferStatus status, const char * msg) {
     try {
         auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_END, user_cb_data);
-        signal << static_cast<int>(status);
+        signal << static_cast<uint32_t>(status);
         signal << msg;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -131,7 +131,7 @@ void DbusTransactionCB::install_start(const libdnf5::rpm::TransactionItem & item
         action = dnfdaemon::transaction_package_to_action(item);
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, item.get_package().get_full_nevra());
-        signal << static_cast<int>(action);
+        signal << static_cast<uint32_t>(action);
         signal << total;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -171,7 +171,7 @@ void DbusTransactionCB::script_start(
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, to_full_nevra_string(nevra));
-        signal << static_cast<int>(type);
+        signal << static_cast<uint32_t>(type);
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
@@ -185,7 +185,7 @@ void DbusTransactionCB::script_stop(
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, to_full_nevra_string(nevra));
-        signal << static_cast<int>(type);
+        signal << static_cast<uint32_t>(type);
         signal << return_code;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -211,7 +211,7 @@ void DbusTransactionCB::script_error(
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, to_full_nevra_string(nevra));
-        signal << static_cast<int>(type);
+        signal << static_cast<uint32_t>(type);
         signal << return_code;
         dbus_object->emitSignal(signal);
     } catch (...) {

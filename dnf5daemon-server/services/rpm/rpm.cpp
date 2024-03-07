@@ -34,42 +34,137 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "distro_sync", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "distro_sync",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::distro_sync, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "downgrade",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "list",
+        "a{sv}",
+        {"options"},
+        "aa{sv}",
+        {"packages"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::list, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "install", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "install",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::install, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "upgrade",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::upgrade, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "reinstall", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "reinstall",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::reinstall, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM,
+        "remove",
+        "asa{sv}",
+        {"pkg_specs", "options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
         });
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, "osut");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, "ostt");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, "ost");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, "osu");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, "osut");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, "osut");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "ot");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS, "ott");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "ot");
+
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS,
+        "ostt",
+        {"session_object_path", "nevra", "processed", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_ACTION_START,
+        "osut",
+        {"session_object_path", "nevra", "action", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS,
+        "ostt",
+        {"session_object_path", "nevra", "processed", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP,
+        "ost",
+        {"session_object_path", "nevra", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START,
+        "osu",
+        {"session_object_path", "nevra", "scriptlet_type"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP,
+        "osut",
+        {"session_object_path", "nevra", "scriptlet_type", "return_code"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR,
+        "osut",
+        {"session_object_path", "nevra", "scriptlet_type", "return_code"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "ot", {"session_object_path", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS,
+        "ott",
+        {"session_object_path", "processed", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "ot", {"session_object_path", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START,
+        "ot",
+        {"session_object_path", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS,
+        "ott",
+        {"session_object_path", "processed", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP,
+        "ot",
+        {"session_object_path", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, "os", {"session_object_path", "nevra"});
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
