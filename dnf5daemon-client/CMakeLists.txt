@@ -13,7 +13,7 @@ include_directories(.)
 # TODO(mblaha) workaround for dnf5daemon-client using server's headers, fix
 include_directories(..)
 
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++>=0.9.0)
 
 add_executable(${DNF5DAEMON_CLIENT_BIN} ${DNF5DAEMON_CLIENT_SOURCES})
 
