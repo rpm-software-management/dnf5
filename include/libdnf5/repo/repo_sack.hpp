@@ -147,6 +147,7 @@ private:
     friend class libdnf5::Base;
     friend class RepoQuery;
     friend class rpm::PackageSack;
+    friend class libdnf5::Goal;
 
     explicit RepoSack(const libdnf5::BaseWeakPtr & base);
     explicit RepoSack(libdnf5::Base & base);

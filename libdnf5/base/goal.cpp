@@ -647,28 +647,42 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             }
         }
 
+        std::optional<libdnf5::rpm::Package> local_pkg;
+
+        if (!package_replay.package_path.empty()) {
+            local_pkg =
+                base->get_repo_sack()->add_stored_transaction_package(replay_location / package_replay.package_path);
+        }
         if (package_replay.action == transaction::TransactionItemAction::UPGRADE ||
             package_replay.action == transaction::TransactionItemAction::INSTALL ||
             package_replay.action == transaction::TransactionItemAction::DOWNGRADE) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::INSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::INSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REINSTALL) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REINSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::REINSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REMOVE) {
-            rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+            } else {
+                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REPLACED) {
             if (!skip_unavailable) {
-                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                if (local_pkg) {
+                    add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+                } else {
+                    rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                }
             }
         } else if (package_replay.action == transaction::TransactionItemAction::REASON_CHANGE) {
             rpm_reason_change_specs.emplace_back(
@@ -689,12 +703,14 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             enabled_repos.filter_enabled(true);
             enabled_repos.filter_id(group_replay.repo_id);
             if (!enabled_repos.empty()) {
-                //TODO(amatej): add ci test where we limit a group to repo
+                //TODO(amatej): set_to_repo_ids is only for packages, remove it? Or update set_to_repo_ids
                 settings_per_group.set_to_repo_ids({group_replay.repo_id});
             }
         }
+        if (!group_replay.group_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(replay_location / group_replay.group_path);
+        }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
         if (group_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL, group_replay.reason, group_replay.group_id, settings_per_group);
@@ -725,7 +741,9 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             }
         }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
+        if (!env_replay.environment_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(replay_location / env_replay.environment_path);
+        }
         if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL,
