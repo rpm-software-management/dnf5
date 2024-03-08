@@ -64,6 +64,7 @@ struct OfflineTransactionStateData {
     bool poweroff_after = false;
     std::vector<std::string> enabled_repos;
     std::vector<std::string> disabled_repos;
+    std::string module_platform_id;
 };
 
 class OfflineTransactionState {
@@ -99,6 +100,7 @@ TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     cmd_line,
     poweroff_after,
     enabled_repos,
-    disabled_repos)
+    disabled_repos,
+    module_platform_id)
 
 #endif  // DNF5_OFFLINE_HPP
