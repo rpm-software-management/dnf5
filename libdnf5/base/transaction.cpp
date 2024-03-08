@@ -87,6 +87,12 @@ const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RES
     {base::ImportRepoKeysResult::IMPORT_FAILED, M_("Public key import failed.")},
 };
 
+std::filesystem::path build_comps_xml_path(std::filesystem::path path, const std::string & id) {
+    path = path / id;
+    path.replace_extension("xml");
+    return path;
+}
+
 }  // namespace
 
 Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
@@ -1148,6 +1154,24 @@ std::string Transaction::serialize() {
     ////TODO(amatej): potentially add modules
 
     return transaction::json_serialize(transaction_replay);
+}
+
+void Transaction::store_comps(const std::filesystem::path & comps_path) const {
+    auto groups = get_transaction_groups();
+    auto envs = get_transaction_environments();
+    if (!groups.empty() || !envs.empty()) {
+        std::filesystem::create_directories(comps_path);
+    }
+
+    for (const auto & group : groups) {
+        auto xml_group = group.get_group();
+        xml_group.serialize(build_comps_xml_path(comps_path, xml_group.get_groupid()));
+    }
+
+    for (const auto & environment : envs) {
+        auto xml_environment = environment.get_environment();
+        xml_environment.serialize(build_comps_xml_path(comps_path, xml_environment.get_environmentid()));
+    }
 }
 
 }  // namespace libdnf5::base
