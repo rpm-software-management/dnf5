@@ -34,12 +34,14 @@ struct GroupReplay {
     TransactionItemAction action;
     TransactionItemReason reason;
     std::string group_id;
+    std::filesystem::path group_path;
     std::string repo_id;
 };
 
 struct EnvironmentReplay {
     TransactionItemAction action;
     std::string environment_id;
+    std::filesystem::path environment_path;
     std::string repo_id;
 };
 
