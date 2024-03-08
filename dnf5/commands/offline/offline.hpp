@@ -97,6 +97,12 @@ private:
     libdnf5::OptionString * number{nullptr};
 };
 
+class OfflineStatusCommand : public OfflineSubcommand {
+public:
+    explicit OfflineStatusCommand(Context & context) : OfflineSubcommand(context, "status") {}
+    void run() override;
+};
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_OFFLINE_HPP

@@ -17,6 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf5/common/exception.hpp"
+
 #include <dnf5/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
@@ -28,6 +30,10 @@ OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : p
 }
 void OfflineTransactionState::read() {
     try {
+        const std::ifstream file{path};
+        if (!file.good()) {
+            throw libdnf5::FileSystemError(errno, path, M_("Error reading offline state file."));
+        }
         const auto & value = toml::parse(path);
         data = toml::find<OfflineTransactionStateData>(value, STATE_HEADER);
         if (data.state_version != STATE_VERSION) {
