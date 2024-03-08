@@ -58,6 +58,11 @@ void Base::dbus_register() {
         dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE,
         "ossss",
         {"session_object_path", "download_id", "message", "url", "metadata"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_BASE,
+        dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
+        "osasssx",
+        {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
 }
 
 sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {

@@ -101,6 +101,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="message" type="s" />
     </signal>
 
+    <!--
+        repo_key_import_request:
+        @session_object_path: object path of the dnf5daemon session
+        @key_id: PGP key id
+        @user_ids: User id
+        @key_fingerprint: Fingerprint of the PGP key
+        @key_url: URL of the PGP key
+        @timestamp: timestamp when the key was created
+
+        Request for repository key import confirmation.
+    -->
+    <signal name="repo_key_import_request">
+        <arg name="session_object_path" type="o" />
+        <arg name="key_id" type="s" />
+        <arg name="user_ids" type="as" />
+        <arg name="key_fingerprint" type="s" />
+        <arg name="key_url" type="s" />
+        <arg name="timestamp" type="x" />
+    </signal>
+
 </interface>
 
 </node>

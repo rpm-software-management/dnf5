@@ -288,12 +288,6 @@ void Repo::dbus_register() {
         dnfdaemon::INTERFACE_REPO, "disable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
         });
-
-    dbus_object->registerSignal(
-        dnfdaemon::INTERFACE_REPO,
-        dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
-        "osasssx",
-        {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
 }
 
 sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {
