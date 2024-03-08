@@ -186,7 +186,7 @@ BuildRequires:  libcurl-devel >= 7.62.0
 
 %if %{with dnf5daemon_server}
 # required for dnf5daemon-server
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.9.0
 BuildRequires:  systemd-rpm-macros
 %if %{with dnf5daemon_tests}
 BuildRequires:  dbus-daemon
