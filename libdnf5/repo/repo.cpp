@@ -464,6 +464,18 @@ void Repo::load_system_repo() {
     p_impl->solv_repo->load_system_repo_ext(RepodataType::COMPS);
 }
 
+void Repo::add_xml_comps(const std::string & path) {
+    if (std::filesystem::path(path).extension() != ".xml") {
+        throw RepoCompsError(M_("Failed to load comps \"{}\": doesn't have the \".xml\" extension"), path);
+    }
+
+    make_solv_repo();
+
+    if (!get_solv_repo().read_group_solvable_from_xml(path)) {
+        throw RepoCompsError(
+            M_("Failed to load xml Comps \"{}\": {}"), path, std::string(pool_errstr(p_impl->solv_repo->repo->pool)));
+    }
+}
 
 rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
     is_readable_rpm(path);
