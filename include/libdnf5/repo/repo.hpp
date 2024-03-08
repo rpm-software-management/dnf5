@@ -371,6 +371,9 @@ private:
     /// Mark this repository as fresh (it is not expired).
     void mark_fresh();
 
+    // Add xml comps file at `path` to the repository.
+    void add_xml_comps(const std::string & path);
+
     std::unique_ptr<Impl> p_impl;
 };
 
