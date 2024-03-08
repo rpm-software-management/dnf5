@@ -34,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 void Base::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_BASE, "read_all_repos", "", {}, "b", {"result"}, [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_BASE, "read_all_repos", "", {}, "b", {"success"}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call, session.session_locale);
         });
 
@@ -51,7 +51,7 @@ void Base::dbus_register() {
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_BASE,
         dnfdaemon::SIGNAL_DOWNLOAD_END,
-        "osis",
+        "osus",
         {"session_object_path", "download_id", "transfer_status", "message"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_BASE,

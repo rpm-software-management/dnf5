@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 <interface name="org.rpm.dnf.v0.SessionManager">
     <!--
         open_session:
-        @configuration: session configuration - an array of key/value pairs
+        @options: session configuration - an array of key/value pairs
         @session_object_path: object path to created Session object
 
         Opens a new session.
