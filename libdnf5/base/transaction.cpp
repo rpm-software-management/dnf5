@@ -1104,7 +1104,8 @@ bool Transaction::Impl::check_gpg_signatures() {
     return result;
 }
 
-std::string Transaction::serialize() {
+std::string Transaction::serialize(
+    const std::filesystem::path & packages_path, const std::filesystem::path & comps_path) const {
     transaction::TransactionReplay transaction_replay;
 
     for (const auto & pkg : get_transaction_packages()) {
@@ -1118,40 +1119,48 @@ std::string Transaction::serialize() {
         if (pkg.get_reason_change_group_id()) {
             package_replay.group_id = *pkg.get_reason_change_group_id();
         }
-        if (rpm_pkg.is_cached()) {
-            package_replay.package_path = rpm_pkg.get_package_path();
+        if (!packages_path.empty()) {
+            if (libdnf5::transaction::transaction_item_action_is_inbound(package_replay.action)) {
+                package_replay.package_path = packages_path / std::filesystem::path(rpm_pkg.get_location()).filename();
+            }
         }
-
         transaction_replay.packages.push_back(package_replay);
     }
 
     for (const auto & group : get_transaction_groups()) {
         transaction::GroupReplay group_replay;
 
-        group_replay.group_id = group.get_group().get_groupid();
+        auto xml_group = group.get_group();
+        group_replay.group_id = xml_group.get_groupid();
         group_replay.action = group.get_action();
         group_replay.reason = group.get_reason();
         // TODO(amatej): does each group has to have at least one repo?
         group_replay.repo_id = *(group.get_group().get_repos().begin());
 
-        //TODO(amatej): add package types... if they are actually needed though... which I am not sure now.
-        // -> because if I plan to store the group jsons separately it will contain all information, so the pkg types shouldn't be here
+        if (!comps_path.empty()) {
+            group_replay.group_path = build_comps_xml_path(comps_path, xml_group.get_groupid());
+        }
+
         transaction_replay.groups.push_back(group_replay);
     }
 
     for (const auto & environment : get_transaction_environments()) {
         transaction::EnvironmentReplay environment_replay;
 
-        environment_replay.environment_id = environment.get_environment().get_environmentid();
+        auto xml_environment = environment.get_environment();
+        environment_replay.environment_id = xml_environment.get_environmentid();
         environment_replay.action = environment.get_action();
         // TODO(amatej): does each environment has to have at least one repo?
         environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
 
+        if (!comps_path.empty()) {
+            environment_replay.environment_path = build_comps_xml_path(comps_path, xml_environment.get_environmentid());
+        }
+
         transaction_replay.environments.push_back(environment_replay);
     }
 
-    ////TODO(amatej): Allow using local sources (downloaded packages, groups..)
-    ////TODO(amatej): potentially add modules
+    //TODO(amatej): potentially add modules
 
     return transaction::json_serialize(transaction_replay);
 }
