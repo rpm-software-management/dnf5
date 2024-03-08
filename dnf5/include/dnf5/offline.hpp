@@ -44,7 +44,7 @@ const std::string OFFLINE_FINISHED_ID{"8cec00a1566f4d3594f116450395f06c"};
 const std::string STATUS_DOWNLOAD_INCOMPLETE{"download-incomplete"};
 const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
 const std::string STATUS_READY{"ready"};
-const std::string STATUS_UPGRADE_INCOMPLETE{"upgrade-incomplete"};
+const std::string STATUS_TRANSACTION_INCOMPLETE{"transaction-incomplete"};
 
 const int STATE_VERSION = 0;
 const std::string STATE_HEADER{"offline-transaction-state"};
@@ -73,6 +73,7 @@ public:
     OfflineTransactionState(std::filesystem::path path);
     OfflineTransactionStateData & get_data() { return data; };
     const std::exception_ptr & get_read_exception() const { return read_exception; };
+    std::filesystem::path get_path() const { return path; };
 
 private:
     void read();
