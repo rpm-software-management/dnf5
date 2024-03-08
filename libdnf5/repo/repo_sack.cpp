@@ -64,6 +64,7 @@ namespace {
 // Names of special repositories
 constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
+constexpr const char * STORED_TRANSACTION_NAME = "@stored_transaction";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
 
@@ -103,6 +104,7 @@ private:
     WeakPtrGuard<RepoSack, false> sack_guard;
     repo::Repo * system_repo{nullptr};
     repo::Repo * cmdline_repo{nullptr};
+    repo::Repo * stored_transaction_repo{nullptr};
     bool repos_updated_and_loaded{false};
     friend RepoSack;
 };
@@ -144,6 +146,36 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
     }
 
     return p_impl->cmdline_repo->get_weak_ptr();
+}
+
+
+RepoWeakPtr RepoSack::get_stored_transaction_repo() {
+    if (!p_impl->stored_transaction_repo) {
+        // Repo type is COMMANDLINE because we don't want to download download any packages. We want it to behave like commandline repo.
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, STORED_TRANSACTION_NAME, Repo::Type::COMMANDLINE));
+        repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
+        p_impl->stored_transaction_repo = repo.get();
+        add_item(std::move(repo));
+    }
+
+    return p_impl->stored_transaction_repo->get_weak_ptr();
+}
+
+
+void RepoSack::add_stored_transaction_comps(const std::string & path) {
+    auto stored_repo = get_stored_transaction_repo();
+    stored_repo->add_xml_comps(path);
+}
+
+
+libdnf5::rpm::Package RepoSack::add_stored_transaction_package(const std::string & path, bool calculate_checksum) {
+    auto stored_repo = get_stored_transaction_repo();
+
+    auto pkg = stored_repo->add_rpm_package(path, calculate_checksum);
+
+    p_impl->base->get_rpm_package_sack()->load_config_excludes_includes();
+
+    return pkg;
 }
 
 
@@ -764,6 +796,10 @@ void RepoSack::internalize_repos() {
 
     if (p_impl->cmdline_repo) {
         p_impl->cmdline_repo->internalize();
+    }
+
+    if (p_impl->stored_transaction_repo) {
+        p_impl->stored_transaction_repo->internalize();
     }
 }
 
