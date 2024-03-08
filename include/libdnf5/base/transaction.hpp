@@ -171,6 +171,11 @@ public:
     /// into a `libdnf5::Goal` and replayed.
     std::string serialize();
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Store each group and environment in this transaction as a separate xml file in the
+    /// specified path.
+    void store_comps(const std::filesystem::path & comps_path) const;
+
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;
