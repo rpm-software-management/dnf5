@@ -500,6 +500,10 @@ void Context::store_offline(libdnf5::base::Transaction & transaction) {
     }
     state.get_data().target_releasever = base.get_vars()->get_value("releasever");
 
+    if (!base.get_config().get_module_platform_id_option().empty()) {
+        state.get_data().module_platform_id = base.get_config().get_module_platform_id_option().get_value();
+    }
+
     state.write();
 }
 

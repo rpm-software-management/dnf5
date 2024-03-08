@@ -357,6 +357,10 @@ void OfflineExecuteCommand::pre_configure() {
     // Additional removal could trigger unwanted changes in transaction.
     ctx.base.get_config().get_clean_requirements_on_remove_option().set(false);
     ctx.base.get_config().get_install_weak_deps_option().set(false);
+    // Disable gpgcheck entirely, since GPG integrity will have already been
+    // checked when the transaction was prepared and serialized. This way, we
+    // don't need to keep track of which packages need to be gpgchecked.
+    ctx.base.get_config().get_gpgcheck_option().set(false);
 }
 
 void OfflineExecuteCommand::configure() {
@@ -371,6 +375,10 @@ void OfflineExecuteCommand::configure() {
     // Get the cache from the cachedir specified in the state file
     ctx.base.get_config().get_system_cachedir_option().set(state->get_data().cachedir);
     ctx.base.get_config().get_cachedir_option().set(state->get_data().cachedir);
+
+    if (!state->get_data().module_platform_id.empty()) {
+        ctx.base.get_config().get_module_platform_id_option().set(state->get_data().module_platform_id);
+    }
 
     // Set same set of enabled/disabled repos used during `system-upgrade download`
     for (const auto & repo_id : state->get_data().enabled_repos) {
