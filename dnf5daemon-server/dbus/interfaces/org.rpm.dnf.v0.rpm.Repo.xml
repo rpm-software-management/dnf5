@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         list:
         @options: an array of key/value pairs
-        @data: array of returned repositories with requested attributes
+        @repositories: array of returned repositories with requested attributes
 
         Get list of repositories that match to given filters.
 
@@ -45,7 +45,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     -->
     <method name="list">
         <arg name="options" type="a{sv}" direction="in"/>
-        <arg name="data" type="aa{sv}" direction="out"/>
+        <arg name="repositories" type="aa{sv}" direction="out"/>
     </method>
 
     <!--
@@ -53,11 +53,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @key_id: id of the key in question
         @confirmed: whether the key import is confirmed by user
 
-        Get list of repositories that match to given filters.
+        Confirm repository PGP key import.
     -->
     <method name="confirm_key">
         <arg name="key_id" type="s" direction="in"/>
         <arg name="confirmed" type="b" direction="in"/>
+    </method>
+
+    <!--
+        enable:
+        @repo_ids: array of strings containing all repo ids to be enabled
+
+        Enable repositories based on the list of given ids.
+    -->
+    <method name="enable">
+        <arg name="repo_ids" type="as" direction="in"/>
+    </method>
+
+    <!--
+        disable:
+        @repo_ids: array of strings containing all repo ids to be disabled
+
+        Disable repositories based on the list of given ids.
+    -->
+    <method name="disable">
+        <arg name="repo_ids" type="as" direction="in"/>
     </method>
 
 </interface>

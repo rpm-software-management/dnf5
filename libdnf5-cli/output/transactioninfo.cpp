@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include <fmt/format.h>
 #include <pwd.h>
 
-#include <format>
 #include <sstream>
 
 namespace libdnf5::cli::output {
@@ -44,11 +44,11 @@ std::string generate_user_info_str(uint32_t user_id) {
         std::stringstream s_stream(user_info->pw_gecos);
         std::string display_name;
         std::getline(s_stream, display_name, ',');
-        results += std::format(" {}", display_name);
+        results += fmt::format(" {}", display_name);
     };
 
     if (user_info->pw_name && strlen(user_info->pw_name) > 0) {
-        results += std::format(" <{}>", user_info->pw_name);
+        results += fmt::format(" <{}>", user_info->pw_name);
     };
 
     return results;

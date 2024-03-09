@@ -259,7 +259,8 @@ std::set<std::string> ConfigManagerSetOptCommand::load_existing_repo_ids() const
             std::error_code ec;
             std::filesystem::directory_iterator di(dir, ec);
             if (ec) {
-                logger->warning("Cannot read repositories from directory \"{}\": {}", dir.string(), ec.message());
+                write_warning(
+                    *logger, M_("Cannot read repositories from directory \"{}\": {}"), dir.string(), ec.message());
                 continue;
             }
             for (auto & dentry : di) {

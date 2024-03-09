@@ -26,10 +26,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
+#include <numeric>
 #include <random>
 #include <sstream>
 #include <string>
 #include <thread>
+
+// TODO(mblaha): Make this constant configurable
+const int MAX_SESSIONS = 3;
 
 SessionManager::SessionManager() {
     connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
@@ -44,11 +48,23 @@ SessionManager::~SessionManager() {
 void SessionManager::dbus_register() {
     dbus_object = sdbus::createObject(*connection, dnfdaemon::DBUS_OBJECT_PATH);
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_SESSION_MANAGER,
+        "open_session",
+        "a{sv}",
+        {"options"},
+        "o",
+        {"session_object_path"},
+        [this](sdbus::MethodCall call) -> void {
             threads_manager.handle_method(*this, &SessionManager::open_session, call);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_SESSION_MANAGER, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_SESSION_MANAGER,
+        "close_session",
+        "o",
+        {"session_object_path"},
+        "b",
+        {"success"},
+        [this](sdbus::MethodCall call) -> void {
             threads_manager.handle_method(*this, &SessionManager::close_session, call);
         });
     dbus_object->finishRegistration();
@@ -97,6 +113,14 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     std::lock_guard<std::mutex> lock(active_mutex);
     if (!active) {
         throw sdbus::Error(dnfdaemon::ERROR, "Cannot open new session.");
+    }
+    // limit number of simultaneously opened sessions
+    const int num_sessions = std::accumulate(
+        sessions.begin(), sessions.end(), 0, [](int sum, const auto & sender) { return sum + sender.second.size(); });
+    if (num_sessions >= MAX_SESSIONS) {
+        auto reply = call.createErrorReply(sdbus::Error(
+            dnfdaemon::ERROR, "Cannot open new session - maximal number of simultaneously opened sessions achieved."));
+        return reply;
     }
 
     auto sender = call.getSender();

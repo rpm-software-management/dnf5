@@ -48,21 +48,45 @@ void Goal::dbus_register() {
     // TODO(mblaha) Adjust resolve method to accommodate also groups, environments,
     // and modules as part of the transaction
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(sssa{sv}a{sv})u", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL,
+        "resolve",
+        "a{sv}",
+        {"options"},
+        "a(sssa{sv}a{sv})u",
+        {"transaction_items", "result"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "get_transaction_problems_string", "", "as", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL,
+        "get_transaction_problems_string",
+        "",
+        {},
+        "as",
+        {"problems"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(
                 *this, &Goal::get_transaction_problems_string, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "get_transaction_problems", "", "a{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL,
+        "get_transaction_problems",
+        "",
+        {},
+        "aa{sv}",
+        {"problems"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(
                 *this, &Goal::get_transaction_problems, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "do_transaction", "a{sv}", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL,
+        "do_transaction",
+        "a{sv}",
+        {"options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::do_transaction, call, session.session_locale);
         });
 }

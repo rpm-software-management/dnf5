@@ -6,7 +6,7 @@
   <vendor>Dnf</vendor>
   <vendor_url>https://github.com/rpm-software-management/libdnf/</vendor_url>
 
-  <action id="org.rpm.dnf.v0.rpm.RepoConf.write">
+  <action id="org.rpm.dnf.v0.rpm.Repo.conf_write">
     <description>Write repository configuration file</description>
     <message>Writing changes to repository configuration file requires authentication.</message>
     <defaults>

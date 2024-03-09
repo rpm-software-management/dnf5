@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 1
-%global project_version_patch 13
+%global project_version_patch 14
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 10]
 
@@ -186,7 +186,7 @@ BuildRequires:  libcurl-devel >= 7.62.0
 
 %if %{with dnf5daemon_server}
 # required for dnf5daemon-server
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.9.0
 BuildRequires:  systemd-rpm-macros
 %if %{with dnf5daemon_tests}
 BuildRequires:  dbus-daemon
@@ -815,6 +815,9 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %ldconfig_scriptlets
 
 %changelog
+* Fri Mar 01 2024 Packit Team <hello@packit.dev> - 5.1.14-1
+- New upstream release 5.1.14
+
 * Tue Feb 20 2024 Packit Team <hello@packit.dev> - 5.1.13-1
 - New upstream release 5.1.13
 

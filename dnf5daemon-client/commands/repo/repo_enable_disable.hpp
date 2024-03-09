@@ -17,20 +17,26 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "utils.hpp"
+#ifndef DNF5DAEMON_CLIENT_COMMANDS_REPO_ENABLE_DISABLE_HPP
+#define DNF5DAEMON_CLIENT_COMMANDS_REPO_ENABLE_DISABLE_HPP
 
-#include <libdnf5/utils/bgettext/bgettext-lib.h>
-#include <libdnf5/utils/format.hpp>
+#include "commands/command.hpp"
 
-#include <chrono>
-#include <iomanip>
+namespace dnfdaemon::client {
 
-std::string format_comment(std::string_view cmd) {
-    // format the comment for new config file entries
-    auto current_time_point = std::chrono::system_clock::now();
-    const std::time_t current_time = std::chrono::system_clock::to_time_t(current_time_point);
-    std::stringstream ss;
-    ss << std::put_time(std::localtime(&current_time), "%F %T");
-    // TODO(mblaha): add full command line
-    return libdnf5::utils::sformat(_("Added by 'versionlock {}' command on {}"), cmd, ss.str());
-}
+class RepoEnableDisableCommand : public DaemonCommand {
+public:
+    explicit RepoEnableDisableCommand(Context & context, const std::string & command)
+        : DaemonCommand(context, command),
+          command(command) {}
+    void set_argument_parser() override;
+    void run() override;
+
+private:
+    std::vector<std::unique_ptr<libdnf5::Option>> * patterns_options{nullptr};
+    const std::string command;
+};
+
+}  // namespace dnfdaemon::client
+
+#endif  // DNF5DAEMON_CLIENT_COMMANDS_REPO_ENABLE_DISABLE_HPP

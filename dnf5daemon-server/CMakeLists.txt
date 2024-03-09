@@ -11,7 +11,7 @@ add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 include_directories(.)
 
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++>=0.9.0)
 find_package(Threads)
 
 add_executable(${DNF5DAEMON_SERVER_BIN} ${DNF5DAEMON_SERVER_SOURCES})

@@ -27,8 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 <interface name="org.rpm.dnf.v0.SessionManager">
     <!--
         open_session:
-        @configuration: session configuration - an array of key/value pairs
-        @path: object path to created Session object
+        @options: session configuration - an array of key/value pairs
+        @session_object_path: object path to created Session object
 
         Opens a new session.
 
@@ -49,19 +49,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     -->
     <method name="open_session">
         <arg name="options" type="a{sv}" direction="in"/>
-        <arg name="path" type="o" direction="out"/>
+        <arg name="session_object_path" type="o" direction="out"/>
     </method>
 
     <!--
         close_session:
-        @path: object path of session to close
-        @result: bool whether the requested session was successfully closed
+        @session_object_path: object path of session to close
+        @success: bool whether the requested session was successfully closed
 
         Close session on given object path.
     -->
     <method name="close_session">
-        <arg name="path" type="o" direction="in" />
-        <arg name="result" type="b" direction="out" />
+        <arg name="session_object_path" type="o" direction="in" />
+        <arg name="success" type="b" direction="out" />
     </method>
 
 </interface>

@@ -56,7 +56,8 @@ std::string get_url_part(const std::string & url, CURLUPart what_part) {
 
 
 // Computes CRC32 checksum of input string.
-// Slow bitwise implementation. Used to calculate the checksum of the omitted part of long URLs.
+// Slow bitwise implementation. Used to calculate the hash of the omitted middle part of a long `repoid` if the `repoid`
+// is generated from a URL. Not used for cryptography.
 uint32_t crc32(std::string_view input) {
     const uint32_t polynomial = 0x04C11DB7;
     uint32_t crc = 0;
@@ -96,15 +97,15 @@ std::string escape(const std::string & text) {
 }
 
 
-// Regular expressions to sanitise filename
+// Regular expressions to sanitise repository id
 const std::regex RE_SCHEME{R"(^\w+:/*(\w+:|www\.)?)"};
 const std::regex RE_SLASH{R"([?/:&#|~\*\[\]\(\)'\\]+)"};
 const std::regex RE_BEGIN{"^[,.]*"};
 const std::regex RE_FINAL{"[,.]*$"};
 
-// Returns a filename suitable for the filesystem and for repository id.
+// Generates a repository id from a URL.
 // Strips dangerous and common characters, encodes some characters and limits the length.
-std::string sanitize_url(const std::string & url) {
+std::string generate_repoid_from_url(const std::string & url) {
     std::string ret;
     ret = std::regex_replace(url, RE_SCHEME, "");
     ret = std::regex_replace(ret, RE_SLASH, "_");
@@ -112,8 +113,8 @@ std::string sanitize_url(const std::string & url) {
     ret = std::regex_replace(ret, RE_FINAL, "");
     ret = escape(ret);
 
-    // Limits length of url.
-    // Copies the first and last 100 characters. The substring in between is replaced by a crc32 checksum.
+    // Limits the length of the repository id.
+    // Copies the first and last 100 characters. The substring in between is replaced by a crc32 hash.
     if (ret.size() > 250) {
         std::string_view tmp{ret};
         ret = fmt::format(
@@ -396,7 +397,7 @@ void ConfigManagerAddRepoCommand::create_repo(
     }
 
     if (repo_id.empty()) {
-        repo_id = sanitize_url(url);
+        repo_id = generate_repoid_from_url(url);
     }
 
     if (save_filename.empty()) {
@@ -423,7 +424,7 @@ void ConfigManagerAddRepoCommand::create_repo(
     parser.add_section(repo_id);
 
     // Sets the default repository name. May be overwritten with "--set=name=<name>".
-    parser.set_value(repo_id, "name", "created by dnf5 config-manager");
+    parser.set_value(repo_id, "name", repo_id + " - Created by dnf5 config-manager");
     // Enables repository by default. The repository can be disabled with "--set=enabled=0".
     parser.set_value(repo_id, "enabled", "1");
 
@@ -492,7 +493,8 @@ void ConfigManagerAddRepoCommand::test_if_ids_not_already_exist(
             std::error_code ec;
             std::filesystem::directory_iterator di(dir, ec);
             if (ec) {
-                logger->warning("Cannot read repositories from directory \"{}\": {}", dir.string(), ec.message());
+                write_warning(
+                    *logger, M_("Cannot read repositories from directory \"{}\": {}"), dir.string(), ec.message());
                 continue;
             }
             for (auto & dentry : di) {

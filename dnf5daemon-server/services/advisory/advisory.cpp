@@ -31,9 +31,16 @@ namespace dnfdaemon {
 
 void Advisory::dbus_register() {
     auto dbus_object = session.get_dbus_object();
-    dbus_object->registerMethod(INTERFACE_ADVISORY, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-        session.get_threads_manager().handle_method(*this, &Advisory::list, call, session.session_locale);
-    });
+    dbus_object->registerMethod(
+        INTERFACE_ADVISORY,
+        "list",
+        "a{sv}",
+        {"options"},
+        "aa{sv}",
+        {"advisories"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Advisory::list, call, session.session_locale);
+        });
 }
 
 libdnf5::advisory::AdvisoryQuery Advisory::advisory_query_from_options(

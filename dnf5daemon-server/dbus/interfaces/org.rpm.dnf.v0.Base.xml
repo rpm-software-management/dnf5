@@ -27,12 +27,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 <interface name="org.rpm.dnf.v0.Base">
     <!--
         read_all_repos:
-        @retval: `true` if repositories were successfully loaded, `false` otherwise.
+        @success: `true` if repositories were successfully loaded, `false` otherwise.
 
         Explicitly ask for loading repositories metadata.
     -->
     <method name="read_all_repos">
-        <arg name="retval" type="b" direction="out"/>
+        <arg name="success" type="b" direction="out"/>
     </method>
 
     <!--
@@ -68,7 +68,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </signal>
 
     <!--
-        mirror_failure:
+        download_mirror_failure:
         @session_object_path: object path of the dnf5daemon session
         @download_id: unique id of downloaded object (repo or package)
         @message: an error message
@@ -77,7 +77,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Mirror failure during the download.
     -->
-    <signal name="mirror_failure">
+    <signal name="download_mirror_failure">
         <arg name="session_object_path" type="o" />
         <arg name="download_id" type="s" />
         <arg name="message" type="s" />
@@ -89,15 +89,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         download_end:
         @session_object_path: object path of the dnf5daemon session
         @download_id: unique id of downloaded object (repo or package)
-        @status: libdnf5::repo::DownloadCallbacks::TransferStatus (0 - successful, 1 - already exists, 2 - error)
-        @error: error message in case of failed download
+        @transfer_status: libdnf5::repo::DownloadCallbacks::TransferStatus (0 - successful, 1 - already exists, 2 - error)
+        @message: error message in case of failed download
 
         Downloading has ended.
     -->
     <signal name="download_end">
         <arg name="session_object_path" type="o" />
         <arg name="download_id" type="s" />
-        <arg name="status" type="i" />
+        <arg name="transfer_status" type="u" />
         <arg name="message" type="s" />
     </signal>
 

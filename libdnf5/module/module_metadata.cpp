@@ -126,7 +126,8 @@ void ModuleMetadata::resolve_added_metadata() {
     resulting_module_index = modulemd_module_index_merger_resolve(module_merger, &error);
     if (error && !resulting_module_index) {
         throw ModuleResolveError(
-            M_("Failed to resolve: {}"), (error->message) ? std::string(error->message) : "Unknown error");
+            M_("Failed to resolve module metadata: {}"),
+            (error->message) ? std::string(error->message) : "Unknown error");
     }
     if (error) {
         auto & logger = *base->get_logger();

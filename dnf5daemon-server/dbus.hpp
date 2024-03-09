@@ -55,7 +55,6 @@ const char * const DBUS_OBJECT_PATH = "/org/rpm/dnf/v0";
 // interfaces
 const char * const INTERFACE_BASE = "org.rpm.dnf.v0.Base";
 const char * const INTERFACE_REPO = "org.rpm.dnf.v0.rpm.Repo";
-const char * const INTERFACE_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf";
 const char * const INTERFACE_RPM = "org.rpm.dnf.v0.rpm.Rpm";
 const char * const INTERFACE_GOAL = "org.rpm.dnf.v0.Goal";
 const char * const INTERFACE_GROUP = "org.rpm.dnf.v0.comps.Group";
@@ -87,14 +86,15 @@ const char * const SIGNAL_TRANSACTION_ELEM_PROGRESS = "transaction_elem_progress
 const char * const SIGNAL_TRANSACTION_FINISHED = "transaction_finished";
 
 // polkit actions
-const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
+const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.Repo.conf_write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
 const char * const POLKIT_CONFIRM_KEY_IMPORT = "org.rpm.dnf.v0.rpm.Repo.confirm_key";
 const char * const POLKIT_CONFIG_OVERRIDE = "org.rpm.dnf.v0.base.Config.override";
 
 // errors
 const char * const ERROR = "org.rpm.dnf.v0.Error";
-const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf.Error";
+const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.Repo.ConfError";
+const char * const ERROR_REPO_ID_UNKNOWN = "org.rpm.dnf.v0.rpm.Repo.NoMatchingIdError";
 const char * const ERROR_RESOLVE = "org.rpm.dnf.v0.rpm.Rpm.ResolveError";
 const char * const ERROR_TRANSACTION = "org.rpm.dnf.v0.rpm.Rpm.TransactionError";
 

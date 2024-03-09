@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_private.hpp"
 
-#include "rpm/package_sack_impl.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf5/common/exception.hpp"
@@ -128,7 +127,11 @@ bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
     return false;
 }
 
-static void same_name_subqueue(libdnf5::solv::RpmPool & pool, Queue * in, Queue * out) {
+
+/// @brief It takes an `in` Queue which contains packages sorted by name (see `installonly_cmp`).
+///        It selects the first name and moves all packages with that name to the `out` Queue.
+///        Additionally libsolv Id of the selected name is returned.
+static Id same_name_subqueue(libdnf5::solv::RpmPool & pool, Queue * in, Queue * out) {
     Id el = queue_pop(in);
     Id name = pool.id2solvable(el)->name;
     queue_empty(out);
@@ -136,6 +139,7 @@ static void same_name_subqueue(libdnf5::solv::RpmPool & pool, Queue * in, Queue 
     while (in->count && pool.id2solvable(in->elements[in->count - 1])->name == name)
         // reverses the order so packages are sorted by descending version
         queue_push(out, queue_pop(in));
+    return name;
 }
 
 
@@ -228,6 +232,10 @@ inline bool name_solvable_cmp_key(const Solvable * first, const Solvable * secon
     return first->name < second->name;
 }
 
+inline bool name_solvable_id_name_cmp_key(const Solvable * first, const Id second) {
+    return first->name < second;
+}
+
 }  // namespace
 
 
@@ -243,17 +251,18 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
     ::Pool * pool = *spool;
     bool reresolve = false;
 
-    for (int i = 0; i < installonly.size(); ++i) {
+    // Use maps to handle each package just once
+    libdnf5::solv::SolvMap marked_for_install_providers_map(spool.get_nsolvables());
+    libdnf5::solv::SolvMap available_unused_providers_map(spool.get_nsolvables());
+
+    for (Id install_only_provide : installonly) {
         Id p;
         Id pp;
-        libdnf5::solv::IdQueue q;
-        std::vector<Solvable *> available_unused_providers;
-        libdnf5::solv::IdQueue installing;
 
         // Add all providers of installonly provides that are marked for install
-        // to `q` IdQueue those that are not marked for install and are not already
-        // installed are added to available_unused_providers.
-        FOR_PROVIDES(p, pp, installonly[i]) {
+        // to `marked_for_install_providers_map` SolvMap those that are not marked
+        // for install and are not already installed are added to available_unused_providers_map.
+        FOR_PROVIDES(p, pp, install_only_provide) {
             // TODO(jmracek)  Replace the test by cached data from sack.p_impl->get_solvables()
             if (!spool.is_package(p)) {
                 continue;
@@ -262,61 +271,57 @@ bool GoalPrivate::limit_installonly_packages(libdnf5::solv::IdQueue & job, Id ru
             // and negative for conflicts (conflicts with another package or dependency
             // conflicts = dependencies cannot be met).
             if (libsolv_solver.get_decisionlevel(p) > 0) {
-                q.push_back(p);
+                marked_for_install_providers_map.add_unsafe(p);
             } else {
-                Solvable * solvable = spool.id2solvable(p);
-                if (!spool.is_installed(solvable)) {
-                    available_unused_providers.push_back(solvable);
-                }
+                available_unused_providers_map.add_unsafe(p);
             }
         }
-        if (q.size() <= static_cast<int>(installonly_limit)) {
-            continue;
+    }
+
+    libdnf5::solv::IdQueue marked_for_install_providers;
+    for (const auto & pkg_id : marked_for_install_providers_map) {
+        marked_for_install_providers.push_back(pkg_id);
+    }
+
+    std::vector<Solvable *> available_unused_providers;
+    for (const auto & pkg_id : available_unused_providers_map) {
+        Solvable * solvable = spool.id2solvable(pkg_id);
+        if (!spool.is_installed(solvable)) {
+            available_unused_providers.push_back(solvable);
         }
-        for (int k = 0; k < q.size(); ++k) {
-            Id id = q[k];
-            Solvable * s = spool.id2solvable(id);
-            if (spool->installed != s->repo) {
-                installing.push_back(id);
-                break;
-            }
-        }
-        if (!installing.size()) {
+    }
+
+    const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
+    marked_for_install_providers.sort(&installonly_cmp, &installonly_cmp_data);
+    std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
+
+    libdnf5::solv::IdQueue same_names;
+    // For each set of `marked_for_install_providers` with the same name ensure at most `installonly_limit`
+    // are installed. Also for each name ensure `available_unused_providers` with that name are not installed.
+    while (!marked_for_install_providers.empty()) {
+        Id name = same_name_subqueue(spool, &marked_for_install_providers.get_queue(), &same_names.get_queue());
+        if (same_names.size() <= static_cast<int>(installonly_limit)) {
             continue;
         }
 
-        const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
-        q.sort(&installonly_cmp, &installonly_cmp_data);
-        std::sort(available_unused_providers.begin(), available_unused_providers.end(), name_solvable_cmp_key);
+        // We want to avoid reinstalling packages marked for ERASE, therefore
+        // if some unused provider is also available we need to mark it ERASE as well.
+        auto low = std::lower_bound(
+            available_unused_providers.begin(), available_unused_providers.end(), name, name_solvable_id_name_cmp_key);
+        while (low != available_unused_providers.end() && (*low)->name == name) {
+            job.push_back(SOLVER_ERASE | SOLVER_SOLVABLE, spool.solvable2id(*low));
+            ++low;
+        }
 
-        libdnf5::solv::IdQueue same_names;
-        while (q.size() > 0) {
-            same_name_subqueue(spool, &q.get_queue(), &same_names.get_queue());
-            if (same_names.size() <= static_cast<int>(installonly_limit)) {
-                continue;
+        reresolve = true;
+        for (int j = 0; j < same_names.size(); ++j) {
+            Id id = same_names[j];
+            Id action = SOLVER_ERASE;
+            if (j < static_cast<int>(installonly_limit)) {
+                action = SOLVER_INSTALL;
             }
-            reresolve = true;
-            for (int j = 0; j < same_names.size(); ++j) {
-                Id id = same_names[j];
-                Id action = SOLVER_ERASE;
-                if (j < static_cast<int>(installonly_limit)) {
-                    action = SOLVER_INSTALL;
-                } else {
-                    // We want to avoid reinstalling packages marked for ERASE, therefore
-                    // if some unused provider is also available we need to mark it ERASE as well.
-                    Solvable * solvable = spool.id2solvable(id);
-                    auto low = std::lower_bound(
-                        available_unused_providers.begin(),
-                        available_unused_providers.end(),
-                        solvable,
-                        nevra_solvable_cmp_key);
-                    while (low != available_unused_providers.end() && (*low)->name == solvable->name) {
-                        job.push_back(SOLVER_ERASE | SOLVER_SOLVABLE, spool.solvable2id(*low));
-                        ++low;
-                    }
-                }
-                job.push_back(action | SOLVER_SOLVABLE, id);
-            }
+
+            job.push_back(action | SOLVER_SOLVABLE, id);
         }
     }
     return reresolve;

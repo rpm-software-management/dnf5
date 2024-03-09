@@ -19,8 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo.hpp"
 
+#include "configuration.hpp"
 #include "dbus.hpp"
 #include "utils.hpp"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 #include <libdnf5/repo/repo.hpp>
@@ -28,8 +30,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <ranges>
 #include <string>
 
 namespace {
@@ -257,12 +261,32 @@ bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::
 void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_REPO,
+        "list",
+        "a{sv}",
+        {"options"},
+        "aa{sv}",
+        {"repositories"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::list, call, session.session_locale);
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_REPO, "confirm_key", "sb", "", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_REPO,
+        "confirm_key",
+        "sb",
+        {"key_id", "confirmed"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO, "enable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO, "disable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
         });
 }
 
@@ -338,5 +362,54 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     std::sort(out_repositories.begin(), out_repositories.end(), keyval_repo_compare);
     auto reply = call.createReply();
     reply << out_repositories;
+    return reply;
+}
+
+void Repo::enable_disable_repos(const std::vector<std::string> & ids, const bool enable) {
+    Configuration cfg(session);
+    cfg.read_configuration();
+
+    auto missing_ids = ids | std::views::filter([&](auto & id) { return !cfg.find_repo(id); });
+    if (!std::ranges::empty(missing_ids)) {
+        std::vector<std::string> missing_ids_vector = {std::begin(missing_ids), std::end(missing_ids)};
+        throw sdbus::Error(
+            dnfdaemon::ERROR_REPO_ID_UNKNOWN,
+            std::string("No matching repositories found for following ids: ") +
+                libdnf5::utils::string::join(missing_ids_vector, ","));
+    }
+
+    std::vector<std::string> changed_config_files;
+    for (auto & repoid : ids) {
+        auto repoinfo = cfg.find_repo(repoid);
+        if (repoinfo->repoconfig->get_enabled_option().get_value() != enable) {
+            auto parser = cfg.find_parser(repoinfo->file_path);
+            if (parser) {
+                parser->set_value(repoid, "enabled", enable ? "1" : "0");
+                changed_config_files.push_back(repoinfo->file_path);
+            }
+        }
+    }
+    for (auto & config_file : changed_config_files) {
+        try {
+            cfg.find_parser(config_file)->write(config_file, false);
+        } catch (std::exception & e) {
+            throw sdbus::Error(
+                dnfdaemon::ERROR_REPOCONF, std::string("Unable to write configuration file: ") + e.what());
+        }
+    }
+}
+
+sdbus::MethodReply Repo::enable_disable(sdbus::MethodCall && call, const bool & enable) {
+    auto sender = call.getSender();
+    std::vector<std::string> ids;
+    call >> ids;
+    auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
+    if (!is_authorized) {
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorized.");
+    }
+
+    enable_disable_repos(ids, enable);
+
+    auto reply = call.createReply();
     return reply;
 }
