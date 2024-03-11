@@ -84,6 +84,7 @@ Provides:       dnf5-command(system-upgrade)
 %else
 %bcond_without zchunk
 %endif
+%bcond_without systemd
 
 %bcond_with    html
 %if 0%{?rhel} == 8
@@ -136,9 +137,7 @@ BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
 BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
 BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 BuildRequires:  pkgconfig(rpm) >= 4.17.0
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
-BuildRequires:  systemd-devel
 BuildRequires:  toml11-static
 
 %if %{with clang}
@@ -163,6 +162,11 @@ BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 
 %if %{with zchunk}
 BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
+%endif
+
+%if %{with systemd}
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  systemd-devel
 %endif
 
 %if %{with html} || %{with man}
@@ -750,6 +754,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
     -DWITH_ZCHUNK=%{?with_zchunk:ON}%{!?with_zchunk:OFF} \
+    -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \
     -DWITH_MAN=%{?with_man:ON}%{!?with_man:OFF} \

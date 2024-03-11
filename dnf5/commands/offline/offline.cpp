@@ -30,7 +30,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
+
+#ifdef WITH_SYSTEMD
+#include <sdbus-c++/sdbus-c++.h>
 #include <systemd/sd-journal.h>
+#endif
 
 #include <cstdlib>
 #include <exception>
@@ -73,27 +77,6 @@ int call(const std::string & command, const std::vector<std::string> & args) {
 }
 
 namespace dnf5 {
-
-void offline::log_status(
-    const std::string & message,
-    const std::string & message_id,
-    const std::string & system_releasever,
-    const std::string & target_releasever) {
-    const auto & version = get_application_version();
-    const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
-    sd_journal_send(
-        "MESSAGE=%s",
-        message.c_str(),
-        "MESSAGE_ID=%s",
-        message_id.c_str(),
-        "SYSTEM_RELEASEVER=%s",
-        system_releasever.c_str(),
-        "TARGET_RELEASEVER=%s",
-        target_releasever.c_str(),
-        "DNF_VERSION=%s",
-        version_string.c_str(),
-        NULL);
-}
 
 /// Helper for displaying messages with Plymouth
 ///
@@ -239,7 +222,7 @@ void check_state(const dnf5::offline::OfflineTransactionState & state) {
     }
 }
 
-void reboot(bool poweroff = false) {
+void reboot([[maybe_unused]] bool poweroff = false) {
     const std::string systemd_destination_name{"org.freedesktop.systemd1"};
     const std::string systemd_object_path{"/org/freedesktop/systemd1"};
     const std::string systemd_manager_interface{"org.freedesktop.systemd1.Manager"};
@@ -249,6 +232,7 @@ void reboot(bool poweroff = false) {
         return;
     }
 
+#ifdef WITH_SYSTEMD
     poweroff = !poweroff;
     std::unique_ptr<sdbus::IConnection> connection;
     try {
@@ -263,6 +247,9 @@ void reboot(bool poweroff = false) {
     } else {
         proxy->callMethod("Reboot").onInterface(systemd_manager_interface);
     }
+#else
+    std::cerr << "Can't connect to D-Bus; this build of DNF 5 does not support D-Bus." << std::endl;
+#endif  // #ifdef WITH_SYSTEMD
 }
 
 void clean_datadir(Context & ctx, const std::filesystem::path & datadir) {
@@ -328,6 +315,7 @@ void OfflineRebootCommand::run() {
     state->write();
 
     dnf5::offline::log_status(
+        ctx,
         "Rebooting to perform offline transaction.",
         dnf5::offline::REBOOT_REQUESTED_ID,
         get_system_releasever(),
@@ -393,6 +381,7 @@ void OfflineExecuteCommand::run() {
     auto & ctx = get_context();
 
     dnf5::offline::log_status(
+        ctx,
         "Starting offline transaction. This will take a while.",
         dnf5::offline::OFFLINE_STARTED_ID,
         get_system_releasever(),
@@ -475,6 +464,7 @@ void OfflineExecuteCommand::run() {
 
     plymouth.message(_(transaction_complete_message.c_str()));
     dnf5::offline::log_status(
+        ctx,
         transaction_complete_message,
         dnf5::offline::OFFLINE_FINISHED_ID,
         get_system_releasever(),
@@ -504,6 +494,7 @@ struct BootEntry {
     std::string target_releasever;
 };
 
+#ifdef WITH_SYSTEMD
 std::string get_journal_field(sd_journal * journal, const std::string & field) {
     const char * data = nullptr;
     size_t length = 0;
@@ -586,6 +577,7 @@ void show_log(size_t boot_index) {
         throw libdnf5::cli::CommandExitError(1, M_("Unable to match systemd journal entry."));
     }
 }
+#endif  // #ifdef WITH_SYSTEMD
 
 void OfflineLogCommand::set_argument_parser() {
     OfflineSubcommand::set_argument_parser();
@@ -608,12 +600,17 @@ void OfflineLogCommand::set_argument_parser() {
 }
 
 void OfflineLogCommand::run() {
+#ifdef WITH_SYSTEMD
     if (number->get_value().empty()) {
         list_logs();
     } else {
         std::string number_string{number->get_value()};
         show_log(std::stoul(number_string) - 1);
     }
+#else
+    throw libdnf5::cli::CommandExitError(
+        1, M_("systemd is not supported in this build of DNF 5; the `log` subcommand is unavailable."));
+#endif
 }
 
 void OfflineStatusCommand::run() {

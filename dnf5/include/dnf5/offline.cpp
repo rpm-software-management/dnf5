@@ -23,6 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 
+#ifdef WITH_SYSTEMD
+#include <systemd/sd-journal.h>
+#endif
+
 namespace dnf5::offline {
 
 OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
@@ -48,6 +52,34 @@ void OfflineTransactionState::write() {
     auto file = libdnf5::utils::fs::File(path, "w");
     file.write(toml::format(toml::value{{STATE_HEADER, data}}));
     file.close();
+}
+
+void log_status(
+    Context & context,
+    const std::string & message,
+    [[maybe_unused]] const std::string & message_id,
+    [[maybe_unused]] const std::string & system_releasever,
+    [[maybe_unused]] const std::string & target_releasever) {
+    const auto & version = get_application_version();
+    const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
+
+    auto logger = context.base.get_logger();
+    logger->info(message);
+
+#ifdef WITH_SYSTEMD
+    sd_journal_send(
+        "MESSAGE=%s",
+        message.c_str(),
+        "MESSAGE_ID=%s",
+        message_id.c_str(),
+        "SYSTEM_RELEASEVER=%s",
+        system_releasever.c_str(),
+        "TARGET_RELEASEVER=%s",
+        target_releasever.c_str(),
+        "DNF_VERSION=%s",
+        version_string.c_str(),
+        NULL);
+#endif
 }
 
 }  // namespace dnf5::offline

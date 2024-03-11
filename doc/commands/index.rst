@@ -26,6 +26,7 @@ DNF5 Commands
     repoquery.8
     search.8
     swap.8
+    system-upgrade.8
     upgrade.8
     versionlock.8
 
