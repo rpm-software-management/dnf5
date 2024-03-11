@@ -25,8 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
-#include <sdbus-c++/sdbus-c++.h>
-#include <toml.hpp>
 
 const std::filesystem::path PATH_TO_PLYMOUTH{"/usr/bin/plymouth"};
 const std::filesystem::path PATH_TO_JOURNALCTL{"/usr/bin/journalctl"};

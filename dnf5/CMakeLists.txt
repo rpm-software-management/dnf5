@@ -34,11 +34,15 @@ target_link_libraries(dnf5 PRIVATE common libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
-pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
 
-target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES} ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
-
+if(WITH_SYSTEMD)
+  pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+  pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
+  add_definitions(-DWITH_SYSTEMD)
+  target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES} ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
+else()
+  target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES})
+endif()
 
 find_package(bash-completion)
 if(BASH_COMPLETION_FOUND)

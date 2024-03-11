@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
-#include <sdbus-c++/sdbus-c++.h>
-#include <systemd/sd-journal.h>
 #include <toml.hpp>
 
 namespace dnf5::offline {
@@ -83,6 +81,7 @@ private:
 };
 
 void log_status(
+    Context & context,
     const std::string & message,
     const std::string & message_id,
     const std::string & system_releasever,

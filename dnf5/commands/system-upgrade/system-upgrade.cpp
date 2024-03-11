@@ -30,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
-#include <systemd/sd-journal.h>
 
 #include <iostream>
 #include <string>
@@ -129,7 +128,7 @@ void SystemUpgradeDownloadCommand::run() {
               << std::endl;
 
     dnf5::offline::log_status(
-        "Download finished.", dnf5::offline::DOWNLOAD_FINISHED_ID, system_releasever, target_releasever);
+        ctx, "Download finished.", dnf5::offline::DOWNLOAD_FINISHED_ID, system_releasever, target_releasever);
 }
 
 }  // namespace dnf5
