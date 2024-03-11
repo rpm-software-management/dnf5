@@ -68,6 +68,8 @@ void UpgradeCommand::set_argument_parser() {
     create_allow_downgrade_options(*this);
     create_downloadonly_option(*this);
     create_destdir_option(*this);
+    auto & destdir = parser.get_named_arg("upgrade.destdir", false);
+    destdir.set_description(destdir.get_description() + " Automatically sets the --downloadonly option.");
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -93,6 +95,10 @@ void UpgradeCommand::configure() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+
+    if (!context.base.get_config().get_destdir_option().empty()) {
+        context.base.get_config().get_downloadonly_option().set(true);
+    }
 }
 
 void UpgradeCommand::run() {
