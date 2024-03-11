@@ -45,8 +45,12 @@ Options
 ``--allowerasing``
     | Allow erasing of installed packages to resolve any potential dependency problems.
 
+``--downloadonly``
+    | Only download packages for transaction.
+
 ``--destdir=<path>``
-    Set directory used for downloading packages to. Default location is to the current working directory.
+    | Set directory used for downloading packages to. Default location is to the current working directory.
+    | Automatically sets the ``downloadonly`` option.
 
 ``--skip-unavailable``
     | Allow skipping packages that are not possible to upgrade. All remaining packages will be upgraded.
