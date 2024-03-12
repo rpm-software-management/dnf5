@@ -65,7 +65,7 @@ void SystemUpgradeDownloadCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_description(_("Downloads everything needed to upgrade to a new release"));
+    cmd.set_description(_("Download everything needed to upgrade to a new release"));
 
     no_downgrade =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
