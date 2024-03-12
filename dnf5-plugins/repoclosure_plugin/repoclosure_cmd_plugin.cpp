@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repoclosure.hpp"
 
 #include <dnf5/iplugin.hpp>
+#include <libdnf5/defs.h>
 
 #include <iostream>
 
@@ -70,24 +71,25 @@ std::vector<std::unique_ptr<Command>> RepoclosureCmdPlugin::create_commands() {
 }  // namespace
 
 
-PluginAPIVersion dnf5_plugin_get_api_version(void) {
+PUBLIC_API PluginAPIVersion dnf5_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
-const char * dnf5_plugin_get_name(void) {
+PUBLIC_API const char * dnf5_plugin_get_name(void) {
     return PLUGIN_NAME;
 }
 
-PluginVersion dnf5_plugin_get_version(void) {
+PUBLIC_API PluginVersion dnf5_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version, Context & context) try {
+PUBLIC_API IPlugin * dnf5_plugin_new_instance(
+    [[maybe_unused]] ApplicationVersion application_version, Context & context) try {
     return new RepoclosureCmdPlugin(context);
 } catch (...) {
     return nullptr;
 }
 
-void dnf5_plugin_delete_instance(IPlugin * plugin_object) {
+PUBLIC_API void dnf5_plugin_delete_instance(IPlugin * plugin_object) {
     delete plugin_object;
 }
