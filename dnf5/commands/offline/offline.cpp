@@ -268,7 +268,7 @@ void OfflineRebootCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description(
-        _("Prepare the system to perform the offline transaction and reboots to start the transaction."));
+        _("Prepare the system to perform the offline transaction and reboot to start the transaction."));
 
     poweroff_after =
         dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
@@ -329,7 +329,7 @@ void OfflineExecuteCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_complete(false);
     cmd.set_description(_(
-        "Internal use only, not intended to be run by the user. Executes the transaction in the offline environment."));
+        "Internal use only, not intended to be run by the user. Execute the transaction in the offline environment."));
 }
 
 void OfflineExecuteCommand::pre_configure() {
@@ -611,6 +611,10 @@ void OfflineLogCommand::run() {
     throw libdnf5::cli::CommandExitError(
         1, M_("systemd is not supported in this build of DNF 5; the `log` subcommand is unavailable."));
 #endif
+}
+
+void OfflineStatusCommand::set_argument_parser() {
+    get_argument_parser_command()->set_description(_("Show status of the current offline transaction"));
 }
 
 void OfflineStatusCommand::run() {

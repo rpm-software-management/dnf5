@@ -365,6 +365,7 @@ Commands in detail:
     | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
     | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
     | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`
+    | :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
     | :manpage:`dnf5-provides(8)`, :ref:`Provides command <provides_command_ref-label>`
     | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
     | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
@@ -372,6 +373,7 @@ Commands in detail:
     | :manpage:`dnf5-repoquery(8)`, :ref:`Repoquery command <repoquery_command_ref-label>`
     | :manpage:`dnf5-search(8)`, :ref:`Search command <search_command_ref-label>`
     | :manpage:`dnf5-swap(8)`, :ref:`Swap command <swap_command_ref-label>`
+    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-upgrade command <system_upgrade_command_ref-label>`
     | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
 
 ..

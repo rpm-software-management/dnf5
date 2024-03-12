@@ -98,6 +98,7 @@ private:
 class OfflineStatusCommand : public OfflineSubcommand {
 public:
     explicit OfflineStatusCommand(Context & context) : OfflineSubcommand(context, "status") {}
+    void set_argument_parser() override;
     void run() override;
 };
 

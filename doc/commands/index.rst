@@ -19,6 +19,7 @@ DNF5 Commands
     leaves.8
     makecache.8
     mark.8
+    offline.8
     provides.8
     reinstall.8
     remove.8

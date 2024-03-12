@@ -87,6 +87,9 @@ Options
 ``--newpackage``
     | Consider only content contained in newpackage advisories.
 
+``--offline``
+    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+
 
 Examples
 ========
