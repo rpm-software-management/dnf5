@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
+#include <libdnf5/defs.h>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <sys/wait.h>
@@ -764,25 +765,25 @@ void Actions::on_transaction(
 
 }  // namespace
 
-PluginAPIVersion libdnf_plugin_get_api_version(void) {
+PUBLIC_API PluginAPIVersion libdnf_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
-const char * libdnf_plugin_get_name(void) {
+PUBLIC_API const char * libdnf_plugin_get_name(void) {
     return PLUGIN_NAME;
 }
 
-plugin::Version libdnf_plugin_get_version(void) {
+PUBLIC_API plugin::Version libdnf_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-plugin::IPlugin * libdnf_plugin_new_instance(
+PUBLIC_API plugin::IPlugin * libdnf_plugin_new_instance(
     [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
     return new Actions(base, parser);
 } catch (...) {
     return nullptr;
 }
 
-void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
+PUBLIC_API void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
     delete plugin_object;
 }
