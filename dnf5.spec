@@ -2,7 +2,7 @@
 %global project_version_minor 1
 %global project_version_patch 15
 
-%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 10]
+%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 11]
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
