@@ -45,6 +45,12 @@ using namespace libdnf5::cli;
 
 const std::string & ID_TO_IDENTIFY_BOOTS = dnf5::offline::OFFLINE_STARTED_ID;
 
+const std::string SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
+const std::string SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
+const std::string SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
+const std::string SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
+const std::string SYSTEMD_SERVICE_NAME{"dnf5-offline-transaction.service"};
+
 int call(const std::string & command, const std::vector<std::string> & args) {
     std::vector<char *> c_args;
     c_args.emplace_back(const_cast<char *>(command.c_str()));
@@ -192,6 +198,9 @@ OfflineSubcommand::OfflineSubcommand(Context & context, const std::string & name
 
 void OfflineSubcommand::configure() {
     auto & ctx = get_context();
+    // This value comes from systemd, see
+    // https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates or
+    // systemd.offline-updates(7).
     magic_symlink = "/system-update";
 
     const std::filesystem::path installroot = ctx.base.get_config().get_installroot_option().get_value();
@@ -223,10 +232,6 @@ void check_state(const dnf5::offline::OfflineTransactionState & state) {
 }
 
 void reboot([[maybe_unused]] bool poweroff = false) {
-    const std::string systemd_destination_name{"org.freedesktop.systemd1"};
-    const std::string systemd_object_path{"/org/freedesktop/systemd1"};
-    const std::string systemd_manager_interface{"org.freedesktop.systemd1.Manager"};
-
     if (std::getenv("DNF_SYSTEM_UPGRADE_NO_REBOOT")) {
         std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not rebooting." << std::endl;
         return;
@@ -241,11 +246,11 @@ void reboot([[maybe_unused]] bool poweroff = false) {
         const std::string error_message{ex.what()};
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
-    auto proxy = sdbus::createProxy(systemd_destination_name, systemd_object_path);
+    auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
     if (poweroff) {
-        proxy->callMethod("Poweroff").onInterface(systemd_manager_interface);
+        proxy->callMethod("Poweroff").onInterface(SYSTEMD_MANAGER_INTERFACE);
     } else {
-        proxy->callMethod("Reboot").onInterface(systemd_manager_interface);
+        proxy->callMethod("Reboot").onInterface(SYSTEMD_MANAGER_INTERFACE);
     }
 #else
     std::cerr << "Can't connect to D-Bus; this build of DNF 5 does not support D-Bus." << std::endl;
@@ -290,8 +295,32 @@ void OfflineRebootCommand::run() {
         throw libdnf5::cli::CommandExitError(1, M_("System is not ready for offline transaction."));
     }
     if (!std::filesystem::is_directory(get_datadir())) {
-        throw libdnf5::cli::CommandExitError(1, M_("data directory {} does not exist"), get_datadir().string());
+        throw libdnf5::cli::CommandExitError(1, M_("Data directory {} does not exist."), get_datadir().string());
     }
+
+#ifdef WITH_SYSTEMD
+    // Check that dnf5-offline-transaction.service is present and wanted by system-update.target
+    std::unique_ptr<sdbus::IConnection> connection;
+    try {
+        connection = sdbus::createSystemBusConnection();
+    } catch (const sdbus::Error & ex) {
+        const std::string error_message{ex.what()};
+        throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
+    }
+    auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+
+    sdbus::ObjectPath unit_object_path;
+    systemd_proxy->callMethod("LoadUnit")
+        .onInterface(SYSTEMD_MANAGER_INTERFACE)
+        .withArguments("system-update.target")
+        .storeResultsTo(unit_object_path);
+
+    auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
+    const std::vector<std::string> & wants = unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE);
+    if (std::find(wants.begin(), wants.end(), SYSTEMD_SERVICE_NAME) == wants.end()) {
+        throw libdnf5::cli::CommandExitError(1, M_("{} is not wanted by system-update.target."), SYSTEMD_SERVICE_NAME);
+    }
+#endif
 
     if (state->get_data().verb == "system-upgrade download") {
         std::cout << _("The system will now reboot to upgrade to release version ")
@@ -396,8 +425,7 @@ void OfflineExecuteCommand::run() {
         throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
     }
 
-    const auto & symlinked_path = std::filesystem::read_symlink(get_magic_symlink());
-    if (symlinked_path != get_datadir()) {
+    if (!std::filesystem::equivalent(get_magic_symlink(), get_datadir())) {
         throw libdnf5::cli::CommandExitError(0, M_("Another offline transaction tool is running. Exiting."));
     }
 

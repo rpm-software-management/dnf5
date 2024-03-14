@@ -123,9 +123,7 @@ void SystemUpgradeDownloadCommand::run() {
     ctx.set_should_store_offline(true);
     ctx.download_and_run(transaction);
 
-    std::cout << _("Download complete! Use `dnf5 system-upgrade reboot` to start the upgrade.\n"
-                   "To cancel the upgrade and delete the downloaded upgrade files, use `dnf5 system-upgrade clean`.")
-              << std::endl;
+    std::cout << _("Download complete!") << std::endl;
 
     dnf5::offline::log_status(
         ctx, "Download finished.", dnf5::offline::DOWNLOAD_FINISHED_ID, system_releasever, target_releasever);

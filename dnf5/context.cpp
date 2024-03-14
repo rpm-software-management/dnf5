@@ -451,7 +451,8 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     if (should_store_offline) {
         store_offline(transaction);
         std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
-                     "transaction."
+                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+                     "offline clean`."
                   << std::endl;
     }
 }
