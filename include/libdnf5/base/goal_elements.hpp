@@ -157,7 +157,7 @@ enum class GoalAction {
 LIBDNF_API std::string goal_action_to_string(GoalAction action);
 
 /// Check whether the action is a replay action
-bool goal_action_is_replay(GoalAction action);
+LIBDNF_API bool goal_action_is_replay(GoalAction action);
 
 /// Settings for GoalJobSettings
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
