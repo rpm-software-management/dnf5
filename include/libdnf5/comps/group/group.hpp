@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <set>
@@ -46,7 +47,7 @@ public:
 
 
 // @replaces dnf:dnf/comps.py:class:Group
-class Group {
+class LIBDNF_API Group {
 public:
     ~Group();
 
@@ -158,9 +159,9 @@ protected:
 private:
     friend class GroupQuery;
 
-    void add_group_id(const GroupId & group_id);
+    LIBDNF_LOCAL void add_group_id(const GroupId & group_id);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

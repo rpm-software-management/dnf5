@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_set_iterator.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <cstddef>
 #include <memory>
@@ -38,7 +39,7 @@ class SolvMap;
 
 namespace libdnf5::advisory {
 
-class AdvisorySet {
+class LIBDNF_API AdvisorySet {
 public:
     using iterator = AdvisorySetIterator;
 
@@ -128,8 +129,8 @@ public:
 private:
     friend AdvisorySetIterator;
     friend class AdvisoryQuery;
-    AdvisorySet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
-    class Impl;
+    LIBDNF_LOCAL AdvisorySet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

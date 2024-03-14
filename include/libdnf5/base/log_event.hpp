@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/solver_problems.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_type.hpp"
 
 #include <optional>
@@ -33,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::base {
 
 /// Contain information, hint, or a problem created during libdnf5::Goal::resolve()
-class LogEvent {
+class LIBDNF_API LogEvent {
 public:
     /// Public constructor
     LogEvent(
@@ -70,7 +71,7 @@ public:
 
 private:
     /// Convert an element from resolve log to string;
-    static std::string to_string(
+    LIBDNF_LOCAL static std::string to_string(
         libdnf5::GoalAction action,
         libdnf5::GoalProblem problem,
         const std::set<std::string> & additional_data,
@@ -79,7 +80,7 @@ private:
         const std::optional<std::string> & spec,
         const std::optional<SolverProblems> & solver_problems);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

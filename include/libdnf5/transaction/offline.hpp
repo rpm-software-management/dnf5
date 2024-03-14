@@ -20,7 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_TRANSACTION_OFFLINE_HPP
 #define LIBDNF5_TRANSACTION_OFFLINE_HPP
 
-#include <libdnf5/conf/const.hpp>
+#include "libdnf5/conf/const.hpp"
+#include "libdnf5/defs.h"
 
 #include <filesystem>
 #include <memory>
@@ -52,7 +53,7 @@ class OfflineTransactionState;
 
 /// Data of the initiated offline transaction state, by default stored in the
 /// /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml file.
-struct OfflineTransactionStateData {
+struct LIBDNF_API OfflineTransactionStateData {
 public:
     friend OfflineTransactionState;
 
@@ -103,13 +104,13 @@ public:
     const std::string & get_module_platform_id() const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
 
 /// Class to handle offline transaction state.
-class OfflineTransactionState {
+class LIBDNF_API OfflineTransactionState {
 public:
     OfflineTransactionState() = delete;
     ~OfflineTransactionState();
@@ -133,9 +134,9 @@ public:
     std::filesystem::path get_path() const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     /// Read offline transaction state data from the file
-    void read();
+    LIBDNF_LOCAL void read();
     std::unique_ptr<Impl> p_impl;
 };
 

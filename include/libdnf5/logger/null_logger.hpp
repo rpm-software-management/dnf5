@@ -22,12 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "logger.hpp"
 
+#include "libdnf5/defs.h"
 
 namespace libdnf5 {
 
 /// NullLogger is an implementation of logging class that discards all incoming logging messages.
 /// It can be used in case when no logs are needed.
-class NullLogger : public Logger {
+class LIBDNF_API NullLogger : public Logger {
 public:
     explicit NullLogger();
     ~NullLogger() override;

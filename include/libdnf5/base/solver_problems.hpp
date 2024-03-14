@@ -24,11 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_elements.hpp"
 
+#include "libdnf5/defs.h"
 
 namespace libdnf5::base {
 
 /// Represent problems detected by a RPM solver (libsolv)
-class SolverProblems {
+class LIBDNF_API SolverProblems {
 public:
     /// Public constructor
     SolverProblems(
@@ -61,7 +62,7 @@ public:
 private:
     friend class Transaction;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

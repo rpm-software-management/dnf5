@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_BASE_TRANSACTION_PACKAGE_HPP
 
 #include "libdnf5/base/transaction.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
@@ -35,7 +36,7 @@ class RpmTransactionTest;
 namespace libdnf5::base {
 
 /// Describe transaction operation related to rpm Package
-class TransactionPackage {
+class LIBDNF_API TransactionPackage {
 public:
     using Action = transaction::TransactionItemAction;
     using Reason = transaction::TransactionItemReason;
@@ -82,14 +83,14 @@ private:
     friend class ::BaseGoalTest;
     friend class ::RpmTransactionTest;
 
-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason);
+    LIBDNF_LOCAL TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason);
 
-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state);
+    LIBDNF_LOCAL TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state);
 
-    TransactionPackage(
+    LIBDNF_LOCAL TransactionPackage(
         const libdnf5::rpm::Package & pkg, Action action, Reason reason, const std::optional<std::string> & group_id);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

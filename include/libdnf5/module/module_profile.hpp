@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_PROFILE_HPP
 #define LIBDNF5_MODULE_MODULE_PROFILE_HPP
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -31,7 +33,7 @@ namespace libdnf5::module {
 
 
 // @replaces libdnf:module:modulemd/ModuleProfile.hpp:class:ModuleProfile
-class ModuleProfile {
+class LIBDNF_API ModuleProfile {
 public:
     /// @return The profile name.
     /// @since 5.0
@@ -69,9 +71,9 @@ private:
     friend class ModuleItem;
 
     // @replaces libdnf:module:modulemd/ModuleProfile.hpp:ctor:ModuleProfile.ModuleProfile(ModulemdProfile * profile)
-    ModuleProfile(_ModulemdProfile * profile, const bool is_default);
+    LIBDNF_LOCAL ModuleProfile(_ModulemdProfile * profile, const bool is_default);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

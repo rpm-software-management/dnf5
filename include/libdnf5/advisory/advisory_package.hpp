@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory.hpp"
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <vector>
 
@@ -41,7 +42,7 @@ class Goal;
 
 namespace libdnf5::advisory {
 
-class AdvisoryPackage {
+class LIBDNF_API AdvisoryPackage {
 public:
     AdvisoryPackage(const AdvisoryPackage & src);
     AdvisoryPackage(AdvisoryPackage && src) noexcept;
@@ -124,8 +125,8 @@ private:
     friend class libdnf5::rpm::PackageQuery;
     friend class libdnf5::Goal;
 
-    class Impl;
-    AdvisoryPackage(Impl * private_pkg);
+    class LIBDNF_LOCAL Impl;
+    LIBDNF_LOCAL AdvisoryPackage(Impl * private_pkg);
     ImplPtr<Impl> p_impl;
 };
 

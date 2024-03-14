@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/solver_problems.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
 
@@ -56,7 +57,7 @@ class RepoSack;
 namespace libdnf5::module {
 
 /// Container with data and methods related to modules
-class ModuleSack {
+class LIBDNF_API ModuleSack {
 public:
     ~ModuleSack();
 
@@ -94,13 +95,13 @@ private:
     friend class ModuleGoalPrivate;
     friend class ModuleQuery;
 
-    ModuleSack(const BaseWeakPtr & base);
+    LIBDNF_LOCAL ModuleSack(const BaseWeakPtr & base);
 
-    BaseWeakPtr get_base() const;
+    LIBDNF_LOCAL BaseWeakPtr get_base() const;
 
     /// Load information about modules from file to ModuleSack. It is critical to load all module information from
     /// all available repositories when modular metadata are available.
-    void add(const std::string & file_content, const std::string & repo_id);
+    LIBDNF_LOCAL void add(const std::string & file_content, const std::string & repo_id);
 
     // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
     //                 They are added with priority 1000 after everything else is loaded.
@@ -109,13 +110,13 @@ private:
     //
     // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.addDefaultsFromDisk()
     // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.moduleDefaultsResolve()
-    void add_defaults_from_disk();
+    LIBDNF_LOCAL void add_defaults_from_disk();
 
     WeakPtrGuard<ModuleSack, false> data_guard;
 
     bool active_modules_resolved = false;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 #include "libdnf5/transaction/transaction_item_state.hpp"
@@ -30,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::base {
 
-class TransactionEnvironment {
+class LIBDNF_API TransactionEnvironment {
 public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
@@ -67,9 +68,10 @@ public:
 private:
     friend class Transaction::Impl;
 
-    TransactionEnvironment(const libdnf5::comps::Environment & grp, Action action, Reason reason, bool with_optional);
+    LIBDNF_LOCAL TransactionEnvironment(
+        const libdnf5::comps::Environment & grp, Action action, Reason reason, bool with_optional);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

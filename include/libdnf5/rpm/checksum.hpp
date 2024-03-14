@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_CHECKSUM_HPP
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <string>
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::rpm {
 
 /// Class contains checksum and checksum type
-class Checksum {
+class LIBDNF_API Checksum {
 public:
     ~Checksum();
     Checksum(const Checksum & src);
@@ -50,9 +51,9 @@ private:
     friend class Package;
 
     /// Require checksum in hex and libsolv checksum type
-    Checksum(const char * checksum, int libsolv_type);
+    LIBDNF_LOCAL Checksum(const char * checksum, int libsolv_type);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

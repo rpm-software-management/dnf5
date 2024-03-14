@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set_iterator.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <cstddef>
 #include <memory>
@@ -45,7 +46,7 @@ class SolvMap;
 namespace libdnf5::rpm {
 
 // @replaces libdnf:sack/packageset.hpp:struct:PackageSet
-class PackageSet {
+class LIBDNF_API PackageSet {
 public:
     using iterator = PackageSetIterator;
 
@@ -161,8 +162,10 @@ private:
     friend class libdnf5::advisory::AdvisoryPackage;
 
     friend libdnf5::Goal;
-    PackageSet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
-    class Impl;
+
+    LIBDNF_LOCAL PackageSet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
+
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

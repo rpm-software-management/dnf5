@@ -48,7 +48,7 @@ public:
 
 /// Maps the options names (text names read from config file, command line, ...) to options objects.
 /// Supports user defined functions for processing new value and converting value to string.
-class OptionBinds {
+class LIBDNF_API OptionBinds {
 public:
     /// Extends the option with user-defined functions for processing a new value and converting value to a string.
     /// It is used as additional level of processing when the option is accessed by its text name.
@@ -66,10 +66,11 @@ public:
     private:
         friend class OptionBinds;
 
-        Item(Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value);
-        explicit Item(Option & option);
+        LIBDNF_LOCAL Item(
+            Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value);
+        LIBDNF_LOCAL explicit Item(Option & option);
 
-        class Impl;
+        class LIBDNF_LOCAL Impl;
         ImplPtr<Impl> p_impl;
     };
 
@@ -102,7 +103,7 @@ public:
     const_iterator find(const std::string & id) const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

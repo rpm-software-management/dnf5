@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/option_child.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::repo {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
-class ConfigRepo : public Config {
+class LIBDNF_API ConfigRepo : public Config {
 public:
     ConfigRepo(ConfigMain & main_config, const std::string & id);
     ~ConfigRepo();
@@ -165,7 +166,7 @@ public:
         Option::Priority priority = Option::Priority::REPOCONFIG) override;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/rpm/package.hpp"
@@ -55,7 +56,7 @@ class RepoDownloader;
 /// RPM repository
 /// Represents a repository used to download packages.
 /// Remote metadata is cached locally.
-class Repo {
+class LIBDNF_API Repo {
 public:
     enum class Type { AVAILABLE, SYSTEM, COMMANDLINE };
 
@@ -312,7 +313,7 @@ public:
     static std::string type_to_string(Type type);
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     friend class RepoSack;
     friend class rpm::Package;
     friend class rpm::PackageSack;
@@ -323,13 +324,13 @@ private:
     /// Loads the repository objects into sacks.
     ///
     /// Also writes the libsolv's solv/solvx cache files.
-    void load();
+    LIBDNF_LOCAL void load();
 
     /// Downloads repository metadata.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
-    void download_metadata(const std::string & destdir);
+    LIBDNF_LOCAL void download_metadata(const std::string & destdir);
 
-    void add_libsolv_testcase(const std::string & path);
+    LIBDNF_LOCAL void add_libsolv_testcase(const std::string & path);
 
     /// Adds an RPM package at `path` to the repository.
     ///
@@ -341,38 +342,38 @@ private:
     /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
     /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
     /// @return PackageId of the added package.
-    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
+    LIBDNF_LOCAL libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
 
-    void make_solv_repo();
+    LIBDNF_LOCAL void make_solv_repo();
 
-    void load_available_repo();
-    void load_system_repo();
+    LIBDNF_LOCAL void load_available_repo();
+    LIBDNF_LOCAL void load_system_repo();
 
-    void internalize();
+    LIBDNF_LOCAL void internalize();
 
     /// If the repository is not already marked as expired, it checks for the presence of the repository cache
     /// expiration attribute, and if the metadata_expire configuration value is set, also checks the modification times
     /// of the main configuration file, the repository configuration file, and the cached primary file.
     /// Depending on the result, the repository may be marked as expired.
-    void recompute_expired();
+    LIBDNF_LOCAL void recompute_expired();
 
     /// @brief  Clones repodata and solv files from the root cache. The original user repository cache is deleted.
     ///         The intended use case is for cloning the root cache when the user one is invalid or empty.
     /// @return Whether at least the repodata cache cloning was successful.
-    bool clone_root_metadata();
+    LIBDNF_LOCAL bool clone_root_metadata();
 
-    RepoDownloader & get_downloader() const;
+    LIBDNF_LOCAL RepoDownloader & get_downloader() const;
 
-    bool is_loaded() const;
+    LIBDNF_LOCAL bool is_loaded() const;
 
     /// Requires that the repo is loaded
-    SolvRepo & get_solv_repo() const;
+    LIBDNF_LOCAL SolvRepo & get_solv_repo() const;
 
     /// Mark this repository as fresh (it is not expired).
-    void mark_fresh();
+    LIBDNF_LOCAL void mark_fresh();
 
     // Add xml comps file at `path` to the repository.
-    void add_xml_comps(const std::string & path);
+    LIBDNF_LOCAL void add_xml_comps(const std::string & path);
 
     std::unique_ptr<Impl> p_impl;
 };

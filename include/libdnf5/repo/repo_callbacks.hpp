@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_REPO_CALLBACKS_HPP
 #define LIBDNF5_REPO_REPO_CALLBACKS_HPP
 
+#include "libdnf5/defs.h"
+
 #include <string>
 #include <vector>
 
@@ -32,7 +34,7 @@ namespace libdnf5::repo {
 
 /// Base class for repository callbacks.
 /// To implement callbacks, inherit from this class and override virtual methods.
-class RepoCallbacks {
+class LIBDNF_API RepoCallbacks {
 public:
     explicit RepoCallbacks();
     RepoCallbacks(const RepoCallbacks &) = delete;

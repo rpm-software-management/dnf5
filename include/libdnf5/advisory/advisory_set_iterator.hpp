@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <cstddef>
 #include <iterator>
 #include <memory>
@@ -33,7 +35,7 @@ namespace libdnf5::advisory {
 class AdvisorySet;
 
 
-class AdvisorySetIterator {
+class LIBDNF_API AdvisorySetIterator {
 public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -61,9 +63,9 @@ public:
     void end();
 
 private:
-    explicit AdvisorySetIterator(const AdvisorySet & advisory_set);
+    LIBDNF_LOCAL explicit AdvisorySetIterator(const AdvisorySet & advisory_set);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

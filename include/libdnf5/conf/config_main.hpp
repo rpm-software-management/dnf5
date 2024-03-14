@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 /// Holds global configuration
-class ConfigMain : public Config {
+class LIBDNF_API ConfigMain : public Config {
 public:
     ConfigMain();
     ~ConfigMain();
@@ -297,7 +297,7 @@ public:
         Option::Priority priority = Option::Priority::MAINCONFIG) override;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

@@ -20,13 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_UTILS_LOCKER_HPP
 #define LIBDNF5_UTILS_LOCKER_HPP
 
+#include "libdnf5/defs.h"
+
 #include <string>
 
 namespace libdnf5::utils {
 
 /// Object for implementing a simple file mutex mechanism
 /// or checking read/write access on a given path.
-class Locker {
+class LIBDNF_API Locker {
 public:
     /// Create a Locker object at a given path
     explicit Locker(const std::string & path);
@@ -47,7 +49,7 @@ public:
     void unlock();
 
 private:
-    bool lock(short int type);
+    LIBDNF_LOCAL bool lock(short int type);
 
     std::string path;
     int lock_fd{-1};

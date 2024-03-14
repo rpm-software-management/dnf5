@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item_reason.hpp"
 #include "transaction_item_state.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <string>
 
 
@@ -41,7 +43,7 @@ class CompsGroupPackageDbUtils;
 class CompsEnvironmentGroupDbUtils;
 
 
-class TransactionItem {
+class LIBDNF_API TransactionItem {
 public:
     using Action = TransactionItemAction;
     using Reason = TransactionItemReason;
@@ -85,57 +87,57 @@ private:
     friend CompsGroupPackageDbUtils;
     friend CompsEnvironmentGroupDbUtils;
 
-    explicit TransactionItem(const Transaction & trans);
+    LIBDNF_LOCAL explicit TransactionItem(const Transaction & trans);
 
     /// Get database id (primary key) of the transaction item (table 'trans_item')
-    int64_t get_id() const noexcept;
+    LIBDNF_LOCAL int64_t get_id() const noexcept;
 
     /// Set database id (primary key) of the transaction item (table 'trans_item')
-    void set_id(int64_t value);
+    LIBDNF_LOCAL void set_id(int64_t value);
 
     /// Set action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setAction(libdnf::TransactionItemAction value)
-    void set_action(Action value);
+    LIBDNF_LOCAL void set_action(Action value);
 
     /// Get name of the action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getActionName()
-    std::string get_action_name();
+    LIBDNF_LOCAL std::string get_action_name();
 
     /// Get abbreviated name of the action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getActionShort()
-    std::string get_action_short();
+    LIBDNF_LOCAL std::string get_action_short();
 
     /// Set reason of the action associated with the transaction item in the transaction
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
-    void set_reason(Reason value);
+    LIBDNF_LOCAL void set_reason(Reason value);
 
     /// Set transaction item state
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setState(libdnf::TransactionItemState value)
-    void set_state(State value);
+    LIBDNF_LOCAL void set_state(State value);
 
     /// Get transaction item repoid (text identifier of a repository)
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setRepoid(const std::string & value)
-    void set_repoid(const std::string & value);
+    LIBDNF_LOCAL void set_repoid(const std::string & value);
 
     /// Has the item appeared on the system during the transaction?
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.isForwardAction()
-    bool is_inbound_action() const;
+    LIBDNF_LOCAL bool is_inbound_action() const;
 
     /// Has the item got removed from the system during the transaction?
     ///
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.isBackwardAction()
-    bool is_outbound_action() const;
+    LIBDNF_LOCAL bool is_outbound_action() const;
 
     // TODO(dmach): Reimplement in Package class; it's most likely not needed in Comps{Group,Environment}
     // std::vector< TransactionItemPtr > replacedBy;
-    const Transaction & get_transaction() const;
+    LIBDNF_LOCAL const Transaction & get_transaction() const;
 
     // TODO(dmach): Reimplement in Package class
     //const std::vector< TransactionItemPtr > &getReplacedBy() const noexcept { return replacedBy; }
@@ -146,12 +148,12 @@ private:
     //void saveState();
 
     /// Get database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    int64_t get_item_id() const noexcept;
+    LIBDNF_LOCAL int64_t get_item_id() const noexcept;
 
     /// Set database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    void set_item_id(int64_t value);
+    LIBDNF_LOCAL void set_item_id(int64_t value);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_DEPENDENCY_HPP
 #define LIBDNF5_MODULE_MODULE_DEPENDENCY_HPP
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -27,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::module {
 
 
-class ModuleDependency {
+class LIBDNF_API ModuleDependency {
 public:
     ModuleDependency(const std::string & module_name, const std::vector<std::string> & streams);
 
@@ -53,7 +55,7 @@ public:
     std::string to_string();
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

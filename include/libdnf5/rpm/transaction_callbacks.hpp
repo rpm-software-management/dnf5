@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_TRANSACTION_CALLBACKS_HPP
 #define LIBDNF5_RPM_TRANSACTION_CALLBACKS_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/nevra.hpp"
 
 #include <cstdint>
@@ -40,7 +41,7 @@ using TransactionItem = base::TransactionPackage;
 
 /// Base class for Transaction callbacks
 /// User implements Transaction callbacks by inheriting this class and overriding its methods.
-class TransactionCallbacks {
+class LIBDNF_API TransactionCallbacks {
 public:
     /// Scriptlet type
     // TODO(jrohel): Are all scriptlets types present and correct?

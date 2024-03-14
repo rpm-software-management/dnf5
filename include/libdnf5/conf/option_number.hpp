@@ -31,7 +31,7 @@ namespace libdnf5 {
 /// Support default value, minimal and maximal values, user defined function for conversion from string.
 // @replaces libdnf:conf/OptionNumber.hpp:class:OptionNumber<T>
 template <typename T>
-class OptionNumber : public Option {
+class LIBDNF_API OptionNumber : public Option {
 public:
     using ValueType = T;
     using FromStringFunc = std::function<ValueType(const std::string &)>;
@@ -109,7 +109,7 @@ public:
     std::string to_string(ValueType value) const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

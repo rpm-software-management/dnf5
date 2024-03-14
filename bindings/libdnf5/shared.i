@@ -21,3 +21,9 @@
     // be renamed to Perl_get_context
     #undef get_context
 %}
+
+
+// Define empty macros. They are used to define the visibility of symbols.
+#define LIBDNF_API
+#define LIBDNF_LOCAL
+#define LIBDNF_PLUGIN_API

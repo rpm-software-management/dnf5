@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "logger.hpp"
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <vector>
@@ -32,7 +33,7 @@ namespace libdnf5 {
 
 /// LogRouter is an implementation of logging class that forwards incoming logging messages to several other loggers.
 /// Loggers can be addressed via index. Index is serial number of the logger starting from zero.
-class LogRouter : public Logger {
+class LIBDNF_API LogRouter : public Logger {
 public:
     /// Constructs a new LogRouter instance with an empty set of destination loggers.
     explicit LogRouter();
@@ -67,7 +68,7 @@ public:
         const std::string & message) noexcept override;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 
