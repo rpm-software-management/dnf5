@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/nsvcap.hpp"
 
@@ -34,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::module {
 
 // TODO(pkratoch): Store pointers to ModuleItems instead of ModuleItems to allow faster copying
-class ModuleQuery : public libdnf5::sack::Query<ModuleItem> {
+class LIBDNF_API ModuleQuery : public libdnf5::sack::Query<ModuleItem> {
 public:
     /// Create a new ModuleQuery instance.
     ///
@@ -181,7 +182,7 @@ public:
 private:
     friend ModuleItem;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

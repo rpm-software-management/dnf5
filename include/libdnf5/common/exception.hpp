@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_COMMON_EXCEPTION_HPP
 #define LIBDNF5_COMMON_EXCEPTION_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-common.h"
 #include "libdnf5/utils/format.hpp"
 
@@ -81,7 +82,7 @@ struct SourceLocation {
 /// An AssertionError is a fault in the program logic, it is thrown when an
 /// incorrect sequence of actions has led to an invalid state in which it is
 /// impossible to continue running the program.
-class AssertionError : public std::logic_error {
+class LIBDNF_API AssertionError : public std::logic_error {
 public:
     explicit AssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
 
@@ -106,7 +107,7 @@ private:
 /// into a standard runtime exception which could be handled,
 /// whereas with the previous `AssertionError` exception the process
 /// is terminated and the system state is captured for debugging purposes.
-class UserAssertionError : public std::logic_error {
+class LIBDNF_API UserAssertionError : public std::logic_error {
 public:
     explicit UserAssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
 
@@ -143,7 +144,7 @@ concept AllowedErrorArgTypes =
 /// `get_domain_name()` should always return the exception's class name and its
 /// namespace (including enclosing class names in case the exception is nested in
 /// other classes) respectively.
-class Error : public std::runtime_error {
+class LIBDNF_API Error : public std::runtime_error {
 public:
     /// A constructor that supports formatting the error message.
     ///
@@ -175,7 +176,7 @@ protected:
 
 
 /// An exception class for system errors represented by the `errno` error code.
-class SystemError : public Error {
+class LIBDNF_API SystemError : public Error {
 public:
     /// Constructs the error from the `errno` error code and generates the
     /// message from the system error description.
@@ -212,7 +213,7 @@ private:
 };
 
 /// An exception class for file system errors represented by the `errno` error code and a path.
-class FileSystemError : public Error {
+class LIBDNF_API FileSystemError : public Error {
 public:
     /// Constructs the error from the `errno` error code, filesystem path and a formatted message.
     /// The formatted message is prepended to the generated system error message.
@@ -243,7 +244,7 @@ private:
 
 // TODO(lukash) This class is used throughout the code where more specific exceptions should be thrown.
 // Kept as a reminder to replace all those with the correct exception classes.
-class RuntimeError : public Error {
+class LIBDNF_API RuntimeError : public Error {
 public:
     using Error::Error;
     const char * get_name() const noexcept override { return "RuntimeError"; }
@@ -258,7 +259,7 @@ enum FormatDetailLevel {
 
 /// Formats the error message of an exception.
 /// If the exception is nested, recurses to format the message of the exception it holds.
-std::string format(const std::exception & e, FormatDetailLevel detail);
+LIBDNF_API std::string format(const std::exception & e, FormatDetailLevel detail);
 
 }  // namespace libdnf5
 

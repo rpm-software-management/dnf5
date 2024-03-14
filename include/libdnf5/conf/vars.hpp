@@ -42,7 +42,7 @@ class ReadOnlyVariableError : public Error {
 ///
 /// The class loads the variables from the environment as well as from a list
 /// of directories.
-struct Vars {
+struct LIBDNF_API Vars {
 public:
     enum class Priority {
         DEFAULT = 10,
@@ -123,12 +123,12 @@ private:
     ///
     /// @param installroot The path to the installroot
     /// @param directories The directories to load vars from
-    void load(const std::string & installroot, const std::vector<std::string> & directories);
+    LIBDNF_LOCAL void load(const std::string & installroot, const std::vector<std::string> & directories);
 
     /// @brief Detects the system's arch, basearch and relesever.
     ///
     /// @param installroot The installroot directory
-    void detect_vars(const std::string & installroot);
+    LIBDNF_LOCAL void detect_vars(const std::string & installroot);
 
     /// @brief Loads DNF vars from a directory.
     ///
@@ -137,13 +137,13 @@ private:
     /// file's contents.
     ///
     /// @param directory Path to a directory with DNF vars
-    void load_from_dir(const std::string & directory);
+    LIBDNF_LOCAL void load_from_dir(const std::string & directory);
 
     /// @brief Loads DNF vars from the environment.
     ///
     /// Reads environment variables that match "DNF[0-9]" and
     /// "DNF_VAR_[A-Za-z0-9_]+" patterns. The "DNF_VAR_" prefix is cut off.
-    void load_from_env();
+    LIBDNF_LOCAL void load_from_env();
 
     /// @brief Set a variable to a value, only obtaining the value if needed using `get_value`
     ///
@@ -151,7 +151,7 @@ private:
     /// @param get_value Function that returns the (optional) value for the variable
     /// @param prio Source/Priority of the value
     /// @throw ReadOnlyVariableError if the variable is read-only
-    void set_lazy(
+    LIBDNF_LOCAL void set_lazy(
         const std::string & name,
         const std::function<const std::unique_ptr<const std::string>()> & get_value,
         Priority prio);
@@ -161,15 +161,15 @@ private:
     /// @param text String with variable expressions
     /// @param depth The recursive depth
     /// @return Pair of the resulting string and the number of characters scanned in `text`
-    std::pair<std::string, size_t> substitute_expression(std::string_view text, unsigned int depth) const;
+    LIBDNF_LOCAL std::pair<std::string, size_t> substitute_expression(std::string_view text, unsigned int depth) const;
 
     /// @brief Split releasever on the first "." into its "major" and "minor" components
     ///
     /// @param releasever A releasever string, possibly containing a "."
     /// @return releasever_major, releasever_minor
-    static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
+    LIBDNF_LOCAL static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

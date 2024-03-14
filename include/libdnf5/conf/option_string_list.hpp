@@ -36,7 +36,7 @@ namespace libdnf5 {
 /// Support default value, and check of an input value using the regular expression.
 // @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
 template <typename T, bool IsAppend = false>
-class OptionStringContainer : public Option {
+class LIBDNF_API OptionStringContainer : public Option {
 public:
     using ValueType = T;
 
@@ -116,10 +116,10 @@ protected:
     void test_item(const std::string & item) const;
 
 private:
-    void init_regex_matcher();
-    void test_item_worker(const std::string & item) const;
+    LIBDNF_LOCAL void init_regex_matcher();
+    LIBDNF_LOCAL void test_item_worker(const std::string & item) const;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

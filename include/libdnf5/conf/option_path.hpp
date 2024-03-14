@@ -36,7 +36,7 @@ public:
 /// Option that stores file/directory path.
 /// Support default value, and path verification (absolute, existence).
 // @replaces libdnf:conf/OptionPath.hpp:class:OptionPath
-class OptionPath : public OptionString {
+class LIBDNF_API OptionPath : public OptionString {
 public:
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, bool exists = false, bool absPath = false)
@@ -76,7 +76,7 @@ public:
     void test(const std::string & value) const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

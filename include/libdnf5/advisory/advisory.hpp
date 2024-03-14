@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_ADVISORY_ADVISORY_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 #include <vector>
@@ -43,7 +44,7 @@ public:
 };
 
 /// An advisory, represents advisory used to track security updates
-class Advisory {
+class LIBDNF_API Advisory {
 public:
     Advisory(const Advisory & src);
     Advisory & operator=(const Advisory & src);
@@ -147,7 +148,7 @@ private:
     friend class AdvisorySetIterator;
     friend class AdvisorySet;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

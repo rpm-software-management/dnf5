@@ -22,11 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 
 namespace libdnf5::advisory {
 
-class AdvisoryReference {
+class LIBDNF_API AdvisoryReference {
 public:
     AdvisoryReference(const AdvisoryReference & src);
     AdvisoryReference & operator=(const AdvisoryReference & src);
@@ -72,9 +74,9 @@ private:
     /// @param advisory AdvisoryId into libsolv pool.
     /// @param index    Index of this reference in its advisory.
     /// @return New AdvisoryReference instance.
-    AdvisoryReference(const BaseWeakPtr & base, AdvisoryId advisory, int index);
+    LIBDNF_LOCAL AdvisoryReference(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

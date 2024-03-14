@@ -25,13 +25,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_package.hpp"
 #include "advisory_set.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <vector>
 
 
 namespace libdnf5::advisory {
 
 //TODO(amatej): add unit tests for AdvisoryCollection
-class AdvisoryCollection {
+class LIBDNF_API AdvisoryCollection {
 public:
     AdvisoryCollection(const AdvisoryCollection & src);
     AdvisoryCollection & operator=(const AdvisoryCollection & src);
@@ -76,7 +78,7 @@ private:
     friend AdvisorySet;
     friend class AdvisoryQuery;
 
-    AdvisoryCollection(const BaseWeakPtr & base, AdvisoryId advisory, int index);
+    LIBDNF_LOCAL AdvisoryCollection(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
     /// Get all AdvisoryPackages stored in this AdvisoryCollection
     ///
@@ -85,9 +87,9 @@ private:
     ///                         them when collecting AdvisoryPackages from multiple collections.
     /// @param with_filenames   Filenames of AdvisoryPackages are not always useful, this allows skipping them.
     ///                         The filename is stored as a c string (not libsolv id) this incurs slowdown.
-    void get_packages(std::vector<AdvisoryPackage> & output, bool with_filenames = false);
+    LIBDNF_LOCAL void get_packages(std::vector<AdvisoryPackage> & output, bool with_filenames = false);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

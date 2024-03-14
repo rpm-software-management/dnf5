@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/comps/group/group.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 #include <vector>
@@ -31,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class GroupQuery : public libdnf5::sack::Query<Group> {
+class LIBDNF_API GroupQuery : public libdnf5::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
     explicit GroupQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
@@ -67,7 +68,7 @@ public:
 
 private:
     friend Group;
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

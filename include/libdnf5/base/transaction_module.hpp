@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_BASE_TRANSACTION_MODULE_HPP
 
 #include "libdnf5/base/transaction.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 #include "libdnf5/transaction/transaction_item_state.hpp"
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::base {
 
-class TransactionModule {
+class LIBDNF_API TransactionModule {
 public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
@@ -73,9 +74,10 @@ public:
 private:
     friend class Transaction::Impl;
 
-    TransactionModule(const std::string & module_name, const std::string & module_stream, Action action, Reason reason);
+    LIBDNF_LOCAL TransactionModule(
+        const std::string & module_name, const std::string & module_stream, Action action, Reason reason);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

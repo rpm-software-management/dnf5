@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <filesystem>
 #include <string>
@@ -31,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::repo {
 
 
-struct RepoCacheRemoveStatistics {
+struct LIBDNF_API RepoCacheRemoveStatistics {
     RepoCacheRemoveStatistics();
     ~RepoCacheRemoveStatistics();
 
@@ -50,7 +51,7 @@ struct RepoCacheRemoveStatistics {
 private:
     friend class RepoCache;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 
@@ -65,7 +66,7 @@ public:
 
 
 /// Repository cache management class.
-class RepoCache {
+class LIBDNF_API RepoCache {
 public:
     using RemoveStatistics = RepoCacheRemoveStatistics;
 
@@ -150,7 +151,7 @@ public:
 private:
     friend RepoCacheRemoveStatistics;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_ITEM_ACTION_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 
@@ -47,7 +48,7 @@ enum class TransactionItemAction : int {
 };
 
 
-class InvalidTransactionItemAction : public libdnf5::Error {
+class LIBDNF_API InvalidTransactionItemAction : public libdnf5::Error {
 public:
     InvalidTransactionItemAction(const std::string & action);
 
@@ -56,13 +57,13 @@ public:
 };
 
 
-std::string transaction_item_action_to_string(TransactionItemAction action);
-TransactionItemAction transaction_item_action_from_string(const std::string & action);
+LIBDNF_API std::string transaction_item_action_to_string(TransactionItemAction action);
+LIBDNF_API TransactionItemAction transaction_item_action_from_string(const std::string & action);
 
-std::string transaction_item_action_to_letter(TransactionItemAction action);
+LIBDNF_API std::string transaction_item_action_to_letter(TransactionItemAction action);
 
-bool transaction_item_action_is_inbound(TransactionItemAction action);
-bool transaction_item_action_is_outbound(TransactionItemAction action);
+LIBDNF_API bool transaction_item_action_is_inbound(TransactionItemAction action);
+LIBDNF_API bool transaction_item_action_is_outbound(TransactionItemAction action);
 
 }  // namespace libdnf5::transaction
 

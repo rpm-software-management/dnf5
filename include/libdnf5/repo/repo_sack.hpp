@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/sack.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/logger/logger.hpp"
 
 
@@ -35,7 +36,7 @@ class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 
-class RepoSack : public sack::Sack<Repo> {
+class LIBDNF_API RepoSack : public sack::Sack<Repo> {
 public:
     /// Creates a new clear repository with default configuration.
     /// @param id The new repo id
@@ -149,34 +150,35 @@ private:
     friend class rpm::PackageSack;
     friend class libdnf5::Goal;
 
-    explicit RepoSack(const libdnf5::BaseWeakPtr & base);
-    explicit RepoSack(libdnf5::Base & base);
+    LIBDNF_LOCAL explicit RepoSack(const libdnf5::BaseWeakPtr & base);
+    LIBDNF_LOCAL explicit RepoSack(libdnf5::Base & base);
 
     /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
     /// Only the configuration of the corresponding existing repositories is modified.
-    void load_repos_configuration_overrides();
+    LIBDNF_LOCAL void load_repos_configuration_overrides();
 
     /// If not created yet, creates the cmdline repository and returns it.
     /// @return The cmdline repository.
-    libdnf5::repo::RepoWeakPtr get_cmdline_repo();
+    LIBDNF_LOCAL libdnf5::repo::RepoWeakPtr get_cmdline_repo();
 
     /// If not created yet, creates the stored transaction repository and returns it.
     /// @return The stored transaction repository.
-    libdnf5::repo::RepoWeakPtr get_stored_transaction_repo();
+    LIBDNF_LOCAL libdnf5::repo::RepoWeakPtr get_stored_transaction_repo();
 
     /// Add given path to comps to the stored_transaction repository.
     /// @param path Path to a local xml comps file to be inserted to stored_transaction repo.
-    void add_stored_transaction_comps(const std::string & path);
+    LIBDNF_LOCAL void add_stored_transaction_comps(const std::string & path);
 
     /// Add given path to rpm to the stored_transaction repository.
     /// @param path Path to a local rpm file to be inserted to stored_transaction repo.
     /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
     /// @return Newly created rpm::Package object in cmdline repo
-    libdnf5::rpm::Package add_stored_transaction_package(const std::string & path, bool calculate_checksum = false);
+    LIBDNF_LOCAL libdnf5::rpm::Package add_stored_transaction_package(
+        const std::string & path, bool calculate_checksum = false);
 
-    void internalize_repos();
+    LIBDNF_LOCAL void internalize_repos();
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

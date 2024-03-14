@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/transaction.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 
 
@@ -31,7 +32,7 @@ namespace libdnf5 {
 
 
 /// Centralized point to perform operations with RPMs, Comps groups, and Modules
-class Goal {
+class LIBDNF_API Goal {
 public:
     explicit Goal(const libdnf5::BaseWeakPtr & base);
     explicit Goal(libdnf5::Base & base);
@@ -396,8 +397,8 @@ public:
     libdnf5::BaseWeakPtr get_base() const;
 
 private:
-    rpm::PackageId get_running_kernel_internal();
-    class Impl;
+    LIBDNF_LOCAL rpm::PackageId get_running_kernel_internal();
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 /// Option exception
-class OptionError : public Error {
+class LIBDNF_API OptionError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
@@ -37,21 +38,21 @@ public:
 };
 
 /// Exception that is generated when an invalid input value is detected.
-class OptionInvalidValueError : public OptionError {
+class LIBDNF_API OptionInvalidValueError : public OptionError {
 public:
     using OptionError::OptionError;
     const char * get_name() const noexcept override { return "OptionInvalidValueError"; }
 };
 
 /// Exception that is generated when not allowed input value is detected.
-class OptionValueNotAllowedError : public OptionInvalidValueError {
+class LIBDNF_API OptionValueNotAllowedError : public OptionInvalidValueError {
 public:
     using OptionInvalidValueError::OptionInvalidValueError;
     const char * get_name() const noexcept override { return "OptionValueNotAllowedError"; }
 };
 
 /// Exception that is generated during read an empty Option.
-class OptionValueNotSetError : public OptionError {
+class LIBDNF_API OptionValueNotSetError : public OptionError {
 public:
     using OptionError::OptionError;
     const char * get_name() const noexcept override { return "OptionValueNotSetError"; }
@@ -60,7 +61,7 @@ public:
 
 /// Option class is an abstract class. Parent of all options. Options are used to store a configuration.
 // @replaces libdnf:conf/Option.hpp:class:Option
-class Option {
+class LIBDNF_API Option {
 public:
     // TODO(jrohel): Prioroties are under discussion and probably will be modified.
     // @replaces libdnf:conf/Option.hpp:enum class:Option::Priority
@@ -128,7 +129,7 @@ protected:
     const std::string & get_lock_comment() const noexcept;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/set.hpp"
+#include "libdnf5/defs.h"
 
 #include <cstdint>
 #include <map>
@@ -36,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::sack {
 
-extern const BgettextMessage msg_err_exact_one_object;
+LIBDNF_API extern const BgettextMessage msg_err_exact_one_object;
 
 /// Query is a Set with filtering capabilities.
 template <typename T>

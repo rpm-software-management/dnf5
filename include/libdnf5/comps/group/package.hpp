@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_type.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <string>
 
 namespace libdnf5::comps {
@@ -30,7 +32,7 @@ namespace libdnf5::comps {
 
 // @replaces dnf:dnf/comps.py:class:Package
 // @replaces dnf:dnf/comps.py:class:CompsTransPkg
-class Package {
+class LIBDNF_API Package {
 public:
     Package(const std::string & name, PackageType type, const std::string & condition);
 
@@ -68,7 +70,7 @@ public:
     void set_condition(const std::string & value);
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

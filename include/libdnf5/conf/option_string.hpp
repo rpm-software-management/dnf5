@@ -28,7 +28,7 @@ namespace libdnf5 {
 /// Option that stores string value.
 /// Support default value, and check of an input value using the regular expression
 // @replaces libdnf:conf/OptionString.hpp:class:OptionString
-class OptionString : public Option {
+class LIBDNF_API OptionString : public Option {
 public:
     using ValueType = std::string;
 
@@ -75,7 +75,7 @@ public:
 
 private:
     friend class OptionPath;
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

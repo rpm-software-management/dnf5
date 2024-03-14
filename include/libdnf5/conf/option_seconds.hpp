@@ -28,7 +28,7 @@ namespace libdnf5 {
 /// Option that stores an integer value of seconds.
 /// Support default value, minimal and maximal values.
 // @replaces libdnf:conf/OptionSeconds.hpp:class:OptionSeconds
-class OptionSeconds : public OptionNumber<std::int32_t> {
+class LIBDNF_API OptionSeconds : public OptionNumber<std::int32_t> {
 public:
     OptionSeconds(ValueType default_value, ValueType min, ValueType max);
     OptionSeconds(ValueType default_value, ValueType min);

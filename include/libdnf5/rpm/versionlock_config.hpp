@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_VERSIONLOCK_CONFIG_HPP
 
 #include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/defs.h"
 
 #include <filesystem>
 #include <map>
@@ -35,7 +36,7 @@ namespace libdnf5::rpm {
 /// Key can be one of "epoch", "evr", "arch".
 /// Supported comparison operators are "<", "<=", "=", ">=", ">", "!=".
 /// @since 5.1.13
-class VersionlockCondition {
+class LIBDNF_API VersionlockCondition {
 public:
     enum class Keys { EPOCH, EVR, ARCH };
 
@@ -80,7 +81,7 @@ private:
 /// package name and a set of conditions. All conditions must be true
 /// for package version to get locked.
 /// @since 5.1.13
-class VersionlockPackage {
+class LIBDNF_API VersionlockPackage {
 public:
     /// Creates an instance of `VersionlockPackage` class specifying the
     /// name of package.
@@ -122,7 +123,7 @@ private:
 
 /// Class contains parsed versionlock configuration file.
 /// @since 5.1.13
-class VersionlockConfig {
+class LIBDNF_API VersionlockConfig {
 public:
     /// Get list of configured versionlock entries.
     std::vector<VersionlockPackage> & get_packages() { return packages; }
@@ -136,7 +137,7 @@ private:
     /// Creates an instance of `VersionlockConfig` specifying the config file
     /// to read.
     /// @param path Path to versionlock configuration file.
-    VersionlockConfig(const std::filesystem::path & path);
+    LIBDNF_LOCAL VersionlockConfig(const std::filesystem::path & path);
 
     std::filesystem::path path;
     std::vector<VersionlockPackage> packages{};

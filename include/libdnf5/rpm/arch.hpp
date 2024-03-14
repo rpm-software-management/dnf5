@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_ARCH_HPP
 #define LIBDNF5_RPM_ARCH_HPP
 
+#include "libdnf5/defs.h"
+
 #include <string>
 #include <vector>
 
@@ -28,12 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::rpm {
 
 /// Returns a list of architectures supported by libdnf5.
-std::vector<std::string> get_supported_arches();
+LIBDNF_API std::vector<std::string> get_supported_arches();
 
 /// Returns base architecture of the given `arch`. In case the base arch is not
 /// found the function returns empty string.
 /// @param arch Architecture.
-std::string get_base_arch(const std::string & arch);
+LIBDNF_API std::string get_base_arch(const std::string & arch);
 
 }  // namespace libdnf5::rpm
 

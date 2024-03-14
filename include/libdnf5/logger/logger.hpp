@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_LOGGER_LOGGER_HPP
 #define LIBDNF5_LOGGER_LOGGER_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/utils/format.hpp"
 
 #include <unistd.h>
@@ -34,7 +35,7 @@ namespace libdnf5 {
 
 /// Logger is an abstract interface used for logging.
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
-class Logger {
+class LIBDNF_API Logger {
 public:
     explicit Logger();
 
@@ -99,7 +100,7 @@ public:
 };
 
 
-class StringLogger : public Logger {
+class LIBDNF_API StringLogger : public Logger {
 public:
     explicit StringLogger();
     ~StringLogger() override;

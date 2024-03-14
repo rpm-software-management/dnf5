@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 
 #include <functional>
@@ -29,14 +30,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::rpm {
 
-class SignatureCheckError : public Error {
+class LIBDNF_API SignatureCheckError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
     const char * get_name() const noexcept override { return "SignatureCheckError"; }
 };
 
-class KeyImportError : public Error {
+class LIBDNF_API KeyImportError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
@@ -45,7 +46,7 @@ public:
 
 using RpmKeyPktPtr = std::unique_ptr<uint8_t, std::function<void(uint8_t * pkt)>>;
 
-class KeyInfo {
+class LIBDNF_API KeyInfo {
 public:
     const std::string & get_key_id() const noexcept;
     std::string get_short_key_id() const;
@@ -77,11 +78,11 @@ protected:
     void add_user_id(const char * user_id);
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-class RpmSignature {
+class LIBDNF_API RpmSignature {
 public:
     enum class CheckResult { OK, SKIPPED, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
@@ -119,7 +120,7 @@ public:
     static std::string check_result_to_string(CheckResult result);
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

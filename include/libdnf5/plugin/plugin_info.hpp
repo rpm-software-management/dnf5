@@ -24,11 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "plugin_version.hpp"
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/version.hpp"
 
 namespace libdnf5::plugin {
 
-class PluginInfo {
+class LIBDNF_API PluginInfo {
 public:
     ~PluginInfo();
 
@@ -62,10 +63,10 @@ public:
     /// @return the value of the `name` attribute or nullptr
     const char * get_attribute(const char * name) const noexcept;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
 
 private:
-    explicit PluginInfo(Impl & p_impl);
+    LIBDNF_LOCAL explicit PluginInfo(Impl & p_impl);
 
     ImplPtr<Impl> p_impl;
 };

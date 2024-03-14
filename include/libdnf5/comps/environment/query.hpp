@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 #include <vector>
@@ -31,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class EnvironmentQuery : public libdnf5::sack::Query<Environment> {
+class LIBDNF_API EnvironmentQuery : public libdnf5::sack::Query<Environment> {
 public:
     // Create new query with newly composed environments (using only solvables from currently enabled repositories)
     explicit EnvironmentQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
@@ -57,7 +58,7 @@ public:
 
 private:
     friend Environment;
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

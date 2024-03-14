@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/vars.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/plugin/plugin_info.hpp"
@@ -55,7 +56,7 @@ class InternalBaseUser;
 /// Instances of :class:`libdnf5::Base` are the central point of functionality supplied by libdnf5.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
 /// :class:`.Base` instances are stateful objects owning various data.
-class Base {
+class LIBDNF_API Base {
 public:
     /// Constructs a new Base instance and sets the destination loggers.
     Base(std::vector<std::unique_ptr<Logger>> && loggers = {});
@@ -132,8 +133,6 @@ public:
 
     libdnf5::BaseWeakPtr get_weak_ptr();
 
-    class Impl;
-
 private:
     friend class libdnf5::InternalBaseUser;
     friend class libdnf5::base::Transaction;
@@ -148,13 +147,14 @@ private:
     friend class libdnf5::repo::SolvRepo;
 
     /// Load plugins according to configuration
-    void load_plugins();
+    LIBDNF_LOCAL void load_plugins();
 
 
     WeakPtrGuard<Base, false> base_guard;
     // Impl has to be the second data member (right after base_guard which is needed for its construction) because it
     // contains Pool and that has be destructed last.
     // See commit: https://github.com/rpm-software-management/dnf5/commit/c8e26cb545aed0d6ca66545d51eda7568efdf232
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

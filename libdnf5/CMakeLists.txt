@@ -8,6 +8,8 @@ configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
 list(APPEND LIBDNF5_PC_REQUIRES)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE)
 
+add_definitions(-DLIBDNF_BUILD_LIBRARY)
+
 # set gettext domain for translations
 set(GETTEXT_DOMAIN libdnf5)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
@@ -24,6 +26,7 @@ add_library(libdnf5 SHARED ${LIBDNF5_SOURCES})
 set(DNF_SO_VERSION 2)
 set_target_properties(libdnf5 PROPERTIES OUTPUT_NAME "dnf5")
 set_target_properties(libdnf5 PROPERTIES SOVERSION ${DNF_SO_VERSION})
+set_target_properties(libdnf5 PROPERTIES C_VISIBILITY_PRESET hidden CXX_VISIBILITY_PRESET hidden)
 # required to have dlopen symbol
 target_link_libraries(libdnf5 PUBLIC ${CMAKE_DL_LIBS})
 

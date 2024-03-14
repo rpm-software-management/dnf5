@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_ITEM_HPP
 #define LIBDNF5_MODULE_MODULE_ITEM_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/module/module_dependency.hpp"
 #include "libdnf5/module/module_profile.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
@@ -53,7 +54,7 @@ public:
 
 // Represents one modulemd document (uniquely described by name:stream:version:context:arch, but there can theoretically be more objects with the same NSVCA)
 // @replaces libdnf:module/ModuleItem.hpp:class:ModuleItem
-class ModuleItem {
+class LIBDNF_API ModuleItem {
 public:
     bool operator==(const ModuleItem & rhs) const noexcept;
     bool operator!=(const ModuleItem & rhs) const noexcept;
@@ -188,30 +189,31 @@ private:
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
-    ModuleItem(_ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id);
+    LIBDNF_LOCAL ModuleItem(
+        _ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id);
 
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameCStr()
-    const char * get_name_cstr() const;
+    LIBDNF_LOCAL const char * get_name_cstr() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getStreamCStr()
-    const char * get_stream_cstr() const;
+    LIBDNF_LOCAL const char * get_stream_cstr() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getContextCStr()
-    const char * get_context_cstr() const;
+    LIBDNF_LOCAL const char * get_context_cstr() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getArchCStr()
-    const char * get_arch_cstr() const;
+    LIBDNF_LOCAL const char * get_arch_cstr() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameStream()
-    std::string get_name_stream() const;
+    LIBDNF_LOCAL std::string get_name_stream() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameStreamVersion()
-    std::string get_name_stream_version() const;
+    LIBDNF_LOCAL std::string get_name_stream_version() const;
     /// @return The "name:stream:computed_static_context" string if computed_static_context exists, otherwise,
     ///         the "name:stream:version:context" string.
-    std::string get_name_stream_staticcontext() const;
+    LIBDNF_LOCAL std::string get_name_stream_staticcontext() const;
     /// @return The "name:stream:computed_static_context:arch" string if computed_static_context exists, otherwise,
     ///         the "name:stream:version:context:arch" string.
-    std::string get_name_stream_staticcontext_arch() const;
+    LIBDNF_LOCAL std::string get_name_stream_staticcontext_arch() const;
 
-    std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
+    LIBDNF_LOCAL std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
 
-    static std::vector<ModuleDependency> get_module_dependencies(
+    LIBDNF_LOCAL static std::vector<ModuleDependency> get_module_dependencies(
         _ModulemdModuleStream * md_stream, bool remove_platform);
 
     // TODO(pkratoch): Make this private once it's not used in tests.
@@ -222,10 +224,11 @@ private:
     /// @since 5.0
     //
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getRequires(bool removePlatform=false)
-    static std::string get_module_dependencies_string(_ModulemdModuleStream * md_stream, bool remove_platform);
-    std::string get_module_dependencies_string(bool remove_platform = false) const;
+    LIBDNF_LOCAL static std::string get_module_dependencies_string(
+        _ModulemdModuleStream * md_stream, bool remove_platform);
+    LIBDNF_LOCAL std::string get_module_dependencies_string(bool remove_platform = false) const;
 
-    static std::string get_name_stream(_ModulemdModuleStream * md_stream);
+    LIBDNF_LOCAL static std::string get_name_stream(_ModulemdModuleStream * md_stream);
 
     /// Create solvable with:
     ///     Name: $name:$stream:$context
@@ -235,22 +238,22 @@ private:
     ///     Provides: module($name:$stream)
     ///     Conflicts: module($name)
     ///     Description: $name:$stream
-    void create_solvable();
-    void create_dependencies() const;
-    void create_solvable_and_dependencies();
+    LIBDNF_LOCAL void create_solvable();
+    LIBDNF_LOCAL void create_dependencies() const;
+    LIBDNF_LOCAL void create_solvable_and_dependencies();
 
     /// @brief Create platform solvable. Intended to be used for autodetecting modular platform ID.
     /// @param module_sack Reference to a modular sack where the target pool with solvables is located.
     /// @param name Platform name.
     /// @param stream Platform stream.
-    static void create_platform_solvable(
+    LIBDNF_LOCAL static void create_platform_solvable(
         const ModuleSackWeakPtr & module_sack, const std::string & name, const std::string & stream);
 
-    libdnf5::module::ModuleSackWeakPtr get_module_sack() const;
+    LIBDNF_LOCAL libdnf5::module::ModuleSackWeakPtr get_module_sack() const;
 
-    void set_computed_static_context(const std::string & context);
+    LIBDNF_LOCAL void set_computed_static_context(const std::string & context);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

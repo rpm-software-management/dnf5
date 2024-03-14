@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction_group.hpp"
 #include "libdnf5/base/transaction_module.hpp"
 #include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <set>
@@ -57,10 +58,10 @@ class TransactionHistory;
 // @replaces libdnf:transaction/Types.hpp:enum:TransactionState
 enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
-std::string transaction_state_to_string(TransactionState state);
-TransactionState transaction_state_from_string(const std::string & state);
+LIBDNF_API std::string transaction_state_to_string(TransactionState state);
+LIBDNF_API TransactionState transaction_state_from_string(const std::string & state);
 
-class InvalidTransactionState : public libdnf5::Error {
+class LIBDNF_API InvalidTransactionState : public libdnf5::Error {
 public:
     InvalidTransactionState(const std::string & state);
 
@@ -76,7 +77,7 @@ public:
 /// to change packages on disk.
 ///
 // @replaces libdnf:transaction/Transaction.hpp:class:Transaction
-class Transaction {
+class LIBDNF_API Transaction {
 public:
     using State = TransactionState;
 
@@ -176,7 +177,7 @@ private:
     /// be filled by the user and saved to the database.
     ///
     /// @param base The base.
-    explicit Transaction(const libdnf5::BaseWeakPtr & base);
+    LIBDNF_LOCAL explicit Transaction(const libdnf5::BaseWeakPtr & base);
 
     /// Constructs the transaction with a known id which needs to exist in the
     /// database. The data are then lazily loaded from the database on first call
@@ -184,78 +185,79 @@ private:
     ///
     /// @param base The base.
     /// @param id The id of the transaction.
-    Transaction(const libdnf5::BaseWeakPtr & base, int64_t id);
+    LIBDNF_LOCAL Transaction(const libdnf5::BaseWeakPtr & base, int64_t id);
 
     /// Set Transaction database id (primary key)
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setId(int64_t value)
-    void set_id(int64_t value);
+    LIBDNF_LOCAL void set_id(int64_t value);
 
     /// Set a user-specified comment describing the transaction
-    void set_comment(const std::string & value);
+    LIBDNF_LOCAL void set_comment(const std::string & value);
 
     /// Set date and time of the transaction start
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtBegin(int64_t value)
-    void set_dt_start(int64_t value);
+    LIBDNF_LOCAL void set_dt_start(int64_t value);
 
     /// Set date and time of the transaction end
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtEnd(int64_t value)
-    void set_dt_end(int64_t value);
+    LIBDNF_LOCAL void set_dt_end(int64_t value);
 
     /// Set the description of the transaction (e.g. the CLI command that was executed)
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
-    void set_description(const std::string & value);
+    LIBDNF_LOCAL void set_description(const std::string & value);
 
     /// Set UID of a user that started the transaction
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
-    void set_user_id(uint32_t value);
+    LIBDNF_LOCAL void set_user_id(uint32_t value);
 
     /// Set $releasever variable value that was used during the transaction
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setReleasever(const std::string & value)
-    void set_releasever(const std::string & value);
+    LIBDNF_LOCAL void set_releasever(const std::string & value);
 
     /// Set RPM database version after the transaction
     /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionEnd(const std::string & value)
-    void set_rpmdb_version_end(const std::string & value);
+    LIBDNF_LOCAL void set_rpmdb_version_end(const std::string & value);
 
     /// Set RPM database version before the transaction
     /// Format: `<rpm_count>`:`<sha1 of sorted SHA1HEADER fields of installed RPMs>`
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
-    void set_rpmdb_version_begin(const std::string & value);
+    LIBDNF_LOCAL void set_rpmdb_version_begin(const std::string & value);
 
     /// Set transaction state
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
-    void set_state(State value);
+    LIBDNF_LOCAL void set_state(State value);
 
     /// Create a new rpm package in the transaction and return a reference to it.
     /// The package is owned by the transaction.
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
-    Package & new_package();
+    LIBDNF_LOCAL Package & new_package();
 
     /// Fill the transaction packages.
-    void fill_transaction_packages(const std::vector<libdnf5::base::TransactionPackage> & transaction_packages);
+    LIBDNF_LOCAL void fill_transaction_packages(
+        const std::vector<libdnf5::base::TransactionPackage> & transaction_packages);
 
     /// Fill the transaction groups.
     /// @param transaction_groups Groups that are part of the transaction
     /// @param installed_names Names of currently installed plus inbound packages
-    void fill_transaction_groups(
+    LIBDNF_LOCAL void fill_transaction_groups(
         const std::vector<libdnf5::base::TransactionGroup> & transaction_groups,
         const std::set<std::string> & installed_names);
 
     /// Fill the transaction environmental groups.
     /// @param transaction_groups Environmental groups that are part of the transaction
     /// @param installed_names Ids of currently installed plus inbound groups
-    void fill_transaction_environments(
+    LIBDNF_LOCAL void fill_transaction_environments(
         const std::vector<libdnf5::base::TransactionEnvironment> & transaction_environments,
         const std::set<std::string> & installed_group_ids);
 
@@ -263,25 +265,25 @@ private:
     /// The group is owned by the transaction.
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
-    CompsGroup & new_comps_group();
+    LIBDNF_LOCAL CompsGroup & new_comps_group();
 
     /// Create a new comps environment in the transaction and return a reference to it.
     /// The environment is owned by the transaction.
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
-    CompsEnvironment & new_comps_environment();
+    LIBDNF_LOCAL CompsEnvironment & new_comps_environment();
 
     /// Start the transaction by inserting it into the database
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
-    void start();
+    LIBDNF_LOCAL void start();
 
     /// Finish the transaction by updating it's state in the database
     ///
     // @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
-    void finish(TransactionState state);
+    LIBDNF_LOCAL void finish(TransactionState state);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

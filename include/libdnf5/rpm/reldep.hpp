@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <string>
@@ -46,7 +47,7 @@ public:
 // @replaces libdnf/dnf-reldep.h:struct:DnfReldep
 // @replaces libdnf/repo/solvable/Dependency.hpp:struct:Dependency
 // @replaces hawkey:hawkey/__init__.py:class:Reldep
-class Reldep {
+class LIBDNF_API Reldep {
 public:
     enum class CmpType { NONE = 0, GT = (1 << 0), EQ = (1 << 1), GTE = (GT | EQ), LT = (1 << 2), LTE = (LT | EQ) };
 
@@ -118,7 +119,7 @@ private:
     /// @param cmp_type p_cmpType: ComparisonType, and their combinations
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
-    Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type);
+    LIBDNF_LOCAL Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of parsed reldep
     ///
@@ -129,7 +130,7 @@ private:
     /// @param create Whether a new Id should be created when name does not exist
     /// @return DependencyId
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
-    static ReldepId get_reldep_id(
+    LIBDNF_LOCAL static ReldepId get_reldep_id(
         const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create = 1);
 
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
@@ -139,9 +140,10 @@ private:
     /// @return DependencyId
     /// @param create Whether a new Id should be created when name does not exist
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
-    static ReldepId get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
+    LIBDNF_LOCAL static ReldepId get_reldep_id(
+        const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

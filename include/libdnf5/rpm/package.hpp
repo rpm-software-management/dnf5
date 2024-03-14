@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "reldep_list.hpp"
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
@@ -64,7 +65,7 @@ public:
     int id{0};
 };
 
-struct Changelog {
+struct LIBDNF_API Changelog {
 public:
     Changelog(time_t timestamp, const std::string & author, const std::string & text);
     ~Changelog();
@@ -79,7 +80,7 @@ public:
     const std::string & get_text() const;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 
@@ -88,7 +89,7 @@ private:
 
 // @replaces libdnf:libdnf/hy-package.h:struct:DnfPackage
 // @replaces dnf:dnf/package.py:class:Package
-class Package {
+class LIBDNF_API Package {
 public:
     ~Package();
     Package(const Package & src);
@@ -553,11 +554,11 @@ private:
     friend class libdnf5::rpm::Transaction;
 
     // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
-    Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
+    LIBDNF_LOCAL Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
 
-    bool is_cached() const;
+    LIBDNF_LOCAL bool is_cached() const;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 

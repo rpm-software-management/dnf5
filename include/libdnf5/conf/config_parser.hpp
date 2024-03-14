@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 /// Error accessing config file other than ENOENT; e.g. we don't have read permission
-class InaccessibleConfigError : public Error {
+class LIBDNF_API InaccessibleConfigError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
@@ -37,7 +37,7 @@ public:
 };
 
 /// Configuration file is missing
-class MissingConfigError : public Error {
+class LIBDNF_API MissingConfigError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
@@ -45,27 +45,27 @@ public:
 };
 
 /// Configuration file is invalid
-class InvalidConfigError : public Error {
+class LIBDNF_API InvalidConfigError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "InvalidConfigError"; }
 };
 
-class ConfigParserError : public Error {
+class LIBDNF_API ConfigParserError : public Error {
 public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "ConfigParserError"; }
 };
 
-class ConfigParserSectionNotFoundError : public ConfigParserError {
+class LIBDNF_API ConfigParserSectionNotFoundError : public ConfigParserError {
 public:
     explicit ConfigParserSectionNotFoundError(const std::string & section);
     const char * get_name() const noexcept override { return "ConfigParserSectionNotFoundError"; }
 };
 
-class ConfigParserOptionNotFoundError : public ConfigParserError {
+class LIBDNF_API ConfigParserOptionNotFoundError : public ConfigParserError {
 public:
     explicit ConfigParserOptionNotFoundError(const std::string & section, const std::string & option);
     const char * get_name() const noexcept override { return "ConfigParserOptionNotFoundError"; }
@@ -81,7 +81,7 @@ public:
 * The parsed items are stored into the PreserveOrderMap.
 * ConfigParser preserve order of items. Comments and empty lines are kept.
 */
-struct ConfigParser {
+struct LIBDNF_API ConfigParser {
 public:
     using Container = PreserveOrderMap<std::string, PreserveOrderMap<std::string, std::string>>;
 
@@ -140,7 +140,7 @@ public:
     Container & get_data() noexcept;
 
 private:
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

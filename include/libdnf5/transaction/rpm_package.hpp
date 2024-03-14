@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_item.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 
 
@@ -35,7 +37,7 @@ class RpmDbUtils;
 /// to perform rpm transaction and then stored in the transaction (history) database.
 ///
 // @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
-class Package : public TransactionItem {
+class LIBDNF_API Package : public TransactionItem {
 public:
     /// Get package name
     ///
@@ -77,35 +79,35 @@ private:
     friend RpmDbUtils;
     friend Transaction;
 
-    explicit Package(const Transaction & trans);
+    LIBDNF_LOCAL explicit Package(const Transaction & trans);
 
     /// Set package name
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
-    void set_name(const std::string & value);
+    LIBDNF_LOCAL void set_name(const std::string & value);
 
     /// Get package epoch as an integer
-    uint32_t get_epoch_int() const;
+    LIBDNF_LOCAL uint32_t get_epoch_int() const;
 
     /// Set package epoch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setEpoch(int32_t value)
-    void set_epoch(const std::string & value);
+    LIBDNF_LOCAL void set_epoch(const std::string & value);
 
     /// Set package version
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setVersion(const std::string & value)
-    void set_version(const std::string & value);
+    LIBDNF_LOCAL void set_version(const std::string & value);
 
     /// Set package release
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setRelease(const std::string & value)
-    void set_release(const std::string & value);
+    LIBDNF_LOCAL void set_release(const std::string & value);
 
     /// Set package arch
     ///
     // @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setArch(const std::string & value)
-    void set_arch(const std::string & value);
+    LIBDNF_LOCAL void set_arch(const std::string & value);
 
     /*
     // TODO(dmach): Implement TransactionSack.new_filter().filter_package_pattern()
@@ -117,9 +119,9 @@ private:
         libdnf5::utils::SQLite3 & conn, const std::string & name, const std::string & arch, int64_t maxTransactionId);
     */
 
-    bool operator<(const Package & other) const;
+    LIBDNF_LOCAL bool operator<(const Package & other) const;
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

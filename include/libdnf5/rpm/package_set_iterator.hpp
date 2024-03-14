@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <cstddef>
 #include <iterator>
 #include <memory>
@@ -33,7 +35,7 @@ namespace libdnf5::rpm {
 class PackageSet;
 
 
-class PackageSetIterator {
+class LIBDNF_API PackageSetIterator {
 public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -63,7 +65,7 @@ public:
 private:
     explicit PackageSetIterator(const PackageSet & package_set);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

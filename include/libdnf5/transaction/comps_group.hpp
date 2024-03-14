@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item.hpp"
 
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <vector>
@@ -40,7 +41,7 @@ class CompsGroupPackageDbUtils;
 /// to perform comps transaction and then stored in the transaction (history) database.
 ///
 // @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupItem
-class CompsGroup : public TransactionItem {
+class LIBDNF_API CompsGroup : public TransactionItem {
 public:
     /// Get string representation of the object, which equals to group_id
     ///
@@ -59,63 +60,63 @@ private:
     friend CompsGroupDbUtils;
     friend CompsGroupPackageDbUtils;
 
-    explicit CompsGroup(const Transaction & trans);
+    LIBDNF_LOCAL explicit CompsGroup(const Transaction & trans);
 
     /// Get text id of the group (xml element: `<comps><group><id>VALUE</id>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getGroupId()
-    const std::string & get_group_id() const noexcept;
+    LIBDNF_LOCAL const std::string & get_group_id() const noexcept;
 
     /// Get text id of the group (xml element: `<comps><group><id>VALUE</id>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setGroupId(const std::string & value)
-    void set_group_id(const std::string & value);
+    LIBDNF_LOCAL void set_group_id(const std::string & value);
 
     /// Get name of the group (xml element: `<comps><group><name>VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getName()
-    const std::string & get_name() const noexcept;
+    LIBDNF_LOCAL const std::string & get_name() const noexcept;
 
     /// Set name of the group (xml element: `<comps><group><name>VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setName(const std::string & value)
-    void set_name(const std::string & value);
+    LIBDNF_LOCAL void set_name(const std::string & value);
 
     /// Get translated name of the group in the current locale (xml element: `<comps><group><name xml:lang="...">VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getTranslatedName()
-    const std::string & get_translated_name() const noexcept;
+    LIBDNF_LOCAL const std::string & get_translated_name() const noexcept;
 
     /// Set translated name of the group in the current locale (xml element: `<comps><group><name xml:lang="...">VALUE</name>...`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setTranslatedName(const std::string & value)
-    void set_translated_name(const std::string & value);
+    LIBDNF_LOCAL void set_translated_name(const std::string & value);
 
     /// Get types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
-    libdnf5::comps::PackageType get_package_types() const noexcept;
+    LIBDNF_LOCAL libdnf5::comps::PackageType get_package_types() const noexcept;
 
     /// Set types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setPackageTypes(libdnf::CompsPackageType value)
-    void set_package_types(libdnf5::comps::PackageType value);
+    LIBDNF_LOCAL void set_package_types(libdnf5::comps::PackageType value);
 
     /// Create a new CompsGroupPackage object and return a reference to it.
     /// The object is owned by the CompsGroup.
-    CompsGroupPackage & new_package();
+    LIBDNF_LOCAL CompsGroupPackage & new_package();
 
     /// Get list of packages associated with the group.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackages()
-    std::vector<CompsGroupPackage> & get_packages();
+    LIBDNF_LOCAL std::vector<CompsGroupPackage> & get_packages();
 
     // TODO(dmach): rewrite into TransactionSack.list_installed_groups(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf5::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
@@ -123,7 +124,7 @@ private:
 /// CompsGroupPackage represents a package associated with a comps group
 ///
 // @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupPackage
-class CompsGroupPackage {
+class LIBDNF_API CompsGroupPackage {
 public:
     ~CompsGroupPackage();
     CompsGroupPackage(const CompsGroupPackage & src);
@@ -139,48 +140,48 @@ private:
     /// Get database id (primary key)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getId()
-    int64_t get_id() const noexcept;
+    LIBDNF_LOCAL int64_t get_id() const noexcept;
 
     /// Set database id (primary key)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setId(int64_t value)
-    void set_id(int64_t value);
+    LIBDNF_LOCAL void set_id(int64_t value);
 
     /// Get name of a package associated with a comps group (xml element: `<comps><group><packagelist><packagereq>VALUE</packagereq>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getName()
-    const std::string & get_name() const noexcept;
+    LIBDNF_LOCAL const std::string & get_name() const noexcept;
 
     /// Set name of a package associated with a comps group (xml element: `<comps><group><packagelist><packagereq>VALUE</packagereq>`)
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setName(const std::string & value)
-    void set_name(const std::string & value);
+    LIBDNF_LOCAL void set_name(const std::string & value);
 
     /// Get a flag that determines if the package was present after the transaction it's associated with has finished.
     /// If the package was installed before running the transaction, it's still counted as installed.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getInstalled()
-    bool get_installed() const noexcept;
+    LIBDNF_LOCAL bool get_installed() const noexcept;
 
     /// Set a flag that determines if the package was present after the transaction it's associated with has finished.
     /// If the package was installed before running the transaction, it's still counted as installed.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setInstalled(bool value)
-    void set_installed(bool value);
+    LIBDNF_LOCAL void set_installed(bool value);
 
     /// Get type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     /// See `enum class comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getPackageType()
-    libdnf5::comps::PackageType get_package_type() const noexcept;
+    LIBDNF_LOCAL libdnf5::comps::PackageType get_package_type() const noexcept;
 
     /// Set type of package associated with a comps group (xml element: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     /// See `enum class libdnf5::comps::PackageType` documentation for more details.
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
-    void set_package_type(libdnf5::comps::PackageType value);
+    LIBDNF_LOCAL void set_package_type(libdnf5::comps::PackageType value);
 
-    class Impl;
+    class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
