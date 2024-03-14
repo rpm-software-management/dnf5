@@ -262,8 +262,6 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/dnf5
 %dir %{_datadir}/dnf5/aliases.d
 %config %{_datadir}/dnf5/aliases.d/compatibility.conf
-%config %{_unitdir}/dnf5-offline-transaction.service
-%config %{_unitdir}/dnf5-offline-transaction-cleanup.service
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %dir %{_datadir}/dnf5/dnf5-plugins
@@ -316,6 +314,12 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man5/dnf5.conf.5.*
 %{_mandir}/man5/dnf5.conf-todo.5.*
 %{_mandir}/man5/dnf5.conf-deprecated.5.*
+
+%if %{with systemd}
+%{_unitdir}/dnf5-offline-transaction.service
+%{_unitdir}/dnf5-offline-transaction-cleanup.service
+%{_unitdir}/system-update.target.wants/dnf5-offline-transaction.service
+%endif
 
 # ========== libdnf5 ==========
 %package -n libdnf5
@@ -806,6 +810,13 @@ done
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37 || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
+%endif
+
+%if %{with systemd}
+mkdir -p %{buildroot}%{_unitdir}/system-update.target.wants/
+pushd %{buildroot}%{_unitdir}/system-update.target.wants/
+  ln -sr ../dnf5-offline-transaction.service
+popd
 %endif
 
 %find_lang dnf5

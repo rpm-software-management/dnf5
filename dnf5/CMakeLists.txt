@@ -2,7 +2,8 @@ if(NOT WITH_DNF5)
     return()
 endif()
 
-set(SYSTEMD_SYSTEM_UNIT_DIR /usr/lib/systemd/system)
+pkg_check_modules(SYSTEMD REQUIRED systemd)
+pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
 
 find_package(Threads)
 
@@ -56,11 +57,10 @@ install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR}
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
-install(DIRECTORY "config/systemd/system/" DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}" PATTERN ".gitkeep" EXCLUDE)
-install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-    ${SYSTEMD_SYSTEM_UNIT_DIR}/dnf5-offline-transaction.service
-    ${SYSTEMD_SYSTEM_UNIT_DIR}/system-update.target.wants/dnf5-offline-transaction.service)"
-)
+
+if(WITH_SYSTEMD)
+  install(DIRECTORY "config/systemd/system/" DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}" PATTERN ".gitkeep" EXCLUDE)
+endif()
 
 # Makes an empty directory for dnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/dnf5-plugins")
