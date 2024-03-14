@@ -25,13 +25,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_package.hpp"
 #include "advisory_set.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <vector>
 
 
 namespace libdnf5::advisory {
 
 //TODO(amatej): add unit tests for AdvisoryCollection
-class AdvisoryCollection {
+class LIBDNF_API AdvisoryCollection {
 public:
     AdvisoryCollection(const AdvisoryCollection & src);
     AdvisoryCollection & operator=(const AdvisoryCollection & src);

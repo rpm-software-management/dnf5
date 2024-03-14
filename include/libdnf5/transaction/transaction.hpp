@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction_group.hpp"
 #include "libdnf5/base/transaction_module.hpp"
 #include "libdnf5/base/transaction_package.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <set>
@@ -57,10 +58,10 @@ class TransactionHistory;
 // @replaces libdnf:transaction/Types.hpp:enum:TransactionState
 enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
-std::string transaction_state_to_string(TransactionState state);
-TransactionState transaction_state_from_string(const std::string & state);
+LIBDNF_API std::string transaction_state_to_string(TransactionState state);
+LIBDNF_API TransactionState transaction_state_from_string(const std::string & state);
 
-class InvalidTransactionState : public libdnf5::Error {
+class LIBDNF_API InvalidTransactionState : public libdnf5::Error {
 public:
     InvalidTransactionState(const std::string & state);
 
@@ -76,7 +77,7 @@ public:
 /// to change packages on disk.
 ///
 // @replaces libdnf:transaction/Transaction.hpp:class:Transaction
-class Transaction {
+class LIBDNF_API Transaction {
 public:
     using State = TransactionState;
 

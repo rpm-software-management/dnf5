@@ -27,6 +27,8 @@
     }
 }
 
+#define LIBDNF_API
+
 %{
     #include "libdnf5/common/weak_ptr.hpp"
 %}

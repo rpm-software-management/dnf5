@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/comps/group/group.hpp"
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
@@ -32,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::base {
 
-class TransactionGroup {
+class LIBDNF_API TransactionGroup {
 public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;

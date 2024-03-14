@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 #include <vector>
@@ -47,7 +48,7 @@ namespace libdnf5::rpm {
 // @replaces libdnf/hy-query.h:struct:HyQuery
 // @replaces libdnf/sack/query.hpp:struct:Query
 // @replaces hawkey:hawkey/__init__.py:class:Query
-class PackageQuery : public PackageSet {
+class LIBDNF_API PackageQuery : public PackageSet {
 public:
     using ExcludeFlags = libdnf5::sack::ExcludeFlags;
 

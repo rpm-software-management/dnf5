@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_BASE_TRANSACTION_PACKAGE_HPP
 
 #include "libdnf5/base/transaction.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 #include "libdnf5/transaction/transaction_item_action.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
@@ -35,7 +36,7 @@ class RpmTransactionTest;
 namespace libdnf5::base {
 
 /// Describe transaction operation related to rpm Package
-class TransactionPackage {
+class LIBDNF_API TransactionPackage {
 public:
     using Action = transaction::TransactionItemAction;
     using Reason = transaction::TransactionItemReason;

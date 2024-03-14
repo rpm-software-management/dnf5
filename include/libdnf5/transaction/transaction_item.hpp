@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item_reason.hpp"
 #include "transaction_item_state.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <string>
 
 
@@ -41,7 +43,7 @@ class CompsGroupPackageDbUtils;
 class CompsEnvironmentGroupDbUtils;
 
 
-class TransactionItem {
+class LIBDNF_API TransactionItem {
 public:
     using Action = TransactionItemAction;
     using Reason = TransactionItemReason;

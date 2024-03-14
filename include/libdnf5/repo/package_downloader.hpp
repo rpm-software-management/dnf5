@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_REPO_PACKAGE_DOWNLOADER_HPP
 
 #include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 
 #include <memory>
@@ -35,7 +36,7 @@ class PackageDownloadError : public Error {
 };
 
 
-class PackageDownloader {
+class LIBDNF_API PackageDownloader {
 public:
     explicit PackageDownloader(const libdnf5::BaseWeakPtr & base);
     explicit PackageDownloader(libdnf5::Base & base);

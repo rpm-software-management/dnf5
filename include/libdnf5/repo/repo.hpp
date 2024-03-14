@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/rpm/package.hpp"
@@ -55,7 +56,7 @@ class RepoDownloader;
 /// RPM repository
 /// Represents a repository used to download packages.
 /// Remote metadata is cached locally.
-class Repo {
+class LIBDNF_API Repo {
 public:
     enum class Type { AVAILABLE, SYSTEM, COMMANDLINE };
 

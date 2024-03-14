@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "reldep_list_iterator.hpp"
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 
@@ -33,7 +34,7 @@ namespace libdnf5::rpm {
 
 // @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 // @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
-class ReldepList {
+class LIBDNF_API ReldepList {
 public:
     // @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(const DependencyContainer &src)
     ReldepList(const ReldepList & src);

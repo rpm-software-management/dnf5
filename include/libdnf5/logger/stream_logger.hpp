@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "logger.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 #include <mutex>
 #include <ostream>
@@ -30,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 /// StreamLogger is an implementation of logging class that writes messages into a stream.
-class StreamLogger : public StringLogger {
+class LIBDNF_API StreamLogger : public StringLogger {
 public:
     explicit StreamLogger(std::unique_ptr<std::ostream> && log_stream) : log_stream(std::move(log_stream)) {}
     void write(const char * line) noexcept override;
@@ -41,7 +43,7 @@ private:
 };
 
 /// Logger that logs to a stream stored as a reference, meant to be used with std::cerr and std::cout.
-class StdCStreamLogger : public StringLogger {
+class LIBDNF_API StdCStreamLogger : public StringLogger {
 public:
     explicit StdCStreamLogger(std::ostream & stream) : log_stream(stream) {}
     void write(const char * line) noexcept override;

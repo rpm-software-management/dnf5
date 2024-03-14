@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_weak.hpp"
 
 #include <memory>
@@ -36,7 +37,7 @@ class FileDownloadError : public Error {
 };
 
 
-class FileDownloader {
+class LIBDNF_API FileDownloader {
 public:
     explicit FileDownloader(const libdnf5::BaseWeakPtr & base);
     explicit FileDownloader(libdnf5::Base & base);

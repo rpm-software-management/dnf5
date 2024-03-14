@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <filesystem>
 #include <string>
@@ -30,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::repo {
 
 
-struct RepoCacheRemoveStatistics {
+struct LIBDNF_API RepoCacheRemoveStatistics {
     std::size_t files_removed;  // Number of removed files and links.
     std::size_t dirs_removed;   // Number of removed directorires.
     std::size_t errors;         // Numbes of errors.
@@ -49,7 +50,7 @@ public:
 
 
 /// Repository cache management class.
-class RepoCache {
+class LIBDNF_API RepoCache {
 public:
     using RemoveStatistics = RepoCacheRemoveStatistics;
 

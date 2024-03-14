@@ -20,6 +20,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_DLL_EXPORT
+
 %ignore PluginError;
 %ignore libdnf_plugin_get_api_version;
 %ignore libdnf_plugin_get_name;

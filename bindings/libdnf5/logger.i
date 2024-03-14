@@ -38,6 +38,8 @@ typedef int32_t pid_t;
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 wrap_unique_ptr(LoggerUniquePtr, libdnf5::Logger);
 wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
 

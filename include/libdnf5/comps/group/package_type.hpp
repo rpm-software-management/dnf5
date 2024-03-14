@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_COMPS_GROUP_PACKAGE_TYPE_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 #include <vector>
@@ -34,7 +35,7 @@ enum class PackageType : int {
     OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
 };
 
-class InvalidPackageType : public libdnf5::Error {
+class LIBDNF_API InvalidPackageType : public libdnf5::Error {
 public:
     InvalidPackageType(const std::string & type);
     InvalidPackageType(const PackageType type);
@@ -66,10 +67,10 @@ inline constexpr bool any(PackageType flags) {
     return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
 }
 
-PackageType package_type_from_string(const std::string & type);
-PackageType package_type_from_string(const std::vector<std::string> types);
-std::string package_type_to_string(const PackageType type);
-std::vector<std::string> package_types_to_strings(const PackageType types);
+LIBDNF_API PackageType package_type_from_string(const std::string & type);
+LIBDNF_API PackageType package_type_from_string(const std::vector<std::string> types);
+LIBDNF_API std::string package_type_to_string(const PackageType type);
+LIBDNF_API std::vector<std::string> package_types_to_strings(const PackageType types);
 
 }  // namespace libdnf5::comps
 

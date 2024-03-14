@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo.hpp"
 
 #include <string>
@@ -40,7 +41,7 @@ using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 namespace libdnf5::repo {
 
-class RepoQuery : public libdnf5::sack::Query<RepoWeakPtr> {
+class LIBDNF_API RepoQuery : public libdnf5::sack::Query<RepoWeakPtr> {
 public:
 #ifndef SWIG
     using Query<RepoWeakPtr>::Query;

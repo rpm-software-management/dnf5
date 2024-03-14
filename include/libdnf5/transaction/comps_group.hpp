@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item.hpp"
 
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <vector>
@@ -40,7 +41,7 @@ class CompsGroupPackageDbUtils;
 /// to perform comps transaction and then stored in the transaction (history) database.
 ///
 // @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupItem
-class CompsGroup : public TransactionItem {
+class LIBDNF_API CompsGroup : public TransactionItem {
 public:
     /// Get string representation of the object, which equals to group_id
     ///
@@ -123,7 +124,7 @@ private:
 /// CompsGroupPackage represents a package associated with a comps group
 ///
 // @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupPackage
-class CompsGroupPackage {
+class LIBDNF_API CompsGroupPackage {
 public:
     ~CompsGroupPackage();
     CompsGroupPackage(const CompsGroupPackage & src);

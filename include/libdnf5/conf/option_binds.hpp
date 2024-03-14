@@ -48,7 +48,7 @@ public:
 
 /// Maps the options names (text names read from config file, command line, ...) to options objects.
 /// Supports user defined functions for processing new value and converting value to string.
-class OptionBinds {
+class LIBDNF_API OptionBinds {
 public:
     /// Extends the option with user-defined functions for processing a new value and converting value to a string.
     /// It is used as additional level of processing when the option is accessed by its text name.

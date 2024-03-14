@@ -40,6 +40,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 %include "libdnf5/comps/group/package_type.hpp"
 %include "libdnf5/comps/group/package.hpp"
 %include "libdnf5/comps/group/group.hpp"

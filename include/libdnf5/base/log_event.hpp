@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/solver_problems.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_type.hpp"
 
 #include <optional>
@@ -33,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::base {
 
 /// Contain information, hint, or a problem created during libdnf5::Goal::resolve()
-class LogEvent {
+class LIBDNF_API LogEvent {
 public:
     /// Public constructor
     LogEvent(

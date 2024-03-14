@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/advisory/advisory_query.hpp"
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/conf/config_main.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/nevra.hpp"
 
 #include <cstdint>
@@ -109,7 +110,7 @@ enum class GoalAction {
 };
 
 /// Convert GoalAction enum to user-readable string
-std::string goal_action_to_string(GoalAction action);
+LIBDNF_API std::string goal_action_to_string(GoalAction action);
 
 /// Settings for GoalJobSettings
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
@@ -119,7 +120,7 @@ enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
 /// Configure SPEC resolving.
 /// Important for queries that resolve SPEC.
-struct ResolveSpecSettings {
+struct LIBDNF_API ResolveSpecSettings {
 public:
     ResolveSpecSettings();
     ~ResolveSpecSettings();
@@ -199,7 +200,7 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-struct GoalJobSettings : public ResolveSpecSettings {
+struct LIBDNF_API GoalJobSettings : public ResolveSpecSettings {
 public:
     GoalJobSettings();
     ~GoalJobSettings();

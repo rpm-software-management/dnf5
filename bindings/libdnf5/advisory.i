@@ -38,6 +38,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 %include "libdnf5/advisory/advisory.hpp"
 %include "libdnf5/advisory/advisory_package.hpp"
 %include "libdnf5/advisory/advisory_set.hpp"

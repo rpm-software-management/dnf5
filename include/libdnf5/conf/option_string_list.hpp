@@ -34,7 +34,7 @@ namespace libdnf5 {
 /// Support default value, and check of an input value using the regular expression
 // @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
 template <typename T>
-class OptionStringContainer : public Option {
+class LIBDNF_API OptionStringContainer : public Option {
 public:
     using ValueType = T;
 

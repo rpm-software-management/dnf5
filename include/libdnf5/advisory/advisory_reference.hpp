@@ -22,11 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 
 namespace libdnf5::advisory {
 
-class AdvisoryReference {
+class LIBDNF_API AdvisoryReference {
 public:
     AdvisoryReference(const AdvisoryReference & src);
     AdvisoryReference & operator=(const AdvisoryReference & src);

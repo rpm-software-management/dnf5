@@ -25,13 +25,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option_binds.hpp"
 #include "vars.hpp"
 
+#include "libdnf5/defs.h"
 #include "libdnf5/logger/logger.hpp"
 
 
 namespace libdnf5 {
 
 /// Base class for configurations objects
-class Config {
+class LIBDNF_API Config {
 public:
     OptionBinds & opt_binds() noexcept { return binds; }
 

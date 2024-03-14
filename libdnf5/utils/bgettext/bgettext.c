@@ -17,13 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf5/defs.h"
 #include "libdnf5/utils/bgettext/bgettext-common.h"
 
 #include <string.h>
 
 enum { BGETTEXT_PLURAL = 1 << 0, BGETTEXT_CONTEXT = 1 << 1, BGETTEXT_DOMAIN = 1 << 2 };
 
-const char * b_dpgettext(const char * domain, const char * context, const char * msgId) {
+LIBDNF_API const char * b_dpgettext(const char * domain, const char * context, const char * msgId) {
     size_t context_len = strlen(context) + 1;
     size_t msgId_len = strlen(msgId) + 1;
     char ctxMsgId[context_len + msgId_len];
@@ -40,14 +41,14 @@ const char * b_dpgettext(const char * domain, const char * context, const char *
     return translation;
 }
 
-const char * b_dpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset) {
+LIBDNF_API const char * b_dpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset) {
     const char * const translation = dgettext(domain, ctxMsgId);
     if (translation == ctxMsgId)
         return ctxMsgId + msgIdOffset;
     return translation;
 }
 
-const char * b_dnpgettext(
+LIBDNF_API const char * b_dnpgettext(
     const char * domain, const char * context, const char * msgId, const char * msgIdPlural, unsigned long int n) {
     size_t context_len = strlen(context) + 1;
     size_t msgId_len = strlen(msgId) + 1;
@@ -65,7 +66,7 @@ const char * b_dnpgettext(
     return translation;
 }
 
-const char * b_dnpgettext2(
+LIBDNF_API const char * b_dnpgettext2(
     const char * domain, const char * ctxMsgId, size_t msgIdOffset, const char * msgIdPlural, unsigned long int n) {
     const char * const translation = dngettext(domain, ctxMsgId, msgIdPlural, n);
     if (translation == ctxMsgId)
@@ -73,11 +74,11 @@ const char * b_dnpgettext2(
     return translation;
 }
 
-const char * b_gettextmsg_get_domain(struct BgettextMessage message) {
+LIBDNF_API const char * b_gettextmsg_get_domain(struct BgettextMessage message) {
     return *message.bgettextMsg & BGETTEXT_DOMAIN ? message.bgettextMsg + 1 : NULL;
 }
 
-const char * b_gettextmsg_get_id(struct BgettextMessage message) {
+LIBDNF_API const char * b_gettextmsg_get_id(struct BgettextMessage message) {
     const char * msgId = message.bgettextMsg + 1;
     if (*message.bgettextMsg & BGETTEXT_DOMAIN) {
         msgId = strchr(msgId, 0) + 1;
@@ -88,7 +89,7 @@ const char * b_gettextmsg_get_id(struct BgettextMessage message) {
     return msgId;
 }
 
-const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
+LIBDNF_API const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
     const char * markedMsg = message.bgettextMsg;
     if ((*markedMsg & ~(BGETTEXT_PLURAL | BGETTEXT_CONTEXT | BGETTEXT_DOMAIN)) == 0) {
         const char * msgId;

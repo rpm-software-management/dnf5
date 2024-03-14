@@ -46,6 +46,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 // enums
 %include "libdnf5/transaction/transaction_item_action.hpp"
 %include "libdnf5/transaction/transaction_item_reason.hpp"

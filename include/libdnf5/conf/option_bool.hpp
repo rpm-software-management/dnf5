@@ -34,7 +34,7 @@ namespace libdnf5 {
 /// Conversion from string to bool is done according to vectors which contains strings of true and false values.
 /// Conversion is case insensitive for input. Values must be lower case in vectors.
 // @replaces libdnf:conf/OptionBool.hpp:class:OptionBool
-class OptionBool : public Option {
+class LIBDNF_API OptionBool : public Option {
 public:
     using ValueType = bool;
 

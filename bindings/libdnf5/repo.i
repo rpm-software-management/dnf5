@@ -48,6 +48,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 %feature("valuewrapper") Package;
 
 %include "libdnf5/repo/config_repo.hpp"

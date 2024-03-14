@@ -42,7 +42,7 @@ class ReadOnlyVariableError : public Error {
 ///
 /// The class loads the variables from the environment as well as from a list
 /// of directories.
-struct Vars {
+struct LIBDNF_API Vars {
 public:
     enum class Priority {
         DEFAULT = 10,

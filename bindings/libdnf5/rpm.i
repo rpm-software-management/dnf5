@@ -49,6 +49,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 %include "libdnf5/rpm/arch.hpp"
 
 %include "libdnf5/rpm/checksum.hpp"

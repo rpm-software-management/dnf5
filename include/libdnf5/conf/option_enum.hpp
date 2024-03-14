@@ -32,7 +32,7 @@ namespace libdnf5 {
 /// Support default value and user defined function for conversion from string.
 // @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<T>
 template <typename T>
-class OptionEnum : public Option {
+class LIBDNF_API OptionEnum : public Option {
 public:
     using ValueType = T;
     using FromStringFunc = std::function<ValueType(const std::string &)>;

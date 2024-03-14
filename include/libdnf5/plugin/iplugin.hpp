@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_PLUGIN_IPLUGIN_HPP
 #define LIBDNF5_PLUGIN_IPLUGIN_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/version.hpp"
 
 #include <cstdint>
@@ -111,22 +112,22 @@ extern "C" {
 
 /// Returns the version of the API supported by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
-libdnf5::PluginAPIVersion libdnf_plugin_get_api_version(void);
+LIBDNF_DLL_EXPORT libdnf5::PluginAPIVersion libdnf_plugin_get_api_version(void);
 
 /// Returns the name of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
-const char * libdnf_plugin_get_name(void);
+LIBDNF_DLL_EXPORT const char * libdnf_plugin_get_name(void);
 
 /// Returns the version of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_version(), but can be called without creating an IPlugin instance.
-libdnf5::plugin::Version libdnf_plugin_get_version(void);
+LIBDNF_DLL_EXPORT libdnf5::plugin::Version libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
+LIBDNF_DLL_EXPORT libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
     libdnf5::LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser);
 
 /// Deletes plugin instance.
-void libdnf_plugin_delete_instance(libdnf5::plugin::IPlugin * plugin_instance);
+LIBDNF_DLL_EXPORT void libdnf_plugin_delete_instance(libdnf5::plugin::IPlugin * plugin_instance);
 }
 
 #endif

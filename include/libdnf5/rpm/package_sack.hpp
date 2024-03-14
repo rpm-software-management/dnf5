@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/versionlock_config.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
@@ -79,7 +80,7 @@ class PackageSet;
 class PackageSack;
 using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
-class PackageSack {
+class LIBDNF_API PackageSack {
 public:
     explicit PackageSack(const libdnf5::BaseWeakPtr & base);
     explicit PackageSack(libdnf5::Base & base);

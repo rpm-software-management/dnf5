@@ -23,11 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory.hpp"
 
 #include "libdnf5/common/impl_ptr.hpp"
+#include "libdnf5/defs.h"
 
 
 namespace libdnf5::advisory {
 
-class AdvisoryModule {
+class LIBDNF_API AdvisoryModule {
 public:
     AdvisoryModule(const AdvisoryModule & src);
     AdvisoryModule(AdvisoryModule && src) noexcept;

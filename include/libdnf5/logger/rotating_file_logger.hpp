@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "logger.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <filesystem>
 #include <memory>
@@ -31,7 +32,7 @@ namespace libdnf5 {
 
 /// RotatingFileLogger is an implementation of a rotating file logger.
 /// It can be used simultaneously in multiple processes and threads.
-class RotatingFileLogger : public StringLogger {
+class LIBDNF_API RotatingFileLogger : public StringLogger {
 public:
     /// Construct a new instance of the `RotatingFileLogger` class.
     ///

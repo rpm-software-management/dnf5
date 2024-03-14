@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_ITEM_HPP
 #define LIBDNF5_MODULE_MODULE_ITEM_HPP
 
+#include "libdnf5/defs.h"
 #include "libdnf5/module/module_dependency.hpp"
 #include "libdnf5/module/module_profile.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
@@ -53,7 +54,7 @@ public:
 
 // Represents one modulemd document (uniquely described by name:stream:version:context:arch, but there can theoretically be more objects with the same NSVCA)
 // @replaces libdnf:module/ModuleItem.hpp:class:ModuleItem
-class ModuleItem {
+class LIBDNF_API ModuleItem {
 public:
     bool operator==(const ModuleItem & rhs) const noexcept;
     bool operator!=(const ModuleItem & rhs) const noexcept;

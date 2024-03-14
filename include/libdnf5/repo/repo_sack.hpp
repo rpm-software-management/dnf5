@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/sack.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/logger/logger.hpp"
 
 
@@ -35,7 +36,7 @@ class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 
-class RepoSack : public sack::Sack<Repo> {
+class LIBDNF_API RepoSack : public sack::Sack<Repo> {
 public:
     /// Creates a new clear repository with default configuration.
     /// @param id The new repo id

@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 
 
 namespace libdnf5::transaction {
@@ -32,7 +33,7 @@ class TransactionHistory;
 using TransactionHistoryWeakPtr = libdnf5::WeakPtr<TransactionHistory, false>;
 
 /// A class for working with transactions recorded in the transaction history database.
-class TransactionHistory {
+class LIBDNF_API TransactionHistory {
 public:
     explicit TransactionHistory(const libdnf5::BaseWeakPtr & base);
     explicit TransactionHistory(libdnf5::Base & base);

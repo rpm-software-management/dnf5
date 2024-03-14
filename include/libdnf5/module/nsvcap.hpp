@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_NSCVAP_HPP
 #define LIBDNF5_MODULE_NSCVAP_HPP
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -28,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::module {
 
 
-class Nsvcap {
+class LIBDNF_API Nsvcap {
 public:
     enum class Form {
         NSVCAP = 1,

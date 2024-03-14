@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <string>
 
@@ -38,7 +39,7 @@ enum class TransactionItemReason : int {
 };
 
 
-class InvalidTransactionItemReason : public libdnf5::Error {
+class LIBDNF_API InvalidTransactionItemReason : public libdnf5::Error {
 public:
     InvalidTransactionItemReason(const std::string & reason);
 
@@ -47,8 +48,8 @@ public:
 };
 
 
-std::string transaction_item_reason_to_string(TransactionItemReason reason);
-TransactionItemReason transaction_item_reason_from_string(const std::string & reason);
+LIBDNF_API std::string transaction_item_reason_to_string(TransactionItemReason reason);
+LIBDNF_API TransactionItemReason transaction_item_reason_from_string(const std::string & reason);
 
 
 /// Compare transaction items and return:
@@ -56,13 +57,13 @@ TransactionItemReason transaction_item_reason_from_string(const std::string & re
 /// 1 if lhs > rhs
 /// 0 if lhs == rhs
 /// Higher number means a better (or a stronger) reason.
-int transaction_item_reason_compare(TransactionItemReason lhs, TransactionItemReason rhs);
+LIBDNF_API int transaction_item_reason_compare(TransactionItemReason lhs, TransactionItemReason rhs);
 
 
-bool operator<(TransactionItemReason lhs, TransactionItemReason rhs);
-bool operator<=(TransactionItemReason lhs, TransactionItemReason rhs);
-bool operator>(TransactionItemReason lhs, TransactionItemReason rhs);
-bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs);
+LIBDNF_API bool operator<(TransactionItemReason lhs, TransactionItemReason rhs);
+LIBDNF_API bool operator<=(TransactionItemReason lhs, TransactionItemReason rhs);
+LIBDNF_API bool operator>(TransactionItemReason lhs, TransactionItemReason rhs);
+LIBDNF_API bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs);
 
 }  // namespace libdnf5::transaction
 

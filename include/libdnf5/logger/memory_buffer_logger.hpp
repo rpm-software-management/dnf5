@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "logger.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <mutex>
 #include <vector>
 
@@ -30,7 +32,7 @@ namespace libdnf5 {
 
 /// MemoryBufferLogger is an implementation of logging class that stores incoming logging messages into memory buffer.
 /// It is usually used as temporary logger until a final logger is configured.
-class MemoryBufferLogger : public Logger {
+class LIBDNF_API MemoryBufferLogger : public Logger {
 public:
     struct Item {
         std::chrono::time_point<std::chrono::system_clock> time;

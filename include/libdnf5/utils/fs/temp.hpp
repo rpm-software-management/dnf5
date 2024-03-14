@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "file.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -31,7 +33,7 @@ namespace libdnf5::utils::fs {
 
 /// Object that creates and holds a temp directory.
 /// The directory gets removed when the object is deleted.
-class TempDir {
+class LIBDNF_API TempDir {
 public:
     /// Creates a temporary directory in the system temporary directory path.
     explicit TempDir(const std::string & name_prefix);
@@ -60,7 +62,7 @@ private:
 /// A mkstemp wrapper that creates and owns a temporary file, which will be
 /// deleted in the destructor unless released. Throws instances of
 /// `libdnf5::FileSystemError` on any I/O failure.
-class TempFile {
+class LIBDNF_API TempFile {
 public:
     /// Creates a temporary file in the system temporary directory path.
     ///

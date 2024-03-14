@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_RELDEP_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <string>
@@ -45,7 +46,7 @@ public:
 // @replaces libdnf/dnf-reldep.h:struct:DnfReldep
 // @replaces libdnf/repo/solvable/Dependency.hpp:struct:Dependency
 // @replaces hawkey:hawkey/__init__.py:class:Reldep
-class Reldep {
+class LIBDNF_API Reldep {
 public:
     enum class CmpType { NONE = 0, GT = (1 << 0), EQ = (1 << 1), GTE = (GT | EQ), LT = (1 << 2), LTE = (LT | EQ) };
 

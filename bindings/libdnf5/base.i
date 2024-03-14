@@ -47,6 +47,8 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_API
+
 %template(BaseWeakPtr) libdnf5::WeakPtr<libdnf5::Base, false>;
 %template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 

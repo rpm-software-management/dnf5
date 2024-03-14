@@ -22,16 +22,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "query_cmp.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <cstdint>
 #include <vector>
 
 
 namespace libdnf5::sack {
 
-bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern);
-bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patterns);
-bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t pattern);
-bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, const std::vector<int64_t> & patterns);
+LIBDNF_API bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern);
+LIBDNF_API bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patterns);
+LIBDNF_API bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t pattern);
+LIBDNF_API bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, const std::vector<int64_t> & patterns);
 
 }  // namespace libdnf5::sack
 

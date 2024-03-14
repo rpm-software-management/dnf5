@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_item.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <memory>
 
 
@@ -35,7 +37,7 @@ class RpmDbUtils;
 /// to perform rpm transaction and then stored in the transaction (history) database.
 ///
 // @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
-class Package : public TransactionItem {
+class LIBDNF_API Package : public TransactionItem {
 public:
     /// Get package name
     ///

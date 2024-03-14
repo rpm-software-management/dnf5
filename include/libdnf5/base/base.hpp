@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/vars.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack.hpp"
 #include "libdnf5/plugin/iplugin.hpp"
@@ -55,7 +56,7 @@ class InternalBaseUser;
 /// Instances of :class:`libdnf5::Base` are the central point of functionality supplied by libdnf5.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
 /// :class:`.Base` instances are stateful objects owning various data.
-class Base {
+class LIBDNF_API Base {
 public:
     /// Constructs a new Base instance and sets the destination loggers.
     Base(std::vector<std::unique_ptr<Logger>> && loggers = {});

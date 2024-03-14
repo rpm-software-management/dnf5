@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/log_event.hpp"
 #include "libdnf5/base/solver_problems.hpp"
 #include "libdnf5/common/proc.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/transaction_callbacks.hpp"
 
 #include <optional>
@@ -44,7 +45,7 @@ class TransactionModule;
 class TransactionPackage;
 
 /// Error related to processing transaction
-class TransactionError : public Error {
+class LIBDNF_API TransactionError : public Error {
 public:
     using Error::Error;
     /// @return Error class' domain name"
@@ -54,7 +55,7 @@ public:
 };
 
 
-class Transaction {
+class LIBDNF_API Transaction {
 public:
     /// enum representing Transaction run result
     enum class TransactionRunResult {

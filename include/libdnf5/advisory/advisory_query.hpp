@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/rpm/package_set.hpp"
 
 
@@ -35,7 +36,7 @@ namespace libdnf5::advisory {
 
 /// AdvisoryQuery is the only way how to access advisories.
 /// It is constructed using Base and filled with advisories from enabled repositories in its RepoSack.
-class AdvisoryQuery : public AdvisorySet {
+class LIBDNF_API AdvisoryQuery : public AdvisorySet {
 public:
     /// Create a new AdvisoryQuery instance.
     ///

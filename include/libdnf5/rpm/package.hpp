@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "checksum.hpp"
 #include "reldep_list.hpp"
 
+#include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
@@ -79,7 +80,7 @@ public:
 
 // @replaces libdnf:libdnf/hy-package.h:struct:DnfPackage
 // @replaces dnf:dnf/package.py:class:Package
-class Package {
+class LIBDNF_API Package {
 public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_identical(DnfPackage * pkg)
     bool operator==(const Package & other) const noexcept;

@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
 
@@ -55,7 +56,7 @@ class RepoSack;
 namespace libdnf5::module {
 
 /// Container with data and methods related to modules
-class ModuleSack {
+class LIBDNF_API ModuleSack {
 public:
     enum class ModuleErrorType {
         NO_ERROR = 0,

@@ -41,6 +41,7 @@
 
 #define CV __perl_CV
 #define final
+#define LIBDNF_API
 
 wrap_unique_ptr(StringUniquePtr, std::string);
 

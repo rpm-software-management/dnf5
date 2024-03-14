@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_group.hpp"
 
 #include "libdnf5/comps/group/package.hpp"
+#include "libdnf5/defs.h"
 
 #include <memory>
 #include <vector>
@@ -40,7 +41,7 @@ class CompsEnvironmentGroupDbUtils;
 /// to perform comps transaction and then stored in the transaction (history) database.
 ///
 // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentItem
-class CompsEnvironment : public TransactionItem {
+class LIBDNF_API CompsEnvironment : public TransactionItem {
 public:
     /// Get string representation of the object, which equals to environment_id
     ///
@@ -120,7 +121,7 @@ private:
 
 
 // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentGroup
-class CompsEnvironmentGroup {
+class LIBDNF_API CompsEnvironmentGroup {
 public:
     ~CompsEnvironmentGroup();
     CompsEnvironmentGroup(const CompsEnvironmentGroup & src);

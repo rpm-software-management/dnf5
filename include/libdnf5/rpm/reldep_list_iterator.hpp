@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep.hpp"
 
+#include "libdnf5/defs.h"
+
 #include <cstddef>
 #include <iterator>
 #include <memory>
@@ -33,7 +35,7 @@ namespace libdnf5::rpm {
 class ReldepList;
 
 
-class ReldepListIterator {
+class LIBDNF_API ReldepListIterator {
 public:
     explicit ReldepListIterator(const ReldepList & reldep_list);
     ReldepListIterator(const ReldepListIterator & other);

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_NEVRA_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/defs.h"
 
 #include <sstream>
 #include <string>
@@ -30,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::rpm {
 
-struct NevraIncorrectInputError : public Error {
+struct LIBDNF_API NevraIncorrectInputError : public Error {
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
     const char * get_name() const noexcept override { return "NevraIncorrectInputError"; }
@@ -38,7 +39,7 @@ struct NevraIncorrectInputError : public Error {
 
 
 // @replaces hawkey:hawkey/__init__.py:class:Nevra
-struct Nevra {
+struct LIBDNF_API Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
 
@@ -68,7 +69,7 @@ public:
     bool operator==(const Nevra & other) const;
 
     // NOTE: required by cppunit asserts
-    friend std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
+    //friend std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
 
     /// Returns false when parsing failed and stored data are in inconsistency state.
 
@@ -118,6 +119,9 @@ private:
 inline std::vector<Nevra> Nevra::parse(const std::string & nevra_str) {
     return parse(nevra_str, get_default_pkg_spec_forms());
 }
+
+
+LIBDNF_API std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
 
 
 /// Create a full nevra string (always contains epoch) from an object
@@ -190,7 +194,7 @@ inline void copy_nevra_attributes(const F & from, T & to) {
 
 /// Compare alpha and numeric segments of two versions.
 /// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
-int rpmvercmp(const char * lhs, const char * rhs);
+LIBDNF_API int rpmvercmp(const char * lhs, const char * rhs);
 
 
 /// Compare evr part of two objects

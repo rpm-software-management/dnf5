@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_COMPS_ENVIRONMENT_ENVIRONMENT_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/defs.h"
 #include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <set>
@@ -45,7 +46,7 @@ public:
 
 
 // @replaces dnf:dnf/comps.py:class:Environment
-class Environment {
+class LIBDNF_API Environment {
 public:
     ~Environment();
 

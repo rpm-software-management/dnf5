@@ -20,13 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_CHECKSUM_HPP
 #define LIBDNF5_RPM_CHECKSUM_HPP
 
+#include "libdnf5/defs.h"
+
 #include <string>
 
 
 namespace libdnf5::rpm {
 
 /// Class contains checksum and checksum type
-class Checksum {
+class LIBDNF_API Checksum {
 public:
     enum class Type { UNKNOWN, MD5, SHA1, SHA224, SHA256, SHA384, SHA512 };
     Type get_type() const noexcept;
