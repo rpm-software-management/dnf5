@@ -222,4 +222,48 @@ void ArgumentParserTest::test_argument_parser() {
         CPPUNIT_ASSERT_THROW(
             arg_parser.parse(std::size(argv), argv), libdnf5::cli::ArgumentParserConflictingArgumentsError);
     }
+
+    {
+        // The number of values required by the "keys" positional argument is set to UNLIMITED, "abc" and "def" will be parsed.
+        constexpr const char * argv[]{"test", "repoquery", "--info", "abc", "def"};
+        arg_parser.parse(std::size(argv), argv);
+
+        const auto & options = *keys->get_linked_values();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), options.size());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("abc"), dynamic_cast<const libdnf5::OptionString *>(options[0].get())->get_value());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("def"), dynamic_cast<const libdnf5::OptionString *>(options[1].get())->get_value());
+    }
+
+    {
+        // By default, the positional argument cannot be repeated. Throws an exception on "def".
+        constexpr const char * argv[]{"test", "repoquery", "abc", "--info", "def", "gh"};
+        CPPUNIT_ASSERT_THROW(arg_parser.parse(std::size(argv), argv), libdnf5::cli::ArgumentParserUnknownArgumentError);
+    }
+
+    {
+        // Allow repeating the "keys" positional argument on the command line
+        keys->set_nrepeats(ArgParser::PositionalArg::UNLIMITED);
+
+        // Stores all values of the repeated positional argument "keys" into a local vector using a hook function.
+        std::vector<std::string> key_vals;
+        keys->set_parse_hook_func(
+            [&key_vals]([[maybe_unused]] ArgParser::PositionalArg * arg, int argc, const char * const argv[]) {
+                for (int i = 0; i < argc; ++i) {
+                    key_vals.emplace_back(argv[i]);
+                }
+                return true;
+            });
+
+        constexpr const char * argv[]{"test", "repoquery", "abc", "--info", "def", "gh"};
+        arg_parser.parse(std::size(argv), argv);
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), key_vals.size());
+        CPPUNIT_ASSERT_EQUAL(std::string("abc"), key_vals[0]);
+        CPPUNIT_ASSERT_EQUAL(std::string("def"), key_vals[1]);
+        CPPUNIT_ASSERT_EQUAL(std::string("gh"), key_vals[2]);
+
+        keys->set_complete_hook_func(nullptr);
+    }
 }
