@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
 "PO-Revision-Date: 2024-02-02 13:11+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -18,39 +18,39 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.3.1\n"
 
-#: addrepo.cpp:152
+#: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: soubor \"{}\" neexistuje"
 
-#: addrepo.cpp:155
+#: addrepo.cpp:156
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Špatně naformátovaná hodnota argumentu \"{}\""
 
-#: addrepo.cpp:195
+#: addrepo.cpp:196
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Nelze nastavit volbu repozitáře \"{}={}\": {}"
 
-#: addrepo.cpp:203 setopt.cpp:138
+#: addrepo.cpp:204 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Nastaví volbu \"{}\" znovu s jinou hodnotou: \"{}\" != \"{}\""
 
-#: addrepo.cpp:269
+#: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
 msgstr "Chybí cesta ke konfiguračnímu adresáři repozitáře"
 
-#: addrepo.cpp:319
+#: addrepo.cpp:320
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se zkopírovat konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:330
+#: addrepo.cpp:331
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se stáhnout konfigurační soubor repozitáře „{}“: {}"
 
-#: addrepo.cpp:352
+#: addrepo.cpp:353
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -58,11 +58,11 @@ msgstr ""
 "Chyba v přidaném konfiguračním souboru repozitáře. Nelze nastavit volbu "
 "úložiště \"{}={}\": {}"
 
-#: addrepo.cpp:386
+#: addrepo.cpp:387
 msgid "Bad baseurl: {}={}"
 msgstr "Špatná základní adresa URL: {}={}"
 
-#: addrepo.cpp:394
+#: addrepo.cpp:395
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -70,11 +70,11 @@ msgstr ""
 "Jeden z --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, "
 "--set=metalink=<URL> musí být nastaven na neprázdnou adresu URL"
 
-#: addrepo.cpp:439
+#: addrepo.cpp:440
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se uložit konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:461
+#: addrepo.cpp:462
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -82,7 +82,7 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Přidejte \"--"
 "add-or-replace\" nebo \"--overwrite\"."
 
-#: addrepo.cpp:464
+#: addrepo.cpp:465
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -90,18 +90,24 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Chcete-li "
 "jej přepsat, přidejte \"--overwrite\"."
 
-#: addrepo.cpp:484 addrepo.cpp:509
+#: addrepo.cpp:485 addrepo.cpp:511
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Repozitář s ID \"{}\" již má konfiguraci v souboru: {}"
 
-#: setopt.cpp:91 unsetopt.cpp:65
+#: addrepo.cpp:497 setopt.cpp:263
+#, fuzzy
+#| msgid "Cannot set repository option \"{}\": {}"
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "Nelze nastavit volbu repozitáře \"{}\": {}"
+
+#: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Špatně naformátovaná hodnota argumentu: Poslední klíčový znak nemůže být "
 "'.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:74
+#: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: Prázdné ID repozitáře není povoleno: {}"
 
@@ -141,19 +147,19 @@ msgstr "Chybí cesta k adresáři vars"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Nelze zapsat proměnnou do souboru \"{}\": {}"
 
-#: shared.hpp:49
+#: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
 "Cesta \"{}\" existuje, ale není to adresář ani symbolický odkaz na adresář."
 
-#: shared.hpp:54
+#: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Cesta \"{}\" existuje, ale je to symbolický odkaz na neexistující objekt."
 
-#: shared.hpp:60
+#: shared.hpp:69
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -161,10 +167,59 @@ msgstr ""
 "Adresář \"{}\" neexistuje. Chcete-li vytvořit chybějící adresáře, přidejte "
 "\"--create-missing-dir\"."
 
-#: shared.hpp:71
+#: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Název proměnné může obsahovat pouze písmena ASCII, čísla a '_': {}"
 
-#: unsetvar.cpp:76
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr ""
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+
+#: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "Nelze odstranit variabilní soubor \"{}\": {}"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-01-19 02:47+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
+"PO-Revision-Date: 2024-03-12 20:36+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ka/>\n"
@@ -16,42 +16,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
-#: addrepo.cpp:152
+#: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "რეპოფაილიდან: ფაილი \"{}\" არ არსებობს"
 
-#: addrepo.cpp:155
+#: addrepo.cpp:156
 msgid "from-repofile: {}"
 msgstr "რეპოფაილიდან: {}"
 
-#: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
 
-#: addrepo.cpp:195
+#: addrepo.cpp:196
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "ვერ დავაყენე რეპოზიტორიის პარამეტრი \"{}={}\": {}"
 
-#: addrepo.cpp:203 setopt.cpp:138
+#: addrepo.cpp:204 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "დააყენებს პარამეტრს \"{}\" კიდევ ერთხელ სხვა მნიშვნელობით: \"{}\" != \"{}\""
 
-#: addrepo.cpp:269
+#: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
 msgstr "აკლია რეპოზიტორიის კონფიგურაციის საქაღალდის ბილიკი"
 
-#: addrepo.cpp:319
+#: addrepo.cpp:320
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" კოპირება ჩავარდა: {}"
 
-#: addrepo.cpp:330
+#: addrepo.cpp:331
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" გადმოწერა ჩავარდა: {}"
 
-#: addrepo.cpp:352
+#: addrepo.cpp:353
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -59,11 +59,11 @@ msgstr ""
 "შეცდომა დამატებული რეპოზიტორიის კონფიგურაციის ფაილში. ვერ დავაყენე "
 "რეპოზიტორიის პარამეტრი \"{}={}\": {}"
 
-#: addrepo.cpp:386
+#: addrepo.cpp:387
 msgid "Bad baseurl: {}={}"
 msgstr "არასწორი baseurl: {}={}"
 
-#: addrepo.cpp:394
+#: addrepo.cpp:395
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -71,11 +71,11 @@ msgstr ""
 "ერთ-ერთი პარამეტრებიდან --from-repofile=<URL>, --set=baseurl=<URL>, --"
 "set=mirrorlist=<URL>, --set=metalink=<URL> არაცარიელ URL-ზე უნდა ეყენოს"
 
-#: addrepo.cpp:439
+#: addrepo.cpp:440
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "რეპოზიტორიის კონფიგურაციის ფაილის \"{}\" შენახვა ჩავარდა: {}"
 
-#: addrepo.cpp:461
+#: addrepo.cpp:462
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -83,7 +83,7 @@ msgstr ""
 "ფაილი \"{}\" უკვე არსებობს და მიუთითებს რეპოზიტორიებზე ID-ებით \"{}\". "
 "დაამატეთ \"--add-or-replace\" ან \"--overwrite\"."
 
-#: addrepo.cpp:464
+#: addrepo.cpp:465
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -91,18 +91,22 @@ msgstr ""
 "ფაილი \"{}\" უკვე არსებობს და მიუთითებს რეპოზიტორიებზე ID-ებით \"{}\". თავზე "
 "გადასაწერად დაამატეთ \"--overwrite\"."
 
-#: addrepo.cpp:484 addrepo.cpp:509
+#: addrepo.cpp:485 addrepo.cpp:511
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "რეპოზიტორია ID-ით \"{}\" უკვე მორგებულია ფაილში:{}"
 
-#: setopt.cpp:91 unsetopt.cpp:65
+#: addrepo.cpp:497 setopt.cpp:263
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "ვერ წავიკითხე რეპოზიტორია საქაღალდიდან \"{}\": {}"
+
+#: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
 "იქნება '.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:74
+#: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: ცარიელი რეპოზიტორიის ID დაშვებული არაა: {}"
 
@@ -143,18 +147,18 @@ msgstr "აკლია ბილიკი ცვლადების საქ
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "ვერ ჩავწერე ცვლადი ფაილში \"{}\": {}"
 
-#: shared.hpp:49
+#: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
 "ბილიკი \"{}\" არსებობს, მაგრამ ის არც საქაღალდეა, არც საქაღალდის სიმბმული."
 
-#: shared.hpp:54
+#: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr "ბილიკი \"{}\" არსებობს, მაგრამ ის სიმბმულია არრსებულ ობიექტზე."
 
-#: shared.hpp:60
+#: shared.hpp:69
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -162,13 +166,77 @@ msgstr ""
 "საქაღალდე \"{}\" არ არსებობს. ნაკლული საქაღალდეების შესაქმნელად დაამატეთ \"--"
 "create-missing-dir\"."
 
-#: shared.hpp:71
+#: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
 "ცვლადის სახელი მხოლოდ ლათინურ სიმბოლოებს, ციფრებს და '_'-ს შეიძლება "
 "შეიცავდეს: {}"
 
-#: unsetvar.cpp:76
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო მხარდაუჭერელი რეპოზიტორიის პარამეტრი: {}"
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr "config-manager: მოთხოვნა, წავშალო მხარდაუჭერელი მთავარი პარამეტრი: {}"
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: მოთხოვნა, რომ წავშალო მთავარი პარამეტრი, მაგრამ ის "
+"კონფიგურაციის ფაილში არ არსებობს: {}"
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო მთავარი პარამეტრი, მაგრამ კონფიგურაციის "
+"ფაილი ვერ ვიპოვე: {}"
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო რეპოზიტორიის პარამეტრი, მაგრამ "
+"გადაფარვებში repoid აღმოჩენილი არაა: {}"
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო რეპოზიტორიის პარამეტრი, მაგრამ ის "
+"გადაფარვებში წარმოდგენილი არაა: {}.{}"
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო რეპოზიტორიის პარამეტრი, მაგრამ "
+"გადაფარვების შემცველი ფაილი ვერ ვიპოვე: {}"
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"confg-manager: მოთხოვნა, წავშალო ცვლადი, მაგრამ ცვლადების საქაღალდე ვერ "
+"ვიპოვე: {}"
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: მოთხოვნა, წავშალო ცვლადი, მაგრამ ის არ არსებობს ცვლადების "
+"საქაღალდეში: {}"
+
+#: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "ვერ წავშალე ცვლადის ფაილი \"{}\": {}"
 

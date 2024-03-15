@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
 "PO-Revision-Date: 2024-02-26 01:35+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,80 +18,84 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.4\n"
 
-#: addrepo.cpp:152
+#: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: \"{}\" dosyası yok"
 
-#: addrepo.cpp:155
+#: addrepo.cpp:156
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr ""
 
-#: addrepo.cpp:195
+#: addrepo.cpp:196
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr ""
 
-#: addrepo.cpp:203 setopt.cpp:138
+#: addrepo.cpp:204 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 
-#: addrepo.cpp:269
+#: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
 msgstr ""
 
-#: addrepo.cpp:319
+#: addrepo.cpp:320
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr ""
 
-#: addrepo.cpp:330
+#: addrepo.cpp:331
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr ""
 
-#: addrepo.cpp:352
+#: addrepo.cpp:353
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
 
-#: addrepo.cpp:386
+#: addrepo.cpp:387
 msgid "Bad baseurl: {}={}"
 msgstr ""
 
-#: addrepo.cpp:394
+#: addrepo.cpp:395
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
 
-#: addrepo.cpp:439
+#: addrepo.cpp:440
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr ""
 
-#: addrepo.cpp:461
+#: addrepo.cpp:462
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
 
-#: addrepo.cpp:464
+#: addrepo.cpp:465
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
 
-#: addrepo.cpp:484 addrepo.cpp:509
+#: addrepo.cpp:485 addrepo.cpp:511
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr ""
 
-#: setopt.cpp:91 unsetopt.cpp:65
+#: addrepo.cpp:497 setopt.cpp:263
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr ""
+
+#: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 
-#: setopt.cpp:100 unsetopt.cpp:74
+#: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr ""
 
@@ -129,26 +133,75 @@ msgstr ""
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr ""
 
-#: shared.hpp:49
+#: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
 
-#: shared.hpp:54
+#: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 
-#: shared.hpp:60
+#: shared.hpp:69
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
 
-#: shared.hpp:71
+#: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr ""
 
-#: unsetvar.cpp:76
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr ""
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+
+#: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr ""
