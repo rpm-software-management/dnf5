@@ -31,11 +31,7 @@ namespace libdnf5::cli::output {
 
 enum ProvidesMatchedBy : int { NO_MATCH = 0, PROVIDES = 1, FILENAME = 2, BINARY = 3 };
 
-static void add_line_into_provides_table(struct libscols_table * table, const char * key, const char * value) {
-    struct libscols_line * ln = scols_table_new_line(table, nullptr);
-    scols_line_set_data(ln, 0, key);
-    scols_line_set_data(ln, 1, value);
-}
+void add_line_into_provides_table(struct libscols_table * table, const char * key, const char * value);
 
 template <class Package>
 static struct libscols_table * create_provides_heading_table(Package & package) {
