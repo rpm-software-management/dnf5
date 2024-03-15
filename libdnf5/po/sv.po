@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-02-16 04:35+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
+"PO-Revision-Date: 2024-03-10 07:36+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -531,8 +531,8 @@ msgstr "Kan inte aktivera flera strömmar för modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr "ingen lösning möjlig"
 
@@ -541,14 +541,14 @@ msgid "Failed to update from string: {}"
 msgstr "Misslyckades med att uppdatera från sträng:{}"
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
-msgstr "Misslyckades med att lösa: {}"
+msgid "Failed to resolve module metadata: {}"
+msgstr "Misslyckades med att lösa modul metadata: {}"
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr "Misslyckades med att uppdatera standard: {}"
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr "Misslyckades med att uppgradera strömmar: {}"
 
@@ -961,17 +961,85 @@ msgstr "Ogiltigt transaktionsobjekts tillstånd: {}"
 msgid "Invalid transaction item type: {}"
 msgstr "Ogiltig transaktionsobjektstyp: {}"
 
-#: transaction/transaction_sr.cpp:55
+#: transaction/transaction_sr.cpp:56
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "Transaktionsuppspelning JSON-serialiserad transaktionsindata är tom"
 
-#: transaction/transaction_sr.cpp:63
+#: transaction/transaction_sr.cpp:65
 msgid "Error during transaction replay JSON parsing : {}"
 msgstr "Fel under JSON-tolkning av transaktionsuppspelning: {}"
 
-#: transaction/transaction_sr.cpp:73
+#: transaction/transaction_sr.cpp:75
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Oväntat versionsformat: \"{}\", version som stöds är \"{}\""
+
+#: transaction/transaction_sr.cpp:81
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr "Inkompatibel huvudversion: \"{}\", stödd huvudversion är \"{}\""
+
+#: transaction/transaction_sr.cpp:88
+msgid "Invalid minor version: \"{}\", number expected."
+msgstr "Ogiltig mindre version: \"{}\", nummer förväntat."
+
+#: transaction/transaction_sr.cpp:91
+msgid "Missing key \"version\"."
+msgstr "Saknar nyckel \"version\"."
+
+#: transaction/transaction_sr.cpp:103
+msgid "Unexpected type of \"environments\", array expected."
+msgstr "Oväntad typ av \"miljöer\", array förväntad."
+
+#: transaction/transaction_sr.cpp:111
+msgid "Missing object key \"id\" in an environment."
+msgstr "Saknar objekt nyckel \"id\" i en miljö."
+
+#: transaction/transaction_sr.cpp:116
+msgid "Missing object key \"action\" in an environment."
+msgstr "Saknar objekt nyckel \"action\" i en miljö."
+
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected."
+msgstr "Oväntad typ av \"grupper\", förväntad array."
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group."
+msgstr "Saknar objekt nyckel \"id\" i en grupp."
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group."
+msgstr "Saknar objektnyckel \"action\" i en grupp."
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group."
+msgstr "Saknar objektnyckel \"reason\" i en grupp."
+
+#: transaction/transaction_sr.cpp:180
+msgid "Unexpected type of \"rpms\", array expected."
+msgstr "Oväntad typ av \"rpms\", array förväntad."
+
+#: transaction/transaction_sr.cpp:189
+msgid "Cannot parse NEVRA for rpm \"{}\"."
+msgstr "Kan inte analysera NEVRA för rpm \"{}\"."
+
+#: transaction/transaction_sr.cpp:197
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+msgstr "Antingen \"nevra\" eller \"package_path\" objektnyckel krävs i en rpm."
+
+#: transaction/transaction_sr.cpp:202
+msgid "Missing object key \"action\" in an rpm."
+msgstr "Saknar objektnyckel \"action\" i en rpm."
+
+#: transaction/transaction_sr.cpp:207
+msgid "Missing object key \"reason\" in an rpm."
+msgstr "Saknar objektnyckel \"reason\" i en rpm."
+
+#: transaction/transaction_sr.cpp:214
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\"."
+msgstr ""
+"Saknar den obligatoriska objektnyckeln \"group_id\" i en rpm med anledning "
+"\"Group\" och åtgärden \"Reason Change\"."
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1147,3 +1215,6 @@ msgstr "Misslyckades med att säkerhetskopiera databas \"{}\" till \"{}\""
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Misslyckades med att återställa databas \"{}\""
+
+#~ msgid "Failed to resolve: {}"
+#~ msgstr "Misslyckades med att lösa: {}"
