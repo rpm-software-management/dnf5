@@ -46,10 +46,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace {
 
 /// Sleep for random number of seconds in interval <0, max_value>
-static void random_wait(int max_value) {
+static void random_wait(unsigned int max_value) {
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> distribution(0, max_value);
+    std::uniform_int_distribution<unsigned int> distribution(0U, max_value);
 
     sleep(distribution(rng));
 }
