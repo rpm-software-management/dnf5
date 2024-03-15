@@ -28,11 +28,13 @@ namespace libdnf5 {
 
 template <typename T>
 static void option_T_list_append(T & option, Option::Priority priority, const std::string & value) {
+    if (priority < option.get_priority()) {
+        return;
+    }
     if (value.empty()) {
         option.set(priority, value);
         return;
     }
-    auto add_priority = priority < option.get_priority() ? option.get_priority() : priority;
     auto val = option.from_string(value);
     bool first = true;
     for (auto & item : val) {
@@ -43,7 +45,7 @@ static void option_T_list_append(T & option, Option::Priority priority, const st
         } else {
             auto orig_value = option.get_value();
             orig_value.insert(orig_value.end(), item);
-            option.set(add_priority, orig_value);
+            option.set(priority, orig_value);
         }
         first = false;
     }
