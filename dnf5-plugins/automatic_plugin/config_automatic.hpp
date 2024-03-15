@@ -40,7 +40,7 @@ public:
     ~ConfigAutomaticCommands() = default;
 
     libdnf5::OptionEnum<std::string> upgrade_type{"default", {"default", "security"}};
-    libdnf5::OptionNumber<std::int32_t> random_sleep{0};
+    libdnf5::OptionNumber<std::uint32_t> random_sleep{0};
     libdnf5::OptionNumber<std::int32_t> network_online_timeout{60};
     libdnf5::OptionBool download_updates{true};
     libdnf5::OptionBool apply_updates{false};
