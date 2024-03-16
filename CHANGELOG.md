@@ -1,3 +1,20 @@
+# 5.1.15
+
+- Update translations from weblate
+- Automatically set `upgrade --downloadonly` when `--destdir` is used
+- Write warnings to stderr too in config-manager plugin
+- Add repoid to generated repository name in config-manager plugin
+- Bump sdbus-cpp requirement to 0.9.0
+- Document and implement dnf5daemon Rpm interface
+- Document and implement dnf5daemon Goal interface
+- Document and implement dnf5daemon Repo interface
+- Document and implement dnf5daemon Base interface
+- Document and implement dnf5daemon Advisory interface
+- Document and implement dnf5daemon SessionManager interface
+- Add `dnf5daemon repo --enable/--disable` commands
+- automatic: Skip network availability check without remote repo
+- dnf5daemon: Rpm.list() works with commandline pkgs
+
 # 5.1.14
 
 - Update translations from weblate

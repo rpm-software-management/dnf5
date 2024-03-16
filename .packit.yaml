@@ -68,7 +68,6 @@ jobs:
   - job: tests
     trigger: pull_request
     identifier: "dnf5daemon-tests"
-    manual_trigger: true
     targets:
       - fedora-all
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-01-18 02:47+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
+"PO-Revision-Date: 2024-03-10 07:36+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/sv/>\n"
@@ -17,42 +17,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
-#: addrepo.cpp:152
+#: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "från-förrådfil \"{}\" fil existerar inte"
 
-#: addrepo.cpp:155
+#: addrepo.cpp:156
 msgid "from-repofile: {}"
 msgstr "från-förrådfil: {}"
 
-#: addrepo.cpp:185 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
 
-#: addrepo.cpp:195
+#: addrepo.cpp:196
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Kan inte ställa in förrådsalternativ \"{}={}\": {}"
 
-#: addrepo.cpp:203 setopt.cpp:138
+#: addrepo.cpp:204 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Ställer in alternativet \"{}\" igen med ett annat värde: \"{}\" != \"{}\""
 
-#: addrepo.cpp:269
+#: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
 msgstr "Saknar sökväg till förrådskonfigurations katalog"
 
-#: addrepo.cpp:319
+#: addrepo.cpp:320
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Misslyckades att kopiera förrådets konfigurationsfil \"{}\": {}"
 
-#: addrepo.cpp:330
+#: addrepo.cpp:331
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Misslyckades att ladda ner förrådets konfigurationsfil \"{}\": {}"
 
-#: addrepo.cpp:352
+#: addrepo.cpp:353
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -60,11 +60,11 @@ msgstr ""
 "Fel i tillagd konfigurationsfil för förråd. Kan inte ställa in "
 "lagringsalternativ \"{}={}\": {}"
 
-#: addrepo.cpp:386
+#: addrepo.cpp:387
 msgid "Bad baseurl: {}={}"
 msgstr "Dålig basurl: {}={}"
 
-#: addrepo.cpp:394
+#: addrepo.cpp:395
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -72,11 +72,11 @@ msgstr ""
 "En av --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> måste vara inställd på en icke-tom URL"
 
-#: addrepo.cpp:439
+#: addrepo.cpp:440
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Misslyckades att spara konfigurationsfil för förråd \"{}: {}"
 
-#: addrepo.cpp:461
+#: addrepo.cpp:462
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -84,7 +84,7 @@ msgstr ""
 "Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
 "\"--add-or-replace\" eller \"--overwrite\"."
 
-#: addrepo.cpp:464
+#: addrepo.cpp:465
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -92,18 +92,22 @@ msgstr ""
 "Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
 "--overwrite\" för att skriva över."
 
-#: addrepo.cpp:484 addrepo.cpp:509
+#: addrepo.cpp:485 addrepo.cpp:511
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Ett förråd med id \"{}\" är redan konfigurerat i fil {}"
 
-#: setopt.cpp:91 unsetopt.cpp:65
+#: addrepo.cpp:497 setopt.cpp:263
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "Kan inte läsa in förråd från katalog \"{}\": {}"
+
+#: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
 "'.': {}"
 
-#: setopt.cpp:100 unsetopt.cpp:74
+#: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
 msgstr "{}: Tomt förråds-ID är inte tillåtet: {}"
 
@@ -143,7 +147,7 @@ msgstr "Saknar sökväg till vars katalog"
 msgid "Cannot write variable to file \"{}\": {}"
 msgstr "Kan inte skriva variabel till fil \"{}\": {}"
 
-#: shared.hpp:49
+#: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
@@ -151,13 +155,13 @@ msgstr ""
 "Sökväg \"{}\" existerar, men är inte en katalog eller en symbolisk länk till "
 "en katalog."
 
-#: shared.hpp:54
+#: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
 "Sökväg \"{}\" existerar, men är en symbolisk länk till ett icke-existerande "
 "objekt."
 
-#: shared.hpp:60
+#: shared.hpp:69
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
@@ -165,11 +169,76 @@ msgstr ""
 "Katalogen \"{} existerar inte. Lägg till \"--create-missing-dir\" för att "
 "skapa saknade kataloger."
 
-#: shared.hpp:71
+#: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
 msgstr "Variabelnamn kan endast innehålla ASCII-bokstäver, siffror och '_': {}"
 
-#: unsetvar.cpp:76
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort förrådsalternativ som inte stöds: {}"
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort huvudalternativ som inte stöds: {}"
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: Begäran att ta bort huvudalternativet men det finns inte i "
+"konfigurationsfilen: {}"
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort huvudalternativet men "
+"konfigurationsfilen hittades inte: {}"
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort förrådsalternativ men förrådsid finns "
+"inte i åsidosättningarna: {}"
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: Begäran att ta bort förrådsalternativ men det finns inte i "
+"åsidosättningarna: {}.{}"
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort förrådsalternativ men filen med "
+"åsidosättningar hittades inte: {}"
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"config-manager: Begäran om att ta bort variabel men vars-katalogen hittades "
+"inte: {}"
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: Begäran om att ta bort variabel men den finns inte i vars-"
+"katalogen: {}"
+
+#: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
 msgstr "Kan inte ta bort variabelfil \"{}\": {}"
 

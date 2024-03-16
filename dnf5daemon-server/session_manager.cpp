@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <thread>
 
 // TODO(mblaha): Make this constant configurable
-const int MAX_SESSIONS = 3;
+const unsigned int MAX_SESSIONS = 3;
 
 SessionManager::SessionManager() {
     connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
@@ -115,8 +115,10 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
         throw sdbus::Error(dnfdaemon::ERROR, "Cannot open new session.");
     }
     // limit number of simultaneously opened sessions
-    const int num_sessions = std::accumulate(
-        sessions.begin(), sessions.end(), 0, [](int sum, const auto & sender) { return sum + sender.second.size(); });
+    const auto num_sessions =
+        std::accumulate(sessions.begin(), sessions.end(), 0U, [](unsigned int sum, const auto & sender) {
+            return sum + sender.second.size();
+        });
     if (num_sessions >= MAX_SESSIONS) {
         auto reply = call.createErrorReply(sdbus::Error(
             dnfdaemon::ERROR, "Cannot open new session - maximal number of simultaneously opened sessions achieved."));

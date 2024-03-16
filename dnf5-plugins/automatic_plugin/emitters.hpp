@@ -42,6 +42,8 @@ public:
           output_stream(output_stream),
           success(success) {}
 
+    virtual ~Emitter() = default;
+
     /// Notify the user about the status of dnf-automatic run.
     virtual void notify() = 0;
 

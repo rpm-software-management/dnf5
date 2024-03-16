@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -535,8 +535,8 @@ msgstr "Nelze povolit více streamů pro modul '{}'"
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr "žádné řešení není možné"
 
@@ -545,14 +545,16 @@ msgid "Failed to update from string: {}"
 msgstr "Aktualizace z řetězce: {} se nezdařila"
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
-msgstr "Nepodařilo se vyřešit: {}"
+#, fuzzy
+#| msgid "Failed to resolve modules."
+msgid "Failed to resolve module metadata: {}"
+msgstr "Nepodařilo se vyřešit moduly."
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr "Nepodařilo se upgradovat výchozí hodnoty: {}"
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr "Nepodařilo se upgradovat streamy: {}"
 
@@ -972,18 +974,89 @@ msgstr "Neplatný stav položky transakce: {}"
 msgid "Invalid transaction item type: {}"
 msgstr "Neplatný typ položky transakce: {}"
 
-#: transaction/transaction_sr.cpp:55
+#: transaction/transaction_sr.cpp:56
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "Serializovaný vstup transakce JSON při přehrání transakce je prázdný"
 
-#: transaction/transaction_sr.cpp:63
+#: transaction/transaction_sr.cpp:65
 msgid "Error during transaction replay JSON parsing : {}"
 msgstr "Chyba parsování JSON při přehrání transakce: {}"
 
-#: transaction/transaction_sr.cpp:73
+#: transaction/transaction_sr.cpp:75
+#, fuzzy
+#| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
+
+#: transaction/transaction_sr.cpp:81
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
 "Nekompatibilní hlavní verze: \"{}\", podporovaná hlavní verze je \"{}\""
+
+#: transaction/transaction_sr.cpp:88
+#, fuzzy
+#| msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgid "Invalid minor version: \"{}\", number expected."
+msgstr ""
+"Neplatná časová hodnota volby \"{}\", číslo nebo \"never\" bylo očekáváno"
+
+#: transaction/transaction_sr.cpp:91
+msgid "Missing key \"version\"."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:103
+msgid "Unexpected type of \"environments\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:111
+msgid "Missing object key \"id\" in an environment."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:116
+msgid "Missing object key \"action\" in an environment."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:180
+msgid "Unexpected type of \"rpms\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:189
+msgid "Cannot parse NEVRA for rpm \"{}\"."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:197
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:202
+msgid "Missing object key \"action\" in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:207
+msgid "Missing object key \"reason\" in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:214
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\"."
+msgstr ""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1159,3 +1232,6 @@ msgstr "Zálohování databáze \"{}\" do \"{}\" se nezdařilo"
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Obnovení databáze \"{}\" se nezdařilo"
+
+#~ msgid "Failed to resolve: {}"
+#~ msgstr "Nepodařilo se vyřešit: {}"

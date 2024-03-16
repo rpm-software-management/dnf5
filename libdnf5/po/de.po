@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -505,8 +505,8 @@ msgstr ""
 #. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
-#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:337
-#: rpm/solv/goal_private.cpp:741
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:746
 msgid "no solution possible"
 msgstr ""
 
@@ -515,14 +515,14 @@ msgid "Failed to update from string: {}"
 msgstr ""
 
 #: module/module_metadata.cpp:129
-msgid "Failed to resolve: {}"
+msgid "Failed to resolve module metadata: {}"
 msgstr ""
 
-#: module/module_metadata.cpp:139
+#: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
 msgstr ""
 
-#: module/module_metadata.cpp:143
+#: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
 msgstr ""
 
@@ -912,16 +912,82 @@ msgstr ""
 msgid "Invalid transaction item type: {}"
 msgstr ""
 
-#: transaction/transaction_sr.cpp:55
+#: transaction/transaction_sr.cpp:56
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr ""
 
-#: transaction/transaction_sr.cpp:63
+#: transaction/transaction_sr.cpp:65
 msgid "Error during transaction replay JSON parsing : {}"
 msgstr ""
 
-#: transaction/transaction_sr.cpp:73
+#: transaction/transaction_sr.cpp:75
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr ""
+
+#: transaction/transaction_sr.cpp:81
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr ""
+
+#: transaction/transaction_sr.cpp:88
+msgid "Invalid minor version: \"{}\", number expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:91
+msgid "Missing key \"version\"."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:103
+msgid "Unexpected type of \"environments\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:111
+msgid "Missing object key \"id\" in an environment."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:116
+msgid "Missing object key \"action\" in an environment."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:180
+msgid "Unexpected type of \"rpms\", array expected."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:189
+msgid "Cannot parse NEVRA for rpm \"{}\"."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:197
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:202
+msgid "Missing object key \"action\" in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:207
+msgid "Missing object key \"reason\" in an rpm."
+msgstr ""
+
+#: transaction/transaction_sr.cpp:214
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\"."
 msgstr ""
 
 #: utils/fs/file.cpp:86

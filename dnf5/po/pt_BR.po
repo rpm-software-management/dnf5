@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-27 02:52+0000\n"
-"PO-Revision-Date: 2024-02-21 13:24+0000\n"
+"POT-Creation-Date: 2024-03-09 02:52+0000\n"
+"PO-Revision-Date: 2024-03-08 14:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/pt_BR/>\n"
@@ -260,51 +260,52 @@ msgstr ""
 
 #: commands/list/list.cpp:46
 msgid "Lists packages depending on the packages' relation to the system"
-msgstr ""
+msgstr "Lista os pacotes dependendo da relação dos pacotes com o sistema"
 
 #: commands/list/list.cpp:49
 msgid "List of keys to match case insensitively"
 msgstr ""
+"Lista de chaves para corresponder sem diferenciar maiúsculas de minúsculas"
 
 #: commands/list/list.cpp:61
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr ""
+msgstr "Mostra todas as versões dos pacotes, não apenas as mais recentes."
 
 #: commands/list/list.cpp:67
 msgid "List installed packages."
-msgstr ""
+msgstr "Lista pacotes instalados."
 
 #: commands/list/list.cpp:71
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
 msgid "List available packages."
-msgstr "Permite pular pacotes indisponíveis"
+msgstr "Lista pacotes indisponíveis."
 
 #: commands/list/list.cpp:78
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
+"Lista extras, ou seja, pacotes instalados no sistema que não estão "
+"disponíveis em nenhum repositório conhecido."
 
 #: commands/list/list.cpp:86
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
+"Lista os pacotes instalados no sistema que estão obsoletos por pacotes em "
+"qualquer repositório conhecido."
 
 #: commands/list/list.cpp:91
-#, fuzzy
-#| msgid "Limit to packages in enhancement advisories."
 msgid "List packages recently added into the repositories."
-msgstr "Limite para pacotes em avisos de melhorias."
+msgstr "Lista os pacotes adicionados recentemente aos repositórios."
 
 #: commands/list/list.cpp:95
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "Lista as atualizações disponíveis para os pacotes instalados."
 
 #: commands/list/list.cpp:99
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr ""
+msgstr "Lista os pacotes que serão removidos pelo comando 'dnf autoremove'."
 
 #: commands/list/list.cpp:260
 msgid "No matching packages to list"
