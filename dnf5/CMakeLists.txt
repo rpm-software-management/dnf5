@@ -2,8 +2,6 @@ if(NOT WITH_DNF5)
     return()
 endif()
 
-pkg_check_modules(SYSTEMD REQUIRED systemd)
-pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
 
 find_package(Threads)
 
@@ -59,6 +57,8 @@ install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
 
 if(WITH_SYSTEMD)
+  pkg_check_modules(SYSTEMD REQUIRED systemd)
+  pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
   install(DIRECTORY "config/systemd/system/" DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}" PATTERN ".gitkeep" EXCLUDE)
 endif()
 

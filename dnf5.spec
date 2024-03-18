@@ -167,6 +167,10 @@ BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
 %if %{with systemd}
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 BuildRequires:  systemd-devel
+
+ # We need to get the SYSTEMD_SYSTEM_UNIT_DIR from
+ # /usr/share/pkgconfig/systemd.pc
+BuildRequires:  systemd
 %endif
 
 %if %{with html} || %{with man}
