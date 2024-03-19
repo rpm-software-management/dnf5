@@ -11,6 +11,9 @@ base = libdnf5.base.Base()
 base_config = base.get_config()
 base_config.installroot = installroot
 
+# Optionally prevent of loading of plugins. Plugins are loaded by default from the host
+base_config.plugins = False
+
 # Optionally load configuration from the config files.
 #
 # The Base's config is initialized with default values, one of which is
