@@ -39,6 +39,9 @@ class BaseTestCase(unittest.TestCase):
         config.cachedir = os.path.join(self.temp_dir, "cache")
         config.optional_metadata_types = libdnf5.conf.OPTIONAL_METADATA_TYPES
 
+        # Prevent loading plugins from the host
+        config.plugins = False
+
         vars = self.base.get_vars().get()
         vars.set("arch", "x86_64")
 
