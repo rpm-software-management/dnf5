@@ -28,8 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <json-c/json.h>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/output/adapters/package_tmpl.hpp>
-#include <libdnf5-cli/output/package_info_sections.hpp>
-#include <libdnf5/common/exception.hpp>
+#include <libdnf5-cli/output/packageinfo.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
@@ -265,11 +264,8 @@ void RepoqueryCommand::run() {
                         for (const auto & package : json_to_packages(message)) {
                             if (info_option->get_value()) {
                                 libdnf5::cli::output::PackageAdapter cli_pkg(package);
-                                auto out = libdnf5::cli::output::PackageInfoSections();
-                                out.setup_cols();
-                                out.add_package(cli_pkg);
-                                out.print();
-                                std::cout << std::endl;
+                                libdnf5::cli::output::print_package_info(cli_pkg);
+                                std::cout << '\n';
                             } else {
                                 std::cout << package.get_full_nevra() << std::endl;
                             }

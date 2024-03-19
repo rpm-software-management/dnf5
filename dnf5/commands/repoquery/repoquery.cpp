@@ -19,9 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
+#include "libdnf5-cli/output/adapters/package_tmpl.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
-#include <libdnf5-cli/output/package_info_sections.hpp>
+#include <libdnf5-cli/output/packageinfo.hpp>
 #include <libdnf5-cli/output/repoquery.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -835,10 +837,17 @@ void RepoqueryCommand::run() {
     } else if (changelogs->get_value()) {
         libdnf5::cli::output::print_changelogs(result_query, {libdnf5::cli::output::ChangelogFilterType::NONE, 0});
     } else if (info_option->get_value()) {
-        auto out = libdnf5::cli::output::PackageInfoSections();
-        out.setup_cols();
-        out.add_section("", result_query);
-        out.print();
+        // sort the packages according to NEVRA
+        std::vector<libdnf5::rpm::Package> packages;
+        for (const auto & pkg : result_query) {
+            packages.emplace_back(std::move(pkg));
+        }
+        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
+        for (auto package : packages) {
+            libdnf5::cli::output::PackageAdapter cli_pkg(package);
+            libdnf5::cli::output::print_package_info(cli_pkg);
+            std::cout << '\n';
+        }
     } else if (!pkg_attr_option->get_value().empty()) {
         libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, result_query, pkg_attr_option->get_value());
     } else {
