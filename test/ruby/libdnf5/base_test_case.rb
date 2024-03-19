@@ -37,6 +37,10 @@ class BaseTestCase < Test::Unit::TestCase
         @base.get_config().get_installroot_option().set(File.join(@temp_dir, "installroot"))
         @base.get_config().get_cachedir_option().set(File.join(@temp_dir, "cache"))
 
+        # Prevent loading of plugins from host
+        @base.get_config().get_pluginconfpath_option().set(File.join(@temp_dir, "pluginconfpath"))
+        @base.get_config().get_pluginpath_option().set(File.join(@temp_dir, "pluginpath"))
+
         # Sets Base internals according to configuration
         @base.setup()
 

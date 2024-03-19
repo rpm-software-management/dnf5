@@ -34,6 +34,10 @@ my $tmpdir = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
 $base->get_config()->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/cache");
 
+# Prevent loading plugins from host by redirecting of pluginconfpath and pluginpath to an empty directory
+$base->get_config()->get_pluginconfpath_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/pluginconfpath");
+$base->get_config()->get_pluginpath_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/pluginpath");
+
 # Sets base internals according to configuration
 $base->setup();
 

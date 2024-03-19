@@ -12,6 +12,11 @@ libdnf5::Base base;
 // installroot directory tree as its root for the rest of its lifetime.
 base.get_config().get_installroot_option().set(installroot);
 
+// Optionally - Prevent loading libdnf5 plugins by redirecting configuration to an empty directory
+// It is important only this tutorial, but not so much for other usecases
+base.get_config().get_pluginconfpath_option().set(installroot / "pluginconfpath");
+base.get_config().get_pluginpath_option().set(installroot / "pluginpath");
+
 // Optionally load configuration from the config files.
 //
 // The Base's config is initialized with default values, one of which is
