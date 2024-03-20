@@ -27,7 +27,6 @@ using namespace libdnf5::cli;
 
 std::unique_ptr<libdnf5::cli::output::PackageListSections> InfoCommand::create_output() {
     auto out = std::make_unique<libdnf5::cli::output::PackageInfoSections>();
-    out->setup_cols();
     return out;
 }
 
