@@ -40,22 +40,18 @@ public:
     virtual ~PackageListSections();
 
     /// Print the table
-    void print();
+    /// @param colorizer Optional class to select color for packages in output
+    virtual void print(const std::unique_ptr<PkgColorizer> & colorizer = nullptr);
 
     /// Adds a new section to the smartcols table
     /// @param heading Header of the section
     /// @param pkg_set List of packages to be printed in this section
-    /// @param colorizer Optional class to select color for packages in output
     /// @param obsoletes Optional map of obsoleted packages by obsoleter
     /// @return Returns `true` in case at least one package was added, `false` otherwise
-    virtual bool add_section(
+    bool add_section(
         const std::string & heading,
         const libdnf5::rpm::PackageSet & pkg_set,
-        const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
         const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {});
-
-    /// Setup table columns
-    virtual void setup_cols();
 
 protected:
     class Impl;

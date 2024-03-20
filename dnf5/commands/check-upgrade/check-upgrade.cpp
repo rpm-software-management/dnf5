@@ -99,7 +99,6 @@ void CheckUpgradeCommand::configure() {
 
 std::unique_ptr<libdnf5::cli::output::PackageListSections> CheckUpgradeCommand::create_output() {
     auto out = std::make_unique<libdnf5::cli::output::PackageListSections>();
-    out->setup_cols();
     return out;
 }
 
@@ -172,21 +171,21 @@ void CheckUpgradeCommand::run() {
         obsoletes.emplace(pkg.get_id(), obsoleted);
     }
 
-    auto colorizer = std::make_unique<libdnf5::cli::output::PkgColorizer>(
-        installed_query,
-        "",  //config.get_color_list_available_install_option().get_value(),
-        "",  //config.get_color_list_available_downgrade_option().get_value(),
-        config.get_color_list_available_reinstall_option().get_value(),
-        config.get_color_list_available_upgrade_option().get_value());
     auto sections = create_output();
 
     bool package_matched = false;
     package_matched |= sections->add_section("", upgrades_query);
-    package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, colorizer, obsoletes);
+    package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, obsoletes);
 
     if (package_matched) {
         // If any upgrades were found, print a table of them, and optionally print changelogs. Return exit code 100.
-        sections->print();
+        auto colorizer = std::make_unique<libdnf5::cli::output::PkgColorizer>(
+            installed_query,
+            "",  //config.get_color_list_available_install_option().get_value(),
+            "",  //config.get_color_list_available_downgrade_option().get_value(),
+            config.get_color_list_available_reinstall_option().get_value(),
+            config.get_color_list_available_upgrade_option().get_value());
+        sections->print(colorizer);
         if (changelogs->get_value()) {
             libdnf5::cli::output::print_changelogs(
                 upgrades_query, {libdnf5::cli::output::ChangelogFilterType::UPGRADES, full_package_query});
