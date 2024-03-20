@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
 #define LIBDNF5_CLI_OUTPUT_PACKAGE_INFO_SECTIONS_HPP
 
-#include "interfaces/package.hpp"
 #include "package_list_sections.hpp"
 
 namespace libdnf5::cli::output {
@@ -31,19 +30,9 @@ public:
     PackageInfoSections();
     ~PackageInfoSections();
 
-    bool add_package(
-        IPackage & pkg,
-        const std::string & heading = "",
-        const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
-        const std::vector<libdnf5::rpm::Package> & obsoletes = {});
-
-    bool add_section(
-        const std::string & heading,
-        const libdnf5::rpm::PackageSet & pkg_set,
-        const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
-        const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {}) override;
-
-    void setup_cols() override;
+    /// Print the table
+    /// @param colorizer Optional class to select color for packages in output
+    void print(const std::unique_ptr<PkgColorizer> & colorizer = nullptr) override;
 };
 
 }  // namespace libdnf5::cli::output
