@@ -306,25 +306,27 @@ void OfflineRebootCommand::run() {
 
 #ifdef WITH_SYSTEMD
     // Check that dnf5-offline-transaction.service is present and wanted by system-update.target
-    std::unique_ptr<sdbus::IConnection> connection;
+    std::unique_ptr<sdbus::IConnection> connection{nullptr};
     try {
         connection = sdbus::createSystemBusConnection();
     } catch (const sdbus::Error & ex) {
-        const std::string error_message{ex.what()};
-        throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
+        std::cerr << "Warning: couldn't connect to D-Bus: " << ex.what() << std::endl;
     }
-    auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+    if (connection != nullptr) {
+        auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
-    sdbus::ObjectPath unit_object_path;
-    systemd_proxy->callMethod("LoadUnit")
-        .onInterface(SYSTEMD_MANAGER_INTERFACE)
-        .withArguments("system-update.target")
-        .storeResultsTo(unit_object_path);
+        sdbus::ObjectPath unit_object_path;
+        systemd_proxy->callMethod("LoadUnit")
+            .onInterface(SYSTEMD_MANAGER_INTERFACE)
+            .withArguments("system-update.target")
+            .storeResultsTo(unit_object_path);
 
-    auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
-    const std::vector<std::string> & wants = unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE);
-    if (std::find(wants.begin(), wants.end(), SYSTEMD_SERVICE_NAME) == wants.end()) {
-        throw libdnf5::cli::CommandExitError(1, M_("{} is not wanted by system-update.target."), SYSTEMD_SERVICE_NAME);
+        auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
+        const std::vector<std::string> & wants = unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE);
+        if (std::find(wants.begin(), wants.end(), SYSTEMD_SERVICE_NAME) == wants.end()) {
+            throw libdnf5::cli::CommandExitError(
+                1, M_("{} is not wanted by system-update.target."), SYSTEMD_SERVICE_NAME);
+        }
     }
 #endif
 
