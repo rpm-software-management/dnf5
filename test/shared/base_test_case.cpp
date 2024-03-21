@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5/base/goal.hpp"
+
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/environment/query.hpp>
 #include <libdnf5/comps/group/group.hpp>
@@ -195,9 +197,14 @@ libdnf5::rpm::Package BaseTestCase::add_system_pkg(
     CPPUNIT_ASSERT_MESSAGE("Couldn't parse NEVRA from package path: \"" + relative_path + "\"", !nevras.empty());
     auto na = nevras[0].get_name() + "." + nevras[0].get_arch();
 
-    (base.*get(priv_impl()))->get_system_state().set_package_reason(na, reason);
+    auto ret = repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 
-    return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    libdnf5::Goal goal(base);
+    goal.add_rpm_reason_change(na, reason);
+    auto transaction = goal.resolve();
+    transaction.run();
+
+    return ret;
 }
 
 
