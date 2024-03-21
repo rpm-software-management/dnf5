@@ -19,7 +19,7 @@
 .. _needs_restarting_plugin_ref-label:
 
 #########################
- Needs-restarting Command
+ Needs-Restarting Command
 #########################
 
 Synopsis

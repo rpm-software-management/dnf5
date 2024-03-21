@@ -283,6 +283,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-advisory.8.*
 %{_mandir}/man8/dnf5-autoremove.8.*
 %{_mandir}/man8/dnf5-check.8.*
+%{_mandir}/man8/dnf5-check-upgrade.8.*
 %{_mandir}/man8/dnf5-clean.8.*
 %{_mandir}/man8/dnf5-distro-sync.8.*
 %{_mandir}/man8/dnf5-downgrade.8.*
@@ -291,12 +292,14 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-group.8.*
 # TODO(jkolarik): history is not ready yet
 # %%{_mandir}/man8/dnf5-history.8.*
+%{_mandir}/man8/dnf5-info.8.*
 %{_mandir}/man8/dnf5-install.8.*
 %{_mandir}/man8/dnf5-leaves.8.*
+%{_mandir}/man8/dnf5-list.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
-# TODO(jkolarik): module is not ready yet
-# %%{_mandir}/man8/dnf5-module.8.*
+%{_mandir}/man8/dnf5-module.8.*
+%{_mandir}/man8/dnf5-offline.8.*
 %{_mandir}/man8/dnf5-provides.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
 %{_mandir}/man8/dnf5-remove.8.*
@@ -304,7 +307,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-repoquery.8.*
 %{_mandir}/man8/dnf5-search.8.*
 %{_mandir}/man8/dnf5-swap.8.*
+%{_mandir}/man8/dnf5-system-upgrade.8.*
 %{_mandir}/man8/dnf5-upgrade.8.*
+%{_mandir}/man8/dnf5-versionlock.8.*
 %{_mandir}/man7/dnf5-aliases.7.*
 %{_mandir}/man7/dnf5-caching.7.*
 %{_mandir}/man7/dnf5-comps.7.*
@@ -700,6 +705,7 @@ config-manager, copr, and repoclosure commands.
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_mandir}/man8/dnf5-builddep.8.*
+%{_mandir}/man8/dnf5-changelog.8.*
 %{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
@@ -727,6 +733,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%{_mandir}/man8/dnf5-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
