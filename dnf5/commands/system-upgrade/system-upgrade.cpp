@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 
+#include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -84,16 +85,16 @@ void SystemUpgradeDownloadCommand::configure() {
 
     const std::filesystem::path installroot{ctx.base.get_config().get_installroot_option().get_value()};
 
-    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
-    if (detected_releasever == nullptr) {
-        throw libdnf5::cli::CommandExitError(1, M_("Couldn't detect the current release version of the system."));
-    }
-    system_releasever = *detected_releasever;
     target_releasever = ctx.base.get_vars()->get_value("releasever");
 
-    // Check --releasever
-    if (target_releasever == system_releasever) {
-        throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version."));
+    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        system_releasever = *detected_releasever;
+
+        // Check --releasever
+        if (target_releasever == system_releasever) {
+            throw libdnf5::cli::CommandExitError(1, M_("Need a --releasever greater than the current system version."));
+        }
     }
 
     ctx.set_load_system_repo(true);

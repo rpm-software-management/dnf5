@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/offline.hpp"
 #include "utils/string.hpp"
 
+#include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -289,7 +290,12 @@ void OfflineRebootCommand::set_argument_parser() {
 void OfflineRebootCommand::run() {
     auto & ctx = get_context();
 
+    if (!std::filesystem::exists(state->get_path())) {
+        throw libdnf5::cli::CommandExitError(1, M_("No offline transaction is stored."));
+    }
+
     check_state(*state);
+
     if (state->get_data().status != dnf5::offline::STATUS_DOWNLOAD_COMPLETE &&
         state->get_data().status != dnf5::offline::STATUS_READY) {
         throw libdnf5::cli::CommandExitError(1, M_("System is not ready for offline transaction."));
@@ -459,6 +465,8 @@ void OfflineExecuteCommand::run() {
                   << datadir << " modified?" << std::endl;
         throw libdnf5::cli::GoalResolveError(transaction);
     }
+
+    libdnf5::cli::output::print_transaction_table(transaction);
 
     PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
@@ -649,7 +657,7 @@ void OfflineStatusCommand::run() {
     const std::string no_transaction_message{"No offline transaction is stored."};
 
     if (!std::filesystem::exists(state->get_path())) {
-        std::cerr << no_transaction_message << std::endl;
+        std::cout << no_transaction_message << std::endl;
         return;
     }
     check_state(*state);

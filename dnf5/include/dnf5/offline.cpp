@@ -36,7 +36,7 @@ void OfflineTransactionState::read() {
     try {
         const std::ifstream file{path};
         if (!file.good()) {
-            throw libdnf5::FileSystemError(errno, path, M_("Error reading offline state file."));
+            throw libdnf5::FileSystemError(errno, path, M_("error reading offline state file"));
         }
         const auto & value = toml::parse(path);
         data = toml::find<OfflineTransactionStateData>(value, STATE_HEADER);
