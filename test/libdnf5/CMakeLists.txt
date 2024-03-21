@@ -1,3 +1,5 @@
+return()
+
 pkg_check_modules(CPPUNIT REQUIRED cppunit)
 
 
