@@ -68,12 +68,13 @@ void SystemUpgradeDownloadCommand::set_argument_parser() {
     cmd.set_description(_("Download everything needed to upgrade to a new release"));
 
     no_downgrade =
-        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
 
     auto * no_downgrade_arg = parser.add_new_named_arg("no-downgrade");
     no_downgrade_arg->set_long_name("no-downgrade");
     no_downgrade_arg->set_description(
         _("Do not install packages from the new release if they are older than what is currently installed"));
+    no_downgrade_arg->set_const_value("true");
     no_downgrade_arg->link_value(no_downgrade);
     cmd.register_named_arg(no_downgrade_arg);
 }
