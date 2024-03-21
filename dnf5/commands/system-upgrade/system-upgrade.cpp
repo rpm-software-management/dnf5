@@ -104,7 +104,7 @@ void SystemUpgradeDownloadCommand::configure() {
 void SystemUpgradeDownloadCommand::run() {
     auto & ctx = get_context();
 
-    const auto & goal = std::make_unique<libdnf5::Goal>(ctx.base);
+    const auto & goal = ctx.get_goal();
 
     if (no_downgrade->get_value()) {
         goal->add_rpm_upgrade();
@@ -112,23 +112,7 @@ void SystemUpgradeDownloadCommand::run() {
         goal->add_rpm_distro_sync();
     }
 
-    auto transaction = goal->resolve();
-    if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
-        throw libdnf5::cli::GoalResolveError(transaction);
-    }
-
-    if (transaction.get_transaction_packages_count() == 0) {
-        throw libdnf5::cli::CommandExitError(
-            1, M_("The system-upgrade transaction is empty; your system is already up-to-date."));
-    }
-
     ctx.set_should_store_offline(true);
-    ctx.download_and_run(transaction);
-
-    std::cout << _("Download complete!") << std::endl;
-
-    dnf5::offline::log_status(
-        ctx, "Download finished.", dnf5::offline::DOWNLOAD_FINISHED_ID, system_releasever, target_releasever);
 }
 
 }  // namespace dnf5
