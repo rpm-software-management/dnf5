@@ -390,6 +390,14 @@ void OfflineExecuteCommand::configure() {
     OfflineSubcommand::configure();
     auto & ctx = get_context();
 
+    if (!std::filesystem::is_symlink(get_magic_symlink())) {
+        throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
+    }
+
+    if (!std::filesystem::equivalent(get_magic_symlink(), get_datadir())) {
+        throw libdnf5::cli::CommandExitError(0, M_("Another offline transaction tool is running. Exiting."));
+    }
+
     check_state(*state);
 
     ctx.set_load_system_repo(true);
@@ -426,14 +434,6 @@ void OfflineExecuteCommand::run() {
         << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
              "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`.")
         << std::endl;
-
-    if (!std::filesystem::is_symlink(get_magic_symlink())) {
-        throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
-    }
-
-    if (!std::filesystem::equivalent(get_magic_symlink(), get_datadir())) {
-        throw libdnf5::cli::CommandExitError(0, M_("Another offline transaction tool is running. Exiting."));
-    }
 
     std::filesystem::remove(get_magic_symlink());
 
