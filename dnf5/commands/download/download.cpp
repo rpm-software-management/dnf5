@@ -145,14 +145,14 @@ void DownloadCommand::set_argument_parser() {
         });
 
 
+    cmd.register_named_arg(arch);
+    cmd.register_named_arg(resolve);
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
-    cmd.register_named_arg(resolve);
-    cmd.register_positional_arg(keys);
     cmd.register_named_arg(srpm);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
-    cmd.register_named_arg(arch);
+    cmd.register_positional_arg(keys);
 }
 
 void DownloadCommand::configure() {

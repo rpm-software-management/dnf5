@@ -42,26 +42,34 @@ Subcommands
 ===========
 
 ``clean``
-    Removes any stored offline transaction and deletes cached package files.
+    | Removes any stored offline transaction and deletes cached package files.
 
 ``log``
-    Used to see a list of boots during which an offline transaction was attempted, or show the logs from an attempted offline transaction. The logs for one of the boots can be shown by specifying one of the numbers in the first column with the ``--number`` argument. Negative numbers can be used to number the boots from last to first. For example, ``log --number=-1`` can be used to see the logs for the last offline transaction.
+    | Used to see a list of boots during which an offline transaction was attempted, or show the logs from an attempted offline transaction. The logs for one of the boots can be shown by specifying one of the numbers in the first column with the ``--number`` argument. Negative numbers can be used to number the boots from last to first. For example, ``log --number=-1`` can be used to see the logs for the last offline transaction.
 
 ``reboot``
-    Prepares the system to perform the offline transaction and reboots to start the transaction. This command can only be run after an offline transaction is initiated (e.g. by ``dnf5 system-upgrade download``).
+    | Prepares the system to perform the offline transaction and reboots to start the transaction. This command can only be run after an offline transaction is initiated (e.g. by ``dnf5 system-upgrade download``).
 
 ``status``
-    Shows the status of the current offline transaction.
+    | Shows the status of the current offline transaction.
+
+``_execute``
+    | Execute the transaction in the offline environment.
+
+    .. warning::
+       For internal use only. Not intended to be run by the user.
 
 
 Options
 =======
 
 ``--number=<boot number>``
-    Used with the ``log`` subcommand. Show the log specified by the number. Run ``dnf5 offline log`` with ``--number`` first to get a list of logs to choose from.
+    | Show the log specified by the number. Run ``dnf5 offline log`` with ``--number`` first to get a list of logs to choose from.
+    | Used with the ``log`` subcommand.
 
 ``--poweroff``
-    Used with the ``reboot`` subcommand. The system will power off after the transaction is completed instead of restarting. If the transaction failed, the system will reboot instead of powering off even with this flag.
+    | The system will power off after the transaction is completed instead of restarting. If the transaction failed, the system will reboot instead of powering off even with this flag.
+    | Used with the ``reboot`` subcommand.
 
 
 Examples

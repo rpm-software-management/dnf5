@@ -193,13 +193,13 @@ void RepoqueryCommand::set_argument_parser() {
     // SIMPLE FILTERS:
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
-    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
-    advisory_bz = std::make_unique<BzOption>(*this);
-    advisory_cve = std::make_unique<CveOption>(*this);
 
     latest_limit_option = dynamic_cast<libdnf5::OptionNumber<std::int32_t> *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionNumber<std::int32_t>>(0)));

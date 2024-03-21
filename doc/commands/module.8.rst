@@ -58,21 +58,26 @@ Subcommands
     | Reset module state so it's no longer enabled or disabled.
 
 
-Options
-=======
-
-``--skip-broken``
-    | Used with ``enable`` command to resolve any dependency problems by removing items that are causing problems from the transaction.
-
-``--skip-unavailable``
-    | Used with ``enable``, ``disable`` and ``reset`` commands to allow skipping modules that are not available in repositories.
-    | All remaining items will be processed.
+Options for ``list`` and ``info``
+=================================
 
 ``--enabled``
     | Show only enabled modules.
 
 ``--disabled``
     | Show only disabled modules.
+
+
+Options for ``enable``, ``disable``, ``reset``
+==============================================
+
+``--skip-broken``
+    | Resolve any dependency problems by removing items that are causing problems from the transaction.
+    | Used with ``enable`` command.
+
+``--skip-unavailable``
+    | Allow skipping modules that are not available in repositories.
+    | All remaining items will be processed.
 
 
 Examples
