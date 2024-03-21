@@ -18,9 +18,9 @@
 
 .. _system_upgrade_command_ref-label:
 
-################
+#######################
  System-upgrade Command
-################
+#######################
 
 Synopsis
 ========
