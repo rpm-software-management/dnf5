@@ -520,6 +520,7 @@ void OfflineCleanCommand::set_argument_parser() {
 
 void OfflineCleanCommand::run() {
     auto & ctx = get_context();
+    std::filesystem::remove(get_magic_symlink());
     clean_datadir(ctx, get_datadir());
 }
 
