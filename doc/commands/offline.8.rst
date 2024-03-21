@@ -37,6 +37,7 @@ Offline transactions can be initiated by specifying the ``--offline`` flag on an
 
 Data for offline transactions is stored under the "system state" directory at ``/usr/lib/sysimage/libdnf5/offline``.
 
+
 Subcommands
 ===========
 
@@ -52,6 +53,7 @@ Subcommands
 ``status``
     Shows the status of the current offline transaction.
 
+
 Options
 =======
 
@@ -60,6 +62,7 @@ Options
 
 ``--poweroff``
     Used with the ``reboot`` subcommand. The system will power off after the transaction is completed instead of restarting. If the transaction failed, the system will reboot instead of powering off even with this flag.
+
 
 Examples
 ========
@@ -83,5 +86,5 @@ Examples
 See Also
 ========
 
-    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-upgrade command <system_upgrade_command_ref-label>`
+    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-upgrade command <system-upgrade_command_ref-label>`
     | https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates

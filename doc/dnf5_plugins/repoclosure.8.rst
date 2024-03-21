@@ -36,7 +36,6 @@ The ``repoclosure`` command allows you to analyze package metadata from multiple
 By default, ``repoclosure`` considers all enabled repositories when checking dependencies. However, you can customize the set of repositories by using standard DNF5 options such as ``--repo``, ``--enable-repo``, or ``--disable-repo``.
 
 
-
 Options
 =======
 

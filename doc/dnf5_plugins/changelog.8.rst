@@ -16,43 +16,43 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-.. _check_command_ref-label:
+.. _changelog_plugin_ref-label:
 
-##############
- Check Command
-##############
+##################
+ Changelog Command
+##################
 
 Synopsis
 ========
 
-``dnf5 check [options]``
+``dnf5 changelog [options] [<package-spec>...]``
 
 
 Description
 ===========
 
-Checks the local packagedb and produces information on any problems it finds.
-The set of checks performed can be specified with options.
+Show package changelogs.
 
 
 Options
 =======
 
-``--dependencies``
-    | Show missing dependencies and conflicts.
+``--since=DATE``
+    | Show only changelog entries since ``DATE``.
+    | `YYYY-MM-DD` date format is expected.
 
-``--duplicates``
-    | Show duplicated packages.
+``--count=VALUE``
+    | Limit the number of changelog entries shown per package to ``VALUE``.
 
-``--obsoleted``
-    | Show obsoleted packages.
+``--upgrades``
+    |  Show only new changelog entries for packages that provide upgrades for already installed packages.
 
 
 Examples
 ========
 
-``dnf5 check``
-    | Show all problems.
+``dnf5 changelog --since=2023-04-01``
+    | Display changelog entries since April 1, 2023 for all packages.
 
-``dnf5 check --dependencies --obsoleted``
-    | Show missing dependencies, conflicts and obsoleted packages.
+``dnf5 changelog --count=5 bash``
+    | Display the 3 latest changelogs for the ``bash`` package.

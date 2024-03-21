@@ -10,8 +10,10 @@ DNF5 Plugins
 
     automatic.8
     builddep.8
+    changelog.8
     copr.8
     needs_restarting.8
     repoclosure.8
 
 ..
+    # TODO(jkolarik): config-manager

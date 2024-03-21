@@ -16,10 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-.. _system_upgrade_command_ref-label:
+.. _system-upgrade_command_ref-label:
 
 #######################
- System-upgrade Command
+ System-Upgrade Command
 #######################
 
 Synopsis
@@ -52,6 +52,7 @@ Subcommands
 
 ``reboot``
     | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
+
 
 Options
 =======
