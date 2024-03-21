@@ -60,7 +60,6 @@ static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
     "obsoletes",
     "optional_metadata_types",
     "protect_running_kernel",
-    "reposdir",
     "skip_broken",
     "skip_if_unavailable",
     "skip_unavailable",
