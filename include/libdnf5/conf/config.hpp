@@ -33,8 +33,9 @@ namespace libdnf5 {
 /// Base class for configurations objects
 class Config {
 public:
+#ifndef SWIGGO
     OptionBinds & opt_binds() noexcept { return binds; }
-
+#endif
     virtual ~Config() = default;
 
     virtual void load_from_parser(

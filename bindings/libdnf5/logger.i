@@ -38,8 +38,10 @@ typedef int32_t pid_t;
 
 #define CV __perl_CV
 
+#ifndef SWIGGO
 wrap_unique_ptr(LoggerUniquePtr, libdnf5::Logger);
 wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
+#endif
 
 %template(LogRouterWeakPtr) libdnf5::WeakPtr<libdnf5::LogRouter, false>;
 

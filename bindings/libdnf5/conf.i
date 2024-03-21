@@ -42,10 +42,7 @@
 #define CV __perl_CV
 #define final
 
-wrap_unique_ptr(StringUniquePtr, std::string);
-
 %include "libdnf5/version.hpp"
-
 %include "libdnf5/conf/const.hpp"
 
 %ignore libdnf5::OptionError;
