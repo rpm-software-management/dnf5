@@ -189,10 +189,10 @@ void OfflineCommand::set_argument_parser() {
 
 void OfflineCommand::register_subcommands() {
     register_subcommand(std::make_unique<OfflineCleanCommand>(get_context()));
-    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
-    register_subcommand(std::make_unique<OfflineExecuteCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineLogCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineStatusCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineExecuteCommand>(get_context()));
 }
 
 OfflineSubcommand::OfflineSubcommand(Context & context, const std::string & name) : Command(context, name) {}

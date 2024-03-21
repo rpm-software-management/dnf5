@@ -68,13 +68,13 @@ void CheckUpgradeCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
-    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
-    advisory_bz = std::make_unique<BzOption>(*this);
-    advisory_cve = std::make_unique<CveOption>(*this);
 }
 
 void CheckUpgradeCommand::configure() {

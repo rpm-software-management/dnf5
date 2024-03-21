@@ -55,10 +55,10 @@ void SystemUpgradeCommand::set_argument_parser() {
 }
 
 void SystemUpgradeCommand::register_subcommands() {
-    register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineCleanCommand>(get_context()));
-    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
+    register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineLogCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
 }
 
 void SystemUpgradeDownloadCommand::set_argument_parser() {

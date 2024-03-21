@@ -50,19 +50,19 @@ Options
 =======
 
 ``--timer``
-    Apply random delay before execution.
+    | Apply random delay before execution.
 
 ``--downloadupdates``
-    Automatically download updated packages.
+    | Automatically download updated packages.
 
 ``--no-downloadupdates``
-    Do not automatically download updated packages.
+    | Do not automatically download updated packages.
 
 ``--installupdates``
-    Automatically install downloaded updates (implies --downloadupdates).
+    | Automatically install downloaded updates (implies --downloadupdates).
 
 ``--no-installupdates``
-    Do not automatically install downloaded updates.
+    | Do not automatically install downloaded updates.
 
 
 Run dnf-automatic
