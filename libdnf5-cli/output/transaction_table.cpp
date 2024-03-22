@@ -552,8 +552,29 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
 
         struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         scols_line_set_data(ln, COL_NAME, tsmodule->get_module_name().c_str());
-        scols_line_set_data(ln, COL_EVR, tsmodule->get_module_stream().c_str());
         scols_cell_set_color(scols_line_get_cell(ln, COL_NAME), action_color(tsmodule->get_action()));
+
+        const auto & replaces = tsmodule->get_replaces();
+        // TODO(pkratoch): When implementing module obsoletes, it might be necessary to change the condition to report obsoletes differently
+        if (replaces.size() == 1 && replaces[0].first == tsmodule->get_module_name()) {
+            // There is only one replaced module and the module name is the same, report it on one line
+            scols_line_set_data(
+                ln, COL_EVR, fmt::format("{} -> {}", tsmodule->get_module_stream(), replaces[0].second).c_str());
+        } else {
+            // There are multiple replaced modules, report it using the "replacing" lines
+            scols_line_set_data(ln, COL_EVR, tsmodule->get_module_stream().c_str());
+            for (auto & replaced : replaces) {
+                struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
+                // TODO(jmracek) Translate it
+                std::string name("replacing ");
+                name.append(replaced.first);
+                scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
+                scols_line_set_data(ln_replaced, COL_EVR, replaced.second.c_str());
+                auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
+            }
+        }
     }
 }
 
