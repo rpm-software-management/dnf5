@@ -73,6 +73,7 @@ public:
     virtual libdnf5::transaction::TransactionItemReason get_reason() const = 0;
     virtual std::string get_module_name() const = 0;
     virtual std::string get_module_stream() const = 0;
+    virtual std::vector<std::pair<std::string, std::string>> get_replaces() const = 0;
 };
 
 

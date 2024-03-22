@@ -42,12 +42,15 @@ public:
     std::string get_module_stream() const { return module_stream; }
     libdnf5::transaction::TransactionItemAction get_action() const { return action; }
     libdnf5::transaction::TransactionItemReason get_reason() const { return reason; }
+    const std::vector<std::pair<std::string, std::string>> & get_replaces() const noexcept { return replaces; }
+    void set_replaces(std::vector<std::pair<std::string, std::string>> && replaces) { this->replaces = replaces; }
 
 private:
     libdnf5::transaction::TransactionItemAction action;
     libdnf5::transaction::TransactionItemReason reason;
     std::string module_name;
     std::string module_stream;
+    std::vector<std::pair<std::string, std::string>> replaces;
 };
 
 }  // namespace dnfdaemon::client
