@@ -112,6 +112,10 @@ public:
 
     std::string get_module_stream() const override { return trans_module.get_module_stream(); }
 
+    std::vector<std::pair<std::string, std::string>> get_replaces() const override {
+        return trans_module.get_replaces();
+    }
+
 private:
     T trans_module;
 };

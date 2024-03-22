@@ -19,23 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/transaction_module.hpp"
 
+#include "transaction_module_impl.hpp"
+
 #include <utility>
 
 namespace libdnf5::base {
-
-class TransactionModule::Impl {
-public:
-    Impl(std::string module_name, std::string module_stream, Action action, Reason reason);
-
-private:
-    friend TransactionModule;
-
-    State state{State::STARTED};
-    Action action;
-    Reason reason;
-    std::string module_name;
-    std::string module_stream;
-};
 
 TransactionModule::~TransactionModule() = default;
 
@@ -83,6 +71,22 @@ std::string TransactionModule::get_module_name() const {
 
 std::string TransactionModule::get_module_stream() const {
     return p_impl->module_stream;
+}
+
+std::vector<std::pair<std::string, std::string>> TransactionModule::get_replaces() const noexcept {
+    return p_impl->replaces;
+}
+
+const std::vector<std::pair<std::string, std::string>> & TransactionModule::get_replaced_by() const noexcept {
+    return p_impl->replaced_by;
+}
+
+void TransactionModule::Impl::replaces_append(std::string && module_name, std::string && module_stream) {
+    replaces.push_back(std::make_pair(std::move(module_name), std::move(module_stream)));
+}
+
+void TransactionModule::Impl::replaced_by_append(std::string && module_name, std::string && module_stream) {
+    replaced_by.push_back(std::make_pair(std::move(module_name), std::move(module_stream)));
 }
 
 }  // namespace libdnf5::base
