@@ -56,6 +56,13 @@ public:
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
     Reason get_reason() const noexcept;
 
+    /// @return module:stream pairs replaced by this transaction module.
+    std::vector<std::pair<std::string, std::string>> get_replaces() const noexcept;
+
+    /// @return module:stream pairs that replace this transaction module (for transaction
+    /// modules that are leaving the system).
+    const std::vector<std::pair<std::string, std::string>> & get_replaced_by() const noexcept;
+
     ~TransactionModule();
 
     TransactionModule(const TransactionModule & mpkg);
