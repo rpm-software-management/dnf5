@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "copr.hpp"
 
 #include <dnf5/iplugin.hpp>
+#include <libdnf5/defs.h>
 
 using namespace dnf5;
 
@@ -71,24 +72,25 @@ public:
 }  // namespace
 
 
-PluginAPIVersion dnf5_plugin_get_api_version(void) {
+PUBLIC_API PluginAPIVersion dnf5_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
-const char * dnf5_plugin_get_name(void) {
+PUBLIC_API const char * dnf5_plugin_get_name(void) {
     return PLUGIN_NAME;
 }
 
-PluginVersion dnf5_plugin_get_version(void) {
+PUBLIC_API PluginVersion dnf5_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version, Context & context) try {
+PUBLIC_API IPlugin * dnf5_plugin_new_instance(
+    [[maybe_unused]] ApplicationVersion application_version, Context & context) try {
     return new CoprCmdPlugin(context);
 } catch (...) {
     return nullptr;
 }
 
-void dnf5_plugin_delete_instance(IPlugin * plugin_object) {
+PUBLIC_API void dnf5_plugin_delete_instance(IPlugin * plugin_object) {
     delete plugin_object;
 }
