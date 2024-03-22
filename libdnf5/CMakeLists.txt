@@ -27,6 +27,7 @@ set(DNF_SO_VERSION 1)
 set_target_properties(libdnf5 PROPERTIES OUTPUT_NAME "dnf5")
 set_target_properties(libdnf5 PROPERTIES SOVERSION ${DNF_SO_VERSION})
 set_target_properties(libdnf5 PROPERTIES C_VISIBILITY_PRESET hidden CXX_VISIBILITY_PRESET hidden)
+set_target_properties(libdnf5 PROPERTIES VISIBILITY_INLINES_HIDDEN ON)
 # required to have dlopen symbol
 target_link_libraries(libdnf5 PUBLIC ${CMAKE_DL_LIBS})
 
