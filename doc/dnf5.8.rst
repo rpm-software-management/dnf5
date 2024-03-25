@@ -304,7 +304,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Use configuration files and variable definitions from the host system rather than the installroot.
 
 ``--version``
-    | Display versions of installed dnf5 components.
+    | Display the version of the dnf5 application and libdnf5 library, along with successfully loaded plugins and their versions, and then exit.
 
 ``-y, --assumeyes``
     | Automatically answer yes for all questions.
