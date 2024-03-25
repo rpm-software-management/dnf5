@@ -65,6 +65,7 @@ constexpr std::pair<const char *, rpmtransFlags_e> string_tsflag_map[]{
     {"nocontexts", RPMTRANS_FLAG_NOCONTEXTS},
     {"nocaps", RPMTRANS_FLAG_NOCAPS},
     {"nocrypto", RPMTRANS_FLAG_NOFILEDIGEST},
+    {"deploops", RPMTRANS_FLAG_DEPLOOPS},
 };
 
 const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSACTION_RUN_RESULT_DICT = {
