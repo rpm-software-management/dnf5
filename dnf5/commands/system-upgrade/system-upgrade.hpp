@@ -48,6 +48,24 @@ private:
     std::string system_releasever;
 };
 
+class OfflineDistroSyncCommand : public Command {
+public:
+    explicit OfflineDistroSyncCommand(Context & context) : Command(context, "offline-distrosync") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
+};
+
+class OfflineUpgradeCommand : public Command {
+public:
+    explicit OfflineUpgradeCommand(Context & context) : Command(context, "offline-upgrade") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
+};
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_SYSTEM_UPGRADE_HPP
