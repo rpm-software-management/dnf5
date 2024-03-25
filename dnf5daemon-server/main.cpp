@@ -39,6 +39,8 @@ int main() {
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
     pthread_sigmask(SIG_BLOCK, &mask, NULL);
+    // ignore SIGPIPE globally, handle pipe writing errors locally where they occur
+    signal(SIGPIPE, SIG_IGN);
 
     try {
         SessionManager session_manager;

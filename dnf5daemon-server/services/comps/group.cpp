@@ -133,7 +133,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
 
     // patterns to search
     std::vector<std::string> patterns =
-        key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
 
     libdnf5::comps::GroupQuery query(base->get_weak_ptr());
     if (patterns.size() > 0) {
@@ -146,7 +146,7 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     // create reply from the query
     dnfdaemon::KeyValueMapList out_groups;
     std::vector<std::string> attributes =
-        key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
+        dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "attributes", std::vector<std::string>{});
     for (auto grp : query.list()) {
         out_groups.push_back(group_to_map(grp, attributes));
     }

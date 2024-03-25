@@ -15,6 +15,9 @@ include_directories(..)
 
 pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++>=0.9.0)
 
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(${JSONC_INCLUDE_DIRS})
+
 add_executable(${DNF5DAEMON_CLIENT_BIN} ${DNF5DAEMON_CLIENT_SOURCES})
 
 target_link_libraries(
@@ -24,6 +27,7 @@ target_link_libraries(
         libdnf5
         libdnf5-cli
         ${SDBUS_CPP_LIBRARIES}
+        ${JSONC_LIBRARIES}
         pthread
 )
 
