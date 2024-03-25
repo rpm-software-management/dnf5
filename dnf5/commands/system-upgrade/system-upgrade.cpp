@@ -56,9 +56,10 @@ void SystemUpgradeCommand::set_argument_parser() {
 
 void SystemUpgradeCommand::register_subcommands() {
     register_subcommand(std::make_unique<OfflineCleanCommand>(get_context()));
-    register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineLogCommand>(get_context()));
     register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineStatusCommand>(get_context()));
+    register_subcommand(std::make_unique<SystemUpgradeDownloadCommand>(get_context()));
 }
 
 void SystemUpgradeDownloadCommand::set_argument_parser() {
@@ -113,6 +114,50 @@ void SystemUpgradeDownloadCommand::run() {
     }
 
     ctx.set_should_store_offline(true);
+}
+
+void OfflineDistroSyncCommand::pre_configure() {
+    throw_missing_command();
+}
+
+void OfflineDistroSyncCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("subcommands").register_argument(arg_parser_this_cmd);
+}
+
+void OfflineDistroSyncCommand::set_argument_parser() {
+    get_argument_parser_command()->set_description(_("Store a distro-sync transaction to be performed offline"));
+}
+
+void OfflineDistroSyncCommand::register_subcommands() {
+    register_subcommand(std::make_unique<OfflineCleanCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineLogCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineStatusCommand>(get_context()));
+}
+
+void OfflineUpgradeCommand::pre_configure() {
+    throw_missing_command();
+}
+
+void OfflineUpgradeCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("subcommands").register_argument(arg_parser_this_cmd);
+}
+
+void OfflineUpgradeCommand::set_argument_parser() {
+    get_argument_parser_command()->set_description(_("Store an upgrade transaction to be performed offline"));
+}
+
+void OfflineUpgradeCommand::register_subcommands() {
+    register_subcommand(std::make_unique<OfflineCleanCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineRebootCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineLogCommand>(get_context()));
+    register_subcommand(std::make_unique<OfflineStatusCommand>(get_context()));
 }
 
 }  // namespace dnf5

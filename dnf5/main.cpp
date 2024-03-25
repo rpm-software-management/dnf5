@@ -694,6 +694,8 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
     context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
     context.add_and_initialize_command(std::make_unique<SystemUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineDistroSyncCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineUpgradeCommand>(context));
     context.add_and_initialize_command(std::make_unique<OfflineCommand>(context));
 }
 
