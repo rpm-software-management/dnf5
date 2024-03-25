@@ -154,6 +154,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`changelog <changelog_plugin_ref-label>`
     | Show package changelogs.
 
+:ref:`config-manager <config_manager_plugin_ref-label>`
+    | Manages main configuration, repositories configuration, and variables.
+
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
@@ -162,9 +165,6 @@ These are available after installing the ``dnf5-plugins`` package.
 
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
-
-..
-    # TODO(jkolarik): config-manager plugin
 
 
 Options
@@ -421,12 +421,11 @@ Application Plugins:
     | :manpage:`dnf5-automatic(8)`, :ref:`Automatic command <automatic_plugin_ref-label>`
     | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
     | :manpage:`dnf5-changelog(8)`, :ref:`Changelog command <changelog_plugin_ref-label>`
+    | :manpage:`dnf5-config-manager(8)`, :ref:`Config-manager command <config_manager_plugin_ref-label>`
     | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
     | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
 
-..
-    # TODO(jkolarik): config-manager plugin
 
 Library Plugins:
     | :manpage:`libdnf5-actions(8)`, :ref:`Actions plugin <actions_plugin_ref-label>`

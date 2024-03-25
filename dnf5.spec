@@ -755,6 +755,7 @@ config-manager, copr, and repoclosure commands.
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_mandir}/man8/dnf5-builddep.8.*
 %{_mandir}/man8/dnf5-changelog.8.*
+%{_mandir}/man8/dnf5-config-manager.8.*
 %{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
