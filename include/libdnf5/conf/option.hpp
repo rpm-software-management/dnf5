@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CONF_OPTION_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <string>
 
@@ -77,8 +78,8 @@ public:
     };
 
     explicit Option(Priority priority = Priority::EMPTY);
-    Option(const Option & src) = default;
-    virtual ~Option() = default;
+    Option(const Option & src);
+    virtual ~Option();
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/Option.hpp:method:Option.clone()
@@ -127,43 +128,10 @@ protected:
     const std::string & get_lock_comment() const noexcept;
 
 private:
-    Priority priority;
-    bool locked{false};
-    std::string lock_comment;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
-inline Option::Option(Priority priority) : priority(priority) {}
-
-inline Option::Priority Option::get_priority() const {
-    return priority;
-}
-
-inline bool Option::empty() const noexcept {
-    return priority == Priority::EMPTY;
-}
-
-inline void Option::set_priority(Priority priority) {
-    this->priority = priority;
-}
-
-inline void Option::lock(const std::string & first_comment) {
-    if (!locked) {
-        lock_comment = first_comment;
-        locked = true;
-    }
-}
-
-inline bool Option::is_locked() const noexcept {
-    return locked;
-}
-
-inline void Option::assert_not_locked() const {
-    libdnf_user_assert(!locked, "Attempting to write to a locked option: {}", get_lock_comment());
-}
-
-inline const std::string & Option::get_lock_comment() const noexcept {
-    return lock_comment;
-}
 
 }  // namespace libdnf5
 
