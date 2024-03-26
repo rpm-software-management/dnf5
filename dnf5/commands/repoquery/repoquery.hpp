@@ -80,8 +80,8 @@ private:
 
     libdnf5::OptionBool * querytags_option{nullptr};
     libdnf5::OptionString * query_format_option{nullptr};
-    libdnf5::OptionEnum<std::string> * pkg_attr_option{nullptr};
-    libdnf5::OptionEnum<std::string> * providers_of_option{nullptr};
+    libdnf5::OptionEnum * pkg_attr_option{nullptr};
+    libdnf5::OptionEnum * providers_of_option{nullptr};
 
     std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
     std::unique_ptr<SecurityOption> advisory_security{nullptr};

@@ -70,8 +70,8 @@ public:
     const OptionBool & get_reset_nice_option() const;
     OptionPath & get_system_cachedir_option();
     const OptionPath & get_system_cachedir_option() const;
-    OptionEnum<std::string> & get_cacheonly_option();
-    const OptionEnum<std::string> & get_cacheonly_option() const;
+    OptionEnum & get_cacheonly_option();
+    const OptionEnum & get_cacheonly_option() const;
     OptionBool & get_keepcache_option();
     const OptionBool & get_keepcache_option() const;
     OptionPath & get_logdir_option();
@@ -130,8 +130,8 @@ public:
     const OptionSeconds & get_metadata_timer_sync_option() const;
     OptionStringList & get_disable_excludes_option();
     const OptionStringList & get_disable_excludes_option() const;
-    OptionEnum<std::string> & get_multilib_policy_option();  // :api
-    const OptionEnum<std::string> & get_multilib_policy_option() const;
+    OptionEnum & get_multilib_policy_option();  // :api
+    const OptionEnum & get_multilib_policy_option() const;
     OptionBool & get_best_option();  // :api
     const OptionBool & get_best_option() const;
     OptionBool & get_install_weak_deps_option();
@@ -142,8 +142,8 @@ public:
     const OptionString & get_bugtracker_url_option() const;
     OptionBool & get_zchunk_option();
     const OptionBool & get_zchunk_option() const;
-    OptionEnum<std::string> & get_color_option();
-    const OptionEnum<std::string> & get_color_option() const;
+    OptionEnum & get_color_option();
+    const OptionEnum & get_color_option() const;
     OptionString & get_color_list_installed_older_option();
     const OptionString & get_color_list_installed_older_option() const;
     OptionString & get_color_list_installed_newer_option();
@@ -187,8 +187,8 @@ public:
     const OptionBool & get_autocheck_running_kernel_option() const;
     OptionBool & get_clean_requirements_on_remove_option();
     const OptionBool & get_clean_requirements_on_remove_option() const;
-    OptionEnum<std::string> & get_history_list_view_option();
-    const OptionEnum<std::string> & get_history_list_view_option() const;
+    OptionEnum & get_history_list_view_option();
+    const OptionEnum & get_history_list_view_option() const;
     OptionBool & get_upgrade_group_objects_upgrade_option();
     const OptionBool & get_upgrade_group_objects_upgrade_option() const;
     OptionPath & get_destdir_option();
@@ -256,8 +256,8 @@ public:
     const OptionNumber<std::uint32_t> & get_bandwidth_option() const;
     OptionNumber<std::uint32_t> & get_minrate_option();
     const OptionNumber<std::uint32_t> & get_minrate_option() const;
-    OptionEnum<std::string> & get_ip_resolve_option();
-    const OptionEnum<std::string> & get_ip_resolve_option() const;
+    OptionEnum & get_ip_resolve_option();
+    const OptionEnum & get_ip_resolve_option() const;
     OptionNumber<float> & get_throttle_option();
     const OptionNumber<float> & get_throttle_option() const;
     OptionSeconds & get_timeout_option();

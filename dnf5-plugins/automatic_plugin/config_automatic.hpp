@@ -39,12 +39,12 @@ public:
     ConfigAutomaticCommands();
     ~ConfigAutomaticCommands() = default;
 
-    libdnf5::OptionEnum<std::string> upgrade_type{"default", {"default", "security"}};
+    libdnf5::OptionEnum upgrade_type{"default", {"default", "security"}};
     libdnf5::OptionNumber<std::int32_t> random_sleep{0};
     libdnf5::OptionNumber<std::int32_t> network_online_timeout{60};
     libdnf5::OptionBool download_updates{true};
     libdnf5::OptionBool apply_updates{false};
-    libdnf5::OptionEnum<std::string> reboot{"never", {"never", "when-changed", "when-needed"}};
+    libdnf5::OptionEnum reboot{"never", {"never", "when-changed", "when-needed"}};
     libdnf5::OptionString reboot_command{"shutdown -r +5 'Rebooting after applying package updates'"};
 };
 
@@ -73,7 +73,7 @@ public:
     libdnf5::OptionString email_from{"root"};
     libdnf5::OptionString email_host{"localhost"};
     libdnf5::OptionNumber<std::int32_t> email_port{25};
-    libdnf5::OptionEnum<std::string> email_tls{"no", {"no", "yes", "starttls"}};
+    libdnf5::OptionEnum email_tls{"no", {"no", "yes", "starttls"}};
 };
 
 

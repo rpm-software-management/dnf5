@@ -156,7 +156,7 @@ void OptionTest::test_options_child() {
 void OptionTest::test_options_enum() {
     const std::vector<std::string> ENUM_VALS{"aa", "bb", "cc", "dd", "ee"};
 
-    OptionEnum<std::string> option("bb", ENUM_VALS);
+    OptionEnum option("bb", ENUM_VALS);
     CPPUNIT_ASSERT_EQUAL(std::string("bb"), option.get_default_value());
     CPPUNIT_ASSERT_EQUAL(std::string("bb"), option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());

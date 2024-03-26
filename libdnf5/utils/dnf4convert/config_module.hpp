@@ -39,7 +39,7 @@ public:
     OptionString name{""};
     OptionString stream{""};
     OptionStringList profiles{std::vector<std::string>{}};
-    OptionEnum<std::string> state{"", {"enabled", "disabled", ""}};
+    OptionEnum state{"", {"enabled", "disabled", ""}};
 
     void load_from_parser(
         const libdnf5::ConfigParser & parser,

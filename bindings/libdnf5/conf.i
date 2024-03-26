@@ -55,7 +55,6 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %include "libdnf5/conf/option.hpp"
 %include "libdnf5/conf/option_bool.hpp"
 %include "libdnf5/conf/option_enum.hpp"
-%template(OptionEnumString) libdnf5::OptionEnum<std::string>;
 
 %include "libdnf5/conf/option_number.hpp"
 %template(OptionNumberInt32) libdnf5::OptionNumber<std::int32_t>;
@@ -81,7 +80,7 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %template(OptionChildNumberInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::int32_t>>;
 %template(OptionChildNumberUInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::uint32_t>>;
 %template(OptionChildNumberFloat) libdnf5::OptionChild<libdnf5::OptionNumber<float>>;
-%template(OptionChildEnumString) libdnf5::OptionChild<libdnf5::OptionEnum<std::string>>;
+%template(OptionChildEnum) libdnf5::OptionChild<libdnf5::OptionEnum>;
 %template(OptionChildSeconds) libdnf5::OptionChild<libdnf5::OptionSeconds>;
 
 
