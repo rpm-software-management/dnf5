@@ -80,8 +80,7 @@ void CheckUpgradeCommand::set_argument_parser() {
 void CheckUpgradeCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
-    context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
     if (changelogs->get_value()) {
         context.base.get_config().get_optional_metadata_types_option().add(
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);

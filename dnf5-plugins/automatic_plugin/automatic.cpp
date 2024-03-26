@@ -306,10 +306,9 @@ void AutomaticCommand::pre_configure() {
 
 void AutomaticCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
     context.update_repo_metadata_from_advisory_options(
         {}, config_automatic.config_commands.upgrade_type.get_value() == "security", false, false, false, {}, {}, {});
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
 
     wait_for_network();
 }

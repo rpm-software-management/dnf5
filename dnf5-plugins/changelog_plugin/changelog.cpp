@@ -108,8 +108,7 @@ void ChangelogCommand::set_argument_parser() {
 
 void ChangelogCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
     context.base.get_config().get_optional_metadata_types_option().add(
         libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
 }

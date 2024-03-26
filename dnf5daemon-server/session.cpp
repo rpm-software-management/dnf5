@@ -207,6 +207,8 @@ bool Session::read_all_repos() {
 
     bool retval = true;
 
+    std::vector<libdnf5::repo::Repo::Type> repos_to_load = {};
+
     bool load_available_repos = session_configuration_value<bool>("load_available_repos", true);
     bool load_system_repo = session_configuration_value<bool>("load_system_repo", true);
     std::vector<std::string> optional_metadata_str =
@@ -228,14 +230,19 @@ bool Session::read_all_repos() {
             repo->set_user_data(user_data.get());
             repo->set_callbacks(std::make_unique<dnf5daemon::KeyImportRepoCB>(*this));
         }
+        repos_to_load.push_back(libdnf5::repo::Repo::Type::AVAILABLE);
+    }
 
+    if (load_system_repo) {
+        repos_to_load.push_back(libdnf5::repo::Repo::Type::SYSTEM);
+    }
+
+    if (!repos_to_load.empty()) {
         try {
-            base->get_repo_sack()->update_and_load_enabled_repos(load_system_repo);
+            base->get_repo_sack()->update_and_load_enabled_repos(repos_to_load);
         } catch (const std::runtime_error & ex) {
             retval = false;
         }
-    } else if (load_system_repo) {
-        base->get_repo_sack()->get_system_repo()->load();
     }
 
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;

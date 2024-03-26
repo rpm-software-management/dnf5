@@ -97,11 +97,10 @@ void RepoclosureCommand::set_argument_parser() {
 
 void RepoclosureCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(false);
     // filelists needed because there are packages in repos with file requirements
     context.base.get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 }
 
 void RepoclosureCommand::run() {

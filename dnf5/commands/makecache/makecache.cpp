@@ -57,7 +57,7 @@ void MakeCacheCommand::run() {
         return;
     }
 
-    ctx.load_repos(false);
+    ctx.load_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 
     std::cout << "Metadata cache created." << std::endl;
 }

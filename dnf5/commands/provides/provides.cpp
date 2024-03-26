@@ -61,10 +61,9 @@ void ProvidesCommand::set_argument_parser() {
 
 void ProvidesCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
     context.base.get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
 }
 
 std::pair<libdnf5::rpm::PackageQuery, libdnf5::cli::output::ProvidesMatchedBy> ProvidesCommand::filter_spec(

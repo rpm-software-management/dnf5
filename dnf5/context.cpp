@@ -167,21 +167,32 @@ void Context::update_repo_metadata_from_advisory_options(
     }
 }
 
-void Context::load_repos(bool load_system) {
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_enabled(true);
-    repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
-
-    for (auto & repo : repos) {
-        repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
+void Context::load_repos(std::vector<libdnf5::repo::Repo::Type> types) {
+    if (types.empty()) {
+        return;
     }
 
-    print_info("Updating and loading repositories:");
-    base.get_repo_sack()->update_and_load_enabled_repos(load_system);
-    if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
-        download_callbacks->reset_progress_bar();
+    bool loading_available = std::find(types.begin(), types.end(), libdnf5::repo::Repo::Type::AVAILABLE) != types.end();
+    if (loading_available) {
+        libdnf5::repo::RepoQuery repos(base);
+        repos.filter_enabled(true);
+        repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
+
+        for (auto & repo : repos) {
+            repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
+        }
+
+        print_info("Updating and loading repositories:");
     }
-    print_info("Repositories loaded.");
+
+    base.get_repo_sack()->update_and_load_enabled_repos(types);
+
+    if (loading_available) {
+        if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
+            download_callbacks->reset_progress_bar();
+        }
+        print_info("Repositories loaded.");
+    }
 }
 
 namespace {
@@ -561,17 +572,9 @@ std::vector<std::string> match_specs(
         installed = available = false;
     }
 
-    if (installed) {
-        try {
-            base.get_repo_sack()->get_system_repo()->load();
-            base.get_rpm_package_sack()->load_config_excludes_includes();
-        } catch (...) {
-            // Ignores errors when completing installed packages, other completions may still work.
-        }
-    }
-
-    if (available) {
-        try {
+    try {
+        std::vector<libdnf5::repo::Repo::Type> types;
+        if (available) {
             // create rpm repositories according configuration files
             base.get_repo_sack()->create_repos_from_system_configuration();
             base.get_config().get_optional_metadata_types_option().set(
@@ -586,11 +589,15 @@ std::vector<std::string> match_specs(
                 repo->set_sync_strategy(libdnf5::repo::Repo::SyncStrategy::ONLY_CACHE);
                 repo->get_config().get_skip_if_unavailable_option().set(libdnf5::Option::Priority::RUNTIME, true);
             }
-
-            ctx.load_repos(false);
-        } catch (...) {
-            // Ignores errors when completing available packages, other completions may still work.
+            types.push_back(libdnf5::repo::Repo::Type::AVAILABLE);
         }
+        if (installed) {
+            types.push_back(libdnf5::repo::Repo::Type::SYSTEM);
+        }
+
+        ctx.load_repos(types);
+    } catch (...) {
+        // Ignores errors when completing packages, other completions may still work.
     }
 
     std::set<std::string> result_set;

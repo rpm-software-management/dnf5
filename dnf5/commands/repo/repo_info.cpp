@@ -96,7 +96,7 @@ private:
 
 void RepoInfoCommand::configure() {
     auto & context = get_context();
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 }
 
 void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {

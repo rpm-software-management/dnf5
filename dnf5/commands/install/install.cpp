@@ -72,7 +72,6 @@ void InstallCommand::set_argument_parser() {
 void InstallCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
-    context.set_load_system_repo(true);
     context.update_repo_metadata_from_advisory_options(
         advisory_name->get_value(),
         advisory_security->get_value(),
@@ -83,7 +82,7 @@ void InstallCommand::configure() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
 
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
 }
 
 void InstallCommand::run() {

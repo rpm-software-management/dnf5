@@ -109,12 +109,12 @@ void ListCommand::set_argument_parser() {
 void ListCommand::configure() {
     // TODO(mblaha): do not force expired metadata sync if not explicitly required
     pkg_narrow = PkgNarrow::ALL;
-    Context::LoadAvailableRepos load_available = Context::LoadAvailableRepos::ENABLED;
-    bool load_system = true;
+    std::vector<libdnf5::repo::Repo::Type> which_repos_to_load = {libdnf5::repo::Repo::Type::AVAILABLE};
+
     if (available->get_value()) {
         pkg_narrow = PkgNarrow::AVAILABLE;
     } else if (installed->get_value()) {
-        load_available = Context::LoadAvailableRepos::NONE;
+        which_repos_to_load.clear();
         pkg_narrow = PkgNarrow::INSTALLED;
     } else if (extras->get_value()) {
         pkg_narrow = PkgNarrow::EXTRAS;
@@ -125,12 +125,12 @@ void ListCommand::configure() {
     } else if (upgrades->get_value()) {
         pkg_narrow = PkgNarrow::UPGRADES;
     } else if (autoremove->get_value()) {
-        load_available = Context::LoadAvailableRepos::NONE;
+        which_repos_to_load.clear();
         pkg_narrow = PkgNarrow::AUTOREMOVE;
     }
     auto & context = get_context();
-    context.set_load_available_repos(load_available);
-    context.set_load_system_repo(load_system);
+    which_repos_to_load.push_back(libdnf5::repo::Repo::Type::SYSTEM);
+    context.set_load_enabled_repos(which_repos_to_load);
 }
 
 std::unique_ptr<libdnf5::cli::output::PackageListSections> ListCommand::create_output() {
