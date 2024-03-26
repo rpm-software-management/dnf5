@@ -121,6 +121,7 @@ public:
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+    void filter_type(const std::vector<Repo::Type> & types, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
 private:
     class Impl;
