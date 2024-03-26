@@ -19,19 +19,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_repo.hpp"
 
+#include "../shared/private_accessor.hpp"
 #include "utils/string.hpp"
 
 #include <libdnf5/base/base.hpp>
 
-#include <filesystem>
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
+// Accessor of private Base::p_impl, see private_accessor.hpp
+create_private_getter_template;
+create_getter(load, &libdnf5::repo::Repo::load);
 
 void RepoTest::test_load_system_repo() {
     // TODO(lukash) there's no rpmdb in the installroot, create data for the test
-    repo_sack->get_system_repo()->load();
+    (*(repo_sack->get_system_repo()).*get(load{}))();
 }
 
 namespace {
