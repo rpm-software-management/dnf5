@@ -46,9 +46,8 @@ void RepolistCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
 
 
-    enable_disable_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionEnum<std::string>>(
-            new libdnf5::OptionEnum<std::string>("enabled", {"all", "enabled", "disabled"}))));
+    enable_disable_option = dynamic_cast<libdnf5::OptionEnum *>(parser.add_init_value(
+        std::unique_ptr<libdnf5::OptionEnum>(new libdnf5::OptionEnum("enabled", {"all", "enabled", "disabled"}))));
 
     auto all = parser.add_new_named_arg("all");
     all->set_long_name("all");

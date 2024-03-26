@@ -343,8 +343,8 @@ void RepoqueryCommand::set_argument_parser() {
         "supplements",
         "",  // empty when option is not used
     };
-    providers_of_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
+    providers_of_option = dynamic_cast<libdnf5::OptionEnum *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum>("", pkg_attrs_options)));
     auto * providers_of = parser.add_new_named_arg("providersof");
     std::string allowed_values = libdnf5::utils::string::join(pkg_attrs_options, ", ");
     // Drop the empty option from the description of supported values
@@ -412,8 +412,8 @@ void RepoqueryCommand::set_argument_parser() {
     // Add additional supported package attribute getters, all pkg_attrs_options get turned into options
     pkg_attrs_options.insert(pkg_attrs_options.begin(), {"files", "sourcerpm", "location"});
 
-    pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
+    pkg_attr_option = dynamic_cast<libdnf5::OptionEnum *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum>("", pkg_attrs_options)));
     // remove the last empty ("") option, it should not be an arg
     pkg_attrs_options.pop_back();
     for (auto & pkg_attr : pkg_attrs_options) {
