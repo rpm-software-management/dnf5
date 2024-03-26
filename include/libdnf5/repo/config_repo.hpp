@@ -90,8 +90,8 @@ public:
     const OptionChild<OptionNumber<std::uint32_t>> & get_bandwidth_option() const;
     OptionChild<OptionNumber<std::uint32_t>> & get_minrate_option();
     const OptionChild<OptionNumber<std::uint32_t>> & get_minrate_option() const;
-    OptionChild<OptionEnum<std::string>> & get_ip_resolve_option();
-    const OptionChild<OptionEnum<std::string>> & get_ip_resolve_option() const;
+    OptionChild<OptionEnum> & get_ip_resolve_option();
+    const OptionChild<OptionEnum> & get_ip_resolve_option() const;
     OptionChild<OptionNumber<float>> & get_throttle_option();
     const OptionChild<OptionNumber<float>> & get_throttle_option() const;
     OptionChild<OptionSeconds> & get_timeout_option();
@@ -141,8 +141,8 @@ public:
     OptionChild<OptionBool> & get_countme_option();
     const OptionChild<OptionBool> & get_countme_option() const;
     // yum compatibility options
-    OptionEnum<std::string> & get_failovermethod_option();
-    const OptionEnum<std::string> & get_failovermethod_option() const;
+    OptionEnum & get_failovermethod_option();
+    const OptionEnum & get_failovermethod_option() const;
 
     /// @return A unique ID of the repository, consisting of its id and a hash
     /// computed from its source URLs (metalink, mirrorlist or baseurl, first

@@ -41,7 +41,7 @@ public:
     void run() override;
 
 private:
-    libdnf5::OptionEnum<std::string> * enable_disable_option{nullptr};
+    libdnf5::OptionEnum * enable_disable_option{nullptr};
     std::vector<std::unique_ptr<libdnf5::Option>> * patterns_options{nullptr};
     const std::string command;
 };
