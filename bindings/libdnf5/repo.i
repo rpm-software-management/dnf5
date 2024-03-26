@@ -66,6 +66,7 @@ wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 %include "libdnf5/repo/repo_cache.hpp"
 
 %include "libdnf5/repo/repo.hpp"
+%template(VectorRepoType) std::vector<libdnf5::repo::Repo::Type>;
 
 %include "libdnf5/repo/repo_weak.hpp"
 %template(RepoWeakPtr) libdnf5::WeakPtr<libdnf5::repo::Repo, false>;

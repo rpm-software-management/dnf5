@@ -519,20 +519,36 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
+    if (load_system) {
+        update_and_load_enabled_repos({Repo::Type::AVAILABLE, Repo::Type::SYSTEM});
+    } else {
+        update_and_load_enabled_repos({Repo::Type::AVAILABLE});
+    }
+}
+
+
+void RepoSack::update_and_load_enabled_repos(const std::vector<Repo::Type> & types) {
     libdnf_user_assert(
         !p_impl->repos_updated_and_loaded, "RepoSack::updated_and_load_enabled_repos has already been called.");
+    libdnf_user_assert(
+        !(types.empty()) && (std::find_if(
+                                 types.begin(),
+                                 types.end(),
+                                 [](const auto & e) {
+                                     return (e != libdnf5::repo::Repo::Type::AVAILABLE) &&
+                                            e != libdnf5::repo::Repo::Type::SYSTEM;
+                                 }) == types.end()),
+        "RepoSack::updated_and_load_enabled_repos has to be used with libdnf5::repo::Repo::Type::SYSTEM and/or "
+        "AVAILABLE.");
 
-    if (load_system) {
+    if (std::find(types.begin(), types.end(), Repo::Type::SYSTEM) != types.end()) {
         // create the system repository if it does not exist
         p_impl->base->get_repo_sack()->get_system_repo();
     }
 
     libdnf5::repo::RepoQuery repos(p_impl->base);
     repos.filter_enabled(true);
-
-    if (!load_system) {
-        repos.filter_type(Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
-    }
+    repos.filter_type(types);
 
     update_and_load_repos(repos);
 
