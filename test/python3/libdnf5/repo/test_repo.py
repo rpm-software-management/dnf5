@@ -75,9 +75,8 @@ class TestRepo(base_test_case.BaseTestCase):
         # can be passed directly to repo.set_callbacks
         repo.set_callbacks(libdnf5.repo.RepoCallbacksUniquePtr(cbs))
 
-        repos = libdnf5.repo.RepoQuery(self.base)
-        repos.filter_id(repoid)
-        self.repo_sack.update_and_load_repos(repos)
+        self.repo_sack.update_and_load_enabled_repos(
+            libdnf5.repo.VectorRepoType(1, libdnf5.repo.Repo.Type_AVAILABLE))
 
         self.assertEqual(dl_cbs.start_cnt, 1)
         self.assertEqual(dl_cbs.start_what, repoid)
@@ -101,7 +100,8 @@ class TestRepo(base_test_case.BaseTestCase):
         cbs = self.RepoCallbacks()
         repo.set_callbacks(libdnf5.repo.RepoCallbacksUniquePtr(cbs))
 
-        self.repo_sack.update_and_load_enabled_repos(libdnf5.repo.VectorRepoType(1, libdnf5.repo.Repo.Type_AVAILABLE))
+        self.repo_sack.update_and_load_enabled_repos(
+            libdnf5.repo.VectorRepoType(1, libdnf5.repo.Repo.Type_AVAILABLE))
 
         self.assertEqual(dl_cbs.start_cnt, 1)
         self.assertEqual(dl_cbs.start_what, repoid)

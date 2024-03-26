@@ -33,10 +33,10 @@ using namespace libdnf5::comps;
 
 void CompsEnvironmentQueryTest::setUp() {
     BaseTestCase::setUp();
-    add_repo_repomd("repomd-comps-core-environment");
-    add_repo_repomd("repomd-comps-custom-environment");
-    add_repo_repomd("repomd-comps-minimal-environment");
-    add_repo_repomd("repomd-comps-minimal-environment-empty");
+    add_repo_repomd("repomd-comps-core-environment", false);
+    add_repo_repomd("repomd-comps-custom-environment", false);
+    add_repo_repomd("repomd-comps-minimal-environment", false);
+    add_repo_repomd("repomd-comps-minimal-environment-empty", false);
     add_repo_repomd("repomd-comps-minimal-environment-v2");
 }
 

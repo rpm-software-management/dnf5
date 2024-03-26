@@ -54,9 +54,7 @@ class BaseTestCase < Test::Unit::TestCase
         repo.get_config().get_baseurl_option().set("file://" + repo_path)
 
         if load
-          repos = Repo::RepoQuery.new(@base)
-          repos.filter_id(repoid)
-          @repo_sack.update_and_load_repos(repos)
+          @repo_sack.update_and_load_enabled_repos(Repo::VectorRepoType.new(1, Repo::Repo::Type_AVAILABLE))
         end
 
         return repo

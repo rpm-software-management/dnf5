@@ -134,21 +134,6 @@ public:
     void update_and_load_enabled_repos(const std::vector<Repo::Type> & types);
 
 
-    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
-    ///
-    /// Downloads (if necessary) repository metadata and loads them in parallel.
-    ///
-    /// Launches a thread that picks repos from a queue and loads them into
-    /// memory (calling their `load()` method). Then iterates over `repos`,
-    /// potentially downloads fresh metadata (by calling the
-    /// `download_metadata()` method) and then queues them for loading. This
-    /// speeds up the process by loading repos into memory while others are being
-    /// downloaded.
-    ///
-    /// @param repos The repositories to update and load
-    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
-    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
-
     RepoSackWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
@@ -175,6 +160,19 @@ private:
 
     explicit RepoSack(const libdnf5::BaseWeakPtr & base);
     explicit RepoSack(libdnf5::Base & base);
+
+    /// Downloads (if necessary) repository metadata and loads them in parallel.
+    ///
+    /// Launches a thread that picks repos from a queue and loads them into
+    /// memory (calling their `load()` method). Then iterates over `repos`,
+    /// potentially downloads fresh metadata (by calling the
+    /// `download_metadata()` method) and then queues them for loading. This
+    /// speeds up the process by loading repos into memory while others are being
+    /// downloaded.
+    ///
+    /// @param repos The repositories to update and load
+    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
+    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
 
     /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
     /// Only the configuration of the corresponding existing repositories is modified.

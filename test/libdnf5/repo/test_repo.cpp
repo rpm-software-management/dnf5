@@ -113,9 +113,7 @@ void RepoTest::test_load_repo() {
     auto cbs = callbacks.get();
     repo->set_callbacks(std::move(callbacks));
 
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_id(repoid);
-    repo_sack->update_and_load_repos(repos);
+    repo_sack->update_and_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 
     CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
     CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
@@ -134,17 +132,18 @@ void RepoTest::test_load_repo_nonexistent() {
     auto repo = add_repo(repoid, "/path/thats/not/here", false);
     repo->get_config().get_skip_if_unavailable_option().set(false);
 
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_id(repoid);
-    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf5::repo::RepoDownloadError);
+    CPPUNIT_ASSERT_THROW(
+        repo_sack->update_and_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE}),
+        libdnf5::repo::RepoDownloadError);
 }
 
 void RepoTest::test_update_and_load_enabled_repos_twice_fails() {
     // Call this once...
-    repo_sack->update_and_load_enabled_repos(true);
+    repo_sack->update_and_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 
     // calling this again should fail
-    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_enabled_repos(true), libdnf5::UserAssertionError);
+    CPPUNIT_ASSERT_THROW(
+        repo_sack->update_and_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE}), libdnf5::UserAssertionError);
 }
 
 void RepoTest::test_update_and_load_enabled_repos_empty() {
