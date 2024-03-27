@@ -18,6 +18,7 @@ Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 %endif
 Recommends:     bash-completion
+Requires:       coreutils
 
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37 || 0%{?rhel} > 10

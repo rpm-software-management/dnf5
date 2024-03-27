@@ -7,4 +7,11 @@ _do_dnf5_completion()
     mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
 }
 
-complete -F _do_dnf5_completion -o nosort -o nospace dnf5
+complete_cmds="dnf5"
+dnf_target=$(readlink -f "/usr/bin/dnf")
+
+if [ "$dnf_target" = "/usr/bin/dnf5" ]; then
+    complete_cmds+=" dnf"
+fi
+
+complete -F _do_dnf5_completion -o nosort -o nospace $complete_cmds
