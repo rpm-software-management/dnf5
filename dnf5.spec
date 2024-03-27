@@ -276,6 +276,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf5
+%if %{with dnf5_obsoletes_dnf}
+%{_datadir}/bash-completion/completions/dnf
+%endif
 %dir %{_prefix}/lib/sysimage/dnf
 %verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/dnf/*
 %license COPYING.md
@@ -799,6 +802,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %if %{with dnf5_obsoletes_dnf}
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
+ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_datadir}/bash-completion/completions/dnf
 %endif
 
 # own dirs and files that dnf5 creates on runtime
