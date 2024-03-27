@@ -50,8 +50,7 @@ public:
     std::string get_description() const { return rawdata.at("description"); }
     std::string get_order() const { return rawdata.at("order"); }
     std::string get_langonly() const { return rawdata.at("langonly"); }
-    // TODO(mblaha) proper installed value
-    bool get_installed() const { return false; }
+    bool get_installed() const { return rawdata.at("installed"); }
     bool get_uservisible() const { return rawdata.at("uservisible"); }
     std::set<std::string> get_repos() const;
     std::vector<DbusGroupPackageWrapper> get_packages() const { return packages; }
