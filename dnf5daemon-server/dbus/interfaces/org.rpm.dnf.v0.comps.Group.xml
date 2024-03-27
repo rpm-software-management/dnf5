@@ -1,0 +1,61 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.comps.Group:
+   @short_description: Interface to comps groups
+-->
+<interface name="org.rpm.dnf.v0.comps.Group">
+    <!--
+        list:
+        @options: an array of key/value pairs
+        @groups: array of returned groups with requested attributes
+
+        Get list of groups that match to given filters.
+
+        Following options and filters are supported:
+
+            - attributes: list of strings
+                list of group attributes that are returned
+            - match_group_id: bool (default true)
+                match patterns against ids of the groups
+            - match_group_name: bool (default false)
+                match patterns against names of the groups
+            - scope: string (default "all")
+                limit groups to one of "all", "installed", "available"
+            - with_hidden: bool (default false)
+                include hidden groups into the result
+            - patterns: list of strings
+                any group matching to any of patterns is returned
+            - contains_pkgs: list of strings
+                include only groups containing given packages
+
+        Unknown options are ignored.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="groups" type="aa{sv}" direction="out"/>
+    </method>
+
+</interface>
+
+</node>

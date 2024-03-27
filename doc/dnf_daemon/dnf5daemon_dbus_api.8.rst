@@ -98,6 +98,21 @@ Interfaces
 
 .. only:: sphinx4
 
+   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml
+
+.. only:: not sphinx4
+
+   .. warning::
+      Sphinx 4 is required to build D-Bus documentation.
+
+      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml``:
+
+   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.comps.Group.xml
+      :language: xml
+
+
+.. only:: sphinx4
+
    ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Advisory.xml
 
 .. only:: not sphinx4
