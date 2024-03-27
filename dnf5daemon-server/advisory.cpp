@@ -76,6 +76,7 @@ KeyValueMapList collections_to_list(
             package["v"] = pkg.get_version();
             package["r"] = pkg.get_release();
             package["a"] = arch;
+            package["nevra"] = pkg.get_nevra();
 
             std::string na{std::move(name)};
             na.append(".");
@@ -103,6 +104,7 @@ KeyValueMapList collections_to_list(
             col_module["v"] = mdl.get_version();
             col_module["c"] = mdl.get_context();
             col_module["a"] = mdl.get_arch();
+            col_module["nsvca"] = mdl.get_nsvca();
             modules.emplace_back(std::move(col_module));
         }
 
