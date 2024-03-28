@@ -327,6 +327,52 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man5/dnf5.conf.5.*
 %{_mandir}/man5/dnf5.conf-todo.5.*
 %{_mandir}/man5/dnf5.conf-deprecated.5.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf.8.*
+%{_mandir}/man8/dnf-advisory.8.*
+%{_mandir}/man8/dnf-autoremove.8.*
+%{_mandir}/man8/dnf-check.8.*
+%{_mandir}/man8/dnf-check-upgrade.8.*
+%{_mandir}/man8/dnf-clean.8.*
+%{_mandir}/man8/dnf-distro-sync.8.*
+%{_mandir}/man8/dnf-downgrade.8.*
+%{_mandir}/man8/dnf-download.8.*
+%{_mandir}/man8/dnf-environment.8.*
+%{_mandir}/man8/dnf-group.8.*
+# TODO(jkolarik): history is not ready yet
+# %%{_mandir}/man8/dnf-history.8.*
+%{_mandir}/man8/dnf-info.8.*
+%{_mandir}/man8/dnf-install.8.*
+%{_mandir}/man8/dnf-leaves.8.*
+%{_mandir}/man8/dnf-list.8.*
+%{_mandir}/man8/dnf-makecache.8.*
+%{_mandir}/man8/dnf-mark.8.*
+%{_mandir}/man8/dnf-module.8.*
+%{_mandir}/man8/dnf-offline.8.*
+%{_mandir}/man8/dnf-provides.8.*
+%{_mandir}/man8/dnf-reinstall.8.*
+%{_mandir}/man8/dnf-remove.8.*
+%{_mandir}/man8/dnf-repo.8.*
+%{_mandir}/man8/dnf-repoquery.8.*
+%{_mandir}/man8/dnf-search.8.*
+%{_mandir}/man8/dnf-swap.8.*
+%{_mandir}/man8/dnf-system-upgrade.8.*
+%{_mandir}/man8/dnf-upgrade.8.*
+%{_mandir}/man8/dnf-versionlock.8.*
+%{_mandir}/man7/dnf-aliases.7.*
+%{_mandir}/man7/dnf-caching.7.*
+%{_mandir}/man7/dnf-comps.7.*
+# TODO(jkolarik): filtering is not ready yet
+# %%{_mandir}/man7/dnf-filtering.7.*
+%{_mandir}/man7/dnf-forcearch.7.*
+%{_mandir}/man7/dnf-installroot.7.*
+# TODO(jkolarik): modularity is not ready yet
+# %%{_mandir}/man7/dnf-modularity.7.*
+%{_mandir}/man7/dnf-specs.7.*
+%{_mandir}/man5/dnf.conf.5.*
+%{_mandir}/man5/dnf.conf-todo.5.*
+%{_mandir}/man5/dnf.conf-deprecated.5.*
+%endif
 
 %if %{with systemd}
 %{_unitdir}/dnf5-offline-transaction.service
@@ -713,6 +759,13 @@ config-manager, copr, and repoclosure commands.
 %{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf-builddep.8.*
+%{_mandir}/man8/dnf-changelog.8.*
+%{_mandir}/man8/dnf-copr.8.*
+%{_mandir}/man8/dnf-needs-restarting.8.*
+%{_mandir}/man8/dnf-repoclosure.8.*
+%endif
 
 
 # ========== dnf5-automatic plugin ==========
@@ -744,6 +797,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %{_unitdir}/dnf-automatic.timer
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf-automatic
+%{_mandir}/man8/dnf-automatic.8.*
 %else
 %exclude %{_bindir}/dnf-automatic
 %endif
@@ -810,6 +864,11 @@ automatically and regularly from systemd timers, cron jobs or similar.
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
 ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_datadir}/bash-completion/completions/dnf
+for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
+    dir=$(dirname $file)
+    filename=$(basename $file)
+    ln -sr $file $dir/${filename/dnf5/dnf}
+done
 %endif
 
 # own dirs and files that dnf5 creates on runtime
