@@ -636,28 +636,41 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             }
         }
 
+        std::optional<libdnf5::rpm::Package> local_pkg;
+
+        if (!package_replay.package_path.empty()) {
+            local_pkg = base->get_repo_sack()->add_stored_transaction_package(package_replay.package_path);
+        }
         if (package_replay.action == transaction::TransactionItemAction::UPGRADE ||
             package_replay.action == transaction::TransactionItemAction::INSTALL ||
             package_replay.action == transaction::TransactionItemAction::DOWNGRADE) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::INSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::INSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REINSTALL) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REINSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::REINSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REMOVE) {
-            rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+            } else {
+                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REPLACED) {
             if (!skip_unavailable) {
-                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                if (local_pkg) {
+                    add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+                } else {
+                    rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                }
             }
         } else if (package_replay.action == transaction::TransactionItemAction::REASON_CHANGE) {
             rpm_reason_change_specs.emplace_back(
@@ -678,12 +691,14 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             enabled_repos.filter_enabled(true);
             enabled_repos.filter_id(group_replay.repo_id);
             if (!enabled_repos.empty()) {
-                //TODO(amatej): add ci test where we limit a group to repo
+                //TODO(amatej): set_to_repo_ids is only for packages, remove it? Or update set_to_repo_ids
                 settings_per_group.set_to_repo_ids({group_replay.repo_id});
             }
         }
+        if (!group_replay.group_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(group_replay.group_path);
+        }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
         if (group_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL, group_replay.reason, group_replay.group_id, settings_per_group);
@@ -701,9 +716,7 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
 
     for (const auto & env_replay : serialized_transaction->first.environments) {
         libdnf5::GoalJobSettings settings_per_environment = settings;
-        //TODO(amatej): add environment_no_groups to avoid handling groups twice
-        //              (once from the environment automatically and once from the replay)
-        //settings_per_environment.environment_no_groups = true;
+        settings_per_environment.set_environment_no_groups(true);
         settings_per_environment.set_group_search_groups(false);
         settings_per_environment.set_group_search_environments(true);
         if (!env_replay.repo_id.empty()) {
@@ -716,7 +729,9 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
             }
         }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
+        if (!env_replay.environment_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(env_replay.environment_path);
+        }
         if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL,
@@ -1951,6 +1966,9 @@ void Goal::Impl::add_environment_install_to_goal(
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
         for (const auto & grp_id : environment.get_groups()) {
             env_group_specs.emplace_back(
                 GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
@@ -1993,6 +2011,9 @@ void Goal::Impl::add_environment_remove_to_goal(
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
         for (const auto & environment : environment_query) {
             rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
+            if (settings.get_environment_no_groups()) {
+                continue;
+            }
             // get all groups installed by the environment
             comps::GroupQuery environment_groups(query_installed);
             environment_groups.filter_groupid(
@@ -2063,6 +2084,10 @@ void Goal::Impl::add_environment_upgrade_to_goal(
 
         // upgrade the environment itself
         rpm_goal.add_environment(available_environment, transaction::TransactionItemAction::UPGRADE, {});
+
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
 
         // group names that are part of the installed version of the environment
         auto old_groups = installed_environment.get_groups();

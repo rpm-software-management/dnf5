@@ -78,6 +78,10 @@ public:
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 
+    // When set current transaction is not executed but rather stored to
+    // the specified path.
+    std::filesystem::path transaction_store_path;
+
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
 

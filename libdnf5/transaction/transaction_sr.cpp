@@ -82,6 +82,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
     if (json_object_object_get_ex(data, "environments", &json_environments) != 0) {
         std::string action;
         std::string environment_id;
+        std::string environment_path;
         std::string repo_id;
 
         for (std::size_t i = 0; i < json_object_array_length(json_environments); ++i) {
@@ -92,12 +93,15 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(environment, "id", &value) != 0) {
                 environment_id = json_object_get_string(value);
             }
+            if (json_object_object_get_ex(environment, "environment_path", &value) != 0) {
+                environment_path = json_object_get_string(value);
+            }
             if (json_object_object_get_ex(environment, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
             }
 
             transaction_replay.environments.push_back(
-                {transaction_item_action_from_string(action), environment_id, repo_id});
+                {transaction_item_action_from_string(action), environment_id, environment_path, repo_id});
         }
     }
 
@@ -108,6 +112,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string action;
         std::string group_id;
         std::string reason;
+        std::string group_path;
         std::string repo_id;
 
         for (std::size_t i = 0; i < json_object_array_length(json_groups); ++i) {
@@ -121,6 +126,9 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(group, "id", &value) != 0) {
                 group_id = json_object_get_string(value);
             }
+            if (json_object_object_get_ex(group, "group_path", &value) != 0) {
+                group_path = json_object_get_string(value);
+            }
             if (json_object_object_get_ex(group, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
             }
@@ -129,6 +137,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
                 {transaction_item_action_from_string(action),
                  transaction_item_reason_from_string(reason),
                  group_id,
+                 group_path,
                  repo_id});
         }
     }
@@ -222,6 +231,9 @@ std::string json_serialize(const TransactionReplay & transaction_replay) {
                 json_group, "action", json_object_new_string(transaction_item_action_to_string(group.action).c_str()));
             json_object_object_add(
                 json_group, "reason", json_object_new_string(transaction_item_reason_to_string(group.reason).c_str()));
+            if (!group.group_path.empty()) {
+                json_object_object_add(json_group, "group_path", json_object_new_string(group.group_path.c_str()));
+            }
             json_object_object_add(json_group, "repo_id", json_object_new_string(group.repo_id.c_str()));
             json_object_array_add(json_groups, json_group);
         }
@@ -241,6 +253,10 @@ std::string json_serialize(const TransactionReplay & transaction_replay) {
                 json_environment,
                 "action",
                 json_object_new_string(transaction_item_action_to_string(environment.action).c_str()));
+            if (!environment.environment_path.empty()) {
+                json_object_object_add(
+                    json_environment, "environment_path", json_object_new_string(environment.environment_path.c_str()));
+            }
             json_object_object_add(json_environment, "repo_id", json_object_new_string(environment.repo_id.c_str()));
 
             json_object_array_add(json_environments, json_environment);
@@ -248,8 +264,7 @@ std::string json_serialize(const TransactionReplay & transaction_replay) {
         json_object_object_add(root, "environments", json_environments);
     }
 
-    ////TODO(amatej): Allow using local sources (downloaded packages, groups..)
-    ////TODO(amatej): potentially add modules
+    //TODO(amatej): potentially add modules
 
     std::string version = std::string(VERSION_MAJOR) + "." + std::string(VERSION_MINOR);
     json_object_object_add(root, "version", json_object_new_string(version.c_str()));

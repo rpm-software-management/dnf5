@@ -701,15 +701,15 @@ bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     try {
         ext_file = fs::File(path, "r", true);
     } catch (FileSystemError & e) {
-        logger.warning("Cannot load group extension for system repo from \"{}\": {}", path, e.what());
+        logger.warning("Cannot load group extension for {} repo from \"{}\": {}", config.get_id(), path, e.what());
         read_success = false;
     }
 
     if (read_success) {
-        logger.debug("Loading group extension for system repo from \"{}\"", path);
+        logger.debug("Loading group extension for {} repo from \"{}\"", config.get_id(), path);
         read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
         if (!read_success) {
-            logger.debug("Loading group extension for system repo from \"{}\" failed.", path);
+            logger.debug("Loading group extension for {} repo from \"{}\" failed.", config.get_id(), path);
         }
     }
 
