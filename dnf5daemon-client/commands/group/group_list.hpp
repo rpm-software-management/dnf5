@@ -22,12 +22,44 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
+#include <libdnf5-cli/session.hpp>
 #include <libdnf5/conf/option_enum.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 #include <memory>
 #include <vector>
 
 namespace dnfdaemon::client {
+
+class GroupAvailableOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit GroupAvailableOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "available", '\0', _("Show only available groups."), false) {}
+};
+
+class GroupInstalledOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit GroupInstalledOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "installed", '\0', _("Show only installed groups."), false) {}
+};
+
+class GroupHiddenOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit GroupHiddenOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "hidden", '\0', _("Show also hidden groups."), false) {}
+};
+
+class GroupContainPkgsOption : public libdnf5::cli::session::AppendStringListOption {
+public:
+    explicit GroupContainPkgsOption(libdnf5::cli::session::Command & command)
+        : AppendStringListOption(
+              command,
+              "contains-pkgs",
+              '\0',
+              _("Show only groups containing packages with specified names. List option, supports globs."),
+              "PACKAGE_NAME,...") {}
+};
+
 
 class GroupListCommand : public DaemonCommand {
 public:
@@ -36,6 +68,10 @@ public:
 
 private:
     std::vector<std::unique_ptr<libdnf5::Option>> * patterns_options{nullptr};
+    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
+    std::unique_ptr<GroupAvailableOption> available{nullptr};
+    std::unique_ptr<GroupInstalledOption> installed{nullptr};
+    std::unique_ptr<GroupContainPkgsOption> contains_pkgs{nullptr};
     const std::string command;
 };
 

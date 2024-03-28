@@ -41,6 +41,12 @@ GroupListCommand::GroupListCommand(Context & context, const char * command)
 
     cmd.set_description("search for packages matching keyword");
 
+    available = std::make_unique<GroupAvailableOption>(*this);
+    installed = std::make_unique<GroupInstalledOption>(*this);
+    available->arg->add_conflict_argument(*installed->arg);
+    hidden = std::make_unique<GroupHiddenOption>(*this);
+    contains_pkgs = std::make_unique<GroupContainPkgsOption>(*this);
+
     patterns_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
@@ -75,6 +81,25 @@ void GroupListCommand::run() {
         std::move(std::begin(more_attributes), std::end(more_attributes), std::back_inserter(attributes));
     }
     options["attributes"] = attributes;
+
+    if (hidden->get_value() || !patterns.empty()) {
+        options["with_hidden"] = true;
+    }
+
+    std::string scope = "all";
+    if (installed->get_value()) {
+        scope = "installed";
+    } else if (available->get_value()) {
+        scope = "available";
+    }
+    options["scope"] = scope;
+
+    if (!contains_pkgs->get_value().empty()) {
+        options["contains_pkgs"] = contains_pkgs->get_value();
+    }
+
+    options["match_group_id"] = true;
+    options["match_group_name"] = true;
 
     dnfdaemon::KeyValueMapList raw_groups;
     ctx.session_proxy->callMethod("list")
