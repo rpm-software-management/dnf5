@@ -55,6 +55,10 @@ public:
         bool exists = false,
         bool abs_path = false);
 
+    ~OptionPath();
+
+    OptionPath(const OptionPath & src);
+
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
     OptionPath(
@@ -78,13 +82,9 @@ public:
     void test(const std::string & value) const;
 
 private:
-    bool exists;
-    bool abs_path;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-inline OptionPath * OptionPath::clone() const {
-    return new OptionPath(*this);
-}
 
 }  // namespace libdnf5
 

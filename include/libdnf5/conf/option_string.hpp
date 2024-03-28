@@ -74,6 +74,7 @@ public:
     std::string from_string(const std::string & value) const;
 
 private:
+    friend class OptionPath;
     class Impl;
     ImplPtr<Impl> p_impl;
 };
