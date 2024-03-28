@@ -458,10 +458,13 @@ void RepoqueryCommand::configure() {
 
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
-    system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
-                         duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
-                         extras->get_value() || upgrades->get_value() || installonly->get_value();
-    context.set_load_system_repo(system_repo_needed);
+    std::vector<libdnf5::repo::Repo::Type> which_repos_to_load;
+    bool system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
+                              duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
+                              extras->get_value() || upgrades->get_value() || installonly->get_value();
+    if (system_repo_needed) {
+        which_repos_to_load.push_back(libdnf5::repo::Repo::Type::SYSTEM);
+    }
     context.update_repo_metadata_from_advisory_options(
         advisory_name->get_value(),
         advisory_security->get_value(),
@@ -471,12 +474,14 @@ void RepoqueryCommand::configure() {
         advisory_severity->get_value(),
         advisory_bz->get_value(),
         advisory_cve->get_value());
-    context.set_load_available_repos(
-        // available_option is on by default, to check if user specified it we check priority
-        available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
-                extras->get_value() || upgrades->get_value() || !providers_of_option->get_value().empty()
-            ? Context::LoadAvailableRepos::ENABLED
-            : Context::LoadAvailableRepos::NONE);
+
+    // available_option is on by default, to check if user specified it we check priority
+    if (available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
+        extras->get_value() || upgrades->get_value() || !providers_of_option->get_value().empty()) {
+        which_repos_to_load.push_back(libdnf5::repo::Repo::Type::AVAILABLE);
+    }
+
+    context.set_load_enabled_repos(which_repos_to_load);
 
     if (srpm->get_value()) {
         context.base.get_repo_sack()->enable_source_repos();
@@ -524,7 +529,7 @@ void RepoqueryCommand::configure() {
 
 void RepoqueryCommand::load_additional_packages() {
     auto & ctx = get_context();
-    if (ctx.get_load_available_repos() != Context::LoadAvailableRepos::NONE) {
+    if (!ctx.get_load_enabled_repos().empty()) {
         for (auto & [path, package] : ctx.base.get_repo_sack()->add_cmdline_packages(pkg_specs)) {
             cmdline_packages.push_back(std::move(package));
         }

@@ -59,8 +59,7 @@ void RemoveCommand::set_argument_parser() {
 
 void RemoveCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::NONE);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::SYSTEM});
 }
 
 void RemoveCommand::run() {

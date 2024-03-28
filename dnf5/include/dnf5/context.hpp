@@ -45,8 +45,6 @@ class Plugins;
 
 class Context : public libdnf5::cli::session::Session {
 public:
-    enum class LoadAvailableRepos { NONE, ENABLED, ALL };
-
     /// Constructs a new Context instance and sets the destination loggers.
     Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers);
 
@@ -70,7 +68,7 @@ public:
         const std::vector<std::string> & cves);
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
-    void load_repos(bool load_system);
+    void load_repos(std::vector<libdnf5::repo::Repo::Type> types);
 
     libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
@@ -132,10 +130,9 @@ public:
     libdnf5::base::Transaction * get_transaction() { return transaction.get(); }
 
     void set_load_system_repo(bool on) { load_system_repo = on; }
-    bool get_load_system_repo() const noexcept { return load_system_repo; }
 
-    void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
-    LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
+    void set_load_enabled_repos(const std::vector<libdnf5::repo::Repo::Type> & types) { load_enabled_repos = types; }
+    std::vector<libdnf5::repo::Repo::Type> get_load_enabled_repos() const noexcept { return load_enabled_repos; }
 
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(std::string_view msg) const;
@@ -161,7 +158,7 @@ private:
     std::unique_ptr<libdnf5::base::Transaction> transaction;
 
     bool load_system_repo{false};
-    LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
+    std::vector<libdnf5::repo::Repo::Type> load_enabled_repos;
 };
 
 

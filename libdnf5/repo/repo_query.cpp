@@ -97,6 +97,15 @@ void RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
     filter(Get::type, static_cast<int64_t>(type), cmp);
 }
 
+void RepoQuery::filter_type(const std::vector<Repo::Type> & types, sack::QueryCmp cmp) {
+    std::vector<int64_t> int_types;
+    std::transform(types.cbegin(), types.cend(), std::back_inserter(int_types), [](Repo::Type t) {
+        return static_cast<int64_t>(t);
+    });
+
+    filter(Get::type, int_types, cmp);
+}
+
 libdnf5::BaseWeakPtr RepoQuery::get_base() {
     return p_impl->base;
 }

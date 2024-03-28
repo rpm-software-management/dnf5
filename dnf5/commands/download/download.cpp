@@ -164,22 +164,22 @@ void DownloadCommand::configure() {
         pkg_specs.push_back(option->get_value());
     }
 
+    std::vector<libdnf5::repo::Repo::Type> which_repos_to_load = {libdnf5::repo::Repo::Type::AVAILABLE};
+
     context.update_repo_metadata_from_specs(pkg_specs);
     if (resolve_option->get_value() && !alldeps_option->get_value()) {
-        context.set_load_system_repo(true);
+        which_repos_to_load.push_back(libdnf5::repo::Repo::Type::SYSTEM);
     } else if (!resolve_option->get_value() && alldeps_option->get_value()) {
         throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
             //TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
             M_("Option \"--alldeps\" should be used with \"--resolve\""));
-    } else {
-        context.set_load_system_repo(false);
     }
 
     if (srpm_option->get_value()) {
         context.base.get_repo_sack()->enable_source_repos();
     }
 
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos(which_repos_to_load);
     // Default destination for downloaded rpms is the current directory
     context.base.get_config().get_destdir_option().set(libdnf5::Option::Priority::PLUGINDEFAULT, ".");
 }

@@ -54,8 +54,7 @@ in the group is preceded by a '-' character.)");
 
 void LeavesCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
-    context.set_load_available_repos(Context::LoadAvailableRepos::NONE);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::SYSTEM});
 }
 
 void LeavesCommand::run() {

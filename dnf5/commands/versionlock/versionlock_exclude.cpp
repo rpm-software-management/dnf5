@@ -53,7 +53,7 @@ void VersionlockExcludeCommand::set_argument_parser() {
 
 void VersionlockExcludeCommand::configure() {
     auto & context = get_context();
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE});
 }
 
 bool exclude_versions(

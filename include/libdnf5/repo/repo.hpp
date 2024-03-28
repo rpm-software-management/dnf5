@@ -149,12 +149,6 @@ public:
     /// @return `true` if metadata are in sync with the origin, `false` otherwise.
     bool is_in_sync();
 
-    /// @deprecated It is going to be removed without a warning
-    /// Loads the repository objects into sacks.
-    ///
-    /// Also writes the libsolv's solv/solvx cache files.
-    void load();
-
     /// Returns whether the using of "includes" is enabled
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getUseIncludes()
@@ -325,6 +319,11 @@ private:
     friend class FileDownloader;
     friend class PackageDownloader;
     friend class solv::Pool;
+
+    /// Loads the repository objects into sacks.
+    ///
+    /// Also writes the libsolv's solv/solvx cache files.
+    void load();
 
     /// Downloads repository metadata.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)

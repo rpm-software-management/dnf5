@@ -43,8 +43,6 @@ public:
     void run() override;
 
 private:
-    bool system_repo_needed = false;
-
     libdnf5::OptionBool * available_option{nullptr};
     libdnf5::OptionBool * installed_option{nullptr};
     libdnf5::OptionBool * userinstalled_option{nullptr};

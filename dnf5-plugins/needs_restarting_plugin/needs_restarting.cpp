@@ -78,9 +78,8 @@ void NeedsRestartingCommand::set_argument_parser() {
 
 void NeedsRestartingCommand::configure() {
     auto & context = get_context();
-    context.set_load_system_repo(true);
 
-    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_load_enabled_repos({libdnf5::repo::Repo::Type::AVAILABLE, libdnf5::repo::Repo::Type::SYSTEM});
 
     const std::set<std::string> metadata_types{libdnf5::METADATA_TYPE_FILELISTS, libdnf5::METADATA_TYPE_UPDATEINFO};
     context.base.get_config().get_optional_metadata_types_option().add(
