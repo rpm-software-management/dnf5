@@ -1,4 +1,5 @@
 import libdnf5
+import os.path
 
 # Create a new Base object
 base = libdnf5.base.Base()
@@ -10,6 +11,11 @@ base = libdnf5.base.Base()
 # installroot directory tree as its root for the rest of its lifetime.
 base_config = base.get_config()
 base_config.installroot = installroot
+
+# Optionally prevent of loading plugins from host by redirecting of pluginconfpath and pluginpath to an empty directory
+# This is only important to make test functional during RPM build, but not for standard usecases
+base_config.pluginconfpath = os.path.join(installroot, "pluginconfpath")
+base_config.pluginpath = os.path.join(installroot, "pluginpath")
 
 # Optionally load configuration from the config files.
 #

@@ -233,6 +233,10 @@ void BaseTestCase::setUp() {
     base.get_config().get_cachedir_option().set(temp->get_path() / "cache");
     base.get_config().get_optional_metadata_types_option().set(libdnf5::OPTIONAL_METADATA_TYPES);
 
+    // Prevent loading libdnf5 plugins by redirecting configuration to an empty directory
+    base.get_config().get_pluginconfpath_option().set(temp->get_path() / "pluginconfpath");
+    base.get_config().get_pluginpath_option().set(temp->get_path() / "pluginpath");
+
     base.get_vars()->set("arch", "x86_64");
 
     base.setup();

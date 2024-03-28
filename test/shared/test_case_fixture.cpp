@@ -86,5 +86,9 @@ std::unique_ptr<libdnf5::Base> TestCaseFixture::get_preconfigured_base() {
     base->get_config().get_installroot_option().set(temp->get_path() / "installroot");
     base->get_config().get_cachedir_option().set(temp->get_path() / "cache");
 
+    // Prevent loading libdnf5 plugins by redirecting configuration to an empty directory
+    base->get_config().get_pluginconfpath_option().set(temp->get_path() / "pluginconfpath");
+    base->get_config().get_pluginpath_option().set(temp->get_path() / "pluginpath");
+
     return base;
 }
