@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-09 02:52+0000\n"
-"PO-Revision-Date: 2024-03-08 14:36+0000\n"
+"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"PO-Revision-Date: 2024-03-17 02:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/pt_BR/>\n"
@@ -989,10 +989,8 @@ msgid "Error during transaction replay JSON parsing : {}"
 msgstr "Erro durante a análise JSON de reprodução de transação: {}"
 
 #: transaction/transaction_sr.cpp:75
-#, fuzzy
-#| msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
-msgstr "Versão TOML \"{}\" não suportada, a versão máxima suportada é \"{}\""
+msgstr "Formato de versão inesperado: \"{}\", versão suportada é \"{}\""
 
 #: transaction/transaction_sr.cpp:81
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
@@ -1000,68 +998,69 @@ msgstr ""
 "Versão principal incompatível: \"{}\", a versão principal suportada é \"{}\""
 
 #: transaction/transaction_sr.cpp:88
-#, fuzzy
-#| msgid "Invalid time option value \"{}\", number or \"never\" expected"
 msgid "Invalid minor version: \"{}\", number expected."
-msgstr "Valor de opção de tempo inválido \"{}\", número ou \"never\" esperado"
+msgstr "Versão mínima inválida: \"{}\", esperava número."
 
 #: transaction/transaction_sr.cpp:91
 msgid "Missing key \"version\"."
-msgstr ""
+msgstr "Faltando a chave \"version\"."
 
 #: transaction/transaction_sr.cpp:103
 msgid "Unexpected type of \"environments\", array expected."
-msgstr ""
+msgstr "Tipo inesperado de \"environments\", esperava array."
 
 #: transaction/transaction_sr.cpp:111
 msgid "Missing object key \"id\" in an environment."
-msgstr ""
+msgstr "Faltando chave de objeto \"id\" em um ambiente."
 
 #: transaction/transaction_sr.cpp:116
 msgid "Missing object key \"action\" in an environment."
-msgstr ""
+msgstr "Faltando a chave de objeto \"action\" em um ambiente."
 
 #: transaction/transaction_sr.cpp:137
 msgid "Unexpected type of \"groups\", array expected."
-msgstr ""
+msgstr "Tipo inesperado de \"groups\", esperava array."
 
 #: transaction/transaction_sr.cpp:145
 msgid "Missing object key \"id\" in a group."
-msgstr ""
+msgstr "Faltando a chave de objeto \"id\" em um grupo."
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"action\" in a group."
-msgstr ""
+msgstr "Faltando a chave de objeto \"action\" em um grupo."
 
 #: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"reason\" in a group."
-msgstr ""
+msgstr "Faltando a chave de objeto \"reason\" em um grupo."
 
 #: transaction/transaction_sr.cpp:180
 msgid "Unexpected type of \"rpms\", array expected."
-msgstr ""
+msgstr "Tipo inesperado de \"rpms\", esperava array."
 
 #: transaction/transaction_sr.cpp:189
 msgid "Cannot parse NEVRA for rpm \"{}\"."
-msgstr ""
+msgstr "Não foi possível analisar NEVRA para o rpm \"{}\"."
 
 #: transaction/transaction_sr.cpp:197
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
 msgstr ""
+"A chave do objeto \"nevra\" ou \"package_path\" é necessária em um rpm."
 
 #: transaction/transaction_sr.cpp:202
 msgid "Missing object key \"action\" in an rpm."
-msgstr ""
+msgstr "Faltando a chave de objeto \"action\" em um rpm."
 
 #: transaction/transaction_sr.cpp:207
 msgid "Missing object key \"reason\" in an rpm."
-msgstr ""
+msgstr "Faltando a chave de objeto \"reason\" em um rpm."
 
 #: transaction/transaction_sr.cpp:214
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\"."
 msgstr ""
+"Faltando chave de objeto \"group_id\" obrigatória em um rpm com motivo "
+"\"Group\" e ação \"Reason Change\"."
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
