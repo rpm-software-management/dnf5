@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-09 02:52+0000\n"
+"POT-Creation-Date: 2024-03-29 02:52+0000\n"
 "PO-Revision-Date: 2024-03-08 14:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -176,7 +176,7 @@ msgstr "Falha para limpar o cache de repositório no caminho \"{0}\": {1}"
 msgid "Invalid urlprotocol option: {}"
 msgstr "Opção inválida de urlprotocol: {}"
 
-#: commands/download/download.cpp:139 main.cpp:609 shared_options.cpp:90
+#: commands/download/download.cpp:139 main.cpp:611 shared_options.cpp:92
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Sem suporte à arquitetura \"{0}. Escolha uma entre {1}"
 
@@ -307,7 +307,7 @@ msgstr "Lista as atualizações disponíveis para os pacotes instalados."
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Lista os pacotes que serão removidos pelo comando 'dnf autoremove'."
 
-#: commands/list/list.cpp:260
+#: commands/list/list.cpp:259
 msgid "No matching packages to list"
 msgstr "Nenhum pacote correspondente para listar"
 
@@ -326,6 +326,151 @@ msgstr "Padrão correspondendo a NSVCAs de módulos."
 #: commands/module/module_list.cpp:84
 msgid "No matches found for \"{}\"."
 msgstr "Nenhuma correspondência encontrada para \"{}\"."
+
+#: commands/offline/offline.cpp:187
+msgid "Manage offline transactions"
+msgstr ""
+
+#: commands/offline/offline.cpp:228
+msgid ""
+"Error reading state: {}. Rerun the command you used to initiate the offline "
+"transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
+msgstr ""
+
+#: commands/offline/offline.cpp:248
+msgid "Couldn't connect to D-Bus: {}"
+msgstr ""
+
+#: commands/offline/offline.cpp:277
+msgid ""
+"Prepare the system to perform the offline transaction and reboot to start "
+"the transaction."
+msgstr ""
+
+#: commands/offline/offline.cpp:284
+msgid "Power off the system after the operation is complete"
+msgstr ""
+
+#: commands/offline/offline.cpp:294
+msgid "No offline transaction is stored."
+msgstr ""
+
+#: commands/offline/offline.cpp:301
+#, fuzzy
+#| msgid "Reverse the order of transactions."
+msgid "System is not ready for offline transaction."
+msgstr "Inverte a ordem das transações."
+
+#: commands/offline/offline.cpp:304
+msgid "Data directory {} does not exist."
+msgstr ""
+
+#: commands/offline/offline.cpp:328
+msgid "{} is not wanted by system-update.target."
+msgstr ""
+
+#: commands/offline/offline.cpp:334
+msgid "The system will now reboot to upgrade to release version "
+msgstr ""
+
+#: commands/offline/offline.cpp:338
+msgid ""
+"The system will now reboot to perform the offline transaction initiated by "
+"the following command:"
+msgstr ""
+
+#: commands/offline/offline.cpp:369
+msgid ""
+"Internal use only, not intended to be run by the user. Execute the "
+"transaction in the offline environment."
+msgstr ""
+
+#: commands/offline/offline.cpp:396
+msgid "Trigger file does not exist. Exiting."
+msgstr ""
+
+#: commands/offline/offline.cpp:400
+msgid "Another offline transaction tool is running. Exiting."
+msgstr ""
+
+#: commands/offline/offline.cpp:436
+msgid ""
+"Warning: the `_execute` command is for internal use only and is not intended "
+"to be run directly by the user. To initiate the system upgrade/offline "
+"transaction, you should run `dnf5 offline reboot`."
+msgstr ""
+
+#: commands/offline/offline.cpp:443
+msgid "Use `dnf5 offline reboot` to begin the transaction."
+msgstr ""
+
+#: commands/offline/offline.cpp:481
+#, fuzzy
+#| msgid "Transaction ID"
+msgid "Transaction failed: "
+msgstr "ID da transação"
+
+#: commands/offline/offline.cpp:554
+msgid "Error reading journal: {}"
+msgstr ""
+
+#: commands/offline/offline.cpp:560
+msgid "Add journal match failed: {}"
+msgstr ""
+
+#: commands/offline/offline.cpp:588
+msgid "No logs were found."
+msgstr ""
+
+#: commands/offline/offline.cpp:592
+msgid "The following boots appear to contain offline transaction logs:"
+msgstr ""
+
+#: commands/offline/offline.cpp:609
+msgid "Cannot find logs with this index."
+msgstr ""
+
+#: commands/offline/offline.cpp:616
+msgid "Unable to match systemd journal entry."
+msgstr ""
+
+#: commands/offline/offline.cpp:628
+msgid "Show logs from past offline transactions"
+msgstr ""
+
+#: commands/offline/offline.cpp:636
+msgid ""
+"Which log to show. Run without any arguments to get a list of available logs."
+msgstr ""
+
+#: commands/offline/offline.cpp:651
+msgid ""
+"systemd is not supported in this build of DNF 5; the `log` subcommand is "
+"unavailable."
+msgstr ""
+
+#: commands/offline/offline.cpp:656
+msgid "Show status of the current offline transaction"
+msgstr ""
+
+#: commands/offline/offline.cpp:672
+msgid "An offline transaction was initiated by the following command:"
+msgstr ""
+
+#: commands/offline/offline.cpp:674
+msgid ""
+"Run `dnf5 offline reboot` to reboot and perform the offline transaction."
+msgstr ""
+
+#: commands/offline/offline.cpp:676
+msgid ""
+"An offline transaction was started, but it did not finish. Run `dnf5 offline "
+"log` for more information. The command that initiated the transaction was:"
+msgstr ""
+
+#: commands/offline/offline.cpp:681
+msgid "Unknown offline transaction status: "
+msgstr ""
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
@@ -366,6 +511,32 @@ msgstr "Pesquisa também a URL e a descrição do pacote."
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
 msgstr "Padrões"
+
+#: commands/system-upgrade/system-upgrade.cpp:54
+msgid "Prepare system for upgrade to a new release"
+msgstr ""
+
+#: commands/system-upgrade/system-upgrade.cpp:70
+msgid "Download everything needed to upgrade to a new release"
+msgstr ""
+
+#: commands/system-upgrade/system-upgrade.cpp:78
+msgid ""
+"Do not install packages from the new release if they are older than what is "
+"currently installed"
+msgstr ""
+
+#: commands/system-upgrade/system-upgrade.cpp:97
+msgid "Need a --releasever greater than the current system version."
+msgstr ""
+
+#: commands/system-upgrade/system-upgrade.cpp:131
+msgid "Store a distro-sync transaction to be performed offline"
+msgstr ""
+
+#: commands/system-upgrade/system-upgrade.cpp:153
+msgid "Store an upgrade transaction to be performed offline"
+msgstr ""
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
@@ -426,13 +597,21 @@ msgstr "Adicionando exclusão de versionlock em \"{0} = {1}\"."
 msgid "Package \"{}\" is already excluded."
 msgstr "O pacote \"{}\" já foi excluído."
 
-#: context.cpp:80
+#: context.cpp:82
 msgid "The key was successfully imported."
 msgstr "A chave foi importada com sucesso."
 
-#: context.cpp:126
+#: context.cpp:128
 msgid "No matching repositories for \"{}\""
 msgstr "Nenhum repositório correspondente para \"{}\""
+
+#: include/dnf5/offline.cpp:39
+msgid "error reading offline state file"
+msgstr ""
+
+#: include/dnf5/offline.cpp:44
+msgid "incompatible version of state data"
+msgstr ""
 
 #: include/dnf5/shared_options.hpp:33
 msgid "Allow erasing of installed packages to resolve problems"
@@ -454,46 +633,76 @@ msgstr "Não foi possível carregar a biblioteca compartilhada \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Não foi possível obter o endereço de símbolo \"{}\": {}"
 
-#: main.cpp:180
+#: main.cpp:182
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Falha ao expirar o cache do repositório no caminho \"{0}\": {1}"
 
-#: main.cpp:205
+#: main.cpp:207
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: especificação de repoid e caminho incorretos \"{}\""
 
-#: main.cpp:228 main.cpp:267
+#: main.cpp:230 main.cpp:269
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Formatação inválida no valor de argumento \"{}\""
 
-#: main.cpp:235
+#: main.cpp:237
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Formatação inválida no valor de argumento: O último caractere da chave "
 "não pode ser '.': {}"
 
-#: main.cpp:248
+#: main.cpp:250
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:274
+#: main.cpp:276
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:819
+#: main.cpp:825
 msgid "======== Main configuration: ========"
 msgstr "====== Configuração principal: ======"
 
-#: main.cpp:860
+#: main.cpp:866
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "====== Configuração do repositório \"{}\": ======="
 
-#: main.cpp:881
+#: main.cpp:887
 msgid "======== Variables: ========"
 msgstr "======== Variáveis: ========"
 
-#: main.cpp:1006 main.cpp:1159
+#: main.cpp:962
+#, fuzzy
+#| msgid "Allow skipping unavailable packages"
+msgid "{} to skip unavailable packages"
+msgstr "Permite pular pacotes indisponíveis"
+
+#: main.cpp:1003
+msgid "{} to not limit the transaction to the best candidates"
+msgstr ""
+
+#: main.cpp:1010
+#, fuzzy
+#| msgid "Allow erasing of installed packages to resolve problems"
+msgid "{} to allow erasing of installed packages to resolve problems"
+msgstr "Permite apagar pacotes instalados para resolver problemas"
+
+#: main.cpp:1018
+msgid "{} to load additional filelists metadata"
+msgstr ""
+
+#: main.cpp:1025
+#, fuzzy
+#| msgid "Allow skipping unavailable packages"
+msgid "{} to skip uninstallable packages"
+msgstr "Permite pular pacotes indisponíveis"
+
+#: main.cpp:1031
+msgid "You can try to add to command line:"
+msgstr ""
+
+#: main.cpp:1112 main.cpp:1271
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Adicione \"--help\" para mais informações sobre os argumentos."
 

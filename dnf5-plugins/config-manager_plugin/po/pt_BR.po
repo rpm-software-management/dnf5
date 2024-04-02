@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-09 02:52+0000\n"
-"PO-Revision-Date: 2024-01-18 02:47+0000\n"
+"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"PO-Revision-Date: 2024-03-17 02:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-config-manager/pt_BR/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
@@ -97,10 +97,8 @@ msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Um repositório com id \"{}\" já configurado no arquivo: {}"
 
 #: addrepo.cpp:497 setopt.cpp:263
-#, fuzzy
-#| msgid "Cannot set repository option \"{}\": {}"
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr "Não é possível definir a opção de repositório \"{}\": {}"
+msgstr "Não é possível ler repositórios do diretório \"{}\": {}"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
@@ -179,51 +177,68 @@ msgstr "Nome de variável pode conter apenas letras ASCII, números e '_': {}"
 #: unsetopt.cpp:93
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
+"config-manager: Solicitação para remover opção de repositório não "
+"compatível: {}"
 
 #: unsetopt.cpp:105
 msgid "config-manager: Request to remove unsupported main option: {}"
 msgstr ""
+"config-manager: Solicitação para remover opção principal não compatível: {}"
 
 #: unsetopt.cpp:140
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Solicitação para remover a opção principal, mas não está "
+"presente no arquivo de configuração: {}"
 
 #: unsetopt.cpp:152
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Solicitação para remover a opção principal, mas o arquivo de "
+"configuração não foi encontrado: {}"
 
 #: unsetopt.cpp:186
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Solicitação de remover a opção de repositório, mas repoid "
+"não está presente na sobrescrição: {}"
 
 #: unsetopt.cpp:194
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Solicitação para remover a opção de repositório, mas não "
+"está presente nas sobrescrições: {}.{}"
 
 #: unsetopt.cpp:214
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Solicitação para remover a opção de repositório, mas o "
+"arquivo com sobrescrições não foi encontrado: {}"
 
 #: unsetvar.cpp:69
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: Solicitação para remover variável, mas diretório de "
+"variáveis não foi encontrado: {}"
 
 #: unsetvar.cpp:82
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Solicitação para remover variável, mas ela não está presente "
+"no diretório de variáveis: {}"
 
 #: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
