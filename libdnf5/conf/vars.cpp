@@ -386,6 +386,22 @@ void Vars::set(const std::string & name, const std::string & value, Priority pri
     set_unsafe(name, value, prio);
 }
 
+bool Vars::unset(const std::string & name, Priority prio) {
+    auto it = variables.find(name);
+    if (it == variables.end()) {
+        return true;
+    }
+    if (is_read_only(name)) {
+        throw ReadOnlyVariableError(M_("Variable \"{}\" is read-only"), name);
+    }
+    // Do nothing if the var is already set with a higher priority
+    if (prio < it->second.priority) {
+        return false;
+    }
+    variables.erase(it);
+    return true;
+}
+
 void Vars::set_lazy(
     const std::string & name,
     const std::function<const std::unique_ptr<const std::string>()> & get_value,
