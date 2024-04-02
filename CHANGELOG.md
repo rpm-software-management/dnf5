@@ -1,3 +1,46 @@
+# 5.1.6
+
+- Update translations from weblate
+- system-upgrade: Add descriptions for aliases
+- system-upgrade: backwards-compat offline-{upgrade,distrosync}
+- bash-completion: Prepare ownerships for dnf5 switch
+- bash-completion: Complete dnf command if we own it
+- dnf5: Print command line hints after resolve failure
+- doc: Example of Advisory.list() API usage
+- dnfdaemon: Add NEVRA field to advisory packages
+- doc: Improve version parameter docs
+- doc: Sync documentation in help and man pages
+- doc: Review and fix missing commands
+- system-upgrade: reboot: don't fail if D-Bus not available
+- system-upgrade: download: use more of main.cpp's logic
+- system-upgrade: clean command now deletes /system-update
+- system-upgrade: offline _execute should exit cleanly
+- system-upgrade: output tweaks for tests
+- system-upgrade: fix --no-downgrade
+- doc: Add Advisory interface to daemon documentation
+- system-upgrade: fix pkgconfig systemd variable
+- system-upgrade: misc fixes
+- system-upgrade: Documentation
+- system-upgrade: systemd behind build flag
+- system-upgrade: offline status subcommand
+- system-upgrade: fix DNF 4 regressions
+- system-upgrade: offline-distrosync, offline-upgrade aliases
+- system-upgrade: Fix installroot
+- system-upgrade: Fixes and cleanup, respond to review
+- system-upgrade: Handle _execute errors
+- system-upgrade: Add OFFLINE_STARTED_ID comment, cleanup
+- system-upgrade: Add warning to `dnf5 offline _execute`
+- system-upgrade: Add `--offline` flag
+- system-upgrade: Add `offline`, `system-upgrade` commands
+- Workaround slow scols_table_print_range() for pkg info formatting
+- dnf5: Remove redundant arch filters
+- PackageQuery: Source rpms do not upgrade binary ones
+- Don't set obsoletes < 5 for ELN/RHEL yet
+- dnf5-plugin automatic: random_wait: Fix types
+- dnf5-plugin automatic: Fix missing virtual destructor in dnf5::Emmiter
+- dnf5daemon-server: Fix variables type in SessionManager::open_session
+- libdnf5-cli: Fix add_line_into_provides_table func declaration
+
 # 5.1.15
 
 - Update translations from weblate
