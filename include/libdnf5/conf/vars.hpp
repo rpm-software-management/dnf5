@@ -79,6 +79,14 @@ public:
     /// @throw ReadOnlyVariableError if the variable is read-only
     void set(const std::string & name, const std::string & value, Priority prio = Priority::RUNTIME);
 
+    /// @brief Unset particular variable
+    ///
+    /// @param name Name of the variable
+    /// @param prio Source/Priority of the request
+    /// @throw ReadOnlyVariableError if the variable is read-only
+    /// @return false if the variable exists after the function returns (insufficient request priority)
+    bool unset(const std::string & name, Priority prio = Priority::RUNTIME);
+
     /// @brief Checks whether a variable is read-only
     ///
     /// @param name Name of the variable
