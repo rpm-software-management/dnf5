@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-09 02:52+0000\n"
-"PO-Revision-Date: 2024-03-10 07:36+0000\n"
+"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"PO-Revision-Date: 2024-03-20 02:43+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -979,7 +979,7 @@ msgstr "Inkompatibel huvudversion: \"{}\", stödd huvudversion är \"{}\""
 
 #: transaction/transaction_sr.cpp:88
 msgid "Invalid minor version: \"{}\", number expected."
-msgstr "Ogiltig mindre version: \"{}\", nummer förväntat."
+msgstr "Ogiltig underversion version: \"{}\", nummer förväntades."
 
 #: transaction/transaction_sr.cpp:91
 msgid "Missing key \"version\"."
