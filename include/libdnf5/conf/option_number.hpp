@@ -60,6 +60,10 @@ public:
     // @replaces libdnf:conf/OptionNumber.hpp:ctor:OptionNumber.OptionNumber<T>(T default_value, FromStringFunc && fromStringFunc)
     OptionNumber(T default_value, FromStringFunc && from_string_func);
 
+    OptionNumber(const OptionNumber & src);
+
+    ~OptionNumber() override;
+
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionNumber.hpp:method:OptionBoo<T>.clone()
     OptionNumber * clone() const override;
@@ -105,32 +109,9 @@ public:
     std::string to_string(ValueType value) const;
 
 private:
-    FromStringFunc from_string_user;
-    ValueType default_value;
-    ValueType min;
-    ValueType max;
-    ValueType value;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-template <typename T>
-inline OptionNumber<T> * OptionNumber<T>::clone() const {
-    return new OptionNumber<T>(*this);
-}
-
-template <typename T>
-inline T OptionNumber<T>::get_value() const {
-    return value;
-}
-
-template <typename T>
-inline T OptionNumber<T>::get_default_value() const {
-    return default_value;
-}
-
-template <typename T>
-inline std::string OptionNumber<T>::get_value_string() const {
-    return to_string(value);
-}
 
 extern template class OptionNumber<std::int32_t>;
 extern template class OptionNumber<std::uint32_t>;
