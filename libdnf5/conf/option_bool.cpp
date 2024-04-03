@@ -25,27 +25,44 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
-OptionBool::OptionBool(const OptionBool & src) : Option(src), default_value(src.default_value), value(src.value) {
-    if (src.true_values) {
-        true_values = std::make_unique<std::vector<std::string>>(*src.true_values);
+class OptionBool::Impl {
+public:
+    Impl(bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
+        : true_values(std::make_unique<std::vector<std::string>>(true_vals)),
+          false_values(std::make_unique<std::vector<std::string>>(false_vals)),
+          default_value(default_value),
+          value(default_value) {}
+
+    Impl(bool default_value) : default_value(default_value), value(default_value) {}
+
+    Impl(const OptionBool::Impl & src) : default_value(src.default_value), value(src.value) {
+        if (src.true_values) {
+            true_values = std::make_unique<std::vector<std::string>>(*src.true_values);
+        }
+        if (src.false_values) {
+            false_values = std::make_unique<std::vector<std::string>>(*src.false_values);
+        }
     }
-    if (src.false_values) {
-        false_values = std::make_unique<std::vector<std::string>>(*src.false_values);
-    }
-}
+
+private:
+    friend OptionBool;
+
+    std::unique_ptr<std::vector<std::string>> true_values;
+    std::unique_ptr<std::vector<std::string>> false_values;
+    bool default_value;
+    bool value;
+};
+
+OptionBool::OptionBool(const OptionBool & src) = default;
 
 OptionBool::OptionBool(
     bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
     : Option(Priority::DEFAULT),
-      true_values(std::make_unique<std::vector<std::string>>(true_vals)),
-      false_values(std::make_unique<std::vector<std::string>>(false_vals)),
-      default_value(default_value),
-      value(default_value) {}
+      p_impl(new Impl(default_value, true_vals, false_vals)) {}
 
-OptionBool::OptionBool(bool default_value)
-    : Option(Priority::DEFAULT),
-      default_value(default_value),
-      value(default_value) {}
+OptionBool::OptionBool(bool default_value) : Option(Priority::DEFAULT), p_impl(new Impl(default_value)) {}
+
+OptionBool::~OptionBool() = default;
 
 bool OptionBool::from_string(const std::string & value) const {
     auto tmp_value = value;
@@ -70,7 +87,7 @@ void OptionBool::set(Priority priority, bool value) {
     assert_not_locked();
 
     if (priority >= get_priority()) {
-        this->value = value;
+        p_impl->value = value;
         set_priority(priority);
     }
 }
@@ -91,6 +108,42 @@ std::string OptionBool::to_string(bool value) const {
     std::ostringstream oss;
     oss << value;
     return oss.str();
+}
+
+OptionBool * OptionBool::clone() const {
+    return new OptionBool(*this);
+}
+
+void OptionBool::test(bool /*unused*/) const {}
+
+bool OptionBool::get_value() const noexcept {
+    return p_impl->value;
+}
+
+bool OptionBool::get_default_value() const noexcept {
+    return p_impl->default_value;
+}
+
+std::string OptionBool::get_value_string() const {
+    return to_string(p_impl->value);
+}
+
+const std::vector<std::string> & OptionBool::get_default_true_values() noexcept {
+    static std::vector<std::string> true_values = {"1", "yes", "true", "on"};
+    return true_values;
+}
+
+const std::vector<std::string> & OptionBool::get_default_false_values() noexcept {
+    static std::vector<std::string> false_values = {"0", "no", "false", "off"};
+    return false_values;
+}
+
+const std::vector<std::string> & OptionBool::get_true_values() const noexcept {
+    return p_impl->true_values ? *p_impl->true_values : get_default_true_values();
+}
+
+const std::vector<std::string> & OptionBool::get_false_values() const noexcept {
+    return p_impl->false_values ? *p_impl->false_values : get_default_false_values();
 }
 
 }  // namespace libdnf5
