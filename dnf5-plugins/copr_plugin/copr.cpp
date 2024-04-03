@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "copr.hpp"
 
-#include <iostream>
+#include <regex>
 
 namespace dnf5 {
 
