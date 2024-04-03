@@ -22,8 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option.hpp"
 
-#include <array>
-#include <memory>
 #include <vector>
 
 
@@ -49,7 +47,7 @@ public:
 
     OptionBool(const OptionBool & src);
 
-    ~OptionBool() override = default;
+    ~OptionBool() override;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.clone()
@@ -112,48 +110,10 @@ public:
     std::string to_string(bool value) const;
 
 private:
-    std::unique_ptr<std::vector<std::string>> true_values;
-    std::unique_ptr<std::vector<std::string>> false_values;
-    bool default_value;
-    bool value;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
-
-inline OptionBool * OptionBool::clone() const {
-    return new OptionBool(*this);
-}
-
-inline void OptionBool::test(bool /*unused*/) const {}
-
-inline bool OptionBool::get_value() const noexcept {
-    return value;
-}
-
-inline bool OptionBool::get_default_value() const noexcept {
-    return default_value;
-}
-
-inline std::string OptionBool::get_value_string() const {
-    return to_string(value);
-}
-
-inline const std::vector<std::string> & OptionBool::get_default_true_values() noexcept {
-    static std::vector<std::string> true_values = {"1", "yes", "true", "on"};
-    return true_values;
-}
-
-inline const std::vector<std::string> & OptionBool::get_default_false_values() noexcept {
-    static std::vector<std::string> false_values = {"0", "no", "false", "off"};
-    return false_values;
-}
-
-inline const std::vector<std::string> & OptionBool::get_true_values() const noexcept {
-    return true_values ? *true_values : get_default_true_values();
-}
-
-inline const std::vector<std::string> & OptionBool::get_false_values() const noexcept {
-    return false_values ? *false_values : get_default_false_values();
-}
 
 }  // namespace libdnf5
 
