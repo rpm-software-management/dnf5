@@ -84,21 +84,6 @@ OptionStringContainer<T>::OptionStringContainer(const OptionStringContainer & sr
       value(src.value) {}
 
 template <typename T>
-OptionStringContainer<T> & OptionStringContainer<T>::operator=(const OptionStringContainer & src) {
-    assert_not_locked();
-
-    if (this == &src) {
-        return *this;
-    }
-    regex = src.regex;
-    icase = src.icase;
-    delimiters = src.delimiters;
-    default_value = src.default_value;
-    value = src.value;
-    return *this;
-}
-
-template <typename T>
 void OptionStringContainer<T>::init_regex_matcher() {
     if (regex.empty()) {
         return;
