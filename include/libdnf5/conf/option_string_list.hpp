@@ -22,8 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option.hpp"
 
-#include <optional>
-#include <regex>
 #include <set>
 #include <vector>
 
@@ -45,7 +43,7 @@ public:
     OptionStringContainer(const ValueType & default_value, std::string regex, bool icase, std::string delimiters);
 
     OptionStringContainer(const OptionStringContainer & src);
-    ~OptionStringContainer() override = default;
+    ~OptionStringContainer() override;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
@@ -113,47 +111,13 @@ protected:
     /// Tests new container item value and throws exception if the item value is not allowed.
     void test_item(const std::string & item) const;
 
-    std::optional<std::regex> regex_matcher;
-    std::string regex;
-    bool icase;
-    std::optional<std::string> delimiters;
-    ValueType default_value;
-    ValueType value;
-
 private:
     void init_regex_matcher();
     void test_item_worker(const std::string & item) const;
+
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-template <typename T>
-inline OptionStringContainer<T> * OptionStringContainer<T>::clone() const {
-    return new OptionStringContainer<T>(*this);
-}
-
-template <typename T>
-inline const T & OptionStringContainer<T>::get_value() const {
-    return value;
-}
-
-template <typename T>
-inline const T & OptionStringContainer<T>::get_default_value() const {
-    return default_value;
-}
-
-template <typename T>
-inline std::string OptionStringContainer<T>::get_value_string() const {
-    return to_string(value);
-}
-
-template <typename T>
-inline const char * OptionStringContainer<T>::get_default_delimiters() noexcept {
-    return " ,\n";
-}
-
-template <typename T>
-inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
-    return delimiters ? delimiters->c_str() : get_default_delimiters();
-}
 
 using OptionStringList = OptionStringContainer<std::vector<std::string>>;
 using OptionStringSet = OptionStringContainer<std::set<std::string>>;
