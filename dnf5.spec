@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 1
-%global project_version_patch 15
+%global project_version_patch 17
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 11]
 
@@ -18,6 +18,7 @@ Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 %endif
 Recommends:     bash-completion
+Requires:       coreutils
 
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37 || 0%{?rhel} > 10
@@ -33,35 +34,35 @@ Provides:       yum = %{version}-%{release}
 Obsoletes:      yum < 5
 %endif
 
-Provides:       dnf5-command(install)
-Provides:       dnf5-command(upgrade)
-Provides:       dnf5-command(remove)
-Provides:       dnf5-command(distro-sync)
-Provides:       dnf5-command(downgrade)
-Provides:       dnf5-command(reinstall)
-Provides:       dnf5-command(swap)
-Provides:       dnf5-command(mark)
+Provides:       dnf5-command(advisory)
 Provides:       dnf5-command(autoremove)
 Provides:       dnf5-command(check)
 Provides:       dnf5-command(check-upgrade)
-Provides:       dnf5-command(provides)
-
+Provides:       dnf5-command(clean)
+Provides:       dnf5-command(distro-sync)
+Provides:       dnf5-command(downgrade)
+Provides:       dnf5-command(download)
+Provides:       dnf5-command(environment)
+Provides:       dnf5-command(group)
+Provides:       dnf5-command(history)
+Provides:       dnf5-command(info)
+Provides:       dnf5-command(install)
 Provides:       dnf5-command(leaves)
+Provides:       dnf5-command(list)
+Provides:       dnf5-command(makecache)
+Provides:       dnf5-command(mark)
+Provides:       dnf5-command(module)
+Provides:       dnf5-command(offline)
+Provides:       dnf5-command(provides)
+Provides:       dnf5-command(reinstall)
+Provides:       dnf5-command(remove)
+Provides:       dnf5-command(repo)
 Provides:       dnf5-command(repoquery)
 Provides:       dnf5-command(search)
-Provides:       dnf5-command(list)
-Provides:       dnf5-command(info)
-
-Provides:       dnf5-command(group)
-Provides:       dnf5-command(environment)
-Provides:       dnf5-command(module)
-Provides:       dnf5-command(history)
-Provides:       dnf5-command(repo)
-Provides:       dnf5-command(advisory)
-
-Provides:       dnf5-command(clean)
-Provides:       dnf5-command(download)
-Provides:       dnf5-command(makecache)
+Provides:       dnf5-command(swap)
+Provides:       dnf5-command(system-upgrade)
+Provides:       dnf5-command(upgrade)
+Provides:       dnf5-command(versionlock)
 
 
 # ========== build options ==========
@@ -82,6 +83,7 @@ Provides:       dnf5-command(makecache)
 %else
 %bcond_without zchunk
 %endif
+%bcond_without systemd
 
 %bcond_with    html
 %if 0%{?rhel} == 8
@@ -159,6 +161,15 @@ BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 
 %if %{with zchunk}
 BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
+%endif
+
+%if %{with systemd}
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  systemd-devel
+
+ # We need to get the SYSTEMD_SYSTEM_UNIT_DIR from
+ # /usr/share/pkgconfig/systemd.pc
+BuildRequires:  systemd
 %endif
 
 %if %{with html} || %{with man}
@@ -263,6 +274,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf5
+%if %{with dnf5_obsoletes_dnf}
+%{_datadir}/bash-completion/completions/dnf
+%endif
 %dir %{_prefix}/lib/sysimage/dnf
 %verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/dnf/*
 %license COPYING.md
@@ -271,6 +285,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-advisory.8.*
 %{_mandir}/man8/dnf5-autoremove.8.*
 %{_mandir}/man8/dnf5-check.8.*
+%{_mandir}/man8/dnf5-check-upgrade.8.*
 %{_mandir}/man8/dnf5-clean.8.*
 %{_mandir}/man8/dnf5-distro-sync.8.*
 %{_mandir}/man8/dnf5-downgrade.8.*
@@ -279,12 +294,14 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-group.8.*
 # TODO(jkolarik): history is not ready yet
 # %%{_mandir}/man8/dnf5-history.8.*
+%{_mandir}/man8/dnf5-info.8.*
 %{_mandir}/man8/dnf5-install.8.*
 %{_mandir}/man8/dnf5-leaves.8.*
+%{_mandir}/man8/dnf5-list.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
-# TODO(jkolarik): module is not ready yet
-# %%{_mandir}/man8/dnf5-module.8.*
+%{_mandir}/man8/dnf5-module.8.*
+%{_mandir}/man8/dnf5-offline.8.*
 %{_mandir}/man8/dnf5-provides.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
 %{_mandir}/man8/dnf5-remove.8.*
@@ -292,7 +309,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-repoquery.8.*
 %{_mandir}/man8/dnf5-search.8.*
 %{_mandir}/man8/dnf5-swap.8.*
+%{_mandir}/man8/dnf5-system-upgrade.8.*
 %{_mandir}/man8/dnf5-upgrade.8.*
+%{_mandir}/man8/dnf5-versionlock.8.*
 %{_mandir}/man7/dnf5-aliases.7.*
 %{_mandir}/man7/dnf5-caching.7.*
 %{_mandir}/man7/dnf5-comps.7.*
@@ -306,6 +325,58 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man5/dnf5.conf.5.*
 %{_mandir}/man5/dnf5.conf-todo.5.*
 %{_mandir}/man5/dnf5.conf-deprecated.5.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf.8.*
+%{_mandir}/man8/dnf-advisory.8.*
+%{_mandir}/man8/dnf-autoremove.8.*
+%{_mandir}/man8/dnf-check.8.*
+%{_mandir}/man8/dnf-check-upgrade.8.*
+%{_mandir}/man8/dnf-clean.8.*
+%{_mandir}/man8/dnf-distro-sync.8.*
+%{_mandir}/man8/dnf-downgrade.8.*
+%{_mandir}/man8/dnf-download.8.*
+%{_mandir}/man8/dnf-environment.8.*
+%{_mandir}/man8/dnf-group.8.*
+# TODO(jkolarik): history is not ready yet
+# %%{_mandir}/man8/dnf-history.8.*
+%{_mandir}/man8/dnf-info.8.*
+%{_mandir}/man8/dnf-install.8.*
+%{_mandir}/man8/dnf-leaves.8.*
+%{_mandir}/man8/dnf-list.8.*
+%{_mandir}/man8/dnf-makecache.8.*
+%{_mandir}/man8/dnf-mark.8.*
+%{_mandir}/man8/dnf-module.8.*
+%{_mandir}/man8/dnf-offline.8.*
+%{_mandir}/man8/dnf-provides.8.*
+%{_mandir}/man8/dnf-reinstall.8.*
+%{_mandir}/man8/dnf-remove.8.*
+%{_mandir}/man8/dnf-repo.8.*
+%{_mandir}/man8/dnf-repoquery.8.*
+%{_mandir}/man8/dnf-search.8.*
+%{_mandir}/man8/dnf-swap.8.*
+%{_mandir}/man8/dnf-system-upgrade.8.*
+%{_mandir}/man8/dnf-upgrade.8.*
+%{_mandir}/man8/dnf-versionlock.8.*
+%{_mandir}/man7/dnf-aliases.7.*
+%{_mandir}/man7/dnf-caching.7.*
+%{_mandir}/man7/dnf-comps.7.*
+# TODO(jkolarik): filtering is not ready yet
+# %%{_mandir}/man7/dnf-filtering.7.*
+%{_mandir}/man7/dnf-forcearch.7.*
+%{_mandir}/man7/dnf-installroot.7.*
+# TODO(jkolarik): modularity is not ready yet
+# %%{_mandir}/man7/dnf-modularity.7.*
+%{_mandir}/man7/dnf-specs.7.*
+%{_mandir}/man5/dnf.conf.5.*
+%{_mandir}/man5/dnf.conf-todo.5.*
+%{_mandir}/man5/dnf.conf-deprecated.5.*
+%endif
+
+%if %{with systemd}
+%{_unitdir}/dnf5-offline-transaction.service
+%{_unitdir}/dnf5-offline-transaction-cleanup.service
+%{_unitdir}/system-update.target.wants/dnf5-offline-transaction.service
+%endif
 
 # ========== libdnf5 ==========
 %package -n libdnf5
@@ -682,9 +753,17 @@ config-manager, copr, and repoclosure commands.
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_mandir}/man8/dnf5-builddep.8.*
+%{_mandir}/man8/dnf5-changelog.8.*
 %{_mandir}/man8/dnf5-copr.8.*
 %{_mandir}/man8/dnf5-needs-restarting.8.*
 %{_mandir}/man8/dnf5-repoclosure.8.*
+%if %{with dnf5_obsoletes_dnf}
+%{_mandir}/man8/dnf-builddep.8.*
+%{_mandir}/man8/dnf-changelog.8.*
+%{_mandir}/man8/dnf-copr.8.*
+%{_mandir}/man8/dnf-needs-restarting.8.*
+%{_mandir}/man8/dnf-repoclosure.8.*
+%endif
 
 
 # ========== dnf5-automatic plugin ==========
@@ -709,12 +788,14 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%{_mandir}/man8/dnf5-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
 %{_unitdir}/dnf-automatic.timer
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf-automatic
+%{_mandir}/man8/dnf-automatic.8.*
 %else
 %exclude %{_bindir}/dnf-automatic
 %endif
@@ -744,6 +825,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
     -DWITH_ZCHUNK=%{?with_zchunk:ON}%{!?with_zchunk:OFF} \
+    -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \
     -DWITH_MAN=%{?with_man:ON}%{!?with_man:OFF} \
@@ -779,6 +861,12 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %if %{with dnf5_obsoletes_dnf}
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
+ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_datadir}/bash-completion/completions/dnf
+for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
+    dir=$(dirname $file)
+    filename=$(basename $file)
+    ln -sr $file $dir/${filename/dnf5/dnf}
+done
 %endif
 
 # own dirs and files that dnf5 creates on runtime
@@ -795,6 +883,13 @@ done
 # Remove if condition when Fedora 37 is EOL
 %if 0%{?fedora} > 37 || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
+%endif
+
+%if %{with systemd}
+mkdir -p %{buildroot}%{_unitdir}/system-update.target.wants/
+pushd %{buildroot}%{_unitdir}/system-update.target.wants/
+  ln -sr ../dnf5-offline-transaction.service
+popd
 %endif
 
 %find_lang dnf5
@@ -815,6 +910,12 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %ldconfig_scriptlets
 
 %changelog
+* Wed Apr 03 2024 Packit Team <hello@packit.dev> - 5.1.17-1
+- New upstream release 5.1.17
+
+* Tue Apr 02 2024 Packit Team <hello@packit.dev> - 5.1.16-1
+- New upstream release 5.1.16
+
 * Fri Mar 15 2024 Packit Team <hello@packit.dev> - 5.1.15-1
 - New upstream release 5.1.15
 

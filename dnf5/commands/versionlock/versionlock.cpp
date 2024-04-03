@@ -42,11 +42,11 @@ void VersionlockCommand::register_subcommands() {
     auto * commands_group = get_context().get_argument_parser().add_new_group("versionlock_commands");
     commands_group->set_header("Versionlock Commands:");
     get_argument_parser_command()->register_group(commands_group);
-    register_subcommand(std::make_unique<VersionlockListCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockAddCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockExcludeCommand>(get_context()), commands_group);
-    register_subcommand(std::make_unique<VersionlockDeleteCommand>(get_context()), commands_group);
     register_subcommand(std::make_unique<VersionlockClearCommand>(get_context()), commands_group);
+    register_subcommand(std::make_unique<VersionlockDeleteCommand>(get_context()), commands_group);
+    register_subcommand(std::make_unique<VersionlockListCommand>(get_context()), commands_group);
 }
 
 void VersionlockCommand::pre_configure() {

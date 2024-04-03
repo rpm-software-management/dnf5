@@ -52,10 +52,11 @@ void ReinstallCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
-    create_downloadonly_option(*this);
-    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_downloadonly_option(*this);
+    create_offline_option(*this);
 }
 
 void ReinstallCommand::configure() {

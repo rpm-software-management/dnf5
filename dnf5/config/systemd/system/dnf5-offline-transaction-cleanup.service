@@ -1,0 +1,10 @@
+[Unit]
+Description=Offline upgrade/transaction using DNF 5 failed
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+# Remove the symlink if it's still there, to protect against reboot loops.
+ExecStart=/usr/bin/rm -fv /system-update
+# If anything goes wrong, reboot back to the normal system.
+ExecStart=/usr/bin/systemctl --no-block reboot

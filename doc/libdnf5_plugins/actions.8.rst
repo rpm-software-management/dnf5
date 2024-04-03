@@ -18,9 +18,9 @@
 
 .. _actions_plugin_ref-label:
 
-==============
-Actions Plugin
-==============
+###############
+ Actions Plugin
+###############
 
 Description
 ===========

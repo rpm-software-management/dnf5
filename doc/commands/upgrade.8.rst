@@ -39,21 +39,29 @@ Options
 =======
 
 ``--minimal``
-    Update packages only to the lowest higher available version that provides a bugfix,
-    enhancement or a fix for a security issue.
+    | Update packages only to the lowest available version that provides bug fixes, enhancements, or security fixes.
 
 ``--allowerasing``
     | Allow erasing of installed packages to resolve any potential dependency problems.
 
-``--downloadonly``
-    | Only download packages for transaction.
+``--skip-unavailable``
+    | Allow skipping packages that are not possible to upgrade. All remaining packages will be upgraded.
+
+``--allow-downgrade``
+    | Enable downgrade of dependencies when resolving the requested operation.
+
+``--no-allow-downgrade``
+    | Disable downgrade of dependencies when resolving the requested operation.
 
 ``--destdir=<path>``
     | Set directory used for downloading packages to. Default location is to the current working directory.
     | Automatically sets the ``downloadonly`` option.
 
-``--skip-unavailable``
-    | Allow skipping packages that are not possible to upgrade. All remaining packages will be upgraded.
+``--downloadonly``
+    | Only download packages for transaction.
+
+``--offline``
+    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
 
 ``--advisories=ADVISORY_NAME,...``
     | Consider only content contained in advisories with specified name.

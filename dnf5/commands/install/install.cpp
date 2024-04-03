@@ -53,20 +53,20 @@ void InstallCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    create_allow_downgrade_options(*this);
     create_downloadonly_option(*this);
+    create_offline_option(*this);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
-    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
-    advisory_bz = std::make_unique<BzOption>(*this);
-    advisory_cve = std::make_unique<CveOption>(*this);
-
-    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
-    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
-    create_allow_downgrade_options(*this);
 }
 
 void InstallCommand::configure() {

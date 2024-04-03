@@ -57,14 +57,14 @@ Subcommands
 ``exclude``
     | Add an exclude (within versionlock) for the available packages matching the spec. It means that packages represented by ``package-spec`` will be excluded from transaction operations.
 
+``clear``
+    | Remove all versionlock entries.
+
 ``delete``
     | Remove any matching versionlock entries.
 
 ``list``
     | List the current versionlock entries.
-
-``clear``
-    | Remove all versionlock entries.
 
 
 Examples
@@ -127,7 +127,6 @@ Example of versionlock file
     key = "evr"
     comparator = ">="
     value = "3"
-
 
 
 See Also

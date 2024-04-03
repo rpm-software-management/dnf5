@@ -2,3 +2,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.Goal.xml ${CMAKE_CURRE
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.SessionManager.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.SessionManager.xml COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.rpm.Repo.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.rpm.Repo.xml COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.rpm.Rpm.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.rpm.Rpm.xml COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.Advisory.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.Advisory.xml COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.comps.Group.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.comps.Group.xml COPYONLY)

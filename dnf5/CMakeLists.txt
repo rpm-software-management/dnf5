@@ -2,6 +2,7 @@ if(NOT WITH_DNF5)
     return()
 endif()
 
+
 find_package(Threads)
 
 # set gettext domain for translations
@@ -32,8 +33,15 @@ target_link_libraries(dnf5 PRIVATE common libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
-target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES})
 
+if(WITH_SYSTEMD)
+  pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+  pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
+  add_definitions(-DWITH_SYSTEMD)
+  target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES} ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
+else()
+  target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES})
+endif()
 
 find_package(bash-completion)
 if(BASH_COMPLETION_FOUND)
@@ -47,6 +55,12 @@ install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR}
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
+
+if(WITH_SYSTEMD)
+  pkg_check_modules(SYSTEMD REQUIRED systemd)
+  pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
+  install(DIRECTORY "config/systemd/system/" DESTINATION "${SYSTEMD_SYSTEM_UNIT_DIR}" PATTERN ".gitkeep" EXCLUDE)
+endif()
 
 # Makes an empty directory for dnf5-plugins configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dnf/dnf5-plugins")

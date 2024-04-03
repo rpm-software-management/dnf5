@@ -55,6 +55,12 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`autoremove <autoremove_command_ref-label>`
     | Remove unneeded packages.
 
+:ref:`check <check_command_ref-label>`
+    | Check for problems in the package database.
+
+:ref:`check-upgrade <check-upgrade_command_ref-label>`
+    | Check for available package upgrades.
+
 :ref:`clean <clean_command_ref-label>`
     | Remove or invalidate cached data.
 
@@ -73,17 +79,29 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`group <group_command_ref-label>`
     | Manage comps groups.
 
+:ref:`info <info_command_ref-label>`
+    | Provide detailed information about installed or available packages.
+
 :ref:`install <install_command_ref-label>`
     | Install packages.
 
 :ref:`leaves <leaves_command_ref-label>`
     | List groups of leaf packages.
 
+:ref:`list <list_command_ref-label>`
+    | List installed or available packages.
+
 :ref:`makecache <makecache_command_ref-label>`
     | Generate the metadata cache.
 
 :ref:`mark <mark_command_ref-label>`
     | Change the reason of an installed package.
+
+:ref:`module <module_command_ref-label>`
+    | Manage modules.
+
+:ref:`offline <offline_command_ref-label>`
+    | Manage offline transactions.
 
 :ref:`provides <provides_command_ref-label>`
     | Find what package provides the given value.
@@ -106,17 +124,19 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`swap <swap_command_ref-label>`
     | Remove software and install another in the single transaction.
 
+:ref:`system-upgrade <system-upgrade_command_ref-label>`
+    | Upgrade the system to a new major release.
+
 :ref:`upgrade <upgrade_command_ref-label>`
     | Upgrade packages.
+
+:ref:`versionlock <versionlock_command_ref-label>`
+    | Protect packages from updates to newer versions.
 
 ..
     # TODO(jkolarik): History command is not ready yet
     :ref:`history <history_command_ref-label>`
         | Manage transaction history.
-
-    # TODO(jkolarik): Module command is not ready yet
-    :ref:`module <module_command_ref-label>`
-        | Manage modules.
 
 
 Plugin commands
@@ -131,6 +151,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`builddep <builddep_plugin_ref-label>`
     | Install missing dependencies for building an RPM package.
 
+:ref:`changelog <changelog_plugin_ref-label>`
+    | Show package changelogs.
+
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
@@ -140,6 +163,8 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
 
+..
+    # TODO(jkolarik): config-manager plugin
 
 
 Options
@@ -275,6 +300,12 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--show-new-leaves``
     | Show newly installed leaf packages and packages that became leaves after a transaction.
 
+``--use-host-config``
+    | Use configuration files and variable definitions from the host system rather than the installroot.
+
+``--version``
+    | Display the version of the dnf5 application and libdnf5 library, along with successfully loaded plugins and their versions, and then exit.
+
 ``-y, --assumeyes``
     | Automatically answer yes for all questions.
 
@@ -352,19 +383,25 @@ Files
 See Also
 ========
 
-Commands in detail:
+Commands:
     | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
     | :manpage:`dnf5-autoremove(8)`, :ref:`Autoremove command <autoremove_command_ref-label>`
+    | :manpage:`dnf5-check(8)`, :ref:`Check command <check_command_ref-label>`
+    | :manpage:`dnf5-check-upgrade(8)`, :ref:`Check-Upgrade command <check-upgrade_command_ref-label>`
     | :manpage:`dnf5-clean(8)`, :ref:`Clean command <clean_command_ref-label>`
     | :manpage:`dnf5-distro-sync(8)`, :ref:`Distro-Sync command <distro-sync_command_ref-label>`
     | :manpage:`dnf5-downgrade(8)`, :ref:`Downgrade command <downgrade_command_ref-label>`
     | :manpage:`dnf5-download(8)`, :ref:`Download command <download_command_ref-label>`
     | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
     | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
+    | :manpage:`dnf5-info(8)`, :ref:`Info command <info_command_ref-label>`
     | :manpage:`dnf5-install(8)`, :ref:`Install command <install_command_ref-label>`
     | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
+    | :manpage:`dnf5-list(8)`, :ref:`List command <list_command_ref-label>`
     | :manpage:`dnf5-makecache(8)`, :ref:`Makecache command <makecache_command_ref-label>`
     | :manpage:`dnf5-mark(8)`, :ref:`Mark command <mark_command_ref-label>`
+    | :manpage:`dnf5-module(8)`, :ref:`Module command <module_command_ref-label>`
+    | :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
     | :manpage:`dnf5-provides(8)`, :ref:`Provides command <provides_command_ref-label>`
     | :manpage:`dnf5-reinstall(8)`, :ref:`Reinstall command <reinstall_command_ref-label>`
     | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
@@ -372,20 +409,30 @@ Commands in detail:
     | :manpage:`dnf5-repoquery(8)`, :ref:`Repoquery command <repoquery_command_ref-label>`
     | :manpage:`dnf5-search(8)`, :ref:`Search command <search_command_ref-label>`
     | :manpage:`dnf5-swap(8)`, :ref:`Swap command <swap_command_ref-label>`
+    | :manpage:`dnf5-system-upgrade(8)`, :ref:`System-Upgrade command <system-upgrade_command_ref-label>`
     | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
+    | :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versionlock_command_ref-label>`
 
 ..
     # TODO(jkolarik): History command is not ready yet
     | :manpage:`dnf5-history(8)`, :ref:`History command, <history_command_ref-label>`
 
-    # TODO(jkolarik): Module command is not ready yet
-    | :manpage:`dnf5-module(8)`, :ref:`Module command, <module_command_ref-label>`
-
-Plugins:
+Application Plugins:
+    | :manpage:`dnf5-automatic(8)`, :ref:`Automatic command <automatic_plugin_ref-label>`
     | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
+    | :manpage:`dnf5-changelog(8)`, :ref:`Changelog command <changelog_plugin_ref-label>`
     | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
-    | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-restarting command <needs_restarting_plugin_ref-label>`
+    | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
+
+..
+    # TODO(jkolarik): config-manager plugin
+
+Library Plugins:
+    | :manpage:`libdnf5-actions(8)`, :ref:`Actions plugin <actions_plugin_ref-label>`
+
+Configuration:
+    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
 
 Miscellaneous:
     | :manpage:`dnf5-aliases(7)`, :ref:`Aliases for command line arguments <aliases_misc_ref-label>`
@@ -394,7 +441,6 @@ Miscellaneous:
     | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
     | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
 
 ..
     # TODO(jkolarik): Filtering is not ready yet

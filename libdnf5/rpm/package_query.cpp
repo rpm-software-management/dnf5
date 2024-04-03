@@ -135,7 +135,8 @@ inline libdnf5::sack::QueryCmp remove_glob_when_unneeded(
  *    other (i.e. i386 package can not be upgraded to x86_64, neither the other
  *    way round). If one of them is noarch and the other one colored then the
  *    pkg is upgradable (i.e. one can upgrade .noarch to .x86_64 and then again
- *    to a new version that is .noarch)
+ *    to a new version that is .noarch). Source rpms cannot be used to upgrade
+ *    any binary rpm.
  * :: is of lower version than pkg.
  * :: if there are multiple packages of that name return the highest version
  *    (implying we won't claim we can upgrade an old package with an already
@@ -159,8 +160,14 @@ Id what_upgrades(libdnf5::solv::RpmPool & spool, const Solvable * solvable) {
         if (updated->repo != spool->installed || updated->name != solvable->name) {
             continue;
         }
-        if (updated->arch != solvable->arch && updated->arch != ARCH_NOARCH && solvable->arch != ARCH_NOARCH) {
-            continue;
+        if (updated->arch != solvable->arch) {
+            if (solvable->arch == ARCH_SRC || solvable->arch == ARCH_NOSRC || updated->arch == ARCH_SRC ||
+                updated->arch == ARCH_NOSRC) {
+                continue;
+            }
+            if (updated->arch != ARCH_NOARCH && solvable->arch != ARCH_NOARCH) {
+                continue;
+            }
         }
         if (spool.evrcmp(updated->evr, solvable->evr, EVRCMP_COMPARE) >= 0) {
             // >= version installed, this pkg can not be used for upgrade

@@ -1,0 +1,20 @@
+[Unit]
+Description=Offline upgrades/transactions using DNF 5
+ConditionPathExists=/system-update
+Documentation=https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates
+
+DefaultDependencies=no
+Requires=sysinit.target
+After=sysinit.target systemd-journald.socket system-update-pre.target
+Before=poweroff.target reboot.target shutdown.target system-update.target
+OnFailure=dnf5-offline-transaction-cleanup.service
+
+[Service]
+# We are done when the script exits, not before
+Type=oneshot
+# Upgrade output goes to journal and on-screen.
+StandardOutput=journal+console
+ExecStart=/usr/bin/dnf5 offline _execute
+
+[Install]
+WantedBy=system-update.target

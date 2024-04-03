@@ -36,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/makecache/makecache.hpp"
 #include "commands/mark/mark.hpp"
 #include "commands/module/module.hpp"
+#include "commands/offline/offline.hpp"
 #include "commands/provides/provides.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -43,6 +44,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
+#include "commands/system-upgrade/system-upgrade.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "commands/versionlock/versionlock.hpp"
 #include "dnf5/context.hpp"
@@ -691,6 +693,10 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
     context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
     context.add_and_initialize_command(std::make_unique<VersionlockCommand>(context));
+    context.add_and_initialize_command(std::make_unique<SystemUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineDistroSyncCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<OfflineCommand>(context));
 }
 
 static void load_plugins(Context & context) {
@@ -929,6 +935,106 @@ static void print_new_leaves(Context & context) {
 }  // namespace dnf5
 
 
+// Recursively search command and its parents whether given argument is configured
+static bool has_named_arg(libdnf5::cli::ArgumentParser::Command * command, std::string_view arg_name) {
+    while (command) {
+        for (const auto & arg : command->get_named_args()) {
+            if (arg->get_long_name() == arg_name) {
+                return true;
+            }
+        }
+        command = command->get_parent() == command ? nullptr : command->get_parent();
+    }
+    return false;
+}
+
+static void print_resolve_hints(dnf5::Context & context) {
+    auto & conf = context.base.get_config();
+    std::vector<std::string> hints;
+    auto transaction_problems = context.get_transaction()->get_problems();
+    auto * command = context.get_selected_command()->get_argument_parser_command();
+
+    // hint --skip-unavailable if a package was not found
+    if ((transaction_problems & libdnf5::GoalProblem::NOT_FOUND) == libdnf5::GoalProblem::NOT_FOUND &&
+        !conf.get_skip_unavailable_option().get_value()) {
+        const std::string_view arg{"--skip-unavailable"};
+        if (has_named_arg(command, arg.substr(2))) {
+            hints.emplace_back(libdnf5::utils::sformat(_("{} to skip unavailable packages"), arg));
+        }
+    }
+
+    if ((transaction_problems & libdnf5::GoalProblem::SOLVER_ERROR) == libdnf5::GoalProblem::SOLVER_ERROR) {
+        bool conflict = false;
+        bool broken_file_dep = false;
+        bool best = false;
+        // walk through all solver problem to detect a conflict, missing file dependency and best
+        for (const auto & resolve_log : context.get_transaction()->get_resolve_logs()) {
+            if (resolve_log.get_problem() == libdnf5::GoalProblem::SOLVER_ERROR) {
+                for (const auto & solv_prob : resolve_log.get_solver_problems()->get_problems()) {
+                    for (const auto & [rule, params] : solv_prob) {
+                        switch (rule) {
+                            case libdnf5::ProblemRules::RULE_PKG_CONFLICTS:
+                                // TODO(mblaha): we should check whether the conflict involves an installed package (missing API).
+                                // https://github.com/rpm-software-management/dnf5/issues/1324
+                                conflict = true;
+                                break;
+                            case libdnf5::ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+                                if (params.size() >= 1) {
+                                    if (params[0].starts_with('/')) {
+                                        broken_file_dep = true;
+                                    }
+                                }
+                                break;
+                            case libdnf5::ProblemRules::RULE_BEST_1:
+                            case libdnf5::ProblemRules::RULE_BEST_2:
+                                best = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (conf.get_best_option().get_value() && best) {
+            const std::string_view arg{"--no-best"};
+            hints.emplace_back(
+                libdnf5::utils::sformat(_("{} to not limit the transaction to the best candidates"), arg));
+        }
+
+        if (!context.get_goal()->get_allow_erasing() && conflict) {
+            const std::string_view arg{"--allowerasing"};
+            if (has_named_arg(command, arg.substr(2))) {
+                hints.emplace_back(
+                    libdnf5::utils::sformat(_("{} to allow erasing of installed packages to resolve problems"), arg));
+            }
+        }
+
+        if (broken_file_dep) {
+            const std::string_view arg{"--setopt=optional_metadata_types=filelists"};
+            auto optional_metadata = conf.get_optional_metadata_types_option().get_value();
+            if (!optional_metadata.contains("filelists")) {
+                hints.emplace_back(libdnf5::utils::sformat(_("{} to load additional filelists metadata"), arg));
+            }
+        }
+
+        if (!conf.get_skip_broken_option().get_value()) {
+            const std::string_view arg{"--skip-broken"};
+            if (has_named_arg(command, arg.substr(2))) {
+                hints.emplace_back(libdnf5::utils::sformat(_("{} to skip uninstallable packages"), arg));
+            }
+        }
+    }
+
+    if (hints.size() > 0) {
+        std::cerr << _("You can try to add to command line:") << std::endl;
+        for (const auto & hint : hints) {
+            std::cerr << "  " << hint << std::endl;
+        }
+    }
+}
+
 int main(int argc, char * argv[]) try {
     // Creates a vector of loggers with one circular memory buffer logger
     std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
@@ -1106,6 +1212,7 @@ int main(int argc, char * argv[]) try {
             command->load_additional_packages();
 
             command->run();
+
             if (auto goal = context.get_goal(false)) {
                 context.set_transaction(goal->resolve());
 
@@ -1146,14 +1253,19 @@ int main(int argc, char * argv[]) try {
                 context.download_and_run(*context.get_transaction());
             }
         } catch (libdnf5::cli::GoalResolveError & ex) {
+            std::cerr << ex.what() << std::endl;
             if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
                 !base.get_config().get_use_host_config_option().get_value()) {
-                std::cout
+                std::cerr
                     << "No repositories were loaded from the installroot. To use the configuration and repositories "
                        "of the host system, pass --use-host-config."
                     << std::endl;
+            } else {
+                if (context.get_transaction() != nullptr) {
+                    // download command can throw GoalResolveError without context.transaction being set
+                    print_resolve_hints(context);
+                }
             }
-            std::cerr << ex.what() << std::endl;
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         } catch (libdnf5::cli::ArgumentParserError & ex) {
             std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;

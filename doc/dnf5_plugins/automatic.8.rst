@@ -19,37 +19,17 @@
 .. _automatic_plugin_ref-label:
 
 ##################
- Automatic command
+ Automatic Command
 ##################
 
 Synopsis
-==========
+========
 
 ``dnf5 automatic [options]``
 
 
-Options
-=======
-
-``--timer``
-    Apply random delay before execution.
-
-``--downloadupdates``
-    Automatically download updated packages.
-
-``--no-downloadupdates``
-    Do not automatically download updated packages.
-
-``--installupdates``
-    Automatically install downloaded updates (implies --downloadupdates).
-
-``--no-installupdates``
-    Do not automatically install downloaded updates.
-
-
-
 Description
-=============
+===========
 
 Alternative CLI to ``dnf upgrade`` with specific facilities to make it suitable to be executed automatically and regularly from systemd timers, cron jobs and similar.
 
@@ -66,8 +46,27 @@ The systemd timer unit ``dnf-automatic.timer`` will behave as the configuration 
 Regardless of the configuration file settings, the first will only notify of available updates. The second will download, but not install them. The third will download and install them.
 
 
+Options
+=======
+
+``--timer``
+    | Apply random delay before execution.
+
+``--downloadupdates``
+    | Automatically download updated packages.
+
+``--no-downloadupdates``
+    | Do not automatically download updated packages.
+
+``--installupdates``
+    | Automatically install downloaded updates (implies --downloadupdates).
+
+``--no-installupdates``
+    | Do not automatically install downloaded updates.
+
+
 Run dnf-automatic
-===================
+=================
 
 You can select one that most closely fits your needs, customize ``/etc/dnf/automatic.conf`` for any specific behaviors, and enable the timer unit.
 
@@ -75,9 +74,10 @@ For example: ``systemctl enable --now dnf-automatic-notifyonly.timer``
 
 
 Configuration File Format
-===========================
+=========================
 
 The configuration file is separated into topical sections.
+
 
 ----------------------
 ``[commands]`` section
@@ -123,7 +123,6 @@ Setting the mode of operation of the program.
     Specify the command to run to trigger a reboot of the system. For example, to skip the 5-minute delay and wall message, use ``shutdown -r``
 
 
-
 ----------------------
 ``[emitters]`` section
 ----------------------
@@ -142,6 +141,7 @@ Choosing how the results should be reported.
 
     How the system is called in the reports.
 
+
 ---------------------
 ``[command]`` section
 ---------------------
@@ -157,6 +157,7 @@ The command emitter configuration. Variables usable in format string arguments a
     format string, default: ``{body}``
 
     The data to pass to the command on stdin.
+
 
 ---------------------------
 ``[command_email]`` section
@@ -183,6 +184,7 @@ The command email emitter configuration. Variables usable in format string argum
     format string, default: ``{body}``
 
     The data to pass to the command on stdin.
+
 
 -------------------
 ``[email]`` section
@@ -224,6 +226,7 @@ The email emitter configuration.
     string, default empty.
 
     Password to use for SMTP server authentication.
+
 
 ------------------
 ``[base]`` section

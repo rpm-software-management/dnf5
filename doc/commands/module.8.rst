@@ -16,9 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-..
-    # TODO(jkolarik): Command not ready yet in upstream ...
-
 .. _module_command_ref-label:
 
 ###############
@@ -28,13 +25,18 @@
 Synopsis
 ========
 
-``dnf5 module <subcommand> [options] [<module-spec>]``
+``dnf5 module <subcommand> [options] [<module-spec>...]``
 
 
 Description
 ===========
 
-Optional ``module-spec`` arguments can be passed to select only specific modules.
+Modularity is an alternative way of building, organizing and delivering packages.
+
+Currently, only basic support is available for managing the modules,
+as they are no longer supported in mainstream RPM distributions.
+
+For more details see: https://docs.pagure.org/modularity/.
 
 
 Subcommands
@@ -46,31 +48,49 @@ Subcommands
 ``info``
     | Print details about module streams.
 
-``provides``
-    | Print module and module profile the specified packages come from.
-
 ``enable``
     | Enable module streams and make their packages available.
 
 ``disable``
     | Disable modules including all their streams.
 
-``switch-to``
-    | Enable different module streams, upgrade their profiles and distro-sync packages.
-
 ``reset``
     | Reset module state so it's no longer enabled or disabled.
 
-``install``
-    | Install module profiles, including their packages.
 
-``remove``
-    | Remove installed module profiles including their packages.
+Options for ``list`` and ``info``
+=================================
+
+``--enabled``
+    | Show only enabled modules.
+
+``--disabled``
+    | Show only disabled modules.
 
 
-Options
-=======
+Options for ``enable``, ``disable``, ``reset``
+==============================================
+
+``--skip-broken``
+    | Resolve any dependency problems by removing items that are causing problems from the transaction.
+    | Used with ``enable`` command.
+
+``--skip-unavailable``
+    | Allow skipping modules that are not available in repositories.
+    | All remaining items will be processed.
 
 
 Examples
 ========
+
+``dnf5 module list``
+    | List all module streams available for your system.
+
+``dnf5 module enable nodejs:8``
+    | Make packages from the Node.js 8 stream available for installation.
+
+
+See Also
+========
+
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`

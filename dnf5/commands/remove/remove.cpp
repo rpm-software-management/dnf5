@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -55,6 +57,8 @@ void RemoveCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, true); });
     cmd.register_positional_arg(keys);
+
+    create_offline_option(*this);
 }
 
 void RemoveCommand::configure() {

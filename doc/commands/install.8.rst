@@ -48,6 +48,18 @@ Options
 ``--skip-unavailable``
     | Allow skipping packages that are not available in repositories. All available packages will be installed.
 
+``--allow-downgrade``
+    | Enable downgrade of dependencies when resolving the requested operation.
+
+``--no-allow-downgrade``
+    | Disable downgrade of dependencies when resolving the requested operation.
+
+``--downloadonly``
+    | Download the resolved package set without executing an RPM transaction.
+
+``--offline``
+    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+
 ``--advisories=ADVISORY_NAME,...``
     | Consider only content contained in advisories with specified name.
     | This is a list option.

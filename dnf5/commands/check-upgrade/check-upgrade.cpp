@@ -68,13 +68,13 @@ void CheckUpgradeCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
-    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
-    advisory_bz = std::make_unique<BzOption>(*this);
-    advisory_cve = std::make_unique<CveOption>(*this);
 }
 
 void CheckUpgradeCommand::configure() {
@@ -128,11 +128,6 @@ void CheckUpgradeCommand::run() {
     upgrades_query.filter_priority();
 
     upgrades_query.filter_upgrades();
-
-    // Source RPMs should not be reported as upgrades, e.g. when the binary
-    // package is marked exclude and only the source package is left in the
-    // repo
-    upgrades_query.filter_arch({"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
 
     libdnf5::rpm::PackageQuery installed_query(ctx.base);
     installed_query.filter_installed();

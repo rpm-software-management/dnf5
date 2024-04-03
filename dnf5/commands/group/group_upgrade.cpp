@@ -40,6 +40,8 @@ void GroupUpgradeCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_downloadonly_option(*this);
+    create_offline_option(*this);
 }
 
 void GroupUpgradeCommand::configure() {

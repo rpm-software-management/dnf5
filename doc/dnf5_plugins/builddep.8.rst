@@ -37,37 +37,44 @@ Install missing dependencies for building an RPM package.
              than you would expect because dependencies were evaluated according macros
              set on the package build host.
 
+
 Options
 =======
 
+``-D "macro expr", --define="macro expr"``
+    | Define a rpm macro. Set the value "expr" to the macro "macro" when parsing spec files. Does not apply for source rpm files.
+
 ``--allowerasing``
-    Allow erasing of installed packages to resolve dependencies resolution problems.
+    | Allow erasing of installed packages to resolve any potential dependency problems.
 
 ``--skip-unavailable``
-    Allow skipping build dependencies not available in repositories. All available build dependencies will be installed.
+    | Allow skipping packages that are not possible to downgrade. All remaining packages will be downgraded.
 
-``-D "macro expr", --define="macro expr"``
-    Define a rpm macro. Set the value "expr" to the macro "macro" when parsing spec files. Does not apply for source rpm files.
+``--allow-downgrade``
+    | Enable downgrade of dependencies when resolving the requested operation.
+
+``--no-allow-downgrade``
+    | Disable downgrade of dependencies when resolving the requested operation.
 
 
 Arguments
 =========
 
 ``<package>``
-    Either path to .src.rpm, .nosrc.rpm or .spec file or package available in a repository.
+    | Either path to .src.rpm, .nosrc.rpm or .spec file or package available in a repository.
 
 
 Examples
 ========
 
 ``dnf builddep foobar.spec``
-  Install the needed build requirements, defined in the foobar.spec file.
+    | Install the needed build requirements, defined in the foobar.spec file.
 
 ``dnf builddep foobar-1.0-1.src.rpm``
-  Install the needed build requirements, defined in the foobar-1.0-1.src.rpm file.
+    | Install the needed build requirements, defined in the foobar-1.0-1.src.rpm file.
 
 ``dnf builddep foobar-1.0-1``
-  Look up foobar-1.0-1 in enabled repositories and install build requirements for its source rpm.
+    | Look up foobar-1.0-1 in enabled repositories and install build requirements for its source rpm.
 
 ``dnf builddep -D 'scl python27' python-foobar.spec``
-  Install the needed build requirements for the python27 SCL version of python-foobar.
+    | Install the needed build requirements for the python27 SCL version of python-foobar.

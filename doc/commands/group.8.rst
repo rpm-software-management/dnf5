@@ -81,8 +81,9 @@ Subcommands
     a different reason (e.g.  explicitly installed by a user or implicitly
     installed as a dependency).
 
-Options
-=======
+
+Options for ``list`` and ``info``
+=================================
 
 ``--available``
     | Show only available groups. Those which are not installed, but known to ``DNF5``.
@@ -93,24 +94,47 @@ Options
 ``--hidden``
     | Show also hidden groups.
 
-``--with-optional``
-    | Used with ``install`` command to include optional packages from the groups.
-
-``--no-packages``
-    | Used with ``install`` and ``remove`` commands to operate exclusively on the groups without manipulating any packages.
-
 ``--contains-pkgs``
     | Show only groups containing packages with specified names. List option, supports globs.
 
+
+Options for ``install``, ``remove`` and ``upgrade``
+===================================================
+
+``--with-optional``
+    | Include optional packages from the groups.
+    | Used with ``install`` command.
+
+``--no-packages``
+    | Operate exclusively on the groups without manipulating any packages.
+    | Used with ``install`` and ``remove`` commands.
+
 ``--allowerasing``
-    | Used with ``install`` and ``upgrade`` to allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Used with ``install`` and ``upgrade`` commands.
 
 ``--skip-broken``
-    | Used with ``install`` command to resolve any dependency problems by removing packages that are causing problems from the transaction.
+    | Resolve any dependency problems by removing packages that are causing problems from the transaction.
+    | Used with ``install`` command.
 
 ``--skip-unavailable``
-    | Used with ``install`` and ``upgrade`` to allow skipping packages that are not possible to install or upgrade.
-    | All remaining packages will be installed or upgraded.
+    | Allow skipping packages that are not possible to install or upgrade.
+    | Used with ``install`` and ``upgrade`` commands.
+
+``--allow-downgrade``
+    | Enable downgrade of dependencies when resolving the requested operation.
+    | Used with ``install`` and ``upgrade`` commands.
+
+``--no-allow-downgrade``
+    | Disable downgrade of dependencies when resolving the requested operation.
+    | Used with ``install`` and ``upgrade`` commands.
+
+``--downloadonly``
+    | Download the resolved package set without executing an RPM transaction.
+    | Used with ``install`` and ``upgrade`` commands.
+
+``--offline``
+    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
 
 
 Examples

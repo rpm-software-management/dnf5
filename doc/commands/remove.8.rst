@@ -38,6 +38,16 @@ If you want to keep the dependencies that were installed together with the given
 set the ``clean_requirements_on_remove`` configuration option to ``False``.
 
 
+Options
+=======
+
+``--no-autoremove``
+    | Disable removal of dependencies that are no longer used.
+
+``--offline``
+    | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+
+
 Examples
 ========
 

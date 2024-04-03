@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include "dnf5/offline.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils/string.hpp"
@@ -36,6 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/fs/file.hpp>
 #include <libdnf5/utils/patterns.hpp>
 
 #include <algorithm>
@@ -184,234 +186,218 @@ void Context::load_repos(bool load_system) {
     print_info("Repositories loaded.");
 }
 
-namespace {
+RpmTransCB::RpmTransCB(Context & context) : context(context) {
+    multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+}
 
-class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
-public:
-    RpmTransCB(Context & context) : context(context) {
-        multi_progress_bar.set_total_bar_visible_limit(
-            libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+RpmTransCB::~RpmTransCB() {
+    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
-
-    ~RpmTransCB() {
-        if (active_progress_bar &&
-            active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
-            active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
-        }
-        if (active_progress_bar) {
-            multi_progress_bar.print();
-        }
-    }
-
-    libdnf5::cli::progressbar::MultiProgressBar * get_multi_progress_bar() { return &multi_progress_bar; }
-
-    void install_progress(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-        uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(amount));
-        if (is_time_to_print()) {
-            multi_progress_bar.print();
-        }
-    }
-
-    void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override {
-        const char * msg{nullptr};
-        switch (item.get_action()) {
-            case libdnf5::transaction::TransactionItemAction::UPGRADE:
-                msg = "Upgrading ";
-                break;
-            case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
-                msg = "Downgrading ";
-                break;
-            case libdnf5::transaction::TransactionItemAction::REINSTALL:
-                msg = "Reinstalling ";
-                break;
-            case libdnf5::transaction::TransactionItemAction::INSTALL:
-            case libdnf5::transaction::TransactionItemAction::REMOVE:
-            case libdnf5::transaction::TransactionItemAction::REPLACED:
-                break;
-            case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
-            case libdnf5::transaction::TransactionItemAction::ENABLE:
-            case libdnf5::transaction::TransactionItemAction::DISABLE:
-            case libdnf5::transaction::TransactionItemAction::RESET:
-                auto & logger = *context.base.get_logger();
-                logger.warning(
-                    "Unexpected action in TransactionPackage: {}",
-                    static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
-                        item.get_action()));
-                return;
-        }
-        if (!msg) {
-            msg = "Installing ";
-        }
-        new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
-    }
-
-    void install_stop(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-        [[maybe_unused]] uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
+    if (active_progress_bar) {
         multi_progress_bar.print();
     }
+}
 
-    void transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(amount));
-        if (is_time_to_print()) {
-            multi_progress_bar.print();
-        }
-    }
+libdnf5::cli::progressbar::MultiProgressBar * RpmTransCB::get_multi_progress_bar() {
+    return &multi_progress_bar;
+}
 
-    void transaction_start(uint64_t total) override {
-        new_progress_bar(static_cast<int64_t>(total), "Prepare transaction");
-    }
-
-    void transaction_stop([[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(total));
+void RpmTransCB::install_progress(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    if (is_time_to_print()) {
         multi_progress_bar.print();
     }
+}
 
-    void uninstall_progress(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-        uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(amount));
-        if (is_time_to_print()) {
-            multi_progress_bar.print();
-        }
+void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) {
+    const char * msg{nullptr};
+    switch (item.get_action()) {
+        case libdnf5::transaction::TransactionItemAction::UPGRADE:
+            msg = "Upgrading ";
+            break;
+        case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
+            msg = "Downgrading ";
+            break;
+        case libdnf5::transaction::TransactionItemAction::REINSTALL:
+            msg = "Reinstalling ";
+            break;
+        case libdnf5::transaction::TransactionItemAction::INSTALL:
+        case libdnf5::transaction::TransactionItemAction::REMOVE:
+        case libdnf5::transaction::TransactionItemAction::REPLACED:
+            break;
+        case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
+        case libdnf5::transaction::TransactionItemAction::ENABLE:
+        case libdnf5::transaction::TransactionItemAction::DISABLE:
+        case libdnf5::transaction::TransactionItemAction::RESET:
+            auto & logger = *context.base.get_logger();
+            logger.warning(
+                "Unexpected action in TransactionPackage: {}",
+                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
+                    item.get_action()));
+            return;
     }
-
-    void uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override {
-        const char * msg{nullptr};
-        if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE ||
-            item.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
-            msg = "Erasing ";
-        }
-        if (!msg) {
-            msg = "Cleanup ";
-        }
-        new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
+    if (!msg) {
+        msg = "Installing ";
     }
+    new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
+}
 
-    void uninstall_stop(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-        [[maybe_unused]] uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
+void RpmTransCB::install_stop(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] uint64_t amount,
+    [[maybe_unused]] uint64_t total) {
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    if (is_time_to_print()) {
         multi_progress_bar.print();
     }
+}
 
+void RpmTransCB::transaction_start(uint64_t total) {
+    new_progress_bar(static_cast<int64_t>(total), "Prepare transaction");
+}
 
-    void unpack_error(const libdnf5::rpm::TransactionItem & item) override {
-        active_progress_bar->add_message(
-            libdnf5::cli::progressbar::MessageType::ERROR, "Unpack error: " + item.get_package().get_full_nevra());
-        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+void RpmTransCB::transaction_stop([[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(total));
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::uninstall_progress(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    if (is_time_to_print()) {
         multi_progress_bar.print();
     }
+}
 
-    void cpio_error(const libdnf5::rpm::TransactionItem & item) override {
-        active_progress_bar->add_message(
-            libdnf5::cli::progressbar::MessageType::ERROR, "Cpio error: " + item.get_package().get_full_nevra());
-        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+void RpmTransCB::uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) {
+    const char * msg{nullptr};
+    if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE ||
+        item.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
+        msg = "Erasing ";
+    }
+    if (!msg) {
+        msg = "Cleanup ";
+    }
+    new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
+}
+
+void RpmTransCB::uninstall_stop(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] uint64_t amount,
+    [[maybe_unused]] uint64_t total) {
+    multi_progress_bar.print();
+}
+
+
+void RpmTransCB::unpack_error(const libdnf5::rpm::TransactionItem & item) {
+    active_progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::ERROR, "Unpack error: " + item.get_package().get_full_nevra());
+    active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::cpio_error(const libdnf5::rpm::TransactionItem & item) {
+    active_progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::ERROR, "Cpio error: " + item.get_package().get_full_nevra());
+    active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::script_error(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    libdnf5::rpm::Nevra nevra,
+    libdnf5::rpm::TransactionCallbacks::ScriptType type,
+    uint64_t return_code) {
+    active_progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::ERROR,
+        fmt::format(
+            "Error in {} scriptlet: {} return code {}",
+            script_type_to_string(type),
+            to_full_nevra_string(nevra),
+            return_code));
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::script_start(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    libdnf5::rpm::Nevra nevra,
+    libdnf5::rpm::TransactionCallbacks::ScriptType type) {
+    active_progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::INFO,
+        fmt::format("Running {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::script_stop(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    libdnf5::rpm::Nevra nevra,
+    libdnf5::rpm::TransactionCallbacks::ScriptType type,
+    [[maybe_unused]] uint64_t return_code) {
+    active_progress_bar->add_message(
+        libdnf5::cli::progressbar::MessageType::INFO,
+        fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::elem_progress(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] uint64_t amount,
+    [[maybe_unused]] uint64_t total) {
+    //std::cout << "Element progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;
+}
+
+void RpmTransCB::verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(amount));
+    if (is_time_to_print()) {
         multi_progress_bar.print();
     }
+}
 
-    void script_error(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
-        libdnf5::rpm::Nevra nevra,
-        libdnf5::rpm::TransactionCallbacks::ScriptType type,
-        uint64_t return_code) override {
-        active_progress_bar->add_message(
-            libdnf5::cli::progressbar::MessageType::ERROR,
-            fmt::format(
-                "Error in {} scriptlet: {} return code {}",
-                script_type_to_string(type),
-                to_full_nevra_string(nevra),
-                return_code));
-        multi_progress_bar.print();
+void RpmTransCB::verify_start([[maybe_unused]] uint64_t total) {
+    new_progress_bar(static_cast<int64_t>(total), "Verify package files");
+}
+
+void RpmTransCB::verify_stop([[maybe_unused]] uint64_t total) {
+    active_progress_bar->set_ticks(static_cast<int64_t>(total));
+    multi_progress_bar.print();
+}
+
+void RpmTransCB::new_progress_bar(int64_t total, const std::string & descr) {
+    if (active_progress_bar && active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
+        active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     }
+    auto progress_bar =
+        std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
+    progress_bar->set_auto_finish(false);
+    progress_bar->start();
+    active_progress_bar = progress_bar.get();
+    multi_progress_bar.add_bar(std::move(progress_bar));
+}
 
-    void script_start(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
-        libdnf5::rpm::Nevra nevra,
-        libdnf5::rpm::TransactionCallbacks::ScriptType type) override {
-        active_progress_bar->add_message(
-            libdnf5::cli::progressbar::MessageType::INFO,
-            fmt::format("Running {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
-        multi_progress_bar.print();
+bool RpmTransCB::is_time_to_print() {
+    auto now = std::chrono::steady_clock::now();
+    auto delta = now - prev_print_time;
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+    if (ms > 100) {
+        // 100ms equals to 10 FPS and that seems to be smooth enough
+        prev_print_time = now;
+        return true;
     }
-
-    void script_stop(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
-        libdnf5::rpm::Nevra nevra,
-        libdnf5::rpm::TransactionCallbacks::ScriptType type,
-        [[maybe_unused]] uint64_t return_code) override {
-        active_progress_bar->add_message(
-            libdnf5::cli::progressbar::MessageType::INFO,
-            fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
-        multi_progress_bar.print();
-    }
-
-    void elem_progress(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
-        [[maybe_unused]] uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
-        //std::cout << "Element progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;
-    }
-
-    void verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(amount));
-        if (is_time_to_print()) {
-            multi_progress_bar.print();
-        }
-    }
-
-    void verify_start([[maybe_unused]] uint64_t total) override {
-        new_progress_bar(static_cast<int64_t>(total), "Verify package files");
-    }
-
-    void verify_stop([[maybe_unused]] uint64_t total) override {
-        active_progress_bar->set_ticks(static_cast<int64_t>(total));
-        multi_progress_bar.print();
-    }
-
-private:
-    void new_progress_bar(int64_t total, const std::string & descr) {
-        if (active_progress_bar &&
-            active_progress_bar->get_state() != libdnf5::cli::progressbar::ProgressBarState::ERROR) {
-            active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
-        }
-        auto progress_bar =
-            std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
-        progress_bar->set_auto_finish(false);
-        progress_bar->start();
-        active_progress_bar = progress_bar.get();
-        multi_progress_bar.add_bar(std::move(progress_bar));
-    }
-
-    static bool is_time_to_print() {
-        auto now = std::chrono::steady_clock::now();
-        auto delta = now - prev_print_time;
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-        if (ms > 100) {
-            // 100ms equals to 10 FPS and that seems to be smooth enough
-            prev_print_time = now;
-            return true;
-        }
-        return false;
-    }
-
-    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
-
-    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
-    Context & context;
-};
+    return false;
+}
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
-}  // namespace
-
 void Context::download_and_run(libdnf5::base::Transaction & transaction) {
+    if (should_store_offline) {
+        base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+    }
     transaction.download();
 
     if (base.get_config().get_downloadonly_option().get_value()) {
@@ -461,6 +447,65 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
         std::cerr << entry << std::endl;
     }
     // TODO(mblaha): print a summary of successful transaction
+
+    if (should_store_offline) {
+        store_offline(transaction);
+        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
+                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+                     "offline clean`."
+                  << std::endl;
+    }
+}
+
+void Context::store_offline(libdnf5::base::Transaction & transaction) {
+    const auto & installroot = base.get_config().get_installroot_option().get_value();
+    const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+    std::filesystem::create_directories(offline_datadir);
+
+    const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
+    dnf5::offline::OfflineTransactionState state{state_path};
+
+    if (state.get_data().status != dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+        std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
+                  << "\t" << state.get_data().cmd_line << std::endl
+                  << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
+        if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+            throw libdnf5::cli::SilentCommandExitError(0);
+        }
+    }
+
+    const std::filesystem::path transaction_json_path{offline_datadir / dnf5::offline::TRANSACTION_JSON_FILENAME};
+
+    const std::string json = transaction.serialize();
+
+    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
+
+    transaction_json_file.write(json);
+    transaction_json_file.close();
+
+    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
+    state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
+
+    std::vector<std::string> command_vector;
+    auto * current_command = get_selected_command();
+    while (current_command != get_root_command()) {
+        command_vector.insert(command_vector.begin(), current_command->get_argument_parser_command()->get_id());
+        current_command = current_command->get_parent_command();
+    }
+    state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
+    state.get_data().cmd_line = get_cmdline();
+
+    const auto & detected_releasever = libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        state.get_data().system_releasever = *detected_releasever;
+    }
+    state.get_data().target_releasever = base.get_vars()->get_value("releasever");
+
+    if (!base.get_config().get_module_platform_id_option().empty()) {
+        state.get_data().module_platform_id = base.get_config().get_module_platform_id_option().get_value();
+    }
+
+    state.write();
 }
 
 libdnf5::Goal * Context::get_goal(bool new_if_not_exist) {

@@ -19,7 +19,7 @@
 .. _needs_restarting_plugin_ref-label:
 
 #########################
- Needs-restarting Command
+ Needs-Restarting Command
 #########################
 
 Synopsis
@@ -40,4 +40,4 @@ Options
 =======
 
 ``-s, --services``
-    List systemd services that need restarting. If the package that provides the service, or any of its dependencies, have been updated since the service started, then restarting the service will be recommended. Note that this approach is quite aggressive to recommend a restart when one may not be strictly necessary.
+    | List systemd services that need restarting. If the package that provides the service, or any of its dependencies, have been updated since the service started, then restarting the service will be recommended. Note that this approach is quite aggressive to recommend a restart when one may not be strictly necessary.

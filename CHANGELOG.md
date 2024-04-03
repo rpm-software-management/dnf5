@@ -1,3 +1,24 @@
+# 5.1.17
+
+- dnf5daemon: Remove reposdir from allowed config overrides
+- Update translations from weblate
+
+# 5.1.16
+
+- Update translations from weblate
+- Document system-upgrade aliases
+- Improved Bash Completion
+- Print command line hints after resolve failure
+- Docuent Advisory.list() API usage
+- Add NEVRA field to advisory packages in dnf5daemon
+- Review and fix missing commands
+- Document dnf5daemon advisory
+- Document system-upgrade
+- system-upgrade: offline status subcommand
+- Add aliases `offline-distrosync`, `offline-upgrade`
+- Add `system-upgrade --offline` option
+- Add `offline`, `system-upgrade` commands
+
 # 5.1.15
 
 - Update translations from weblate

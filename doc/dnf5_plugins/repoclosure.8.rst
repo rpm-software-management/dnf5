@@ -36,38 +36,36 @@ The ``repoclosure`` command allows you to analyze package metadata from multiple
 By default, ``repoclosure`` considers all enabled repositories when checking dependencies. However, you can customize the set of repositories by using standard DNF5 options such as ``--repo``, ``--enable-repo``, or ``--disable-repo``.
 
 
-
 Options
 =======
 
 ``--arch <arch>``
-    Query only packages for specified architecture, can be specified multiple times (default is all
-    compatible architectures with your system).
+    | Query only packages for specified architecture, can be specified multiple times (default is all compatible architectures with your system).
 
 ``--best``
-    Check only the newest packages per arch.
+    | Check only the newest packages per arch.
 
 ``--check <repoid>``
-    Specify repositories to check, can be specified multiple times (default is all enabled repositories).
+    | Specify repositories to check, can be specified multiple times (default is all enabled repositories).
 
 ``--newest``
-    Check only the newest packages in the repos.
+    | Check only the newest packages in the repos.
 
 ``<pkg-spec>``
-    Check closure for this package only.
+    | Check closure for this package only.
 
 
 Examples
 ========
 
 ``dnf5 repoclosure``
-    Display a list of unresolved dependencies for all enabled repositories.
+    | Display a list of unresolved dependencies for all enabled repositories.
 
 ``dnf5 repoclosure --repo rawhide --arch noarch --arch x86_64``
-    Display a list of unresolved dependencies for rawhide repository and packages with architecture noarch and x86_64.
+    | Display a list of unresolved dependencies for rawhide repository and packages with architecture noarch and x86_64.
 
 ``dnf5 repoclosure --repo rawhide zmap``
-    Display a list of unresolved dependencies for zmap package from rawhide repository.
+    | Display a list of unresolved dependencies for zmap package from rawhide repository.
 
 ``dnf5 repoclosure --repo rawhide --check myrepo``
-    Display a list of unresolved dependencies for myrepo, an add-on for the rawhide repository.
+    | Display a list of unresolved dependencies for myrepo, an add-on for the rawhide repository.

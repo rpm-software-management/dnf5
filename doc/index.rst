@@ -19,7 +19,6 @@ Welcome to DNF5's documentation!
     misc/index
     best_practices/index
     templates/index
-    migration_guide
     changes
 
 

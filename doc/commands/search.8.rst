@@ -46,6 +46,9 @@ Options
     | Search patterns also inside `Description` and `URL` fields.
     | By applying this option the search lists packages that match at least one of the keys (OR operation).
 
+``--showduplicates``
+    | Show all versions of packages, not only the latest ones.
+
 
 Examples
 ========

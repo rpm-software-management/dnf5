@@ -38,26 +38,26 @@ Subcommands
 ===========
 
 ``list``
-    List Copr repositories.
+    | List Copr repositories.
 
 ``enable <project-spec> [<chroot>]``
-    Download the repository info from a Copr server and install it as a `/etc/yum.repos.d/*.repo` file.
+    | Download the repository info from a Copr server and install it as a `/etc/yum.repos.d/*.repo` file.
 
 ``disable <project-spec>``
-    Disable specified Copr repository (if exists), keep `/etc/yum.repos.d/*.repo` file - just set enabled=0.
+    | Disable specified Copr repository (if exists), keep `/etc/yum.repos.d/*.repo` file - just set enabled=0.
 
 ``remove <project-spec>``
-    Remove specified Copr repository from the system. Also removes the `/etc/yum.repos.d/*.repo` file.
+    | Remove specified Copr repository from the system. Also removes the `/etc/yum.repos.d/*.repo` file.
 
 ``debug``
-    Print info about the system useful for debugging.
+    | Print info about the system useful for debugging.
 
 
 Options
 =======
 
 ``--hub``
-    Copr hub (the web-UI/API server) hostname. Defaults to `copr.fedorainfracloud.org`.
+    | Copr hub (the web-UI/API server) hostname. Defaults to `copr.fedorainfracloud.org`.
 
 
 Arguments
@@ -87,10 +87,10 @@ Examples
 ========
 
 ``dnf5 copr enable rhscl/perl516 epel-6-x86_64``
-    Enable the rhscl/perl516 Copr repository, using the epel-6-x86_64 chroot.
+    | Enable the rhscl/perl516 Copr repository, using the epel-6-x86_64 chroot.
 
 ``dnf5 copr disable rhscl/perl516``
-    Disable the rhscl/perl516 Copr repository
+    | Disable the rhscl/perl516 Copr repository
 
 ``dnf5 copr list``
-    List Copr repositories configured on the system.
+    | List Copr repositories configured on the system.

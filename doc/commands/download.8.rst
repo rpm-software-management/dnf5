@@ -38,6 +38,9 @@ defined in ``package-spec`` arguments to the current working directory.
 Options
 =======
 
+``--arch``
+    | Limit to packages of given architectures. This option can be used multiple times.
+
 ``--resolve``
     | Resolve dependencies of specified packages and download missing ones.
 
@@ -47,17 +50,15 @@ Options
 ``--destdir=<path>``
     | Set directory used for downloading packages to. Default location is to the current working directory.
 
+``--srpm``
+    | Download the source rpm. Enables source repositories of all enabled binary repositories.
+
 ``--url``
     | Prints the list of URLs where the rpms can be downloaded instead of downloading.
 
 ``--urlprotocol``
     | To be used together with ``--url``. It filters out the URLs to the specified protocols: ``http``, ``https``, ``ftp``, or ``file``. This option can be used multiple times.
 
-``--arch``
-    | Limit to packages of given architectures. This option can be used multiple times.
-
-``--srpm``
-    | Download the source rpm. Enables source repositories of all enabled binary repositories.
 
 Examples
 ========

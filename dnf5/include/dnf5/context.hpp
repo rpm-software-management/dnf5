@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "version.hpp"
 
 #include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/goal.hpp>
@@ -77,6 +78,8 @@ public:
     std::vector<std::pair<std::string, std::string>> repos_from_path;
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
+
+    void store_offline(libdnf5::base::Transaction & transaction);
 
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
@@ -142,17 +145,25 @@ public:
 
     void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
 
+    // Store the transaction to be run later in a minimal boot environment,
+    // using `dnf5 offline`
+    void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
+    bool get_should_store_offline() const { return should_store_offline; }
+
 private:
     std::string cmdline;
 
     /// Points to user comment.
     const char * comment{nullptr};
 
+    bool should_store_offline = false;
+
     bool quiet{false};
     bool dump_main_config{false};
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
     bool show_new_leaves{false};
+    std::string get_cmd_line();
 
     std::reference_wrapper<std::ostream> output_stream = std::cout;
 
@@ -185,6 +196,86 @@ public:
 
 private:
     Actions action;
+};
+
+class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
+public:
+    RpmTransCB(Context & context);
+    ~RpmTransCB();
+    libdnf5::cli::progressbar::MultiProgressBar * get_multi_progress_bar();
+
+    void install_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
+    void install_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override;
+
+    void transaction_start(uint64_t total) override;
+
+    void transaction_stop([[maybe_unused]] uint64_t total) override;
+
+    void uninstall_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
+
+    void uninstall_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+
+    void unpack_error(const libdnf5::rpm::TransactionItem & item) override;
+
+    void cpio_error(const libdnf5::rpm::TransactionItem & item) override;
+
+    void script_error(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
+        uint64_t return_code) override;
+
+    void script_start(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type) override;
+
+    void script_stop(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
+        [[maybe_unused]] uint64_t return_code) override;
+
+    void elem_progress(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+        [[maybe_unused]] uint64_t amount,
+        [[maybe_unused]] uint64_t total) override;
+
+    void verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) override;
+
+    void verify_start([[maybe_unused]] uint64_t total) override;
+
+    void verify_stop([[maybe_unused]] uint64_t total) override;
+
+private:
+    void new_progress_bar(int64_t total, const std::string & descr);
+
+    static bool is_time_to_print();
+
+    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    Context & context;
 };
 
 void run_transaction(libdnf5::rpm::Transaction & transaction);

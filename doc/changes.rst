@@ -156,6 +156,14 @@ Needs-restarting command
  * Dropped ``-r, --reboothint`` option; this is now the default behavior.
  * Dropped ``-u, --useronly`` option.
 
+Offline-distrosync command
+--------------------------
+ * Now an alias of ``dnf5 distro-sync --offline``
+
+Offline-upgrade command
+--------------------------
+ * Now an alias of ``dnf5 upgrade --offline``
+
 Remove command
 --------------
  * Command does not remove packages according to provides, but only according NEVRA or file provide match
@@ -187,6 +195,10 @@ Repoquery command
  * Option ``--resolve`` was changed to ``--providers-of=PACKAGE_ATTRIBUTE``. It no longer interacts with the formatting ``--requires``,
    ``--provides``, ``--suggests``,... options instead it takes the PACKAGE_ATTRIBUTE value directly.
    E.g., ``dnf rq --resolve --requires glibc`` -> ``dnf rq --providers-of=requires glibc``.
+
+System-upgrade command
+--------------------------
+ * Moved from a plugin to a built-in command
 
 Upgrade command
 ---------------
