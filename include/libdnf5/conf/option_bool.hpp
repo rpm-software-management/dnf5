@@ -48,11 +48,8 @@ public:
         bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals);
 
     OptionBool(const OptionBool & src);
-    OptionBool(OptionBool && src) noexcept = default;
-    ~OptionBool() override = default;
 
-    OptionBool & operator=(const OptionBool & src);
-    OptionBool & operator=(OptionBool && src) noexcept = default;
+    ~OptionBool() override = default;
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.clone()
