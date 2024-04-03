@@ -1,3 +1,8 @@
+# 5.1.17
+
+- dnf5daemon: Remove reposdir from allowed config overrides
+- Update translations from weblate
+
 # 5.1.16
 
 - Update translations from weblate
