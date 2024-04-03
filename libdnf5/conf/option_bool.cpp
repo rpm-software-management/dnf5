@@ -34,24 +34,6 @@ OptionBool::OptionBool(const OptionBool & src) : Option(src), default_value(src.
     }
 }
 
-OptionBool & OptionBool::operator=(const OptionBool & src) {
-    assert_not_locked();
-
-    if (this == &src) {
-        return *this;
-    }
-    if (src.true_values) {
-        true_values = std::make_unique<std::vector<std::string>>(*src.true_values);
-    }
-    if (src.false_values) {
-        false_values = std::make_unique<std::vector<std::string>>(*src.false_values);
-    }
-    default_value = src.default_value;
-    value = src.value;
-    return *this;
-}
-
-
 OptionBool::OptionBool(
     bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
     : Option(Priority::DEFAULT),
