@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "logger.hpp"
 
+#include "libdnf5/common/impl_ptr.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -33,26 +35,28 @@ namespace libdnf5 {
 class LogRouter : public Logger {
 public:
     /// Constructs a new LogRouter instance with an empty set of destination loggers.
-    LogRouter() = default;
+    LogRouter();
+
+    ~LogRouter();
 
     /// Constructs a new LogRouter instance and sets the destination loggers.
-    LogRouter(std::vector<std::unique_ptr<Logger>> && loggers) : loggers(std::move(loggers)) {}
+    LogRouter(std::vector<std::unique_ptr<Logger>> && loggers);
 
     /// Moves (registers) the "logger" into the log router. It gets next free index number.
-    void add_logger(std::unique_ptr<Logger> && logger) { loggers.push_back(std::move(logger)); }
+    void add_logger(std::unique_ptr<Logger> && logger);
 
     /// Returns pointer to the logger at the "index" position.
-    Logger * get_logger(size_t index) { return loggers.at(index).get(); }
+    Logger * get_logger(size_t index);
 
     /// Removes logger at the "index" position from LogRouter.
     /// The array of the loggers is squeezed. Index of the loggers behind removed logger is decreased by one.
     std::unique_ptr<Logger> release_logger(size_t index);
 
     /// Swaps the logger at the "index" position with another "logger".
-    void swap_logger(std::unique_ptr<Logger> & logger, size_t index) { loggers.at(index).swap(logger); }
+    void swap_logger(std::unique_ptr<Logger> & logger, size_t index);
 
     /// Returns number of loggers registered in LogRouter.
-    size_t get_loggers_count() const noexcept { return loggers.size(); }
+    size_t get_loggers_count() const noexcept;
 
     void log_line(Level level, const std::string & message) noexcept override;
 
@@ -63,7 +67,8 @@ public:
         const std::string & message) noexcept override;
 
 private:
-    std::vector<std::unique_ptr<Logger>> loggers;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5
