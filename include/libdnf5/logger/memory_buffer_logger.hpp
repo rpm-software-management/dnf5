@@ -22,9 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "logger.hpp"
 
-#include <mutex>
-#include <vector>
-
+#include "libdnf5/common/impl_ptr.hpp"
 
 namespace libdnf5 {
 
@@ -40,6 +38,7 @@ public:
     };
 
     explicit MemoryBufferLogger(std::size_t max_items_to_keep, std::size_t reserve = 0);
+    ~MemoryBufferLogger();
 
     void write(
         const std::chrono::time_point<std::chrono::system_clock> & time,
@@ -47,16 +46,14 @@ public:
         Level level,
         const std::string & message) noexcept override;
 
-    std::size_t get_items_count() const { return items.size(); }
+    std::size_t get_items_count() const;
     const Item & get_item(std::size_t item_idx) const;
     void clear() noexcept;
     void write_to_logger(Logger & logger);
 
 private:
-    mutable std::mutex items_mutex;
-    std::size_t max_items;  // rotation, oldest messages are replaced
-    std::size_t first_item_idx;
-    std::vector<Item> items;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5
