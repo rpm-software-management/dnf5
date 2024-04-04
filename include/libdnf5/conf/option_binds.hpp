@@ -77,6 +77,10 @@ public:
     using iterator = Container::iterator;
     using const_iterator = Container::const_iterator;
 
+    OptionBinds();
+    OptionBinds(const OptionBinds & src);
+    ~OptionBinds();
+
     Item & add(
         const std::string & id,
         Option & option,
@@ -86,19 +90,20 @@ public:
     Item & add(const std::string & id, Option & option);
     Item & at(const std::string & id);
     const Item & at(const std::string & id) const;
-    bool empty() const noexcept { return items.empty(); }
-    std::size_t size() const noexcept { return items.size(); }
-    iterator begin() noexcept { return items.begin(); }
-    const_iterator begin() const noexcept { return items.begin(); }
-    const_iterator cbegin() const noexcept { return items.cbegin(); }
-    iterator end() noexcept { return items.end(); }
-    const_iterator end() const noexcept { return items.end(); }
-    const_iterator cend() const noexcept { return items.cend(); }
-    iterator find(const std::string & id) { return items.find(id); }
-    const_iterator find(const std::string & id) const { return items.find(id); }
+    bool empty() const noexcept;
+    std::size_t size() const noexcept;
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cend() const noexcept;
+    iterator find(const std::string & id);
+    const_iterator find(const std::string & id) const;
 
 private:
-    Container items;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5

@@ -83,18 +83,28 @@ bool OptionBinds::Item::get_is_append_option() const {
 
 
 // =========== OptionBinds class ===============
+class OptionBinds::Impl {
+private:
+    friend OptionBinds;
+
+    Container items;
+};
+
+OptionBinds::OptionBinds() : p_impl(new Impl()) {}
+OptionBinds::OptionBinds(const OptionBinds & src) = default;
+OptionBinds::~OptionBinds() = default;
 
 OptionBinds::Item & OptionBinds::at(const std::string & id) {
-    auto item = items.find(id);
-    if (item == items.end()) {
+    auto item = p_impl->items.find(id);
+    if (item == p_impl->items.end()) {
         throw OptionBindsOptionNotFoundError(id);
     }
     return item->second;
 }
 
 const OptionBinds::Item & OptionBinds::at(const std::string & id) const {
-    auto item = items.find(id);
-    if (item == items.end()) {
+    auto item = p_impl->items.find(id);
+    if (item == p_impl->items.end()) {
         throw OptionBindsOptionNotFoundError(id);
     }
     return item->second;
@@ -106,21 +116,53 @@ OptionBinds::Item & OptionBinds::add(
     Item::NewStringFunc new_string_func,
     Item::GetValueStringFunc get_value_string_func,
     bool add_value) {
-    auto item = items.find(id);
-    if (item != items.end()) {
+    auto item = p_impl->items.find(id);
+    if (item != p_impl->items.end()) {
         throw OptionBindsOptionAlreadyExistsError(id);
     }
-    auto res = items.emplace(id, Item(option, std::move(new_string_func), std::move(get_value_string_func), add_value));
+    auto res = p_impl->items.emplace(
+        id, Item(option, std::move(new_string_func), std::move(get_value_string_func), add_value));
     return res.first->second;
 }
 
 OptionBinds::Item & OptionBinds::add(const std::string & id, Option & option) {
-    auto item = items.find(id);
-    if (item != items.end()) {
+    auto item = p_impl->items.find(id);
+    if (item != p_impl->items.end()) {
         throw OptionBindsOptionAlreadyExistsError(id);
     }
-    auto res = items.emplace(id, Item(option));
+    auto res = p_impl->items.emplace(id, Item(option));
     return res.first->second;
+}
+
+bool OptionBinds::empty() const noexcept {
+    return p_impl->items.empty();
+}
+std::size_t OptionBinds::size() const noexcept {
+    return p_impl->items.size();
+}
+OptionBinds::iterator OptionBinds::begin() noexcept {
+    return p_impl->items.begin();
+}
+OptionBinds::const_iterator OptionBinds::begin() const noexcept {
+    return p_impl->items.begin();
+}
+OptionBinds::const_iterator OptionBinds::cbegin() const noexcept {
+    return p_impl->items.cbegin();
+}
+OptionBinds::iterator OptionBinds::end() noexcept {
+    return p_impl->items.end();
+}
+OptionBinds::const_iterator OptionBinds::end() const noexcept {
+    return p_impl->items.end();
+}
+OptionBinds::const_iterator OptionBinds::cend() const noexcept {
+    return p_impl->items.cend();
+}
+OptionBinds::iterator OptionBinds::find(const std::string & id) {
+    return p_impl->items.find(id);
+}
+OptionBinds::const_iterator OptionBinds::find(const std::string & id) const {
+    return p_impl->items.find(id);
 }
 
 }  // namespace libdnf5
