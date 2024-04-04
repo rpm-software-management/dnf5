@@ -33,9 +33,10 @@ namespace libdnf5 {
 /// Base class for configurations objects
 class Config {
 public:
-    OptionBinds & opt_binds() noexcept { return binds; }
+    OptionBinds & opt_binds() noexcept;
 
-    virtual ~Config() = default;
+    Config();
+    virtual ~Config();
 
     virtual void load_from_parser(
         const ConfigParser & parser,
@@ -45,7 +46,8 @@ public:
         Option::Priority priority);
 
 private:
-    OptionBinds binds;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
