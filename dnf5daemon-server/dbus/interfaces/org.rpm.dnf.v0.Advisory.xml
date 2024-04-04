@@ -36,23 +36,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
             - advisory_attrs: list of strings
                 List of advisory attributes that are returned in `advisories` array. Supported attributes are "advisoryid", "name", "title", "type", "severity", "status", "vendor", "description", "buildtime", "message", "rights", "collections", and "references".
-            - availability: string
-                One of "available" (default if filter is not present), "all", "installed", or "updates".
-            - name: list of strings
+            - availability: string, default "available"
+                Limit returned advisories based on their relation to installed packages. Accepted values are
+
+                - "available" to return only advisories containing newer versions of installed packages
+
+                - "all" - to return all advisories
+
+                - "installed" - to return only advisories containing equal or older versions of installed packages
+
+                - "updates" - to return only advisories containing newer versions of installed packages for which an update is available
+            - names: list of strings
                 Consider only advisories with one of given names.
-            - type: list of strings
+            - types: list of strings
                 Consider only advisories of given types. Possible types are "security", "bugfix", "enhancement", and "newpackage".
             - contains_pkgs: list of strings
                 Consider only advisories containing one of given packages.
-            - severity: list of strings
+            - severities: list of strings
                 Consider only advisories of given severity. Possible values are "critical", "important", "moderate", "low", and "none".
-            - reference_bz: list of strings
+            - reference_bzs: list of strings
                 Consider only advisories referencing given Bugzilla ticket ID. Expected values are numeric IDs, e.g. 123456.
-            - reference_cve: list of strings
+            - reference_cves: list of strings
                 Consider only advisoried referencing given CVE ID. Expected values are strings IDs in CVE format, e.g. CVE-2201-0123.
-            - with_bz: boolean
+            - with_bz: boolean, default False
                 Consider only advisories referencing a Bugzilla ticket.
-            - with_cve: boolean
+            - with_cve: boolean, default False
                 Consider only advisories referencing a CVE ticket.
 
         Unknown options are ignored.
