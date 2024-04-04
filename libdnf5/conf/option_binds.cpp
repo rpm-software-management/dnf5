@@ -32,37 +32,53 @@ OptionBindsOptionAlreadyExistsError::OptionBindsOptionAlreadyExistsError(const s
     : OptionBindsError(M_("Option \"{}\" already exists"), id) {}
 
 // ========== OptionBinds::Item class ===============
+class OptionBinds::Item::Impl {
+public:
+    Impl(Option & option, NewStringFunc && new_string_func, GetValueStringFunc && get_value_string_func, bool add_value)
+        : option(&option),
+          new_str_func(std::move(new_string_func)),
+          get_value_str_func(std::move(get_value_string_func)),
+          is_append_option(add_value) {}
+
+    Impl(Option & option) : option(&option){};
+
+private:
+    friend OptionBinds::Item;
+    Option * option;
+    NewStringFunc new_str_func;
+    GetValueStringFunc get_value_str_func;
+    bool is_append_option{false};  // hint that new value be added/appended
+};
 
 OptionBinds::Item::Item(
     Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value)
-    : option(&option),
-      new_str_func(std::move(new_string_func)),
-      get_value_str_func(std::move(get_value_string_func)),
-      is_append_option(add_value) {}
+    : p_impl(new Impl(option, std::move(new_string_func), std::move(get_value_string_func), add_value)) {}
 
-OptionBinds::Item::Item(Option & option) : option(&option) {}
+OptionBinds::Item::Item(Option & option) : p_impl(new Impl(option)) {}
+
+OptionBinds::Item::~Item() = default;
 
 Option::Priority OptionBinds::Item::get_priority() const {
-    return option->get_priority();
+    return p_impl->option->get_priority();
 }
 
 void OptionBinds::Item::new_string(Option::Priority priority, const std::string & value) {
-    if (new_str_func) {
-        new_str_func(priority, value);
+    if (p_impl->new_str_func) {
+        p_impl->new_str_func(priority, value);
     } else {
-        option->set(priority, value);
+        p_impl->option->set(priority, value);
     }
 }
 
 std::string OptionBinds::Item::get_value_string() const {
-    if (get_value_str_func) {
-        return get_value_str_func();
+    if (p_impl->get_value_str_func) {
+        return p_impl->get_value_str_func();
     }
-    return option->get_value_string();
+    return p_impl->option->get_value_string();
 }
 
 bool OptionBinds::Item::get_is_append_option() const {
-    return is_append_option;
+    return p_impl->is_append_option;
 }
 
 

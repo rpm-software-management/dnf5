@@ -57,6 +57,7 @@ public:
         using NewStringFunc = std::function<void(Option::Priority, const std::string &)>;
         using GetValueStringFunc = std::function<const std::string &()>;
 
+        ~Item();
         Option::Priority get_priority() const;
         void new_string(Option::Priority priority, const std::string & value);
         std::string get_value_string() const;
@@ -67,10 +68,9 @@ public:
 
         Item(Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value);
         explicit Item(Option & option);
-        Option * option;
-        NewStringFunc new_str_func;
-        GetValueStringFunc get_value_str_func;
-        bool is_append_option{false};  // hint that new value be added/appended
+
+        class Impl;
+        ImplPtr<Impl> p_impl;
     };
 
     using Container = std::map<std::string, Item>;
