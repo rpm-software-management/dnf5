@@ -31,11 +31,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @packages: array of returned packages with requested attributes
 
         Get list of packages that match to given filters.
+        Since the method returns packages directly in the D-Bus method reply
+        message, which has a limited size, there is a possibility that the
+        requested package set size would exceed this limit. If you request a
+        large number of packages and/or a great number of package attributes,
+        please consider using the list_fd() method.
 
         Following options and filters are supported:
 
             - package_attrs: list of strings
-                list of package attributes that are returned
+                list of package attributes that are returned. Supported attributes are name, epoch, version, release, arch, repo_id, from_repo_id, is_installed, install_size, download_size, sourcerpm, summary, url, license, description, files, changelogs, provides, requires, requires_pre, conflicts, obsoletes, recommends, suggests, enhances, supplements, evr, nevra, full_nevra, reason, vendor, group.
             - with_nevra: bool (default true)
                 match patterns against available packages NEVRAs
             - with_provides: bool (default true)
@@ -52,7 +57,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
             - patterns: list of strings
                 any package matching to any of patterns is returned
             - scope: string (default "all")
-                limit packages to one of "all", "installed", "available", "upgrades", "upradable"
+                limit packages to one of "all", "installed", "available", "upgrades", "upgradable"
             - arch: list of strings
                 limit the resulting set only to packages of given architectures
             - repo: list of strings
@@ -92,9 +97,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @file_descriptor: File descriptor opened for writing used to transfer data
         @transfer_id: Identifier of this transfer. Used for signaling the end of transfer.
 
-        Get list of packages that match to given filters.
-        Packages are transfered in form of stream of JSON objects. Each JSON
-        object is a dictionary representing one package.
+        Retrieve a list of packages that match the provided filters.
+        Packages are transmitted as a stream of JSON objects, with each JSON object representing one package as a dictionary. This stream is then written into the given file_descriptor.
+        Unlike the list() method, this approach does not encounter issues with large output data.
+        The server has a 30-second timeout during which it waits for the client to read data from the pipe if the pipe is full.
 
         The same options as in list() method are supported.
     -->
