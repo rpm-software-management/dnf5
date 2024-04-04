@@ -65,9 +65,9 @@ public:
     /// Filter Advisories by type.
     ///
     /// @param type         Possible types are: "security", "bugfix", "enhancement", "newpackage".
-    /// @param cmp_type     What comparator to use with type, allows: EQ.
-    void filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
-    void filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+    /// @param cmp_type     What comparator to use with type, allows: IEXACT (default), EQ.
+    void filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
+    void filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
 
     /// Filter Advisories by reference.
     ///
@@ -87,10 +87,10 @@ public:
     /// Filter Advisories by severity.
     ///
     /// @param severity     Possible severities are: "critical", "important", "moderate", "low", "none".
-    /// @param cmp_type     What comparator to use with severity, allows: EQ.
-    void filter_severity(const std::string & severity, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+    /// @param cmp_type     What comparator to use with severity, allows: IEXACT (default), EQ.
+    void filter_severity(const std::string & severity, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
     void filter_severity(
-        const std::vector<std::string> & severities, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+        const std::vector<std::string> & severities, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
 
     /// Filter out advisories that don't contain at least one AdvisoryPackage that has a counterpart Package in package_set
     /// such that they have matching name and architecture and also their epoch-version-release complies to cmp_type.
