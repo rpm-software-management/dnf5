@@ -227,12 +227,16 @@ bool Session::read_all_repos() {
         }
 
         try {
-            base->get_repo_sack()->update_and_load_enabled_repos(load_system_repo);
+            if (load_system_repo) {
+                base->get_repo_sack()->load_repos();
+            } else {
+                base->get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+            }
         } catch (const std::runtime_error & ex) {
             retval = false;
         }
     } else if (load_system_repo) {
-        base->get_repo_sack()->get_system_repo()->load();
+        base->get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
     }
 
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
