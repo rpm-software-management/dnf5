@@ -6,6 +6,7 @@ repo_sack->create_repos_from_system_configuration();
 // If out of date, downloads fresh repositories' metadata and loads the
 // repositories into memory.
 //
-// `true` as first argument says to also load the @System repository (the
-// packages installed on the system, loaded from the rpmdb).
-repo_sack->update_and_load_enabled_repos(true);
+// load_repos() without any arguments says to load both the @System
+// repository (the packages installed on the system, loaded from the rpmdb)
+// and the available repositories.
+repo_sack->load_repos();
