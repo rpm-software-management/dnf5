@@ -40,7 +40,7 @@ public:
               command,
               "available",
               '\0',
-              _("Show advisories containing newer versions of installed packages."),
+              _("Show advisories containing newer versions of installed packages. This is the default behavior."),
               false) {}
 };
 

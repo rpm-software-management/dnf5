@@ -57,7 +57,7 @@ Options
     | Show advisories containing any version of installed packages.
 
 ``--available``
-    | Show advisories containing newer versions of installed packages.
+    | Show advisories containing newer versions of installed packages. This is the default behavior.
 
 ``--installed``
     | Show advisories containing equal and older versions of installed packages.
