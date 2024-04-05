@@ -101,9 +101,11 @@ public:
     /// configuration of protected_packages (glob:).
     /// To prevent differences between configuration and internal Base settings, following configurations
     /// will be locked: installroot, varsdir.
-    /// The method is supposed to be called after configuration is updated, application plugins applied
+    /// The method is supposed to be called after configuration and vars are updated, application plugins applied
     /// their pre configuration modification in configuration, but before repositories are loaded or any Package
-    /// or Advisory query created.
+    /// or Advisory query created. The method is recommended to be called before loading  repositories, because
+    /// not all variables for substitutions might be available. Caution - modification of vars after this call
+    /// might be problematic, because architecture is already fixed for our solver.
     /// Calling the method for the second time result in throwing an exception
     void setup();
 
