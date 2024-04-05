@@ -44,9 +44,11 @@ public:
     libdnf5::repo::RepoWeakPtr add_repo(const std::string & repoid, const std::string & repo_path, bool load = true);
 
     // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
+    // Both add_repo_repomd and add_repo_rpm can be called together only once with load = true
     libdnf5::repo::RepoWeakPtr add_repo_repomd(const std::string & repoid, bool load = true);
 
     // Add (load) a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
+    // Both add_repo_repomd and add_repo_rpm can be called together only once with load = true
     libdnf5::repo::RepoWeakPtr add_repo_rpm(const std::string & repoid, bool load = true);
 
     // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
