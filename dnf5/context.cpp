@@ -177,7 +177,12 @@ void Context::load_repos(bool load_system) {
     }
 
     print_info("Updating and loading repositories:");
-    base.get_repo_sack()->update_and_load_enabled_repos(load_system);
+    if (load_system) {
+        base.get_repo_sack()->load_repos();
+    } else {
+        base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+    }
+
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
         download_callbacks->reset_progress_bar();
     }
@@ -561,15 +566,6 @@ std::vector<std::string> match_specs(
         installed = available = false;
     }
 
-    if (installed) {
-        try {
-            base.get_repo_sack()->get_system_repo()->load();
-            base.get_rpm_package_sack()->load_config_excludes_includes();
-        } catch (...) {
-            // Ignores errors when completing installed packages, other completions may still work.
-        }
-    }
-
     if (available) {
         try {
             // create rpm repositories according configuration files
@@ -587,9 +583,15 @@ std::vector<std::string> match_specs(
                 repo->get_config().get_skip_if_unavailable_option().set(libdnf5::Option::Priority::RUNTIME, true);
             }
 
-            ctx.load_repos(false);
+            ctx.load_repos(installed);
         } catch (...) {
             // Ignores errors when completing available packages, other completions may still work.
+        }
+    } else if (installed) {
+        try {
+            base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
+        } catch (...) {
+            // Ignores errors when completing installed packages, other completions may still work.
         }
     }
 

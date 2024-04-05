@@ -19,6 +19,6 @@ repo.get_config().baseurl = baseurl
 # If out of date, downloads fresh metadata of all available repositories and
 # loads the repositories into memory.
 #
-# `False` as first argument says not to load the @System repository (the
-# packages installed on the system).
-repo_sack.update_and_load_enabled_repos(False)
+# `libdnf5.repo.Repo.Type_AVAILABLE` as first argument says to load only the available
+# repositories (repository SYSTEM, that contains installed pacakges, is not loaded).
+repo_sack.load_repos(libdnf5.repo.Repo.Type_AVAILABLE)
