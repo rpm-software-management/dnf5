@@ -254,6 +254,8 @@ RepoWeakPtr RepoSack::get_system_repo() {
  * @warning This function should not be used to load and update repositories. Instead, use `RepoSack::update_and_load_enabled_repos`
  */
 void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
+    libdnf_user_assert(!repos_updated_and_loaded, "RepoSack::updated_and_load_repos has already been called.");
+
     auto logger = base->get_logger();
 
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
@@ -537,31 +539,43 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     fix_group_missing_xml();
 
     base->get_rpm_package_sack()->load_config_excludes_includes();
+    base->get_module_sack()->p_impl->module_filtering();
+    repos_updated_and_loaded = true;
 }
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
-    libdnf_user_assert(
-        !p_impl->repos_updated_and_loaded, "RepoSack::updated_and_load_enabled_repos has already been called.");
-
     if (load_system) {
+        load_repos();
+    } else {
+        load_repos(Repo::Type::AVAILABLE);
+    }
+}
+
+void RepoSack::load_repos() {
+    // create the system repository if it does not exist
+    p_impl->base->get_repo_sack()->get_system_repo();
+    libdnf5::repo::RepoQuery repos(p_impl->base);
+    repos.filter_enabled(true);
+    p_impl->update_and_load_repos(repos);
+}
+
+void RepoSack::load_repos(Repo::Type type) {
+    libdnf_user_assert(
+        (type == libdnf5::repo::Repo::Type::AVAILABLE) || (type == libdnf5::repo::Repo::Type::SYSTEM),
+        "RepoSack::load_repos has to be used with libdnf5::repo::Repo::Type::SYSTEM, "
+        "libdnf5::repo::Repo::Type::AVAILABLE or no argument to load both.");
+
+    if (type == Repo::Type::SYSTEM) {
         // create the system repository if it does not exist
         p_impl->base->get_repo_sack()->get_system_repo();
     }
 
     libdnf5::repo::RepoQuery repos(p_impl->base);
     repos.filter_enabled(true);
-
-    if (!load_system) {
-        repos.filter_type(Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
-    }
+    repos.filter_type(type);
 
     p_impl->update_and_load_repos(repos);
-
-    // TODO(jmracek) Replace by call that will resolve active modules and apply modular filtering
-    p_impl->base->get_module_sack()->p_impl->module_filtering();
-
-    p_impl->repos_updated_and_loaded = true;
 }
 
 

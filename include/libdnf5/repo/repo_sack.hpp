@@ -120,6 +120,16 @@ public:
     /// @param load_system Whether to load the system repository
     void update_and_load_enabled_repos(bool load_system);
 
+    /// Downloads (if necessary) repositories of selected type and loads them in parallel.
+    /// load_repos() can be called only once per each RepoSack.
+    /// It also sets up modular filtering.
+    /// @param type What repositories to load (libdnf5::Repo::Type::SYSTEM or libdnf5::Repo::Type::AVAILABLE)
+    void load_repos(Repo::Type type);
+
+    /// Downloads (if necessary) both available and system repositories and loads them in parallel.
+    /// load_repos() can be called only once per each RepoSack.
+    /// It also sets up modular filtering.
+    void load_repos();
 
     RepoSackWeakPtr get_weak_ptr();
 
