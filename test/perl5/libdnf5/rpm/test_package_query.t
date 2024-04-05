@@ -54,9 +54,7 @@ my $repo_cfg = $repo->get_config();
 $repo_cfg->get_baseurl_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
 
 # fetch repo metadata and load it
-my $repos = new libdnf5::repo::RepoQuery($base);
-$repos->filter_id($repoid);
-$repo_sack->update_and_load_repos($repos);
+$repo_sack->load_repos($libdnf5::repo::Repo::Type::AVAILABLE);
 
 #test_size()
 {

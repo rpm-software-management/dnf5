@@ -46,9 +46,7 @@ libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo(
     repo->get_config().get_baseurl_option().set("file://" + repo_path);
 
     if (load) {
-        libdnf5::repo::RepoQuery repos(base);
-        repos.filter_id(repoid);
-        repo_sack->update_and_load_repos(repos);
+        repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
     }
 
     return repo;

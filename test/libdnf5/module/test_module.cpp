@@ -197,7 +197,7 @@ void ModuleTest::test_query() {
 }
 
 void ModuleTest::test_query_latest() {
-    add_repo_repomd("repomd-modules");
+    add_repo_repomd("repomd-modules", false);
     add_repo_repomd("repomd-modules-duplicit");
 
     {  // Check we can see all the modules, even ones with duplicit nscva
@@ -801,12 +801,14 @@ void ModuleTest::test_module_disable_enabled() {
 
 
 void ModuleTest::test_module_reset() {
-    add_repo_repomd("repomd-modules");
-
     // Set state of module berries to ENABLED
+    // This has to be done before the repos are loaded and modules initialized
+    // in load_repos in add_repo_repomd.
     (base.*get(priv_impl()))
         ->get_system_state()
         .set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
+
+    add_repo_repomd("repomd-modules");
 
     // Add module reset goal operation
     libdnf5::Goal goal(base);

@@ -19,6 +19,7 @@ require 'test/unit'
 include Test::Unit::Assertions
 
 require 'libdnf5/base'
+require 'libdnf5/repo'
 
 require 'base_test_case'
 
@@ -95,9 +96,7 @@ class TestRepo < BaseTestCase
         cbs = RepoCallbacks.new()
         repo.set_callbacks(Repo::RepoCallbacksUniquePtr.new(cbs))
 
-        repos = Repo::RepoQuery.new(@base)
-        repos.filter_id(repoid)
-        @repo_sack.update_and_load_repos(repos)
+        @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
 
         assert_equal(1, dl_cbs.start_cnt)
         assert_equal(repoid, dl_cbs.start_what)
