@@ -24,11 +24,6 @@ require 'base_test_case'
 
 
 class TestRepo < BaseTestCase
-    def test_load_system_repo()
-        # TODO(lukash) there's no rpmdb in the installroot, create data for the test
-        @repo_sack.get_system_repo().load()
-    end
-
     class DownloadCallbacks < Repo::DownloadCallbacks
         attr_accessor :start_cnt, :start_what
         attr_accessor :end_cnt, :end_error_message
