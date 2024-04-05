@@ -120,20 +120,6 @@ public:
     /// @param load_system Whether to load the system repository
     void update_and_load_enabled_repos(bool load_system);
 
-    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
-    ///
-    /// Downloads (if necessary) repository metadata and loads them in parallel.
-    ///
-    /// Launches a thread that picks repos from a queue and loads them into
-    /// memory (calling their `load()` method). Then iterates over `repos`,
-    /// potentially downloads fresh metadata (by calling the
-    /// `download_metadata()` method) and then queues them for loading. This
-    /// speeds up the process by loading repos into memory while others are being
-    /// downloaded.
-    ///
-    /// @param repos The repositories to update and load
-    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
-    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
 
     RepoSackWeakPtr get_weak_ptr();
 
@@ -144,13 +130,6 @@ public:
     /// For each enabled repository enable corresponding source repository.
     /// @since 5.0
     void enable_source_repos();
-
-    /// Re-create missing xml definitions for installed groups. Since we do not have
-    /// the state of the group in time of installation, current definition from
-    /// available repositories is going to be used.
-    /// In case the repo does not exist in repositories, only the minimal solvables
-    /// are created from info in system state.
-    void fix_group_missing_xml();
 
     ~RepoSack();
 

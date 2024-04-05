@@ -75,6 +75,29 @@ class RepoSack::Impl {
 public:
     Impl(const libdnf5::BaseWeakPtr & base);
 
+    /// Re-create missing xml definitions for installed groups. Since we do not have
+    /// the state of the group in time of installation, current definition from
+    /// available repositories is going to be used.
+    /// In case the repo does not exist in repositories, only the minimal solvables
+    /// are created from info in system state.
+    void fix_group_missing_xml();
+
+    /// Downloads (if necessary) repository metadata and loads them in parallel.
+    ///
+    /// All repository loading should go though this method.
+    /// It sets up modular filtering and ensures the loading is done only once.
+    ///
+    /// Launches a thread that picks repos from a queue and loads them into
+    /// memory (calling their `load()` method). Then iterates over `repos`,
+    /// potentially downloads fresh metadata (by calling the
+    /// `download_metadata()` method) and then queues them for loading. This
+    /// speeds up the process by loading repos into memory while others are being
+    /// downloaded.
+    ///
+    /// @param repos The repositories to update and load
+    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
+    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
+
 private:
     BaseWeakPtr base;
     WeakPtrGuard<RepoSack, false> sack_guard;
@@ -230,8 +253,8 @@ RepoWeakPtr RepoSack::get_system_repo() {
  * @param import_keys Whether or not to import signing keys
  * @warning This function should not be used to load and update repositories. Instead, use `RepoSack::update_and_load_enabled_repos`
  */
-void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
-    auto logger = p_impl->base->get_logger();
+void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
+    auto logger = base->get_logger();
 
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
@@ -309,12 +332,12 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             finish_sack_loader();
             throw;
         }
-        p_impl->base->get_logger()->warning(
+        base->get_logger()->warning(
             "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"):", repo->get_id());
         const auto & error_lines = utils::string::split(format(e, FormatDetailLevel::Plain), "\n");
         for (const auto & line : error_lines) {
             if (!line.empty()) {
-                p_impl->base->get_logger()->warning(' ' + line);
+                base->get_logger()->warning(' ' + line);
             }
         }
         return false;
@@ -373,7 +396,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
             if (!remote_keys_files.empty()) {
                 // download remote keys files to local temporary files
-                FileDownloader downloader(p_impl->base);
+                FileDownloader downloader(base);
                 downloader.set_fail_fast(false);
                 downloader.set_resume(false);
 
@@ -457,8 +480,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                     // the expired metadata still reflect the origin
                     utimes(
                         repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-                    RepoCache(p_impl->base, repo->get_config().get_cachedir())
-                        .remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                    RepoCache(base, repo->get_config().get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
                     repo->mark_fresh();
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
 
@@ -490,7 +512,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 logger->debug("Downloading metadata for repo \"{}\"", repo->get_config().get_id());
                 auto cache_dir = repo->get_config().get_cachedir();
                 repo->download_metadata(cache_dir);
-                RepoCache(p_impl->base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
                 repo->mark_fresh();
                 repo->read_metadata_cache();
 
@@ -514,7 +536,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
     fix_group_missing_xml();
 
-    p_impl->base->get_rpm_package_sack()->load_config_excludes_includes();
+    base->get_rpm_package_sack()->load_config_excludes_includes();
 }
 
 
@@ -534,7 +556,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
         repos.filter_type(Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
     }
 
-    update_and_load_repos(repos);
+    p_impl->update_and_load_repos(repos);
 
     // TODO(jmracek) Replace by call that will resolve active modules and apply modular filtering
     p_impl->base->get_module_sack()->p_impl->module_filtering();
@@ -713,16 +735,16 @@ void RepoSack::internalize_repos() {
     }
 }
 
-void RepoSack::fix_group_missing_xml() {
-    if (has_system_repo()) {
-        auto & solv_repo = p_impl->system_repo->get_solv_repo();
+void RepoSack::Impl::fix_group_missing_xml() {
+    if (system_repo != nullptr) {
+        auto & solv_repo = system_repo->get_solv_repo();
         auto & group_missing_xml = solv_repo.get_groups_missing_xml();
         auto & environments_missing_xml = solv_repo.get_environments_missing_xml();
         if (group_missing_xml.empty() && environments_missing_xml.empty()) {
             return;
         }
-        auto & logger = *p_impl->base->get_logger();
-        auto & system_state = p_impl->base->p_impl->get_system_state();
+        auto & logger = *base->get_logger();
+        auto & system_state = base->p_impl->get_system_state();
         auto comps_xml_dir = system_state.get_group_xml_dir();
         bool directory_exists = true;
         std::error_code ec;
@@ -732,7 +754,7 @@ void RepoSack::fix_group_missing_xml() {
             directory_exists = false;
         }
         if (!group_missing_xml.empty()) {
-            libdnf5::comps::GroupQuery available_groups(p_impl->base);
+            libdnf5::comps::GroupQuery available_groups(base);
             available_groups.filter_installed(false);
             for (const auto & group_id : group_missing_xml) {
                 bool xml_saved = false;
@@ -768,7 +790,7 @@ void RepoSack::fix_group_missing_xml() {
             }
         }
         if (!environments_missing_xml.empty()) {
-            libdnf5::comps::EnvironmentQuery available_environments(p_impl->base);
+            libdnf5::comps::EnvironmentQuery available_environments(base);
             available_environments.filter_installed(false);
             for (const auto & environment_id : environments_missing_xml) {
                 bool xml_saved = false;
