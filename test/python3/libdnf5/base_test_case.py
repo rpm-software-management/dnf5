@@ -61,9 +61,7 @@ class BaseTestCase(unittest.TestCase):
         repo.get_config().baseurl = "file://" + repo_path
 
         if load:
-            repos = libdnf5.repo.RepoQuery(self.base)
-            repos.filter_id(repoid)
-            self.repo_sack.update_and_load_repos(repos)
+            self.repo_sack.load_repos(libdnf5.repo.Repo.Type_AVAILABLE)
 
         return repo
 
