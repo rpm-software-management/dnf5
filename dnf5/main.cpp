@@ -1209,9 +1209,7 @@ int main(int argc, char * argv[]) try {
                 if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
                     context.load_repos(context.get_load_system_repo());
                 } else if (context.get_load_system_repo()) {
-                    repo_sack->get_system_repo()->load();
-                    // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-                    context.base.get_rpm_package_sack()->load_config_excludes_includes();
+                    repo_sack->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
                 }
             }
 
