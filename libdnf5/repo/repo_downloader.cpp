@@ -223,9 +223,9 @@ bool RepoDownloader::is_metalink_in_sync() try {
     for (auto & hash : hashes) {
         int chksumLen;
         auto chksum = solv_chksum_get(hash.chksum.get(), &chksumLen);
-        char chksumHex[chksumLen * 2 + 1];
-        solv_bin2hex(chksum, chksumLen, chksumHex);
-        if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
+        std::vector<char> chksumHex(static_cast<std::size_t>(chksumLen * 2 + 1), '\0');
+        solv_bin2hex(chksum, chksumLen, chksumHex.data());
+        if (strcmp(chksumHex.data(), hash.lr_metalink_hash->value) != 0) {
             logger.trace(
                 "Sync check: failed for repo \"{}\", {} checksum mismatch",
                 config.get_id(),
@@ -442,14 +442,14 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
             h.set_opt(LRO_FASTESTMIRRORCACHE, fastest_mirror_cache_dir.c_str());
         } else {
             // use already resolved mirror list
-            const char * c_mirrors[mirrors.size() + 1];
-            str_vector_to_char_array(mirrors, c_mirrors);
-            h.set_opt(LRO_URLS, c_mirrors);
+            std::vector<const char *> c_mirrors(mirrors.size() + 1, nullptr);
+            str_vector_to_char_array(mirrors, c_mirrors.data());
+            h.set_opt(LRO_URLS, c_mirrors.data());
         }
     } else if (!config.get_baseurl_option().get_value().empty()) {
-        const char * urls[config.get_baseurl_option().get_value().size() + 1];
-        str_vector_to_char_array(config.get_baseurl_option().get_value(), urls);
-        h.set_opt(LRO_URLS, urls);
+        std::vector<const char *> urls(config.get_baseurl_option().get_value().size() + 1, nullptr);
+        str_vector_to_char_array(config.get_baseurl_option().get_value(), urls.data());
+        h.set_opt(LRO_URLS, urls.data());
     } else {
         throw RepoDownloadError(
             M_("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
