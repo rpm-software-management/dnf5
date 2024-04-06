@@ -30,6 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/rpm/nevra.hpp>
+#include <libdnf5/transaction/transaction_item_action.hpp>
+#include <libdnf5/transaction/transaction_item_reason.hpp>
 #include <libdnf5/utils/to_underlying.hpp>
 #include <libsmartcols/libsmartcols.h>
 
@@ -43,26 +45,8 @@ namespace libdnf5::cli::output {
 enum { COL_NAME, COL_ARCH, COL_EVR, COL_REPO, COL_SIZE };
 
 
-static const char * action_color(libdnf5::transaction::TransactionItemAction action) {
-    switch (action) {
-        case libdnf5::transaction::TransactionItemAction::INSTALL:
-        case libdnf5::transaction::TransactionItemAction::UPGRADE:
-        case libdnf5::transaction::TransactionItemAction::REINSTALL:
-        case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
-        case libdnf5::transaction::TransactionItemAction::ENABLE:
-            return "green";
-        case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
-        case libdnf5::transaction::TransactionItemAction::RESET:
-            return "magenta";
-        case libdnf5::transaction::TransactionItemAction::REMOVE:
-        case libdnf5::transaction::TransactionItemAction::DISABLE:
-            return "red";
-        case libdnf5::transaction::TransactionItemAction::REPLACED:
-            return "halfbright";
-    }
+const char * action_color(libdnf5::transaction::TransactionItemAction action);
 
-    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
-}
 
 class ActionHeaderPrinter {
 public:
