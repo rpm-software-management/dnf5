@@ -1132,12 +1132,7 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
     libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
     bool cmp_glob = (cmp_type & libdnf5::sack::QueryCmp::GLOB) == libdnf5::sack::QueryCmp::GLOB;
 
-    Id repo_id;
-    bool repo_ids[pool->nrepos];
-    for (repo_id = 0; repo_id < pool->nrepos; ++repo_id) {
-        repo_ids[repo_id] = false;
-    }
-
+    std::vector<bool> repo_ids(static_cast<std::size_t>(pool->nrepos), false);
     for (auto & pattern : patterns) {
         libdnf5::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
@@ -1147,10 +1142,11 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
         }
         switch (tmp_cmp_type) {
             case libdnf5::sack::QueryCmp::EQ:
+                Id repo_id;
                 ::Repo * r;
                 FOR_REPOS(repo_id, r) {
                     if (strcmp(r->name, c_pattern) == 0) {
-                        repo_ids[repo_id] = true;
+                        repo_ids[static_cast<std::size_t>(repo_id)] = true;
                         break;
                     }
                 }
@@ -1158,7 +1154,7 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
             case libdnf5::sack::QueryCmp::GLOB:
                 FOR_REPOS(repo_id, r) {
                     if (fnmatch(c_pattern, r->name, 0) == 0) {
-                        repo_ids[repo_id] = true;
+                        repo_ids[static_cast<std::size_t>(repo_id)] = true;
                     }
                 }
                 break;
@@ -1168,7 +1164,7 @@ void PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, lib
     }
     for (Id candidate_id : *p_impl) {
         auto * solvable = pool.id2solvable(candidate_id);
-        if (solvable->repo && repo_ids[solvable->repo->repoid]) {
+        if (solvable->repo && repo_ids[static_cast<std::size_t>(solvable->repo->repoid)]) {
             filter_result.add_unsafe(candidate_id);
         }
     }
