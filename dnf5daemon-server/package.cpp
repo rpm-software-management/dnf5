@@ -59,7 +59,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"vendor", PackageAttribute::vendor},
     {"group", PackageAttribute::group}};
 
-std::vector<std::string> reldeplist_to_strings(const libdnf5::rpm::ReldepList & reldeps) {
+static std::vector<std::string> reldeplist_to_strings(const libdnf5::rpm::ReldepList & reldeps) {
     std::vector<std::string> lst;
     for (auto reldep : reldeps) {
         lst.emplace_back(reldep.to_string());
@@ -67,7 +67,7 @@ std::vector<std::string> reldeplist_to_strings(const libdnf5::rpm::ReldepList & 
     return lst;
 }
 
-std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf5::rpm::Package & libdnf_package) {
+static std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf5::rpm::Package & libdnf_package) {
     std::vector<dnfdaemon::Changelog> changelogs;
 
     for (const auto & chlog : libdnf_package.get_changelogs()) {
@@ -197,7 +197,7 @@ dnfdaemon::KeyValueMap package_to_map(
     return dbus_package;
 }
 
-void add_string_list(json_object * json_pkg, const char * cattr, const std::vector<std::string> & vector) {
+static void add_string_list(json_object * json_pkg, const char * cattr, const std::vector<std::string> & vector) {
     json_object * array = json_object_new_array();
     json_object_object_add(json_pkg, cattr, array);
     for (const auto & elem : vector) {
