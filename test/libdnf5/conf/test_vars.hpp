@@ -32,6 +32,10 @@ class VarsTest : public TestCaseFixture {
     CPPUNIT_TEST(test_vars);
     CPPUNIT_TEST(test_vars_multiple_dirs);
     CPPUNIT_TEST(test_vars_env);
+    CPPUNIT_TEST(test_vars_api);
+    CPPUNIT_TEST(test_vars_api_set_prio);
+    CPPUNIT_TEST(test_vars_api_unset_prio);
+    CPPUNIT_TEST(test_vars_api_releasever);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -40,6 +44,10 @@ public:
     void test_vars();
     void test_vars_multiple_dirs();
     void test_vars_env();
+    void test_vars_api();
+    void test_vars_api_set_prio();
+    void test_vars_api_unset_prio();
+    void test_vars_api_releasever();
 
     std::unique_ptr<libdnf5::Base> base;
 };
