@@ -5,8 +5,8 @@ Changes in DNF5 in comparison to DNF
 The chapter describe differences between ``DNF5`` (https://github.com/rpm-software-management/dnf5) and ``DNF``
 (https://github.com/rpm-software-management/dnf)
 
-Changes on the API:
-===================
+Changes on the API
+==================
 PackageSet::operator[]
 ----------------------
 It was removed due to insufficient O(n^2) performance.
@@ -49,8 +49,8 @@ This allows using a list of authentication methods in configuration files and th
 "--setopt=proxy_auth_method=".
 
 
-Changes on the command line:
-============================
+Changes on the command line
+===========================
 
 Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous, it wasn't clear
 whether the input is a command argument or a subcommand. If present, subcommands are now mandatory.
@@ -222,8 +222,8 @@ Updateinfo command
  * Dropped deprecated aliases: ``list-updateinfo``, ``list-security``, ``list-sec``, ``info-updateinfo``, ``info-security``, ``info-sec``, ``summary-updateinfo``.
  * Dropped ``upif`` alias.
 
-Changes of configuration:
-=========================
+Changes of configuration
+========================
 
 Default of ``best`` configuration option changed to ``true``
 ------------------------------------------------------------
