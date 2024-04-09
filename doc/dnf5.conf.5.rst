@@ -1076,44 +1076,18 @@ Types of Options
     String representing time units in seconds. Can be set to ``-1`` or ``never``.
 
 
-Files
-=====
-
-.. _main_configuration_file-label:
-
-``Main Configuration File``
-    /etc/dnf/dnf.conf
-
-.. _cache_files-label:
-
-``Cache Files``
-    /var/cache/libdnf5
-
-.. _repo_files-label:
-
-``Repository Files``
-    /etc/yum.repos.d/
-
-.. _varfiles-label:
-
-``Variables``
-    Any property named file in ``/etc/dnf/vars`` is turned into a variable named after the filename
-    (or overrides any of the above variables but those set from commandline).
-    Filenames may contain only alphanumeric characters and underscores and be in lowercase.
-    Variables are also read from ``/etc/yum/vars`` for YUM compatibility reasons.
-
 Drop-in configuration directories
 =================================
 
 `DNF5` loads configuration options that are defined in the :ref:`main
-configuration file <main_cnfiguration_file-label>`, :ref:`user configuration
+configuration file <main_configuration_file-label>`, :ref:`user configuration
 files<user_configuration_files-label>` and :ref:`distribution configuration
 files<distro_configuration_files-label>`.
 
-Users can define custom config options in this way.
+The configuration files are processed following this order:
 
 1. Configuration files are alphabetically sorted in a list of names from the
-   :ref:`distribution configuration directory<distro_configuration_dir-label>`
+   :ref:`distribution configuration directory<distro_configuration_dir-label>.
    and the :ref:`user configuration directory<user_configuration_dir-label>`. If
    a file with the same name is present in both directories, only the file from
    the user configuration directory is added to the list. The
@@ -1121,28 +1095,8 @@ Users can define custom config options in this way.
 2. Options are retrieved in order from the list The configuration from the next
    file overrides the previous one. The last option wins.
 
-.. _user_configuration_dir-label:
-
-``User Configuration Directory``
-    /etc/dnf/libdnf5.conf.d/
-
-.. _user_configuration_files-label:
-
-``User Configuration Files``
-    /etc/dnf/libdnf5.conf.d/20-user-settings.conf
-
-.. _distro_configuration_dir-label:
-
-``Distribution Configuration Directory``
-    /usr/share/dnf5/libdnf.conf.d/
-
-.. _distro_configuration_files-label:
-
-``Distribution Configuration Files``
-    /usr/share/dnf5/libdnf.conf.d/50-something.conf
-
-Example configuration:
-----------------------
+Example of configuration files
+------------------------------
 
 User configuration files:
 
@@ -1167,6 +1121,31 @@ the user file /etc/dnf/libdnf5.conf.d/60-something.conf):
 4. /etc/dnf/libdnf5.conf.d/80-user-settings.conf
 5. /usr/share/dnf5/libdnf.conf.d/90-something.conf
 6. /etc/dnf/dnf.conf
+
+.. _conf_files_and_directories-label:
+
+Files and directories
+---------------------
+
+.. _user_configuration_dir-label:
+
+``User Configuration Directory``
+    /etc/dnf/libdnf5.conf.d/
+
+.. _user_configuration_files-label:
+
+``User Configuration Files``
+    /etc/dnf/libdnf5.conf.d/20-user-settings.conf
+
+.. _distro_configuration_dir-label:
+
+``Distribution Configuration Directory``
+    /usr/share/dnf5/libdnf.conf.d/
+
+.. _distro_configuration_files-label:
+
+``Distribution Configuration Files``
+    /usr/share/dnf5/libdnf.conf.d/50-something.conf
 
 Drop-in repo directories
 ========================
@@ -1230,6 +1209,57 @@ Resulting file processing order:
 5. /usr/share/dnf5/repos.overide.d/90-something2.repo
 6. /etc/dnf/repos.overide.d/99-config-manager.repo
 
+
+.. _repo_files_and_directories-label:
+
+Files and directories
+---------------------
+
+.. _user_repos_override_dir-label:
+
+``User Repos Override Directory``
+    /etc/dnf/repos.override.d/
+
+.. _user_repos_override_files-label:
+
+``User Repos Override Files``
+    /etc/dnf/repos.override.d/20-user-overrides.repo
+
+.. _distro_repos_override_dir-label:
+
+``Distribution Repos Override Directory``
+    /usr/share/dnf5/repos.override.d/
+
+.. _distro_repos_override_files-label:
+
+``Distribution Repos Override Files``
+    /usr/share/dnf5/repos.override.d/50-something2.repo
+
+Files
+=====
+
+.. _main_configuration_file-label:
+
+``Main Configuration File``
+    /etc/dnf/dnf.conf
+
+.. _cache_files-label:
+
+``Cache Files``
+    /var/cache/libdnf5
+
+.. _repo_files-label:
+
+``Repository Files``
+    /etc/yum.repos.d/
+
+.. _varfiles-label:
+
+``Variables``
+    Any property named file in ``/etc/dnf/vars`` is turned into a variable named after the filename
+    (or overrides any of the above variables but those set from commandline).
+    Filenames may contain only alphanumeric characters and underscores and be in lowercase.
+    Variables are also read from ``/etc/yum/vars`` for YUM compatibility reasons.
 
 See Also
 ========
