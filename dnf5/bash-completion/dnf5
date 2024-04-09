@@ -2,8 +2,8 @@
 
 _do_dnf5_completion()
 {
-    local words=() cword
-    __reassemble_comp_words_by_ref "><=;|&(:" words cword
+    local cur prev words cword comp_args
+    _init_completion -n "><=;|&(:" -- "$@" || return
     mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
 }
 
