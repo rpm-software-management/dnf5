@@ -3,7 +3,16 @@
 _do_dnf5_completion()
 {
     local cur prev words cword comp_args
-    _init_completion -n "><=;|&(:" -- "$@" || return
+
+    # Test if bash-completion supports "_comp_initialize" (added in bash-completion 2.12)
+    type _comp_initialize >/dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        _comp_initialize -n "><=;|&(:" -- "$@" || return
+    else
+        # legacy function call (deprecated since bash-completion 2.12)
+        _init_completion -n "><=;|&(:" -- "$@" || return
+    fi
+
     mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
 }
 
