@@ -1262,6 +1262,43 @@ Files
     Filenames may contain only alphanumeric characters and underscores and be in lowercase.
     Variables are also read from ``/etc/yum/vars`` for YUM compatibility reasons.
 
+
+Directories
+===========
+
+Directories are listed in the opposite order in which they are
+processed meaning that the first directory in each list
+has the highest priority in its category.
+
+Repository Directories
+----------------------
+
+.. _distro_repos_dir-label:
+
+``Distribution Repositories Directory in /usr``
+    /usr/share/dnf5/repos.d/
+
+``Distribution Repositories Directory in /etc``
+    /etc/distro.repos.d/
+
+.. _yum_repos_dir-label:
+
+``YUM Repositories Directory``
+    /etc/yum.repos.d/
+
+Variables Directories
+---------------------
+
+.. _vars_dir-label:
+
+``Variables Directory``
+    /etc/dnf/vars/
+
+.. _distro_vars_dir-label:
+
+``Distribution Variables Directory``
+    /usr/share/dnf5/vars.d/
+
 See Also
 ========
 
