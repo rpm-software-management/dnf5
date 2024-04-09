@@ -527,6 +527,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(base);
+                // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because if we did
+                // updating only a subset of packages would be a valid solution. However in a distro-sync we want to
+                // ensure ALL packages are synchronized with the target repository.
+                query.filter_available();
                 libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
