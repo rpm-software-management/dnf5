@@ -1168,6 +1168,69 @@ the user file /etc/dnf/libdnf5.conf.d/60-something.conf):
 5. /usr/share/dnf5/libdnf.conf.d/90-something.conf
 6. /etc/dnf/dnf.conf
 
+Drop-in repo directories
+========================
+
+After the repository configurations are loaded other repo configurations can be overloaded from the directories
+:ref:`user repos override directory <user_repos_override_dir-label>`
+and :ref:`distribution repos override directory <distro_repos_override_dir-label>`.
+
+The format of the files inside the directories is the same as the format of the repository configuration files.
+The options in the overridden files can modify existing repos but cannot create new repositories.
+
+Override files support globs in the repository ID in order to support bulk modifications of repository parameters.
+
+The repository overrides are processed following this order:
+
+1. Files from ``/usr/share/dnf5/repos.override.d/`` and ``/etc/dnf5/repos.override.d/`` are loaded in an alphabetically
+   sorted list. In case files have the same name, the file from ``/etc/dnf5/repos.override.d/`` is used.
+   This implies the list has only unique filenames. This also implies that the repository configuration files can be
+   simply masked by creating a file with the same name in the ``/etc`` override directory.
+
+2. The options from the files are applied in the order they are loaded. The last option wins.
+
+
+Example configuration
+---------------------
+
+.. code-block::
+
+   # Enable `skip_if_unavailable` for all repositories
+   [*]
+   skip_if_unavailable = true
+
+   # And then disable `skip_if_unavailable` for repositories with id prefix "fedora"
+   [fedora*]
+   skip_if_unavailable = false
+
+Example of configuration files
+------------------------------
+
+This example shows the order in which override files are processed.
+
+Files with user repos overrides:
+
+- /etc/dnf/repos.overide.d/20-user-overrides.repo
+- /etc/dnf/repos.overide.d/60-something2.repo
+- /etc/dnf/repos.overide.d/80-user-overrides.repo
+- /etc/dnf/repos.overide.d/99-config-manager.repo
+
+Files with distribution repos overrides:
+
+- /usr/share/dnf5/repos.overide.d/50-something2.repo
+- /usr/share/dnf5/repos.overide.d/60-something2.repo
+- /usr/share/dnf5/repos.overide.d/90-something2.repo
+
+Resulting file processing order:
+
+1. /etc/dnf/repos.overide.d/20-user-overrides.repo
+2. /usr/share/dnf5/repos.overide.d/50-something2.repo
+3. /etc/dnf/repos.overide.d/60-something2.repo
+4. /etc/dnf/repos.overide.d/80-user-overrides.repo
+5. /usr/share/dnf5/repos.overide.d/90-something2.repo
+6. /etc/dnf/repos.overide.d/99-config-manager.repo
+
+
 See Also
 ========
 
