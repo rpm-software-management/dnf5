@@ -18,6 +18,8 @@
 
 .. _automatic_plugin_ref-label:
 
+.. TODO(jkolarik): Fix references to configuration files to correct locations
+
 ##################
  Automatic Command
 ##################

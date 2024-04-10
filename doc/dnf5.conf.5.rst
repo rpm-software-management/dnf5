@@ -16,6 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+.. TODO(jkolarik): Fix --disableexcludes references, the option is dropped now.
+
 .. _dnf5_conf-label:
 
 ##############################
