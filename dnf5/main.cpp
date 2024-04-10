@@ -69,6 +69,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
+#include <locale.h>
 #include <string.h>
 
 #include <algorithm>
@@ -932,10 +933,20 @@ static void print_new_leaves(Context & context) {
     }
 }
 
+static void set_locale() {
+    auto * locale = setlocale(LC_ALL, "");
+    if (locale) {
+        return;
+    }
+    std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
+}
+
 }  // namespace dnf5
 
 
 int main(int argc, char * argv[]) try {
+    dnf5::set_locale();
+
     // Creates a vector of loggers with one circular memory buffer logger
     std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
     const std::size_t max_log_items_to_keep = 10000;
