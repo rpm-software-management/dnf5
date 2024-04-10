@@ -32,6 +32,9 @@ jobs:
     targets:
       - fedora-all
     branch: 'main'
+    actions:
+      get-current-version:
+        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
   - job: copr_build
     trigger: pull_request
     targets:
