@@ -196,6 +196,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--comment=COMMENT``
     | Add a comment to the transaction history.
 
+.. _config_option_ref-label:
+
 ``--config=CONFIG_FILE_PATH``
     | Define configuration file location.
 
@@ -237,6 +239,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--forcearch=ARCH``
     | Force the use of a specific architecture.
     | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
+.. _help_option_ref-label:
 
 ``-h, --help``
     | Show the help.
@@ -300,8 +304,13 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--show-new-leaves``
     | Show newly installed leaf packages and packages that became leaves after a transaction.
 
+.. _use_host_config_option_ref-label:
+
 ``--use-host-config``
     | Use configuration files and variable definitions from the host system rather than the installroot.
+    | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+
+.. _version_option_ref-label:
 
 ``--version``
     | Display the version of the dnf5 application and libdnf5 library, along with successfully loaded plugins and their versions, and then exit.
