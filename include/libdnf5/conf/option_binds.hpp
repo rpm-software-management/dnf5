@@ -82,12 +82,12 @@ public:
     ~OptionBinds();
 
     Item & add(
-        const std::string & id,
+        std::string id,
         Option & option,
         Item::NewStringFunc new_string_func,
         Item::GetValueStringFunc get_value_string_func,
         bool add_value);
-    Item & add(const std::string & id, Option & option);
+    Item & add(std::string id, Option & option);
     Item & at(const std::string & id);
     const Item & at(const std::string & id) const;
     bool empty() const noexcept;

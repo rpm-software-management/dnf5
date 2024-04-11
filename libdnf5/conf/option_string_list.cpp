@@ -31,18 +31,18 @@ namespace libdnf5 {
 template <typename T>
 class OptionStringContainer<T>::Impl {
 public:
-    Impl(const T & default_value) : icase(false), default_value(default_value), value(default_value){};
-    Impl(const T & default_value, std::string && regex, bool icase)
+    Impl(T && default_value) : icase(false), default_value(default_value), value(std::move(default_value)){};
+    Impl(T && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
           default_value(default_value),
-          value(default_value){};
-    Impl(const T & default_value, std::string && regex, bool icase, std::string && delimiters)
+          value(std::move(default_value)){};
+    Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
         : regex(std::move(regex)),
           icase(icase),
           delimiters(std::move(delimiters)),
           default_value(default_value),
-          value(default_value){};
+          value(std::move(default_value)){};
 
 private:
     friend OptionStringContainer;
@@ -56,14 +56,14 @@ private:
 };
 
 template <typename T>
-OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value)
+OptionStringContainer<T>::OptionStringContainer(ValueType default_value)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value)) {}
+      p_impl(new Impl(std::move(default_value))) {}
 
 template <typename T>
-OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value, std::string regex, bool icase)
+OptionStringContainer<T>::OptionStringContainer(ValueType default_value, std::string regex, bool icase)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value, std::move(regex), icase)) {
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase)) {
     init_regex_matcher();
     test(default_value);
 }
@@ -87,9 +87,9 @@ OptionStringContainer<T>::OptionStringContainer(const std::string & default_valu
 
 template <typename T>
 OptionStringContainer<T>::OptionStringContainer(
-    const ValueType & default_value, std::string regex, bool icase, std::string delimiters)
+    ValueType default_value, std::string regex, bool icase, std::string delimiters)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value, std::move(regex), icase, std::move(delimiters))) {
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase, std::move(delimiters))) {
     init_regex_matcher();
     test(p_impl->default_value);
 }

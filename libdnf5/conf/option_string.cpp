@@ -44,9 +44,9 @@ std::string OptionString::from_string(const std::string & value) const {
 }
 
 
-OptionString::OptionString(const std::string & default_value)
+OptionString::OptionString(std::string default_value)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value)) {}
+      p_impl(new Impl(std::move(default_value))) {}
 
 OptionString::OptionString(const char * default_value) : p_impl(new Impl()) {
     if (default_value) {
@@ -55,13 +55,14 @@ OptionString::OptionString(const char * default_value) : p_impl(new Impl()) {
     }
 }
 
-OptionString::OptionString(const std::string & default_value, std::string regex, bool icase)
+OptionString::OptionString(std::string default_value, std::string regex, bool icase)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value, regex, icase)) {
-    test(default_value);
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase)) {
+    test(p_impl->value);
 }
 
-OptionString::OptionString(const char * default_value, std::string regex, bool icase) : p_impl(new Impl(regex, icase)) {
+OptionString::OptionString(const char * default_value, std::string regex, bool icase)
+    : p_impl(new Impl(std::move(regex), icase)) {
     if (default_value) {
         p_impl->default_value = default_value;
         test(p_impl->default_value);
