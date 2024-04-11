@@ -27,9 +27,9 @@ namespace libdnf5 {
 
 class OptionBool::Impl {
 public:
-    Impl(bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
-        : true_values(std::make_unique<std::vector<std::string>>(true_vals)),
-          false_values(std::make_unique<std::vector<std::string>>(false_vals)),
+    Impl(bool default_value, std::vector<std::string> && true_vals, std::vector<std::string> && false_vals)
+        : true_values(std::make_unique<std::vector<std::string>>(std::move(true_vals))),
+          false_values(std::make_unique<std::vector<std::string>>(std::move(false_vals))),
           default_value(default_value),
           value(default_value) {}
 
@@ -55,10 +55,9 @@ private:
 
 OptionBool::OptionBool(const OptionBool & src) = default;
 
-OptionBool::OptionBool(
-    bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
+OptionBool::OptionBool(bool default_value, std::vector<std::string> true_vals, std::vector<std::string> false_vals)
     : Option(Priority::DEFAULT),
-      p_impl(new Impl(default_value, true_vals, false_vals)) {}
+      p_impl(new Impl(default_value, std::move(true_vals), std::move(false_vals))) {}
 
 OptionBool::OptionBool(bool default_value) : Option(Priority::DEFAULT), p_impl(new Impl(default_value)) {}
 

@@ -111,7 +111,7 @@ const OptionBinds::Item & OptionBinds::at(const std::string & id) const {
 }
 
 OptionBinds::Item & OptionBinds::add(
-    const std::string & id,
+    std::string id,
     Option & option,
     Item::NewStringFunc new_string_func,
     Item::GetValueStringFunc get_value_string_func,
@@ -121,16 +121,16 @@ OptionBinds::Item & OptionBinds::add(
         throw OptionBindsOptionAlreadyExistsError(id);
     }
     auto res = p_impl->items.emplace(
-        id, Item(option, std::move(new_string_func), std::move(get_value_string_func), add_value));
+        std::move(id), Item(option, std::move(new_string_func), std::move(get_value_string_func), add_value));
     return res.first->second;
 }
 
-OptionBinds::Item & OptionBinds::add(const std::string & id, Option & option) {
+OptionBinds::Item & OptionBinds::add(std::string id, Option & option) {
     auto item = p_impl->items.find(id);
     if (item != p_impl->items.end()) {
         throw OptionBindsOptionAlreadyExistsError(id);
     }
-    auto res = p_impl->items.emplace(id, Item(option));
+    auto res = p_impl->items.emplace(std::move(id), Item(option));
     return res.first->second;
 }
 

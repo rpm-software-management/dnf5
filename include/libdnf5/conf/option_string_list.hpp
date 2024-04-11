@@ -36,11 +36,11 @@ class OptionStringContainer : public Option {
 public:
     using ValueType = T;
 
-    explicit OptionStringContainer(const ValueType & default_value);
-    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase);
+    explicit OptionStringContainer(ValueType default_value);
+    OptionStringContainer(ValueType default_value, std::string regex, bool icase);
     explicit OptionStringContainer(const std::string & default_value);
     OptionStringContainer(const std::string & default_value, std::string regex, bool icase);
-    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase, std::string delimiters);
+    OptionStringContainer(ValueType default_value, std::string regex, bool icase, std::string delimiters);
 
     OptionStringContainer(const OptionStringContainer & src);
     ~OptionStringContainer() override;

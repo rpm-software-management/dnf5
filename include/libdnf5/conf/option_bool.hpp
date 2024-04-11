@@ -42,8 +42,7 @@ public:
 
     /// Constructor that sets default value and vectors for conversion from string.
     // @replaces libdnf:conf/OptionBool.hpp:ctor:OptionBool.OptionBool(bool defaultValue, const char * const trueVals[], const char * const falseVals[]);
-    OptionBool(
-        bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals);
+    OptionBool(bool default_value, std::vector<std::string> true_vals, std::vector<std::string> false_vals);
 
     OptionBool(const OptionBool & src);
 

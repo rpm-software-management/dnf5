@@ -32,9 +32,9 @@ class OptionString : public Option {
 public:
     using ValueType = std::string;
 
-    explicit OptionString(const std::string & default_value);
+    explicit OptionString(std::string default_value);
     explicit OptionString(const char * default_value);
-    OptionString(const std::string & default_value, std::string regex, bool icase);
+    OptionString(std::string default_value, std::string regex, bool icase);
     OptionString(const char * default_value, std::string regex, bool icase);
 
     ~OptionString();

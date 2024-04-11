@@ -48,7 +48,7 @@ static std::string remove_file_prot(const std::string & value) {
     return value;
 }
 
-OptionPath::OptionPath(const std::string & default_value, bool exists, bool abs_path)
+OptionPath::OptionPath(std::string default_value, bool exists, bool abs_path)
     : OptionString(default_value),
       p_impl(new Impl(exists, abs_path)) {
     OptionString::p_impl->default_value = remove_file_prot(this->get_default_value());
@@ -66,8 +66,7 @@ OptionPath::OptionPath(const char * default_value, bool exists, bool abs_path)
     }
 }
 
-OptionPath::OptionPath(
-    const std::string & default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
+OptionPath::OptionPath(std::string default_value, std::string regex, bool icase, bool exists, bool abs_path)
     : OptionString(remove_file_prot(default_value), regex, icase),
       p_impl(new Impl(exists, abs_path)) {
     OptionString::p_impl->default_value = remove_file_prot(this->get_default_value());
@@ -75,7 +74,7 @@ OptionPath::OptionPath(
     OptionString::p_impl->value = this->get_default_value();
 }
 
-OptionPath::OptionPath(const char * default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
+OptionPath::OptionPath(const char * default_value, std::string regex, bool icase, bool exists, bool abs_path)
     : OptionString(default_value, regex, icase),
       p_impl(new Impl(exists, abs_path)) {
     if (default_value) {
