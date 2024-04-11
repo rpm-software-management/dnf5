@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "clean.hpp"
 
+#include "dnf5/shared_options.hpp"
+
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -125,6 +127,7 @@ void CleanCommand::set_argument_parser() {
     });
 
     cmd.register_positional_arg(cache_types);
+    create_store_option(*this);
 }
 
 void CleanCommand::run() {

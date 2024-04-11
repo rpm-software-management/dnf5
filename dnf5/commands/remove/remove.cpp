@@ -59,6 +59,7 @@ void RemoveCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void RemoveCommand::configure() {

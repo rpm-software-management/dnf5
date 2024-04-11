@@ -53,6 +53,7 @@ void DistroSyncCommand::set_argument_parser() {
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void DistroSyncCommand::configure() {
