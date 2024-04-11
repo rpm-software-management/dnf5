@@ -115,6 +115,13 @@ void Rpm::dbus_register() {
         });
 
     dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN, "ot", {"session_object_path", "total"});
+    dbus_object->registerSignal(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_TRANSACTION_AFTER_COMPLETE,
+        "ob",
+        {"session_object_path", "success"});
+    dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS,
         "ostt",

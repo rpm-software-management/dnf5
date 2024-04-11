@@ -230,21 +230,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         transaction_before_begin:
+        @session_object_path: object path of the dnf5daemon session
         @total: number of elements in the rpm transaction
 
         Send right before the rpm transaction is run.
     -->
     <signal name="transaction_before_begin">
+        <arg name="session_object_path" type="o" />
         <arg name="total" type="t" />
     </signal>
 
     <!--
         transaction_after_complete:
+        @session_object_path: object path of the dnf5daemon session
         @success: true if the rpm transaction was completed successfully
 
         Send right after the rpm transaction run finished.
     -->
     <signal name="transaction_after_complete">
+        <arg name="session_object_path" type="o" />
         <arg name="success" type="b" />
     </signal>
 
