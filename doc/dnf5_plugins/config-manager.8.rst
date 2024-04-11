@@ -120,6 +120,10 @@ Subcommands
     Note:
     The variables ``releasever_major`` and ``releasever_minor`` are generated automatically and connot be removed.
 
+
+.. note::
+   Override directories are also listed with examples in :ref:`Drop-in repo directories<drop_in_repo_directories-label>`.
+
 Options
 =======
 
@@ -180,3 +184,9 @@ Examples
 
 ``dnf5 config-manager unsetvar myvar1 myvar2``
     Removes ``myvar1`` and ``myvar2`` variables.
+
+See Also
+========
+
+Configuration:
+    | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`

@@ -1077,6 +1077,8 @@ Types of Options
     String representing time units in seconds. Can be set to ``-1`` or ``never``.
 
 
+.. _drop_in_configuration_directories-label:
+
 Drop-in configuration directories
 =================================
 
@@ -1148,6 +1150,9 @@ Files and directories
 ``Distribution Configuration Files``
     /usr/share/dnf5/libdnf.conf.d/50-something.conf
 
+
+.. _drop_in_repo_directories-label:
+
 Drop-in repo directories
 ========================
 
@@ -1169,6 +1174,9 @@ The repository overrides are processed following this order:
 
 2. The options from the files are applied in the order they are loaded. The last option wins.
 
+
+.. note::
+    See also the documentation for :ref:`Config-manager Command<config_manager_plugin_ref-label>` to see where the overrides are used.
 
 Example configuration
 ---------------------
