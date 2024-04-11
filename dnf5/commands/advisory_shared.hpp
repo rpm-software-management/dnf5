@@ -155,18 +155,6 @@ public:
               _("ADVISORY_SEVERITY,..."),
               "critical|important|moderate|low|none",
               true) {}
-
-
-    std::vector<std::string> get_value() const {
-        auto vals = AppendStringListOption::get_value();
-        std::transform(vals.begin(), vals.end(), vals.begin(), [](std::string val) -> std::string {
-            val = libdnf5::utils::string::tolower(val);
-            val[0] = static_cast<char>(std::toupper(val[0]));
-            return val;
-        });
-
-        return vals;
-    }
 };
 
 class BzOption : public libdnf5::cli::session::AppendStringListOption {
