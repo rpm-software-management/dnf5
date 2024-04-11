@@ -245,7 +245,6 @@ bool Session::check_authorization(
     const std::string destination_name = "org.freedesktop.PolicyKit1";
     const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
     const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
-    // allow polkit to ask user to enter root password
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
     polkit_proxy->finishRegistration();
 
@@ -253,12 +252,23 @@ bool Session::check_authorization(
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
     sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
     std::map<std::string, std::string> details{};
+    // allow polkit to ask user to enter root password
     uint flags = allow_user_interaction ? 1 : 0;
-    std::string cancelation_id = "";
-    polkit_proxy->callMethod("CheckAuthorization")
-        .onInterface(interface_name)
-        .withArguments(subject, actionid, details, flags, cancelation_id)
-        .storeResultsTo(auth_result);
+    std::string cancellation_id = "";
+    try {
+        polkit_proxy->callMethod("CheckAuthorization")
+            .onInterface(interface_name)
+            .withArguments(subject, actionid, details, flags, cancellation_id)
+            .withTimeout(std::chrono::minutes(2))
+            .storeResultsTo(auth_result);
+    } catch (const sdbus::Error & ex) {
+        auto name = ex.getName();
+        if (name == "org.freedesktop.DBus.Error.Timeout" || name == "org.freedesktop.DBus.Error.NoReply") {
+            // in case of timeout return "not authorized"
+            return false;
+        }
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Failed to check authorization: \"{}\"", ex.what()));
+    }
 
     // get results
     bool res_is_authorized = std::get<0>(auth_result);
