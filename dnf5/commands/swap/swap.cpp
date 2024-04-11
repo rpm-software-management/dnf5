@@ -70,6 +70,7 @@ void SwapCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
 
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void SwapCommand::configure() {

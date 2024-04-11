@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
+#include "libdnf5/utils/fs/file.hpp"
+
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/tty.hpp>
@@ -404,7 +406,35 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     if (should_store_offline) {
         base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
     }
-    transaction.download();
+
+    if (!transaction_store_path.empty()) {
+        auto transaction_location = transaction_store_path / "transaction.json";
+        constexpr const char * packages_in_trans_dir{"./packages"};
+        auto packages_location = transaction_store_path / packages_in_trans_dir;
+        constexpr const char * comps_in_trans_dir{"./comps"};
+        auto comps_location = transaction_store_path / comps_in_trans_dir;
+        if (std::filesystem::exists(transaction_location)) {
+            std::cout << libdnf5::utils::sformat(
+                _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
+                transaction_store_path.string());
+            if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+                std::filesystem::remove_all(packages_location);
+                std::filesystem::remove_all(comps_location);
+            } else {
+                throw libdnf5::cli::AbortedByUserError();
+            }
+        }
+        auto & destdir_opt = base.get_config().get_destdir_option();
+        destdir_opt.set(packages_location);
+        std::filesystem::create_directories(transaction_store_path);
+        transaction.download();
+        transaction.store_comps(comps_location);
+        libdnf5::utils::fs::File transfile(transaction_location, "w");
+        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
+        return;
+    } else {
+        transaction.download();
+    }
 
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;

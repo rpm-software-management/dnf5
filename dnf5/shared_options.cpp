@@ -96,5 +96,23 @@ void create_offline_option(dnf5::Command & command) {
     command.get_argument_parser_command()->register_named_arg(offline);
 }
 
+void create_store_option(dnf5::Command & command) {
+    auto & ctx = command.get_context();
+    auto & parser = ctx.get_argument_parser();
+    auto * store = parser.add_new_named_arg("store");
+    store->set_long_name("store");
+    store->set_has_value(true);
+    store->set_description("Store the current transaction in a directory at the specified path instead of running it.");
+    store->set_arg_value_help("STORED_TRANSACTION_PATH");
+    command.get_argument_parser_command()->register_named_arg(store);
+    store->set_parse_hook_func([&ctx](
+                                   [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                   [[maybe_unused]] const char * option,
+                                   const char * value) {
+        ctx.transaction_store_path = value;
+        return true;
+    });
+}
+
 
 }  // namespace dnf5

@@ -80,6 +80,7 @@ void UpgradeCommand::set_argument_parser() {
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
     advisory_enhancement = std::make_unique<EnhancementOption>(*this);
     advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+    create_store_option(*this);
 }
 
 void UpgradeCommand::configure() {

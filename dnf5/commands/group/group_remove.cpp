@@ -35,6 +35,7 @@ void GroupRemoveCommand::set_argument_parser() {
     no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void GroupRemoveCommand::configure() {
