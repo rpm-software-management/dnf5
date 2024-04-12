@@ -21,7 +21,7 @@ include_directories(.)
 
 # build libdnf5.so
 add_library(libdnf5 SHARED ${LIBDNF5_SOURCES})
-set(DNF_SO_VERSION 1)
+set(DNF_SO_VERSION 2)
 set_target_properties(libdnf5 PROPERTIES OUTPUT_NAME "dnf5")
 set_target_properties(libdnf5 PROPERTIES SOVERSION ${DNF_SO_VERSION})
 # required to have dlopen symbol

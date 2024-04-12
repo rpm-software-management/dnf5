@@ -19,7 +19,7 @@ include_directories(.)
 
 # build libdnf5-cli.so
 add_library(libdnf5-cli SHARED ${LIBDNF5_CLI_SOURCES})
-set(DNF_CLI_SO_VERSION 1)
+set(DNF_CLI_SO_VERSION 2)
 set_target_properties(libdnf5-cli PROPERTIES OUTPUT_NAME "dnf5-cli")
 set_target_properties(libdnf5-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
 # required by clang
