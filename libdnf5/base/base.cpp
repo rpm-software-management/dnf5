@@ -255,6 +255,20 @@ bool Base::is_initialized() {
     return p_impl->pool.get() != nullptr;
 }
 
+void Base::notify_repos_configured() {
+    auto & pool = p_impl->pool;
+    libdnf_user_assert(pool, "Base has not been initialized");
+
+    auto & repos_configured = p_impl->repos_configured;
+    libdnf_user_assert(!repos_configured, "The `notify_repos_configured` notification has already been called");
+
+    repos_configured = true;
+}
+
+bool Base::are_repos_configured() const noexcept {
+    return p_impl->repos_configured;
+}
+
 ConfigMain & Base::get_config() {
     return p_impl->config;
 }

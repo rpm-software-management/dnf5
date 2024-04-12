@@ -1212,6 +1212,8 @@ int main(int argc, char * argv[]) try {
                 dump_main_configuration(context);
             }
 
+            base.notify_repos_configured();
+
             if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
                 dump_repository_configuration(context, repo_id_list);
             }
