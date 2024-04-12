@@ -90,9 +90,11 @@ public:
 
     void init() override { parse_action_files(); }
 
-    void pre_base_setup() override { on_base_setup(pre_base_setup_actions); }
+    void pre_base_setup() override { on_hook(pre_base_setup_actions); }
 
-    void post_base_setup() override { on_base_setup(post_base_setup_actions); }
+    void post_base_setup() override { on_hook(post_base_setup_actions); }
+
+    void repos_configured() override { on_hook(repos_configured_actions); }
 
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
@@ -104,8 +106,8 @@ public:
 
 private:
     void parse_action_files();
-    void on_base_setup(const std::vector<Action> & trans_actions);
-    void on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions);
+    void on_hook(const std::vector<Action> & actions);
+    void on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & actions);
     void execute_command(CommandToRun & command);
 
     [[nodiscard]] std::pair<std::string, bool> substitute(
@@ -123,6 +125,7 @@ private:
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
     std::vector<Action> post_base_setup_actions;
+    std::vector<Action> repos_configured_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
 
@@ -345,14 +348,14 @@ void unescape(std::string & str) {
     str.resize(dst_pos);
 }
 
-void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
-    if (trans_actions.empty()) {
+void Actions::on_hook(const std::vector<Action> & actions) {
+    if (actions.empty()) {
         return;
     }
 
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
-    for (const auto & action : trans_actions) {
+    for (const auto & action : actions) {
         if (auto [substituted_args, subst_error] = substitute_args(nullptr, nullptr, action); !subst_error) {
             for (auto & arg : substituted_args) {
                 unescape(arg);
@@ -455,11 +458,13 @@ void Actions::parse_action_files() {
                 continue;
             }
 
-            enum class Hooks { PRE_BASE_SETUP, POST_BASE_SETUP, PRE_TRANS, POST_TRANS } hook;
+            enum class Hooks { PRE_BASE_SETUP, POST_BASE_SETUP, REPOS_CONFIGURED, PRE_TRANS, POST_TRANS } hook;
             if (line.starts_with("pre_base_setup:")) {
                 hook = Hooks::PRE_BASE_SETUP;
             } else if (line.starts_with("post_base_setup:")) {
                 hook = Hooks::POST_BASE_SETUP;
+            } else if (line.starts_with("repos_configured:")) {
+                hook = Hooks::REPOS_CONFIGURED;
             } else if (line.starts_with("pre_transaction:")) {
                 hook = Hooks::PRE_TRANS;
             } else if (line.starts_with("post_transaction:")) {
@@ -522,6 +527,9 @@ void Actions::parse_action_files() {
                     break;
                 case Hooks::POST_BASE_SETUP:
                     post_base_setup_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::REPOS_CONFIGURED:
+                    repos_configured_actions.emplace_back(std::move(act));
                     break;
                 case Hooks::PRE_TRANS:
                     pre_trans_actions.emplace_back(std::move(act));
@@ -682,9 +690,8 @@ void Actions::execute_command(CommandToRun & command) {
     }
 }
 
-void Actions::on_transaction(
-    const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions) {
-    if (trans_actions.empty()) {
+void Actions::on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & actions) {
+    if (actions.empty()) {
         return;
     }
 
@@ -718,7 +725,7 @@ void Actions::on_transaction(
     spec_settings.set_with_provides(false);
     spec_settings.set_with_filenames(true);
     spec_settings.set_with_binaries(false);
-    for (const auto & action : trans_actions) {
+    for (const auto & action : actions) {
         if (action.pkg_filter.empty()) {
             // action without packages - the action is called regardless of the of number of packages in the transaction
             if (auto [substituted_args, subst_error] = substitute_args(nullptr, nullptr, action); !subst_error) {
