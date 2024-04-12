@@ -410,7 +410,7 @@ Package management library.
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
 %dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so.1*
+%{_libdir}/libdnf5.so.2*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf5/
 
@@ -426,7 +426,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Library for working with a terminal in a command-line package manager.
 
 %files -n libdnf5-cli -f libdnf5-cli.lang
-%{_libdir}/libdnf5-cli.so.1*
+%{_libdir}/libdnf5-cli.so.2*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
