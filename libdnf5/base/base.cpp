@@ -262,6 +262,8 @@ void Base::notify_repos_configured() {
     auto & repos_configured = p_impl->repos_configured;
     libdnf_user_assert(!repos_configured, "The `notify_repos_configured` notification has already been called");
 
+    p_impl->plugins.repos_configured();
+
     repos_configured = true;
 }
 
