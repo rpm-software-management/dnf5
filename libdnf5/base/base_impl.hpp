@@ -63,6 +63,8 @@ private:
     friend class Base;
     Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<Logger>> && loggers);
 
+    bool repos_configured{false};
+
     // RpmPool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
     std::unique_ptr<solv::RpmPool> pool;
 

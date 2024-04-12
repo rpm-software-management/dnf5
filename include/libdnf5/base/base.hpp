@@ -101,6 +101,15 @@ public:
     /// Returns true when setup() (mandatory method in many workflows) was already called
     bool is_initialized();
 
+    /// Notifies the libdnf5 library that the repositories are configured.  It can be called before `load_repos`.
+    /// The libdnf5 library can then call plugins that can make final adjustments to the repositories configuration.
+    /// In the case that it has not been called, it is called automatically at the beginning of the load_repos method.
+    /// Calling the method for the second time result in throwing an exception.
+    void notify_repos_configured();
+
+    /// Returns true when notify_repos_configured() was already called (by user or automatically)
+    bool are_repos_configured() const noexcept;
+
     // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history();
     libdnf5::module::ModuleSackWeakPtr get_module_sack();

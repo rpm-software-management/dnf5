@@ -553,14 +553,26 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 }
 
 void RepoSack::load_repos() {
+    auto & base = p_impl->base;
+
+    if (!base->are_repos_configured()) {
+        base->notify_repos_configured();
+    }
+
     // create the system repository if it does not exist
-    p_impl->base->get_repo_sack()->get_system_repo();
+    base->get_repo_sack()->get_system_repo();
     libdnf5::repo::RepoQuery repos(p_impl->base);
     repos.filter_enabled(true);
     p_impl->update_and_load_repos(repos);
 }
 
 void RepoSack::load_repos(Repo::Type type) {
+    auto & base = p_impl->base;
+
+    if (!base->are_repos_configured()) {
+        base->notify_repos_configured();
+    }
+
     libdnf_user_assert(
         (type == libdnf5::repo::Repo::Type::AVAILABLE) || (type == libdnf5::repo::Repo::Type::SYSTEM),
         "RepoSack::load_repos has to be used with libdnf5::repo::Repo::Type::SYSTEM, "
@@ -568,7 +580,7 @@ void RepoSack::load_repos(Repo::Type type) {
 
     if (type == Repo::Type::SYSTEM) {
         // create the system repository if it does not exist
-        p_impl->base->get_repo_sack()->get_system_repo();
+        base->get_repo_sack()->get_system_repo();
     }
 
     libdnf5::repo::RepoQuery repos(p_impl->base);
