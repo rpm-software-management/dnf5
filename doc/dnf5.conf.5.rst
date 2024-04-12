@@ -1273,25 +1273,30 @@ Files
 Directories
 ===========
 
-Directories are listed in the opposite order in which they are
-processed meaning that the first directory in each list
-has the highest priority in its category.
-
 Repository Directories
 ----------------------
 
-.. _distro_repos_dir-label:
+Directories are listed in the order in which they are processed.
 
-``Distribution Repositories Directory in /usr``
-    /usr/share/dnf5/repos.d/
-
-``Distribution Repositories Directory in /etc``
-    /etc/distro.repos.d/
+.. note::
+   Unlike overrides that modify an existing repository configuration,
+   the configuration in these directories defines new repositories.
+   It is not possible to define repositories with the same ID.
+   If multiple repositories with the same ID are defined only the first configuration
+   will be loaded. Loading the next one will log an error.
 
 .. _yum_repos_dir-label:
 
 ``YUM Repositories Directory``
     /etc/yum.repos.d/
+
+.. _distro_repos_dir-label:
+
+``Distribution Repositories Directory in /etc``
+    /etc/distro.repos.d/
+
+``Distribution Repositories Directory in /usr``
+    /usr/share/dnf5/repos.d/
 
 Variables Directories
 ---------------------
