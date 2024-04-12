@@ -87,6 +87,10 @@ public:
     /// It is called at the end of the `Base::setup` method.
     virtual void post_base_setup() {}
 
+    /// The repos_configured hook.
+    /// It is called in `Base::notify_repos_configured` method.
+    virtual void repos_configured() {}
+
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
     virtual void pre_transaction(const libdnf5::base::Transaction &) {}
