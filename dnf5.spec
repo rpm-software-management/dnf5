@@ -762,6 +762,7 @@ config-manager, copr, and repoclosure commands.
 %if %{with dnf5_obsoletes_dnf}
 %{_mandir}/man8/dnf-builddep.8.*
 %{_mandir}/man8/dnf-changelog.8.*
+%{_mandir}/man8/dnf-config-manager.8.*
 %{_mandir}/man8/dnf-copr.8.*
 %{_mandir}/man8/dnf-needs-restarting.8.*
 %{_mandir}/man8/dnf-repoclosure.8.*
