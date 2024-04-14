@@ -149,6 +149,8 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 
 std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     const std::vector<std::string> & paths, bool calculate_checksum) {
+    p_impl->base->p_impl->get_plugins().pre_add_cmdline_packages(paths);
+
     // find remote URLs and local file paths in the input
     std::vector<std::string> rpm_urls;
     std::vector<std::string> rpm_filepaths;
@@ -230,6 +232,8 @@ std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     if (!path_to_package.empty()) {
         p_impl->base->get_rpm_package_sack()->load_config_excludes_includes();
     }
+
+    p_impl->base->p_impl->get_plugins().post_add_cmdline_packages();
 
     return path_to_package;
 }

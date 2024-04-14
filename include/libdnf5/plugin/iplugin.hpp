@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/version.hpp"
 
 #include <cstdint>
+#include <string>
+#include <vector>
 
 namespace libdnf5 {
 
@@ -94,6 +96,15 @@ public:
     /// The repos_loaded hook.
     /// It is called at the end of the `RepoSack::load_repos` method (in Impl).
     virtual void repos_loaded() {}
+
+    /// The pre_add_cmdline_packages hook.
+    /// It is called at the beginning of the `RepoSack::add_cmdline_packages` method.
+    /// @param paths Vector of paths (local files or URLs) to package files to be inserted into cmdline repo.
+    virtual void pre_add_cmdline_packages([[maybe_unused]] const std::vector<std::string> & paths) {}
+
+    /// The post_add_cmdline_packages hook.
+    /// It is called at the end of the `RepoSack::add_cmdline_packages` method.
+    virtual void post_add_cmdline_packages() {}
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
