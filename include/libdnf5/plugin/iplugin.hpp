@@ -49,9 +49,10 @@ struct Version {
 /// @brief A base class for implementing LIBDNF5 plugins that introduce additional logic into the library using hooks.
 class IPlugin {
 public:
-    IPlugin(Base & base) : base(&base) {}
-    virtual ~IPlugin() = default;
+    explicit IPlugin(Base & base);
+    virtual ~IPlugin();
 
+    IPlugin() = delete;
     IPlugin(const IPlugin &) = delete;
     IPlugin(IPlugin &&) = delete;
     IPlugin & operator=(const IPlugin &) = delete;
@@ -75,51 +76,51 @@ public:
 
     /// The plugin can load additional plugins. E.g. C++ plugin for loading Python plugins.
     /// Called before init.
-    virtual void load_plugins() {}
+    virtual void load_plugins();
 
     /// Plugin initialization.
     /// Called before hooks.
-    virtual void init() {}
+    virtual void init();
 
     /// The pre_base_setup hook.
     /// It is called at the beginning of the `Base::setup` method (after the `init` hook).
-    virtual void pre_base_setup() {}
+    virtual void pre_base_setup();
 
     /// The post_base_setup hook.
     /// It is called at the end of the `Base::setup` method.
-    virtual void post_base_setup() {}
+    virtual void post_base_setup();
 
     /// The repos_configured hook.
     /// It is called in `Base::notify_repos_configured` method.
-    virtual void repos_configured() {}
+    virtual void repos_configured();
 
     /// The repos_loaded hook.
     /// It is called at the end of the `RepoSack::load_repos` method (in Impl).
-    virtual void repos_loaded() {}
+    virtual void repos_loaded();
 
     /// The pre_add_cmdline_packages hook.
     /// It is called at the beginning of the `RepoSack::add_cmdline_packages` method.
     /// @param paths Vector of paths (local files or URLs) to package files to be inserted into cmdline repo.
-    virtual void pre_add_cmdline_packages([[maybe_unused]] const std::vector<std::string> & paths) {}
+    virtual void pre_add_cmdline_packages(const std::vector<std::string> & paths);
 
     /// The post_add_cmdline_packages hook.
     /// It is called at the end of the `RepoSack::add_cmdline_packages` method.
-    virtual void post_add_cmdline_packages() {}
+    virtual void post_add_cmdline_packages();
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
     /// @param transaction Contains the transaction that will be started.
-    virtual void pre_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
+    virtual void pre_transaction(const libdnf5::base::Transaction & transaction);
 
     /// The post_transaction hook.
     /// It is called after transactions.
     /// @param transaction Contains the completed transaction.
-    virtual void post_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
+    virtual void post_transaction(const libdnf5::base::Transaction & transaction);
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
-    virtual void finish() noexcept {}
+    virtual void finish() noexcept;
 
-    Base & get_base() noexcept { return *base; }
+    Base & get_base() noexcept;
 
 private:
     Base * base;
