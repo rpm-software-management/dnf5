@@ -91,6 +91,10 @@ public:
     /// It is called in `Base::notify_repos_configured` method.
     virtual void repos_configured() {}
 
+    /// The repos_loaded hook.
+    /// It is called at the end of the `RepoSack::load_repos` method (in Impl).
+    virtual void repos_loaded() {}
+
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
     virtual void pre_transaction(const libdnf5::base::Transaction &) {}

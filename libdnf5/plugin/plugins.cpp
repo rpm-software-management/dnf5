@@ -246,6 +246,14 @@ void Plugins::repos_configured() {
     }
 }
 
+void Plugins::repos_loaded() {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->repos_loaded();
+        }
+    }
+}
+
 void Plugins::pre_transaction(const libdnf5::base::Transaction & transaction) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
