@@ -59,6 +59,7 @@ public:
     void pre_base_setup();
     void post_base_setup();
     void repos_configured();
+    void repos_loaded();
     void pre_transaction(const libdnf5::base::Transaction & transaction);
     void post_transaction(const libdnf5::base::Transaction & transaction);
     void finish() noexcept;
@@ -98,6 +99,8 @@ public:
     void post_base_setup();
 
     void repos_configured();
+
+    void repos_loaded();
 
     void pre_transaction(const libdnf5::base::Transaction & transaction);
 
@@ -160,6 +163,12 @@ inline void Plugin::post_base_setup() {
 inline void Plugin::repos_configured() {
     if (iplugin_instance) {
         iplugin_instance->repos_configured();
+    }
+}
+
+inline void Plugin::repos_loaded() {
+    if (iplugin_instance) {
+        iplugin_instance->repos_loaded();
     }
 }
 

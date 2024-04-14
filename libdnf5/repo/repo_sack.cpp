@@ -541,6 +541,8 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     base->get_rpm_package_sack()->load_config_excludes_includes();
     base->get_module_sack()->p_impl->module_filtering();
     repos_updated_and_loaded = true;
+
+    base->p_impl->get_plugins().repos_loaded();
 }
 
 
