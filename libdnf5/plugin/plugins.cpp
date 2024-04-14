@@ -254,6 +254,22 @@ void Plugins::repos_loaded() {
     }
 }
 
+void Plugins::pre_add_cmdline_packages(const std::vector<std::string> & paths) {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->pre_add_cmdline_packages(paths);
+        }
+    }
+}
+
+void Plugins::post_add_cmdline_packages() {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_add_cmdline_packages();
+        }
+    }
+}
+
 void Plugins::pre_transaction(const libdnf5::base::Transaction & transaction) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
