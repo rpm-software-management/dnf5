@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_PLUGIN_IPLUGIN_HPP
 #define LIBDNF5_PLUGIN_IPLUGIN_HPP
 
+#include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/version.hpp"
 
 #include <cstdint>
@@ -123,7 +124,8 @@ public:
     Base & get_base() noexcept;
 
 private:
-    Base * base;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::plugin

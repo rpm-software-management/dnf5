@@ -21,7 +21,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::plugin {
 
-IPlugin::IPlugin(Base & base) : base(&base) {}
+
+class IPlugin::Impl {
+public:
+    explicit Impl(Base & base) : base(&base) {}
+
+    Base & get_base() const noexcept { return *base; }
+
+private:
+    Base * base;
+};
+
+
+IPlugin::IPlugin(Base & base) : p_impl(new Impl(base)) {}
 
 IPlugin::~IPlugin() = default;
 
@@ -48,7 +60,7 @@ void IPlugin::post_transaction([[maybe_unused]] const libdnf5::base::Transaction
 void IPlugin::finish() noexcept {}
 
 Base & IPlugin::get_base() noexcept {
-    return *base;
+    return p_impl->get_base();
 }
 
 }  // namespace libdnf5::plugin
