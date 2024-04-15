@@ -17,23 +17,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf5/plugin/iplugin.hpp"
+#include "iplugin_private.hpp"
 
 namespace libdnf5::plugin {
 
 
 class IPlugin::Impl {
 public:
-    explicit Impl(Base & base) : base(&base) {}
+    explicit Impl(IPluginData & data) : data(&data) {}
 
-    Base & get_base() const noexcept { return *base; }
+    Base & get_base() const noexcept { return plugin::get_base(*data); }
 
 private:
-    Base * base;
+    IPluginData * data;
 };
 
 
-IPlugin::IPlugin(Base & base) : p_impl(new Impl(base)) {}
+IPlugin::IPlugin(IPluginData & data) : p_impl(new Impl(data)) {}
 
 IPlugin::~IPlugin() = default;
 
@@ -59,7 +59,7 @@ void IPlugin::post_transaction([[maybe_unused]] const libdnf5::base::Transaction
 
 void IPlugin::finish() noexcept {}
 
-Base & IPlugin::get_base() noexcept {
+Base & IPlugin::get_base() const noexcept {
     return p_impl->get_base();
 }
 

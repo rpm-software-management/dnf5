@@ -47,10 +47,12 @@ struct Version {
     std::uint16_t micro;
 };
 
+class IPluginData;
+
 /// @brief A base class for implementing LIBDNF5 plugins that introduce additional logic into the library using hooks.
 class IPlugin {
 public:
-    explicit IPlugin(Base & base);
+    explicit IPlugin(IPluginData & data);
     virtual ~IPlugin();
 
     IPlugin() = delete;
@@ -121,7 +123,7 @@ public:
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept;
 
-    Base & get_base() noexcept;
+    Base & get_base() const noexcept;
 
 private:
     class Impl;
@@ -147,7 +149,7 @@ libdnf5::plugin::Version libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
 libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
-    libdnf5::LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser);
+    libdnf5::LibraryVersion library_version, libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser & parser);
 
 /// Deletes plugin instance.
 void libdnf_plugin_delete_instance(libdnf5::plugin::IPlugin * plugin_instance);
