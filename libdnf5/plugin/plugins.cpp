@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 
+#include "iplugin_private.hpp"
 #include "utils/library.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -74,7 +75,7 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
-    iplugin_instance = new_instance(libdnf5::get_library_version(), base, get_config_parser());
+    iplugin_instance = new_instance(libdnf5::get_library_version(), get_iplugin_data(base), get_config_parser());
 }
 
 PluginLibrary::~PluginLibrary() {

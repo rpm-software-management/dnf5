@@ -67,7 +67,7 @@ struct CommandToRun {
 
 class Actions : public plugin::IPlugin {
 public:
-    Actions(libdnf5::Base & base, libdnf5::ConfigParser &) : IPlugin(base) {}
+    Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~Actions() = default;
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -777,8 +777,10 @@ plugin::Version libdnf_plugin_get_version(void) {
 }
 
 plugin::IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
-    return new Actions(base, parser);
+    [[maybe_unused]] LibraryVersion library_version,
+    libdnf5::plugin::IPluginData & data,
+    libdnf5::ConfigParser & parser) try {
+    return new Actions(data, parser);
 } catch (...) {
     return nullptr;
 }
