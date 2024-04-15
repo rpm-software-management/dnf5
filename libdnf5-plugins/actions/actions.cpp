@@ -42,7 +42,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{0, 3, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 0, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -98,6 +98,12 @@ public:
 
     void repos_loaded() override { on_hook(repos_loaded_actions); }
 
+    void pre_add_cmdline_packages(const std::vector<std::string> &) override {
+        on_hook(pre_add_cmdline_packages_actions);
+    }
+
+    void post_add_cmdline_packages() override { on_hook(post_add_cmdline_packages_actions); }
+
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
     }
@@ -129,6 +135,8 @@ private:
     std::vector<Action> post_base_setup_actions;
     std::vector<Action> repos_configured_actions;
     std::vector<Action> repos_loaded_actions;
+    std::vector<Action> pre_add_cmdline_packages_actions;
+    std::vector<Action> post_add_cmdline_packages_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
 
@@ -466,6 +474,8 @@ void Actions::parse_action_files() {
                 POST_BASE_SETUP,
                 REPOS_CONFIGURED,
                 REPOS_LOADED,
+                PRE_ADD_CMDLINE_PACKAGES,
+                POST_ADD_CMDLINE_PACKAGES,
                 PRE_TRANS,
                 POST_TRANS
             } hook;
@@ -477,6 +487,10 @@ void Actions::parse_action_files() {
                 hook = Hooks::REPOS_CONFIGURED;
             } else if (line.starts_with("repos_loaded:")) {
                 hook = Hooks::REPOS_LOADED;
+            } else if (line.starts_with("pre_add_cmdline_packages:")) {
+                hook = Hooks::PRE_ADD_CMDLINE_PACKAGES;
+            } else if (line.starts_with("post_add_cmdline_packages:")) {
+                hook = Hooks::POST_ADD_CMDLINE_PACKAGES;
             } else if (line.starts_with("pre_transaction:")) {
                 hook = Hooks::PRE_TRANS;
             } else if (line.starts_with("post_transaction:")) {
@@ -545,6 +559,12 @@ void Actions::parse_action_files() {
                     break;
                 case Hooks::REPOS_LOADED:
                     repos_loaded_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::PRE_ADD_CMDLINE_PACKAGES:
+                    pre_add_cmdline_packages_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::POST_ADD_CMDLINE_PACKAGES:
+                    post_add_cmdline_packages_actions.emplace_back(std::move(act));
                     break;
                 case Hooks::PRE_TRANS:
                     pre_trans_actions.emplace_back(std::move(act));
