@@ -265,7 +265,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
 %dir %{_datadir}/dnf5
 %dir %{_datadir}/dnf5/aliases.d
-%config %{_datadir}/dnf5/aliases.d/compatibility.conf
+%{_datadir}/dnf5/aliases.d/compatibility.conf
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %dir %{_datadir}/dnf5/dnf5-plugins
