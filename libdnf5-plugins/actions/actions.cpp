@@ -96,6 +96,8 @@ public:
 
     void repos_configured() override { on_hook(repos_configured_actions); }
 
+    void repos_loaded() override { on_hook(repos_loaded_actions); }
+
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
     }
@@ -126,6 +128,7 @@ private:
     std::vector<Action> pre_base_setup_actions;
     std::vector<Action> post_base_setup_actions;
     std::vector<Action> repos_configured_actions;
+    std::vector<Action> repos_loaded_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
 
@@ -458,13 +461,22 @@ void Actions::parse_action_files() {
                 continue;
             }
 
-            enum class Hooks { PRE_BASE_SETUP, POST_BASE_SETUP, REPOS_CONFIGURED, PRE_TRANS, POST_TRANS } hook;
+            enum class Hooks {
+                PRE_BASE_SETUP,
+                POST_BASE_SETUP,
+                REPOS_CONFIGURED,
+                REPOS_LOADED,
+                PRE_TRANS,
+                POST_TRANS
+            } hook;
             if (line.starts_with("pre_base_setup:")) {
                 hook = Hooks::PRE_BASE_SETUP;
             } else if (line.starts_with("post_base_setup:")) {
                 hook = Hooks::POST_BASE_SETUP;
             } else if (line.starts_with("repos_configured:")) {
                 hook = Hooks::REPOS_CONFIGURED;
+            } else if (line.starts_with("repos_loaded:")) {
+                hook = Hooks::REPOS_LOADED;
             } else if (line.starts_with("pre_transaction:")) {
                 hook = Hooks::PRE_TRANS;
             } else if (line.starts_with("post_transaction:")) {
@@ -530,6 +542,9 @@ void Actions::parse_action_files() {
                     break;
                 case Hooks::REPOS_CONFIGURED:
                     repos_configured_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::REPOS_LOADED:
+                    repos_loaded_actions.emplace_back(std::move(act));
                     break;
                 case Hooks::PRE_TRANS:
                     pre_trans_actions.emplace_back(std::move(act));
