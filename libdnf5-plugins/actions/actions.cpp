@@ -66,7 +66,7 @@ struct CommandToRun {
 };
 
 
-class Actions : public plugin::IPlugin {
+class Actions final : public plugin::IPlugin {
 public:
     Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~Actions() = default;
