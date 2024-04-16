@@ -2428,7 +2428,7 @@ base::Transaction Goal::resolve() {
         }
     }
 
-    ret |= p_impl->rpm_goal.resolve();
+    transaction.p_impl->resolve_and_set_transaction(p_impl->rpm_goal, module_sack, ret);
 
     // Write debug solver data
     // Note: Modules debug data are handled separately when resolving module goal in ModuleSack::Impl::module_solve()
@@ -2455,8 +2455,6 @@ base::Transaction Goal::resolve() {
     }
 
     //TODO(amatej): Add conditional check that no extra packages were added by the solver
-
-    transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
 
     return transaction;
 }

@@ -47,8 +47,10 @@ public:
 
     Impl & operator=(const Impl & other);
 
-    /// Set transaction according resolved goal and problems to EventLog
-    void set_transaction(rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems);
+    /// Resolve goal_to_resolve first using strict setting and then user defined setting,
+    /// then set transaction according the resolved goal and report problems to EventLog
+    void resolve_and_set_transaction(
+        rpm::solv::GoalPrivate & goal_to_resolve, module::ModuleSack & module_sack, GoalProblem problems);
 
     TransactionPackage make_transaction_package(
         Id id,

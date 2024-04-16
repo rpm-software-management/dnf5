@@ -373,32 +373,38 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
     return p_impl->signature_problems;
 }
 
-void Transaction::Impl::set_transaction(
-    rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems) {
-    auto solver_problems = process_solver_problems(base, solved_goal);
-    if (!solver_problems.empty()) {
-        add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
-    } else {
-        // TODO(jmracek) To improve performance add a test whether it make sense to resolve transaction in strict mode
-        // Test whether there were skipped jobs or used not the best candidates due to broken dependencies
-        rpm::solv::GoalPrivate solved_goal_copy(solved_goal);
-        solved_goal_copy.set_run_in_strict_mode(true);
-        solved_goal_copy.resolve();
-        auto solver_problems_strict = process_solver_problems(base, solved_goal_copy);
-        if (!solver_problems_strict.empty()) {
-            add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems_strict);
-        }
-    }
+void Transaction::Impl::resolve_and_set_transaction(
+    rpm::solv::GoalPrivate & goal_to_resolve, module::ModuleSack & module_sack, GoalProblem problems) {
     this->problems = problems;
 
-    if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||
-        ((problems & GoalProblem::MODULE_SOLVER_ERROR_LATEST) != GoalProblem::NO_PROBLEM &&
+    // TODO(jmracek) To improve performance add a test whether it make sense to resolve transaction in strict mode
+    // Test whether there were skipped jobs or used not the best candidates due to broken dependencies
+    goal_to_resolve.set_run_in_strict_mode(true);
+    GoalProblem resolve_problems = goal_to_resolve.resolve();
+
+    auto solver_problems_strict = process_solver_problems(base, goal_to_resolve);
+    if (!solver_problems_strict.empty()) {
+        goal_to_resolve.set_run_in_strict_mode(false);
+        resolve_problems = goal_to_resolve.resolve();
+
+        auto solver_problems = process_solver_problems(base, goal_to_resolve);
+        // Report problems from strict transaction, because it might contain more information
+        if (solver_problems.empty()) {
+            add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems_strict);
+        } else {
+            add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems_strict);
+        }
+    }
+    this->problems |= resolve_problems;
+
+    if ((this->problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||
+        ((this->problems & GoalProblem::MODULE_SOLVER_ERROR_LATEST) != GoalProblem::NO_PROBLEM &&
          base->get_config().get_best_option().get_value())) {
         // There is a fatal error in resolving modules
         return;
     }
 
-    auto transaction = solved_goal.get_transaction();
+    auto transaction = goal_to_resolve.get_transaction();
     libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
     if (!libsolv_transaction) {
         return;
@@ -412,29 +418,31 @@ void Transaction::Impl::set_transaction(
 
     // The order of packages in the vector matters, we rely on outbound actions
     // being at the end in Transaction::Impl::run()
-    for (auto id : solved_goal.list_installs()) {
-        packages.emplace_back(
-            make_transaction_package(id, TransactionPackage::Action::INSTALL, solved_goal, replaced, installed_query));
-    }
-
-    for (auto id : solved_goal.list_reinstalls()) {
+    for (auto id : goal_to_resolve.list_installs()) {
         packages.emplace_back(make_transaction_package(
-            id, TransactionPackage::Action::REINSTALL, solved_goal, replaced, installed_query));
+            id, TransactionPackage::Action::INSTALL, goal_to_resolve, replaced, installed_query));
     }
 
-    for (auto id : solved_goal.list_upgrades()) {
-        packages.emplace_back(
-            make_transaction_package(id, TransactionPackage::Action::UPGRADE, solved_goal, replaced, installed_query));
-    }
-
-    for (auto id : solved_goal.list_downgrades()) {
+    for (auto id : goal_to_resolve.list_reinstalls()) {
         packages.emplace_back(make_transaction_package(
-            id, TransactionPackage::Action::DOWNGRADE, solved_goal, replaced, installed_query));
+            id, TransactionPackage::Action::REINSTALL, goal_to_resolve, replaced, installed_query));
     }
 
-    for (auto id : solved_goal.list_removes()) {
+    for (auto id : goal_to_resolve.list_upgrades()) {
+        packages.emplace_back(make_transaction_package(
+            id, TransactionPackage::Action::UPGRADE, goal_to_resolve, replaced, installed_query));
+    }
+
+    for (auto id : goal_to_resolve.list_downgrades()) {
+        packages.emplace_back(make_transaction_package(
+            id, TransactionPackage::Action::DOWNGRADE, goal_to_resolve, replaced, installed_query));
+    }
+
+    for (auto id : goal_to_resolve.list_removes()) {
         packages.emplace_back(TransactionPackage(
-            rpm::Package(base, rpm::PackageId(id)), TransactionPackage::Action::REMOVE, solved_goal.get_reason(id)));
+            rpm::Package(base, rpm::PackageId(id)),
+            TransactionPackage::Action::REMOVE,
+            goal_to_resolve.get_reason(id)));
     }
 
     // Add replaced packages to transaction
@@ -448,13 +456,13 @@ void Transaction::Impl::set_transaction(
     }
 
     // Add environmental groups to the transaction
-    for (auto & [environment, action, reason, with_optional] : solved_goal.list_environments()) {
+    for (auto & [environment, action, reason, with_optional] : goal_to_resolve.list_environments()) {
         TransactionEnvironment tsenv(environment, action, reason, with_optional);
         environments.emplace_back(std::move(tsenv));
     }
 
     // Add groups to the transaction
-    for (auto & [group, action, reason, package_types] : solved_goal.list_groups()) {
+    for (auto & [group, action, reason, package_types] : goal_to_resolve.list_groups()) {
         TransactionGroup tsgrp(group, action, reason, package_types);
         groups.emplace_back(std::move(tsgrp));
     }
@@ -487,7 +495,7 @@ void Transaction::Impl::set_transaction(
     }
 
     // Add reason change actions to the transaction
-    for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
+    for (auto & [pkg, reason, group_id] : goal_to_resolve.list_reason_changes()) {
         TransactionPackage tspkg(pkg, TransactionPackage::Action::REASON_CHANGE, reason, group_id);
         packages.emplace_back(std::move(tspkg));
     }
