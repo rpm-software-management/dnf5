@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon {
 
 bool write_to_fd(const std::string & message, int out_fd, std::string & error_msg) {
-    const size_t fd_buffer_size = fcntl(out_fd, F_GETPIPE_SZ);
+    const auto fd_buffer_size = static_cast<size_t>(fcntl(out_fd, F_GETPIPE_SZ));
     // TODO(mblaha): make the timeout configurable
     const int timeout = 30000;
 
@@ -38,7 +38,6 @@ bool write_to_fd(const std::string & message, int out_fd, std::string & error_ms
     pfds[0].events = POLLOUT;
 
     ssize_t total_bytes_written = 0;
-    ssize_t bytes_written = -1;
     size_t bytes_remaining = message.size();
 
     int ready = -1;
@@ -59,7 +58,7 @@ bool write_to_fd(const std::string & message, int out_fd, std::string & error_ms
             default:
                 if ((pfds[0].revents & POLLOUT) != 0) {
                     // file descriptor is ready for writing
-                    bytes_written =
+                    const auto bytes_written =
                         write(out_fd, message.data() + total_bytes_written, std::min(fd_buffer_size, bytes_remaining));
                     if (bytes_written == -1) {
                         if ((errno != EAGAIN && errno != EWOULDBLOCK)) {
@@ -70,7 +69,7 @@ bool write_to_fd(const std::string & message, int out_fd, std::string & error_ms
                         }
                     } else {
                         total_bytes_written += bytes_written;
-                        bytes_remaining -= bytes_written;
+                        bytes_remaining -= static_cast<size_t>(bytes_written);
                     }
                 } else {
                     success = false;

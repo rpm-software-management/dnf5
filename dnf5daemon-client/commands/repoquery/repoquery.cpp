@@ -219,7 +219,7 @@ void RepoqueryCommand::run() {
 
     int in_fd = pipefd[0];
 
-    const size_t pipe_buffer_size = fcntl(in_fd, F_GETPIPE_SZ);
+    const auto pipe_buffer_size = static_cast<size_t>(fcntl(in_fd, F_GETPIPE_SZ));
     const int timeout = 30000;
 
     std::array<pollfd, 1> pfds;
@@ -227,8 +227,6 @@ void RepoqueryCommand::run() {
     pfds[0].events = POLLIN;
 
     std::string message;
-    ssize_t total_bytes_read = 0;
-    ssize_t bytes_read = -1;
 
     std::vector<char> buffer(pipe_buffer_size);  // Buffer for reading data
     enum class STATUS { PENDING, FINISHED, FAILED } reading_status;
@@ -247,7 +245,7 @@ void RepoqueryCommand::run() {
                 break;
             default:
                 if ((pfds[0].revents & POLLIN) != 0) {
-                    bytes_read = read(in_fd, buffer.data(), pipe_buffer_size);
+                    const auto bytes_read = read(in_fd, buffer.data(), pipe_buffer_size);
                     if (bytes_read == -1) {
                         // read error
                         if (errno != EAGAIN && errno != EWOULDBLOCK) {
@@ -259,8 +257,7 @@ void RepoqueryCommand::run() {
                         reading_status = STATUS::FINISHED;
                     } else {
                         // data read
-                        message.append(buffer.data(), bytes_read);
-                        total_bytes_read += bytes_read;
+                        message.append(buffer.data(), static_cast<size_t>(bytes_read));
                         for (const auto & package : json_to_packages(message)) {
                             if (info_option->get_value()) {
                                 libdnf5::cli::output::PackageAdapter cli_pkg(package);
