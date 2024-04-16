@@ -42,6 +42,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/rpm/reldep.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/patterns.hpp"
 
 #include <filesystem>
@@ -207,7 +208,8 @@ private:
     void install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg);
     void remove_group_packages(const rpm::PackageSet & remove_candidates);
 
-    std::unique_ptr<std::pair<transaction::TransactionReplay, GoalJobSettings>> serialized_transaction;
+    // (path_to_serialized_transaction, settings)
+    std::unique_ptr<std::tuple<std::filesystem::path, GoalJobSettings>> serialized_transaction;
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -625,10 +627,15 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
     if (!serialized_transaction) {
         return GoalProblem::NO_PROBLEM;
     }
-    libdnf5::GoalJobSettings settings = serialized_transaction->second;
+
+    auto & [replay_path, settings] = *serialized_transaction;
+    utils::fs::File replay_file(replay_path, "r");
+    auto replay_location = replay_path.remove_filename();
+    auto replay = transaction::parse_transaction_replay(replay_file.read());
+
     bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
-    for (const auto & package_replay : serialized_transaction->first.packages) {
+    for (const auto & package_replay : replay.packages) {
         libdnf5::GoalJobSettings settings_per_package = settings;
         settings_per_package.set_clean_requirements_on_remove(libdnf5::GoalSetting::SET_FALSE);
         if (!package_replay.repo_id.empty()) {
@@ -672,7 +679,7 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
         }
     }
 
-    for (const auto & group_replay : serialized_transaction->first.groups) {
+    for (const auto & group_replay : replay.groups) {
         libdnf5::GoalJobSettings settings_per_group = settings;
         settings_per_group.set_group_no_packages(true);
         settings_per_group.set_group_search_groups(true);
@@ -703,7 +710,7 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
         }
     }
 
-    for (const auto & env_replay : serialized_transaction->first.environments) {
+    for (const auto & env_replay : replay.environments) {
         libdnf5::GoalJobSettings settings_per_environment = settings;
         settings_per_environment.set_environment_no_groups(true);
         settings_per_environment.set_group_search_groups(false);
@@ -2469,11 +2476,11 @@ base::Transaction Goal::resolve() {
     return transaction;
 }
 
-
-void Goal::add_serialized_transaction(const std::string & serialized_transaction, libdnf5::GoalJobSettings & settings) {
+void Goal::add_serialized_transaction(
+    const std::filesystem::path & transaction_path, const libdnf5::GoalJobSettings & settings) {
     libdnf_user_assert(!p_impl->serialized_transaction, "Serialized transaction cannot be set multiple times.");
-    p_impl->serialized_transaction = std::make_unique<std::pair<transaction::TransactionReplay, GoalJobSettings>>(
-        transaction::parse_transaction_replay(serialized_transaction), settings);
+    p_impl->serialized_transaction =
+        std::make_unique<std::tuple<std::filesystem::path, GoalJobSettings>>(transaction_path, settings);
 }
 
 void Goal::reset() {
