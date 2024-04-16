@@ -31,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option_path.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
-#include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
 
 #ifdef WITH_SYSTEMD
@@ -453,15 +452,10 @@ void OfflineExecuteCommand::run() {
     const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
-    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "r");
-
-    const auto & json = transaction_json_file.read();
-    transaction_json_file.close();
 
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.base);
 
-    auto settings = libdnf5::GoalJobSettings();
-    goal->add_serialized_transaction(json, settings);
+    goal->add_serialized_transaction(transaction_json_path);
 
     auto transaction = goal->resolve();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
