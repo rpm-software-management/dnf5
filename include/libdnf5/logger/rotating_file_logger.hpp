@@ -23,9 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "logger.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <filesystem>
-#include <memory>
 
 namespace libdnf5 {
 
@@ -60,7 +60,7 @@ public:
 
 private:
     class Impl;
-    std::unique_ptr<Impl> p_impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5

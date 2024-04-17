@@ -24,9 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <unistd.h>
 
-#include <array>
 #include <chrono>
 #include <string>
+#include <string_view>
+#include <utility>
 
 
 namespace libdnf5 {
@@ -35,19 +36,18 @@ namespace libdnf5 {
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
 class Logger {
 public:
-    Logger() = default;
+    explicit Logger();
+
     Logger(const Logger &) = delete;
     Logger(Logger &&) = delete;
     Logger & operator=(const Logger &) = delete;
     Logger & operator=(Logger &&) = delete;
-    virtual ~Logger() = default;
+
+    virtual ~Logger();
 
     enum class Level : unsigned int { CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG, TRACE };
 
-    static constexpr const char * level_to_cstr(Level level) noexcept {
-        auto ilevel = static_cast<unsigned int>(level);
-        return ilevel >= LEVEL_C_STR.size() ? "UNDEFINED" : LEVEL_C_STR[ilevel];
-    }
+    static const char * level_to_cstr(Level level) noexcept;
 
     template <typename... Ss>
     void critical(std::string_view format, Ss &&... args) {
@@ -96,16 +96,14 @@ public:
         pid_t pid,
         Level level,
         const std::string & message) noexcept = 0;
-
-private:
-#ifndef SWIG
-    static constexpr std::array<const char *, static_cast<unsigned int>(Level::TRACE) + 1> LEVEL_C_STR = {
-        "CRITICAL", "ERROR", "WARNING", "NOTICE", "INFO", "DEBUG", "TRACE"};
-#endif
 };
+
 
 class StringLogger : public Logger {
 public:
+    explicit StringLogger();
+    ~StringLogger() override;
+
     void write(
         const std::chrono::time_point<std::chrono::system_clock> & time,
         pid_t pid,

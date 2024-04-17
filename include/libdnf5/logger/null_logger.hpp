@@ -29,13 +29,16 @@ namespace libdnf5 {
 /// It can be used in case when no logs are needed.
 class NullLogger : public Logger {
 public:
-    void log_line(Level /*level*/, const std::string & /*message*/) noexcept override {}
+    explicit NullLogger();
+    ~NullLogger() override;
+
+    void log_line(Level level, const std::string & message) noexcept override;
 
     void write(
-        const std::chrono::time_point<std::chrono::system_clock> & /*time*/,
-        pid_t /*pid*/,
-        Level /*level*/,
-        const std::string & /*message*/) noexcept override {}
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept override;
 };
 
 }  // namespace libdnf5
