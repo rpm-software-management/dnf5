@@ -108,11 +108,13 @@ public:
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
-    virtual void pre_transaction(const libdnf5::base::Transaction &) {}
+    /// @param transaction Contains the transaction that will be started.
+    virtual void pre_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
 
     /// The post_transaction hook.
     /// It is called after transactions.
-    virtual void post_transaction(const libdnf5::base::Transaction &) {}
+    /// @param transaction Contains the completed transaction.
+    virtual void post_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept {}
