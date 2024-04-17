@@ -35,12 +35,12 @@ namespace libdnf5 {
 class LogRouter : public Logger {
 public:
     /// Constructs a new LogRouter instance with an empty set of destination loggers.
-    LogRouter();
+    explicit LogRouter();
 
     ~LogRouter();
 
     /// Constructs a new LogRouter instance and sets the destination loggers.
-    LogRouter(std::vector<std::unique_ptr<Logger>> && loggers);
+    explicit LogRouter(std::vector<std::unique_ptr<Logger>> && loggers);
 
     /// Moves (registers) the "logger" into the log router. It gets next free index number.
     void add_logger(std::unique_ptr<Logger> && logger);

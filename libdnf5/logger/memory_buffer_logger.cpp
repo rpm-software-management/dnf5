@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/logger/memory_buffer_logger.hpp"
 
+#include <mutex>
+
 namespace libdnf5 {
 
 class MemoryBufferLogger::Impl {
