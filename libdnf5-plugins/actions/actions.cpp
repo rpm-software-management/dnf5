@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
+#include <libdnf5/plugin/iplugin.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <sys/wait.h>
