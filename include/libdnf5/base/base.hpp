@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack.hpp"
-#include "libdnf5/plugin/iplugin.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
