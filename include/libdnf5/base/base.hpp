@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/logger/log_router.hpp"
 #include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/plugin/plugin_info.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
@@ -93,6 +94,10 @@ public:
     /// @param enable Request: true - enable plugins, false - disable plugins
     /// @exception libdnf5::UserAssertionError When called after Base::setup
     void enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable);
+
+    /// @return a list of information about plugins found during Base::setup
+    /// @exception libdnf5::UserAssertionError When called before Base::setup
+    const std::vector<plugin::PluginInfo> & get_plugins_info() const;
 
     /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
     /// configuration of protected_packages (glob:).

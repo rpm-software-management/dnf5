@@ -16,9 +16,19 @@
 
 %{
     #include "libdnf5/plugin/iplugin.hpp"
+    #include "libdnf5/plugin/plugin_info.hpp"
 %}
 
 #define CV __perl_CV
+
+%include "libdnf5/plugin/plugin_version.hpp"
+
+%extend libdnf5::plugin::Version {
+    Version(std::uint16_t major, std::uint16_t minor, std::uint16_t micro) {
+        libdnf5::plugin::Version * ver = new libdnf5::plugin::Version({major, minor, micro});
+        return ver;
+    }
+}
 
 %ignore PluginError;
 %ignore libdnf_plugin_get_api_version;
@@ -29,9 +39,4 @@
 %feature("director") IPlugin;
 %include "libdnf5/plugin/iplugin.hpp"
 
-%extend libdnf5::plugin::Version {
-    Version(std::uint16_t major, std::uint16_t minor, std::uint16_t micro) {
-        libdnf5::plugin::Version * ver = new libdnf5::plugin::Version({major, minor, micro});
-        return ver;
-    }
-}
+%include "libdnf5/plugin/plugin_info.hpp"
