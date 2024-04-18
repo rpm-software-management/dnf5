@@ -46,7 +46,8 @@ void TransactionQueryTest::test_filter_id_eq() {
     auto base = new_base();
 
     // create a new empty transaction
-    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto trans = (history.*get(new_transaction{}))();
 
     // save the transaction
     (trans.*get(start{}))();
@@ -56,6 +57,7 @@ void TransactionQueryTest::test_filter_id_eq() {
     auto base2 = new_base();
 
     // get the written transaction
-    auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
+    libdnf5::transaction::TransactionHistory history2(base2->get_weak_ptr());
+    auto ts_list = history2.list_transactions({trans.get_id()});
     CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 }

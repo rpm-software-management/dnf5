@@ -52,7 +52,8 @@ create_getter(new_transaction, &libdnf5::transaction::TransactionHistory::new_tr
 }  //namespace
 
 static Transaction create_transaction(libdnf5::Base & base, int nr) {
-    auto trans = (*(base.get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base);
+    auto trans = (history.*get(new_transaction{}))();
     (trans.*get(set_dt_start{}))(nr * 10 + 1);
     (trans.*get(set_dt_end{}))(nr * 10 + 2);
     (trans.*get(set_rpmdb_version_begin{}))(fmt::format("ts {} begin", nr));
@@ -75,7 +76,8 @@ void TransactionTest::test_save_load() {
     // load the saved transaction from database and compare values
     auto base2 = new_base();
 
-    auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
+    libdnf5::transaction::TransactionHistory history2(base2->get_weak_ptr());
+    auto ts_list = history2.list_transactions({trans.get_id()});
     CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     auto trans2 = ts_list[0];
@@ -94,7 +96,8 @@ void TransactionTest::test_save_load() {
 
 void TransactionTest::test_second_start_raises() {
     auto base = new_base();
-    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto trans = (history.*get(new_transaction{}))();
     (trans.*get(start{}))();
     // 2nd begin must throw an exception
     CPPUNIT_ASSERT_THROW((trans.*get(start{}))(), libdnf5::RuntimeError);
@@ -103,7 +106,8 @@ void TransactionTest::test_second_start_raises() {
 
 void TransactionTest::test_save_with_specified_id_raises() {
     auto base = new_base();
-    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto trans = (history.*get(new_transaction{}))();
     (trans.*get(set_id{}))(1);
     // it is not allowed to save a transaction with arbitrary ID
     CPPUNIT_ASSERT_THROW((trans.*get(start{}))(), libdnf5::RuntimeError);
@@ -129,7 +133,8 @@ void TransactionTest::test_update() {
 
     // load the transaction from the database
     auto base2 = new_base();
-    auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
+    libdnf5::transaction::TransactionHistory history2(base2->get_weak_ptr());
+    auto ts_list = history2.list_transactions({trans.get_id()});
     CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     auto trans2 = ts_list[0];
@@ -151,9 +156,9 @@ void TransactionTest::test_compare() {
     auto base = new_base();
 
     // test operator ==, > and <
-    auto transaction_history = base->get_transaction_history();
-    auto first = (*(base->get_transaction_history()).*get(new_transaction{}))();
-    auto second = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto first = (history.*get(new_transaction{}))();
+    auto second = (history.*get(new_transaction{}))();
 
     // equal id
     (first.*get(set_id{}))(1);
@@ -190,7 +195,8 @@ void TransactionTest::test_select_all() {
     (trans3.*get(finish{}))(TransactionState::OK);
 
     // load the saved transaction from database and compare values
-    auto ts_list = base->get_transaction_history()->list_all_transactions();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto ts_list = history.list_all_transactions();
     CPPUNIT_ASSERT_EQUAL((size_t)3, ts_list.size());
 
     auto trans1_loaded = ts_list[0];
@@ -247,7 +253,8 @@ void TransactionTest::test_select_multiple() {
     (trans3.*get(finish{}))(TransactionState::OK);
 
     // load the saved transaction from database and compare values
-    auto ts_list = base->get_transaction_history()->list_transactions({1, 3});
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto ts_list = history.list_transactions({1, 3});
     CPPUNIT_ASSERT_EQUAL((size_t)2, ts_list.size());
 
     auto trans1_loaded = ts_list[0];
@@ -292,7 +299,8 @@ void TransactionTest::test_select_range() {
     (trans3.*get(finish{}))(TransactionState::OK);
 
     // load the saved transaction from database and compare values
-    auto ts_list = base->get_transaction_history()->list_transactions(1, 2);
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto ts_list = history.list_transactions(1, 2);
     CPPUNIT_ASSERT_EQUAL((size_t)2, ts_list.size());
 
     auto trans1_loaded = ts_list[0];

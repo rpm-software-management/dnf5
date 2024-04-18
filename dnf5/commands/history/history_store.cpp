@@ -51,7 +51,7 @@ void HistoryStoreCommand::set_argument_parser() {
 
 void HistoryStoreCommand::run() {
     const auto ts_specs = transaction_specs->get_value();
-    auto & history = *get_context().base.get_transaction_history();
+    libdnf5::transaction::TransactionHistory history(get_context().base);
     std::vector<libdnf5::transaction::Transaction> transactions;
     auto logger = get_context().base.get_logger();
 
