@@ -20,10 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_PLUGIN_IPLUGIN_HPP
 #define LIBDNF5_PLUGIN_IPLUGIN_HPP
 
+#include "plugin_version.hpp"
+
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/version.hpp"
 
-#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -39,13 +40,6 @@ class Transaction;
 }  // namespace libdnf5
 
 namespace libdnf5::plugin {
-
-/// Plugin version
-struct Version {
-    std::uint16_t major;
-    std::uint16_t minor;
-    std::uint16_t micro;
-};
 
 class IPluginData;
 

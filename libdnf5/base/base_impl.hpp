@@ -56,6 +56,10 @@ public:
 
     plugin::Plugins & get_plugins() { return plugins; }
 
+    std::vector<plugin::PluginInfo> & get_plugins_info() { return plugins_info; }
+
+    const std::vector<plugin::PluginInfo> & get_plugins_info() const { return plugins_info; }
+
     /// Call a function that loads the config file, catching errors appropriately
     void with_config_file_path(std::function<void(const std::string &)> func);
 
@@ -94,6 +98,7 @@ private:
 
     /// map of plugin names (global patterns) that we want to enable (true) or disable (false)
     PreserveOrderMap<std::string, bool> plugins_enablement;
+    std::vector<plugin::PluginInfo> plugins_info;
 
     WeakPtrGuard<LogRouter, false> log_router_guard;
     WeakPtrGuard<Vars, false> vars_guard;
@@ -102,10 +107,13 @@ private:
 
 class InternalBaseUser {
 public:
-    static solv::RpmPool & get_rpm_pool(const libdnf5::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
     static solv::CompsPool & get_comps_pool(const libdnf5::BaseWeakPtr & base) {
         return base->p_impl->get_comps_pool();
     }
+
+    static std::vector<plugin::PluginInfo> & get_plugins_info(Base * base) { return base->p_impl->get_plugins_info(); }
+
+    static solv::RpmPool & get_rpm_pool(const libdnf5::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
 };
 
 }  // namespace libdnf5

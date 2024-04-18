@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 
+#include "base/base_impl.hpp"
 #include "iplugin_private.hpp"
+#include "plugin_info_impl.hpp"
 #include "utils/library.hpp"
 
-#include "libdnf5/base/base.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <filesystem>
@@ -188,6 +189,9 @@ void Plugins::load_plugin(
 
     if (!is_enabled) {
         logger.debug("Skip disabled plugin \"{}\"", config_file_path);
+        // Creates a PluginInfo for the unloaded plugin.
+        auto & plugins_info = InternalBaseUser::get_plugins_info(base);
+        plugins_info.emplace_back(PluginInfo::Impl::create_plugin_info(plugin_name, nullptr));
         return;
     }
 
@@ -225,6 +229,15 @@ void Plugins::load_plugins(
 
     if (!failed_filenames.empty()) {
         throw PluginError(M_("Cannot load plugins: {}"), failed_filenames);
+    }
+
+    // Creates a PluginInfo for each loaded plugin.
+    auto & plugins_info = InternalBaseUser::get_plugins_info(base);
+    for (const auto & plugin : plugins) {
+        const auto * iplugin = plugin->get_iplugin();
+        if (iplugin) {
+            plugins_info.emplace_back(PluginInfo::Impl::create_plugin_info(iplugin->get_name(), iplugin));
+        }
     }
 }
 

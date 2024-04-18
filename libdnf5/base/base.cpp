@@ -157,6 +157,11 @@ void Base::enable_disable_plugins(const std::vector<std::string> & plugin_names,
     }
 }
 
+const std::vector<plugin::PluginInfo> & Base::get_plugins_info() const {
+    libdnf_user_assert(p_impl->pool, "Base::get_plugins_info must not be called before Base::setup");
+    return p_impl->get_plugins_info();
+}
+
 void Base::setup() {
     auto & pool = p_impl->pool;
     libdnf_user_assert(!pool, "Base was already initialized");
