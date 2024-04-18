@@ -107,6 +107,9 @@ std::string string_join(
     return output;
 }
 
+
+}  // namespace
+
 bool is_unique(
     const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & origin,
     ProblemRules rule,
@@ -140,68 +143,6 @@ bool is_unique(
     }
     return true;
 }
-
-std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
-    rpm::solv::GoalPrivate & solved_goal, const libdnf5::solv::IdQueue & broken_installed) {
-    auto & pool = solved_goal.get_rpm_pool();
-
-    auto protected_running_kernel = solved_goal.get_protect_running_kernel();
-    std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
-
-    std::set<std::string> names;
-    auto removal_of_protected = solved_goal.get_removal_of_protected();
-    if (removal_of_protected && !removal_of_protected->empty()) {
-        for (auto protected_id : *removal_of_protected) {
-            if (protected_id == protected_running_kernel.id) {
-                std::vector<std::string> elements;
-                elements.emplace_back(pool.get_full_nevra(protected_id));
-                if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
-                    problem_output.push_back(
-                        std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
-                }
-                continue;
-            }
-            names.emplace(pool.get_name(protected_id));
-        }
-        if (!names.empty()) {
-            std::vector<std::string> names_vector(names.begin(), names.end());
-            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
-                problem_output.push_back(
-                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
-            }
-        }
-        return problem_output;
-    }
-    auto protected_packages = solved_goal.get_protected_packages();
-
-    if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
-        return problem_output;
-    }
-
-    for (auto broken : broken_installed) {
-        if (broken == protected_running_kernel.id) {
-            std::vector<std::string> elements;
-            elements.emplace_back(pool.get_full_nevra(broken));
-            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
-                problem_output.push_back(
-                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
-            }
-        } else if (protected_packages && protected_packages->contains_unsafe(broken)) {
-            names.emplace(pool.get_name(broken));
-        }
-    }
-    if (!names.empty()) {
-        std::vector<std::string> names_vector(names.begin(), names.end());
-        if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
-            problem_output.push_back(
-                std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
-        }
-    }
-    return problem_output;
-}
-
-
-}  // namespace
 
 class SolverProblems::Impl {
 public:
@@ -340,128 +281,6 @@ std::string SolverProblems::to_string() const {
         ++index;
     }
     return output;
-}
-
-std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_solver_problems(
-    const libdnf5::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
-    auto & pool = get_rpm_pool(base);
-
-    // Required to discover of problems related to protected packages
-    libdnf5::solv::IdQueue broken_installed;
-
-    auto solver_problems = solved_goal.get_problems();
-
-    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
-
-    for (auto & problem : solver_problems) {
-        std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
-
-        for (auto & [rule, source, dep, target, description] : problem) {
-            std::vector<std::string> elements;
-            ProblemRules tmp_rule = rule;
-            switch (rule) {
-                case ProblemRules::RULE_DISTUPGRADE:
-                case ProblemRules::RULE_INFARCH:
-                case ProblemRules::RULE_UPDATE:
-                case ProblemRules::RULE_BEST_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
-                    elements.push_back(pool.solvid2str(source));
-                    break;
-                case ProblemRules::RULE_JOB:
-                case ProblemRules::RULE_JOB_UNSUPPORTED:
-                case ProblemRules::RULE_PKG:
-                case ProblemRules::RULE_BEST_2:
-                    break;
-                case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
-                case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
-                    elements.push_back(pool.dep2str(dep));
-                    break;
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
-                    if (false) {
-                        // TODO (jmracek) (modularExclude && modularExclude->has(source))
-                    } else {
-                        tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
-                    }
-                    elements.push_back(pool.solvid2str(source));
-                    break;
-                case ProblemRules::RULE_PKG_SELF_CONFLICT:
-                    elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(source));
-                    break;
-                case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_PKG_REQUIRES:
-                    if (pool.is_installed(source)) {
-                        broken_installed.push_back(source);
-                    }
-                    elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(source));
-                    break;
-                case ProblemRules::RULE_PKG_SAME_NAME:
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.solvid2str(target));
-                    std::sort(elements.begin(), elements.end());
-                    break;
-                case ProblemRules::RULE_PKG_CONFLICTS:
-                case ProblemRules::RULE_PKG_OBSOLETES:
-                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
-                case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
-                case ProblemRules::RULE_YUMOBS:
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(target));
-                    break;
-                case ProblemRules::RULE_UNKNOWN:
-                    elements.push_back(description);
-                    break;
-                case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
-                case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
-                    // Rules are not generated by libsolv
-                    break;
-                case ProblemRules::RULE_MODULE_DISTUPGRADE:
-                case ProblemRules::RULE_MODULE_INFARCH:
-                case ProblemRules::RULE_MODULE_UPDATE:
-                case ProblemRules::RULE_MODULE_JOB:
-                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
-                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
-                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
-                case ProblemRules::RULE_MODULE_PKG:
-                case ProblemRules::RULE_MODULE_BEST_1:
-                case ProblemRules::RULE_MODULE_BEST_2:
-                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
-                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
-                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
-                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
-                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
-                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
-                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
-                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
-                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
-                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
-                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
-                case ProblemRules::RULE_MODULE_YUMOBS:
-                case ProblemRules::RULE_MODULE_UNKNOWN:
-                    libdnf_throw_assertion("Unexpected module problem rule in rpm goal");
-            }
-            if (is_unique(problem_output, tmp_rule, elements)) {
-                problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
-            }
-        }
-        if (is_unique(problems, problem_output)) {
-            problems.push_back(std::move(problem_output));
-        }
-    }
-    auto problem_protected = get_removal_of_protected(solved_goal, broken_installed);
-    if (!problem_protected.empty()) {
-        if (is_unique(problems, problem_protected)) {
-            problems.insert(problems.begin(), std::move(problem_protected));
-        }
-    }
-    return problems;
 }
 
 std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems()

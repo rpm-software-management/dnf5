@@ -32,8 +32,14 @@ extern "C" {
 namespace libdnf5::base {
 
 
-std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_solver_problems(
-    const libdnf5::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal);
+bool is_unique(
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & origin,
+    ProblemRules rule,
+    const std::vector<std::string> & elements);
+
+bool is_unique(
+    const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> & problems,
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & new_element);
 
 std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_module_solver_problems(
     Pool * pool, const std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> & solver_problems);
