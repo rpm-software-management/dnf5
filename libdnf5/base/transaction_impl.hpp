@@ -105,6 +105,8 @@ private:
     std::vector<std::string> transaction_problems{};
     std::vector<std::string> signature_problems{};
 
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> solver_problems{};
+
     // history db transaction id
     int64_t history_db_id = 0;
 
@@ -117,6 +119,8 @@ private:
 
     bool check_gpg_signatures();
     ImportRepoKeysResult import_repo_keys(libdnf5::repo::Repo & repo);
+
+    void process_solver_problems(rpm::solv::GoalPrivate & solved_goal);
 
     // Used during transaction replay to ensure stored reason are used
     std::unordered_map<std::string, transaction::TransactionItemReason> rpm_reason_overrides;
