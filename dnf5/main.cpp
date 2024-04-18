@@ -426,7 +426,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
-    no_plugins->set_description("disable all plugins");
+    no_plugins->set_description("Disable all libdnf5 plugins");
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.get_plugins_option());
     global_options_group->register_argument(no_plugins);
@@ -436,14 +436,12 @@ void RootCommand::set_argument_parser() {
     enable_plugins_names->set_has_value(true);
     enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
     enable_plugins_names->set_description(
-        _("Enable plugins by name. List option. Supports globs, can be specified multiple times."));
+        _("Enable libdnf5 plugins by name. List option. Supports globs, can be specified multiple times."));
     enable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
-                ctx.enable_plugins_patterns.emplace_back(plugin_name_pattern);
-            }
+            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), true);
             return true;
         });
     global_options_group->register_argument(enable_plugins_names);
@@ -453,14 +451,12 @@ void RootCommand::set_argument_parser() {
     disable_plugins_names->set_has_value(true);
     disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
     disable_plugins_names->set_description(
-        _("Disable plugins by name. List option. Supports globs, can be specified multiple times."));
+        _("Disable libdnf5 plugins by name. List option. Supports globs, can be specified multiple times."));
     disable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
-                ctx.disable_plugins_patterns.emplace_back(plugin_name_pattern);
-            }
+            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), false);
             return true;
         });
     global_options_group->register_argument(disable_plugins_names);
@@ -1175,6 +1171,12 @@ int main(int argc, char * argv[]) try {
                 std::filesystem::current_path("/");
             } else {
                 close(fd);
+            }
+
+            // Enable/disable libdnf5 plugins according to the list created by
+            // the --enable-plugin and --disable-plugin commandline arguments
+            for (const auto & [plugin_name_pattern, enable] : context.libdnf5_plugins_enablement) {
+                base.enable_disable_plugins(plugin_name_pattern, enable);
             }
 
             base.setup();
