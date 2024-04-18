@@ -85,6 +85,7 @@ public:
     LogRouterWeakPtr get_logger();
     repo::RepoSackWeakPtr get_repo_sack();
     rpm::PackageSackWeakPtr get_rpm_package_sack();
+    module::ModuleSackWeakPtr get_module_sack();
 
     /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
     /// configuration of protected_packages (glob:).
@@ -110,9 +111,8 @@ public:
     /// Returns true when notify_repos_configured() was already called (by user or automatically)
     bool are_repos_configured() const noexcept;
 
-    // TODO(jmracek) Remove from public API due to unstability of the code
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
     transaction::TransactionHistoryWeakPtr get_transaction_history();
-    libdnf5::module::ModuleSackWeakPtr get_module_sack();
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars();

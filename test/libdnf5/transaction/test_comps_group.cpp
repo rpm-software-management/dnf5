@@ -91,7 +91,8 @@ void TransactionCompsGroupTest::test_save_load() {
     auto base = new_base();
 
     //// create a new empty transaction
-    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    libdnf5::transaction::TransactionHistory history(base->get_weak_ptr());
+    auto trans = (history.*get(new_transaction{}))();
 
     //// create an group in the transaction
     create_comps_group(trans);
