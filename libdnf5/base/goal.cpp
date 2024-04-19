@@ -1741,7 +1741,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5:
         auto [pkg_problem, pkg_queue] =
             // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
             add_install_to_goal(transaction, GoalAction::INSTALL_BY_COMPS, pkg_name, pkg_settings);
-        rpm_goal.add_transaction_group_installed(pkg_queue);
+        rpm_goal.add_transaction_group_reason(pkg_queue);
     } else {
         // check whether condition can even be met
         rpm::PackageQuery condition_query(base);
@@ -1753,7 +1753,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5:
             // TODO(mblaha): log absence of pkg in case the query is empty
             if (!query.empty()) {
                 add_provide_install_to_goal(fmt::format("({} if {})", pkg_name, pkg_condition), pkg_settings);
-                rpm_goal.add_transaction_group_installed(*query.p_impl);
+                rpm_goal.add_transaction_group_reason(*query.p_impl);
             }
         }
     }
@@ -1792,6 +1792,7 @@ void Goal::Impl::remove_group_packages(const rpm::PackageSet & remove_candidates
 
     auto & cfg_main = base->get_config();
     rpm_goal.add_remove(packages_to_remove_ids, cfg_main.get_clean_requirements_on_remove_option().get_value());
+    rpm_goal.add_transaction_group_reason(packages_to_remove_ids);
 }
 
 void Goal::Impl::add_group_install_to_goal(
