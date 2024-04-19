@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/transaction_module.hpp"
 #include "libdnf5/base/transaction_package.hpp"
 #include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/rpm/package.hpp"
 #include "libdnf5/rpm/rpm_signature.hpp"
 
 #include <solv/transaction.h>
@@ -106,6 +107,8 @@ private:
     std::vector<std::string> signature_problems{};
 
     std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> solver_problems{};
+    std::vector<libdnf5::rpm::Package> broken_dependency_packages;
+    std::vector<libdnf5::rpm::Package> conflicting_packages;
 
     // history db transaction id
     int64_t history_db_id = 0;
