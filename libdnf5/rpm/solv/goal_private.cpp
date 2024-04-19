@@ -682,21 +682,21 @@ void GoalPrivate::add_transaction_user_installed(const libdnf5::solv::IdQueue & 
     }
 }
 
-void GoalPrivate::add_transaction_group_installed(const libdnf5::solv::IdQueue & idqueue) {
-    if (!transaction_group_installed) {
+void GoalPrivate::add_transaction_group_reason(const libdnf5::solv::IdQueue & idqueue) {
+    if (!transaction_group_reason) {
         auto & pool = get_rpm_pool();
-        transaction_group_installed.reset(new libdnf5::solv::SolvMap(pool->nsolvables));
+        transaction_group_reason.reset(new libdnf5::solv::SolvMap(pool->nsolvables));
     }
     for (const auto & id : idqueue) {
-        transaction_group_installed->add(id);
+        transaction_group_reason->add(id);
     }
 }
 
-void GoalPrivate::add_transaction_group_installed(const libdnf5::solv::SolvMap & solvmap) {
-    if (!transaction_group_installed) {
-        transaction_group_installed.reset(new libdnf5::solv::SolvMap(solvmap));
+void GoalPrivate::add_transaction_group_reason(const libdnf5::solv::SolvMap & solvmap) {
+    if (!transaction_group_reason) {
+        transaction_group_reason.reset(new libdnf5::solv::SolvMap(solvmap));
     } else {
-        *transaction_group_installed |= solvmap;
+        *transaction_group_reason |= solvmap;
     }
 }
 
@@ -722,7 +722,7 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
             return transaction::TransactionItemReason::USER;
         }
         // explicitly group-installed
-        if (transaction_group_installed && transaction_group_installed->contains(id)) {
+        if (transaction_group_reason && transaction_group_reason->contains(id)) {
             return transaction::TransactionItemReason::GROUP;
         }
         // for some packages (e.g. installed by provide) we cannot decide the reason, resort to USER

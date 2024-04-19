@@ -170,8 +170,8 @@ public:
     bool is_clean_deps_present() { return clean_deps_present; }
 
     void add_transaction_user_installed(const libdnf5::solv::IdQueue & idqueue);
-    void add_transaction_group_installed(const libdnf5::solv::IdQueue & idqueue);
-    void add_transaction_group_installed(const libdnf5::solv::SolvMap & solvmap);
+    void add_transaction_group_reason(const libdnf5::solv::IdQueue & idqueue);
+    void add_transaction_group_reason(const libdnf5::solv::SolvMap & solvmap);
 
     /// Add packages that should not be used by solver to satisfy weak dependencies
     void add_exclude_from_weak(const libdnf5::solv::SolvMap & solvmap);
@@ -188,7 +188,7 @@ private:
     unsigned int installonly_limit{0};
 
     // packages potentially installed by any group in this transaction
-    std::unique_ptr<libdnf5::solv::SolvMap> transaction_group_installed;
+    std::unique_ptr<libdnf5::solv::SolvMap> transaction_group_reason;
     // packages explicitly user-installed in this transaction
     std::unique_ptr<libdnf5::solv::SolvMap> transaction_user_installed;
 
