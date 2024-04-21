@@ -1046,6 +1046,41 @@ static void print_resolve_hints(dnf5::Context & context) {
     }
 }
 
+static void print_no_match_libdnf_plugin_patterns(dnf5::Context & context) {
+    if (!context.get_libdnf_plugins_enablement().empty()) {
+        std::vector<std::string> plugin_names;
+        for (const auto & plugin_info : context.get_base().get_plugins_info()) {
+            plugin_names.emplace_back(plugin_info.get_name());
+        }
+
+        struct {
+            const BgettextMessage no_match_message;
+            std::set<std::string> no_match_pattern_set;
+        } no_matches[2]{
+            {M_("No matches were found for the following plugin name patterns while enabling libdnf plugins: {}"), {}},
+            {M_("No matches were found for the following plugin name patterns while disabling libdnf plugins: {}"),
+             {}}};
+
+        for (const auto & [plugin_name_patterns, enable] : context.get_libdnf_plugins_enablement()) {
+            for (const auto & pattern : plugin_name_patterns) {
+                if (!libdnf5::sack::match_string(plugin_names, libdnf5::sack::QueryCmp::GLOB, pattern)) {
+                    no_matches[enable ? 0 : 1].no_match_pattern_set.insert(pattern);
+                }
+            }
+        }
+
+        for (const auto & [no_match_message, no_match_pattern_set] : no_matches) {
+            if (auto it = no_match_pattern_set.begin(); it != no_match_pattern_set.end()) {
+                std::string patterns = *it++;
+                for (; it != no_match_pattern_set.end(); ++it) {
+                    patterns += ", " + *it;
+                }
+                std::cerr << libdnf5::utils::sformat(TM_(no_match_message, 1), patterns) << std::endl;
+            }
+        }
+    }
+}
+
 int main(int argc, char * argv[]) try {
     dnf5::set_locale();
 
@@ -1180,6 +1215,8 @@ int main(int argc, char * argv[]) try {
             }
 
             base.setup();
+
+            print_no_match_libdnf_plugin_patterns(context);
 
             auto destination_logger = libdnf5::create_rotating_file_logger(base, DNF5_LOGGER_FILENAME);
             // Swap to destination logger
