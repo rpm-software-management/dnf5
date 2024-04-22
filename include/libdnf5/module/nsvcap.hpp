@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_NSCVAP_HPP
 #define LIBDNF5_MODULE_NSCVAP_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -50,17 +51,26 @@ public:
         NSC = 18,
     };
 
+    Nsvcap();
+    ~Nsvcap();
+
+    Nsvcap(const Nsvcap & src);
+    Nsvcap & operator=(const Nsvcap & src);
+
+    Nsvcap(Nsvcap && src) noexcept;
+    Nsvcap & operator=(Nsvcap && src) noexcept;
+
     /// The default forms and their order determine module_spec matching
     static const std::vector<Form> & get_default_module_spec_forms();
 
     /// Parse a string in a given form.
     /// If the parsing is successful, the attributes of this class are set accordingly, otherwise, they are left unchanged.
     ///
-    /// @param pattern          A string to parse.
+    /// @param nsvcap_str       A string to parse.
     /// @param form             A module form in which the string should be.
     /// @return                 `true` if the pattern matched the form, `false` otherwise.
     /// @since 5.0.6
-    bool parse(const std::string pattern, Form form);
+    bool parse(const std::string & nsvcap_str, Form form);
 
     /// Parse a string in one of the given forms.
     /// If the parsing is successful, the attributes of this class are set accordingly, otherwise, they are left unchanged.
@@ -69,7 +79,7 @@ public:
     /// @param forms            Module forms in one of which the string should be.
     /// @return                 `true` if the nsvcap_str matched one of the forms, `false` otherwise.
     /// @since 5.0.6
-    static std::vector<Nsvcap> parse(const std::string & pattern, std::vector<Form> forms);
+    static std::vector<Nsvcap> parse(const std::string & pattern, const std::vector<Form> & forms);
 
     /// Parse a string.
     /// If the parsing is successful, the attributes of this class are set accordingly, otherwise, they are left unchanged.
@@ -84,34 +94,30 @@ public:
     /// @since 5.0.6
     void clear();
 
-    const std::string & get_name() const noexcept { return name; }
-    const std::string & get_stream() const noexcept { return stream; }
-    const std::string & get_version() const noexcept { return version; }
-    const std::string & get_context() const noexcept { return context; }
-    const std::string & get_arch() const noexcept { return arch; }
-    const std::string & get_profile() const noexcept { return profile; }
+    const std::string & get_name() const noexcept;
+    const std::string & get_stream() const noexcept;
+    const std::string & get_version() const noexcept;
+    const std::string & get_context() const noexcept;
+    const std::string & get_arch() const noexcept;
+    const std::string & get_profile() const noexcept;
 
-    void set_name(const std::string & name) { this->name = name; }
-    void set_stream(const std::string & stream) { this->stream = stream; }
-    void set_version(const std::string & version) { this->version = version; }
-    void set_context(const std::string & context) { this->context = context; }
-    void set_arch(const std::string & arch) { this->arch = arch; }
-    void set_profile(const std::string & profile) { this->profile = profile; }
+    void set_name(const std::string & name);
+    void set_stream(const std::string & stream);
+    void set_version(const std::string & version);
+    void set_context(const std::string & context);
+    void set_arch(const std::string & arch);
+    void set_profile(const std::string & profile);
 
-    void set_name(std::string && name) { this->name = std::move(name); }
-    void set_stream(std::string && stream) { this->stream = std::move(stream); }
-    void set_version(std::string && version) { this->version = std::move(version); }
-    void set_context(std::string && context) { this->context = std::move(context); }
-    void set_arch(std::string && arch) { this->arch = std::move(arch); }
-    void set_profile(std::string && profile) { this->profile = std::move(profile); }
+    void set_name(std::string && name);
+    void set_stream(std::string && stream);
+    void set_version(std::string && version);
+    void set_context(std::string && context);
+    void set_arch(std::string && arch);
+    void set_profile(std::string && profile);
 
 private:
-    std::string name;
-    std::string stream;
-    std::string version;
-    std::string context;
-    std::string arch;
-    std::string profile;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

@@ -64,7 +64,7 @@ void print_changelogs(
             changelogs.begin(),
             changelogs.end(),
             [](const libdnf5::rpm::Changelog & a, const libdnf5::rpm::Changelog & b) {
-                return a.timestamp > b.timestamp;
+                return a.get_timestamp() > b.get_timestamp();
             });
 
         // filter changelog
@@ -78,13 +78,13 @@ void print_changelogs(
             time_t newest_timestamp = 0;
             for (auto pkg : query) {
                 for (auto & chlog : pkg.get_changelogs()) {
-                    if (chlog.timestamp > newest_timestamp) {
-                        newest_timestamp = chlog.timestamp;
+                    if (chlog.get_timestamp() > newest_timestamp) {
+                        newest_timestamp = chlog.get_timestamp();
                     }
                 }
             }
             size_t idx;
-            for (idx = 0; idx < changelogs.size() && changelogs[idx].timestamp > newest_timestamp; ++idx) {
+            for (idx = 0; idx < changelogs.size() && changelogs[idx].get_timestamp() > newest_timestamp; ++idx) {
             }
             changelogs.erase(changelogs.begin() + static_cast<int>(idx), changelogs.end());
         } else if (filter.first == ChangelogFilterType::COUNT) {
@@ -103,15 +103,15 @@ void print_changelogs(
         } else if (filter.first == ChangelogFilterType::SINCE) {
             int64_t since = std::get<int64_t>(filter.second);
             size_t idx;
-            for (idx = 0; idx < changelogs.size() && changelogs[idx].timestamp >= since; ++idx) {
+            for (idx = 0; idx < changelogs.size() && changelogs[idx].get_timestamp() >= since; ++idx) {
             }
             changelogs.erase(changelogs.begin() + static_cast<int>(idx), changelogs.end());
         }
 
         for (auto & chlog : changelogs) {
-            std::cout << std::put_time(std::gmtime(&chlog.timestamp), "* %a %b %d %X %Y ");
-            std::cout << chlog.author << "\n";
-            std::cout << chlog.text << "\n" << std::endl;
+            std::cout << std::put_time(std::gmtime(&chlog.get_timestamp()), "* %a %b %d %X %Y ");
+            std::cout << chlog.get_author() << "\n";
+            std::cout << chlog.get_text() << "\n" << std::endl;
         }
     }
 }

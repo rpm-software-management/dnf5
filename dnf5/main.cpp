@@ -56,8 +56,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5-cli/exception.hpp>
 #include <libdnf5-cli/exit-codes.hpp>
+#include <libdnf5-cli/output/adapters/transaction.hpp>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/common/xdg.hpp>
@@ -69,6 +71,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
+#include <locale.h>
 #include <string.h>
 
 #include <algorithm>
@@ -116,24 +119,24 @@ void RootCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     auto & config = ctx.base.get_config();
 
-    cmd.set_description("Utility for packages maintaining");
-    cmd.set_long_description("DNF5 is a program for maintaining packages.");
-    cmd.set_named_args_help_header("Unclassified options:");
+    cmd.set_description(_("Utility for packages maintaining"));
+    cmd.set_long_description(_("DNF5 is a program for maintaining packages."));
+    cmd.set_named_args_help_header(_("Unclassified options:"));
 
     auto * global_options_group = parser.add_new_group("global_options");
-    global_options_group->set_header("Global options:");
+    global_options_group->set_header(_("Global options:"));
 
     auto help = parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
-    help->set_description("Print help");
+    help->set_description(_("Print help"));
     global_options_group->register_argument(help);
 
     auto config_file_path = parser.add_new_named_arg("config");
     config_file_path->set_long_name("config");
     config_file_path->set_has_value(true);
     config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
-    config_file_path->set_description("Configuration file location");
+    config_file_path->set_description(_("Configuration file location"));
     config_file_path->link_value(&config.get_config_file_path_option());
     global_options_group->register_argument(config_file_path);
 
@@ -141,8 +144,8 @@ void RootCommand::set_argument_parser() {
     quiet->set_long_name("quiet");
     quiet->set_short_name('q');
     quiet->set_description(
-        "In combination with a non-interactive command, shows just the relevant content. "
-        "Suppresses messages notifying about the current state or actions of dnf5.");
+        _("In combination with a non-interactive command, shows just the relevant content. "
+          "Suppresses messages notifying about the current state or actions of dnf5."));
     quiet->set_parse_hook_func([&ctx](
                                    [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                    [[maybe_unused]] const char * option,
@@ -156,14 +159,14 @@ void RootCommand::set_argument_parser() {
     cacheonly->set_long_name("cacheonly");
     cacheonly->set_short_name('C');
     cacheonly->set_description(
-        "Run entirely from system cache, don't update the cache and use it even in case it is expired.");
+        _("Run entirely from system cache, don't update the cache and use it even in case it is expired."));
     cacheonly->set_const_value("all");
     cacheonly->link_value(&config.get_cacheonly_option());
     global_options_group->register_argument(cacheonly);
 
     auto refresh = parser.add_new_named_arg("refresh");
     refresh->set_long_name("refresh");
-    refresh->set_description("Force refreshing metadata before running the command.");
+    refresh->set_description(_("Force refreshing metadata before running the command."));
     refresh->set_parse_hook_func([&ctx](
                                      [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                      [[maybe_unused]] const char * option,
@@ -196,7 +199,7 @@ void RootCommand::set_argument_parser() {
     repofrompath->set_long_name("repofrompath");
     repofrompath->set_has_value(true);
     repofrompath->set_arg_value_help("REPO_ID,REPO_PATH");
-    repofrompath->set_description("create additional repository using id and path");
+    repofrompath->set_description(_("create additional repository using id and path"));
     repofrompath->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -216,11 +219,11 @@ void RootCommand::set_argument_parser() {
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("[REPO_ID.]OPTION=VALUE");
-    setopt->set_description("set arbitrary config and repo options");
-    setopt->set_long_description(
+    setopt->set_description(_("set arbitrary config and repo options"));
+    setopt->set_long_description(_(
         R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
-              they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
+              they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**"));
     setopt->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -282,28 +285,28 @@ void RootCommand::set_argument_parser() {
     auto assume_yes = parser.add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
-    assume_yes->set_description("automatically answer yes for all questions");
+    assume_yes->set_description(_("automatically answer yes for all questions"));
     assume_yes->set_const_value("true");
     assume_yes->link_value(&config.get_assumeyes_option());
     global_options_group->register_argument(assume_yes);
 
     auto assume_no = parser.add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
-    assume_no->set_description("automatically answer no for all questions");
+    assume_no->set_description(_("automatically answer no for all questions"));
     assume_no->set_const_value("true");
     assume_no->link_value(&config.get_assumeno_option());
     global_options_group->register_argument(assume_no);
 
     auto best = parser.add_new_named_arg("best");
     best->set_long_name("best");
-    best->set_description("try the best available package versions in transactions");
+    best->set_description(("try the best available package versions in transactions"));
     best->set_const_value("true");
     best->link_value(&config.get_best_option());
     global_options_group->register_argument(best);
 
     auto no_best = parser.add_new_named_arg("no-best");
     no_best->set_long_name("no-best");
-    no_best->set_description("do not limit the transaction to the best candidate");
+    no_best->set_description(_("do not limit the transaction to the best candidate"));
     no_best->set_const_value("false");
     no_best->link_value(&config.get_best_option());
     global_options_group->register_argument(no_best);
@@ -314,7 +317,7 @@ void RootCommand::set_argument_parser() {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_description(
-            "Don't install files that are marked as documentation (which includes man pages and texinfo documents)");
+            _("Don't install files that are marked as documentation (which includes man pages and texinfo documents)"));
         no_docs->set_parse_hook_func([&ctx](
                                          [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                          [[maybe_unused]] const char * option,
@@ -330,7 +333,7 @@ void RootCommand::set_argument_parser() {
         auto exclude = parser.add_new_named_arg("exclude");
         exclude->set_long_name("exclude");
         exclude->set_short_name('x');
-        exclude->set_description("exclude packages by name or glob");
+        exclude->set_description(_("exclude packages by name or glob"));
         exclude->set_has_value(true);
         exclude->set_arg_value_help("package,...");
         exclude->set_parse_hook_func([&ctx](
@@ -349,7 +352,7 @@ void RootCommand::set_argument_parser() {
     enable_repo_ids->set_has_value(true);
     enable_repo_ids->set_arg_value_help("REPO_ID,...");
     enable_repo_ids->set_description(
-        "Enable additional repositories. List option. Supports globs, can be specified multiple times.");
+        _("Enable additional repositories. List option. Supports globs, can be specified multiple times."));
     enable_repo_ids->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -367,7 +370,7 @@ void RootCommand::set_argument_parser() {
     disable_repo_ids->set_has_value(true);
     disable_repo_ids->set_arg_value_help("REPO_ID,...");
     disable_repo_ids->set_description(
-        "Disable repositories. List option. Supports globs, can be specified multiple times.");
+        _("Disable repositories. List option. Supports globs, can be specified multiple times."));
     disable_repo_ids->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -385,7 +388,7 @@ void RootCommand::set_argument_parser() {
     repo_ids->set_has_value(true);
     repo_ids->set_arg_value_help("REPO_ID,...");
     repo_ids->set_description(
-        "Enable just specific repositories. List option. Supports globs, can be specified multiple times.");
+        _("Enable just specific repositories. List option. Supports globs, can be specified multiple times."));
     repo_ids->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -407,7 +410,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
-    no_gpgchecks->set_description("disable gpg signature checking (if RPM policy allows)");
+    no_gpgchecks->set_description(_("disable gpg signature checking (if RPM policy allows)"));
     no_gpgchecks->set_parse_hook_func([&ctx](
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
@@ -423,7 +426,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
-    no_plugins->set_description("disable all plugins");
+    no_plugins->set_description("Disable all libdnf5 plugins");
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.get_plugins_option());
     global_options_group->register_argument(no_plugins);
@@ -433,14 +436,12 @@ void RootCommand::set_argument_parser() {
     enable_plugins_names->set_has_value(true);
     enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
     enable_plugins_names->set_description(
-        "Enable plugins by name. List option. Supports globs, can be specified multiple times.");
+        _("Enable libdnf5 plugins by name. List option. Supports globs, can be specified multiple times."));
     enable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
-                ctx.enable_plugins_patterns.emplace_back(plugin_name_pattern);
-            }
+            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), true);
             return true;
         });
     global_options_group->register_argument(enable_plugins_names);
@@ -450,14 +451,12 @@ void RootCommand::set_argument_parser() {
     disable_plugins_names->set_has_value(true);
     disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
     disable_plugins_names->set_description(
-        "Disable plugins by name. List option. Supports globs, can be specified multiple times.");
+        _("Disable libdnf5 plugins by name. List option. Supports globs, can be specified multiple times."));
     disable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
-                ctx.disable_plugins_patterns.emplace_back(plugin_name_pattern);
-            }
+            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), false);
             return true;
         });
     global_options_group->register_argument(disable_plugins_names);
@@ -469,9 +468,9 @@ void RootCommand::set_argument_parser() {
     comment->set_long_name("comment");
     comment->set_has_value(true);
     comment->set_arg_value_help("COMMENT");
-    comment->set_description("add a comment to transaction");
+    comment->set_description(_("add a comment to transaction"));
     comment->set_long_description(
-        "Adds a comment to the action. If a transaction takes place, the comment is stored in it.");
+        _("Adds a comment to the action. If a transaction takes place, the comment is stored in it."));
     comment->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -484,14 +483,14 @@ void RootCommand::set_argument_parser() {
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("ABSOLUTE_PATH");
-    installroot->set_description("set install root");
+    installroot->set_description(_("set install root"));
     installroot->link_value(&config.get_installroot_option());
     global_options_group->register_argument(installroot);
 
     auto use_host_config = parser.add_new_named_arg("use-host-config");
     use_host_config->set_long_name("use-host-config");
     use_host_config->set_description(
-        "use configuration, reposdir, and vars from the host system rather than the installroot");
+        _("use configuration, reposdir, and vars from the host system rather than the installroot"));
     use_host_config->set_const_value("true");
     use_host_config->link_value(&config.get_use_host_config_option());
     global_options_group->register_argument(use_host_config);
@@ -500,7 +499,7 @@ void RootCommand::set_argument_parser() {
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
     releasever->set_arg_value_help("RELEASEVER");
-    releasever->set_description("override the value of $releasever in config and repo files");
+    releasever->set_description(_("override the value of $releasever in config and repo files"));
     releasever->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -513,7 +512,7 @@ void RootCommand::set_argument_parser() {
         auto show_new_leaves = parser.add_new_named_arg("show-new-leaves");
         show_new_leaves->set_long_name("show-new-leaves");
         show_new_leaves->set_description(
-            "Show newly installed leaf packages and packages that became leaves after a transaction.");
+            _("Show newly installed leaf packages and packages that became leaves after a transaction."));
         show_new_leaves->set_parse_hook_func([&ctx](
                                                  [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                                  [[maybe_unused]] const char * option,
@@ -527,7 +526,7 @@ void RootCommand::set_argument_parser() {
     {
         auto debug_solver = parser.add_new_named_arg("debug_solver");
         debug_solver->set_long_name("debugsolver");
-        debug_solver->set_description("Dump detailed solving results into files");
+        debug_solver->set_description(_("Dump detailed solving results into files"));
         debug_solver->set_const_value("true");
         debug_solver->link_value(&config.get_debug_solver_option());
         global_options_group->register_argument(debug_solver);
@@ -536,7 +535,7 @@ void RootCommand::set_argument_parser() {
     {
         auto dump_config = parser.add_new_named_arg("dump-main-config");
         dump_config->set_long_name("dump-main-config");
-        dump_config->set_description("Print main configuration values to stdout");
+        dump_config->set_description(_("Print main configuration values to stdout"));
         dump_config->set_parse_hook_func([&ctx](
                                              [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                              [[maybe_unused]] const char * option,
@@ -553,7 +552,7 @@ void RootCommand::set_argument_parser() {
         dump_repo_config->set_has_value(true);
         dump_repo_config->set_arg_value_help("REPO_ID,...");
         dump_repo_config->set_description(
-            "Print repository configuration values to stdout. List option. Supports globs");
+            _("Print repository configuration values to stdout. List option. Supports globs"));
         dump_repo_config->set_parse_hook_func([&ctx](
                                                   [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                                   [[maybe_unused]] const char * option,
@@ -568,7 +567,7 @@ void RootCommand::set_argument_parser() {
     {
         auto dump_variables = parser.add_new_named_arg("dump-variables");
         dump_variables->set_long_name("dump-variables");
-        dump_variables->set_description("Print variable values to stdout");
+        dump_variables->set_description(_("Print variable values to stdout"));
         dump_variables->set_parse_hook_func([&ctx](
                                                 [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                                 [[maybe_unused]] const char * option,
@@ -582,14 +581,14 @@ void RootCommand::set_argument_parser() {
     {
         auto version = parser.add_new_named_arg("version");
         version->set_long_name("version");
-        version->set_description("Show DNF5 version and exit");
+        version->set_description(_("Show DNF5 version and exit"));
         global_options_group->register_argument(version);
     }
 
     {
         auto forcearch = parser.add_new_named_arg("forcearch");
         forcearch->set_long_name("forcearch");
-        forcearch->set_description("Force the use of a different architecture.");
+        forcearch->set_description(_("Force the use of a different architecture."));
         forcearch->set_has_value(true);
         forcearch->set_arg_value_help("FORCEARCH");
         forcearch->set_parse_hook_func([&ctx](
@@ -627,21 +626,21 @@ void RootCommand::set_argument_parser() {
     {
         auto * software_management_commands_group =
             ctx.get_argument_parser().add_new_group("software_management_commands");
-        software_management_commands_group->set_header("Software Management Commands:");
+        software_management_commands_group->set_header(_("Software Management Commands:"));
         cmd.register_group(software_management_commands_group);
     }
 
     // query commands group
     {
         auto * query_commands_group = ctx.get_argument_parser().add_new_group("query_commands");
-        query_commands_group->set_header("Query Commands:");
+        query_commands_group->set_header(_("Query Commands:"));
         cmd.register_group(query_commands_group);
     }
 
     // subcommands group
     {
         auto * subcommands_group = ctx.get_argument_parser().add_new_group("subcommands");
-        subcommands_group->set_header("Subcommands:");
+        subcommands_group->set_header(_("Subcommands:"));
         cmd.register_group(subcommands_group);
     }
 }
@@ -733,15 +732,19 @@ static void print_versions(Context & context) {
     constexpr const char * appl_name = "dnf5";
     {
         const auto & version = get_application_version();
-        std::cout << fmt::format("{} version {}.{}.{}", appl_name, version.major, version.minor, version.micro)
-                  << std::endl;
+        std::cout
+            << fmt::format(
+                   "{} version {}.{}.{}.{}", appl_name, version.prime, version.major, version.minor, version.micro)
+            << std::endl;
         const auto & api_version = get_plugin_api_version();
         std::cout << fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor)
                   << std::endl;
     }
     {
         const auto & version = libdnf5::get_library_version();
-        std::cout << fmt::format("libdnf5 version {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
+        std::cout << fmt::format(
+                         "libdnf5 version {}.{}.{}.{}", version.prime, version.major, version.minor, version.micro)
+                  << std::endl;
         const auto & api_version = libdnf5::get_plugin_api_version();
         std::cout << fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor) << std::endl;
     }
@@ -932,6 +935,14 @@ static void print_new_leaves(Context & context) {
     }
 }
 
+static void set_locale() {
+    auto * locale = setlocale(LC_ALL, "");
+    if (locale) {
+        return;
+    }
+    std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
+}
+
 }  // namespace dnf5
 
 
@@ -1036,6 +1047,8 @@ static void print_resolve_hints(dnf5::Context & context) {
 }
 
 int main(int argc, char * argv[]) try {
+    dnf5::set_locale();
+
     // Creates a vector of loggers with one circular memory buffer logger
     std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
     const std::size_t max_log_items_to_keep = 10000;
@@ -1160,6 +1173,12 @@ int main(int argc, char * argv[]) try {
                 close(fd);
             }
 
+            // Enable/disable libdnf5 plugins according to the list created by
+            // the --enable-plugin and --disable-plugin commandline arguments
+            for (const auto & [plugin_name_pattern, enable] : context.libdnf5_plugins_enablement) {
+                base.enable_disable_plugins(plugin_name_pattern, enable);
+            }
+
             base.setup();
 
             auto destination_logger = libdnf5::create_rotating_file_logger(base, DNF5_LOGGER_FILENAME);
@@ -1195,6 +1214,8 @@ int main(int argc, char * argv[]) try {
                 dump_main_configuration(context);
             }
 
+            base.notify_repos_configured();
+
             if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
                 dump_repository_configuration(context, repo_id_list);
             }
@@ -1203,9 +1224,7 @@ int main(int argc, char * argv[]) try {
                 if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
                     context.load_repos(context.get_load_system_repo());
                 } else if (context.get_load_system_repo()) {
-                    repo_sack->get_system_repo()->load();
-                    // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-                    context.base.get_rpm_package_sack()->load_config_excludes_includes();
+                    repo_sack->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
                 }
             }
 
@@ -1222,7 +1241,9 @@ int main(int argc, char * argv[]) try {
                 download_callbacks->set_number_widget_visible(true);
                 download_callbacks->set_show_total_bar_limit(0);
 
-                if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
+                libdnf5::cli::output::TransactionAdapter cli_output_transaction(*context.get_transaction());
+                if (!libdnf5::cli::output::print_transaction_table(
+                        static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction))) {
                     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
                 }
 
@@ -1232,7 +1253,10 @@ int main(int argc, char * argv[]) try {
 
                 dnf5::print_transaction_size_stats(context);
 
-                if (base.get_config().get_downloadonly_option().get_value()) {
+                if (!context.transaction_store_path.empty()) {
+                    std::cout << "The operation will only store the transaction in " << context.transaction_store_path
+                              << "." << std::endl;
+                } else if (base.get_config().get_downloadonly_option().get_value()) {
                     std::cout << "The operation will only download packages for the transaction." << std::endl;
                 } else {
                     for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {

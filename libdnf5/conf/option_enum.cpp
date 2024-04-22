@@ -22,169 +22,89 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <algorithm>
-#include <sstream>
 
 namespace libdnf5 {
 
-template <typename T>
-bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)(std::ios_base &)) {
-    std::istringstream iss(in);
-    return !(iss >> manipulator >> out).fail();
-}
+class OptionEnum::Impl {
+public:
+    Impl(std::string && default_value, std::vector<std::string> && enum_vals)
+        : enum_vals(std::move(enum_vals)),
+          default_value(default_value),
+          value(std::move(default_value)) {}
 
-template <typename T>
-OptionEnum<T>::OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals)
+    Impl(std::string && default_value, std::vector<std::string> && enum_vals, FromStringFunc && from_string_func)
+        : from_string_user(std::move(from_string_func)),
+          enum_vals(std::move(enum_vals)),
+          default_value(default_value),
+          value(std::move(default_value)) {}
+
+private:
+    friend OptionEnum;
+
+    FromStringFunc from_string_user;
+    std::vector<std::string> enum_vals;
+    std::string default_value;
+    std::string value;
+};
+
+OptionEnum::OptionEnum(std::string default_value, std::vector<std::string> enum_vals)
     : Option(Priority::DEFAULT),
-      enum_vals(enum_vals),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
+      p_impl(new Impl(std::move(default_value), std::move(enum_vals))) {
+    test(p_impl->value);
 }
 
-template <typename T>
-OptionEnum<T>::OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals)
+OptionEnum::OptionEnum(
+    std::string default_value, std::vector<std::string> enum_vals, FromStringFunc && from_string_func)
     : Option(Priority::DEFAULT),
-      enum_vals(std::move(enum_vals)),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
+      p_impl(new Impl(std::move(default_value), std::move(enum_vals), std::move(from_string_func))) {
+    test(p_impl->value);
 }
 
-template <typename T>
-OptionEnum<T>::OptionEnum(
-    ValueType default_value, const std::vector<ValueType> & enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT),
-      from_string_user(std::move(from_string_func)),
-      enum_vals(enum_vals),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
-}
+OptionEnum::~OptionEnum() = default;
 
-template <typename T>
-OptionEnum<T>::OptionEnum(
-    ValueType default_value, std::vector<ValueType> && enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT),
-      from_string_user(std::move(from_string_func)),
-      enum_vals(std::move(enum_vals)),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
-}
-
-template <typename T>
-void OptionEnum<T>::test(ValueType value) const {
-    auto it = std::find(enum_vals.begin(), enum_vals.end(), value);
-    if (it == enum_vals.end()) {
+void OptionEnum::test(const std::string & value) const {
+    auto it = std::find(p_impl->enum_vals.begin(), p_impl->enum_vals.end(), value);
+    if (it == p_impl->enum_vals.end()) {
         throw OptionValueNotAllowedError(M_("Enum option value \"{}\" not allowed"), value);
     }
 }
 
-template <typename T>
-T OptionEnum<T>::from_string(const std::string & value) const {
-    if (from_string_user) {
-        return from_string_user(value);
-    }
-    T val;
-    if (libdnf5::from_string<ValueType>(val, value, std::dec)) {
-        return val;
-    }
-    throw OptionInvalidValueError(M_("Invalid enum option value \"{}\""), value);
-}
-
-template <typename T>
-void OptionEnum<T>::set(Priority priority, ValueType value) {
-    assert_not_locked();
-
-    if (priority >= this->priority) {
-        test(value);
-        this->value = value;
-        this->priority = priority;
-    }
-}
-
-template <typename T>
-void OptionEnum<T>::set(ValueType value) {
-    set(Priority::RUNTIME, value);
-}
-
-template <typename T>
-void OptionEnum<T>::set(Priority priority, const std::string & value) {
-    set(priority, from_string(value));
-}
-
-template <typename T>
-void OptionEnum<T>::set(const std::string & value) {
-    set(Priority::RUNTIME, value);
-}
-
-template <typename T>
-T OptionEnum<T>::get_value() const {
-    return value;
-}
-
-template <typename T>
-T OptionEnum<T>::get_default_value() const {
-    return default_value;
-}
-
-template <typename T>
-std::string OptionEnum<T>::to_string(ValueType value) const {
-    std::ostringstream oss;
-    oss << value;
-    return oss.str();
-}
-
-template <typename T>
-std::string OptionEnum<T>::get_value_string() const {
-    return to_string(value);
-}
-
-OptionEnum<std::string>::OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals)
-    : Option(Priority::DEFAULT),
-      enum_vals(std::move(enum_vals)),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
-}
-
-OptionEnum<std::string>::OptionEnum(
-    const std::string & default_value, std::vector<ValueType> enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT),
-      from_string_user(std::move(from_string_func)),
-      enum_vals(std::move(enum_vals)),
-      default_value(default_value),
-      value(default_value) {
-    test(default_value);
-}
-
-void OptionEnum<std::string>::test(const std::string & value) const {
-    auto it = std::find(enum_vals.begin(), enum_vals.end(), value);
-    if (it == enum_vals.end()) {
-        throw OptionValueNotAllowedError(M_("Enum option value \"{}\" not allowed"), value);
-    }
-}
-
-std::string OptionEnum<std::string>::from_string(const std::string & value) const {
-    if (from_string_user) {
-        return from_string_user(value);
+std::string OptionEnum::from_string(const std::string & value) const {
+    if (p_impl->from_string_user) {
+        return p_impl->from_string_user(value);
     }
     return value;
 }
 
-void OptionEnum<std::string>::set(Priority priority, const std::string & value) {
+void OptionEnum::set(Priority priority, const std::string & value) {
     assert_not_locked();
 
     auto val = from_string(value);
     if (priority >= get_priority()) {
         test(val);
-        this->value = val;
+        p_impl->value = val;
         set_priority(priority);
     }
 }
 
-void OptionEnum<std::string>::set(const std::string & value) {
+void OptionEnum::set(const std::string & value) {
     set(Priority::RUNTIME, value);
+}
+
+OptionEnum * OptionEnum::clone() const {
+    return new OptionEnum(*this);
+}
+
+const std::string & OptionEnum::get_value() const {
+    return p_impl->value;
+}
+
+const std::string & OptionEnum::get_default_value() const {
+    return p_impl->default_value;
+}
+
+std::string OptionEnum::get_value_string() const {
+    return p_impl->value;
 }
 
 }  // namespace libdnf5

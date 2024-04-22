@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
-#include "libdnf5/comps/comps.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/logger/log_router.hpp"
@@ -63,10 +62,8 @@ public:
 
     ~Base();
 
-    void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks) {
-        this->download_callbacks = std::move(download_callbacks);
-    }
-    repo::DownloadCallbacks * get_download_callbacks() { return download_callbacks.get(); }
+    void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks);
+    repo::DownloadCallbacks * get_download_callbacks();
 
     /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
     /// Pointer to a locked "Base" instance can be obtained using "get_locked_base()".
@@ -83,42 +80,53 @@ public:
     /// The file defined in the current configuration and files in the drop-in directories are used.
     void load_config();
 
-    /// @deprecated Don't use it! It will be removed in Fedora 40. It was intended for internal use only.
-    /// Call a function that loads the config file, catching errors appropriately
-    void with_config_file_path(std::function<void(const std::string &)> func);
-
-    /// @deprecated It is redundant. It calls `load_config()`.
-    /// Loads main configuration.
-    void load_config_from_file();
-
     /// @return a reference to configuration
-    ConfigMain & get_config() { return config; }
-    LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
-    repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
-    rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
+    ConfigMain & get_config();
+    LogRouterWeakPtr get_logger();
+    repo::RepoSackWeakPtr get_repo_sack();
+    rpm::PackageSackWeakPtr get_rpm_package_sack();
+    module::ModuleSackWeakPtr get_module_sack();
+
+    /// Adds a request to enable/disable plugins that match the names (glob patterns) in the list.
+    /// Can be called multiple times. Requests (`plugin_names` and `enable` state) are queued.
+    /// The enable state of a plugin is set according to the last matching request.
+    /// Must be called before the Base::setup.
+    /// @param plugin_names Plugin names (glob patterns) to enable/disable
+    /// @param enable Request: true - enable plugins, false - disable plugins
+    /// @exception libdnf5::UserAssertionError When called after Base::setup
+    void enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable);
 
     /// Loads libdnf plugins, vars from environment, varsdirs and installroot (releasever, arch) and resolves
     /// configuration of protected_packages (glob:).
     /// To prevent differences between configuration and internal Base settings, following configurations
     /// will be locked: installroot, varsdir.
-    /// The method is supposed to be called after configuration is updated, application plugins applied
+    /// The method is supposed to be called after configuration and vars are updated, application plugins applied
     /// their pre configuration modification in configuration, but before repositories are loaded or any Package
-    /// or Advisory query created.
+    /// or Advisory query created. The method is recommended to be called before loading  repositories, because
+    /// not all variables for substitutions might be available. Caution - modification of vars after this call
+    /// might be problematic, because architecture is already fixed for our solver.
     /// Calling the method for the second time result in throwing an exception
     void setup();
 
     /// Returns true when setup() (mandatory method in many workflows) was already called
     bool is_initialized();
 
-    // TODO(jmracek) Remove from public API due to unstability of the code
-    transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
-    libdnf5::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
-    libdnf5::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
+    /// Notifies the libdnf5 library that the repositories are configured.  It can be called before `load_repos`.
+    /// The libdnf5 library can then call plugins that can make final adjustments to the repositories configuration.
+    /// In the case that it has not been called, it is called automatically at the beginning of the load_repos method.
+    /// Calling the method for the second time result in throwing an exception.
+    void notify_repos_configured();
+
+    /// Returns true when notify_repos_configured() was already called (by user or automatically)
+    bool are_repos_configured() const noexcept;
+
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    transaction::TransactionHistoryWeakPtr get_transaction_history();
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
-    VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
+    VarsWeakPtr get_vars();
 
-    libdnf5::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
+    libdnf5::BaseWeakPtr get_weak_ptr();
 
     class Impl;
 
@@ -144,20 +152,6 @@ private:
     // contains Pool and that has be destructed last.
     // See commit: https://github.com/rpm-software-management/dnf5/commit/c8e26cb545aed0d6ca66545d51eda7568efdf232
     ImplPtr<Impl> p_impl;
-
-    LogRouter log_router;
-    ConfigMain config;
-    repo::RepoSack repo_sack;
-    rpm::PackageSack rpm_package_sack;
-    comps::Comps comps{*this};
-    module::ModuleSack module_sack{get_weak_ptr()};
-    std::map<std::string, std::string> variables;
-    transaction::TransactionHistory transaction_history;
-    Vars vars;
-    std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
-
-    WeakPtrGuard<LogRouter, false> log_router_gurad;
-    WeakPtrGuard<Vars, false> vars_gurad;
 };
 
 }  // namespace libdnf5

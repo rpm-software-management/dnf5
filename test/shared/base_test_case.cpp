@@ -46,9 +46,7 @@ libdnf5::repo::RepoWeakPtr BaseTestCase::add_repo(
     repo->get_config().get_baseurl_option().set("file://" + repo_path);
 
     if (load) {
-        libdnf5::repo::RepoQuery repos(base);
-        repos.filter_id(repoid);
-        repo_sack->update_and_load_repos(repos);
+        repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
     }
 
     return repo;
@@ -156,7 +154,7 @@ libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool inst
 libdnf5::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char * repo) {
     libdnf5::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
-    query.filter_repo_id({repo});
+    query.filter_repo_id(repo);
     return first_query_pkg(query, nevra + " (repo: " + repo + ")");
 }
 
@@ -183,6 +181,7 @@ namespace {
 // Accessor of private Base::p_impl, see private_accessor.hpp
 create_private_getter_template;
 create_getter(priv_impl, &libdnf5::Base::p_impl);
+create_getter(add_rpm_package, &libdnf5::repo::Repo::add_rpm_package);
 
 }  // namespace
 
@@ -197,7 +196,8 @@ libdnf5::rpm::Package BaseTestCase::add_system_pkg(
 
     (base.*get(priv_impl()))->get_system_state().set_package_reason(na, reason);
 
-    return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    return (*(repo_sack->get_system_repo()).*get(add_rpm_package{}))(
+        PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 
@@ -230,6 +230,9 @@ void BaseTestCase::setUp() {
     base.get_config().get_installroot_option().set(temp->get_path() / "installroot");
     base.get_config().get_cachedir_option().set(temp->get_path() / "cache");
     base.get_config().get_optional_metadata_types_option().set(libdnf5::OPTIONAL_METADATA_TYPES);
+
+    // Prevent loading libdnf5 plugins
+    base.get_config().get_plugins_option().set(false);
 
     base.get_vars()->set("arch", "x86_64");
 

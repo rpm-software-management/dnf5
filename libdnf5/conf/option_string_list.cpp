@@ -23,22 +23,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <optional>
+#include <regex>
+
 namespace libdnf5 {
 
 template <typename T>
-OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value)
-    : Option(Priority::DEFAULT),
-      icase(false),
-      default_value(default_value),
-      value(default_value) {}
+class OptionStringContainer<T>::Impl {
+public:
+    Impl(T && default_value) : icase(false), default_value(default_value), value(std::move(default_value)){};
+    Impl(T && default_value, std::string && regex, bool icase)
+        : regex(std::move(regex)),
+          icase(icase),
+          default_value(default_value),
+          value(std::move(default_value)){};
+    Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
+        : regex(std::move(regex)),
+          icase(icase),
+          delimiters(std::move(delimiters)),
+          default_value(default_value),
+          value(std::move(default_value)){};
+
+private:
+    friend OptionStringContainer;
+
+    std::optional<std::regex> regex_matcher;
+    std::string regex;
+    bool icase;
+    std::optional<std::string> delimiters;
+    ValueType default_value;
+    ValueType value;
+};
 
 template <typename T>
-OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value, std::string regex, bool icase)
+OptionStringContainer<T>::OptionStringContainer(ValueType default_value)
     : Option(Priority::DEFAULT),
-      regex(std::move(regex)),
-      icase(icase),
-      default_value(default_value),
-      value(default_value) {
+      p_impl(new Impl(std::move(default_value))) {}
+
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(ValueType default_value, std::string regex, bool icase)
+    : Option(Priority::DEFAULT),
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase)) {
     init_regex_matcher();
     test(default_value);
 }
@@ -46,85 +71,62 @@ OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value,
 template <typename T>
 OptionStringContainer<T>::OptionStringContainer(const std::string & default_value)
     : Option(Priority::DEFAULT),
-      icase(false) {
-    this->value = this->default_value = from_string(default_value);
+      p_impl(new Impl({})) {
+    p_impl->value = p_impl->default_value = from_string(default_value);
 }
 
 template <typename T>
 OptionStringContainer<T>::OptionStringContainer(const std::string & default_value, std::string regex, bool icase)
     : Option(Priority::DEFAULT),
-      regex(std::move(regex)),
-      icase(icase) {
+      p_impl(new Impl({}, std::move(regex), icase)) {
     init_regex_matcher();
-    this->default_value = from_string(default_value);
-    test(this->default_value);
-    value = this->default_value;
+    p_impl->default_value = from_string(default_value);
+    test(p_impl->default_value);
+    p_impl->value = p_impl->default_value;
 }
 
 template <typename T>
 OptionStringContainer<T>::OptionStringContainer(
-    const ValueType & default_value, std::string regex, bool icase, std::string delimiters)
+    ValueType default_value, std::string regex, bool icase, std::string delimiters)
     : Option(Priority::DEFAULT),
-      regex(std::move(regex)),
-      icase(icase),
-      delimiters(std::move(delimiters)),
-      default_value(default_value),
-      value(this->default_value) {
+      p_impl(new Impl(std::move(default_value), std::move(regex), icase, std::move(delimiters))) {
     init_regex_matcher();
-    test(this->default_value);
+    test(p_impl->default_value);
 }
 
 template <typename T>
-OptionStringContainer<T>::OptionStringContainer(const OptionStringContainer & src)
-    : Option(src),
-      regex(src.regex),
-      icase(src.icase),
-      delimiters(src.delimiters),
-      default_value(src.default_value),
-      value(src.value) {}
+OptionStringContainer<T>::OptionStringContainer(const OptionStringContainer & src) = default;
 
 template <typename T>
-OptionStringContainer<T> & OptionStringContainer<T>::operator=(const OptionStringContainer & src) {
-    assert_not_locked();
-
-    if (this == &src) {
-        return *this;
-    }
-    regex = src.regex;
-    icase = src.icase;
-    delimiters = src.delimiters;
-    default_value = src.default_value;
-    value = src.value;
-    return *this;
-}
+OptionStringContainer<T>::~OptionStringContainer() = default;
 
 template <typename T>
 void OptionStringContainer<T>::init_regex_matcher() {
-    if (regex.empty()) {
+    if (p_impl->regex.empty()) {
         return;
     }
 
     auto flags = std::regex::ECMAScript | std::regex::nosubs;
-    if (icase) {
+    if (p_impl->icase) {
         flags |= std::regex::icase;
     }
-    regex_matcher = std::regex(regex, flags);
+    p_impl->regex_matcher = std::regex(p_impl->regex, flags);
 }
 
 template <typename T>
 void OptionStringContainer<T>::test_item_worker(const std::string & item) const {
-    if (!std::regex_match(item, *regex_matcher)) {
+    if (!std::regex_match(item, *p_impl->regex_matcher)) {
         throw OptionValueNotAllowedError(
             M_("Input item value \"{}\" not allowed, allowed values for this option are defined by regular expression "
                "\"{}\""),
             item,
-            regex);
+            p_impl->regex);
     }
 }
 
 template <typename T>
 void OptionStringContainer<T>::test_item(const std::string & item) const {
-    if (regex.empty()) {
+    if (p_impl->regex.empty()) {
         return;
     }
     test_item_worker(item);
@@ -132,7 +134,7 @@ void OptionStringContainer<T>::test_item(const std::string & item) const {
 
 template <typename T>
 void OptionStringContainer<T>::test(const ValueType & value) const {
-    if (regex.empty()) {
+    if (p_impl->regex.empty()) {
         return;
     }
     for (const auto & val : value) {
@@ -177,7 +179,7 @@ void OptionStringContainer<T>::set(Priority priority, const ValueType & value) {
 
     if (priority >= get_priority()) {
         test(value);
-        this->value = value;
+        p_impl->value = value;
         set_priority(priority);
     }
 }
@@ -203,7 +205,7 @@ void OptionStringContainer<T>::add(Priority priority, const ValueType & items) {
 
     test(items);
     for (const auto & item : items) {
-        value.insert(value.end(), item);
+        p_impl->value.insert(p_impl->value.end(), item);
     }
     if (get_priority() < priority) {
         set_priority(priority);
@@ -220,7 +222,7 @@ void OptionStringContainer<T>::add_item(Priority priority, const std::string & i
     assert_not_locked();
 
     test_item(item);
-    value.insert(value.end(), item);
+    p_impl->value.insert(p_impl->value.end(), item);
     if (get_priority() < priority) {
         set_priority(priority);
     }
@@ -240,6 +242,37 @@ std::string OptionStringContainer<T>::to_string(const ValueType & value) const {
     }
     return oss.str();
 }
+
+template <typename T>
+inline OptionStringContainer<T> * OptionStringContainer<T>::clone() const {
+    return new OptionStringContainer<T>(*this);
+}
+
+template <typename T>
+inline const T & OptionStringContainer<T>::get_value() const {
+    return p_impl->value;
+}
+
+template <typename T>
+inline const T & OptionStringContainer<T>::get_default_value() const {
+    return p_impl->default_value;
+}
+
+template <typename T>
+inline std::string OptionStringContainer<T>::get_value_string() const {
+    return to_string(p_impl->value);
+}
+
+template <typename T>
+inline const char * OptionStringContainer<T>::get_default_delimiters() noexcept {
+    return " ,\n";
+}
+
+template <typename T>
+inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
+    return p_impl->delimiters ? p_impl->delimiters->c_str() : get_default_delimiters();
+}
+
 
 template class OptionStringContainer<std::vector<std::string>>;
 template class OptionStringContainer<std::set<std::string>>;

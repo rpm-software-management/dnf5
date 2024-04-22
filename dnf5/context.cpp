@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
+#include "libdnf5/utils/fs/file.hpp"
+
 #include <fmt/format.h>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf5-cli/tty.hpp>
@@ -179,7 +181,12 @@ void Context::load_repos(bool load_system) {
     }
 
     print_info("Updating and loading repositories:");
-    base.get_repo_sack()->update_and_load_enabled_repos(load_system);
+    if (load_system) {
+        base.get_repo_sack()->load_repos();
+    } else {
+        base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+    }
+
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
         download_callbacks->reset_progress_bar();
     }
@@ -231,6 +238,7 @@ void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint6
         case libdnf5::transaction::TransactionItemAction::ENABLE:
         case libdnf5::transaction::TransactionItemAction::DISABLE:
         case libdnf5::transaction::TransactionItemAction::RESET:
+        case libdnf5::transaction::TransactionItemAction::SWITCH:
             auto & logger = *context.base.get_logger();
             logger.warning(
                 "Unexpected action in TransactionPackage: {}",
@@ -398,7 +406,35 @@ void Context::download_and_run(libdnf5::base::Transaction & transaction) {
     if (should_store_offline) {
         base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
     }
-    transaction.download();
+
+    if (!transaction_store_path.empty()) {
+        auto transaction_location = transaction_store_path / "transaction.json";
+        constexpr const char * packages_in_trans_dir{"./packages"};
+        auto packages_location = transaction_store_path / packages_in_trans_dir;
+        constexpr const char * comps_in_trans_dir{"./comps"};
+        auto comps_location = transaction_store_path / comps_in_trans_dir;
+        if (std::filesystem::exists(transaction_location)) {
+            std::cout << libdnf5::utils::sformat(
+                _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
+                transaction_store_path.string());
+            if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+                std::filesystem::remove_all(packages_location);
+                std::filesystem::remove_all(comps_location);
+            } else {
+                throw libdnf5::cli::AbortedByUserError();
+            }
+        }
+        auto & destdir_opt = base.get_config().get_destdir_option();
+        destdir_opt.set(packages_location);
+        std::filesystem::create_directories(transaction_store_path);
+        transaction.download();
+        transaction.store_comps(comps_location);
+        libdnf5::utils::fs::File transfile(transaction_location, "w");
+        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
+        return;
+    } else {
+        transaction.download();
+    }
 
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;
@@ -605,15 +641,6 @@ std::vector<std::string> match_specs(
         installed = available = false;
     }
 
-    if (installed) {
-        try {
-            base.get_repo_sack()->get_system_repo()->load();
-            base.get_rpm_package_sack()->load_config_excludes_includes();
-        } catch (...) {
-            // Ignores errors when completing installed packages, other completions may still work.
-        }
-    }
-
     if (available) {
         try {
             // create rpm repositories according configuration files
@@ -631,19 +658,27 @@ std::vector<std::string> match_specs(
                 repo->get_config().get_skip_if_unavailable_option().set(libdnf5::Option::Priority::RUNTIME, true);
             }
 
-            ctx.load_repos(false);
+            ctx.load_repos(installed);
         } catch (...) {
             // Ignores errors when completing available packages, other completions may still work.
+        }
+    } else if (installed) {
+        try {
+            base.get_repo_sack()->load_repos(libdnf5::repo::Repo::Type::SYSTEM);
+        } catch (...) {
+            // Ignores errors when completing installed packages, other completions may still work.
         }
     }
 
     std::set<std::string> result_set;
     {
         libdnf5::rpm::PackageQuery matched_pkgs_query(base);
-        matched_pkgs_query.resolve_pkg_spec(
-            pattern + '*',
-            {.ignore_case = false, .with_provides = false, .with_filenames = false, .with_binaries = false},
-            true);
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(false);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
+        matched_pkgs_query.resolve_pkg_spec(pattern + '*', settings, true);
 
         for (const auto & package : matched_pkgs_query) {
             auto [it, inserted] = result_set.insert(package.get_name());

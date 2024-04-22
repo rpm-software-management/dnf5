@@ -35,11 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf5::comps {
-class Comps;
-}
-
-
 namespace libdnf5::solv {
 class Pool;
 }
@@ -154,22 +149,6 @@ public:
     /// @return `true` if metadata are in sync with the origin, `false` otherwise.
     bool is_in_sync();
 
-    /// @deprecated It is going to be removed without a warning
-    /// Downloads repository metadata.
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
-    void download_metadata(const std::string & destdir);
-
-    /// @deprecated It is going to be removed without a warning
-    /// Loads the repository objects into sacks.
-    ///
-    /// Also writes the libsolv's solv/solvx cache files.
-    void load();
-
-    /// Not API, unsupported
-    /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
-    // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
-    void load_extra_system_repo(const std::string & rootdir);
-
     /// Returns whether the using of "includes" is enabled
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getUseIncludes()
@@ -236,14 +215,10 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getExpiresIn()
     int get_expires_in() const;
 
-    /// Gets repository freshness
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.fresh()
-    bool fresh();
-
     // @replaces libdnf:repo/Repo.hpp:method:Repo.setMaxMirrorTries(int maxMirrorTries)
     void set_max_mirror_tries(int max_mirror_tries);
 
-    /// Gets timestamp of metadata "primary" file
+    /// Gets timestamp of metadata "primary" file, if the file is not present returns -1
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getTimestamp()
     int64_t get_timestamp() const;
 
@@ -327,30 +302,7 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.getMirrors()
     std::vector<std::string> get_mirrors() const;
 
-    /// @deprecated It is redundant because repo class has direct access to Base and Vars
-    /// Sets substitutions. Substitutions are used to substitute variables in repository configuration.
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
-    void set_substitutions(const std::map<std::string, std::string> & substitutions);
-
-    /// @deprecated It is going to be removed without a warning
-    /// Not API, unsupported
-    void add_libsolv_testcase(const std::string & path);
-
-    /// @deprecated It is going to be removed without a warning
-    /// Not API, unsupported
-    /// Adds an RPM package at `path` to the repository.
-    ///
-    /// If `with_hdrid` is `true`, the RPM is loaded with the
-    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
-    /// calculate the SHA256 checksum of the RPM header and store it. This adds
-    /// overhead but has the advantage of TODO(lukash) describe the advantage.
-    /// @param path The path to the RPM file.
-    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
-    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
-    /// @return PackageId of the added package.
-    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
-
-    libdnf5::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
+    libdnf5::repo::RepoWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
@@ -364,10 +316,32 @@ private:
     friend class RepoSack;
     friend class rpm::Package;
     friend class rpm::PackageSack;
-    friend class comps::Comps;
     friend class FileDownloader;
     friend class PackageDownloader;
     friend class solv::Pool;
+
+    /// Loads the repository objects into sacks.
+    ///
+    /// Also writes the libsolv's solv/solvx cache files.
+    void load();
+
+    /// Downloads repository metadata.
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
+    void download_metadata(const std::string & destdir);
+
+    void add_libsolv_testcase(const std::string & path);
+
+    /// Adds an RPM package at `path` to the repository.
+    ///
+    /// If `with_hdrid` is `true`, the RPM is loaded with the
+    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
+    /// calculate the SHA256 checksum of the RPM header and store it. This adds
+    /// overhead but has the advantage of TODO(lukash) describe the advantage.
+    /// @param path The path to the RPM file.
+    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
+    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
+    /// @return PackageId of the added package.
+    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
 
     void make_solv_repo();
 
@@ -387,21 +361,20 @@ private:
     /// @return Whether at least the repodata cache cloning was successful.
     bool clone_root_metadata();
 
-    libdnf5::BaseWeakPtr base;
-    ConfigRepo config;
+    RepoDownloader & get_downloader() const;
 
-    Type type;
-    int64_t timestamp{-1};  // 0 forces expiration on the next call to load(), -1 means undefined value
-    bool use_includes{false};
-    std::string repo_file_path;
-    SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
-    bool expired{false};
+    bool is_loaded() const;
 
-    std::unique_ptr<RepoDownloader> downloader;
-    std::unique_ptr<SolvRepo> solv_repo;
+    /// Requires that the repo is loaded
+    SolvRepo & get_solv_repo() const;
 
-    WeakPtrGuard<Repo, false> data_guard;
-    bool loaded{false};
+    /// Mark this repository as fresh (it is not expired).
+    void mark_fresh();
+
+    // Add xml comps file at `path` to the repository.
+    void add_xml_comps(const std::string & path);
+
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::repo

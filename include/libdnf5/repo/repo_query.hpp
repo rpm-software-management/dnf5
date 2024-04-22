@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_REPO_REPO_QUERY_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
@@ -56,9 +57,17 @@ public:
     /// @param base     Reference to Base
     explicit RepoQuery(libdnf5::Base & base);
 
+    ~RepoQuery();
+
+    RepoQuery(const RepoQuery & src);
+    RepoQuery & operator=(const RepoQuery & src);
+
+    RepoQuery(RepoQuery && src) noexcept;
+    RepoQuery & operator=(RepoQuery && src) noexcept;
+
     /// @return Weak pointer to the Base object.
     /// @since 5.0
-    libdnf5::BaseWeakPtr get_base() { return base; }
+    libdnf5::BaseWeakPtr get_base();
 
     /// Filter repos by their `enabled` state.
     ///
@@ -114,7 +123,8 @@ public:
     void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
 private:
-    BaseWeakPtr base;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::repo

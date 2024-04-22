@@ -32,10 +32,14 @@ class OptionString : public Option {
 public:
     using ValueType = std::string;
 
-    explicit OptionString(const std::string & default_value);
+    explicit OptionString(std::string default_value);
     explicit OptionString(const char * default_value);
-    OptionString(const std::string & default_value, std::string regex, bool icase);
+    OptionString(std::string default_value, std::string regex, bool icase);
     OptionString(const char * default_value, std::string regex, bool icase);
+
+    ~OptionString();
+
+    OptionString(const OptionString & src);
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionString.hpp:method:OptionString.clone()
@@ -69,28 +73,11 @@ public:
     // @replaces libdnf:conf/OptionString.hpp:method:OptionString.fromString(const std::string & value)
     std::string from_string(const std::string & value) const;
 
-protected:
-    std::string regex;
-    bool icase;
-    std::string default_value;
-    std::string value;
+private:
+    friend class OptionPath;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-inline OptionString * OptionString::clone() const {
-    return new OptionString(*this);
-}
-
-inline const std::string & OptionString::get_default_value() const noexcept {
-    return default_value;
-}
-
-inline std::string OptionString::get_value_string() const {
-    return get_value();
-}
-
-inline std::string OptionString::from_string(const std::string & value) const {
-    return value;
-}
 
 }  // namespace libdnf5
 

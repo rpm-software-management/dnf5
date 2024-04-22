@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
-#include <iostream>
-
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -137,7 +135,6 @@ void ListCommand::configure() {
 
 std::unique_ptr<libdnf5::cli::output::PackageListSections> ListCommand::create_output() {
     auto out = std::make_unique<libdnf5::cli::output::PackageListSections>();
-    out->setup_cols();
     return out;
 }
 
@@ -151,12 +148,12 @@ void ListCommand::run() {
     // pre-select by patterns
     if (!pkg_specs.empty()) {
         base_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
-        libdnf5::ResolveSpecSettings settings{
-            .ignore_case = true,
-            .with_nevra = true,
-            .with_provides = false,
-            .with_filenames = false,
-            .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(true);
+        settings.set_with_nevra(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(false);
+        settings.set_with_binaries(false);
         for (const auto & spec : pkg_specs) {
             libdnf5::rpm::PackageQuery pkg_query(full_package_query);
             pkg_query.resolve_pkg_spec(spec, settings, true);
@@ -194,12 +191,12 @@ void ListCommand::run() {
                 installed_latest.filter_latest_evr();
                 available.filter_nevra(installed_latest, libdnf5::sack::QueryCmp::NOT | libdnf5::sack::QueryCmp::LTE);
             }
-            package_matched |= sections->add_section("Installed packages", installed, colorizer);
-            package_matched |= sections->add_section("Available packages", available, colorizer);
+            package_matched |= sections->add_section("Installed packages", installed);
+            package_matched |= sections->add_section("Available packages", available);
             break;
         }
         case PkgNarrow::INSTALLED: {
-            package_matched |= sections->add_section("Installed packages", installed, colorizer);
+            package_matched |= sections->add_section("Installed packages", installed);
             break;
         }
         case PkgNarrow::AVAILABLE: {
@@ -208,14 +205,15 @@ void ListCommand::run() {
                 base_query.filter_priority();
                 base_query.filter_latest_evr();
             }
-            package_matched |= sections->add_section("Available packages", base_query, colorizer);
+            package_matched |= sections->add_section("Available packages", base_query);
             break;
         }
         case PkgNarrow::UPGRADES:
             base_query.filter_priority();
             base_query.filter_upgrades();
+            base_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NEQ);
             base_query.filter_latest_evr();
-            package_matched |= sections->add_section("Available upgrades", base_query, colorizer);
+            package_matched |= sections->add_section("Available upgrades", base_query);
             break;
         case PkgNarrow::OBSOLETES: {
             base_query.filter_priority();
@@ -231,16 +229,16 @@ void ListCommand::run() {
                 }
                 obsoletes.emplace(pkg.get_id(), obsoleted);
             }
-            package_matched |= sections->add_section("Obsoleting packages", base_query, colorizer, obsoletes);
+            package_matched |= sections->add_section("Obsoleting packages", base_query, obsoletes);
             break;
         }
         case PkgNarrow::AUTOREMOVE:
             installed.filter_unneeded();
-            package_matched |= sections->add_section("Autoremove packages", installed, colorizer);
+            package_matched |= sections->add_section("Autoremove packages", installed);
             break;
         case PkgNarrow::EXTRAS:
             base_query.filter_extras();
-            package_matched |= sections->add_section("Extra packages", base_query, colorizer);
+            package_matched |= sections->add_section("Extra packages", base_query);
             break;
         case PkgNarrow::RECENT:
             base_query.filter_available();
@@ -251,14 +249,14 @@ void ListCommand::run() {
             auto recent_limit_days = config.get_recent_option().get_value();
             auto now = time(NULL);
             base_query.filter_recent(now - (recent_limit_days * 86400));
-            package_matched |= sections->add_section("Recently added packages", base_query, colorizer);
+            package_matched |= sections->add_section("Recently added packages", base_query);
             break;
     }
 
     if (!package_matched && !pkg_specs.empty()) {
         throw libdnf5::cli::CommandExitError(1, M_("No matching packages to list"));
     } else {
-        sections->print();
+        sections->print(colorizer);
     }
 }
 

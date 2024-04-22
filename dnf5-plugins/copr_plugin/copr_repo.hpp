@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/base.hpp>
 
 #include <filesystem>
+#include <regex>
 
 
 namespace dnf5 {

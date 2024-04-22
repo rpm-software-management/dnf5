@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solver_problems_internal.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
+#include "transaction_module_impl.hpp"
+#include "transaction_package_impl.hpp"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
 
@@ -65,6 +67,7 @@ constexpr std::pair<const char *, rpmtransFlags_e> string_tsflag_map[]{
     {"nocontexts", RPMTRANS_FLAG_NOCONTEXTS},
     {"nocaps", RPMTRANS_FLAG_NOCAPS},
     {"nocrypto", RPMTRANS_FLAG_NOFILEDIGEST},
+    {"deploops", RPMTRANS_FLAG_DEPLOOPS},
 };
 
 const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSACTION_RUN_RESULT_DICT = {
@@ -83,6 +86,12 @@ const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RES
     {base::ImportRepoKeysResult::IMPORT_DECLINED, M_("Canceled by the user.")},
     {base::ImportRepoKeysResult::IMPORT_FAILED, M_("Public key import failed.")},
 };
+
+std::filesystem::path build_comps_xml_path(std::filesystem::path path, const std::string & id) {
+    path = path / id;
+    path.replace_extension("xml");
+    return path;
+}
 
 }  // namespace
 
@@ -187,18 +196,18 @@ GoalProblem Transaction::Impl::report_not_found(
             pkg_spec,
             {},
             log_level);
-        if (settings.report_hint) {
+        if (settings.get_report_hint()) {
             rpm::PackageQuery hints(base);
             if (action == GoalAction::REMOVE) {
                 hints.filter_installed();
             }
-            if (!settings.ignore_case && settings.with_nevra) {
+            if (!settings.get_ignore_case() && settings.get_with_nevra()) {
                 rpm::PackageQuery icase(hints);
-                ResolveSpecSettings settings_copy = settings;
-                settings_copy.ignore_case = true;
-                settings_copy.with_provides = false;
-                settings_copy.with_filenames = false;
-                settings_copy.with_binaries = false;
+                ResolveSpecSettings settings_copy(settings);
+                settings_copy.set_ignore_case(true);
+                settings_copy.set_with_provides(false);
+                settings_copy.set_with_filenames(false);
+                settings_copy.set_with_binaries(false);
                 auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
                 if (nevra_pair_icase.first) {
                     add_resolve_log(
@@ -231,7 +240,7 @@ GoalProblem Transaction::Impl::report_not_found(
         }
         return GoalProblem::NOT_FOUND;
     }
-    query.filter_arch({"src", "nosrc"}, sack::QueryCmp::NEQ);
+    query.filter_arch(std::vector<std::string>{"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
         add_resolve_log(
             action,
@@ -285,6 +294,10 @@ void Transaction::Impl::add_resolve_log(
 void Transaction::Impl::add_resolve_log(
     GoalProblem problem,
     std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems) {
+    add_resolve_log(problem, SolverProblems(std::move(problems)));
+}
+
+void Transaction::Impl::add_resolve_log(GoalProblem problem, const SolverProblems & problems) {
     resolve_logs.emplace_back(LogEvent(problem, problems));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
@@ -383,6 +396,14 @@ void Transaction::Impl::set_transaction(
         }
     }
     this->problems = problems;
+
+    if ((problems & GoalProblem::MODULE_SOLVER_ERROR) != GoalProblem::NO_PROBLEM ||
+        ((problems & GoalProblem::MODULE_SOLVER_ERROR_LATEST) != GoalProblem::NO_PROBLEM &&
+         base->get_config().get_best_option().get_value())) {
+        // There is a fatal error in resolving modules
+        return;
+    }
+
     auto transaction = solved_goal.get_transaction();
     libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
     if (!libsolv_transaction) {
@@ -427,7 +448,7 @@ void Transaction::Impl::set_transaction(
         rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
         TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, obsoleted.get_reason());
         for (auto id : replaced_by_ids) {
-            tspkg.replaced_by.emplace_back(rpm::Package(base, rpm::PackageId(id)));
+            tspkg.p_impl->replaced_by_append(rpm::Package(base, rpm::PackageId(id)));
         }
         packages.emplace_back(std::move(tspkg));
     }
@@ -461,6 +482,15 @@ void Transaction::Impl::set_transaction(
             name, "", transaction::TransactionItemAction::RESET, transaction::TransactionItemReason::USER);
         modules.emplace_back(std::move(tsmodule));
     }
+    for (auto & name_streams : module_db->get_all_newly_switched_streams()) {
+        TransactionModule tsmodule(
+            name_streams.first,
+            name_streams.second.first,
+            transaction::TransactionItemAction::SWITCH,
+            transaction::TransactionItemReason::USER);
+        tsmodule.p_impl->replaces_append(std::string(name_streams.first), std::string(name_streams.second.second));
+        modules.emplace_back(std::move(tsmodule));
+    }
 
     // Add reason change actions to the transaction
     for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
@@ -480,7 +510,7 @@ void Transaction::Impl::set_transaction(
                     pkg.get_action() == transaction::TransactionItemAction::REMOVE ||
                     (reason_override->second > pkg.get_reason() &&
                      pkg.get_action() != transaction::TransactionItemAction::REASON_CHANGE)) {
-                    pkg.reason = reason_override->second;
+                    pkg.p_impl->set_reason(reason_override->second);
                 }
             }
         }
@@ -522,10 +552,10 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     for (auto replaced_id : obs) {
         rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
         reason = std::max(reason, replaced_pkg.get_reason());
-        tspkg.replaces.emplace_back(std::move(replaced_pkg));
+        tspkg.p_impl->replaces_append(std::move(replaced_pkg));
         replaced[replaced_id].push_back(id);
     }
-    tspkg.set_reason(reason);
+    tspkg.p_impl->set_reason(reason);
 
     return tspkg;
 }
@@ -1074,7 +1104,8 @@ bool Transaction::Impl::check_gpg_signatures() {
     return result;
 }
 
-std::string Transaction::serialize() {
+std::string Transaction::serialize(
+    const std::filesystem::path & packages_path, const std::filesystem::path & comps_path) const {
     transaction::TransactionReplay transaction_replay;
 
     for (const auto & pkg : get_transaction_packages()) {
@@ -1088,42 +1119,68 @@ std::string Transaction::serialize() {
         if (pkg.get_reason_change_group_id()) {
             package_replay.group_id = *pkg.get_reason_change_group_id();
         }
-        if (rpm_pkg.is_cached()) {
-            package_replay.package_path = rpm_pkg.get_package_path();
+        if (!packages_path.empty()) {
+            if (libdnf5::transaction::transaction_item_action_is_inbound(package_replay.action)) {
+                package_replay.package_path = packages_path / std::filesystem::path(rpm_pkg.get_location()).filename();
+            }
         }
-
         transaction_replay.packages.push_back(package_replay);
     }
 
     for (const auto & group : get_transaction_groups()) {
         transaction::GroupReplay group_replay;
 
-        group_replay.group_id = group.get_group().get_groupid();
+        auto xml_group = group.get_group();
+        group_replay.group_id = xml_group.get_groupid();
         group_replay.action = group.get_action();
         group_replay.reason = group.get_reason();
         // TODO(amatej): does each group has to have at least one repo?
         group_replay.repo_id = *(group.get_group().get_repos().begin());
 
-        //TODO(amatej): add package types... if they are actually needed though... which I am not sure now.
-        // -> because if I plan to store the group jsons separately it will contain all information, so the pkg types shouldn't be here
+        if (!comps_path.empty()) {
+            group_replay.group_path = build_comps_xml_path(comps_path, xml_group.get_groupid());
+        }
+
         transaction_replay.groups.push_back(group_replay);
     }
 
     for (const auto & environment : get_transaction_environments()) {
         transaction::EnvironmentReplay environment_replay;
 
-        environment_replay.environment_id = environment.get_environment().get_environmentid();
+        auto xml_environment = environment.get_environment();
+        environment_replay.environment_id = xml_environment.get_environmentid();
         environment_replay.action = environment.get_action();
         // TODO(amatej): does each environment has to have at least one repo?
         environment_replay.repo_id = *(environment.get_environment().get_repos().begin());
 
+        if (!comps_path.empty()) {
+            environment_replay.environment_path = build_comps_xml_path(comps_path, xml_environment.get_environmentid());
+        }
+
         transaction_replay.environments.push_back(environment_replay);
     }
 
-    ////TODO(amatej): Allow using local sources (downloaded packages, groups..)
-    ////TODO(amatej): potentially add modules
+    //TODO(amatej): potentially add modules
 
     return transaction::json_serialize(transaction_replay);
+}
+
+void Transaction::store_comps(const std::filesystem::path & comps_path) const {
+    auto groups = get_transaction_groups();
+    auto envs = get_transaction_environments();
+    if (!groups.empty() || !envs.empty()) {
+        std::filesystem::create_directories(comps_path);
+    }
+
+    for (const auto & group : groups) {
+        auto xml_group = group.get_group();
+        xml_group.serialize(build_comps_xml_path(comps_path, xml_group.get_groupid()));
+    }
+
+    for (const auto & environment : envs) {
+        auto xml_environment = environment.get_environment();
+        xml_environment.serialize(build_comps_xml_path(comps_path, xml_environment.get_environmentid()));
+    }
 }
 
 }  // namespace libdnf5::base

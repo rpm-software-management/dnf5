@@ -106,6 +106,9 @@ libdnf5::advisory::AdvisoryQuery Advisory::advisory_query_from_options(
     }
 
     auto opt_availability = key_value_map_get<std::string>(options, "availability", "");
+    std::transform(opt_availability.begin(), opt_availability.end(), opt_availability.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
     if (opt_availability == "all") {
         package_query.filter_installed();
         auto advisories_not_installed(advisories);

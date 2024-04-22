@@ -95,7 +95,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    bool allow_erasing = key_value_map_get<bool>(options, "allow_erasing", false);
+    bool allow_erasing = dnfdaemon::key_value_map_get<bool>(options, "allow_erasing", false);
 
     session.fill_sack();
 
@@ -196,7 +196,7 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
         goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
         if (log.get_job_settings()) {
             dnfdaemon::KeyValueMap goal_job_settings;
-            goal_job_settings["to_repo_ids"] = log.get_job_settings()->to_repo_ids;
+            goal_job_settings["to_repo_ids"] = log.get_job_settings()->get_to_repo_ids();
             goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
         }
         if (log.get_spec()) {
@@ -262,7 +262,7 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     std::string comment;
     if (options.find("comment") != options.end()) {
-        comment = key_value_map_get<std::string>(options, "comment");
+        comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
     }
 
     transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));

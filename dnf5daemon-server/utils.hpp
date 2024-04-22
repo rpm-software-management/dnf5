@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
+namespace dnfdaemon {
 
 template <typename ItemType>
 ItemType key_value_map_get(const dnfdaemon::KeyValueMap & map, const std::string & key) {
@@ -55,5 +56,14 @@ ItemType key_value_map_get(
         throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Map item \"{}\" has incorrect type.", key));
     }
 }
+
+/// Write the message to the file descriptor opened for writing.
+/// @param Message
+/// @param out_fd Open file descriptor
+/// @param error_msg In case of error this string contains error description
+/// @return True in case the write succeeded, False otherwise.
+bool write_to_fd(const std::string & message, int out_fd, std::string & error_msg);
+
+}  // namespace dnfdaemon
 
 #endif

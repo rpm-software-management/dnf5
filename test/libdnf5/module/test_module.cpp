@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/fs/file.hpp"
 
 #include <libdnf5/base/goal.hpp>
+#include <libdnf5/base/goal_elements.hpp>
 #include <libdnf5/module/module_errors.hpp>
 #include <libdnf5/module/module_item.hpp>
 #include <libdnf5/module/module_query.hpp>
@@ -105,7 +106,7 @@ void ModuleTest::test_resolve() {
 
     auto module_sack = base.get_module_sack();
 
-    CPPUNIT_ASSERT_EQUAL(ModuleSack::ModuleErrorType::NO_ERROR, module_sack->resolve_active_module_items().second);
+    CPPUNIT_ASSERT_EQUAL(libdnf5::GoalProblem::NO_PROBLEM, module_sack->resolve_active_module_items().second);
 
     std::vector<std::string> expected_active_module_specs{
         "NoStaticContext:latest:1::x86_64",
@@ -128,7 +129,7 @@ void ModuleTest::test_resolve_broken_defaults() {
     auto module_sack = base.get_module_sack();
 
     CPPUNIT_ASSERT_EQUAL(
-        ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS, module_sack->resolve_active_module_items().second);
+        libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS, module_sack->resolve_active_module_items().second);
 
     std::vector<std::string> expected_active_module_specs{
         "berries:main:3:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
@@ -196,7 +197,7 @@ void ModuleTest::test_query() {
 }
 
 void ModuleTest::test_query_latest() {
-    add_repo_repomd("repomd-modules");
+    add_repo_repomd("repomd-modules", false);
     add_repo_repomd("repomd-modules-duplicit");
 
     {  // Check we can see all the modules, even ones with duplicit nscva
@@ -800,12 +801,14 @@ void ModuleTest::test_module_disable_enabled() {
 
 
 void ModuleTest::test_module_reset() {
-    add_repo_repomd("repomd-modules");
-
     // Set state of module berries to ENABLED
+    // This has to be done before the repos are loaded and modules initialized
+    // in load_repos in add_repo_repomd.
     (base.*get(priv_impl()))
         ->get_system_state()
         .set_module_state("berries", libdnf5::system::ModuleState({"main", ModuleStatus::ENABLED, {}}));
+
+    add_repo_repomd("repomd-modules");
 
     // Add module reset goal operation
     libdnf5::Goal goal(base);

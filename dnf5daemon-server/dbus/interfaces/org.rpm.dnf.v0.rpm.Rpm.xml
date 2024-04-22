@@ -31,11 +31,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @packages: array of returned packages with requested attributes
 
         Get list of packages that match to given filters.
+        Since the method returns packages directly in the D-Bus method reply
+        message, which has a limited size, there is a possibility that the
+        requested package set size would exceed this limit. If you request a
+        large number of packages and/or a great number of package attributes,
+        please consider using the list_fd() method.
 
         Following options and filters are supported:
 
             - package_attrs: list of strings
-                list of package attributes that are returned
+                list of package attributes that are returned. Supported attributes are name, epoch, version, release, arch, repo_id, from_repo_id, is_installed, install_size, download_size, sourcerpm, summary, url, license, description, files, changelogs, provides, requires, requires_pre, conflicts, obsoletes, recommends, suggests, enhances, supplements, evr, nevra, full_nevra, reason, vendor, group.
             - with_nevra: bool (default true)
                 match patterns against available packages NEVRAs
             - with_provides: bool (default true)
@@ -52,7 +57,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
             - patterns: list of strings
                 any package matching to any of patterns is returned
             - scope: string (default "all")
-                limit packages to one of "all", "installed", "available", "upgrades", "upradable"
+                limit packages to one of "all", "installed", "available", "upgrades", "upgradable"
             - arch: list of strings
                 limit the resulting set only to packages of given architectures
             - repo: list of strings
@@ -84,6 +89,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <method name="list">
         <arg name="options" type="a{sv}" direction="in"/>
         <arg name="packages" type="aa{sv}" direction="out"/>
+    </method>
+
+    <!--
+        list_fd:
+        @options: an array of key/value pairs
+        @file_descriptor: File descriptor opened for writing used to transfer data
+        @transfer_id: Identifier of this transfer. Used for signaling the end of transfer.
+
+        Retrieve a list of packages that match the provided filters.
+        Packages are transmitted as a stream of JSON objects, with each JSON object representing one package as a dictionary. This stream is then written into the given file_descriptor.
+        Unlike the list() method, this approach does not encounter issues with large output data.
+        The server has a 30-second timeout during which it waits for the client to read data from the pipe if the pipe is full.
+
+        The same options as in list() method are supported.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="file_descriptor" type="h" direction="in"/>
+        <arg name="transfer_id" type="s" direction="in"/>
     </method>
 
     <!--
@@ -202,6 +226,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="nevra" type="s" />
         <arg name="processed" type="t" />
         <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_before_begin:
+        @session_object_path: object path of the dnf5daemon session
+        @total: number of elements in the rpm transaction
+
+        Send right before the rpm transaction is run.
+    -->
+    <signal name="transaction_before_begin">
+        <arg name="session_object_path" type="o" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_after_complete:
+        @session_object_path: object path of the dnf5daemon session
+        @success: true if the rpm transaction was completed successfully
+
+        Send right after the rpm transaction run finished.
+    -->
+    <signal name="transaction_after_complete">
+        <arg name="session_object_path" type="o" />
+        <arg name="success" type="b" />
     </signal>
 
     <!--
@@ -382,6 +430,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <signal name="transaction_unpack_error">
         <arg name="session_object_path" type="o" />
         <arg name="nevra" type="s" />
+    </signal>
+
+    <!--
+        write_to_fd_finished:
+        @success: true if the tranfer finished successfully
+        @transfer_id: id of the tranfer was finished and its file descriptor closed
+        @error_msg: error message if the transfer was not successful.
+
+        Processing of the item has started.
+    -->
+    <signal name="write_to_fd_finished">
+        <arg name="success" type="b" />
+        <arg name="transfer_id" type="s" />
+        <arg name="error_msg" type="s" />
     </signal>
 </interface>
 

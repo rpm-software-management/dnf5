@@ -57,6 +57,7 @@ void DowngradeCommand::set_argument_parser() {
     create_allow_downgrade_options(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void DowngradeCommand::configure() {

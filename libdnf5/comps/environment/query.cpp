@@ -22,9 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
-#include "libdnf5/comps/comps.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
-#include "libdnf5/comps/environment/sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -39,8 +37,23 @@ extern "C" {
 
 namespace libdnf5::comps {
 
+class EnvironmentQuery::Impl {
+public:
+    explicit Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
-EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(base) {
+private:
+    friend EnvironmentQuery;
+
+    struct F {
+        static std::string environmentid(const Environment & obj) { return obj.get_environmentid(); }
+        static std::string name(const Environment & obj) { return obj.get_name(); }
+        static bool is_installed(const Environment & obj) { return obj.get_installed(); }
+    };
+
+    libdnf5::BaseWeakPtr base;
+};
+
+EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_unique<Impl>(base)) {
     if (empty) {
         return;
     }
@@ -77,7 +90,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
         // Add installed environments directly, because there is only one solvable for each
         if (repoid == "@System") {
             Environment environment(base);
-            environment.environment_ids.push_back(EnvironmentId(solvable_id));
+            environment.add_environment_id(EnvironmentId(solvable_id));
             add(environment);
         } else {
             // Create map of available environments:
@@ -94,7 +107,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
         std::sort(item.second.begin(), item.second.end(), std::greater<>());
         // Create environment_ids vector from the sorted solvable_ids
         for (const auto & solvableid_repoid_pair : item.second) {
-            environment.environment_ids.emplace_back(solvableid_repoid_pair.second);
+            environment.add_environment_id(EnvironmentId(solvableid_repoid_pair.second));
         }
         add(environment);
     }
@@ -103,5 +116,45 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base, bool empty) : base(
 
 EnvironmentQuery::EnvironmentQuery(Base & base, bool empty) : EnvironmentQuery(base.get_weak_ptr(), empty) {}
 
+EnvironmentQuery::~EnvironmentQuery() = default;
+
+EnvironmentQuery::EnvironmentQuery(const EnvironmentQuery & src)
+    : libdnf5::sack::Query<Environment>(src),
+      p_impl(new Impl(*src.p_impl)) {}
+EnvironmentQuery::EnvironmentQuery(EnvironmentQuery && src) noexcept = default;
+
+EnvironmentQuery & EnvironmentQuery::operator=(const EnvironmentQuery & src) {
+    libdnf5::sack::Query<Environment>::operator=(src);
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+EnvironmentQuery & EnvironmentQuery::operator=(EnvironmentQuery && src) noexcept = default;
+
+void EnvironmentQuery::filter_environmentid(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Impl::F::environmentid, pattern, cmp);
+}
+
+void EnvironmentQuery::filter_environmentid(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Impl::F::environmentid, patterns, cmp);
+}
+
+void EnvironmentQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Impl::F::name, pattern, cmp);
+}
+
+void EnvironmentQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Impl::F::name, patterns, cmp);
+}
+
+void EnvironmentQuery::filter_installed(bool value) {
+    filter(Impl::F::is_installed, value, sack::QueryCmp::EQ);
+}
 
 }  // namespace libdnf5::comps

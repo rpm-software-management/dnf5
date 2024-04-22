@@ -20,7 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_MODULE_MODULE_SACK_HPP
 #define LIBDNF5_MODULE_MODULE_SACK_HPP
 
+#include "module_status.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/base/solver_problems.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/module/module_item.hpp"
 #include "libdnf5/module/module_sack_weak.hpp"
@@ -52,33 +55,9 @@ class RepoSack;
 
 namespace libdnf5::module {
 
-
-// TODO(pkratoch): Make this a docstring.
-// ENABLED - a module that has an enabled stream.
-// DISABLED - a module that is disabled.
-// AVAILABLE - otherwise.
-enum class ModuleStatus { AVAILABLE, ENABLED, DISABLED };
-
-
 /// Container with data and methods related to modules
 class ModuleSack {
 public:
-    enum class ModuleErrorType {
-        NO_ERROR = 0,
-        INFO,
-        /// Error in module defaults detected during resolvement of module dependencies
-        ERROR_IN_DEFAULTS,
-        /// Error detected during resolvement of module dependencies
-        ERROR,
-        /// Error detected during resolvement of module dependencies - Unexpected error!!!
-        CANNOT_RESOLVE_MODULES,
-        CANNOT_RESOLVE_MODULE_SPEC,
-        CANNOT_ENABLE_MULTIPLE_STREAMS,
-        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATUS,
-        /// Problem with latest modules during resolvement of module dependencies
-        ERROR_IN_LATEST
-    };
-
     ~ModuleSack();
 
     ModuleSackWeakPtr get_weak_ptr();
@@ -101,9 +80,9 @@ public:
     /// Resolve which module items are active. This means requesting all enabled streams or default streams (default
     /// streams only from not-enabled non-disabled modules), while excluding all disabled module streams.
     ///
-    /// @return A pair of problems in resolving to report and ModuleErrorType.
+    /// @return A pair of problems in resolving to report and GoalProblem.
     /// @since 5.0
-    std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
+    std::pair<base::SolverProblems, GoalProblem> resolve_active_module_items();
 
 private:
     friend class libdnf5::Base;
@@ -141,20 +120,6 @@ private:
 };
 
 
-class InvalidModuleStatus : public libdnf5::Error {
-public:
-    InvalidModuleStatus(const std::string & status);
-
-    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
-    const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
-};
-
-
-std::string module_status_to_string(ModuleStatus status);
-ModuleStatus module_status_from_string(const std::string & status);
-
-
 }  // namespace libdnf5::module
-
 
 #endif  // LIBDNF5_MODULE_MODULE_SACK_HPP

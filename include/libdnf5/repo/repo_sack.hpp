@@ -98,10 +98,10 @@ public:
         const std::vector<std::string> & paths, bool calculate_checksum = false);
 
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
-    bool has_system_repo() const noexcept { return system_repo; }
+    bool has_system_repo() const noexcept;
 
     /// @return `true` if the command line repository has been initialized (via `get_cmdline_repo()`).
-    bool has_cmdline_repo() const noexcept { return cmdline_repo; }
+    bool has_cmdline_repo() const noexcept;
 
     /// Dumps libsolv's rpm debugdata of all loaded repositories.
     /// @param dir The directory into which to dump the debugdata.
@@ -112,30 +112,26 @@ public:
     /// @param dir The directory into which to dump the debugdata.
     void dump_comps_debugdata(const std::string & dir);
 
+    /// @deprecated It is going to be removed, please use load_repos with allows specifying repo type.
     /// Downloads (if necessary) all enabled repository metadata and loads them in parallel.
     ///
-    /// See `update_and_load_repos()`, which is called on the list of enabled
-    /// repos and, if requested, the system repository.
+    /// This is just a thin wrapper around load_repos.
     ///
     /// @param load_system Whether to load the system repository
     void update_and_load_enabled_repos(bool load_system);
 
-    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
-    ///
-    /// Downloads (if necessary) repository metadata and loads them in parallel.
-    ///
-    /// Launches a thread that picks repos from a queue and loads them into
-    /// memory (calling their `load()` method). Then iterates over `repos`,
-    /// potentially downloads fresh metadata (by calling the
-    /// `download_metadata()` method) and then queues them for loading. This
-    /// speeds up the process by loading repos into memory while others are being
-    /// downloaded.
-    ///
-    /// @param repos The repositories to update and load
-    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
-    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
+    /// Downloads (if necessary) repositories of selected type and loads them in parallel.
+    /// load_repos() can be called only once per each RepoSack.
+    /// It also sets up modular filtering.
+    /// @param type What repositories to load (libdnf5::Repo::Type::SYSTEM or libdnf5::Repo::Type::AVAILABLE)
+    void load_repos(Repo::Type type);
 
-    RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
+    /// Downloads (if necessary) both available and system repositories and loads them in parallel.
+    /// load_repos() can be called only once per each RepoSack.
+    /// It also sets up modular filtering.
+    void load_repos();
+
+    RepoSackWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
@@ -145,38 +141,43 @@ public:
     /// @since 5.0
     void enable_source_repos();
 
-    /// Re-create missing xml definitions for installed groups. Since we do not have
-    /// the state of the group in time of installation, current definition from
-    /// available repositories is going to be used.
-    /// In case the repo does not exist in repositories, only the minimal solvables
-    /// are created from info in system state.
-    void fix_group_missing_xml();
+    ~RepoSack();
 
 private:
     friend class libdnf5::Base;
     friend class RepoQuery;
     friend class rpm::PackageSack;
+    friend class libdnf5::Goal;
 
-    explicit RepoSack(const libdnf5::BaseWeakPtr & base) : base(base) {}
+    explicit RepoSack(const libdnf5::BaseWeakPtr & base);
     explicit RepoSack(libdnf5::Base & base);
 
     /// Loads repositories configuration overrides from drop-in directories. No new repositories are created.
     /// Only the configuration of the corresponding existing repositories is modified.
     void load_repos_configuration_overrides();
 
-    WeakPtrGuard<RepoSack, false> sack_guard;
-
     /// If not created yet, creates the cmdline repository and returns it.
     /// @return The cmdline repository.
     libdnf5::repo::RepoWeakPtr get_cmdline_repo();
 
+    /// If not created yet, creates the stored transaction repository and returns it.
+    /// @return The stored transaction repository.
+    libdnf5::repo::RepoWeakPtr get_stored_transaction_repo();
+
+    /// Add given path to comps to the stored_transaction repository.
+    /// @param path Path to a local xml comps file to be inserted to stored_transaction repo.
+    void add_stored_transaction_comps(const std::string & path);
+
+    /// Add given path to rpm to the stored_transaction repository.
+    /// @param path Path to a local rpm file to be inserted to stored_transaction repo.
+    /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
+    /// @return Newly created rpm::Package object in cmdline repo
+    libdnf5::rpm::Package add_stored_transaction_package(const std::string & path, bool calculate_checksum = false);
+
     void internalize_repos();
 
-    BaseWeakPtr base;
-
-    repo::Repo * system_repo{nullptr};
-    repo::Repo * cmdline_repo{nullptr};
-    bool repos_updated_and_loaded{false};
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::repo

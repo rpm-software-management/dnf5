@@ -17,25 +17,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf5/comps/environment/sack.hpp"
-
-#include "libdnf5/comps/comps.hpp"
-#include "libdnf5/comps/environment/environment.hpp"
-#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/logger/null_logger.hpp"
 
 
-namespace libdnf5::comps {
+namespace libdnf5 {
 
+NullLogger::NullLogger() = default;
 
-EnvironmentSackWeakPtr EnvironmentSack::get_weak_ptr() {
-    return EnvironmentSackWeakPtr(this, &sack_guard);
-}
+NullLogger::~NullLogger() = default;
 
+void NullLogger::log_line([[maybe_unused]] Level level, [[maybe_unused]] const std::string & message) noexcept {}
 
-EnvironmentSack::EnvironmentSack(Comps & comps) : comps{comps} {}
+void NullLogger::write(
+    [[maybe_unused]] const std::chrono::time_point<std::chrono::system_clock> & time,
+    [[maybe_unused]] pid_t pid,
+    [[maybe_unused]] Level level,
+    [[maybe_unused]] const std::string & message) noexcept {}
 
-
-EnvironmentSack::~EnvironmentSack() = default;
-
-
-}  // namespace libdnf5::comps
+}  // namespace libdnf5

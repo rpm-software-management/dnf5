@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_list.hpp"
 
+#include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/grouplist.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -91,7 +91,12 @@ void GroupListCommand::run() {
 }
 
 void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
-    libdnf5::cli::output::print_grouplist_table(query.list());
+    std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> items;
+    items.reserve(query.list().size());
+    for (auto & obj : query.list()) {
+        items.emplace_back(new libdnf5::cli::output::GroupAdapter(obj));
+    }
+    libdnf5::cli::output::print_grouplist_table(items);
 }
 
 }  // namespace dnf5

@@ -190,6 +190,7 @@ void Transaction::fill(const base::Transaction & transaction) {
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::SWITCH:
                 break;
         }
     }
@@ -211,7 +212,16 @@ int Transaction::run() {
     }
     rpmtsSetNotifyStyle(ts, 1);
     rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
+    auto * const callbacks = callbacks_holder.callbacks.get();
+    if (callbacks) {
+        int nelements = rpmtsNElements(ts);
+        libdnf_assert(nelements >= 0, "librpm rpmtsNElements() returned negative number of transaction elements.");
+        callbacks->before_begin(static_cast<uint64_t>(nelements));
+    }
     auto rc = rpmtsRun(ts, nullptr, ignore_set);
+    if (callbacks) {
+        callbacks->after_complete(rc == 0);
+    }
     rpmtsSetNotifyCallback(ts, nullptr, nullptr);
 
     return rc;

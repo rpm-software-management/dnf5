@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 
 
 include(VERSION.cmake)
-project(dnf5 LANGUAGES CXX C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+project(dnf5 LANGUAGES CXX C VERSION ${VERSION_PRIME}.${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO})
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -74,6 +74,9 @@ find_package(PkgConfig REQUIRED)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Give inline methods hidden visibility by default
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+
 # remove PROJECT_SOURCE_DIR prefix from __FILE__ macro used in asserts (available since GCC 8 and Clang 10)
 add_compile_options("-fmacro-prefix-map=${PROJECT_SOURCE_DIR}/=")
 
@@ -94,9 +97,10 @@ endif()
 add_definitions(-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}")
 add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
-add_definitions(-DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
-add_definitions(-DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR})
-add_definitions(-DPROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH})
+add_definitions(-DPROJECT_VERSION_PRIME=${VERSION_PRIME})
+add_definitions(-DPROJECT_VERSION_MAJOR=${VERSION_MAJOR})
+add_definitions(-DPROJECT_VERSION_MINOR=${VERSION_MINOR})
+add_definitions(-DPROJECT_VERSION_MICRO=${VERSION_MICRO})
 
 # libsolv options
 if(ENABLE_SOLV_URPMREORDER)

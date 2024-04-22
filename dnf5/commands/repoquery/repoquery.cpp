@@ -19,9 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
+#include "libdnf5-cli/output/adapters/package_tmpl.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/changelogs.hpp>
-#include <libdnf5-cli/output/package_info_sections.hpp>
+#include <libdnf5-cli/output/packageinfo.hpp>
 #include <libdnf5-cli/output/repoquery.hpp>
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -341,8 +343,8 @@ void RepoqueryCommand::set_argument_parser() {
         "supplements",
         "",  // empty when option is not used
     };
-    providers_of_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
+    providers_of_option = dynamic_cast<libdnf5::OptionEnum *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum>("", pkg_attrs_options)));
     auto * providers_of = parser.add_new_named_arg("providersof");
     std::string allowed_values = libdnf5::utils::string::join(pkg_attrs_options, ", ");
     // Drop the empty option from the description of supported values
@@ -410,8 +412,8 @@ void RepoqueryCommand::set_argument_parser() {
     // Add additional supported package attribute getters, all pkg_attrs_options get turned into options
     pkg_attrs_options.insert(pkg_attrs_options.begin(), {"files", "sourcerpm", "location"});
 
-    pkg_attr_option = dynamic_cast<libdnf5::OptionEnum<std::string> *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionEnum<std::string>>("", pkg_attrs_options)));
+    pkg_attr_option = dynamic_cast<libdnf5::OptionEnum *>(
+        parser.add_init_value(std::make_unique<libdnf5::OptionEnum>("", pkg_attrs_options)));
     // remove the last empty ("") option, it should not be an arg
     pkg_attrs_options.pop_back();
     for (auto & pkg_attr : pkg_attrs_options) {
@@ -534,9 +536,9 @@ static libdnf5::rpm::PackageSet resolve_nevras_to_packges(
     libdnf5::Base & base, const std::vector<std::string> & nevra_globs, const libdnf5::rpm::PackageQuery & base_query) {
     auto resolved_nevras_set = libdnf5::rpm::PackageSet(base);
     auto settings = libdnf5::ResolveSpecSettings();
-    settings.with_provides = false;
-    settings.with_filenames = false;
-    settings.with_binaries = false;
+    settings.set_with_provides(false);
+    settings.set_with_filenames(false);
+    settings.set_with_binaries(false);
     for (const auto & nevra : nevra_globs) {
         auto tmp_query = base_query;
         tmp_query.resolve_pkg_spec(nevra, settings, true);
@@ -569,8 +571,10 @@ void RepoqueryCommand::run() {
             }
         }
 
-        const libdnf5::ResolveSpecSettings settings{
-            .ignore_case = true, .with_provides = false, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_ignore_case(true);
+        settings.set_with_provides(false);
+        settings.set_with_binaries(false);
         for (const auto & spec : pkg_specs) {
             libdnf5::rpm::PackageQuery package_query(base_query);
             package_query.resolve_pkg_spec(spec, settings, true);
@@ -814,7 +818,7 @@ void RepoqueryCommand::run() {
     if (srpm->get_value()) {
         libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         auto only_src_query = result_query;
-        only_src_query.filter_arch({"src"});
+        only_src_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
         for (const auto & pkg : result_query) {
             if (!pkg.get_sourcerpm().empty()) {
                 auto tmp_q = only_src_query;
@@ -833,10 +837,17 @@ void RepoqueryCommand::run() {
     } else if (changelogs->get_value()) {
         libdnf5::cli::output::print_changelogs(result_query, {libdnf5::cli::output::ChangelogFilterType::NONE, 0});
     } else if (info_option->get_value()) {
-        auto out = libdnf5::cli::output::PackageInfoSections();
-        out.setup_cols();
-        out.add_section("", result_query);
-        out.print();
+        // sort the packages according to NEVRA
+        std::vector<libdnf5::rpm::Package> packages;
+        for (const auto & pkg : result_query) {
+            packages.emplace_back(std::move(pkg));
+        }
+        std::sort(packages.begin(), packages.end(), libdnf5::rpm::cmp_nevra<libdnf5::rpm::Package>);
+        for (auto package : packages) {
+            libdnf5::cli::output::PackageAdapter cli_pkg(package);
+            libdnf5::cli::output::print_package_info(cli_pkg);
+            std::cout << '\n';
+        }
     } else if (!pkg_attr_option->get_value().empty()) {
         libdnf5::cli::output::print_pkg_attr_uniq_sorted(stdout, result_query, pkg_attr_option->get_value());
     } else {

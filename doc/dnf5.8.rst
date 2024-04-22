@@ -154,6 +154,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`changelog <changelog_plugin_ref-label>`
     | Show package changelogs.
 
+:ref:`config-manager <config_manager_plugin_ref-label>`
+    | Manages main configuration, repositories configuration, and variables.
+
 :ref:`copr <copr_plugin_ref-label>`
     | Manage Copr repositories (add-ons provided by users/community/third-party).
 
@@ -162,9 +165,6 @@ These are available after installing the ``dnf5-plugins`` package.
 
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
-
-..
-    # TODO(jkolarik): config-manager plugin
 
 
 Options
@@ -195,6 +195,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 
 ``--comment=COMMENT``
     | Add a comment to the transaction history.
+
+.. _config_option_ref-label:
 
 ``--config=CONFIG_FILE_PATH``
     | Define configuration file location.
@@ -237,6 +239,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--forcearch=ARCH``
     | Force the use of a specific architecture.
     | :ref:`See <forcearch_misc_ref-label>` :manpage:`dnf5-forcearch(7)` for more info.
+
+.. _help_option_ref-label:
 
 ``-h, --help``
     | Show the help.
@@ -300,8 +304,13 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--show-new-leaves``
     | Show newly installed leaf packages and packages that became leaves after a transaction.
 
+.. _use_host_config_option_ref-label:
+
 ``--use-host-config``
     | Use configuration files and variable definitions from the host system rather than the installroot.
+    | :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+
+.. _version_option_ref-label:
 
 ``--version``
     | Display the version of the dnf5 application and libdnf5 library, along with successfully loaded plugins and their versions, and then exit.
@@ -421,12 +430,11 @@ Application Plugins:
     | :manpage:`dnf5-automatic(8)`, :ref:`Automatic command <automatic_plugin_ref-label>`
     | :manpage:`dnf5-builddep(8)`, :ref:`Builddep command <builddep_plugin_ref-label>`
     | :manpage:`dnf5-changelog(8)`, :ref:`Changelog command <changelog_plugin_ref-label>`
+    | :manpage:`dnf5-config-manager(8)`, :ref:`Config-manager command <config_manager_plugin_ref-label>`
     | :manpage:`dnf5-copr(8)`, :ref:`Copr command <copr_plugin_ref-label>`
     | :manpage:`dnf5-needs-restarting(8)`, :ref:`Needs-Restarting command <needs_restarting_plugin_ref-label>`
     | :manpage:`dnf5-repoclosure(8)`, :ref:`Repoclosure command <repoclosure_plugin_ref-label>`
 
-..
-    # TODO(jkolarik): config-manager plugin
 
 Library Plugins:
     | :manpage:`libdnf5-actions(8)`, :ref:`Actions plugin <actions_plugin_ref-label>`

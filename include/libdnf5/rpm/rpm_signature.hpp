@@ -47,17 +47,15 @@ using RpmKeyPktPtr = std::unique_ptr<uint8_t, std::function<void(uint8_t * pkt)>
 
 class KeyInfo {
 public:
-    const std::string & get_key_id() const noexcept { return key_id; }
+    const std::string & get_key_id() const noexcept;
     std::string get_short_key_id() const;
-    const std::vector<std::string> & get_user_ids() const noexcept { return user_ids; }
-    const std::string & get_fingerprint() const noexcept { return fingerprint; }
-    const std::string & get_url() const noexcept { return key_url; }
-    const std::string & get_path() const noexcept { return key_path; }
-    const std::string & get_raw_key() const noexcept { return raw_key; }
-    const long int & get_timestamp() const noexcept { return timestamp; }
+    const std::vector<std::string> & get_user_ids() const noexcept;
+    const std::string & get_fingerprint() const noexcept;
+    const std::string & get_url() const noexcept;
+    const std::string & get_path() const noexcept;
+    const std::string & get_raw_key() const noexcept;
+    const long int & get_timestamp() const noexcept;
 
-protected:
-    friend class RpmSignature;
     KeyInfo(
         const std::string & key_url,
         const std::string & key_path,
@@ -66,22 +64,35 @@ protected:
         const std::string & fingerprint,
         long int timestamp,
         const std::string & raw_key);
-    std::string key_url;
-    std::string key_path;
-    std::string key_id;
-    std::vector<std::string> user_ids;
-    std::string fingerprint;
-    long int timestamp;
-    std::string raw_key;
+
+    ~KeyInfo();
+
+    KeyInfo(const KeyInfo & src);
+    KeyInfo & operator=(const KeyInfo & src);
+
+    KeyInfo(KeyInfo && src) noexcept;
+    KeyInfo & operator=(KeyInfo && src) noexcept;
+
+protected:
+    void add_user_id(const char * user_id);
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 class RpmSignature {
 public:
     enum class CheckResult { OK, SKIPPED, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
-    explicit RpmSignature(const libdnf5::BaseWeakPtr & base) : base(base) {}
-    explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
-    ~RpmSignature(){};
+    explicit RpmSignature(const libdnf5::BaseWeakPtr & base);
+    explicit RpmSignature(Base & base);
+    ~RpmSignature();
+    RpmSignature(const RpmSignature & src);
+    RpmSignature & operator=(const RpmSignature & src);
+
+    RpmSignature(RpmSignature && src) noexcept;
+    RpmSignature & operator=(RpmSignature && src) noexcept;
 
     /// Check signature of the `package` using public keys stored in rpm database.
     /// @param package: package to check.
@@ -91,7 +102,7 @@ public:
     ///         CheckResult::FAILED_NOT_TRUSTED - signature is valid but the key is not trusted
     ///         CheckResult::FAILED_NOT_SIGNED - package is not signed but signature is required
     ///         CheckResult::FAILED - check failed for another reason
-    CheckResult check_package_signature(Package package) const;
+    CheckResult check_package_signature(const Package & pkg) const;
 
     /// Import public key into rpm database.
     /// @param key: GPG key to be imported into rpm database.
@@ -108,7 +119,8 @@ public:
     static std::string check_result_to_string(CheckResult result);
 
 private:
-    BaseWeakPtr base;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::rpm

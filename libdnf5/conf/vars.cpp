@@ -41,7 +41,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <memory>
-#include <optional>
 
 #define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
 #define ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -121,6 +120,19 @@ static std::string detect_arch() {
 // ==================================================================
 
 
+class Vars::Impl {
+public:
+    Impl(const BaseWeakPtr & base);
+
+private:
+    friend Vars;
+
+    std::map<std::string, Variable> variables;
+    BaseWeakPtr base;
+};
+
+Vars::Impl::Impl(const BaseWeakPtr & base) : base(base) {}
+
 std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
     std::unique_ptr<std::string> release_ver;
 
@@ -159,6 +171,10 @@ std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, cons
 
 
 Vars::Vars(Base & base) : Vars(base.get_weak_ptr()) {}
+
+Vars::Vars(const libdnf5::BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+
+Vars::~Vars() = default;
 
 const unsigned int MAXIMUM_EXPRESSION_DEPTH = 32;
 
@@ -223,7 +239,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
             auto pos_after_variable = static_cast<size_t>(std::distance(res.begin(), it));
 
             // Find the substituting string and the end of the variable expression
-            auto variable_mapping = variables.find(res.substr(pos_variable, pos_after_variable - pos_variable));
+            auto variable_mapping = p_impl->variables.find(res.substr(pos_variable, pos_after_variable - pos_variable));
             const std::string * subst_str = nullptr;
 
             size_t pos_after_variable_expression;
@@ -262,7 +278,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                         // If variable is unset or empty, the expansion of word is
                         // substituted. Otherwise, the value of variable is
                         // substituted.
-                        if (variable_mapping == variables.end() || variable_mapping->second.value.empty()) {
+                        if (variable_mapping == p_impl->variables.end() || variable_mapping->second.value.empty()) {
                             subst_str = &expanded_word;
                         } else {
                             subst_str = &variable_mapping->second.value;
@@ -271,7 +287,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                         // ${variable:+word} (alternate value)
                         // If variable is unset or empty nothing is substituted.
                         // Otherwise, the expansion of word is substituted.
-                        if (variable_mapping == variables.end() || variable_mapping->second.value.empty()) {
+                        if (variable_mapping == p_impl->variables.end() || variable_mapping->second.value.empty()) {
                             const std::string empty{};
                             subst_str = &empty;
                         } else {
@@ -285,7 +301,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                     pos_after_variable_expression = pos_after_word + 1;
                 } else if (res[pos_after_variable] == '}') {
                     // ${variable}
-                    if (variable_mapping != variables.end()) {
+                    if (variable_mapping != p_impl->variables.end()) {
                         subst_str = &variable_mapping->second.value;
                     }
                     // Move past the closing '}'
@@ -297,7 +313,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                 }
             } else {
                 // No braces, we have a $variable
-                if (variable_mapping != variables.end()) {
+                if (variable_mapping != p_impl->variables.end()) {
                     subst_str = &variable_mapping->second.value;
                 }
                 pos_after_variable_expression = pos_after_variable;
@@ -358,10 +374,10 @@ void Vars::set(const std::string & name, const std::string & value, Priority pri
     // set_unsafe sets the variable without checking whether it's read-only
     std::function<void(const std::string, const std::string, Priority)> set_unsafe =
         [&](const std::string & name, const std::string & value, Priority prio) {
-            auto it = variables.find(name);
+            auto it = p_impl->variables.find(name);
 
             // Do nothing if the var is already set with a higher priority
-            if (it != variables.end() && prio < it->second.priority) {
+            if (it != p_impl->variables.end() && prio < it->second.priority) {
                 return;
             }
 
@@ -376,8 +392,8 @@ void Vars::set(const std::string & name, const std::string & value, Priority pri
                 }
             }
 
-            if (it == variables.end()) {
-                variables.insert({name, {value, prio}});
+            if (it == p_impl->variables.end()) {
+                p_impl->variables.insert({name, {value, prio}});
             } else {
                 it->second.value = value;
                 it->second.priority = prio;
@@ -386,12 +402,28 @@ void Vars::set(const std::string & name, const std::string & value, Priority pri
     set_unsafe(name, value, prio);
 }
 
+bool Vars::unset(const std::string & name, Priority prio) {
+    auto it = p_impl->variables.find(name);
+    if (it == p_impl->variables.end()) {
+        return true;
+    }
+    if (is_read_only(name)) {
+        throw ReadOnlyVariableError(M_("Variable \"{}\" is read-only"), name);
+    }
+    // Do nothing if the var is already set with a higher priority
+    if (prio < it->second.priority) {
+        return false;
+    }
+    p_impl->variables.erase(it);
+    return true;
+}
+
 void Vars::set_lazy(
     const std::string & name,
     const std::function<const std::unique_ptr<const std::string>()> & get_value,
     const Priority prio) {
-    auto it = variables.find(name);
-    if (it == variables.end() || prio > it->second.priority) {
+    auto it = p_impl->variables.find(name);
+    if (it == p_impl->variables.end() || prio > it->second.priority) {
         const auto maybe_value = get_value();
         if (maybe_value != nullptr) {
             set(name, *maybe_value, prio);
@@ -419,13 +451,15 @@ void Vars::detect_vars(const std::string & installroot) {
     set_lazy(
         "basearch",
         [this]() -> auto {
-            auto base_arch = libdnf5::rpm::get_base_arch(variables["arch"].value);
+            auto base_arch = libdnf5::rpm::get_base_arch(p_impl->variables["arch"].value);
             return base_arch.empty() ? nullptr : std::make_unique<std::string>(std::move(base_arch));
         },
         Priority::AUTO);
 
     set_lazy(
-        "releasever", [this, &installroot]() -> auto { return detect_release(base, installroot); }, Priority::AUTO);
+        "releasever",
+        [this, &installroot]() -> auto { return detect_release(p_impl->base, installroot); },
+        Priority::AUTO);
 }
 
 static void dir_close(DIR * d) {
@@ -433,7 +467,7 @@ static void dir_close(DIR * d) {
 }
 
 void Vars::load_from_dir(const std::string & directory) {
-    auto & logger = *base->get_logger();
+    auto & logger = *p_impl->base->get_logger();
     if (DIR * dir = opendir(directory.c_str())) {
         std::unique_ptr<DIR, decltype(&dir_close)> dir_guard(dir, &dir_close);
         while (auto ent = readdir(dir)) {
@@ -480,6 +514,22 @@ void Vars::load_from_env() {
             }
         }
     }
+}
+
+const std::map<std::string, Vars::Variable> & Vars::get_variables() const {
+    return p_impl->variables;
+}
+
+bool Vars::contains(const std::string & name) const {
+    return p_impl->variables.find(name) != p_impl->variables.end();
+}
+
+const std::string & Vars::get_value(const std::string & name) const {
+    return p_impl->variables.at(name).value;
+}
+
+const Vars::Variable & Vars::get(const std::string & name) const {
+    return p_impl->variables.at(name);
 }
 
 }  // namespace libdnf5

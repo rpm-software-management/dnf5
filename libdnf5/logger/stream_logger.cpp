@@ -19,24 +19,59 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/logger/stream_logger.hpp"
 
+#include <mutex>
 
 namespace libdnf5 {
 
-void StreamLogger::write(const char * line) noexcept {
-    try {
-        std::lock_guard<std::mutex> guard(stream_mutex);
-        *log_stream << line << std::flush;
-    } catch (...) {
+class StreamLogger::Impl {
+public:
+    Impl(std::unique_ptr<std::ostream> && log_stream) : log_stream(std::move(log_stream)) {}
+
+    void write(const char * line) noexcept {
+        try {
+            std::lock_guard<std::mutex> guard(stream_mutex);
+            *log_stream << line << std::flush;
+        } catch (...) {
+        }
     }
+
+private:
+    mutable std::mutex stream_mutex;
+    std::unique_ptr<std::ostream> log_stream;
+};
+
+StreamLogger::StreamLogger(std::unique_ptr<std::ostream> && log_stream) : p_impl(new Impl(std::move(log_stream))) {}
+
+StreamLogger::~StreamLogger() = default;
+
+void StreamLogger::write(const char * line) noexcept {
+    p_impl->write(line);
 }
 
 
-void StdCStreamLogger::write(const char * line) noexcept {
-    try {
-        std::lock_guard<std::mutex> guard(stream_mutex);
-        log_stream << line << std::flush;
-    } catch (...) {
+class StdCStreamLogger::Impl {
+public:
+    Impl(std::ostream & log_stream) : log_stream(log_stream) {}
+
+    void write(const char * line) noexcept {
+        try {
+            std::lock_guard<std::mutex> guard(stream_mutex);
+            log_stream << line << std::flush;
+        } catch (...) {
+        }
     }
+
+private:
+    mutable std::mutex stream_mutex;
+    std::ostream & log_stream;
+};
+
+StdCStreamLogger::StdCStreamLogger(std::ostream & log_stream) : p_impl(new Impl(log_stream)) {}
+
+StdCStreamLogger::~StdCStreamLogger() = default;
+
+void StdCStreamLogger::write(const char * line) noexcept {
+    p_impl->write(line);
 }
 
 }  // namespace libdnf5

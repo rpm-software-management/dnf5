@@ -38,7 +38,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
-#include "libdnf5/conf/option_bool.hpp"
 #include "libdnf5/repo/file_downloader.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
@@ -49,7 +48,6 @@ extern "C" {
 }
 
 #include <atomic>
-#include <cerrno>
 #include <condition_variable>
 #include <filesystem>
 #include <mutex>
@@ -66,6 +64,7 @@ namespace {
 // Names of special repositories
 constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
+constexpr const char * STORED_TRANSACTION_NAME = "@stored_transaction";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
 
@@ -73,8 +72,51 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 
 namespace libdnf5::repo {
 
+class RepoSack::Impl {
+public:
+    Impl(const libdnf5::BaseWeakPtr & base);
+
+    /// Re-create missing xml definitions for installed groups. Since we do not have
+    /// the state of the group in time of installation, current definition from
+    /// available repositories is going to be used.
+    /// In case the repo does not exist in repositories, only the minimal solvables
+    /// are created from info in system state.
+    void fix_group_missing_xml();
+
+    /// Downloads (if necessary) repository metadata and loads them in parallel.
+    ///
+    /// All repository loading should go though this method.
+    /// It sets up modular filtering and ensures the loading is done only once.
+    ///
+    /// Launches a thread that picks repos from a queue and loads them into
+    /// memory (calling their `load()` method). Then iterates over `repos`,
+    /// potentially downloads fresh metadata (by calling the
+    /// `download_metadata()` method) and then queues them for loading. This
+    /// speeds up the process by loading repos into memory while others are being
+    /// downloaded.
+    ///
+    /// @param repos The repositories to update and load
+    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
+    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
+
+private:
+    BaseWeakPtr base;
+    WeakPtrGuard<RepoSack, false> sack_guard;
+    repo::Repo * system_repo{nullptr};
+    repo::Repo * cmdline_repo{nullptr};
+    repo::Repo * stored_transaction_repo{nullptr};
+    bool repos_updated_and_loaded{false};
+    friend RepoSack;
+};
+
+
+RepoSack::Impl::Impl(const libdnf5::BaseWeakPtr & base) : base(base) {}
+
 RepoSack::RepoSack(libdnf5::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
+RepoSack::RepoSack(const libdnf5::BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+
+RepoSack::~RepoSack() = default;
 
 RepoWeakPtr RepoSack::create_repo(const std::string & id) {
     for (const auto & existing_repo : get_data()) {
@@ -83,7 +125,7 @@ RepoWeakPtr RepoSack::create_repo(const std::string & id) {
                 M_("Failed to create repo \"{}\": Id is present more than once in the configuration"), id);
         }
     }
-    auto repo = std::make_unique<Repo>(base, id, Repo::Type::AVAILABLE);
+    auto repo = std::make_unique<Repo>(p_impl->base, id, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }
 
@@ -96,19 +138,51 @@ RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, 
 
 
 RepoWeakPtr RepoSack::get_cmdline_repo() {
-    if (!cmdline_repo) {
-        std::unique_ptr<Repo> repo(new Repo(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
+    if (!p_impl->cmdline_repo) {
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
-        cmdline_repo = repo.get();
+        p_impl->cmdline_repo = repo.get();
         add_item(std::move(repo));
     }
 
-    return cmdline_repo->get_weak_ptr();
+    return p_impl->cmdline_repo->get_weak_ptr();
+}
+
+
+RepoWeakPtr RepoSack::get_stored_transaction_repo() {
+    if (!p_impl->stored_transaction_repo) {
+        // Repo type is COMMANDLINE because we don't want to download download any packages. We want it to behave like commandline repo.
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, STORED_TRANSACTION_NAME, Repo::Type::COMMANDLINE));
+        repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
+        p_impl->stored_transaction_repo = repo.get();
+        add_item(std::move(repo));
+    }
+
+    return p_impl->stored_transaction_repo->get_weak_ptr();
+}
+
+
+void RepoSack::add_stored_transaction_comps(const std::string & path) {
+    auto stored_repo = get_stored_transaction_repo();
+    stored_repo->add_xml_comps(path);
+}
+
+
+libdnf5::rpm::Package RepoSack::add_stored_transaction_package(const std::string & path, bool calculate_checksum) {
+    auto stored_repo = get_stored_transaction_repo();
+
+    auto pkg = stored_repo->add_rpm_package(path, calculate_checksum);
+
+    p_impl->base->get_rpm_package_sack()->load_config_excludes_includes();
+
+    return pkg;
 }
 
 
 std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     const std::vector<std::string> & paths, bool calculate_checksum) {
+    p_impl->base->p_impl->get_plugins().pre_add_cmdline_packages(paths);
+
     // find remote URLs and local file paths in the input
     std::vector<std::string> rpm_urls;
     std::vector<std::string> rpm_filepaths;
@@ -164,9 +238,9 @@ std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     std::map<std::string, libdnf5::rpm::Package> path_to_package;
 
     if (!url_to_path.empty()) {
-        auto & logger = *base->get_logger();
+        auto & logger = *p_impl->base->get_logger();
         // download remote URLs
-        libdnf5::repo::FileDownloader downloader(base);
+        libdnf5::repo::FileDownloader downloader(p_impl->base);
         for (auto & [url, dest_path] : url_to_path) {
             logger.debug("Downloading package \"{}\" to file \"{}\"", url, dest_path.string());
             // TODO(mblaha): temporarily used the dummy DownloadCallbacks instance
@@ -188,23 +262,25 @@ std::map<std::string, libdnf5::rpm::Package> RepoSack::add_cmdline_packages(
     }
 
     if (!path_to_package.empty()) {
-        base->get_rpm_package_sack()->load_config_excludes_includes();
+        p_impl->base->get_rpm_package_sack()->load_config_excludes_includes();
     }
+
+    p_impl->base->p_impl->get_plugins().post_add_cmdline_packages();
 
     return path_to_package;
 }
 
 
 RepoWeakPtr RepoSack::get_system_repo() {
-    if (!system_repo) {
-        std::unique_ptr<Repo> repo(new Repo(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
+    if (!p_impl->system_repo) {
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
         // TODO(mblaha): re-enable caching once we can reliably detect whether system repo is up-to-date
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
-        system_repo = repo.get();
+        p_impl->system_repo = repo.get();
         add_item(std::move(repo));
     }
 
-    return system_repo->get_weak_ptr();
+    return p_impl->system_repo->get_weak_ptr();
 }
 
 /**
@@ -213,7 +289,9 @@ RepoWeakPtr RepoSack::get_system_repo() {
  * @param import_keys Whether or not to import signing keys
  * @warning This function should not be used to load and update repositories. Instead, use `RepoSack::update_and_load_enabled_repos`
  */
-void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
+void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys) {
+    libdnf_user_assert(!repos_updated_and_loaded, "RepoSack::updated_and_load_repos has already been called.");
+
     auto logger = base->get_logger();
 
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
@@ -336,7 +414,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             std::vector<std::tuple<Repo *, std::string>> local_keys_files;
             std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> remote_keys_files;
             for (auto * repo : repos_with_bad_signature) {
-                for (const auto & key_url : repo->config.get_gpgkey_option().get_value()) {
+                for (const auto & key_url : repo->get_config().get_gpgkey_option().get_value()) {
                     if (key_url.starts_with("file:/")) {
                         local_keys_files.emplace_back(repo, key_url);
                     } else {
@@ -351,7 +429,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             for (auto & [repo, key_url] : local_keys_files) {
                 unsigned local_path_start_idx = key_url.starts_with("file:///") ? 7 : 5;
                 utils::fs::File file(key_url.substr(local_path_start_idx), "r");
-                repo->downloader->pgp.import_key(file.get_fd(), key_url);
+                repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
             }
 
             if (!remote_keys_files.empty()) {
@@ -369,7 +447,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 // import downloaded keys files
                 for (const auto & [repo, key_url, temp_file] : remote_keys_files) {
                     utils::fs::File file(temp_file.get_path(), "r");
-                    repo->downloader->pgp.import_key(file.get_fd(), key_url);
+                    repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
                 }
             }
 
@@ -392,18 +470,19 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
                 bool valid_metadata{false};
                 try {
                     repo->read_metadata_cache();
-                    if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+                    if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
                         // cache loaded
                         repo->recompute_expired();
-                        valid_metadata = !repo->expired || repo->sync_strategy == Repo::SyncStrategy::ONLY_CACHE ||
-                                         repo->sync_strategy == Repo::SyncStrategy::LAZY;
+                        valid_metadata = !repo->is_expired() ||
+                                         repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE ||
+                                         repo->get_sync_strategy() == Repo::SyncStrategy::LAZY;
                     }
                 } catch (const std::runtime_error & e) {
                 }
 
                 if (valid_metadata) {
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-                    logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
+                    logger->debug("Using cache for repo \"{}\"", repo->get_config().get_id());
                     send_to_sack_loader(repo);
                 } else {
                     // Try reusing the root cache
@@ -414,7 +493,7 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
 
                     if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
                         throw RepoDownloadError(
-                            M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
+                            M_("Cache-only enabled but no cache for repository \"{}\""), repo->get_config().get_id());
                     }
                     ++idx;
                 }
@@ -434,16 +513,18 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             auto * const repo = repos_for_processing[idx];
             catch_thread_sack_loader_exceptions();
             try {
-                if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
+                if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
                     repo->is_in_sync()) {
                     // the expired metadata still reflect the origin
-                    utimes(repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-                    RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                    repo->expired = false;
+                    utimes(
+                        repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+                    RepoCache(base, repo->get_config().get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                    repo->mark_fresh();
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
 
                     logger->debug(
-                        "Using cache for repo \"{}\". It is expired, but matches the original.", repo->config.get_id());
+                        "Using cache for repo \"{}\". It is expired, but matches the original.",
+                        repo->get_config().get_id());
                     send_to_sack_loader(repo);
                 } else {
                     ++idx;
@@ -466,13 +547,12 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
             auto * const repo = repos_for_processing[idx];
             catch_thread_sack_loader_exceptions();
             try {
-                logger->debug("Downloading metadata for repo \"{}\"", repo->config.get_id());
-                auto cache_dir = repo->config.get_cachedir();
+                logger->debug("Downloading metadata for repo \"{}\"", repo->get_config().get_id());
+                auto cache_dir = repo->get_config().get_cachedir();
                 repo->download_metadata(cache_dir);
                 RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                repo->timestamp = -1;
+                repo->mark_fresh();
                 repo->read_metadata_cache();
-                repo->expired = false;
 
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                 send_to_sack_loader(repo);
@@ -495,47 +575,74 @@ void RepoSack::update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool impo
     fix_group_missing_xml();
 
     base->get_rpm_package_sack()->load_config_excludes_includes();
+    base->get_module_sack()->p_impl->module_filtering();
+    repos_updated_and_loaded = true;
+
+    base->p_impl->get_plugins().repos_loaded();
 }
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
-    libdnf_user_assert(!repos_updated_and_loaded, "RepoSack::updated_and_load_enabled_repos has already been called.");
-
     if (load_system) {
+        load_repos();
+    } else {
+        load_repos(Repo::Type::AVAILABLE);
+    }
+}
+
+void RepoSack::load_repos() {
+    auto & base = p_impl->base;
+
+    if (!base->are_repos_configured()) {
+        base->notify_repos_configured();
+    }
+
+    // create the system repository if it does not exist
+    base->get_repo_sack()->get_system_repo();
+    libdnf5::repo::RepoQuery repos(p_impl->base);
+    repos.filter_enabled(true);
+    p_impl->update_and_load_repos(repos);
+}
+
+void RepoSack::load_repos(Repo::Type type) {
+    auto & base = p_impl->base;
+
+    if (!base->are_repos_configured()) {
+        base->notify_repos_configured();
+    }
+
+    libdnf_user_assert(
+        (type == libdnf5::repo::Repo::Type::AVAILABLE) || (type == libdnf5::repo::Repo::Type::SYSTEM),
+        "RepoSack::load_repos has to be used with libdnf5::repo::Repo::Type::SYSTEM, "
+        "libdnf5::repo::Repo::Type::AVAILABLE or no argument to load both.");
+
+    if (type == Repo::Type::SYSTEM) {
         // create the system repository if it does not exist
         base->get_repo_sack()->get_system_repo();
     }
 
-    libdnf5::repo::RepoQuery repos(base);
+    libdnf5::repo::RepoQuery repos(p_impl->base);
     repos.filter_enabled(true);
+    repos.filter_type(type);
 
-    if (!load_system) {
-        repos.filter_type(Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
-    }
-
-    update_and_load_repos(repos);
-
-    // TODO(jmracek) Replace by call that will resolve active modules and apply modular filtering
-    base->get_module_sack()->p_impl->module_filtering();
-
-    repos_updated_and_loaded = true;
+    p_impl->update_and_load_repos(repos);
 }
 
 
 void RepoSack::dump_debugdata(const std::string & dir) {
-    libdnf5::solv::Solver solver{get_rpm_pool(base)};
+    libdnf5::solv::Solver solver{get_rpm_pool(p_impl->base)};
     solver.write_debugdata(dir, false);
 }
 
 
 void RepoSack::dump_comps_debugdata(const std::string & dir) {
-    libdnf5::solv::Solver solver{get_comps_pool(base)};
+    libdnf5::solv::Solver solver{get_comps_pool(p_impl->base)};
     solver.write_debugdata(dir, false);
 }
 
 
 void RepoSack::create_repos_from_file(const std::string & path) {
-    auto & logger = *base->get_logger();
+    auto & logger = *p_impl->base->get_logger();
     ConfigParser parser;
     parser.read(path);
     const auto & cfg_parser_data = parser.get_data();
@@ -544,7 +651,7 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         if (section == "main") {
             continue;
         }
-        auto repo_id = base->get_vars()->substitute(section);
+        auto repo_id = p_impl->base->get_vars()->substitute(section);
 
         logger.debug("Creating repo \"{}\" from config file \"{}\" section \"{}\"", repo_id, path, section);
 
@@ -557,7 +664,7 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         }
         repo->set_repo_file_path(path);
         auto & repo_cfg = repo->get_config();
-        repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
+        repo_cfg.load_from_parser(parser, section, *p_impl->base->get_vars(), *p_impl->base->get_logger());
 
         if (repo_cfg.get_name_option().get_priority() == Option::Priority::DEFAULT) {
             logger.debug("Repo \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path);
@@ -567,7 +674,7 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 }
 
 void RepoSack::create_repos_from_config_file() {
-    base->with_config_file_path(
+    p_impl->base->p_impl->with_config_file_path(
         std::function<void(const std::string &)>{[this](const std::string & path) { create_repos_from_file(path); }});
 }
 
@@ -575,7 +682,8 @@ void RepoSack::create_repos_from_dir(const std::string & dir_path) {
     std::error_code ec;
     std::filesystem::directory_iterator di(dir_path, ec);
     if (ec) {
-        base->get_logger()->warning("Cannot read repositories from directory \"{}\": {}", dir_path, ec.message());
+        p_impl->base->get_logger()->warning(
+            "Cannot read repositories from directory \"{}\": {}", dir_path, ec.message());
         return;
     }
     std::vector<std::filesystem::path> paths;
@@ -592,7 +700,7 @@ void RepoSack::create_repos_from_dir(const std::string & dir_path) {
 }
 
 void RepoSack::create_repos_from_reposdir() {
-    for (auto & dir : base->get_config().get_reposdir_option().get_value()) {
+    for (auto & dir : p_impl->base->get_config().get_reposdir_option().get_value()) {
         if (std::filesystem::exists(dir)) {
             create_repos_from_dir(dir);
         }
@@ -616,12 +724,12 @@ void RepoSack::create_repos_from_system_configuration() {
 }
 
 void RepoSack::load_repos_configuration_overrides() {
-    auto loger = base->get_logger();
+    auto loger = p_impl->base->get_logger();
 
     fs::path repos_override_dir_path{REPOS_OVERRIDE_DIR};
     fs::path repos_distrib_override_dir_path{LIBDNF5_REPOS_DISTRIBUTION_OVERRIDE_DIR};
 
-    const auto & config = base->get_config();
+    const auto & config = p_impl->base->get_config();
     const bool use_installroot_config{!config.get_use_host_config_option().get_value()};
     if (use_installroot_config) {
         const fs::path installroot_path{config.get_installroot_option().get_value()};
@@ -638,26 +746,27 @@ void RepoSack::load_repos_configuration_overrides() {
         const auto & cfg_parser_data = parser.get_data();
         for (const auto & cfg_parser_data_iter : cfg_parser_data) {
             const auto & section = cfg_parser_data_iter.first;
-            const auto repo_id_pattern = base->get_vars()->substitute(section);
+            const auto repo_id_pattern = p_impl->base->get_vars()->substitute(section);
 
-            RepoQuery repo_query(base);
+            RepoQuery repo_query(p_impl->base);
             repo_query.filter_id(repo_id_pattern, sack::QueryCmp::GLOB);
             for (auto & repo : repo_query) {
-                repo->get_config().load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
+                repo->get_config().load_from_parser(
+                    parser, section, *p_impl->base->get_vars(), *p_impl->base->get_logger());
             }
         }
     }
 }
 
 BaseWeakPtr RepoSack::get_base() const {
-    return base;
+    return p_impl->base;
 }
 
 void RepoSack::enable_source_repos() {
-    RepoQuery enabled_repos(base);
+    RepoQuery enabled_repos(p_impl->base);
     enabled_repos.filter_enabled(true);
     for (const auto & repo : enabled_repos) {
-        RepoQuery source_query(base);
+        RepoQuery source_query(p_impl->base);
         // There is no way how to find source (or debuginfo) repository for
         // given repo. This is only guessing according to the current practice:
         auto repoid = repo->get_id();
@@ -676,25 +785,29 @@ void RepoSack::enable_source_repos() {
 }
 
 void RepoSack::internalize_repos() {
-    auto rq = RepoQuery(base);
+    auto rq = RepoQuery(p_impl->base);
     for (auto & repo : rq.get_data()) {
         repo->internalize();
     }
 
-    if (system_repo) {
-        system_repo->internalize();
+    if (p_impl->system_repo) {
+        p_impl->system_repo->internalize();
     }
 
-    if (cmdline_repo) {
-        cmdline_repo->internalize();
+    if (p_impl->cmdline_repo) {
+        p_impl->cmdline_repo->internalize();
+    }
+
+    if (p_impl->stored_transaction_repo) {
+        p_impl->stored_transaction_repo->internalize();
     }
 }
 
-void RepoSack::fix_group_missing_xml() {
-    if (has_system_repo()) {
-        auto & solv_repo = system_repo->solv_repo;
-        auto & group_missing_xml = solv_repo->get_groups_missing_xml();
-        auto & environments_missing_xml = solv_repo->get_environments_missing_xml();
+void RepoSack::Impl::fix_group_missing_xml() {
+    if (system_repo != nullptr) {
+        auto & solv_repo = system_repo->get_solv_repo();
+        auto & group_missing_xml = solv_repo.get_groups_missing_xml();
+        auto & environments_missing_xml = solv_repo.get_environments_missing_xml();
         if (group_missing_xml.empty() && environments_missing_xml.empty()) {
             return;
         }
@@ -734,13 +847,13 @@ void RepoSack::fix_group_missing_xml() {
                             logger.debug(ex.what());
                         }
                         if (xml_saved) {
-                            solv_repo->read_group_solvable_from_xml(xml_file_name);
+                            solv_repo.read_group_solvable_from_xml(xml_file_name);
                         }
                     }
                 }
                 if (!xml_saved) {
                     // fall-back to creating solvables only from system state
-                    solv_repo->create_group_solvable(group_id, system_state.get_group_state(group_id));
+                    solv_repo.create_group_solvable(group_id, system_state.get_group_state(group_id));
                 }
             }
         }
@@ -767,13 +880,13 @@ void RepoSack::fix_group_missing_xml() {
                             logger.debug(ex.what());
                         }
                         if (xml_saved) {
-                            solv_repo->read_group_solvable_from_xml(xml_file_name);
+                            solv_repo.read_group_solvable_from_xml(xml_file_name);
                         }
                     }
                 }
                 if (!xml_saved) {
                     // fall-back to creating solvables only from system state
-                    solv_repo->create_environment_solvable(
+                    solv_repo.create_environment_solvable(
                         environment_id, system_state.get_environment_state(environment_id));
                 }
             }
@@ -783,6 +896,18 @@ void RepoSack::fix_group_missing_xml() {
         group_missing_xml.clear();
         environments_missing_xml.clear();
     }
+}
+
+bool RepoSack::has_system_repo() const noexcept {
+    return p_impl->system_repo != nullptr;
+}
+
+bool RepoSack::has_cmdline_repo() const noexcept {
+    return p_impl->cmdline_repo != nullptr;
+}
+
+RepoSackWeakPtr RepoSack::get_weak_ptr() {
+    return {this, &p_impl->sack_guard};
 }
 
 }  // namespace libdnf5::repo

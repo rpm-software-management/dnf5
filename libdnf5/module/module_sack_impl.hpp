@@ -112,10 +112,10 @@ public:
     /// Resolve given module items.
     ///
     /// @param module_items Module Items to resolve.
-    /// @return `std::pair` of problems in resolving and ModuleErrorType.
+    /// @return `std::pair` of problems in resolving and a GoalProblem.
     /// @since 5.0
-    std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> module_solve(
-        std::vector<ModuleItem *> module_items);
+    std::pair<std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>>, GoalProblem> module_solve(
+        std::vector<ModuleItem *> & module_items);
 
     /// Enable module stream.
     /// @param name module name to be enabled.
@@ -154,6 +154,7 @@ public:
 
 private:
     friend class libdnf5::base::Transaction;
+    friend class libdnf5::Goal;
     friend ModuleSack;
     friend ModuleItem;
     friend ModuleGoalPrivate;

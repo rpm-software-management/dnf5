@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/solv/goal_private.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
+#include "solver_problems_internal.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "utils/string.hpp"
@@ -41,6 +42,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/rpm/reldep.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/fs/file.hpp"
 #include "libdnf5/utils/patterns.hpp"
 
 #include <filesystem>
@@ -206,7 +208,8 @@ private:
     void install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg);
     void remove_group_packages(const rpm::PackageSet & remove_candidates);
 
-    std::unique_ptr<std::pair<transaction::TransactionReplay, GoalJobSettings>> serialized_transaction;
+    // (path_to_serialized_transaction, settings)
+    std::unique_ptr<std::tuple<std::filesystem::path, GoalJobSettings>> serialized_transaction;
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -369,13 +372,13 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
         std::string group_spec = spec.substr(1);
         auto group_settings = libdnf5::GoalJobSettings(settings);
         // for compatibility reasons '@group-spec' can mean also environment
-        group_settings.group_search_environments = true;
+        group_settings.set_group_search_environments(true);
         // support for kickstart environmental groups syntax - '@^environment-spec'
         if (group_spec.starts_with("^")) {
             group_spec = group_spec.substr(1);
-            group_settings.group_search_groups = false;
+            group_settings.set_group_search_groups(false);
         } else {
-            group_settings.group_search_groups = true;
+            group_settings.set_group_search_groups(true);
         }
         group_specs.push_back(
             std::make_tuple(action, libdnf5::transaction::TransactionItemReason::USER, group_spec, group_settings));
@@ -395,7 +398,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    libdnf_assert_same_base(base, rpm_package.base);
+    libdnf_assert_same_base(base, rpm_package.get_base());
 
     libdnf5::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
@@ -508,9 +511,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 rpm::PackageQuery query(base);
 
                 // Apply advisory filters
-                if (settings.advisory_filter.has_value()) {
+                if (settings.get_advisory_filter() != nullptr) {
                     filter_candidates_for_advisory_upgrade(
-                        base, query, settings.advisory_filter.value(), cfg_main.get_obsoletes_option().get_value());
+                        base, query, *settings.get_advisory_filter(), cfg_main.get_obsoletes_option().get_value());
                 }
 
                 // Make the smallest possible upgrade
@@ -527,6 +530,10 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(base);
+                // Since distro-sync uses SOLVER_TARGETED mode we cannot pass in installed packages because if we did
+                // updating only a subset of packages would be a valid solution. However in a distro-sync we want to
+                // ensure ALL packages are synchronized with the target repository.
+                query.filter_available();
                 libdnf5::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
@@ -563,7 +570,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 
 GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
-    module::ModuleSack & module_sack = base->module_sack;
+    module::ModuleSack & module_sack = *base->get_module_sack();
 
     std::vector<std::string> missing_module_specs;
     for (auto & [action, spec, settings] : module_specs) {
@@ -620,43 +627,62 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
     if (!serialized_transaction) {
         return GoalProblem::NO_PROBLEM;
     }
-    libdnf5::GoalJobSettings settings = serialized_transaction->second;
+
+    auto & [replay_path, settings] = *serialized_transaction;
+    utils::fs::File replay_file(replay_path, "r");
+    auto replay_location = replay_path.remove_filename();
+    auto replay = transaction::parse_transaction_replay(replay_file.read());
+
     bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
-    for (const auto & package_replay : serialized_transaction->first.packages) {
+    for (const auto & package_replay : replay.packages) {
         libdnf5::GoalJobSettings settings_per_package = settings;
-        settings_per_package.clean_requirements_on_remove = libdnf5::GoalSetting::SET_FALSE;
+        settings_per_package.set_clean_requirements_on_remove(libdnf5::GoalSetting::SET_FALSE);
         if (!package_replay.repo_id.empty()) {
             repo::RepoQuery enabled_repos(base);
             enabled_repos.filter_enabled(true);
             enabled_repos.filter_id(package_replay.repo_id);
             if (!enabled_repos.empty()) {
-                settings_per_package.to_repo_ids = {package_replay.repo_id};
+                settings_per_package.set_to_repo_ids({package_replay.repo_id});
             }
         }
 
+        std::optional<libdnf5::rpm::Package> local_pkg;
+
+        if (!package_replay.package_path.empty()) {
+            local_pkg =
+                base->get_repo_sack()->add_stored_transaction_package(replay_location / package_replay.package_path);
+        }
         if (package_replay.action == transaction::TransactionItemAction::UPGRADE ||
             package_replay.action == transaction::TransactionItemAction::INSTALL ||
             package_replay.action == transaction::TransactionItemAction::DOWNGRADE) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::INSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::INSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::INSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REINSTALL) {
-            if (package_replay.package_path.empty()) {
-                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REINSTALL, *local_pkg, settings_per_package);
             } else {
-                rpm_filepaths.emplace_back(GoalAction::REINSTALL, package_replay.package_path, settings_per_package);
+                rpm_specs.emplace_back(GoalAction::REINSTALL, package_replay.nevra, settings_per_package);
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REMOVE) {
-            rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            if (local_pkg) {
+                add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+            } else {
+                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+            }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REPLACED) {
             if (!skip_unavailable) {
-                rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                if (local_pkg) {
+                    add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
+                } else {
+                    rpm_specs.emplace_back(GoalAction::REMOVE, package_replay.nevra, settings_per_package);
+                }
             }
         } else if (package_replay.action == transaction::TransactionItemAction::REASON_CHANGE) {
             rpm_reason_change_specs.emplace_back(
@@ -667,22 +693,24 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
         }
     }
 
-    for (const auto & group_replay : serialized_transaction->first.groups) {
+    for (const auto & group_replay : replay.groups) {
         libdnf5::GoalJobSettings settings_per_group = settings;
-        settings_per_group.group_no_packages = true;
-        settings_per_group.group_search_groups = true;
-        settings_per_group.group_search_environments = false;
+        settings_per_group.set_group_no_packages(true);
+        settings_per_group.set_group_search_groups(true);
+        settings_per_group.set_group_search_environments(false);
         if (!group_replay.repo_id.empty()) {
             repo::RepoQuery enabled_repos(base);
             enabled_repos.filter_enabled(true);
             enabled_repos.filter_id(group_replay.repo_id);
             if (!enabled_repos.empty()) {
-                //TODO(amatej): add ci test where we limit a group to repo
-                settings_per_group.to_repo_ids = {group_replay.repo_id};
+                //TODO(amatej): set_to_repo_ids is only for packages, remove it? Or update set_to_repo_ids
+                settings_per_group.set_to_repo_ids({group_replay.repo_id});
             }
         }
+        if (!group_replay.group_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(replay_location / group_replay.group_path);
+        }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
         if (group_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL, group_replay.reason, group_replay.group_id, settings_per_group);
@@ -698,24 +726,24 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
         }
     }
 
-    for (const auto & env_replay : serialized_transaction->first.environments) {
+    for (const auto & env_replay : replay.environments) {
         libdnf5::GoalJobSettings settings_per_environment = settings;
-        //TODO(amatej): add environment_no_groups to avoid handling groups twice
-        //              (once from the environment automatically and once from the replay)
-        //settings_per_environment.environment_no_groups = true;
-        settings_per_environment.group_search_groups = false;
-        settings_per_environment.group_search_environments = true;
+        settings_per_environment.set_environment_no_groups(true);
+        settings_per_environment.set_group_search_groups(false);
+        settings_per_environment.set_group_search_environments(true);
         if (!env_replay.repo_id.empty()) {
             repo::RepoQuery enabled_repos(base);
             enabled_repos.filter_enabled(true);
             enabled_repos.filter_id(env_replay.repo_id);
             if (!enabled_repos.empty()) {
                 //TODO(amatej): add ci test where we limit an env to a repo
-                settings_per_environment.to_repo_ids = {env_replay.repo_id};
+                settings_per_environment.set_to_repo_ids({env_replay.repo_id});
             }
         }
 
-        //TODO(amatej): we could detect if we have a filepath instead and add_spec(..) or somehow add the filepath
+        if (!env_replay.environment_path.empty()) {
+            base->get_repo_sack()->add_stored_transaction_comps(replay_location / env_replay.environment_path);
+        }
         if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
                 GoalAction::INSTALL,
@@ -754,7 +782,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
     for (auto & [action, reason, spec, settings] : specs) {
         // For the REMOVE action, skip_unavailable defaults to true, ensuring
         // that the removal of a not-installed group is not treated as an error.
-        bool skip_unavailable = (action == GoalAction::REMOVE && settings.skip_unavailable == GoalSetting::AUTO)
+        bool skip_unavailable = (action == GoalAction::REMOVE && settings.get_skip_unavailable() == GoalSetting::AUTO)
                                     ? true
                                     : settings.resolve_skip_unavailable(cfg_main);
         auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
@@ -771,21 +799,21 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
             ret |= GoalProblem::UNSUPPORTED_ACTION;
             continue;
         }
-        sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
+        sack::QueryCmp cmp = settings.get_ignore_case() ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
         bool spec_resolved{false};
-        if (settings.group_search_groups) {
+        if (settings.get_group_search_groups()) {
             comps::GroupQuery group_query(base, true);
             comps::GroupQuery spec_groups_query(base_groups_query);
             // for REMOVE / UPGRADE actions take only installed groups into account
             // for INSTALL only available groups
             spec_groups_query.filter_installed(action != GoalAction::INSTALL && action != GoalAction::INSTALL_BY_COMPS);
-            if (settings.group_with_id) {
+            if (settings.get_group_with_id()) {
                 comps::GroupQuery group_query_id(spec_groups_query);
                 group_query_id.filter_groupid(spec, cmp);
                 group_query |= group_query_id;
             }
             // TODO(mblaha): reconsider usefulness of searching groups by names
-            if (settings.group_with_name) {
+            if (settings.get_group_with_name()) {
                 comps::GroupQuery group_query_name(spec_groups_query);
                 group_query_name.filter_name(spec, cmp);
                 group_query |= group_query_name;
@@ -795,17 +823,17 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 spec_resolved = true;
             }
         }
-        if (settings.group_search_environments) {
+        if (settings.get_group_search_environments()) {
             comps::EnvironmentQuery environment_query(base, true);
             comps::EnvironmentQuery spec_environments_query(base_environments_query);
             spec_environments_query.filter_installed(action != GoalAction::INSTALL);
-            if (settings.group_with_id) {
+            if (settings.get_group_with_id()) {
                 comps::EnvironmentQuery environment_query_id(spec_environments_query);
                 environment_query_id.filter_environmentid(spec, cmp);
                 environment_query |= environment_query_id;
             }
             // TODO(mblaha): reconsider usefulness of searching groups by names
-            if (settings.group_with_name) {
+            if (settings.get_group_with_name()) {
                 comps::EnvironmentQuery environment_query_name(spec_environments_query);
                 environment_query_name.filter_name(spec, cmp);
                 environment_query |= environment_query_name;
@@ -897,7 +925,7 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     // The correct evaluation of rich dependencies can be only performed by solver.
     // There are some limitations - solver is unable to handle when operation is limited to packages from the
     // particular repository and multilib_policy `all`.
-    if (libdnf5::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
+    if (libdnf5::rpm::Reldep::is_rich_dependency(spec) && settings.get_to_repo_ids().empty()) {
         add_provide_install_to_goal(spec, settings);
         return {GoalProblem::NO_PROBLEM, result_queue};
     }
@@ -921,8 +949,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
     bool skip_broken = settings.resolve_skip_broken(cfg_main);
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
-        if (!settings.to_repo_ids.empty()) {
-            query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
+        if (!settings.get_to_repo_ids().empty()) {
+            query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
             if (query.empty()) {
                 transaction.p_impl->add_resolve_log(
                     action,
@@ -938,8 +966,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         }
 
         // Apply advisory filters
-        if (settings.advisory_filter.has_value()) {
-            query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
+        if (settings.get_advisory_filter() != nullptr) {
+            query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
         }
 
         /// <name, <arch, std::vector<pkg Solvables>>>
@@ -1010,8 +1038,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             (nevra_pair.second.get_name().empty() &&
              (!nevra_pair.second.get_epoch().empty() || !nevra_pair.second.get_version().empty() ||
               !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
-            if (!settings.to_repo_ids.empty()) {
-                query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
+            if (!settings.get_to_repo_ids().empty()) {
+                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
                         action,
@@ -1027,8 +1055,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             }
 
             // Apply advisory filters
-            if (settings.advisory_filter.has_value()) {
-                query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
+            if (settings.get_advisory_filter() != nullptr) {
+                query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
             }
 
             rpm::PackageQuery available(query);
@@ -1086,8 +1114,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, query);
             }
-            if (!settings.to_repo_ids.empty()) {
-                query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
+            if (!settings.get_to_repo_ids().empty()) {
+                query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
                         action,
@@ -1103,8 +1131,8 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             }
 
             // Apply advisory filters
-            if (settings.advisory_filter.has_value()) {
-                query.filter_advisories(settings.advisory_filter.value(), libdnf5::sack::QueryCmp::EQ);
+            if (settings.get_advisory_filter() != nullptr) {
+                query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
             }
             solv_map_to_id_queue(result_queue, *query.p_impl);
             rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
@@ -1216,8 +1244,8 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
     // TODO(jmracek) Implement filtering from_repo_ids
 
-    if (!settings.to_repo_ids.empty()) {
-        relevant_available.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
+    if (!settings.get_to_repo_ids().empty()) {
+        relevant_available.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
         if (relevant_available.empty()) {
             transaction.p_impl->add_resolve_log(
                 GoalAction::REINSTALL,
@@ -1320,7 +1348,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 solv::IdQueue ids_nevra_installed;
                 for (auto id : ids) {
                     rpm::PackageQuery query(installed);
-                    query.filter_nevra({pool.get_nevra(id)});
+                    query.filter_nevra(pool.get_nevra(id));
                     if (query.empty()) {
                         // Report when package with the same NEVRA is not installed
                         transaction.p_impl->add_resolve_log(
@@ -1352,7 +1380,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         }
                     }
                     rpm::PackageQuery query(installed);
-                    query.filter_name({pool.get_name(id)});
+                    query.filter_name(pool.get_name(id));
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
@@ -1382,7 +1410,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             continue;
                         }
                     }
-                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::GTE);
+                    query.filter_evr(pool.get_evr(id), sack::QueryCmp::GTE);
                     if (!query.empty()) {
                         // Report when package with higher or equal version is installed
                         transaction.p_impl->add_resolve_log(
@@ -1410,7 +1438,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 solv::IdQueue ids_downgrades;
                 for (auto id : ids) {
                     rpm::PackageQuery query(installed);
-                    query.filter_name({pool.get_name(id)});
+                    query.filter_name(pool.get_name(id));
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
@@ -1423,7 +1451,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             log_level);
                         continue;
                     }
-                    query.filter_arch({pool.get_arch(id)});
+                    query.filter_arch(pool.get_arch(id));
                     if (query.empty()) {
                         // Report when package with the same name is installed for a different architecture
                         transaction.p_impl->add_resolve_log(
@@ -1436,7 +1464,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             log_level);
                         continue;
                     }
-                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::LTE);
+                    query.filter_evr(pool.get_evr(id), sack::QueryCmp::LTE);
                     if (!query.empty()) {
                         // Report when package with lower or equal version is installed
                         std::string name_arch(pool.get_name(id));
@@ -1485,7 +1513,7 @@ GoalProblem Goal::Impl::add_remove_to_goal(
     if (!nevra_pair.first) {
         auto & cfg_main = base->get_config();
         bool skip_unavailable =
-            settings.skip_unavailable == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
+            settings.get_skip_unavailable() == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
         auto problem = transaction.p_impl->report_not_found(
             GoalAction::REMOVE,
             spec,
@@ -1494,7 +1522,7 @@ GoalProblem Goal::Impl::add_remove_to_goal(
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
-    if (!settings.from_repo_ids.empty()) {
+    if (!settings.get_from_repo_ids().empty()) {
         // TODO(jmracek) keep only packages installed from repo_id -requires swdb
         if (query.empty()) {
             // TODO(jmracek) no solution for the spec => mark result - not from repository
@@ -1590,8 +1618,8 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
             query |= obsoletes_query;
         }
     }
-    if (!settings.to_repo_ids.empty()) {
-        query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
+    if (!settings.get_to_repo_ids().empty()) {
+        query.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
         if (query.empty()) {
             transaction.p_impl->add_resolve_log(
                 action,
@@ -1607,8 +1635,8 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     }
 
     // Apply advisory filters
-    if (settings.advisory_filter.has_value()) {
-        filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value(), obsoletes);
+    if (settings.get_advisory_filter() != nullptr) {
+        filter_candidates_for_advisory_upgrade(base, query, *settings.get_advisory_filter(), obsoletes);
     }
 
     if (minimal) {
@@ -1701,10 +1729,10 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
 
 void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5::comps::Package pkg) {
     auto pkg_settings = GoalJobSettings();
-    pkg_settings.with_provides = false;
-    pkg_settings.with_filenames = false;
-    pkg_settings.with_binaries = false;
-    pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+    pkg_settings.set_with_provides(false);
+    pkg_settings.set_with_filenames(false);
+    pkg_settings.set_with_binaries(false);
+    pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
 
     // TODO(mblaha): apply pkg.basearchonly when available in comps
     auto pkg_name = pkg.get_name();
@@ -1713,7 +1741,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5:
         auto [pkg_problem, pkg_queue] =
             // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
             add_install_to_goal(transaction, GoalAction::INSTALL_BY_COMPS, pkg_name, pkg_settings);
-        rpm_goal.add_transaction_group_installed(pkg_queue);
+        rpm_goal.add_transaction_group_reason(pkg_queue);
     } else {
         // check whether condition can even be met
         rpm::PackageQuery condition_query(base);
@@ -1725,7 +1753,7 @@ void Goal::Impl::install_group_package(base::Transaction & transaction, libdnf5:
             // TODO(mblaha): log absence of pkg in case the query is empty
             if (!query.empty()) {
                 add_provide_install_to_goal(fmt::format("({} if {})", pkg_name, pkg_condition), pkg_settings);
-                rpm_goal.add_transaction_group_installed(*query.p_impl);
+                rpm_goal.add_transaction_group_reason(*query.p_impl);
             }
         }
     }
@@ -1764,6 +1792,7 @@ void Goal::Impl::remove_group_packages(const rpm::PackageSet & remove_candidates
 
     auto & cfg_main = base->get_config();
     rpm_goal.add_remove(packages_to_remove_ids, cfg_main.get_clean_requirements_on_remove_option().get_value());
+    rpm_goal.add_transaction_group_reason(packages_to_remove_ids);
 }
 
 void Goal::Impl::add_group_install_to_goal(
@@ -1775,7 +1804,7 @@ void Goal::Impl::add_group_install_to_goal(
     auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
     for (auto group : group_query) {
         rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
-        if (settings.group_no_packages) {
+        if (settings.get_group_no_packages()) {
             continue;
         }
         std::vector<libdnf5::comps::Package> packages;
@@ -1813,7 +1842,7 @@ void Goal::Impl::add_group_remove_to_goal(
     for (auto & [spec, reason, group_query, settings] : groups_to_remove) {
         for (const auto & group : group_query) {
             rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason, {});
-            if (settings.group_no_packages) {
+            if (settings.get_group_no_packages()) {
                 continue;
             }
             // get all packages installed by the group
@@ -1887,7 +1916,7 @@ void Goal::Impl::add_group_upgrade_to_goal(
             installed_group.get_reason(),
             allowed_package_types);
 
-        if (settings.group_no_packages) {
+        if (settings.get_group_no_packages()) {
             continue;
         }
 
@@ -1912,13 +1941,13 @@ void Goal::Impl::add_group_upgrade_to_goal(
         }
 
         auto pkg_settings = GoalJobSettings();
-        pkg_settings.with_provides = false;
-        pkg_settings.with_filenames = false;
-        pkg_settings.with_binaries = false;
+        pkg_settings.set_with_provides(false);
+        pkg_settings.set_with_filenames(false);
+        pkg_settings.set_with_binaries(false);
         for (const auto & pkg_name : state_group.packages) {
             if (new_set.contains(pkg_name)) {
                 // upgrade all packages installed with the group
-                pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+                pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
                 add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
             } else {
                 // remove those packages that are not part of the group any more
@@ -1945,11 +1974,14 @@ void Goal::Impl::add_environment_install_to_goal(
     auto & cfg_main = base->get_config();
     bool with_optional = any(settings.resolve_group_package_types(cfg_main) & libdnf5::comps::PackageType::OPTIONAL);
     auto group_settings = libdnf5::GoalJobSettings(settings);
-    group_settings.group_search_environments = false;
-    group_settings.group_search_groups = true;
+    group_settings.set_group_search_environments(false);
+    group_settings.set_group_search_groups(true);
     std::vector<GroupSpec> env_group_specs;
     for (auto environment : environment_query) {
         rpm_goal.add_environment(environment, transaction::TransactionItemAction::INSTALL, with_optional);
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
         for (const auto & grp_id : environment.get_groups()) {
             env_group_specs.emplace_back(
                 GoalAction::INSTALL_BY_COMPS, transaction::TransactionItemReason::DEPENDENCY, grp_id, group_settings);
@@ -1987,11 +2019,14 @@ void Goal::Impl::add_environment_remove_to_goal(
     // groups that are candidates for removal
     std::vector<GroupSpec> remove_group_specs;
     auto group_settings = libdnf5::GoalJobSettings();
-    group_settings.group_search_environments = false;
-    group_settings.group_search_groups = true;
+    group_settings.set_group_search_environments(false);
+    group_settings.set_group_search_groups(true);
     for (auto & [spec, environment_query, settings] : environments_to_remove) {
         for (const auto & environment : environment_query) {
             rpm_goal.add_environment(environment, transaction::TransactionItemAction::REMOVE, {});
+            if (settings.get_environment_no_groups()) {
+                continue;
+            }
             // get all groups installed by the environment
             comps::GroupQuery environment_groups(query_installed);
             environment_groups.filter_groupid(
@@ -2038,8 +2073,8 @@ void Goal::Impl::add_environment_upgrade_to_goal(
 
     std::vector<GroupSpec> env_group_specs;
     auto group_settings = libdnf5::GoalJobSettings(settings);
-    group_settings.group_search_environments = false;
-    group_settings.group_search_groups = true;
+    group_settings.set_group_search_environments(false);
+    group_settings.set_group_search_groups(true);
 
     for (auto installed_environment : environment_query) {
         auto environment_id = installed_environment.get_environmentid();
@@ -2062,6 +2097,10 @@ void Goal::Impl::add_environment_upgrade_to_goal(
 
         // upgrade the environment itself
         rpm_goal.add_environment(available_environment, transaction::TransactionItemAction::UPGRADE, {});
+
+        if (settings.get_environment_no_groups()) {
+            continue;
+        }
 
         // group names that are part of the installed version of the environment
         auto old_groups = installed_environment.get_groups();
@@ -2196,8 +2235,11 @@ void Goal::Impl::add_paths_to_goal() {
 void Goal::Impl::set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak) {
     for (const auto & exclude_weak : exclude_from_weak) {
         rpm::PackageQuery weak_query(base, rpm::PackageQuery::ExcludeFlags::APPLY_EXCLUDES);
-        libdnf5::ResolveSpecSettings settings{
-            .with_nevra = true, .with_provides = false, .with_filenames = true, .with_binaries = false};
+        libdnf5::ResolveSpecSettings settings;
+        settings.set_with_nevra(true);
+        settings.set_with_provides(false);
+        settings.set_with_filenames(true);
+        settings.set_with_binaries(true);
         weak_query.resolve_pkg_spec(exclude_weak, settings, false);
         weak_query.filter_available();
         rpm_goal.add_exclude_from_weak(*weak_query.p_impl);
@@ -2313,15 +2355,47 @@ base::Transaction Goal::resolve() {
     sack->p_impl->make_provides_ready();
 
 
-    // TODO(jmracek) Apply modules first
-    module::ModuleSack & module_sack = p_impl->base->module_sack;
+    module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
     ret |= p_impl->add_module_specs_to_goal(transaction);
-    // Resolve modules
-    auto module_error = module_sack.resolve_active_module_items().second;
-    if (module_error != libdnf5::module::ModuleSack::ModuleErrorType::NO_ERROR) {
-        throw module::ModuleResolveError(M_("Failed to resolve modules."));
+
+    // Check for switched module streams
+    if (!p_impl->base->get_config().get_module_stream_switch_option().get_value()) {
+        auto switched_streams = module_sack.p_impl->module_db->get_all_newly_switched_streams();
+        if (!switched_streams.empty()) {
+            for (auto item : switched_streams) {
+                transaction.p_impl->add_resolve_log(
+                    GoalAction::ENABLE,
+                    GoalProblem::MODULE_CANNOT_SWITH_STREAMS,
+                    GoalJobSettings(),
+                    libdnf5::transaction::TransactionItemType::MODULE,
+                    item.first,
+                    {"0:" + item.second.first, "1:" + item.second.second},
+                    libdnf5::Logger::Level::ERROR);
+            }
+            ret |= GoalProblem::MODULE_CANNOT_SWITH_STREAMS;
+        }
     }
+    // Resolve modules
+    auto result = module_sack.resolve_active_module_items();
+    auto module_solver_problems = result.first;
+    auto module_error = result.second;
+
+    if (module_error != GoalProblem::NO_PROBLEM) {
+        // Report problems from the module solver
+        transaction.p_impl->add_resolve_log(module_error, module_solver_problems);
+
+        // Ignore MODULE_SOLVER_ERROR_DEFAULTS and MODULE_SOLVER_ERROR_LATEST with best=false
+        // Other errors (MODULE_SOLVER_ERROR and MODULE_SOLVER_ERROR_LATEST with best=true) are returned
+        if (module_error != GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS &&
+            (module_error != GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+             p_impl->base->get_config().get_best_option().get_value())) {
+            ret |= module_error;
+        }
+    }
+
     module_sack.p_impl->enable_dependent_modules();
+
+
     // TODO(jmracek) Apply comps second or later
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
     ret |= p_impl->add_specs_to_goal(transaction);
@@ -2421,11 +2495,11 @@ base::Transaction Goal::resolve() {
     return transaction;
 }
 
-
-void Goal::add_serialized_transaction(const std::string & serialized_transaction, libdnf5::GoalJobSettings & settings) {
+void Goal::add_serialized_transaction(
+    const std::filesystem::path & transaction_path, const libdnf5::GoalJobSettings & settings) {
     libdnf_user_assert(!p_impl->serialized_transaction, "Serialized transaction cannot be set multiple times.");
-    p_impl->serialized_transaction = std::make_unique<std::pair<transaction::TransactionReplay, GoalJobSettings>>(
-        transaction::parse_transaction_replay(serialized_transaction), settings);
+    p_impl->serialized_transaction =
+        std::make_unique<std::tuple<std::filesystem::path, GoalJobSettings>>(transaction_path, settings);
 }
 
 void Goal::reset() {

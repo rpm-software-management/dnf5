@@ -107,7 +107,7 @@ class ConfigMain::Impl {
     OptionNumber<std::int32_t> recent{7, 0};
     OptionBool reset_nice{true};
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
-    OptionEnum<std::string> cacheonly{"none", {"all", "metadata", "none"}};
+    OptionEnum cacheonly{"none", {"all", "metadata", "none"}};
     OptionBool keepcache{false};
     OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf5::xdg::get_user_state_dir()};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
@@ -144,29 +144,29 @@ class ConfigMain::Impl {
     OptionBool allow_vendor_change{true};
     OptionSeconds metadata_timer_sync{60 * 60 * 3};  // 3 hours
     OptionStringList disable_excludes{std::vector<std::string>{}};
-    OptionEnum<std::string> multilib_policy{"best", {"best", "all"}};  // :api
-    OptionBool best{true};                                             // :api
+    OptionEnum multilib_policy{"best", {"best", "all"}};  // :api
+    OptionBool best{true};                                // :api
     OptionBool install_weak_deps{true};
     OptionBool allow_downgrade{true};
     OptionString bugtracker_url{BUGTRACKER};
     OptionBool zchunk{true};
 
-    OptionEnum<std::string> color{"auto", {"auto", "never", "always"}, [](const std::string & value) {
-                                      const std::array<const char *, 4> always{{"on", "yes", "1", "true"}};
-                                      const std::array<const char *, 4> never{{"off", "no", "0", "false"}};
-                                      const std::array<const char *, 2> aut{{"tty", "if-tty"}};
-                                      std::string tmp;
-                                      if (std::find(always.begin(), always.end(), value) != always.end()) {
-                                          tmp = "always";
-                                      } else if (std::find(never.begin(), never.end(), value) != never.end()) {
-                                          tmp = "never";
-                                      } else if (std::find(aut.begin(), aut.end(), value) != aut.end()) {
-                                          tmp = "auto";
-                                      } else {
-                                          tmp = value;
-                                      }
-                                      return tmp;
-                                  }};
+    OptionEnum color{"auto", {"auto", "never", "always"}, [](const std::string & value) {
+                         const std::array<const char *, 4> always{{"on", "yes", "1", "true"}};
+                         const std::array<const char *, 4> never{{"off", "no", "0", "false"}};
+                         const std::array<const char *, 2> aut{{"tty", "if-tty"}};
+                         std::string tmp;
+                         if (std::find(always.begin(), always.end(), value) != always.end()) {
+                             tmp = "always";
+                         } else if (std::find(never.begin(), never.end(), value) != never.end()) {
+                             tmp = "never";
+                         } else if (std::find(aut.begin(), aut.end(), value) != aut.end()) {
+                             tmp = "auto";
+                         } else {
+                             tmp = value;
+                         }
+                         return tmp;
+                     }};
 
     OptionString color_list_installed_older{"yellow"};
     OptionString color_list_installed_newer{"bold,yellow"};
@@ -189,7 +189,7 @@ class ConfigMain::Impl {
     OptionBool autocheck_running_kernel{true};  // :yum-compatibility
     OptionBool clean_requirements_on_remove{true};
 
-    OptionEnum<std::string> history_list_view{
+    OptionEnum history_list_view{
         "commands", {"single-user-commands", "users", "commands"}, [](const std::string & value) {
             if (value == "cmds" || value == "default") {
                 return std::string("commands");
@@ -234,17 +234,17 @@ class ConfigMain::Impl {
     OptionNumber<std::uint32_t> bandwidth{0, str_to_bytes};
     OptionNumber<std::uint32_t> minrate{1000, str_to_bytes};
 
-    OptionEnum<std::string> ip_resolve{"whatever", {"ipv4", "ipv6", "whatever"}, [](const std::string & value) {
-                                           auto tmp = value;
-                                           if (value == "4") {
-                                               tmp = "ipv4";
-                                           } else if (value == "6") {
-                                               tmp = "ipv6";
-                                           } else {
-                                               std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
-                                           }
-                                           return tmp;
-                                       }};
+    OptionEnum ip_resolve{"whatever", {"ipv4", "ipv6", "whatever"}, [](const std::string & value) {
+                              auto tmp = value;
+                              if (value == "4") {
+                                  tmp = "ipv4";
+                              } else if (value == "6") {
+                                  tmp = "ipv6";
+                              } else {
+                                  std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+                              }
+                              return tmp;
+                          }};
 
     OptionNumber<float> throttle{
         0, 0, [](const std::string & value) {
@@ -618,10 +618,10 @@ const OptionPath & ConfigMain::get_system_cachedir_option() const {
     return p_impl->system_cachedir;
 }
 
-OptionEnum<std::string> & ConfigMain::get_cacheonly_option() {
+OptionEnum & ConfigMain::get_cacheonly_option() {
     return p_impl->cacheonly;
 }
-const OptionEnum<std::string> & ConfigMain::get_cacheonly_option() const {
+const OptionEnum & ConfigMain::get_cacheonly_option() const {
     return p_impl->cacheonly;
 }
 
@@ -800,10 +800,10 @@ const OptionStringList & ConfigMain::get_disable_excludes_option() const {
     return p_impl->disable_excludes;
 }
 
-OptionEnum<std::string> & ConfigMain::get_multilib_policy_option() {
+OptionEnum & ConfigMain::get_multilib_policy_option() {
     return p_impl->multilib_policy;
 }
-const OptionEnum<std::string> & ConfigMain::get_multilib_policy_option() const {
+const OptionEnum & ConfigMain::get_multilib_policy_option() const {
     return p_impl->multilib_policy;
 }
 
@@ -842,10 +842,10 @@ const OptionBool & ConfigMain::get_zchunk_option() const {
     return p_impl->zchunk;
 }
 
-OptionEnum<std::string> & ConfigMain::get_color_option() {
+OptionEnum & ConfigMain::get_color_option() {
     return p_impl->color;
 }
-const OptionEnum<std::string> & ConfigMain::get_color_option() const {
+const OptionEnum & ConfigMain::get_color_option() const {
     return p_impl->color;
 }
 
@@ -989,10 +989,10 @@ const OptionBool & ConfigMain::get_clean_requirements_on_remove_option() const {
     return p_impl->clean_requirements_on_remove;
 }
 
-OptionEnum<std::string> & ConfigMain::get_history_list_view_option() {
+OptionEnum & ConfigMain::get_history_list_view_option() {
     return p_impl->history_list_view;
 }
-const OptionEnum<std::string> & ConfigMain::get_history_list_view_option() const {
+const OptionEnum & ConfigMain::get_history_list_view_option() const {
     return p_impl->history_list_view;
 }
 
@@ -1226,10 +1226,10 @@ const OptionNumber<std::uint32_t> & ConfigMain::get_minrate_option() const {
     return p_impl->minrate;
 }
 
-OptionEnum<std::string> & ConfigMain::get_ip_resolve_option() {
+OptionEnum & ConfigMain::get_ip_resolve_option() {
     return p_impl->ip_resolve;
 }
-const OptionEnum<std::string> & ConfigMain::get_ip_resolve_option() const {
+const OptionEnum & ConfigMain::get_ip_resolve_option() const {
     return p_impl->ip_resolve;
 }
 

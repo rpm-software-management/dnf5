@@ -57,6 +57,7 @@ public:
         using NewStringFunc = std::function<void(Option::Priority, const std::string &)>;
         using GetValueStringFunc = std::function<const std::string &()>;
 
+        ~Item();
         Option::Priority get_priority() const;
         void new_string(Option::Priority priority, const std::string & value);
         std::string get_value_string() const;
@@ -67,38 +68,42 @@ public:
 
         Item(Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value);
         explicit Item(Option & option);
-        Option * option;
-        NewStringFunc new_str_func;
-        GetValueStringFunc get_value_str_func;
-        bool is_append_option{false};  // hint that new value be added/appended
+
+        class Impl;
+        ImplPtr<Impl> p_impl;
     };
 
     using Container = std::map<std::string, Item>;
     using iterator = Container::iterator;
     using const_iterator = Container::const_iterator;
 
+    OptionBinds();
+    OptionBinds(const OptionBinds & src);
+    ~OptionBinds();
+
     Item & add(
-        const std::string & id,
+        std::string id,
         Option & option,
         Item::NewStringFunc new_string_func,
         Item::GetValueStringFunc get_value_string_func,
         bool add_value);
-    Item & add(const std::string & id, Option & option);
+    Item & add(std::string id, Option & option);
     Item & at(const std::string & id);
     const Item & at(const std::string & id) const;
-    bool empty() const noexcept { return items.empty(); }
-    std::size_t size() const noexcept { return items.size(); }
-    iterator begin() noexcept { return items.begin(); }
-    const_iterator begin() const noexcept { return items.begin(); }
-    const_iterator cbegin() const noexcept { return items.cbegin(); }
-    iterator end() noexcept { return items.end(); }
-    const_iterator end() const noexcept { return items.end(); }
-    const_iterator cend() const noexcept { return items.cend(); }
-    iterator find(const std::string & id) { return items.find(id); }
-    const_iterator find(const std::string & id) const { return items.find(id); }
+    bool empty() const noexcept;
+    std::size_t size() const noexcept;
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cend() const noexcept;
+    iterator find(const std::string & id);
+    const_iterator find(const std::string & id) const;
 
 private:
-    Container items;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5

@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_environment.hpp"
 
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/environment/query.hpp>
 
 #include <filesystem>
@@ -67,8 +66,8 @@ void CompsEnvironmentTest::test_load_defaults() {
 
 void CompsEnvironmentTest::test_merge() {
     // Load multiple different definitions of the minimal environment
-    add_repo_repomd("repomd-comps-minimal-environment");
-    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment", false);
+    add_repo_repomd("repomd-comps-custom-environment", false);
     add_repo_repomd("repomd-comps-minimal-environment-v2");
 
     // The "Minimal Install v2" is preferred because its repoid is alphabetically higher
@@ -87,8 +86,8 @@ void CompsEnvironmentTest::test_merge() {
 void CompsEnvironmentTest::test_merge_when_different_load_order() {
     // Load multiple different definitions of the minimal environment
     // The order of loading the repositories does not matter
-    add_repo_repomd("repomd-comps-minimal-environment-v2");
-    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment-v2", false);
+    add_repo_repomd("repomd-comps-custom-environment", false);
     add_repo_repomd("repomd-comps-minimal-environment");
 
     // The "Minimal Install v2" is preferred because its repoid is alphabetically higher
@@ -107,8 +106,8 @@ void CompsEnvironmentTest::test_merge_when_different_load_order() {
 
 void CompsEnvironmentTest::test_merge_with_empty() {
     // Load minimal environment and another definition with all attributes empty
-    add_repo_repomd("repomd-comps-minimal-environment");
-    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment", false);
+    add_repo_repomd("repomd-comps-custom-environment", false);
     add_repo_repomd("repomd-comps-minimal-environment-empty");
 
     // All the attributes are taken from the non-empty definition
@@ -128,8 +127,8 @@ void CompsEnvironmentTest::test_merge_with_empty() {
 
 void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
     // Load minimal environment and another definition with all attributes empty
-    add_repo_repomd("repomd-comps-minimal-environment-empty");
-    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment-empty", false);
+    add_repo_repomd("repomd-comps-custom-environment", false);
     add_repo_repomd("repomd-comps-minimal-environment");
 
     // All the attributes are taken from the non-empty definition
@@ -149,7 +148,7 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
 
 void CompsEnvironmentTest::test_merge_different_translations() {
     // Load different definitions of the minimal environment with different set of translations
-    add_repo_repomd("repomd-comps-minimal-environment");
+    add_repo_repomd("repomd-comps-minimal-environment", false);
     add_repo_repomd("repomd-comps-minimal-environment-different-translations");
 
     EnvironmentQuery q_minimal_env(base);
@@ -192,9 +191,9 @@ void CompsEnvironmentTest::test_serialize() {
 
 
 void CompsEnvironmentTest::test_solvables() {
-    add_repo_repomd("repomd-comps-minimal-environment");
-    add_repo_repomd("repomd-comps-core");
-    add_repo_repomd("repomd-comps-core-environment");
+    add_repo_repomd("repomd-comps-minimal-environment", false);
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-core-environment", false);
     add_repo_repomd("repomd-comps-standard");
 
     EnvironmentQuery q_environments(base);

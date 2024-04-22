@@ -34,6 +34,9 @@ my $tmpdir = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
 $base->get_config()->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/cache");
 
+# Prevent loading plugins from host
+$base->get_config()->get_plugins_option()->set("False");
+
 # Sets base internals according to configuration
 $base->setup();
 
@@ -51,9 +54,7 @@ my $repo_cfg = $repo->get_config();
 $repo_cfg->get_baseurl_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
 
 # fetch repo metadata and load it
-my $repos = new libdnf5::repo::RepoQuery($base);
-$repos->filter_id($repoid);
-$repo_sack->update_and_load_repos($repos);
+$repo_sack->load_repos($libdnf5::repo::Repo::Type::AVAILABLE);
 
 #test_size()
 {

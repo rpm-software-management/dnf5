@@ -188,10 +188,12 @@ bool BuildDepCommand::add_from_pkg(
     auto & ctx = get_context();
 
     libdnf5::rpm::PackageQuery pkg_query(ctx.base);
-    pkg_query.resolve_pkg_spec(
-        pkg_spec,
-        libdnf5::ResolveSpecSettings{.with_provides = false, .with_filenames = false, .with_binaries = false},
-        false);
+    libdnf5::ResolveSpecSettings settings;
+    settings.set_with_provides(false);
+    settings.set_with_filenames(false);
+    settings.set_with_binaries(false);
+    settings.set_expand_globs(false);
+    pkg_query.resolve_pkg_spec(pkg_spec, settings, false);
 
     std::vector<std::string> source_names{pkg_spec};
     for (const auto & pkg : pkg_query) {
@@ -199,7 +201,7 @@ bool BuildDepCommand::add_from_pkg(
     }
 
     libdnf5::rpm::PackageQuery source_pkgs(ctx.base);
-    source_pkgs.filter_arch({"src"});
+    source_pkgs.filter_arch(std::vector<std::string>{"src", "nosrc"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
         std::cerr << "No package matched \"" << pkg_spec << "\"." << std::endl;
@@ -215,18 +217,6 @@ bool BuildDepCommand::add_from_pkg(
         }
         return true;
     }
-}
-
-std::string escape_glob(const std::string & in) {
-    // Escape fnmatch glob characters in a string
-    std::string out;
-    for (const auto ch : in) {
-        if (ch == '*' || ch == '?' || ch == '[' || ch == ']' || ch == '\\') {
-            out += '\\';
-        }
-        out += ch;
-    }
-    return out;
 }
 
 void BuildDepCommand::run() {
@@ -273,8 +263,13 @@ void BuildDepCommand::run() {
     // Search only for solution in provides and files. Use buildrequire with name search might result in inconsistent
     // behavior with installing dependencies of RPMs
     libdnf5::GoalJobSettings settings;
-    settings.with_nevra = false;
-    settings.with_binaries = false;
+    settings.set_with_nevra(false);
+    settings.set_with_binaries(false);
+
+    // Don't expand globs in pkg specs. The special characters in a pkg spec
+    // such as the brackets in `python3dist(build[virtualenv])`, should be
+    // treated as literal.
+    settings.set_expand_globs(false);
 
     for (const auto & spec : install_specs) {
         if (libdnf5::rpm::Reldep::is_rich_dependency(spec)) {
@@ -284,13 +279,7 @@ void BuildDepCommand::run() {
             // we do not download filelists and some files could be explicitly mentioned in provide section. The best
             // solution would be to merge result of provide and file search to prevent problems caused by modification
             // during distro lifecycle.
-
-            // TODO(egoode) once we have a setting to disable expanding globs
-            // in resolve_pkg_spec, escaping the glob characters will no longer
-            // be needed:
-            // https://github.com/rpm-software-management/dnf5/pull/1085
-            const auto & escaped_spec = escape_glob(spec);
-            goal->add_rpm_install(escaped_spec, settings);
+            goal->add_rpm_install(spec, settings);
         }
     }
 
@@ -300,7 +289,7 @@ void BuildDepCommand::run() {
         auto system_repo = ctx.base.get_repo_sack()->get_system_repo();
         auto rpm_package_sack = ctx.base.get_rpm_package_sack();
         libdnf5::rpm::PackageQuery conflicts_query_available(ctx.base);
-        conflicts_query_available.filter_name({conflicts_specs.begin(), conflicts_specs.end()});
+        conflicts_query_available.filter_name(std::vector<std::string>{conflicts_specs.begin(), conflicts_specs.end()});
         libdnf5::rpm::PackageQuery conflicts_query_installed(conflicts_query_available);
         conflicts_query_available.filter_repo_id({system_repo->get_id()}, libdnf5::sack::QueryCmp::NEQ);
         rpm_package_sack->add_user_excludes(conflicts_query_available);

@@ -40,7 +40,7 @@ public:
               command,
               "available",
               '\0',
-              _("Show advisories containing newer versions of installed packages."),
+              _("Show advisories containing newer versions of installed packages. This is the default behavior."),
               false) {}
 };
 
@@ -157,18 +157,6 @@ public:
               _("ADVISORY_SEVERITY,..."),
               "critical|important|moderate|low|none",
               true) {}
-
-
-    std::vector<std::string> get_value() const {
-        auto vals = AppendStringListOption::get_value();
-        std::transform(vals.begin(), vals.end(), vals.begin(), [](std::string val) -> std::string {
-            std::for_each(val.begin(), val.end(), [](char & c) { c = static_cast<char>(::tolower(c)); });
-            val[0] = static_cast<char>(std::toupper(val[0]));
-            return val;
-        });
-
-        return vals;
-    }
 };
 
 class BzOption : public libdnf5::cli::session::AppendStringListOption {

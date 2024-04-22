@@ -1,12 +1,302 @@
-====================================
-Changes in DNF5 in comparison to DNF
-====================================
+.. _changes_ref-label:
 
-The chapter describe differences between ``DNF5`` (https://github.com/rpm-software-management/dnf5) and ``DNF``
-(https://github.com/rpm-software-management/dnf)
+#############################
+ Changes between DNF and DNF5
+#############################
 
-Changes on the API:
-===================
+This chapter describes the differences between `DNF5 <https://github.com/rpm-software-management/dnf5>`_ and `DNF <https://github.com/rpm-software-management/dnf>`_.
+
+.. _cli_changes_ref-label:
+
+Changes on the CLI
+==================
+
+Options
+-------
+
+Global options scoping
+^^^^^^^^^^^^^^^^^^^^^^
+Options that cannot be applied to all commands or may be applicable but have no effect are removed from general options and implemented only for related commands.
+
+Examples: ``--best``, ``--no-best`` are only relevant to several transaction commands.
+
+
+Options renaming
+^^^^^^^^^^^^^^^^
+Renaming boolean options to the following formats:
+
+  * ``--<option>`` and ``--no-<option>``
+  * ``--enable-<option>`` and ``--disable-<option>``
+
+The options with original names are retained for now as compatibility aliases.
+
+Examples: ``--best`` and ``--no-best``.
+
+
+Strict behavior
+^^^^^^^^^^^^^^^
+  * Options ``--disable-repo=REPO_ID`` and ``--setopt=[REPO_ID.]OPTION=VALUE`` now consistently result in an error when provided with an invalid ``REPO_ID``.
+  * The behavior is now aligned with the ``--repo=REPO_ID`` and ``--enable-repo=REPO_ID``.
+  * The ``strict`` configuration option is no longer considered, see the :ref:`strict option deprecation <strict_option_conf_changes_ref-label>` for more information.
+
+
+Changes to individual options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``-4/-6``
+  * Dropped. Now only the ``ip_resolve`` configuration option is available.
+
+``--color``
+  * Dropped. Now only the ``color`` configuration option is available.
+
+``-c``
+  * The short version of the ``--config`` option has been dropped.
+
+.. TODO(jkolarik): Not implemented yet
+   ``-d, --debuglevel``
+     * Dropped. Now only the ``debuglevel`` configuration option is available.
+
+``--disableexcludes``
+  * Dropped. Now only the ``disable_excludes`` configuration option is available.
+
+``--disable, --enable``
+  * Dropped along with the previously existing alternatives ``--set-disabled`` and ``--set-enabled``.
+  * Currently, this can only be achieved through the :ref:`config-manager <config_manager_plugin_ref-label>` plugin.
+
+    * For example, to disable the ``fedora`` repository: ``dnf config-manager setopt fedora.enabled=0``.
+
+``--downloaddir``
+  * Dropped. Now only the ``--destdir`` is used for the ``download`` command.
+  * When downloading packages using the ``system-upgrade`` or ``offline`` command, the target path construction now utilizes the configured ``installroot`` and ``cachedir`` options.
+
+``-e, --errorlevel``
+  * Dropped. Now only the ``errorlevel`` configuration option is available.
+
+``--help-cmd``
+  * Dropped. Now only the ``-h`` or ``--help`` options are available.
+
+``--installroot``
+  * New behavior introduced to define from which place the configuration and variables are loaded.
+  * See the :ref:`installroot documentation <installroot_misc_ref-label>` for more information.
+
+``--noautoremove``
+  * Applicable only for the ``remove`` command now. As a workaround for other commands, you can use ``--setopt=clean_requirements_on_remove=False``.
+
+``--obsoletes``
+  * Dropped. Now only the ``obsoletes`` configuration option is available.
+
+``-R, --randomwait``
+  * Dropped.
+
+``--rpmverbosity``
+  * Dropped. Now only the ``rpmverbosity`` configuration option is available.
+
+``--sec-severity``
+  * Renamed to ``--advisory-severities``.
+
+``-v, --verbose``
+  * Not implemented at present. May be added for specific commands in the future.
+
+``--version``
+  * Behavior is different now. See the :ref:`main man page <version_option_ref-label>` for more details.
+
+
+Newly introduced options
+^^^^^^^^^^^^^^^^^^^^^^^^
+``--allow-downgrade``
+  * Along with ``--no-allow-downgrade``, these options enable/disable the downgrade of dependencies when resolving transactions.
+  * New respective configuration options have also been created.
+  * Applicable to ``install``, ``upgrade``, and related commands.
+
+``--dump-main-config``
+  * Along with related ``--dump-repo-config=REPO_ID``, these are new options to print configuration values on the standard output.
+
+``--offline``
+  * Store the transaction to be performed offline.
+  * Applicable to all relevant transactional commands.
+  * See the :ref:`Offline command <offline_command_ref-label>` for more information.
+
+``--show-new-leaves``
+  * Show newly installed leaf packages and packages that became leaves after a transaction.
+
+``--skip-unavailable``
+  * Allow skipping packages that are not available in repositories.
+  * Not to be confused with the :ref:`skip_if_unavailable <skip_if_unavailable_options-label>` configuration option.
+  * Applicable to ``install``, ``upgrade``, and related commands.
+  * See also the :ref:`strict option deprecation <strict_option_conf_changes_ref-label>` for more information.
+
+``--use-host-config``
+  * See the :ref:`main man page <use_host_config_option_ref-label>` for more details.
+
+
+Commands
+--------
+
+Optional arguments
+^^^^^^^^^^^^^^^^^^
+Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous,
+making it unclear whether the input was intended as a command argument or a subcommand. Subcommands are now mandatory if present.
+
+Examples:
+  * Before: ``dnf history <transaction ID>`` Now: ``dnf history info <transaction ID>``
+  * Before: ``dnf updateinfo`` Now: ``dnf updateinfo summary``
+
+
+Changes to individual commands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``alias``
+  * Dropped. The command has been replaced by a different functionality.
+  * See the :ref:`Aliases for command line arguments <aliases_misc_ref-label>` for more information.
+
+``automatic``
+  * Now a DNF5 plugin.
+  * Different configuration file locations and some changes in format.
+  * See the :ref:`Automatic command <automatic_plugin_ref-label>` for more information.
+
+``autoremove``
+  * Dropped the ``<spec>`` positional argument since the use case is sufficiently covered by the ``remove`` command.
+  * Specific variants of the command, ``autoremove-n``, ``autoremove-na``, and ``autoremove-nevra``, are not supported anymore.
+
+``builddep``
+  * Dropped ``--spec`` and ``--srpm`` arguments as automatic detection from file extensions is implemented now.
+
+``config-manager``
+  * New behavior introduced.
+  * Parameters are replaced by subcommands.
+
+    * Examples:
+
+      * Before: ``--add-repo`` Now: ``addrepo``
+      * Before: ``--save --setopt`` Now: ``setopt``
+
+  * Existing repository files are not modified; drop-in override files are created instead.
+  * See the :ref:`config-manager documentation <config_manager_plugin_ref-label>` for more information.
+
+``distro-sync``
+  * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
+  * Dropped ``distrosync`` and ``distribution-synchronization`` aliases.
+
+``downgrade``
+  * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
+
+``download``
+  * Option ``--source`` was renamed to ``--srpm``.
+  * Dropped ``--downloaddir`` argument, only ``--destdir`` is supported now.
+
+``group``
+  * New option ``--contains-pkgs`` to filter only groups containing specific packages.
+  * Dropped ``--ids`` argument as group ids are always in the output now.
+  * Dropped ``group mark install`` and ``group mark remove`` subcommands in favor of the new ``--no-packages`` option for the ``install`` and ``remove`` commands.
+
+    * E.g. to mark a group as installed without touching any packages, ``dnf5 group install --no-packages <group_id>`` command can be used.
+
+  * Dropped ``groupinstall`` alias. It is replaced by ``dnf group install``.
+  * Dropped ``groupinfo`` alias. It is replaced by ``dnf group info``.
+  * Dropped ``grouplist`` alias. It is replaced by ``dnf group list``.
+  * Dropped ``grouperase`` alias. It is replaced by ``dnf group remove``.
+  * Dropped ``groupremove`` alias. It is replaced by ``dnf group remove``.
+  * Dropped ``groupupdate`` alias. It is replaced by ``dnf group upgrade``.
+  * Dropped ``groups`` alias. It is replaced by ``dnf group``.
+
+``help``
+  * Dropped. The functionality is replaced by the ``--help`` option.
+
+``info``
+  * Dropped ``--all`` option since this behavior is the default one.
+  * Dropped ``--updates`` option, only ``--upgrades`` is available now.
+
+``list``
+  * Dropped ``--all`` option since this behavior is the default one.
+  * Changed the behavior of the ``--available`` option.
+    * In DNF4, only packages not installed or with higher versions were listed. This behavior remains unchanged when the option is not used, reducing duplications in the "Installed Packages" section.
+    * When using the ``--available`` option, DNF5 considers all versions available in enabled repositories, irrespective of the installed version.
+
+``makecache``
+  * Metadata is now stored in different directories, see the ``cachedir`` configuration option :ref:`changes <cachedir_option_conf_changes_ref-label>` for more details.
+
+``mark``
+  * Renaming subcommands to be more intuitive: ``install`` -> ``user``, ``remove`` -> ``dependency``.
+  * New ``weak`` subcommand to mark a package as a weak dependency.
+  * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
+
+``module``
+  * Dropped ``--all`` option since this behavior is the default one.
+
+``needs-restarting``
+  * Command no longer scans for open files to determine outdated files still in use. The default behavior now aligns with DNF 4's ``--reboothint``, suggesting a system reboot depending on updated packages since the last boot.
+  * Reboot recommendations are now triggered if any package with a ``reboot_suggested`` advisory has been installed or updated.
+  * The ``-s, --services`` option no longer scans for open files. Instead, restarting a service is recommended if any dependency of the service-providing package or the package itself has been updated since the service started.
+  * Dropped ``-r, --reboothint`` option since this behavior is now the default one.
+  * Dropped ``-u, --useronly`` option.
+
+``offline-distrosync``
+  * Now it's an alias of ``dnf5 distro-sync --offline``.
+
+``offline-upgrade``
+  * Now it's an alias of ``dnf5 upgrade --offline``.
+
+``remove``
+  * Command no longer removes packages according to provides, but only based on NEVRA or file provide match.
+  * Dropped commands ``remove-n``, ``remove-na``, ``remove-nevra``.
+  * Specific variants of the command, ``remove-n``, ``remove-na``, and ``remove-nevra``, are not supported anymore.
+
+    * Dropped also the related aliases, ``erase``, ``erase-n``, ``erase-na`` and ``erase-nevra``.
+
+``repoclosure``
+  * Dropped ``--pkg`` option. Positional arguments can now be used to specify packages to check closure for.
+
+``repolist``
+  * Options ``-v`` and ``--verbose`` have been removed. The functionality is replaced by the ``repoinfo`` command, which was already introduced in DNF4.
+
+``repoquery``
+  * Dropped: ``-a/--all``, ``--alldeps``, ``--nevra`` options. Their behavior is and has been the default for both DNF4 and DNF5, so the options are no longer needed.
+  * Dropped: ``--nvr``, ``--envra`` options. They are no longer supported.
+  * Dropped: ``--archlist`` alias for ``--arch``.
+  * Dropped: ``-f`` alias for ``--file``. Also, the arguments to ``--file`` are separated by commas instead of spaces.
+  * Moved ``--groupmember`` option to the ``info`` and ``list`` subcommands of the ``group`` and ``advisory`` commands, renaming it to ``--contains-pkgs``.
+  * ``--queryformat, --qf`` no longer prints an additional newline at the end of each formatted string, bringing it closer to the behavior of ``rpm --query``.
+  * ``--queryformat`` no longer supports ``size`` tag because it was printing install size for installed packages and download size for not-installed packages, which could be confusing.
+  * Option ``--source`` was renamed to ``--sourcerpm``, and it now matches queryformat's ``sourcerpm`` tag.
+  * Option ``--resolve`` was changed to ``--providers-of=PACKAGE_ATTRIBUTE``. It no longer interacts with the formatting options such as ``--requires``, ``--provides``, ``--suggests``, etc. Instead, it takes the PACKAGE_ATTRIBUTE value directly.
+
+    * For example, ``dnf rq --resolve --requires glibc`` is now ``dnf rq --providers-of=requires glibc``.
+
+  * See the :ref:`Repoquery command <repoquery_command_ref-label>` for more information.
+
+``system-upgrade``
+  * Moved from a plugin to a built-in command.
+
+``upgrade``
+  * New option ``--minimal``.
+
+    * ``upgrade-minimal`` still exists as a compatibility alias for ``upgrade --minimal``.
+
+  * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
+  * Dropped ``upgrade-to`` and ``localupdate`` aliases.
+  * Dropped ``--skip-broken`` option, as it was already available in DNF4 only for compatibility reasons with YUM, but has no effect.
+
+    * Instead, decisions about package selection and handling dependency issues are based on the :ref:`best <best_option_ref-label>` or :ref:`no-best <no_best_option_ref-label>` options.
+
+``updateinfo``
+  * Renamed the command to ``advisory``
+
+    * ``updateinfo`` still exists as a compatibility alias.
+
+  * Subcommands are now mandatory: ``dnf updateinfo`` is now ``dnf5 advisory summary``.
+  * Options ``--summary``, ``--list`` and ``--info`` have been changed to subcommands. See ``dnf5 advisory --help``.
+  * Option ``--sec-severity`` has been renamed to ``--advisory-severities=ADVISORY_SEVERITY,...``.
+  * The ``advisory`` commands now only accept advisory IDs; to filter by packages, use the ``--contains-pkgs=PACKAGE_NAME,...`` option.
+  * Dropped deprecated aliases: ``list-updateinfo``, ``list-security``, ``list-sec``, ``info-updateinfo``, ``info-security``, ``info-sec``, ``summary-updateinfo``.
+  * Dropped ``upif`` alias.
+
+``versionlock``
+  * New format of the configuration file.
+  * See the :ref:`Versionlock command <versionlock_command_ref-label>` for more information.
+
+.. _api_changes_ref-label:
+
+Changes on the API
+==================
+
 PackageSet::operator[]
 ----------------------
 It was removed due to insufficient O(n^2) performance.
@@ -49,196 +339,64 @@ This allows using a list of authentication methods in configuration files and th
 "--setopt=proxy_auth_method=".
 
 
-Changes on the command line:
-============================
+.. _conf_changes_ref-label:
 
-Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous, it wasn't clear
-whether the input is a command argument or a subcommand. If present, subcommands are now mandatory.
-``dnf history <transaction ID>`` -> ``dnf history info <transaction ID>``
-``dnf updateinfo`` -> ``dnf updateinfo summary``
+Changes to configuration
+========================
 
-Options that cannot be applied to all commands or can be applied but without any effect should be removed from general
-options and implemented only for related commands.
-For example: ``--best``, ``--nobest`` are related to only several transaction commands.
+.. _strict_option_conf_changes_ref-label:
 
-Renaming boolean options to format ``--<option>``, and ``--no-<option>``
-``--nobest`` -> ``--no-best``. Proposing to keep ``--nobest`` as a deprecated option.
-
-To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` within
-the ``disable_excludes`` configuration option to unify the behavior with query objects on the API.
-
-strict configuration option deprecation
----------------------------------------
-``strict`` config option is now deprecated. The problem with this option is that it does two things:
-
- 1. if disabled it allows the solver to skip uninstallable packages to resolve depsolv problems
- 2. if disabled it allows dnf to skip unavailable packages (this is for ``install`` command mostly)
-
-The functionality is now split to two config options - ``skip_broken`` for the uninstallable packages and
-``skip_unavailable`` for packages not present in repositories. Together with these new config options there are also
-corresponding command line options ``--skip-broken`` and ``--skip-unavailable`` for commands where it makes sense.
-
-
-Global options
---------------
-* Options ``--disable-repo=REPO_ID`` and ``--setopt=[REPO_ID.]OPTION=VALUE`` now always cause an error when provided with invalid ``REPO_ID``.
-  This makes them consistent with ``--repo=REPO_ID`` and ``--enable-repo=REPO_ID``. The ``strict`` configuration option is no longer taken into account.
-* Option ``--help-cmd`` is dropped as we already have ``--help`` and ``-h`` options.
-
-Alias command
--------------
-* Dropped. The command is replaced by a different functionality, see
-  :ref:`Aliases for command line arguments <aliases_misc_ref-label>`.
-
-Autoremove command
-------------------
- * Dropped ``<spec>`` positional argument since the usecase is sufficiently covered by the ``remove`` command.
- * Specific ``autoremove-n``, ``autoremove-na``, and ``autoremove-nevra`` variants of the command are not supported.
-
-Distro-sync command
--------------------
- * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the ``--skip-unavailable`` option.
- * Dropped ``distrosync`` and ``distribution-synchronization`` aliases
-
-Downgrade command
------------------
- * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the ``--skip-unavailable`` option.
-
-Download command
-----------------
- * Option ``--source`` was renamed to ``--srpm``.
-
-Group command
--------------
- * Dropped ``group mark install`` and ``group mark remove`` subcommands in favour of the
-   new ``--no-packages`` option of the ``group install/remove`` commands. So for example
-   to mark a group as installed without touching any packages,
-   ``dnf5 group install --no-packages <group_id>`` command can be used.
- * Dropped ``groupinstall`` alias. It is replaced by ``dnf group install``
- * Dropped ``groupinfo`` alias. It is replaced by ``dnf group info``
- * Dropped ``grouplist`` alias. It is replaced by ``dnf group list``
- * Dropped ``grouperase`` alias. It is replaced by ``dnf group remove``
- * Dropped ``groupremove`` alias. It is replaced by ``dnf group remove``
- * Dropped ``groupupdate`` alias. It is replaced by ``dnf group upgrade``
- * Dropped ``groups`` alias. It is replaced by ``dnf group``
-
-Help command
-------------
- * Dropped. The functionality is replaced by ``--help`` option
-
-Info command
-------------
- * Dropped ``if`` alias.
-
-List command
-------------
- * Dropped ``--all`` option since this behavior is now the default one.
- * Changed the list of ``--available`` packages. Previously, dnf4 only listed packages that are either not installed, or
-   whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip
-   packages already listed in the ``Installed Packages`` section to reduce duplicities. But if the ``--available`` modifier
-   is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
-
-Makecache command
------------------
- * Metadata is stored in different directories now, see :ref:`cachedir changes`.
-
-Module command
---------------
- * Dropped ``--all`` option since this behavior is the default one.
-
-Needs-restarting command
-------------------------
- * ``needs-restarting`` no longer scans for open files to determine whether any outdated files are still in use. The default behavior is now the ``--reboothint`` behavior of DNF 4 needs-restarting, which reports whether a system reboot is recommended depending on which packages have been updated since the most recent boot.
- * Reboot will now be recommended if any package with an associated ``reboot_suggested`` advisory has been installed or updated.
- * The ``-s, --services`` option no longer scans for open files. Instead, restarting a service is recommended if any dependency of the package that provides the service, or the package itself, has been updated since the service started.
- * Dropped ``-r, --reboothint`` option; this is now the default behavior.
- * Dropped ``-u, --useronly`` option.
-
-Offline-distrosync command
---------------------------
- * Now an alias of ``dnf5 distro-sync --offline``
-
-Offline-upgrade command
---------------------------
- * Now an alias of ``dnf5 upgrade --offline``
-
-Remove command
---------------
- * Command does not remove packages according to provides, but only according NEVRA or file provide match
- * Dropped commands ``remove-n``, ``remove-na``, ``remove-nevra``.
- * Dropped erase aliases for the same ``erase``, ``erase-n`` , ``erase-na`` , ``erase-nevra``.
-
-Repoclosure command
--------------------
- * Dropped ``--pkg`` option. Positional arguments can be used to specify packages to check closure for.
-
-Repolist command
-----------------
- * Option ``-v`` and ``--verbose`` were removed. The functionality is replaced by ``repoinfo`` command that was already
-   introduced in DNF4.
-
-Repoquery command
------------------
- * Dropped: ``-a/--all``, ``--alldeps``, ``--nevra`` options, their behavior is and has been the default for both dnf4 and
-   dnf5. The options are no longer needed.
- * Dropped: ``--nvr``, ``--envra`` options. They are no longer supported.
- * Dropped: ``--archlist`` alias for ``--arch``.
- * Dropped: ``-f`` alias for ``--file`` also the arguments to ``--file`` are separated by comma instead of a space.
- * Moved ``--groupmember`` option to the Group info and list commands and renamed to ``--contains-pkgs``.
- * --queryformat/--qf no longer prints additional new line at the end of each formatted string, bringing it closer to
-   rpm --query behavior.
- * --queryformat no longer supports ``size`` tag because it was printing install size for installed packages and download
-   size for not-installed packages. This could be confusing.
- * Option ``--source`` was renamed to ``--sourcerpm`` and it now matches queryformat's ``sourcerpm`` tag.
- * Option ``--resolve`` was changed to ``--providers-of=PACKAGE_ATTRIBUTE``. It no longer interacts with the formatting ``--requires``,
-   ``--provides``, ``--suggests``,... options instead it takes the PACKAGE_ATTRIBUTE value directly.
-   E.g., ``dnf rq --resolve --requires glibc`` -> ``dnf rq --providers-of=requires glibc``.
-
-System-upgrade command
---------------------------
- * Moved from a plugin to a built-in command
-
-Upgrade command
----------------
- * New dnf5 option ``--minimal`` (``upgrade-minimal`` command still exists as a compatibility alias for
-   ``upgrade --minimal``).
- * When any argument does not match any package or it is not installed, DNF5 fail. The behavior can be modified by
-   the ``--skip-unavailable`` option.
- * Dropped upgrade command aliases ``upgrade-to`` and ``localupdate``.
- * Dropped ``--skip-broken`` option, as it was already available in DNF4 only for compatibility reasons with YUM,
-   but it has no effect. Instead, the decision about selecting the newer version of a package into the transaction
-   and skipping possible dependency issues is based on the :ref:`best <best_option_ref-label>` or
-   :ref:`no-best <no_best_option_ref-label>` option.
-
-Updateinfo command
-------------------
- * The command has been renamed to ``advisory`` (but there is a compatibility ``updateinfo`` alias).
- * It is required to always specify a subcommand: ``dnf updateinfo`` -> ``dnf5 advisory summary``.
- * Options ``--summary``, ``--list`` and ``--info`` have been changed to subcommands. See ``dnf5 advisory --help``.
- * Option ``--sec-severity`` (``--secseverity``) has been renamed to ``--advisory-severities=ADVISORY_SEVERITY,...``.
- * The ``advisory`` commands now accept only advisory ID, in order to filter by packages use ``--contains-pkgs=PACKAGE_NAME,...`` option.
- * Dropped deprecated aliases: ``list-updateinfo``, ``list-security``, ``list-sec``, ``info-updateinfo``, ``info-security``, ``info-sec``, ``summary-updateinfo``.
- * Dropped ``upif`` alias.
-
-Changes of configuration:
-=========================
-
-Default of ``best`` configuration option changed to ``true``
-------------------------------------------------------------
-The new default value ensures that important updates will not be skipped and issues in distribution will be reported
-earlier.
-
-.. _cachedir changes:
-
-cachedir and system_cachedir options
+Deprecation of the ``strict`` option
 ------------------------------------
-The default root cache directory (``system_cachedir``) is now ``/var/cache/libdnf5``, while for users, the ``cachedir``
-is at ``/home/$USER/.cache/libdnf5``. Users no longer access the root's cache directly; instead, metadata is copied
-to the user's location if it's empty or invalid. For additional information, refer to the :ref:`Caching <caching_misc_ref-label>` man page.
+``strict`` configuration option is now deprecated due to its dual functionality:
 
-cacheonly option
-----------------
-The ``cacheonly`` option was changed from ``bool`` to ``enum`` with options ``all``, ``metadata`` and ``none``,
-enabling users to specify whether to use the cache exclusively for metadata or for both metadata and packages.
+ 1. It allows the solver to skip uninstallable packages to resolve dependency problems.
+ 2. It permits DNF to skip unavailable packages (mostly for the ``install`` command).
+
+To address this, the functionality has been split into two configuration options:
+
+  * ``skip_broken`` for uninstallable packages.
+  * ``skip_unavailable`` for packages not present in repositories.
+
+Additionally, corresponding command-line options ``--skip-broken`` and ``--skip-unavailable`` have been introduced for commands where applicable.
+
+
+Changes to individual options
+-----------------------------
+``best``
+  * Default value is changed to ``true``.
+  * The new default value ensures that important updates will not be skipped and issues in distribution will be reported earlier.
+
+.. _cachedir_option_conf_changes_ref-label:
+
+``cachedir``
+  * The default user cached dir is now at ``/home/$USER/.cache/libdnf5``.
+  * The default root cache directory, configured by the ``system_cachedir`` option, is now ``/var/cache/libdnf5``.
+  * Users no longer access the root's cache directly; instead, metadata is copied to the user's location if it's empty or invalid.
+  * For additional information, refer to the :ref:`Caching <caching_misc_ref-label>` man page.
+
+``cacheonly``
+  * The option was changed from ``bool`` to ``enum`` with options ``all``, ``metadata`` and ``none``.
+
+    * This enables users to specify whether to use the cache exclusively for metadata or for both metadata and packages.
+
+``deltarpm``
+  * Default value is changed to ``false``.
+  * The support for delta RPMs is not implemented for now.
+
+``disable_excludes``
+  * To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` to unify the behavior with query objects on the API.
+
+``optional_metadata_types``
+  * Default value is now: ``comps,updateinfo``.
+  * Supported values are now extended to the following list: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``.
+
+
+Newly introduced options
+------------------------
+``allow_downgrade``
+  * New option used to enable or disable downgrade of dependencies when resolving transaction.
+
+``skip_broken``, ``skip_unavailable``, ``strict``
+  * New options ``skip_broken``, ``skip_unavailable`` were added due to deprecation of ``strict`` option.
+  * See the :ref:`strict deprecation <strict_option_conf_changes_ref-label>` above.

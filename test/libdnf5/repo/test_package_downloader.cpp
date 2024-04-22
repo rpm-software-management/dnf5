@@ -72,9 +72,9 @@ void PackageDownloaderTest::test_package_downloader() {
     auto repo = add_repo_rpm("rpm-repo1");
 
     libdnf5::rpm::PackageQuery query(base);
-    query.filter_name({"one"});
-    query.filter_version({"2"});
-    query.filter_arch({"noarch"});
+    query.filter_name("one");
+    query.filter_version("2");
+    query.filter_arch("noarch");
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
     auto downloader = libdnf5::repo::PackageDownloader(base);
@@ -99,7 +99,7 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     auto repo = add_repo_rpm("rpm-repo1");
 
     libdnf5::rpm::PackageQuery query(base);
-    query.filter_name({"one"});
+    query.filter_name("one");
     CPPUNIT_ASSERT_EQUAL((size_t)4, query.size());
 
     auto & config = base.get_config();

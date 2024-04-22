@@ -31,6 +31,7 @@ Dbus methods and arguments. Generated from dbus XMLs.
 Description
 ===========
 
+Note: While most of the following methods can be invoked successfully by a regular user, authentication by an administrative user is required for some of them (e.g. `Goal.do_transaction()`, `Repo.confirm_key()`, `Repo.enable()`, `Repo.disable()`). This authentication is managed by calling `CheckAuthorization()` method of the `org.freedesktop.PolicyKit1.Authority` Polkit D-Bus interface. The `AllowUserInteraction` flag is set for this call, indicating that if an authentication agent is available, the call is blocked while the user is prompted to authenticate. A hardcoded timeout of 2 minutes is set for the user interaction.
 
 Interfaces
 ==========

@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false  # don't fail all matrix jobs if one of them fails
       matrix:
-        compiler: [gcc]  # gcc is the default
+        compiler: [gcc, clang]  # gcc is the default
 
     steps:
       - uses: actions/checkout@v4

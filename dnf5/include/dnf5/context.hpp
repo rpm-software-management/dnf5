@@ -76,10 +76,15 @@ public:
     libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::pair<std::string, std::string>> repos_from_path;
-    std::vector<std::string> enable_plugins_patterns;
-    std::vector<std::string> disable_plugins_patterns;
+
+    /// list of lists of libdnf5 plugin names (global patterns) that we want to enable (true) or disable (false)
+    std::vector<std::pair<std::vector<std::string>, bool>> libdnf5_plugins_enablement;
 
     void store_offline(libdnf5::base::Transaction & transaction);
+
+    // When set current transaction is not executed but rather stored to
+    // the specified path.
+    std::filesystem::path transaction_store_path;
 
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }

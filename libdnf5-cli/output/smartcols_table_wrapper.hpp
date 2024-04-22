@@ -37,13 +37,15 @@ public:
     }
     ~SmartcolsTableWrapper();
 
-    libscols_table * operator*() { return tb; }
-
-private:
     // Disallow copy operations
     SmartcolsTableWrapper(const SmartcolsTableWrapper &) = delete;
     SmartcolsTableWrapper & operator=(const SmartcolsTableWrapper &) = delete;
 
+    libscols_table * operator*() { return tb; }
+
+    const libscols_table * operator*() const { return tb; }
+
+private:
     libscols_table * tb;
     libscols_symbols * sb;
 };

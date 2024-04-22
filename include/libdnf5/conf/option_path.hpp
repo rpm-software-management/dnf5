@@ -40,7 +40,7 @@ class OptionPath : public OptionString {
 public:
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, bool exists = false, bool absPath = false)
-    explicit OptionPath(const std::string & default_value, bool exists = false, bool abs_path = false);
+    explicit OptionPath(std::string default_value, bool exists = false, bool abs_path = false);
 
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, bool exists = false, bool absPath = false)
@@ -48,17 +48,15 @@ public:
 
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
-    OptionPath(
-        const std::string & default_value,
-        const std::string & regex,
-        bool icase,
-        bool exists = false,
-        bool abs_path = false);
+    OptionPath(std::string default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);
+
+    ~OptionPath();
+
+    OptionPath(const OptionPath & src);
 
     /// Constructor sets default value and conditions.
     // @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists = false, bool absPath = false)
-    OptionPath(
-        const char * default_value, const std::string & regex, bool icase, bool exists = false, bool abs_path = false);
+    OptionPath(const char * default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);
 
     /// Makes copy (clone) of this object.
     // @replaces libdnf:conf/OptionPath.hpp:method:OptionPath.clone()
@@ -78,13 +76,9 @@ public:
     void test(const std::string & value) const;
 
 private:
-    bool exists;
-    bool abs_path;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-inline OptionPath * OptionPath::clone() const {
-    return new OptionPath(*this);
-}
 
 }  // namespace libdnf5
 

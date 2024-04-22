@@ -74,12 +74,23 @@ public:
 
     /// Filter packages by their `name`.
     ///
-    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param pattern          A string the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NAME
+    void filter_name(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_name(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `name`.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.0
+    //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NAME
     void filter_name(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -94,15 +105,36 @@ public:
 
     /// Filter packages by their `epoch`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EPOCH
+    void filter_epoch(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_epoch(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `epoch`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EPOCH
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EPOCH
     void filter_epoch(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `epoch`.
+    ///
+    /// @param pattern          A number the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
+    /// @since 5.2
+    void filter_epoch(unsigned long pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_epoch(std::vector<unsigned long>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `epoch`.
     ///
@@ -115,15 +147,38 @@ public:
 
     /// Filter packages by their `version`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
+    void filter_version(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_version(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `version`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_VERSION
     void filter_version(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `release`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RELEASE
+    void filter_release(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_release(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `release`.
     ///
@@ -136,6 +191,16 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RELEASE
     void filter_release(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `arch`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    void filter_arch(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_arch(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `arch`.
     ///
@@ -157,15 +222,39 @@ public:
 
     /// Filter packages by their `epoch:version-release`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
+    void filter_evr(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_evr(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `epoch:version-release`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `NEQ`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EVR
     void filter_evr(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `name-[epoch:]version-release.arch`. The following matches are tolerant to omitted 0 epoch: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`, `IGLOB`, `NOT_IGLOB`, `IEXACT`, `NOT_IEXACT`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
+    void filter_nevra(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_nevra(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `name-[epoch:]version-release.arch`. The following matches are tolerant to omitted 0 epoch: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
     ///
@@ -174,9 +263,7 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`, `IGLOB`, `NOT_IGLOB`, `IEXACT`, `NOT_IEXACT`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA_STRICT
     void filter_nevra(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -208,14 +295,36 @@ public:
 
     /// Filter packages by their `sourcerpm`.
     ///
-    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param pattern          A string the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SOURCERPM
+    void filter_sourcerpm(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_sourcerpm(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `sourcerpm`.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SOURCERPM
     void filter_sourcerpm(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `url`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_URL
+    void filter_url(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_url(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `url`.
     ///
@@ -224,22 +333,21 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_URL
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_URL
     void filter_url(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter packages by their `summary`.
     ///
-    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param pattern          A string the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
-    /// @since 5.0
+    /// @since 5.2
     //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUMMARY
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUMMARY
-    void filter_summary(
-        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+    void filter_summary(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_summary(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `summary`.
     ///
@@ -248,7 +356,30 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUMMARY
+    void filter_summary(
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `summary`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.2
+    //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_DESCRIPTION
+    void filter_description(
+        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_description(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `summary`.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.0
+    //
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_DESCRIPTION
     void filter_description(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -275,12 +406,23 @@ public:
 
     /// Filter packages by their `provides`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
+    void filter_provides(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_provides(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `provides`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_PROVIDES
     void filter_provides(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -299,12 +441,23 @@ public:
 
     /// Filter packages by their `requires`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
+    void filter_requires(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_requires(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `requires`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REQUIRES
     void filter_requires(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -334,12 +487,23 @@ public:
 
     /// Filter packages by their `conflicts`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
+    void filter_conflicts(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_conflicts(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `conflicts`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_CONFLICTS
     void filter_conflicts(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -369,12 +533,23 @@ public:
 
     /// Filter packages by their `obsoletes`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
+    void filter_obsoletes(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_obsoletes(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `obsoletes`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_OBSOLETES
     void filter_obsoletes(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -404,12 +579,24 @@ public:
 
     /// Filter packages by their `recommends`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
+    void filter_recommends(
+        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_recommends(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `recommends`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RECOMMENDS
     void filter_recommends(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -436,6 +623,18 @@ public:
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_SUGGESTS
     void filter_suggests(
         const ReldepList & reldep_list, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `suggests`.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUGGESTS
+    void filter_suggests(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_suggests(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `suggests`.
     ///
@@ -474,12 +673,23 @@ public:
 
     /// Filter packages by their `enhances`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
+    void filter_enhances(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_enhances(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `enhances`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_ENHANCES
     void filter_enhances(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -509,12 +719,24 @@ public:
 
     /// Filter packages by their `supplements`.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
+    void filter_supplements(
+        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_supplements(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by their `supplements`.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUPPLEMENTS
     void filter_supplements(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
@@ -532,15 +754,38 @@ public:
 
     /// Filter packages by `files` they contain.
     ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_FILE
+    void filter_file(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_file(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filter packages by `files` they contain.
+    ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_FILE
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_FILE
     void filter_file(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by their `location`.
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`.
+    /// @since 5.2
+    //
+    // TODO(dmach): enable glob match to enable filename matching: {nevra.rpm, */nevra.rpm}
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
+    void filter_location(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_location(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by their `location`.
     /// @param patterns         A vector of strings the filter is matched against.
@@ -549,10 +794,21 @@ public:
     /// @since 5.0
     //
     // TODO(dmach): enable glob match to enable filename matching: {nevra.rpm, */nevra.rpm}
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_LOCATION
     void filter_location(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
+    /// Filter packages by `id` of the Repo they belong to.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2
+    //
+    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
+    void filter_repo_id(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_repo_id(std::vector<std::string>{pattern}, cmp_type);
+    };
 
     /// Filter packages by `id` of the Repo they belong to.
     ///
@@ -561,7 +817,6 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
     /// @since 5.0
     //
-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REPONAME
     void filter_repo_id(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);

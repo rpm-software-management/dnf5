@@ -20,9 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_PLUGIN_IPLUGIN_HPP
 #define LIBDNF5_PLUGIN_IPLUGIN_HPP
 
+#include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/version.hpp"
 
 #include <cstdint>
+#include <string>
+#include <vector>
 
 namespace libdnf5 {
 
@@ -44,12 +47,15 @@ struct Version {
     std::uint16_t micro;
 };
 
+class IPluginData;
+
 /// @brief A base class for implementing LIBDNF5 plugins that introduce additional logic into the library using hooks.
 class IPlugin {
 public:
-    IPlugin(Base & base) : base(&base) {}
-    virtual ~IPlugin() = default;
+    explicit IPlugin(IPluginData & data);
+    virtual ~IPlugin();
 
+    IPlugin() = delete;
     IPlugin(const IPlugin &) = delete;
     IPlugin(IPlugin &&) = delete;
     IPlugin & operator=(const IPlugin &) = delete;
@@ -73,35 +79,55 @@ public:
 
     /// The plugin can load additional plugins. E.g. C++ plugin for loading Python plugins.
     /// Called before init.
-    virtual void load_plugins() {}
+    virtual void load_plugins();
 
     /// Plugin initialization.
     /// Called before hooks.
-    virtual void init() {}
+    virtual void init();
 
     /// The pre_base_setup hook.
     /// It is called at the beginning of the `Base::setup` method (after the `init` hook).
-    virtual void pre_base_setup() {}
+    virtual void pre_base_setup();
 
     /// The post_base_setup hook.
     /// It is called at the end of the `Base::setup` method.
-    virtual void post_base_setup() {}
+    virtual void post_base_setup();
+
+    /// The repos_configured hook.
+    /// It is called in `Base::notify_repos_configured` method.
+    virtual void repos_configured();
+
+    /// The repos_loaded hook.
+    /// It is called at the end of the `RepoSack::load_repos` method (in Impl).
+    virtual void repos_loaded();
+
+    /// The pre_add_cmdline_packages hook.
+    /// It is called at the beginning of the `RepoSack::add_cmdline_packages` method.
+    /// @param paths Vector of paths (local files or URLs) to package files to be inserted into cmdline repo.
+    virtual void pre_add_cmdline_packages(const std::vector<std::string> & paths);
+
+    /// The post_add_cmdline_packages hook.
+    /// It is called at the end of the `RepoSack::add_cmdline_packages` method.
+    virtual void post_add_cmdline_packages();
 
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
-    virtual void pre_transaction(const libdnf5::base::Transaction &) {}
+    /// @param transaction Contains the transaction that will be started.
+    virtual void pre_transaction(const libdnf5::base::Transaction & transaction);
 
     /// The post_transaction hook.
     /// It is called after transactions.
-    virtual void post_transaction(const libdnf5::base::Transaction &) {}
+    /// @param transaction Contains the completed transaction.
+    virtual void post_transaction(const libdnf5::base::Transaction & transaction);
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
-    virtual void finish() noexcept {}
+    virtual void finish() noexcept;
 
-    Base & get_base() noexcept { return *base; }
+    Base & get_base() const noexcept;
 
 private:
-    Base * base;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::plugin
@@ -123,7 +149,7 @@ libdnf5::plugin::Version libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
 libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
-    libdnf5::LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser);
+    libdnf5::LibraryVersion library_version, libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser & parser);
 
 /// Deletes plugin instance.
 void libdnf_plugin_delete_instance(libdnf5::plugin::IPlugin * plugin_instance);

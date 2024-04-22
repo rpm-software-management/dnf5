@@ -38,58 +38,155 @@ extern "C" {
 
 #include <algorithm>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace libdnf5::module {
 
+class ModuleItem::Impl {
+public:
+    Impl(_ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, std::string repo_id);
+
+    ~Impl();
+    Impl(const Impl & mpkg);
+    Impl & operator=(const Impl & mpkg);
+    Impl(Impl && mpkg) noexcept;
+    Impl & operator=(Impl && mpkg) noexcept;
+
+private:
+    friend ModuleItem;
+
+    ModuleSackWeakPtr module_sack;
+
+    ModuleItemId id;
+    std::string repo_id;
+
+    // Corresponds to one yaml document
+    _ModulemdModuleStream * md_stream;
+
+    // For compatibility with older modules that didn't have static contexts
+    std::string computed_static_context;
+};
+
+ModuleItem::Impl::Impl(_ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, std::string repo_id)
+    : module_sack(module_sack),
+      repo_id(std::move(repo_id)),
+      md_stream(md_stream) {
+    if (md_stream != nullptr) {
+        g_object_ref(md_stream);
+    }
+}
+
+
+ModuleItem::Impl::~Impl() {
+    if (md_stream != nullptr) {
+        g_object_unref(md_stream);
+    }
+}
+
+ModuleItem::Impl::Impl(const Impl & mpkg)
+    : module_sack(mpkg.module_sack),
+      id(mpkg.id),
+      repo_id(mpkg.repo_id),
+      md_stream(mpkg.md_stream),
+      computed_static_context(mpkg.computed_static_context) {
+    if (md_stream != nullptr) {
+        g_object_ref(md_stream);
+    }
+}
+
+
+ModuleItem::Impl & ModuleItem::Impl::operator=(const Impl & mpkg) {
+    if (this != &mpkg) {
+        if (md_stream != nullptr) {
+            g_object_unref(md_stream);
+        }
+        module_sack = mpkg.module_sack;
+        id = mpkg.id;
+        repo_id = mpkg.repo_id;
+        md_stream = mpkg.md_stream;
+        if (md_stream != nullptr) {
+            g_object_ref(md_stream);
+        }
+        computed_static_context = mpkg.computed_static_context;
+    }
+    return *this;
+}
+
+
+ModuleItem::Impl::Impl(Impl && mpkg) noexcept
+    : module_sack(mpkg.module_sack),
+      id(mpkg.id),
+      repo_id(std::move(mpkg.repo_id)),
+      md_stream(mpkg.md_stream),
+      computed_static_context(std::move(mpkg.computed_static_context)) {
+    mpkg.md_stream = nullptr;
+}
+
+
+ModuleItem::Impl & ModuleItem::Impl::operator=(Impl && mpkg) noexcept {
+    if (this != &mpkg) {
+        if (md_stream != nullptr) {
+            g_object_unref(md_stream);
+        }
+        module_sack = mpkg.module_sack;
+        id = mpkg.id;
+        repo_id = std::move(mpkg.repo_id);
+        md_stream = mpkg.md_stream;
+        mpkg.md_stream = nullptr;
+        computed_static_context = std::move(mpkg.computed_static_context);
+    }
+    return *this;
+}
+
 
 const char * ModuleItem::get_name_cstr() const {
-    return modulemd_module_stream_get_module_name(md_stream);
+    return modulemd_module_stream_get_module_name(p_impl->md_stream);
 }
 
 
 std::string ModuleItem::get_name() const {
-    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(p_impl->md_stream));
 }
 
 
 const char * ModuleItem::get_stream_cstr() const {
-    return modulemd_module_stream_get_stream_name(md_stream);
+    return modulemd_module_stream_get_stream_name(p_impl->md_stream);
 }
 
 
 std::string ModuleItem::get_stream() const {
-    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(p_impl->md_stream));
 }
 
 
 long long ModuleItem::get_version() const {
-    return (long long)modulemd_module_stream_get_version(md_stream);
+    return (long long)modulemd_module_stream_get_version(p_impl->md_stream);
 }
 
 
 std::string ModuleItem::get_version_str() const {
-    return std::to_string(modulemd_module_stream_get_version(md_stream));
+    return std::to_string(modulemd_module_stream_get_version(p_impl->md_stream));
 }
 
 
 const char * ModuleItem::get_context_cstr() const {
-    return modulemd_module_stream_get_context(md_stream);
+    return modulemd_module_stream_get_context(p_impl->md_stream);
 }
 
 
 std::string ModuleItem::get_context() const {
-    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(p_impl->md_stream));
 }
 
 
 const char * ModuleItem::get_arch_cstr() const {
-    return modulemd_module_stream_get_arch(md_stream);
+    return modulemd_module_stream_get_arch(p_impl->md_stream);
 }
 
 
 std::string ModuleItem::get_arch() const {
-    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream));
+    return libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(p_impl->md_stream));
 }
 
 
@@ -104,9 +201,9 @@ std::string ModuleItem::get_name_stream(ModulemdModuleStream * md_stream) {
 std::string ModuleItem::get_name_stream_version() const {
     return fmt::format(
         "{}:{}:{}",
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
-        std::to_string(modulemd_module_stream_get_version(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(p_impl->md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(p_impl->md_stream)),
+        std::to_string(modulemd_module_stream_get_version(p_impl->md_stream)));
 }
 
 
@@ -119,11 +216,11 @@ std::string ModuleItem::get_name_stream_staticcontext() const {
     //                 }
     return fmt::format(
         "{}:{}:{}",
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
-        computed_static_context.empty()
-            ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
-            : computed_static_context);
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(p_impl->md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(p_impl->md_stream)),
+        p_impl->computed_static_context.empty()
+            ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(p_impl->md_stream))
+            : p_impl->computed_static_context);
 }
 
 
@@ -131,36 +228,36 @@ std::string ModuleItem::get_name_stream_staticcontext_arch() const {
     return fmt::format(
         "{}:{}",
         get_name_stream_staticcontext(),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(p_impl->md_stream)));
 }
 
 
 std::string ModuleItem::get_full_identifier() const {
     return fmt::format(
         "{}:{}:{}:{}:{}",
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
-        std::to_string(modulemd_module_stream_get_version(md_stream)),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream)),
-        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_module_name(p_impl->md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_stream_name(p_impl->md_stream)),
+        std::to_string(modulemd_module_stream_get_version(p_impl->md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(p_impl->md_stream)),
+        libdnf5::utils::string::c_to_str(modulemd_module_stream_get_arch(p_impl->md_stream)));
 }
 
 
 std::string ModuleItem::get_summary() const {
     return libdnf5::utils::string::c_to_str(
-        modulemd_module_stream_v2_get_summary((ModulemdModuleStreamV2 *)md_stream, NULL));
+        modulemd_module_stream_v2_get_summary((ModulemdModuleStreamV2 *)p_impl->md_stream, NULL));
 }
 
 
 std::string ModuleItem::get_description() const {
     return libdnf5::utils::string::c_to_str(
-        modulemd_module_stream_v2_get_description((ModulemdModuleStreamV2 *)md_stream, NULL));
+        modulemd_module_stream_v2_get_description((ModulemdModuleStreamV2 *)p_impl->md_stream, NULL));
 }
 
 
 std::vector<std::string> ModuleItem::get_artifacts() const {
     std::vector<std::string> result_rpms;
-    char ** rpms = modulemd_module_stream_v2_get_rpm_artifacts_as_strv((ModulemdModuleStreamV2 *)md_stream);
+    char ** rpms = modulemd_module_stream_v2_get_rpm_artifacts_as_strv((ModulemdModuleStreamV2 *)p_impl->md_stream);
 
     for (char ** iter = rpms; iter && *iter; iter++) {
         result_rpms.emplace_back(std::string(*iter));
@@ -173,7 +270,7 @@ std::vector<std::string> ModuleItem::get_artifacts() const {
 
 std::vector<std::string> ModuleItem::get_demodularized_rpms() const {
     std::vector<std::string> result_rpms;
-    char ** rpms = modulemd_module_stream_v2_get_demodularized_rpms((ModulemdModuleStreamV2 *)md_stream);
+    char ** rpms = modulemd_module_stream_v2_get_demodularized_rpms((ModulemdModuleStreamV2 *)p_impl->md_stream);
 
     for (char ** iter = rpms; iter && *iter; iter++) {
         result_rpms.emplace_back(std::string(*iter));
@@ -186,8 +283,8 @@ std::vector<std::string> ModuleItem::get_demodularized_rpms() const {
 
 std::vector<ModuleProfile> ModuleItem::get_profiles_internal(const char * name) const {
     std::vector<ModuleProfile> result_profiles;
-    GPtrArray * profiles = modulemd_module_stream_v2_search_profiles((ModulemdModuleStreamV2 *)md_stream, name);
-    const auto & default_profiles = module_sack->get_default_profiles(get_name(), get_stream());
+    GPtrArray * profiles = modulemd_module_stream_v2_search_profiles((ModulemdModuleStreamV2 *)p_impl->md_stream, name);
+    const auto & default_profiles = p_impl->module_sack->get_default_profiles(get_name(), get_stream());
 
     for (unsigned int i = 0; i < profiles->len; i++) {
         const auto & modulemd_profile = static_cast<ModulemdProfile *>(g_ptr_array_index(profiles, i));
@@ -203,17 +300,17 @@ std::vector<ModuleProfile> ModuleItem::get_profiles_internal(const char * name) 
 
 
 std::vector<std::string> ModuleItem::get_default_profiles() const {
-    return module_sack->get_default_profiles(get_name(), get_stream());
+    return p_impl->module_sack->get_default_profiles(get_name(), get_stream());
 }
 
 
 bool ModuleItem::is_default() const {
-    return module_sack->get_default_stream(get_name()) == get_stream();
+    return p_impl->module_sack->get_default_stream(get_name()) == get_stream();
 }
 
 
 bool ModuleItem::get_static_context() const {
-    return modulemd_module_stream_v2_is_static_context((ModulemdModuleStreamV2 *)md_stream);
+    return modulemd_module_stream_v2_is_static_context((ModulemdModuleStreamV2 *)p_impl->md_stream);
 }
 
 
@@ -262,81 +359,40 @@ std::string ModuleItem::get_module_dependencies_string(ModulemdModuleStream * md
 
 ModuleItem::ModuleItem(
     _ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id)
-    : md_stream(md_stream),
-      module_sack(module_sack),
-      repo_id(repo_id) {
-    if (md_stream != nullptr) {
-        g_object_ref(md_stream);
-    }
-}
+    : p_impl(std::make_unique<Impl>(md_stream, module_sack, repo_id)) {}
 
+ModuleItem::~ModuleItem() = default;
 
-ModuleItem::ModuleItem(const ModuleItem & mpkg)
-    : md_stream(mpkg.md_stream),
-      module_sack(mpkg.module_sack),
-      id(mpkg.id),
-      repo_id(mpkg.repo_id),
-      computed_static_context(mpkg.computed_static_context) {
-    if (md_stream != nullptr) {
-        g_object_ref(md_stream);
-    }
-}
-
+ModuleItem::ModuleItem(const ModuleItem & mpkg) : p_impl(new Impl(*mpkg.p_impl)) {}
+ModuleItem::ModuleItem(ModuleItem && mpkg) noexcept = default;
 
 ModuleItem & ModuleItem::operator=(const ModuleItem & mpkg) {
     if (this != &mpkg) {
-        if (md_stream != nullptr) {
-            g_object_unref(md_stream);
+        if (p_impl) {
+            *p_impl = *mpkg.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*mpkg.p_impl);
         }
-        md_stream = mpkg.md_stream;
-        if (md_stream != nullptr) {
-            g_object_ref(md_stream);
-        }
-        module_sack = mpkg.module_sack;
-        id = mpkg.id;
-        repo_id = mpkg.repo_id;
-        computed_static_context = mpkg.computed_static_context;
     }
+
     return *this;
 }
+ModuleItem & ModuleItem::operator=(ModuleItem && mpkg) noexcept = default;
 
-
-ModuleItem::ModuleItem(ModuleItem && mpkg)
-    : md_stream(mpkg.md_stream),
-      module_sack(std::move(mpkg.module_sack)),
-      id(std::move(mpkg.id)),
-      repo_id(std::move(mpkg.repo_id)),
-      computed_static_context(std::move(mpkg.computed_static_context)) {
-    mpkg.md_stream = nullptr;
+bool ModuleItem::operator==(const ModuleItem & rhs) const noexcept {
+    return p_impl->id.id == rhs.get_id().id;
 }
-
-
-ModuleItem & ModuleItem::operator=(ModuleItem && mpkg) {
-    if (this != &mpkg) {
-        if (md_stream != nullptr) {
-            g_object_unref(md_stream);
-        }
-        md_stream = mpkg.md_stream;
-        mpkg.md_stream = nullptr;
-        module_sack = std::move(mpkg.module_sack);
-        id = std::move(mpkg.id);
-        repo_id = std::move(mpkg.repo_id);
-        computed_static_context = std::move(mpkg.computed_static_context);
-    }
-    return *this;
+bool ModuleItem::operator!=(const ModuleItem & rhs) const noexcept {
+    return p_impl->id.id != rhs.get_id().id;
 }
-
-
-ModuleItem::~ModuleItem() {
-    if (md_stream != nullptr) {
-        g_object_unref(md_stream);
-    }
+bool ModuleItem::operator<(const ModuleItem & rhs) const noexcept {
+    return p_impl->id.id < rhs.get_id().id;
 }
 
 
 std::string ModuleItem::get_yaml() const {
     ModulemdModuleIndex * i = modulemd_module_index_new();
-    modulemd_module_index_add_module_stream(i, md_stream, NULL);
+    modulemd_module_index_add_module_stream(i, p_impl->md_stream, NULL);
     gchar * cStrYaml = modulemd_module_index_dump_to_string(i, NULL);
     std::string yaml = std::string(cStrYaml);
     g_free(cStrYaml);
@@ -353,7 +409,8 @@ static void create_solvable_worker(
     const std::string & stream,
     const std::string & version,
     const std::string & context,
-    const char * arch) {
+    const char * arch,
+    const char * original_context) {
     // Name: $name:$stream:$context
     solvable_set_str(solvable, SOLVABLE_NAME, fmt::format("{}:{}:{}", name, stream, context).c_str());
     // Version: $version
@@ -363,6 +420,10 @@ static void create_solvable_worker(
     solvable_set_str(solvable, SOLVABLE_ARCH, arch ? arch : "noarch");
     // Store original $name:$stream in description
     solvable_set_str(solvable, SOLVABLE_DESCRIPTION, fmt::format("{}:{}", name, stream).c_str());
+    // Store the original context in summary
+    if (original_context) {
+        solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context);
+    }
 
     // Create Provides: module($name)
     auto dep_id = pool_str2id(pool, fmt::format("module({})", name).c_str(), 1);
@@ -372,24 +433,23 @@ static void create_solvable_worker(
     // Create Provides: module($name:$stream)
     dep_id = pool_str2id(pool, fmt::format("module({}:{})", name, stream).c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
-
-    // TODO(pkratoch): Maybe store original context in summary
-    // solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context.c_str());
 }
 
 
 void ModuleItem::create_solvable() {
-    auto pool = module_sack->p_impl->pool;
+    auto pool = p_impl->module_sack->p_impl->pool;
 
     // Create new solvable and store its id
-    id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
-    auto solvable = pool_id2solvable(pool, id.id);
-    auto context = computed_static_context.empty()
-                       ? libdnf5::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
-                       : computed_static_context;
-    auto arch = modulemd_module_stream_get_arch(md_stream);
+    p_impl->id = ModuleItemId(
+        repo_add_solvable(pool_id2repo(pool, Id(p_impl->module_sack->p_impl->repositories[p_impl->repo_id]))));
+    auto solvable = pool_id2solvable(pool, p_impl->id.id);
+    auto original_context = modulemd_module_stream_get_context(p_impl->md_stream);
+    auto context = p_impl->computed_static_context.empty() ? libdnf5::utils::string::c_to_str(original_context)
+                                                           : p_impl->computed_static_context;
+    auto arch = modulemd_module_stream_get_arch(p_impl->md_stream);
 
-    create_solvable_worker(pool, solvable, get_name(), get_stream(), get_version_str(), std::move(context), arch);
+    create_solvable_worker(
+        pool, solvable, get_name(), get_stream(), get_version_str(), std::move(context), arch, original_context);
 }
 
 
@@ -401,13 +461,13 @@ void ModuleItem::create_platform_solvable(
     auto id = repo_add_solvable(repo_create(pool, "@System"));
     auto solvable = pool_id2solvable(pool, id);
 
-    create_solvable_worker(pool, solvable, name, stream, "0", "00000000", "noarch");
+    create_solvable_worker(pool, solvable, name, stream, "0", "00000000", "noarch", "");
 }
 
 
 void ModuleItem::create_dependencies() const {
-    Pool * pool = module_sack->p_impl->pool;
-    Solvable * solvable = pool_id2solvable(pool, id.id);
+    Pool * pool = p_impl->module_sack->p_impl->pool;
+    Solvable * solvable = pool_id2solvable(pool, p_impl->id.id);
     std::string req_formatted;
 
     for (const auto & dependency : get_module_dependencies()) {
@@ -444,29 +504,66 @@ void ModuleItem::create_dependencies() const {
 
 
 void ModuleItem::create_solvable_and_dependencies() {
-    module_sack->p_impl->provides_ready = false;
-    module_sack->p_impl->considered_uptodate = false;
+    p_impl->module_sack->p_impl->provides_ready = false;
+    p_impl->module_sack->p_impl->considered_uptodate = false;
     create_solvable();
     create_dependencies();
 }
 
 
 bool ModuleItem::is_active() const {
-    if (!module_sack->active_modules_resolved) {
-        module_sack->resolve_active_module_items();
+    if (!p_impl->module_sack->active_modules_resolved) {
+        p_impl->module_sack->resolve_active_module_items();
     }
-    return module_sack->p_impl->active_modules.contains(id.id);
+    return p_impl->module_sack->p_impl->active_modules.contains(p_impl->id.id);
 }
 
 
 ModuleStatus ModuleItem::get_status() const {
-    const ModuleStatus & module_status = module_sack->p_impl->module_db->get_status(get_name());
+    const ModuleStatus & module_status = p_impl->module_sack->p_impl->module_db->get_status(get_name());
     if (module_status == ModuleStatus::ENABLED &&
-        get_stream() != module_sack->p_impl->module_db->get_enabled_stream(get_name())) {
+        get_stream() != p_impl->module_sack->p_impl->module_db->get_enabled_stream(get_name())) {
         return ModuleStatus::AVAILABLE;
     }
     return module_status;
 }
 
+void ModuleItem::set_computed_static_context(const std::string & context) {
+    p_impl->computed_static_context = context;
+}
+
+const std::string & ModuleItem::get_repo_id() const {
+    return p_impl->repo_id;
+};
+ModuleItemId ModuleItem::get_id() const {
+    return p_impl->id;
+};
+libdnf5::module::ModuleSackWeakPtr ModuleItem::get_module_sack() const {
+    return p_impl->module_sack;
+}
+
+std::vector<ModuleProfile> ModuleItem::get_profiles(const std::string & name) const {
+    return get_profiles_internal(name.c_str());
+}
+
+
+std::vector<ModuleProfile> ModuleItem::get_profiles() const {
+    return get_profiles_internal(nullptr);
+}
+
+
+std::vector<ModuleDependency> ModuleItem::get_module_dependencies(bool remove_platform) const {
+    return get_module_dependencies(p_impl->md_stream, remove_platform);
+}
+
+
+std::string ModuleItem::get_module_dependencies_string(bool remove_platform) const {
+    return get_module_dependencies_string(p_impl->md_stream, remove_platform);
+}
+
+
+std::string ModuleItem::get_name_stream() const {
+    return get_name_stream(p_impl->md_stream);
+}
 
 }  // namespace libdnf5::module

@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/base_weak.hpp"
 
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -60,8 +59,10 @@ public:
         Priority priority;
     };
 
-    Vars(const libdnf5::BaseWeakPtr & base) : base(base) {}
+    Vars(const libdnf5::BaseWeakPtr & base);
     Vars(libdnf5::Base & base);
+
+    ~Vars();
 
     /// @brief Substitute DNF vars in the input text.
     ///
@@ -69,7 +70,7 @@ public:
     /// @return The substituted text
     std::string substitute(const std::string & text) const;
 
-    const std::map<std::string, Variable> & get_variables() const { return variables; }
+    const std::map<std::string, Variable> & get_variables() const;
 
     /// @brief Set particular variable to a value
     ///
@@ -78,6 +79,14 @@ public:
     /// @param prio Source/Priority of the value
     /// @throw ReadOnlyVariableError if the variable is read-only
     void set(const std::string & name, const std::string & value, Priority prio = Priority::RUNTIME);
+
+    /// @brief Unset particular variable
+    ///
+    /// @param name Name of the variable
+    /// @param prio Source/Priority of the request
+    /// @throw ReadOnlyVariableError if the variable is read-only
+    /// @return false if the variable exists after the function returns (insufficient request priority)
+    bool unset(const std::string & name, Priority prio = Priority::RUNTIME);
 
     /// @brief Checks whether a variable is read-only
     ///
@@ -89,17 +98,17 @@ public:
     ///
     /// @param name Name of the variable
     /// @return true if there is such an element, otherwise false
-    bool contains(const std::string & name) const { return variables.find(name) != variables.end(); }
+    bool contains(const std::string & name) const;
 
     /// @brief Get value of particular variable.
     ///
     /// @param name Name of the variable
-    const std::string & get_value(const std::string & name) const { return variables.at(name).value; }
+    const std::string & get_value(const std::string & name) const;
 
     /// @brief Get particular variable.
     ///
     /// @param name Name of the variable
-    const Variable & get(const std::string & name) const { return variables.at(name); }
+    const Variable & get(const std::string & name) const;
 
     static std::unique_ptr<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path);
 
@@ -160,8 +169,8 @@ private:
     /// @return releasever_major, releasever_minor
     static std::tuple<std::string, std::string> split_releasever(const std::string & releasever);
 
-    BaseWeakPtr base;
-    std::map<std::string, Variable> variables;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5

@@ -1,11 +1,12 @@
-%global project_version_major 5
-%global project_version_minor 1
-%global project_version_patch 17
+%global project_version_prime 5
+%global project_version_major 2
+%global project_version_minor 0
+%global project_version_micro 0
 
-%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 41 || 0%{?rhel} > 11]
+%bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 11]
 
 Name:           dnf5
-Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
+Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
@@ -264,7 +265,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
 %dir %{_datadir}/dnf5
 %dir %{_datadir}/dnf5/aliases.d
-%config %{_datadir}/dnf5/aliases.d/compatibility.conf
+%{_datadir}/dnf5/aliases.d/compatibility.conf
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %dir %{_datadir}/dnf5/dnf5-plugins
@@ -273,104 +274,58 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/dnf5
-%if %{with dnf5_obsoletes_dnf}
-%{_datadir}/bash-completion/completions/dnf
-%endif
+%{_datadir}/bash-completion/completions/dnf*
 %dir %{_prefix}/lib/sysimage/dnf
 %verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/dnf/*
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/dnf5.8.*
-%{_mandir}/man8/dnf5-advisory.8.*
-%{_mandir}/man8/dnf5-autoremove.8.*
-%{_mandir}/man8/dnf5-check.8.*
-%{_mandir}/man8/dnf5-check-upgrade.8.*
-%{_mandir}/man8/dnf5-clean.8.*
-%{_mandir}/man8/dnf5-distro-sync.8.*
-%{_mandir}/man8/dnf5-downgrade.8.*
-%{_mandir}/man8/dnf5-download.8.*
-%{_mandir}/man8/dnf5-environment.8.*
-%{_mandir}/man8/dnf5-group.8.*
-# TODO(jkolarik): history is not ready yet
-# %%{_mandir}/man8/dnf5-history.8.*
-%{_mandir}/man8/dnf5-info.8.*
-%{_mandir}/man8/dnf5-install.8.*
-%{_mandir}/man8/dnf5-leaves.8.*
-%{_mandir}/man8/dnf5-list.8.*
-%{_mandir}/man8/dnf5-makecache.8.*
-%{_mandir}/man8/dnf5-mark.8.*
-%{_mandir}/man8/dnf5-module.8.*
-%{_mandir}/man8/dnf5-offline.8.*
-%{_mandir}/man8/dnf5-provides.8.*
-%{_mandir}/man8/dnf5-reinstall.8.*
-%{_mandir}/man8/dnf5-remove.8.*
-%{_mandir}/man8/dnf5-repo.8.*
-%{_mandir}/man8/dnf5-repoquery.8.*
-%{_mandir}/man8/dnf5-search.8.*
-%{_mandir}/man8/dnf5-swap.8.*
-%{_mandir}/man8/dnf5-system-upgrade.8.*
-%{_mandir}/man8/dnf5-upgrade.8.*
-%{_mandir}/man8/dnf5-versionlock.8.*
-%{_mandir}/man7/dnf5-aliases.7.*
-%{_mandir}/man7/dnf5-caching.7.*
-%{_mandir}/man7/dnf5-comps.7.*
-# TODO(jkolarik): filtering is not ready yet
-# %%{_mandir}/man7/dnf5-filtering.7.*
-%{_mandir}/man7/dnf5-forcearch.7.*
-%{_mandir}/man7/dnf5-installroot.7.*
-# TODO(jkolarik): modularity is not ready yet
-# %%{_mandir}/man7/dnf5-modularity.7.*
-%{_mandir}/man7/dnf5-specs.7.*
-%{_mandir}/man5/dnf5.conf.5.*
-%{_mandir}/man5/dnf5.conf-todo.5.*
-%{_mandir}/man5/dnf5.conf-deprecated.5.*
 %if %{with dnf5_obsoletes_dnf}
 %{_mandir}/man8/dnf.8.*
-%{_mandir}/man8/dnf-advisory.8.*
-%{_mandir}/man8/dnf-autoremove.8.*
-%{_mandir}/man8/dnf-check.8.*
-%{_mandir}/man8/dnf-check-upgrade.8.*
-%{_mandir}/man8/dnf-clean.8.*
-%{_mandir}/man8/dnf-distro-sync.8.*
-%{_mandir}/man8/dnf-downgrade.8.*
-%{_mandir}/man8/dnf-download.8.*
-%{_mandir}/man8/dnf-environment.8.*
-%{_mandir}/man8/dnf-group.8.*
-# TODO(jkolarik): history is not ready yet
-# %%{_mandir}/man8/dnf-history.8.*
-%{_mandir}/man8/dnf-info.8.*
-%{_mandir}/man8/dnf-install.8.*
-%{_mandir}/man8/dnf-leaves.8.*
-%{_mandir}/man8/dnf-list.8.*
-%{_mandir}/man8/dnf-makecache.8.*
-%{_mandir}/man8/dnf-mark.8.*
-%{_mandir}/man8/dnf-module.8.*
-%{_mandir}/man8/dnf-offline.8.*
-%{_mandir}/man8/dnf-provides.8.*
-%{_mandir}/man8/dnf-reinstall.8.*
-%{_mandir}/man8/dnf-remove.8.*
-%{_mandir}/man8/dnf-repo.8.*
-%{_mandir}/man8/dnf-repoquery.8.*
-%{_mandir}/man8/dnf-search.8.*
-%{_mandir}/man8/dnf-swap.8.*
-%{_mandir}/man8/dnf-system-upgrade.8.*
-%{_mandir}/man8/dnf-upgrade.8.*
-%{_mandir}/man8/dnf-versionlock.8.*
-%{_mandir}/man7/dnf-aliases.7.*
-%{_mandir}/man7/dnf-caching.7.*
-%{_mandir}/man7/dnf-comps.7.*
-# TODO(jkolarik): filtering is not ready yet
-# %%{_mandir}/man7/dnf-filtering.7.*
-%{_mandir}/man7/dnf-forcearch.7.*
-%{_mandir}/man7/dnf-installroot.7.*
-# TODO(jkolarik): modularity is not ready yet
-# %%{_mandir}/man7/dnf-modularity.7.*
-%{_mandir}/man7/dnf-specs.7.*
-%{_mandir}/man5/dnf.conf.5.*
-%{_mandir}/man5/dnf.conf-todo.5.*
-%{_mandir}/man5/dnf.conf-deprecated.5.*
 %endif
+%{_mandir}/man8/dnf*-advisory.8.*
+%{_mandir}/man8/dnf*-autoremove.8.*
+%{_mandir}/man8/dnf*-check.8.*
+%{_mandir}/man8/dnf*-check-upgrade.8.*
+%{_mandir}/man8/dnf*-clean.8.*
+%{_mandir}/man8/dnf*-distro-sync.8.*
+%{_mandir}/man8/dnf*-downgrade.8.*
+%{_mandir}/man8/dnf*-download.8.*
+%{_mandir}/man8/dnf*-environment.8.*
+%{_mandir}/man8/dnf*-group.8.*
+# TODO(jkolarik): history is not ready yet
+# %%{_mandir}/man8/dnf*-history.8.*
+%{_mandir}/man8/dnf*-info.8.*
+%{_mandir}/man8/dnf*-install.8.*
+%{_mandir}/man8/dnf*-leaves.8.*
+%{_mandir}/man8/dnf*-list.8.*
+%{_mandir}/man8/dnf*-makecache.8.*
+%{_mandir}/man8/dnf*-mark.8.*
+%{_mandir}/man8/dnf*-module.8.*
+%{_mandir}/man8/dnf*-offline.8.*
+%{_mandir}/man8/dnf*-provides.8.*
+%{_mandir}/man8/dnf*-reinstall.8.*
+%{_mandir}/man8/dnf*-remove.8.*
+%{_mandir}/man8/dnf*-repo.8.*
+%{_mandir}/man8/dnf*-repoquery.8.*
+%{_mandir}/man8/dnf*-search.8.*
+%{_mandir}/man8/dnf*-swap.8.*
+%{_mandir}/man8/dnf*-system-upgrade.8.*
+%{_mandir}/man8/dnf*-upgrade.8.*
+%{_mandir}/man8/dnf*-versionlock.8.*
+%{_mandir}/man7/dnf*-aliases.7.*
+%{_mandir}/man7/dnf*-caching.7.*
+%{_mandir}/man7/dnf*-comps.7.*
+# TODO(jkolarik): filtering is not ready yet
+# %%{_mandir}/man7/dnf*-filtering.7.*
+%{_mandir}/man7/dnf*-forcearch.7.*
+%{_mandir}/man7/dnf*-installroot.7.*
+# TODO(jkolarik): modularity is not ready yet
+# %%{_mandir}/man7/dnf*-modularity.7.*
+%{_mandir}/man7/dnf*-specs.7.*
+%{_mandir}/man5/dnf*.conf.5.*
+%{_mandir}/man5/dnf*.conf-todo.5.*
+%{_mandir}/man5/dnf*.conf-deprecated.5.*
 
 %if %{with systemd}
 %{_unitdir}/dnf5-offline-transaction.service
@@ -409,7 +364,7 @@ Package management library.
 %dir %{_datadir}/dnf5/repos.d
 %dir %{_datadir}/dnf5/vars.d
 %dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so.1*
+%{_libdir}/libdnf5.so.2*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf5/
 
@@ -425,7 +380,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Library for working with a terminal in a command-line package manager.
 
 %files -n libdnf5-cli -f libdnf5-cli.lang
-%{_libdir}/libdnf5-cli.so.1*
+%{_libdir}/libdnf5-cli.so.2*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -714,7 +669,7 @@ Package management service with a DBus interface.
 %files -n dnf5daemon-server -f dnf5daemon-server.lang
 %{_sbindir}/dnf5daemon-server
 %{_unitdir}/dnf5daemon-server.service
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
+%{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.conf
 %{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
 %{_datadir}/dbus-1/interfaces/org.rpm.dnf.v0.*.xml
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
@@ -752,18 +707,12 @@ config-manager, copr, and repoclosure commands.
 %{_libdir}/dnf5/plugins/copr_cmd_plugin.so
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
-%{_mandir}/man8/dnf5-builddep.8.*
-%{_mandir}/man8/dnf5-changelog.8.*
-%{_mandir}/man8/dnf5-copr.8.*
-%{_mandir}/man8/dnf5-needs-restarting.8.*
-%{_mandir}/man8/dnf5-repoclosure.8.*
-%if %{with dnf5_obsoletes_dnf}
-%{_mandir}/man8/dnf-builddep.8.*
-%{_mandir}/man8/dnf-changelog.8.*
-%{_mandir}/man8/dnf-copr.8.*
-%{_mandir}/man8/dnf-needs-restarting.8.*
-%{_mandir}/man8/dnf-repoclosure.8.*
-%endif
+%{_mandir}/man8/dnf*-builddep.8.*
+%{_mandir}/man8/dnf*-changelog.8.*
+%{_mandir}/man8/dnf*-config-manager.8.*
+%{_mandir}/man8/dnf*-copr.8.*
+%{_mandir}/man8/dnf*-needs-restarting.8.*
+%{_mandir}/man8/dnf*-repoclosure.8.*
 
 
 # ========== dnf5-automatic plugin ==========
@@ -788,14 +737,13 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
-%{_mandir}/man8/dnf5-automatic.8.*
+%{_mandir}/man8/dnf*-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
 %{_unitdir}/dnf-automatic.timer
 %if %{with dnf5_obsoletes_dnf}
 %{_bindir}/dnf-automatic
-%{_mandir}/man8/dnf-automatic.8.*
 %else
 %exclude %{_bindir}/dnf-automatic
 %endif
@@ -840,9 +788,10 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
     -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
     \
-    -DPROJECT_VERSION_MAJOR=%{project_version_major} \
-    -DPROJECT_VERSION_MINOR=%{project_version_minor} \
-    -DPROJECT_VERSION_PATCH=%{project_version_patch}
+    -DVERSION_PRIME=%{project_version_prime} \
+    -DVERSION_MAJOR=%{project_version_major} \
+    -DVERSION_MINOR=%{project_version_minor} \
+    -DVERSION_MICRO=%{project_version_micro}
 %cmake_build
 %if %{with man}
     %cmake_build --target doc-man

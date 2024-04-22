@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query.hpp"
-#include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/comps/group/group.hpp"
 
 #include <string>
@@ -32,27 +31,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class GroupSack;
-using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
-
-
 class GroupQuery : public libdnf5::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
     explicit GroupQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
     explicit GroupQuery(libdnf5::Base & base, bool empty = false);
 
-    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::groupid, pattern, cmp);
-    }
+    ~GroupQuery();
 
-    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::groupid, patterns, cmp);
-    }
+    GroupQuery(const GroupQuery & src);
+    GroupQuery & operator=(const GroupQuery & src);
 
-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::name, pattern, cmp);
-    }
+    GroupQuery(GroupQuery && src) noexcept;
+    GroupQuery & operator=(GroupQuery && src) noexcept;
+
+    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+
+    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     /// Filter groups by packages they contain. Keep only groups that contain packages with given names.
     ///
@@ -62,27 +59,16 @@ public:
     void filter_package_name(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::name, patterns, cmp);
-    }
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_uservisible(bool value) { filter(F::is_uservisible, value, sack::QueryCmp::EQ); }
-    void filter_default(bool value) { filter(F::is_default, value, sack::QueryCmp::EQ); }
-    void filter_installed(bool value) { filter(F::is_installed, value, sack::QueryCmp::EQ); }
+    void filter_uservisible(bool value);
+    void filter_default(bool value);
+    void filter_installed(bool value);
 
 private:
-    struct F {
-        static std::string groupid(const Group & obj) { return obj.get_groupid(); }
-        static std::string name(const Group & obj) { return obj.get_name(); }
-        static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
-        static bool is_default(const Group & obj) { return obj.get_default(); }
-        static bool is_installed(const Group & obj) { return obj.get_installed(); }
-    };
-
-    libdnf5::BaseWeakPtr base;
-
     friend Group;
-    friend GroupSack;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

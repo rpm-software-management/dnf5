@@ -124,7 +124,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         # Test passing an explicit list of forms
         query = libdnf5.rpm.PackageQuery(self.base)
         settings = libdnf5.base.ResolveSpecSettings()
-        settings.nevra_forms.append(libdnf5.rpm.Nevra.Form_NA)
+        settings.set_nevra_forms(
+            libdnf5.rpm.VectorNevraForm(1, libdnf5.rpm.Nevra.Form_NA))
 
         match, nevra = query.resolve_pkg_spec("pkg.x86_64", settings, True)
 
@@ -158,6 +159,6 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         logs = package.get_changelogs()
         self.assertEqual(2, logs.size())
         log = next(iter(logs))
-        self.assertEqual('First change', log.text)
-        self.assertEqual('Joe Black', log.author)
-        self.assertEqual(1641027600, log.timestamp)
+        self.assertEqual('First change', log.get_text())
+        self.assertEqual('Joe Black', log.get_author())
+        self.assertEqual(1641027600, log.get_timestamp())

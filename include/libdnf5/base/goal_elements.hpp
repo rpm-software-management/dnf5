@@ -60,7 +60,32 @@ enum class ProblemRules {
     RULE_YUMOBS,
     RULE_UNKNOWN,
     RULE_PKG_REMOVAL_OF_PROTECTED,
-    RULE_PKG_REMOVAL_OF_RUNNING_KERNEL
+    RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
+    RULE_MODULE_DISTUPGRADE,
+    RULE_MODULE_INFARCH,
+    RULE_MODULE_UPDATE,
+    RULE_MODULE_JOB,
+    RULE_MODULE_JOB_UNSUPPORTED,
+    RULE_MODULE_JOB_NOTHING_PROVIDES_DEP,
+    RULE_MODULE_JOB_UNKNOWN_PACKAGE,
+    RULE_MODULE_JOB_PROVIDED_BY_SYSTEM,
+    RULE_MODULE_PKG,
+    RULE_MODULE_BEST_1,
+    RULE_MODULE_BEST_2,
+    RULE_MODULE_PKG_NOT_INSTALLABLE_1,
+    RULE_MODULE_PKG_NOT_INSTALLABLE_2,
+    RULE_MODULE_PKG_NOT_INSTALLABLE_3,
+    RULE_MODULE_PKG_NOT_INSTALLABLE_4,
+    RULE_MODULE_PKG_NOTHING_PROVIDES_DEP,
+    RULE_MODULE_PKG_SAME_NAME,
+    RULE_MODULE_PKG_CONFLICTS,
+    RULE_MODULE_PKG_OBSOLETES,
+    RULE_MODULE_PKG_INSTALLED_OBSOLETES,
+    RULE_MODULE_PKG_IMPLICIT_OBSOLETES,
+    RULE_MODULE_PKG_REQUIRES,
+    RULE_MODULE_PKG_SELF_CONFLICT,
+    RULE_MODULE_YUMOBS,
+    RULE_MODULE_UNKNOWN,
 };
 
 /// Define a type of information, hint, or problem gathered during libdnf5::Goal::resolve()
@@ -83,7 +108,14 @@ enum class GoalProblem : uint32_t {
     WRITE_DEBUG = (1 << 14),
     UNSUPPORTED_ACTION = (1 << 15),
     MULTIPLE_STREAMS = (1 << 16),
-    EXCLUDED_VERSIONLOCK = (1 << 17)
+    EXCLUDED_VERSIONLOCK = (1 << 17),
+    /// Error in module defaults detected during resolvement of module dependencies
+    MODULE_SOLVER_ERROR_DEFAULTS = (1 << 18),
+    /// Problem with latest modules during resolvement of module dependencies
+    MODULE_SOLVER_ERROR_LATEST = (1 << 19),
+    /// Error detected during resolvement of module dependencies
+    MODULE_SOLVER_ERROR = (1 << 20),
+    MODULE_CANNOT_SWITH_STREAMS = (1 << 21)
 };
 
 /// Types of Goal actions
@@ -117,73 +149,182 @@ enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 /// Unresolved or resolved values based on GoalSetting
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
+/// Configure SPEC resolving.
+/// Important for queries that resolve SPEC.
 struct ResolveSpecSettings {
 public:
-    /// Important for queries that resolve SPEC
-    bool ignore_case{false};
-    /// Important for queries that resolve SPEC
-    bool with_nevra{true};
-    /// Important for queries that resolve SPEC
-    bool with_provides{true};
-    /// Important for queries that resolve SPEC
-    bool with_filenames{true};
-    /// Important for queries that resolve SPEC
-    /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
-    bool with_binaries{true};
-    /// Important for queries that resolve SPEC
-    std::vector<libdnf5::rpm::Nevra::Form> nevra_forms{};
+    ResolveSpecSettings();
+    ~ResolveSpecSettings();
 
-    /// these flags are used only for group resolving
-    bool group_with_id{true};
-    bool group_with_name{false};
-    /// Historically group spec could also mean an environment. These flags
+    ResolveSpecSettings(const ResolveSpecSettings & src);
+    ResolveSpecSettings & operator=(const ResolveSpecSettings & src);
+
+    ResolveSpecSettings(ResolveSpecSettings && src) noexcept;
+    ResolveSpecSettings & operator=(ResolveSpecSettings && src) noexcept;
+
+    /// Set whether to match case-insensitively
+    ///
+    /// Default: false
+    void set_ignore_case(bool ignore_case);
+    bool get_ignore_case() const;
+
+    /// Set whether packages' nevras should be considered during SPEC matching
+    ///
+    /// Default: true
+    void set_with_nevra(bool with_nevra);
+    bool get_with_nevra() const;
+
+    /// Set whether packages' provides should be considered during SPEC matching
+    ///
+    /// Default: true
+    void set_with_provides(bool with_provides);
+    bool get_with_provides() const;
+
+    /// Set whether package's files should be considered during SPEC matching
+    /// It will check if SPEC starts with "/" or "*/" and if it matches any file in a package
+    ///
+    /// Default: true
+    void set_with_filenames(bool with_filenames);
+    bool get_with_filenames() const;
+
+    /// Set whether package's binaries should be considered during SPEC matching
+    /// It will check whether SPEC is a binary -> `/usr/(s)bin/<SPEC>`
+    ///
+    /// Default: true
+    void set_with_binaries(bool with_binaries);
+    bool get_with_binaries() const;
+
+    /// Set whether to expand globs in package specs using fnmatch
+    ///
+    /// Default: true
+    void set_expand_globs(bool expand_globs);
+    bool get_expand_globs() const;
+
+    /// When matching packages' nevras is enabled specify allowed nevra forms.
+    ///
+    /// The default can be obtained from libdnf5::rpm::Nevra::get_default_pkg_spec_forms().
+    void set_nevra_forms(std::vector<libdnf5::rpm::Nevra::Form> nevra_forms);
+    std::vector<libdnf5::rpm::Nevra::Form> get_nevra_forms() const;
+
+    /// Set whether groups' ids should be considered during group SPEC matching
+    ///
+    /// Default: true
+    void set_group_with_id(bool group_with_id);
+    bool get_group_with_id() const;
+
+    /// Set whether groups' names should be considered during group SPEC matching
+    ///
+    /// Default: false
+    void set_group_with_name(bool group_with_name);
+    bool get_group_with_name() const;
+
+    /// Configure whether to search in groups when matching SPEC in group ids or names.
+    /// Historically group SPEC could also mean an environment. These flags
     /// configure in which entities the spec is searched for.
-    bool group_search_groups{true};
-    bool group_search_environments{true};
+    ///
+    /// Default: true
+    void set_group_search_groups(bool search_groups);
+    bool get_group_search_groups() const;
+
+    /// Configure whether to search in environments when matching SPEC in group ids or names.
+    ///
+    /// Default: true
+    void set_group_search_environments(bool search_environments);
+    bool get_group_search_environments() const;
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 struct GoalJobSettings : public ResolveSpecSettings {
 public:
+    GoalJobSettings();
+    ~GoalJobSettings();
+
+    GoalJobSettings(const GoalJobSettings & src);
+    GoalJobSettings(GoalJobSettings && src) noexcept;
+    GoalJobSettings & operator=(const GoalJobSettings & src);
+    GoalJobSettings & operator=(GoalJobSettings && src) noexcept;
+
     /// Return used value for skip_broken
-    GoalUsedSetting get_used_skip_broken() const { return used_skip_broken; };
+    GoalUsedSetting get_used_skip_broken() const;
     /// Return used value for skip_unavailable
-    GoalUsedSetting get_used_skip_unavailable() const { return used_skip_unavailable; };
+    GoalUsedSetting get_used_skip_unavailable() const;
     /// Return used value for best
-    GoalUsedSetting get_used_best() const { return used_best; };
+    GoalUsedSetting get_used_best() const;
     /// Return used value for clean_requirements_on_remove
-    GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
+    GoalUsedSetting get_used_clean_requirements_on_remove() const;
 
-    /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
-    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
-    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const {
-        return advisory_filter ? &advisory_filter.value() : nullptr;
-    }
+    /// Optionally set AdvisoryQuery that is used to filter packages (used for upgrade).
+    /// Upgrades considers only packages that resolve some advisory in specified AdvisoryQuery.
+    ///
+    /// By default is is empty and no packages are filtered.
+    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter);
+    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const;
 
-    // Which types of group packages are going to be installed with the group.
-    // If not set, default is taken from ConfigMain.group_package_types
-    void set_group_package_types(const libdnf5::comps::PackageType type) { group_package_types = type; }
-    const libdnf5::comps::PackageType * get_group_package_types() const {
-        return group_package_types ? &group_package_types.value() : nullptr;
-    }
+    /// Which types of group packages are going to be installed with the group.
+    ///
+    /// Default is taken from ConfigMain.group_package_types
+    void set_group_package_types(libdnf5::comps::PackageType type);
+    const libdnf5::comps::PackageType * get_group_package_types() const;
 
     /// If set to true, group operations (install / remove / upgrade) will only work
     /// with the group itself, but will not add to the transaction any packages.
-    bool group_no_packages{false};
+    ///
+    /// Default: false
+    void set_group_no_packages(bool group_no_packages);
+    bool get_group_no_packages() const;
 
-    /// Set whether hints should be reported
-    bool report_hint{true};
-    /// Set skip_broken, AUTO means that it is handled according to the default behavior
-    GoalSetting skip_broken{GoalSetting::AUTO};
-    /// Set skip_unavailable, AUTO means that it is handled according to the default behavior
-    GoalSetting skip_unavailable{GoalSetting::AUTO};
-    /// Set best, AUTO means that it is handled according to the default behavior
-    GoalSetting best{GoalSetting::AUTO};
-    /// Set clean_requirements_on_remove, AUTO means that it is handled according to the default behavior
-    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
-    /// Define which installed packages should be modified according to repoid from which they were installed
-    std::vector<std::string> from_repo_ids;
-    /// Reduce candidates for the operation according repository ids
-    std::vector<std::string> to_repo_ids;
+    /// If set to true, environments operations (install / remove / upgrade) will only work
+    /// with the environment itself, but will not add to any groups to the transaction.
+    ///
+    /// Default: false
+    void set_environment_no_groups(bool environment_no_groups);
+    bool get_environment_no_groups() const;
+
+    /// Set whether to report packages providing alternatives (``alternative-for(..)`` provide) and packages
+    /// with different letter capitalization when no matches are found.
+    ///
+    /// Default: true
+    void set_report_hint(bool report_hint);
+    bool get_report_hint() const;
+
+    /// Resolve any dependency problems by removing packages that are causing problems from the transaction.
+    ///
+    /// By default the value is taken from ``skip_broken`` configuration option.
+    void set_skip_broken(GoalSetting skip_broken);
+    GoalSetting get_skip_broken() const;
+
+    /// Allow skipping packages that are unavailable.
+    ///
+    /// By default the value is taken from a configuration option ``skip_unavailable`` except for remove action
+    /// which defaults to true.
+    void set_skip_unavailable(GoalSetting skip_unavailable);
+    GoalSetting get_skip_unavailable() const;
+
+    /// Try the best available package versions in transactions.
+    ///
+    /// By default the value is taken from ``best`` configuration option.
+    void set_best(GoalSetting best);
+    GoalSetting get_best() const;
+
+    /// Remove dependencies that are no longer used during ``dnf remove``.
+    ///
+    /// By default the value is false except for remove action which defaults to value from
+    /// clean_requirements_on_remove configuration option.
+    void set_clean_requirements_on_remove(GoalSetting clean_requirements_on_remove);
+    GoalSetting get_clean_requirements_on_remove() const;
+
+    /// Not implemented yet
+    void set_from_repo_ids(std::vector<std::string> from_repo_ids);
+    std::vector<std::string> get_from_repo_ids() const;
+
+    /// Limit available packages to specified repositories.
+    ///
+    /// Empty by default.
+    void set_to_repo_ids(std::vector<std::string> to_repo_ids);
+    std::vector<std::string> get_to_repo_ids() const;
 
 private:
     friend class Goal;
@@ -239,13 +380,8 @@ private:
     /// @exception libdnf5::AssertionError When a different value already stored or when invalid value
     libdnf5::comps::PackageType resolve_group_package_types(const libdnf5::ConfigMain & cfg_main);
 
-    GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
-    GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
-    std::optional<libdnf5::comps::PackageType> used_group_package_types{std::nullopt};
-    std::optional<libdnf5::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
-    std::optional<libdnf5::comps::PackageType> group_package_types{std::nullopt};
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

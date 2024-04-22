@@ -17,32 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf5/comps/comps.hpp"
 
-#include "solv/pool.hpp"
+#include "libdnf5-cli/output/adapters/repo.hpp"
 
-#include "libdnf5/base/base.hpp"
+#include <libdnf5/repo/repo.hpp>
 
-#include <filesystem>
+namespace libdnf5::cli::output {
 
+template class RepoAdapter<libdnf5::repo::RepoWeakPtr>;
 
-namespace libdnf5::comps {
-
-
-Comps::Comps(libdnf5::Base & base) : base{base} {}
-
-
-Comps::~Comps() = default;
-
-
-CompsWeakPtr Comps::get_weak_ptr() {
-    return CompsWeakPtr(this, &data_guard);
-}
-
-
-BaseWeakPtr Comps::get_base() const {
-    return base.get_weak_ptr();
-}
-
-
-}  // namespace libdnf5::comps
+}  // namespace libdnf5::cli::output

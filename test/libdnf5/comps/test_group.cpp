@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/fs/file.hpp"
 
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/package.hpp>
 #include <libdnf5/comps/group/query.hpp>
 
@@ -58,7 +57,8 @@ using namespace libdnf5::comps;
 
 
 void CompsGroupTest::test_load() {
-    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-standard");
 
     GroupQuery q_core(base);
     q_core.filter_installed(false);
@@ -82,8 +82,6 @@ void CompsGroupTest::test_load() {
         Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
     CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
-
-    add_repo_repomd("repomd-comps-standard");
 
     GroupQuery q_standard(base);
     q_standard.filter_installed(false);
@@ -133,8 +131,8 @@ void CompsGroupTest::test_load_defaults() {
 
 void CompsGroupTest::test_merge() {
     // Load multiple different definitions of the core group
-    add_repo_repomd("repomd-comps-core");
-    add_repo_repomd("repomd-comps-standard");
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-standard", false);
     add_repo_repomd("repomd-comps-core-v2");
 
     // The "Core v2" is preferred because its repoid is alphabetically higher
@@ -166,8 +164,8 @@ void CompsGroupTest::test_merge() {
 void CompsGroupTest::test_merge_when_different_load_order() {
     // Load multiple different definitions of the core group
     // The order of loading the repositories does not matter
-    add_repo_repomd("repomd-comps-core-v2");
-    add_repo_repomd("repomd-comps-standard");
+    add_repo_repomd("repomd-comps-core-v2", false);
+    add_repo_repomd("repomd-comps-standard", false);
     add_repo_repomd("repomd-comps-core");
 
     // The "Core v2" is preferred because its repoid is alphabetically higher
@@ -198,8 +196,8 @@ void CompsGroupTest::test_merge_when_different_load_order() {
 
 void CompsGroupTest::test_merge_with_empty() {
     // Load core group and another definition with all attributes empty
-    add_repo_repomd("repomd-comps-core");
-    add_repo_repomd("repomd-comps-standard");
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-standard", false);
     add_repo_repomd("repomd-comps-core-empty");
 
     // All the attributes are taken from the non-empty definition except for boolean values
@@ -225,8 +223,8 @@ void CompsGroupTest::test_merge_with_empty() {
 
 void CompsGroupTest::test_merge_empty_with_nonempty() {
     // Load core group and another definition with all attributes empty
-    add_repo_repomd("repomd-comps-core-v2");
-    add_repo_repomd("repomd-comps-standard");
+    add_repo_repomd("repomd-comps-core-v2", false);
+    add_repo_repomd("repomd-comps-standard", false);
     add_repo_repomd("repomd-comps-core-empty");
 
     // All the attributes are taken from the non-empty definition
@@ -255,7 +253,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
 
 void CompsGroupTest::test_merge_different_translations() {
     // Load different definitions of the core group with different set of translations
-    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-core", false);
     add_repo_repomd("repomd-comps-core-different-translations");
 
     GroupQuery q_core(base);
@@ -294,9 +292,9 @@ void CompsGroupTest::test_serialize() {
 
 
 void CompsGroupTest::test_solvables() {
-    add_repo_repomd("repomd-comps-minimal-environment");
-    add_repo_repomd("repomd-comps-core");
-    add_repo_repomd("repomd-comps-core-environment");
+    add_repo_repomd("repomd-comps-minimal-environment", false);
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-core-environment", false);
     add_repo_repomd("repomd-comps-standard");
 
     libdnf5::comps::GroupQuery q_groups(base);

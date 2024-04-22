@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/common/sack/query.hpp"
-#include "libdnf5/common/weak_ptr.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 
 #include <string>
@@ -32,46 +31,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::comps {
 
 
-class EnvironmentSack;
-using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
-
-
 class EnvironmentQuery : public libdnf5::sack::Query<Environment> {
 public:
     // Create new query with newly composed environments (using only solvables from currently enabled repositories)
     explicit EnvironmentQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
     explicit EnvironmentQuery(libdnf5::Base & base, bool empty = false);
 
-    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::environmentid, pattern, cmp);
-    }
+    ~EnvironmentQuery();
 
+    EnvironmentQuery(const EnvironmentQuery & src);
+    EnvironmentQuery & operator=(const EnvironmentQuery & src);
+
+    EnvironmentQuery(EnvironmentQuery && src) noexcept;
+    EnvironmentQuery & operator=(EnvironmentQuery && src) noexcept;
+
+    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
     void filter_environmentid(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::environmentid, patterns, cmp);
-    }
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::name, pattern, cmp);
-    }
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
-        filter(F::name, patterns, cmp);
-    }
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
-    void filter_installed(bool value) { filter(F::is_installed, value, sack::QueryCmp::EQ); }
+    void filter_installed(bool value);
 
 private:
-    struct F {
-        static std::string environmentid(const Environment & obj) { return obj.get_environmentid(); }
-        static std::string name(const Environment & obj) { return obj.get_name(); }
-        static bool is_installed(const Environment & obj) { return obj.get_installed(); }
-    };
-
-    libdnf5::BaseWeakPtr base;
-
     friend Environment;
-    friend EnvironmentSack;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

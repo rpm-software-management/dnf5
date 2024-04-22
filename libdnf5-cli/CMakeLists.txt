@@ -19,7 +19,7 @@ include_directories(.)
 
 # build libdnf5-cli.so
 add_library(libdnf5-cli SHARED ${LIBDNF5_CLI_SOURCES})
-set(DNF_CLI_SO_VERSION 1)
+set(DNF_CLI_SO_VERSION 2)
 set_target_properties(libdnf5-cli PROPERTIES OUTPUT_NAME "dnf5-cli")
 set_target_properties(libdnf5-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
 # required by clang
@@ -39,7 +39,7 @@ target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(SMARTCOLS REQUIRED smartcols)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE "${SMARTCOLS_MODULE_NAME}")
-target_link_libraries(libdnf5-cli PUBLIC ${SMARTCOLS_LIBRARIES})
+target_link_libraries(libdnf5-cli PRIVATE ${SMARTCOLS_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string

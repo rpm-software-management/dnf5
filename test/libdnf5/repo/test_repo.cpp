@@ -19,19 +19,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_repo.hpp"
 
+#include "../shared/private_accessor.hpp"
 #include "utils/string.hpp"
 
 #include <libdnf5/base/base.hpp>
 
-#include <filesystem>
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
+// Accessor of private Base::p_impl, see private_accessor.hpp
+create_private_getter_template;
+create_getter(load, &libdnf5::repo::Repo::load);
 
 void RepoTest::test_load_system_repo() {
     // TODO(lukash) there's no rpmdb in the installroot, create data for the test
-    repo_sack->get_system_repo()->load();
+    (*(repo_sack->get_system_repo()).*get(load{}))();
 }
 
 namespace {
@@ -113,9 +115,7 @@ void RepoTest::test_load_repo() {
     auto cbs = callbacks.get();
     repo->set_callbacks(std::move(callbacks));
 
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_id(repoid);
-    repo_sack->update_and_load_repos(repos);
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
 
     CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
     CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
@@ -134,15 +134,66 @@ void RepoTest::test_load_repo_nonexistent() {
     auto repo = add_repo(repoid, "/path/thats/not/here", false);
     repo->get_config().get_skip_if_unavailable_option().set(false);
 
-    libdnf5::repo::RepoQuery repos(base);
-    repos.filter_id(repoid);
-    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf5::repo::RepoDownloadError);
+    CPPUNIT_ASSERT_THROW(repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE), libdnf5::repo::RepoDownloadError);
 }
 
-void RepoTest::test_update_and_load_enabled_repos_twice_fails() {
+void RepoTest::test_load_repos_twice_fails() {
     // Call this once...
-    repo_sack->update_and_load_enabled_repos(true);
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
 
     // calling this again should fail
-    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_enabled_repos(true), libdnf5::UserAssertionError);
+    CPPUNIT_ASSERT_THROW(repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE), libdnf5::UserAssertionError);
+}
+
+void RepoTest::test_load_repos_invalid_type() {
+    CPPUNIT_ASSERT_THROW(repo_sack->load_repos(libdnf5::repo::Repo::Type::COMMANDLINE), libdnf5::UserAssertionError);
+}
+
+void RepoTest::test_load_repos_load_available() {
+    std::string repoid("repomd-repo1");
+    auto repo = add_repo_repomd(repoid, false);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+    auto cbs = callbacks.get();
+    repo->set_callbacks(std::move(callbacks));
+
+    repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
+    CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->end_cnt);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), dl_callbacks_ptr->end_error_message);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(1, dl_callbacks_ptr->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_import_cnt);
+}
+
+void RepoTest::test_load_repos_load_available_system() {
+    std::string repoid("repomd-repo1");
+    auto repo = add_repo_repomd(repoid, false);
+
+    auto dl_callbacks = std::make_unique<DownloadCallbacks>();
+    auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
+
+    auto callbacks = std::make_unique<RepoCallbacks>();
+
+    repo_sack->load_repos();
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
+    CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
+
+    CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->end_cnt);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), dl_callbacks_ptr->end_error_message);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(2, dl_callbacks_ptr->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->fastest_mirror_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->handle_mirror_failure_cnt);
 }

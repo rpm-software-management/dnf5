@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
-#include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/rpm/package_query.hpp"
@@ -44,7 +43,6 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <filesystem>
 
 
 using LibsolvRepo = Repo;
@@ -69,18 +67,16 @@ void PackageSack::Impl::make_provides_ready() {
 
     if (base->get_repo_sack()->has_system_repo() && !addedfileprovides_inst.empty()) {
         auto system_repo = base->get_repo_sack()->get_system_repo();
-        // TODO(lukash) handle the existence of solv_repo in a unified manner?
-        if (system_repo->solv_repo) {
-            system_repo->solv_repo->rewrite_repo(addedfileprovides_inst);
+        if (system_repo->is_loaded()) {
+            system_repo->get_solv_repo().rewrite_repo(addedfileprovides_inst);
         }
     }
 
     if (!addedfileprovides.empty()) {
         auto rq = repo::RepoQuery(base);
         for (auto & repo : rq.get_data()) {
-            // TODO(lukash) handle the existence of solv_repo in a unified manner?
-            if (repo->solv_repo) {
-                repo->solv_repo->rewrite_repo(addedfileprovides);
+            if (repo->is_loaded()) {
+                repo->get_solv_repo().rewrite_repo(addedfileprovides);
             }
         }
     }
@@ -169,12 +165,12 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     bool excludes_exist = false;  // found packages for exclude
     bool includes_exist = false;  // found packages for include
 
-    ResolveSpecSettings resolve_settings{
-        .ignore_case = false,
-        .with_nevra = true,
-        .with_provides = false,
-        .with_filenames = false,
-        .with_binaries = false};
+    ResolveSpecSettings resolve_settings;
+    resolve_settings.set_ignore_case(false);
+    resolve_settings.set_with_nevra(true);
+    resolve_settings.set_with_provides(false);
+    resolve_settings.set_with_filenames(false);
+    resolve_settings.set_with_binaries(false);
 
     // first evaluate repo specific includes/excludes
     if (!only_main) {
@@ -470,11 +466,10 @@ std::optional<libdnf5::solv::SolvMap> PackageSack::Impl::compute_considered_map(
 
             // Add all solvables from repositories which do not use "includes"
             for (const auto & repo : base->get_repo_sack()->get_data()) {
-                // TODO(lukash) handle the existence of solv_repo in a unified manner?
-                if (!repo->get_use_includes() && repo->solv_repo) {
+                if (!repo->get_use_includes() && repo->is_loaded()) {
                     Id solvableid;
                     Solvable * solvable;
-                    FOR_REPO_SOLVABLES(repo->solv_repo->repo, solvableid, solvable) {
+                    FOR_REPO_SOLVABLES(repo->get_solv_repo().repo, solvableid, solvable) {
                         pkg_includes_tmp.add_unsafe(solvableid);
                     }
                 }

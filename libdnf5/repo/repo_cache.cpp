@@ -51,143 +51,163 @@ std::size_t remove(const std::filesystem::path & path, std::size_t & error_count
     return 0;
 }
 
-
-// Removes directory and its content.
-RepoCache::RemoveStatistics remove_recursive(const std::filesystem::path & dir_path, Logger & log) {
-    RepoCache::RemoveStatistics status{};
-    std::error_code ec;
-    for (const auto & dir_entry : std::filesystem::directory_iterator(dir_path, ec)) {
-        if (dir_entry.is_directory()) {
-            status += remove_recursive(dir_entry, log);
-            status.dirs_removed += remove(dir_entry, status.errors, log);
-        } else {
-            status.files_removed += remove(dir_entry, status.errors, log);
-        }
-    }
-    status.dirs_removed += remove(dir_path, status.errors, log);
-    return status;
-}
-
-
 inline std::filesystem::path get_attribute_filepath(
     const std::filesystem::path & repo_cache_dir, const std::string & attr_name) {
     return repo_cache_dir / CACHE_ATTRS_DIR / attr_name;
 }
 
 
+}  // namespace
+
+
 /// Removes all attributes from the cache.
-RepoCache::RemoveStatistics cache_remove_attributes(const std::filesystem::path & path, Logger & log) {
+RepoCache::RemoveStatistics RepoCache::Impl::cache_remove_attributes(const std::filesystem::path & path, Logger & log) {
     auto status = remove_recursive(path / CACHE_ATTRS_DIR, log);
     log.debug(
         "Attributes removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
         path.native(),
-        status.files_removed,
-        status.dirs_removed,
-        status.errors);
+        status.get_files_removed(),
+        status.get_dirs_removed(),
+        status.get_errors());
     return status;
 }
 
-}  // namespace
+// Removes directory and its content.
+RepoCache::RemoveStatistics RepoCache::Impl::remove_recursive(const std::filesystem::path & dir_path, Logger & log) {
+    RepoCache::RemoveStatistics status{};
+    std::error_code ec;
+    for (const auto & dir_entry : std::filesystem::directory_iterator(dir_path, ec)) {
+        if (dir_entry.is_directory()) {
+            status += remove_recursive(dir_entry, log);
+            status.p_impl->dirs_removed += remove(dir_entry, status.p_impl->errors, log);
+        } else {
+            status.p_impl->files_removed += remove(dir_entry, status.p_impl->errors, log);
+        }
+    }
+    status.p_impl->dirs_removed += remove(dir_path, status.p_impl->errors, log);
+    return status;
+}
 
 
 RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator+=(const RepoCacheRemoveStatistics & rhs) noexcept {
-    files_removed += rhs.files_removed;
-    dirs_removed += rhs.dirs_removed;
-    errors += rhs.errors;
+    p_impl->files_removed += rhs.p_impl->files_removed;
+    p_impl->dirs_removed += rhs.p_impl->dirs_removed;
+    p_impl->errors += rhs.p_impl->errors;
     return *this;
 }
 
+RepoCacheRemoveStatistics::RepoCacheRemoveStatistics() : p_impl(new Impl()){};
+RepoCacheRemoveStatistics::~RepoCacheRemoveStatistics() = default;
+
+RepoCacheRemoveStatistics::RepoCacheRemoveStatistics(const RepoCacheRemoveStatistics & src) = default;
+RepoCacheRemoveStatistics::RepoCacheRemoveStatistics(RepoCacheRemoveStatistics && src) noexcept = default;
+
+RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator=(const RepoCacheRemoveStatistics & src) = default;
+RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator=(RepoCacheRemoveStatistics && src) noexcept = default;
+
+std::size_t RepoCacheRemoveStatistics::get_files_removed() {
+    return p_impl->files_removed;
+}
+std::size_t RepoCacheRemoveStatistics::get_dirs_removed() {
+    return p_impl->dirs_removed;
+}
+std::size_t RepoCacheRemoveStatistics::get_errors() {
+    return p_impl->errors;
+}
 
 RepoCache::RepoCache(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & repo_cache_dir)
-    : base(base),
-      cache_dir(repo_cache_dir) {
-    if (cache_dir.empty()) {
-        throw RepoCacheError(M_("Empty path to the repository cache directory."));
-    }
-}
+    : p_impl(new Impl(base, repo_cache_dir)) {}
 
 
 RepoCache::RepoCache(libdnf5::Base & base, const std::string & repo_cache_dir)
     : RepoCache(base.get_weak_ptr(), repo_cache_dir) {}
 
 
-RepoCache::RemoveStatistics RepoCache::remove_metadata() {
-    auto & log = *base->get_logger();
-    auto status = remove_recursive(cache_dir / CACHE_METADATA_DIR, log);
+RepoCache::~RepoCache() = default;
 
-    status.files_removed += remove(cache_dir / CACHE_MIRRORLIST_FILE, status.errors, log);
-    status.files_removed += remove(cache_dir / CACHE_METALINK_FILE, status.errors, log);
+RepoCache::RepoCache(const RepoCache & src) = default;
+RepoCache::RepoCache(RepoCache && src) noexcept = default;
+
+RepoCache & RepoCache::operator=(const RepoCache & src) = default;
+RepoCache & RepoCache::operator=(RepoCache && src) noexcept = default;
+
+RepoCache::RemoveStatistics RepoCache::remove_metadata() {
+    auto & log = *p_impl->base->get_logger();
+    auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_METADATA_DIR, log);
+
+    status.p_impl->files_removed += remove(p_impl->cache_dir / CACHE_MIRRORLIST_FILE, status.p_impl->errors, log);
+    status.p_impl->files_removed += remove(p_impl->cache_dir / CACHE_METALINK_FILE, status.p_impl->errors, log);
     log.debug(
         "Metadata removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
-        cache_dir.native(),
-        status.files_removed,
-        status.dirs_removed,
-        status.errors);
+        p_impl->cache_dir.native(),
+        status.get_files_removed(),
+        status.get_dirs_removed(),
+        status.get_errors());
     return status;
 }
 
 
 RepoCache::RemoveStatistics RepoCache::remove_packages() {
-    auto & log = *base->get_logger();
-    auto status = remove_recursive(cache_dir / CACHE_PACKAGES_DIR, log);
+    auto & log = *p_impl->base->get_logger();
+    auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_PACKAGES_DIR, log);
     log.debug(
         "Packages removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
-        cache_dir.native(),
-        status.files_removed,
-        status.dirs_removed,
-        status.errors);
+        p_impl->cache_dir.native(),
+        status.get_files_removed(),
+        status.get_dirs_removed(),
+        status.get_errors());
     return status;
 }
 
 
 RepoCache::RemoveStatistics RepoCache::remove_solv_files() {
-    auto & log = *base->get_logger();
-    auto status = remove_recursive(cache_dir / CACHE_SOLV_FILES_DIR, log);
+    auto & log = *p_impl->base->get_logger();
+    auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_SOLV_FILES_DIR, log);
     log.debug(
         "Solv files removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
-        cache_dir.native(),
-        status.files_removed,
-        status.dirs_removed,
-        status.errors);
+        p_impl->cache_dir.native(),
+        status.get_files_removed(),
+        status.get_dirs_removed(),
+        status.get_errors());
     return status;
 }
 
 
 RepoCache::RemoveStatistics RepoCache::remove_all() {
-    auto & log = *base->get_logger();
+    auto & log = *p_impl->base->get_logger();
     auto status = remove_metadata();
     status += remove_packages();
     status += remove_solv_files();
-    status += cache_remove_attributes(cache_dir, log);
+    status += p_impl->cache_remove_attributes(p_impl->cache_dir, log);
     std::error_code ec;
-    if (std::filesystem::remove(cache_dir, ec)) {
-        ++status.dirs_removed;
+    if (std::filesystem::remove(p_impl->cache_dir, ec)) {
+        ++status.p_impl->dirs_removed;
     }
     return status;
 }
 
 
 void RepoCache::write_attribute(const std::string & name, const std::string & value) {
-    std::filesystem::create_directory(std::filesystem::path(cache_dir) / CACHE_ATTRS_DIR);
-    utils::fs::File attr_file(get_attribute_filepath(cache_dir, name), "w", false);
+    std::filesystem::create_directory(std::filesystem::path(p_impl->cache_dir) / CACHE_ATTRS_DIR);
+    utils::fs::File attr_file(get_attribute_filepath(p_impl->cache_dir, name), "w", false);
     attr_file.write(value);
     attr_file.close();  // unlike a destructor, it can throw an exception
 }
 
 
 std::string RepoCache::read_attribute(const std::string & name) {
-    utils::fs::File attr_file(get_attribute_filepath(cache_dir, name), "r", false);
+    utils::fs::File attr_file(get_attribute_filepath(p_impl->cache_dir, name), "r", false);
     return attr_file.read();
 }
 
 
 bool RepoCache::is_attribute(const std::string & name) {
-    return std::filesystem::exists(get_attribute_filepath(cache_dir, name));
+    return std::filesystem::exists(get_attribute_filepath(p_impl->cache_dir, name));
 }
 
 
 bool RepoCache::remove_attribute(const std::string & name) {
-    return std::filesystem::remove(get_attribute_filepath(cache_dir, name));
+    return std::filesystem::remove(get_attribute_filepath(p_impl->cache_dir, name));
 }
 
 
@@ -196,7 +216,7 @@ std::string RepoCache::get_repoid() {
     constexpr std::size_t HYPHEN_POS_FROM_END = HASH_LENGTH + 1;
     constexpr const char * HASH_CHARS = "0123456789ABCDEFabcdef";
 
-    auto it = --cache_dir.end();
+    auto it = --p_impl->cache_dir.end();
     if (it->empty()) {
         --it;
     }

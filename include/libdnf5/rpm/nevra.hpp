@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_NEVRA_HPP
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <sstream>
 #include <string>
@@ -59,10 +60,12 @@ public:
     /// @exception IncorrectNevraString
     static std::vector<Nevra> parse(const std::string & nevra_str, const std::vector<Form> & forms);
 
-    Nevra() = default;
-    Nevra(const Nevra & src) = default;
-    Nevra(Nevra && src) = default;
-    Nevra & operator=(const Nevra & other) = default;
+    Nevra();
+    ~Nevra();
+    Nevra(const Nevra & src);
+    Nevra(Nevra && src) noexcept;
+    Nevra & operator=(const Nevra & other);
+    Nevra & operator=(Nevra && src) noexcept;
 
     /// @return `true` if all Nevra attributes (`name`, `epoch`, `version`, `release` and `arch`) match.
     bool operator==(const Nevra & other) const;
@@ -75,43 +78,38 @@ public:
     void clear() noexcept;
 
     // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
-    const std::string & get_name() const noexcept { return name; }
+    const std::string & get_name() const noexcept;
 
     // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
-    const std::string & get_epoch() const noexcept { return epoch; }
+    const std::string & get_epoch() const noexcept;
 
     // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
-    const std::string & get_version() const noexcept { return version; }
+    const std::string & get_version() const noexcept;
 
     // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
-    const std::string & get_release() const noexcept { return release; }
+    const std::string & get_release() const noexcept;
 
     // @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
-    const std::string & get_arch() const noexcept { return arch; }
+    const std::string & get_arch() const noexcept;
 
-    void set_name(const std::string & value) { name = value; }
-    void set_epoch(const std::string & value) { epoch = value; }
-    void set_version(const std::string & value) { version = value; }
-    void set_release(const std::string & value) { release = value; }
-    void set_arch(const std::string & value) { arch = value; }
+    void set_name(const std::string & value);
+    void set_epoch(const std::string & value);
+    void set_version(const std::string & value);
+    void set_release(const std::string & value);
+    void set_arch(const std::string & value);
 
-    void set_name(const std::string && value) { name = std::move(value); }
-    void set_epoch(const std::string && value) { epoch = std::move(value); }
-    void set_version(const std::string && value) { version = std::move(value); }
-    void set_release(const std::string && value) { release = std::move(value); }
-    void set_arch(const std::string && value) { arch = std::move(value); }
-
-    // TODO(jmracek) Add comperators ==
+    void set_name(std::string && value);
+    void set_epoch(std::string && value);
+    void set_version(std::string && value);
+    void set_release(std::string && value);
+    void set_arch(std::string && value);
 
     // @replaces hawkey:hawkey/__init__.py:method:Nevra.has_just_name()
     bool has_just_name() const;
 
 private:
-    std::string name;
-    std::string epoch;
-    std::string version;
-    std::string release;
-    std::string arch;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
@@ -273,7 +271,7 @@ bool cmp_naevr(const L & lhs, const R & rhs) {
 };
 
 template <typename T>
-bool cmp_naevr(const T & lhs, const T rhs) {
+bool cmp_naevr(const T & lhs, const T & rhs) {
     return cmp_naevr<T, T>(lhs, rhs);
 }
 

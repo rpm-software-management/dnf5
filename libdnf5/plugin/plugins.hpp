@@ -58,6 +58,10 @@ public:
     void init();
     void pre_base_setup();
     void post_base_setup();
+    void repos_configured();
+    void repos_loaded();
+    void pre_add_cmdline_packages(const std::vector<std::string> & paths);
+    void post_add_cmdline_packages();
     void pre_transaction(const libdnf5::base::Transaction & transaction);
     void post_transaction(const libdnf5::base::Transaction & transaction);
     void finish() noexcept;
@@ -80,10 +84,12 @@ public:
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
     /// Loads the plugin from the library defined by the configuration file config_file_path.
-    void load_plugin(const std::string & config_file_path);
+    void load_plugin(
+        const std::string & config_file_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
 
     /// Loads plugins defined by configuration files in the directory.
-    void load_plugins(const std::string & config_dir_path);
+    void load_plugins(
+        const std::string & config_dir_path, const PreserveOrderMap<std::string, bool> & plugin_enablement);
 
     /// Returns the number of registered plugins.
     size_t count() const noexcept;
@@ -95,6 +101,14 @@ public:
     void pre_base_setup();
 
     void post_base_setup();
+
+    void repos_configured();
+
+    void repos_loaded();
+
+    void pre_add_cmdline_packages(const std::vector<std::string> & paths);
+
+    void post_add_cmdline_packages();
 
     void pre_transaction(const libdnf5::base::Transaction & transaction);
 
@@ -151,6 +165,30 @@ inline void Plugin::pre_base_setup() {
 inline void Plugin::post_base_setup() {
     if (iplugin_instance) {
         iplugin_instance->post_base_setup();
+    }
+}
+
+inline void Plugin::repos_configured() {
+    if (iplugin_instance) {
+        iplugin_instance->repos_configured();
+    }
+}
+
+inline void Plugin::repos_loaded() {
+    if (iplugin_instance) {
+        iplugin_instance->repos_loaded();
+    }
+}
+
+inline void Plugin::pre_add_cmdline_packages(const std::vector<std::string> & paths) {
+    if (iplugin_instance) {
+        iplugin_instance->pre_add_cmdline_packages(paths);
+    }
+}
+
+inline void Plugin::post_add_cmdline_packages() {
+    if (iplugin_instance) {
+        iplugin_instance->post_add_cmdline_packages();
     }
 }
 

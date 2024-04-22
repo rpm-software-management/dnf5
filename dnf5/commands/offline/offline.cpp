@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/offline.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5-cli/output/adapters/transaction_tmpl.hpp"
+
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/goal.hpp>
@@ -29,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option_path.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
-#include <libdnf5/utils/fs/file.hpp>
 #include <sys/wait.h>
 
 #ifdef WITH_SYSTEMD
@@ -158,6 +159,7 @@ public:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
             case libdnf5::transaction::TransactionItemAction::DISABLE:
             case libdnf5::transaction::TransactionItemAction::RESET:
+            case libdnf5::transaction::TransactionItemAction::SWITCH:
                 throw std::logic_error(fmt::format(
                     "Unexpected action in TransactionPackage: {}",
                     static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
@@ -450,15 +452,10 @@ void OfflineExecuteCommand::run() {
     const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
-    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "r");
-
-    const auto & json = transaction_json_file.read();
-    transaction_json_file.close();
 
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.base);
 
-    auto settings = libdnf5::GoalJobSettings();
-    goal->add_serialized_transaction(json, settings);
+    goal->add_serialized_transaction(transaction_json_path);
 
     auto transaction = goal->resolve();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
@@ -468,7 +465,8 @@ void OfflineExecuteCommand::run() {
         throw libdnf5::cli::GoalResolveError(transaction);
     }
 
-    libdnf5::cli::output::print_transaction_table(transaction);
+    libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
+    libdnf5::cli::output::print_transaction_table(cli_output_transaction);
 
     PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);

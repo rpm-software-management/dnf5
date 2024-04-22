@@ -40,7 +40,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public plugin::IPlugin {
 public:
-    PythonPluginLoader(libdnf5::Base & base, libdnf5::ConfigParser &) : IPlugin(base) {}
+    PythonPluginLoader(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~PythonPluginLoader();
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -327,8 +327,10 @@ plugin::Version libdnf_plugin_get_version(void) {
 }
 
 plugin::IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser) try {
-    return new PythonPluginLoader(base, parser);
+    [[maybe_unused]] LibraryVersion library_version,
+    libdnf5::plugin::IPluginData & data,
+    libdnf5::ConfigParser & parser) try {
+    return new PythonPluginLoader(data, parser);
 } catch (...) {
     return nullptr;
 }

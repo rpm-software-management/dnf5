@@ -17,25 +17,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf5/comps/group/sack.hpp"
 
-#include "libdnf5/comps/comps.hpp"
-#include "libdnf5/comps/group/group.hpp"
-#include "libdnf5/comps/group/query.hpp"
+#ifndef LIBDNF5_CLI_OUTPUT_ADAPTERS_REPO_TMPL_HPP
+#define LIBDNF5_CLI_OUTPUT_ADAPTERS_REPO_TMPL_HPP
 
+#include "../interfaces/repo.hpp"
 
-namespace libdnf5::comps {
+namespace libdnf5::cli::output {
 
+template <class T>
+class RepoAdapter : public IRepo {
+public:
+    RepoAdapter(const T & repo) : repo{repo} {}
 
-GroupSackWeakPtr GroupSack::get_weak_ptr() {
-    return GroupSackWeakPtr(this, &sack_guard);
-}
+    RepoAdapter(T && repo) : repo{std::move(repo)} {}
 
+    std::string get_id() const override { return repo->get_id(); }
 
-GroupSack::GroupSack(Comps & comps) : comps{comps} {}
+    bool is_enabled() const override { return repo->is_enabled(); }
 
+    std::string get_name() const override { return repo->get_config().get_name_option().get_value(); }
 
-GroupSack::~GroupSack() = default;
+private:
+    T repo;
+};
 
+}  // namespace libdnf5::cli::output
 
-}  // namespace libdnf5::comps
+#endif  // LIBDNF5_CLI_OUTPUT_ADAPTERS_REPO_TMPL_HPP

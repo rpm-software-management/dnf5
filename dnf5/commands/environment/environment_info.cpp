@@ -19,11 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment_info.hpp"
 
+#include <libdnf5-cli/output/adapters/comps.hpp>
 #include <libdnf5-cli/output/environmentinfo.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/environment/query.hpp>
 #include <libdnf5/conf/const.hpp>
+
+#include <iostream>
 
 namespace dnf5 {
 
@@ -68,7 +70,8 @@ void EnvironmentInfoCommand::run() {
     }
 
     for (auto environment : query.list()) {
-        libdnf5::cli::output::print_environmentinfo_table(environment);
+        libdnf5::cli::output::EnvironmentAdapter cli_env(environment);
+        libdnf5::cli::output::print_environmentinfo_table(cli_env);
         std::cout << '\n';
     }
 }

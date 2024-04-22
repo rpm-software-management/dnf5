@@ -27,8 +27,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::base {
 
+class LogEvent::Impl {
+public:
+    Impl(
+        libdnf5::GoalAction action,
+        libdnf5::GoalProblem problem,
+        const std::set<std::string> & additional_data,
+        const libdnf5::GoalJobSettings & settings,
+        libdnf5::transaction::TransactionItemType spec_type,
+        const std::string & spec);
 
-LogEvent::LogEvent(
+    Impl(libdnf5::GoalAction action, libdnf5::GoalProblem problem, const SolverProblems & solver_problems);
+
+private:
+    friend LogEvent;
+
+    libdnf5::GoalAction action;
+    libdnf5::GoalProblem problem;
+    std::set<std::string> additional_data;
+    std::optional<libdnf5::GoalJobSettings> job_settings;
+    std::optional<libdnf5::transaction::TransactionItemType> spec_type;
+    std::optional<std::string> spec;
+    std::optional<SolverProblems> solver_problems;
+};
+
+LogEvent::Impl::Impl(
     libdnf5::GoalAction action,
     libdnf5::GoalProblem problem,
     const std::set<std::string> & additional_data,
@@ -40,26 +63,65 @@ LogEvent::LogEvent(
       additional_data(additional_data),
       job_settings(settings),
       spec_type(spec_type),
-      spec(spec) {
+      spec(spec) {}
+
+LogEvent::Impl::Impl(libdnf5::GoalAction action, libdnf5::GoalProblem problem, const SolverProblems & solver_problems)
+    : action(action),
+      problem(problem),
+      solver_problems(solver_problems) {}
+
+LogEvent::LogEvent(
+    libdnf5::GoalAction action,
+    libdnf5::GoalProblem problem,
+    const std::set<std::string> & additional_data,
+    const libdnf5::GoalJobSettings & settings,
+    const libdnf5::transaction::TransactionItemType spec_type,
+    const std::string & spec)
+    : p_impl(std::make_unique<Impl>(action, problem, additional_data, settings, spec_type, spec)) {
     libdnf_assert(
         !(problem == libdnf5::GoalProblem::SOLVER_ERROR ||
-          problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
-        "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
-        "libdnf5::GoalProblem::SOLVER_ERROR or libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
-        "problems it is necessary to provide SolverProblems in constructor");
+          problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+          problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS),
+        "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow these problems: "
+        "libdnf5::GoalProblem::SOLVER_ERROR, libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR, libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS. "
+        "With those problems it is necessary to provide SolverProblems in constructor");
 }
 
 LogEvent::LogEvent(libdnf5::GoalProblem problem, const SolverProblems & solver_problems)
-    : action(libdnf5::GoalAction::RESOLVE),
-      problem(problem),
-      solver_problems(solver_problems) {
+    : p_impl(std::make_unique<Impl>(libdnf5::GoalAction::RESOLVE, problem, solver_problems)) {
     libdnf_assert(
         problem == libdnf5::GoalProblem::SOLVER_ERROR ||
-            problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
-        "LogEvent::LogEvent() called with incorrect problem, only libdnf5::GoalProblem::SOLVER_ERROR or "
-        "libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
+            problem == libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST ||
+            problem == libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS,
+        "LogEvent::LogEvent() called with incorrect problem, supported problems are only: "
+        "libdnf5::GoalProblem::SOLVER_ERROR, libdnf5::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR, libdnf5::GoalProblem::MODULE_SOLVER_ERROR_LATEST, "
+        "libdnf5::GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS.");
 }
 
+LogEvent::~LogEvent() = default;
+
+LogEvent::LogEvent(const LogEvent & src) : p_impl(new Impl(*src.p_impl)) {}
+LogEvent::LogEvent(LogEvent && src) noexcept = default;
+
+LogEvent & LogEvent::operator=(const LogEvent & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
+LogEvent & LogEvent::operator=(LogEvent && src) noexcept = default;
 
 std::string LogEvent::to_string(
     libdnf5::GoalAction action,
@@ -102,7 +164,7 @@ std::string LogEvent::to_string(
             return ret.append(utils::sformat(
                 _("No match for argument '{0}' in repositories '{1}'"),
                 *spec,
-                utils::string::join(settings->to_repo_ids, ", ")));
+                utils::string::join(settings->get_to_repo_ids(), ", ")));
         case GoalProblem::NOT_INSTALLED:
             return ret.append(utils::sformat(_("Packages for argument '{}' available, but not installed."), *spec));
         case GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE:
@@ -186,9 +248,78 @@ std::string LogEvent::to_string(
             }
             return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
         }
+        case GoalProblem::MODULE_SOLVER_ERROR: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems:\n")));
+            return ret.append(solver_problems->to_string());
+        }
+        case GoalProblem::MODULE_SOLVER_ERROR_LATEST: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems with the latest modules:\n")));
+            return ret.append(solver_problems->to_string());
+        }
+        case GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS: {
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
+            ret.append(utils::sformat(_("Modular dependency problems with the defaults:\n")));
+            return ret.append(solver_problems->to_string());
+        }
+        case GoalProblem::MODULE_CANNOT_SWITH_STREAMS: {
+            std::string original_stream;
+            std::string new_stream;
+            for (const auto & module_stream : additional_data) {
+                const auto pos = module_stream.find(":");
+                if (module_stream.substr(0, pos) == "0") {
+                    original_stream = module_stream.substr(pos + 1);
+                } else {
+                    new_stream = module_stream.substr(pos + 1);
+                }
+            }
+            ret.append(utils::sformat(
+                _("The operation would result in switching of module '{0}' stream '{1}' to stream '{2}'\n"),
+                *spec,
+                original_stream,
+                new_stream));
+            return ret.append(
+                _("Error: It is not possible to switch enabled streams of a module unless explicitly enabled via "
+                  "configuration option module_stream_switch."));
+        }
     }
     return ret;
 }
 
+libdnf5::GoalAction LogEvent::get_action() const {
+    return p_impl->action;
+};
+libdnf5::GoalProblem LogEvent::get_problem() const {
+    return p_impl->problem;
+};
+const std::set<std::string> & LogEvent::get_additional_data() const {
+    return p_impl->additional_data;
+};
+const libdnf5::GoalJobSettings * LogEvent::get_job_settings() const {
+    return p_impl->job_settings ? &p_impl->job_settings.value() : nullptr;
+};
+const std::string * LogEvent::get_spec() const {
+    return p_impl->spec ? &p_impl->spec.value() : nullptr;
+};
+const SolverProblems * LogEvent::get_solver_problems() const {
+    return p_impl->solver_problems ? &p_impl->solver_problems.value() : nullptr;
+};
+std::string LogEvent::to_string() const {
+    return to_string(
+        p_impl->action,
+        p_impl->problem,
+        p_impl->additional_data,
+        p_impl->job_settings,
+        p_impl->spec_type,
+        p_impl->spec,
+        p_impl->solver_problems);
+};
 
 }  // namespace libdnf5::base

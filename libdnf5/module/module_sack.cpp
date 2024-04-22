@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/module/module_sack.hpp"
 
+#include "base/solver_problems_internal.hpp"
 #include "module/module_goal_private.hpp"
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
@@ -137,7 +138,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
         if (stream_iterator != static_context_map.end()) {
             auto context_iterator = stream_iterator->second.find(requires_string);
             if (context_iterator != stream_iterator->second.end()) {
-                module_item->computed_static_context = context_iterator->second[0]->get_context();
+                module_item->set_computed_static_context(context_iterator->second[0]->get_context());
                 module_item->create_solvable_and_dependencies();
                 modules.push_back(std::move(module_item));
                 continue;
@@ -149,7 +150,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
         if (requires_string.empty()) {
             requires_string.append("NoRequires");
         }
-        module_item->computed_static_context = requires_string;
+        module_item->set_computed_static_context(requires_string);
         module_item->create_solvable_and_dependencies();
         modules.push_back(std::move(module_item));
     }
@@ -323,7 +324,7 @@ void ModuleSack::Impl::module_filtering() {
     // prevent filtering out of binary packages that has the same name as source package but binary package is not
     // in module (it prevents creation of broken dependenciers in the distribution)
     exclude_src_names_query.filter_name(src_names);
-    exclude_src_names_query.filter_arch({"src", "nosrc"});
+    exclude_src_names_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
 
     // Required to filtrate out source packages and packages with incompatible architectures.
     exclude_names_query.filter_name(names);
@@ -353,7 +354,10 @@ void ModuleSack::Impl::make_provides_ready() {
     Map * considered = pool->considered;
     pool->considered = nullptr;
 
-    // TODO(pkratoch): Internalize repositories
+    // Internalize repositories
+    for (auto repo_pair : repositories) {
+        repo_internalize(pool_id2repo(pool, repo_pair.second));
+    }
 
     pool_createwhatprovides(pool);
     provides_ready = true;
@@ -399,7 +403,7 @@ void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
     for (const auto & module_item : modules) {
         std::string solvable_name = module_item->get_name_stream_staticcontext();
         if (solvable_names.contains(solvable_name)) {
-            active_modules[module_item->id.id] = module_item.get();
+            active_modules[module_item->get_id().id] = module_item.get();
         }
     }
 }
@@ -459,12 +463,12 @@ void ModuleSack::Impl::enable_dependent_modules() {
 }
 
 
-std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> ModuleSack::Impl::module_solve(
-    std::vector<ModuleItem *> module_items) {
-    std::vector<std::vector<std::string>> problems;
+std::pair<std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>>, GoalProblem>
+ModuleSack::Impl::module_solve(std::vector<ModuleItem *> & module_items) {
+    std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
     if (module_items.empty()) {
         active_modules.clear();
-        return std::make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+        return std::make_pair(problems, GoalProblem::NO_PROBLEM);
     }
 
     recompute_considered_in_pool();
@@ -515,24 +519,23 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_strict);
-        return make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+        return make_pair(problems, GoalProblem::NO_PROBLEM);
     }
 
-    // TODO(pkratoch): Get problems
-    // problems = goal.describe_all_problem_rules(false);
+    problems = goal_strict.get_problems();
 
     ret = goal_best.resolve();
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_best);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR_DEFAULTS);
     }
 
     ret = goal.resolve();
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR_LATEST);
     }
 
     // Conflicting modules has to be removed otherwise it could result than one of them will be active
@@ -544,14 +547,14 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     if (ret == libdnf5::GoalProblem::NO_PROBLEM) {
         set_active_modules(goal_weak);
-        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR);
+        return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR);
     }
 
     auto logger = base->get_logger();
     logger->critical("Modularity filtering totally broken\n");
 
     active_modules.clear();
-    return make_pair(problems, ModuleSack::ModuleErrorType::CANNOT_RESOLVE_MODULES);
+    return make_pair(problems, GoalProblem::MODULE_SOLVER_ERROR);
 }
 
 
@@ -659,7 +662,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
     }
 
     libdnf5::rpm::PackageQuery base_query(base);
-    base_query.filter_provides({"system-release"});
+    base_query.filter_provides("system-release");
     base_query.filter_latest_evr();
 
     // try to detect platform id from available packages
@@ -724,8 +727,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 }
 
 
-std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
-ModuleSack::resolve_active_module_items() {
+std::pair<base::SolverProblems, GoalProblem> ModuleSack::resolve_active_module_items() {
     p_impl->considered_uptodate = false;
     p_impl->excludes.reset(new libdnf5::solv::SolvMap(p_impl->pool->nsolvables));
     p_impl->module_db->initialize();
@@ -737,7 +739,7 @@ ModuleSack::resolve_active_module_items() {
         const auto & module_name = module_item->get_name();
         status = p_impl->module_db->get_status(module_name);
         if (status == ModuleStatus::DISABLED) {
-            p_impl->excludes->add(module_item->id.id);
+            p_impl->excludes->add(module_item->get_id().id);
         } else if (
             status == ModuleStatus::ENABLED &&
             p_impl->module_db->get_enabled_stream(module_name) == module_item->get_stream()) {
@@ -749,7 +751,8 @@ ModuleSack::resolve_active_module_items() {
 
     auto problems = p_impl->module_solve(module_items_to_solve);
     active_modules_resolved = true;
-    return problems;
+    return std::make_pair(
+        base::SolverProblems(base::process_module_solver_problems(p_impl->pool, problems.first)), problems.second);
 }
 
 

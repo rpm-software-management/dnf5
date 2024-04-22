@@ -33,10 +33,10 @@ using namespace libdnf5::comps;
 
 void CompsGroupQueryTest::setUp() {
     BaseTestCase::setUp();
-    add_repo_repomd("repomd-comps-core");
-    add_repo_repomd("repomd-comps-core-empty");
-    add_repo_repomd("repomd-comps-core-different-translations");
-    add_repo_repomd("repomd-comps-critical-path-standard");
+    add_repo_repomd("repomd-comps-core", false);
+    add_repo_repomd("repomd-comps-core-empty", false);
+    add_repo_repomd("repomd-comps-core-different-translations", false);
+    add_repo_repomd("repomd-comps-critical-path-standard", false);
     add_repo_repomd("repomd-comps-standard");
 }
 

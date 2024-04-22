@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_callbacks_simple.hpp"
 
 #include <curl/curl.h>
+#include <libdnf5-cli/output/adapters/transaction.hpp>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
@@ -341,19 +342,26 @@ void AutomaticCommand::run() {
     // print resolve logs and the transaction table to the output stream
     {
         output_stream << std::endl << _("Resolved transaction:") << std::endl;
-        libdnf5::cli::output::print_resolve_logs(transaction, output_stream);
+        libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
+        libdnf5::cli::output::print_resolve_logs(
+            static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction), output_stream);
 
         if (!transaction.empty()) {
-            libdnf5::cli::output::TransactionSummary summary;
-            auto tt = libdnf5::cli::output::create_transaction_table(transaction, summary);
-            scols_table_enable_colors(*tt, false);
-            scols_table_set_termwidth(*tt, 80);
-            char * tt_string = nullptr;
-            scols_print_table_to_string(*tt, &tt_string);
-            output_stream << tt_string << std::endl;
+            char * tt_string;
+            size_t size;
+            auto * fd = open_memstream(&tt_string, &size);
+            {
+                libdnf5::cli::output::TransactionTable table(
+                    static_cast<libdnf5::cli::output::ITransaction &>(cli_output_transaction));
+                table.set_colors_enabled(false);
+                table.set_term_width(80);
+                table.set_output_stream(fd);
+                table.print_table();
+                table.print_summary();
+            }
+            fclose(fd);
+            output_stream << tt_string;
             free(tt_string);
-
-            summary.print(output_stream);
         }
     }
 

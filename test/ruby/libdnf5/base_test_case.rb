@@ -37,6 +37,9 @@ class BaseTestCase < Test::Unit::TestCase
         @base.get_config().get_installroot_option().set(File.join(@temp_dir, "installroot"))
         @base.get_config().get_cachedir_option().set(File.join(@temp_dir, "cache"))
 
+        # Prevent loading of plugins from host
+        @base.get_config().get_plugins_option().set(false)
+
         # Sets Base internals according to configuration
         @base.setup()
 
@@ -54,9 +57,7 @@ class BaseTestCase < Test::Unit::TestCase
         repo.get_config().get_baseurl_option().set("file://" + repo_path)
 
         if load
-          repos = Repo::RepoQuery.new(@base)
-          repos.filter_id(repoid)
-          @repo_sack.update_and_load_repos(repos)
+          @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
         end
 
         return repo

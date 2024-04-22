@@ -16,6 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+.. TODO(jkolarik): Fix --disableexcludes references, the option is dropped now.
+
 .. _dnf5_conf-label:
 
 ##############################
@@ -92,7 +94,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``cachedir``
     :ref:`string <string-label>`
 
-    Path to a directory used by various DNF5 subsystems for storing cache data.
+    Path to a directory used by various DNF5 subsystems for storing cache data
+    including repositories metadata and downloaded packages.
     Has a reasonable root-writable default depending on the distribution. DNF5
     needs to be able to create files and directories at this location.
 
@@ -432,6 +435,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     ``nocontexts``    ``RPMTRANS_FLAG_NOCONTEXTS``
     ``nocaps``        ``RPMTRANS_FLAG_NOCAPS``
     ``nocrypto``      ``RPMTRANS_FLAG_NOFILEDIGEST``
+    ``deploops``      ``RPMTRANS_FLAG_DEPLOOPS``
     ================  ===============================
 
     The ``nocrypto`` option will also set the ``_RPMVSF_NOSIGNATURES`` and
@@ -1075,6 +1079,173 @@ Types of Options
     String representing time units in seconds. Can be set to ``-1`` or ``never``.
 
 
+.. _drop_in_configuration_directories-label:
+
+Drop-in configuration directories
+=================================
+
+`DNF5` loads configuration options that are defined in the :ref:`main
+configuration file <main_configuration_file-label>`, :ref:`user configuration
+files<user_configuration_files-label>` and :ref:`distribution configuration
+files<distro_configuration_files-label>`.
+
+The configuration files are processed following this order:
+
+1. Configuration files are alphabetically sorted in a list of names from the
+   :ref:`distribution configuration directory<distro_configuration_dir-label>.
+   and the :ref:`user configuration directory<user_configuration_dir-label>`. If
+   a file with the same name is present in both directories, only the file from
+   the user configuration directory is added to the list. The
+   distribution file is then masked by the user file.
+2. Options are retrieved in order from the list The configuration from the next
+   file overrides the previous one. The last option wins.
+
+Example of configuration files
+------------------------------
+
+User configuration files:
+
+- /etc/dnf/dnf.conf
+- /etc/dnf/libdnf5.conf.d/20-user-settings.conf
+- /etc/dnf/libdnf5.conf.d/60-something.conf
+- /etc/dnf/libdnf5.conf.d/80-user-settings.conf
+
+Distribution configuration files:
+
+- /usr/share/dnf5/libdnf.conf.d/50-something.conf
+- /usr/share/dnf5/libdnf.conf.d/60-something.conf
+- /usr/share/dnf5/libdnf.conf.d/90-something.conf
+
+Resulting file loading order by default
+(/usr/share/dnf5/libdnf.conf.d/60-something.conf is skipped, masked by
+the user file /etc/dnf/libdnf5.conf.d/60-something.conf):
+
+1. /etc/dnf/libdnf5.conf.d/20-user-settings.conf
+2. /usr/share/dnf5/libdnf.conf.d/50-something.conf
+3. /etc/dnf/libdnf5.conf.d/60-something.conf
+4. /etc/dnf/libdnf5.conf.d/80-user-settings.conf
+5. /usr/share/dnf5/libdnf.conf.d/90-something.conf
+6. /etc/dnf/dnf.conf
+
+.. _conf_files_and_directories-label:
+
+Files and directories
+---------------------
+
+.. _user_configuration_dir-label:
+
+``User Configuration Directory``
+    /etc/dnf/libdnf5.conf.d/
+
+.. _user_configuration_files-label:
+
+``User Configuration Files``
+    /etc/dnf/libdnf5.conf.d/20-user-settings.conf
+
+.. _distro_configuration_dir-label:
+
+``Distribution Configuration Directory``
+    /usr/share/dnf5/libdnf.conf.d/
+
+.. _distro_configuration_files-label:
+
+``Distribution Configuration Files``
+    /usr/share/dnf5/libdnf.conf.d/50-something.conf
+
+
+.. _drop_in_repo_directories-label:
+
+Drop-in repo directories
+========================
+
+After the repository configurations are loaded other repo configurations can be overloaded from the directories
+:ref:`user repos override directory <user_repos_override_dir-label>`
+and :ref:`distribution repos override directory <distro_repos_override_dir-label>`.
+
+The format of the files inside the directories is the same as the format of the repository configuration files.
+The options in the overridden files can modify existing repos but cannot create new repositories.
+
+Override files support globs in the repository ID in order to support bulk modifications of repository parameters.
+
+The repository overrides are processed following this order:
+
+1. Files from ``/usr/share/dnf5/repos.override.d/`` and ``/etc/dnf5/repos.override.d/`` are loaded in an alphabetically
+   sorted list. In case files have the same name, the file from ``/etc/dnf5/repos.override.d/`` is used.
+   This implies the list has only unique filenames. This also implies that the repository configuration files can be
+   simply masked by creating a file with the same name in the ``/etc`` override directory.
+
+2. The options from the files are applied in the order they are loaded. The last option wins.
+
+
+.. note::
+    See also the documentation for :ref:`Config-manager Command<config_manager_plugin_ref-label>` to see where the overrides are used.
+
+Example configuration
+---------------------
+
+.. code-block::
+
+   # Enable `skip_if_unavailable` for all repositories
+   [*]
+   skip_if_unavailable = true
+
+   # And then disable `skip_if_unavailable` for repositories with id prefix "fedora"
+   [fedora*]
+   skip_if_unavailable = false
+
+Example of configuration files
+------------------------------
+
+This example shows the order in which override files are processed.
+
+Files with user repos overrides:
+
+- /etc/dnf/repos.overide.d/20-user-overrides.repo
+- /etc/dnf/repos.overide.d/60-something2.repo
+- /etc/dnf/repos.overide.d/80-user-overrides.repo
+- /etc/dnf/repos.overide.d/99-config-manager.repo
+
+Files with distribution repos overrides:
+
+- /usr/share/dnf5/repos.overide.d/50-something2.repo
+- /usr/share/dnf5/repos.overide.d/60-something2.repo
+- /usr/share/dnf5/repos.overide.d/90-something2.repo
+
+Resulting file processing order:
+
+1. /etc/dnf/repos.overide.d/20-user-overrides.repo
+2. /usr/share/dnf5/repos.overide.d/50-something2.repo
+3. /etc/dnf/repos.overide.d/60-something2.repo
+4. /etc/dnf/repos.overide.d/80-user-overrides.repo
+5. /usr/share/dnf5/repos.overide.d/90-something2.repo
+6. /etc/dnf/repos.overide.d/99-config-manager.repo
+
+
+.. _repo_files_and_directories-label:
+
+Files and directories
+---------------------
+
+.. _user_repos_override_dir-label:
+
+``User Repos Override Directory``
+    /etc/dnf/repos.override.d/
+
+.. _user_repos_override_files-label:
+
+``User Repos Override Files``
+    /etc/dnf/repos.override.d/20-user-overrides.repo
+
+.. _distro_repos_override_dir-label:
+
+``Distribution Repos Override Directory``
+    /usr/share/dnf5/repos.override.d/
+
+.. _distro_repos_override_files-label:
+
+``Distribution Repos Override Files``
+    /usr/share/dnf5/repos.override.d/50-something2.repo
+
 Files
 =====
 
@@ -1101,71 +1272,47 @@ Files
     Filenames may contain only alphanumeric characters and underscores and be in lowercase.
     Variables are also read from ``/etc/yum/vars`` for YUM compatibility reasons.
 
-Drop-in configuration directories
-=================================
 
-`DNF5` loads configuration options that are defined in the :ref:`main
-configuration file <main_cnfiguration_file-label>`, :ref:`user configuration
-files<user_configuration_files-label>` and :ref:`distribution configuration
-files<distro_configuration_files-label>`.
+Directories
+===========
 
-Users can define custom config options in this way.
-
-1. Configuration files are alphabetically sorted in a list of names from the
-   :ref:`distribution configuration directory<distro_configuration_dir-label>`
-   and the :ref:`user configuration directory<user_configuration_dir-label>`. If
-   a file with the same name is present in both directories, only the file from
-   the user configuration directory is added to the list. The
-   distribution file is then masked by the user file.
-2. Options are retrieved in order from the list The configuration from the next
-   file overrides the previous one. The last option wins.
-
-.. _user_configuration_dir-label:
-
-``User Configuration Directory``
-    /etc/dnf/libdnf5.conf.d/
-
-.. _user_configuration_files-label:
-
-``User Configuration Files``
-    /etc/dnf/libdnf5.conf.d/20-user-settings.conf
-
-.. _distro_configuration_dir-label:
-
-``Distribution Configuration Directory``
-    /usr/share/dnf5/libdnf.conf.d/
-
-.. _distro_configuration_files-label:
-
-``Distribution Configuration Files``
-    /usr/share/dnf5/libdnf.conf.d/50-something.conf
-
-Example configuration:
+Repository Directories
 ----------------------
 
-User configuration files:
+Directories are listed in the order in which they are processed.
 
-- /etc/dnf/dnf.conf
-- /etc/dnf/libdnf5.conf.d/20-user-settings.conf
-- /etc/dnf/libdnf5.conf.d/60-something.conf
-- /etc/dnf/libdnf5.conf.d/80-user-settings.conf
+.. note::
+   Unlike overrides that modify an existing repository configuration,
+   the configuration in these directories defines new repositories.
+   It is not possible to define repositories with the same ID.
+   If multiple repositories with the same ID are defined only the first configuration
+   will be loaded. Loading the next one will log an error.
 
-Distribution configuration files:
+.. _yum_repos_dir-label:
 
-- /usr/share/dnf5/libdnf.conf.d/50-something.conf
-- /usr/share/dnf5/libdnf.conf.d/60-something.conf
-- /usr/share/dnf5/libdnf.conf.d/90-something.conf
+``YUM Repositories Directory``
+    /etc/yum.repos.d/
 
-Resulting file loading order by default
-(/usr/share/dnf5/libdnf.conf.d/60-something.conf is skipped, masked by
-the user file /etc/dnf/libdnf5.conf.d/60-something.conf):
+.. _distro_repos_dir-label:
 
-1. /etc/dnf/libdnf5.conf.d/20-user-settings.conf
-2. /usr/share/dnf5/libdnf.conf.d/50-something.conf
-3. /etc/dnf/libdnf5.conf.d/60-something.conf
-4. /etc/dnf/libdnf5.conf.d/80-user-settings.conf
-5. /usr/share/dnf5/libdnf.conf.d/90-something.conf
-6. /etc/dnf/dnf.conf
+``Distribution Repositories Directory in /etc``
+    /etc/distro.repos.d/
+
+``Distribution Repositories Directory in /usr``
+    /usr/share/dnf5/repos.d/
+
+Variables Directories
+---------------------
+
+.. _vars_dir-label:
+
+``Variables Directory``
+    /etc/dnf/vars/
+
+.. _distro_vars_dir-label:
+
+``Distribution Variables Directory``
+    /usr/share/dnf5/vars.d/
 
 See Also
 ========

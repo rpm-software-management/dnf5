@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_install.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
@@ -45,6 +44,7 @@ void GroupInstallCommand::set_argument_parser() {
     create_allow_downgrade_options(*this);
     create_downloadonly_option(*this);
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void GroupInstallCommand::configure() {
@@ -62,7 +62,7 @@ void GroupInstallCommand::run() {
 
     libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {
-        settings.group_no_packages = true;
+        settings.set_group_no_packages(true);
     }
     if (with_optional->get_value()) {
         auto group_package_types = libdnf5::comps::package_type_from_string(

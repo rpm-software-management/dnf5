@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5DAEMON_SERVER_THREADS_MANAGER_HPP
 
 #include "dbus.hpp"
+#include "utils.hpp"
 
 #include <fmt/format.h>
 #include <locale.h>
@@ -30,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <mutex>
 #include <optional>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -94,6 +96,63 @@ public:
                     uselocale(orig_locale);
                     freelocale(new_locale);
                 }
+                current_thread_finished();
+            },
+            std::ref(service),
+            method,
+            call,
+            thread_locale);
+        register_thread(std::move(worker));
+    }
+
+    template <class S>
+    void handle_method_fd(
+        S & service,
+        void (S::*method)(sdbus::MethodCall &),
+        sdbus::MethodCall & call,
+        std::optional<std::string> thread_locale = std::nullopt) {
+        auto worker = std::thread(
+            [this](
+                S & service,
+                void (S::*method)(sdbus::MethodCall &),
+                sdbus::MethodCall call,
+                std::optional<std::string> thread_locale = std::nullopt) {
+                locale_t new_locale{nullptr};
+                locale_t orig_locale{nullptr};
+                if (thread_locale) {
+                    orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                }
+
+                const sdbus::MethodReply reply = call.createReply();
+                std::string error_msg;
+                try {
+                    reply.send();
+                } catch (const std::exception & e) {
+                    error_msg = e.what();
+                } catch (...) {
+                    error_msg = "Unknown exception caught";
+                }
+
+                if (error_msg.empty()) {
+                    try {
+                        (service.*method)(call);
+                    } catch (...) {
+                        // TODO(mblaha): log the error
+                    }
+                } else {
+                    std::cerr << fmt::format(
+                                     "Error sending D-Bus reply to {}:{}() call: {}",
+                                     call.getInterfaceName(),
+                                     call.getMemberName(),
+                                     error_msg)
+                              << std::endl;
+                }
+
+                if (thread_locale) {
+                    uselocale(orig_locale);
+                    freelocale(new_locale);
+                }
+
                 current_thread_finished();
             },
             std::ref(service),

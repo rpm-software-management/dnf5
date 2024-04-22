@@ -37,9 +37,10 @@ struct PluginVersion {
 /// @brief A base class for implementing DNF5 plugins that provide one or more commands to users.
 class IPlugin {
 public:
-    IPlugin(Context & context) : context(&context) {}
-    virtual ~IPlugin() = default;
+    explicit IPlugin(Context & context);
+    virtual ~IPlugin();
 
+    IPlugin() = delete;
     IPlugin(const IPlugin &) = delete;
     IPlugin(IPlugin &&) = delete;
     IPlugin & operator=(const IPlugin &) = delete;
@@ -62,14 +63,14 @@ public:
     virtual const char * get_attribute(const char * name) const noexcept = 0;
 
     /// Plugin initialization.
-    virtual void init() {}
+    virtual void init();
 
     virtual std::vector<std::unique_ptr<Command>> create_commands() = 0;
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept = 0;
 
-    Context & get_context() noexcept { return *context; }
+    Context & get_context() const noexcept;
 
 private:
     Context * context;

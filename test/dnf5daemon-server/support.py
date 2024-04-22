@@ -70,10 +70,12 @@ class InstallrootCase(unittest.TestCase):
         self.iface_session = dbus.Interface(
             self.bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
             dbus_interface=IFACE_SESSION_MANAGER)
+        # Prevent loading plugins from host by setting "plugins" to False
         self.session = self.iface_session.open_session({
             "config": {
                 "config_file_path": self.config_file_path,
                 "installroot": self.installroot,
+                "plugins": False,
                 "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
                 "reposdir": self.reposdir,
             }

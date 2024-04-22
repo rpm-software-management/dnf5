@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_RPM_RELDEP_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/impl_ptr.hpp"
 
 #include <memory>
 #include <string>
@@ -58,16 +59,16 @@ public:
     Reldep(libdnf5::Base & base, const std::string & reldep_string);
 
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
-    Reldep(const Reldep & reldep) = default;
-    Reldep(Reldep && reldep);
+    Reldep(const Reldep & reldep);
+    Reldep(Reldep && reldep) noexcept;
 
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    ~Reldep() = default;
+    ~Reldep();
 
     bool operator==(const Reldep & other) const noexcept;
     bool operator!=(const Reldep & other) const noexcept;
-    Reldep & operator=(const Reldep & other) = default;
+    Reldep & operator=(const Reldep & other);
     Reldep & operator=(Reldep && other) = delete;
 
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
@@ -88,17 +89,17 @@ public:
 
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getId()
     // @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
-    ReldepId get_id() const noexcept { return id; };
+    ReldepId get_id() const noexcept;
 
     /// Return weak pointer to base
-    BaseWeakPtr get_base() const { return base; };
+    BaseWeakPtr get_base() const;
 
     /// @brief Test if pattern is rich dependency
     /// Return true if pattern start with "("
-    static bool is_rich_dependency(const std::string & pattern) { return pattern[0] == '('; };
+    static bool is_rich_dependency(const std::string & pattern);
 
     /// Return unique ID representing Reldep
-    int get_hash() const { return get_id().id; };
+    int get_hash() const;
 
 protected:
     /// @brief Creates a reldep from Id
@@ -140,17 +141,9 @@ private:
     // @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
     static ReldepId get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
 
-    BaseWeakPtr base;
-    ReldepId id;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
-
-inline bool Reldep::operator==(const Reldep & other) const noexcept {
-    return id == other.id && base == other.base;
-}
-
-inline bool Reldep::operator!=(const Reldep & other) const noexcept {
-    return id != other.id || base != other.base;
-}
 
 }  // namespace libdnf5::rpm
 

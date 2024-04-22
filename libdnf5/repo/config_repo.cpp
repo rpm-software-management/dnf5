@@ -64,7 +64,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionNumber<std::uint32_t>> retries{main_config.get_retries_option()};
     OptionChild<OptionNumber<std::uint32_t>> bandwidth{main_config.get_bandwidth_option()};
     OptionChild<OptionNumber<std::uint32_t>> minrate{main_config.get_minrate_option()};
-    OptionChild<OptionEnum<std::string>> ip_resolve{main_config.get_ip_resolve_option()};
+    OptionChild<OptionEnum> ip_resolve{main_config.get_ip_resolve_option()};
     OptionChild<OptionNumber<float>> throttle{main_config.get_throttle_option()};
     OptionChild<OptionSeconds> timeout{main_config.get_timeout_option()};
     OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.get_max_parallel_downloads_option()};
@@ -86,7 +86,7 @@ class ConfigRepo::Impl {
     OptionString enabled_metadata{""};
     OptionChild<OptionString> user_agent{main_config.get_user_agent_option()};
     OptionChild<OptionBool> countme{main_config.get_countme_option()};
-    OptionEnum<std::string> failovermethod{"priority", {"priority", "roundrobin"}};
+    OptionEnum failovermethod{"priority", {"priority", "roundrobin"}};
     OptionChild<OptionBool> build_cache{main_config.get_build_cache_option()};
 };
 
@@ -388,10 +388,10 @@ const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_minrate_option(
     return p_impl->minrate;
 }
 
-OptionChild<OptionEnum<std::string>> & ConfigRepo::get_ip_resolve_option() {
+OptionChild<OptionEnum> & ConfigRepo::get_ip_resolve_option() {
     return p_impl->ip_resolve;
 }
-const OptionChild<OptionEnum<std::string>> & ConfigRepo::get_ip_resolve_option() const {
+const OptionChild<OptionEnum> & ConfigRepo::get_ip_resolve_option() const {
     return p_impl->ip_resolve;
 }
 
@@ -546,10 +546,10 @@ const OptionChild<OptionBool> & ConfigRepo::get_countme_option() const {
     return p_impl->countme;
 }
 
-OptionEnum<std::string> & ConfigRepo::get_failovermethod_option() {
+OptionEnum & ConfigRepo::get_failovermethod_option() {
     return p_impl->failovermethod;
 }
-const OptionEnum<std::string> & ConfigRepo::get_failovermethod_option() const {
+const OptionEnum & ConfigRepo::get_failovermethod_option() const {
     return p_impl->failovermethod;
 }
 

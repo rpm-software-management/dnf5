@@ -27,6 +27,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::rpm {
 
+class Nevra::Impl {
+public:
+    explicit Impl() = default;
+
+private:
+    friend Nevra;
+
+    std::string name;
+    std::string epoch;
+    std::string version;
+    std::string release;
+    std::string arch;
+};
 
 static const std::vector<Nevra::Form> PKG_SPEC_FORMS{
     Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV};
@@ -90,7 +103,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 const char * release_delim_for_nevra = last_delim;
                 const char * arch_delim_for_nevra = arch_delim;
 
-                nevra.name.assign(nevra_pattern, evr_delim_for_nevra);
+                nevra.p_impl->name.assign(nevra_pattern, evr_delim_for_nevra);
                 ++evr_delim_for_nevra;
 
                 // test presence of epoch (optional)
@@ -99,7 +112,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     if (epoch_delim - evr_delim_for_nevra < 1 || release_delim_for_nevra - epoch_delim < 2) {
                         continue;
                     }
-                    nevra.epoch.assign(evr_delim_for_nevra, epoch_delim);
+                    nevra.p_impl->epoch.assign(evr_delim_for_nevra, epoch_delim);
                     evr_delim_for_nevra = epoch_delim + 1;
                 }
 
@@ -107,21 +120,21 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (release_delim_for_nevra - evr_delim_for_nevra < 1) {
                     continue;
                 }
-                nevra.version.assign(evr_delim_for_nevra, release_delim_for_nevra);
+                nevra.p_impl->version.assign(evr_delim_for_nevra, release_delim_for_nevra);
                 ++release_delim_for_nevra;
 
                 // test presence of release
                 if (arch_delim_for_nevra - release_delim_for_nevra < 1) {
                     continue;
                 }
-                nevra.release.assign(release_delim_for_nevra, arch_delim_for_nevra);
+                nevra.p_impl->release.assign(release_delim_for_nevra, arch_delim_for_nevra);
                 ++arch_delim_for_nevra;
 
                 // test presence of arch
                 if (end - arch_delim_for_nevra < 1) {
                     continue;
                 }
-                nevra.arch.assign(arch_delim_for_nevra);
+                nevra.p_impl->arch.assign(arch_delim_for_nevra);
 
                 result.push_back(std::move(nevra));
             } break;
@@ -138,7 +151,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 const char * evr_delim_for_nevr = before_last_delim;
                 const char * release_delim_for_nevr = last_delim;
 
-                nevra.name.assign(nevra_pattern, evr_delim_for_nevr);
+                nevra.p_impl->name.assign(nevra_pattern, evr_delim_for_nevr);
                 ++evr_delim_for_nevr;
 
                 // test presence of epoch (optional)
@@ -147,7 +160,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     if (epoch_delim - evr_delim_for_nevr < 1 || release_delim_for_nevr - epoch_delim < 2) {
                         continue;
                     }
-                    nevra.epoch.assign(evr_delim_for_nevr, epoch_delim);
+                    nevra.p_impl->epoch.assign(evr_delim_for_nevr, epoch_delim);
                     evr_delim_for_nevr = epoch_delim + 1;
                 }
 
@@ -155,14 +168,14 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (release_delim_for_nevr - evr_delim_for_nevr < 1) {
                     continue;
                 }
-                nevra.version.assign(evr_delim_for_nevr, release_delim_for_nevr);
+                nevra.p_impl->version.assign(evr_delim_for_nevr, release_delim_for_nevr);
                 ++release_delim_for_nevr;
 
                 // test presence of release
                 if (end - release_delim_for_nevr < 1) {
                     continue;
                 }
-                nevra.release.assign(release_delim_for_nevr);
+                nevra.p_impl->release.assign(release_delim_for_nevr);
 
                 result.push_back(std::move(nevra));
             } break;
@@ -178,7 +191,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
 
                 const char * evr_delim_for_nev = last_delim;
 
-                nevra.name.assign(nevra_pattern, evr_delim_for_nev);
+                nevra.p_impl->name.assign(nevra_pattern, evr_delim_for_nev);
                 ++evr_delim_for_nev;
 
                 // test presence of epoch (optional)
@@ -187,7 +200,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     if (epoch_delim - evr_delim_for_nev < 1 || end - epoch_delim < 2) {
                         continue;
                     }
-                    nevra.epoch.assign(evr_delim_for_nev, epoch_delim);
+                    nevra.p_impl->epoch.assign(evr_delim_for_nev, epoch_delim);
                     evr_delim_for_nev = epoch_delim + 1;
                 }
 
@@ -195,7 +208,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (end - evr_delim_for_nev < 1) {
                     continue;
                 }
-                nevra.version.assign(evr_delim_for_nev);
+                nevra.p_impl->version.assign(evr_delim_for_nev);
 
                 result.push_back(std::move(nevra));
             } break;
@@ -223,8 +236,8 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     continue;
                 }
 
-                nevra.name.assign(nevra_pattern, arch_delim);
-                nevra.arch.assign(arch_delim + 1);
+                nevra.p_impl->name.assign(nevra_pattern, arch_delim);
+                nevra.p_impl->arch.assign(arch_delim + 1);
 
                 result.push_back(std::move(nevra));
             } break;
@@ -239,7 +252,7 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     continue;
                 }
 
-                nevra.name.assign(nevra_pattern);
+                nevra.p_impl->name.assign(nevra_pattern);
 
                 result.push_back(std::move(nevra));
                 break;
@@ -250,21 +263,23 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
 
 
 void Nevra::clear() noexcept {
-    name.clear();
-    epoch.clear();
-    version.clear();
-    release.clear();
-    arch.clear();
+    p_impl->name.clear();
+    p_impl->epoch.clear();
+    p_impl->version.clear();
+    p_impl->release.clear();
+    p_impl->arch.clear();
 }
 
 bool Nevra::has_just_name() const {
-    return !name.empty() && epoch.empty() && version.empty() && release.empty() && arch.empty();
+    return !p_impl->name.empty() && p_impl->epoch.empty() && p_impl->version.empty() && p_impl->release.empty() &&
+           p_impl->arch.empty();
 }
 
 
 bool Nevra::operator==(const Nevra & other) const {
-    return name == other.name && epoch == other.epoch && version == other.version && release == other.release &&
-           arch == other.arch;
+    return p_impl->name == other.p_impl->name && p_impl->epoch == other.p_impl->epoch &&
+           p_impl->version == other.p_impl->version && p_impl->release == other.p_impl->release &&
+           p_impl->arch == other.p_impl->arch;
 }
 
 
@@ -278,5 +293,69 @@ int rpmvercmp(const char * lhs, const char * rhs) {
     return ::rpmvercmp(lhs, rhs);
 }
 
+Nevra::Nevra() : p_impl(new Impl()){};
+Nevra::~Nevra() = default;
+
+Nevra::Nevra(const Nevra & src) = default;
+Nevra::Nevra(Nevra && src) noexcept = default;
+
+Nevra & Nevra::operator=(const Nevra & src) = default;
+Nevra & Nevra::operator=(Nevra && src) noexcept = default;
+
+const std::string & Nevra::get_name() const noexcept {
+    return p_impl->name;
+}
+
+// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
+const std::string & Nevra::get_epoch() const noexcept {
+    return p_impl->epoch;
+}
+
+// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
+const std::string & Nevra::get_version() const noexcept {
+    return p_impl->version;
+}
+
+// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
+const std::string & Nevra::get_release() const noexcept {
+    return p_impl->release;
+}
+
+// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
+const std::string & Nevra::get_arch() const noexcept {
+    return p_impl->arch;
+}
+
+void Nevra::set_name(const std::string & value) {
+    p_impl->name = value;
+}
+void Nevra::set_epoch(const std::string & value) {
+    p_impl->epoch = value;
+}
+void Nevra::set_version(const std::string & value) {
+    p_impl->version = value;
+}
+void Nevra::set_release(const std::string & value) {
+    p_impl->release = value;
+}
+void Nevra::set_arch(const std::string & value) {
+    p_impl->arch = value;
+}
+
+void Nevra::set_name(std::string && value) {
+    p_impl->name = std::move(value);
+}
+void Nevra::set_epoch(std::string && value) {
+    p_impl->epoch = std::move(value);
+}
+void Nevra::set_version(std::string && value) {
+    p_impl->version = std::move(value);
+}
+void Nevra::set_release(std::string && value) {
+    p_impl->release = std::move(value);
+}
+void Nevra::set_arch(std::string && value) {
+    p_impl->arch = std::move(value);
+}
 
 }  // namespace libdnf5::rpm

@@ -20,12 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_remove.hpp"
 
 #include <dnf5/shared_options.hpp>
-#include <libdnf5/comps/comps.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/conf/const.hpp>
-
-#include <iostream>
 
 namespace dnf5 {
 
@@ -38,6 +35,7 @@ void GroupRemoveCommand::set_argument_parser() {
     no_packages = std::make_unique<GroupNoPackagesOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
     create_offline_option(*this);
+    create_store_option(*this);
 }
 
 void GroupRemoveCommand::configure() {
@@ -54,7 +52,7 @@ void GroupRemoveCommand::run() {
 
     libdnf5::GoalJobSettings settings;
     if (no_packages->get_value()) {
-        settings.group_no_packages = true;
+        settings.set_group_no_packages(true);
     }
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_remove(spec, libdnf5::transaction::TransactionItemReason::USER, settings);

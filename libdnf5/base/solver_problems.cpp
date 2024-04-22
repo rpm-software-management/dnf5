@@ -25,6 +25,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
 
+extern "C" {
+#include <solv/pool.h>
+#include <solv/solvable.h>
+}
 
 namespace libdnf5::base {
 
@@ -63,7 +67,32 @@ static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
         " the following protected packages: {}")},
     {ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
      M_("The operation would result in removing"
-        " of running kernel: {}")}};
+        " of running kernel: {}")},
+    {ProblemRules::RULE_MODULE_DISTUPGRADE, M_("module {} does not belong to a distupgrade repository")},
+    {ProblemRules::RULE_MODULE_INFARCH, M_("module {} has inferior architecture")},
+    {ProblemRules::RULE_MODULE_UPDATE, M_("problem with installed module {}")},
+    {ProblemRules::RULE_MODULE_JOB, M_("conflicting requests")},
+    {ProblemRules::RULE_MODULE_JOB_UNSUPPORTED, M_("unsupported request")},
+    {ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP, M_("nothing provides requested {}")},
+    {ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE, M_("module {} does not exist")},
+    {ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM, M_("{} is provided by the system")},
+    {ProblemRules::RULE_MODULE_PKG, M_("some dependency problem")},
+    {ProblemRules::RULE_MODULE_BEST_1, M_("cannot install the best update candidate for module {}")},
+    {ProblemRules::RULE_MODULE_BEST_2, M_("cannot install the best candidate for the job")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1, M_("module {} is disabled")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2, M_("module {} does not have a compatible architecture")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3, M_("module {} is not installable")},
+    {ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4, M_("module {} is disabled")},
+    {ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP, M_("nothing provides {0} needed by module {1}")},
+    {ProblemRules::RULE_MODULE_PKG_SAME_NAME, M_("cannot install both modules {0} and {1}")},
+    {ProblemRules::RULE_MODULE_PKG_CONFLICTS, M_("module {0} conflicts with {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_OBSOLETES, M_("module {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES, M_("installed module {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES, M_("module {0} implicitly obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_MODULE_PKG_REQUIRES, M_("module {1} requires {0}, but none of the providers can be installed")},
+    {ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT, M_("module {1} conflicts with {0} provided by itself")},
+    {ProblemRules::RULE_MODULE_YUMOBS, M_("both module {0} and {2} obsolete {1}")}};
+
 
 std::string string_join(
     const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & src, const std::string & delim) {
@@ -174,13 +203,36 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_pr
 
 }  // namespace
 
-SolverProblems::SolverProblems(
+class SolverProblems::Impl {
+public:
+    Impl(const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems);
+
+private:
+    friend SolverProblems;
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
+};
+
+SolverProblems::Impl::Impl(
     const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems)
     : problems(problems) {}
 
-SolverProblems::SolverProblems(const SolverProblems & src) = default;
+SolverProblems::SolverProblems(
+    const std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> & problems)
+    : p_impl(std::make_unique<Impl>(problems)) {}
+
+SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*src.p_impl)) {}
 SolverProblems::SolverProblems(SolverProblems && src) noexcept = default;
-SolverProblems & SolverProblems::operator=(const SolverProblems & src) = default;
+SolverProblems & SolverProblems::operator=(const SolverProblems & src) {
+    if (this != &src) {
+        if (p_impl) {
+            *p_impl = *src.p_impl;
+        } else {
+            p_impl = std::make_unique<Impl>(*src.p_impl);
+        }
+    }
+
+    return *this;
+}
 SolverProblems & SolverProblems::operator=(SolverProblems && src) noexcept = default;
 SolverProblems::~SolverProblems() = default;
 
@@ -197,6 +249,17 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
         case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+        case ProblemRules::RULE_MODULE_DISTUPGRADE:
+        case ProblemRules::RULE_MODULE_INFARCH:
+        case ProblemRules::RULE_MODULE_UPDATE:
+        case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+        case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+        case ProblemRules::RULE_MODULE_BEST_1:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+        case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
             if (raw.second.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -205,6 +268,10 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_JOB_UNSUPPORTED:
         case ProblemRules::RULE_PKG:
         case ProblemRules::RULE_BEST_2:
+        case ProblemRules::RULE_MODULE_JOB:
+        case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+        case ProblemRules::RULE_MODULE_PKG:
+        case ProblemRules::RULE_MODULE_BEST_2:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -213,6 +280,10 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_REQUIRES:
         case ProblemRules::RULE_PKG_SELF_CONFLICT:
         case ProblemRules::RULE_PKG_SAME_NAME:
+        case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+        case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+        case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
             if (raw.second.size() != 2) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -222,11 +293,17 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
         case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
         case ProblemRules::RULE_YUMOBS:
+        case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+        case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+        case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+        case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+        case ProblemRules::RULE_MODULE_YUMOBS:
             if (raw.second.size() != 3) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
             return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
         case ProblemRules::RULE_UNKNOWN:
+        case ProblemRules::RULE_MODULE_UNKNOWN:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -241,22 +318,22 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
 
 
 std::string SolverProblems::to_string() const {
-    if (problems.empty()) {
+    if (p_impl->problems.empty()) {
         return {};
     }
     std::string output;
-    if (problems.size() == 1) {
+    if (p_impl->problems.size() == 1) {
         output.append(_("Problem: "));
-        output.append(string_join(*problems.begin(), "\n  - "));
+        output.append(string_join(*p_impl->problems.begin(), "\n  - "));
         return output;
     }
     const char * problem_prefix = _("Problem {}: ");
 
     output.append(utils::sformat(problem_prefix, 1));
-    output.append(string_join(*problems.begin(), "\n  - "));
+    output.append(string_join(*p_impl->problems.begin(), "\n  - "));
 
     int index = 2;
-    for (auto iter = std::next(problems.begin()); iter != problems.end(); ++iter) {
+    for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
         output.append("\n ");
         output.append(utils::sformat(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
@@ -343,6 +420,32 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
                 case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
                     // Rules are not generated by libsolv
                     break;
+                case ProblemRules::RULE_MODULE_DISTUPGRADE:
+                case ProblemRules::RULE_MODULE_INFARCH:
+                case ProblemRules::RULE_MODULE_UPDATE:
+                case ProblemRules::RULE_MODULE_JOB:
+                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+                case ProblemRules::RULE_MODULE_PKG:
+                case ProblemRules::RULE_MODULE_BEST_1:
+                case ProblemRules::RULE_MODULE_BEST_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+                case ProblemRules::RULE_MODULE_YUMOBS:
+                case ProblemRules::RULE_MODULE_UNKNOWN:
+                    libdnf_throw_assertion("Unexpected module problem rule in rpm goal");
             }
             if (is_unique(problem_output, tmp_rule, elements)) {
                 problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
@@ -356,6 +459,128 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
     if (!problem_protected.empty()) {
         if (is_unique(problems, problem_protected)) {
             problems.insert(problems.begin(), std::move(problem_protected));
+        }
+    }
+    return problems;
+}
+
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems()
+    const {
+    return p_impl->problems;
+};
+
+
+static std::string module_solvid2str(Pool * pool, Id source) {
+    auto * solvable = pool_id2solvable(pool, source);
+    const char * summary = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
+    return fmt::format(
+        "{}:{}:{}.{}",
+        solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION),
+        pool_id2str(pool, solvable->evr),
+        summary ? summary : "",
+        pool_id2str(pool, solvable->arch));
+}
+
+
+std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> process_module_solver_problems(
+    Pool * pool, const std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> & solver_problems) {
+    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
+
+    for (auto & problem : solver_problems) {
+        std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+        for (auto & [rule, source, dep, target, description] : problem) {
+            std::vector<std::string> elements;
+            ProblemRules tmp_rule = rule;
+            switch (rule) {
+                case ProblemRules::RULE_MODULE_DISTUPGRADE:
+                case ProblemRules::RULE_MODULE_INFARCH:
+                case ProblemRules::RULE_MODULE_UPDATE:
+                case ProblemRules::RULE_MODULE_BEST_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_JOB:
+                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_MODULE_PKG:
+                case ProblemRules::RULE_MODULE_BEST_2:
+                    break;
+                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
+                    if (false) {
+                        // TODO (jmracek) (modularExclude && modularExclude->has(source))
+                    } else {
+                        tmp_rule = ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4;
+                    }
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+                    elements.push_back(module_solvid2str(pool, source));
+                    elements.push_back(module_solvid2str(pool, target));
+                    std::sort(elements.begin(), elements.end());
+                    break;
+                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_MODULE_YUMOBS:
+                    elements.push_back(module_solvid2str(pool, source));
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(module_solvid2str(pool, target));
+                    break;
+                case ProblemRules::RULE_MODULE_UNKNOWN:
+                    elements.push_back(description);
+                    break;
+                case ProblemRules::RULE_DISTUPGRADE:
+                case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_UPDATE:
+                case ProblemRules::RULE_JOB:
+                case ProblemRules::RULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
+                case ProblemRules::RULE_PKG:
+                case ProblemRules::RULE_BEST_1:
+                case ProblemRules::RULE_BEST_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_PKG_SAME_NAME:
+                case ProblemRules::RULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                case ProblemRules::RULE_YUMOBS:
+                case ProblemRules::RULE_UNKNOWN:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+                    libdnf_throw_assertion("Unexpected rpm problem rule in module solver problems");
+            }
+            if (is_unique(problem_output, tmp_rule, elements)) {
+                problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
+            }
+        }
+        if (is_unique(problems, problem_output)) {
+            problems.push_back(std::move(problem_output));
         }
     }
     return problems;
