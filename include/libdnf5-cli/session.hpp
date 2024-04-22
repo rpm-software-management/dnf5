@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "argument_parser.hpp"
 
+#include <libdnf5/common/impl_ptr.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/conf/option_string_list.hpp>
@@ -37,7 +38,14 @@ class Command;
 
 class Session {
 public:
-    Session() : argument_parser(new libdnf5::cli::ArgumentParser) {}
+    explicit Session();
+    ~Session();
+
+    Session(const Session & src) = delete;
+    Session(Session && src);
+
+    Session & operator=(const Session & src) = delete;
+    Session & operator=(Session && src);
 
     /// Store the command to the session and initialize it.
     /// @since 5.0
@@ -55,12 +63,12 @@ public:
     /// @return Selected (sub)command that a user specified on the command line.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    Command * get_selected_command() { return selected_command; }
+    Command * get_selected_command();
 
     /// Set `command` as the selected (sub)command that a user specified on the command line.
     /// We're only pointing to a command that is owned by the Session already.
     /// @since 5.0
-    void set_selected_command(Command * command) { selected_command = command; }
+    void set_selected_command(Command * command);
 
     /// @return The underlying argument parser.
     /// @since 5.0
@@ -71,9 +79,8 @@ public:
     void clear();
 
 private:
-    Command * selected_command{nullptr};
-    std::vector<std::unique_ptr<Command>> commands;
-    std::unique_ptr<libdnf5::cli::ArgumentParser> argument_parser;
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 
@@ -152,12 +159,6 @@ private:
     Session & session;
     libdnf5::cli::ArgumentParser::Command * argument_parser_command;
 };
-
-
-inline Command * Session::get_root_command() {
-    auto * arg_parser_root_command = argument_parser->get_root_command();
-    return arg_parser_root_command ? static_cast<Command *>(arg_parser_root_command->get_user_data()) : nullptr;
-}
 
 
 class Option {};
