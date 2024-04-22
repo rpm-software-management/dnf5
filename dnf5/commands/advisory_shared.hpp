@@ -61,40 +61,29 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
     if (!advisory_types.empty() || !advisory_severities.empty() || !advisory_names.empty() || !advisory_bzs.empty() ||
         !advisory_cves.empty()) {
         auto advisories = libdnf5::advisory::AdvisoryQuery(base);
-        advisories.clear();
         // Filter by advisory name
         if (!advisory_names.empty()) {
-            auto advisories_names = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_names.filter_name(advisory_names);
-            advisories |= advisories_names;
+            advisories.filter_name(advisory_names);
         }
 
         // Filter by advisory type
         if (!advisory_types.empty()) {
-            auto advisories_types = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_types.filter_type(advisory_types);
-            advisories |= advisories_types;
+            advisories.filter_type(advisory_types);
         }
 
         // Filter by advisory severity
         if (!advisory_severities.empty()) {
-            auto advisories_severities = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_severities.filter_severity(advisory_severities);
-            advisories |= advisories_severities;
+            advisories.filter_severity(advisory_severities);
         }
 
         // Filter by advisory bz
         if (!advisory_bzs.empty()) {
-            auto advisories_bzs = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_bzs.filter_reference(advisory_bzs, {"bugzilla"});
-            advisories |= advisories_bzs;
+            advisories.filter_reference(advisory_bzs, {"bugzilla"});
         }
 
         // Filter by advisory cve
         if (!advisory_cves.empty()) {
-            auto advisories_cves = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_cves.filter_reference(advisory_cves, {"cve"});
-            advisories |= advisories_cves;
+            advisories.filter_reference(advisory_cves, {"cve"});
         }
 
         return advisories;
