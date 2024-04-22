@@ -164,7 +164,7 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
-    only_outputs_installed->push_back(duplicates->arg);
+    only_outputs_installed->push_back(duplicates->get_arg());
 
     unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -173,17 +173,17 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to unneeded installed packages (i.e. packages that were installed as "
         "dependencies but are no longer needed).",
         false);
-    only_outputs_installed->push_back(unneeded->arg);
+    only_outputs_installed->push_back(unneeded->get_arg());
 
     installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installonly", '\0', "Limit to installed installonly packages.", false);
-    only_outputs_installed->push_back(installonly->arg);
+    only_outputs_installed->push_back(installonly->get_arg());
 
     // FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED:
 
     extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
-    only_outputs_installed->push_back(extras->arg);
+    only_outputs_installed->push_back(extras->get_arg());
 
     upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -406,8 +406,8 @@ void RepoqueryCommand::set_argument_parser() {
 
     changelogs = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "changelogs", '\0', "Display package changelogs.", false);
-    repoquery_formatting->register_argument(changelogs->arg);
-    formatting_conflicts->push_back(changelogs->arg);
+    repoquery_formatting->register_argument(changelogs->get_arg());
+    formatting_conflicts->push_back(changelogs->get_arg());
 
     // Add additional supported package attribute getters, all pkg_attrs_options get turned into options
     pkg_attrs_options.insert(pkg_attrs_options.begin(), {"files", "sourcerpm", "location"});
@@ -439,16 +439,16 @@ void RepoqueryCommand::set_argument_parser() {
     // Options that configure how repos should be loaded are incompatible
     // with --available and --installed options.
     available->set_conflict_arguments(only_outputs_installed);
-    available->add_conflict_argument(*upgrades->arg);
+    available->add_conflict_argument(*upgrades->get_arg());
     installed->set_conflict_arguments(only_outputs_installed);
-    installed->add_conflict_argument(*upgrades->arg);
+    installed->add_conflict_argument(*upgrades->get_arg());
 
     // --upgrades option returns only available packages, conflict with options
     // that return only installed packages
-    upgrades->arg->set_conflict_arguments(only_outputs_installed);
+    upgrades->get_arg()->set_conflict_arguments(only_outputs_installed);
 
     // recursive is not compatible with exactdeps
-    recursive->arg->add_conflict_argument(*exactdeps->arg);
+    recursive->get_arg()->add_conflict_argument(*exactdeps->get_arg());
 }
 
 void RepoqueryCommand::configure() {
