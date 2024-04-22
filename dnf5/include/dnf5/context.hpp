@@ -180,17 +180,6 @@ public:
 };
 
 
-class RpmTransactionItem : public libdnf5::rpm::TransactionItem {
-public:
-    enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
-
-    RpmTransactionItem(const libdnf5::base::TransactionPackage & tspkg);
-    Actions get_action() const noexcept { return action; }
-
-private:
-    Actions action;
-};
-
 class RpmTransCB : public libdnf5::rpm::TransactionCallbacks {
 public:
     RpmTransCB(Context & context);
