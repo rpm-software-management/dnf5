@@ -170,8 +170,11 @@ class Command : public libdnf5::cli::session::Command {
 public:
     using libdnf5::cli::session::Command::Command;
 
+    Command() = delete;
+    ~Command() override;
+
     /// @return Reference to the Context.
-    Context & get_context() const noexcept { return static_cast<Context &>(get_session()); }
+    Context & get_context() const noexcept;
 
     void goal_resolved() override;
 };

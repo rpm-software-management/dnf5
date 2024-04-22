@@ -619,6 +619,20 @@ const std::vector<std::pair<std::string, std::string>> & Context::get_repos_from
 }
 
 
+Command::~Command() = default;
+
+Context & Command::get_context() const noexcept {
+    return static_cast<Context &>(get_session());
+}
+
+void Command::goal_resolved() {
+    auto & transaction = *get_context().get_transaction();
+    if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
+        throw libdnf5::cli::GoalResolveError(transaction);
+    }
+}
+
+
 RpmTransCB::RpmTransCB(Context & context) : context(context) {
     multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
 }
@@ -828,13 +842,6 @@ bool RpmTransCB::is_time_to_print() {
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
-
-void Command::goal_resolved() {
-    auto & transaction = *get_context().get_transaction();
-    if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
-        throw libdnf5::cli::GoalResolveError(transaction);
-    }
-}
 
 /// Returns file and directory paths that begins with `path_to_complete`.
 /// Files must match `regex_pattern`.
