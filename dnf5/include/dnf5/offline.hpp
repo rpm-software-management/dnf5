@@ -68,9 +68,9 @@ class OfflineTransactionState {
 public:
     void write();
     OfflineTransactionState(std::filesystem::path path);
-    OfflineTransactionStateData & get_data() { return data; };
-    const std::exception_ptr & get_read_exception() const { return read_exception; };
-    std::filesystem::path get_path() const { return path; };
+    OfflineTransactionStateData & get_data();
+    const std::exception_ptr & get_read_exception() const;
+    std::filesystem::path get_path() const;
 
 private:
     void read();
