@@ -244,30 +244,30 @@ void AutomaticCommand::set_argument_parser() {
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(nodownloadupdates->arg);
-        downloadupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(nodownloadupdates->get_arg());
+        downloadupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     // installupdates and no-installupdates options conflict with each other.
     // installupdates and no-downloadupdates options conflict with each other.
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(downloadupdates->arg);
-        conflicts->push_back(installupdates->arg);
-        nodownloadupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(downloadupdates->get_arg());
+        conflicts->push_back(installupdates->get_arg());
+        nodownloadupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(noinstallupdates->arg);
-        conflicts->push_back(nodownloadupdates->arg);
-        installupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(noinstallupdates->get_arg());
+        conflicts->push_back(nodownloadupdates->get_arg());
+        installupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(installupdates->arg);
-        noinstallupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(installupdates->get_arg());
+        noinstallupdates->get_arg()->set_conflict_arguments(conflicts);
     }
 }
 

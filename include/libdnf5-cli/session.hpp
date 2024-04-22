@@ -161,7 +161,18 @@ private:
 };
 
 
-class Option {};
+class Option {
+public:
+    Option(const Option & src) = delete;
+    Option(Option && src) = delete;
+    ~Option();
+
+    Option & operator=(const Option & src) = delete;
+    Option & operator=(Option && src) = delete;
+
+protected:
+    Option();
+};
 
 
 class BoolOption : public Option {
@@ -174,18 +185,21 @@ public:
         bool default_value,
         libdnf5::OptionBool * linked_option = nullptr);
 
+    ~BoolOption();
+
     /// @return Parsed value.
     /// @since 5.0
-    bool get_value() const { return conf->get_value(); }
+    bool get_value() const;
 
     /// Set bool value with priority for the option
     /// @param priority Priority
     /// @param value Value
     /// @since 5.0
-    void set(libdnf5::Option::Priority priority, bool value) { return conf->set(priority, value); }
+    void set(libdnf5::Option::Priority priority, bool value);
 
-    // TODO(dmach): `arg` must be public, because it is used to define conflicting args
-    //protected:
+    libdnf5::cli::ArgumentParser::NamedArg * get_arg();
+
+protected:
     libdnf5::OptionBool * conf{nullptr};
     libdnf5::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
@@ -213,10 +227,15 @@ public:
         const bool icase,
         const std::string & delimiters = libdnf5::OptionStringList::get_default_delimiters());
 
+    ~AppendStringListOption();
+
     /// @return Parsed value.
     /// @since 5.0
-    std::vector<std::string> get_value() const { return conf->get_value(); }
+    std::vector<std::string> get_value() const;
 
+    libdnf5::cli::ArgumentParser::NamedArg * get_arg();
+
+protected:
     libdnf5::OptionStringList * conf{nullptr};
     libdnf5::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
@@ -226,12 +245,16 @@ class StringArgumentList : public Option {
 public:
     explicit StringArgumentList(
         libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs);
-    StringArgumentList(libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc)
-        : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
+    explicit StringArgumentList(
+        libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc);
+
+    ~StringArgumentList();
 
     /// @return Parsed value.
     /// @since 5.0
     std::vector<std::string> get_value() const;
+
+    libdnf5::cli::ArgumentParser::PositionalArg * get_arg();
 
 protected:
     std::vector<std::unique_ptr<libdnf5::Option>> * conf{nullptr};

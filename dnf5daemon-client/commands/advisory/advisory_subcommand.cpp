@@ -34,12 +34,12 @@ void AdvisorySubCommand::set_argument_parser() {
     available = std::make_unique<AdvisoryAvailableOption>(*this);
     installed = std::make_unique<AdvisoryInstalledOption>(*this);
     updates = std::make_unique<AdvisoryUpdatesOption>(*this);
-    all->arg->add_conflict_argument(*available->arg);
-    all->arg->add_conflict_argument(*installed->arg);
-    all->arg->add_conflict_argument(*updates->arg);
-    available->arg->add_conflict_argument(*installed->arg);
-    available->arg->add_conflict_argument(*updates->arg);
-    installed->arg->add_conflict_argument(*updates->arg);
+    all->get_arg()->add_conflict_argument(*available->get_arg());
+    all->get_arg()->add_conflict_argument(*installed->get_arg());
+    all->get_arg()->add_conflict_argument(*updates->get_arg());
+    available->get_arg()->add_conflict_argument(*installed->get_arg());
+    available->get_arg()->add_conflict_argument(*updates->get_arg());
+    installed->get_arg()->add_conflict_argument(*updates->get_arg());
 
     contains_pkgs = std::make_unique<AdvisoryContainsPkgsOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);

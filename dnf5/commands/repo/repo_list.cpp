@@ -36,9 +36,9 @@ void RepoListCommand::set_argument_parser() {
     disabled = std::make_unique<RepoDisabledOption>(*this);
     repo_specs = std::make_unique<RepoSpecArguments>(*this);
 
-    all->arg->add_conflict_argument(*enabled->arg);
-    all->arg->add_conflict_argument(*disabled->arg);
-    enabled->arg->add_conflict_argument(*disabled->arg);
+    all->get_arg()->add_conflict_argument(*enabled->get_arg());
+    all->get_arg()->add_conflict_argument(*disabled->get_arg());
+    enabled->get_arg()->add_conflict_argument(*disabled->get_arg());
 }
 
 void RepoListCommand::run() {

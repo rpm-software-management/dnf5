@@ -175,6 +175,11 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf5::
 }
 
 
+Option::Option() = default;
+
+Option::~Option() = default;
+
+
 BoolOption::BoolOption(
     libdnf5::cli::session::Command & command,
     const std::string & long_name,
@@ -204,6 +209,20 @@ BoolOption::BoolOption(
     arg->link_value(conf);
 
     command.get_argument_parser_command()->register_named_arg(arg);
+}
+
+BoolOption::~BoolOption() = default;
+
+bool BoolOption::get_value() const {
+    return conf->get_value();
+}
+
+void BoolOption::set(libdnf5::Option::Priority priority, bool value) {
+    return conf->set(priority, value);
+}
+
+libdnf5::cli::ArgumentParser::NamedArg * BoolOption::get_arg() {
+    return arg;
 }
 
 
@@ -242,7 +261,6 @@ AppendStringListOption::AppendStringListOption(
     command.get_argument_parser_command()->register_named_arg(arg);
 }
 
-
 AppendStringListOption::AppendStringListOption(
     libdnf5::cli::session::Command & command,
     const std::string & long_name,
@@ -251,6 +269,15 @@ AppendStringListOption::AppendStringListOption(
     const std::string & help)
     : AppendStringListOption(command, long_name, short_name, desc, help, "", false) {}
 
+AppendStringListOption::~AppendStringListOption() = default;
+
+std::vector<std::string> AppendStringListOption::get_value() const {
+    return conf->get_value();
+}
+
+libdnf5::cli::ArgumentParser::NamedArg * AppendStringListOption::get_arg() {
+    return arg;
+}
 
 StringArgumentList::StringArgumentList(
     libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs) {
@@ -264,6 +291,12 @@ StringArgumentList::StringArgumentList(
     command.get_argument_parser_command()->register_positional_arg(arg);
 }
 
+StringArgumentList::StringArgumentList(
+    libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc)
+    : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
+
+StringArgumentList::~StringArgumentList() = default;
+
 std::vector<std::string> StringArgumentList::get_value() const {
     std::vector<std::string> result;
 
@@ -273,6 +306,10 @@ std::vector<std::string> StringArgumentList::get_value() const {
     }
 
     return result;
+}
+
+libdnf5::cli::ArgumentParser::PositionalArg * StringArgumentList::get_arg() {
+    return arg;
 }
 
 

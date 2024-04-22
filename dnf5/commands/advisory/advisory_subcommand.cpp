@@ -48,12 +48,12 @@ void AdvisorySubCommand::set_argument_parser() {
     with_bz = std::make_unique<AdvisoryWithBzOption>(*this);
     with_cve = std::make_unique<AdvisoryWithCveOption>(*this);
 
-    all->arg->add_conflict_argument(*available->arg);
-    all->arg->add_conflict_argument(*installed->arg);
-    all->arg->add_conflict_argument(*updates->arg);
-    available->arg->add_conflict_argument(*installed->arg);
-    available->arg->add_conflict_argument(*updates->arg);
-    installed->arg->add_conflict_argument(*updates->arg);
+    all->get_arg()->add_conflict_argument(*available->get_arg());
+    all->get_arg()->add_conflict_argument(*installed->get_arg());
+    all->get_arg()->add_conflict_argument(*updates->get_arg());
+    available->get_arg()->add_conflict_argument(*installed->get_arg());
+    available->get_arg()->add_conflict_argument(*updates->get_arg());
+    installed->get_arg()->add_conflict_argument(*updates->get_arg());
 }
 
 // There can be multiple versions of kernel installed at the same time.

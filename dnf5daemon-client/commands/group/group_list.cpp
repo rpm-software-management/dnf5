@@ -44,7 +44,7 @@ GroupListCommand::GroupListCommand(Context & context, const char * command)
 
     available = std::make_unique<GroupAvailableOption>(*this);
     installed = std::make_unique<GroupInstalledOption>(*this);
-    available->arg->add_conflict_argument(*installed->arg);
+    available->get_arg()->add_conflict_argument(*installed->get_arg());
     hidden = std::make_unique<GroupHiddenOption>(*this);
     contains_pkgs = std::make_unique<GroupContainPkgsOption>(*this);
 
