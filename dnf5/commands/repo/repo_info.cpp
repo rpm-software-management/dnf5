@@ -108,10 +108,10 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
     std::sort(repos.begin(), repos.end(), [](const auto & l, const auto & r) { return l->get_id() < r->get_id(); });
 
     for (auto & repo : repos) {
-        libdnf5::rpm::PackageQuery pkgs(get_context().base, libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
+        libdnf5::rpm::PackageQuery pkgs(get_context().get_base(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
         pkgs.filter_repo_id({repo->get_id()});
 
-        libdnf5::rpm::PackageQuery available_pkgs(get_context().base);
+        libdnf5::rpm::PackageQuery available_pkgs(get_context().get_base());
         available_pkgs.filter_repo_id({repo->get_id()});
 
         uint64_t repo_size = 0;

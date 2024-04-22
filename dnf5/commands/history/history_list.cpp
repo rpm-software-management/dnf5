@@ -39,7 +39,7 @@ void HistoryListCommand::set_argument_parser() {
 
 void HistoryListCommand::run() {
     auto ts_specs = transaction_specs->get_value();
-    libdnf5::transaction::TransactionHistory history(get_context().base);
+    libdnf5::transaction::TransactionHistory history(get_context().get_base());
     std::vector<libdnf5::transaction::Transaction> transactions;
 
     if (ts_specs.empty()) {

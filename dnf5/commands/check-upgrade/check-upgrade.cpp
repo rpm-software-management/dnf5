@@ -83,7 +83,7 @@ void CheckUpgradeCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     if (changelogs->get_value()) {
-        context.base.get_config().get_optional_metadata_types_option().add(
+        context.get_base().get_config().get_optional_metadata_types_option().add(
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
     }
     context.update_repo_metadata_from_advisory_options(
@@ -104,21 +104,21 @@ std::unique_ptr<libdnf5::cli::output::PackageListSections> CheckUpgradeCommand::
 
 void CheckUpgradeCommand::run() {
     auto & ctx = get_context();
-    auto & config = ctx.base.get_config();
+    auto & config = ctx.get_base().get_config();
 
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base);
-    libdnf5::rpm::PackageQuery upgrades_query(ctx.base);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.get_base());
+    libdnf5::rpm::PackageQuery upgrades_query(ctx.get_base());
 
     // filter by provided specs, for `check-upgrade <pkg1> <pkg2> ...`
     if (!pkg_specs.empty()) {
-        upgrades_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        upgrades_query = libdnf5::rpm::PackageQuery(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf5::ResolveSpecSettings settings;
         settings.set_with_nevra(true);
         settings.set_with_provides(false);
         settings.set_with_filenames(false);
         settings.set_with_binaries(false);
         for (const auto & spec : pkg_specs) {
-            libdnf5::rpm::PackageQuery package_query(ctx.base);
+            libdnf5::rpm::PackageQuery package_query(ctx.get_base());
             package_query.resolve_pkg_spec(spec, settings, true);
             upgrades_query |= package_query;
         }
@@ -133,13 +133,13 @@ void CheckUpgradeCommand::run() {
 
     upgrades_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NOT_EXACT);
 
-    libdnf5::rpm::PackageQuery installed_query(ctx.base);
+    libdnf5::rpm::PackageQuery installed_query(ctx.get_base());
     installed_query.filter_installed();
 
     // filter by advisory flags, e.g. `--security`
     size_t size_before_filter_advisories = upgrades_query.size();
     auto advisories = advisory_query_from_cli_input(
-        ctx.base,
+        ctx.get_base(),
         advisory_name->get_value(),
         advisory_security->get_value(),
         advisory_bugfix->get_value(),

@@ -55,7 +55,7 @@ void TransactionCallbacksSimple::install_start(
         case libdnf5::transaction::TransactionItemAction::DISABLE:
         case libdnf5::transaction::TransactionItemAction::RESET:
         case libdnf5::transaction::TransactionItemAction::SWITCH:
-            auto & logger = *context.base.get_logger();
+            auto & logger = *context.get_base().get_logger();
             logger.warning(
                 "Unexpected action in TransactionPackage: {}",
                 static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(

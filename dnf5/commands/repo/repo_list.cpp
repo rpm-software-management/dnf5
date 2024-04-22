@@ -44,7 +44,7 @@ void RepoListCommand::set_argument_parser() {
 void RepoListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::repo::RepoQuery query(ctx.base);
+    libdnf5::repo::RepoQuery query(ctx.get_base());
     if (all->get_value()) {
         // don't filter anything
     } else if (disabled->get_value()) {

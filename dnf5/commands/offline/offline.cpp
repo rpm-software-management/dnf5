@@ -206,16 +206,16 @@ void OfflineSubcommand::configure() {
     // systemd.offline-updates(7).
     magic_symlink = "/system-update";
 
-    const std::filesystem::path installroot = ctx.base.get_config().get_installroot_option().get_value();
+    const std::filesystem::path installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     state = std::make_optional<dnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
 
-    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.get_base().get_weak_ptr(), installroot);
     if (detected_releasever != nullptr) {
         system_releasever = *detected_releasever;
     }
-    target_releasever = ctx.base.get_vars()->get_value("releasever");
+    target_releasever = ctx.get_base().get_vars()->get_value("releasever");
 }
 
 void check_state(const dnf5::offline::OfflineTransactionState & state) {
@@ -261,7 +261,7 @@ void reboot([[maybe_unused]] bool poweroff = false) {
 }
 
 void clean_datadir(Context & ctx, const std::filesystem::path & datadir) {
-    ctx.base.get_logger()->info("Cleaning up downloaded data...");
+    ctx.get_base().get_logger()->info("Cleaning up downloaded data...");
 
     for (const auto & entry : std::filesystem::directory_iterator(datadir)) {
         std::filesystem::remove_all(entry.path());
@@ -341,7 +341,7 @@ void OfflineRebootCommand::run() {
             << std::endl
             << "\t" << state->get_data().cmd_line << std::endl;
     }
-    if (!libdnf5::cli::utils::userconfirm::userconfirm(ctx.base.get_config())) {
+    if (!libdnf5::cli::utils::userconfirm::userconfirm(ctx.get_base().get_config())) {
         return;
     }
 
@@ -375,19 +375,19 @@ void OfflineExecuteCommand::pre_configure() {
     auto & ctx = get_context();
 
     // Don't try to refresh metadata, we are offline
-    ctx.base.get_config().get_cacheonly_option().set("all");
+    ctx.get_base().get_config().get_cacheonly_option().set("all");
     // Don't ask any questions
-    ctx.base.get_config().get_assumeyes_option().set(true);
+    ctx.get_base().get_config().get_assumeyes_option().set(true);
     // Override `assumeno` too since it takes priority over `assumeyes`
-    ctx.base.get_config().get_assumeno_option().set(false);
+    ctx.get_base().get_config().get_assumeno_option().set(false);
     // Upgrade operation already removes all element that must be removed.
     // Additional removal could trigger unwanted changes in transaction.
-    ctx.base.get_config().get_clean_requirements_on_remove_option().set(false);
-    ctx.base.get_config().get_install_weak_deps_option().set(false);
+    ctx.get_base().get_config().get_clean_requirements_on_remove_option().set(false);
+    ctx.get_base().get_config().get_install_weak_deps_option().set(false);
     // Disable gpgcheck entirely, since GPG integrity will have already been
     // checked when the transaction was prepared and serialized. This way, we
     // don't need to keep track of which packages need to be gpgchecked.
-    ctx.base.get_config().get_gpgcheck_option().set(false);
+    ctx.get_base().get_config().get_gpgcheck_option().set(false);
 }
 
 void OfflineExecuteCommand::configure() {
@@ -408,19 +408,19 @@ void OfflineExecuteCommand::configure() {
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
     // Get the cache from the cachedir specified in the state file
-    ctx.base.get_config().get_system_cachedir_option().set(state->get_data().cachedir);
-    ctx.base.get_config().get_cachedir_option().set(state->get_data().cachedir);
+    ctx.get_base().get_config().get_system_cachedir_option().set(state->get_data().cachedir);
+    ctx.get_base().get_config().get_cachedir_option().set(state->get_data().cachedir);
 
     if (!state->get_data().module_platform_id.empty()) {
-        ctx.base.get_config().get_module_platform_id_option().set(state->get_data().module_platform_id);
+        ctx.get_base().get_config().get_module_platform_id_option().set(state->get_data().module_platform_id);
     }
 
     // Set same set of enabled/disabled repos used during `system-upgrade download`
     for (const auto & repo_id : state->get_data().enabled_repos) {
-        ctx.setopts.emplace_back(repo_id + ".enabled", "1");
+        ctx.get_setopts().emplace_back(repo_id + ".enabled", "1");
     }
     for (const auto & repo_id : state->get_data().disabled_repos) {
-        ctx.setopts.emplace_back(repo_id + ".disabled", "1");
+        ctx.get_setopts().emplace_back(repo_id + ".disabled", "1");
     }
 }
 
@@ -448,12 +448,12 @@ void OfflineExecuteCommand::run() {
     state->get_data().status = dnf5::offline::STATUS_TRANSACTION_INCOMPLETE;
     state->write();
 
-    const auto & installroot = get_context().base.get_config().get_installroot_option().get_value();
+    const auto & installroot = get_context().get_base().get_config().get_installroot_option().get_value();
     const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
 
-    const auto & goal = std::make_unique<libdnf5::Goal>(ctx.base);
+    const auto & goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
 
     goal->add_serialized_transaction(transaction_json_path);
 

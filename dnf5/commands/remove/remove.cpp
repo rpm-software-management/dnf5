@@ -43,7 +43,7 @@ void RemoveCommand::set_argument_parser() {
     noautoremove->set_long_name("no-autoremove");
     noautoremove->set_description("Disable removal of dependencies that are no longer used");
     noautoremove->set_const_value("false");
-    noautoremove->link_value(&ctx.base.get_config().get_clean_requirements_on_remove_option());
+    noautoremove->link_value(&ctx.get_base().get_config().get_clean_requirements_on_remove_option());
     cmd.register_named_arg(noautoremove);
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);

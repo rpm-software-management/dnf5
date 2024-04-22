@@ -33,7 +33,7 @@ void AdvisoryListCommand::process_and_print_queries(
     std::vector<libdnf5::advisory::AdvisoryPackage> installed_pkgs;
     std::vector<libdnf5::advisory::AdvisoryPackage> not_installed_pkgs;
 
-    libdnf5::rpm::PackageQuery packages(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery packages(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
     if (package_specs.size() > 0) {
         packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
     }
@@ -51,11 +51,11 @@ void AdvisoryListCommand::process_and_print_queries(
         packages.filter_upgradable();
         not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     } else {  // available is the default
-        libdnf5::rpm::PackageQuery installed_packages(ctx.base);
+        libdnf5::rpm::PackageQuery installed_packages(ctx.get_base());
         installed_packages.filter_installed();
         installed_packages.filter_latest_evr();
 
-        add_running_kernel_packages(ctx.base, installed_packages);
+        add_running_kernel_packages(ctx.get_base(), installed_packages);
 
         if (package_specs.size() > 0) {
             installed_packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);

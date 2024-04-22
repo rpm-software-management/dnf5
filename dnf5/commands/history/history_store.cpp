@@ -51,9 +51,9 @@ void HistoryStoreCommand::set_argument_parser() {
 
 void HistoryStoreCommand::run() {
     const auto ts_specs = transaction_specs->get_value();
-    libdnf5::transaction::TransactionHistory history(get_context().base);
+    libdnf5::transaction::TransactionHistory history(get_context().get_base());
     std::vector<libdnf5::transaction::Transaction> transactions;
-    auto logger = get_context().base.get_logger();
+    auto logger = get_context().get_base().get_logger();
 
     std::filesystem::path tmp_path(output_option->get_value());
 
@@ -61,7 +61,7 @@ void HistoryStoreCommand::run() {
         std::cout << libdnf5::utils::sformat(
             _("File \"{}\" already exists, it will be overwritten.\n"), tmp_path.string());
         // ask user for the file overwrite confirmation
-        if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().base.get_config())) {
+        if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().get_base().get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }
     }

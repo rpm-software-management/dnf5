@@ -98,8 +98,8 @@ void UpgradeCommand::configure() {
         advisory_cve->get_value());
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
-    if (!context.base.get_config().get_destdir_option().empty()) {
-        context.base.get_config().get_downloadonly_option().set(true);
+    if (!context.get_base().get_config().get_destdir_option().empty()) {
+        context.get_base().get_config().get_downloadonly_option().set(true);
     }
 }
 
@@ -123,7 +123,7 @@ void UpgradeCommand::run() {
     }
 
     auto advisories = advisory_query_from_cli_input(
-        ctx.base,
+        ctx.get_base(),
         advisory_name->get_value(),
         advisory_security->get_value(),
         advisory_bugfix->get_value(),

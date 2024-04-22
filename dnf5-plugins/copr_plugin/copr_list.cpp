@@ -64,7 +64,7 @@ void CoprListCommand::set_argument_parser() {
 
 
 void CoprListCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     std::unique_ptr<dnf5::CoprConfig> config = std::make_unique<dnf5::CoprConfig>(base);
     // empty string if no --hub is specified
     auto hostname = copr_cmd()->hub();

@@ -91,7 +91,7 @@ Plugins::~Plugins() {
 }
 
 void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
-    auto logger = context->base.get_logger();
+    auto logger = context->get_base().get_logger();
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
@@ -100,7 +100,7 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
 }
 
 void Plugins::load_plugin(const std::string & file_path) {
-    auto logger = context->base.get_logger();
+    auto logger = context->get_base().get_logger();
     logger->debug("Loading plugin file=\"{}\"", file_path);
     auto plugin = std::make_unique<PluginLibrary>(*context, file_path);
     auto * iplugin = plugin->get_iplugin();
@@ -117,7 +117,7 @@ void Plugins::load_plugin(const std::string & file_path) {
 }
 
 void Plugins::load_plugins(const std::string & dir_path) {
-    auto logger = context->base.get_logger();
+    auto logger = context->get_base().get_logger();
 
     std::vector<std::filesystem::path> lib_paths;
     std::error_code ec;

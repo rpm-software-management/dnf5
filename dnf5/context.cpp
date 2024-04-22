@@ -90,20 +90,131 @@ private:
 
 }  // namespace
 
-Context::Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers)
-    : base(std::move(loggers)),
-      plugins(std::make_unique<Plugins>(*this)) {}
+class Context::Impl {
+public:
+    explicit Impl(Context & owner, std::vector<std::unique_ptr<libdnf5::Logger>> && loggers)
+        : owner(owner),
+          base(std::move(loggers)),
+          plugins(std::make_unique<Plugins>(owner)) {}
 
-Context::~Context() {
-    // "Session", which is the parent of "Context", owns objects from dnf5 plugins (command arguments).
-    // Objects from plugins must be destroyed before the plugins can be released,
-    // otherwise they will reference the released code.
-    // TODO(jrohel): Calling clear() is not nice here. Better workflow.
-    clear();
-}
+    void apply_repository_setopts();
+
+    void update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs);
+
+    void update_repo_metadata_from_advisory_options(
+        const std::vector<std::string> & names,
+        bool security,
+        bool bugfix,
+        bool enhancement,
+        bool newpackage,
+        const std::vector<std::string> & severity,
+        const std::vector<std::string> & bzs,
+        const std::vector<std::string> & cves);
+
+    void load_repos(bool load_system);
+
+    std::vector<std::pair<std::vector<std::string>, bool>> libdnf5_plugins_enablement;
+
+    void store_offline(libdnf5::base::Transaction & transaction);
+
+    std::filesystem::path transaction_store_path;
+
+    const char * get_comment() const noexcept { return comment; }
+
+    void set_comment(const char * comment) noexcept { this->comment = comment; }
+
+    std::string get_cmdline() { return cmdline; }
+
+    void set_cmdline(std::string & cmdline) { this->cmdline = cmdline; }
+
+    void download_and_run(libdnf5::base::Transaction & transaction);
+
+    void set_quiet(bool quiet) { this->quiet = quiet; }
+
+    bool get_quiet() const { return quiet; }
+
+    void set_dump_main_config(bool enable) { this->dump_main_config = enable; }
+
+    bool get_dump_main_config() const { return dump_main_config; }
+
+    void set_dump_repo_config_id_list(const std::vector<std::string> & repo_id_list) {
+        this->dump_repo_config_id_list = repo_id_list;
+    }
+
+    const std::vector<std::string> & get_dump_repo_config_id_list() const { return dump_repo_config_id_list; }
+
+    void set_dump_variables(bool enable) { this->dump_variables = enable; }
+
+    bool get_dump_variables() const { return dump_variables; }
+
+    void set_show_new_leaves(bool show_new_leaves) { this->show_new_leaves = show_new_leaves; }
+
+    bool get_show_new_leaves() const { return show_new_leaves; }
+
+    Plugins & get_plugins() { return *plugins; }
+
+    libdnf5::Goal * get_goal(bool new_if_not_exist);
+
+    void set_transaction(libdnf5::base::Transaction && transaction) {
+        this->transaction = std::make_unique<libdnf5::base::Transaction>(std::move(transaction));
+    }
+
+    libdnf5::base::Transaction * get_transaction() { return transaction.get(); }
+
+    void set_load_system_repo(bool on) { load_system_repo = on; }
+    bool get_load_system_repo() const noexcept { return load_system_repo; }
+
+    void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
+    LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
+
+    void print_info(std::string_view msg) const;
+
+    void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
+
+    void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
+    bool get_should_store_offline() const { return should_store_offline; }
+
+    libdnf5::Base & get_base() { return base; };
+
+    std::vector<std::pair<std::string, std::string>> & get_setopts() { return setopts; }
+    const std::vector<std::pair<std::string, std::string>> & get_setopts() const { return setopts; }
+
+    std::vector<std::pair<std::string, std::string>> & get_repos_from_path() { return repos_from_path; }
+    const std::vector<std::pair<std::string, std::string>> & get_repos_from_path() const { return repos_from_path; }
+
+private:
+    Context & owner;
+
+    libdnf5::Base base;
+    std::vector<std::pair<std::string, std::string>> setopts;
+    std::vector<std::pair<std::string, std::string>> repos_from_path;
+
+    std::string cmdline;
+
+    /// Points to user comment.
+    const char * comment{nullptr};
+
+    bool should_store_offline = false;
+
+    bool quiet{false};
+    bool dump_main_config{false};
+    std::vector<std::string> dump_repo_config_id_list;
+    bool dump_variables{false};
+    bool show_new_leaves{false};
+    std::string get_cmd_line();
+
+    std::reference_wrapper<std::ostream> output_stream = std::cout;
+
+    std::unique_ptr<Plugins> plugins;
+    std::unique_ptr<libdnf5::Goal> goal;
+    std::unique_ptr<libdnf5::base::Transaction> transaction;
+
+    bool load_system_repo{false};
+    LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
+};
 
 // TODO(jrohel): Move logic into libdnf?
-void Context::apply_repository_setopts() {
+void Context::Impl::apply_repository_setopts() {
     std::vector<std::string> missing_repo_ids;
     for (const auto & setopt : setopts) {
         auto last_dot_pos = setopt.first.rfind('.');
@@ -131,15 +242,7 @@ void Context::apply_repository_setopts() {
     }
 }
 
-
-void Context::print_info(std::string_view msg) const {
-    if (!quiet) {
-        output_stream.get() << msg << std::endl;
-    }
-}
-
-
-void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
+void Context::Impl::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
     for (auto & spec : pkg_specs) {
         if (libdnf5::utils::is_file_pattern(spec)) {
             base.get_config().get_optional_metadata_types_option().add_item(
@@ -154,7 +257,7 @@ void Context::update_repo_metadata_from_specs(const std::vector<std::string> & p
     }
 }
 
-void Context::update_repo_metadata_from_advisory_options(
+void Context::Impl::update_repo_metadata_from_advisory_options(
     const std::vector<std::string> & names,
     bool security,
     bool bugfix,
@@ -171,7 +274,7 @@ void Context::update_repo_metadata_from_advisory_options(
     }
 }
 
-void Context::load_repos(bool load_system) {
+void Context::Impl::load_repos(bool load_system) {
     libdnf5::repo::RepoQuery repos(base);
     repos.filter_enabled(true);
     repos.filter_type(libdnf5::repo::Repo::Type::SYSTEM, libdnf5::sack::QueryCmp::NEQ);
@@ -192,6 +295,329 @@ void Context::load_repos(bool load_system) {
     }
     print_info("Repositories loaded.");
 }
+
+void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
+    const auto & installroot = base.get_config().get_installroot_option().get_value();
+    const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+    std::filesystem::create_directories(offline_datadir);
+
+    const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
+    dnf5::offline::OfflineTransactionState state{state_path};
+
+    if (state.get_data().status != dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+        std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
+                  << "\t" << state.get_data().cmd_line << std::endl
+                  << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
+        if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+            throw libdnf5::cli::SilentCommandExitError(0);
+        }
+    }
+
+    const std::filesystem::path transaction_json_path{offline_datadir / dnf5::offline::TRANSACTION_JSON_FILENAME};
+
+    const std::string json = transaction.serialize();
+
+    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
+
+    transaction_json_file.write(json);
+    transaction_json_file.close();
+
+    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
+    state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
+
+    std::vector<std::string> command_vector;
+    auto * current_command = owner.get_selected_command();
+    while (current_command != owner.get_root_command()) {
+        command_vector.insert(command_vector.begin(), current_command->get_argument_parser_command()->get_id());
+        current_command = current_command->get_parent_command();
+    }
+    state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
+    state.get_data().cmd_line = get_cmdline();
+
+    const auto & detected_releasever = libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        state.get_data().system_releasever = *detected_releasever;
+    }
+    state.get_data().target_releasever = base.get_vars()->get_value("releasever");
+
+    if (!base.get_config().get_module_platform_id_option().empty()) {
+        state.get_data().module_platform_id = base.get_config().get_module_platform_id_option().get_value();
+    }
+
+    state.write();
+}
+
+void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
+    if (should_store_offline) {
+        base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+    }
+
+    if (!transaction_store_path.empty()) {
+        auto transaction_location = transaction_store_path / "transaction.json";
+        constexpr const char * packages_in_trans_dir{"./packages"};
+        auto packages_location = transaction_store_path / packages_in_trans_dir;
+        constexpr const char * comps_in_trans_dir{"./comps"};
+        auto comps_location = transaction_store_path / comps_in_trans_dir;
+        if (std::filesystem::exists(transaction_location)) {
+            std::cout << libdnf5::utils::sformat(
+                _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
+                transaction_store_path.string());
+            if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+                std::filesystem::remove_all(packages_location);
+                std::filesystem::remove_all(comps_location);
+            } else {
+                throw libdnf5::cli::AbortedByUserError();
+            }
+        }
+        auto & destdir_opt = base.get_config().get_destdir_option();
+        destdir_opt.set(packages_location);
+        std::filesystem::create_directories(transaction_store_path);
+        transaction.download();
+        transaction.store_comps(comps_location);
+        libdnf5::utils::fs::File transfile(transaction_location, "w");
+        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
+        return;
+    } else {
+        transaction.download();
+    }
+
+    if (base.get_config().get_downloadonly_option().get_value()) {
+        return;
+    }
+
+    print_info("\nRunning transaction");
+
+    // Compute the total number of transaction actions (number of bars)
+    // Total number of actions = number of packages in the transaction +
+    //                           action of verifying package files if new package files are present in the transaction +
+    //                           action of preparing transaction
+    const auto & trans_packages = transaction.get_transaction_packages();
+    auto num_of_actions = trans_packages.size() + 1;
+    for (auto & trans_pkg : trans_packages) {
+        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            ++num_of_actions;
+            break;
+        }
+    }
+
+    auto callbacks = std::make_unique<RpmTransCB>(owner);
+    callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
+    transaction.set_callbacks(std::move(callbacks));
+
+    transaction.set_description(get_cmdline());
+
+    if (comment) {
+        transaction.set_comment(comment);
+    }
+
+    auto result = transaction.run();
+    print_info("");
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
+                  << std::endl;
+        for (auto const & entry : transaction.get_gpg_signature_problems()) {
+            std::cerr << entry << std::endl;
+        }
+        for (auto & problem : transaction.get_transaction_problems()) {
+            std::cerr << "  - " << problem << std::endl;
+        }
+        throw libdnf5::cli::SilentCommandExitError(1);
+    }
+
+    for (auto const & entry : transaction.get_gpg_signature_problems()) {
+        std::cerr << entry << std::endl;
+    }
+    // TODO(mblaha): print a summary of successful transaction
+
+    if (should_store_offline) {
+        store_offline(transaction);
+        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
+                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+                     "offline clean`."
+                  << std::endl;
+    }
+}
+
+libdnf5::Goal * Context::Impl::get_goal(bool new_if_not_exist) {
+    if (!goal && new_if_not_exist) {
+        goal = std::make_unique<libdnf5::Goal>(base);
+    }
+    return goal.get();
+}
+
+void Context::Impl::print_info(std::string_view msg) const {
+    if (!quiet) {
+        output_stream.get() << msg << std::endl;
+    }
+}
+
+
+Context::Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers)
+    : p_impl{new Impl(*this, std::move(loggers))} {}
+
+Context::~Context() {
+    // "Session", which is the parent of "Context", owns objects from dnf5 plugins (command arguments).
+    // Objects from plugins must be destroyed before the plugins can be released,
+    // otherwise they will reference the released code.
+    // TODO(jrohel): Calling clear() is not nice here. Better workflow.
+    clear();
+}
+
+void Context::apply_repository_setopts() {
+    p_impl->apply_repository_setopts();
+}
+
+void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
+    p_impl->update_repo_metadata_from_specs(pkg_specs);
+}
+
+void Context::update_repo_metadata_from_advisory_options(
+    const std::vector<std::string> & names,
+    bool security,
+    bool bugfix,
+    bool enhancement,
+    bool newpackage,
+    const std::vector<std::string> & severity,
+    const std::vector<std::string> & bzs,
+    const std::vector<std::string> & cves) {
+    p_impl->update_repo_metadata_from_advisory_options(
+        names, security, bugfix, enhancement, newpackage, severity, bzs, cves);
+}
+
+void Context::load_repos(bool load_system) {
+    p_impl->load_repos(load_system);
+}
+
+void Context::store_offline(libdnf5::base::Transaction & transaction) {
+    p_impl->store_offline(transaction);
+}
+
+const char * Context::get_comment() const noexcept {
+    return p_impl->get_comment();
+}
+
+void Context::set_comment(const char * comment) noexcept {
+    p_impl->set_comment(comment);
+}
+
+std::string Context::get_cmdline() {
+    return p_impl->get_cmdline();
+}
+
+void Context::set_cmdline(std::string & cmdline) {
+    p_impl->set_cmdline(cmdline);
+}
+
+void Context::download_and_run(libdnf5::base::Transaction & transaction) {
+    p_impl->download_and_run(transaction);
+}
+
+void Context::set_quiet(bool quiet) {
+    p_impl->set_quiet(quiet);
+}
+
+bool Context::get_quiet() const {
+    return p_impl->get_quiet();
+}
+
+void Context::set_dump_main_config(bool enable) {
+    p_impl->set_dump_main_config(enable);
+}
+
+bool Context::get_dump_main_config() const {
+    return p_impl->get_dump_main_config();
+}
+
+void Context::set_dump_repo_config_id_list(const std::vector<std::string> & repo_id_list) {
+    p_impl->set_dump_repo_config_id_list(repo_id_list);
+}
+
+const std::vector<std::string> & Context::get_dump_repo_config_id_list() const {
+    return p_impl->get_dump_repo_config_id_list();
+}
+
+void Context::set_dump_variables(bool enable) {
+    p_impl->set_dump_variables(enable);
+}
+
+bool Context::get_dump_variables() const {
+    return p_impl->get_dump_variables();
+}
+
+void Context::set_show_new_leaves(bool show_new_leaves) {
+    p_impl->set_show_new_leaves(show_new_leaves);
+}
+
+bool Context::get_show_new_leaves() const {
+    return p_impl->get_show_new_leaves();
+}
+
+Plugins & Context::get_plugins() {
+    return p_impl->get_plugins();
+}
+
+libdnf5::Goal * Context::get_goal(bool new_if_not_exist) {
+    return p_impl->get_goal(new_if_not_exist);
+}
+
+void Context::set_transaction(libdnf5::base::Transaction && transaction) {
+    p_impl->set_transaction(std::move(transaction));
+}
+
+libdnf5::base::Transaction * Context::get_transaction() {
+    return p_impl->get_transaction();
+}
+
+void Context::set_load_system_repo(bool on) {
+    p_impl->set_load_system_repo(on);
+}
+bool Context::get_load_system_repo() const noexcept {
+    return p_impl->get_load_system_repo();
+}
+
+void Context::set_load_available_repos(LoadAvailableRepos which) {
+    p_impl->set_load_available_repos(which);
+}
+
+Context::LoadAvailableRepos Context::get_load_available_repos() const noexcept {
+    return p_impl->get_load_available_repos();
+}
+
+void Context::print_info(std::string_view msg) const {
+    p_impl->print_info(msg);
+}
+void Context::set_output_stream(std::ostream & new_output_stream) {
+    p_impl->set_output_stream(new_output_stream);
+}
+
+void Context::set_should_store_offline(bool should_store_offline) {
+    p_impl->set_should_store_offline(should_store_offline);
+}
+
+bool Context::get_should_store_offline() const {
+    return p_impl->get_should_store_offline();
+}
+
+libdnf5::Base & Context::get_base() {
+    return p_impl->get_base();
+};
+
+std::vector<std::pair<std::string, std::string>> & Context::get_setopts() {
+    return p_impl->get_setopts();
+}
+
+const std::vector<std::pair<std::string, std::string>> & Context::get_setopts() const {
+    return p_impl->get_setopts();
+}
+
+std::vector<std::pair<std::string, std::string>> & Context::get_repos_from_path() {
+    return p_impl->get_repos_from_path();
+}
+
+const std::vector<std::pair<std::string, std::string>> & Context::get_repos_from_path() const {
+    return p_impl->get_repos_from_path();
+}
+
 
 RpmTransCB::RpmTransCB(Context & context) : context(context) {
     multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
@@ -239,7 +665,7 @@ void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint6
         case libdnf5::transaction::TransactionItemAction::DISABLE:
         case libdnf5::transaction::TransactionItemAction::RESET:
         case libdnf5::transaction::TransactionItemAction::SWITCH:
-            auto & logger = *context.base.get_logger();
+            auto & logger = *context.get_base().get_logger();
             logger.warning(
                 "Unexpected action in TransactionPackage: {}",
                 static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
@@ -402,154 +828,6 @@ bool RpmTransCB::is_time_to_print() {
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
-void Context::download_and_run(libdnf5::base::Transaction & transaction) {
-    if (should_store_offline) {
-        base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
-    }
-
-    if (!transaction_store_path.empty()) {
-        auto transaction_location = transaction_store_path / "transaction.json";
-        constexpr const char * packages_in_trans_dir{"./packages"};
-        auto packages_location = transaction_store_path / packages_in_trans_dir;
-        constexpr const char * comps_in_trans_dir{"./comps"};
-        auto comps_location = transaction_store_path / comps_in_trans_dir;
-        if (std::filesystem::exists(transaction_location)) {
-            std::cout << libdnf5::utils::sformat(
-                _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
-                transaction_store_path.string());
-            if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
-                std::filesystem::remove_all(packages_location);
-                std::filesystem::remove_all(comps_location);
-            } else {
-                throw libdnf5::cli::AbortedByUserError();
-            }
-        }
-        auto & destdir_opt = base.get_config().get_destdir_option();
-        destdir_opt.set(packages_location);
-        std::filesystem::create_directories(transaction_store_path);
-        transaction.download();
-        transaction.store_comps(comps_location);
-        libdnf5::utils::fs::File transfile(transaction_location, "w");
-        transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
-        return;
-    } else {
-        transaction.download();
-    }
-
-    if (base.get_config().get_downloadonly_option().get_value()) {
-        return;
-    }
-
-    print_info("\nRunning transaction");
-
-    // Compute the total number of transaction actions (number of bars)
-    // Total number of actions = number of packages in the transaction +
-    //                           action of verifying package files if new package files are present in the transaction +
-    //                           action of preparing transaction
-    const auto & trans_packages = transaction.get_transaction_packages();
-    auto num_of_actions = trans_packages.size() + 1;
-    for (auto & trans_pkg : trans_packages) {
-        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
-            ++num_of_actions;
-            break;
-        }
-    }
-
-    auto callbacks = std::make_unique<RpmTransCB>(*this);
-    callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
-    transaction.set_callbacks(std::move(callbacks));
-
-    transaction.set_description(get_cmdline());
-
-    if (comment) {
-        transaction.set_comment(comment);
-    }
-
-    auto result = transaction.run();
-    print_info("");
-    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
-                  << std::endl;
-        for (auto const & entry : transaction.get_gpg_signature_problems()) {
-            std::cerr << entry << std::endl;
-        }
-        for (auto & problem : transaction.get_transaction_problems()) {
-            std::cerr << "  - " << problem << std::endl;
-        }
-        throw libdnf5::cli::SilentCommandExitError(1);
-    }
-
-    for (auto const & entry : transaction.get_gpg_signature_problems()) {
-        std::cerr << entry << std::endl;
-    }
-    // TODO(mblaha): print a summary of successful transaction
-
-    if (should_store_offline) {
-        store_offline(transaction);
-        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
-                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
-                     "offline clean`."
-                  << std::endl;
-    }
-}
-
-void Context::store_offline(libdnf5::base::Transaction & transaction) {
-    const auto & installroot = base.get_config().get_installroot_option().get_value();
-    const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
-    std::filesystem::create_directories(offline_datadir);
-
-    const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
-    dnf5::offline::OfflineTransactionState state{state_path};
-
-    if (state.get_data().status != dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
-        std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
-                  << "\t" << state.get_data().cmd_line << std::endl
-                  << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
-        if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
-            throw libdnf5::cli::SilentCommandExitError(0);
-        }
-    }
-
-    const std::filesystem::path transaction_json_path{offline_datadir / dnf5::offline::TRANSACTION_JSON_FILENAME};
-
-    const std::string json = transaction.serialize();
-
-    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
-
-    transaction_json_file.write(json);
-    transaction_json_file.close();
-
-    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
-    state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
-
-    std::vector<std::string> command_vector;
-    auto * current_command = get_selected_command();
-    while (current_command != get_root_command()) {
-        command_vector.insert(command_vector.begin(), current_command->get_argument_parser_command()->get_id());
-        current_command = current_command->get_parent_command();
-    }
-    state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
-    state.get_data().cmd_line = get_cmdline();
-
-    const auto & detected_releasever = libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
-    if (detected_releasever != nullptr) {
-        state.get_data().system_releasever = *detected_releasever;
-    }
-    state.get_data().target_releasever = base.get_vars()->get_value("releasever");
-
-    if (!base.get_config().get_module_platform_id_option().empty()) {
-        state.get_data().module_platform_id = base.get_config().get_module_platform_id_option().get_value();
-    }
-
-    state.write();
-}
-
-libdnf5::Goal * Context::get_goal(bool new_if_not_exist) {
-    if (!goal && new_if_not_exist) {
-        goal = std::make_unique<libdnf5::Goal>(base);
-    }
-    return goal.get();
-}
 
 void Command::goal_resolved() {
     auto & transaction = *get_context().get_transaction();
@@ -628,7 +906,7 @@ std::vector<std::string> match_specs(
     bool paths,
     bool nevra_for_same_name,
     const char * file_name_regex) {
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
 
     base.get_config().get_assumeno_option().set(libdnf5::Option::Priority::RUNTIME, true);
     ctx.set_quiet(true);

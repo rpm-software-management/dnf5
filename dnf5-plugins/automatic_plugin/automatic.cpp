@@ -106,7 +106,7 @@ void AutomaticCommand::wait_for_network() {
     }
 
     auto & context = get_context();
-    auto & base = context.base;
+    auto & base = context.get_base();
     auto & logger = *base.get_logger();
     logger.debug("Waiting for internet connection...");
 
@@ -273,7 +273,7 @@ void AutomaticCommand::set_argument_parser() {
 
 void AutomaticCommand::pre_configure() {
     auto & context = get_context();
-    auto & base = context.base;
+    auto & base = context.get_base();
 
     auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
     if (timer->get_value() && random_sleep > 0) {
@@ -321,7 +321,7 @@ void AutomaticCommand::configure() {
 
 void AutomaticCommand::run() {
     auto & context = get_context();
-    auto & base = context.base;
+    auto & base = context.get_base();
     bool success = true;
 
     // setup upgrade transaction goal
@@ -455,7 +455,7 @@ AutomaticCommand::~AutomaticCommand() {
     // during ~Base, resulting in a segmentation fault. Therefore, we need to reset
     // download_callbacks manually.
     if (download_callbacks_set) {
-        context.base.set_download_callbacks(nullptr);
+        context.get_base().set_download_callbacks(nullptr);
     }
 }
 

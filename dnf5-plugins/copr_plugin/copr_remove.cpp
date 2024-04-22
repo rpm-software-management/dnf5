@@ -39,7 +39,7 @@ void CoprRemoveCommand::set_argument_parser() {
 
 
 void CoprRemoveCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     copr_repo_remove(base, get_project_spec());
 }
 

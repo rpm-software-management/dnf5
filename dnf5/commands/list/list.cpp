@@ -140,14 +140,14 @@ std::unique_ptr<libdnf5::cli::output::PackageListSections> ListCommand::create_o
 
 void ListCommand::run() {
     auto & ctx = get_context();
-    auto & config = ctx.base.get_config();
+    auto & config = ctx.get_base().get_config();
 
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
-    libdnf5::rpm::PackageQuery base_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery base_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
 
     // pre-select by patterns
     if (!pkg_specs.empty()) {
-        base_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        base_query = libdnf5::rpm::PackageQuery(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf5::ResolveSpecSettings settings;
         settings.set_ignore_case(true);
         settings.set_with_nevra(true);

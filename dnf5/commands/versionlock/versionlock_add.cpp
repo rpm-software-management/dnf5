@@ -88,7 +88,7 @@ bool lock_version(
 
 void VersionlockAddCommand::run() {
     auto & ctx = get_context();
-    auto package_sack = ctx.base.get_rpm_package_sack();
+    auto package_sack = ctx.get_base().get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
     auto orig_size = vl_config.get_packages().size();
 
@@ -100,7 +100,7 @@ void VersionlockAddCommand::run() {
     settings.set_with_filenames(false);
     settings.set_with_binaries(false);
     for (const auto & spec : pkg_specs) {
-        libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+        libdnf5::rpm::PackageQuery query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
         query.resolve_pkg_spec(spec, settings, false);
         if (query.empty()) {
             std::cerr << libdnf5::utils::sformat(_("No package found for \"{}\"."), spec) << std::endl;

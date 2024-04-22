@@ -41,12 +41,12 @@ void MakeCacheCommand::set_argument_parser() {
 void MakeCacheCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::repo::RepoQuery enabled_repos_query(ctx.base);
+    libdnf5::repo::RepoQuery enabled_repos_query(ctx.get_base());
     enabled_repos_query.filter_enabled(true);
     if (enabled_repos_query.empty()) {
         std::string repos_paths;
         bool first = true;
-        for (const auto & val : ctx.base.get_config().get_reposdir_option().get_value()) {
+        for (const auto & val : ctx.get_base().get_config().get_reposdir_option().get_value()) {
             if (!first) {
                 repos_paths += ", ";
             }

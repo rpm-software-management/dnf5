@@ -34,7 +34,7 @@ void VersionlockClearCommand::set_argument_parser() {
 
 void VersionlockClearCommand::run() {
     auto & ctx = get_context();
-    auto package_sack = ctx.base.get_rpm_package_sack();
+    auto package_sack = ctx.get_base().get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
     vl_config.get_packages().clear();
     vl_config.save();

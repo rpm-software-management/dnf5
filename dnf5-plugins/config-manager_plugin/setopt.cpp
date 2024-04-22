@@ -161,7 +161,7 @@ void ConfigManagerSetOptCommand::set_argument_parser() {
 
 void ConfigManagerSetOptCommand::configure() {
     auto & ctx = get_context();
-    const auto & config = ctx.base.get_config();
+    const auto & config = ctx.get_base().get_config();
 
     auto repo_ids = load_existing_repo_ids();
     for (auto & [in_repo_id, repo_setopts] : in_repos_setopts) {
@@ -236,7 +236,7 @@ void ConfigManagerSetOptCommand::configure() {
 
 std::set<std::string> ConfigManagerSetOptCommand::load_existing_repo_ids() const {
     auto & ctx = get_context();
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
     auto logger = base.get_logger();
 
     std::set<std::string> repo_ids;

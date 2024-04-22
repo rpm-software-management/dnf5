@@ -263,7 +263,7 @@ void ConfigManagerAddRepoCommand::set_argument_parser() {
 
 void ConfigManagerAddRepoCommand::configure() {
     auto & ctx = get_context();
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
 
     const auto & repo_dirs = base.get_config().get_reposdir_option().get_value();
     if (repo_dirs.empty()) {
@@ -283,7 +283,7 @@ void ConfigManagerAddRepoCommand::configure() {
 void ConfigManagerAddRepoCommand::add_repos_from_repofile(
     const SourceRepofile & source_repofile, const std::filesystem::path & dest_repo_dir) {
     auto & ctx = get_context();
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
     auto logger = base.get_logger();
 
     if (save_filename.empty()) {
@@ -375,7 +375,7 @@ void ConfigManagerAddRepoCommand::create_repo(
     const std::map<std::string, std::string> & repo_opts,
     const std::filesystem::path & dest_repo_dir) {
     auto & ctx = get_context();
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
     auto logger = base.get_logger();
 
     // Test for presence of required arguments.
@@ -472,7 +472,7 @@ void ConfigManagerAddRepoCommand::test_if_filepath_not_exist(
 void ConfigManagerAddRepoCommand::test_if_ids_not_already_exist(
     const std::vector<std::string> & repo_ids, const std::filesystem::path & ignore_path) const {
     auto & ctx = get_context();
-    auto & base = ctx.base;
+    auto & base = ctx.get_base();
     auto logger = base.get_logger();
 
     // The repository can also be defined in the main configuration file.
