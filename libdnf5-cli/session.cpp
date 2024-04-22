@@ -127,11 +127,41 @@ Command::Command(Session & session, const std::string & name) : session{session}
     argument_parser_command->set_user_data(this);
 }
 
+Command::~Command() = default;
+
+void Command::set_parent_command() {}
+
+void Command::set_argument_parser() {}
+
+void Command::register_subcommands() {}
+
+void Command::pre_configure() {}
+
+void Command::configure() {}
+
+void Command::load_additional_packages() {}
+
+void Command::run() {}
+
+void Command::goal_resolved() {}
 
 void Command::throw_missing_command() const {
     throw ArgumentParserMissingCommandError(M_("Missing command"), get_argument_parser_command()->get_id());
 }
+Session & Command::get_session() const noexcept {
+    return session;
+}
 
+Command * Command::get_parent_command() const noexcept {
+    auto * parser_parent = argument_parser_command->get_parent();
+    if (!parser_parent)
+        return nullptr;
+    return static_cast<Command *>(parser_parent->get_user_data());
+}
+
+libdnf5::cli::ArgumentParser::Command * Command::get_argument_parser_command() const noexcept {
+    return argument_parser_command;
+}
 
 void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf5::cli::ArgumentParser::Group * group) {
     auto * sub_arg_parser_command = subcommand->get_argument_parser_command();

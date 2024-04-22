@@ -87,41 +87,48 @@ private:
 class Command : public libdnf5::cli::ArgumentParserUserData {
 public:
     explicit Command(Session & session, const std::string & name);
-    virtual ~Command() = default;
+    virtual ~Command();
+
+    Command() = delete;
+    Command(const Command & src) = delete;
+    Command(Command && src) = delete;
+
+    Command & operator=(const Command & src) = delete;
+    Command & operator=(Command && src) = delete;
 
     /// Sets a parent command and group. Can add a new group to the parent command.
     /// @since 5.0
-    virtual void set_parent_command() {}
+    virtual void set_parent_command();
 
     /// Set command arguments.
     /// @since 5.0
-    virtual void set_argument_parser() {}
+    virtual void set_argument_parser();
 
     /// Register subcommands.
     /// @since 5.0
-    virtual void register_subcommands() {}
+    virtual void register_subcommands();
 
     /// Adjust configuration.
     /// Called after parsing the command line and but before loading configuration files.
     /// @since 5.0
-    virtual void pre_configure() {}
+    virtual void pre_configure();
 
     /// Adjust configuration.
     /// Called after parsing the command line and loading configuration files.
     /// @since 5.0
-    virtual void configure() {}
+    virtual void configure();
 
     /// Loads additional packages that are not in the repositories.
     /// @since 5.0
-    virtual void load_additional_packages() {}
+    virtual void load_additional_packages();
 
     /// Run the command.
     /// @since 5.0
-    virtual void run() {}
+    virtual void run();
 
     /// Called immediately after the goal is resolved.
     /// @since 5.0
-    virtual void goal_resolved() {}
+    virtual void goal_resolved();
 
     /// Throw a ArgumentParserMissingCommandError exception with the command name in it
     void throw_missing_command() const;
@@ -129,24 +136,17 @@ public:
     /// @return Pointer to the Session.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    Session & get_session() const noexcept { return session; }
+    Session & get_session() const noexcept;
 
     /// @return Pointer to the parent Command. Root command returns null because it has no parent.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    Command * get_parent_command() const noexcept {
-        auto * parser_parent = argument_parser_command->get_parent();
-        if (!parser_parent)
-            return nullptr;
-        return static_cast<Command *>(parser_parent->get_user_data());
-    }
+    Command * get_parent_command() const noexcept;
 
     /// @return Pointer to the underlying argument parser command.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    libdnf5::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept {
-        return argument_parser_command;
-    }
+    libdnf5::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept;
 
 protected:
     /// Register a `subcommand` to the current command.
