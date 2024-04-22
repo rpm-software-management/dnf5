@@ -553,15 +553,18 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     const char * arg_value;
     int consumed_args;
     if (has_value) {
-        if (option[1] != '\0') {
-            arg_value = option + 1;
-            consumed_args = 1;
-        } else {
+        if (option[1] == '\0') {
             if (argc < 2) {
                 throw ArgumentParserNamedArgMissingValueError(M_("Missing value for named argument \"-{}\""), *option);
             }
             arg_value = argv[1];
             consumed_args = 2;
+        } else if (option[1] == '=') {
+            throw ArgumentParserInvalidValueError(
+                M_("'=' is not supported delimiter for short option \"-{}\""), std::string(option));
+        } else {
+            arg_value = option + 1;
+            consumed_args = 1;
         }
     } else {
         arg_value = const_val.c_str();
