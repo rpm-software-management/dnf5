@@ -24,7 +24,42 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::session {
 
-void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+class Session::Impl {
+public:
+    Impl() : argument_parser(new libdnf5::cli::ArgumentParser) {}
+
+    void add_and_initialize_command(std::unique_ptr<Command> && command);
+
+    Command * get_root_command() {
+        auto * arg_parser_root_command = argument_parser->get_root_command();
+        return arg_parser_root_command ? static_cast<Command *>(arg_parser_root_command->get_user_data()) : nullptr;
+    }
+
+    void set_root_command(Command & command) {
+        argument_parser->set_root_command(command.get_argument_parser_command());
+    }
+
+    Command * get_selected_command() { return selected_command; }
+
+    void set_selected_command(Command * command) { selected_command = command; }
+
+    libdnf5::cli::ArgumentParser & get_argument_parser() { return *argument_parser; }
+
+    void clear() {
+        for (auto & cmd : commands) {
+            cmd.reset();
+        }
+        argument_parser.reset();
+    }
+
+private:
+    Command * selected_command{nullptr};
+    std::vector<std::unique_ptr<Command>> commands;
+    std::unique_ptr<libdnf5::cli::ArgumentParser> argument_parser;
+};
+
+
+void Session::Impl::add_and_initialize_command(std::unique_ptr<Command> && command) {
     auto * arg_parser_command = command->get_argument_parser_command();
 
     // set the command as selected when parsed
@@ -48,22 +83,40 @@ void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
 }
 
 
-libdnf5::cli::ArgumentParser & Session::get_argument_parser() {
-    return *argument_parser;
+Session::Session() : p_impl{new Impl} {}
+
+Session::~Session() = default;
+
+Session::Session(Session && src) = default;
+
+Session & Session::operator=(Session && src) = default;
+
+void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+    p_impl->add_and_initialize_command(std::move(command));
 }
 
+Command * Session::get_root_command() {
+    return p_impl->get_root_command();
+}
 
 void Session::set_root_command(Command & command) {
-    // register command as root command in argument parser
-    get_argument_parser().set_root_command(command.get_argument_parser_command());
+    p_impl->set_root_command(command);
 }
 
+Command * Session::get_selected_command() {
+    return p_impl->get_selected_command();
+}
+
+void Session::set_selected_command(Command * command) {
+    p_impl->set_selected_command(command);
+}
+
+libdnf5::cli::ArgumentParser & Session::get_argument_parser() {
+    return p_impl->get_argument_parser();
+}
 
 void Session::clear() {
-    for (auto & cmd : commands) {
-        cmd.reset();
-    }
-    argument_parser.reset();
+    p_impl->clear();
 }
 
 
