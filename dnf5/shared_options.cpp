@@ -28,6 +28,35 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
+AllowErasingOption::AllowErasingOption(libdnf5::cli::session::Command & command)
+    : BoolOption(command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
+
+AllowErasingOption::~AllowErasingOption() = default;
+
+
+SkipBrokenOption::SkipBrokenOption(dnf5::Command & command)
+    : BoolOption(
+          command,
+          "skip-broken",
+          '\0',
+          _("Allow resolving of depsolve problems by skipping packages"),
+          false,
+          &command.get_context().get_base().get_config().get_skip_broken_option()) {}
+
+SkipBrokenOption::~SkipBrokenOption() = default;
+
+
+SkipUnavailableOption::SkipUnavailableOption(dnf5::Command & command)
+    : BoolOption(
+          command,
+          "skip-unavailable",
+          '\0',
+          _("Allow skipping unavailable packages"),
+          false,
+          &command.get_context().get_base().get_config().get_skip_unavailable_option()) {}
+
+SkipUnavailableOption::~SkipUnavailableOption() = default;
+
 
 void create_allow_downgrade_options(dnf5::Command & command) {
     auto * solver_options = command.get_context().get_argument_parser().add_new_group("solver_options");
