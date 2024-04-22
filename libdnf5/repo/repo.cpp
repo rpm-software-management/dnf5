@@ -85,7 +85,6 @@ private:
     ConfigRepo config;
 
     SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
-    bool loaded{false};
     bool expired{false};
     std::unique_ptr<SolvRepo> solv_repo;
     std::unique_ptr<RepoDownloader> downloader;
@@ -219,7 +218,7 @@ void Repo::download_metadata(const std::string & destdir) {
 
 void Repo::load() {
     // Each repository can only be loaded once. This one has already loaded, so just return instantly
-    if (p_impl->loaded) {
+    if (is_loaded()) {
         return;
     }
 
@@ -233,8 +232,6 @@ void Repo::load() {
 
     p_impl->solv_repo->set_needs_internalizing();
     p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
-
-    p_impl->loaded = true;
 }
 
 void Repo::add_libsolv_testcase(const std::string & path) {
@@ -617,7 +614,7 @@ RepoDownloader & Repo::get_downloader() const {
 }
 
 bool Repo::is_loaded() const {
-    return p_impl->loaded;
+    return p_impl->solv_repo.get();
 }
 
 SolvRepo & Repo::get_solv_repo() const {
