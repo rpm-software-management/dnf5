@@ -51,7 +51,7 @@ void GroupInstallCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
@@ -66,7 +66,7 @@ void GroupInstallCommand::run() {
     }
     if (with_optional->get_value()) {
         auto group_package_types = libdnf5::comps::package_type_from_string(
-            ctx.base.get_config().get_group_package_types_option().get_value());
+            ctx.get_base().get_config().get_group_package_types_option().get_value());
         settings.set_group_package_types(group_package_types | libdnf5::comps::PackageType::OPTIONAL);
     }
     for (const auto & spec : group_specs->get_value()) {

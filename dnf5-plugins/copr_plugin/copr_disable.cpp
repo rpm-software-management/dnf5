@@ -39,7 +39,7 @@ void CoprDisableCommand::set_argument_parser() {
 
 
 void CoprDisableCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     copr_repo_disable(base, get_project_spec());
 }
 

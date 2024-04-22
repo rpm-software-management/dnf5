@@ -65,7 +65,7 @@ void delete_package(libdnf5::rpm::VersionlockConfig & vl_config, std::string_vie
 
 void VersionlockDeleteCommand::run() {
     auto & ctx = get_context();
-    auto package_sack = ctx.base.get_rpm_package_sack();
+    auto package_sack = ctx.get_base().get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
     auto orig_size = vl_config.get_packages().size();
 

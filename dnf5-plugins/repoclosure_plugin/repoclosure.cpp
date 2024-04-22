@@ -99,7 +99,7 @@ void RepoclosureCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(false);
     // filelists needed because there are packages in repos with file requirements
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
@@ -111,13 +111,14 @@ void RepoclosureCommand::run() {
     // to_check_query is the set of packages we are checking the dependencies of
     // in case that `--newest` was used, start with an empty query
     bool newest_used = newest->get_value();
-    libdnf5::rpm::PackageQuery available_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
-    libdnf5::rpm::PackageQuery to_check_query(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
+    libdnf5::rpm::PackageQuery available_query(
+        ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
+    libdnf5::rpm::PackageQuery to_check_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, newest_used);
     if (newest_used) {
-        libdnf5::repo::RepoQuery repos(ctx.base);
+        libdnf5::repo::RepoQuery repos(ctx.get_base());
         repos.filter_enabled(true);
         for (const auto & repo : repos) {
-            libdnf5::rpm::PackageQuery repo_pkgs(ctx.base);
+            libdnf5::rpm::PackageQuery repo_pkgs(ctx.get_base());
             repo_pkgs.filter_repo_id({repo->get_id()});
             repo_pkgs.filter_latest_evr();
             available_query |= repo_pkgs;
@@ -133,12 +134,12 @@ void RepoclosureCommand::run() {
         to_check_query.filter_arch(arches);
     }
 
-    if (ctx.base.get_config().get_best_option().get_value()) {
+    if (ctx.get_base().get_config().get_best_option().get_value()) {
         available_query.filter_latest_evr();
     }
 
     if (!pkg_specs.empty()) {
-        libdnf5::rpm::PackageQuery to_check_pkgs(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::rpm::PackageQuery to_check_pkgs(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf5::ResolveSpecSettings settings;
         settings.set_with_nevra(true);
         settings.set_with_provides(false);

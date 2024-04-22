@@ -58,14 +58,14 @@ void ConfigManagerUnsetVarCommand::set_argument_parser() {
 void ConfigManagerUnsetVarCommand::configure() {
     auto & ctx = get_context();
     if (!vars_to_remove.empty()) {
-        const auto & vars_dir = get_last_vars_dir_path(ctx.base.get_config());
+        const auto & vars_dir = get_last_vars_dir_path(ctx.get_base().get_config());
         if (vars_dir.empty()) {
             throw ConfigManagerError(M_("Missing path to vars directory"));
         }
 
         if (!std::filesystem::exists(vars_dir)) {
             write_warning(
-                *ctx.base.get_logger(),
+                *ctx.get_base().get_logger(),
                 M_("config-manager: Request to remove variable but vars directory was not found: {}"),
                 vars_dir.string());
             return;
@@ -78,7 +78,7 @@ void ConfigManagerUnsetVarCommand::configure() {
                     std::filesystem::remove(filepath);
                 } else {
                     write_warning(
-                        *ctx.base.get_logger(),
+                        *ctx.get_base().get_logger(),
                         M_("config-manager: Request to remove variable but it is not present in the vars directory: "
                            "{}"),
                         name);

@@ -42,7 +42,7 @@ void GroupRemoveCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 

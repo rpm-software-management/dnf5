@@ -48,7 +48,7 @@ void AutoremoveCommand::configure() {
 
 void AutoremoveCommand::run() {
     auto & ctx = get_context();
-    libdnf5::rpm::PackageQuery unneeded(ctx.base);
+    libdnf5::rpm::PackageQuery unneeded(ctx.get_base());
     unneeded.filter_unneeded();
     auto goal = get_context().get_goal();
     for (const auto & pkg : unneeded) {

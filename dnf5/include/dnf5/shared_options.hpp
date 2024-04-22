@@ -42,7 +42,7 @@ public:
               '\0',
               _("Allow resolving of depsolve problems by skipping packages"),
               false,
-              &command.get_context().base.get_config().get_skip_broken_option()) {}
+              &command.get_context().get_base().get_config().get_skip_broken_option()) {}
 };
 
 class SkipUnavailableOption : public libdnf5::cli::session::BoolOption {
@@ -54,7 +54,7 @@ public:
               '\0',
               _("Allow skipping unavailable packages"),
               false,
-              &command.get_context().base.get_config().get_skip_unavailable_option()) {}
+              &command.get_context().get_base().get_config().get_skip_unavailable_option()) {}
 };
 
 /// Create two options (`--allow-downgrade` and `--no-allow-downgrade`) for a command provided as an argument command.

@@ -49,9 +49,14 @@ public:
     enum class LoadAvailableRepos { NONE, ENABLED, ALL };
 
     /// Constructs a new Context instance and sets the destination loggers.
-    Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers);
+    explicit Context(std::vector<std::unique_ptr<libdnf5::Logger>> && loggers);
 
+    Context(const Context & src) = delete;
+    Context(Context && src) = delete;
     ~Context();
+
+    Context & operator=(const Context & src) = delete;
+    Context & operator=(Context && src) = delete;
 
     void apply_repository_setopts();
 
@@ -73,10 +78,6 @@ public:
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system);
 
-    libdnf5::Base base;
-    std::vector<std::pair<std::string, std::string>> setopts;
-    std::vector<std::pair<std::string, std::string>> repos_from_path;
-
     /// list of lists of libdnf5 plugin names (global patterns) that we want to enable (true) or disable (false)
     std::vector<std::pair<std::vector<std::string>, bool>> libdnf5_plugins_enablement;
 
@@ -87,97 +88,81 @@ public:
     std::filesystem::path transaction_store_path;
 
     /// Gets user comment.
-    const char * get_comment() const noexcept { return comment; }
+    const char * get_comment() const noexcept;
 
     /// Stores pointer to user comment.
-    void set_comment(const char * comment) noexcept { this->comment = comment; }
+    void set_comment(const char * comment) noexcept;
 
     /// Get command line used to run the dnf5 command
-    std::string get_cmdline() { return cmdline; }
+    std::string get_cmdline();
 
     /// Set command line used to run the dnf5 command
-    void set_cmdline(std::string & cmdline) { this->cmdline = cmdline; }
+    void set_cmdline(std::string & cmdline);
 
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
     void download_and_run(libdnf5::base::Transaction & transaction);
 
     /// Set to true to suppresses messages notifying about the current state or actions of dnf5.
-    void set_quiet(bool quiet) { this->quiet = quiet; }
+    void set_quiet(bool quiet);
 
-    bool get_quiet() const { return quiet; }
+    bool get_quiet() const;
 
     /// Set to true to print information about main configuration
-    void set_dump_main_config(bool enable) { this->dump_main_config = enable; }
+    void set_dump_main_config(bool enable);
 
-    bool get_dump_main_config() const { return dump_main_config; }
+    bool get_dump_main_config() const;
 
     /// Set a list of repository IDs to print information about their configuration
-    void set_dump_repo_config_id_list(const std::vector<std::string> & repo_id_list) {
-        this->dump_repo_config_id_list = repo_id_list;
-    }
+    void set_dump_repo_config_id_list(const std::vector<std::string> & repo_id_list);
 
-    const std::vector<std::string> & get_dump_repo_config_id_list() const { return dump_repo_config_id_list; }
+    const std::vector<std::string> & get_dump_repo_config_id_list() const;
 
     /// Set to true to print information about variables
-    void set_dump_variables(bool enable) { this->dump_variables = enable; }
+    void set_dump_variables(bool enable);
 
-    bool get_dump_variables() const { return dump_variables; }
+    bool get_dump_variables() const;
 
     /// Set to true to show newly installed leaf packages and packages that became leaves after a transaction.
-    void set_show_new_leaves(bool show_new_leaves) { this->show_new_leaves = show_new_leaves; }
+    void set_show_new_leaves(bool show_new_leaves);
 
-    bool get_show_new_leaves() const { return show_new_leaves; }
+    bool get_show_new_leaves() const;
 
-    Plugins & get_plugins() { return *plugins; }
+    Plugins & get_plugins();
 
     libdnf5::Goal * get_goal(bool new_if_not_exist = true);
 
-    void set_transaction(libdnf5::base::Transaction && transaction) {
-        this->transaction = std::make_unique<libdnf5::base::Transaction>(std::move(transaction));
-    }
+    void set_transaction(libdnf5::base::Transaction && transaction);
 
-    libdnf5::base::Transaction * get_transaction() { return transaction.get(); }
+    libdnf5::base::Transaction * get_transaction();
 
-    void set_load_system_repo(bool on) { load_system_repo = on; }
-    bool get_load_system_repo() const noexcept { return load_system_repo; }
+    void set_load_system_repo(bool on);
+    bool get_load_system_repo() const noexcept;
 
-    void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
-    LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
+    void set_load_available_repos(LoadAvailableRepos which);
+    LoadAvailableRepos get_load_available_repos() const noexcept;
 
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(std::string_view msg) const;
 
-    void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
+    void set_output_stream(std::ostream & new_output_stream);
 
     // Store the transaction to be run later in a minimal boot environment,
     // using `dnf5 offline`
-    void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
-    bool get_should_store_offline() const { return should_store_offline; }
+    void set_should_store_offline(bool should_store_offline);
+    bool get_should_store_offline() const;
+
+    libdnf5::Base & get_base();
+
+    std::vector<std::pair<std::string, std::string>> & get_setopts();
+    const std::vector<std::pair<std::string, std::string>> & get_setopts() const;
+
+    std::vector<std::pair<std::string, std::string>> & get_repos_from_path();
+    const std::vector<std::pair<std::string, std::string>> & get_repos_from_path() const;
 
 private:
-    std::string cmdline;
-
-    /// Points to user comment.
-    const char * comment{nullptr};
-
-    bool should_store_offline = false;
-
-    bool quiet{false};
-    bool dump_main_config{false};
-    std::vector<std::string> dump_repo_config_id_list;
-    bool dump_variables{false};
-    bool show_new_leaves{false};
-    std::string get_cmd_line();
-
-    std::reference_wrapper<std::ostream> output_stream = std::cout;
-
-    std::unique_ptr<Plugins> plugins;
-    std::unique_ptr<libdnf5::Goal> goal;
-    std::unique_ptr<libdnf5::base::Transaction> transaction;
-
-    bool load_system_repo{false};
-    LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

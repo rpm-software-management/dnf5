@@ -45,14 +45,14 @@ void GroupListCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void GroupListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::comps::GroupQuery query(ctx.base);
+    libdnf5::comps::GroupQuery query(ctx.get_base());
     auto group_specs_str = group_specs->get_value();
 
     // Filter by patterns if given

@@ -83,7 +83,7 @@ void NeedsRestartingCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 
     const std::set<std::string> metadata_types{libdnf5::METADATA_TYPE_FILELISTS, libdnf5::METADATA_TYPE_UPDATEINFO};
-    context.base.get_config().get_optional_metadata_types_option().add(
+    context.get_base().get_config().get_optional_metadata_types_option().add(
         libdnf5::Option::Priority::RUNTIME, metadata_types);
 }
 
@@ -109,7 +109,7 @@ time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
     //      correct. Does not work on containers which share their kernel with
     //      the host---there, the host kernel uptime is returned
 
-    const auto & logger = ctx.base.get_logger();
+    const auto & logger = ctx.get_base().get_logger();
 
     // First, ask systemd for the boot time. If systemd is available, this is
     // the best option.
@@ -189,7 +189,7 @@ libdnf5::rpm::PackageSet recursive_dependencies(
 void NeedsRestartingCommand::system_needs_restarting(Context & ctx) {
     const auto boot_time = get_boot_time(ctx);
 
-    libdnf5::rpm::PackageQuery reboot_suggested{ctx.base};
+    libdnf5::rpm::PackageQuery reboot_suggested{ctx.get_base()};
     reboot_suggested.filter_installed();
     reboot_suggested.filter_reboot_suggested();
 
@@ -285,7 +285,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
     // Iterate over each file from each installed package and check whether it
     // is a unit file for a running service. This is much faster than running
     // filter_file on each unit file.
-    libdnf5::rpm::PackageQuery installed{ctx.base};
+    libdnf5::rpm::PackageQuery installed{ctx.get_base()};
     installed.filter_installed();
 
     std::vector<std::string> service_names;

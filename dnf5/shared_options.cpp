@@ -40,14 +40,14 @@ void create_allow_downgrade_options(dnf5::Command & command) {
     allow_downgrade->set_long_name("allow-downgrade");
     allow_downgrade->set_description("Allow downgrade of dependencies for resolve of requested operation");
     allow_downgrade->set_const_value("true");
-    allow_downgrade->link_value(&command.get_context().base.get_config().get_allow_downgrade_option());
+    allow_downgrade->link_value(&command.get_context().get_base().get_config().get_allow_downgrade_option());
     parser_command->register_named_arg(allow_downgrade);
 
     auto no_allow_downgrade = parser.add_new_named_arg("no-allow-downgrade");
     no_allow_downgrade->set_long_name("no-allow-downgrade");
     no_allow_downgrade->set_description("Disable downgrade of dependencies for resolve of requested operation");
     no_allow_downgrade->set_const_value("false");
-    no_allow_downgrade->link_value(&command.get_context().base.get_config().get_allow_downgrade_option());
+    no_allow_downgrade->link_value(&command.get_context().get_base().get_config().get_allow_downgrade_option());
     parser_command->register_named_arg(no_allow_downgrade);
 
     allow_downgrade->add_conflict_argument(*no_allow_downgrade);
@@ -61,7 +61,7 @@ void create_destdir_option(dnf5::Command & command) {
         "Set directory used for downloading packages to. Default location is to the current working directory.");
     destdir->set_has_value(true);
     destdir->set_arg_value_help("DESTDIR");
-    destdir->link_value(&command.get_context().base.get_config().get_destdir_option());
+    destdir->link_value(&command.get_context().get_base().get_config().get_destdir_option());
     command.get_argument_parser_command()->register_named_arg(destdir);
 }
 
@@ -71,7 +71,7 @@ void create_downloadonly_option(dnf5::Command & command) {
     downloadonly->set_long_name("downloadonly");
     downloadonly->set_description("Only download packages for a transaction");
     downloadonly->set_const_value("true");
-    downloadonly->link_value(&command.get_context().base.get_config().get_downloadonly_option());
+    downloadonly->link_value(&command.get_context().get_base().get_config().get_downloadonly_option());
     command.get_argument_parser_command()->register_named_arg(downloadonly);
 }
 
@@ -88,8 +88,9 @@ void create_offline_option(dnf5::Command & command) {
                                      [[maybe_unused]] const char * value) {
         // The installroot will be prepended to the cachedir and system_cachedir later in Base.setup()
         const auto & offline_datadir = dnf5::offline::DEFAULT_DATADIR;
-        ctx.base.get_config().get_system_cachedir_option().set(libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
-        ctx.base.get_config().get_cachedir_option().set(libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
+        ctx.get_base().get_config().get_system_cachedir_option().set(
+            libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
+        ctx.get_base().get_config().get_cachedir_option().set(libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
         ctx.set_should_store_offline(true);
         return true;
     });

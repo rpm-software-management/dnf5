@@ -92,7 +92,7 @@ void BuildDepCommand::set_argument_parser() {
 
 void BuildDepCommand::configure() {
     if (!pkg_specs.empty()) {
-        get_context().base.get_repo_sack()->enable_source_repos();
+        get_context().get_base().get_repo_sack()->enable_source_repos();
     }
 
     auto & context = get_context();
@@ -187,7 +187,7 @@ bool BuildDepCommand::add_from_pkg(
     std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const std::string & pkg_spec) {
     auto & ctx = get_context();
 
-    libdnf5::rpm::PackageQuery pkg_query(ctx.base);
+    libdnf5::rpm::PackageQuery pkg_query(ctx.get_base());
     libdnf5::ResolveSpecSettings settings;
     settings.set_with_provides(false);
     settings.set_with_filenames(false);
@@ -200,7 +200,7 @@ bool BuildDepCommand::add_from_pkg(
         source_names.emplace_back(pkg.get_source_name());
     }
 
-    libdnf5::rpm::PackageQuery source_pkgs(ctx.base);
+    libdnf5::rpm::PackageQuery source_pkgs(ctx.get_base());
     source_pkgs.filter_arch(std::vector<std::string>{"src", "nosrc"});
     source_pkgs.filter_name(source_names);
     if (source_pkgs.empty()) {
@@ -286,9 +286,9 @@ void BuildDepCommand::run() {
     if (conflicts_specs.size() > 0) {
         auto & ctx = get_context();
         // exclude available (not installed) conflicting packages
-        auto system_repo = ctx.base.get_repo_sack()->get_system_repo();
-        auto rpm_package_sack = ctx.base.get_rpm_package_sack();
-        libdnf5::rpm::PackageQuery conflicts_query_available(ctx.base);
+        auto system_repo = ctx.get_base().get_repo_sack()->get_system_repo();
+        auto rpm_package_sack = ctx.get_base().get_rpm_package_sack();
+        libdnf5::rpm::PackageQuery conflicts_query_available(ctx.get_base());
         conflicts_query_available.filter_name(std::vector<std::string>{conflicts_specs.begin(), conflicts_specs.end()});
         libdnf5::rpm::PackageQuery conflicts_query_installed(conflicts_query_available);
         conflicts_query_available.filter_repo_id({system_repo->get_id()}, libdnf5::sack::QueryCmp::NEQ);
@@ -305,7 +305,7 @@ void BuildDepCommand::goal_resolved() {
     auto & transaction = *ctx.get_transaction();
     auto transaction_problems = transaction.get_problems();
     if (transaction_problems != libdnf5::GoalProblem::NO_PROBLEM) {
-        auto skip_unavailable = ctx.base.get_config().get_skip_unavailable_option().get_value();
+        auto skip_unavailable = ctx.get_base().get_config().get_skip_unavailable_option().get_value();
         if (transaction_problems != libdnf5::GoalProblem::NOT_FOUND || !skip_unavailable) {
             throw GoalResolveError(transaction);
         }

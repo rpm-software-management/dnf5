@@ -63,7 +63,7 @@ void log_status(
     const auto & version = get_application_version();
     const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
 
-    auto logger = context.base.get_logger();
+    auto logger = context.get_base().get_logger();
     logger->info(message);
 
 #ifdef WITH_SYSTEMD
