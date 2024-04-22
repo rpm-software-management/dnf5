@@ -34,25 +34,21 @@ namespace libdnf5::repo {
 /// To implement callbacks, inherit from this class and override virtual methods.
 class RepoCallbacks {
 public:
-    RepoCallbacks() = default;
+    explicit RepoCallbacks();
     RepoCallbacks(const RepoCallbacks &) = delete;
     RepoCallbacks(RepoCallbacks &&) = delete;
+    virtual ~RepoCallbacks();
+
     RepoCallbacks & operator=(const RepoCallbacks &) = delete;
     RepoCallbacks & operator=(RepoCallbacks &&) = delete;
-    virtual ~RepoCallbacks() = default;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 
     /// GPG key import callback. Allows to confirm or deny the import.
     /// @param key_info The key that is about to be imported
     /// @return `true` to import the key, `false` to not import
-    virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) { return true; }
+    virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info);
     /// Called on successful repo key import.
     /// @param key_info The key that was successfully imported
-    virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info) {}
-
-#pragma GCC diagnostic pop
+    virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info);
 };
 
 }  // namespace libdnf5::repo
