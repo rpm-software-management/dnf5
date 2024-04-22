@@ -27,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::base {
 
-class TransactionGroup;
 class TransactionPackage;
 
 }  // namespace libdnf5::base
@@ -38,10 +37,6 @@ namespace libdnf5::rpm {
 /// Class represents one item in transaction set.
 using TransactionItem = base::TransactionPackage;
 
-
-// suppress "unused-parameter" warnings because TransactionCallbacks is a virtual class
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 /// Base class for Transaction callbacks
 /// User implements Transaction callbacks by inheriting this class and overriding its methods.
@@ -67,36 +62,40 @@ public:
     /// @return  string representation of the scriptlet type
     static const char * script_type_to_string(ScriptType type) noexcept;
 
-    virtual ~TransactionCallbacks() = default;
+    explicit TransactionCallbacks();
+    TransactionCallbacks(const TransactionCallbacks &) = delete;
+    TransactionCallbacks(TransactionCallbacks &&) = delete;
+    virtual ~TransactionCallbacks();
+
+    TransactionCallbacks & operator=(const TransactionCallbacks &) = delete;
+    TransactionCallbacks & operator=(TransactionCallbacks &&) = delete;
 
     /// Called right before the rpm transaction is run
     /// @param total Number of elements in the rpm transaction
-    virtual void before_begin(uint64_t total) {}
+    virtual void before_begin(uint64_t total);
     /// Called after the transaction run finished
     /// @param success Whether the rpm transaction was completed successfully
-    virtual void after_complete(bool success) {}
+    virtual void after_complete(bool success);
 
-    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
-    virtual void install_start(const TransactionItem & item, uint64_t total) {}
-    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
-    virtual void transaction_progress(uint64_t amount, uint64_t total) {}
-    virtual void transaction_start(uint64_t total) {}
-    virtual void transaction_stop(uint64_t total) {}
-    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
-    virtual void uninstall_start(const TransactionItem & item, uint64_t total) {}
-    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
-    virtual void unpack_error(const TransactionItem & item) {}
-    virtual void cpio_error(const TransactionItem & item) {}
-    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
-    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type) {}
-    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
-    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
-    virtual void verify_progress(uint64_t amount, uint64_t total) {}
-    virtual void verify_start(uint64_t total) {}
-    virtual void verify_stop(uint64_t total) {}
+    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void install_start(const TransactionItem & item, uint64_t total);
+    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void transaction_progress(uint64_t amount, uint64_t total);
+    virtual void transaction_start(uint64_t total);
+    virtual void transaction_stop(uint64_t total);
+    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void uninstall_start(const TransactionItem & item, uint64_t total);
+    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void unpack_error(const TransactionItem & item);
+    virtual void cpio_error(const TransactionItem & item);
+    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
+    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type);
+    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
+    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void verify_progress(uint64_t amount, uint64_t total);
+    virtual void verify_start(uint64_t total);
+    virtual void verify_stop(uint64_t total);
 };
-
-#pragma GCC diagnostic pop
 
 
 }  // namespace libdnf5::rpm

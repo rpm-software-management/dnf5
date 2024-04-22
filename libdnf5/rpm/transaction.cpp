@@ -477,33 +477,6 @@ TransactionCallbacks::ScriptType Transaction::rpm_tag_to_script_type(rpmTag_e ta
     }
 }
 
-const char * TransactionCallbacks::script_type_to_string(ScriptType type) noexcept {
-    switch (type) {
-        case ScriptType::PRE_INSTALL:
-            return "pre-install";
-        case ScriptType::POST_INSTALL:
-            return "post-install";
-        case ScriptType::PRE_UNINSTALL:
-            return "pre-uninstall";
-        case ScriptType::POST_UNINSTALL:
-            return "post-uninstall";
-        case ScriptType::PRE_TRANSACTION:
-            return "pre-transaction";
-        case ScriptType::POST_TRANSACTION:
-            return "post-transaction";
-        case ScriptType::TRIGGER_PRE_INSTALL:
-            return "trigger-pre-install";
-        case ScriptType::TRIGGER_INSTALL:
-            return "trigger-install";
-        case ScriptType::TRIGGER_UNINSTALL:
-            return "trigger-uninstall";
-        case ScriptType::TRIGGER_POST_UNINSTALL:
-            return "trigger-post-uninstall";
-        case ScriptType::UNKNOWN:
-            return "unknown";
-    }
-    return "unknown";
-}
 
 #define libdnf_assert_transaction_item_set() libdnf_assert(item != nullptr, "TransactionItem is not set")
 
