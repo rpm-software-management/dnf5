@@ -34,6 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <optional>
+#include <unordered_set>
 
 namespace libdnf5::cli::output {
 
@@ -62,6 +63,8 @@ const char * action_color(libdnf5::transaction::TransactionItemAction action) {
 
     libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
 }
+
+constexpr const char * SKIPPED_COLOR = "red";
 
 
 class ActionHeaderPrinter {
@@ -315,6 +318,8 @@ public:
         }
     }
 
+    void add_skip() { skips++; }
+
     void print(std::FILE * fd = stdout) const {
         std::fputs("\nTransaction Summary:\n", fd);
         if (installs != 0) {
@@ -338,6 +343,9 @@ public:
         if (reason_changes != 0) {
             std::fputs(fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes).c_str(), fd);
         }
+        if (skips != 0) {
+            std::fputs(fmt::format(" {:15} {:4} packages\n", "Skipping:", skips).c_str(), fd);
+        }
         std::fputc('\n', fd);
     }
 
@@ -349,6 +357,7 @@ private:
     int removes = 0;
     int replaced = 0;
     int reason_changes = 0;
+    int skips = 0;
 };
 
 
@@ -431,6 +440,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
 
     auto tspkgs = transaction.get_transaction_packages();
     std::sort(tspkgs.begin(), tspkgs.end(), transaction_package_cmp);
+    std::unordered_set<std::string> tspkgs_nevra;
     auto tsgrps = transaction.get_transaction_groups();
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp);
 
@@ -445,6 +455,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         }
 
         auto pkg = tspkg->get_package();
+        tspkgs_nevra.insert(pkg->get_full_nevra());
 
         header_ln = action_header_printer.print(*tspkg);
 
@@ -576,6 +587,35 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             }
         }
     }
+
+    // vector of different types of skipped packages along with the header for the type
+    std::vector<std::pair<std::vector<std::unique_ptr<libdnf5::cli::output::IPackage>>, std::string>> skipped;
+    skipped.emplace_back(transaction.get_conflicting_packages(), "Skipping packages with conflicts:");
+    skipped.emplace_back(transaction.get_broken_dependency_packages(), "Skipping packages with broken dependencies:");
+    for (const auto & [skipped_packages, header] : skipped) {
+        header_ln = nullptr;
+        for (const auto & pkg : skipped_packages) {
+            // Packages for which another package with the same NEVRA is already part
+            // of the transaction are skipped.
+            if (tspkgs_nevra.contains(pkg->get_full_nevra())) {
+                continue;
+            }
+            if (!header_ln) {
+                header_ln = scols_table_new_line(*tb, NULL);
+                scols_line_set_data(header_ln, COL_NAME, header.c_str());
+            }
+            struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
+            scols_line_set_data(ln, COL_NAME, pkg->get_name().c_str());
+            scols_line_set_data(ln, COL_ARCH, pkg->get_arch().c_str());
+            scols_line_set_data(ln, COL_EVR, pkg->get_evr().c_str());
+            scols_line_set_data(ln, COL_REPO, pkg->get_repo_id().c_str());
+            auto tspkg_size = static_cast<int64_t>(pkg->get_install_size());
+            scols_line_set_data(ln, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(tspkg_size).c_str());
+            auto ce = scols_line_get_cell(ln, COL_NAME);
+            scols_cell_set_color(ce, SKIPPED_COLOR);
+            ts_summary.add_skip();
+        }
+    }
 }
 
 
@@ -631,13 +671,14 @@ bool print_transaction_table(ITransaction & transaction) {
     // Present them to the user.
     print_resolve_logs(transaction);
 
+    TransactionTable table(transaction);
+    table.print_table();
+
     if (transaction.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
 
-    TransactionTable table(transaction);
-    table.print_table();
     table.print_summary();
 
     return true;
