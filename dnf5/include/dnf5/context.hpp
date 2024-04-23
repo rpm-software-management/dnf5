@@ -78,9 +78,6 @@ public:
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system);
 
-    /// list of lists of libdnf5 plugin names (global patterns) that we want to enable (true) or disable (false)
-    std::vector<std::pair<std::vector<std::string>, bool>> libdnf5_plugins_enablement;
-
     void store_offline(libdnf5::base::Transaction & transaction);
 
     // When set current transaction is not executed but rather stored to
@@ -159,6 +156,9 @@ public:
 
     std::vector<std::pair<std::string, std::string>> & get_repos_from_path();
     const std::vector<std::pair<std::string, std::string>> & get_repos_from_path() const;
+
+    std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement();
+    const std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement() const;
 
 private:
     class Impl;

@@ -441,7 +441,7 @@ void RootCommand::set_argument_parser() {
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), true);
+            ctx.get_libdnf_plugins_enablement().emplace_back(plugin_name_patterns.get_value(), true);
             return true;
         });
     global_options_group->register_argument(enable_plugins_names);
@@ -456,7 +456,7 @@ void RootCommand::set_argument_parser() {
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             libdnf5::OptionStringList plugin_name_patterns(value);
-            ctx.libdnf5_plugins_enablement.emplace_back(plugin_name_patterns.get_value(), false);
+            ctx.get_libdnf_plugins_enablement().emplace_back(plugin_name_patterns.get_value(), false);
             return true;
         });
     global_options_group->register_argument(disable_plugins_names);
@@ -1175,7 +1175,7 @@ int main(int argc, char * argv[]) try {
 
             // Enable/disable libdnf5 plugins according to the list created by
             // the --enable-plugin and --disable-plugin commandline arguments
-            for (const auto & [plugin_name_pattern, enable] : context.libdnf5_plugins_enablement) {
+            for (const auto & [plugin_name_pattern, enable] : context.get_libdnf_plugins_enablement()) {
                 base.enable_disable_plugins(plugin_name_pattern, enable);
             }
 

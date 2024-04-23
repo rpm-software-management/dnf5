@@ -113,8 +113,6 @@ public:
 
     void load_repos(bool load_system);
 
-    std::vector<std::pair<std::vector<std::string>, bool>> libdnf5_plugins_enablement;
-
     void store_offline(libdnf5::base::Transaction & transaction);
 
     std::filesystem::path transaction_store_path;
@@ -182,12 +180,22 @@ public:
     std::vector<std::pair<std::string, std::string>> & get_repos_from_path() { return repos_from_path; }
     const std::vector<std::pair<std::string, std::string>> & get_repos_from_path() const { return repos_from_path; }
 
+    std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement() {
+        return libdnf_plugins_enablement;
+    }
+    const std::vector<std::pair<std::vector<std::string>, bool>> & get_libdnf_plugins_enablement() const {
+        return libdnf_plugins_enablement;
+    }
+
 private:
     Context & owner;
 
     libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::pair<std::string, std::string>> repos_from_path;
+
+    /// list of lists of libdnf plugin names (global patterns) that we want to enable (true) or disable (false)
+    std::vector<std::pair<std::vector<std::string>, bool>> libdnf_plugins_enablement;
 
     std::string cmdline;
 
@@ -616,6 +624,14 @@ std::vector<std::pair<std::string, std::string>> & Context::get_repos_from_path(
 
 const std::vector<std::pair<std::string, std::string>> & Context::get_repos_from_path() const {
     return p_impl->get_repos_from_path();
+}
+
+std::vector<std::pair<std::vector<std::string>, bool>> & Context::get_libdnf_plugins_enablement() {
+    return p_impl->get_libdnf_plugins_enablement();
+}
+
+const std::vector<std::pair<std::vector<std::string>, bool>> & Context::get_libdnf_plugins_enablement() const {
+    return p_impl->get_libdnf_plugins_enablement();
 }
 
 
