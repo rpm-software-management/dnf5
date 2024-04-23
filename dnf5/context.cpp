@@ -117,8 +117,6 @@ public:
 
     void store_offline(libdnf5::base::Transaction & transaction);
 
-    std::filesystem::path transaction_store_path;
-
     const char * get_comment() const noexcept { return comment; }
 
     void set_comment(const char * comment) noexcept { this->comment = comment; }
@@ -171,6 +169,9 @@ public:
 
     void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
 
+    void set_transaction_store_path(std::filesystem::path path) { transaction_store_path = path; }
+    const std::filesystem::path & get_transaction_store_path() const { return transaction_store_path; }
+
     void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
     bool get_should_store_offline() const { return should_store_offline; }
 
@@ -184,6 +185,8 @@ public:
 
 private:
     Context & owner;
+
+    std::filesystem::path transaction_store_path;
 
     libdnf5::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
@@ -588,6 +591,14 @@ void Context::print_info(std::string_view msg) const {
 }
 void Context::set_output_stream(std::ostream & new_output_stream) {
     p_impl->set_output_stream(new_output_stream);
+}
+
+void Context::set_transaction_store_path(std::filesystem::path path) {
+    p_impl->set_transaction_store_path(path);
+}
+
+const std::filesystem::path & Context::get_transaction_store_path() const {
+    return p_impl->get_transaction_store_path();
 }
 
 void Context::set_should_store_offline(bool should_store_offline) {

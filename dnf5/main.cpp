@@ -1253,9 +1253,10 @@ int main(int argc, char * argv[]) try {
 
                 dnf5::print_transaction_size_stats(context);
 
-                if (!context.transaction_store_path.empty()) {
-                    std::cout << "The operation will only store the transaction in " << context.transaction_store_path
-                              << "." << std::endl;
+                if (auto transaction_store_path = context.get_transaction_store_path();
+                    !transaction_store_path.empty()) {
+                    std::cout << "The operation will only store the transaction in " << transaction_store_path << "."
+                              << std::endl;
                 } else if (base.get_config().get_downloadonly_option().get_value()) {
                     std::cout << "The operation will only download packages for the transaction." << std::endl;
                 } else {

@@ -83,10 +83,6 @@ public:
 
     void store_offline(libdnf5::base::Transaction & transaction);
 
-    // When set current transaction is not executed but rather stored to
-    // the specified path.
-    std::filesystem::path transaction_store_path;
-
     /// Gets user comment.
     const char * get_comment() const noexcept;
 
@@ -146,6 +142,10 @@ public:
     void print_info(std::string_view msg) const;
 
     void set_output_stream(std::ostream & new_output_stream);
+
+    // When set current transaction is not executed but rather stored to the specified path.
+    void set_transaction_store_path(std::filesystem::path path);
+    const std::filesystem::path & get_transaction_store_path() const;
 
     // Store the transaction to be run later in a minimal boot environment,
     // using `dnf5 offline`
