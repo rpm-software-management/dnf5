@@ -139,7 +139,7 @@ void create_store_option(dnf5::Command & command) {
                                    [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                    [[maybe_unused]] const char * option,
                                    const char * value) {
-        ctx.transaction_store_path = value;
+        ctx.set_transaction_store_path(value);
         return true;
     });
 }
