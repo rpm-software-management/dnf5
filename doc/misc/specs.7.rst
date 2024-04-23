@@ -153,6 +153,7 @@ packages providing the given spec. This can either be an explicit provide, an
 implicit provide (i.e. name of the package) or a file provide. The selection is
 case-sensitive and globbing is supported.
 
+.. _file_provides_ref-label:
 
 Specifying File Provides
 ------------------------

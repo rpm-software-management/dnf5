@@ -159,7 +159,7 @@ Options
     | This is a list option.
 
 ``--whatprovides=CAPABILITY,...``
-    | Limit to packages that provide any of <capabilities>.
+    | Limit to packages that provide any of <capabilities>. Capabilities :ref:`specifying a file provide <file_provides_ref-label>` are also matched against file provides.
     | This is a list option.
 
 ``--whatrecommends=CAPABILITY,...``

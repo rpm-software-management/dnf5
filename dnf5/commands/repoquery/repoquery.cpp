@@ -693,11 +693,21 @@ void RepoqueryCommand::run() {
     if (!whatprovides->get_value().empty()) {
         auto provides_query = result_query;
         provides_query.filter_provides(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
-        if (!provides_query.empty()) {
-            result_query = provides_query;
+
+        std::vector<std::string> file_patterns;
+        // Search additionally for files to ensure that all providers are listed
+        // Limit file search only to files patterns to ensure that we are not providing unexpected resurts.
+        // Additionally it is a performance optimization - file search is very expensive
+        for (auto & capability : whatprovides->get_value()) {
+            if (libdnf5::utils::is_file_pattern(capability)) {
+                file_patterns.push_back(capability);
+            }
+        }
+        if (!file_patterns.empty()) {
+            result_query.filter_file(file_patterns, libdnf5::sack::QueryCmp::GLOB);
+            result_query |= provides_query;
         } else {
-            // If provides query doesn't match anything try matching files
-            result_query.filter_file(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
+            result_query = provides_query;
         }
     }
 
