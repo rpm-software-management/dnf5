@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
-"PO-Revision-Date: 2024-01-18 02:47+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
+"PO-Revision-Date: 2024-04-16 20:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/pt_BR/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -31,9 +31,12 @@ msgid "Show advisories containing any version of installed packages."
 msgstr "Mostra os avisos que contenham qualquer versão dos pacotes instalados."
 
 #: commands/advisory/arguments.hpp:43
-msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr ""
-"Mostra os avisos que contenham versões mais recentes dos pacotes instalados."
+"Mostra os avisos que contenham versões mais recentes dos pacotes instalados. "
+"Este é p comportamento padrão."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -112,7 +115,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "GRAVIDADE_AVISO,..."
 
-#: commands/advisory/arguments.hpp:181
+#: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -120,11 +123,11 @@ msgstr ""
 "Limite para pacotes em avisos que corrigem um Bugzilla ID, ex. 123123. Opção "
 "de lista."
 
-#: commands/advisory/arguments.hpp:182
+#: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -132,9 +135,37 @@ msgstr ""
 "Limite para pacotes em avisos que corrigem um ID de CVE (Common "
 "Vulnerabilities and Exposures), ex. CVE-2201-0123. Opção de lista."
 
-#: commands/advisory/arguments.hpp:194
+#: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "ID_CVE,..."
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:59
+#, fuzzy
+#| msgid ""
+#| "Show only advisories containing packages with specified names. List "
+#| "option, supports globs."
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Mostra apenas os avisos que contenham pacotes com nomes específicos. Opção "
+"de lista, suporta caracteres curinga."
+
+#: commands/repoquery/repoquery.cpp:158
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr ""
 
 #: exception.cpp:28
 msgid ""

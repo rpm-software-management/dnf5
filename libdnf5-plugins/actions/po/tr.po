@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
 "PO-Revision-Date: 2024-03-15 22:35+0000\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,40 +18,40 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.4\n"
 
-#: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
+#: actions.cpp:398 actions.cpp:406 actions.cpp:414 actions.cpp:422
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
 msgstr ""
 
-#: actions.cpp:443
+#: actions.cpp:444
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 
-#: actions.cpp:450
+#: actions.cpp:451
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "\"{}\" dosyasının {} satırında hata: \"{}\" seçeneği bilinmiyor"
 
-#: actions.cpp:468
+#: actions.cpp:469
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr ""
 
-#: actions.cpp:478
+#: actions.cpp:479
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
 msgstr ""
 
-#: actions.cpp:488
+#: actions.cpp:489
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 
-#: actions.cpp:505
+#: actions.cpp:506
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 
-#: actions.cpp:514
+#: actions.cpp:515
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "\"{}\" dosyasının {} satırında hata: Eksik komut"

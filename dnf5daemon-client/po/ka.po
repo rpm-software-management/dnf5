@@ -2,12 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
-"PO-Revision-Date: 2024-01-19 02:47+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
+"PO-Revision-Date: 2024-04-14 02:35+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ka/>\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -32,9 +33,12 @@ msgstr ""
 "დაყენებული პაკეტების ნებისმიერი ვერსიის შემცველი რეკომენდაციების ჩვენება."
 
 #: commands/advisory/arguments.hpp:43
-msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr ""
-"დაყენებული პაკეტების უფრო ახალი ვერსიის შემცველი რეკომენდაციების ჩვენება."
+"დაყენებული პაკეტების უფრო ახალი ვერსიის შემცველი რეკომენდაციების ჩვენება. ეს "
+"ნაგულისხმევი ქცევაა."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -117,7 +121,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "რეკომენდაციის_სიმძიმე,..."
 
-#: commands/advisory/arguments.hpp:181
+#: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -125,11 +129,11 @@ msgstr ""
 "მხოლოდ იმ პაკეტების გაზიარება, რასაც შეიცავენ რეკომენდაციები, რომლებიც "
 "მითითებულ Bugzilla ID-ს ასწორებენ. მაგ: 123123. სიის პარამეტრი."
 
-#: commands/advisory/arguments.hpp:182
+#: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -138,9 +142,33 @@ msgstr ""
 "მითითებულ CVE ID-ს (Common Vulnerabilities and Exposures) ასწორებენ. მაგ: "
 "CVE-2201-0123. სიის პარამეტრი."
 
-#: commands/advisory/arguments.hpp:194
+#: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr "მხოლოდ ხელმისაწვდომი ჯგუფების ჩვენება."
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr "მხოლოდ დაყენებული ჯგუფების ჩვენება."
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr "დამალული ჯგუფების ჩვენება."
+
+#: commands/group/group_list.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"მხოლოდ იმ ჯგუფების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც აქვთ "
+"შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
+
+#: commands/repoquery/repoquery.cpp:158
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr "დამუშავების შეცდომა JSON ობიექტისთვის \"{}\": {}"
 
 #: exception.cpp:28
 msgid ""
