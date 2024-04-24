@@ -31,17 +31,24 @@ DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> tra
     std::map<int, size_t> transaction_packages_by_id;
 
     for (const auto & ti : transaction) {
-        auto object_type = libdnf5::transaction::transaction_item_type_from_string(std::get<0>(ti));
-        if (object_type == libdnf5::transaction::TransactionItemType::PACKAGE) {
+        auto object_type = std::get<0>(ti);
+        if (object_type == "Package") {
             transaction_packages.push_back(DbusTransactionPackageWrapper(ti));
             transaction_packages_by_id.emplace(
                 transaction_packages.back().get_package().get_id(), transaction_packages.size() - 1);
-        } else if (object_type == libdnf5::transaction::TransactionItemType::GROUP) {
+        } else if (object_type == "Group") {
             transaction_groups.push_back(DbusTransactionGroupWrapper(ti));
-        } else if (object_type == libdnf5::transaction::TransactionItemType::ENVIRONMENT) {
+        } else if (object_type == "Environment") {
             transaction_environments.push_back(DbusTransactionEnvironmentWrapper(ti));
-        } else if (object_type == libdnf5::transaction::TransactionItemType::MODULE) {
+        } else if (object_type == "Module") {
             transaction_modules.push_back(DbusTransactionModuleWrapper(ti));
+        } else if (object_type == "Skipped") {
+            auto trans_item_attrs = std::get<3>(ti);
+            if (key_value_map_get<std::string>(trans_item_attrs, "reason_skipped", "conflict") == "conflict") {
+                conflicting_packages.emplace_back(std::get<4>(ti));
+            } else {
+                broken_dependency_packages.emplace_back(std::get<4>(ti));
+            }
         }
     }
     // set "replaces" for transaction_packages. Since transaction_package contains only
