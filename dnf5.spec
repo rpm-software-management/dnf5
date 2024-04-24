@@ -342,7 +342,7 @@ Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
 %if %{with dnf5_obsoletes_dnf}
-Conflicts:      dnf-data < 4.16.0
+Conflicts:      dnf-data < 4.20.0
 %endif
 
 %description -n libdnf5
