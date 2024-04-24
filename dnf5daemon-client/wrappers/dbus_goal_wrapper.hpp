@@ -47,11 +47,16 @@ public:
     std::vector<std::string> get_resolve_logs_as_strings() const { return resolve_logs; }
     void set_resolve_logs(std::vector<std::string> logs) { resolve_logs = logs; }
 
+    std::vector<DbusPackageWrapper> get_conflicting_packages() const { return conflicting_packages; }
+    std::vector<DbusPackageWrapper> get_broken_dependency_packages() const { return broken_dependency_packages; }
+
 private:
     std::vector<DbusTransactionPackageWrapper> transaction_packages;
     std::vector<DbusTransactionGroupWrapper> transaction_groups;
     std::vector<DbusTransactionEnvironmentWrapper> transaction_environments;
     std::vector<DbusTransactionModuleWrapper> transaction_modules;
+    std::vector<DbusPackageWrapper> conflicting_packages;
+    std::vector<DbusPackageWrapper> broken_dependency_packages;
     std::vector<std::string> resolve_logs;
 };
 

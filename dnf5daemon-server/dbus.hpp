@@ -33,8 +33,10 @@ using KeyValueMapList = std::vector<KeyValueMap>;
 enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
 enum class ResolveResult { NO_PROBLEM, WARNING, ERROR };
 
+enum class DbusTransactionItemType : int { PACKAGE, GROUP, ENVIRONMENT, MODULE, SKIPPED };
+
 using DbusTransactionItem = sdbus::Struct<
-    std::string,   // libdnf5::transaction::TransactionItemType
+    std::string,   // DbusTransactionItemType
     std::string,   // libdnf5::transaction::TransactionItemAction
     std::string,   // libdnf5::transaction::TransactionItemReason
     KeyValueMap,   // other transaction item attributes - e.g. group id for REASON_CHANGE to GROUP,
