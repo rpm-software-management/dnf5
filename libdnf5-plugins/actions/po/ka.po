@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
 "PO-Revision-Date: 2023-11-28 02:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.2.1\n"
 
-#: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
+#: actions.cpp:398 actions.cpp:406 actions.cpp:414 actions.cpp:422
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,22 +26,22 @@ msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: მოველოდი ფორმატს \"HOOK:PKG_FILTER:DIRECTION:"
 "OPTIONS:CMD\""
 
-#: actions.cpp:443
+#: actions.cpp:444
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "შეცდომა ფაილში \"{}\" ფაილში {}: უცნობი \"enabled\" პარამეტრის მნიშვნელობა "
 "\"{}\""
 
-#: actions.cpp:450
+#: actions.cpp:451
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პარამეტრი \"{}\""
 
-#: actions.cpp:468
+#: actions.cpp:469
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი ჰუკი \"{}\""
 
-#: actions.cpp:478
+#: actions.cpp:479
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -49,17 +49,17 @@ msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: პაკეტების ფილტრი, მხოლოდ, PRE_TRANS და "
 "POST_TRANS ჰუკებში შეგიძლიათ, გამოიყენოთ"
 
-#: actions.cpp:488
+#: actions.cpp:489
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: მიმართულებას პაკეტების ფილტრის გარეშე ვერ "
 "გამოიყენებთ"
 
-#: actions.cpp:505
+#: actions.cpp:506
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პაკეტის მიმართულება \"{}\""
 
-#: actions.cpp:514
+#: actions.cpp:515
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: ნაკლული ბრძანება"

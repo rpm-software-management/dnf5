@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Luna Jernberg <bittin@reimu.nl>, 2024.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
-"PO-Revision-Date: 2024-01-18 02:47+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
+"PO-Revision-Date: 2024-04-14 02:35+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/sv/>\n"
 "Language: sv\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -33,9 +34,12 @@ msgstr ""
 "Visa rekommendationer som innehåller någon version av installerade paket."
 
 #: commands/advisory/arguments.hpp:43
-msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr ""
-"Visa rekommendationer som innehåller nyare versioner av installerade paket."
+"Visa rekommendationer som innehåller nyare versioner av installerade paket. "
+"Detta är standardbeteendet."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -115,7 +119,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "REKOMMENDATIONSALLVARLIGHET,…"
 
-#: commands/advisory/arguments.hpp:181
+#: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -123,11 +127,11 @@ msgstr ""
 "Begränsa till paket i rekommendationer som löser ett Bugzilla-ID, t.ex. "
 "123123. Listflagga."
 
-#: commands/advisory/arguments.hpp:182
+#: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -135,9 +139,33 @@ msgstr ""
 "Begränsa till paket med rekommendationer som fixar en CVE (Vanliga "
 "sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
 
-#: commands/advisory/arguments.hpp:194
+#: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr "Visa endast tillgängliga grupper."
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr "Visa endast installerade grupper."
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr "Visa även dolda grupper."
+
+#: commands/group/group_list.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Visa endast grupper som innehåller paket med angivna namn. Listflagga, "
+"stödjer ”glob”:ar."
+
+#: commands/repoquery/repoquery.cpp:158
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr "Fel vid analys av JSON-objekt \"{}\": {}"
 
 #: exception.cpp:28
 msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
 "PO-Revision-Date: 2024-01-11 13:50+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -23,15 +23,15 @@ msgstr ""
 msgid "Print list of unresolved dependencies for repositories"
 msgstr "Skriv ut lista över olösta beroenden för förråd"
 
-#: repoclosure.cpp:150
+#: repoclosure.cpp:154
 msgid "No match for argument \"{}\"."
 msgstr "Ingen matching för argument \"{}\"."
 
-#: repoclosure.cpp:156
+#: repoclosure.cpp:160
 msgid "Failed to resolve package specifications."
 msgstr "Misslyckades att lösa paketspecifikationer."
 
-#: repoclosure.cpp:211
+#: repoclosure.cpp:215
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."

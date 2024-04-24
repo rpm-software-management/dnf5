@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
 "PO-Revision-Date: 2024-02-26 01:35+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -30,84 +30,84 @@ msgstr "\"{}\", \"{}\" komutu içinde izin verilmez"
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:76
+#: argument_parser.cpp:110
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:84
+#: argument_parser.cpp:237
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:199 argument_parser.cpp:204
+#: argument_parser.cpp:345 argument_parser.cpp:350
 msgid "Too few values for positional argument \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:244
+#: argument_parser.cpp:511
 msgid "Missing value for named argument \"--{}\""
 msgstr ""
 
-#: argument_parser.cpp:252
+#: argument_parser.cpp:519
 msgid "Unexpected value for named argumend \"--{}\""
 msgstr ""
 
-#: argument_parser.cpp:295
+#: argument_parser.cpp:561
 msgid "Missing value for named argument \"-{}\""
 msgstr ""
 
-#: argument_parser.cpp:431
-msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:442
-msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:452
-msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:462
-msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:472
-msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:480
-msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:488
-msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:495
-msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:590 argument_parser.cpp:718
-msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr ""
-
-#: argument_parser.cpp:602 argument_parser.cpp:730
-msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
-
 #. print usage
-#: argument_parser.cpp:798
+#: argument_parser.cpp:657
 msgid "Usage:"
 msgstr ""
 
-#: argument_parser.cpp:806
+#: argument_parser.cpp:665
 msgid "Description:"
 msgstr ""
 
-#: argument_parser.cpp:1078
+#: argument_parser.cpp:915
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:926
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:936
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:946
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:973
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:981
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:989
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:996
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1103 argument_parser.cpp:1307
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1118 argument_parser.cpp:1322
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1525
 msgid "Named argument with path id \"{}\" not found"
 msgstr ""
 
-#: argument_parser.cpp:1133
+#: argument_parser.cpp:1535
 msgid "Positional argument with path id \"{}\" not found"
 msgstr ""
 
@@ -119,6 +119,14 @@ msgstr ""
 msgid "Failed to resolve the transaction"
 msgstr ""
 
-#: session.cpp:79
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr ""
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr ""
+
+#: session.cpp:149
 msgid "Missing command"
 msgstr ""

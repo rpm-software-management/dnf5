@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
-"PO-Revision-Date: 2024-01-29 14:37+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2024-04-24 02:52+0000\n"
+"PO-Revision-Date: 2024-04-14 02:35+0000\n"
+"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ru/>\n"
 "Language: ru\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -35,9 +34,12 @@ msgstr ""
 "Показывать рекомендации, содержащие любую версию установленных пакетов."
 
 #: commands/advisory/arguments.hpp:43
-msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr ""
-"Показывать рекомендации, содержащие новые версии установленных пакетов."
+"Показывать рекомендации, содержащие новые версии установленных пакетов. Это "
+"поведение по умолчанию."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
@@ -60,7 +62,7 @@ msgid ""
 "supports globs."
 msgstr ""
 "Показывать только рекомендации, содержащие пакеты с указанными именами. "
-"Опция списка, поддерживает глобусы."
+"Опция списка, поддерживает шаблоны поиска."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -118,7 +120,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "СЕРЬЕЗНОСТЬ_РЕКОМЕНДАЦИЙ,…"
 
-#: commands/advisory/arguments.hpp:181
+#: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -126,11 +128,11 @@ msgstr ""
 "Ограничение на пакеты в рекомендациях, которые исправляют идентификатор "
 "Bugzilla, например 123123. Опция списка."
 
-#: commands/advisory/arguments.hpp:182
+#: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "ID_BUGZILLA,…"
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -139,9 +141,33 @@ msgstr ""
 "(Common Vulnerabilities and Exposures), например, CVE-2201-0123. Опция "
 "списка."
 
-#: commands/advisory/arguments.hpp:194
+#: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "ID_CVE,…"
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr "Показывать только доступные группы."
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr "Показывать только установленные группы."
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr "Показывать также и скрытые группы."
+
+#: commands/group/group_list.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Показывать только группы, содержащие пакеты с указанными именами. Опция "
+"списка, поддерживает шаблоны поиска."
+
+#: commands/repoquery/repoquery.cpp:158
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr "Ошибка при разборе объекта JSON \"{}\": {}"
 
 #: exception.cpp:28
 msgid ""
