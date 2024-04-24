@@ -33,6 +33,8 @@ Obsoletes:      dnf < 5
 
 Provides:       yum = %{version}-%{release}
 Obsoletes:      yum < 5
+
+Conflicts:      python3-dnf-plugins-core < 4.7.0
 %endif
 
 Provides:       dnf5-command(advisory)
