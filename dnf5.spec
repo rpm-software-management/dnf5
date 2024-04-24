@@ -861,6 +861,9 @@ popd
 %ldconfig_scriptlets
 
 %changelog
+* Wed Apr 24 2024 Packit Team <hello@packit.dev> - 5.2.0.0-1
+- New upstream release 5.2.0.0
+
 * Wed Apr 03 2024 Packit Team <hello@packit.dev> - 5.1.17-1
 - New upstream release 5.1.17
 

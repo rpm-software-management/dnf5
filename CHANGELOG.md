@@ -1,3 +1,235 @@
+# 5.2.0.0
+
+- Update translations from weblate
+- [DNF5] `--enable-plugin` and `--disable-pluin`: no match found message
+- [DNF5] API: Move Context::libdnf5_plugins_enablement to p_impl
+- spec: Add conflict with the former provider of plugin man pages
+- spec: Add conflict with the old provider of dnf.conf
+- [DNF5] Fix: Remove transaction_store_path from public, add getter/setter
+- [libdnf5 API] Base::get_plugins_info
+- [libdnf5 plugins] include iplugin.hpp in plugins instead of base.hpp
+- repo_sack: Treat all repos with solv_repo created as loaded (RhBug:2275530)
+- [DNF5] API: No inline methods in shared_options.hpp
+- [DNF5] API: offline::OfflineTransactionState: no inline methods, move cpp
+- [DNF5] API: Remove unused and buggy RpmTransactionItem class
+- [DNF5] Command: no inline methods
+- [DNF5] API: Context: add p_impl, move public vars to p_impl, getters
+- API: cli::session: no inline methods and public vars in opts classes
+- API: cli::session::Command: no inline methods
+- API: add p_impl to cli::session::Session
+- API: rpm::TransactionCallbacks: no inline methods
+- API: repo::RepoCallbacks: no inline methods
+- Prepare for switch of dnf5 in Rawhide
+- base: Make get_transaction_history unstable
+- Set `group` reason for packages removed by a group removal
+- [DNF5] Implement `--enable-plugin` and `--disable-pluin`
+- [libdnf5 API] Base::enable_disable_plugins
+- spec: Simplify man page files
+- Loggers: Fix: Add missing "null_loger.cpp" file
+- Loggers API: unify, explicit ctors, non-inline methods, use p_impl
+- doc: Review of DNF4 vs DNF5 CLI and configuration changes
+- Re-enable clang builds after API changes
+- Add `--store` option for storing arbitrary transaction
+- libdnf5::Goal: when adding serialized transaction accept local items
+- Goal: change `add_serialized_transaction()` to accept path to trans
+- Add group/env paths for transaction parsing/serializing
+- base::Transaction: during serialization allow specifying paths
+- base::Transaction: add `store_comps(...)` method
+- repo_sack: add stored_transaction repo and its private API
+- repo: add private API `add_xml_comps(path)`
+- Generalize logging of `read_group_solvable_from_xml(..)`
+- Add `environment_no_groups` to `GoalJobSettings`
+- libdnf5 IPlugin: Pass IPluginData instead of Base to constructor
+- libdnf5 IPlugin: Use pImpl
+- libdnf5 IPlugin: Do not use inline methods
+- dnf5 IPlugin: Do not use inline methods on API
+- libdnf5 IPlugin: Add argumets description
+- libdnf5 plugins: New hooks `pre/post_add_cmdline_packages`
+- libdnf5 plugins: New hook `repos_loaded`
+- libdnf5 plugins: New hook `repos_configured`
+- Base: notify_repos_configured and are_repos_configured methods
+- Fix: implicit conversion changes signedness, unused value
+- Disable unit tests for Copr dnf5 plugin
+- dnfdaemon: Document Polit CheckAuthorization call
+- dnfdaemon: Catch timeout during CheckAuthorization
+- Not handle compatibility.conf as configuration file
+- config: add search (se) and info (if) aliases
+- Improve documentation of repo config directories
+- Cross reference documentation
+- Document Repos and Vars Dirs
+- doc: Unify style and move "Files" section
+- Document repos configuration overrides
+- doc: Remove ":" in titles
+- Bump libdnf5/libdnf5-cli so version
+- Mark multiple strings for translation
+- Set locale for dnf5 run
+- spec: Add missing dnf-config-manager.8.gz file
+- Generate documentation for ConfigRepo Class
+- [Doc] Describe denerating repo cache path
+- dnf5daemon: Make availability case insensitive
+- dnf5: Drop unneeded severities capitalization
+- dnf5: Document --available as default for advisory cmd
+- dnf5daemon-client: Drop unneeded severities capitalization
+- advisory: filter_severity and filter_type case insensitive
+- dnfdaemon: Fix and enhance Advisory interface doc
+- Enable import data from DNF4 for systems without state dir
+- libdnf5 options: Unify constructors - pass args for storing by value
+- dnfdaemon: Missing signal registration
+- doc: config manager plugin: wrap too long lines
+- doc: document config-manager plugin
+- Packit: get version from specfile for copr_builds againts main
+- Update tests to use new `load_repos()` API
+- Use new load_repos instead of deprecated update_and_load_enabled_repos
+- Make `libdnf5::repo::Repo::load()` private
+- Deprecate: `update_and_load_enabled_repos`
+- RepoSack: add new `load_repos` method
+- Move update_and_load_repos and fix_group_missing_xml to Impl
+- Prevent loading plugins for unittests
+- Respect plugins configuration option for loading plugins
+- Add pImpl to `libdnf5::LogRouter`
+- Add pImpl to `libdnf5::MemoryBufferLogger`
+- Add pImpl to `libdnf5::OptionBinds`
+- Add pImpl to `libdnf5::OptionBinds::Item`
+- Add pImpl to `libdnf5::Config`
+- Add pImpl to `libdnf5::OptionStringList`
+- OptionStringList: remove assignment operators and move constructor
+- Add pImpl to `libdnf5::OptionBool`
+- OptionBool: remove assignment operators and move constructor
+- Add pImpl to `libdnf5::OptionNumber`
+- Add pImpl to `libdnf5::OptionPath`
+- Add pImpl to `libdnf5::OptionString`
+- libdnf5::OptionEnum: remove template, add pImpl
+- Add pImpl to `libdnf5::Option`
+- modules: Report problems with switching module streams
+- modules: Report switched module streams
+- modules: Add switching module streams as a possible transaction action
+- modules: Add replaces and replaced_by to TransactionModule
+- Add missing info updates alias, to match list command
+- Update `package_info_sections` not to use `scols_table_print_range`
+- libdnf-cli: Extract package info printing
+- ArgumentParser: use p_impl, no inline methods
+- ArgumentParser:PositionalArg: Unit tests: Support repeating of pos arg
+- ArgumentParser:PositionalArg: Support repeating of positional argument
+- Hide/Remove deprecated `libdnf5::repo::Repo` API
+- Remove deprecated members from `/include/libdnf5/logger/factory.hpp`
+- Remove deprecated unused function `create_forcearch_option()`
+- builddep: Don't escape globs, use expand_globs = false
+- builddep: Don't try to expand globs in pkg specs
+- libdnf5-cli::output: Use ifaces instead templates. Move code to .cpp files
+- Interfaces and adapters
+- module::ModuleStatus: Move to separate header file
+- comps::PackageType: Move to separate header file
+- cmp_naevr: Fix: pass by reference
+- modules: Report module solver problems
+- Accept SolverProblems for transacion resolve log
+- modules: Return problems from the module solver
+- modules: Add a method to process module solver problems
+- modules: Add a separate set of problem rules for modules
+- modules: Store the original module context also in the libsolv solvable
+- modules: Internalize modular repositories
+- Add pImpl to `libdnf5::repo::RepoCache` and `RepoCacheRemoveStatistics`
+- Add pImpl to `libdnf5::repo::RepoQuery`
+- Hide deprecated `libdnf5::base::with_config_file_path` into Impl
+- Remove deprecated `libdnf5::Base::load_config_from_file`
+- Move all `libdnf5::Base` members to pImpl
+- Add pImpl to `libdnf5::rpm::Reldep`
+- Add pImpl to `libdnf5::rpm::Changelog`
+- Add pImpl to `libdnf5::rpm::Nevra`
+- Add pImpl to `libdnf5::rpm::Checksum`
+- Add pImpl to `libdnf5::rpm::Package`
+- Adjust code to new rpm::PackageQuery::filter_* methods after the rebase
+- Add a method accepting std::string for filter_repo_id()
+- Add a method accepting std::string for filter_location()
+- Add a method accepting std::string for filter_file()
+- Add a method accepting std::string for filter_supplements()
+- Add a method accepting std::string for filter_enhances()
+- Add a method accepting std::string for filter_suggests()
+- Add a method accepting std::string for filter_recommends()
+- Add a method accepting std::string for filter_obsoletes()
+- Add a method accepting std::string for filter_conflicts()
+- Add a method accepting std::string for filter_requires()
+- Add a method accepting std::string for filter_description()
+- Add a method accepting std::string for filter_summary()
+- Add a method accepting std::string for filter_url()
+- Add a method accepting std::string for filter_sourcerpm()
+- Add a method accepting std::string for filter_nevra()
+- Add a method accepting std::string for filter_evr()
+- Add a method accepting std::string for filter_arch()
+- Add a method accepting std::string for filter_release()
+- Add a method accepting std::string for filter_version()
+- Add a method accepting std::string and int for filter_epoch()
+- Add a method accepting std::string for filter_name()
+- Add a method accepting std::string for filter_provides()
+- Extend version to four numbers (5.x.y.z)
+- Unify smallest version number name
+- cmake: rename PROJECT_VERSION_* to just VERSION_*
+- dnf5daemon: Document before_begin / after_complete signals
+- dnf5daemon: Signals to wrap rpm transaction execution
+- rpm: New callback to wrap whole rpm transaction
+- Add pImpl to `libdnf5::module::ModuleProfile`
+- Add pImpl to `libdnf5::module::ModuleDependency`
+- Add pImpl to `libdnf5::module::Nsvcap`
+- Add pImpl to `libdnf5::module::ModuleQuery`
+- Add pImpl to `libdnf5::comps::EnvironmentQuery`
+- Add pImpl to `libdnf5::comps::GroupQuery`
+- Add pImpl to `libdnf5::comps::Environment`
+- Add pImpl to `libdnf5::comps::Package`
+- Add pImpl to `libdnf5::comps::Group`
+- Remove unused `libdnf5::comps::GroupSack`
+- Remove unused `libdnf5::comps::EnvironmentSack`
+- Remove unused `libdnf5::comps::Comps`
+- Add pImpl to `libdnf5::advisory::Advisory`
+- Add pImpl to `libdnf5::advisory::AdvisoryReference`
+- Add pImpl to `libdnf5::advisory::AdvisoryCollection`
+- Add pImpl to `libdnf5::advisory::AdvisoryQuery`
+- Add pImpl to `libdnf5::rpm::RpmSignature`
+- Add pImpl to `libdnf5::transaction::Transaction`
+- Add pImpl to `libdnf5::rpm::KeyInfo`
+- Add pImpl to `libdnf5::repo::RepoSack`
+- Add pImpl to `libdnf5::base::SolverProblems`
+- Add pImpl to `libdnf5::base::LogEvent`
+- Add pImpl to `libdnf5::ConfigParser`
+- Add pImpl to `libdnf5::Vars`
+- Add pImpl to `libdnf5::transaction::TransactionHistory`
+- Add pImpl to `libdnf5::transaction::Package`
+- Add pImpl to `libdnf5::transaction::CompsGroup`
+- Add pImpl to `libdnf5::transaction::CompsEnvironment`
+- Add pImpl to `libdnf5::transaction::TransactionItem`
+- Remove several not needed imports
+- repo: add p_Impl and several needed utility methods
+- Repo: remove unused `fresh()` and `timestamp` attribute
+- Add pImpl to `ModuleItem` and remove definitions from header
+- Add pImpl to `libdnf5::base::transaction_*` classes
+- Add p_impl to libdnf5::GoalJobSettings and add getters and setters
+- Add p_impl to libdnf5::ResolveSpecSettings and add getters and setters
+- dnf5: bash completion: Prefer using "_comp_initialize" with fallback
+- dnf5: Bash completion: Switch to `_init_completion`
+- Fix `DISTRO_SYNC_ALL` (distro-sync without arguments, system upgrade)
+- Support RPMTRANS_FLAG_DEPLOOPS
+- Give inline methods hidden visibility by default
+- dnfdaemon: Make only internally used funcs static
+- dnfdaemon: Enhance Rpm.list() / Rpm.list_fd() documentation
+- doc: Add example of Rpm.list_fd usage in Python
+- dnf5daemon-client: Repoquery uses new Rpm:list_fd() API
+- dnfdaemon: New method list_fd() on Rpm interface
+- dnfdaemon: Serialize package object to JSON string
+- dnf5daemon: Handler that return data using UNIX_FD
+- dnf5daemon: Auxiliary method to write string to fd
+- dnf5daemon: Move utils functions into dnfdaemon namespace
+- dnf5daemon: get_session() method for D-Bus services
+- dnf5daemon-server: Ignore SIGPIPE
+- Vars: Add unit tests for API methods
+- Vars::unset: API method for removing variable
+- dnf5daemon-server/dbus: Install config files into /usr
+- Fix: libdnf5-cli::output::action_color: Move implementation to .cpp file
+- Fix: Do not use Variable-length arrays (VLAs) in C++ code
+- Add a hint to call base.setup() prior loading repositories
+- dnf5daemon-client: New switches for group list
+- doc: Include comps.Group interface to D-Bus API documentatin
+- dnfdaemon: Enhance comps.Group.list() method
+- dnf5daemon-client: Fix group.get_installed()
+- man: Link dnf5 pages to dnf
+
 # 5.1.17
 
 - dnf5daemon: Remove reposdir from allowed config overrides
