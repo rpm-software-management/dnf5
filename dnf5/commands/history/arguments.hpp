@@ -30,8 +30,9 @@ namespace dnf5 {
 
 class TransactionSpecArguments : public libdnf5::cli::session::StringArgumentList {
 public:
-    explicit TransactionSpecArguments(libdnf5::cli::session::Command & command)
-        : StringArgumentList(command, "transaction-id", _("Transaction ID")) {}
+    explicit TransactionSpecArguments(
+        libdnf5::cli::session::Command & command, int nrepeats = libdnf5::cli::ArgumentParser::PositionalArg::OPTIONAL)
+        : StringArgumentList(command, "transaction-id", _("Transaction ID"), nrepeats) {}
 };
 
 
