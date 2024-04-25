@@ -43,12 +43,11 @@ const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
 const std::string STATUS_READY{"ready"};
 const std::string STATUS_TRANSACTION_INCOMPLETE{"transaction-incomplete"};
 
-const int STATE_VERSION = 0;
+const int STATE_VERSION = 1;
 const std::string STATE_HEADER{"offline-transaction-state"};
 
 const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "offline"};
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
-const std::filesystem::path TRANSACTION_JSON_FILENAME{"offline-transaction.json"};
 
 struct OfflineTransactionStateData {
     int state_version = STATE_VERSION;
@@ -59,8 +58,6 @@ struct OfflineTransactionStateData {
     std::string verb;
     std::string cmd_line;
     bool poweroff_after = false;
-    std::vector<std::string> enabled_repos;
-    std::vector<std::string> disabled_repos;
     std::string module_platform_id;
 };
 
@@ -98,8 +95,6 @@ TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     verb,
     cmd_line,
     poweroff_after,
-    enabled_repos,
-    disabled_repos,
     module_platform_id)
 
 #endif  // DNF5_OFFLINE_HPP
