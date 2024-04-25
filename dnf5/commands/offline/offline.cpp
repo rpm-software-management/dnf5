@@ -406,7 +406,8 @@ void OfflineExecuteCommand::configure() {
     check_state(*state);
 
     ctx.set_load_system_repo(true);
-    ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    // Stored transactions can be replayed without loading available repos
+    ctx.set_load_available_repos(Context::LoadAvailableRepos::NONE);
 
     // Get the cache from the cachedir specified in the state file
     ctx.get_base().get_config().get_system_cachedir_option().set(state->get_data().cachedir);
@@ -444,10 +445,10 @@ void OfflineExecuteCommand::run() {
     state->get_data().status = dnf5::offline::STATUS_TRANSACTION_INCOMPLETE;
     state->write();
 
-    const auto & installroot = ctx.base.get_config().get_installroot_option().get_value();
+    const auto & installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
-    const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
+    const auto & transaction_json_path = datadir / "transaction.json";
 
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
 

@@ -115,11 +115,6 @@ void create_offline_option(dnf5::Command & command) {
                                      [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
                                      [[maybe_unused]] const char * option,
                                      [[maybe_unused]] const char * value) {
-        // The installroot will be prepended to the cachedir and system_cachedir later in Base.setup()
-        const auto & offline_datadir = dnf5::offline::DEFAULT_DATADIR;
-        ctx.get_base().get_config().get_system_cachedir_option().set(
-            libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
-        ctx.get_base().get_config().get_cachedir_option().set(libdnf5::Option::Priority::INSTALLROOT, offline_datadir);
         ctx.set_should_store_offline(true);
         return true;
     });

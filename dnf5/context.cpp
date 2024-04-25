@@ -312,6 +312,11 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
 
+    constexpr const char * packages_in_trans_dir{"./packages"};
+    const auto & packages_location = offline_datadir / packages_in_trans_dir;
+    constexpr const char * comps_in_trans_dir{"./comps"};
+    const auto & comps_location = offline_datadir / comps_in_trans_dir;
+
     const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
     dnf5::offline::OfflineTransactionState state{state_path};
 
@@ -320,19 +325,50 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
                   << "\t" << state.get_data().cmd_line << std::endl
                   << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
-            throw libdnf5::cli::SilentCommandExitError(0);
+            throw libdnf5::cli::AbortedByUserError();
         }
     }
 
-    const std::filesystem::path transaction_json_path{offline_datadir / dnf5::offline::TRANSACTION_JSON_FILENAME};
+    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE;
+    state.write();
 
-    const std::string json = transaction.serialize();
+    // First, serialize the transaction
+    transaction.store_comps(comps_location);
 
-    auto transaction_json_file = libdnf5::utils::fs::File(transaction_json_path, "w");
-
-    transaction_json_file.write(json);
+    const auto transaction_json_path = offline_datadir / "transaction.json";
+    libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
+    transaction_json_file.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
     transaction_json_file.close();
 
+    // Then, test the serialized transaction
+    const auto & goal = std::make_unique<libdnf5::Goal>(base);
+    goal->add_serialized_transaction(transaction_json_path);
+    auto test_transaction = goal->resolve();
+    if (test_transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
+        throw libdnf5::cli::GoalResolveError(transaction);
+    }
+    base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+
+    print_info("\nTesting offline transaction");
+    auto result = test_transaction.run();
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
+                  << std::endl;
+        for (auto const & entry : transaction.get_gpg_signature_problems()) {
+            std::cerr << entry << std::endl;
+        }
+        for (auto & problem : test_transaction.get_transaction_problems()) {
+            std::cerr << "  - " << problem << std::endl;
+        }
+        throw libdnf5::cli::SilentCommandExitError(1);
+    }
+
+    for (auto const & entry : test_transaction.get_gpg_signature_problems()) {
+        std::cerr << entry << std::endl;
+    }
+
+    // Download and transaction test complete. Fill out entries in offline
+    // transaction state file.
     state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
     state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
 
@@ -359,10 +395,6 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 }
 
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
-    if (should_store_offline) {
-        base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
-    }
-
     if (!transaction_store_path.empty()) {
         auto transaction_location = transaction_store_path / "transaction.json";
         constexpr const char * packages_in_trans_dir{"./packages"};
@@ -388,11 +420,27 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         libdnf5::utils::fs::File transfile(transaction_location, "w");
         transfile.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
         return;
-    } else {
-        transaction.download();
     }
 
+    if (should_store_offline) {
+        const auto & installroot = base.get_config().get_installroot_option().get_value();
+        const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+        std::filesystem::create_directories(offline_datadir);
+
+        base.get_config().get_destdir_option().set(offline_datadir / "packages");
+    }
+
+    transaction.download();
     if (base.get_config().get_downloadonly_option().get_value()) {
+        return;
+    }
+
+    if (should_store_offline) {
+        store_offline(transaction);
+        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
+                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+                     "offline clean`."
+                  << std::endl;
         return;
     }
 
@@ -439,14 +487,6 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         std::cerr << entry << std::endl;
     }
     // TODO(mblaha): print a summary of successful transaction
-
-    if (should_store_offline) {
-        store_offline(transaction);
-        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
-                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
-                     "offline clean`."
-                  << std::endl;
-    }
 }
 
 libdnf5::Goal * Context::Impl::get_goal(bool new_if_not_exist) {
