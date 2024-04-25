@@ -236,12 +236,15 @@ void check_state(const dnf5::offline::OfflineTransactionState & state) {
 
 void reboot([[maybe_unused]] bool poweroff = false) {
     if (std::getenv("DNF_SYSTEM_UPGRADE_NO_REBOOT")) {
-        std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not rebooting." << std::endl;
+        if (poweroff) {
+            std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not powering off." << std::endl;
+        } else {
+            std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not rebooting." << std::endl;
+        }
         return;
     }
 
 #ifdef WITH_SYSTEMD
-    poweroff = !poweroff;
     std::unique_ptr<sdbus::IConnection> connection;
     try {
         connection = sdbus::createSystemBusConnection();
@@ -251,7 +254,7 @@ void reboot([[maybe_unused]] bool poweroff = false) {
     }
     auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
     if (poweroff) {
-        proxy->callMethod("Poweroff").onInterface(SYSTEMD_MANAGER_INTERFACE);
+        proxy->callMethod("PowerOff").onInterface(SYSTEMD_MANAGER_INTERFACE);
     } else {
         proxy->callMethod("Reboot").onInterface(SYSTEMD_MANAGER_INTERFACE);
     }
@@ -279,11 +282,12 @@ void OfflineRebootCommand::set_argument_parser() {
         _("Prepare the system to perform the offline transaction and reboot to start the transaction."));
 
     poweroff_after =
-        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(true)));
+        dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(std::make_unique<libdnf5::OptionBool>(false)));
 
     auto * poweroff_after_arg = parser.add_new_named_arg("poweroff");
     poweroff_after_arg->set_long_name("poweroff");
     poweroff_after_arg->set_description(_("Power off the system after the operation is complete"));
+    poweroff_after_arg->set_const_value("true");
     poweroff_after_arg->link_value(poweroff_after);
 
     cmd.register_named_arg(poweroff_after_arg);
@@ -360,7 +364,7 @@ void OfflineRebootCommand::run() {
         get_system_releasever(),
         get_target_releasever());
 
-    reboot(poweroff_after->get_value());
+    reboot(false);
 }
 
 void OfflineExecuteCommand::set_argument_parser() {
