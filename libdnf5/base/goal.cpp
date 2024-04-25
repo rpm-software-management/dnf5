@@ -107,7 +107,7 @@ public:
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
-    GoalProblem add_transaction_replay_specs_to_goal(base::Transaction & transaction);
+    GoalProblem add_serialized_transaction_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
@@ -169,6 +169,12 @@ public:
 
     void set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak);
     void autodetect_unsatisfied_installed_weak_dependencies();
+
+    GoalProblem add_replay_to_goal(
+        base::Transaction & transaction,
+        const transaction::TransactionReplay & replay,
+        GoalJobSettings settings,
+        std::filesystem::path replay_location = "");
 
 private:
     friend class Goal;
@@ -623,7 +629,7 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
     return ret;
 }
 
-GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction & transaction) {
+GoalProblem Goal::Impl::add_serialized_transaction_to_goal(base::Transaction & transaction) {
     if (!serialized_transaction) {
         return GoalProblem::NO_PROBLEM;
     }
@@ -633,6 +639,14 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
     auto replay_location = replay_path.remove_filename();
     auto replay = transaction::parse_transaction_replay(replay_file.read());
 
+    return add_replay_to_goal(transaction, replay, settings, replay_location);
+}
+
+GoalProblem Goal::Impl::add_replay_to_goal(
+    base::Transaction & transaction,
+    const transaction::TransactionReplay & replay,
+    GoalJobSettings settings,
+    std::filesystem::path replay_location) {
     bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
     for (const auto & package_replay : replay.packages) {
@@ -770,7 +784,6 @@ GoalProblem Goal::Impl::add_transaction_replay_specs_to_goal(base::Transaction &
 
     return GoalProblem::NO_PROBLEM;
 }
-
 
 GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
@@ -2345,7 +2358,7 @@ base::Transaction Goal::resolve() {
     // of specs, it doesn't resolve anything. Therefore it doesn't need any Sacks to be ready.
     // In fact given that it can add to rpm_filepaths it has to be added before `add_paths_to_goal()`
     // and thus before the provides are computed.
-    ret |= p_impl->add_transaction_replay_specs_to_goal(transaction);
+    ret |= p_impl->add_serialized_transaction_to_goal(transaction);
 
     p_impl->add_paths_to_goal();
 
