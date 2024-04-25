@@ -75,4 +75,9 @@ TransactionHistoryWeakPtr TransactionHistory::get_weak_ptr() {
     return {this, &p_impl->guard};
 }
 
+TransactionItemReason TransactionHistory::transaction_item_reason_at(
+    const std::string & name, const std::string & arch, int64_t transaction_id_point) {
+    return TransactionDbUtils::transaction_item_reason_at(p_impl->base, name, arch, transaction_id_point);
+}
+
 }  // namespace libdnf5::transaction
