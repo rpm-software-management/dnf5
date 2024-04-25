@@ -217,5 +217,43 @@ void TransactionDbUtils::trans_update(libdnf5::utils::SQLite3::Statement & query
     query.reset();
 }
 
+static constexpr const char * SQL_TRANS_ITEM_NAME_ARCH_REASON = R"**(
+    SELECT
+        "ti"."reason_id"
+    FROM
+        "trans_item" "ti"
+    JOIN
+        "trans" "t" ON ("ti"."trans_id" = "t"."id")
+    JOIN
+        "rpm" "i" USING ("item_id")
+    JOIN
+        "pkg_name" ON "i"."name_id" = "pkg_name"."id"
+    JOIN
+        "arch" ON "i"."arch_id" = "arch"."id"
+    WHERE
+        "t"."state_id" = 2
+        AND "ti"."action_id" NOT IN (6)
+        AND "pkg_name"."name" = ?
+        AND "arch"."name" = ?
+        AND "ti"."trans_id" <= ?
+    ORDER BY
+        "ti"."trans_id" DESC
+    LIMIT 1
+)**";
+
+TransactionItemReason TransactionDbUtils::transaction_item_reason_at(
+    const BaseWeakPtr & base, const std::string & name, const std::string & arch, int64_t transaction_id_point) {
+    auto conn = transaction_db_connect(*base);
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, SQL_TRANS_ITEM_NAME_ARCH_REASON);
+    query.bindv(name, arch, transaction_id_point);
+
+    if (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
+        auto reason = static_cast<transaction::TransactionItemReason>(query.get<int>("reason_id"));
+        return reason;
+    }
+
+    return TransactionItemReason::NONE;
+}
 
 }  // namespace libdnf5::transaction

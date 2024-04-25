@@ -73,6 +73,18 @@ public:
     /// @since 5.0
     libdnf5::BaseWeakPtr get_base() const;
 
+    /// Get reason for package specified by name and arch at a point in history
+    /// specified by transaction id.
+    ///
+    /// @param name Name of rpm package
+    /// @param arch Arch of rpm package
+    /// @param transaction_id_point Id of a history transaction (can be obtained from
+    ///                             libdnf5::transaction::TransactionHistory)
+    /// @return Reason of the last transaction item before transaction_id_point that
+    ///         has an rpm with matching name and arch.
+    TransactionItemReason transaction_item_reason_at(
+        const std::string & name, const std::string & arch, int64_t transaction_id_point);
+
 private:
     /// Create a new Transaction object.
     libdnf5::transaction::Transaction new_transaction();

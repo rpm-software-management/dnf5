@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/sqlite3/sqlite3.hpp"
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/transaction/transaction_item_reason.hpp"
 
 #include <memory>
 
@@ -59,6 +60,10 @@ public:
 
     /// Use a query to update a record in the 'trans' table
     static void trans_update(libdnf5::utils::SQLite3::Statement & query, Transaction & trans);
+
+    /// Get reason for name-arch at a point in history specified by transaction id.
+    static TransactionItemReason transaction_item_reason_at(
+        const BaseWeakPtr & base, const std::string & name, const std::string & arch, int64_t transaction_id_point);
 };
 
 }  // namespace libdnf5::transaction
