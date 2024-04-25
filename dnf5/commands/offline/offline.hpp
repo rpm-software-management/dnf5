@@ -49,14 +49,10 @@ protected:
     std::filesystem::path get_magic_symlink() const { return magic_symlink; };
     std::filesystem::path get_datadir() const { return datadir; };
     std::optional<dnf5::offline::OfflineTransactionState> state;
-    std::string get_system_releasever() const { return system_releasever; };
-    std::string get_target_releasever() const { return target_releasever; };
 
 private:
     std::filesystem::path magic_symlink;
     std::filesystem::path datadir;
-    std::string target_releasever;
-    std::string system_releasever;
 };
 
 class OfflineRebootCommand : public OfflineSubcommand {

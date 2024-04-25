@@ -210,12 +210,6 @@ void OfflineSubcommand::configure() {
     datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     state = std::make_optional<dnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
-
-    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.get_base().get_weak_ptr(), installroot);
-    if (detected_releasever != nullptr) {
-        system_releasever = *detected_releasever;
-    }
-    target_releasever = ctx.get_base().get_vars()->get_value("releasever");
 }
 
 void check_state(const dnf5::offline::OfflineTransactionState & state) {
@@ -336,9 +330,12 @@ void OfflineRebootCommand::run() {
     }
 #endif
 
+    const auto & system_releasever = state->get_data().system_releasever;
+    const auto & target_releasever = state->get_data().target_releasever;
+
     if (state->get_data().verb == "system-upgrade download") {
-        std::cout << _("The system will now reboot to upgrade to release version ")
-                  << state->get_data().target_releasever << "." << std::endl;
+        std::cout << _("The system will now reboot to upgrade to release version ") << target_releasever << "."
+                  << std::endl;
     } else {
         std::cout
             << _("The system will now reboot to perform the offline transaction initiated by the following command:")
@@ -361,8 +358,8 @@ void OfflineRebootCommand::run() {
         ctx,
         "Rebooting to perform offline transaction.",
         dnf5::offline::REBOOT_REQUESTED_ID,
-        get_system_releasever(),
-        get_target_releasever());
+        system_releasever,
+        target_releasever);
 
     reboot(false);
 }
@@ -418,25 +415,20 @@ void OfflineExecuteCommand::configure() {
     if (!state->get_data().module_platform_id.empty()) {
         ctx.get_base().get_config().get_module_platform_id_option().set(state->get_data().module_platform_id);
     }
-
-    // Set same set of enabled/disabled repos used during `system-upgrade download`
-    for (const auto & repo_id : state->get_data().enabled_repos) {
-        ctx.get_setopts().emplace_back(repo_id + ".enabled", "1");
-    }
-    for (const auto & repo_id : state->get_data().disabled_repos) {
-        ctx.get_setopts().emplace_back(repo_id + ".disabled", "1");
-    }
 }
 
 void OfflineExecuteCommand::run() {
     auto & ctx = get_context();
 
+    const auto & system_releasever = state->get_data().system_releasever;
+    const auto & target_releasever = state->get_data().target_releasever;
+
     dnf5::offline::log_status(
         ctx,
         "Starting offline transaction. This will take a while.",
         dnf5::offline::OFFLINE_STARTED_ID,
-        get_system_releasever(),
-        get_target_releasever());
+        system_releasever,
+        target_releasever);
 
     std::cout
         << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
@@ -452,7 +444,7 @@ void OfflineExecuteCommand::run() {
     state->get_data().status = dnf5::offline::STATUS_TRANSACTION_INCOMPLETE;
     state->write();
 
-    const auto & installroot = get_context().get_base().get_config().get_installroot_option().get_value();
+    const auto & installroot = ctx.base.get_config().get_installroot_option().get_value();
     const auto & datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
     const auto & transaction_json_path = datadir / dnf5::offline::TRANSACTION_JSON_FILENAME;
@@ -504,11 +496,7 @@ void OfflineExecuteCommand::run() {
 
     plymouth.message(_(transaction_complete_message.c_str()));
     dnf5::offline::log_status(
-        ctx,
-        transaction_complete_message,
-        dnf5::offline::OFFLINE_FINISHED_ID,
-        get_system_releasever(),
-        get_target_releasever());
+        ctx, transaction_complete_message, dnf5::offline::OFFLINE_FINISHED_ID, system_releasever, target_releasever);
 
     // If the transaction succeeded, remove downloaded data
     clean_datadir(ctx, get_datadir());
