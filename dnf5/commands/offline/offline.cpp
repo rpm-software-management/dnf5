@@ -467,8 +467,19 @@ void OfflineExecuteCommand::run() {
 
     PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
-    /* callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions); */
+    const auto & trans_packages = transaction.get_transaction_packages();
+    auto num_of_actions = trans_packages.size() + 1;
+    for (auto & trans_pkg : trans_packages) {
+        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            ++num_of_actions;
+            break;
+        }
+    }
+
+    callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
     transaction.set_callbacks(std::move(callbacks));
+
+    transaction.set_description(state->get_data().cmd_line);
 
     const auto result = transaction.run();
     std::cout << std::endl;
