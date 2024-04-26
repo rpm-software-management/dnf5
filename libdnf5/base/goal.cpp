@@ -110,6 +110,8 @@ public:
     GoalProblem add_serialized_transaction_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
+    GoalProblem resolve_reverted_transactions(base::Transaction & transaction);
+
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
@@ -216,6 +218,8 @@ private:
 
     // (path_to_serialized_transaction, settings)
     std::unique_ptr<std::tuple<std::filesystem::path, GoalJobSettings>> serialized_transaction;
+
+    std::unique_ptr<std::tuple<std::vector<transaction::Transaction>, GoalJobSettings>> revert_transactions;
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -572,7 +576,6 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     }
     return ret;
 }
-
 
 GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
@@ -2219,6 +2222,120 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
+GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transaction) {
+    if (!revert_transactions) {
+        return GoalProblem::NO_PROBLEM;
+    }
+    auto ret = GoalProblem::NO_PROBLEM;
+
+    using Action = transaction::TransactionItemAction;
+    using Reason = transaction::TransactionItemReason;
+    const std::unordered_map<Action, Action> REVERT_ACTION = {
+        {Action::INSTALL, Action::REMOVE},
+        {Action::UPGRADE, Action::REPLACED},
+        {Action::DOWNGRADE, Action::REPLACED},
+        {Action::REINSTALL, Action::REINSTALL},
+        {Action::REMOVE, Action::INSTALL},
+        {Action::REPLACED, Action::INSTALL},
+        {Action::REASON_CHANGE, Action::REASON_CHANGE},
+    };
+    transaction::TransactionReplay replay;
+    auto history = base->get_transaction_history();
+
+    auto & [reverting_transactions, settings] = *revert_transactions;
+    //TODO(amatej): Implement merging of transactions and merge the vector
+    //              instead of taking the first one.
+    auto & reverting_transaction = reverting_transactions[0];
+
+    for (const auto & pkg : reverting_transaction.get_packages()) {
+        transaction::PackageReplay package_replay;
+        package_replay.nevra = libdnf5::rpm::to_nevra_string(pkg);
+        auto reverted_action = REVERT_ACTION.find(pkg.get_action());
+        libdnf_assert(
+            reverted_action != REVERT_ACTION.end(),
+            "Cannot revert action: \"{}\"",
+            transaction_item_action_to_string(pkg.get_action()));
+        package_replay.action = reverted_action->second;
+
+        // We cannot tell the previous reason if the action is REASON_CHANGE it could have been anything.
+        // For reverted action INSTALL and reason CLEAN the previous reason could have been either DEPENDENCY or WEAK DEPENDENCY
+        // to pick the right one we have to look into history.
+        if ((package_replay.action == Action::REASON_CHANGE) ||
+            (package_replay.action == Action::INSTALL && pkg.get_reason() == Reason::CLEAN)) {
+            // We look up the reason based on only name and arch, this means we could find a different
+            // version of installonly package however we store only one reason for ALL versions of
+            // installonly packages so it doesn't matter.
+            package_replay.reason =
+                history->transaction_item_reason_at(pkg.get_name(), pkg.get_arch(), reverting_transaction.get_id() - 1);
+        } else if (
+            package_replay.action == Action::REMOVE &&
+            (pkg.get_reason() == Reason::DEPENDENCY || pkg.get_reason() == Reason::WEAK_DEPENDENCY)) {
+            package_replay.reason = Reason::CLEAN;
+        } else {
+            package_replay.reason = pkg.get_reason();
+        }
+
+        replay.packages.push_back(package_replay);
+    }
+
+    for (const auto & group : reverting_transaction.get_comps_groups()) {
+        transaction::GroupReplay group_replay;
+        group_replay.group_id = group.to_string();
+        // Do not revert UPGRADE for groups. Groups don't have an upgrade path so they cannot be
+        // upgraded or downgraded. The UPGRADE action is basically a synchronization with
+        // current group definition. Reverting synchronization is again synchronization but
+        // with the older group definition, this happens automatically by reverting the rpm
+        // actions. We only have to keep the UPGRADE action to have a record of the operation.
+        if (group.get_action() != transaction::TransactionItemAction::UPGRADE) {
+            auto reverted_action = REVERT_ACTION.find(group.get_action());
+            if (reverted_action == REVERT_ACTION.end()) {
+                libdnf_throw_assertion(
+                    "Cannot revert action: \"{}\"", transaction_item_action_to_string(group.get_action()));
+            }
+            group_replay.action = reverted_action->second;
+        } else {
+            group_replay.action = transaction::TransactionItemAction::UPGRADE;
+        }
+
+        if (group_replay.action == Action::INSTALL && group.get_reason() == Reason::CLEAN) {
+            group_replay.reason = Reason::DEPENDENCY;
+        } else if (group_replay.action == Action::REMOVE && group.get_reason() == Reason::DEPENDENCY) {
+            group_replay.reason = Reason::CLEAN;
+        } else {
+            group_replay.reason = group.get_reason();
+        }
+
+        replay.groups.push_back(group_replay);
+    }
+
+    for (const auto & env : reverting_transaction.get_comps_environments()) {
+        transaction::EnvironmentReplay env_replay;
+        env_replay.environment_id = env.to_string();
+        // Do not revert UPGRADE for environments. Environments don't have an upgrade path so they cannot be
+        // upgraded or downgraded. The UPGRADE action is basically a synchronization with
+        // current environment definition. Reverting synchronization is again synchronization but
+        // with the older environment definition, this happens automatically by reverting the rpm
+        // actions. We only have to keep the UPGRADE action to have a record of the operation.
+        if (env.get_action() != transaction::TransactionItemAction::UPGRADE) {
+            auto reverted_action = REVERT_ACTION.find(env.get_action());
+            if (reverted_action == REVERT_ACTION.end()) {
+                libdnf_throw_assertion(
+                    "Cannot revert action: \"{}\"", transaction_item_action_to_string(env.get_action()));
+            }
+            env_replay.action = reverted_action->second;
+        } else {
+            env_replay.action = transaction::TransactionItemAction::UPGRADE;
+        }
+
+        replay.environments.push_back(env_replay);
+    }
+
+    ret |= add_replay_to_goal(transaction, replay, settings);
+
+    return ret;
+}
+
+
 void Goal::Impl::add_paths_to_goal() {
     if (rpm_filepaths.empty()) {
         return;
@@ -2358,7 +2475,9 @@ base::Transaction Goal::resolve() {
     // of specs, it doesn't resolve anything. Therefore it doesn't need any Sacks to be ready.
     // In fact given that it can add to rpm_filepaths it has to be added before `add_paths_to_goal()`
     // and thus before the provides are computed.
+    // Both serialized and reverted transactions use TransactionReplay.
     ret |= p_impl->add_serialized_transaction_to_goal(transaction);
+    ret |= p_impl->resolve_reverted_transactions(transaction);
 
     p_impl->add_paths_to_goal();
 
@@ -2514,6 +2633,14 @@ void Goal::add_serialized_transaction(
     p_impl->serialized_transaction =
         std::make_unique<std::tuple<std::filesystem::path, GoalJobSettings>>(transaction_path, settings);
 }
+
+void Goal::add_revert_transactions(
+    const std::vector<libdnf5::transaction::Transaction> & transactions, const libdnf5::GoalJobSettings & settings) {
+    libdnf_user_assert(!p_impl->revert_transactions, "Revert transactions cannot be set multiple times.");
+    p_impl->revert_transactions =
+        std::make_unique<std::tuple<std::vector<transaction::Transaction>, GoalJobSettings>>(transactions, settings);
+}
+
 
 void Goal::reset() {
     p_impl->module_specs.clear();

@@ -364,6 +364,16 @@ public:
         const std::filesystem::path & transaction_path,
         const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Add revert request of history transactions to the goal.
+    /// Can be called only once per Goal.
+    ///
+    /// @param transactions                     A vector of history transactions to be reverted.
+    /// @param settings                         A structure to override default goal settings.
+    void add_revert_transactions(
+        const std::vector<libdnf5::transaction::Transaction> & transactions,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
+
     /// When true it allows to remove installed packages to resolve dependency problems
     void set_allow_erasing(bool value);
 
