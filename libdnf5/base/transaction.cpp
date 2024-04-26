@@ -1264,7 +1264,8 @@ bool Transaction::Impl::check_gpg_signatures() {
     // TODO(mblaha): DNSsec key verification
     libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
-    int num_checks_skipped = 0;
+    unsigned long num_checks_skipped = 0;
+    std::set<std::string> repos_with_skipped_checks;
     for (const auto & trans_pkg : packages) {
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
             auto const & pkg = trans_pkg.get_package();
@@ -1277,6 +1278,7 @@ bool Transaction::Impl::check_gpg_signatures() {
             auto check_result = rpm_signature.check_package_signature(pkg);
             if (check_result == libdnf5::rpm::RpmSignature::CheckResult::SKIPPED) {
                 num_checks_skipped += 1;
+                repos_with_skipped_checks.insert(pkg.get_repo_id());
             } else if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                 // these two errors are possibly recoverable by importing the correct public key
                 auto is_error_recoverable =
@@ -1315,7 +1317,17 @@ bool Transaction::Impl::check_gpg_signatures() {
         }
     }
     if (num_checks_skipped > 0) {
-        auto warning_msg = utils::sformat(_("Warning: skipped PGP checks for {} package(s)."), num_checks_skipped);
+        auto repo_string = libdnf5::utils::string::join(
+            repos_with_skipped_checks, C_("It is a joining character for repositories IDs", ", "));
+        auto warning_msg =
+            (num_checks_skipped == 1)
+                ? utils::sformat(_("Warning: skipped PGP checks for 1 package from repository: {}"), repo_string)
+                : utils::sformat(
+                      P_("Warning: skipped PGP checks for {0} packages from repository: {1}",
+                         "Warning: skipped PGP checks for {0} packages from repositories: {1}",
+                         repos_with_skipped_checks.size()),
+                      num_checks_skipped,
+                      repo_string);
         signature_problems.push_back(warning_msg);
     }
     return result;

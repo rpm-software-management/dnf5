@@ -32,7 +32,7 @@ class TestTransaction(base_test_case.BaseTestCase):
 
         self.assertEqual(1, transaction.get_transaction_packages_count())
         self.assertTrue(transaction.check_gpg_signatures())
-        self.assertEqual(('Warning: skipped PGP checks for 1 package(s).',),
+        self.assertEqual(('Warning: skipped PGP checks for 1 package from repository: repomd-repo1',),
                          transaction.get_gpg_signature_problems())
 
     def test_check_gpg_signatures_fail(self):
