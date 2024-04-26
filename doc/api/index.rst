@@ -8,3 +8,4 @@ API Reference
 
     python/python
     c++/cpp
+    changes_dnf5.2
