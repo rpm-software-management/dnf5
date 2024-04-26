@@ -49,7 +49,11 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
         scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
-        scols_line_set_data(ln, 4, std::to_string(ts.get_packages().size()).c_str());
+        scols_line_set_data(
+            ln,
+            4,
+            std::to_string(ts.get_packages().size() + ts.get_comps_groups().size() + ts.get_comps_environments().size())
+                .c_str());
     }
 
     scols_print_table(table.get());
