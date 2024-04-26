@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_ARGUMENTS_HPP
 #define DNF5_COMMANDS_HISTORY_ARGUMENTS_HPP
 
+#include "dnf5/context.hpp"
+
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 
@@ -41,6 +43,32 @@ public:
     explicit ReverseOption(libdnf5::cli::session::Command & command)
         : BoolOption(command, "reverse", '\0', _("Reverse the order of transactions."), false) {}
 };
+
+class IgnoreInstalledOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit IgnoreInstalledOption(libdnf5::cli::session::Command & command)
+        : BoolOption(
+              command,
+              "ignore-installed",
+              '\0',
+              _("Don't consider mismatches between installed and stored transaction packages as errors. This can "
+                "result in an empty transaction because among other things the option can ignore failing Remove "
+                "actions."),
+              false) {}
+};
+
+class IgnoreExtrasOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit IgnoreExtrasOption(libdnf5::cli::session::Command & command)
+        : BoolOption(
+              command,
+              "ignore-extras",
+              '\0',
+              _("Don't consider extra packages pulled into the transaction as errors."),
+              false) {}
+};
+
+std::function<std::vector<std::string>(const char * arg)> create_history_id_autocomplete(Context & ctx);
 
 
 }  // namespace dnf5

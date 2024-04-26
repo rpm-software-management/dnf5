@@ -57,7 +57,7 @@ void HistoryCommand::register_subcommands() {
     auto * software_management_commands_group = parser.add_new_group("history_software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    // register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
     // register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
     // register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
     register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
