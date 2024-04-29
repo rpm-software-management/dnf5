@@ -117,6 +117,12 @@ public:
         /// also the CoprRepoPart::load_raw_values() or
         /// CoprRepoPart::CoprRepoPart(dnfRepo) which are more about the
         /// 'disable' part.
+
+        // Copr Frontend API-responds to us with this particular CoprRepoPart
+        // included, so it _is_ supposed to be enabled (otherwise it would not
+        // be listed).
+        enabled = true;
+
         if (!json->has_key("opts"))
             return;
         auto opts = json->get_dict_item("opts");
