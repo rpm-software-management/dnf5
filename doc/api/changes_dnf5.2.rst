@@ -4,6 +4,8 @@
 
 This page lists the differences in the public API of `DNF5 5.2 <https://github.com/rpm-software-management/dnf5/releases/tag/5.2.0.0>`_ compared to the previous major version, DNF5 5.1.
 
+`Here <https://raw.githubusercontent.com/rpm-software-management/dnf5/main/doc/api/changes_dnf5.2.rst>`_'s the full diff showing the changes in the libdnf5 API.
+
 
 Wrapping struct attributes
 ==========================
@@ -51,7 +53,7 @@ Other changes
 
 * ``libdnf5::advisory::AdvisoryQuery``
 
-  * ``filter_*`` methods have the default ``cmp_type`` ``IEXACT`` (was ``EQ`` before)
+  * ``filter_type`` and ``filter_severity`` methods have the default ``cmp_type`` ``IEXACT`` (was ``EQ`` before)
 
 * ``libdnf5::repo::RepoSack``
 
