@@ -228,7 +228,7 @@ void check_state(const dnf5::offline::OfflineTransactionState & state) {
     }
 }
 
-void reboot([[maybe_unused]] bool poweroff = false) {
+void reboot(bool poweroff = false) {
     if (std::getenv("DNF_SYSTEM_UPGRADE_NO_REBOOT")) {
         if (poweroff) {
             std::cerr << "DNF_SYSTEM_UPGRADE_NO_REBOOT is set, not powering off." << std::endl;
