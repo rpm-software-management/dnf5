@@ -467,6 +467,12 @@ void OfflineExecuteCommand::run() {
 
     PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
+
+    // Adapted from Context::Impl::download_and_run:
+    // Compute the total number of transaction actions (number of bars)
+    // Total number of actions = number of packages in the transaction +
+    //                           action of verifying package files if new package files are present in the transaction +
+    //                           action of preparing transaction
     const auto & trans_packages = transaction.get_transaction_packages();
     auto num_of_actions = trans_packages.size() + 1;
     for (auto & trans_pkg : trans_packages) {
