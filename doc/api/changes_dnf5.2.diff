@@ -1,0 +1,4147 @@
+diff --git a/include/libdnf5/advisory/advisory.hpp b/include/libdnf5/advisory/advisory.hpp
+index 9b4159c9..245415b4 100644
+--- a/include/libdnf5/advisory/advisory.hpp
++++ b/include/libdnf5/advisory/advisory.hpp
+@@ -48 +48,2 @@ public:
+-    bool operator==(const Advisory & other) const noexcept { return id == other.id && base == other.base; }
++    Advisory(const Advisory & src);
++    Advisory & operator=(const Advisory & src);
+@@ -50 +51,6 @@ public:
+-    bool operator!=(const Advisory & other) const noexcept { return !(*this == other); }
++    Advisory(Advisory && src) noexcept;
++    Advisory & operator=(Advisory && src) noexcept;
++
++    bool operator==(const Advisory & other) const noexcept;
++
++    bool operator!=(const Advisory & other) const noexcept;
+@@ -144,3 +150,2 @@ private:
+-    BaseWeakPtr base;
+-
+-    AdvisoryId id;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/advisory/advisory_collection.hpp b/include/libdnf5/advisory/advisory_collection.hpp
+index fd82043a..203a3eb3 100644
+--- a/include/libdnf5/advisory/advisory_collection.hpp
++++ b/include/libdnf5/advisory/advisory_collection.hpp
+@@ -35,0 +36,8 @@ public:
++    AdvisoryCollection(const AdvisoryCollection & src);
++    AdvisoryCollection & operator=(const AdvisoryCollection & src);
++
++    AdvisoryCollection(AdvisoryCollection && src) noexcept;
++    AdvisoryCollection & operator=(AdvisoryCollection && src) noexcept;
++
++    ~AdvisoryCollection();
++
+@@ -73 +80,0 @@ private:
+-    //TODO(amatej): Hide into an Impl?
+@@ -83,13 +90,2 @@ private:
+-    //TODO(amatej): Hide into an Impl?
+-    /// Get all AdvisoryModules stored in this AdvisoryCollection
+-    /// @param output           std::vector of AdvisorModules used as output.
+-    ///                         This is much faster than returning new std::vector and later joining
+-    ///                         them when collecting AdvisoryModules from multiple collections.
+-    void get_modules(std::vector<AdvisoryModule> & output);
+-
+-    BaseWeakPtr base;
+-
+-    AdvisoryId advisory;
+-
+-    /// AdvisoryCollections don't have their own Id, therefore store it's index in its Advisory (just like AdvisoryReference)
+-    int index;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/advisory/advisory_query.hpp b/include/libdnf5/advisory/advisory_query.hpp
+index 06a4d5c2..251b86e6 100644
+--- a/include/libdnf5/advisory/advisory_query.hpp
++++ b/include/libdnf5/advisory/advisory_query.hpp
+@@ -31 +30,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/rpm/package.hpp"
+@@ -51,2 +50,2 @@ public:
+-    AdvisoryQuery(const AdvisoryQuery & src) = default;
+-    AdvisoryQuery & operator=(const AdvisoryQuery & src) = default;
++    AdvisoryQuery(const AdvisoryQuery & src);
++    AdvisoryQuery & operator=(const AdvisoryQuery & src);
+@@ -54,2 +53,2 @@ public:
+-    AdvisoryQuery(AdvisoryQuery && src) = default;
+-    AdvisoryQuery & operator=(AdvisoryQuery && src) = default;
++    AdvisoryQuery(AdvisoryQuery && src) noexcept;
++    AdvisoryQuery & operator=(AdvisoryQuery && src) noexcept;
+@@ -69,3 +68,3 @@ public:
+-    /// @param cmp_type     What comparator to use with type, allows: EQ.
+-    void filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+-    void filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
++    /// @param cmp_type     What comparator to use with type, allows: IEXACT (default), EQ.
++    void filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
++    void filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
+@@ -91,2 +90,2 @@ public:
+-    /// @param cmp_type     What comparator to use with severity, allows: EQ.
+-    void filter_severity(const std::string & severity, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
++    /// @param cmp_type     What comparator to use with severity, allows: IEXACT (default), EQ.
++    void filter_severity(const std::string & severity, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
+@@ -94 +93 @@ public:
+-        const std::vector<std::string> & severities, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
++        const std::vector<std::string> & severities, sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::IEXACT);
+@@ -116 +115,2 @@ private:
+-    BaseWeakPtr base;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/advisory/advisory_reference.hpp b/include/libdnf5/advisory/advisory_reference.hpp
+index 25aef184..ca0d7373 100644
+--- a/include/libdnf5/advisory/advisory_reference.hpp
++++ b/include/libdnf5/advisory/advisory_reference.hpp
+@@ -26,2 +25,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <vector>
+-
+@@ -32,0 +31,8 @@ public:
++    AdvisoryReference(const AdvisoryReference & src);
++    AdvisoryReference & operator=(const AdvisoryReference & src);
++
++    AdvisoryReference(AdvisoryReference && src) noexcept;
++    AdvisoryReference & operator=(AdvisoryReference && src) noexcept;
++
++    ~AdvisoryReference();
++
+@@ -71,7 +77,2 @@ private:
+-    BaseWeakPtr base;
+-    AdvisoryId advisory;
+-
+-    /// We cannot store IDs of reference data (id, type, title, url) because they
+-    /// don't have ids set in libsolv (they are only strings), therefore we store
+-    /// index of the reference.
+-    int index;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/base.hpp b/include/libdnf5/base/base.hpp
+index 29f2da26..c4c8e38a 100644
+--- a/include/libdnf5/base/base.hpp
++++ b/include/libdnf5/base/base.hpp
+@@ -27 +26,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/comps/comps.hpp"
+@@ -32 +31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/plugin/iplugin.hpp"
++#include "libdnf5/plugin/plugin_info.hpp"
+@@ -66,4 +65,2 @@ public:
+-    void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks) {
+-        this->download_callbacks = std::move(download_callbacks);
+-    }
+-    repo::DownloadCallbacks * get_download_callbacks() { return download_callbacks.get(); }
++    void set_download_callbacks(std::unique_ptr<repo::DownloadCallbacks> && download_callbacks);
++    repo::DownloadCallbacks * get_download_callbacks();
+@@ -86,8 +82,0 @@ public:
+-    /// @deprecated Don't use it! It will be removed in Fedora 40. It was intended for internal use only.
+-    /// Call a function that loads the config file, catching errors appropriately
+-    void with_config_file_path(std::function<void(const std::string &)> func);
+-
+-    /// @deprecated It is redundant. It calls `load_config()`.
+-    /// Loads main configuration.
+-    void load_config_from_file();
+-
+@@ -95,4 +84,18 @@ public:
+-    ConfigMain & get_config() { return config; }
+-    LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
+-    repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
+-    rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
++    ConfigMain & get_config();
++    LogRouterWeakPtr get_logger();
++    repo::RepoSackWeakPtr get_repo_sack();
++    rpm::PackageSackWeakPtr get_rpm_package_sack();
++    module::ModuleSackWeakPtr get_module_sack();
++
++    /// Adds a request to enable/disable plugins that match the names (glob patterns) in the list.
++    /// Can be called multiple times. Requests (`plugin_names` and `enable` state) are queued.
++    /// The enable state of a plugin is set according to the last matching request.
++    /// Must be called before the Base::setup.
++    /// @param plugin_names Plugin names (glob patterns) to enable/disable
++    /// @param enable Request: true - enable plugins, false - disable plugins
++    /// @exception libdnf5::UserAssertionError When called after Base::setup
++    void enable_disable_plugins(const std::vector<std::string> & plugin_names, bool enable);
++
++    /// @return a list of information about plugins found during Base::setup
++    /// @exception libdnf5::UserAssertionError When called before Base::setup
++    const std::vector<plugin::PluginInfo> & get_plugins_info() const;
+@@ -104 +107 @@ public:
+-    /// The method is supposed to be called after configuration is updated, application plugins applied
++    /// The method is supposed to be called after configuration and vars are updated, application plugins applied
+@@ -106 +109,3 @@ public:
+-    /// or Advisory query created.
++    /// or Advisory query created. The method is recommended to be called before loading  repositories, because
++    /// not all variables for substitutions might be available. Caution - modification of vars after this call
++    /// might be problematic, because architecture is already fixed for our solver.
+@@ -113,4 +118,11 @@ public:
+-    // TODO(jmracek) Remove from public API due to unstability of the code
+-    transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
+-    libdnf5::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
+-    libdnf5::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
++    /// Notifies the libdnf5 library that the repositories are configured.  It can be called before `load_repos`.
++    /// The libdnf5 library can then call plugins that can make final adjustments to the repositories configuration.
++    /// In the case that it has not been called, it is called automatically at the beginning of the load_repos method.
++    /// Calling the method for the second time result in throwing an exception.
++    void notify_repos_configured();
++
++    /// Returns true when notify_repos_configured() was already called (by user or automatically)
++    bool are_repos_configured() const noexcept;
++
++    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
++    transaction::TransactionHistoryWeakPtr get_transaction_history();
+@@ -119 +131 @@ public:
+-    VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
++    VarsWeakPtr get_vars();
+@@ -121 +133 @@ public:
+-    libdnf5::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
++    libdnf5::BaseWeakPtr get_weak_ptr();
+@@ -147,14 +158,0 @@ private:
+-
+-    LogRouter log_router;
+-    ConfigMain config;
+-    repo::RepoSack repo_sack;
+-    rpm::PackageSack rpm_package_sack;
+-    comps::Comps comps{*this};
+-    module::ModuleSack module_sack{get_weak_ptr()};
+-    std::map<std::string, std::string> variables;
+-    transaction::TransactionHistory transaction_history;
+-    Vars vars;
+-    std::unique_ptr<repo::DownloadCallbacks> download_callbacks;
+-
+-    WeakPtrGuard<LogRouter, false> log_router_gurad;
+-    WeakPtrGuard<Vars, false> vars_gurad;
+diff --git a/include/libdnf5/base/goal.hpp b/include/libdnf5/base/goal.hpp
+index dc484730..1590d0b2 100644
+--- a/include/libdnf5/base/goal.hpp
++++ b/include/libdnf5/base/goal.hpp
+@@ -360 +360 @@ public:
+-    /// @param json_serialized_transaction      A string of JSON serialized transaction
++    /// @param transaction_path                 A path to JSON serialized transaction.
+@@ -362 +362,4 @@ public:
+-    void add_serialized_transaction(const std::string & serialized_transaction, libdnf5::GoalJobSettings & settings);
++    ///                                         the packages and comps have relative paths in trans file.
++    void add_serialized_transaction(
++        const std::filesystem::path & transaction_path,
++        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
+diff --git a/include/libdnf5/base/goal_elements.hpp b/include/libdnf5/base/goal_elements.hpp
+index 0815733c..790ce18f 100644
+--- a/include/libdnf5/base/goal_elements.hpp
++++ b/include/libdnf5/base/goal_elements.hpp
+@@ -63 +63,26 @@ enum class ProblemRules {
+-    RULE_PKG_REMOVAL_OF_RUNNING_KERNEL
++    RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
++    RULE_MODULE_DISTUPGRADE,
++    RULE_MODULE_INFARCH,
++    RULE_MODULE_UPDATE,
++    RULE_MODULE_JOB,
++    RULE_MODULE_JOB_UNSUPPORTED,
++    RULE_MODULE_JOB_NOTHING_PROVIDES_DEP,
++    RULE_MODULE_JOB_UNKNOWN_PACKAGE,
++    RULE_MODULE_JOB_PROVIDED_BY_SYSTEM,
++    RULE_MODULE_PKG,
++    RULE_MODULE_BEST_1,
++    RULE_MODULE_BEST_2,
++    RULE_MODULE_PKG_NOT_INSTALLABLE_1,
++    RULE_MODULE_PKG_NOT_INSTALLABLE_2,
++    RULE_MODULE_PKG_NOT_INSTALLABLE_3,
++    RULE_MODULE_PKG_NOT_INSTALLABLE_4,
++    RULE_MODULE_PKG_NOTHING_PROVIDES_DEP,
++    RULE_MODULE_PKG_SAME_NAME,
++    RULE_MODULE_PKG_CONFLICTS,
++    RULE_MODULE_PKG_OBSOLETES,
++    RULE_MODULE_PKG_INSTALLED_OBSOLETES,
++    RULE_MODULE_PKG_IMPLICIT_OBSOLETES,
++    RULE_MODULE_PKG_REQUIRES,
++    RULE_MODULE_PKG_SELF_CONFLICT,
++    RULE_MODULE_YUMOBS,
++    RULE_MODULE_UNKNOWN,
+@@ -86 +111,8 @@ enum class GoalProblem : uint32_t {
+-    EXCLUDED_VERSIONLOCK = (1 << 17)
++    EXCLUDED_VERSIONLOCK = (1 << 17),
++    /// Error in module defaults detected during resolvement of module dependencies
++    MODULE_SOLVER_ERROR_DEFAULTS = (1 << 18),
++    /// Problem with latest modules during resolvement of module dependencies
++    MODULE_SOLVER_ERROR_LATEST = (1 << 19),
++    /// Error detected during resolvement of module dependencies
++    MODULE_SOLVER_ERROR = (1 << 20),
++    MODULE_CANNOT_SWITH_STREAMS = (1 << 21)
+@@ -119,0 +152,2 @@ enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
++/// Configure SPEC resolving.
++/// Important for queries that resolve SPEC.
+@@ -122,9 +156,35 @@ public:
+-    /// Important for queries that resolve SPEC
+-    bool ignore_case{false};
+-    /// Important for queries that resolve SPEC
+-    bool with_nevra{true};
+-    /// Important for queries that resolve SPEC
+-    bool with_provides{true};
+-    /// Important for queries that resolve SPEC
+-    bool with_filenames{true};
+-    /// Important for queries that resolve SPEC
++    ResolveSpecSettings();
++    ~ResolveSpecSettings();
++
++    ResolveSpecSettings(const ResolveSpecSettings & src);
++    ResolveSpecSettings & operator=(const ResolveSpecSettings & src);
++
++    ResolveSpecSettings(ResolveSpecSettings && src) noexcept;
++    ResolveSpecSettings & operator=(ResolveSpecSettings && src) noexcept;
++
++    /// Set whether to match case-insensitively
++    ///
++    /// Default: false
++    void set_ignore_case(bool ignore_case);
++    bool get_ignore_case() const;
++
++    /// Set whether packages' nevras should be considered during SPEC matching
++    ///
++    /// Default: true
++    void set_with_nevra(bool with_nevra);
++    bool get_with_nevra() const;
++
++    /// Set whether packages' provides should be considered during SPEC matching
++    ///
++    /// Default: true
++    void set_with_provides(bool with_provides);
++    bool get_with_provides() const;
++
++    /// Set whether package's files should be considered during SPEC matching
++    /// It will check if SPEC starts with "/" or "*/" and if it matches any file in a package
++    ///
++    /// Default: true
++    void set_with_filenames(bool with_filenames);
++    bool get_with_filenames() const;
++
++    /// Set whether package's binaries should be considered during SPEC matching
+@@ -132,8 +192,31 @@ public:
+-    bool with_binaries{true};
+-    /// Important for queries that resolve SPEC
+-    std::vector<libdnf5::rpm::Nevra::Form> nevra_forms{};
+-
+-    /// these flags are used only for group resolving
+-    bool group_with_id{true};
+-    bool group_with_name{false};
+-    /// Historically group spec could also mean an environment. These flags
++    ///
++    /// Default: true
++    void set_with_binaries(bool with_binaries);
++    bool get_with_binaries() const;
++
++    /// Set whether to expand globs in package specs using fnmatch
++    ///
++    /// Default: true
++    void set_expand_globs(bool expand_globs);
++    bool get_expand_globs() const;
++
++    /// When matching packages' nevras is enabled specify allowed nevra forms.
++    ///
++    /// The default can be obtained from libdnf5::rpm::Nevra::get_default_pkg_spec_forms().
++    void set_nevra_forms(std::vector<libdnf5::rpm::Nevra::Form> nevra_forms);
++    std::vector<libdnf5::rpm::Nevra::Form> get_nevra_forms() const;
++
++    /// Set whether groups' ids should be considered during group SPEC matching
++    ///
++    /// Default: true
++    void set_group_with_id(bool group_with_id);
++    bool get_group_with_id() const;
++
++    /// Set whether groups' names should be considered during group SPEC matching
++    ///
++    /// Default: false
++    void set_group_with_name(bool group_with_name);
++    bool get_group_with_name() const;
++
++    /// Configure whether to search in groups when matching SPEC in group ids or names.
++    /// Historically group SPEC could also mean an environment. These flags
+@@ -141,2 +224,14 @@ public:
+-    bool group_search_groups{true};
+-    bool group_search_environments{true};
++    ///
++    /// Default: true
++    void set_group_search_groups(bool search_groups);
++    bool get_group_search_groups() const;
++
++    /// Configure whether to search in environments when matching SPEC in group ids or names.
++    ///
++    /// Default: true
++    void set_group_search_environments(bool search_environments);
++    bool get_group_search_environments() const;
++
++private:
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -146,0 +242,8 @@ public:
++    GoalJobSettings();
++    ~GoalJobSettings();
++
++    GoalJobSettings(const GoalJobSettings & src);
++    GoalJobSettings(GoalJobSettings && src) noexcept;
++    GoalJobSettings & operator=(const GoalJobSettings & src);
++    GoalJobSettings & operator=(GoalJobSettings && src) noexcept;
++
+@@ -148 +251 @@ public:
+-    GoalUsedSetting get_used_skip_broken() const { return used_skip_broken; };
++    GoalUsedSetting get_used_skip_broken() const;
+@@ -150 +253 @@ public:
+-    GoalUsedSetting get_used_skip_unavailable() const { return used_skip_unavailable; };
++    GoalUsedSetting get_used_skip_unavailable() const;
+@@ -152 +255 @@ public:
+-    GoalUsedSetting get_used_best() const { return used_best; };
++    GoalUsedSetting get_used_best() const;
+@@ -154 +257 @@ public:
+-    GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
++    GoalUsedSetting get_used_clean_requirements_on_remove() const;
+@@ -156,5 +259,6 @@ public:
+-    /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
+-    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
+-    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const {
+-        return advisory_filter ? &advisory_filter.value() : nullptr;
+-    }
++    /// Optionally set AdvisoryQuery that is used to filter packages (used for upgrade).
++    /// Upgrades considers only packages that resolve some advisory in specified AdvisoryQuery.
++    ///
++    /// By default is is empty and no packages are filtered.
++    void set_advisory_filter(const libdnf5::advisory::AdvisoryQuery & filter);
++    const libdnf5::advisory::AdvisoryQuery * get_advisory_filter() const;
+@@ -162,6 +266,5 @@ public:
+-    // Which types of group packages are going to be installed with the group.
+-    // If not set, default is taken from ConfigMain.group_package_types
+-    void set_group_package_types(const libdnf5::comps::PackageType type) { group_package_types = type; }
+-    const libdnf5::comps::PackageType * get_group_package_types() const {
+-        return group_package_types ? &group_package_types.value() : nullptr;
+-    }
++    /// Which types of group packages are going to be installed with the group.
++    ///
++    /// Default is taken from ConfigMain.group_package_types
++    void set_group_package_types(libdnf5::comps::PackageType type);
++    const libdnf5::comps::PackageType * get_group_package_types() const;
+@@ -171,16 +274,54 @@ public:
+-    bool group_no_packages{false};
+-
+-    /// Set whether hints should be reported
+-    bool report_hint{true};
+-    /// Set skip_broken, AUTO means that it is handled according to the default behavior
+-    GoalSetting skip_broken{GoalSetting::AUTO};
+-    /// Set skip_unavailable, AUTO means that it is handled according to the default behavior
+-    GoalSetting skip_unavailable{GoalSetting::AUTO};
+-    /// Set best, AUTO means that it is handled according to the default behavior
+-    GoalSetting best{GoalSetting::AUTO};
+-    /// Set clean_requirements_on_remove, AUTO means that it is handled according to the default behavior
+-    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
+-    /// Define which installed packages should be modified according to repoid from which they were installed
+-    std::vector<std::string> from_repo_ids;
+-    /// Reduce candidates for the operation according repository ids
+-    std::vector<std::string> to_repo_ids;
++    ///
++    /// Default: false
++    void set_group_no_packages(bool group_no_packages);
++    bool get_group_no_packages() const;
++
++    /// If set to true, environments operations (install / remove / upgrade) will only work
++    /// with the environment itself, but will not add to any groups to the transaction.
++    ///
++    /// Default: false
++    void set_environment_no_groups(bool environment_no_groups);
++    bool get_environment_no_groups() const;
++
++    /// Set whether to report packages providing alternatives (``alternative-for(..)`` provide) and packages
++    /// with different letter capitalization when no matches are found.
++    ///
++    /// Default: true
++    void set_report_hint(bool report_hint);
++    bool get_report_hint() const;
++
++    /// Resolve any dependency problems by removing packages that are causing problems from the transaction.
++    ///
++    /// By default the value is taken from ``skip_broken`` configuration option.
++    void set_skip_broken(GoalSetting skip_broken);
++    GoalSetting get_skip_broken() const;
++
++    /// Allow skipping packages that are unavailable.
++    ///
++    /// By default the value is taken from a configuration option ``skip_unavailable`` except for remove action
++    /// which defaults to true.
++    void set_skip_unavailable(GoalSetting skip_unavailable);
++    GoalSetting get_skip_unavailable() const;
++
++    /// Try the best available package versions in transactions.
++    ///
++    /// By default the value is taken from ``best`` configuration option.
++    void set_best(GoalSetting best);
++    GoalSetting get_best() const;
++
++    /// Remove dependencies that are no longer used during ``dnf remove``.
++    ///
++    /// By default the value is false except for remove action which defaults to value from
++    /// clean_requirements_on_remove configuration option.
++    void set_clean_requirements_on_remove(GoalSetting clean_requirements_on_remove);
++    GoalSetting get_clean_requirements_on_remove() const;
++
++    /// Not implemented yet
++    void set_from_repo_ids(std::vector<std::string> from_repo_ids);
++    std::vector<std::string> get_from_repo_ids() const;
++
++    /// Limit available packages to specified repositories.
++    ///
++    /// Empty by default.
++    void set_to_repo_ids(std::vector<std::string> to_repo_ids);
++    std::vector<std::string> get_to_repo_ids() const;
+@@ -242,7 +383,2 @@ private:
+-    GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
+-    GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
+-    GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
+-    GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
+-    std::optional<libdnf5::comps::PackageType> used_group_package_types{std::nullopt};
+-    std::optional<libdnf5::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
+-    std::optional<libdnf5::comps::PackageType> group_package_types{std::nullopt};
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/log_event.hpp b/include/libdnf5/base/log_event.hpp
+index dba018c3..3386701e 100644
+--- a/include/libdnf5/base/log_event.hpp
++++ b/include/libdnf5/base/log_event.hpp
+@@ -47 +47,7 @@ public:
+-    ~LogEvent() = default;
++    ~LogEvent();
++
++    LogEvent(const LogEvent & src);
++    LogEvent & operator=(const LogEvent & src);
++
++    LogEvent(LogEvent && src) noexcept;
++    LogEvent & operator=(LogEvent && src) noexcept;
+@@ -50 +56 @@ public:
+-    libdnf5::GoalAction get_action() const { return action; };
++    libdnf5::GoalAction get_action() const;
+@@ -52 +58 @@ public:
+-    libdnf5::GoalProblem get_problem() const { return problem; };
++    libdnf5::GoalProblem get_problem() const;
+@@ -54 +60 @@ public:
+-    const std::set<std::string> get_additional_data() const { return additional_data; };
++    const std::set<std::string> & get_additional_data() const;
+@@ -56,3 +62 @@ public:
+-    const libdnf5::GoalJobSettings * get_job_settings() const {
+-        return job_settings ? &job_settings.value() : nullptr;
+-    };
++    const libdnf5::GoalJobSettings * get_job_settings() const;
+@@ -60 +64 @@ public:
+-    const std::string * get_spec() const { return spec ? &spec.value() : nullptr; };
++    const std::string * get_spec() const;
+@@ -62 +66 @@ public:
+-    const SolverProblems * get_solver_problems() const { return solver_problems ? &solver_problems.value() : nullptr; };
++    const SolverProblems * get_solver_problems() const;
+@@ -65,3 +69 @@ public:
+-    std::string to_string() const {
+-        return to_string(action, problem, additional_data, job_settings, spec_type, spec, solver_problems);
+-    };
++    std::string to_string() const;
+@@ -80,8 +82,2 @@ private:
+-    libdnf5::GoalAction action;
+-    libdnf5::GoalProblem problem;
+-
+-    std::set<std::string> additional_data;
+-    std::optional<libdnf5::GoalJobSettings> job_settings;
+-    std::optional<libdnf5::transaction::TransactionItemType> spec_type;
+-    std::optional<std::string> spec;
+-    std::optional<SolverProblems> solver_problems;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/solver_problems.hpp b/include/libdnf5/base/solver_problems.hpp
+index 109cfc24..3941cc5d 100644
+--- a/include/libdnf5/base/solver_problems.hpp
++++ b/include/libdnf5/base/solver_problems.hpp
+@@ -27,2 +26,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/common/impl_ptr.hpp"
+-
+@@ -55,3 +53 @@ public:
+-    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> get_problems() const {
+-        return problems;
+-    };
++    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> get_problems() const;
+@@ -68 +64,2 @@ private:
+-    std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string>>>> problems;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/transaction.hpp b/include/libdnf5/base/transaction.hpp
+index 12cd71d0..70d5e867 100644
+--- a/include/libdnf5/base/transaction.hpp
++++ b/include/libdnf5/base/transaction.hpp
+@@ -172 +172,10 @@ public:
+-    std::string serialize();
++    /// If packages_path is provided it is assumed all packages in this transaction are present there and
++    /// the serialized transaction contains paths those packages.
++    /// The same applies for comps paths (they can be stored using the `store_comps` method).
++    std::string serialize(
++        const std::filesystem::path & packages_path = "", const std::filesystem::path & comps_path = "") const;
++
++    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
++    /// Store each group and environment in this transaction as a separate xml file in the
++    /// specified path.
++    void store_comps(const std::filesystem::path & comps_path) const;
+diff --git a/include/libdnf5/base/transaction_environment.hpp b/include/libdnf5/base/transaction_environment.hpp
+index d5f0db3b..5336a3fd 100644
+--- a/include/libdnf5/base/transaction_environment.hpp
++++ b/include/libdnf5/base/transaction_environment.hpp
+@@ -24 +23,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/base/goal_elements.hpp"
+@@ -39 +37,0 @@ public:
+-    using PackageType = libdnf5::comps::PackageType;
+@@ -42 +40 @@ public:
+-    libdnf5::comps::Environment get_environment() const { return environment; }
++    libdnf5::comps::Environment get_environment() const;
+@@ -47 +45 @@ public:
+-    Action get_action() const noexcept { return action; }
++    Action get_action() const noexcept;
+@@ -52 +50 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
+@@ -57 +55 @@ public:
+-    Reason get_reason() const noexcept { return reason; }
++    Reason get_reason() const noexcept;
+@@ -60 +58,8 @@ public:
+-    bool get_with_optional() const noexcept { return with_optional; }
++    bool get_with_optional() const noexcept;
++
++    ~TransactionEnvironment();
++
++    TransactionEnvironment(const TransactionEnvironment & mpkg);
++    TransactionEnvironment & operator=(const TransactionEnvironment & mpkg);
++    TransactionEnvironment(TransactionEnvironment && mpkg) noexcept;
++    TransactionEnvironment & operator=(TransactionEnvironment && mpkg) noexcept;
+@@ -65,8 +70 @@ private:
+-    TransactionEnvironment(
+-        const libdnf5::comps::Environment & grp, Action action, Reason reason, const bool with_optional)
+-        : environment(grp),
+-          action(action),
+-          reason(reason),
+-          with_optional(with_optional) {}
+-
+-    void set_state(State value) noexcept { state = value; }
++    TransactionEnvironment(const libdnf5::comps::Environment & grp, Action action, Reason reason, bool with_optional);
+@@ -74,5 +72,2 @@ private:
+-    libdnf5::comps::Environment environment;
+-    Action action;
+-    Reason reason;
+-    State state{State::STARTED};
+-    bool with_optional;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/transaction_group.hpp b/include/libdnf5/base/transaction_group.hpp
+index 4c332ef3..55bb5248 100644
+--- a/include/libdnf5/base/transaction_group.hpp
++++ b/include/libdnf5/base/transaction_group.hpp
+@@ -24 +23,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/base/goal_elements.hpp"
+@@ -33,2 +31,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <optional>
+-
+@@ -46 +43 @@ public:
+-    libdnf5::comps::Group get_group() const { return group; }
++    libdnf5::comps::Group get_group() const;
+@@ -51 +48 @@ public:
+-    Action get_action() const noexcept { return action; }
++    Action get_action() const noexcept;
+@@ -56 +53 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
+@@ -61 +58 @@ public:
+-    Reason get_reason() const noexcept { return reason; }
++    Reason get_reason() const noexcept;
+@@ -64 +61,8 @@ public:
+-    PackageType get_package_types() const noexcept { return package_types; }
++    PackageType get_package_types() const noexcept;
++
++    ~TransactionGroup();
++
++    TransactionGroup(const TransactionGroup & mpkg);
++    TransactionGroup & operator=(const TransactionGroup & mpkg);
++    TransactionGroup(TransactionGroup && mpkg) noexcept;
++    TransactionGroup & operator=(TransactionGroup && mpkg) noexcept;
+@@ -69,7 +73 @@ private:
+-    TransactionGroup(const libdnf5::comps::Group & grp, Action action, Reason reason, const PackageType types)
+-        : group(grp),
+-          action(action),
+-          reason(reason),
+-          package_types(types) {}
+-
+-    void set_state(State value) noexcept { state = value; }
++    TransactionGroup(const libdnf5::comps::Group & grp, Action action, Reason reason, const PackageType & types);
+@@ -77,5 +75,2 @@ private:
+-    libdnf5::comps::Group group;
+-    Action action;
+-    Reason reason;
+-    State state{State::STARTED};
+-    PackageType package_types;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/transaction_module.hpp b/include/libdnf5/base/transaction_module.hpp
+index e66ea062..f64caf69 100644
+--- a/include/libdnf5/base/transaction_module.hpp
++++ b/include/libdnf5/base/transaction_module.hpp
+@@ -24 +23,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/base/goal_elements.hpp"
+@@ -26 +24,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/module/module_item.hpp"
+@@ -31,2 +28,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <optional>
+-
+@@ -43 +39 @@ public:
+-    std::string get_module_name() const { return module_name; }
++    std::string get_module_name() const;
+@@ -46 +42 @@ public:
+-    std::string get_module_stream() const { return module_stream; }
++    std::string get_module_stream() const;
+@@ -51 +47 @@ public:
+-    Action get_action() const noexcept { return action; }
++    Action get_action() const noexcept;
+@@ -56 +52 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
+@@ -61 +57,15 @@ public:
+-    Reason get_reason() const noexcept { return reason; }
++    Reason get_reason() const noexcept;
++
++    /// @return module:stream pairs replaced by this transaction module.
++    std::vector<std::pair<std::string, std::string>> get_replaces() const noexcept;
++
++    /// @return module:stream pairs that replace this transaction module (for transaction
++    /// modules that are leaving the system).
++    const std::vector<std::pair<std::string, std::string>> & get_replaced_by() const noexcept;
++
++    ~TransactionModule();
++
++    TransactionModule(const TransactionModule & mpkg);
++    TransactionModule & operator=(const TransactionModule & mpkg);
++    TransactionModule(TransactionModule && mpkg) noexcept;
++    TransactionModule & operator=(TransactionModule && mpkg) noexcept;
+@@ -66,7 +76 @@ private:
+-    TransactionModule(const std::string & module_name, const std::string & module_stream, Action action, Reason reason)
+-        : module_name(module_name),
+-          module_stream(module_stream),
+-          action(action),
+-          reason(reason) {}
+-
+-    void set_state(State value) noexcept { state = value; }
++    TransactionModule(const std::string & module_name, const std::string & module_stream, Action action, Reason reason);
+@@ -74,5 +78,2 @@ private:
+-    std::string module_name;
+-    std::string module_stream;
+-    Action action;
+-    Reason reason;
+-    State state{State::STARTED};
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/base/transaction_package.hpp b/include/libdnf5/base/transaction_package.hpp
+index 9d317b30..14ae5240 100644
+--- a/include/libdnf5/base/transaction_package.hpp
++++ b/include/libdnf5/base/transaction_package.hpp
+@@ -24 +23,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/base/goal_elements.hpp"
+@@ -46 +45 @@ public:
+-    libdnf5::rpm::Package get_package() const { return package; }
++    libdnf5::rpm::Package get_package() const;
+@@ -51 +50 @@ public:
+-    Action get_action() const noexcept { return action; }
++    Action get_action() const noexcept;
+@@ -56 +55 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
+@@ -61 +60 @@ public:
+-    Reason get_reason() const noexcept { return reason; }
++    Reason get_reason() const noexcept;
+@@ -64 +63 @@ public:
+-    const std::vector<rpm::Package> get_replaces() const noexcept { return replaces; }
++    std::vector<rpm::Package> get_replaces() const noexcept;
+@@ -68 +67 @@ public:
+-    const std::vector<rpm::Package> & get_replaced_by() const noexcept { return replaced_by; }
++    const std::vector<rpm::Package> & get_replaced_by() const noexcept;
+@@ -72,3 +71,8 @@ public:
+-    const std::string * get_reason_change_group_id() const noexcept {
+-        return reason_change_group_id ? &reason_change_group_id.value() : nullptr;
+-    }
++    const std::string * get_reason_change_group_id() const noexcept;
++
++    ~TransactionPackage();
++
++    TransactionPackage(const TransactionPackage & mpkg);
++    TransactionPackage & operator=(const TransactionPackage & mpkg);
++    TransactionPackage(TransactionPackage && mpkg) noexcept;
++    TransactionPackage & operator=(TransactionPackage && mpkg) noexcept;
+@@ -81,4 +85 @@ private:
+-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason)
+-        : package(pkg),
+-          action(action),
+-          reason(reason) {}
++    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason);
+@@ -86,5 +87 @@ private:
+-    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state)
+-        : package(pkg),
+-          action(action),
+-          reason(reason),
+-          state(state) {}
++    TransactionPackage(const libdnf5::rpm::Package & pkg, Action action, Reason reason, State state);
+@@ -93,17 +90,4 @@ private:
+-        const libdnf5::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)
+-        : package(pkg),
+-          action(action),
+-          reason(reason),
+-          reason_change_group_id(group_id) {}
+-
+-    void set_reason(Reason value) noexcept { reason = value; }
+-    void set_state(State value) noexcept { state = value; }
+-
+-    libdnf5::rpm::Package package;
+-    Action action;
+-    Reason reason;
+-    State state{State::STARTED};
+-    std::optional<std::string> reason_change_group_id;
+-
+-    std::vector<rpm::Package> replaces;
+-    std::vector<rpm::Package> replaced_by;
++        const libdnf5::rpm::Package & pkg, Action action, Reason reason, const std::optional<std::string> & group_id);
++
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/comps/comps.hpp b/include/libdnf5/comps/comps.hpp
+deleted file mode 100644
+index 94ee8581..00000000
+--- a/include/libdnf5/comps/comps.hpp
++++ /dev/null
+@@ -1,68 +0,0 @@
+-/*
+-Copyright Contributors to the libdnf project.
+-
+-This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+-
+-Libdnf is free software: you can redistribute it and/or modify
+-it under the terms of the GNU Lesser General Public License as published by
+-the Free Software Foundation, either version 2.1 of the License, or
+-(at your option) any later version.
+-
+-Libdnf is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU Lesser General Public License for more details.
+-
+-You should have received a copy of the GNU Lesser General Public License
+-along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-*/
+-
+-#ifndef LIBDNF5_COMPS_COMPS_HPP
+-#define LIBDNF5_COMPS_COMPS_HPP
+-
+-#include "libdnf5/common/weak_ptr.hpp"
+-#include "libdnf5/comps/environment/sack.hpp"
+-#include "libdnf5/comps/group/sack.hpp"
+-#include "libdnf5/repo/repo.hpp"
+-
+-
+-namespace libdnf5 {
+-
+-class Base;
+-
+-}
+-
+-
+-namespace libdnf5::comps {
+-
+-using CompsWeakPtr = libdnf5::WeakPtr<Comps, false>;
+-
+-class Comps {
+-public:
+-    explicit Comps(libdnf5::Base & base);
+-    ~Comps();
+-
+-    GroupSackWeakPtr get_group_sack() { return group_sack.get_weak_ptr(); }
+-    EnvironmentSackWeakPtr get_environment_sack() { return environment_sack.get_weak_ptr(); }
+-
+-    CompsWeakPtr get_weak_ptr();
+-
+-    libdnf5::BaseWeakPtr get_base() const;
+-
+-private:
+-    libdnf5::Base & base;
+-    GroupSack group_sack{*this};
+-    EnvironmentSack environment_sack{*this};
+-    WeakPtrGuard<Comps, false> data_guard;
+-
+-    friend class Group;
+-    friend class GroupQuery;
+-    friend class GroupSack;
+-    friend class Environment;
+-    friend class EnvironmentSack;
+-    friend class EnvironmentQuery;
+-};
+-
+-}  // namespace libdnf5::comps
+-
+-#endif  // LIBDNF5_COMPS_COMPS_HPP
+diff --git a/include/libdnf5/comps/environment/environment.hpp b/include/libdnf5/comps/environment/environment.hpp
+index c7f77152..fa324877 100644
+--- a/include/libdnf5/comps/environment/environment.hpp
++++ b/include/libdnf5/comps/environment/environment.hpp
+@@ -49,0 +50,8 @@ public:
++    ~Environment();
++
++    Environment(const Environment & src);
++    Environment & operator=(const Environment & src);
++
++    Environment(Environment && src) noexcept;
++    Environment & operator=(Environment && src) noexcept;
++
+@@ -116,6 +124,4 @@ public:
+-    bool operator==(const Environment & rhs) const noexcept {
+-        return environment_ids == rhs.environment_ids && base == rhs.base;
+-    }
+-    bool operator!=(const Environment & rhs) const noexcept {
+-        return environment_ids != rhs.environment_ids || base != rhs.base;
+-    }
++    bool operator==(const Environment & rhs) const noexcept;
++
++    bool operator!=(const Environment & rhs) const noexcept;
++
+@@ -123,3 +129 @@ public:
+-    bool operator<(const Environment & rhs) const {
+-        return get_environmentid() < rhs.get_environmentid() || get_repos() < rhs.get_repos();
+-    }
++    bool operator<(const Environment & rhs) const;
+@@ -138,10 +142 @@ private:
+-    libdnf5::BaseWeakPtr base;
+-
+-    // Corresponds to solvable ids for this environment (libsolv doesn't merge groups, so there are multiple solvables
+-    // for one environmentid).
+-    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+-    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+-    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+-    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+-    // definitions.
+-    std::vector<EnvironmentId> environment_ids;
++    friend class EnvironmentQuery;
+@@ -149,2 +144 @@ private:
+-    std::vector<std::string> groups;
+-    std::vector<std::string> optional_groups;
++    void add_environment_id(const EnvironmentId & environment_id);
+@@ -152,2 +146,2 @@ private:
+-    friend class EnvironmentSack;
+-    friend class EnvironmentQuery;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/comps/environment/query.hpp b/include/libdnf5/comps/environment/query.hpp
+index ec5a9587..c64aedec 100644
+--- a/include/libdnf5/comps/environment/query.hpp
++++ b/include/libdnf5/comps/environment/query.hpp
+@@ -25 +24,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/common/weak_ptr.hpp"
+@@ -35,4 +33,0 @@ namespace libdnf5::comps {
+-class EnvironmentSack;
+-using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
+-
+-
+@@ -45,3 +40 @@ public:
+-    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::environmentid, pattern, cmp);
+-    }
++    ~EnvironmentQuery();
+@@ -49,4 +42,2 @@ public:
+-    void filter_environmentid(
+-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::environmentid, patterns, cmp);
+-    }
++    EnvironmentQuery(const EnvironmentQuery & src);
++    EnvironmentQuery & operator=(const EnvironmentQuery & src);
+@@ -54,3 +45,2 @@ public:
+-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::name, pattern, cmp);
+-    }
++    EnvironmentQuery(EnvironmentQuery && src) noexcept;
++    EnvironmentQuery & operator=(EnvironmentQuery && src) noexcept;
+@@ -58,3 +48,3 @@ public:
+-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::name, patterns, cmp);
+-    }
++    void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
++    void filter_environmentid(
++        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -62 +52 @@ public:
+-    void filter_installed(bool value) { filter(F::is_installed, value, sack::QueryCmp::EQ); }
++    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -64,6 +54 @@ public:
+-private:
+-    struct F {
+-        static std::string environmentid(const Environment & obj) { return obj.get_environmentid(); }
+-        static std::string name(const Environment & obj) { return obj.get_name(); }
+-        static bool is_installed(const Environment & obj) { return obj.get_installed(); }
+-    };
++    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -71 +56 @@ private:
+-    libdnf5::BaseWeakPtr base;
++    void filter_installed(bool value);
+@@ -72,0 +58 @@ private:
++private:
+@@ -74 +60,2 @@ private:
+-    friend EnvironmentSack;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/comps/environment/sack.hpp b/include/libdnf5/comps/environment/sack.hpp
+deleted file mode 100644
+index e832bf81..00000000
+--- a/include/libdnf5/comps/environment/sack.hpp
++++ /dev/null
+@@ -1,73 +0,0 @@
+-/*
+-Copyright Contributors to the libdnf project.
+-
+-This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+-
+-Libdnf is free software: you can redistribute it and/or modify
+-it under the terms of the GNU Lesser General Public License as published by
+-the Free Software Foundation, either version 2.1 of the License, or
+-(at your option) any later version.
+-
+-Libdnf is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU Lesser General Public License for more details.
+-
+-You should have received a copy of the GNU Lesser General Public License
+-along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-*/
+-
+-#ifndef LIBDNF5_COMPS_ENVIRONMENT_SACK_HPP
+-#define LIBDNF5_COMPS_ENVIRONMENT_SACK_HPP
+-
+-#include "libdnf5/common/sack/sack.hpp"
+-#include "libdnf5/common/weak_ptr.hpp"
+-#include "libdnf5/transaction/transaction_item_reason.hpp"
+-
+-#include <map>
+-#include <string>
+-
+-
+-namespace libdnf5::comps {
+-
+-
+-class Comps;
+-class Environment;
+-
+-class EnvironmentSack;
+-using EnvironmentSackWeakPtr = WeakPtr<EnvironmentSack, false>;
+-
+-
+-class EnvironmentSack : public libdnf5::sack::Sack<Environment> {
+-public:
+-    ~EnvironmentSack();
+-
+-    /// Create WeakPtr to EnvironmentSack
+-    EnvironmentSackWeakPtr get_weak_ptr();
+-
+-    const std::map<std::string, libdnf5::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+-
+-protected:
+-    explicit EnvironmentSack(Comps & comps);
+-
+-private:
+-    Comps & comps;
+-
+-    WeakPtrGuard<EnvironmentSack, false> sack_guard;
+-
+-    /// @return Map of resolved reasons why environments were installed: ``{environment_id -> reason}``.
+-    ///         An environment can be installed due to multiple reasons, only the most significant is returned.
+-    /// @since 5.0
+-    std::map<std::string, libdnf5::transaction::TransactionItemReason> reasons;
+-
+-    friend Comps;
+-    friend Environment;
+-
+-    friend class EnvironmentQuery;
+-};
+-
+-
+-}  // namespace libdnf5::comps
+-
+-
+-#endif  // LIBDNF5_COMPS_ENVIRONMENT_SACK_HPP
+diff --git a/include/libdnf5/comps/group/group.hpp b/include/libdnf5/comps/group/group.hpp
+index ef04b91a..44c7b26e 100644
+--- a/include/libdnf5/comps/group/group.hpp
++++ b/include/libdnf5/comps/group/group.hpp
+@@ -50,0 +51,8 @@ public:
++    ~Group();
++
++    Group(const Group & src);
++    Group & operator=(const Group & src);
++
++    Group(Group && src) noexcept;
++    Group & operator=(Group && src) noexcept;
++
+@@ -135,2 +143,2 @@ public:
+-    bool operator==(const Group & rhs) const noexcept { return group_ids == rhs.group_ids && base == rhs.base; }
+-    bool operator!=(const Group & rhs) const noexcept { return group_ids != rhs.group_ids || base != rhs.base; }
++    bool operator==(const Group & rhs) const noexcept;
++    bool operator!=(const Group & rhs) const noexcept;
+@@ -138,3 +146 @@ public:
+-    bool operator<(const Group & rhs) const {
+-        return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
+-    }
++    bool operator<(const Group & rhs) const;
+@@ -153,10 +159 @@ private:
+-    libdnf5::BaseWeakPtr base;
+-
+-    // Corresponds to solvable ids for this group (libsolv doesn't merge groups, so there are multiple solvables
+-    // for one groupid).
+-    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+-    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+-    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+-    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+-    // definitions.
+-    std::vector<GroupId> group_ids;
++    friend class GroupQuery;
+@@ -164 +161 @@ private:
+-    std::vector<Package> packages;
++    void add_group_id(const GroupId & group_id);
+@@ -166,2 +163,2 @@ private:
+-    friend class GroupSack;
+-    friend class GroupQuery;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/comps/group/package.hpp b/include/libdnf5/comps/group/package.hpp
+index 61fe79c3..c9f3e14e 100644
+--- a/include/libdnf5/comps/group/package.hpp
++++ b/include/libdnf5/comps/group/package.hpp
+@@ -23 +23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/common/exception.hpp"
++#include "package_type.hpp"
+@@ -26,2 +25,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <vector>
+-
+@@ -31,45 +28,0 @@ namespace libdnf5::comps {
+-enum class PackageType : int {
+-    CONDITIONAL = 1 << 0,  // a weak dependency
+-    DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
+-    MANDATORY = 1 << 2,    // installed
+-    OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
+-};
+-
+-class InvalidPackageType : public libdnf5::Error {
+-public:
+-    InvalidPackageType(const std::string & type);
+-    InvalidPackageType(const PackageType type);
+-
+-    const char * get_domain_name() const noexcept override { return "libdnf5::comps"; }
+-    const char * get_name() const noexcept override { return "InvalidPackageType"; }
+-};
+-
+-inline PackageType operator|(PackageType a, PackageType b) {
+-    return static_cast<PackageType>(
+-        static_cast<std::underlying_type<PackageType>::type>(a) |
+-        static_cast<std::underlying_type<PackageType>::type>(b));
+-}
+-
+-inline PackageType operator|=(PackageType & a, PackageType b) {
+-    a = static_cast<PackageType>(
+-        static_cast<std::underlying_type<PackageType>::type>(a) |
+-        static_cast<std::underlying_type<PackageType>::type>(b));
+-    return a;
+-}
+-
+-inline constexpr PackageType operator&(PackageType a, PackageType b) {
+-    return static_cast<PackageType>(
+-        static_cast<std::underlying_type<PackageType>::type>(a) &
+-        static_cast<std::underlying_type<PackageType>::type>(b));
+-}
+-
+-inline constexpr bool any(PackageType flags) {
+-    return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
+-}
+-
+-PackageType package_type_from_string(const std::string & type);
+-PackageType package_type_from_string(const std::vector<std::string> types);
+-std::string package_type_to_string(const PackageType type);
+-std::vector<std::string> package_types_to_strings(const PackageType types);
+-
+-
+@@ -78 +30,0 @@ std::vector<std::string> package_types_to_strings(const PackageType types);
+-
+@@ -83,4 +35 @@ public:
+-    explicit Package(const std::string & name, PackageType type, const std::string & condition)
+-        : name(name),
+-          type(type),
+-          condition(condition) {}
++    Package(const std::string & name, PackageType type, const std::string & condition);
+@@ -88,3 +37 @@ public:
+-    bool operator==(const Package & other) const noexcept {
+-        return name == other.name && type == other.type && condition == other.condition;
+-    }
++    ~Package();
+@@ -92 +39,9 @@ public:
+-    bool operator!=(const Package & other) const noexcept { return !(*this == other); }
++    Package(const Package & src);
++    Package & operator=(const Package & src);
++
++    Package(Package && src) noexcept;
++    Package & operator=(Package && src) noexcept;
++
++    bool operator==(const Package & other) const noexcept;
++
++    bool operator!=(const Package & other) const noexcept;
+@@ -98,2 +53,2 @@ public:
+-    std::string get_name() const { return name; }
+-    void set_name(const std::string & value) { name = value; }
++    std::string get_name() const;
++    void set_name(const std::string & value);
+@@ -103,2 +58,2 @@ public:
+-    PackageType get_type() const { return type; }
+-    void set_type(const PackageType & value) { type = value; }
++    PackageType get_type() const;
++    void set_type(const PackageType & value);
+@@ -108,13 +63 @@ public:
+-    std::string get_type_string() const {
+-        switch (type) {
+-            case PackageType::MANDATORY:
+-                return "mandatory";
+-            case PackageType::DEFAULT:
+-                return "default";
+-            case PackageType::OPTIONAL:
+-                return "optional";
+-            case PackageType::CONDITIONAL:
+-                return "conditional";
+-        }
+-        return "";
+-    }
++    std::string get_type_string() const;
+@@ -124,2 +67,2 @@ public:
+-    std::string get_condition() const { return condition; }
+-    void set_condition(const std::string & value) { condition = value; }
++    std::string get_condition() const;
++    void set_condition(const std::string & value);
+@@ -128,4 +71,2 @@ private:
+-    std::string name;
+-    PackageType type;
+-    // Used only for CONDITIONAL packages
+-    std::string condition;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -137 +77,0 @@ private:
+-
+diff --git a/include/libdnf5/comps/group/package_type.hpp b/include/libdnf5/comps/group/package_type.hpp
+new file mode 100644
+index 00000000..b5ad4fc8
+--- /dev/null
++++ b/include/libdnf5/comps/group/package_type.hpp
+@@ -0,0 +1,76 @@
++/*
++Copyright Contributors to the libdnf project.
++
++This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
++
++Libdnf is free software: you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation, either version 2.1 of the License, or
++(at your option) any later version.
++
++Libdnf is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++*/
++
++#ifndef LIBDNF5_COMPS_GROUP_PACKAGE_TYPE_HPP
++#define LIBDNF5_COMPS_GROUP_PACKAGE_TYPE_HPP
++
++#include "libdnf5/common/exception.hpp"
++
++#include <string>
++#include <vector>
++
++namespace libdnf5::comps {
++
++enum class PackageType : int {
++    CONDITIONAL = 1 << 0,  // a weak dependency
++    DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
++    MANDATORY = 1 << 2,    // installed
++    OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
++};
++
++class InvalidPackageType : public libdnf5::Error {
++public:
++    InvalidPackageType(const std::string & type);
++    InvalidPackageType(const PackageType type);
++
++    const char * get_domain_name() const noexcept override { return "libdnf5::comps"; }
++    const char * get_name() const noexcept override { return "InvalidPackageType"; }
++};
++
++inline PackageType operator|(PackageType a, PackageType b) {
++    return static_cast<PackageType>(
++        static_cast<std::underlying_type<PackageType>::type>(a) |
++        static_cast<std::underlying_type<PackageType>::type>(b));
++}
++
++inline PackageType operator|=(PackageType & a, PackageType b) {
++    a = static_cast<PackageType>(
++        static_cast<std::underlying_type<PackageType>::type>(a) |
++        static_cast<std::underlying_type<PackageType>::type>(b));
++    return a;
++}
++
++inline constexpr PackageType operator&(PackageType a, PackageType b) {
++    return static_cast<PackageType>(
++        static_cast<std::underlying_type<PackageType>::type>(a) &
++        static_cast<std::underlying_type<PackageType>::type>(b));
++}
++
++inline constexpr bool any(PackageType flags) {
++    return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
++}
++
++PackageType package_type_from_string(const std::string & type);
++PackageType package_type_from_string(const std::vector<std::string> types);
++std::string package_type_to_string(const PackageType type);
++std::vector<std::string> package_types_to_strings(const PackageType types);
++
++}  // namespace libdnf5::comps
++
++#endif
+diff --git a/include/libdnf5/comps/group/query.hpp b/include/libdnf5/comps/group/query.hpp
+index 8f57517f..d8c79810 100644
+--- a/include/libdnf5/comps/group/query.hpp
++++ b/include/libdnf5/comps/group/query.hpp
+@@ -25 +24,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "libdnf5/common/weak_ptr.hpp"
+@@ -35,4 +33,0 @@ namespace libdnf5::comps {
+-class GroupSack;
+-using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
+-
+-
+@@ -45,3 +40,7 @@ public:
+-    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::groupid, pattern, cmp);
+-    }
++    ~GroupQuery();
++
++    GroupQuery(const GroupQuery & src);
++    GroupQuery & operator=(const GroupQuery & src);
++
++    GroupQuery(GroupQuery && src) noexcept;
++    GroupQuery & operator=(GroupQuery && src) noexcept;
+@@ -49,3 +48 @@ public:
+-    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::groupid, patterns, cmp);
+-    }
++    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -53,3 +50,3 @@ public:
+-    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::name, pattern, cmp);
+-    }
++    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
++
++    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -65,3 +62 @@ public:
+-    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ) {
+-        filter(F::name, patterns, cmp);
+-    }
++    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
+@@ -69,3 +64,3 @@ public:
+-    void filter_uservisible(bool value) { filter(F::is_uservisible, value, sack::QueryCmp::EQ); }
+-    void filter_default(bool value) { filter(F::is_default, value, sack::QueryCmp::EQ); }
+-    void filter_installed(bool value) { filter(F::is_installed, value, sack::QueryCmp::EQ); }
++    void filter_uservisible(bool value);
++    void filter_default(bool value);
++    void filter_installed(bool value);
+@@ -74,10 +68,0 @@ private:
+-    struct F {
+-        static std::string groupid(const Group & obj) { return obj.get_groupid(); }
+-        static std::string name(const Group & obj) { return obj.get_name(); }
+-        static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
+-        static bool is_default(const Group & obj) { return obj.get_default(); }
+-        static bool is_installed(const Group & obj) { return obj.get_installed(); }
+-    };
+-
+-    libdnf5::BaseWeakPtr base;
+-
+@@ -85 +70,2 @@ private:
+-    friend GroupSack;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/comps/group/sack.hpp b/include/libdnf5/comps/group/sack.hpp
+deleted file mode 100644
+index b8f4fac6..00000000
+--- a/include/libdnf5/comps/group/sack.hpp
++++ /dev/null
+@@ -1,73 +0,0 @@
+-/*
+-Copyright Contributors to the libdnf project.
+-
+-This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+-
+-Libdnf is free software: you can redistribute it and/or modify
+-it under the terms of the GNU Lesser General Public License as published by
+-the Free Software Foundation, either version 2.1 of the License, or
+-(at your option) any later version.
+-
+-Libdnf is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU Lesser General Public License for more details.
+-
+-You should have received a copy of the GNU Lesser General Public License
+-along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-*/
+-
+-#ifndef LIBDNF5_COMPS_GROUP_SACK_HPP
+-#define LIBDNF5_COMPS_GROUP_SACK_HPP
+-
+-#include "libdnf5/common/sack/sack.hpp"
+-#include "libdnf5/common/weak_ptr.hpp"
+-#include "libdnf5/transaction/transaction_item_reason.hpp"
+-
+-#include <map>
+-#include <string>
+-
+-
+-namespace libdnf5::comps {
+-
+-
+-class Comps;
+-class Group;
+-
+-class GroupSack;
+-using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
+-
+-
+-class GroupSack : public libdnf5::sack::Sack<Group> {
+-public:
+-    ~GroupSack();
+-
+-    /// Create WeakPtr to GroupSack
+-    GroupSackWeakPtr get_weak_ptr();
+-
+-    const std::map<std::string, libdnf5::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+-
+-protected:
+-    explicit GroupSack(Comps & comps);
+-
+-private:
+-    Comps & comps;
+-
+-    WeakPtrGuard<GroupSack, false> sack_guard;
+-
+-    /// @return Map of resolved reasons why groups were installed: ``{group_id -> reason}``.
+-    ///         A group can be installed due to multiple reasons, only the most significant is returned.
+-    /// @since 5.0
+-    std::map<std::string, libdnf5::transaction::TransactionItemReason> reasons;
+-
+-    friend Comps;
+-    friend Group;
+-
+-    friend class GroupQuery;
+-};
+-
+-
+-}  // namespace libdnf5::comps
+-
+-
+-#endif  // LIBDNF5_COMPS_GROUP_SACK_HPP
+diff --git a/include/libdnf5/conf/config.hpp b/include/libdnf5/conf/config.hpp
+index a0d004a3..e5faf274 100644
+--- a/include/libdnf5/conf/config.hpp
++++ b/include/libdnf5/conf/config.hpp
+@@ -36 +36 @@ public:
+-    OptionBinds & opt_binds() noexcept { return binds; }
++    OptionBinds & opt_binds() noexcept;
+@@ -38 +38,2 @@ public:
+-    virtual ~Config() = default;
++    Config();
++    virtual ~Config();
+@@ -48 +49,2 @@ private:
+-    OptionBinds binds;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/conf/config_main.hpp b/include/libdnf5/conf/config_main.hpp
+index 0b4f9150..759c0a8b 100644
+--- a/include/libdnf5/conf/config_main.hpp
++++ b/include/libdnf5/conf/config_main.hpp
+@@ -73,2 +73,2 @@ public:
+-    OptionEnum<std::string> & get_cacheonly_option();
+-    const OptionEnum<std::string> & get_cacheonly_option() const;
++    OptionEnum & get_cacheonly_option();
++    const OptionEnum & get_cacheonly_option() const;
+@@ -133,2 +133,2 @@ public:
+-    OptionEnum<std::string> & get_multilib_policy_option();  // :api
+-    const OptionEnum<std::string> & get_multilib_policy_option() const;
++    OptionEnum & get_multilib_policy_option();  // :api
++    const OptionEnum & get_multilib_policy_option() const;
+@@ -145,2 +145,2 @@ public:
+-    OptionEnum<std::string> & get_color_option();
+-    const OptionEnum<std::string> & get_color_option() const;
++    OptionEnum & get_color_option();
++    const OptionEnum & get_color_option() const;
+@@ -190,2 +190,2 @@ public:
+-    OptionEnum<std::string> & get_history_list_view_option();
+-    const OptionEnum<std::string> & get_history_list_view_option() const;
++    OptionEnum & get_history_list_view_option();
++    const OptionEnum & get_history_list_view_option() const;
+@@ -259,2 +259,2 @@ public:
+-    OptionEnum<std::string> & get_ip_resolve_option();
+-    const OptionEnum<std::string> & get_ip_resolve_option() const;
++    OptionEnum & get_ip_resolve_option();
++    const OptionEnum & get_ip_resolve_option() const;
+diff --git a/include/libdnf5/conf/config_parser.hpp b/include/libdnf5/conf/config_parser.hpp
+index e8e8c0e5..c3479e06 100644
+--- a/include/libdnf5/conf/config_parser.hpp
++++ b/include/libdnf5/conf/config_parser.hpp
+@@ -26 +25,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <map>
+@@ -88,0 +88,9 @@ public:
++    ConfigParser();
++    ~ConfigParser();
++
++    ConfigParser(const ConfigParser & src);
++    ConfigParser & operator=(const ConfigParser & src);
++
++    ConfigParser(ConfigParser && src) noexcept;
++    ConfigParser & operator=(ConfigParser && src) noexcept;
++
+@@ -135,4 +143,2 @@ private:
+-    Container data;
+-    int item_number{0};
+-    std::string header;
+-    std::map<std::string, std::string> raw_items;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/conf/option.hpp b/include/libdnf5/conf/option.hpp
+index 4a42c7fb..bd1ee5c0 100644
+--- a/include/libdnf5/conf/option.hpp
++++ b/include/libdnf5/conf/option.hpp
+@@ -23,0 +24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -80,2 +81,2 @@ public:
+-    Option(const Option & src) = default;
+-    virtual ~Option() = default;
++    Option(const Option & src);
++    virtual ~Option();
+@@ -130,3 +131,2 @@ private:
+-    Priority priority;
+-    bool locked{false};
+-    std::string lock_comment;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -135,32 +134,0 @@ private:
+-inline Option::Option(Priority priority) : priority(priority) {}
+-
+-inline Option::Priority Option::get_priority() const {
+-    return priority;
+-}
+-
+-inline bool Option::empty() const noexcept {
+-    return priority == Priority::EMPTY;
+-}
+-
+-inline void Option::set_priority(Priority priority) {
+-    this->priority = priority;
+-}
+-
+-inline void Option::lock(const std::string & first_comment) {
+-    if (!locked) {
+-        lock_comment = first_comment;
+-        locked = true;
+-    }
+-}
+-
+-inline bool Option::is_locked() const noexcept {
+-    return locked;
+-}
+-
+-inline void Option::assert_not_locked() const {
+-    libdnf_user_assert(!locked, "Attempting to write to a locked option: {}", get_lock_comment());
+-}
+-
+-inline const std::string & Option::get_lock_comment() const noexcept {
+-    return lock_comment;
+-}
+diff --git a/include/libdnf5/conf/option_binds.hpp b/include/libdnf5/conf/option_binds.hpp
+index 0c5f7bbd..639af2a4 100644
+--- a/include/libdnf5/conf/option_binds.hpp
++++ b/include/libdnf5/conf/option_binds.hpp
+@@ -59,0 +60 @@ public:
++        ~Item();
+@@ -70,4 +71,3 @@ public:
+-        Option * option;
+-        NewStringFunc new_str_func;
+-        GetValueStringFunc get_value_str_func;
+-        bool is_append_option{false};  // hint that new value be added/appended
++
++        class Impl;
++        ImplPtr<Impl> p_impl;
+@@ -79,0 +80,4 @@ public:
++    OptionBinds();
++    OptionBinds(const OptionBinds & src);
++    ~OptionBinds();
++
+@@ -81 +85 @@ public:
+-        const std::string & id,
++        std::string id,
+@@ -86 +90 @@ public:
+-    Item & add(const std::string & id, Option & option);
++    Item & add(std::string id, Option & option);
+@@ -89,10 +93,10 @@ public:
+-    bool empty() const noexcept { return items.empty(); }
+-    std::size_t size() const noexcept { return items.size(); }
+-    iterator begin() noexcept { return items.begin(); }
+-    const_iterator begin() const noexcept { return items.begin(); }
+-    const_iterator cbegin() const noexcept { return items.cbegin(); }
+-    iterator end() noexcept { return items.end(); }
+-    const_iterator end() const noexcept { return items.end(); }
+-    const_iterator cend() const noexcept { return items.cend(); }
+-    iterator find(const std::string & id) { return items.find(id); }
+-    const_iterator find(const std::string & id) const { return items.find(id); }
++    bool empty() const noexcept;
++    std::size_t size() const noexcept;
++    iterator begin() noexcept;
++    const_iterator begin() const noexcept;
++    const_iterator cbegin() const noexcept;
++    iterator end() noexcept;
++    const_iterator end() const noexcept;
++    const_iterator cend() const noexcept;
++    iterator find(const std::string & id);
++    const_iterator find(const std::string & id) const;
+@@ -101 +105,2 @@ private:
+-    Container items;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/conf/option_bool.hpp b/include/libdnf5/conf/option_bool.hpp
+index 77362ccf..d7ffe5ac 100644
+--- a/include/libdnf5/conf/option_bool.hpp
++++ b/include/libdnf5/conf/option_bool.hpp
+@@ -25,2 +24,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <array>
+-#include <memory>
+@@ -47,2 +45 @@ public:
+-    OptionBool(
+-        bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals);
++    OptionBool(bool default_value, std::vector<std::string> true_vals, std::vector<std::string> false_vals);
+@@ -51,2 +47,0 @@ public:
+-    OptionBool(OptionBool && src) noexcept = default;
+-    ~OptionBool() override = default;
+@@ -54,2 +49 @@ public:
+-    OptionBool & operator=(const OptionBool & src);
+-    OptionBool & operator=(OptionBool && src) noexcept = default;
++    ~OptionBool() override;
+@@ -118,4 +112,2 @@ private:
+-    std::unique_ptr<std::vector<std::string>> true_values;
+-    std::unique_ptr<std::vector<std::string>> false_values;
+-    bool default_value;
+-    bool value;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -125,36 +116,0 @@ private:
+-inline OptionBool * OptionBool::clone() const {
+-    return new OptionBool(*this);
+-}
+-
+-inline void OptionBool::test(bool /*unused*/) const {}
+-
+-inline bool OptionBool::get_value() const noexcept {
+-    return value;
+-}
+-
+-inline bool OptionBool::get_default_value() const noexcept {
+-    return default_value;
+-}
+-
+-inline std::string OptionBool::get_value_string() const {
+-    return to_string(value);
+-}
+-
+-inline const std::vector<std::string> & OptionBool::get_default_true_values() noexcept {
+-    static std::vector<std::string> true_values = {"1", "yes", "true", "on"};
+-    return true_values;
+-}
+-
+-inline const std::vector<std::string> & OptionBool::get_default_false_values() noexcept {
+-    static std::vector<std::string> false_values = {"0", "no", "false", "off"};
+-    return false_values;
+-}
+-
+-inline const std::vector<std::string> & OptionBool::get_true_values() const noexcept {
+-    return true_values ? *true_values : get_default_true_values();
+-}
+-
+-inline const std::vector<std::string> & OptionBool::get_false_values() const noexcept {
+-    return false_values ? *false_values : get_default_false_values();
+-}
+-
+diff --git a/include/libdnf5/conf/option_enum.hpp b/include/libdnf5/conf/option_enum.hpp
+index b7867c52..98fef8a7 100644
+--- a/include/libdnf5/conf/option_enum.hpp
++++ b/include/libdnf5/conf/option_enum.hpp
+@@ -31,67 +31 @@ namespace libdnf5 {
+-/// Option that stores value from enumeration. The type of value is template parameter.
+-/// Support default value and user defined function for conversion from string.
+-// @replaces libdnf:conf/OptionEnum.hpp:class:OptionEnum<T>
+-template <typename T>
+-class OptionEnum : public Option {
+-public:
+-    using ValueType = T;
+-    using FromStringFunc = std::function<ValueType(const std::string &)>;
+-
+-    OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals);
+-    OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals);
+-    OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals, FromStringFunc && from_string_func);
+-    OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals, FromStringFunc && from_string_func);
+-
+-    /// Makes copy (clone) of this object.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.clone()
+-    OptionEnum * clone() const override;
+-
+-    /// Sets new value and priority (source).
+-    /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, bool value)
+-    void set(Priority priority, ValueType value);
+-
+-    /// Sets new value and runtime priority.
+-    void set(ValueType value);
+-
+-    /// Parses input string and sets new value and priority.
+-    /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.set(Priority priority, const std::string & value)
+-    void set(Priority priority, const std::string & value) override;
+-
+-    /// Parses input string and sets new value and runtime priority.
+-    void set(const std::string & value) override;
+-
+-    /// Gets the stored value.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValue()
+-    T get_value() const;
+-
+-    /// Gets the default value. Default value is used until it is replaced by set() method.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
+-    T get_default_value() const;
+-
+-    /// Gets a string representation of the stored value.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
+-    std::string get_value_string() const override;
+-
+-    /// Tests input value and throws exception if the value is not allowed.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.test(ValueType value)
+-    void test(ValueType value) const;
+-
+-    /// Parses input string and returns result.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.fromString(const std::string & value)
+-    ValueType from_string(const std::string & value) const;
+-
+-    /// Converts input value to the string.
+-    // @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.toString(ValueType value)
+-    std::string to_string(ValueType value) const;
+-
+-private:
+-    FromStringFunc from_string_user;
+-    std::vector<ValueType> enum_vals;
+-    ValueType default_value;
+-    ValueType value;
+-};
+-
+-
+-/// Option that stores value from enumeration. Specialized template for enumeration of strings.
++/// Option that stores value from enumeration of strings.
+@@ -101,2 +35 @@ private:
+-template <>
+-class OptionEnum<std::string> : public Option {
++class OptionEnum : public Option {
+@@ -105 +38,4 @@ public:
+-    using FromStringFunc = std::function<ValueType(const std::string &)>;
++    using FromStringFunc = std::function<std::string(const std::string &)>;
++
++    OptionEnum(std::string default_value, std::vector<std::string> enum_vals);
++    OptionEnum(std::string default_value, std::vector<std::string> enum_vals, FromStringFunc && from_string_func);
+@@ -107,2 +43 @@ public:
+-    OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals);
+-    OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals, FromStringFunc && from_string_func);
++    ~OptionEnum() override;
+@@ -143,4 +78,2 @@ private:
+-    FromStringFunc from_string_user;
+-    std::vector<ValueType> enum_vals;
+-    ValueType default_value;
+-    ValueType value;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -149,20 +81,0 @@ private:
+-template <typename T>
+-inline OptionEnum<T> * OptionEnum<T>::clone() const {
+-    return new OptionEnum<T>(*this);
+-}
+-
+-inline OptionEnum<std::string> * OptionEnum<std::string>::clone() const {
+-    return new OptionEnum<std::string>(*this);
+-}
+-
+-inline const std::string & OptionEnum<std::string>::get_value() const {
+-    return value;
+-}
+-
+-inline const std::string & OptionEnum<std::string>::get_default_value() const {
+-    return default_value;
+-}
+-
+-inline std::string OptionEnum<std::string>::get_value_string() const {
+-    return value;
+-}
+diff --git a/include/libdnf5/conf/option_number.hpp b/include/libdnf5/conf/option_number.hpp
+index 0d3c2090..459f4127 100644
+--- a/include/libdnf5/conf/option_number.hpp
++++ b/include/libdnf5/conf/option_number.hpp
+@@ -62,0 +63,4 @@ public:
++    OptionNumber(const OptionNumber & src);
++
++    ~OptionNumber() override;
++
+@@ -108,5 +112,2 @@ private:
+-    FromStringFunc from_string_user;
+-    ValueType default_value;
+-    ValueType min;
+-    ValueType max;
+-    ValueType value;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -115,20 +115,0 @@ private:
+-template <typename T>
+-inline OptionNumber<T> * OptionNumber<T>::clone() const {
+-    return new OptionNumber<T>(*this);
+-}
+-
+-template <typename T>
+-inline T OptionNumber<T>::get_value() const {
+-    return value;
+-}
+-
+-template <typename T>
+-inline T OptionNumber<T>::get_default_value() const {
+-    return default_value;
+-}
+-
+-template <typename T>
+-inline std::string OptionNumber<T>::get_value_string() const {
+-    return to_string(value);
+-}
+-
+diff --git a/include/libdnf5/conf/option_path.hpp b/include/libdnf5/conf/option_path.hpp
+index 381a4bf8..9270629b 100644
+--- a/include/libdnf5/conf/option_path.hpp
++++ b/include/libdnf5/conf/option_path.hpp
+@@ -43 +43 @@ public:
+-    explicit OptionPath(const std::string & default_value, bool exists = false, bool abs_path = false);
++    explicit OptionPath(std::string default_value, bool exists = false, bool abs_path = false);
+@@ -51,6 +51,5 @@ public:
+-    OptionPath(
+-        const std::string & default_value,
+-        const std::string & regex,
+-        bool icase,
+-        bool exists = false,
+-        bool abs_path = false);
++    OptionPath(std::string default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);
++
++    ~OptionPath();
++
++    OptionPath(const OptionPath & src);
+@@ -60,2 +59 @@ public:
+-    OptionPath(
+-        const char * default_value, const std::string & regex, bool icase, bool exists = false, bool abs_path = false);
++    OptionPath(const char * default_value, std::string regex, bool icase, bool exists = false, bool abs_path = false);
+@@ -81,2 +79,2 @@ private:
+-    bool exists;
+-    bool abs_path;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -85,4 +82,0 @@ private:
+-inline OptionPath * OptionPath::clone() const {
+-    return new OptionPath(*this);
+-}
+-
+diff --git a/include/libdnf5/conf/option_string.hpp b/include/libdnf5/conf/option_string.hpp
+index 6858ae2e..aed29e91 100644
+--- a/include/libdnf5/conf/option_string.hpp
++++ b/include/libdnf5/conf/option_string.hpp
+@@ -35 +35 @@ public:
+-    explicit OptionString(const std::string & default_value);
++    explicit OptionString(std::string default_value);
+@@ -37 +37 @@ public:
+-    OptionString(const std::string & default_value, std::string regex, bool icase);
++    OptionString(std::string default_value, std::string regex, bool icase);
+@@ -39,0 +40,4 @@ public:
++    ~OptionString();
++
++    OptionString(const OptionString & src);
++
+@@ -72,5 +76,4 @@ public:
+-protected:
+-    std::string regex;
+-    bool icase;
+-    std::string default_value;
+-    std::string value;
++private:
++    friend class OptionPath;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -79,16 +81,0 @@ protected:
+-inline OptionString * OptionString::clone() const {
+-    return new OptionString(*this);
+-}
+-
+-inline const std::string & OptionString::get_default_value() const noexcept {
+-    return default_value;
+-}
+-
+-inline std::string OptionString::get_value_string() const {
+-    return get_value();
+-}
+-
+-inline std::string OptionString::from_string(const std::string & value) const {
+-    return value;
+-}
+-
+diff --git a/include/libdnf5/conf/option_string_list.hpp b/include/libdnf5/conf/option_string_list.hpp
+index 4335f033..041dbf08 100644
+--- a/include/libdnf5/conf/option_string_list.hpp
++++ b/include/libdnf5/conf/option_string_list.hpp
+@@ -25,2 +24,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <optional>
+-#include <regex>
+@@ -41,2 +39,2 @@ public:
+-    explicit OptionStringContainer(const ValueType & default_value);
+-    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase);
++    explicit OptionStringContainer(ValueType default_value);
++    OptionStringContainer(ValueType default_value, std::string regex, bool icase);
+@@ -45 +43 @@ public:
+-    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase, std::string delimiters);
++    OptionStringContainer(ValueType default_value, std::string regex, bool icase, std::string delimiters);
+@@ -48,5 +46 @@ public:
+-    OptionStringContainer(OptionStringContainer && src) noexcept = default;
+-    ~OptionStringContainer() override = default;
+-
+-    OptionStringContainer & operator=(const OptionStringContainer & src);
+-    OptionStringContainer & operator=(OptionStringContainer && src) noexcept = default;
++    ~OptionStringContainer() override;
+@@ -120,7 +113,0 @@ protected:
+-    std::optional<std::regex> regex_matcher;
+-    std::string regex;
+-    bool icase;
+-    std::optional<std::string> delimiters;
+-    ValueType default_value;
+-    ValueType value;
+-
+@@ -130,11 +116,0 @@ private:
+-};
+-
+-template <typename T>
+-inline OptionStringContainer<T> * OptionStringContainer<T>::clone() const {
+-    return new OptionStringContainer<T>(*this);
+-}
+-
+-template <typename T>
+-inline const T & OptionStringContainer<T>::get_value() const {
+-    return value;
+-}
+@@ -142,19 +118,3 @@ inline const T & OptionStringContainer<T>::get_value() const {
+-template <typename T>
+-inline const T & OptionStringContainer<T>::get_default_value() const {
+-    return default_value;
+-}
+-
+-template <typename T>
+-inline std::string OptionStringContainer<T>::get_value_string() const {
+-    return to_string(value);
+-}
+-
+-template <typename T>
+-inline const char * OptionStringContainer<T>::get_default_delimiters() noexcept {
+-    return " ,\n";
+-}
+-
+-template <typename T>
+-inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
+-    return delimiters ? delimiters->c_str() : get_default_delimiters();
+-}
++    class Impl;
++    ImplPtr<Impl> p_impl;
++};
+diff --git a/include/libdnf5/conf/vars.hpp b/include/libdnf5/conf/vars.hpp
+index a17a0c88..aac1be84 100644
+--- a/include/libdnf5/conf/vars.hpp
++++ b/include/libdnf5/conf/vars.hpp
+@@ -26 +25,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <set>
+@@ -63 +62 @@ public:
+-    Vars(const libdnf5::BaseWeakPtr & base) : base(base) {}
++    Vars(const libdnf5::BaseWeakPtr & base);
+@@ -65,0 +65,2 @@ public:
++    ~Vars();
++
+@@ -72 +73 @@ public:
+-    const std::map<std::string, Variable> & get_variables() const { return variables; }
++    const std::map<std::string, Variable> & get_variables() const;
+@@ -81,0 +83,8 @@ public:
++    /// @brief Unset particular variable
++    ///
++    /// @param name Name of the variable
++    /// @param prio Source/Priority of the request
++    /// @throw ReadOnlyVariableError if the variable is read-only
++    /// @return false if the variable exists after the function returns (insufficient request priority)
++    bool unset(const std::string & name, Priority prio = Priority::RUNTIME);
++
+@@ -92 +101 @@ public:
+-    bool contains(const std::string & name) const { return variables.find(name) != variables.end(); }
++    bool contains(const std::string & name) const;
+@@ -97 +106 @@ public:
+-    const std::string & get_value(const std::string & name) const { return variables.at(name).value; }
++    const std::string & get_value(const std::string & name) const;
+@@ -102 +111 @@ public:
+-    const Variable & get(const std::string & name) const { return variables.at(name); }
++    const Variable & get(const std::string & name) const;
+@@ -163,2 +172,2 @@ private:
+-    BaseWeakPtr base;
+-    std::map<std::string, Variable> variables;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/logger/factory.hpp b/include/libdnf5/logger/factory.hpp
+index 0e07154f..f17d2c02 100644
+--- a/include/libdnf5/logger/factory.hpp
++++ b/include/libdnf5/logger/factory.hpp
+@@ -30,10 +29,0 @@ namespace libdnf5 {
+-// File logger destination filename.
+-/// @deprecated The filename should be set by API user.
+-constexpr const char * FILE_LOGGER_FILENAME = "dnf5.log";
+-
+-/// @deprecated It is going to be removed.
+-/// @brief Helper method for creating a file logger.
+-/// @param base Reference to Base for loading the configured logger path.
+-/// @return Instance of a new file logger.
+-std::unique_ptr<libdnf5::Logger> create_file_logger(libdnf5::Base & base);
+-
+diff --git a/include/libdnf5/logger/global_logger.hpp b/include/libdnf5/logger/global_logger.hpp
+index cf5f82b1..62ec025d 100644
+--- a/include/libdnf5/logger/global_logger.hpp
++++ b/include/libdnf5/logger/global_logger.hpp
+@@ -32 +32 @@ public:
+-    GlobalLogger();
++    explicit GlobalLogger();
+@@ -33,0 +34,6 @@ public:
++
++    GlobalLogger(const GlobalLogger &) = delete;
++    GlobalLogger(GlobalLogger &&) = delete;
++    GlobalLogger & operator=(const GlobalLogger &) = delete;
++    GlobalLogger & operator=(GlobalLogger &&) = delete;
++
+diff --git a/include/libdnf5/logger/log_router.hpp b/include/libdnf5/logger/log_router.hpp
+index a622b688..3daf053e 100644
+--- a/include/libdnf5/logger/log_router.hpp
++++ b/include/libdnf5/logger/log_router.hpp
+@@ -24,0 +25,2 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
++
+@@ -36 +38,3 @@ public:
+-    LogRouter() = default;
++    explicit LogRouter();
++
++    ~LogRouter();
+@@ -39 +43 @@ public:
+-    LogRouter(std::vector<std::unique_ptr<Logger>> && loggers) : loggers(std::move(loggers)) {}
++    explicit LogRouter(std::vector<std::unique_ptr<Logger>> && loggers);
+@@ -42 +46 @@ public:
+-    void add_logger(std::unique_ptr<Logger> && logger) { loggers.push_back(std::move(logger)); }
++    void add_logger(std::unique_ptr<Logger> && logger);
+@@ -45 +49 @@ public:
+-    Logger * get_logger(size_t index) { return loggers.at(index).get(); }
++    Logger * get_logger(size_t index);
+@@ -52 +56 @@ public:
+-    void swap_logger(std::unique_ptr<Logger> & logger, size_t index) { loggers.at(index).swap(logger); }
++    void swap_logger(std::unique_ptr<Logger> & logger, size_t index);
+@@ -55 +59 @@ public:
+-    size_t get_loggers_count() const noexcept { return loggers.size(); }
++    size_t get_loggers_count() const noexcept;
+@@ -66 +70,2 @@ private:
+-    std::vector<std::unique_ptr<Logger>> loggers;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/logger/logger.hpp b/include/libdnf5/logger/logger.hpp
+index 4ee64c5e..ff33371e 100644
+--- a/include/libdnf5/logger/logger.hpp
++++ b/include/libdnf5/logger/logger.hpp
+@@ -27 +26,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <array>
+@@ -29,0 +29,2 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include <string_view>
++#include <utility>
+@@ -38 +39,2 @@ public:
+-    Logger() = default;
++    explicit Logger();
++
+@@ -43 +45,2 @@ public:
+-    virtual ~Logger() = default;
++
++    virtual ~Logger();
+@@ -47,4 +50 @@ public:
+-    static constexpr const char * level_to_cstr(Level level) noexcept {
+-        auto ilevel = static_cast<unsigned int>(level);
+-        return ilevel >= LEVEL_C_STR.size() ? "UNDEFINED" : LEVEL_C_STR[ilevel];
+-    }
++    static const char * level_to_cstr(Level level) noexcept;
+@@ -99,6 +98,0 @@ public:
+-
+-private:
+-#ifndef SWIG
+-    static constexpr std::array<const char *, static_cast<unsigned int>(Level::TRACE) + 1> LEVEL_C_STR = {
+-        "CRITICAL", "ERROR", "WARNING", "NOTICE", "INFO", "DEBUG", "TRACE"};
+-#endif
+@@ -106,0 +101 @@ private:
++
+@@ -108,0 +104,3 @@ public:
++    explicit StringLogger();
++    ~StringLogger() override;
++
+diff --git a/include/libdnf5/logger/memory_buffer_logger.hpp b/include/libdnf5/logger/memory_buffer_logger.hpp
+index 479ebbb3..8516c2f4 100644
+--- a/include/libdnf5/logger/memory_buffer_logger.hpp
++++ b/include/libdnf5/logger/memory_buffer_logger.hpp
+@@ -25,3 +25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <mutex>
+-#include <vector>
+-
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -42,0 +41 @@ public:
++    ~MemoryBufferLogger();
+@@ -50 +49 @@ public:
+-    std::size_t get_items_count() const { return items.size(); }
++    std::size_t get_items_count() const;
+@@ -56,4 +55,2 @@ private:
+-    mutable std::mutex items_mutex;
+-    std::size_t max_items;  // rotation, oldest messages are replaced
+-    std::size_t first_item_idx;
+-    std::vector<Item> items;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/logger/null_logger.hpp b/include/libdnf5/logger/null_logger.hpp
+index aa6b1ef4..5a079b81 100644
+--- a/include/libdnf5/logger/null_logger.hpp
++++ b/include/libdnf5/logger/null_logger.hpp
+@@ -32 +32,4 @@ public:
+-    void log_line(Level /*level*/, const std::string & /*message*/) noexcept override {}
++    explicit NullLogger();
++    ~NullLogger() override;
++
++    void log_line(Level level, const std::string & message) noexcept override;
+@@ -35,4 +38,4 @@ public:
+-        const std::chrono::time_point<std::chrono::system_clock> & /*time*/,
+-        pid_t /*pid*/,
+-        Level /*level*/,
+-        const std::string & /*message*/) noexcept override {}
++        const std::chrono::time_point<std::chrono::system_clock> & time,
++        pid_t pid,
++        Level level,
++        const std::string & message) noexcept override;
+diff --git a/include/libdnf5/logger/rotating_file_logger.hpp b/include/libdnf5/logger/rotating_file_logger.hpp
+index e15e1076..f2a66a0f 100644
+--- a/include/libdnf5/logger/rotating_file_logger.hpp
++++ b/include/libdnf5/logger/rotating_file_logger.hpp
+@@ -25,0 +26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -28 +28,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <memory>
+@@ -63 +63 @@ private:
+-    std::unique_ptr<Impl> p_impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/logger/stream_logger.hpp b/include/libdnf5/logger/stream_logger.hpp
+index baa85cd9..2aa7451d 100644
+--- a/include/libdnf5/logger/stream_logger.hpp
++++ b/include/libdnf5/logger/stream_logger.hpp
+@@ -24,0 +25,2 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
++
+@@ -26 +27,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <mutex>
+@@ -35 +36,3 @@ public:
+-    explicit StreamLogger(std::unique_ptr<std::ostream> && log_stream) : log_stream(std::move(log_stream)) {}
++    explicit StreamLogger(std::unique_ptr<std::ostream> && log_stream);
++    ~StreamLogger() override;
++
+@@ -39,2 +42,2 @@ private:
+-    mutable std::mutex stream_mutex;
+-    std::unique_ptr<std::ostream> log_stream;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -46 +49,3 @@ public:
+-    explicit StdCStreamLogger(std::ostream & stream) : log_stream(stream) {}
++    explicit StdCStreamLogger(std::ostream & log_stream);
++    ~StdCStreamLogger() override;
++
+@@ -50,2 +55,2 @@ private:
+-    mutable std::mutex stream_mutex;
+-    std::ostream & log_stream;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/module/module_dependency.hpp b/include/libdnf5/module/module_dependency.hpp
+index c509435b..24fd4b24 100644
+--- a/include/libdnf5/module/module_dependency.hpp
++++ b/include/libdnf5/module/module_dependency.hpp
+@@ -22,0 +23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include <memory>
+@@ -31,3 +32 @@ public:
+-    ModuleDependency(const std::string & module_name, const std::vector<std::string> & streams)
+-        : module_name(module_name),
+-          streams(streams) {}
++    ModuleDependency(const std::string & module_name, const std::vector<std::string> & streams);
+@@ -35,3 +34,9 @@ public:
+-    ModuleDependency(std::string && module_name, std::vector<std::string> && streams)
+-        : module_name(std::move(module_name)),
+-          streams(std::move(streams)) {}
++    ModuleDependency(std::string && module_name, std::vector<std::string> && streams);
++
++    ~ModuleDependency();
++
++    ModuleDependency(const ModuleDependency & src);
++    ModuleDependency & operator=(const ModuleDependency & src);
++
++    ModuleDependency(ModuleDependency && src) noexcept;
++    ModuleDependency & operator=(ModuleDependency && src) noexcept;
+@@ -41 +46 @@ public:
+-    const std::string & get_module_name() const { return module_name; };
++    const std::string & get_module_name() const;
+@@ -46 +51 @@ public:
+-    const std::vector<std::string> & get_streams() const { return streams; };
++    const std::vector<std::string> & get_streams() const;
+@@ -51,4 +56,2 @@ private:
+-    friend class ModuleItem;
+-
+-    std::string module_name;
+-    std::vector<std::string> streams;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/module/module_item.hpp b/include/libdnf5/module/module_item.hpp
+index 7b164f6d..84c3c337 100644
+--- a/include/libdnf5/module/module_item.hpp
++++ b/include/libdnf5/module/module_item.hpp
+@@ -58,3 +58,3 @@ public:
+-    bool operator==(const ModuleItem & rhs) const noexcept { return id.id == rhs.id.id; }
+-    bool operator!=(const ModuleItem & rhs) const noexcept { return id.id != rhs.id.id; }
+-    bool operator<(const ModuleItem & rhs) const noexcept { return id.id < rhs.id.id; }
++    bool operator==(const ModuleItem & rhs) const noexcept;
++    bool operator!=(const ModuleItem & rhs) const noexcept;
++    bool operator<(const ModuleItem & rhs) const noexcept;
+@@ -159 +159 @@ public:
+-    const std::string & get_repo_id() const { return repo_id; };
++    const std::string & get_repo_id() const;
+@@ -162 +162 @@ public:
+-    ModuleItemId get_id() const { return id; };
++    ModuleItemId get_id() const;
+@@ -182,2 +182,2 @@ public:
+-    ModuleItem(ModuleItem && mpkg);
+-    ModuleItem & operator=(ModuleItem && mpkg);
++    ModuleItem(ModuleItem && mpkg) noexcept;
++    ModuleItem & operator=(ModuleItem && mpkg) noexcept;
+@@ -249,2 +249 @@ private:
+-    // Corresponds to one yaml document
+-    _ModulemdModuleStream * md_stream;
++    libdnf5::module::ModuleSackWeakPtr get_module_sack() const;
+@@ -252,3 +251 @@ private:
+-    ModuleSackWeakPtr module_sack;
+-    ModuleItemId id;
+-    std::string repo_id;
++    void set_computed_static_context(const std::string & context);
+@@ -256,2 +253,2 @@ private:
+-    // For compatibility with older modules that didn't have static contexts
+-    std::string computed_static_context;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -261,25 +257,0 @@ private:
+-inline std::vector<ModuleProfile> ModuleItem::get_profiles(const std::string & name) const {
+-    return get_profiles_internal(name.c_str());
+-}
+-
+-
+-inline std::vector<ModuleProfile> ModuleItem::get_profiles() const {
+-    return get_profiles_internal(nullptr);
+-}
+-
+-
+-inline std::vector<ModuleDependency> ModuleItem::get_module_dependencies(bool remove_platform) const {
+-    return get_module_dependencies(md_stream, remove_platform);
+-}
+-
+-
+-inline std::string ModuleItem::get_module_dependencies_string(bool remove_platform) const {
+-    return get_module_dependencies_string(md_stream, remove_platform);
+-}
+-
+-
+-inline std::string ModuleItem::get_name_stream() const {
+-    return get_name_stream(md_stream);
+-}
+-
+-
+diff --git a/include/libdnf5/module/module_profile.hpp b/include/libdnf5/module/module_profile.hpp
+index 03714933..a867140d 100644
+--- a/include/libdnf5/module/module_profile.hpp
++++ b/include/libdnf5/module/module_profile.hpp
+@@ -63,0 +64,2 @@ public:
++    ModuleProfile(ModuleProfile && src) noexcept;
++    ModuleProfile & operator=(ModuleProfile && src) noexcept;
+@@ -72,3 +74,2 @@ private:
+-    // @replaces libdnf:module:modulemd/ModuleProfile.hpp:attribute:ModuleProfile.profile
+-    _ModulemdProfile * profile{nullptr};
+-    bool is_default_profile = false;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/module/module_query.hpp b/include/libdnf5/module/module_query.hpp
+index cf28b490..67372ea7 100644
+--- a/include/libdnf5/module/module_query.hpp
++++ b/include/libdnf5/module/module_query.hpp
+@@ -44,0 +45,8 @@ public:
++    ~ModuleQuery();
++
++    ModuleQuery(const ModuleQuery & src);
++    ModuleQuery & operator=(const ModuleQuery & src);
++
++    ModuleQuery(ModuleQuery && src) noexcept;
++    ModuleQuery & operator=(ModuleQuery && src) noexcept;
++
+@@ -53 +61 @@ public:
+-    libdnf5::BaseWeakPtr get_base() { return base; }
++    libdnf5::BaseWeakPtr get_base();
+@@ -174,11 +181,0 @@ private:
+-    // Getter callbacks that return attribute values from an object. Used in query filters.
+-    struct Get {
+-        static std::string name(const ModuleItem & obj) { return obj.get_name(); }
+-        static std::string stream(const ModuleItem & obj) { return obj.get_stream(); }
+-        static std::string version(const ModuleItem & obj) { return obj.get_version_str(); }
+-        static std::string context(const ModuleItem & obj) { return obj.get_context(); }
+-        static std::string arch(const ModuleItem & obj) { return obj.get_arch(); }
+-        static bool is_enabled(const ModuleItem & obj);
+-        static bool is_disabled(const ModuleItem & obj);
+-    };
+-
+@@ -187,3 +184,2 @@ private:
+-    static bool latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2);
+-
+-    BaseWeakPtr base;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/module/module_sack.hpp b/include/libdnf5/module/module_sack.hpp
+index a9cfd6ba..28e2397a 100644
+--- a/include/libdnf5/module/module_sack.hpp
++++ b/include/libdnf5/module/module_sack.hpp
+@@ -22,0 +23,2 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "module_status.hpp"
++
+@@ -23,0 +26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/base/solver_problems.hpp"
+@@ -55,8 +57,0 @@ namespace libdnf5::module {
+-
+-// TODO(pkratoch): Make this a docstring.
+-// ENABLED - a module that has an enabled stream.
+-// DISABLED - a module that is disabled.
+-// AVAILABLE - otherwise.
+-enum class ModuleStatus { AVAILABLE, ENABLED, DISABLED };
+-
+-
+@@ -66,16 +60,0 @@ public:
+-    enum class ModuleErrorType {
+-        NO_ERROR = 0,
+-        INFO,
+-        /// Error in module defaults detected during resolvement of module dependencies
+-        ERROR_IN_DEFAULTS,
+-        /// Error detected during resolvement of module dependencies
+-        ERROR,
+-        /// Error detected during resolvement of module dependencies - Unexpected error!!!
+-        CANNOT_RESOLVE_MODULES,
+-        CANNOT_RESOLVE_MODULE_SPEC,
+-        CANNOT_ENABLE_MULTIPLE_STREAMS,
+-        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATUS,
+-        /// Problem with latest modules during resolvement of module dependencies
+-        ERROR_IN_LATEST
+-    };
+-
+@@ -104 +83 @@ public:
+-    /// @return A pair of problems in resolving to report and ModuleErrorType.
++    /// @return A pair of problems in resolving to report and GoalProblem.
+@@ -106 +85 @@ public:
+-    std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
++    std::pair<base::SolverProblems, GoalProblem> resolve_active_module_items();
+@@ -144,13 +122,0 @@ private:
+-class InvalidModuleStatus : public libdnf5::Error {
+-public:
+-    InvalidModuleStatus(const std::string & status);
+-
+-    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
+-    const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
+-};
+-
+-
+-std::string module_status_to_string(ModuleStatus status);
+-ModuleStatus module_status_from_string(const std::string & status);
+-
+-
+@@ -159 +124,0 @@ ModuleStatus module_status_from_string(const std::string & status);
+-
+diff --git a/include/libdnf5/module/module_status.hpp b/include/libdnf5/module/module_status.hpp
+new file mode 100644
+index 00000000..f89278cc
+--- /dev/null
++++ b/include/libdnf5/module/module_status.hpp
+@@ -0,0 +1,50 @@
++/*
++Copyright Contributors to the libdnf project.
++
++This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
++
++Libdnf is free software: you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation, either version 2.1 of the License, or
++(at your option) any later version.
++
++Libdnf is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++*/
++
++#ifndef LIBDNF5_MODULE_MODULE_STATUS_HPP
++#define LIBDNF5_MODULE_MODULE_STATUS_HPP
++
++#include "libdnf5/common/exception.hpp"
++
++#include <string>
++
++namespace libdnf5::module {
++
++// TODO(pkratoch): Make this a docstring.
++// ENABLED - a module that has an enabled stream.
++// DISABLED - a module that is disabled.
++// AVAILABLE - otherwise.
++enum class ModuleStatus { AVAILABLE, ENABLED, DISABLED };
++
++class InvalidModuleStatus : public libdnf5::Error {
++public:
++    InvalidModuleStatus(const std::string & status);
++
++    const char * get_domain_name() const noexcept override { return "libdnf5::module"; }
++    const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
++};
++
++
++std::string module_status_to_string(ModuleStatus status);
++ModuleStatus module_status_from_string(const std::string & status);
++
++
++}  // namespace libdnf5::module
++
++#endif  // LIBDNF5_MODULE_MODULE_STATUS_HPP
+diff --git a/include/libdnf5/module/nsvcap.hpp b/include/libdnf5/module/nsvcap.hpp
+index 4e765a94..6bb15330 100644
+--- a/include/libdnf5/module/nsvcap.hpp
++++ b/include/libdnf5/module/nsvcap.hpp
+@@ -22,0 +23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include <memory>
+@@ -52,0 +54,9 @@ public:
++    Nsvcap();
++    ~Nsvcap();
++
++    Nsvcap(const Nsvcap & src);
++    Nsvcap & operator=(const Nsvcap & src);
++
++    Nsvcap(Nsvcap && src) noexcept;
++    Nsvcap & operator=(Nsvcap && src) noexcept;
++
+@@ -59 +69 @@ public:
+-    /// @param pattern          A string to parse.
++    /// @param nsvcap_str       A string to parse.
+@@ -63 +73 @@ public:
+-    bool parse(const std::string pattern, Form form);
++    bool parse(const std::string & nsvcap_str, Form form);
+@@ -72 +82 @@ public:
+-    static std::vector<Nsvcap> parse(const std::string & pattern, std::vector<Form> forms);
++    static std::vector<Nsvcap> parse(const std::string & pattern, const std::vector<Form> & forms);
+@@ -87,20 +97,20 @@ public:
+-    const std::string & get_name() const noexcept { return name; }
+-    const std::string & get_stream() const noexcept { return stream; }
+-    const std::string & get_version() const noexcept { return version; }
+-    const std::string & get_context() const noexcept { return context; }
+-    const std::string & get_arch() const noexcept { return arch; }
+-    const std::string & get_profile() const noexcept { return profile; }
+-
+-    void set_name(const std::string & name) { this->name = name; }
+-    void set_stream(const std::string & stream) { this->stream = stream; }
+-    void set_version(const std::string & version) { this->version = version; }
+-    void set_context(const std::string & context) { this->context = context; }
+-    void set_arch(const std::string & arch) { this->arch = arch; }
+-    void set_profile(const std::string & profile) { this->profile = profile; }
+-
+-    void set_name(std::string && name) { this->name = std::move(name); }
+-    void set_stream(std::string && stream) { this->stream = std::move(stream); }
+-    void set_version(std::string && version) { this->version = std::move(version); }
+-    void set_context(std::string && context) { this->context = std::move(context); }
+-    void set_arch(std::string && arch) { this->arch = std::move(arch); }
+-    void set_profile(std::string && profile) { this->profile = std::move(profile); }
++    const std::string & get_name() const noexcept;
++    const std::string & get_stream() const noexcept;
++    const std::string & get_version() const noexcept;
++    const std::string & get_context() const noexcept;
++    const std::string & get_arch() const noexcept;
++    const std::string & get_profile() const noexcept;
++
++    void set_name(const std::string & name);
++    void set_stream(const std::string & stream);
++    void set_version(const std::string & version);
++    void set_context(const std::string & context);
++    void set_arch(const std::string & arch);
++    void set_profile(const std::string & profile);
++
++    void set_name(std::string && name);
++    void set_stream(std::string && stream);
++    void set_version(std::string && version);
++    void set_context(std::string && context);
++    void set_arch(std::string && arch);
++    void set_profile(std::string && profile);
+@@ -109,6 +119,2 @@ private:
+-    std::string name;
+-    std::string stream;
+-    std::string version;
+-    std::string context;
+-    std::string arch;
+-    std::string profile;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/plugin/iplugin.hpp b/include/libdnf5/plugin/iplugin.hpp
+index 91a5e17f..03c247c6 100644
+--- a/include/libdnf5/plugin/iplugin.hpp
++++ b/include/libdnf5/plugin/iplugin.hpp
+@@ -22,0 +23,3 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "plugin_version.hpp"
++
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -25 +28,2 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <cstdint>
++#include <string>
++#include <vector>
+@@ -40,6 +44 @@ namespace libdnf5::plugin {
+-/// Plugin version
+-struct Version {
+-    std::uint16_t major;
+-    std::uint16_t minor;
+-    std::uint16_t micro;
+-};
++class IPluginData;
+@@ -50,2 +49,2 @@ public:
+-    IPlugin(Base & base) : base(&base) {}
+-    virtual ~IPlugin() = default;
++    explicit IPlugin(IPluginData & data);
++    virtual ~IPlugin();
+@@ -52,0 +52 @@ public:
++    IPlugin() = delete;
+@@ -76 +76 @@ public:
+-    virtual void load_plugins() {}
++    virtual void load_plugins();
+@@ -80 +80 @@ public:
+-    virtual void init() {}
++    virtual void init();
+@@ -84 +84 @@ public:
+-    virtual void pre_base_setup() {}
++    virtual void pre_base_setup();
+@@ -88 +88,18 @@ public:
+-    virtual void post_base_setup() {}
++    virtual void post_base_setup();
++
++    /// The repos_configured hook.
++    /// It is called in `Base::notify_repos_configured` method.
++    virtual void repos_configured();
++
++    /// The repos_loaded hook.
++    /// It is called at the end of the `RepoSack::load_repos` method (in Impl).
++    virtual void repos_loaded();
++
++    /// The pre_add_cmdline_packages hook.
++    /// It is called at the beginning of the `RepoSack::add_cmdline_packages` method.
++    /// @param paths Vector of paths (local files or URLs) to package files to be inserted into cmdline repo.
++    virtual void pre_add_cmdline_packages(const std::vector<std::string> & paths);
++
++    /// The post_add_cmdline_packages hook.
++    /// It is called at the end of the `RepoSack::add_cmdline_packages` method.
++    virtual void post_add_cmdline_packages();
+@@ -92 +109,2 @@ public:
+-    virtual void pre_transaction(const libdnf5::base::Transaction &) {}
++    /// @param transaction Contains the transaction that will be started.
++    virtual void pre_transaction(const libdnf5::base::Transaction & transaction);
+@@ -96 +114,2 @@ public:
+-    virtual void post_transaction(const libdnf5::base::Transaction &) {}
++    /// @param transaction Contains the completed transaction.
++    virtual void post_transaction(const libdnf5::base::Transaction & transaction);
+@@ -99 +118 @@ public:
+-    virtual void finish() noexcept {}
++    virtual void finish() noexcept;
+@@ -101 +120 @@ public:
+-    Base & get_base() noexcept { return *base; }
++    Base & get_base() const noexcept;
+@@ -104 +123,2 @@ private:
+-    Base * base;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -126 +146 @@ libdnf5::plugin::IPlugin * libdnf_plugin_new_instance(
+-    libdnf5::LibraryVersion library_version, libdnf5::Base & base, libdnf5::ConfigParser & parser);
++    libdnf5::LibraryVersion library_version, libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser & parser);
+diff --git a/include/libdnf5/plugin/plugin_info.hpp b/include/libdnf5/plugin/plugin_info.hpp
+new file mode 100644
+index 00000000..769cf095
+--- /dev/null
++++ b/include/libdnf5/plugin/plugin_info.hpp
+@@ -0,0 +1,75 @@
++/*
++Copyright Contributors to the libdnf project.
++
++This file is part of li
++bdnf: https://github.com/rpm-software-management/libdnf/
++
++Libdnf is free software: you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation, either version 2.1 of the License, or
++(at your option) any later version.
++
++Libdnf is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++*/
++
++#ifndef LIBDNF5_PLUGIN_PLUGIN_INFO_HPP
++#define LIBDNF5_PLUGIN_PLUGIN_INFO_HPP
++
++#include "plugin_version.hpp"
++
++#include "libdnf5/common/impl_ptr.hpp"
++#include "libdnf5/version.hpp"
++
++namespace libdnf5::plugin {
++
++class PluginInfo {
++public:
++    ~PluginInfo();
++
++    PluginInfo(const PluginInfo & src);
++    PluginInfo(PluginInfo && src) noexcept;
++    PluginInfo & operator=(const PluginInfo & src);
++    PluginInfo & operator=(PluginInfo && src) noexcept;
++
++    PluginInfo() = delete;
++
++    /// @return the real name of the plugin or derived from the configuration file if the plugin is not loaded
++    const std::string & get_name() const noexcept;
++
++    /// @return true if the plugin is loaded
++    bool is_loaded() const noexcept;
++
++    /// @return the version of the API supported by the plugin, or zeros if the plugin is not loaded
++    PluginAPIVersion get_api_version() const noexcept;
++
++    /// @return the real plugin name (returned from plugin) or nullptr if the plugin is not loaded
++    const char * get_real_name() const noexcept;
++
++    /// @return the version of the plugin, or zeros if the plugin is not loaded
++    Version get_version() const noexcept;
++
++    /// @return a nullptr terminated array of attributes supported by the plugin or nullptr if the plugin is not loaded
++    const char * const * get_attributes() const noexcept;
++
++    /// Gets the value of the attribute from the plugin.
++    /// Returns nullptr if the attribute does not exist or plugin is not loaded.
++    /// @return the value of the `name` attribute or nullptr
++    const char * get_attribute(const char * name) const noexcept;
++
++    class Impl;
++
++private:
++    explicit PluginInfo(Impl & p_impl);
++
++    ImplPtr<Impl> p_impl;
++};
++
++}  // namespace libdnf5::plugin
++
++#endif
+diff --git a/include/libdnf5/plugin/plugin_version.hpp b/include/libdnf5/plugin/plugin_version.hpp
+new file mode 100644
+index 00000000..6ed0a560
+--- /dev/null
++++ b/include/libdnf5/plugin/plugin_version.hpp
+@@ -0,0 +1,36 @@
++/*
++Copyright Contributors to the libdnf project.
++
++This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
++
++Libdnf is free software: you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation, either version 2.1 of the License, or
++(at your option) any later version.
++
++Libdnf is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++*/
++
++#ifndef LIBDNF5_PLUGIN_PLUGIN_VERSION_HPP
++#define LIBDNF5_PLUGIN_PLUGIN_VERSION_HPP
++
++#include <cstdint>
++
++namespace libdnf5::plugin {
++
++/// Plugin version
++struct Version {
++    std::uint16_t major;
++    std::uint16_t minor;
++    std::uint16_t micro;
++};
++
++}  // namespace libdnf5::plugin
++
++#endif
+diff --git a/include/libdnf5/repo/config_repo.hpp b/include/libdnf5/repo/config_repo.hpp
+index eabcf2c9..b4e020d6 100644
+--- a/include/libdnf5/repo/config_repo.hpp
++++ b/include/libdnf5/repo/config_repo.hpp
+@@ -93,2 +93,2 @@ public:
+-    OptionChild<OptionEnum<std::string>> & get_ip_resolve_option();
+-    const OptionChild<OptionEnum<std::string>> & get_ip_resolve_option() const;
++    OptionChild<OptionEnum> & get_ip_resolve_option();
++    const OptionChild<OptionEnum> & get_ip_resolve_option() const;
+@@ -144,2 +144,2 @@ public:
+-    OptionEnum<std::string> & get_failovermethod_option();
+-    const OptionEnum<std::string> & get_failovermethod_option() const;
++    OptionEnum & get_failovermethod_option();
++    const OptionEnum & get_failovermethod_option() const;
+@@ -153 +153 @@ public:
+-    /// cached metadata are stored.
++    /// cached metadata are stored. The path contains unique ID generated by get_unique_id()
+diff --git a/include/libdnf5/repo/repo.hpp b/include/libdnf5/repo/repo.hpp
+index 259c8c30..4cc9dfb9 100644
+--- a/include/libdnf5/repo/repo.hpp
++++ b/include/libdnf5/repo/repo.hpp
+@@ -38,5 +37,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-namespace libdnf5::comps {
+-class Comps;
+-}
+-
+-
+@@ -157,16 +151,0 @@ public:
+-    /// @deprecated It is going to be removed without a warning
+-    /// Downloads repository metadata.
+-    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
+-    void download_metadata(const std::string & destdir);
+-
+-    /// @deprecated It is going to be removed without a warning
+-    /// Loads the repository objects into sacks.
+-    ///
+-    /// Also writes the libsolv's solv/solvx cache files.
+-    void load();
+-
+-    /// Not API, unsupported
+-    /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
+-    // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
+-    void load_extra_system_repo(const std::string & rootdir);
+-
+@@ -239,4 +217,0 @@ public:
+-    /// Gets repository freshness
+-    // @replaces libdnf:repo/Repo.hpp:method:Repo.fresh()
+-    bool fresh();
+-
+@@ -246 +221 @@ public:
+-    /// Gets timestamp of metadata "primary" file
++    /// Gets timestamp of metadata "primary" file, if the file is not present returns -1
+@@ -330,24 +305 @@ public:
+-    /// @deprecated It is redundant because repo class has direct access to Base and Vars
+-    /// Sets substitutions. Substitutions are used to substitute variables in repository configuration.
+-    // @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
+-    void set_substitutions(const std::map<std::string, std::string> & substitutions);
+-
+-    /// @deprecated It is going to be removed without a warning
+-    /// Not API, unsupported
+-    void add_libsolv_testcase(const std::string & path);
+-
+-    /// @deprecated It is going to be removed without a warning
+-    /// Not API, unsupported
+-    /// Adds an RPM package at `path` to the repository.
+-    ///
+-    /// If `with_hdrid` is `true`, the RPM is loaded with the
+-    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
+-    /// calculate the SHA256 checksum of the RPM header and store it. This adds
+-    /// overhead but has the advantage of TODO(lukash) describe the advantage.
+-    /// @param path The path to the RPM file.
+-    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
+-    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
+-    /// @return PackageId of the added package.
+-    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
+-
+-    libdnf5::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
++    libdnf5::repo::RepoWeakPtr get_weak_ptr();
+@@ -367 +318,0 @@ private:
+-    friend class comps::Comps;
+@@ -371,0 +323,23 @@ private:
++    /// Loads the repository objects into sacks.
++    ///
++    /// Also writes the libsolv's solv/solvx cache files.
++    void load();
++
++    /// Downloads repository metadata.
++    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
++    void download_metadata(const std::string & destdir);
++
++    void add_libsolv_testcase(const std::string & path);
++
++    /// Adds an RPM package at `path` to the repository.
++    ///
++    /// If `with_hdrid` is `true`, the RPM is loaded with the
++    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
++    /// calculate the SHA256 checksum of the RPM header and store it. This adds
++    /// overhead but has the advantage of TODO(lukash) describe the advantage.
++    /// @param path The path to the RPM file.
++    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
++    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
++    /// @return PackageId of the added package.
++    libdnf5::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
++
+@@ -390,2 +364,6 @@ private:
+-    libdnf5::BaseWeakPtr base;
+-    ConfigRepo config;
++    RepoDownloader & get_downloader() const;
++
++    bool is_loaded() const;
++
++    /// Requires that the repo is loaded
++    SolvRepo & get_solv_repo() const;
+@@ -393,6 +371,2 @@ private:
+-    Type type;
+-    int64_t timestamp{-1};  // 0 forces expiration on the next call to load(), -1 means undefined value
+-    bool use_includes{false};
+-    std::string repo_file_path;
+-    SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
+-    bool expired{false};
++    /// Mark this repository as fresh (it is not expired).
++    void mark_fresh();
+@@ -400,2 +374,2 @@ private:
+-    std::unique_ptr<RepoDownloader> downloader;
+-    std::unique_ptr<SolvRepo> solv_repo;
++    // Add xml comps file at `path` to the repository.
++    void add_xml_comps(const std::string & path);
+@@ -403,2 +377 @@ private:
+-    WeakPtrGuard<Repo, false> data_guard;
+-    bool loaded{false};
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/repo/repo_cache.hpp b/include/libdnf5/repo/repo_cache.hpp
+index 94a73827..89aa47ac 100644
+--- a/include/libdnf5/repo/repo_cache.hpp
++++ b/include/libdnf5/repo/repo_cache.hpp
+@@ -24,0 +25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -34,3 +35,12 @@ struct RepoCacheRemoveStatistics {
+-    std::size_t files_removed;  // Number of removed files and links.
+-    std::size_t dirs_removed;   // Number of removed directorires.
+-    std::size_t errors;         // Numbes of errors.
++    RepoCacheRemoveStatistics();
++    ~RepoCacheRemoveStatistics();
++
++    RepoCacheRemoveStatistics(const RepoCacheRemoveStatistics & src);
++    RepoCacheRemoveStatistics & operator=(const RepoCacheRemoveStatistics & src);
++
++    RepoCacheRemoveStatistics(RepoCacheRemoveStatistics && src) noexcept;
++    RepoCacheRemoveStatistics & operator=(RepoCacheRemoveStatistics && src) noexcept;
++
++    std::size_t get_files_removed();  // Number of removed files and links.
++    std::size_t get_dirs_removed();   // Number of removed directorires.
++    std::size_t get_errors();         // Numbes of errors.
+@@ -38,0 +49,6 @@ struct RepoCacheRemoveStatistics {
++
++private:
++    friend class RepoCache;
++
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -64,0 +81,8 @@ public:
++    ~RepoCache();
++
++    RepoCache(const RepoCache & src);
++    RepoCache & operator=(const RepoCache & src);
++
++    RepoCache(RepoCache && src) noexcept;
++    RepoCache & operator=(RepoCache && src) noexcept;
++
+@@ -127,2 +151,4 @@ private:
+-    libdnf5::BaseWeakPtr base;
+-    std::filesystem::path cache_dir;
++    friend RepoCacheRemoveStatistics;
++
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/repo/repo_callbacks.hpp b/include/libdnf5/repo/repo_callbacks.hpp
+index b7d14b78..8440db18 100644
+--- a/include/libdnf5/repo/repo_callbacks.hpp
++++ b/include/libdnf5/repo/repo_callbacks.hpp
+@@ -37 +37 @@ public:
+-    RepoCallbacks() = default;
++    explicit RepoCallbacks();
+@@ -39,0 +40,2 @@ public:
++    virtual ~RepoCallbacks();
++
+@@ -42,4 +43,0 @@ public:
+-    virtual ~RepoCallbacks() = default;
+-
+-#pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wunused-parameter"
+@@ -50 +48 @@ public:
+-    virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info) { return true; }
++    virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info);
+@@ -53,3 +51 @@ public:
+-    virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info) {}
+-
+-#pragma GCC diagnostic pop
++    virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info);
+diff --git a/include/libdnf5/repo/repo_errors.hpp b/include/libdnf5/repo/repo_errors.hpp
+index d353bbb8..5942a4d3 100644
+--- a/include/libdnf5/repo/repo_errors.hpp
++++ b/include/libdnf5/repo/repo_errors.hpp
+@@ -60,0 +61,7 @@ class RepoRpmError : public RepoError {
++
++class RepoCompsError : public RepoError {
++    using RepoError::RepoError;
++    const char * get_name() const noexcept override { return "RepoCompsError"; }
++};
++
++
+diff --git a/include/libdnf5/repo/repo_query.hpp b/include/libdnf5/repo/repo_query.hpp
+index 26915abe..73de311f 100644
+--- a/include/libdnf5/repo/repo_query.hpp
++++ b/include/libdnf5/repo/repo_query.hpp
+@@ -23,0 +24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -58,0 +60,8 @@ public:
++    ~RepoQuery();
++
++    RepoQuery(const RepoQuery & src);
++    RepoQuery & operator=(const RepoQuery & src);
++
++    RepoQuery(RepoQuery && src) noexcept;
++    RepoQuery & operator=(RepoQuery && src) noexcept;
++
+@@ -61 +70 @@ public:
+-    libdnf5::BaseWeakPtr get_base() { return base; }
++    libdnf5::BaseWeakPtr get_base();
+@@ -117 +126,2 @@ private:
+-    BaseWeakPtr base;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+diff --git a/include/libdnf5/repo/repo_sack.hpp b/include/libdnf5/repo/repo_sack.hpp
+index 41741268..e7194e37 100644
+--- a/include/libdnf5/repo/repo_sack.hpp
++++ b/include/libdnf5/repo/repo_sack.hpp
+@@ -101 +101 @@ public:
+-    bool has_system_repo() const noexcept { return system_repo; }
++    bool has_system_repo() const noexcept;
+@@ -104 +104 @@ public:
+-    bool has_cmdline_repo() const noexcept { return cmdline_repo; }
++    bool has_cmdline_repo() const noexcept;
+@@ -114,0 +115 @@ public:
++    /// @deprecated It is going to be removed, please use load_repos with allows specifying repo type.
+@@ -117,2 +118 @@ public:
+-    /// See `update_and_load_repos()`, which is called on the list of enabled
+-    /// repos and, if requested, the system repository.
++    /// This is just a thin wrapper around load_repos.
+@@ -123,14 +123,5 @@ public:
+-    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+-    ///
+-    /// Downloads (if necessary) repository metadata and loads them in parallel.
+-    ///
+-    /// Launches a thread that picks repos from a queue and loads them into
+-    /// memory (calling their `load()` method). Then iterates over `repos`,
+-    /// potentially downloads fresh metadata (by calling the
+-    /// `download_metadata()` method) and then queues them for loading. This
+-    /// speeds up the process by loading repos into memory while others are being
+-    /// downloaded.
+-    ///
+-    /// @param repos The repositories to update and load
+-    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
+-    void update_and_load_repos(libdnf5::repo::RepoQuery & repos, bool import_keys = true);
++    /// Downloads (if necessary) repositories of selected type and loads them in parallel.
++    /// load_repos() can be called only once per each RepoSack.
++    /// It also sets up modular filtering.
++    /// @param type What repositories to load (libdnf5::Repo::Type::SYSTEM or libdnf5::Repo::Type::AVAILABLE)
++    void load_repos(Repo::Type type);
+@@ -138 +129,6 @@ public:
+-    RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
++    /// Downloads (if necessary) both available and system repositories and loads them in parallel.
++    /// load_repos() can be called only once per each RepoSack.
++    /// It also sets up modular filtering.
++    void load_repos();
++
++    RepoSackWeakPtr get_weak_ptr();
+@@ -148,6 +144 @@ public:
+-    /// Re-create missing xml definitions for installed groups. Since we do not have
+-    /// the state of the group in time of installation, current definition from
+-    /// available repositories is going to be used.
+-    /// In case the repo does not exist in repositories, only the minimal solvables
+-    /// are created from info in system state.
+-    void fix_group_missing_xml();
++    ~RepoSack();
+@@ -158,0 +150 @@ private:
++    friend class libdnf5::Goal;
+@@ -160 +152 @@ private:
+-    explicit RepoSack(const libdnf5::BaseWeakPtr & base) : base(base) {}
++    explicit RepoSack(const libdnf5::BaseWeakPtr & base);
+@@ -167,2 +158,0 @@ private:
+-    WeakPtrGuard<RepoSack, false> sack_guard;
+-
+@@ -173 +163,7 @@ private:
+-    void internalize_repos();
++    /// If not created yet, creates the stored transaction repository and returns it.
++    /// @return The stored transaction repository.
++    libdnf5::repo::RepoWeakPtr get_stored_transaction_repo();
++
++    /// Add given path to comps to the stored_transaction repository.
++    /// @param path Path to a local xml comps file to be inserted to stored_transaction repo.
++    void add_stored_transaction_comps(const std::string & path);
+@@ -175 +171,7 @@ private:
+-    BaseWeakPtr base;
++    /// Add given path to rpm to the stored_transaction repository.
++    /// @param path Path to a local rpm file to be inserted to stored_transaction repo.
++    /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
++    /// @return Newly created rpm::Package object in cmdline repo
++    libdnf5::rpm::Package add_stored_transaction_package(const std::string & path, bool calculate_checksum = false);
++
++    void internalize_repos();
+@@ -177,3 +179,2 @@ private:
+-    repo::Repo * system_repo{nullptr};
+-    repo::Repo * cmdline_repo{nullptr};
+-    bool repos_updated_and_loaded{false};
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/rpm/checksum.hpp b/include/libdnf5/rpm/checksum.hpp
+index 9d0b59f1..4531b193 100644
+--- a/include/libdnf5/rpm/checksum.hpp
++++ b/include/libdnf5/rpm/checksum.hpp
+@@ -22,0 +23,3 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
++
++#include <memory>
+@@ -30,0 +34,7 @@ public:
++    ~Checksum();
++    Checksum(const Checksum & src);
++    Checksum & operator=(const Checksum & src);
++
++    Checksum(Checksum && src) noexcept;
++    Checksum & operator=(Checksum && src) noexcept;
++
+@@ -36 +46 @@ public:
+-    const std::string & get_checksum() const noexcept { return checksum; };
++    const std::string & get_checksum() const noexcept;
+@@ -45,2 +55,2 @@ private:
+-    std::string checksum;
+-    int libsolv_type;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -50,7 +59,0 @@ private:
+-/// Constructor requires checksum in hex and libsolv checksum type
+-inline Checksum::Checksum(const char * checksum, int libsolv_type) : libsolv_type(libsolv_type) {
+-    if (checksum != nullptr) {
+-        this->checksum = checksum;
+-    }
+-}
+-
+diff --git a/include/libdnf5/rpm/nevra.hpp b/include/libdnf5/rpm/nevra.hpp
+index 218274d7..cf2b943f 100644
+--- a/include/libdnf5/rpm/nevra.hpp
++++ b/include/libdnf5/rpm/nevra.hpp
+@@ -24,0 +25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -62,4 +63,6 @@ public:
+-    Nevra() = default;
+-    Nevra(const Nevra & src) = default;
+-    Nevra(Nevra && src) = default;
+-    Nevra & operator=(const Nevra & other) = default;
++    Nevra();
++    ~Nevra();
++    Nevra(const Nevra & src);
++    Nevra(Nevra && src) noexcept;
++    Nevra & operator=(const Nevra & other);
++    Nevra & operator=(Nevra && src) noexcept;
+@@ -78 +81 @@ public:
+-    const std::string & get_name() const noexcept { return name; }
++    const std::string & get_name() const noexcept;
+@@ -81 +84 @@ public:
+-    const std::string & get_epoch() const noexcept { return epoch; }
++    const std::string & get_epoch() const noexcept;
+@@ -84 +87 @@ public:
+-    const std::string & get_version() const noexcept { return version; }
++    const std::string & get_version() const noexcept;
+@@ -87 +90 @@ public:
+-    const std::string & get_release() const noexcept { return release; }
++    const std::string & get_release() const noexcept;
+@@ -90 +93 @@ public:
+-    const std::string & get_arch() const noexcept { return arch; }
++    const std::string & get_arch() const noexcept;
+@@ -92,5 +95,5 @@ public:
+-    void set_name(const std::string & value) { name = value; }
+-    void set_epoch(const std::string & value) { epoch = value; }
+-    void set_version(const std::string & value) { version = value; }
+-    void set_release(const std::string & value) { release = value; }
+-    void set_arch(const std::string & value) { arch = value; }
++    void set_name(const std::string & value);
++    void set_epoch(const std::string & value);
++    void set_version(const std::string & value);
++    void set_release(const std::string & value);
++    void set_arch(const std::string & value);
+@@ -98,7 +101,5 @@ public:
+-    void set_name(const std::string && value) { name = std::move(value); }
+-    void set_epoch(const std::string && value) { epoch = std::move(value); }
+-    void set_version(const std::string && value) { version = std::move(value); }
+-    void set_release(const std::string && value) { release = std::move(value); }
+-    void set_arch(const std::string && value) { arch = std::move(value); }
+-
+-    // TODO(jmracek) Add comperators ==
++    void set_name(std::string && value);
++    void set_epoch(std::string && value);
++    void set_version(std::string && value);
++    void set_release(std::string && value);
++    void set_arch(std::string && value);
+@@ -110,5 +111,2 @@ private:
+-    std::string name;
+-    std::string epoch;
+-    std::string version;
+-    std::string release;
+-    std::string arch;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -276 +274 @@ template <typename T>
+-bool cmp_naevr(const T & lhs, const T rhs) {
++bool cmp_naevr(const T & lhs, const T & rhs) {
+diff --git a/include/libdnf5/rpm/package.hpp b/include/libdnf5/rpm/package.hpp
+index 6fe0a135..6da61121 100644
+--- a/include/libdnf5/rpm/package.hpp
++++ b/include/libdnf5/rpm/package.hpp
+@@ -26,0 +27 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -68,7 +69,15 @@ public:
+-    explicit Changelog(time_t timestamp, std::string author, std::string text)
+-        : timestamp(timestamp),
+-          author(std::move(author)),
+-          text(std::move(text)) {}
+-    time_t timestamp;
+-    std::string author;
+-    std::string text;
++    Changelog(time_t timestamp, const std::string & author, const std::string & text);
++    ~Changelog();
++    Changelog(const Changelog & src);
++    Changelog & operator=(const Changelog & src);
++
++    Changelog(Changelog && src) noexcept;
++    Changelog & operator=(Changelog && src) noexcept;
++
++    const time_t & get_timestamp() const;
++    const std::string & get_author() const;
++    const std::string & get_text() const;
++
++private:
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -83,0 +93,7 @@ public:
++    ~Package();
++    Package(const Package & src);
++    Package & operator=(const Package & src);
++
++    Package(Package && src) noexcept;
++    Package & operator=(Package && src) noexcept;
++
+@@ -87 +103 @@ public:
+-    bool operator<(const Package & other) const noexcept { return id < other.id; }
++    bool operator<(const Package & other) const noexcept;
+@@ -90 +106 @@ public:
+-    PackageId get_id() const noexcept { return id; };
++    PackageId get_id() const noexcept;
+@@ -519 +535 @@ public:
+-    std::string to_string() const { return get_nevra(); };
++    std::string to_string() const;
+@@ -525 +541 @@ public:
+-    int get_hash() const { return get_id().id; };
++    int get_hash() const;
+@@ -539,3 +554,0 @@ private:
+-    static constexpr const char * DEBUGINFO_SUFFIX = "-debuginfo";
+-    static constexpr const char * DEBUGSOURCE_SUFFIX = "-debugsource";
+-
+@@ -547,2 +560,2 @@ private:
+-    BaseWeakPtr base;
+-    PackageId id;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -552,12 +564,0 @@ private:
+-inline Package::Package(const BaseWeakPtr & base, PackageId id) : base(base), id(id) {}
+-
+-
+-inline bool Package::operator==(const Package & other) const noexcept {
+-    return id == other.id && base == other.base;
+-}
+-
+-
+-inline bool Package::operator!=(const Package & other) const noexcept {
+-    return id != other.id || base != other.base;
+-}
+-
+diff --git a/include/libdnf5/rpm/package_query.hpp b/include/libdnf5/rpm/package_query.hpp
+index d49e8746..c67783e5 100644
+--- a/include/libdnf5/rpm/package_query.hpp
++++ b/include/libdnf5/rpm/package_query.hpp
+@@ -77 +77 @@ public:
+-    /// @param patterns         A vector of strings the filter is matched against.
++    /// @param pattern          A string the filter is matched against.
+@@ -82,0 +83,11 @@ public:
++    void filter_name(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_name(std::vector<std::string>{pattern}, cmp_type);
++    };
++
++    /// Filter packages by their `name`.
++    ///
++    /// @param patterns         A vector of strings the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
++    /// @since 5.0
++    //
+@@ -94,0 +106,12 @@ public:
++    /// Filter packages by their `epoch`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EPOCH
++    void filter_epoch(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_epoch(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -102 +124,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EPOCH
+@@ -106,0 +129,10 @@ public:
++    /// Filter packages by their `epoch`.
++    ///
++    /// @param pattern          A number the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
++    /// @since 5.2
++    void filter_epoch(unsigned long pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_epoch(std::vector<unsigned long>{pattern}, cmp_type);
++    };
++
+@@ -115,0 +148,12 @@ public:
++    /// Filter packages by their `version`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
++    void filter_version(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_version(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -123 +166,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
+@@ -127,0 +171,12 @@ public:
++    /// Filter packages by their `release`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RELEASE
++    void filter_release(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_release(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -139,0 +195,10 @@ public:
++    /// Filter packages by their `arch`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    void filter_arch(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_arch(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -157,0 +223,12 @@ public:
++    /// Filter packages by their `epoch:version-release`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `GT`, `LT`, `GTE`, `LTE`, `EQ`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
++    void filter_evr(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_evr(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -165 +241,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
+@@ -169,0 +246,13 @@ public:
++    /// Filter packages by their `name-[epoch:]version-release.arch`. The following matches are tolerant to omitted 0 epoch: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`, `GLOB`, `NOT_GLOB`, `IGLOB`, `NOT_IGLOB`, `IEXACT`, `NOT_IEXACT`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
++    void filter_nevra(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_nevra(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -177 +265,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA
+@@ -179 +266,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
+@@ -211 +298 @@ public:
+-    /// @param patterns         A vector of strings the filter is matched against.
++    /// @param pattern          A string the filter is matched against.
+@@ -215,0 +303,10 @@ public:
++    void filter_sourcerpm(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_sourcerpm(std::vector<std::string>{pattern}, cmp_type);
++    };
++
++    /// Filter packages by their `sourcerpm`.
++    ///
++    /// @param patterns         A vector of strings the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    //
+@@ -219,0 +317,12 @@ public:
++    /// Filter packages by their `url`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_URL
++    void filter_url(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_url(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -227 +335,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_URL
+@@ -231,0 +340,12 @@ public:
++    /// Filter packages by their `summary`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUMMARY
++    void filter_summary(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_summary(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -239 +358,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUMMARY
+@@ -243,0 +363,13 @@ public:
++    /// Filter packages by their `summary`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_DESCRIPTION
++    void filter_description(
++        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_description(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -251 +382,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_DESCRIPTION
+@@ -275,0 +407,12 @@ public:
++    /// Filter packages by their `provides`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
++    void filter_provides(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_provides(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -283 +425,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
+@@ -299,0 +442,12 @@ public:
++    /// Filter packages by their `requires`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
++    void filter_requires(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_requires(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -307 +460,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
+@@ -334,0 +488,12 @@ public:
++    /// Filter packages by their `conflicts`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
++    void filter_conflicts(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_conflicts(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -342 +506,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
+@@ -369,0 +534,12 @@ public:
++    /// Filter packages by their `obsoletes`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
++    void filter_obsoletes(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_obsoletes(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -377 +552,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
+@@ -404,0 +580,13 @@ public:
++    /// Filter packages by their `recommends`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
++    void filter_recommends(
++        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_recommends(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -412 +599,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
+@@ -439,0 +627,12 @@ public:
++    /// Filter packages by their `suggests`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUGGESTS
++    void filter_suggests(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_suggests(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -474,0 +674,12 @@ public:
++    /// Filter packages by their `enhances`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
++    void filter_enhances(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_enhances(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -482 +692,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
+@@ -509,0 +720,13 @@ public:
++    /// Filter packages by their `supplements`.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
++    void filter_supplements(
++        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_supplements(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -517 +739,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
+@@ -532,0 +755,12 @@ public:
++    /// Filter packages by `files` they contain.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_FILE
++    void filter_file(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_file(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -540 +773,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_FILE
+@@ -544,0 +778,12 @@ public:
++    /// Filter packages by their `location`.
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`.
++    /// @since 5.2
++    //
++    // TODO(dmach): enable glob match to enable filename matching: {nevra.rpm, */nevra.rpm}
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
++    void filter_location(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_location(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -552 +796,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
+@@ -556,0 +801,12 @@ public:
++    /// Filter packages by `id` of the Repo they belong to.
++    ///
++    /// @param pattern          A string the filter is matched against.
++    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
++    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
++    /// @since 5.2
++    //
++    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
++    void filter_repo_id(const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
++        filter_repo_id(std::vector<std::string>{pattern}, cmp_type);
++    };
++
+@@ -564 +819,0 @@ public:
+-    // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
+diff --git a/include/libdnf5/rpm/reldep.hpp b/include/libdnf5/rpm/reldep.hpp
+index 7db86ec5..0dd0ceb3 100644
+--- a/include/libdnf5/rpm/reldep.hpp
++++ b/include/libdnf5/rpm/reldep.hpp
+@@ -23,0 +24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
++#include "libdnf5/common/impl_ptr.hpp"
+@@ -61,2 +62,2 @@ public:
+-    Reldep(const Reldep & reldep) = default;
+-    Reldep(Reldep && reldep);
++    Reldep(const Reldep & reldep);
++    Reldep(Reldep && reldep) noexcept;
+@@ -66 +67 @@ public:
+-    ~Reldep() = default;
++    ~Reldep();
+@@ -70 +71 @@ public:
+-    Reldep & operator=(const Reldep & other) = default;
++    Reldep & operator=(const Reldep & other);
+@@ -91 +92 @@ public:
+-    ReldepId get_id() const noexcept { return id; };
++    ReldepId get_id() const noexcept;
+@@ -94 +95 @@ public:
+-    BaseWeakPtr get_base() const { return base; };
++    BaseWeakPtr get_base() const;
+@@ -98 +99 @@ public:
+-    static bool is_rich_dependency(const std::string & pattern) { return pattern[0] == '('; };
++    static bool is_rich_dependency(const std::string & pattern);
+@@ -101 +102 @@ public:
+-    int get_hash() const { return get_id().id; };
++    int get_hash() const;
+@@ -143,2 +144,2 @@ private:
+-    BaseWeakPtr base;
+-    ReldepId id;
++    class Impl;
++    ImplPtr<Impl> p_impl;
+@@ -147,8 +147,0 @@ private:
+-inline bool Reldep::operator==(const Reldep & other) const noexcept {
+-    return id == other.id && base == other.base;
+-}
+-
+-inline bool Reldep::operator!=(const Reldep & other) const noexcept {
+-    return id != other.id || base != other.base;
+-}
+-
+diff --git a/include/libdnf5/rpm/rpm_signature.hpp b/include/libdnf5/rpm/rpm_signature.hpp
+index ca4b5eb9..9fa83987 100644
+--- a/include/libdnf5/rpm/rpm_signature.hpp
++++ b/include/libdnf5/rpm/rpm_signature.hpp
+@@ -50 +50 @@ public:
+-    const std::string & get_key_id() const noexcept { return key_id; }
++    const std::string & get_key_id() const noexcept;
+@@ -52,6 +52,6 @@ public:
+-    const std::vector<std::string> & get_user_ids() const noexcept { return user_ids; }
+-    const std::string & get_fingerprint() const noexcept { return fingerprint; }
+-    const std::string & get_url() const noexcept { return key_url; }
+-    const std::string & get_path() const noexcept { return key_path; }
+-    const std::string & get_raw_key() const noexcept { return raw_key; }
+-    const long int & get_timestamp() const noexcept { return timestamp; }
++    const std::vector<std::string> & get_user_ids() const noexcept;
++    const std::string & get_fingerprint() const noexcept;
++    const std::string & get_url() const noexcept;
++    const std::string & get_path() const noexcept;
++    const std::string & get_raw_key() const noexcept;
++    const long int & get_timestamp() const noexcept;
+@@ -59,2 +58,0 @@ public:
+-protected:
+-    friend class RpmSignature;
+@@ -69,7 +67,15 @@ protected:
+-    std::string key_url;
+-    std::string key_path;
+-    std::string key_id;
+-    std::vector<std::string> user_ids;
+-    std::string fingerprint;
+-    long int timestamp;
+-    std::string raw_key;
++
++    ~KeyInfo();
++
++    KeyInfo(const KeyInfo & src);
++    KeyInfo & operator=(const KeyInfo & src);
++
++    KeyInfo(KeyInfo && src) noexcept;
++    KeyInfo & operator=(KeyInfo && src) noexcept;
++
++protected:
++    void add_user_id(const char * user_id);
++
++private:
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -82,3 +88,8 @@ public:
+-    explicit RpmSignature(const libdnf5::BaseWeakPtr & base) : base(base) {}
+-    explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
+-    ~RpmSignature(){};
++    explicit RpmSignature(const libdnf5::BaseWeakPtr & base);
++    explicit RpmSignature(Base & base);
++    ~RpmSignature();
++    RpmSignature(const RpmSignature & src);
++    RpmSignature & operator=(const RpmSignature & src);
++
++    RpmSignature(RpmSignature && src) noexcept;
++    RpmSignature & operator=(RpmSignature && src) noexcept;
+@@ -94 +105 @@ public:
+-    CheckResult check_package_signature(Package package) const;
++    CheckResult check_package_signature(const Package & pkg) const;
+@@ -111 +122,2 @@ private:
+-    BaseWeakPtr base;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/rpm/transaction_callbacks.hpp b/include/libdnf5/rpm/transaction_callbacks.hpp
+index 9503fdfa..6f79e423 100644
+--- a/include/libdnf5/rpm/transaction_callbacks.hpp
++++ b/include/libdnf5/rpm/transaction_callbacks.hpp
+@@ -30 +29,0 @@ namespace libdnf5::base {
+-class TransactionGroup;
+@@ -42,4 +40,0 @@ using TransactionItem = base::TransactionPackage;
+-// suppress "unused-parameter" warnings because TransactionCallbacks is a virtual class
+-#pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wunused-parameter"
+-
+@@ -70,20 +65,33 @@ public:
+-    virtual ~TransactionCallbacks() = default;
+-
+-    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+-    virtual void install_start(const TransactionItem & item, uint64_t total) {}
+-    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+-    virtual void transaction_progress(uint64_t amount, uint64_t total) {}
+-    virtual void transaction_start(uint64_t total) {}
+-    virtual void transaction_stop(uint64_t total) {}
+-    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+-    virtual void uninstall_start(const TransactionItem & item, uint64_t total) {}
+-    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+-    virtual void unpack_error(const TransactionItem & item) {}
+-    virtual void cpio_error(const TransactionItem & item) {}
+-    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
+-    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type) {}
+-    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
+-    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+-    virtual void verify_progress(uint64_t amount, uint64_t total) {}
+-    virtual void verify_start(uint64_t total) {}
+-    virtual void verify_stop(uint64_t total) {}
++    explicit TransactionCallbacks();
++    TransactionCallbacks(const TransactionCallbacks &) = delete;
++    TransactionCallbacks(TransactionCallbacks &&) = delete;
++    virtual ~TransactionCallbacks();
++
++    TransactionCallbacks & operator=(const TransactionCallbacks &) = delete;
++    TransactionCallbacks & operator=(TransactionCallbacks &&) = delete;
++
++    /// Called right before the rpm transaction is run
++    /// @param total Number of elements in the rpm transaction
++    virtual void before_begin(uint64_t total);
++    /// Called after the transaction run finished
++    /// @param success Whether the rpm transaction was completed successfully
++    virtual void after_complete(bool success);
++
++    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
++    virtual void install_start(const TransactionItem & item, uint64_t total);
++    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
++    virtual void transaction_progress(uint64_t amount, uint64_t total);
++    virtual void transaction_start(uint64_t total);
++    virtual void transaction_stop(uint64_t total);
++    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
++    virtual void uninstall_start(const TransactionItem & item, uint64_t total);
++    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
++    virtual void unpack_error(const TransactionItem & item);
++    virtual void cpio_error(const TransactionItem & item);
++    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
++    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type);
++    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
++    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
++    virtual void verify_progress(uint64_t amount, uint64_t total);
++    virtual void verify_start(uint64_t total);
++    virtual void verify_stop(uint64_t total);
+@@ -92,2 +99,0 @@ public:
+-#pragma GCC diagnostic pop
+-
+diff --git a/include/libdnf5/transaction/comps_environment.hpp b/include/libdnf5/transaction/comps_environment.hpp
+index dd7b0977..d7313f5d 100644
+--- a/include/libdnf5/transaction/comps_environment.hpp
++++ b/include/libdnf5/transaction/comps_environment.hpp
+@@ -49,0 +50,6 @@ public:
++    CompsEnvironment(const CompsEnvironment & src);
++    CompsEnvironment & operator=(const CompsEnvironment & src);
++    CompsEnvironment(CompsEnvironment && src) noexcept;
++    CompsEnvironment & operator=(CompsEnvironment && src) noexcept;
++    ~CompsEnvironment();
++
+@@ -60 +66 @@ private:
+-    const std::string & get_environment_id() const noexcept { return environment_id; }
++    const std::string & get_environment_id() const noexcept;
+@@ -65 +71 @@ private:
+-    void set_environment_id(const std::string & value) { environment_id = value; }
++    void set_environment_id(const std::string & value);
+@@ -70 +76 @@ private:
+-    const std::string & get_name() const noexcept { return name; }
++    const std::string & get_name() const noexcept;
+@@ -75 +81 @@ private:
+-    void set_name(const std::string & value) { name = value; }
++    void set_name(const std::string & value);
+@@ -80 +86 @@ private:
+-    const std::string & get_translated_name() const noexcept { return translated_name; }
++    const std::string & get_translated_name() const noexcept;
+@@ -85 +91 @@ private:
+-    void set_translated_name(const std::string & value) { translated_name = value; }
++    void set_translated_name(const std::string & value);
+@@ -90 +96 @@ private:
+-    libdnf5::comps::PackageType get_package_types() const noexcept { return package_types; }
++    libdnf5::comps::PackageType get_package_types() const noexcept;
+@@ -95 +101 @@ private:
+-    void set_package_types(libdnf5::comps::PackageType value) { package_types = value; }
++    void set_package_types(libdnf5::comps::PackageType value);
+@@ -104 +110 @@ private:
+-    std::vector<CompsEnvironmentGroup> & get_groups() { return groups; }
++    std::vector<CompsEnvironmentGroup> & get_groups();
+@@ -111,5 +117,2 @@ private:
+-    std::string environment_id;
+-    std::string name;
+-    std::string translated_name;
+-    libdnf5::comps::PackageType package_types = libdnf5::comps::PackageType::DEFAULT;
+-    std::vector<CompsEnvironmentGroup> groups;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -120,0 +124,8 @@ class CompsEnvironmentGroup {
++public:
++    ~CompsEnvironmentGroup();
++    CompsEnvironmentGroup(const CompsEnvironmentGroup & src);
++    CompsEnvironmentGroup & operator=(const CompsEnvironmentGroup & src);
++    CompsEnvironmentGroup(CompsEnvironmentGroup && src) noexcept;
++    CompsEnvironmentGroup & operator=(CompsEnvironmentGroup && src) noexcept;
++    CompsEnvironmentGroup();
++
+@@ -128 +139 @@ private:
+-    int64_t get_id() const noexcept { return id; }
++    int64_t get_id() const noexcept;
+@@ -133 +144 @@ private:
+-    void set_id(int64_t value) { id = value; }
++    void set_id(int64_t value);
+@@ -138 +149 @@ private:
+-    const std::string & get_group_id() const noexcept { return group_id; }
++    const std::string & get_group_id() const noexcept;
+@@ -143 +154 @@ private:
+-    void set_group_id(const std::string & value) { group_id = value; }
++    void set_group_id(const std::string & value);
+@@ -149 +160 @@ private:
+-    bool get_installed() const noexcept { return installed; }
++    bool get_installed() const noexcept;
+@@ -155 +166 @@ private:
+-    void set_installed(bool value) { installed = value; }
++    void set_installed(bool value);
+@@ -159 +170 @@ private:
+-    libdnf5::comps::PackageType get_group_type() const noexcept { return group_type; }
++    libdnf5::comps::PackageType get_group_type() const noexcept;
+@@ -163 +174 @@ private:
+-    void set_group_type(libdnf5::comps::PackageType value) { group_type = value; }
++    void set_group_type(libdnf5::comps::PackageType value);
+@@ -165,4 +176,2 @@ private:
+-    int64_t id = 0;
+-    std::string group_id;
+-    bool installed = false;
+-    libdnf5::comps::PackageType group_type;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/comps_group.hpp b/include/libdnf5/transaction/comps_group.hpp
+index cdeedeb3..5e35a582 100644
+--- a/include/libdnf5/transaction/comps_group.hpp
++++ b/include/libdnf5/transaction/comps_group.hpp
+@@ -49,0 +50,6 @@ public:
++    CompsGroup(const CompsGroup & src);
++    CompsGroup & operator=(const CompsGroup & src);
++    CompsGroup(CompsGroup && src) noexcept;
++    CompsGroup & operator=(CompsGroup && src) noexcept;
++    ~CompsGroup();
++
+@@ -61 +67 @@ private:
+-    const std::string & get_group_id() const noexcept { return group_id; }
++    const std::string & get_group_id() const noexcept;
+@@ -66 +72 @@ private:
+-    void set_group_id(const std::string & value) { group_id = value; }
++    void set_group_id(const std::string & value);
+@@ -71 +77 @@ private:
+-    const std::string & get_name() const noexcept { return name; }
++    const std::string & get_name() const noexcept;
+@@ -76 +82 @@ private:
+-    void set_name(const std::string & value) { name = value; }
++    void set_name(const std::string & value);
+@@ -81 +87 @@ private:
+-    const std::string & get_translated_name() const noexcept { return translated_name; }
++    const std::string & get_translated_name() const noexcept;
+@@ -86 +92 @@ private:
+-    void set_translated_name(const std::string & value) { translated_name = value; }
++    void set_translated_name(const std::string & value);
+@@ -91 +97 @@ private:
+-    libdnf5::comps::PackageType get_package_types() const noexcept { return package_types; }
++    libdnf5::comps::PackageType get_package_types() const noexcept;
+@@ -96 +102 @@ private:
+-    void set_package_types(libdnf5::comps::PackageType value) { package_types = value; }
++    void set_package_types(libdnf5::comps::PackageType value);
+@@ -105 +111 @@ private:
+-    std::vector<CompsGroupPackage> & get_packages() { return packages; }
++    std::vector<CompsGroupPackage> & get_packages();
+@@ -112,5 +118,2 @@ private:
+-    std::string group_id;
+-    std::string name;
+-    std::string translated_name;
+-    libdnf5::comps::PackageType package_types;
+-    std::vector<CompsGroupPackage> packages;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+@@ -123,0 +127,8 @@ class CompsGroupPackage {
++public:
++    ~CompsGroupPackage();
++    CompsGroupPackage(const CompsGroupPackage & src);
++    CompsGroupPackage & operator=(const CompsGroupPackage & src);
++    CompsGroupPackage(CompsGroupPackage && src) noexcept;
++    CompsGroupPackage & operator=(CompsGroupPackage && src) noexcept;
++    CompsGroupPackage();
++
+@@ -131 +142 @@ private:
+-    int64_t get_id() const noexcept { return id; }
++    int64_t get_id() const noexcept;
+@@ -136 +147 @@ private:
+-    void set_id(int64_t value) { id = value; }
++    void set_id(int64_t value);
+@@ -141 +152 @@ private:
+-    const std::string & get_name() const noexcept { return name; }
++    const std::string & get_name() const noexcept;
+@@ -146 +157 @@ private:
+-    void set_name(const std::string & value) { name = value; }
++    void set_name(const std::string & value);
+@@ -152 +163 @@ private:
+-    bool get_installed() const noexcept { return installed; }
++    bool get_installed() const noexcept;
+@@ -158 +169 @@ private:
+-    void set_installed(bool value) { installed = value; }
++    void set_installed(bool value);
+@@ -164 +175 @@ private:
+-    libdnf5::comps::PackageType get_package_type() const noexcept { return package_type; }
++    libdnf5::comps::PackageType get_package_type() const noexcept;
+@@ -170 +181 @@ private:
+-    void set_package_type(libdnf5::comps::PackageType value) { package_type = value; }
++    void set_package_type(libdnf5::comps::PackageType value);
+@@ -172,4 +183,2 @@ private:
+-    int64_t id = 0;
+-    std::string name;
+-    bool installed = false;
+-    libdnf5::comps::PackageType package_type = libdnf5::comps::PackageType::DEFAULT;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/rpm_package.hpp b/include/libdnf5/transaction/rpm_package.hpp
+index 235ff5be..22a2cce8 100644
+--- a/include/libdnf5/transaction/rpm_package.hpp
++++ b/include/libdnf5/transaction/rpm_package.hpp
+@@ -24 +23,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include "transaction_item_reason.hpp"
+@@ -27 +25,0 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-#include <vector>
+@@ -45 +43 @@ public:
+-    const std::string & get_name() const noexcept { return name; }
++    const std::string & get_name() const noexcept;
+@@ -50 +48 @@ public:
+-    const std::string & get_epoch() const noexcept { return epoch; }
++    const std::string & get_epoch() const noexcept;
+@@ -55 +53 @@ public:
+-    const std::string & get_release() const noexcept { return release; }
++    const std::string & get_release() const noexcept;
+@@ -60 +58 @@ public:
+-    const std::string & get_arch() const noexcept { return arch; }
++    const std::string & get_arch() const noexcept;
+@@ -65 +63 @@ public:
+-    const std::string & get_version() const noexcept { return version; }
++    const std::string & get_version() const noexcept;
+@@ -71,0 +70,6 @@ public:
++    ~Package();
++    Package(const Package & src);
++    Package & operator=(const Package & src);
++    Package(Package && src) noexcept;
++    Package & operator=(Package && src) noexcept;
++
+@@ -81 +85 @@ private:
+-    void set_name(const std::string & value) { name = value; }
++    void set_name(const std::string & value);
+@@ -89 +93 @@ private:
+-    void set_epoch(const std::string & value) { epoch = value; }
++    void set_epoch(const std::string & value);
+@@ -94 +98 @@ private:
+-    void set_version(const std::string & value) { version = value; }
++    void set_version(const std::string & value);
+@@ -99 +103 @@ private:
+-    void set_release(const std::string & value) { release = value; }
++    void set_release(const std::string & value);
+@@ -104 +108 @@ private:
+-    void set_arch(const std::string & value) { arch = value; }
++    void set_arch(const std::string & value);
+@@ -118,5 +122,2 @@ private:
+-    std::string name;
+-    std::string epoch;
+-    std::string version;
+-    std::string release;
+-    std::string arch;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/transaction.hpp b/include/libdnf5/transaction/transaction.hpp
+index 78e24a6a..b6b89ead 100644
+--- a/include/libdnf5/transaction/transaction.hpp
++++ b/include/libdnf5/transaction/transaction.hpp
+@@ -83 +83,8 @@ public:
+-    virtual ~Transaction() = default;
++    virtual ~Transaction();
++
++    Transaction(const Transaction & src);
++    Transaction & operator=(const Transaction & src);
++
++    Transaction(Transaction && src) noexcept;
++    Transaction & operator=(Transaction && src) noexcept;
++
+@@ -93 +100 @@ public:
+-    int64_t get_id() const noexcept { return id; }
++    int64_t get_id() const noexcept;
+@@ -98 +105 @@ public:
+-    int64_t get_dt_start() const noexcept { return dt_begin; }
++    int64_t get_dt_start() const noexcept;
+@@ -103 +110 @@ public:
+-    int64_t get_dt_end() const noexcept { return dt_end; }
++    int64_t get_dt_end() const noexcept;
+@@ -109 +116 @@ public:
+-    const std::string & get_rpmdb_version_begin() const noexcept { return rpmdb_version_begin; }
++    const std::string & get_rpmdb_version_begin() const noexcept;
+@@ -115 +122 @@ public:
+-    const std::string & get_rpmdb_version_end() const noexcept { return rpmdb_version_end; }
++    const std::string & get_rpmdb_version_end() const noexcept;
+@@ -120 +127 @@ public:
+-    const std::string & get_releasever() const noexcept { return releasever; }
++    const std::string & get_releasever() const noexcept;
+@@ -125 +132 @@ public:
+-    uint32_t get_user_id() const noexcept { return user_id; }
++    uint32_t get_user_id() const noexcept;
+@@ -130 +137 @@ public:
+-    const std::string & get_description() const noexcept { return description; }
++    const std::string & get_description() const noexcept;
+@@ -133 +140 @@ public:
+-    const std::string & get_comment() const noexcept { return comment; }
++    const std::string & get_comment() const noexcept;
+@@ -138 +145 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
+@@ -185 +192 @@ private:
+-    void set_id(int64_t value) { id = value; }
++    void set_id(int64_t value);
+@@ -188 +195 @@ private:
+-    void set_comment(const std::string & value) { comment = value; }
++    void set_comment(const std::string & value);
+@@ -193 +200 @@ private:
+-    void set_dt_start(int64_t value) { dt_begin = value; }
++    void set_dt_start(int64_t value);
+@@ -198 +205 @@ private:
+-    void set_dt_end(int64_t value) { dt_end = value; }
++    void set_dt_end(int64_t value);
+@@ -203 +210 @@ private:
+-    void set_description(const std::string & value) { description = value; }
++    void set_description(const std::string & value);
+@@ -208 +215 @@ private:
+-    void set_user_id(uint32_t value) { user_id = value; }
++    void set_user_id(uint32_t value);
+@@ -213 +220 @@ private:
+-    void set_releasever(const std::string & value) { releasever = value; }
++    void set_releasever(const std::string & value);
+@@ -219 +226 @@ private:
+-    void set_rpmdb_version_end(const std::string & value) { rpmdb_version_end = value; }
++    void set_rpmdb_version_end(const std::string & value);
+@@ -225 +232 @@ private:
+-    void set_rpmdb_version_begin(const std::string & value) { rpmdb_version_begin = value; }
++    void set_rpmdb_version_begin(const std::string & value);
+@@ -230 +237 @@ private:
+-    void set_state(State value) { state = value; }
++    void set_state(State value);
+@@ -277,20 +284,2 @@ private:
+-    int64_t id{0};
+-
+-    int64_t dt_begin = 0;
+-    int64_t dt_end = 0;
+-    std::string rpmdb_version_begin;
+-    std::string rpmdb_version_end;
+-    // TODO(dmach): move to a new "vars" table?
+-    std::string releasever;
+-    uint32_t user_id = 0;
+-    std::string description;
+-    std::string comment;
+-    State state = State::STARTED;
+-
+-    std::optional<std::vector<std::pair<int, std::string>>> console_output;
+-
+-    std::optional<std::vector<CompsEnvironment>> comps_environments;
+-    std::optional<std::vector<CompsGroup>> comps_groups;
+-    std::optional<std::vector<Package>> packages;
+-
+-    BaseWeakPtr base;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/transaction_history.hpp b/include/libdnf5/transaction/transaction_history.hpp
+index 7074773d..a7373f31 100644
+--- a/include/libdnf5/transaction/transaction_history.hpp
++++ b/include/libdnf5/transaction/transaction_history.hpp
+@@ -38,0 +39,5 @@ public:
++    ~TransactionHistory();
++    TransactionHistory(const TransactionHistory & src) = delete;
++    TransactionHistory & operator=(const TransactionHistory & src) = delete;
++    TransactionHistory(TransactionHistory && src) noexcept = delete;
++    TransactionHistory & operator=(TransactionHistory && src) noexcept = delete;
+@@ -40 +45 @@ public:
+-    TransactionHistoryWeakPtr get_weak_ptr() { return TransactionHistoryWeakPtr(this, &guard); }
++    TransactionHistoryWeakPtr get_weak_ptr();
+@@ -75,3 +80,2 @@ private:
+-    BaseWeakPtr base;
+-
+-    WeakPtrGuard<TransactionHistory, false> guard;
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/transaction_item.hpp b/include/libdnf5/transaction/transaction_item.hpp
+index fc122a5c..2b8f270c 100644
+--- a/include/libdnf5/transaction/transaction_item.hpp
++++ b/include/libdnf5/transaction/transaction_item.hpp
+@@ -53 +53 @@ public:
+-    Action get_action() const noexcept { return action; }
++    Action get_action() const noexcept;
+@@ -58 +58 @@ public:
+-    Reason get_reason() const noexcept { return reason; }
++    Reason get_reason() const noexcept;
+@@ -63 +63 @@ public:
+-    const std::string & get_repoid() const noexcept { return repoid; }
++    const std::string & get_repoid() const noexcept;
+@@ -68 +68,7 @@ public:
+-    State get_state() const noexcept { return state; }
++    State get_state() const noexcept;
++
++    ~TransactionItem();
++    TransactionItem(const TransactionItem & src);
++    TransactionItem & operator=(const TransactionItem & src);
++    TransactionItem(TransactionItem && src) noexcept;
++    TransactionItem & operator=(TransactionItem && src) noexcept;
+@@ -85 +91 @@ private:
+-    int64_t get_id() const noexcept { return id; }
++    int64_t get_id() const noexcept;
+@@ -88 +94 @@ private:
+-    void set_id(int64_t value) { id = value; }
++    void set_id(int64_t value);
+@@ -93 +99 @@ private:
+-    void set_action(Action value) { action = value; }
++    void set_action(Action value);
+@@ -108 +114 @@ private:
+-    void set_reason(Reason value) { reason = value; }
++    void set_reason(Reason value);
+@@ -113 +119 @@ private:
+-    void set_state(State value) { state = value; }
++    void set_state(State value);
+@@ -118 +124 @@ private:
+-    void set_repoid(const std::string & value) { repoid = value; }
++    void set_repoid(const std::string & value);
+@@ -142,4 +147,0 @@ private:
+-    // TODO(dmach): move to sack, resolve for all packages; return the user who initially installed the package
+-    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItem.getInstalledBy()
+-    uint32_t getInstalledBy() const;
+-
+@@ -147 +149 @@ private:
+-    int64_t get_item_id() const noexcept { return item_id; }
++    int64_t get_item_id() const noexcept;
+@@ -150,15 +152,4 @@ private:
+-    void set_item_id(int64_t value) { item_id = value; }
+-    int64_t id = 0;
+-    Action action = Action::INSTALL;
+-    Reason reason = Reason::NONE;
+-    State state = State::STARTED;
+-    std::string repoid;
+-
+-    int64_t item_id = 0;
+-
+-    // TODO(lukash) this won't be safe in bindings (or in general when a
+-    // TransactionItem is kept around after a Transaction is destroyed), but we
+-    // can't easily use a WeakPtr here, since the Transactions are expected to
+-    // be at least movable, and the WeakPtrGuard would make the Transaction
+-    // unmovable
+-    const Transaction * trans = nullptr;
++    void set_item_id(int64_t value);
++
++    class Impl;
++    std::unique_ptr<Impl> p_impl;
+diff --git a/include/libdnf5/transaction/transaction_item_action.hpp b/include/libdnf5/transaction/transaction_item_action.hpp
+index ab15a08a..2265e81f 100644
+--- a/include/libdnf5/transaction/transaction_item_action.hpp
++++ b/include/libdnf5/transaction/transaction_item_action.hpp
+@@ -45 +45,2 @@ enum class TransactionItemAction : int {
+-    RESET = 10          // module reset
++    RESET = 10,         // module reset
++    SWITCH = 11         // module switch
+diff --git a/include/libdnf5/version.hpp b/include/libdnf5/version.hpp
+index 58bf1600..a64bcfa9 100644
+--- a/include/libdnf5/version.hpp
++++ b/include/libdnf5/version.hpp
+@@ -28,0 +29,4 @@ namespace libdnf5 {
++/// PRIME version - completely changing API and everything in dnf (hopefully stays as a 5 for the foreseeable future)
++/// MAJOR version - incompatible API changes
++/// MINOR version - add functionality in a backward compatible manner
++/// MICRO version - make backward compatible bug fixes
+@@ -29,0 +34 @@ struct LibraryVersion {
++    std::uint16_t prime;
+@@ -42 +47 @@ struct PluginAPIVersion {
+-static constexpr PluginAPIVersion PLUGIN_API_VERSION{.major = 1, .minor = 0};
++static constexpr PluginAPIVersion PLUGIN_API_VERSION{.major = 2, .minor = 0};
