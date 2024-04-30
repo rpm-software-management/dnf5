@@ -349,7 +349,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     }
     base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
 
-    print_info("\nTesting offline transaction");
+    print_info("Testing offline transaction");
     auto result = test_transaction.run();
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
@@ -434,6 +434,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;
     }
+    print_info("");
 
     if (should_store_offline) {
         store_offline(transaction);
@@ -444,7 +445,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         return;
     }
 
-    print_info("\nRunning transaction");
+    print_info("Running transaction");
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
