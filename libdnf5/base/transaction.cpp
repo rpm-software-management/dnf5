@@ -464,12 +464,17 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
             std::vector<std::string> elements;
             ProblemRules tmp_rule = rule;
             switch (rule) {
-                case ProblemRules::RULE_DISTUPGRADE:
                 case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3: {
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    break;
+                }
+                case ProblemRules::RULE_DISTUPGRADE:
                 case ProblemRules::RULE_UPDATE:
                 case ProblemRules::RULE_BEST_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
                     elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_JOB:
@@ -483,47 +488,69 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     elements.push_back(pool.dep2str(dep));
                     break;
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4: {
                     if (false) {
                         // TODO (jmracek) (modularExclude && modularExclude->has(source))
                     } else {
                         tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
                     }
-                    elements.push_back(pool.solvid2str(source));
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
                     break;
-                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                }
+                case ProblemRules::RULE_PKG_SELF_CONFLICT: {
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
                     elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(source));
                     break;
+                }
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_REQUIRES: {
                     skip_broken.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    auto * src_solvable = pool.id2solvable(source);
                     elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
                     break;
-                case ProblemRules::RULE_PKG_SAME_NAME:
+                }
+                case ProblemRules::RULE_PKG_SAME_NAME: {
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.solvid2str(target));
-                    std::sort(elements.begin(), elements.end());
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
                     break;
+                }
                 case ProblemRules::RULE_PKG_CONFLICTS:
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(target));
-                    break;
+                    [[fallthrough]];
                 case ProblemRules::RULE_PKG_OBSOLETES:
-                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
-                case ProblemRules::RULE_YUMOBS:
+                case ProblemRules::RULE_YUMOBS: {
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    elements.push_back(pool.dep2str(dep));
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
+                    break;
+                }
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES: {
                     elements.push_back(pool.solvid2str(source));
                     elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(target));
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
                     break;
+                }
                 case ProblemRules::RULE_UNKNOWN:
                     elements.push_back(description);
                     break;
