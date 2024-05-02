@@ -40,7 +40,7 @@ namespace {
 static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_DISTUPGRADE, M_("{} does not belong to a distupgrade repository")},
     {ProblemRules::RULE_INFARCH, M_("{0} from {1} has inferior architecture")},
-    {ProblemRules::RULE_UPDATE, M_("problem with installed package ")},
+    {ProblemRules::RULE_UPDATE, M_("problem with installed package")},
     {ProblemRules::RULE_JOB, M_("conflicting requests")},
     {ProblemRules::RULE_JOB_UNSUPPORTED, M_("unsupported request")},
     {ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP, M_("nothing provides requested {}")},
