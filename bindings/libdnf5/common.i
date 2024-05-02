@@ -282,6 +282,27 @@ del ClassName##__iter__
 %template(PreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, std::string>;
 %template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf5::PreserveOrderMap<std::string, libdnf5::PreserveOrderMap<std::string, std::string>>;
 
+// The following adds Python attribute shortcuts for getters and setters
+// from C++ structures that act as plain data objects.
+//
+// E.g. object.get_value() -> object.value
+//
+#if defined(SWIGPYTHON)
+%pythoncode %{
+def create_attributes_from_getters_and_setters(cls):
+    getter_prefix = 'get_'
+    setter_prefix = 'set_'
+    attrs = {method[len(getter_prefix):] for method in dir(cls) if method.startswith(getter_prefix) or method.startswith(setter_prefix)}
+    for attr in attrs:
+        getter_name = getter_prefix + attr
+        setter_name = setter_prefix + attr
+        setattr(cls, attr, property(
+            lambda self, getter_name=getter_name: getattr(self, getter_name)() if getter_name in dir(cls) else None,
+            lambda self, value, setter_name=setter_name: getattr(self, setter_name)(value) if setter_name in dir(cls) else None
+        ))
+%}
+#endif
+
 %exception;  // beware this resets all exception handlers if you import this file after defining any
 
 // Base weak ptr is used across the codebase

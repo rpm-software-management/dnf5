@@ -91,3 +91,11 @@ add_iterator(SetRepoWeakPtr)
 conf.create_config_option_attributes(ConfigRepo)
 %}
 #endif
+
+// Add attributes for getters/setters in Python.
+// See 'common.i' for more info.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.create_attributes_from_getters_and_setters(RepoCacheRemoveStatistics)
+%}
+#endif

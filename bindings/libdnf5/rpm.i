@@ -108,3 +108,11 @@ wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf5::rpm::TransactionCallback
 %include "libdnf5/rpm/rpm_signature.hpp"
 
 %template(VectorKeyInfo) std::vector<libdnf5::rpm::KeyInfo>;
+
+// Add attributes for getters/setters in Python.
+// See 'common.i' for more info.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.create_attributes_from_getters_and_setters(Changelog)
+%}
+#endif

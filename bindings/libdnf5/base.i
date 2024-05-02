@@ -75,3 +75,12 @@
 
 %include "libdnf5/base/goal.hpp"
 %include "libdnf5/base/goal_elements.hpp"
+
+// Add attributes for getters/setters in Python.
+// See 'common.i' for more info.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.create_attributes_from_getters_and_setters(ResolveSpecSettings)
+common.create_attributes_from_getters_and_setters(GoalJobSettings)
+%}
+#endif
