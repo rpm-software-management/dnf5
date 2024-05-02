@@ -395,6 +395,11 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 }
 
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
+    if (transaction.test() != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+      std::cerr << "Transaction has failed. Try to run it with superuser privileges (under the root user on most systems)"
+                << std::endl;
+      throw libdnf5::cli::SilentCommandExitError(1);
+    }
     if (!transaction_store_path.empty()) {
         auto transaction_location = transaction_store_path / "transaction.json";
         constexpr const char * packages_in_trans_dir{"./packages"};
