@@ -69,18 +69,16 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
             advisories |= advisories_names;
         }
 
-        // Filter by advisory type
-        if (!advisory_types.empty()) {
-            auto advisories_types = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_types.filter_type(advisory_types);
-            advisories |= advisories_types;
-        }
-
-        // Filter by advisory severity
-        if (!advisory_severities.empty()) {
-            auto advisories_severities = libdnf5::advisory::AdvisoryQuery(base);
-            advisories_severities.filter_severity(advisory_severities);
-            advisories |= advisories_severities;
+        // Filter by advisory severity and filter by advisory type using AND operator
+        if (!advisory_severities.empty() || !advisory_types.empty()) {
+            auto advisories_severities_and_types = libdnf5::advisory::AdvisoryQuery(base);
+            if (!advisory_severities.empty()) {
+                advisories_severities_and_types.filter_severity(advisory_severities);
+            }
+            if (advisory_types.empty()) {
+                advisories_severities_and_types.filter_type(advisory_types);
+            }
+            advisories |= advisories_severities_and_types;
         }
 
         // Filter by advisory bz
