@@ -458,6 +458,7 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
     solver_problems.clear();
 
     for (auto & problem : goal_solver_problems) {
+        std::set<std::pair<int, int>> current_conflicting_rules;
         std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
 
         for (auto & [rule, source, dep, target, description] : problem) {
@@ -528,8 +529,13 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     break;
                 }
                 case ProblemRules::RULE_PKG_CONFLICTS:
+                    if (current_conflicting_rules.contains(std::pair<int, int>(target, source))) {
+                        // do not add pkgA conflicts with pkgB rule if pkgB conflicts with PkgA rule is already present
+                        continue;
+                    }
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
+                    current_conflicting_rules.emplace(source, target);
                     [[fallthrough]];
                 case ProblemRules::RULE_PKG_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
