@@ -51,6 +51,10 @@ Each non-comment line defines an action and consists of five items separated by 
 
    * ``pre_base_setup``
    * ``post_base_setup``
+   * ``repos_configured``  (added in version 1.0.0)
+   * ``repos_loaded``  (added in version 1.0.0)
+   * ``pre_add_cmdline_packages``  (added in version 1.0.0)
+   * ``post_add_cmdline_packages``  (added in version 1.0.0)
    * ``pre_transaction``
    * ``post_transaction``
 
