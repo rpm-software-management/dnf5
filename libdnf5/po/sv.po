@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 02:52+0000\n"
-"PO-Revision-Date: 2024-04-19 02:40+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
+"PO-Revision-Date: 2024-05-02 02:52+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
 "Language: sv\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -691,7 +691,7 @@ msgstr "get_unique_id(): Beräkning av SHA256 misslyckades"
 
 #: repo/file_downloader.cpp:143
 msgid "Cannot download files, cacheonly option is activated."
-msgstr "Kan inte ladda ner filer, alternativet endast cache är aktiverat."
+msgstr "Kan inte ladda ner filer, alternativet cacheonly är aktiverat."
 
 #: repo/file_downloader.cpp:204
 msgid "Failed to download files"
@@ -708,7 +708,7 @@ msgstr ""
 #: repo/package_downloader.cpp:147
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
-"Kunde inte ladda ner paketet \"{0}\", endast cache-alternativet är aktiverat."
+"Kunde inte ladda ner paketet \"{0}\", alternativet cacheonly är aktiverat."
 
 #: repo/package_downloader.cpp:222
 msgid "Failed to download packages"
@@ -729,8 +729,7 @@ msgstr "Ogiltigt förråds-id \"{}\": oväntat tecken '{}'"
 #: repo/repo.cpp:149
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
-"Förråd \"{}\" har ingen källa (basurl, spegellista eller metalänk) "
-"uppsättning."
+"Förrådet \"{}\" har ingen källa (baseurl, mirrorlist eller metalink) satt."
 
 #: repo/repo.cpp:160
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
@@ -775,7 +774,7 @@ msgstr "Misslyckades att ladda ner metadata ({}: \"{}\") för förråd \"{}\""
 #: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
-"Fel vid kontroll av om metalänk \"{}\" är synkroniserat för förrådet \"{}\""
+"Fel vid kontroll av om metalink \"{}\" är synkroniserat för förrådet \"{}\""
 
 #: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
@@ -791,7 +790,7 @@ msgstr "Fel vid laddning av lokal metadata för förråd \"{}\""
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
-"Ingen giltig källa (basurl, spegellista eller metalänk) hittades för "
+"Ingen giltig källa (baseurl, mirrorlist eller metalink) hittades för "
 "förrådet \"{}\""
 
 #: repo/repo_pgp.cpp:60
@@ -1084,7 +1083,7 @@ msgstr "Saknar nyckel \"version\"."
 
 #: transaction/transaction_sr.cpp:104
 msgid "Unexpected type of \"environments\", array expected."
-msgstr "Oväntad typ av \"miljöer\", array förväntad."
+msgstr "Oväntad typ av \"environments\", en vektor förväntades."
 
 #: transaction/transaction_sr.cpp:112
 msgid "Missing object key \"id\" in an environment."
@@ -1096,7 +1095,7 @@ msgstr "Saknar objekt nyckel \"action\" i en miljö."
 
 #: transaction/transaction_sr.cpp:142
 msgid "Unexpected type of \"groups\", array expected."
-msgstr "Oväntad typ av \"grupper\", förväntad array."
+msgstr "Oväntad typ av \"groups\", en vektor förväntades."
 
 #: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"id\" in a group."

@@ -1,23 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Krystof Cerny <cleverline1mc@gmail.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-01-15 09:42+0000\n"
-"Last-Translator: Krystof Cerny <cleverline1mc@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
-"plugin-needs-restarting/cs/>\n"
-"Language: cs\n"
+"PO-Revision-Date: 2024-04-27 17:14+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-needs-restarting/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.4\n"
 
 #: needs_restarting.cpp:232
 msgid "Couldn't connect to D-Bus: {}"
-msgstr "Nelze se připojit k D-Bus: {}"
+msgstr "D-Bus로 연결 할 수 없음: {}"
