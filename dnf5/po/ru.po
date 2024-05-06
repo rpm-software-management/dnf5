@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 02:52+0000\n"
-"PO-Revision-Date: 2024-04-24 02:40+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
+"PO-Revision-Date: 2024-04-30 05:36+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ru/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.2\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
@@ -45,7 +45,7 @@ msgstr "Доступны"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr "Печать сводки рекомендаций"
+msgstr "Вывод сводки рекомендаций"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
@@ -335,7 +335,7 @@ msgstr "Для \"{}\" не найдено ни одного совпадения
 msgid "Manage offline transactions"
 msgstr "Управление автономными транзакциями"
 
-#: commands/offline/offline.cpp:230
+#: commands/offline/offline.cpp:224
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -344,11 +344,11 @@ msgstr ""
 "которой вы инициировали автономную транзакцию, например `dnf5 system-upgrade "
 "download [ОПЦИИ]`."
 
-#: commands/offline/offline.cpp:250
+#: commands/offline/offline.cpp:247
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Не удалось подключиться к шине D-Bus: {}"
 
-#: commands/offline/offline.cpp:279
+#: commands/offline/offline.cpp:276
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -356,31 +356,31 @@ msgstr ""
 "Подготовьте систему к выполнению автономной транзакции и перезагрузите ее, "
 "чтобы начать транзакцию."
 
-#: commands/offline/offline.cpp:286
+#: commands/offline/offline.cpp:283
 msgid "Power off the system after the operation is complete"
 msgstr "Выключить систему после завершения операции"
 
-#: commands/offline/offline.cpp:296
+#: commands/offline/offline.cpp:294
 msgid "No offline transaction is stored."
 msgstr "Нет сохраненных автономных транзакций."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:301
 msgid "System is not ready for offline transaction."
 msgstr "Система не готова к автономной транзакции."
 
-#: commands/offline/offline.cpp:306
+#: commands/offline/offline.cpp:304
 msgid "Data directory {} does not exist."
 msgstr "Каталог данных {} не существует."
 
-#: commands/offline/offline.cpp:330
+#: commands/offline/offline.cpp:328
 msgid "{} is not wanted by system-update.target."
 msgstr "{} не требуется для system-update.target."
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:337
 msgid "The system will now reboot to upgrade to release version "
 msgstr "Теперь система перезагрузится для обновления до версии выпуска "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:341
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -388,7 +388,7 @@ msgstr ""
 "Теперь система перезагрузится для выполнения автономной транзакции, "
 "инициированной следующей командой:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:372
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -396,15 +396,15 @@ msgstr ""
 "Только для внутреннего использования, не предназначено для выполнения "
 "пользователем. Выполните транзакцию в автономной среде."
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:399
 msgid "Trigger file does not exist. Exiting."
 msgstr "Файл триггера не существует. Выход."
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:403
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Запущен еще один инструмент для автономных транзакций. Выход."
 
-#: commands/offline/offline.cpp:438
+#: commands/offline/offline.cpp:435
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -415,72 +415,72 @@ msgstr ""
 "инициировать обновление системы или переход в автономный режим, необходимо "
 "выполнить команду `dnf5 offline reboot`."
 
-#: commands/offline/offline.cpp:445
+#: commands/offline/offline.cpp:442
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Используйте `dnf5 offline reboot`, чтобы начать транзакцию."
 
-#: commands/offline/offline.cpp:479
+#: commands/offline/offline.cpp:493
 msgid "Transaction failed: "
 msgstr "Сбой транзакции: "
 
-#: commands/offline/offline.cpp:552
+#: commands/offline/offline.cpp:562
 msgid "Error reading journal: {}"
 msgstr "Ошибка при чтении журнала: {}"
 
-#: commands/offline/offline.cpp:558
+#: commands/offline/offline.cpp:568
 msgid "Add journal match failed: {}"
 msgstr "Сбой добавления журнала: {}"
 
-#: commands/offline/offline.cpp:586
+#: commands/offline/offline.cpp:596
 msgid "No logs were found."
 msgstr "Журналы не найдены."
 
-#: commands/offline/offline.cpp:590
+#: commands/offline/offline.cpp:600
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "Следующие boots, похоже, содержат автономные журналы транзакций:"
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:617
 msgid "Cannot find logs with this index."
 msgstr "Невозможно найти журналы с таким индексом."
 
-#: commands/offline/offline.cpp:614
+#: commands/offline/offline.cpp:624
 msgid "Unable to match systemd journal entry."
 msgstr "Невозможно сопоставить запись в журнале systemd."
 
-#: commands/offline/offline.cpp:626
+#: commands/offline/offline.cpp:636
 msgid "Show logs from past offline transactions"
 msgstr "Показать журналы прошлых автономных операций"
 
-#: commands/offline/offline.cpp:634
+#: commands/offline/offline.cpp:644
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Какой журнал показывать. Выполните без аргументов, чтобы получить список "
 "доступных журналов."
 
-#: commands/offline/offline.cpp:649
+#: commands/offline/offline.cpp:659
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
 "systemd не поддерживается в этой сборке DNF 5; подкоманда `log` недоступна."
 
-#: commands/offline/offline.cpp:654
+#: commands/offline/offline.cpp:664
 msgid "Show status of the current offline transaction"
 msgstr "Показать статус текущей автономной транзакции"
 
-#: commands/offline/offline.cpp:670
+#: commands/offline/offline.cpp:680
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Автономная транзакция была инициирована следующей командой:"
 
-#: commands/offline/offline.cpp:672
+#: commands/offline/offline.cpp:682
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Выполните команду `dnf5 offline reboot`, чтобы перезагрузиться и выполнить "
 "автономную транзакцию."
 
-#: commands/offline/offline.cpp:674
+#: commands/offline/offline.cpp:684
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -489,7 +489,7 @@ msgstr ""
 "дополнительной информации выполните команду `dnf5 offline log`. Команда, "
 "инициировавшая транзакцию, была:"
 
-#: commands/offline/offline.cpp:679
+#: commands/offline/offline.cpp:689
 msgid "Unknown offline transaction status: "
 msgstr "Неизвестный статус автономной транзакции: "
 
@@ -629,11 +629,11 @@ msgstr "Пакет \"{}\" уже исключен."
 msgid "The key was successfully imported."
 msgstr "Ключ был успешно импортирован."
 
-#: context.cpp:241
+#: context.cpp:252
 msgid "No matching repositories for \"{}\""
 msgstr "Нет подходящих репозиториев для \"{}\""
 
-#: context.cpp:363
+#: context.cpp:406
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten.\n"
@@ -927,7 +927,23 @@ msgstr "{}, чтобы пропустить неустанавливаемые �
 msgid "You can try to add to command line:"
 msgstr "Можно попробовать добавить в командную строку:"
 
-#: main.cpp:1125 main.cpp:1295
+#: main.cpp:1060
+msgid ""
+"No matches were found for the following plugin name patterns while enabling "
+"libdnf plugins: {}"
+msgstr ""
+"При включении плагинов libdnf не было найдено совпадений для следующих "
+"шаблонов имен плагинов: {}"
+
+#: main.cpp:1061
+msgid ""
+"No matches were found for the following plugin name patterns while disabling "
+"libdnf plugins: {}"
+msgstr ""
+"При отключении плагинов libdnf не было найдено совпадений для следующих "
+"шаблонов имен плагинов: {}"
+
+#: main.cpp:1160 main.cpp:1333
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
 ". Добавьте \"--help\" для получения дополнительной информации об аргументах."

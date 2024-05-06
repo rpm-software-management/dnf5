@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 02:52+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
 "PO-Revision-Date: 2024-02-26 01:35+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -308,142 +308,142 @@ msgstr "\"{}\" için eşleşme bulunamadı."
 msgid "Manage offline transactions"
 msgstr ""
 
-#: commands/offline/offline.cpp:230
+#: commands/offline/offline.cpp:224
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
 
-#: commands/offline/offline.cpp:250
+#: commands/offline/offline.cpp:247
 msgid "Couldn't connect to D-Bus: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:279
+#: commands/offline/offline.cpp:276
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:286
+#: commands/offline/offline.cpp:283
 msgid "Power off the system after the operation is complete"
 msgstr ""
 
-#: commands/offline/offline.cpp:296
+#: commands/offline/offline.cpp:294
 msgid "No offline transaction is stored."
 msgstr ""
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:301
 msgid "System is not ready for offline transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:306
+#: commands/offline/offline.cpp:304
 msgid "Data directory {} does not exist."
 msgstr ""
 
-#: commands/offline/offline.cpp:330
+#: commands/offline/offline.cpp:328
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:337
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:341
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr ""
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:372
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr ""
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:399
 msgid "Trigger file does not exist. Exiting."
 msgstr ""
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:403
 msgid "Another offline transaction tool is running. Exiting."
 msgstr ""
 
-#: commands/offline/offline.cpp:438
+#: commands/offline/offline.cpp:435
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
 
-#: commands/offline/offline.cpp:445
+#: commands/offline/offline.cpp:442
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:479
+#: commands/offline/offline.cpp:493
 #, fuzzy
 #| msgid "Transaction ID"
 msgid "Transaction failed: "
 msgstr "İşlem Kimliği"
 
-#: commands/offline/offline.cpp:552
+#: commands/offline/offline.cpp:562
 msgid "Error reading journal: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:558
+#: commands/offline/offline.cpp:568
 msgid "Add journal match failed: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:586
+#: commands/offline/offline.cpp:596
 msgid "No logs were found."
 msgstr ""
 
-#: commands/offline/offline.cpp:590
+#: commands/offline/offline.cpp:600
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 
-#: commands/offline/offline.cpp:607
+#: commands/offline/offline.cpp:617
 msgid "Cannot find logs with this index."
 msgstr ""
 
-#: commands/offline/offline.cpp:614
+#: commands/offline/offline.cpp:624
 msgid "Unable to match systemd journal entry."
 msgstr ""
 
-#: commands/offline/offline.cpp:626
+#: commands/offline/offline.cpp:636
 msgid "Show logs from past offline transactions"
 msgstr ""
 
-#: commands/offline/offline.cpp:634
+#: commands/offline/offline.cpp:644
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 
-#: commands/offline/offline.cpp:649
+#: commands/offline/offline.cpp:659
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
 
-#: commands/offline/offline.cpp:654
+#: commands/offline/offline.cpp:664
 msgid "Show status of the current offline transaction"
 msgstr ""
 
-#: commands/offline/offline.cpp:670
+#: commands/offline/offline.cpp:680
 msgid "An offline transaction was initiated by the following command:"
 msgstr ""
 
-#: commands/offline/offline.cpp:672
+#: commands/offline/offline.cpp:682
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:674
+#: commands/offline/offline.cpp:684
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
 
-#: commands/offline/offline.cpp:679
+#: commands/offline/offline.cpp:689
 msgid "Unknown offline transaction status: "
 msgstr ""
 
@@ -572,11 +572,11 @@ msgstr "\"{}\" paketi zaten dışlanmış."
 msgid "The key was successfully imported."
 msgstr ""
 
-#: context.cpp:241
+#: context.cpp:252
 msgid "No matching repositories for \"{}\""
 msgstr "\"{}\" için eşleşen depo yok"
 
-#: context.cpp:363
+#: context.cpp:406
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten.\n"
@@ -834,7 +834,19 @@ msgstr ""
 msgid "You can try to add to command line:"
 msgstr ""
 
-#: main.cpp:1125 main.cpp:1295
+#: main.cpp:1060
+msgid ""
+"No matches were found for the following plugin name patterns while enabling "
+"libdnf plugins: {}"
+msgstr ""
+
+#: main.cpp:1061
+msgid ""
+"No matches were found for the following plugin name patterns while disabling "
+"libdnf plugins: {}"
+msgstr ""
+
+#: main.cpp:1160 main.cpp:1333
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
 
