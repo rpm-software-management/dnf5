@@ -1,3 +1,23 @@
+# 5.2.1.0
+
+- Update translations from weblate
+- bindings: Tests for using struct attributes in Python
+- bindings: Add Python attributes for structs
+- docs: Fix diff link on the dnf 5.2.0.0 changes page
+- docs: Add diff with API changes in dnf5-5.2.0.0
+- docs: Add a page about public API changes in dnf 5.2.0.0
+- system-upgrade: fix missing \n before transaction test
+- system-upgrade: comment to clarify progress bar logic
+- system-upgrade: drop [[maybe_unused]] from reboot() arg
+- system-upgrade: fix progress bars, set transaction description
+- system-upgrade: adapt to new transaction serialization format
+- system-upgrade: clean up releasever logic
+- system-upgrade: fix poweroff_after
+- copr: the dnf5 copr enable sets CoprRepoPart.enabled = true
+- Add file search result for repoquery --whatprovides
+- doc: Add enviroment variables and clarify options for loading the plugins
+- dnfdaemon: Fix Rpm interface introspection file
+
 # 5.2.0.0
 
 - Update translations from weblate
