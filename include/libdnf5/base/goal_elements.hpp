@@ -326,6 +326,20 @@ public:
     void set_to_repo_ids(std::vector<std::string> to_repo_ids);
     std::vector<std::string> get_to_repo_ids() const;
 
+    /// If set to true, after resolving serialized or reverted transactions don't check for
+    /// extra packages pulled into the transaction.
+    ///
+    /// Default: false
+    void set_ignore_extras(bool ignore_extras);
+    bool get_ignore_extras() const;
+
+    /// If set to true, after resolving serialized or reverted transactions don't check for
+    /// installed packages matching those in the transactions.
+    ///
+    /// Default: false
+    void set_ignore_installed(bool ignore_installed);
+    bool get_ignore_installed() const;
+
 private:
     friend class Goal;
 
