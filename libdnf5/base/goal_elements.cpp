@@ -168,6 +168,14 @@ class GoalJobSettings::Impl {
     ///// Reduce candidates for the operation according repository ids
     std::vector<std::string> to_repo_ids;
 
+    /// For replaying transactions don't check for extra packages pulled into the transaction.
+    /// Used by history undo, system upgrade, ...
+    bool ignore_extras{false};
+
+    /// For replaying transactions don't check for installed packages matching those in transaction.
+    /// Used by history undo, system upgrade, ...
+    bool ignore_installed{false};
+
     GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
@@ -465,5 +473,19 @@ GoalUsedSetting GoalJobSettings::get_used_best() const {
 GoalUsedSetting GoalJobSettings::get_used_clean_requirements_on_remove() const {
     return p_impl->used_clean_requirements_on_remove;
 };
+
+void GoalJobSettings::set_ignore_extras(bool ignore_extras) {
+    p_impl->ignore_extras = ignore_extras;
+}
+bool GoalJobSettings::get_ignore_extras() const {
+    return p_impl->ignore_extras;
+}
+
+void GoalJobSettings::set_ignore_installed(bool ignore_installed) {
+    p_impl->ignore_installed = ignore_installed;
+}
+bool GoalJobSettings::get_ignore_installed() const {
+    return p_impl->ignore_installed;
+}
 
 }  // namespace libdnf5
