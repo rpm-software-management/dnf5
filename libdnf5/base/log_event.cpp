@@ -136,22 +136,17 @@ std::string LogEvent::to_string(
         // TODO(jmracek) Improve messages => Each message can contain also an action
         case GoalProblem::NOT_FOUND:
             if (action == GoalAction::REMOVE) {
-                std::string spec_type_str;
                 switch (*spec_type) {
                     case libdnf5::transaction::TransactionItemType::PACKAGE:
-                        spec_type_str = _("packages");
-                        break;
+                        return ret.append(utils::sformat(_("No packages to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::GROUP:
-                        spec_type_str = _("groups");
-                        break;
+                        return ret.append(utils::sformat(_("No groups to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::ENVIRONMENT:
-                        spec_type_str = _("environmental groups");
-                        break;
+                        return ret.append(
+                            utils::sformat(_("No environmental groups to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::MODULE:
-                        spec_type_str = _("modules");
-                        break;
+                        return ret.append(utils::sformat(_("No modules to remove for argument: {}"), *spec));
                 }
-                return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
             } else if (action == GoalAction::INSTALL_BY_COMPS) {
                 if (spec_type && *spec_type == libdnf5::transaction::TransactionItemType::GROUP) {
                     return ret.append(utils::sformat(_("No match for group from environment: {}"), *spec));
