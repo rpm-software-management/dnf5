@@ -240,7 +240,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
 
             // Find the substituting string and the end of the variable expression
             auto variable_mapping = p_impl->variables.find(res.substr(pos_variable, pos_after_variable - pos_variable));
-            const std::string * subst_str = nullptr;
+            std::optional<std::string> subst_str{std::nullopt};
 
             size_t pos_after_variable_expression;
 
@@ -279,19 +279,18 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                         // substituted. Otherwise, the value of variable is
                         // substituted.
                         if (variable_mapping == p_impl->variables.end() || variable_mapping->second.value.empty()) {
-                            subst_str = &expanded_word;
+                            subst_str = expanded_word;
                         } else {
-                            subst_str = &variable_mapping->second.value;
+                            subst_str = variable_mapping->second.value;
                         }
                     } else if (expansion_mode == '+') {
                         // ${variable:+word} (alternate value)
                         // If variable is unset or empty nothing is substituted.
                         // Otherwise, the expansion of word is substituted.
                         if (variable_mapping == p_impl->variables.end() || variable_mapping->second.value.empty()) {
-                            const std::string empty{};
-                            subst_str = &empty;
+                            subst_str = "";
                         } else {
-                            subst_str = &expanded_word;
+                            subst_str = expanded_word;
                         }
                     } else {
                         // Unknown expansion mode, continue after the ':'
@@ -302,7 +301,7 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
                 } else if (res[pos_after_variable] == '}') {
                     // ${variable}
                     if (variable_mapping != p_impl->variables.end()) {
-                        subst_str = &variable_mapping->second.value;
+                        subst_str = variable_mapping->second.value;
                     }
                     // Move past the closing '}'
                     pos_after_variable_expression = pos_after_variable + 1;
@@ -314,13 +313,13 @@ std::pair<std::string, size_t> Vars::substitute_expression(std::string_view text
             } else {
                 // No braces, we have a $variable
                 if (variable_mapping != p_impl->variables.end()) {
-                    subst_str = &variable_mapping->second.value;
+                    subst_str = variable_mapping->second.value;
                 }
                 pos_after_variable_expression = pos_after_variable;
             }
 
             // If there is no substitution to make, move past the variable expression and continue.
-            if (subst_str == nullptr) {
+            if (!subst_str.has_value()) {
                 total_scanned += pos_after_variable_expression - pos;
                 pos = pos_after_variable_expression;
                 continue;
