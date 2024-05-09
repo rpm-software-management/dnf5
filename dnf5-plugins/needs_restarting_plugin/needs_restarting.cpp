@@ -168,12 +168,9 @@ libdnf5::rpm::PackageSet recursive_dependencies(
     stack.emplace_back(package);
 
     while (!stack.empty()) {
-        const auto & current = stack.back();
-        stack.pop_back();
-
         libdnf5::rpm::PackageQuery query{installed};
-        query.filter_provides(current.get_requires());
-
+        query.filter_provides(stack.back().get_requires());
+        stack.pop_back();
         for (const auto & dependency : query) {
             if (!dependencies.contains(dependency)) {
                 stack.emplace_back(dependency);
