@@ -181,7 +181,7 @@ Id what_upgrades(libdnf5::solv::RpmPool & spool, const Solvable * solvable) {
     return l;
 }
 
-/// Return id of a package that can be upgraded with pkg.
+/// Return id of a package that can be downgraded with pkg.
 ///
 /// The returned package Id fulfills the following criteria:
 /// :: it is installed
