@@ -18,8 +18,6 @@
 
 .. _automatic_plugin_ref-label:
 
-.. TODO(jkolarik): Fix references to configuration files to correct locations
-
 ##################
  Automatic Command
 ##################
@@ -35,17 +33,11 @@ Description
 
 Alternative CLI to ``dnf upgrade`` with specific facilities to make it suitable to be executed automatically and regularly from systemd timers, cron jobs and similar.
 
-The operation of the tool is usually controlled by the configuration file or the function-specific timer units (see below). The command only accepts a single optional argument pointing to the config file, and some control arguments intended for use by the services that back the timer units. If no configuration file is passed from the command line, ``/etc/dnf/automatic.conf`` is used.
+The operation of the tool is controlled by configuration files. Default values are set from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` config file. Host-specific overrides from ``/etc/dnf/dnf5-plugins/automatic.conf`` are then applied.
 
 The tool synchronizes package metadata as needed and then checks for updates available for the given system and then either exits, downloads the packages or downloads and applies the updates. The outcome of the operation is then reported by a selected mechanism, for instance via the standard output, email or MOTD messages.
 
-The systemd timer unit ``dnf-automatic.timer`` will behave as the configuration file specifies (see below) with regard to whether to download and apply updates. Some other timer units are provided which override the configuration file with some standard behaviours:
-
-- dnf-automatic-notifyonly
-- dnf-automatic-download
-- dnf-automatic-install
-
-Regardless of the configuration file settings, the first will only notify of available updates. The second will download, but not install them. The third will download and install them.
+The systemd timer unit ``dnf5-automatic.timer`` will behave as the configuration file specifies (see below) with regard to whether to download and apply updates.
 
 
 Options
@@ -53,6 +45,8 @@ Options
 
 ``--timer``
     | Apply random delay before execution.
+
+The following options can be used to override values from the configuration file.
 
 ``--downloadupdates``
     | Automatically download updated packages.
@@ -67,12 +61,15 @@ Options
     | Do not automatically install downloaded updates.
 
 
-Run dnf-automatic
-=================
 
-You can select one that most closely fits your needs, customize ``/etc/dnf/automatic.conf`` for any specific behaviors, and enable the timer unit.
+Run dnf5 automatic service
+==========================
 
-For example: ``systemctl enable --now dnf-automatic-notifyonly.timer``
+The service is typically executed using the systemd timer ``dnf5-automatic.timer``. To configure the service, customize the ``/etc/dnf/dnf5-plugins/automatic.conf`` file. You can either copy the distribution config file from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` and use it as a baseline, or create your own configuration file from scratch with only the required overrides.
+
+Then enable the timer unit:
+
+``systemctl enable --now dnf5-automatic.timer``
 
 
 Configuration File Format
@@ -90,22 +87,22 @@ Setting the mode of operation of the program.
 ``apply_updates``
     boolean, default: False
 
-    Whether packages comprising the available updates should be applied by ``dnf-automatic.timer``, i.e. installed via RPM. Implies ``download_updates``. Note that if this is set to ``False``, downloaded packages will be left in the cache till the next successful DNF transaction. Note that the other timer units override this setting.
+    Whether packages comprising the available updates should be applied by ``dnf5-automatic.timer``, i.e. installed via RPM. Implies ``download_updates``. Note that if this is set to ``False``, downloaded packages will be left in the cache till the next successful DNF transaction.
 
 ``download_updates``
     boolean, default: True
 
-    Whether packages comprising the available updates should be downloaded by ``dnf-automatic.timer``. Note that the other timer units override this setting.
+    Whether packages comprising the available updates should be downloaded by ``dnf5-automatic.timer``.
 
 ``network_online_timeout``
     time in seconds, default: 60
 
-    Maximal time dnf-automatic will wait until the system is online. 0 means that network availability detection will be skipped.
+    Maximal time ``dnf5 automatic`` will wait until the system is online. 0 means that network availability detection will be skipped.
 
 ``random_sleep``
     time in seconds, default: 0
 
-    Maximal random delay before downloading.  Note that, by default, the ``systemd`` timers also apply a random delay of up to 1 hour.
+    Maximal random delay before downloading (only applied if ``--timer`` option was used).  Note that, by default, the ``systemd`` timers also apply a random delay of up to 1 hour.
 
 .. _upgrade_type_automatic-label:
 
@@ -218,16 +215,6 @@ The email emitter configuration.
     either one of ``no``, ``yes``, ``starttls``, default: ``no``
 
     Whether to use TLS, STARTTLS or no encryption to connect to the SMTP server.
-
-``email_username``
-    string, default empty.
-
-    Username to use for SMTP server authentication.
-
-``email_password``
-    string, default empty.
-
-    Password to use for SMTP server authentication.
 
 
 ------------------
