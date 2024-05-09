@@ -350,7 +350,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     All configuration files found in these directories, that are named same as a
     plugin, are parsed.
 
-    Default: ``/etc/dnf/plugins``.
+    Default: ``/etc/dnf/libdnf5-plugins``.
 
 .. _pluginpath_options-label:
 
