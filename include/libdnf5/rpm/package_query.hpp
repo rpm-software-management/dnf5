@@ -360,7 +360,7 @@ public:
     void filter_summary(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
-    /// Filter packages by their `summary`.
+    /// Filter packages by their `description`.
     ///
     /// @param pattern          A string the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
@@ -373,7 +373,7 @@ public:
         filter_description(std::vector<std::string>{pattern}, cmp_type);
     };
 
-    /// Filter packages by their `summary`.
+    /// Filter packages by their `description`.
     ///
     /// @param patterns         A vector of strings the filter is matched against.
     /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
@@ -847,19 +847,45 @@ public:
         PackageQuery & installed,
         libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::GTE);
 
+    /// Filter installed packages.
+    ///
+    /// Removes from the query all packages that are not installed.
+    /// @since 5.0
+    // @replaces libdnf/sack/query.hpp:method:installed()
     void filter_installed();
 
+    /// Filter available packages.
+    ///
+    /// Removes from the query all packages that are installed.
+    /// @since 5.0
+    // @replaces libdnf/sack/query.hpp:method:available()
     void filter_available();
 
+    /// Filter available packages that are upgrades to installed packages.
+    ///
+    /// Removes from the query all packages that are not upgrades to installed packages.
+    /// @since 5.0
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_UPGRADES
     void filter_upgrades();
 
+    /// Filter available packages that are downgrades to installed packages.
+    ///
+    /// Removes from the query all packages that are not downgrades to installed packages.
+    /// @since 5.0
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADES
     void filter_downgrades();
 
+    /// Filter installed packages for which there are available upgrades.
+    ///
+    /// Only installed packages remain in the query, and only those for which upgrades are available.
+    /// @since 5.0
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_UPGRADABLE
     void filter_upgradable();
 
+    /// Filter installed packages for which there are available downgrades.
+    ///
+    /// Only installed packages remain in the query, and only those for which downgrades are available.
+    /// @since 5.0
     // @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADABLE
     void filter_downgradable();
 
