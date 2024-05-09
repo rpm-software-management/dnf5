@@ -739,6 +739,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%{_datadir}/dnf5/dnf5-plugins/automatic.conf
 %{_mandir}/man8/dnf*-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
