@@ -387,6 +387,9 @@ Changes to individual options
 ``disable_excludes``
   * To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` to unify the behavior with query objects on the API.
 
+``keepcache``
+  * The behavior has been slightly modified, see the :ref:`Caching <caching_packages_ref-label>` man page for more information.
+
 ``optional_metadata_types``
   * Default value is now: ``comps,updateinfo``.
   * Supported values are now extended to the following list: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``.

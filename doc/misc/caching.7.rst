@@ -115,6 +115,7 @@ If the required metadata is not present in the system, it can result in differen
 such as returning an empty query, error output for no match for an argument, or an error when
 resolving a transaction.
 
+.. _caching_packages_ref-label:
 
 Caching Packages
 ================
@@ -129,6 +130,8 @@ potential use cases.
 When the keepcache option is set to ``True``, downloaded files are not tracked, and they could be
 removed later, either manually or by executing the ``clean`` command, for example,
 ``dnf5 clean packages``.
+
+Packages are always retained when downloaded using the ``download`` command.
 
 
 Sharing Root Cache Among Users
