@@ -474,7 +474,7 @@ void RepoqueryCommand::configure() {
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
         available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
-                extras->get_value() || upgrades->get_value() || !providers_of_option->get_value().empty()
+                extras->get_value() || upgrades->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
