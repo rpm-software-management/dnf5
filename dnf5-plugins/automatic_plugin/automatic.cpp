@@ -274,12 +274,6 @@ void AutomaticCommand::set_argument_parser() {
 void AutomaticCommand::pre_configure() {
     auto & context = get_context();
     auto & base = context.get_base();
-
-    auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
-    if (timer->get_value() && random_sleep > 0) {
-        random_wait(random_sleep);
-    }
-
     auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacksSimple>(output_stream);
     base.set_download_callbacks(std::move(download_callbacks_uptr));
     download_callbacks_set = true;
@@ -304,6 +298,11 @@ void AutomaticCommand::pre_configure() {
             config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
             break;
         }
+    }
+
+    auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
+    if (timer->get_value() && random_sleep > 0) {
+        random_wait(random_sleep);
     }
 
     context.set_output_stream(output_stream);
