@@ -234,19 +234,22 @@ std::string LogEvent::to_string(
                 const auto pos = module_stream.find(":");
                 module_dict[module_stream.substr(0, pos)].insert(module_stream.substr(pos + 1));
             }
-            // Create the error message describing all the streams of modules that were matched.
-            std::string error_message;
+            // Format a leading line of the error message.
+            ret.append(utils::sformat(_("Unable to resolve argument '{}':"), *spec));
+            // Describe all the streams of modules that were matched.
             for (const auto & module_dict_iter : module_dict) {
-                error_message.append(utils::sformat(
-                    _("\n  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the streams are "
-                      "enabled or "
-                      "default."),
+                ret.append(utils::sformat(
+                    P_("\n  - Argument '{}' matches {} stream ('{}') of module '{}', "
+                       "but the stream is not enabled or default.",
+                       "\n  - Argument '{}' matches {} streams ('{}') of module '{}', "
+                       "but none of the streams are enabled or default.",
+                       module_dict_iter.second.size()),
                     *spec,
                     module_dict_iter.second.size(),
-                    utils::string::join(module_dict_iter.second, "', '"),
+                    utils::string::join(module_dict_iter.second, _("', '")),
                     module_dict_iter.first));
             }
-            return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
+            return ret;
         }
         case GoalProblem::MODULE_SOLVER_ERROR: {
             if (!solver_problems) {
