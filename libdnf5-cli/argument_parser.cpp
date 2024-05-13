@@ -516,7 +516,7 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
     } else {
         if (assign_ptr) {
             throw ArgumentParserNamedArgValueNotExpectedError(
-                M_("Unexpected value for named argumend \"--{}\""), std::string(option));
+                M_("Unexpected value for named argument \"--{}\""), std::string(option));
         }
         arg_value = const_val.c_str();
         consumed_args = 1;
