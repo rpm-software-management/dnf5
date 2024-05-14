@@ -357,15 +357,19 @@ void Transaction::erase(TransactionItem & item) {
 }
 
 void Transaction::install_up_down(TransactionItem & item, libdnf5::transaction::TransactionItemAction action) {
+    BgettextMessage msg_error;
     std::string msg_action;
     bool upgrade{true};
     if (action == libdnf5::transaction::TransactionItemAction::UPGRADE) {
+        msg_error = M_("Cannot upgrade package \"{}\"");
         msg_action = "upgrade";
     } else if (action == libdnf5::transaction::TransactionItemAction::DOWNGRADE) {
         downgrade_requested = true;
+        msg_error = M_("Cannot downgrade package \"{}\"");
         msg_action = "downgrade";
     } else if (action == libdnf5::transaction::TransactionItemAction::INSTALL) {
         upgrade = false;
+        msg_error = M_("Cannot install package \"{}\"");
         msg_action = "install";
     } else {
         libdnf_throw_assertion("Unsupported action: {}", utils::to_underlying(action));
@@ -378,7 +382,7 @@ void Transaction::install_up_down(TransactionItem & item, libdnf5::transaction::
     headerFree(header);
     if (rc != 0) {
         //TODO(jrohel): Why? Librpm does not provide this information.
-        throw TransactionError(M_("Cannot {} package \"{}\""), msg_action, item.get_package().get_full_nevra());
+        throw TransactionError(msg_error, item.get_package().get_full_nevra());
     }
     libdnf_assert(
         last_item_added_ts_element,
