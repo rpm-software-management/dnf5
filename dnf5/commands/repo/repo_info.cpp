@@ -66,7 +66,6 @@ public:
     }
     std::vector<std::string> get_includepkgs() const override {
         return repo->get_config().get_includepkgs_option().get_value();
-        ;
     }
     bool get_skip_if_unavailable() const override {
         return repo->get_config().get_skip_if_unavailable_option().get_value();

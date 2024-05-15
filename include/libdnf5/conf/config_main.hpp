@@ -88,12 +88,12 @@ public:
     const OptionStringList & get_reposdir_option() const;
     OptionBool & get_debug_solver_option();
     const OptionBool & get_debug_solver_option() const;
-    OptionStringList & get_installonlypkgs_option();
-    const OptionStringList & get_installonlypkgs_option() const;
+    OptionStringAppendList & get_installonlypkgs_option();
+    const OptionStringAppendList & get_installonlypkgs_option() const;
     OptionStringList & get_group_package_types_option();
     const OptionStringList & get_group_package_types_option() const;
-    OptionStringSet & get_optional_metadata_types_option();
-    const OptionStringSet & get_optional_metadata_types_option() const;
+    OptionStringAppendSet & get_optional_metadata_types_option();
+    const OptionStringAppendSet & get_optional_metadata_types_option() const;
     OptionBool & get_use_host_config_option();
     const OptionBool & get_use_host_config_option() const;
 
@@ -104,8 +104,8 @@ public:
     OptionNumber<std::uint32_t> & get_installonly_limit_option();
     const OptionNumber<std::uint32_t> & get_installonly_limit_option() const;
 
-    OptionStringList & get_tsflags_option();
-    const OptionStringList & get_tsflags_option() const;
+    OptionStringAppendList & get_tsflags_option();
+    const OptionStringAppendList & get_tsflags_option() const;
     OptionBool & get_assumeyes_option();
     const OptionBool & get_assumeyes_option() const;
     OptionBool & get_assumeno_option();
@@ -222,12 +222,12 @@ public:
     const OptionPath & get_cachedir_option() const;
     OptionBool & get_fastestmirror_option();
     const OptionBool & get_fastestmirror_option() const;
-    OptionStringList & get_excludepkgs_option();
-    const OptionStringList & get_excludepkgs_option() const;
-    OptionStringList & get_includepkgs_option();
-    const OptionStringList & get_includepkgs_option() const;
-    OptionStringList & get_exclude_from_weak_option();
-    const OptionStringList & get_exclude_from_weak_option() const;
+    OptionStringAppendList & get_excludepkgs_option();
+    const OptionStringAppendList & get_excludepkgs_option() const;
+    OptionStringAppendList & get_includepkgs_option();
+    const OptionStringAppendList & get_includepkgs_option() const;
+    OptionStringAppendList & get_exclude_from_weak_option();
+    const OptionStringAppendList & get_exclude_from_weak_option() const;
     OptionBool & get_exclude_from_weak_autodetect_option();
     const OptionBool & get_exclude_from_weak_autodetect_option() const;
     OptionString & get_proxy_option();
@@ -238,8 +238,8 @@ public:
     const OptionString & get_proxy_password_option() const;
     OptionStringSet & get_proxy_auth_method_option();
     const OptionStringSet & get_proxy_auth_method_option() const;
-    OptionStringList & get_protected_packages_option();
-    const OptionStringList & get_protected_packages_option() const;
+    OptionStringAppendList & get_protected_packages_option();
+    const OptionStringAppendList & get_protected_packages_option() const;
     OptionString & get_username_option();
     const OptionString & get_username_option() const;
     OptionString & get_password_option();
