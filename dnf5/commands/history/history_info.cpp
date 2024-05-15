@@ -33,6 +33,8 @@ void HistoryInfoCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Print details about transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
+    auto & ctx = get_context();
+    transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     reverse = std::make_unique<ReverseOption>(*this);
 }
 
