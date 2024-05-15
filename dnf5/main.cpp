@@ -1166,7 +1166,7 @@ int main(int argc, char * argv[]) try {
                     if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
                         std::cerr
                             << fmt::format(
-                                   "It could be a command provided by a plugin, try: dnf5 install dnf5-command({})",
+                                   "It could be a command provided by a plugin, try: dnf5 install 'dnf5-command({})'",
                                    unknown_arg_ex->get_argument())
                             << std::endl;
                     }
