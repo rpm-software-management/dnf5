@@ -48,8 +48,8 @@ class ConfigRepo::Impl {
     OptionString type{""};
     OptionString mediaid{""};
     OptionStringList gpgkey{std::vector<std::string>{}};
-    OptionStringList excludepkgs{std::vector<std::string>{}};
-    OptionStringList includepkgs{std::vector<std::string>{}};
+    OptionStringAppendList excludepkgs{std::vector<std::string>{}};
+    OptionStringAppendList includepkgs{std::vector<std::string>{}};
     OptionChild<OptionBool> fastestmirror{main_config.get_fastestmirror_option()};
     OptionChild<OptionString> proxy{main_config.get_proxy_option()};
     OptionChild<OptionString> proxy_username{main_config.get_proxy_username_option()};
@@ -57,7 +57,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionStringSet> proxy_auth_method{main_config.get_proxy_auth_method_option()};
     OptionChild<OptionString> username{main_config.get_username_option()};
     OptionChild<OptionString> password{main_config.get_password_option()};
-    OptionChild<OptionStringList> protected_packages{main_config.get_protected_packages_option()};
+    OptionChild<OptionStringAppendList> protected_packages{main_config.get_protected_packages_option()};
     OptionChild<OptionBool> gpgcheck{main_config.get_gpgcheck_option()};
     OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
     OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
@@ -102,34 +102,9 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     owner.opt_binds().add("type", type);
     owner.opt_binds().add("mediaid", mediaid);
     owner.opt_binds().add("gpgkey", gpgkey);
-
-    owner.opt_binds().add(
-        "excludepkgs",
-        excludepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(excludepkgs, priority, value);
-        },
-        nullptr,
-        true);
-    //compatibility with yum
-    owner.opt_binds().add(
-        "exclude",
-        excludepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(excludepkgs, priority, value);
-        },
-        nullptr,
-        true);
-
-    owner.opt_binds().add(
-        "includepkgs",
-        includepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(includepkgs, priority, value);
-        },
-        nullptr,
-        true);
-
+    owner.opt_binds().add("excludepkgs", excludepkgs);
+    owner.opt_binds().add("exclude", excludepkgs);  //compatibility with yum
+    owner.opt_binds().add("includepkgs", includepkgs);
     owner.opt_binds().add("fastestmirror", fastestmirror);
 
     owner.opt_binds().add(
@@ -276,17 +251,17 @@ const OptionStringList & ConfigRepo::get_gpgkey_option() const {
     return p_impl->gpgkey;
 }
 
-OptionStringList & ConfigRepo::get_excludepkgs_option() {
+OptionStringAppendList & ConfigRepo::get_excludepkgs_option() {
     return p_impl->excludepkgs;
 }
-const OptionStringList & ConfigRepo::get_excludepkgs_option() const {
+const OptionStringAppendList & ConfigRepo::get_excludepkgs_option() const {
     return p_impl->excludepkgs;
 }
 
-OptionStringList & ConfigRepo::get_includepkgs_option() {
+OptionStringAppendList & ConfigRepo::get_includepkgs_option() {
     return p_impl->includepkgs;
 }
-const OptionStringList & ConfigRepo::get_includepkgs_option() const {
+const OptionStringAppendList & ConfigRepo::get_includepkgs_option() const {
     return p_impl->includepkgs;
 }
 
@@ -339,10 +314,10 @@ const OptionChild<OptionString> & ConfigRepo::get_password_option() const {
     return p_impl->password;
 }
 
-OptionChild<OptionStringList> & ConfigRepo::get_protected_packages_option() {
+OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_option() {
     return p_impl->protected_packages;
 }
-const OptionChild<OptionStringList> & ConfigRepo::get_protected_packages_option() const {
+const OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_option() const {
     return p_impl->protected_packages;
 }
 
