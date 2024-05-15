@@ -66,8 +66,10 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %include "libdnf5/conf/option_seconds.hpp"
 %include "libdnf5/conf/option_string.hpp"
 %include "libdnf5/conf/option_string_list.hpp"
-%template(OptionStringSet) libdnf5::OptionStringContainer<std::set<std::string>>;
-%template(OptionStringList) libdnf5::OptionStringContainer<std::vector<std::string>>;
+%template(OptionStringSet) libdnf5::OptionStringContainer<std::set<std::string>, false>;
+%template(OptionStringList) libdnf5::OptionStringContainer<std::vector<std::string>, false>;
+%template(OptionStringAppendSet) libdnf5::OptionStringContainer<std::set<std::string>, true>;
+%template(OptionStringAppendList) libdnf5::OptionStringContainer<std::vector<std::string>, true>;
 
 %ignore libdnf5::OptionPathNotFoundError;
 %include "libdnf5/conf/option_path.hpp"
@@ -77,6 +79,8 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %template(OptionChildString) libdnf5::OptionChild<libdnf5::OptionString>;
 %template(OptionChildStringList) libdnf5::OptionChild<libdnf5::OptionStringList>;
 %template(OptionChildStringSet) libdnf5::OptionChild<libdnf5::OptionStringSet>;
+%template(OptionChildStringAppendList) libdnf5::OptionChild<libdnf5::OptionStringAppendList>;
+%template(OptionChildStringAppendSet) libdnf5::OptionChild<libdnf5::OptionStringAppendSet>;
 %template(OptionChildNumberInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::int32_t>>;
 %template(OptionChildNumberUInt32) libdnf5::OptionChild<libdnf5::OptionNumber<std::uint32_t>>;
 %template(OptionChildNumberFloat) libdnf5::OptionChild<libdnf5::OptionNumber<float>>;
