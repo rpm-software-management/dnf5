@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
 "PO-Revision-Date: 2024-02-02 12:15+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -33,7 +33,11 @@ msgid "Show advisories containing any version of installed packages."
 msgstr "Zobrazí doporučení obsahující jakoukoli verzi nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:43
-msgid "Show advisories containing newer versions of installed packages."
+#, fuzzy
+#| msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr "Zobrazí doporučení obsahující novější verze nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:55
@@ -113,7 +117,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "ADVISORY_SEVERITY,..."
 
-#: commands/advisory/arguments.hpp:181
+#: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -121,11 +125,11 @@ msgstr ""
 "Omezí se na balíčky v doporučeních, které opravují Bugzilla ID, např. "
 "123123. Seznamu možností."
 
-#: commands/advisory/arguments.hpp:182
+#: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory/arguments.hpp:192
+#: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -133,9 +137,37 @@ msgstr ""
 "Omezí se na balíčky v doporučeních, které opravují ID CVE (Common "
 "Vulnerabilities and Exposures), např. CVE-2201-0123. Seznam možností."
 
-#: commands/advisory/arguments.hpp:194
+#: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr ""
+
+#: commands/group/group_list.hpp:59
+#, fuzzy
+#| msgid ""
+#| "Show only advisories containing packages with specified names. List "
+#| "option, supports globs."
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Zobrazit pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
+"možností, podporuje globs."
+
+#: commands/repoquery/repoquery.cpp:158
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr ""
 
 #: exception.cpp:28
 msgid ""

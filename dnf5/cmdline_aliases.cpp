@@ -95,7 +95,7 @@ bool attach_named_args(
 
 void load_aliases_from_toml_file(Context & context, const fs::path & config_file_path) {
     auto & arg_parser = context.get_argument_parser();
-    auto logger = context.base.get_logger();
+    auto logger = context.get_base().get_logger();
 
     try {
         const auto arg_parser_elements =
@@ -654,7 +654,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 }  // namespace
 
 void load_cmdline_aliases(Context & context, const std::filesystem::path & config_dir_path) {
-    auto logger = context.base.get_logger();
+    auto logger = context.get_base().get_logger();
 
     std::vector<fs::path> config_paths;
     std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory

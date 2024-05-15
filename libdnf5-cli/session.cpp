@@ -24,7 +24,42 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::session {
 
-void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+class Session::Impl {
+public:
+    Impl() : argument_parser(new libdnf5::cli::ArgumentParser) {}
+
+    void add_and_initialize_command(std::unique_ptr<Command> && command);
+
+    Command * get_root_command() {
+        auto * arg_parser_root_command = argument_parser->get_root_command();
+        return arg_parser_root_command ? static_cast<Command *>(arg_parser_root_command->get_user_data()) : nullptr;
+    }
+
+    void set_root_command(Command & command) {
+        argument_parser->set_root_command(command.get_argument_parser_command());
+    }
+
+    Command * get_selected_command() { return selected_command; }
+
+    void set_selected_command(Command * command) { selected_command = command; }
+
+    libdnf5::cli::ArgumentParser & get_argument_parser() { return *argument_parser; }
+
+    void clear() {
+        for (auto & cmd : commands) {
+            cmd.reset();
+        }
+        argument_parser.reset();
+    }
+
+private:
+    Command * selected_command{nullptr};
+    std::vector<std::unique_ptr<Command>> commands;
+    std::unique_ptr<libdnf5::cli::ArgumentParser> argument_parser;
+};
+
+
+void Session::Impl::add_and_initialize_command(std::unique_ptr<Command> && command) {
     auto * arg_parser_command = command->get_argument_parser_command();
 
     // set the command as selected when parsed
@@ -48,22 +83,40 @@ void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
 }
 
 
-libdnf5::cli::ArgumentParser & Session::get_argument_parser() {
-    return *argument_parser;
+Session::Session() : p_impl{new Impl} {}
+
+Session::~Session() = default;
+
+Session::Session(Session && src) = default;
+
+Session & Session::operator=(Session && src) = default;
+
+void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+    p_impl->add_and_initialize_command(std::move(command));
 }
 
+Command * Session::get_root_command() {
+    return p_impl->get_root_command();
+}
 
 void Session::set_root_command(Command & command) {
-    // register command as root command in argument parser
-    get_argument_parser().set_root_command(command.get_argument_parser_command());
+    p_impl->set_root_command(command);
 }
 
+Command * Session::get_selected_command() {
+    return p_impl->get_selected_command();
+}
+
+void Session::set_selected_command(Command * command) {
+    p_impl->set_selected_command(command);
+}
+
+libdnf5::cli::ArgumentParser & Session::get_argument_parser() {
+    return p_impl->get_argument_parser();
+}
 
 void Session::clear() {
-    for (auto & cmd : commands) {
-        cmd.reset();
-    }
-    argument_parser.reset();
+    p_impl->clear();
 }
 
 
@@ -74,11 +127,41 @@ Command::Command(Session & session, const std::string & name) : session{session}
     argument_parser_command->set_user_data(this);
 }
 
+Command::~Command() = default;
+
+void Command::set_parent_command() {}
+
+void Command::set_argument_parser() {}
+
+void Command::register_subcommands() {}
+
+void Command::pre_configure() {}
+
+void Command::configure() {}
+
+void Command::load_additional_packages() {}
+
+void Command::run() {}
+
+void Command::goal_resolved() {}
 
 void Command::throw_missing_command() const {
     throw ArgumentParserMissingCommandError(M_("Missing command"), get_argument_parser_command()->get_id());
 }
+Session & Command::get_session() const noexcept {
+    return session;
+}
 
+Command * Command::get_parent_command() const noexcept {
+    auto * parser_parent = argument_parser_command->get_parent();
+    if (!parser_parent)
+        return nullptr;
+    return static_cast<Command *>(parser_parent->get_user_data());
+}
+
+libdnf5::cli::ArgumentParser::Command * Command::get_argument_parser_command() const noexcept {
+    return argument_parser_command;
+}
 
 void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf5::cli::ArgumentParser::Group * group) {
     auto * sub_arg_parser_command = subcommand->get_argument_parser_command();
@@ -90,6 +173,11 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf5::
 
     session.add_and_initialize_command(std::move(subcommand));
 }
+
+
+Option::Option() = default;
+
+Option::~Option() = default;
 
 
 BoolOption::BoolOption(
@@ -121,6 +209,20 @@ BoolOption::BoolOption(
     arg->link_value(conf);
 
     command.get_argument_parser_command()->register_named_arg(arg);
+}
+
+BoolOption::~BoolOption() = default;
+
+bool BoolOption::get_value() const {
+    return conf->get_value();
+}
+
+void BoolOption::set(libdnf5::Option::Priority priority, bool value) {
+    return conf->set(priority, value);
+}
+
+libdnf5::cli::ArgumentParser::NamedArg * BoolOption::get_arg() {
+    return arg;
 }
 
 
@@ -159,7 +261,6 @@ AppendStringListOption::AppendStringListOption(
     command.get_argument_parser_command()->register_named_arg(arg);
 }
 
-
 AppendStringListOption::AppendStringListOption(
     libdnf5::cli::session::Command & command,
     const std::string & long_name,
@@ -168,6 +269,15 @@ AppendStringListOption::AppendStringListOption(
     const std::string & help)
     : AppendStringListOption(command, long_name, short_name, desc, help, "", false) {}
 
+AppendStringListOption::~AppendStringListOption() = default;
+
+std::vector<std::string> AppendStringListOption::get_value() const {
+    return conf->get_value();
+}
+
+libdnf5::cli::ArgumentParser::NamedArg * AppendStringListOption::get_arg() {
+    return arg;
+}
 
 StringArgumentList::StringArgumentList(
     libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs) {
@@ -181,6 +291,12 @@ StringArgumentList::StringArgumentList(
     command.get_argument_parser_command()->register_positional_arg(arg);
 }
 
+StringArgumentList::StringArgumentList(
+    libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc)
+    : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
+
+StringArgumentList::~StringArgumentList() = default;
+
 std::vector<std::string> StringArgumentList::get_value() const {
     std::vector<std::string> result;
 
@@ -190,6 +306,10 @@ std::vector<std::string> StringArgumentList::get_value() const {
     }
 
     return result;
+}
+
+libdnf5::cli::ArgumentParser::PositionalArg * StringArgumentList::get_arg() {
+    return arg;
 }
 
 

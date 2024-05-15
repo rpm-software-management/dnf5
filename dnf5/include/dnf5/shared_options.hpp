@@ -28,34 +28,24 @@ namespace dnf5 {
 
 class AllowErasingOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit AllowErasingOption(libdnf5::cli::session::Command & command)
-        : BoolOption(
-              command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
+    explicit AllowErasingOption(libdnf5::cli::session::Command & command);
+    ~AllowErasingOption();
 };
+
 
 class SkipBrokenOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit SkipBrokenOption(dnf5::Command & command)
-        : BoolOption(
-              command,
-              "skip-broken",
-              '\0',
-              _("Allow resolving of depsolve problems by skipping packages"),
-              false,
-              &command.get_context().base.get_config().get_skip_broken_option()) {}
+    explicit SkipBrokenOption(dnf5::Command & command);
+    ~SkipBrokenOption();
 };
+
 
 class SkipUnavailableOption : public libdnf5::cli::session::BoolOption {
 public:
-    explicit SkipUnavailableOption(dnf5::Command & command)
-        : BoolOption(
-              command,
-              "skip-unavailable",
-              '\0',
-              _("Allow skipping unavailable packages"),
-              false,
-              &command.get_context().base.get_config().get_skip_unavailable_option()) {}
+    explicit SkipUnavailableOption(dnf5::Command & command);
+    ~SkipUnavailableOption();
 };
+
 
 /// Create two options (`--allow-downgrade` and `--no-allow-downgrade`) for a command provided as an argument command.
 /// The values are stored in the `allow_downgrade` configuration option

@@ -89,7 +89,7 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                         tmp_repo_conf.opt_binds().at(repo_key);
                     } catch (const OptionBindsOptionNotFoundError & ex) {
                         write_warning(
-                            *ctx.base.get_logger(),
+                            *ctx.get_base().get_logger(),
                             M_("config-manager: Request to remove unsupported repository option: {}"),
                             key);
                     }
@@ -101,7 +101,7 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
                         tmp_config.opt_binds().at(key);
                     } catch (const OptionBindsOptionNotFoundError & ex) {
                         write_warning(
-                            *ctx.base.get_logger(),
+                            *ctx.get_base().get_logger(),
                             M_("config-manager: Request to remove unsupported main option: {}"),
                             key);
                     }
@@ -118,11 +118,11 @@ void ConfigManagerUnsetOptCommand::set_argument_parser() {
 
 void ConfigManagerUnsetOptCommand::configure() {
     auto & ctx = get_context();
-    const auto & config = ctx.base.get_config();
+    const auto & config = ctx.get_base().get_config();
 
     // Remove options from main configuration file.
     if (!main_opts_to_remove.empty()) {
-        const auto & cfg_filepath = get_config_file_path(ctx.base.get_config());
+        const auto & cfg_filepath = get_config_file_path(ctx.get_base().get_config());
         if (std::filesystem::exists(cfg_filepath)) {
             ConfigParser parser;
             bool changed = false;
@@ -136,7 +136,7 @@ void ConfigManagerUnsetOptCommand::configure() {
             for (const auto & key : main_opts_to_remove) {
                 if (!used_keys.contains(key)) {
                     write_warning(
-                        *ctx.base.get_logger(),
+                        *ctx.get_base().get_logger(),
                         M_("config-manager: Request to remove main option but it is not present in the config file: "
                            "{}"),
                         key);
@@ -148,7 +148,7 @@ void ConfigManagerUnsetOptCommand::configure() {
             }
         } else {
             write_warning(
-                *ctx.base.get_logger(),
+                *ctx.get_base().get_logger(),
                 M_("config-manager: Request to remove main option but config file not found: {}"),
                 cfg_filepath.string());
         }
@@ -182,7 +182,7 @@ void ConfigManagerUnsetOptCommand::configure() {
                 if (const auto used_repoid_opts = used_repos_opts.find(in_repoid);
                     used_repoid_opts == used_repos_opts.end()) {
                     write_warning(
-                        *ctx.base.get_logger(),
+                        *ctx.get_base().get_logger(),
                         M_("config-manager: Request to remove repository option but repoid is not present "
                            "in the overrides: {}"),
                         in_repoid);
@@ -190,7 +190,7 @@ void ConfigManagerUnsetOptCommand::configure() {
                     for (const auto & key : keys) {
                         if (!used_repoid_opts->second.contains(key))
                             write_warning(
-                                *ctx.base.get_logger(),
+                                *ctx.get_base().get_logger(),
                                 M_("config-manager: Request to remove repository option but it is not present "
                                    "in the overrides: {}.{}"),
                                 in_repoid,
@@ -210,7 +210,7 @@ void ConfigManagerUnsetOptCommand::configure() {
             }
         } else {
             write_warning(
-                *ctx.base.get_logger(),
+                *ctx.get_base().get_logger(),
                 M_("config-manager: Request to remove repository option but file with overrides not found: {}"),
                 repos_override_file_path.string());
         }

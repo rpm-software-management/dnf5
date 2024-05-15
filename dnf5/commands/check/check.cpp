@@ -257,7 +257,7 @@ void CheckCommand::set_argument_parser() {
 
 
 void CheckCommand::configure() {
-    installonly_pkgs_provides = get_context().base.get_config().get_installonlypkgs_option().get_value();
+    installonly_pkgs_provides = get_context().get_base().get_config().get_installonlypkgs_option().get_value();
     if (!(dependencies || duplicates || obsoleted)) {
         dependencies = duplicates = obsoleted = true;
     }
@@ -268,7 +268,7 @@ void CheckCommand::run() {
     auto & ctx = get_context();
 
     auto ts = rpmtsCreate();
-    auto & config = ctx.base.get_config();
+    auto & config = ctx.get_base().get_config();
     rpmtsSetRootDir(ts, config.get_installroot_option().get_value().c_str());
 
     rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_PACKAGES, NULL, 0);

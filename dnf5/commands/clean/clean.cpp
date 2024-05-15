@@ -132,7 +132,7 @@ void CleanCommand::set_argument_parser() {
 
 void CleanCommand::run() {
     auto & ctx = get_context();
-    fs::path cachedir{ctx.base.get_config().get_cachedir_option().get_value()};
+    fs::path cachedir{ctx.get_base().get_config().get_cachedir_option().get_value()};
 
     std::error_code ec;
     libdnf5::repo::RepoCache::RemoveStatistics statistics{};
@@ -140,7 +140,7 @@ void CleanCommand::run() {
         if (!dir_entry.is_directory()) {
             continue;
         }
-        libdnf5::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
+        libdnf5::repo::RepoCache cache(ctx.get_base().get_weak_ptr(), dir_entry.path());
 
         try {
             if (required_actions & CLEAN_ALL) {

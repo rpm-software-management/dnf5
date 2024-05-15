@@ -84,11 +84,11 @@ void SystemUpgradeDownloadCommand::set_argument_parser() {
 void SystemUpgradeDownloadCommand::configure() {
     auto & ctx = get_context();
 
-    const std::filesystem::path installroot{ctx.base.get_config().get_installroot_option().get_value()};
+    const std::filesystem::path installroot{ctx.get_base().get_config().get_installroot_option().get_value()};
 
-    target_releasever = ctx.base.get_vars()->get_value("releasever");
+    target_releasever = ctx.get_base().get_vars()->get_value("releasever");
 
-    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.base.get_weak_ptr(), installroot);
+    const auto & detected_releasever = libdnf5::Vars::detect_release(ctx.get_base().get_weak_ptr(), installroot);
     if (detected_releasever != nullptr) {
         system_releasever = *detected_releasever;
 

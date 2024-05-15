@@ -110,7 +110,7 @@ void ChangelogCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add(
+    context.get_base().get_config().get_optional_metadata_types_option().add(
         libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
 }
 
@@ -119,7 +119,7 @@ void ChangelogCommand::run() {
 
     std::pair<libdnf5::cli::output::ChangelogFilterType, std::variant<libdnf5::rpm::PackageQuery, int64_t, int32_t>>
         filter = {libdnf5::cli::output::ChangelogFilterType::NONE, 0};
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
 
     auto since = since_option->get_value();
     auto count = count_option->get_value();
@@ -140,7 +140,7 @@ void ChangelogCommand::run() {
     }
 
     //query
-    libdnf5::rpm::PackageQuery query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK, true);
+    libdnf5::rpm::PackageQuery query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK, true);
     libdnf5::ResolveSpecSettings settings;
     settings.set_ignore_case(true);
     settings.set_with_nevra(true);

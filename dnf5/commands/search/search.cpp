@@ -57,7 +57,7 @@ void SearchCommand::configure() {
 }
 
 void SearchCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     SearchProcessor processor(base, patterns->get_value(), all->get_value(), show_duplicates->get_value());
     libdnf5::cli::output::print_search_results(processor.get_results());
 }

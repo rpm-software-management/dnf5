@@ -34,7 +34,7 @@ void CoprDebugCommand::set_argument_parser() {
 
 
 void CoprDebugCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     std::unique_ptr<dnf5::CoprConfig> copr_config = std::make_unique<dnf5::CoprConfig>(base);
     auto name_version = copr_config->get_value("main", "name_version");
     auto arch = copr_config->get_value("main", "arch");

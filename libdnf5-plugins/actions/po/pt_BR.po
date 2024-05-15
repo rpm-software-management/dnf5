@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
 "PO-Revision-Date: 2024-01-11 22:23+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.3.1\n"
 
-#: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
+#: actions.cpp:398 actions.cpp:406 actions.cpp:414 actions.cpp:422
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,22 +26,22 @@ msgstr ""
 "Erro no arquivo \"{}\" na linha {}: Esperava-se o formato \"GANCHO:"
 "FILTRO_PACOTE:DIREÇÃO:OPÇÕES:COMANDO\""
 
-#: actions.cpp:443
+#: actions.cpp:444
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Erro no arquivo \"{}\" na linha {}: Opção \"enabled\" com valor desconhecido "
 "\"{}\""
 
-#: actions.cpp:450
+#: actions.cpp:451
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Erro no arquivo \"{}\" na linha {}: Opção desconhecida \"{}\""
 
-#: actions.cpp:468
+#: actions.cpp:469
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Erro no arquivo \"{}\" na linha {}: Gancho desconhecido \"{}\""
 
-#: actions.cpp:478
+#: actions.cpp:479
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -49,18 +49,18 @@ msgstr ""
 "Erro no arquivo \"{}\" na linha {}: O filtro de pacotes só pode ser usado em "
 "ganchos PRE_TRANS e POST_TRANS"
 
-#: actions.cpp:488
+#: actions.cpp:489
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "Erro no arquivo \"{}\" na linha {}: Não é possível usar direção sem filtro "
 "de pacotes"
 
-#: actions.cpp:505
+#: actions.cpp:506
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 "Erro no arquivo \"{}\" na linha {}: Pacote com direção desconhecida \"{}\""
 
-#: actions.cpp:514
+#: actions.cpp:515
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Erro no arquivo \"{}\" na linha {}: Faltando comando"

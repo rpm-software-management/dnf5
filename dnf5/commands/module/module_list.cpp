@@ -46,7 +46,7 @@ void ModuleListCommand::configure() {
 }
 
 void ModuleListCommand::run() {
-    libdnf5::module::ModuleQuery query(get_context().base, true);
+    libdnf5::module::ModuleQuery query(get_context().get_base(), true);
     auto module_specs_str = module_specs->get_value();
     std::set<std::string> unmatched_module_spec;
 
@@ -54,7 +54,7 @@ void ModuleListCommand::run() {
         for (const auto & module_spec : module_specs_str) {
             bool module_spec_matched = false;
             for (const auto & nsvcap : libdnf5::module::Nsvcap::parse(module_spec)) {
-                libdnf5::module::ModuleQuery nsvcap_query(get_context().base, false);
+                libdnf5::module::ModuleQuery nsvcap_query(get_context().get_base(), false);
                 nsvcap_query.filter_nsvca(nsvcap, libdnf5::sack::QueryCmp::GLOB);
                 if (!nsvcap_query.empty()) {
                     query |= nsvcap_query;
@@ -66,7 +66,7 @@ void ModuleListCommand::run() {
             }
         }
     } else {
-        query = libdnf5::module::ModuleQuery(get_context().base, false);
+        query = libdnf5::module::ModuleQuery(get_context().get_base(), false);
     }
 
     if (enabled->get_value()) {

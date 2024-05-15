@@ -57,7 +57,7 @@ void CoprEnableCommand::set_argument_parser() {
 
 
 void CoprEnableCommand::run() {
-    auto & base = get_context().base;
+    auto & base = get_context().get_base();
     std::unique_ptr<dnf5::CoprConfig> config = std::make_unique<dnf5::CoprConfig>(base);
     auto repo = CoprRepo(base, config, get_project_spec(), opt_chroot);
     repo.save_interactive();

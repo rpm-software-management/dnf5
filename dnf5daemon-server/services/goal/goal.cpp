@@ -43,6 +43,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         }                                                                                              \
     })
 
+static std::string dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType type) {
+    switch (type) {
+        case dnfdaemon::DbusTransactionItemType::PACKAGE:
+            return "Package";
+        case dnfdaemon::DbusTransactionItemType::GROUP:
+            return "Group";
+        case dnfdaemon::DbusTransactionItemType::ENVIRONMENT:
+            return "Environment";
+        case dnfdaemon::DbusTransactionItemType::MODULE:
+            return "Module";
+        case dnfdaemon::DbusTransactionItemType::SKIPPED:
+            return "Skipped";
+    }
+    return "";
+}
+
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     // TODO(mblaha) Adjust resolve method to accommodate also groups, environments,
@@ -119,7 +135,8 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
             "download_size",
             "install_size",
             "evr",
-            "reason"};
+            "reason",
+            "full_nevra"};
         for (auto & tspkg : transaction.get_transaction_packages()) {
             dnfdaemon::KeyValueMap trans_item_attrs{};
             if (tspkg.get_reason_change_group_id()) {
@@ -134,7 +151,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
                 trans_item_attrs.emplace("replaces", replaces_ids);
             }
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::PACKAGE),
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::PACKAGE),
                 transaction_item_action_to_string(tspkg.get_action()),
                 transaction_item_reason_to_string(tspkg.get_reason()),
                 trans_item_attrs,
@@ -144,7 +161,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
         dnfdaemon::KeyValueMap trans_item_attrs{};
         for (auto & tsgrp : transaction.get_transaction_groups()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::GROUP),
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::GROUP),
                 transaction_item_action_to_string(tsgrp.get_action()),
                 transaction_item_reason_to_string(tsgrp.get_reason()),
                 trans_item_attrs,
@@ -152,7 +169,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
         }
         for (auto & tsenv : transaction.get_transaction_environments()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                transaction_item_type_to_string(libdnf5::transaction::TransactionItemType::ENVIRONMENT),
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::ENVIRONMENT),
                 transaction_item_action_to_string(tsenv.get_action()),
                 transaction_item_reason_to_string(tsenv.get_reason()),
                 trans_item_attrs,
@@ -164,6 +181,26 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
             overall_result = dnfdaemon::ResolveResult::WARNING;
         } else {
             overall_result = dnfdaemon::ResolveResult::NO_PROBLEM;
+        }
+        for (const auto & pkg : transaction.get_conflicting_packages()) {
+            dnfdaemon::KeyValueMap trans_item_attrs{};
+            trans_item_attrs.emplace("reason_skipped", "conflict");
+            dbus_transaction.emplace_back(
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
+                "",
+                "",
+                trans_item_attrs,
+                package_to_map(pkg, pkg_attrs));
+        }
+        for (const auto & pkg : transaction.get_broken_dependency_packages()) {
+            dnfdaemon::KeyValueMap trans_item_attrs{};
+            trans_item_attrs.emplace("reason_skipped", "broken_dependency");
+            dbus_transaction.emplace_back(
+                dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::SKIPPED),
+                "",
+                "",
+                trans_item_attrs,
+                package_to_map(pkg, pkg_attrs));
         }
     }
 

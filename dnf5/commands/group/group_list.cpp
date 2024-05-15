@@ -35,7 +35,7 @@ void GroupListCommand::set_argument_parser() {
 
     available = std::make_unique<GroupAvailableOption>(*this);
     installed = std::make_unique<GroupInstalledOption>(*this);
-    available->arg->add_conflict_argument(*installed->arg);
+    available->get_arg()->add_conflict_argument(*installed->get_arg());
     hidden = std::make_unique<GroupHiddenOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this);
     group_pkg_contains = std::make_unique<GroupContainsPkgsOption>(*this);
@@ -45,14 +45,14 @@ void GroupListCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void GroupListCommand::run() {
     auto & ctx = get_context();
 
-    libdnf5::comps::GroupQuery query(ctx.base);
+    libdnf5::comps::GroupQuery query(ctx.get_base());
     auto group_specs_str = group_specs->get_value();
 
     // Filter by patterns if given

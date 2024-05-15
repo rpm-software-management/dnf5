@@ -106,7 +106,7 @@ void AutomaticCommand::wait_for_network() {
     }
 
     auto & context = get_context();
-    auto & base = context.base;
+    auto & base = context.get_base();
     auto & logger = *base.get_logger();
     logger.debug("Waiting for internet connection...");
 
@@ -244,53 +244,47 @@ void AutomaticCommand::set_argument_parser() {
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(nodownloadupdates->arg);
-        downloadupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(nodownloadupdates->get_arg());
+        downloadupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     // installupdates and no-installupdates options conflict with each other.
     // installupdates and no-downloadupdates options conflict with each other.
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(downloadupdates->arg);
-        conflicts->push_back(installupdates->arg);
-        nodownloadupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(downloadupdates->get_arg());
+        conflicts->push_back(installupdates->get_arg());
+        nodownloadupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(noinstallupdates->arg);
-        conflicts->push_back(nodownloadupdates->arg);
-        installupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(noinstallupdates->get_arg());
+        conflicts->push_back(nodownloadupdates->get_arg());
+        installupdates->get_arg()->set_conflict_arguments(conflicts);
     }
     {
         auto conflicts =
             parser.add_conflict_args_group(std::make_unique<std::vector<libdnf5::cli::ArgumentParser::Argument *>>());
-        conflicts->push_back(installupdates->arg);
-        noinstallupdates->arg->set_conflict_arguments(conflicts);
+        conflicts->push_back(installupdates->get_arg());
+        noinstallupdates->get_arg()->set_conflict_arguments(conflicts);
     }
 }
 
 void AutomaticCommand::pre_configure() {
     auto & context = get_context();
-    auto & base = context.base;
-
-    auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
-    if (timer->get_value() && random_sleep > 0) {
-        random_wait(random_sleep);
-    }
-
+    auto & base = context.get_base();
     auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacksSimple>(output_stream);
     base.set_download_callbacks(std::move(download_callbacks_uptr));
     download_callbacks_set = true;
 
-    // read the config file, use the first existing file in following locations:
+    // read the config files in following order (/etc overrides /usr):
+    //      - [installroot]/usr/share/dnf5/dnf5-plugins/automatic.conf
     //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf
-    //      - [installroot]/usr/share/dnf5/d  nf5-plugins/automatic.conf
     auto & main_config = base.get_config();
     bool use_host_config{main_config.get_use_host_config_option().get_value()};
     std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
-    std::vector<std::filesystem::path> possible_paths{"/etc/dnf/dnf5-plugins", "/usr/share/dnf5/dnf5-plugins"};
+    std::vector<std::filesystem::path> possible_paths{"/usr/share/dnf5/dnf5-plugins", "/etc/dnf/dnf5-plugins"};
     for (const auto & pth : possible_paths) {
         std::filesystem::path conf_file_path{pth / "automatic.conf"};
         if (!use_host_config) {
@@ -302,8 +296,12 @@ void AutomaticCommand::pre_configure() {
             base.get_config().load_from_parser(
                 parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
             config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
-            break;
         }
+    }
+
+    auto random_sleep = config_automatic.config_commands.random_sleep.get_value();
+    if (timer->get_value() && random_sleep > 0) {
+        random_wait(random_sleep);
     }
 
     context.set_output_stream(output_stream);
@@ -321,7 +319,7 @@ void AutomaticCommand::configure() {
 
 void AutomaticCommand::run() {
     auto & context = get_context();
-    auto & base = context.base;
+    auto & base = context.get_base();
     bool success = true;
 
     // setup upgrade transaction goal
@@ -455,7 +453,7 @@ AutomaticCommand::~AutomaticCommand() {
     // during ~Base, resulting in a segmentation fault. Therefore, we need to reset
     // download_callbacks manually.
     if (download_callbacks_set) {
-        context.base.set_download_callbacks(nullptr);
+        context.get_base().set_download_callbacks(nullptr);
     }
 }
 

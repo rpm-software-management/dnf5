@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024.
 # Luna Jernberg <bittin@reimu.nl>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
-"PO-Revision-Date: 2024-03-20 02:43+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
+"PO-Revision-Date: 2024-04-26 08:36+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/sv/>\n"
@@ -53,9 +54,12 @@ msgstr ""
 "Visa rekommendationer som innehåller någon version av installerade paket."
 
 #: commands/advisory/arguments.hpp:45
-msgid "Show advisories containing newer versions of installed packages."
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
 msgstr ""
-"Visa rekommendationer som innehåller nyare versioner av installerade paket."
+"Visa rekommendationer som innehåller nyare versioner av installerade paket. "
+"Detta är standardbeteendet."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
@@ -133,7 +137,7 @@ msgstr ""
 msgid "ADVISORY_SEVERITY,..."
 msgstr "REKOMMENDATIONSALLVARLIGHET,…"
 
-#: commands/advisory_shared.hpp:179
+#: commands/advisory_shared.hpp:167
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
@@ -141,11 +145,11 @@ msgstr ""
 "Begränsa till paket i rekommendationer som löser ett Bugzilla-ID, t.ex. "
 "123123. Listflagga."
 
-#: commands/advisory_shared.hpp:180
+#: commands/advisory_shared.hpp:168
 msgid "BUGZILLA_ID,..."
 msgstr "BUGZILLA_ID,..."
 
-#: commands/advisory_shared.hpp:190
+#: commands/advisory_shared.hpp:178
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
@@ -153,7 +157,7 @@ msgstr ""
 "Begränsa till paket med rekommendationer som fixar en CVE (Vanliga "
 "sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
 
-#: commands/advisory_shared.hpp:192
+#: commands/advisory_shared.hpp:180
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
@@ -161,15 +165,15 @@ msgstr "CVE_ID,..."
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Kontrollen upptäckte {} problem i {} paket"
 
-#: commands/clean/clean.cpp:86
+#: commands/clean/clean.cpp:88
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Lista över cachetyper att rensa upp. Typer som stöds: {0}"
 
-#: commands/clean/clean.cpp:104
+#: commands/clean/clean.cpp:106
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Okänd cachetyp \"{0}\". Typer som stöds: {1}"
 
-#: commands/clean/clean.cpp:161
+#: commands/clean/clean.cpp:164
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Misslyckades att rensa arkivets cache i sökväg \"{0}\": {1}"
 
@@ -177,7 +181,7 @@ msgstr "Misslyckades att rensa arkivets cache i sökväg \"{0}\": {1}"
 msgid "Invalid urlprotocol option: {}"
 msgstr "Ogiltigt urlprotocol alternativ: {}"
 
-#: commands/download/download.cpp:139 main.cpp:611 shared_options.cpp:92
+#: commands/download/download.cpp:139 main.cpp:610
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Arkitektur \"{0}\" som inte stöds. Välj en från {1}"
 
@@ -204,7 +208,7 @@ msgstr "Visa endast tillgängliga grupper."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr "Visa också dolda grupper."
+msgstr "Visa även dolda grupper."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
@@ -215,8 +219,8 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Visa endast grupper som innehåller paket med angivna namn. Listalternativ, "
-"stöder globs."
+"Visa endast grupper som innehåller paket med angivna namn. Listflagga, "
+"stödjer ”glob”:ar."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
@@ -258,27 +262,27 @@ msgstr ""
 "Ogiltigt transaktions-ID-intervall \"{}\", \"ID\" eller \"ID..ID\" "
 "förväntas, där ID är \"NUMMER\", \"senaste\" eller \"senaste NUMMER\"."
 
-#: commands/list/list.cpp:46
+#: commands/list/list.cpp:44
 msgid "Lists packages depending on the packages' relation to the system"
 msgstr "Listar paket beroende på paketens förhållande till systemet"
 
-#: commands/list/list.cpp:49
+#: commands/list/list.cpp:47
 msgid "List of keys to match case insensitively"
 msgstr "Lista över nycklar att matcha skiftlägeskänsligt"
 
-#: commands/list/list.cpp:61
+#: commands/list/list.cpp:59
 msgid "Show all versions of the packages, not only the latest ones."
 msgstr "Visa alla versioner av paketen, inte bara de senaste."
 
-#: commands/list/list.cpp:67
+#: commands/list/list.cpp:65
 msgid "List installed packages."
 msgstr "Lista installerade paket."
 
-#: commands/list/list.cpp:71
+#: commands/list/list.cpp:69
 msgid "List available packages."
 msgstr "Lista tillgängliga paket."
 
-#: commands/list/list.cpp:78
+#: commands/list/list.cpp:76
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
@@ -286,7 +290,7 @@ msgstr ""
 "Lista extrafunktioner, det vill säga paket installerade på systemet som inte "
 "är tillgängliga i något känt förråd."
 
-#: commands/list/list.cpp:86
+#: commands/list/list.cpp:84
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
@@ -294,19 +298,19 @@ msgstr ""
 "Lista paket installerade på systemet som är föråldrade av paket i något känt "
 "förråd."
 
-#: commands/list/list.cpp:91
+#: commands/list/list.cpp:89
 msgid "List packages recently added into the repositories."
 msgstr "Lista paket som nyligen lagts till i förråd."
 
-#: commands/list/list.cpp:95
+#: commands/list/list.cpp:93
 msgid "List upgrades available for the installed packages."
 msgstr "Lista tillgängliga uppgraderingar för de installerade paketen."
 
-#: commands/list/list.cpp:99
+#: commands/list/list.cpp:97
 msgid "List packages which will be removed by the 'dnf autoremove' command."
 msgstr "Lista paket som kommer att tas bort med 'dnf autoremove' kommandot."
 
-#: commands/list/list.cpp:259
+#: commands/list/list.cpp:257
 msgid "No matching packages to list"
 msgstr "Inga matchande paket att lista"
 
@@ -322,154 +326,172 @@ msgstr "Visa inaktiverade moduler."
 msgid "Pattern matching module NSVCAs."
 msgstr "Mönstermatchande modul NSVCA:er."
 
-#: commands/module/module_list.cpp:84
+#: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
 msgstr "Inga matchningar hittades för \"{}\"."
 
-#: commands/offline/offline.cpp:187
+#: commands/offline/offline.cpp:189
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "Hantera frånkopplade transaktioner"
 
-#: commands/offline/offline.cpp:228
+#: commands/offline/offline.cpp:224
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
+"Fel vid läsning av tillståndet: {}. Kör om kommandot du använde för att "
+"initiera den frånkopplade transaktionen, t.ex. `dnf5 system-upgrade download "
+"[FLAGGOR]`."
 
-#: commands/offline/offline.cpp:248
+#: commands/offline/offline.cpp:247
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "Kunde inte ansluta till D-Bus: {}"
 
-#: commands/offline/offline.cpp:277
+#: commands/offline/offline.cpp:276
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
+"Förbered systemet för att utföra den frånkopplade transaktionen och starta "
+"om för att påbörja transaktionen."
 
-#: commands/offline/offline.cpp:284
+#: commands/offline/offline.cpp:283
 msgid "Power off the system after the operation is complete"
-msgstr ""
+msgstr "Stäng av systemet efter att åtgärden är färdig"
 
 #: commands/offline/offline.cpp:294
 msgid "No offline transaction is stored."
-msgstr ""
+msgstr "Ingen frånkopplad transaktion är lagrad."
 
 #: commands/offline/offline.cpp:301
-#, fuzzy
-#| msgid "Reverse the order of transactions."
 msgid "System is not ready for offline transaction."
-msgstr "Vänd om ordningsföljden på transaktioner."
+msgstr "Systemet är inte redo för en frånkopplad transaktion."
 
 #: commands/offline/offline.cpp:304
 msgid "Data directory {} does not exist."
-msgstr ""
+msgstr "Datakatalogen {} finns inte."
 
 #: commands/offline/offline.cpp:328
 msgid "{} is not wanted by system-update.target."
-msgstr ""
+msgstr "{} är inte önskat av system-update.target."
 
-#: commands/offline/offline.cpp:334
+#: commands/offline/offline.cpp:337
 msgid "The system will now reboot to upgrade to release version "
-msgstr ""
+msgstr "Systemet kommer nu starta om för att uppgradera till utgåveversion "
 
-#: commands/offline/offline.cpp:338
+#: commands/offline/offline.cpp:341
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr ""
+"Systemet kommer nu starta om för att utföra den frånkopplade transaktionen "
+"som initierades av följande kommando:"
 
-#: commands/offline/offline.cpp:369
+#: commands/offline/offline.cpp:372
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr ""
+"Endast intern användning, inte avsett att köras av användaren. Kör "
+"transaktionen i den frånkopplade miljön."
 
-#: commands/offline/offline.cpp:396
+#: commands/offline/offline.cpp:399
 msgid "Trigger file does not exist. Exiting."
-msgstr ""
+msgstr "Utlösarfilen finns inte. Avslutar."
 
-#: commands/offline/offline.cpp:400
+#: commands/offline/offline.cpp:403
 msgid "Another offline transaction tool is running. Exiting."
-msgstr ""
+msgstr "En annan frånkopplad transaktion kör. Avslutar."
 
-#: commands/offline/offline.cpp:436
+#: commands/offline/offline.cpp:435
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
+"Varning: kommandot `_execute`är endast för intern användning och är inte "
+"avsett att köras direkt av användaren. För att initiera systemuppgraderingen/"
+"den frånkopplade transaktionen skall man köra ? dnf5 offline reboot`."
 
-#: commands/offline/offline.cpp:443
+#: commands/offline/offline.cpp:442
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr ""
+msgstr "Använd `dnf5 offline reboot` för att påbörja transaktionen."
 
-#: commands/offline/offline.cpp:481
-#, fuzzy
-#| msgid "Transaction ID"
+#: commands/offline/offline.cpp:493
 msgid "Transaction failed: "
-msgstr "Transaktions ID"
+msgstr "Transaktionen misslyckades: "
 
-#: commands/offline/offline.cpp:554
+#: commands/offline/offline.cpp:562
 msgid "Error reading journal: {}"
-msgstr ""
+msgstr "Fel när journalen lästes: {}"
 
-#: commands/offline/offline.cpp:560
+#: commands/offline/offline.cpp:568
 msgid "Add journal match failed: {}"
-msgstr ""
+msgstr "Tillägg av journalmatchning misslyckades: {}"
 
-#: commands/offline/offline.cpp:588
+#: commands/offline/offline.cpp:596
 msgid "No logs were found."
-msgstr ""
+msgstr "Inga loggar fanns."
 
-#: commands/offline/offline.cpp:592
+#: commands/offline/offline.cpp:600
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
+"Följande uppstarter förefaller att innehålla loggar över frånkopplade "
+"transaktioner:"
 
-#: commands/offline/offline.cpp:609
+#: commands/offline/offline.cpp:617
 msgid "Cannot find logs with this index."
-msgstr ""
+msgstr "Kan inte hitta loggar med detta index."
 
-#: commands/offline/offline.cpp:616
+#: commands/offline/offline.cpp:624
 msgid "Unable to match systemd journal entry."
-msgstr ""
-
-#: commands/offline/offline.cpp:628
-msgid "Show logs from past offline transactions"
-msgstr ""
+msgstr "Kan inte matcha systemd:s journalpost."
 
 #: commands/offline/offline.cpp:636
+msgid "Show logs from past offline transactions"
+msgstr "Visa loggar från tidigare frånkopplade transaktioner"
+
+#: commands/offline/offline.cpp:644
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
+"Vilka loggar som skall visas. Kör utan några argument för att få en lista "
+"över tillgängliga loggar."
 
-#: commands/offline/offline.cpp:651
+#: commands/offline/offline.cpp:659
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
+"systemd stödjs inte i detta bygge av DNF 5; underkommandot `log` är "
+"otillgängligt."
 
-#: commands/offline/offline.cpp:656
+#: commands/offline/offline.cpp:664
 msgid "Show status of the current offline transaction"
-msgstr ""
+msgstr "Visa status för den aktuella frånkopplade transaktionen"
 
-#: commands/offline/offline.cpp:672
+#: commands/offline/offline.cpp:680
 msgid "An offline transaction was initiated by the following command:"
-msgstr ""
+msgstr "En frånkopplad transaktion initierades av följande kommando:"
 
-#: commands/offline/offline.cpp:674
+#: commands/offline/offline.cpp:682
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
+"Kör `dnf5 offline reboot` för att starta om och utföra den frånkopplade "
+"transaktionen."
 
-#: commands/offline/offline.cpp:676
+#: commands/offline/offline.cpp:684
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
+"En frånkopplad transaktion startades, men avslutades inte. Kör `dnf5 offline "
+"log` för mer information. Kommandot som initierade transaktionen var:"
 
-#: commands/offline/offline.cpp:681
+#: commands/offline/offline.cpp:689
 msgid "Unknown offline transaction status: "
-msgstr ""
+msgstr "Okänd status på frånkopplad transaktion: "
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
@@ -487,7 +509,7 @@ msgstr "Visa inaktiverade förråd."
 msgid "Pattern matching repo IDs."
 msgstr "Mönstermatchande repo-IDn."
 
-#: commands/repoquery/repoquery.cpp:514
+#: commands/repoquery/repoquery.cpp:516
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -495,7 +517,7 @@ msgstr ""
 "Alternativet \"--exactdeps\" måste användas antingen med \"--whatrequires\" "
 "eller \"--whatdepends\""
 
-#: commands/repoquery/repoquery.cpp:519
+#: commands/repoquery/repoquery.cpp:521
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -513,29 +535,31 @@ msgstr "Mönster"
 
 #: commands/system-upgrade/system-upgrade.cpp:54
 msgid "Prepare system for upgrade to a new release"
-msgstr ""
+msgstr "Förbered systemet för uppgradering till en ny utgåva"
 
 #: commands/system-upgrade/system-upgrade.cpp:70
 msgid "Download everything needed to upgrade to a new release"
-msgstr ""
+msgstr "Hämta allt som behövs för att uppgradera till en ny utgåva"
 
 #: commands/system-upgrade/system-upgrade.cpp:78
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
 msgstr ""
+"Installera inte paket från den nya utgåvan om de är äldre än vad som för "
+"närvarande är installerat"
 
 #: commands/system-upgrade/system-upgrade.cpp:97
 msgid "Need a --releasever greater than the current system version."
-msgstr ""
+msgstr "Behöver en --releasever större än den aktuella systemversionen."
 
 #: commands/system-upgrade/system-upgrade.cpp:131
 msgid "Store a distro-sync transaction to be performed offline"
-msgstr ""
+msgstr "Lagra en distro-sync-transaktion att utföras frånkopplat"
 
 #: commands/system-upgrade/system-upgrade.cpp:153
 msgid "Store an upgrade transaction to be performed offline"
-msgstr ""
+msgstr "Lagra en uppgraderingstransaktion att utföras frånkopplat"
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
@@ -550,16 +574,16 @@ msgstr "Lägg till ny post i versionslåskonfigurationen"
 msgid "List of package specs to add versionlock for"
 msgstr "Lista över paketspecifikationer att lägga till versionslås för"
 
-#: commands/versionlock/versionlock_add.cpp:103
-#: commands/versionlock/versionlock_exclude.cpp:122
+#: commands/versionlock/versionlock_add.cpp:106
+#: commands/versionlock/versionlock_exclude.cpp:125
 msgid "No package found for \"{}\"."
 msgstr "Inga paket hittades för \"{}\"."
 
-#: commands/versionlock/versionlock_add.cpp:121
+#: commands/versionlock/versionlock_add.cpp:124
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Lägger till versionslås på \"{0}={1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:127
 msgid "Package \"{}\" is already locked."
 msgstr "Paketet \"{}\" är redan låst."
 
@@ -593,37 +617,25 @@ msgstr ""
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
 msgstr "Lägger till versionslås exkludering på \"{0}={1}\"."
 
-#: commands/versionlock/versionlock_exclude.cpp:136
+#: commands/versionlock/versionlock_exclude.cpp:139
 msgid "Package \"{}\" is already excluded."
 msgstr "Paketet \"{}\" är redan exkluderat."
 
-#: context.cpp:82
+#: context.cpp:84
 msgid "The key was successfully imported."
 msgstr "Nyckeln importerades framgångsrikt."
 
-#: context.cpp:128
+#: context.cpp:252
 msgid "No matching repositories for \"{}\""
 msgstr "Inga matchande förråd för \"{}\""
 
-#: include/dnf5/offline.cpp:39
-msgid "error reading offline state file"
+#: context.cpp:406
+msgid ""
+"Location \"{}\" already contains a stored transaction, it will be "
+"overwritten.\n"
 msgstr ""
-
-#: include/dnf5/offline.cpp:44
-msgid "incompatible version of state data"
-msgstr ""
-
-#: include/dnf5/shared_options.hpp:33
-msgid "Allow erasing of installed packages to resolve problems"
-msgstr "Tillåt radering av installerade paket för att lösa problem"
-
-#: include/dnf5/shared_options.hpp:43
-msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr "Tillåt lösning av depsolve problem genom att hoppa över paket"
-
-#: include/dnf5/shared_options.hpp:55
-msgid "Allow skipping unavailable packages"
-msgstr "Tillåt att du hoppar över otillgängliga paket"
+"Plats \"{}\" innehåller redan en lagrad transaktion den kommer att skrivas "
+"över.\n"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
@@ -633,78 +645,324 @@ msgstr "Kan inte ladda delat bibliotek \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
 
-#: main.cpp:182
+#: main.cpp:122
+msgid "Utility for packages maintaining"
+msgstr "Verktyg för pakethantering"
+
+#: main.cpp:123
+msgid "DNF5 is a program for maintaining packages."
+msgstr "DNF5 är ett program för att hantera paket."
+
+#: main.cpp:124
+msgid "Unclassified options:"
+msgstr "Oklassificerade flaggor:"
+
+#: main.cpp:127
+msgid "Global options:"
+msgstr "Globala flaggor:"
+
+#: main.cpp:132
+msgid "Print help"
+msgstr "Skriv ut hjälp"
+
+#: main.cpp:139
+msgid "Configuration file location"
+msgstr "Konfigurationsfilens plats"
+
+#: main.cpp:147
+msgid ""
+"In combination with a non-interactive command, shows just the relevant "
+"content. Suppresses messages notifying about the current state or actions of "
+"dnf5."
+msgstr ""
+"I kombination med ett icke-interaktivt kommando, visar bara det relevanta "
+"innehållet. Undertrycker meddelanden som berättar om tillståndet hos eller "
+"åtgärder av dnf5."
+
+#: main.cpp:162
+msgid ""
+"Run entirely from system cache, don't update the cache and use it even in "
+"case it is expired."
+msgstr ""
+"Kör helt från systemets cache, uppdatera inte cachen och använd den även då "
+"den har gått ut."
+
+#: main.cpp:169
+msgid "Force refreshing metadata before running the command."
+msgstr "Framtvinga uppdatering av metadata före kommandot körs."
+
+#: main.cpp:185
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Det gick inte att upphöra förrådscache i sökväg \"{0}\": {1}"
 
-#: main.cpp:207
+#: main.cpp:202
+msgid "create additional repository using id and path"
+msgstr "skapa ytterligare förråd med ett id och en sökväg"
+
+#: main.cpp:210
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Felaktigt förrådsid och sökvägsspecifikation \"{}\""
 
-#: main.cpp:230 main.cpp:269
+#: main.cpp:222
+msgid "set arbitrary config and repo options"
+msgstr "sätt godtyckliga konfigurations- och förrådsalternativ"
+
+#: main.cpp:224
+msgid ""
+"Override a configuration option from the configuration file. To override "
+"configuration options for repositories, use repoid.option for  the\n"
+"              <option>.  Values  for configuration options like excludepkgs, "
+"includepkgs, installonlypkgs and tsflags are appended to the original "
+"value,\n"
+"              they do not override it. However, specifying an empty value (e."
+"g. --setopt=tsflags=) will clear the option."
+msgstr ""
+"Åsidosätt ett konfigurationsalternativ från konfigurationsfilen. För att "
+"åsidosätta konfigurationsalternativ för förråd, använd förrrådsid.alternativ "
+"som\n"
+"              <alternativ>. Värden på konfigurationsalternativ som "
+"excludepkgs, includepkgs, installonlypkgs och tsflags läggs till till det "
+"ursprungliga värdet,\n"
+"              de åsidosätter det inte. Dock kommer att ange ett tomt värde "
+"(t.ex. --setopt=tsflags=) nollställa alternativet."
+
+#: main.cpp:233 main.cpp:272
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Felaktigt formaterat argumentvärde \"{}\""
 
-#: main.cpp:237
+#: main.cpp:240
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Felaktigt formaterat argumentvärde: Sista nyckeltecknet kan inte vara "
 "'.': {}"
 
-#: main.cpp:250
+#: main.cpp:253
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:276
+#: main.cpp:279
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:825
+#: main.cpp:288
+msgid "automatically answer yes for all questions"
+msgstr "svara automatiskt ja på alla frågor"
+
+#: main.cpp:295
+msgid "automatically answer no for all questions"
+msgstr "svara automatiskt nej på alla frågor"
+
+#: main.cpp:309
+msgid "do not limit the transaction to the best candidate"
+msgstr "begränsa inte transaktionen till den bästa kandidaten"
+
+#: main.cpp:320
+msgid ""
+"Don't install files that are marked as documentation (which includes man "
+"pages and texinfo documents)"
+msgstr ""
+"Installera inte filer som är markerade som dokumentation (vilket inkluderar "
+"manualsidor och texinfo-dokument)"
+
+#: main.cpp:336
+msgid "exclude packages by name or glob"
+msgstr "uteslut paket via namn eller glob"
+
+#: main.cpp:355
+msgid ""
+"Enable additional repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Aktivera ytterligare datakataloger. Listalternativ. Stödjer globbningar, kan "
+"anges flera gånger."
+
+#: main.cpp:373
+msgid ""
+"Disable repositories. List option. Supports globs, can be specified multiple "
+"times."
+msgstr ""
+"Avaktivera förråd. Listalternativ. Stödjer globbningar, kan anges flera "
+"gånger."
+
+#: main.cpp:391
+msgid ""
+"Enable just specific repositories. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Aktivera bara specifika förråd. Listalternativ. Stödjer globbningar, kan "
+"anges flera gånger."
+
+#: main.cpp:413
+msgid "disable gpg signature checking (if RPM policy allows)"
+msgstr "avaktivera kontroll av gpg-signatur (om RPM-policyn tillåter)"
+
+#: main.cpp:439
+msgid ""
+"Enable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Akvtivera libdnf5-insticksmoduler efter namn. Listalternativ. Stödjer "
+"globbningar, kan anges flera gånger."
+
+#: main.cpp:454
+msgid ""
+"Disable libdnf5 plugins by name. List option. Supports globs, can be "
+"specified multiple times."
+msgstr ""
+"Avakvtivera libdnf5-insticksmoduler efter namn. Listalternativ. Stödjer "
+"globbningar, kan anges flera gånger."
+
+#: main.cpp:471
+msgid "add a comment to transaction"
+msgstr "lägg till en kommentar till transaktionen"
+
+#: main.cpp:473
+msgid ""
+"Adds a comment to the action. If a transaction takes place, the comment is "
+"stored in it."
+msgstr ""
+"Lägger till kommentarer till åtgärden. Om en transaktion sker lagras "
+"kommentaren i den."
+
+#: main.cpp:486
+msgid "set install root"
+msgstr "ange installationsrot"
+
+#: main.cpp:493
+msgid ""
+"use configuration, reposdir, and vars from the host system rather than the "
+"installroot"
+msgstr ""
+"använd konfiguration, förrådskatalog och variabler från värdsystemet "
+"istället för installationsroten"
+
+#: main.cpp:502
+msgid "override the value of $releasever in config and repo files"
+msgstr "åsidosätt värdet på $releasever i config- och repo-filer"
+
+#: main.cpp:515
+msgid ""
+"Show newly installed leaf packages and packages that became leaves after a "
+"transaction."
+msgstr ""
+"Visa nyligen installerade lövpaket och paket som blev löv efter en "
+"transaktion."
+
+#: main.cpp:529
+msgid "Dump detailed solving results into files"
+msgstr "Dumpa ut detaljerade lösningsresultat till filer"
+
+#: main.cpp:538
+msgid "Print main configuration values to stdout"
+msgstr "Skriv huvudkonfigurationsvärden till standard ut"
+
+#: main.cpp:555
+msgid ""
+"Print repository configuration values to stdout. List option. Supports globs"
+msgstr ""
+"Skriv förrådskonfigurationsvärden till standard ut. Listalternativ. Stödjer "
+"globbningar"
+
+#: main.cpp:570
+msgid "Print variable values to stdout"
+msgstr "Skriv variabelvärden till standard ut"
+
+#: main.cpp:584
+msgid "Show DNF5 version and exit"
+msgstr "Visa DNF5-version och avsluta"
+
+#: main.cpp:591
+msgid "Force the use of a different architecture."
+msgstr "Framtvinga användningen av en annan arkitektur."
+
+#: main.cpp:629
+msgid "Software Management Commands:"
+msgstr "Programvaruhanteringskommandon:"
+
+#: main.cpp:636
+msgid "Query Commands:"
+msgstr "Frågekommandon:"
+
+#: main.cpp:643
+msgid "Subcommands:"
+msgstr "Underkommandon:"
+
+#: main.cpp:828
 msgid "======== Main configuration: ========"
 msgstr "======== Huvudkonfiguration: ========"
 
-#: main.cpp:866
+#: main.cpp:869
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" Förrådskonfiguration: ========"
 
-#: main.cpp:887
+#: main.cpp:890
 msgid "======== Variables: ========"
 msgstr "======== Variabler: ========"
 
-#: main.cpp:962
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
+#: main.cpp:973
 msgid "{} to skip unavailable packages"
-msgstr "Tillåt att du hoppar över otillgängliga paket"
+msgstr "{} för att hoppa över otillgängliga paket"
 
-#: main.cpp:1003
+#: main.cpp:1014
 msgid "{} to not limit the transaction to the best candidates"
-msgstr ""
+msgstr "{} för att inte begränsa transaktionen till de bästa kandidaterna"
 
-#: main.cpp:1010
-#, fuzzy
-#| msgid "Allow erasing of installed packages to resolve problems"
+#: main.cpp:1021
 msgid "{} to allow erasing of installed packages to resolve problems"
-msgstr "Tillåt radering av installerade paket för att lösa problem"
+msgstr "{} för att tillåta radering av installerade paket för att lösa problem"
 
-#: main.cpp:1018
+#: main.cpp:1029
 msgid "{} to load additional filelists metadata"
-msgstr ""
+msgstr "{} för att läsa in ytterligare fillistemetadata"
 
-#: main.cpp:1025
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
+#: main.cpp:1036
 msgid "{} to skip uninstallable packages"
-msgstr "Tillåt att du hoppar över otillgängliga paket"
+msgstr "{} för att hoppa över oinstallerbara paket"
 
-#: main.cpp:1031
+#: main.cpp:1042
 msgid "You can try to add to command line:"
-msgstr ""
+msgstr "Du kan försöka lägga till till kommandoraden:"
 
-#: main.cpp:1112 main.cpp:1271
+#: main.cpp:1060
+msgid ""
+"No matches were found for the following plugin name patterns while enabling "
+"libdnf plugins: {}"
+msgstr ""
+"Inga matchningar hittades för följande pluginnamnmönster när libdnf-plugins "
+"aktiverades: {}"
+
+#: main.cpp:1061
+msgid ""
+"No matches were found for the following plugin name patterns while disabling "
+"libdnf plugins: {}"
+msgstr ""
+"Inga matchningar hittades för följande pluginnamnsmönster när libdnf-plugins "
+"inaktiverades: {}"
+
+#: main.cpp:1160 main.cpp:1333
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Lägg till \"--help\" för mer information om argumenten."
+
+#: offline.cpp:54
+msgid "error reading offline state file"
+msgstr "fel vid läsning av tillståndsfilen för frånkopplat"
+
+#: offline.cpp:59
+msgid "incompatible version of state data"
+msgstr "inkompatibel version av tillståndsdata"
+
+#: shared_options.cpp:32
+msgid "Allow erasing of installed packages to resolve problems"
+msgstr "Tillåt radering av installerade paket för att lösa problem"
+
+#: shared_options.cpp:42
+msgid "Allow resolving of depsolve problems by skipping packages"
+msgstr "Tillåt lösning av depsolve problem genom att hoppa över paket"
+
+#: shared_options.cpp:54
+msgid "Allow skipping unavailable packages"
+msgstr "Tillåt att du hoppar över otillgängliga paket"
 
 #~ msgid "setvar: Badly formatted argument value \"{}\""
 #~ msgstr "setvar: Felaktigt formaterat argumentvärde \"{}\""

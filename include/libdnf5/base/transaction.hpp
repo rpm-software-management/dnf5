@@ -99,6 +99,12 @@ public:
     /// @return environmental groups that are part of the transaction.
     std::vector<libdnf5::base::TransactionEnvironment> & get_transaction_environments() const;
 
+    /// @return list of packages skipped due to broken dependencies
+    std::vector<libdnf5::rpm::Package> get_broken_dependency_packages() const;
+
+    /// @return list of packages skipped due to conflicts
+    std::vector<libdnf5::rpm::Package> get_conflicting_packages() const;
+
     /// @return `true` if the transaction is empty.
     bool empty() const;
 

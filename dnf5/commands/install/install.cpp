@@ -93,7 +93,7 @@ void InstallCommand::run() {
     goal->set_allow_erasing(allow_erasing->get_value());
     auto settings = libdnf5::GoalJobSettings();
     auto advisories = advisory_query_from_cli_input(
-        ctx.base,
+        ctx.get_base(),
         advisory_name->get_value(),
         advisory_security->get_value(),
         advisory_bugfix->get_value(),

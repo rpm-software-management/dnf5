@@ -48,12 +48,12 @@ void AdvisorySubCommand::set_argument_parser() {
     with_bz = std::make_unique<AdvisoryWithBzOption>(*this);
     with_cve = std::make_unique<AdvisoryWithCveOption>(*this);
 
-    all->arg->add_conflict_argument(*available->arg);
-    all->arg->add_conflict_argument(*installed->arg);
-    all->arg->add_conflict_argument(*updates->arg);
-    available->arg->add_conflict_argument(*installed->arg);
-    available->arg->add_conflict_argument(*updates->arg);
-    installed->arg->add_conflict_argument(*updates->arg);
+    all->get_arg()->add_conflict_argument(*available->get_arg());
+    all->get_arg()->add_conflict_argument(*installed->get_arg());
+    all->get_arg()->add_conflict_argument(*updates->get_arg());
+    available->get_arg()->add_conflict_argument(*installed->get_arg());
+    available->get_arg()->add_conflict_argument(*updates->get_arg());
+    installed->get_arg()->add_conflict_argument(*updates->get_arg());
 }
 
 // There can be multiple versions of kernel installed at the same time.
@@ -74,7 +74,7 @@ void AdvisorySubCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().get_optional_metadata_types_option().add_item(
+    context.get_base().get_config().get_optional_metadata_types_option().add_item(
         libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_UPDATEINFO);
 }
 
@@ -82,7 +82,7 @@ void AdvisorySubCommand::run() {
     auto & ctx = get_context();
 
     auto advisories_opt = advisory_query_from_cli_input(
-        ctx.base,
+        ctx.get_base(),
         advisory_specs->get_value(),
         advisory_security->get_value(),
         advisory_bugfix->get_value(),
@@ -92,7 +92,7 @@ void AdvisorySubCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
 
-    auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.base));
+    auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.get_base()));
 
     if (with_bz->get_value()) {
         advisories.filter_reference("*", {"bugzilla"}, libdnf5::sack::QueryCmp::IGLOB);

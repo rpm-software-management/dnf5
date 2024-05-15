@@ -54,7 +54,7 @@ void ConfigManagerSetVarCommand::set_argument_parser() {
                 check_variable_name(var_name);
 
                 // Test that the variable is not read-only.
-                auto vars = ctx.base.get_vars();
+                auto vars = ctx.get_base().get_vars();
                 if (vars->is_read_only(var_name)) {
                     throw ConfigManagerError(
                         M_("Cannot set \"{}\": Variable \"{}\" is read-only"), std::string{value}, var_name);
@@ -92,7 +92,7 @@ void ConfigManagerSetVarCommand::configure() {
     auto & ctx = get_context();
 
     if (!setvars.empty()) {
-        const auto & vars_dir = get_last_vars_dir_path(ctx.base.get_config());
+        const auto & vars_dir = get_last_vars_dir_path(ctx.get_base().get_config());
         if (vars_dir.empty()) {
             throw ConfigManagerError(M_("Missing path to vars directory"));
         }

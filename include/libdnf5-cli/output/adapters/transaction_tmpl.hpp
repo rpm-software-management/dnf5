@@ -141,6 +141,26 @@ public:
         return ret;
     }
 
+    std::vector<std::unique_ptr<IPackage>> get_conflicting_packages() const override {
+        std::vector<std::unique_ptr<IPackage>> ret;
+        const auto & conflicting_packages = transaction->get_conflicting_packages();
+        ret.reserve(conflicting_packages.size());
+        for (auto & pkg : conflicting_packages) {
+            ret.emplace_back(new PackageAdapter(pkg));
+        }
+        return ret;
+    }
+
+    std::vector<std::unique_ptr<IPackage>> get_broken_dependency_packages() const override {
+        std::vector<std::unique_ptr<IPackage>> ret;
+        const auto & broken_packages = transaction->get_broken_dependency_packages();
+        ret.reserve(broken_packages.size());
+        for (auto & pkg : broken_packages) {
+            ret.emplace_back(new PackageAdapter(pkg));
+        }
+        return ret;
+    }
+
     std::vector<std::unique_ptr<ITransactionGroup>> get_transaction_groups() const override {
         std::vector<std::unique_ptr<ITransactionGroup>> ret;
         const auto & trans_groups = transaction->get_transaction_groups();

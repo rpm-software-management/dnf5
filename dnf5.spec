@@ -1,6 +1,6 @@
 %global project_version_prime 5
 %global project_version_major 2
-%global project_version_minor 0
+%global project_version_minor 1
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 11]
@@ -33,6 +33,8 @@ Obsoletes:      dnf < 5
 
 Provides:       yum = %{version}-%{release}
 Obsoletes:      yum < 5
+
+Conflicts:      python3-dnf-plugins-core < 4.7.0
 %endif
 
 Provides:       dnf5-command(advisory)
@@ -342,7 +344,7 @@ Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
 %if %{with dnf5_obsoletes_dnf}
-Conflicts:      dnf-data < 4.16.0
+Conflicts:      dnf-data < 4.20.0
 %endif
 
 %description -n libdnf5
@@ -737,6 +739,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %files plugin-automatic -f dnf5-plugin-automatic.lang
 %ghost %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
+%{_datadir}/dnf5/dnf5-plugins/automatic.conf
 %{_mandir}/man8/dnf*-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
@@ -859,6 +862,12 @@ popd
 %ldconfig_scriptlets
 
 %changelog
+* Mon May 06 2024 Packit Team <hello@packit.dev> - 5.2.1.0-1
+- New upstream release 5.2.1.0
+
+* Wed Apr 24 2024 Packit Team <hello@packit.dev> - 5.2.0.0-1
+- New upstream release 5.2.0.0
+
 * Wed Apr 03 2024 Packit Team <hello@packit.dev> - 5.1.17-1
 - New upstream release 5.1.17
 

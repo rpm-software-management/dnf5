@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
+#include <libdnf5/plugin/iplugin.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <sys/wait.h>
@@ -41,7 +42,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{0, 3, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 0, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -65,7 +66,7 @@ struct CommandToRun {
 };
 
 
-class Actions : public plugin::IPlugin {
+class Actions final : public plugin::IPlugin {
 public:
     Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~Actions() = default;
@@ -89,9 +90,19 @@ public:
 
     void init() override { parse_action_files(); }
 
-    void pre_base_setup() override { on_base_setup(pre_base_setup_actions); }
+    void pre_base_setup() override { on_hook(pre_base_setup_actions); }
 
-    void post_base_setup() override { on_base_setup(post_base_setup_actions); }
+    void post_base_setup() override { on_hook(post_base_setup_actions); }
+
+    void repos_configured() override { on_hook(repos_configured_actions); }
+
+    void repos_loaded() override { on_hook(repos_loaded_actions); }
+
+    void pre_add_cmdline_packages(const std::vector<std::string> &) override {
+        on_hook(pre_add_cmdline_packages_actions);
+    }
+
+    void post_add_cmdline_packages() override { on_hook(post_add_cmdline_packages_actions); }
 
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         on_transaction(transaction, pre_trans_actions);
@@ -103,8 +114,8 @@ public:
 
 private:
     void parse_action_files();
-    void on_base_setup(const std::vector<Action> & trans_actions);
-    void on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions);
+    void on_hook(const std::vector<Action> & actions);
+    void on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & actions);
     void execute_command(CommandToRun & command);
 
     [[nodiscard]] std::pair<std::string, bool> substitute(
@@ -122,6 +133,10 @@ private:
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
     std::vector<Action> post_base_setup_actions;
+    std::vector<Action> repos_configured_actions;
+    std::vector<Action> repos_loaded_actions;
+    std::vector<Action> pre_add_cmdline_packages_actions;
+    std::vector<Action> post_add_cmdline_packages_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
 
@@ -344,14 +359,14 @@ void unescape(std::string & str) {
     str.resize(dst_pos);
 }
 
-void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
-    if (trans_actions.empty()) {
+void Actions::on_hook(const std::vector<Action> & actions) {
+    if (actions.empty()) {
         return;
     }
 
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
-    for (const auto & action : trans_actions) {
+    for (const auto & action : actions) {
         if (auto [substituted_args, subst_error] = substitute_args(nullptr, nullptr, action); !subst_error) {
             for (auto & arg : substituted_args) {
                 unescape(arg);
@@ -454,11 +469,28 @@ void Actions::parse_action_files() {
                 continue;
             }
 
-            enum class Hooks { PRE_BASE_SETUP, POST_BASE_SETUP, PRE_TRANS, POST_TRANS } hook;
+            enum class Hooks {
+                PRE_BASE_SETUP,
+                POST_BASE_SETUP,
+                REPOS_CONFIGURED,
+                REPOS_LOADED,
+                PRE_ADD_CMDLINE_PACKAGES,
+                POST_ADD_CMDLINE_PACKAGES,
+                PRE_TRANS,
+                POST_TRANS
+            } hook;
             if (line.starts_with("pre_base_setup:")) {
                 hook = Hooks::PRE_BASE_SETUP;
             } else if (line.starts_with("post_base_setup:")) {
                 hook = Hooks::POST_BASE_SETUP;
+            } else if (line.starts_with("repos_configured:")) {
+                hook = Hooks::REPOS_CONFIGURED;
+            } else if (line.starts_with("repos_loaded:")) {
+                hook = Hooks::REPOS_LOADED;
+            } else if (line.starts_with("pre_add_cmdline_packages:")) {
+                hook = Hooks::PRE_ADD_CMDLINE_PACKAGES;
+            } else if (line.starts_with("post_add_cmdline_packages:")) {
+                hook = Hooks::POST_ADD_CMDLINE_PACKAGES;
             } else if (line.starts_with("pre_transaction:")) {
                 hook = Hooks::PRE_TRANS;
             } else if (line.starts_with("post_transaction:")) {
@@ -521,6 +553,18 @@ void Actions::parse_action_files() {
                     break;
                 case Hooks::POST_BASE_SETUP:
                     post_base_setup_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::REPOS_CONFIGURED:
+                    repos_configured_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::REPOS_LOADED:
+                    repos_loaded_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::PRE_ADD_CMDLINE_PACKAGES:
+                    pre_add_cmdline_packages_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::POST_ADD_CMDLINE_PACKAGES:
+                    post_add_cmdline_packages_actions.emplace_back(std::move(act));
                     break;
                 case Hooks::PRE_TRANS:
                     pre_trans_actions.emplace_back(std::move(act));
@@ -681,9 +725,8 @@ void Actions::execute_command(CommandToRun & command) {
     }
 }
 
-void Actions::on_transaction(
-    const libdnf5::base::Transaction & transaction, const std::vector<Action> & trans_actions) {
-    if (trans_actions.empty()) {
+void Actions::on_transaction(const libdnf5::base::Transaction & transaction, const std::vector<Action> & actions) {
+    if (actions.empty()) {
         return;
     }
 
@@ -717,7 +760,7 @@ void Actions::on_transaction(
     spec_settings.set_with_provides(false);
     spec_settings.set_with_filenames(true);
     spec_settings.set_with_binaries(false);
-    for (const auto & action : trans_actions) {
+    for (const auto & action : actions) {
         if (action.pkg_filter.empty()) {
             // action without packages - the action is called regardless of the of number of packages in the transaction
             if (auto [substituted_args, subst_error] = substitute_args(nullptr, nullptr, action); !subst_error) {

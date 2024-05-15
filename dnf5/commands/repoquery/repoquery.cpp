@@ -164,7 +164,7 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
-    only_outputs_installed->push_back(duplicates->arg);
+    only_outputs_installed->push_back(duplicates->get_arg());
 
     unneeded = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -173,17 +173,17 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to unneeded installed packages (i.e. packages that were installed as "
         "dependencies but are no longer needed).",
         false);
-    only_outputs_installed->push_back(unneeded->arg);
+    only_outputs_installed->push_back(unneeded->get_arg());
 
     installonly = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installonly", '\0', "Limit to installed installonly packages.", false);
-    only_outputs_installed->push_back(installonly->arg);
+    only_outputs_installed->push_back(installonly->get_arg());
 
     // FILTERS THAT REQUIRE BOTH INSTALLED AND AVAILABLE PACKAGES TO BE LOADED:
 
     extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "extras", '\0', "Limit to installed packages that are not present in any available repository.", false);
-    only_outputs_installed->push_back(extras->arg);
+    only_outputs_installed->push_back(extras->get_arg());
 
     upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -406,8 +406,8 @@ void RepoqueryCommand::set_argument_parser() {
 
     changelogs = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "changelogs", '\0', "Display package changelogs.", false);
-    repoquery_formatting->register_argument(changelogs->arg);
-    formatting_conflicts->push_back(changelogs->arg);
+    repoquery_formatting->register_argument(changelogs->get_arg());
+    formatting_conflicts->push_back(changelogs->get_arg());
 
     // Add additional supported package attribute getters, all pkg_attrs_options get turned into options
     pkg_attrs_options.insert(pkg_attrs_options.begin(), {"files", "sourcerpm", "location"});
@@ -439,16 +439,16 @@ void RepoqueryCommand::set_argument_parser() {
     // Options that configure how repos should be loaded are incompatible
     // with --available and --installed options.
     available->set_conflict_arguments(only_outputs_installed);
-    available->add_conflict_argument(*upgrades->arg);
+    available->add_conflict_argument(*upgrades->get_arg());
     installed->set_conflict_arguments(only_outputs_installed);
-    installed->add_conflict_argument(*upgrades->arg);
+    installed->add_conflict_argument(*upgrades->get_arg());
 
     // --upgrades option returns only available packages, conflict with options
     // that return only installed packages
-    upgrades->arg->set_conflict_arguments(only_outputs_installed);
+    upgrades->get_arg()->set_conflict_arguments(only_outputs_installed);
 
     // recursive is not compatible with exactdeps
-    recursive->arg->add_conflict_argument(*exactdeps->arg);
+    recursive->get_arg()->add_conflict_argument(*exactdeps->get_arg());
 }
 
 void RepoqueryCommand::configure() {
@@ -474,22 +474,22 @@ void RepoqueryCommand::configure() {
     context.set_load_available_repos(
         // available_option is on by default, to check if user specified it we check priority
         available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !system_repo_needed ||
-                extras->get_value() || upgrades->get_value() || !providers_of_option->get_value().empty()
+                extras->get_value() || upgrades->get_value()
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 
     if (srpm->get_value()) {
-        context.base.get_repo_sack()->enable_source_repos();
+        context.get_base().get_repo_sack()->enable_source_repos();
     }
 
     if (changelogs->get_value()) {
-        context.base.get_config().get_optional_metadata_types_option().add_item(
+        context.get_base().get_config().get_optional_metadata_types_option().add_item(
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
     }
 
     if (!file->get_value().empty() || (pkg_attr_option->get_value() == "files") ||
         (libdnf5::cli::output::requires_filelists(query_format_option->get_value()))) {
-        context.base.get_config().get_optional_metadata_types_option().add_item(
+        context.get_base().get_config().get_optional_metadata_types_option().add_item(
             libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
         return;
     }
@@ -505,7 +505,7 @@ void RepoqueryCommand::configure() {
           whatsuggests->get_value()}) {
         for (const auto & capability : capabilities) {
             if (libdnf5::utils::is_file_pattern(capability)) {
-                context.base.get_config().get_optional_metadata_types_option().add_item(
+                context.get_base().get_config().get_optional_metadata_types_option().add_item(
                     libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
                 return;
             }
@@ -525,7 +525,7 @@ void RepoqueryCommand::configure() {
 void RepoqueryCommand::load_additional_packages() {
     auto & ctx = get_context();
     if (ctx.get_load_available_repos() != Context::LoadAvailableRepos::NONE) {
-        for (auto & [path, package] : ctx.base.get_repo_sack()->add_cmdline_packages(pkg_specs)) {
+        for (auto & [path, package] : ctx.get_base().get_repo_sack()->add_cmdline_packages(pkg_specs)) {
             cmdline_packages.push_back(std::move(package));
         }
     }
@@ -558,8 +558,8 @@ void RepoqueryCommand::run() {
     if (!upgrades->get_value()) {
         flags = flags | libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK;
     }
-    libdnf5::rpm::PackageQuery base_query(ctx.base, flags, false);
-    libdnf5::rpm::PackageQuery result_query(ctx.base, flags, true);
+    libdnf5::rpm::PackageQuery base_query(ctx.get_base(), flags, false);
+    libdnf5::rpm::PackageQuery result_query(ctx.get_base(), flags, true);
 
     // First filter by pkg_specs - it should be in SIMPLE FILTERS but it can narrow the query the most
     if (pkg_specs.empty()) {
@@ -593,7 +593,7 @@ void RepoqueryCommand::run() {
     }
 
     if (duplicates->get_value()) {
-        libdnf5::rpm::PackageQuery installonly_query(ctx.base, flags, false);
+        libdnf5::rpm::PackageQuery installonly_query(ctx.get_base(), flags, false);
         installonly_query.filter_installonly();
         result_query -= installonly_query;
         result_query.filter_duplicates();
@@ -604,7 +604,7 @@ void RepoqueryCommand::run() {
     }
 
     if (installonly->get_value()) {
-        libdnf5::rpm::PackageQuery installonly_query(ctx.base, flags, false);
+        libdnf5::rpm::PackageQuery installonly_query(ctx.get_base(), flags, false);
         installonly_query.filter_installonly();
         result_query &= installonly_query;
     }
@@ -622,7 +622,7 @@ void RepoqueryCommand::run() {
     // APPLY SIMPLE FILTERS - It doesn't matter if the packages are from system or available repo
 
     auto advisories = advisory_query_from_cli_input(
-        ctx.base,
+        ctx.get_base(),
         advisory_name->get_value(),
         advisory_security->get_value(),
         advisory_bugfix->get_value(),
@@ -640,7 +640,7 @@ void RepoqueryCommand::run() {
     }
 
     if (!whatdepends->get_value().empty()) {
-        auto matched_reldeps = libdnf5::rpm::ReldepList(ctx.base);
+        auto matched_reldeps = libdnf5::rpm::ReldepList(ctx.get_base());
         for (const auto & reldep_glob : whatdepends->get_value()) {
             matched_reldeps.add_reldep_with_glob(reldep_glob);
         }
@@ -665,7 +665,7 @@ void RepoqueryCommand::run() {
 
         if (!exactdeps->get_value()) {
             auto pkgs_from_resolved_nevras =
-                resolve_nevras_to_packges(ctx.base, whatdepends->get_value(), result_query);
+                resolve_nevras_to_packges(ctx.get_base(), whatdepends->get_value(), result_query);
 
             // Filter requires by packages from resolved nevras
             auto what_requires_resolved_nevras = result_query;
@@ -693,11 +693,21 @@ void RepoqueryCommand::run() {
     if (!whatprovides->get_value().empty()) {
         auto provides_query = result_query;
         provides_query.filter_provides(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
-        if (!provides_query.empty()) {
-            result_query = provides_query;
+
+        std::vector<std::string> file_patterns;
+        // Search additionally for files to ensure that all providers are listed
+        // Limit file search only to files patterns to ensure that we are not providing unexpected resurts.
+        // Additionally it is a performance optimization - file search is very expensive
+        for (auto & capability : whatprovides->get_value()) {
+            if (libdnf5::utils::is_file_pattern(capability)) {
+                file_patterns.push_back(capability);
+            }
+        }
+        if (!file_patterns.empty()) {
+            result_query.filter_file(file_patterns, libdnf5::sack::QueryCmp::GLOB);
+            result_query |= provides_query;
         } else {
-            // If provides query doesn't match anything try matching files
-            result_query.filter_file(whatprovides->get_value(), libdnf5::sack::QueryCmp::GLOB);
+            result_query = provides_query;
         }
     }
 
@@ -707,7 +717,7 @@ void RepoqueryCommand::run() {
         } else {
             auto requires_resolved = result_query;
             requires_resolved.filter_requires(
-                resolve_nevras_to_packges(ctx.base, whatrequires->get_value(), result_query));
+                resolve_nevras_to_packges(ctx.get_base(), whatrequires->get_value(), result_query));
 
             result_query.filter_requires(whatrequires->get_value(), libdnf5::sack::QueryCmp::GLOB);
             result_query |= requires_resolved;
@@ -721,7 +731,7 @@ void RepoqueryCommand::run() {
     if (!whatconflicts->get_value().empty()) {
         auto conflicts_resolved = result_query;
         conflicts_resolved.filter_conflicts(
-            resolve_nevras_to_packges(ctx.base, whatconflicts->get_value(), result_query));
+            resolve_nevras_to_packges(ctx.get_base(), whatconflicts->get_value(), result_query));
 
         result_query.filter_conflicts(whatconflicts->get_value(), libdnf5::sack::QueryCmp::GLOB);
         result_query |= conflicts_resolved;
@@ -730,7 +740,7 @@ void RepoqueryCommand::run() {
     if (!whatrecommends->get_value().empty()) {
         auto recommends_resolved = result_query;
         recommends_resolved.filter_recommends(
-            resolve_nevras_to_packges(ctx.base, whatrecommends->get_value(), result_query));
+            resolve_nevras_to_packges(ctx.get_base(), whatrecommends->get_value(), result_query));
 
         result_query.filter_recommends(whatrecommends->get_value(), libdnf5::sack::QueryCmp::GLOB);
         result_query |= recommends_resolved;
@@ -738,7 +748,8 @@ void RepoqueryCommand::run() {
 
     if (!whatenhances->get_value().empty()) {
         auto enhances_resolved = result_query;
-        enhances_resolved.filter_enhances(resolve_nevras_to_packges(ctx.base, whatenhances->get_value(), result_query));
+        enhances_resolved.filter_enhances(
+            resolve_nevras_to_packges(ctx.get_base(), whatenhances->get_value(), result_query));
 
         result_query.filter_enhances(whatenhances->get_value(), libdnf5::sack::QueryCmp::GLOB);
         result_query |= enhances_resolved;
@@ -747,7 +758,7 @@ void RepoqueryCommand::run() {
     if (!whatsupplements->get_value().empty()) {
         auto supplements_resolved = result_query;
         supplements_resolved.filter_supplements(
-            resolve_nevras_to_packges(ctx.base, whatsupplements->get_value(), result_query));
+            resolve_nevras_to_packges(ctx.get_base(), whatsupplements->get_value(), result_query));
 
         result_query.filter_supplements(whatsupplements->get_value(), libdnf5::sack::QueryCmp::GLOB);
         result_query |= supplements_resolved;
@@ -755,7 +766,8 @@ void RepoqueryCommand::run() {
 
     if (!whatsuggests->get_value().empty()) {
         auto suggests_resolved = result_query;
-        suggests_resolved.filter_suggests(resolve_nevras_to_packges(ctx.base, whatsuggests->get_value(), result_query));
+        suggests_resolved.filter_suggests(
+            resolve_nevras_to_packges(ctx.get_base(), whatsuggests->get_value(), result_query));
 
         result_query.filter_suggests(whatsuggests->get_value(), libdnf5::sack::QueryCmp::GLOB);
         result_query |= suggests_resolved;
@@ -770,7 +782,7 @@ void RepoqueryCommand::run() {
     }
 
     if (recent->get_value()) {
-        auto & cfg_main = ctx.base.get_config();
+        auto & cfg_main = ctx.get_base().get_config();
         auto recent_limit_days = cfg_main.get_recent_option().get_value();
         auto now = time(nullptr);
         result_query.filter_recent(now - (recent_limit_days * 86400));
@@ -790,7 +802,7 @@ void RepoqueryCommand::run() {
     if (!providers_of_option->get_value().empty()) {
         // Collect reldeps of selected packages
         auto rels = libdnf5::cli::output::get_reldeplist_for_attr(result_query, providers_of_option->get_value());
-        libdnf5::rpm::PackageQuery providers(ctx.base);
+        libdnf5::rpm::PackageQuery providers(ctx.get_base());
         if (!arch->get_value().empty()) {
             providers.filter_arch(arch->get_value(), libdnf5::sack::QueryCmp::GLOB);
         }
@@ -816,7 +828,7 @@ void RepoqueryCommand::run() {
     }
 
     if (srpm->get_value()) {
-        libdnf5::rpm::PackageQuery srpms(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        libdnf5::rpm::PackageQuery srpms(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         auto only_src_query = result_query;
         only_src_query.filter_arch(std::vector<std::string>{"src", "nosrc"});
         for (const auto & pkg : result_query) {

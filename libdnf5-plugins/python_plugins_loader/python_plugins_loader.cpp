@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <Python.h>
 #include <fmt/format.h>
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/plugin/iplugin.hpp>
 
 #include <cstdlib>
 #include <cstring>

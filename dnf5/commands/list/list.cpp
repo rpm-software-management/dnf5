@@ -63,11 +63,11 @@ void ListCommand::set_argument_parser() {
 
     installed = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "installed", '\0', _("List installed packages."), false);
-    conflicts->push_back(installed->arg);
+    conflicts->push_back(installed->get_arg());
 
     available = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "available", '\0', _("List available packages."), false);
-    conflicts->push_back(available->arg);
+    conflicts->push_back(available->get_arg());
 
     extras = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -75,7 +75,7 @@ void ListCommand::set_argument_parser() {
         '\0',
         _("List extras, that is packages installed on the system that are not available in any known repository."),
         false);
-    conflicts->push_back(extras->arg);
+    conflicts->push_back(extras->get_arg());
 
     obsoletes = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -83,27 +83,27 @@ void ListCommand::set_argument_parser() {
         '\0',
         _("List packages installed on the system that are obsoleted by packages in any known repository."),
         false);
-    conflicts->push_back(obsoletes->arg);
+    conflicts->push_back(obsoletes->get_arg());
 
     recent = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "recent", '\0', _("List packages recently added into the repositories."), false);
-    conflicts->push_back(recent->arg);
+    conflicts->push_back(recent->get_arg());
 
     upgrades = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "upgrades", '\0', _("List upgrades available for the installed packages."), false);
-    conflicts->push_back(upgrades->arg);
+    conflicts->push_back(upgrades->get_arg());
 
     autoremove = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "autoremove", '\0', _("List packages which will be removed by the 'dnf autoremove' command."), false);
-    conflicts->push_back(autoremove->arg);
+    conflicts->push_back(autoremove->get_arg());
 
-    installed->arg->set_conflict_arguments(conflicts);
-    available->arg->set_conflict_arguments(conflicts);
-    extras->arg->set_conflict_arguments(conflicts);
-    obsoletes->arg->set_conflict_arguments(conflicts);
-    recent->arg->set_conflict_arguments(conflicts);
-    upgrades->arg->set_conflict_arguments(conflicts);
-    autoremove->arg->set_conflict_arguments(conflicts);
+    installed->get_arg()->set_conflict_arguments(conflicts);
+    available->get_arg()->set_conflict_arguments(conflicts);
+    extras->get_arg()->set_conflict_arguments(conflicts);
+    obsoletes->get_arg()->set_conflict_arguments(conflicts);
+    recent->get_arg()->set_conflict_arguments(conflicts);
+    upgrades->get_arg()->set_conflict_arguments(conflicts);
+    autoremove->get_arg()->set_conflict_arguments(conflicts);
 }
 
 void ListCommand::configure() {
@@ -140,14 +140,14 @@ std::unique_ptr<libdnf5::cli::output::PackageListSections> ListCommand::create_o
 
 void ListCommand::run() {
     auto & ctx = get_context();
-    auto & config = ctx.base.get_config();
+    auto & config = ctx.get_base().get_config();
 
-    libdnf5::rpm::PackageQuery full_package_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
-    libdnf5::rpm::PackageQuery base_query(ctx.base, libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery full_package_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
+    libdnf5::rpm::PackageQuery base_query(ctx.get_base(), libdnf5::sack::ExcludeFlags::IGNORE_VERSIONLOCK);
 
     // pre-select by patterns
     if (!pkg_specs.empty()) {
-        base_query = libdnf5::rpm::PackageQuery(ctx.base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        base_query = libdnf5::rpm::PackageQuery(ctx.get_base(), libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf5::ResolveSpecSettings settings;
         settings.set_ignore_case(true);
         settings.set_with_nevra(true);

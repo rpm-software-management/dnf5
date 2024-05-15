@@ -206,7 +206,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Data are saved in ``./debugdata``.
 
 ``--disable-plugin=PLUGIN_NAME,...``
-    | Disable specified plugins for the purpose of the current ``DNF5`` command.
+    | Disable specified libdnf5 library plugins for the purpose of the current ``DNF5`` command.
     | This is a list option which can be specified multiple times.
     | Accepted values are names, or a glob of names.
 
@@ -227,7 +227,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Print variable values to stdout.
 
 ``--enable-plugin=PLUGIN_NAME,...``
-    | Enable specified plugins for the purpose of the current ``DNF5`` command.
+    | Enable specified libdnf5 library plugins for the purpose of the current ``DNF5`` command.
     | This is a list option which can be specified multiple times.
     | Accepted values are names, or a glob of names.
 
@@ -263,7 +263,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Skip checking GPG signatures on packages (if ``RPM`` policy allows that).
 
 ``--no-plugins``
-    | Disable all plugins.
+    | Disable all libdnf5 plugins.
 
 ``-q, --quiet``
     In combination with a non-interactive command, shows just the relevant content.
@@ -387,6 +387,17 @@ Files
 
 ``System State``
     /usr/lib/sysimage/libdnf5/
+
+
+Environment
+===========
+
+``DNF5_PLUGINS_DIR``
+    Override a directory with DNF5 application plugins. Set it to an empty
+    string to disable loading the application plugins.
+
+``LIBDNF_PLUGINS_CONFIG_DIR``
+    Override a directory with libdnf5 plugin's configuration files.
 
 
 See Also

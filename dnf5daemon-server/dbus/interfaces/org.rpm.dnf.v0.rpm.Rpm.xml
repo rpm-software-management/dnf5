@@ -104,7 +104,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         The same options as in list() method are supported.
     -->
-    <method name="list">
+    <method name="list_fd">
         <arg name="options" type="a{sv}" direction="in"/>
         <arg name="file_descriptor" type="h" direction="in"/>
         <arg name="transfer_id" type="s" direction="in"/>
@@ -434,11 +434,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         write_to_fd_finished:
-        @success: true if the tranfer finished successfully
-        @transfer_id: id of the tranfer was finished and its file descriptor closed
+        @success: true if the transfer finished successfully
+        @transfer_id: id of the finished transfer
         @error_msg: error message if the transfer was not successful.
 
-        Processing of the item has started.
+        Notify the user that writing to the file descriptor with given transfer_id has finished and the descriptor has been closed.
     -->
     <signal name="write_to_fd_finished">
         <arg name="success" type="b" />

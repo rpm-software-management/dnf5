@@ -17,9 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "dnf5/offline.hpp"
+
 #include "libdnf5/common/exception.hpp"
 
-#include <dnf5/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 
@@ -32,6 +33,20 @@ namespace dnf5::offline {
 OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
     read();
 }
+
+OfflineTransactionStateData & OfflineTransactionState::get_data() {
+    return data;
+}
+
+const std::exception_ptr & OfflineTransactionState::get_read_exception() const {
+    return read_exception;
+}
+
+std::filesystem::path OfflineTransactionState::get_path() const {
+    return path;
+}
+
+
 void OfflineTransactionState::read() {
     try {
         const std::ifstream file{path};
@@ -48,6 +63,7 @@ void OfflineTransactionState::read() {
         data = OfflineTransactionStateData{};
     }
 }
+
 void OfflineTransactionState::write() {
     auto file = libdnf5::utils::fs::File(path, "w");
     file.write(toml::format(toml::value{{STATE_HEADER, data}}));
@@ -63,7 +79,7 @@ void log_status(
     const auto & version = get_application_version();
     const std::string & version_string = fmt::format("{}.{}.{}", version.major, version.minor, version.micro);
 
-    auto logger = context.base.get_logger();
+    auto logger = context.get_base().get_logger();
     logger->info(message);
 
 #ifdef WITH_SYSTEMD

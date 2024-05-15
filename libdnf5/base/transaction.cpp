@@ -36,6 +36,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/common/sack/exclude_flags.hpp"
+#include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/repo/package_downloader.hpp"
 #include "libdnf5/rpm/package_query.hpp"
@@ -91,6 +93,65 @@ std::filesystem::path build_comps_xml_path(std::filesystem::path path, const std
     path = path / id;
     path.replace_extension("xml");
     return path;
+}
+
+static std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
+    rpm::solv::GoalPrivate & solved_goal, const libdnf5::rpm::PackageQuery & broken_installed_query) {
+    auto & pool = solved_goal.get_rpm_pool();
+
+    auto protected_running_kernel = solved_goal.get_protect_running_kernel();
+    std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+    std::set<std::string> names;
+    auto removal_of_protected = solved_goal.get_removal_of_protected();
+    if (removal_of_protected && !removal_of_protected->empty()) {
+        for (auto protected_id : *removal_of_protected) {
+            if (protected_id == protected_running_kernel.id) {
+                std::vector<std::string> elements;
+                elements.emplace_back(pool.get_full_nevra(protected_id));
+                if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
+                    problem_output.push_back(
+                        std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
+                }
+                continue;
+            }
+            names.emplace(pool.get_name(protected_id));
+        }
+        if (!names.empty()) {
+            std::vector<std::string> names_vector(names.begin(), names.end());
+            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
+                problem_output.push_back(
+                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
+            }
+        }
+        return problem_output;
+    }
+    auto protected_packages = solved_goal.get_protected_packages();
+
+    if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
+        return problem_output;
+    }
+
+    for (const auto & broken_pkg : broken_installed_query) {
+        if (broken_pkg.get_id() == protected_running_kernel) {
+            std::vector<std::string> elements;
+            elements.emplace_back(broken_pkg.get_full_nevra());
+            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
+                problem_output.push_back(
+                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
+            }
+        } else if (protected_packages && protected_packages->contains_unsafe(broken_pkg.get_id().id)) {
+            names.emplace(broken_pkg.get_name());
+        }
+    }
+    if (!names.empty()) {
+        std::vector<std::string> names_vector(names.begin(), names.end());
+        if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
+            problem_output.push_back(
+                std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
+        }
+    }
+    return problem_output;
 }
 
 }  // namespace
@@ -316,6 +377,13 @@ std::vector<std::string> Transaction::get_resolve_logs_as_strings() const {
     return logs;
 }
 
+std::vector<libdnf5::rpm::Package> Transaction::get_broken_dependency_packages() const {
+    return p_impl->broken_dependency_packages;
+}
+
+std::vector<libdnf5::rpm::Package> Transaction::get_conflicting_packages() const {
+    return p_impl->conflicting_packages;
+}
 
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
     switch (result) {
@@ -379,9 +447,158 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
     return p_impl->signature_problems;
 }
 
+void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_goal) {
+    auto & pool = get_rpm_pool(base);
+
+    libdnf5::rpm::PackageQuery skip_broken(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf5::rpm::PackageQuery skip_conflict(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+
+    auto goal_solver_problems = solved_goal.get_problems();
+
+    solver_problems.clear();
+
+    for (auto & problem : goal_solver_problems) {
+        std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+        for (auto & [rule, source, dep, target, description] : problem) {
+            std::vector<std::string> elements;
+            ProblemRules tmp_rule = rule;
+            switch (rule) {
+                case ProblemRules::RULE_DISTUPGRADE:
+                case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_UPDATE:
+                case ProblemRules::RULE_BEST_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
+                    elements.push_back(pool.solvid2str(source));
+                    break;
+                case ProblemRules::RULE_JOB:
+                case ProblemRules::RULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_PKG:
+                case ProblemRules::RULE_BEST_2:
+                    break;
+                case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
+                    elements.push_back(pool.dep2str(dep));
+                    break;
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                    if (false) {
+                        // TODO (jmracek) (modularExclude && modularExclude->has(source))
+                    } else {
+                        tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
+                    }
+                    elements.push_back(pool.solvid2str(source));
+                    break;
+                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                    skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(source));
+                    break;
+                case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_PKG_REQUIRES:
+                    skip_broken.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(source));
+                    break;
+                case ProblemRules::RULE_PKG_SAME_NAME:
+                    skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
+                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.solvid2str(target));
+                    std::sort(elements.begin(), elements.end());
+                    break;
+                case ProblemRules::RULE_PKG_CONFLICTS:
+                    skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
+                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(target));
+                    break;
+                case ProblemRules::RULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_YUMOBS:
+                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(target));
+                    break;
+                case ProblemRules::RULE_UNKNOWN:
+                    elements.push_back(description);
+                    break;
+                case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+                    // Rules are not generated by libsolv
+                    break;
+                case ProblemRules::RULE_MODULE_DISTUPGRADE:
+                case ProblemRules::RULE_MODULE_INFARCH:
+                case ProblemRules::RULE_MODULE_UPDATE:
+                case ProblemRules::RULE_MODULE_JOB:
+                case ProblemRules::RULE_MODULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_MODULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_MODULE_JOB_PROVIDED_BY_SYSTEM:
+                case ProblemRules::RULE_MODULE_PKG:
+                case ProblemRules::RULE_MODULE_BEST_1:
+                case ProblemRules::RULE_MODULE_BEST_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_3:
+                case ProblemRules::RULE_MODULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_MODULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+                case ProblemRules::RULE_MODULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_MODULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_MODULE_PKG_REQUIRES:
+                case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
+                case ProblemRules::RULE_MODULE_YUMOBS:
+                case ProblemRules::RULE_MODULE_UNKNOWN:
+                    libdnf_throw_assertion("Unexpected module problem rule in rpm goal");
+            }
+            if (is_unique(problem_output, tmp_rule, elements)) {
+                problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
+            }
+        }
+        if (is_unique(solver_problems, problem_output)) {
+            solver_problems.push_back(std::move(problem_output));
+        }
+    }
+
+    libdnf5::rpm::PackageQuery broken_installed(skip_broken);
+    broken_installed.filter_installed();
+    auto problem_protected = get_removal_of_protected(solved_goal, broken_installed);
+    if (!problem_protected.empty()) {
+        if (is_unique(solver_problems, problem_protected)) {
+            solver_problems.insert(solver_problems.begin(), std::move(problem_protected));
+        }
+    }
+    // packages skipped due to broken dependencies
+    // only available packages, filter out installed packages with the same NEVRA
+    skip_broken.filter_available();
+    skip_broken.filter_nevra(broken_installed, libdnf5::sack::QueryCmp::NEQ);
+    broken_dependency_packages.clear();
+    for (auto pkg : skip_broken) {
+        broken_dependency_packages.push_back(std::move(pkg));
+    }
+
+    // packages skipped due to the conflict
+    // only available packages, filter out installed packages with the same NEVRA
+    libdnf5::rpm::PackageQuery conflict_installed(skip_conflict);
+    conflict_installed.filter_installed();
+    skip_conflict.filter_available();
+    skip_conflict.filter_nevra(conflict_installed, libdnf5::sack::QueryCmp::NEQ);
+    conflicting_packages.clear();
+    for (auto pkg : skip_conflict) {
+        conflicting_packages.push_back(std::move(pkg));
+    }
+}
+
 void Transaction::Impl::set_transaction(
     rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems) {
-    auto solver_problems = process_solver_problems(base, solved_goal);
+    process_solver_problems(solved_goal);
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
     } else {
@@ -390,9 +607,9 @@ void Transaction::Impl::set_transaction(
         rpm::solv::GoalPrivate solved_goal_copy(solved_goal);
         solved_goal_copy.set_run_in_strict_mode(true);
         solved_goal_copy.resolve();
-        auto solver_problems_strict = process_solver_problems(base, solved_goal_copy);
-        if (!solver_problems_strict.empty()) {
-            add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems_strict);
+        process_solver_problems(solved_goal_copy);
+        if (!solver_problems.empty()) {
+            add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems);
         }
     }
     this->problems = problems;

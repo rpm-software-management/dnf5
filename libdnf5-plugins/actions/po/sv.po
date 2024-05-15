@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
 "PO-Revision-Date: 2024-01-11 13:50+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.3.1\n"
 
-#: actions.cpp:397 actions.cpp:405 actions.cpp:413 actions.cpp:421
+#: actions.cpp:398 actions.cpp:406 actions.cpp:414 actions.cpp:422
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -27,20 +27,20 @@ msgstr ""
 "Fel i fil \"{}\" på rad {}: \"KROK:PKG_FILTER:RIKTNING:ALTERNATIV:KOMMANDO\" "
 "format förväntas"
 
-#: actions.cpp:443
+#: actions.cpp:444
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänt \"aktiverat\" alternativvärde \"{}\""
 
-#: actions.cpp:450
+#: actions.cpp:451
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänt alternativ \"{}\""
 
-#: actions.cpp:468
+#: actions.cpp:469
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänd krok \"{}\""
 
-#: actions.cpp:478
+#: actions.cpp:479
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -48,15 +48,15 @@ msgstr ""
 "Fel i fil \"{}\" på rad {}: Paketfilter kan endast användas i PRE_TRANS och "
 "POST_TRANS krokar"
 
-#: actions.cpp:488
+#: actions.cpp:489
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr "Fel i fil \"{}\" på rad {}: Kan inte använda riktning utan paketfilter"
 
-#: actions.cpp:505
+#: actions.cpp:506
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänd paketriktning \"{}\""
 
-#: actions.cpp:514
+#: actions.cpp:515
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Fel i fil \"{}\" på rad {}: Saknar kommando"

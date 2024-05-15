@@ -136,22 +136,17 @@ std::string LogEvent::to_string(
         // TODO(jmracek) Improve messages => Each message can contain also an action
         case GoalProblem::NOT_FOUND:
             if (action == GoalAction::REMOVE) {
-                std::string spec_type_str;
                 switch (*spec_type) {
                     case libdnf5::transaction::TransactionItemType::PACKAGE:
-                        spec_type_str = _("packages");
-                        break;
+                        return ret.append(utils::sformat(_("No packages to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::GROUP:
-                        spec_type_str = _("groups");
-                        break;
+                        return ret.append(utils::sformat(_("No groups to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::ENVIRONMENT:
-                        spec_type_str = _("environmental groups");
-                        break;
+                        return ret.append(
+                            utils::sformat(_("No environmental groups to remove for argument: {}"), *spec));
                     case libdnf5::transaction::TransactionItemType::MODULE:
-                        spec_type_str = _("modules");
-                        break;
+                        return ret.append(utils::sformat(_("No modules to remove for argument: {}"), *spec));
                 }
-                return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
             } else if (action == GoalAction::INSTALL_BY_COMPS) {
                 if (spec_type && *spec_type == libdnf5::transaction::TransactionItemType::GROUP) {
                     return ret.append(utils::sformat(_("No match for group from environment: {}"), *spec));
@@ -234,19 +229,22 @@ std::string LogEvent::to_string(
                 const auto pos = module_stream.find(":");
                 module_dict[module_stream.substr(0, pos)].insert(module_stream.substr(pos + 1));
             }
-            // Create the error message describing all the streams of modules that were matched.
-            std::string error_message;
+            // Format a leading line of the error message.
+            ret.append(utils::sformat(_("Unable to resolve argument '{}':"), *spec));
+            // Describe all the streams of modules that were matched.
             for (const auto & module_dict_iter : module_dict) {
-                error_message.append(utils::sformat(
-                    _("\n  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the streams are "
-                      "enabled or "
-                      "default."),
+                ret.append(utils::sformat(
+                    P_("\n  - Argument '{}' matches {} stream ('{}') of module '{}', "
+                       "but the stream is not enabled or default.",
+                       "\n  - Argument '{}' matches {} streams ('{}') of module '{}', "
+                       "but none of the streams are enabled or default.",
+                       module_dict_iter.second.size()),
                     *spec,
                     module_dict_iter.second.size(),
-                    utils::string::join(module_dict_iter.second, "', '"),
+                    utils::string::join(module_dict_iter.second, _("', '")),
                     module_dict_iter.first));
             }
-            return ret.append(utils::sformat(_("Unable to resolve argument '{}':{}"), *spec, error_message));
+            return ret;
         }
         case GoalProblem::MODULE_SOLVER_ERROR: {
             if (!solver_problems) {

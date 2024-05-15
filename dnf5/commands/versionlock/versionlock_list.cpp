@@ -32,7 +32,7 @@ void VersionlockListCommand::set_argument_parser() {
 
 void VersionlockListCommand::run() {
     auto & ctx = get_context();
-    auto package_sack = ctx.base.get_rpm_package_sack();
+    auto package_sack = ctx.get_base().get_rpm_package_sack();
     auto vl_config = package_sack->get_versionlock_config();
 
     bool first = true;

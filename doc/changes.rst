@@ -149,7 +149,8 @@ Changes to individual commands
 
 ``automatic``
   * Now a DNF5 plugin.
-  * Different configuration file locations and some changes in format.
+  * Configuration file has been moved from ``/etc/dnf/automatic.conf`` to ``/etc/dnf/dnf5-plugins/automatic.conf``. However, its contents remain compatible.
+  * The specific systemd units, ``dnf-automatic-download``, ``dnf-automatic-install``, and ``dnf-automatic-notifyonly``, have been dropped. Only one ``dnf5-automatic`` timer is shipped.
   * See the :ref:`Automatic command <automatic_plugin_ref-label>` for more information.
 
 ``autoremove``
@@ -386,6 +387,9 @@ Changes to individual options
 
 ``disable_excludes``
   * To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` to unify the behavior with query objects on the API.
+
+``keepcache``
+  * The behavior has been slightly modified, see the :ref:`Caching <caching_packages_ref-label>` man page for more information.
 
 ``optional_metadata_types``
   * Default value is now: ``comps,updateinfo``.

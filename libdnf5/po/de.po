@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-29 02:52+0000\n"
+"POT-Creation-Date: 2024-05-02 02:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,315 +16,403 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: advisory/advisory.cpp:44
+#: advisory/advisory.cpp:81
 msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
 
-#: base/goal.cpp:387
+#: base/goal.cpp:390
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr ""
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1114
+#: base/goal.cpp:1142
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr ""
 
-#: base/goal.cpp:2322
-msgid "Failed to resolve modules."
-msgstr ""
-
-#: base/log_event.cpp:80
+#: base/log_event.cpp:142
 msgid "packages"
 msgstr ""
 
-#: base/log_event.cpp:83
+#: base/log_event.cpp:145
 msgid "groups"
 msgstr ""
 
-#: base/log_event.cpp:86
+#: base/log_event.cpp:148
 msgid "environmental groups"
 msgstr ""
 
-#: base/log_event.cpp:89
+#: base/log_event.cpp:151
 msgid "modules"
 msgstr ""
 
-#: base/log_event.cpp:92
+#: base/log_event.cpp:154
 msgid "No {} to remove for argument: {}"
 msgstr ""
 
-#: base/log_event.cpp:95
+#: base/log_event.cpp:157
 msgid "No match for group from environment: {}"
 msgstr ""
 
-#: base/log_event.cpp:97
+#: base/log_event.cpp:159
 msgid "No match for group package: {}"
 msgstr ""
 
-#: base/log_event.cpp:100
+#: base/log_event.cpp:162
 msgid "No match for argument: {}"
 msgstr ""
 
-#: base/log_event.cpp:103
+#: base/log_event.cpp:165
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr ""
 
-#: base/log_event.cpp:107
+#: base/log_event.cpp:169
 msgid "Packages for argument '{}' available, but not installed."
 msgstr ""
 
-#: base/log_event.cpp:110
+#: base/log_event.cpp:172
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
 
-#: base/log_event.cpp:112
+#: base/log_event.cpp:174
 msgid "Argument '{}' matches only source packages."
 msgstr ""
 
-#: base/log_event.cpp:114
+#: base/log_event.cpp:176
 msgid "Argument '{}' matches only excluded packages."
 msgstr ""
 
-#: base/log_event.cpp:116
+#: base/log_event.cpp:178
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
 
-#: base/log_event.cpp:121
+#: base/log_event.cpp:183
 msgid "  * Maybe you meant: {}"
 msgstr ""
 
-#: base/log_event.cpp:124
+#: base/log_event.cpp:186
 msgid "There are following alternatives for '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:131
+#: base/log_event.cpp:193
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
 
-#: base/log_event.cpp:137
+#: base/log_event.cpp:199
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
 msgstr ""
 
-#: base/log_event.cpp:142
+#: base/log_event.cpp:204
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 
-#: base/log_event.cpp:144
+#: base/log_event.cpp:206
 msgid "Packages for argument '{}' installed, but not available."
 msgstr ""
 
-#: base/log_event.cpp:153
+#: base/log_event.cpp:215
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr ""
 
-#: base/log_event.cpp:155
+#: base/log_event.cpp:217
 msgid "Package \"{}\" is already installed."
 msgstr ""
 
-#: base/log_event.cpp:164
+#: base/log_event.cpp:226
 msgid "Debug data written to \"{}\""
 msgstr ""
 
-#: base/log_event.cpp:167
+#: base/log_event.cpp:229
 msgid "{} action for argument \"{}\" is not supported."
 msgstr ""
 
-#: base/log_event.cpp:179
+#: base/log_event.cpp:241
 msgid ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr ""
 
-#: base/log_event.cpp:187
+#: base/log_event.cpp:249
 msgid "Unable to resolve argument '{}':{}"
 msgstr ""
 
-#: base/solver_problems.cpp:37
-msgid "{} does not belong to a distupgrade repository"
+#: base/log_event.cpp:255
+msgid "Modular dependency problems:\n"
 msgstr ""
 
-#: base/solver_problems.cpp:38
-msgid "{} has inferior architecture"
+#: base/log_event.cpp:262
+msgid "Modular dependency problems with the latest modules:\n"
 msgstr ""
 
-#: base/solver_problems.cpp:39
-msgid "problem with installed package "
+#: base/log_event.cpp:269
+msgid "Modular dependency problems with the defaults:\n"
 msgstr ""
 
-#: base/solver_problems.cpp:40
-msgid "conflicting requests"
+#: base/log_event.cpp:284
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr ""
+
+#: base/log_event.cpp:289
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
 msgstr ""
 
 #: base/solver_problems.cpp:41
-msgid "unsupported request"
+msgid "{} does not belong to a distupgrade repository"
 msgstr ""
 
 #: base/solver_problems.cpp:42
-msgid "nothing provides requested {}"
+msgid "{} has inferior architecture"
 msgstr ""
 
 #: base/solver_problems.cpp:43
-msgid "package {} does not exist"
+msgid "problem with installed package "
 msgstr ""
 
-#: base/solver_problems.cpp:44
-msgid "{} is provided by the system"
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:74
+msgid "conflicting requests"
 msgstr ""
 
-#: base/solver_problems.cpp:45
-msgid "some dependency problem"
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:75
+msgid "unsupported request"
 msgstr ""
 
-#: base/solver_problems.cpp:46
-msgid "cannot install the best update candidate for package {}"
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:76
+msgid "nothing provides requested {}"
 msgstr ""
 
 #: base/solver_problems.cpp:47
-msgid "cannot install the best candidate for the job"
+msgid "package {} does not exist"
 msgstr ""
 
-#: base/solver_problems.cpp:48
-msgid "package {} is filtered out by modular filtering"
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:78
+msgid "{} is provided by the system"
 msgstr ""
 
-#: base/solver_problems.cpp:49
-msgid "package {} does not have a compatible architecture"
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:79
+msgid "some dependency problem"
 msgstr ""
 
 #: base/solver_problems.cpp:50
-msgid "package {} is not installable"
+msgid "cannot install the best update candidate for package {}"
 msgstr ""
 
-#: base/solver_problems.cpp:51
-msgid "package {} is filtered out by exclude filtering"
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:81
+msgid "cannot install the best candidate for the job"
 msgstr ""
 
 #: base/solver_problems.cpp:52
-msgid "nothing provides {0} needed by {1}"
+msgid "package {} is filtered out by modular filtering"
 msgstr ""
 
 #: base/solver_problems.cpp:53
-msgid "cannot install both {0} and {1}"
+msgid "package {} does not have a compatible architecture"
 msgstr ""
 
 #: base/solver_problems.cpp:54
-msgid "package {0} conflicts with {1} provided by {2}"
+msgid "package {} is not installable"
 msgstr ""
 
 #: base/solver_problems.cpp:55
-msgid "package {0} obsoletes {1} provided by {2}"
+msgid "package {} is filtered out by exclude filtering"
 msgstr ""
 
 #: base/solver_problems.cpp:56
-msgid "installed package {0} obsoletes {1} provided by {2}"
+msgid "nothing provides {0} needed by {1}"
 msgstr ""
 
 #: base/solver_problems.cpp:57
-msgid "package {0} implicitly obsoletes {1} provided by {2}"
+msgid "cannot install both {0} and {1}"
 msgstr ""
 
 #: base/solver_problems.cpp:58
-msgid "package {1} requires {0}, but none of the providers can be installed"
+msgid "package {0} conflicts with {1} provided by {2}"
 msgstr ""
 
 #: base/solver_problems.cpp:59
-msgid "package {1} conflicts with {0} provided by itself"
+msgid "package {0} obsoletes {1} provided by {2}"
 msgstr ""
 
 #: base/solver_problems.cpp:60
-msgid "both package {0} and {2} obsolete {1}"
+msgid "installed package {0} obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:61
+msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgstr ""
 
 #: base/solver_problems.cpp:62
+msgid "package {1} requires {0}, but none of the providers can be installed"
+msgstr ""
+
+#: base/solver_problems.cpp:63
+msgid "package {1} conflicts with {0} provided by itself"
+msgstr ""
+
+#: base/solver_problems.cpp:64
+msgid "both package {0} and {2} obsolete {1}"
+msgstr ""
+
+#: base/solver_problems.cpp:66
 msgid ""
 "The operation would result in removing the following protected packages: {}"
 msgstr ""
 
-#: base/solver_problems.cpp:65
+#: base/solver_problems.cpp:69
 msgid "The operation would result in removing of running kernel: {}"
 msgstr ""
 
-#: base/solver_problems.cpp:249
+#: base/solver_problems.cpp:71
+msgid "module {} does not belong to a distupgrade repository"
+msgstr ""
+
+#: base/solver_problems.cpp:72
+msgid "module {} has inferior architecture"
+msgstr ""
+
+#: base/solver_problems.cpp:73
+msgid "problem with installed module {}"
+msgstr ""
+
+#: base/solver_problems.cpp:77
+msgid "module {} does not exist"
+msgstr ""
+
+#: base/solver_problems.cpp:80
+msgid "cannot install the best update candidate for module {}"
+msgstr ""
+
+#: base/solver_problems.cpp:82 base/solver_problems.cpp:85
+msgid "module {} is disabled"
+msgstr ""
+
+#: base/solver_problems.cpp:83
+msgid "module {} does not have a compatible architecture"
+msgstr ""
+
+#: base/solver_problems.cpp:84
+msgid "module {} is not installable"
+msgstr ""
+
+#: base/solver_problems.cpp:86
+msgid "nothing provides {0} needed by module {1}"
+msgstr ""
+
+#: base/solver_problems.cpp:87
+msgid "cannot install both modules {0} and {1}"
+msgstr ""
+
+#: base/solver_problems.cpp:88
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:89
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:90
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:91
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:92
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr ""
+
+#: base/solver_problems.cpp:93
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr ""
+
+#: base/solver_problems.cpp:94
+msgid "both module {0} and {2} obsolete {1}"
+msgstr ""
+
+#: base/solver_problems.cpp:326
 msgid "Problem: "
 msgstr ""
 
-#: base/solver_problems.cpp:253
+#: base/solver_problems.cpp:330
 msgid "Problem {}: "
 msgstr ""
 
-#: base/transaction.cpp:71
+#: base/transaction.cpp:74
 msgid "This transaction has been already run before."
 msgstr ""
 
-#: base/transaction.cpp:72
+#: base/transaction.cpp:75
 msgid "Cannot run transaction with resolving problems."
 msgstr ""
 
-#: base/transaction.cpp:73
+#: base/transaction.cpp:76
 msgid "Rpm transaction check failed."
 msgstr ""
 
-#: base/transaction.cpp:75
+#: base/transaction.cpp:78
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:79
 msgid "Rpm transaction failed."
 msgstr ""
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:80
 msgid "Signature verification failed."
 msgstr ""
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:84
 msgid "The repository does not have any PGP keys configured."
 msgstr ""
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:85
 msgid "Public key is not installed."
 msgstr ""
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:86
 msgid "Canceled by the user."
 msgstr ""
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:87
 msgid "Public key import failed."
 msgstr ""
 
-#: base/transaction.cpp:638
+#: base/transaction.cpp:668
 msgid "Invalid tsflag: {}"
 msgstr ""
 
-#: base/transaction.cpp:972
+#: base/transaction.cpp:1002
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 
-#: base/transaction.cpp:993
+#: base/transaction.cpp:1023
 msgid "An error occurred importing key \"{}\": {}"
 msgstr ""
 
-#: base/transaction.cpp:1026
+#: base/transaction.cpp:1056
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 
-#: base/transaction.cpp:1053
+#: base/transaction.cpp:1083
 msgid "Import of the key didn't help, wrong key?"
 msgstr ""
 
-#: base/transaction.cpp:1071
+#: base/transaction.cpp:1101
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr ""
 
@@ -348,15 +436,15 @@ msgstr ""
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 
-#: comps/environment/environment.cpp:252
+#: comps/environment/environment.cpp:307
 msgid "failed to save xml document for comps"
 msgstr ""
 
-#: comps/group/group.cpp:283
+#: comps/group/group.cpp:331
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 
-#: comps/group/package.cpp:31 comps/group/package.cpp:34
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
 msgid "Invalid package type: {}"
 msgstr ""
 
@@ -380,23 +468,23 @@ msgstr ""
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 
-#: conf/config_parser.cpp:53
+#: conf/config_parser.cpp:54
 msgid "Section \"{}\" not found"
 msgstr ""
 
-#: conf/config_parser.cpp:58
+#: conf/config_parser.cpp:59
 msgid "Section \"{}\" does not contain option \"{}\""
 msgstr ""
 
-#: conf/config_parser.cpp:66
+#: conf/config_parser.cpp:96
 msgid "Configuration file \"{}\" not found"
 msgstr ""
 
-#: conf/config_parser.cpp:68
+#: conf/config_parser.cpp:98
 msgid "Unable to access configuration file \"{}\""
 msgstr ""
 
-#: conf/config_parser.cpp:71
+#: conf/config_parser.cpp:101
 msgid "Error in configuration file \"{}\""
 msgstr ""
 
@@ -408,31 +496,27 @@ msgstr ""
 msgid "Option \"{}\" already exists"
 msgstr ""
 
-#: conf/option_bool.cpp:84
+#: conf/option_bool.cpp:82
 msgid "Invalid boolean value \"{}\""
 msgstr ""
 
-#: conf/option_enum.cpp:79 conf/option_enum.cpp:164
+#: conf/option_enum.cpp:68
 msgid "Enum option value \"{}\" not allowed"
 msgstr ""
 
-#: conf/option_enum.cpp:92
-msgid "Invalid enum option value \"{}\""
-msgstr ""
-
-#: conf/option_number.cpp:76
+#: conf/option_number.cpp:99
 msgid "Input value {} is outside the allowed range {} ... {}"
 msgstr ""
 
-#: conf/option_number.cpp:89
+#: conf/option_number.cpp:112
 msgid "Invalid number option value \"{}\""
 msgstr ""
 
-#: conf/option_path.cpp:81
+#: conf/option_path.cpp:93
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
 msgstr ""
 
-#: conf/option_path.cpp:86
+#: conf/option_path.cpp:98
 msgid "Path \"{}\" does not exist"
 msgstr ""
 
@@ -457,7 +541,7 @@ msgstr ""
 msgid "Unknown time unit '{}'"
 msgstr ""
 
-#: conf/option_string.cpp:72
+#: conf/option_string.cpp:89
 msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
@@ -465,25 +549,25 @@ msgstr ""
 
 #. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
 #. or extend exception (add name) in upper layer.
-#: conf/option_string.cpp:97
+#: conf/option_string.cpp:114
 msgid "Option value is not set"
 msgstr ""
 
-#: conf/option_string_list.cpp:118
+#: conf/option_string_list.cpp:120
 msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
 msgstr ""
 
-#: conf/vars.cpp:64
+#: conf/vars.cpp:63
 msgid "failed to read rpm config files"
 msgstr ""
 
-#: conf/vars.cpp:90
+#: conf/vars.cpp:89
 msgid "Failed to execute uname()"
 msgstr ""
 
-#: conf/vars.cpp:355
+#: conf/vars.cpp:371 conf/vars.cpp:411
 msgid "Variable \"{}\" is read-only"
 msgstr ""
 
@@ -491,7 +575,7 @@ msgstr ""
 msgid "Cannot open log file"
 msgstr ""
 
-#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:764
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 msgid "No such module: {}"
 msgstr ""
 
@@ -526,45 +610,45 @@ msgstr ""
 msgid "Failed to upgrade streams: {}"
 msgstr ""
 
-#: module/module_sack.cpp:92
+#: module/module_sack.cpp:93
 msgid "Failed to load module metadata for repository \"{}\": {}"
 msgstr ""
 
-#: module/module_sack.cpp:591
+#: module/module_sack.cpp:594
 msgid "Missing '='"
 msgstr ""
 
-#: module/module_sack.cpp:595 module/module_sack.cpp:603
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
 msgstr ""
 
-#: module/module_sack.cpp:599
+#: module/module_sack.cpp:602
 msgid "Missing ':' in the value"
 msgstr ""
 
-#: module/module_sack.cpp:908
+#: module/module_sack.cpp:911
 msgid "Invalid module status: {}"
 msgstr ""
 
-#: plugin/plugins.cpp:64
+#: plugin/plugins.cpp:66
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 
-#: plugin/plugins.cpp:113
+#: plugin/plugins.cpp:115
 msgid "Cannot find plugin library \"{}\""
 msgstr ""
 
-#: plugin/plugins.cpp:169
+#: plugin/plugins.cpp:182
 msgid "Invalid option value: enabled={}"
 msgstr ""
 
-#: plugin/plugins.cpp:187
+#: plugin/plugins.cpp:206
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr ""
 
-#: plugin/plugins.cpp:212
+#: plugin/plugins.cpp:231
 msgid "Cannot load plugins: {}"
 msgstr ""
 
@@ -594,42 +678,50 @@ msgstr ""
 msgid "Failed to download packages"
 msgstr ""
 
-#: repo/repo.cpp:74
+#: repo/repo.cpp:60
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr ""
 
-#: repo/repo.cpp:78
+#: repo/repo.cpp:64
 msgid "Failed to access RPM \"{}\": {}"
 msgstr ""
 
-#: repo/repo.cpp:98
+#: repo/repo.cpp:106
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr ""
 
-#: repo/repo.cpp:139
+#: repo/repo.cpp:149
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 
-#: repo/repo.cpp:150
+#: repo/repo.cpp:160
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr ""
 
-#: repo/repo.cpp:415
+#: repo/repo.cpp:408
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
 msgstr ""
 
-#: repo/repo.cpp:480
+#: repo/repo.cpp:466
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr ""
+
+#: repo/repo.cpp:473
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr ""
+
+#: repo/repo.cpp:490
 msgid "Failed to load RPM \"{}\": {}"
 msgstr ""
 
-#: repo/repo_cache.cpp:105
-msgid "Empty path to the repository cache directory."
+#: repo/repo_cache.cpp:229
+msgid "Unable to determine id of the repository in the cache."
 msgstr ""
 
-#: repo/repo_cache.cpp:209
-msgid "Unable to determine id of the repository in the cache."
+#: repo/repo_cache_private.hpp:56
+msgid "Empty path to the repository cache directory."
 msgstr ""
 
 #: repo/repo_downloader.cpp:138
@@ -657,25 +749,25 @@ msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
 
-#: repo/repo_pgp.cpp:61
+#: repo/repo_pgp.cpp:60
 msgid "Failed to import pgp keys into temporary keyring: {}"
 msgstr ""
 
-#: repo/repo_pgp.cpp:67 repo/repo_pgp.cpp:94
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
 msgid "Failed to list pgp keys: {}"
 msgstr ""
 
-#: repo/repo_pgp.cpp:141
+#: repo/repo_pgp.cpp:140
 msgid "Failed to import pgp keys: {}"
 msgstr ""
 
-#: repo/repo_sack.cpp:83
+#: repo/repo_sack.cpp:125
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:417
+#: repo/repo_sack.cpp:496
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 
@@ -724,19 +816,19 @@ msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
 msgstr ""
 
-#: rpm/nevra.cpp:69
+#: rpm/nevra.cpp:82
 msgid "NEVRA string \"{}\" contains ':' multiple times"
 msgstr ""
 
-#: rpm/nevra.cpp:73
+#: rpm/nevra.cpp:86
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr ""
 
-#: rpm/package.cpp:507
+#: rpm/package.cpp:80
 msgid "Package with rpmdbid was not found"
 msgstr ""
 
-#: rpm/reldep.cpp:97 rpm/reldep.cpp:104
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
 msgstr ""
 
@@ -760,11 +852,11 @@ msgstr ""
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr ""
 
-#: rpm/rpm_signature.cpp:204
+#: rpm/rpm_signature.cpp:283
 msgid "\"{}\": key is not an armored public key."
 msgstr ""
 
-#: rpm/rpm_signature.cpp:209
+#: rpm/rpm_signature.cpp:288
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr ""
 
@@ -782,51 +874,51 @@ msgstr ""
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr ""
 
-#: rpm/transaction.cpp:200
+#: rpm/transaction.cpp:201
 msgid "Failed to order the rpm transaction."
 msgstr ""
 
-#: rpm/transaction.cpp:227
+#: rpm/transaction.cpp:237
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 
-#: rpm/transaction.cpp:246
+#: rpm/transaction.cpp:256
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 
-#: rpm/transaction.cpp:267
+#: rpm/transaction.cpp:277
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 
-#: rpm/transaction.cpp:284
+#: rpm/transaction.cpp:294
 msgid "Failed to read package header from file \"{}\""
 msgstr ""
 
-#: rpm/transaction.cpp:297
+#: rpm/transaction.cpp:307
 msgid "Cannot init rpm database iterator"
 msgstr ""
 
-#: rpm/transaction.cpp:301
+#: rpm/transaction.cpp:311
 msgid "Package was not found in rpm database"
 msgstr ""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:317
+#: rpm/transaction.cpp:327
 msgid "Cannot reinstall package \"{}\""
 msgstr ""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:335
+#: rpm/transaction.cpp:345
 msgid "Cannot remove package \"{}\""
 msgstr ""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:371
+#: rpm/transaction.cpp:381
 msgid "Cannot {} package \"{}\""
 msgstr ""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:508
+#: rpm/versionlock_config.cpp:261 system/state.cpp:513
 msgid "{}"
 msgstr ""
 
@@ -847,7 +939,7 @@ msgstr ""
 msgid "{} state for \"{}\" not found."
 msgstr ""
 
-#: system/state.cpp:535
+#: system/state.cpp:540
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 
@@ -888,11 +980,11 @@ msgstr ""
 msgid "Failed to insert record into table 'item' in history database"
 msgstr ""
 
-#: transaction/transaction.cpp:66
+#: transaction/transaction.cpp:96
 msgid "Invalid transaction state: {}"
 msgstr ""
 
-#: transaction/transaction.cpp:234
+#: transaction/transaction.cpp:282
 msgid "Transaction has already started!"
 msgstr ""
 
@@ -936,55 +1028,55 @@ msgstr ""
 msgid "Missing key \"version\"."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:103
+#: transaction/transaction_sr.cpp:104
 msgid "Unexpected type of \"environments\", array expected."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:111
+#: transaction/transaction_sr.cpp:112
 msgid "Missing object key \"id\" in an environment."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:116
+#: transaction/transaction_sr.cpp:117
 msgid "Missing object key \"action\" in an environment."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:142
 msgid "Unexpected type of \"groups\", array expected."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:145
+#: transaction/transaction_sr.cpp:150
 msgid "Missing object key \"id\" in a group."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:150
+#: transaction/transaction_sr.cpp:155
 msgid "Missing object key \"action\" in a group."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:155
+#: transaction/transaction_sr.cpp:160
 msgid "Missing object key \"reason\" in a group."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:180
+#: transaction/transaction_sr.cpp:189
 msgid "Unexpected type of \"rpms\", array expected."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:189
+#: transaction/transaction_sr.cpp:198
 msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:197
+#: transaction/transaction_sr.cpp:206
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:202
+#: transaction/transaction_sr.cpp:211
 msgid "Missing object key \"action\" in an rpm."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:207
+#: transaction/transaction_sr.cpp:216
 msgid "Missing object key \"reason\" in an rpm."
 msgstr ""
 
-#: transaction/transaction_sr.cpp:214
+#: transaction/transaction_sr.cpp:223
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\"."

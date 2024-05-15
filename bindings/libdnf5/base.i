@@ -50,6 +50,15 @@
 %template(BaseWeakPtr) libdnf5::WeakPtr<libdnf5::Base, false>;
 %template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 
+%ignore std::vector<libdnf5::plugin::PluginInfo>::insert;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::pop;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::pop_back;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::push;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::push_back;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::reserve;
+%ignore std::vector<libdnf5::plugin::PluginInfo>::resize;
+%template(VectorPluginInfo) std::vector<libdnf5::plugin::PluginInfo>;
+
 %include "libdnf5/base/base.hpp"
 
 %include "libdnf5/base/solver_problems.hpp"
@@ -66,3 +75,12 @@
 
 %include "libdnf5/base/goal.hpp"
 %include "libdnf5/base/goal_elements.hpp"
+
+// Add attributes for getters/setters in Python.
+// See 'common.i' for more info.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+common.create_attributes_from_getters_and_setters(ResolveSpecSettings)
+common.create_attributes_from_getters_and_setters(GoalJobSettings)
+%}
+#endif
