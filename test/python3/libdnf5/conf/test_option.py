@@ -39,6 +39,9 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
 
     def test_container_add(self):
         types_config = self.base.get_config().get_optional_metadata_types_option()
+        # optional_metadata_types is an append option with non-empty default.
+        # To test anything, clear it first
+        types_config.set(())
         types_config.set((libdnf5.conf.METADATA_TYPE_FILELISTS,))
         types_config.add(libdnf5.conf.Option.Priority_RUNTIME, (libdnf5.conf.METADATA_TYPE_COMPS,
                          libdnf5.conf.METADATA_TYPE_UPDATEINFO))

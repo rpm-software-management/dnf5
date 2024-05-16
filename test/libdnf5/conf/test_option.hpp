@@ -40,6 +40,7 @@ class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_options_string_set);
     CPPUNIT_TEST(test_options_list_add);
     CPPUNIT_TEST(test_options_list_add_item);
+    CPPUNIT_TEST(test_options_string_append_list);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -56,6 +57,7 @@ public:
     void test_options_string_set();
     void test_options_list_add();
     void test_options_list_add_item();
+    void test_options_string_append_list();
 };
 
 
