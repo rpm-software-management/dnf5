@@ -134,6 +134,7 @@ options = {
         "is_installed",
         "install_size",
         "download_size",
+        "buildtime",
         "sourcerpm",
         "summary",
         "url",

@@ -36,6 +36,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"is_installed", PackageAttribute::is_installed},
     {"install_size", PackageAttribute::install_size},
     {"download_size", PackageAttribute::download_size},
+    {"buildtime", PackageAttribute::buildtime},
     {"sourcerpm", PackageAttribute::sourcerpm},
     {"summary", PackageAttribute::summary},
     {"url", PackageAttribute::url},
@@ -118,6 +119,9 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::download_size:
                 dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_download_size()));
+                break;
+            case PackageAttribute::buildtime:
+                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_build_time()));
                 break;
             case PackageAttribute::sourcerpm:
                 dbus_package.emplace(attr, libdnf_package.get_sourcerpm());
@@ -253,6 +257,10 @@ std::string package_to_json(const libdnf5::rpm::Package & libdnf_package, const 
             case PackageAttribute::download_size:
                 json_object_object_add(
                     json_pkg, cattr, json_object_new_int64(static_cast<int64_t>(libdnf_package.get_download_size())));
+                break;
+            case PackageAttribute::buildtime:
+                json_object_object_add(
+                    json_pkg, cattr, json_object_new_int64(static_cast<int64_t>(libdnf_package.get_build_time())));
                 break;
             case PackageAttribute::sourcerpm:
                 json_object_object_add(json_pkg, cattr, json_object_new_string(libdnf_package.get_sourcerpm().c_str()));

@@ -40,7 +40,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Following options and filters are supported:
 
             - package_attrs: list of strings
-                list of package attributes that are returned. Supported attributes are name, epoch, version, release, arch, repo_id, from_repo_id, is_installed, install_size, download_size, sourcerpm, summary, url, license, description, files, changelogs, provides, requires, requires_pre, conflicts, obsoletes, recommends, suggests, enhances, supplements, evr, nevra, full_nevra, reason, vendor, group.
+                list of package attributes that are returned. Supported attributes are name, epoch, version, release, arch, repo_id, from_repo_id, is_installed, install_size, download_size, buildtime, sourcerpm, summary, url, license, description, files, changelogs, provides, requires, requires_pre, conflicts, obsoletes, recommends, suggests, enhances, supplements, evr, nevra, full_nevra, reason, vendor, group.
             - with_nevra: bool (default true)
                 match patterns against available packages NEVRAs
             - with_provides: bool (default true)
