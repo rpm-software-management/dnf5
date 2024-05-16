@@ -530,3 +530,24 @@ void OptionTest::test_options_list_add_item() {
     option.add_item(libdnf5::Option::Priority::RUNTIME, "item1");
     CPPUNIT_ASSERT((OptionStringSet::ValueType{"item1", "item2"}) == option.get_value());
 }
+
+void OptionTest::test_options_string_append_list() {
+    OptionStringAppendList option("Pkg1, Pkg2");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2"}), option.get_value());
+    // setting a new value will append to current value
+    option.set(Option::Priority::COMMANDLINE, "Pkg3");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg3"}), option.get_value());
+    // values are evaluated ordered by the priority
+    option.set(Option::Priority::MAINCONFIG, "Pkg4");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg1", "Pkg2", "Pkg4", "Pkg3"}), option.get_value());
+    // I can clear the option using an empty first item (values with higher priority
+    // are also appended)
+    option.set(Option::Priority::MAINCONFIG, ",Pkg5");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3"}), option.get_value());
+    // emty item on other than first place is skipped and does not clear the value
+    option.set(Option::Priority::COMMANDLINE, "Pkg6, ,Pkg7");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Pkg5", "Pkg3", "Pkg6", "Pkg7"}), option.get_value());
+    // I can clear the option an using empty value
+    option.set(Option::Priority::COMMANDLINE, "");
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{}), option.get_value());
+}
