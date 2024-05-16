@@ -415,7 +415,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             } else {  // print replacing versions
                 struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
                 // TODO(jmracek) Translate it
-                std::string name(" replacing ");
+                std::string name("   replacing ");
                 name.append(replaced->get_name());
                 scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
                 scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
