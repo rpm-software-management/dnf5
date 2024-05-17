@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnf5daemon-server/utils.hpp>
 
 #include <set>
+#include <string>
 #include <vector>
 
 namespace dnfdaemon::client {
@@ -32,10 +33,10 @@ class DbusEnvironmentWrapper {
 public:
     explicit DbusEnvironmentWrapper(const dnfdaemon::KeyValueMap & rawdata);
 
-    std::string get_environmentid() const { return rawdata.at("environmentid"); }
-    std::string get_name() const { return rawdata.at("name"); }
-    std::string get_description() const { return rawdata.at("description"); }
-    std::string get_order() const { return rawdata.at("order"); }
+    std::string get_environmentid() const { return std::string{rawdata.at("environmentid")}; }
+    std::string get_name() const { return std::string{rawdata.at("name")}; }
+    std::string get_description() const { return std::string{rawdata.at("description")}; }
+    std::string get_order() const { return std::string{rawdata.at("order")}; }
     // TODO(mblaha) proper installed value
     bool get_installed() const { return false; }
     std::set<std::string> get_repos() const;
