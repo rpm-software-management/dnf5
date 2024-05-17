@@ -57,9 +57,9 @@ void AdvisorySubCommand::set_argument_parser() {
 
 dnfdaemon::KeyValueMap AdvisorySubCommand::session_config() {
     dnfdaemon::KeyValueMap cfg = {};
-    cfg["load_system_repo"] = true;
-    cfg["load_available_repos"] = true;
-    cfg["optional_metadata_types"] = std::vector<std::string>{libdnf5::METADATA_TYPE_UPDATEINFO};
+    cfg["load_system_repo"] = sdbus::Variant(true);
+    cfg["load_available_repos"] = sdbus::Variant(true);
+    cfg["optional_metadata_types"] = sdbus::Variant(std::vector<std::string>{libdnf5::METADATA_TYPE_UPDATEINFO});
     return cfg;
 }
 
@@ -69,7 +69,7 @@ void AdvisorySubCommand::run() {
     // convert arguments to dbus call options
     dnfdaemon::KeyValueMap options = {};
 
-    options["names"] = advisory_names->get_value();
+    options["names"] = sdbus::Variant(advisory_names->get_value());
 
     // by default return available advisories
     std::string availability = "available";
@@ -80,7 +80,7 @@ void AdvisorySubCommand::run() {
     } else if (updates->get_value()) {
         availability = "updates";
     }
-    options["availability"] = availability;  // string
+    options["availability"] = sdbus::Variant(availability);  // string
 
     // advisory types
     std::vector<std::string> advisory_types{};
@@ -96,16 +96,16 @@ void AdvisorySubCommand::run() {
     if (advisory_newpackage->get_value()) {
         advisory_types.emplace_back("newpackage");
     }
-    options["types"] = advisory_types;  // vector<string>
+    options["types"] = sdbus::Variant(advisory_types);  // vector<string>
 
-    options["contains_pkgs"] = contains_pkgs->get_value();     // vector<string>
-    options["severities"] = advisory_severities->get_value();  // vector<string>
-    options["reference_bzs"] = advisory_bzs->get_value();      // vector<string>
-    options["reference_cves"] = advisory_cves->get_value();    // vector<string>
-    options["with_bz"] = with_bz->get_value();                 // bool
-    options["with_cve"] = with_cve->get_value();               // bool
+    options["contains_pkgs"] = sdbus::Variant(contains_pkgs->get_value());     // vector<string>
+    options["severities"] = sdbus::Variant(advisory_severities->get_value());  // vector<string>
+    options["reference_bzs"] = sdbus::Variant(advisory_bzs->get_value());      // vector<string>
+    options["reference_cves"] = sdbus::Variant(advisory_cves->get_value());    // vector<string>
+    options["with_bz"] = sdbus::Variant(with_bz->get_value());                 // bool
+    options["with_cve"] = sdbus::Variant(with_cve->get_value());               // bool
 
-    options["advisory_attrs"] = advisory_attrs;
+    options["advisory_attrs"] = sdbus::Variant(advisory_attrs);
 
     // call the server
     dnfdaemon::KeyValueMapList raw_advisories;

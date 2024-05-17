@@ -103,14 +103,14 @@ sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
     libdnf5::offline::OfflineTransactionState state{state_path};
     if (!state.get_read_exception()) {
         const auto & state_data = state.get_data();
-        transaction_state["status"] = state_data.get_status();
-        transaction_state["cachedir"] = state_data.get_cachedir();
-        transaction_state["target_releasever"] = state_data.get_target_releasever();
-        transaction_state["system_releasever"] = state_data.get_system_releasever();
-        transaction_state["verb"] = state_data.get_verb();
-        transaction_state["cmd_line"] = state_data.get_cmd_line();
-        transaction_state["poweroff_after"] = state_data.get_poweroff_after();
-        transaction_state["module_platform_id"] = state_data.get_module_platform_id();
+        transaction_state["status"] = sdbus::Variant(state_data.get_status());
+        transaction_state["cachedir"] = sdbus::Variant(state_data.get_cachedir());
+        transaction_state["target_releasever"] = sdbus::Variant(state_data.get_target_releasever());
+        transaction_state["system_releasever"] = sdbus::Variant(state_data.get_system_releasever());
+        transaction_state["verb"] = sdbus::Variant(state_data.get_verb());
+        transaction_state["cmd_line"] = sdbus::Variant(state_data.get_cmd_line());
+        transaction_state["poweroff_after"] = sdbus::Variant(state_data.get_poweroff_after());
+        transaction_state["module_platform_id"] = sdbus::Variant(state_data.get_module_platform_id());
     }
 
     auto reply = call.createReply();

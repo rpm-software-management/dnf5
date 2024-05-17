@@ -47,12 +47,12 @@ void Context::init_session(sdbus::IConnection & connection) {
     for (auto & opt : setopts) {
         config[opt.first] = opt.second;
     }
-    cfg["config"] = config;
+    cfg["config"] = sdbus::Variant(config);
 
     if (!releasever.get_value().empty()) {
-        cfg["releasever"] = releasever.get_value();
+        cfg["releasever"] = sdbus::Variant(releasever.get_value());
     }
-    cfg["locale"] = setlocale(LC_MESSAGES, nullptr);
+    cfg["locale"] = sdbus::Variant(setlocale(LC_MESSAGES, nullptr));
 
     session_manager_proxy->callMethod("open_session")
         .onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER)

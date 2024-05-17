@@ -71,12 +71,12 @@ KeyValueMapList collections_to_list(
             auto name = pkg.get_name();
             auto arch = pkg.get_arch();
 
-            package["n"] = name;
-            package["e"] = pkg.get_epoch();
-            package["v"] = pkg.get_version();
-            package["r"] = pkg.get_release();
-            package["a"] = arch;
-            package["nevra"] = pkg.get_nevra();
+            package["n"] = sdbus::Variant(name);
+            package["e"] = sdbus::Variant(pkg.get_epoch());
+            package["v"] = sdbus::Variant(pkg.get_version());
+            package["r"] = sdbus::Variant(pkg.get_release());
+            package["a"] = sdbus::Variant(arch);
+            package["nevra"] = sdbus::Variant(pkg.get_nevra());
 
             std::string na{std::move(name)};
             na.append(".");
@@ -84,12 +84,12 @@ KeyValueMapList collections_to_list(
             auto it = installed_versions.find(na);
             if (it == installed_versions.end()) {
                 // advisory package is not installed => not related to system
-                package["applicability"] = "unrelated";
+                package["applicability"] = sdbus::Variant("unrelated");
             } else if (libdnf5::rpm::evrcmp(it->second, pkg) < 0) {
                 // installed version is lower than one in advisory
-                package["applicability"] = "available";
+                package["applicability"] = sdbus::Variant("available");
             } else {
-                package["applicability"] = "installed";
+                package["applicability"] = sdbus::Variant("installed");
             }
 
             packages.emplace_back(std::move(package));
@@ -99,18 +99,18 @@ KeyValueMapList collections_to_list(
         auto libdnf_modules = col.get_modules();
         for (const auto & mdl : libdnf_modules) {
             KeyValueMap col_module;
-            col_module["n"] = mdl.get_name();
-            col_module["s"] = mdl.get_stream();
-            col_module["v"] = mdl.get_version();
-            col_module["c"] = mdl.get_context();
-            col_module["a"] = mdl.get_arch();
-            col_module["nsvca"] = mdl.get_nsvca();
+            col_module["n"] = sdbus::Variant(mdl.get_name());
+            col_module["s"] = sdbus::Variant(mdl.get_stream());
+            col_module["v"] = sdbus::Variant(mdl.get_version());
+            col_module["c"] = sdbus::Variant(mdl.get_context());
+            col_module["a"] = sdbus::Variant(mdl.get_arch());
+            col_module["nsvca"] = sdbus::Variant(mdl.get_nsvca());
             modules.emplace_back(std::move(col_module));
         }
 
         KeyValueMap collection;
-        collection["packages"] = std::move(packages);
-        collection["modules"] = std::move(modules);
+        collection["packages"] = sdbus::Variant(std::move(packages));
+        collection["modules"] = sdbus::Variant(std::move(modules));
         collections.emplace_back(std::move(collection));
     }
     return collections;
