@@ -13,8 +13,7 @@ include_directories(.)
 # TODO(mblaha) workaround for dnf5daemon-client using server's headers, fix
 include_directories(..)
 
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++>=0.9.0)
-
+include(sdbus_cpp)
 pkg_check_modules(JSONC REQUIRED json-c)
 include_directories(${JSONC_INCLUDE_DIRS})
 
