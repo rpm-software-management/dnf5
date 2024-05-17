@@ -119,8 +119,8 @@ time_t NeedsRestartingCommand::get_boot_time(Context & ctx) {
         connection = sdbus::createSystemBusConnection();
         auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
-        const uint64_t systemd_boot_time_us =
-            proxy->getProperty("UnitsLoadStartTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE);
+        const auto systemd_boot_time_us =
+            uint64_t{proxy->getProperty("UnitsLoadStartTimestamp").onInterface(SYSTEMD_MANAGER_INTERFACE)};
 
         const time_t systemd_boot_time = static_cast<long>(systemd_boot_time_us) / (1000L * 1000L);
 
@@ -275,7 +275,7 @@ void NeedsRestartingCommand::services_need_restarting(Context & ctx) {
         // FragmentPath is the path to the unit file that defines the service
         const auto fragment_path = unit_proxy->getProperty("FragmentPath").onInterface(SYSTEMD_UNIT_INTERFACE);
         const auto start_timestamp_us =
-            unit_proxy->getProperty("ActiveEnterTimestamp").onInterface(SYSTEMD_UNIT_INTERFACE);
+            uint64_t{unit_proxy->getProperty("ActiveEnterTimestamp").onInterface(SYSTEMD_UNIT_INTERFACE)};
 
         unit_file_to_service.insert(std::make_pair(fragment_path, Service{unit_name, start_timestamp_us}));
     }

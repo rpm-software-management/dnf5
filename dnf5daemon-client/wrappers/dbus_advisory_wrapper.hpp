@@ -55,13 +55,13 @@ private:
 class DbusAdvisoryPackageWrapper {
 public:
     DbusAdvisoryPackageWrapper(const dnfdaemon::KeyValueMap & rawdata, DbusAdvisoryWrapper * advisory);
-    std::string get_name() const { return rawdata.at("n"); }
-    std::string get_epoch() const { return rawdata.at("e"); }
-    std::string get_version() const { return rawdata.at("v"); }
-    std::string get_release() const { return rawdata.at("r"); }
-    std::string get_arch() const { return rawdata.at("a"); }
+    std::string get_name() const { return std::string{rawdata.at("n")}; }
+    std::string get_epoch() const { return std::string{rawdata.at("e")}; }
+    std::string get_version() const { return std::string{rawdata.at("v")}; }
+    std::string get_release() const { return std::string{rawdata.at("r")}; }
+    std::string get_arch() const { return std::string{rawdata.at("a")}; }
     std::string get_nevra() const { return libdnf5::rpm::to_nevra_string(*this); }
-    std::string get_applicability() const { return rawdata.at("applicability"); }
+    std::string get_applicability() const { return std::string{rawdata.at("applicability")}; }
 
     DbusAdvisoryWrapper get_advisory() const;
 
@@ -74,11 +74,11 @@ private:
 class DbusAdvisoryModuleWrapper {
 public:
     DbusAdvisoryModuleWrapper(const dnfdaemon::KeyValueMap & rawdata, DbusAdvisoryWrapper * advisory);
-    std::string get_name() const { return rawdata.at("n"); }
-    std::string get_stream() const { return rawdata.at("s"); }
-    std::string get_version() const { return rawdata.at("v"); }
-    std::string get_context() const { return rawdata.at("c"); }
-    std::string get_arch() const { return rawdata.at("a"); }
+    std::string get_name() const { return std::string{rawdata.at("n")}; }
+    std::string get_stream() const { return std::string{rawdata.at("s")}; }
+    std::string get_version() const { return std::string{rawdata.at("v")}; }
+    std::string get_context() const { return std::string{rawdata.at("c")}; }
+    std::string get_arch() const { return std::string{rawdata.at("a")}; }
     std::string get_nsvca() const {
         return get_name() + ":" + get_stream() + ":" + get_version() + ":" + get_context() + ":" + get_arch();
     }
@@ -107,17 +107,17 @@ class DbusAdvisoryWrapper {
 public:
     explicit DbusAdvisoryWrapper(const dnfdaemon::KeyValueMap & rawdata);
 
-    std::string get_advisoryid() const { return rawdata.at("advisoryid"); }
-    std::string get_name() const { return rawdata.at("name"); }
-    std::string get_severity() const { return rawdata.at("severity"); }
-    std::string get_type() const { return rawdata.at("type"); }
-    uint64_t get_buildtime() const { return rawdata.at("buildtime"); }
-    std::string get_vendor() const { return rawdata.at("vendor"); }
-    std::string get_description() const { return rawdata.at("description"); }
-    std::string get_title() const { return rawdata.at("title"); }
-    std::string get_status() const { return rawdata.at("status"); }
-    std::string get_rights() const { return rawdata.at("rights"); }
-    std::string get_message() const { return rawdata.at("message"); }
+    std::string get_advisoryid() const { return std::string{rawdata.at("advisoryid")}; }
+    std::string get_name() const { return std::string{rawdata.at("name")}; }
+    std::string get_severity() const { return std::string{rawdata.at("severity")}; }
+    std::string get_type() const { return std::string{rawdata.at("type")}; }
+    uint64_t get_buildtime() const { return uint64_t{rawdata.at("buildtime")}; }
+    std::string get_vendor() const { return std::string{rawdata.at("vendor")}; }
+    std::string get_description() const { return std::string{rawdata.at("description")}; }
+    std::string get_title() const { return std::string{rawdata.at("title")}; }
+    std::string get_status() const { return std::string{rawdata.at("status")}; }
+    std::string get_rights() const { return std::string{rawdata.at("rights")}; }
+    std::string get_message() const { return std::string{rawdata.at("message")}; }
     std::vector<DbusAdvisoryReferenceWrapper> get_references() const { return references; }
     std::vector<DbusAdvisoryCollectionWrapper> get_collections() const { return collections; }
 

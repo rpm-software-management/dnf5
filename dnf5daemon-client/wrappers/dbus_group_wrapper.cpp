@@ -24,7 +24,7 @@ namespace dnfdaemon::client {
 DbusGroupWrapper::DbusGroupWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {
     auto packages_iter = rawdata.find("packages");
     if (packages_iter != rawdata.end()) {
-        dnfdaemon::KeyValueMapList raw_packages = packages_iter->second;
+        auto raw_packages = dnfdaemon::KeyValueMapList(packages_iter->second);
         for (auto & raw_package : raw_packages) {
             packages.push_back(DbusGroupPackageWrapper(raw_package));
         }
@@ -32,7 +32,7 @@ DbusGroupWrapper::DbusGroupWrapper(const dnfdaemon::KeyValueMap & rawdata) : raw
 };
 
 std::set<std::string> DbusGroupWrapper::get_repos() const {
-    std::vector<std::string> repos_vector = rawdata.at("repos");
+    std::vector<std::string> repos_vector = std::vector<std::string>(rawdata.at("repos"));
     std::set<std::string> repos_set(repos_vector.begin(), repos_vector.end());
     return repos_set;
 };
