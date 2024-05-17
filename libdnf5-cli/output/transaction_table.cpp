@@ -227,7 +227,12 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_table_enable_noheadings(*tb, 1);
     struct libscols_line * header_ln = scols_table_new_line(*tb, NULL);
 
+    int single_line_min = 130;
     auto termwidth = (int)scols_table_get_termwidth(*tb);
+    int scols_fl = SCOLS_FL_WRAP;
+    if (termwidth < single_line_min) {
+        scols_fl = SCOLS_FL_TRUNC;
+    }
 
     auto column = scols_table_new_column(*tb, "Package", 0.2, 0);
     auto header = scols_column_get_header(column);
@@ -241,13 +246,13 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
-    column = scols_table_new_column(*tb, "Version", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Version", 0.1, scols_fl);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_EVR);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
-    column = scols_table_new_column(*tb, "Repository", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Repository", 0.1, scols_fl);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_REPO);
     scols_cell_set_data(cell, scols_cell_get_data(header));
@@ -275,10 +280,9 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     auto tsgrps = transaction.get_transaction_groups();
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp);
 
-    int single_line_min = 130;
-    std::string arrow = " <- ";
+    //std::string arrow = " <- ";
     if (termwidth < single_line_min) {
-        scols_column_set_whint(scols_table_get_column(*tb, COL_NAME), 0.4);  // priorizize pakage name over versions
+        scols_column_set_whint(scols_table_get_column(*tb, COL_NAME), 0.35);  // priorizize pakage name over versions
     }
     for (const auto & tspkg : tspkgs) {
         // TODO(lukash) handle OBSOLETED correctly through the transaction table output
@@ -339,7 +343,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
                 } else {
                     auto cl_arch = scols_line_get_cell(ln, COL_ARCH);
                     scols_cell_set_color(cl_arch, "brown");
-                    scols_cell_set_data(cl_arch, (pkg->get_arch() + arrow + replaced->get_arch()).c_str());
+                    scols_cell_set_data(cl_arch, (pkg->get_arch() + " (" + replaced->get_arch() + ")").c_str());
                 }
             }
 
@@ -353,7 +357,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
                 } else {
                     scols_cell_set_color(scols_line_get_cell(ln, COL_REPO), "magenta");
                     scols_line_set_data(
-                        ln, COL_REPO, (pkg->get_repo_id() + arrow + replaced->get_from_repo_id()).c_str());
+                        ln, COL_REPO, (pkg->get_repo_id() + " (" + replaced->get_from_repo_id() + ")").c_str());
                 }
             }
 
@@ -382,8 +386,8 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
                     scols_line_set_data(
                         ln,
                         COL_SIZE,
-                        (libdnf5::cli::utils::units::format_size_aligned(tspkg_size) + arrow +
-                         libdnf5::cli::utils::units::format_size_aligned(replaced_size))
+                        (libdnf5::cli::utils::units::format_size_aligned(tspkg_size) + " (" +
+                         libdnf5::cli::utils::units::format_size_aligned(replaced_size) + ")")
                             .c_str());
                 }
             }
@@ -409,7 +413,8 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
                     } else {
                         auto cl_evr = scols_line_get_cell(ln, COL_EVR);
                         scols_cell_set_data(
-                            cl_evr, fmt::format("{:20s}{}{}", pkg->get_evr(), arrow, replaced->get_evr()).c_str());
+                            cl_evr,
+                            fmt::format("{:20s}{}{}{}", pkg->get_evr(), " (", replaced->get_evr(), ")").c_str());
                     }
                 }
             } else {  // print replacing versions
