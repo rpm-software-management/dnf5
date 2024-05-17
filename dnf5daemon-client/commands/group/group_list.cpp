@@ -72,7 +72,7 @@ void GroupListCommand::run() {
             patterns.emplace_back(option->get_value());
         }
     }
-    options["patterns"] = patterns;
+    options["patterns"] = sdbus::Variant(patterns);
 
     std::vector<std::string> attributes{"groupid", "name", "installed"};
     if (command == "info") {
@@ -81,10 +81,10 @@ void GroupListCommand::run() {
         attributes.reserve(attributes.size() + more_attributes.size());
         std::move(std::begin(more_attributes), std::end(more_attributes), std::back_inserter(attributes));
     }
-    options["attributes"] = attributes;
+    options["attributes"] = sdbus::Variant(attributes);
 
     if (hidden->get_value() || !patterns.empty()) {
-        options["with_hidden"] = true;
+        options["with_hidden"] = sdbus::Variant(true);
     }
 
     std::string scope = "all";
@@ -93,14 +93,14 @@ void GroupListCommand::run() {
     } else if (available->get_value()) {
         scope = "available";
     }
-    options["scope"] = scope;
+    options["scope"] = sdbus::Variant(scope);
 
     if (!contains_pkgs->get_value().empty()) {
-        options["contains_pkgs"] = contains_pkgs->get_value();
+        options["contains_pkgs"] = sdbus::Variant(contains_pkgs->get_value());
     }
 
-    options["match_group_id"] = true;
-    options["match_group_name"] = true;
+    options["match_group_id"] = sdbus::Variant(true);
+    options["match_group_name"] = sdbus::Variant(true);
 
     dnfdaemon::KeyValueMapList raw_groups;
     ctx.session_proxy->callMethod("list")

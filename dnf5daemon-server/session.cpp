@@ -272,7 +272,7 @@ bool Session::check_authorization(
 
     // call CheckAuthorization method
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
-    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
+    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sdbus::Variant(sender)}}};
     std::map<std::string, std::string> details{};
     // allow polkit to ask user to enter root password
     uint flags = allow_user_interaction ? 1 : 0;

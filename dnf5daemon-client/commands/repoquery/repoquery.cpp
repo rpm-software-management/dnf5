@@ -102,9 +102,9 @@ void RepoqueryCommand::set_argument_parser() {
 
 dnfdaemon::KeyValueMap RepoqueryCommand::session_config() {
     dnfdaemon::KeyValueMap cfg = {};
-    cfg["load_system_repo"] = installed_option->get_value();
-    cfg["load_available_repos"] =
-        (available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !installed_option->get_value());
+    cfg["load_system_repo"] = sdbus::Variant(installed_option->get_value());
+    cfg["load_available_repos"] = sdbus::Variant(
+        (available_option->get_priority() >= libdnf5::Option::Priority::COMMANDLINE || !installed_option->get_value()));
     return cfg;
 }
 
@@ -125,13 +125,13 @@ std::vector<DbusPackageWrapper> json_to_packages(std::string & json_stream) {
             json_object_object_foreach(json_pkg, key, val) {
                 switch (json_object_get_type(val)) {
                     case json_type_boolean:
-                        dbuspkg[key] = static_cast<bool>(json_object_get_boolean(val));
+                        dbuspkg[key] = sdbus::Variant(static_cast<bool>(json_object_get_boolean(val)));
                         break;
                     case json_type_int:
-                        dbuspkg[key] = static_cast<uint64_t>(json_object_get_int64(val));
+                        dbuspkg[key] = sdbus::Variant(static_cast<uint64_t>(json_object_get_int64(val)));
                         break;
                     default:
-                        dbuspkg[key] = json_object_get_string(val);
+                        dbuspkg[key] = sdbus::Variant(json_object_get_string(val));
                 }
             }
             packages.emplace_back(DbusPackageWrapper(dbuspkg));
@@ -180,7 +180,7 @@ void RepoqueryCommand::run() {
             patterns.emplace_back(option->get_value());
         }
     }
-    options["patterns"] = patterns;
+    options["patterns"] = sdbus::Variant(patterns);
     if (info_option->get_value()) {
         options.insert(std::pair<std::string, std::vector<std::string>>(
             "package_attrs",

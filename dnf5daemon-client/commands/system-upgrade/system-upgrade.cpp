@@ -67,7 +67,7 @@ void SystemUpgradeCommand::run() {
 
     dnfdaemon::KeyValueMap options = {};
     if (no_downgrade_option.get_value()) {
-        options["mode"] = "upgrade";
+        options["mode"] = sdbus::Variant("upgrade");
     }
 
     ctx.session_proxy->callMethod("system_upgrade")

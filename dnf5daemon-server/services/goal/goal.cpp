@@ -249,20 +249,20 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
     goal_resolve_log_list.reserve(resolve_logs.size());
     for (const auto & log : resolve_logs) {
         dnfdaemon::KeyValueMap goal_resolve_log_item;
-        goal_resolve_log_item["action"] = static_cast<uint32_t>(log.get_action());
-        goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
+        goal_resolve_log_item["action"] = sdbus::Variant(static_cast<uint32_t>(log.get_action()));
+        goal_resolve_log_item["problem"] = sdbus::Variant(static_cast<uint32_t>(log.get_problem()));
         if (log.get_job_settings()) {
             dnfdaemon::KeyValueMap goal_job_settings;
-            goal_job_settings["to_repo_ids"] = log.get_job_settings()->get_to_repo_ids();
-            goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
+            goal_job_settings["to_repo_ids"] = sdbus::Variant(log.get_job_settings()->get_to_repo_ids());
+            goal_resolve_log_item["goal_job_settings"] = sdbus::Variant(goal_job_settings);
         }
         if (log.get_spec()) {
-            goal_resolve_log_item["spec"] = *log.get_spec();
+            goal_resolve_log_item["spec"] = sdbus::Variant(*log.get_spec());
         }
         if (log.get_additional_data().size() > 0) {
             // convert std::set<std::string> to std::vector<std::string>
-            goal_resolve_log_item["additional_data"] =
-                std::vector<std::string>{log.get_additional_data().begin(), log.get_additional_data().end()};
+            goal_resolve_log_item["additional_data"] = sdbus::Variant(
+                std::vector<std::string>{log.get_additional_data().begin(), log.get_additional_data().end()});
         }
         if (log.get_solver_problems()) {
             using DbusRule = sdbus::Struct<uint32_t, std::vector<std::string>>;
@@ -274,7 +274,7 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
                 }
                 dbus_problems.push_back(std::move(dbus_problem));
             }
-            goal_resolve_log_item["solver_problems"] = std::move(dbus_problems);
+            goal_resolve_log_item["solver_problems"] = sdbus::Variant(std::move(dbus_problems));
         }
         goal_resolve_log_list.push_back(std::move(goal_resolve_log_item));
     }
