@@ -34,6 +34,7 @@ struct GroupReplay {
     TransactionItemAction action;
     TransactionItemReason reason;
     std::string group_id;
+    // Path to serialized comps group relative to the transaction json file
     std::filesystem::path group_path;
     std::string repo_id;
 };
@@ -41,6 +42,7 @@ struct GroupReplay {
 struct EnvironmentReplay {
     TransactionItemAction action;
     std::string environment_id;
+    // Path to serialized comps environment relative to the transaction json file
     std::filesystem::path environment_path;
     std::string repo_id;
 };
@@ -49,7 +51,9 @@ struct PackageReplay {
     TransactionItemAction action;
     TransactionItemReason reason;
     std::string group_id;
+    // This nevra doesn't contain epoch if it is 0
     std::string nevra;
+    // Path to rpm package relative to the transaction json file
     std::filesystem::path package_path;
     std::string repo_id;
 };
