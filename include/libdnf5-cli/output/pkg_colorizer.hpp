@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/package.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/rpm/package_set.hpp>
 
 #include <string>
@@ -30,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-class PkgColorizer {
+class LIBDNF_CLI_API PkgColorizer {
 public:
     /// Class is used to compute output color of the package based on the package
     /// version and version in `base_versions`. Colors can be either names (e.g. red,
@@ -53,7 +55,7 @@ public:
     std::string get_pkg_color(const IPackage & package);
 
 private:
-    std::string to_escape(const std::string & color);
+    LIBDNF_CLI_LOCAL std::string to_escape(const std::string & color);
 
     // map N.A of the package to the version
     std::unordered_map<std::string, libdnf5::rpm::Package> base_na_version;

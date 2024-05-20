@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "exit-codes.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/exception.hpp>
 
@@ -37,7 +39,7 @@ public:
 
 
 /// Exception is thrown when the user does not confirm the transaction.
-class AbortedByUserError : public Error {
+class LIBDNF_CLI_API AbortedByUserError : public Error {
 public:
     AbortedByUserError();
     const char * get_name() const noexcept override { return "AbortedByUserError"; }
@@ -53,7 +55,7 @@ public:
 
 
 /// Exception is thrown when libdnf5 fails to resolve the transaction.
-class GoalResolveError : public Error {
+class LIBDNF_CLI_API GoalResolveError : public Error {
 public:
     /// Construct Error from a list of string representations of resolve logs.
     /// @param resolve_logs List of resolve logs
@@ -97,7 +99,7 @@ private:
 };
 
 /// Exception used when non-standard exit code should be returned without displaying any message to the user
-class SilentCommandExitError : public Error {
+class LIBDNF_CLI_API SilentCommandExitError : public Error {
 public:
     /// Constructs the error with given exit code.
     ///

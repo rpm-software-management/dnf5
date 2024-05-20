@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/repo/repo_weak.hpp>
 
 namespace libdnf5::cli::output {
 
-extern template class RepoAdapter<libdnf5::repo::RepoWeakPtr>;
+extern template class LIBDNF_CLI_API RepoAdapter<libdnf5::repo::RepoWeakPtr>;
 
 }  // namespace libdnf5::cli::output
 

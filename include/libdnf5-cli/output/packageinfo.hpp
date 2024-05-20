@@ -24,9 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "interfaces/package.hpp"
 #include "pkg_colorizer.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
-void print_package_info(
+LIBDNF_CLI_API void print_package_info(
     IPackage & pkg,
     const std::unique_ptr<PkgColorizer> & colorizer = nullptr,
     const std::vector<libdnf5::rpm::Package> & obsoletes = {});

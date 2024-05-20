@@ -23,9 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/comps.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
-void print_environmentinfo_table(IEnvironment & environment);
+LIBDNF_CLI_API void print_environmentinfo_table(IEnvironment & environment);
 
 }  // namespace libdnf5::cli::output
 

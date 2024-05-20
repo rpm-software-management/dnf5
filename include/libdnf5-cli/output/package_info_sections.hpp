@@ -23,9 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_list_sections.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
-class PackageInfoSections : public PackageListSections {
+class LIBDNF_CLI_API PackageInfoSections : public PackageListSections {
 public:
     PackageInfoSections();
     ~PackageInfoSections();

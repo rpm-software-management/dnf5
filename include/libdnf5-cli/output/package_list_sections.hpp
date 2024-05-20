@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pkg_colorizer.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 
@@ -34,7 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::cli::output {
 
 /// Print list packages divided into sections.
-class PackageListSections {
+class LIBDNF_CLI_API PackageListSections {
 public:
     PackageListSections();
     virtual ~PackageListSections();
@@ -54,7 +56,7 @@ public:
         const std::map<libdnf5::rpm::PackageId, std::vector<libdnf5::rpm::Package>> & obsoletes = {});
 
 protected:
-    class Impl;
+    class LIBDNF_CLI_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 

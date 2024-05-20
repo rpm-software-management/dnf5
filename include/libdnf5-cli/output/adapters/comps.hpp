@@ -23,15 +23,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/comps/group/package.hpp>
 
 namespace libdnf5::cli::output {
 
-extern template class GroupPackageAdapter<libdnf5::comps::Package>;
-extern template class GroupAdapter<libdnf5::comps::Group>;
-extern template class EnvironmentAdapter<libdnf5::comps::Environment>;
+extern template class LIBDNF_CLI_API GroupPackageAdapter<libdnf5::comps::Package>;
+extern template class LIBDNF_CLI_API GroupAdapter<libdnf5::comps::Group>;
+extern template class LIBDNF_CLI_API EnvironmentAdapter<libdnf5::comps::Environment>;
 
 }  // namespace libdnf5::cli::output
 

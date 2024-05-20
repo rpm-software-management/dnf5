@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/transaction.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/common/impl_ptr.hpp>
 
 #include <cstdio>
@@ -30,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-class TransactionTable {
+class LIBDNF_CLI_API TransactionTable {
 public:
     explicit TransactionTable(ITransaction & transaction);
     ~TransactionTable();
@@ -49,13 +51,13 @@ public:
     void set_output_stream(std::FILE * fd);
 
 private:
-    class Impl;
+    class LIBDNF_CLI_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 
-void print_resolve_logs(const ITransaction & transaction, std::ostream & stream = std::cerr);
+LIBDNF_CLI_API void print_resolve_logs(const ITransaction & transaction, std::ostream & stream = std::cerr);
 
-bool print_transaction_table(ITransaction & transaction);
+LIBDNF_CLI_API bool print_transaction_table(ITransaction & transaction);
 
 }  // namespace libdnf5::cli::output
 

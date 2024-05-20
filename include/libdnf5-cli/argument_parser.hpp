@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_ARGUMENT_PARSER_HPP
 #define LIBDNF5_CLI_ARGUMENT_PARSER_HPP
 
+#include "libdnf5-cli/defs.h"
 #include "libdnf5-cli/exception.hpp"
 
 #include <libdnf5/conf/option.hpp>
@@ -153,7 +154,7 @@ public:
 /// Base class for user data used in ArgumentParser::Argument
 class ArgumentParserUserData {};
 
-class ArgumentParser {
+class LIBDNF_CLI_API ArgumentParser {
 public:
     class Argument;
 
@@ -186,7 +187,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        Group(const std::string & id);
+        LIBDNF_CLI_LOCAL Group(const std::string & id);
 
         std::string id;
         std::string header;
@@ -262,7 +263,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        Argument(ArgumentParser & owner, std::string id);
+        LIBDNF_CLI_LOCAL Argument(ArgumentParser & owner, std::string id);
 
         ArgumentParser & owner;
         std::string id;
@@ -330,9 +331,9 @@ public:
     private:
         friend class ArgumentParser;
 
-        PositionalArg(
+        LIBDNF_CLI_LOCAL PositionalArg(
             ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf5::Option>> * values);
-        PositionalArg(
+        LIBDNF_CLI_LOCAL PositionalArg(
             ArgumentParser & owner,
             const std::string & id,
             int nvals,
@@ -341,7 +342,7 @@ public:
 
         /// Parses input.
         /// Returns number of consumed arguments from the input.
-        int parse(const char * option, int argc, const char * const argv[]);
+        LIBDNF_CLI_LOCAL int parse(const char * option, int argc, const char * const argv[]);
 
         int nvals;  // Number of values required by this positional argument on the command line
         libdnf5::Option * init_value;
@@ -434,16 +435,16 @@ public:
     private:
         friend class ArgumentParser;
 
-        NamedArg(ArgumentParser & owner, const std::string & id);
+        LIBDNF_CLI_LOCAL NamedArg(ArgumentParser & owner, const std::string & id);
 
         /// Parses long argument.
         /// Returns number of consumed arguments from the input.
-        int parse_long(const char * option, int argc, const char * const argv[]);
+        LIBDNF_CLI_LOCAL int parse_long(const char * option, int argc, const char * const argv[]);
 
         /// Parses short argument.
         /// Returns the number of arguments consumed from the input. It may be zero.
         /// Multiple short arguments can be packed in one item. (e.g. "-v -f" -> "-vf").
-        int parse_short(const char * option, int argc, const char * const argv[]);
+        LIBDNF_CLI_LOCAL int parse_short(const char * option, int argc, const char * const argv[]);
 
         std::string long_name;
         char short_name{'\0'};
@@ -557,11 +558,11 @@ public:
     private:
         friend class ArgumentParser;
 
-        Command(ArgumentParser & owner, const std::string & id);
+        LIBDNF_CLI_LOCAL Command(ArgumentParser & owner, const std::string & id);
 
         // Prints a completed argument `arg` or a table with suggestions and help to complete
         // if there is more than one solution.
-        void print_complete(
+        LIBDNF_CLI_LOCAL void print_complete(
             const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
 
         Command * parent{nullptr};
@@ -634,7 +635,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        CommandOrdinary(ArgumentParser & owner, const std::string & id);
+        LIBDNF_CLI_LOCAL CommandOrdinary(ArgumentParser & owner, const std::string & id);
 
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
@@ -714,7 +715,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        CommandAlias(ArgumentParser & owner, const std::string & id, Command & attached_command);
+        LIBDNF_CLI_LOCAL CommandAlias(ArgumentParser & owner, const std::string & id, Command & attached_command);
 
         Command & attached_command;
 
@@ -853,7 +854,7 @@ public:
     void complete(int argc, const char * const argv[], int complete_arg_idx);
 
 private:
-    class ArgumentParserImpl;
+    class LIBDNF_CLI_LOCAL ArgumentParserImpl;
     const std::unique_ptr<ArgumentParserImpl> p_impl;
 };
 

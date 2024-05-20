@@ -23,9 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/advisory.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
-class AdvisoryInfo {
+class LIBDNF_CLI_API AdvisoryInfo {
 public:
     AdvisoryInfo();
     ~AdvisoryInfo();
@@ -34,7 +36,7 @@ public:
     void print();
 
 private:
-    class Impl;
+    class LIBDNF_CLI_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
