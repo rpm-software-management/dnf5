@@ -2,6 +2,9 @@ if(NOT WITH_DNF5_PLUGINS)
     return()
 endif()
 
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+
 include_directories("${PROJECT_SOURCE_DIR}/dnf5/include/")
 # These plugins use symbols from dnf5 program, hence the symbold are undefined
 # at link time and cannot pass "-z defs" linker check. Disable the check.

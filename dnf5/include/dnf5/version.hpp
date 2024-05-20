@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_CONFIG_HPP
 #define DNF5_CONFIG_HPP
 
+#include "defs.h"
+
 #include <cstdint>
 
 namespace dnf5 {
@@ -49,11 +51,11 @@ static constexpr PluginAPIVersion PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 /// @return Application version
 /// @since 5.0
-ApplicationVersion get_application_version() noexcept;
+DNF_API ApplicationVersion get_application_version() noexcept;
 
 /// @return API version implemented in the application
 /// @since 5.0
-PluginAPIVersion get_plugin_api_version() noexcept;
+DNF_API PluginAPIVersion get_plugin_api_version() noexcept;
 
 }  // namespace dnf5
 

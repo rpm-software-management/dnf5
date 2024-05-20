@@ -20,13 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_OFFLINE_HPP
 #define DNF5_OFFLINE_HPP
 
-#include <dnf5/context.hpp>
+#include "context.hpp"
+#include "defs.h"
 
 #include <string>
 
 namespace dnf5::offline {
 
-void log_status(
+DNF_API void log_status(
     Context & context,
     const std::string & message,
     const std::string & message_id,

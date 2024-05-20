@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_PLUGIN_IPLUGIN_HPP
 
 #include "context.hpp"
+#include "defs.h"
 
 #include <cstdint>
 #include <vector>
@@ -35,7 +36,7 @@ struct PluginVersion {
 };
 
 /// @brief A base class for implementing DNF5 plugins that provide one or more commands to users.
-class IPlugin {
+class DNF_PLUGIN_API IPlugin {
 public:
     explicit IPlugin(Context & context);
     virtual ~IPlugin();
@@ -83,21 +84,22 @@ extern "C" {
 
 /// Returns the version of the API required by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
-dnf5::PluginAPIVersion dnf5_plugin_get_api_version(void);
+DNF_PLUGIN_API dnf5::PluginAPIVersion dnf5_plugin_get_api_version(void);
 
 /// Returns the name of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
-const char * dnf5_plugin_get_name(void);
+DNF_PLUGIN_API const char * dnf5_plugin_get_name(void);
 
 /// Returns the version of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_version(), but can be called without creating an IPlugin instance.
-dnf5::PluginVersion dnf5_plugin_get_version(void);
+DNF_PLUGIN_API dnf5::PluginVersion dnf5_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-dnf5::IPlugin * dnf5_plugin_new_instance(dnf5::ApplicationVersion application_version, dnf5::Context & context);
+DNF_PLUGIN_API dnf5::IPlugin * dnf5_plugin_new_instance(
+    dnf5::ApplicationVersion application_version, dnf5::Context & context);
 
 /// Deletes plugin instance.
-void dnf5_plugin_delete_instance(dnf5::IPlugin * plugin_instance);
+DNF_PLUGIN_API void dnf5_plugin_delete_instance(dnf5::IPlugin * plugin_instance);
 }
 
 #endif

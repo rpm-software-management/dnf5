@@ -5,6 +5,8 @@ endif()
 
 find_package(Threads)
 
+add_definitions(-DDNF_BUILD_APPLICATION)
+
 # set gettext domain for translations
 set(GETTEXT_DOMAIN dnf5)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
@@ -28,6 +30,8 @@ add_executable(dnf5 ${DNF5_SOURCES})
 
 # Enable symbol export. Needed for loadable modules (dnf5 plugins).
 set_property(TARGET dnf5 PROPERTY ENABLE_EXPORTS 1)
+# Export only explicitly marked symbols.
+set_target_properties(dnf5 PROPERTIES C_VISIBILITY_PRESET hidden CXX_VISIBILITY_PRESET hidden)
 
 target_link_libraries(dnf5 PRIVATE common libdnf5 libdnf5-cli Threads::Threads)
 install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
