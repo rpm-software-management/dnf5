@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/rpm/package.hpp>
 
 namespace libdnf5::cli::output {
 
-extern template class PackageAdapter<libdnf5::rpm::Package>;
+extern template class LIBDNF_CLI_API PackageAdapter<libdnf5::rpm::Package>;
 
 }  // namespace libdnf5::cli::output
 

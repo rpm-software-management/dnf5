@@ -16,6 +16,7 @@
 
 #define CV __perl_CV
 
+#define LIBDNF_CLI_API
 
 %include "libdnf5-cli/progressbar/progress_bar.hpp"
 %include "libdnf5-cli/progressbar/download_progress_bar.hpp"

@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/advisory/advisory.hpp>
 #include <libdnf5/advisory/advisory_collection.hpp>
 #include <libdnf5/advisory/advisory_module.hpp>
@@ -31,11 +33,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-extern template class AdvisoryReferenceAdapter<libdnf5::advisory::AdvisoryReference>;
-extern template class AdvisoryPackageAdapter<libdnf5::advisory::AdvisoryPackage>;
-extern template class AdvisoryModuleAdapter<libdnf5::advisory::AdvisoryModule>;
-extern template class AdvisoryCollectionAdapter<libdnf5::advisory::AdvisoryCollection>;
-extern template class AdvisoryAdapter<libdnf5::advisory::Advisory>;
+extern template class LIBDNF_CLI_API AdvisoryReferenceAdapter<libdnf5::advisory::AdvisoryReference>;
+extern template class LIBDNF_CLI_API AdvisoryPackageAdapter<libdnf5::advisory::AdvisoryPackage>;
+extern template class LIBDNF_CLI_API AdvisoryModuleAdapter<libdnf5::advisory::AdvisoryModule>;
+extern template class LIBDNF_CLI_API AdvisoryCollectionAdapter<libdnf5::advisory::AdvisoryCollection>;
+extern template class LIBDNF_CLI_API AdvisoryAdapter<libdnf5::advisory::Advisory>;
 
 }  // namespace libdnf5::cli::output
 

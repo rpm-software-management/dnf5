@@ -21,11 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_TRANSACTIONLIST_HPP
 #define LIBDNF5_CLI_OUTPUT_TRANSACTIONLIST_HPP
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/transaction/transaction.hpp>
 
 namespace libdnf5::cli::output {
 
-void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list);
+LIBDNF_CLI_API void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list);
 
 }  // namespace libdnf5::cli::output
 

@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "argument_parser.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/common/impl_ptr.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_string.hpp>
@@ -36,7 +38,7 @@ namespace libdnf5::cli::session {
 class Command;
 
 
-class Session {
+class LIBDNF_CLI_API Session {
 public:
     explicit Session();
     ~Session();
@@ -79,12 +81,12 @@ public:
     void clear();
 
 private:
-    class Impl;
+    class LIBDNF_CLI_LOCAL Impl;
     ImplPtr<Impl> p_impl;
 };
 
 
-class Command : public libdnf5::cli::ArgumentParserUserData {
+class LIBDNF_CLI_API Command : public libdnf5::cli::ArgumentParserUserData {
 public:
     explicit Command(Session & session, const std::string & name);
     virtual ~Command();
@@ -161,7 +163,7 @@ private:
 };
 
 
-class Option {
+class LIBDNF_CLI_API Option {
 public:
     Option(const Option & src) = delete;
     Option(Option && src) = delete;
@@ -175,7 +177,7 @@ protected:
 };
 
 
-class BoolOption : public Option {
+class LIBDNF_CLI_API BoolOption : public Option {
 public:
     explicit BoolOption(
         libdnf5::cli::session::Command & command,
@@ -208,7 +210,7 @@ protected:
 /// AppendStringListOption is a wrapper around NamedArg and OptionStringList
 /// which allows specifying the argument multiple times and merging their values.
 /// E.g. --whatrequires=tree --whatrequires=plant -> option contains: "tree, plant"
-class AppendStringListOption : public Option {
+class LIBDNF_CLI_API AppendStringListOption : public Option {
 public:
     explicit AppendStringListOption(
         libdnf5::cli::session::Command & command,
@@ -241,7 +243,7 @@ protected:
 };
 
 
-class StringArgumentList : public Option {
+class LIBDNF_CLI_API StringArgumentList : public Option {
 public:
     explicit StringArgumentList(
         libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs);

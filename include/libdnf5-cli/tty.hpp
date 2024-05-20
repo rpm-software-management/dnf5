@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_TTY_HPP
 #define LIBDNF5_CLI_TTY_HPP
 
+#include "libdnf5-cli/defs.h"
 
 #include <iostream>
 
@@ -28,30 +29,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::cli::tty {
 
 
-std::ostream & reset(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & reset(std::ostream & stream);
 
-std::ostream & bold(std::ostream & stream);
-std::ostream & underline(std::ostream & stream);
-std::ostream & blink(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & bold(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & underline(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & blink(std::ostream & stream);
 
-std::ostream & black(std::ostream & stream);
-std::ostream & red(std::ostream & stream);
-std::ostream & green(std::ostream & stream);
-std::ostream & yellow(std::ostream & stream);
-std::ostream & blue(std::ostream & stream);
-std::ostream & magenta(std::ostream & stream);
-std::ostream & cyan(std::ostream & stream);
-std::ostream & white(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & black(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & red(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & green(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & yellow(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & blue(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & magenta(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & cyan(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & white(std::ostream & stream);
 
-std::ostream & clear_line(std::ostream & stream);
-std::ostream & cursor_up(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & clear_line(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & cursor_up(std::ostream & stream);
 
-std::ostream & cursor_hide(std::ostream & stream);
-std::ostream & cursor_show(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & cursor_hide(std::ostream & stream);
+LIBDNF_CLI_API std::ostream & cursor_show(std::ostream & stream);
 
 
-int get_width();
-bool is_interactive();
+LIBDNF_CLI_API int get_width();
+LIBDNF_CLI_API bool is_interactive();
 
 
 }  // namespace libdnf5::cli::tty

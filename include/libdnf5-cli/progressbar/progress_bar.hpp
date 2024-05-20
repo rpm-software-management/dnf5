@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
 #define LIBDNF5_CLI_PROGRESSBAR_PROGRESS_BAR_HPP
 
+#include "libdnf5-cli/defs.h"
 
 #include <chrono>
 #include <string>
@@ -47,7 +48,7 @@ enum class MessageType : int {
 };
 
 
-class ProgressBar {
+class LIBDNF_CLI_API ProgressBar {
 public:
     using Message = std::pair<MessageType, std::string>;
 
@@ -110,7 +111,7 @@ public:
 
     std::chrono::time_point<std::chrono::system_clock> get_begin() { return begin; }
 
-    friend std::ostream & operator<<(std::ostream & os, ProgressBar & bar);
+    LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & os, ProgressBar & bar);
 
 protected:
     virtual void to_stream(std::ostream & stream) = 0;

@@ -31,11 +31,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "widgets/speed.hpp"
 #include "widgets/time.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 
 namespace libdnf5::cli::progressbar {
 
 
-class DownloadProgressBar : public ProgressBar {
+class LIBDNF_CLI_API DownloadProgressBar : public ProgressBar {
 public:
     explicit DownloadProgressBar(int64_t download_size, const std::string & description);
 
@@ -54,7 +56,7 @@ protected:
 
 private:
     // TODO(dmach): fix inconsistency - MultiProgresBar::operator<< erases previously printed lines, DownloadProgressBar::operator<< does not
-    friend std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar);
+    LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar);
 
     // widgets
     libdnf5::cli::progressbar::NumberWidget number_widget;

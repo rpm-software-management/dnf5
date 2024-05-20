@@ -23,9 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/comps.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
-void print_groupinfo_table(IGroup & group);
+LIBDNF_CLI_API void print_groupinfo_table(IGroup & group);
 
 }  // namespace libdnf5::cli::output
 

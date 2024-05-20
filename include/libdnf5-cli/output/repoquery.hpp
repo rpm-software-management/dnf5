@@ -21,21 +21,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP
 #define LIBDNF5_CLI_OUTPUT_REPOQUERY_HPP
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/rpm/package_set.hpp>
 
 namespace libdnf5::cli::output {
 
-bool requires_filelists(const std::string & queryformat);
+LIBDNF_CLI_API bool requires_filelists(const std::string & queryformat);
 
-void print_pkg_set_with_format(
+LIBDNF_CLI_API void print_pkg_set_with_format(
     std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & queryformat);
 
-void print_pkg_attr_uniq_sorted(
+LIBDNF_CLI_API void print_pkg_attr_uniq_sorted(
     std::FILE * target, const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name);
 
-void print_available_pkg_attrs(std::FILE * target);
+LIBDNF_CLI_API void print_available_pkg_attrs(std::FILE * target);
 
-libdnf5::rpm::ReldepList get_reldeplist_for_attr(
+LIBDNF_CLI_API libdnf5::rpm::ReldepList get_reldeplist_for_attr(
     const libdnf5::rpm::PackageSet & pkgs, const std::string & getter_name);
 
 }  // namespace libdnf5::cli::output

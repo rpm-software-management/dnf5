@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CLI_OUTPUT_SEARCH_HPP
 #define LIBDNF5_CLI_OUTPUT_SEARCH_HPP
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/rpm/package.hpp>
 
@@ -66,7 +68,7 @@ struct SearchResults {
 
 /// @brief Write the search results to the standard output.
 /// @param results Structure with already computed search results.
-void print_search_results(const SearchResults & results);
+LIBDNF_CLI_API void print_search_results(const SearchResults & results);
 
 }  // namespace libdnf5::cli::output
 

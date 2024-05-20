@@ -22,11 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/package.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 namespace libdnf5::cli::output {
 
 enum ProvidesMatchedBy : int { NO_MATCH = 0, PROVIDES = 1, FILENAME = 2, BINARY = 3 };
 
-void print_provides_table(IPackage & package, const char * spec, int match);
+LIBDNF_CLI_API void print_provides_table(IPackage & package, const char * spec, int match);
 
 }  // namespace libdnf5::cli::output
 

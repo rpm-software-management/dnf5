@@ -23,15 +23,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/module/module_dependency.hpp>
 #include <libdnf5/module/module_item.hpp>
 #include <libdnf5/module/module_profile.hpp>
 
 namespace libdnf5::cli::output {
 
-extern template class ModuleDependencyAdapter<libdnf5::module::ModuleDependency>;
-extern template class ModuleItemAdapter<libdnf5::module::ModuleItem>;
-extern template class ModuleProfileAdapter<libdnf5::module::ModuleProfile>;
+extern template class LIBDNF_CLI_API ModuleDependencyAdapter<libdnf5::module::ModuleDependency>;
+extern template class LIBDNF_CLI_API ModuleItemAdapter<libdnf5::module::ModuleItem>;
+extern template class LIBDNF_CLI_API ModuleProfileAdapter<libdnf5::module::ModuleProfile>;
 
 }  // namespace libdnf5::cli::output
 

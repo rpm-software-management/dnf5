@@ -2,6 +2,7 @@ if(NOT WITH_LIBDNF5_CLI)
     return()
 endif()
 
+add_definitions(-DLIBDNF_CLI_BUILD_LIBRARY)
 
 set(GETTEXT_DOMAIN libdnf5-cli)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
@@ -22,6 +23,7 @@ add_library(libdnf5-cli SHARED ${LIBDNF5_CLI_SOURCES})
 set(DNF_CLI_SO_VERSION 2)
 set_target_properties(libdnf5-cli PROPERTIES OUTPUT_NAME "dnf5-cli")
 set_target_properties(libdnf5-cli PROPERTIES SOVERSION ${DNF_CLI_SO_VERSION})
+set_target_properties(libdnf5-cli PROPERTIES C_VISIBILITY_PRESET hidden CXX_VISIBILITY_PRESET hidden)
 # required by clang
 target_link_libraries(libdnf5-cli PUBLIC stdc++)
 

@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/repo.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <memory>
 
 namespace libdnf5::cli::output {
 
-class RepoInfo {
+class LIBDNF_CLI_API RepoInfo {
 public:
     RepoInfo();
     ~RepoInfo();
@@ -36,11 +38,11 @@ public:
     void print();
 
 private:
-    class Impl;
+    class LIBDNF_CLI_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-void print_repoinfo_json(const std::vector<std::unique_ptr<IRepoInfo>> & repos);
+LIBDNF_CLI_API void print_repoinfo_json(const std::vector<std::unique_ptr<IRepoInfo>> & repos);
 
 }  // namespace libdnf5::cli::output
 

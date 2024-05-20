@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_UTILS_UNITS
 #define LIBDNF_CLI_UTILS_UNITS
 
+#include "libdnf5-cli/defs.h"
+
 #include <string>
 #include <utility>
 
@@ -28,9 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::cli::utils::units {
 
 
-std::pair<float, const char *> to_size(int64_t num);
+LIBDNF_CLI_API std::pair<float, const char *> to_size(int64_t num);
 
-std::string format_size_aligned(int64_t num);
+LIBDNF_CLI_API std::string format_size_aligned(int64_t num);
 
 
 }  // namespace libdnf5::cli::utils::units

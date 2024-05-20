@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download_progress_bar.hpp"
 #include "progress_bar.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -33,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::cli::progressbar {
 
 
-class MultiProgressBar {
+class LIBDNF_CLI_API MultiProgressBar {
 public:
     static constexpr std::size_t NEVER_VISIBLE_LIMIT = static_cast<std::size_t>(-1);
 
@@ -45,7 +47,7 @@ public:
         std::cout << *this;
         std::cout << std::flush;
     }
-    friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
+    LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
 
     /// Sets the minimum number of registered progress bars to show the total bar.
     void set_total_bar_visible_limit(std::size_t value) noexcept { total_bar_visible_limit = value; }

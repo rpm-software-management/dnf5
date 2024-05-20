@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_tmpl.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/base/transaction_environment.hpp>
 #include <libdnf5/base/transaction_group.hpp>
@@ -31,11 +33,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-extern template class TransactionPackageAdapter<libdnf5::base::TransactionPackage>;
-extern template class TransactionGroupAdapter<libdnf5::base::TransactionGroup>;
-extern template class TransactionEnvironmentAdapter<libdnf5::base::TransactionEnvironment>;
-extern template class TransactionModuleAdapter<libdnf5::base::TransactionModule>;
-extern template class TransactionAdapter<libdnf5::base::Transaction>;
+extern template class LIBDNF_CLI_API TransactionPackageAdapter<libdnf5::base::TransactionPackage>;
+extern template class LIBDNF_CLI_API TransactionGroupAdapter<libdnf5::base::TransactionGroup>;
+extern template class LIBDNF_CLI_API TransactionEnvironmentAdapter<libdnf5::base::TransactionEnvironment>;
+extern template class LIBDNF_CLI_API TransactionModuleAdapter<libdnf5::base::TransactionModule>;
+extern template class LIBDNF_CLI_API TransactionAdapter<libdnf5::base::Transaction>;
 
 }  // namespace libdnf5::cli::output
 

@@ -23,14 +23,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "interfaces/module.hpp"
 
+#include "libdnf5-cli/defs.h"
+
 #include <memory>
 #include <vector>
 
 namespace libdnf5::cli::output {
 
-void print_modulelist_table(const std::vector<std::unique_ptr<IModuleItem>> & module_list);
+LIBDNF_CLI_API void print_modulelist_table(const std::vector<std::unique_ptr<IModuleItem>> & module_list);
 
-void print_modulelist_table_hint();
+LIBDNF_CLI_API void print_modulelist_table_hint();
 
 }  // namespace libdnf5::cli::output
 
