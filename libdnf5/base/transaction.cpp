@@ -31,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 #include "transaction_module_impl.hpp"
 #include "transaction_package_impl.hpp"
-#include "utils/locker.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -44,6 +43,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
+#include "libdnf5/utils/locker.hpp"
 
 #include <fmt/format.h>
 #include <unistd.h>
