@@ -38,6 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "libdnf5/repo/package_downloader.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
@@ -904,7 +905,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     // acquire the lock
     std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
-    lock_file_path /= "run/dnf/rpmtransaction.lock";
+    lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
     std::filesystem::create_directories(lock_file_path.parent_path());
 
     libdnf5::utils::Locker locker(lock_file_path);

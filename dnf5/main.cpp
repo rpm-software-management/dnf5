@@ -63,6 +63,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/common/xdg.hpp>
+#include <libdnf5/conf/const.hpp>
 #include <libdnf5/logger/factory.hpp>
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
@@ -1125,7 +1126,8 @@ static bool cmd_requires_privileges(dnf5::Context & context) {
 
 static bool user_has_privileges(dnf5::Context & context) {
     std::filesystem::path lock_file_path = context.get_base().get_config().get_installroot_option().get_value();
-    lock_file_path /= "run/dnf/rpm.transaction.lock.tmp";
+    lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
+    lock_file_path += ".tmp";
 
     try {
         std::filesystem::create_directories(lock_file_path.parent_path());
