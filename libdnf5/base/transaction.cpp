@@ -243,7 +243,7 @@ GoalProblem Transaction::Impl::report_not_found(
     libdnf5::Logger::Level log_level) {
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-    if (action == GoalAction::REMOVE) {
+    if (action == GoalAction::REMOVE || action == GoalAction::REPLAY_REMOVE) {
         query.filter_installed();
     }
     auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
@@ -259,7 +259,7 @@ GoalProblem Transaction::Impl::report_not_found(
             log_level);
         if (settings.get_report_hint()) {
             rpm::PackageQuery hints(base);
-            if (action == GoalAction::REMOVE) {
+            if (action == GoalAction::REMOVE || action == GoalAction::REPLAY_REMOVE) {
                 hints.filter_installed();
             }
             if (!settings.get_ignore_case() && settings.get_with_nevra()) {

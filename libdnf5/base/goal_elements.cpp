@@ -379,10 +379,29 @@ std::string goal_action_to_string(GoalAction action) {
             return "Disable";
         case GoalAction::RESET:
             return "Reset";
+        case GoalAction::REPLAY_INSTALL:
+            return "Install action";
+        case GoalAction::REPLAY_REMOVE:
+            return "Remove action";
+        case GoalAction::REPLAY_UPGRADE:
+            return "Upgrade action";
+        case GoalAction::REPLAY_REINSTALL:
+            return "Reinstall action";
+        case GoalAction::REPLAY_REASON_CHANGE:
+            return "Reason change action";
     }
     return "";
 }
 
+bool goal_action_is_replay(GoalAction action) {
+    if (action == GoalAction::REPLAY_INSTALL || action == GoalAction::REPLAY_REMOVE ||
+        action == GoalAction::REPLAY_UPGRADE || action == GoalAction::REPLAY_REINSTALL ||
+        action == GoalAction::REPLAY_REASON_CHANGE) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 void GoalJobSettings::set_report_hint(bool report_hint) {
     p_impl->report_hint = report_hint;

@@ -137,11 +137,19 @@ enum class GoalAction {
     REASON_CHANGE,
     ENABLE,
     DISABLE,
-    RESET
+    RESET,
+    REPLAY_INSTALL,
+    REPLAY_REMOVE,
+    REPLAY_UPGRADE,
+    REPLAY_REINSTALL,
+    REPLAY_REASON_CHANGE,
 };
 
 /// Convert GoalAction enum to user-readable string
 std::string goal_action_to_string(GoalAction action);
+
+/// Check whether the action is a replay action
+bool goal_action_is_replay(GoalAction action);
 
 /// Settings for GoalJobSettings
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
