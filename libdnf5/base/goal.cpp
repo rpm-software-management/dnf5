@@ -587,6 +587,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::REPLAY_REASON_CHANGE: {
                 libdnf_throw_assertion("Unsupported action \"REPLAY REASON CHANGE\"");
             }
+            case GoalAction::REPLAY_REASON_OVERRIDE: {
+                libdnf_throw_assertion("Unsupported action \"REPLAY REASON OVERRIDE\"");
+            }
         }
     }
     return ret;
@@ -677,7 +680,10 @@ GoalProblem Goal::Impl::add_replay_to_goal(
     auto ret = GoalProblem::NO_PROBLEM;
     bool skip_unavailable = settings.resolve_skip_unavailable(base->get_config());
 
+    std::unordered_set<std::string> rpm_nevra_cache;
+
     for (const auto & package_replay : replay.packages) {
+        rpm_nevra_cache.insert(package_replay.nevra);
         libdnf5::GoalJobSettings settings_per_package = settings;
         settings_per_package.set_clean_requirements_on_remove(libdnf5::GoalSetting::SET_FALSE);
 
@@ -898,6 +904,8 @@ GoalProblem Goal::Impl::add_replay_to_goal(
                 "Unsupported package replay action \"{}\"", transaction_item_action_to_string(package_replay.action));
         }
     }
+
+    transaction.p_impl->rpm_replays_nevra_cache.emplace_back(rpm_nevra_cache, settings);
 
     for (const auto & group_replay : replay.groups) {
         libdnf5::GoalJobSettings settings_per_group = settings;
@@ -2876,8 +2884,6 @@ base::Transaction Goal::resolve() {
             {std::filesystem::canonical(debug_dir)},
             libdnf5::Logger::Level::WARNING);
     }
-
-    //TODO(amatej): Add conditional check that no extra packages were added by the solver
 
     transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
 

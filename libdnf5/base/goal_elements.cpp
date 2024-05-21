@@ -389,6 +389,8 @@ std::string goal_action_to_string(GoalAction action) {
             return "Reinstall action";
         case GoalAction::REPLAY_REASON_CHANGE:
             return "Reason change action";
+        case GoalAction::REPLAY_REASON_OVERRIDE:
+            return "Reason override";
     }
     return "";
 }
@@ -396,7 +398,7 @@ std::string goal_action_to_string(GoalAction action) {
 bool goal_action_is_replay(GoalAction action) {
     if (action == GoalAction::REPLAY_INSTALL || action == GoalAction::REPLAY_REMOVE ||
         action == GoalAction::REPLAY_UPGRADE || action == GoalAction::REPLAY_REINSTALL ||
-        action == GoalAction::REPLAY_REASON_CHANGE) {
+        action == GoalAction::REPLAY_REASON_CHANGE || action == GoalAction::REPLAY_REASON_OVERRIDE) {
         return true;
     } else {
         return false;
