@@ -127,7 +127,6 @@ void CleanCommand::set_argument_parser() {
     });
 
     cmd.register_positional_arg(cache_types);
-    create_store_option(*this);
 }
 
 void CleanCommand::run() {
