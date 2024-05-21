@@ -70,6 +70,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/locker.hpp>
 #include <libdnf5/version.hpp>
 #include <locale.h>
 #include <string.h>
@@ -1081,6 +1082,62 @@ static void print_no_match_libdnf_plugin_patterns(dnf5::Context & context) {
     }
 }
 
+static bool cmd_requires_privileges(dnf5::Context & context) {
+    // the main, dnf5 command, is allowed
+    auto cmd = context.get_selected_command();
+    auto arg_cmd = cmd->get_argument_parser_command();
+    if (arg_cmd->get_parent() == nullptr) {
+        return false;
+    }
+
+    // first a hard-coded list of commands that always need to be run with elevated privileges
+    auto main_arg_cmd = cmd->get_parent_command() != context.get_root_command() ? arg_cmd->get_parent() : arg_cmd;
+    std::vector<std::string> privileged_cmds = {"automatic", "offline", "system-upgrade"};
+    if (std::find(privileged_cmds.begin(), privileged_cmds.end(), main_arg_cmd->get_id()) != privileged_cmds.end()) {
+        return true;
+    }
+
+    // when assumeno is set, system should not be modified
+    auto & config = context.get_base().get_config();
+    if (config.get_assumeno_option().get_value()) {
+        return false;
+    }
+
+    auto all_cmd_args = arg_cmd->get_named_args();
+    if (main_arg_cmd != arg_cmd) {
+        all_cmd_args.insert(
+            all_cmd_args.end(), main_arg_cmd->get_named_args().begin(), main_arg_cmd->get_named_args().end());
+    }
+
+    // when downloadonly is defined and set, system should not be modified
+    auto it_downloadonly = std::find_if(
+        all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "downloadonly"; });
+    if (it_downloadonly != all_cmd_args.end() &&
+        ((libdnf5::OptionBool *)(*it_downloadonly)->get_linked_value())->get_value()) {
+        return false;
+    }
+
+    // otherwise, transactional cmds with store option defined are expected to modify the system
+    auto it_store = std::find_if(
+        all_cmd_args.begin(), all_cmd_args.end(), [](auto arg) { return arg->get_long_name() == "store"; });
+    return it_store != all_cmd_args.end();
+}
+
+static bool user_has_privileges(dnf5::Context & context) {
+    std::filesystem::path lock_file_path = context.get_base().get_config().get_installroot_option().get_value();
+    lock_file_path /= "run/dnf/rpm.transaction.lock.tmp";
+
+    try {
+        std::filesystem::create_directories(lock_file_path.parent_path());
+        libdnf5::utils::Locker locker(lock_file_path);
+        return locker.write_lock();
+    } catch (libdnf5::SystemError & ex) {
+        return false;
+    } catch (std::filesystem::filesystem_error & ex) {
+        return false;
+    }
+}
+
 int main(int argc, char * argv[]) try {
     dnf5::set_locale();
 
@@ -1255,6 +1312,13 @@ int main(int argc, char * argv[]) try {
 
             if (const auto & repo_id_list = context.get_dump_repo_config_id_list(); !repo_id_list.empty()) {
                 dump_repository_configuration(context, repo_id_list);
+            }
+
+            if (cmd_requires_privileges(context) && !user_has_privileges(context)) {
+                throw libdnf5::cli::InsufficientPrivilegesError(
+                    M_("The requested operation requires superuser privileges. Please log in as a user with elevated "
+                       "rights, or use the \"--assumeno\" or \"--downloadonly\" options to run the command without "
+                       "modifying the system state."));
             }
 
             {
