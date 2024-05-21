@@ -64,6 +64,9 @@ CompsEnvironment & CompsEnvironment::operator=(const CompsEnvironment & src) {
 CompsEnvironment & CompsEnvironment::operator=(CompsEnvironment && src) noexcept = default;
 CompsEnvironment::~CompsEnvironment() = default;
 
+std::string CompsEnvironment::to_string() const {
+    return get_environment_id();
+}
 
 const std::string & CompsEnvironment::get_environment_id() const noexcept {
     return p_impl->environment_id;

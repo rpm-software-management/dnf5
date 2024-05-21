@@ -45,7 +45,7 @@ public:
     /// Get string representation of the object, which equals to group_id
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
-    std::string to_string() const { return get_group_id(); }
+    std::string to_string() const;
 
     CompsGroup(const CompsGroup & src);
     CompsGroup & operator=(const CompsGroup & src);
