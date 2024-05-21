@@ -33,6 +33,8 @@ install(TARGETS libdnf5-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 # link libraries and set pkg-config requires
 
+target_link_libraries(libdnf5-cli PRIVATE common)
+
 target_link_libraries(libdnf5-cli PUBLIC libdnf5)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
