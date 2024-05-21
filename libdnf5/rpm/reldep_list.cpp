@@ -129,6 +129,10 @@ bool ReldepList::add_reldep(const std::string & reldep_str, int create) {
     }
 }
 
+bool ReldepList::add_reldep(const std::string & reldep_str) {
+    return add_reldep(reldep_str, 1);
+}
+
 void ReldepList::append(ReldepList & source) {
     libdnf_assert_same_base(p_impl->base, source.get_base());
     p_impl->queue += source.p_impl->queue;

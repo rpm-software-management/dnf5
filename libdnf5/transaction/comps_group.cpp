@@ -61,6 +61,10 @@ CompsGroup & CompsGroup::operator=(const CompsGroup & src) {
 CompsGroup & CompsGroup::operator=(CompsGroup && src) noexcept = default;
 CompsGroup::~CompsGroup() = default;
 
+std::string CompsGroup::to_string() const {
+    return get_group_id();
+}
+
 const std::string & CompsGroup::get_group_id() const noexcept {
     return p_impl->group_id;
 }

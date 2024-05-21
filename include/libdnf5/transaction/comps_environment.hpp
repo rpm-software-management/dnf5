@@ -45,7 +45,7 @@ public:
     /// Get string representation of the object, which equals to environment_id
     ///
     // @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.toStr()
-    std::string to_string() const { return get_environment_id(); }
+    std::string to_string() const;
 
     CompsEnvironment(const CompsEnvironment & src);
     CompsEnvironment & operator=(const CompsEnvironment & src);

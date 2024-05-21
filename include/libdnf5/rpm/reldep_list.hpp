@@ -125,11 +125,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-
-inline bool ReldepList::add_reldep(const std::string & reldep_str) {
-    return add_reldep(reldep_str, 1);
-}
-
 }  // namespace libdnf5::rpm
 
 #endif  // LIBDNF5_RPM_RELDEP_LIST_HPP
