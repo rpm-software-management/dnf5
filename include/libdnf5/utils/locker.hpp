@@ -24,12 +24,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::utils {
 
+/// Object for implementing a simple file mutex mechanism
+/// or checking read/write access on a given path.
 class Locker {
 public:
-    explicit Locker(const std::string & path) : path(path){};
+    /// Create a Locker object at a given path
+    explicit Locker(const std::string & path);
     ~Locker();
+
+    /// @brief Try to acquire read lock on a given file path
+    /// @return True if lock acquisition was successful, otherwise false
+    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
     bool read_lock();
+
+    /// @brief Try to acquire write lock on a given file path
+    /// @return True if lock acquisition was successful, otherwise false
+    /// @throws libdnf5::SystemError if an unexpected error occurs when checking the lock state, like insufficient privileges
     bool write_lock();
+
+    /// @brief Unlock the existing lock and remove the underlying lock file
+    /// @throws libdnf5::SystemError if an unexpected error occurs when unlocking
     void unlock();
 
 private:
