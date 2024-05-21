@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction.hpp"
 
-#include "package_set_impl.hpp"
-
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/rpm/package_query.hpp"
@@ -39,9 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <filesystem>
 #include <map>
-#include <type_traits>
 
 
 namespace libdnf5::rpm {

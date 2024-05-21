@@ -127,6 +127,8 @@ private:
 
     // Used during transaction replay to ensure stored reason are used
     std::unordered_map<std::string, transaction::TransactionItemReason> rpm_reason_overrides;
+    // Used during transaction replay to verify no extra packages were pulled into the transaction
+    std::vector<std::tuple<std::unordered_set<std::string>, GoalJobSettings>> rpm_replays_nevra_cache;
 };
 
 

@@ -323,6 +323,13 @@ std::string LogEvent::to_string(
                 _("Error: It is not possible to switch enabled streams of a module unless explicitly enabled via "
                   "configuration option module_stream_switch."));
         }
+        case GoalProblem::EXTRA: {
+            return ret.append(utils::sformat(
+                _("Extra package '{0}' (with action '{1}') which is not present in the stored transaction was pulled "
+                  "into the transaction.\n"),
+                *spec,
+                *additional_data.begin()));
+        }
     }
     return ret;
 }
