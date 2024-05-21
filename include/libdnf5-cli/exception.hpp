@@ -44,6 +44,14 @@ public:
 };
 
 
+/// Exception is thrown when the user does not have enough privileges to perform requested operation.
+class InsufficientPrivilegesError : public Error {
+public:
+    using Error::Error;
+    const char * get_name() const noexcept override { return "InsufficientPrivilegesError"; }
+};
+
+
 /// Exception is thrown when libdnf5 fails to resolve the transaction.
 class GoalResolveError : public Error {
 public:
