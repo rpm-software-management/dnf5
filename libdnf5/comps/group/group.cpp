@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv/pool.hpp"
 #include "utils/string.hpp"
-#include "utils/xml.hpp"
+#include "libdnf5/utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/group/package.hpp"

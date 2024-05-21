@@ -18,22 +18,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include <libdnf5/utils/xml.hpp>
+#ifndef LIBDNF5_CLI_OUTPUT_XMLADVISORYLIST_HPP
+#define LIBDNF5_CLI_OUTPUT_XMLADVISORYLIST_HPP
 
-#include <libxml/tree.h>
+#include "interfaces/advisory.hpp"
 
-#include <string>
+#include <libdnf5/advisory/advisory.hpp>
+#include <libdnf5/advisory/advisory_package.hpp>
+#include <libdnf5/advisory/advisory_reference.hpp>
+#include <libdnf5/advisory/advisory_collection.hpp>
+#include <libdnf5/advisory/advisory_query.hpp>
 
+namespace libdnf5::cli::output {
 
-namespace libdnf5::utils::xml {
+void print_xmladvisorylist(
+    libdnf5::advisory::AdvisoryQuery advisories);
 
+}  // namespace libdnf5::cli::output
 
-xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
-    xmlNodePtr node = xmlNewNode(NULL, BAD_CAST child_name.c_str());
-    xmlAddChild(parent, node);
-    xmlAddChild(node, xmlNewText(BAD_CAST child_text.c_str()));
-    return node;
-}
-
-
-}  // namespace libdnf5::utils::xml
+#endif  // LIBDNF5_CLI_OUTPUT_XMLADVISORYLIST_HPP

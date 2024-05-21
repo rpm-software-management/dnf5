@@ -94,7 +94,7 @@ public:
     virtual std::string get_rights() const = 0;
     virtual std::string get_message() const = 0;
     virtual std::vector<std::unique_ptr<IAdvisoryReference>> get_references() const = 0;
-    virtual std::vector<std::unique_ptr<IAdvisoryCollection>> get_collections() const = 0;
+    virtual std::vector<std::unique_ptr<IAdvisoryCollection>> get_collections() = 0;
 };
 
 }  // namespace libdnf5::cli::output

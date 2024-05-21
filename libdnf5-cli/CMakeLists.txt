@@ -41,6 +41,10 @@ pkg_check_modules(SMARTCOLS REQUIRED smartcols)
 list(APPEND LIBDNF5_CLI_PC_REQUIRES_PRIVATE "${SMARTCOLS_MODULE_NAME}")
 target_link_libraries(libdnf5-cli PRIVATE ${SMARTCOLS_LIBRARIES})
 
+pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
+list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
+include_directories(${LIBXML2_INCLUDE_DIRS})
+target_link_libraries(libdnf5 PRIVATE ${LIBXML2_LIBRARIES})
 
 # sort the pkg-config requires and concatenate them into a string
 list(SORT LIBDNF5_CLI_PC_REQUIRES)

@@ -64,6 +64,9 @@ std::string AdvisoryPackage::get_arch() const {
 std::string AdvisoryPackage::get_nevra() const {
     return p_impl->get_name() + "-" + p_impl->get_evr() + "." + p_impl->get_arch();
 }
+std::string AdvisoryPackage::get_filename() const {
+    return p_impl->get_filename();
+}
 AdvisoryId AdvisoryPackage::get_advisory_id() const {
     return p_impl->get_advisory_id();
 }
@@ -131,6 +134,10 @@ std::string AdvisoryPackage::Impl::get_evr() const {
 
 std::string AdvisoryPackage::Impl::get_arch() const {
     return get_rpm_pool(base).id2str(arch);
+}
+
+std::string AdvisoryPackage::Impl::get_filename() const {
+    return filename;
 }
 
 bool AdvisoryPackage::Impl::is_resolved_in(const libdnf5::rpm::PackageSet & pkgs) const {

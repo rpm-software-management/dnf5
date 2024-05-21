@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5-cli/output/adapters/advisory.hpp>
 #include <libdnf5-cli/output/advisorylist.hpp>
+#include <libdnf5-cli/output/xmladvisorylist.hpp>
 #include <libdnf5/advisory/advisory_package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
@@ -51,22 +52,26 @@ void AdvisoryListCommand::process_and_print_queries(
         packages.filter_upgradable();
         not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     } else {  // available is the default
-        libdnf5::rpm::PackageQuery installed_packages(ctx.get_base());
-        installed_packages.filter_installed();
-        installed_packages.filter_latest_evr();
+        packages = libdnf5::rpm::PackageQuery(ctx.get_base());
+        packages.filter_installed();
+        packages.filter_latest_evr();
 
-        add_running_kernel_packages(ctx.get_base(), installed_packages);
+        add_running_kernel_packages(ctx.get_base(), packages);
 
         if (package_specs.size() > 0) {
-            installed_packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
+            packages.filter_name(package_specs, libdnf5::sack::QueryCmp::IGLOB);
         }
 
-        not_installed_pkgs = advisories.get_advisory_packages_sorted(installed_packages, libdnf5::sack::QueryCmp::GT);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf5::sack::QueryCmp::GT);
     }
 
     std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_installed_pkgs;
     std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_not_installed_pkgs;
-    if (with_bz->get_value()) {
+    if (as_xml->get_value()) {
+        libdnf5::advisory::AdvisoryQuery advisory_subset(advisories);
+	advisory_subset.filter_packages(packages, libdnf5::sack::QueryCmp::GT);
+        libdnf5::cli::output::print_xmladvisorylist(advisory_subset);
+    } else if (with_bz->get_value()) {
         libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
     } else if (with_cve->get_value()) {
         libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");

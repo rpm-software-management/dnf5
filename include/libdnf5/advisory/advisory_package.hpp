@@ -79,6 +79,11 @@ public:
     /// @return Arch of this AdvisoryPackage as std::string.
     std::string get_arch() const;
 
+    /// Get the filename of this AdvisoryPackage.
+    ///
+    /// @return Filename of this AdvisoryPackage as std::string.
+    std::string get_filename() const;
+
     /// Get NEVRA of this AdvisoryPackage.
     ///
     /// @return NEVRA of this AdvisoryPackage as std::string.

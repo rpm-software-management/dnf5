@@ -52,6 +52,7 @@ protected:
     std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
     std::unique_ptr<AdvisoryWithBzOption> with_bz{nullptr};
     std::unique_ptr<AdvisoryWithCveOption> with_cve{nullptr};
+    std::unique_ptr<AdvisoryListAsXmlOption> as_xml{nullptr};
 
     AdvisorySubCommand(Context & context, const std::string & name) : Command(context, name) {}
 

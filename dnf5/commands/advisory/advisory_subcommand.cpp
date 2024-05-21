@@ -44,6 +44,7 @@ void AdvisorySubCommand::set_argument_parser() {
     advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
+    as_xml = std::make_unique<AdvisoryListAsXmlOption>(*this);
 
     with_bz = std::make_unique<AdvisoryWithBzOption>(*this);
     with_cve = std::make_unique<AdvisoryWithCveOption>(*this);

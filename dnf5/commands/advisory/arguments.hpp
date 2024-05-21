@@ -90,6 +90,11 @@ public:
         : StringArgumentList(command, "advisory-spec", _("List of patterns matched against advisory names.")) {}
 };
 
+class AdvisoryListAsXmlOption : public libdnf5::cli::session::BoolOption {
+public:
+    explicit AdvisoryListAsXmlOption(libdnf5::cli::session::Command & command)
+        : BoolOption(command, "xml-output", '\0', _("Output advisory list in updateinfo.xml format."), false) {}
+};
 
 }  // namespace dnf5
 

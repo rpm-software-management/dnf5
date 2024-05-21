@@ -41,6 +41,7 @@ public:
     std::string get_release() const;
     std::string get_evr() const;
     std::string get_arch() const;
+    std::string get_filename() const;
     Id get_name_id() const { return name; };
     Id get_evr_id() const { return evr; };
     Id get_arch_id() const { return arch; };

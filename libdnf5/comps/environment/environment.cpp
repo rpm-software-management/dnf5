@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/environment/environment.hpp"
 
 #include "solv/pool.hpp"
-#include "utils/xml.hpp"
+#include "libdnf5/utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/environment/query.hpp"

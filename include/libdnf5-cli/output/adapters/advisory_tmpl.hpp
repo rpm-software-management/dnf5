@@ -175,7 +175,7 @@ public:
         return ret;
     }
 
-    std::vector<std::unique_ptr<IAdvisoryCollection>> get_collections() const override {
+    std::vector<std::unique_ptr<IAdvisoryCollection>> get_collections() override {
         std::vector<std::unique_ptr<IAdvisoryCollection>> ret;
         auto collections = pkg.get_collections();
         ret.reserve(collections.size());

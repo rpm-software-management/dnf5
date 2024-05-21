@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
-#include "utils/xml.hpp"
+#include "libdnf5/utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
