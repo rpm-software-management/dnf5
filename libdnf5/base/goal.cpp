@@ -694,6 +694,9 @@ GoalProblem Goal::Impl::add_replay_to_goal(
             }
             transaction.p_impl->rpm_reason_overrides[package_replay.nevra] = package_replay.reason;
         } else if (package_replay.action == transaction::TransactionItemAction::REPLACED) {
+            // Removing the original versions (the reverse part of an action like e.g. Upgrade) is more robust,
+            // but we can't do it if skip_unavailable is set because if the inbound action is skipped we would
+            // simply remove the package.
             if (!skip_unavailable) {
                 if (local_pkg) {
                     add_rpm_ids(GoalAction::REMOVE, *local_pkg, settings_per_package);
