@@ -56,12 +56,16 @@ static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP, M_("nothing provides {0} needed by {1} from {2}")},
     {ProblemRules::RULE_PKG_SAME_NAME, M_("cannot install both {0} from {1} and {2} from {3}")},
     {ProblemRules::RULE_PKG_CONFLICTS, M_("package {0} from {1} conflicts with {2} provided by {3} from {4}")},
+    {ProblemRules::RULE_PKG_INSTALLED_CONFLICTS,
+     M_("installed package {0} conflicts with {1} provided by {2} from {3}")},
     {ProblemRules::RULE_PKG_OBSOLETES, M_("package {0} from {1} obsoletes {2} provided by {3} from {4}")},
     {ProblemRules::RULE_PKG_INSTALLED_OBSOLETES, M_("installed package {0} obsoletes {1} provided by {2} from {3}")},
     {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES,
      M_("package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}")},
     {ProblemRules::RULE_PKG_REQUIRES,
      M_("package {1} from {2} requires {0}, but none of the providers can be installed")},
+    {ProblemRules::RULE_PKG_INSTALLED_REQUIRES,
+     M_("installed package {1} requires {0}, but none of the providers can be installed")},
     {ProblemRules::RULE_PKG_SELF_CONFLICT, M_("package {0} from {1} conflicts with {2} provided by itself")},
     {ProblemRules::RULE_YUMOBS, M_("both package {0} from {1} and {3} from {4} obsolete {2}")},
     {ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED,
@@ -223,6 +227,7 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
         case ProblemRules::RULE_MODULE_PKG_REQUIRES:
         case ProblemRules::RULE_MODULE_PKG_SELF_CONFLICT:
         case ProblemRules::RULE_MODULE_PKG_SAME_NAME:
+        case ProblemRules::RULE_PKG_INSTALLED_REQUIRES:
             if (raw.second.size() != 2) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
@@ -240,6 +245,7 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
             }
             return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
         case ProblemRules::RULE_PKG_SAME_NAME:
+        case ProblemRules::RULE_PKG_INSTALLED_CONFLICTS:
         case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
             if (raw.second.size() != 4) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
@@ -401,10 +407,12 @@ std::vector<std::vector<std::pair<libdnf5::ProblemRules, std::vector<std::string
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_PKG_SAME_NAME:
                 case ProblemRules::RULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_PKG_INSTALLED_CONFLICTS:
                 case ProblemRules::RULE_PKG_OBSOLETES:
                 case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
                 case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_INSTALLED_REQUIRES:
                 case ProblemRules::RULE_PKG_SELF_CONFLICT:
                 case ProblemRules::RULE_YUMOBS:
                 case ProblemRules::RULE_UNKNOWN:
