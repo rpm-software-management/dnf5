@@ -449,6 +449,7 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
 
 void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_goal) {
     auto & pool = get_rpm_pool(base);
+    auto * installed_repo = pool->installed;
 
     libdnf5::rpm::PackageQuery skip_broken(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
     libdnf5::rpm::PackageQuery skip_conflict(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
@@ -464,6 +465,7 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
         for (auto & [rule, source, dep, target, description] : problem) {
             std::vector<std::string> elements;
             ProblemRules tmp_rule = rule;
+            bool installed_conflicts = false;
             switch (rule) {
                 case ProblemRules::RULE_INFARCH:
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
@@ -508,6 +510,10 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     elements.push_back(pool.dep2str(dep));
                     break;
                 }
+                case ProblemRules::RULE_PKG_INSTALLED_REQUIRES:
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(source));
+                    break;
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_PKG_REQUIRES: {
                     skip_broken.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
@@ -528,6 +534,9 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     elements.push_back(tgt_solvable->repo->name);
                     break;
                 }
+                case ProblemRules::RULE_PKG_INSTALLED_CONFLICTS:
+                    installed_conflicts = true;
+                    [[fallthrough]];
                 case ProblemRules::RULE_PKG_CONFLICTS:
                     if (current_conflicting_rules.contains(std::pair<int, int>(target, source))) {
                         // do not add pkgA conflicts with pkgB rule if pkgB conflicts with PkgA rule is already present
@@ -536,13 +545,22 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
                     current_conflicting_rules.emplace(source, target);
+                    if (installed_conflicts) {
+                        // RULE_PKG_INSTALLED_CONFLICTS expects the first(source)
+                        // element to be an installed package
+                        if (pool.id2solvable(source)->repo != installed_repo) {
+                            std::swap(source, target);
+                        }
+                    }
                     [[fallthrough]];
                 case ProblemRules::RULE_PKG_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
                 case ProblemRules::RULE_YUMOBS: {
                     auto * src_solvable = pool.id2solvable(source);
                     elements.push_back(pool.solvable2str(src_solvable));
-                    elements.push_back(src_solvable->repo->name);
+                    if (!installed_conflicts) {
+                        elements.push_back(src_solvable->repo->name);
+                    }
                     elements.push_back(pool.dep2str(dep));
                     auto * tgt_solvable = pool.id2solvable(target);
                     elements.push_back(pool.solvable2str(tgt_solvable));
