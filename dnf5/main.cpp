@@ -974,6 +974,33 @@ static void print_resolve_hints(dnf5::Context & context) {
         }
     }
 
+    // hint --ignore-extras if there are unexpected extra packages in the transaction
+    if ((transaction_problems & libdnf5::GoalProblem::EXTRA) == libdnf5::GoalProblem::EXTRA) {
+        const std::string_view arg{"--ignore-extras"};
+        if (has_named_arg(command, arg.substr(2))) {
+            hints.emplace_back(libdnf5::utils::sformat(_("{} to allow extra packages in the transaction"), arg));
+        }
+    }
+
+    // hint --ignore-installed if there are mismatches between installed and stored transaction packages in replay
+    if ((transaction_problems & libdnf5::GoalProblem::NOT_INSTALLED) == libdnf5::GoalProblem::NOT_INSTALLED ||
+        (transaction_problems & libdnf5::GoalProblem::INSTALLED_IN_DIFFERENT_VERSION) ==
+            libdnf5::GoalProblem::INSTALLED_IN_DIFFERENT_VERSION) {
+        for (const auto & resolve_log : context.get_transaction()->get_resolve_logs()) {
+            if (goal_action_is_replay(resolve_log.get_action())) {
+                const std::string_view arg{"--ignore-installed"};
+                if (has_named_arg(command, arg.substr(2))) {
+                    hints.emplace_back(libdnf5::utils::sformat(
+                        _("{} to allow mismatches between installed and stored transaction packages. This can result "
+                          "in an empty transaction because among other things the option can ignore failing Remove "
+                          "actions."),
+                        arg));
+                    break;
+                }
+            }
+        }
+    }
+
     if ((transaction_problems & libdnf5::GoalProblem::SOLVER_ERROR) == libdnf5::GoalProblem::SOLVER_ERROR) {
         bool conflict = false;
         bool broken_file_dep = false;
