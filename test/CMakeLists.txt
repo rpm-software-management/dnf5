@@ -22,7 +22,7 @@ endif()
 add_subdirectory(data)
 
 # libdnf5
-#add_subdirectory(libdnf5)
+add_subdirectory(libdnf5)
 
 # performance tests are available only for libdnf5
 if(WITH_PERFORMANCE_TESTS)
@@ -30,7 +30,7 @@ if(WITH_PERFORMANCE_TESTS)
 endif()
 
 # libdnf5-cli
-#add_subdirectory(libdnf5-cli)
+add_subdirectory(libdnf5-cli)
 
 # tutorial
 add_subdirectory(tutorial)
@@ -43,7 +43,7 @@ add_subdirectory(ruby)
 
 # components
 add_subdirectory(dnf5daemon-server)
-#add_subdirectory(dnf5-plugins)
+add_subdirectory(dnf5-plugins)
 
 # add shared
-#add_subdirectory(shared)
+add_subdirectory(shared)
