@@ -16,7 +16,7 @@ target_compile_options(run_tests PRIVATE "-Wno-self-assign-overloaded")
 target_compile_options(run_tests PRIVATE "-Wno-self-move")
 
 target_link_directories(run_tests PRIVATE ${CMAKE_BINARY_DIR}/libdnf5)
-target_link_libraries(run_tests PRIVATE stdc++ libdnf5 cppunit test_shared)
+target_link_libraries(run_tests PRIVATE stdc++ libdnf5_static cppunit test_shared)
 
 pkg_check_modules(JSONC REQUIRED json-c)
 include_directories(${JSONC_INCLUDE_DIRS})
