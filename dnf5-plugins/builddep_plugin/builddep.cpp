@@ -85,6 +85,36 @@ void BuildDepCommand::set_argument_parser() {
         });
     cmd.register_named_arg(defs);
 
+    auto with_bconds = parser.add_new_named_arg("with_bconds");
+    with_bconds->set_long_name("with");
+    with_bconds->set_has_value(true);
+    with_bconds->set_arg_value_help("OPTION");
+    with_bconds->set_description(
+        "Enable conditional build OPTION when parsing spec files. "
+        "Does not apply for source rpm files.");
+    with_bconds->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            rpm_macros.emplace_back("_with_" + std::string(value), "--with-" + std::string(value));
+            return true;
+        });
+    cmd.register_named_arg(with_bconds);
+
+    auto without_bconds = parser.add_new_named_arg("without_bconds");
+    without_bconds->set_long_name("without");
+    without_bconds->set_has_value(true);
+    without_bconds->set_arg_value_help("OPTION");
+    without_bconds->set_description(
+        "Disable conditional build OPTION when parsing spec files. "
+        "Does not apply for source rpm files.");
+    without_bconds->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            rpm_macros.emplace_back("_without_" + std::string(value), "--without-" + std::string(value));
+            return true;
+        });
+    cmd.register_named_arg(without_bconds);
+
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
@@ -240,7 +270,8 @@ void BuildDepCommand::run() {
         }
     } else {
         if (srpm_file_paths.size() > 0 && rpm_macros.size() > 0) {
-            std::cerr << "Warning: -D or --define arguments have no meaning for source rpm packages." << std::endl;
+            std::cerr << "Warning: -D/--define/--with/--without arguments have no effect on source rpm packages."
+                      << std::endl;
         }
     }
 
