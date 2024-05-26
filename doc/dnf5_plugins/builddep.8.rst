@@ -44,6 +44,9 @@ Options
 ``-D "macro expr", --define="macro expr"``
     | Define a rpm macro. Set the value "expr" to the macro "macro" when parsing spec files. Does not apply for source rpm files.
 
+``--with=OPTION, --without=OPTION``
+    | Enable or disable conditional build OPTION when parsing spec files. Does not apply for source rpm files.
+
 ``--allowerasing``
     | Allow erasing of installed packages to resolve any potential dependency problems.
 
@@ -78,3 +81,6 @@ Examples
 
 ``dnf builddep -D 'scl python27' python-foobar.spec``
     | Install the needed build requirements for the python27 SCL version of python-foobar.
+
+``dnf builddep --without=selinux foobar.spec``
+    | Install the needed build requirements except those for optional SELinux support.
