@@ -246,7 +246,12 @@ Changes to individual commands
   * Dropped ``--pkg`` option. Positional arguments can now be used to specify packages to check closure for.
 
 ``repolist``
-  * Options ``-v`` and ``--verbose`` have been removed. The functionality is replaced by the ``repoinfo`` command, which was already introduced in DNF4.
+  * The ``repolist`` and ``repoinfo`` commands are now subcommands of the ``repo`` command: ``repo list`` and ``repo info``.
+
+    * Original commands still exist as compatibility aliases.
+
+  * Options ``-v`` and ``--verbose`` have been removed. The functionality is replaced by the ``repo info`` command (already in DNF4 as ``repoinfo``).
+  * When no repositories are configured, empty output is now provided instead of displaying "No repositories available".
 
 ``repoquery``
   * Dropped: ``-a/--all``, ``--alldeps``, ``--nevra`` options. Their behavior is and has been the default for both DNF4 and DNF5, so the options are no longer needed.
