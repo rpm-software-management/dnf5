@@ -8,9 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-04-16 20:36+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"PO-Revision-Date: 2024-05-24 08:05+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
@@ -339,6 +340,9 @@ msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
+"Estado de leitura de erro: {}. Execute novamente o comando usado para "
+"iniciar a transação offline, por exemplo`dnf5 system-upgrade download "
+"[OPTIONS]`."
 
 #: commands/offline/offline.cpp:247
 msgid "Couldn't connect to D-Bus: {}"
@@ -349,20 +353,20 @@ msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
+"Prepare o sistema para executar a transação offline e reinicialize para "
+"iniciar a transação."
 
 #: commands/offline/offline.cpp:283
 msgid "Power off the system after the operation is complete"
-msgstr ""
+msgstr "Desligue o sistema após a conclusão da operação"
 
 #: commands/offline/offline.cpp:294
 msgid "No offline transaction is stored."
 msgstr ""
 
 #: commands/offline/offline.cpp:301
-#, fuzzy
-#| msgid "Reverse the order of transactions."
 msgid "System is not ready for offline transaction."
-msgstr "Inverte a ordem das transações."
+msgstr "O sistema não está pronto para transações offline."
 
 #: commands/offline/offline.cpp:304
 msgid "Data directory {} does not exist."
@@ -408,10 +412,8 @@ msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr ""
 
 #: commands/offline/offline.cpp:493
-#, fuzzy
-#| msgid "Transaction ID"
 msgid "Transaction failed: "
-msgstr "ID da transação"
+msgstr "Transação falhou "
 
 #: commands/offline/offline.cpp:562
 msgid "Error reading journal: {}"
@@ -431,11 +433,12 @@ msgstr ""
 
 #: commands/offline/offline.cpp:617
 msgid "Cannot find logs with this index."
-msgstr ""
+msgstr "Não foi possível encontrar registros com este índice."
 
 #: commands/offline/offline.cpp:624
+#, fuzzy
 msgid "Unable to match systemd journal entry."
-msgstr ""
+msgstr "Não é possível corresponder à entrada no diário do systemd."
 
 #: commands/offline/offline.cpp:636
 msgid "Show logs from past offline transactions"
@@ -517,7 +520,7 @@ msgstr "Padrões"
 
 #: commands/system-upgrade/system-upgrade.cpp:54
 msgid "Prepare system for upgrade to a new release"
-msgstr ""
+msgstr "Preparar o sistema para atualizar para uma nova versão"
 
 #: commands/system-upgrade/system-upgrade.cpp:70
 msgid "Download everything needed to upgrade to a new release"
@@ -531,7 +534,7 @@ msgstr ""
 
 #: commands/system-upgrade/system-upgrade.cpp:97
 msgid "Need a --releasever greater than the current system version."
-msgstr ""
+msgstr "Necessita de um --releasever maior que o da versão do sistema atual."
 
 #: commands/system-upgrade/system-upgrade.cpp:131
 msgid "Store a distro-sync transaction to be performed offline"
@@ -609,12 +612,11 @@ msgid "No matching repositories for \"{}\""
 msgstr "Nenhum repositório correspondente para \"{}\""
 
 #: context.cpp:406
-#, fuzzy
-#| msgid "File \"{}\" already exists, it will be overwritten.\n"
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten.\n"
-msgstr "O arquivo \"{}\" já existe, ele será sobrescritos.\n"
+msgstr ""
+"O local \"{}\" já contém uma transação armazenada, ela será substituída.\n"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
@@ -642,7 +644,7 @@ msgstr ""
 
 #: main.cpp:132
 msgid "Print help"
-msgstr ""
+msgstr "Exibir a ajuda"
 
 #: main.cpp:139
 msgid "Configuration file location"
@@ -679,7 +681,7 @@ msgstr "repofrompath: especificação de repoid e caminho incorretos \"{}\""
 
 #: main.cpp:222
 msgid "set arbitrary config and repo options"
-msgstr ""
+msgstr "define opções arbitrárias de configuração e repo"
 
 #: main.cpp:224
 msgid ""
@@ -713,15 +715,15 @@ msgstr "setvar: {}"
 
 #: main.cpp:288
 msgid "automatically answer yes for all questions"
-msgstr ""
+msgstr "responde sim para todas as perguntas automaticamente"
 
 #: main.cpp:295
 msgid "automatically answer no for all questions"
-msgstr ""
+msgstr "responde não para todas as perguntas automaticamente"
 
 #: main.cpp:309
 msgid "do not limit the transaction to the best candidate"
-msgstr ""
+msgstr "não limita a transação ao melhor candidato"
 
 #: main.cpp:320
 msgid ""
@@ -731,7 +733,7 @@ msgstr ""
 
 #: main.cpp:336
 msgid "exclude packages by name or glob"
-msgstr ""
+msgstr "exclui pacotes por nome ou glob"
 
 #: main.cpp:355
 msgid ""
@@ -847,30 +849,24 @@ msgid "======== Variables: ========"
 msgstr "======== Variáveis: ========"
 
 #: main.cpp:973
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
 msgid "{} to skip unavailable packages"
-msgstr "Permite pular pacotes indisponíveis"
+msgstr "{} para ignorar pacotes indisponíveis"
 
 #: main.cpp:1014
 msgid "{} to not limit the transaction to the best candidates"
 msgstr ""
 
 #: main.cpp:1021
-#, fuzzy
-#| msgid "Allow erasing of installed packages to resolve problems"
 msgid "{} to allow erasing of installed packages to resolve problems"
-msgstr "Permite apagar pacotes instalados para resolver problemas"
+msgstr "{} Permite apagar pacotes instalados para resolver problemas"
 
 #: main.cpp:1029
 msgid "{} to load additional filelists metadata"
 msgstr ""
 
 #: main.cpp:1036
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
 msgid "{} to skip uninstallable packages"
-msgstr "Permite pular pacotes indisponíveis"
+msgstr "{} para ignorar pacotes desinstaláveis"
 
 #: main.cpp:1042
 msgid "You can try to add to command line:"
