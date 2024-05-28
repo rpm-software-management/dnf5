@@ -1,3 +1,48 @@
+# 5.2.2.0
+
+- Update translations from weblate
+- dnf5daemon: The buildtime attribute has been added to the package_attrs option
+- docs: Document changes to repoinfo and repolist
+- packit: Create downstream PR only for Rawhide
+- prepare-release: Use new v1.2 action with 4-digits version format
+- test: Unit tests for append option
+- conf: Remove unused option_T_list_append template
+- conf: Convert append options to use new classes
+- bindings: Add new append option classes
+- conf: New classes for append options
+- base: Enhance installed pkgs solver problems reporting
+- base: Remove trailing space from RULE_UPDATE message
+- base: Deduplicate solver problem messages
+- base: Add repository to solver problem messages
+- i18n: Unwind "Cannot {} package \"{}\"" message
+- fix: quote `dnf5-command({})' in command suggestion when plugin not found
+- automatic: Clarify changes dnf4 vs dnf5
+- automatic: ship default automatic.conf
+- automatic: Fix the documentation
+- automatic: Adjust config files reading behavior
+- automatic: Fix random_sleep option
+- download: add `--source` alias for `--srpm`
+- needs_restarting: Fix invalid reference usage
+- doc: Improve docs regarding the keepcache option and download command
+- Option `--providers-of` doesn't require available repos
+- [DOC, libdnf, actions plugin]: Add new hooks to documentation
+- [libdnf, actions plugin] Support `pre/post_add_cmdline_packages` hooks
+- [libdnf, actions plugin] Support `repos_loaded` hook
+- [libdnf, actions plugin] Support `repos_configured` hook
+- [libdnf, actions plugin] Mark Action class as final
+- Fix a typo in the message
+- `history list`: count also groups and envs in total `Altered`
+- i18n: Unwind "No {} to remove for argument: {}"
+- Add/fix documentation for rpm::PackageQuery methods
+- i18n: Improve formatting an error message for multiple streams
+- dnf5daemon: Add skipped packages to transaction table
+- cli: Split transaction table into sections
+- cli: Add skipped packages to the transaction table
+- transaction: Add methods to get skipped packages
+- transaction: Move process_solver_problems into Impl
+- docs: correct the default for pluginconfpath
+- Vars::substitute: fix use-out-of-scope leaks
+
 # 5.2.1.0
 
 - Update translations from weblate
