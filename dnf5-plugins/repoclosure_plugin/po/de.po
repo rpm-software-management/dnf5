@@ -1,0 +1,40 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"PO-Revision-Date: 2024-05-14 01:26+0000\n"
+"Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/de/>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.5.2\n"
+
+#: repoclosure.cpp:45
+msgid "Print list of unresolved dependencies for repositories"
+msgstr "Liste der unaufgelösten Abhängigkeiten für Repositories ausgeben"
+
+#: repoclosure.cpp:154
+msgid "No match for argument \"{}\"."
+msgstr "Keine Übereinstimmung für Argument \"{}\"."
+
+#: repoclosure.cpp:160
+msgid "Failed to resolve package specifications."
+msgstr "Auflösen der Paketspezifikationen fehlgeschlagen."
+
+#: repoclosure.cpp:215
+msgid ""
+"Error: Repoclosure ended with unresolved dependencies ({}) across {} "
+"packages."
+msgstr ""
+"Fehler: Repo-Closure endete mit unaufgelösten Abhängigkeiten ({}) über {} "
+"Pakete."
