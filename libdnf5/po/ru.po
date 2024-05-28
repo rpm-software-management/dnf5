@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-04-19 02:40+0000\n"
+"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"PO-Revision-Date: 2024-05-20 17:36+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ru/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -36,75 +36,71 @@ msgstr "Неподдерживаемый аргумент для действи�
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Неверное значение конфигурации для multilib_policy: {}"
 
-#: base/log_event.cpp:142
-msgid "packages"
-msgstr "пакеты"
+#: base/log_event.cpp:141
+msgid "No packages to remove for argument: {}"
+msgstr "Нет пакетов на удаление для аргумента: {}"
 
-#: base/log_event.cpp:145
-msgid "groups"
-msgstr "группы"
+#: base/log_event.cpp:143
+msgid "No groups to remove for argument: {}"
+msgstr "Нет групп на удаление для аргумента: {}"
+
+#: base/log_event.cpp:146
+msgid "No environmental groups to remove for argument: {}"
+msgstr "Нет групп сред на удаление для аргумента: {}"
 
 #: base/log_event.cpp:148
-msgid "environmental groups"
-msgstr "группы среды"
+msgid "No modules to remove for argument: {}"
+msgstr "Нет модулей на удаление для аргумента: {}"
 
-#: base/log_event.cpp:151
-msgid "modules"
-msgstr "модули"
-
-#: base/log_event.cpp:154
-msgid "No {} to remove for argument: {}"
-msgstr "Нет {} для удаления аргумента: {}"
-
-#: base/log_event.cpp:157
+#: base/log_event.cpp:152
 msgid "No match for group from environment: {}"
 msgstr "Нет совпадений для группы из среды: {}"
 
-#: base/log_event.cpp:159
+#: base/log_event.cpp:154
 msgid "No match for group package: {}"
 msgstr "Нет соответствия для группового пакета: {}"
 
-#: base/log_event.cpp:162
+#: base/log_event.cpp:157
 msgid "No match for argument: {}"
 msgstr "Нет соответствия для аргумента: {}"
 
-#: base/log_event.cpp:165
+#: base/log_event.cpp:160
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Нет соответствия для аргумента '{0}' в репозиториях '{1}'"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:164
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Пакеты для аргумента '{}' доступны, но не установлены."
 
-#: base/log_event.cpp:172
+#: base/log_event.cpp:167
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
 "Пакеты для аргумента '{}' доступны, но установлены для другой архитектуры."
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:169
 msgid "Argument '{}' matches only source packages."
 msgstr "Аргумент '{}' соответствует только исходным пакетам."
 
-#: base/log_event.cpp:176
+#: base/log_event.cpp:171
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Аргумент '{}' соответствует только исключенным пакетам."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:173
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
 "Аргумент '{}' соответствует только пакетам, исключенным блокировкой версий."
 
-#: base/log_event.cpp:183
+#: base/log_event.cpp:178
 msgid "  * Maybe you meant: {}"
 msgstr "  * Возможно, вы имели в виду: {}"
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:181
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Существуют следующие альтернативы для '{0}': {1}"
 
-#: base/log_event.cpp:193
+#: base/log_event.cpp:188
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -112,7 +108,7 @@ msgstr ""
 "Самая низкая доступная версия пакета \"{}\" уже установлена, понизить её "
 "невозможно."
 
-#: base/log_event.cpp:199
+#: base/log_event.cpp:194
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version => cannot reinstall"
@@ -120,66 +116,83 @@ msgstr ""
 "Пакеты для аргумента '{}' установлены и доступны, но в другой версии => "
 "невозможно переустановить"
 
-#: base/log_event.cpp:204
+#: base/log_event.cpp:199
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr "Пакеты для аргумента '{}' установлены и доступны, но в другой версии."
 
-#: base/log_event.cpp:206
+#: base/log_event.cpp:201
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Пакеты для аргумента '{}' установлены, но недоступны."
 
-#: base/log_event.cpp:215
+#: base/log_event.cpp:210
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Пакет \"{}\" уже установлен по причине \"{}\"."
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:212
 msgid "Package \"{}\" is already installed."
 msgstr "Пакет \"{}\" уже установлен."
 
-#: base/log_event.cpp:226
+#: base/log_event.cpp:221
 msgid "Debug data written to \"{}\""
 msgstr "Отладочные данные записаны в \"{}\""
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:224
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Действие {} для аргумента \"{}\" не поддерживается."
 
-#: base/log_event.cpp:241
+#. Format a leading line of the error message.
+#: base/log_event.cpp:233
+msgid "Unable to resolve argument '{}':"
+msgstr "Невозможно разрешить аргумент '{}':"
+
+#: base/log_event.cpp:237
 msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
 "\n"
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
-msgstr ""
+msgstr[0] ""
+"\n"
+"  - Аргумент '{}' соответствует {} потоку ('{}') модуля '{}', но поток не "
+"включен и не используется по умолчанию."
+msgstr[1] ""
+"\n"
+"  - Аргумент '{}' соответствует {} потокам ('{}') модуля '{}', но ни один из "
+"потоков не включен и не используется по умолчанию."
+msgstr[2] ""
 "\n"
 "  - Аргумент '{}' соответствует {} потокам ('{}') модуля '{}', но ни один из "
 "потоков не включен и не используется по умолчанию."
 
-#: base/log_event.cpp:249
-msgid "Unable to resolve argument '{}':{}"
-msgstr "Невозможно разрешить аргумент '{}':{}"
+#: base/log_event.cpp:244
+msgid "', '"
+msgstr "', '"
 
-#: base/log_event.cpp:255
+#: base/log_event.cpp:253
 msgid "Modular dependency problems:\n"
 msgstr "Проблемы с модульными зависимостями:\n"
 
-#: base/log_event.cpp:262
+#: base/log_event.cpp:260
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Проблемы с модульными зависимостями с последними модулями:\n"
 
-#: base/log_event.cpp:269
+#: base/log_event.cpp:267
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Проблемы с модульными зависимостями с настройками по умолчанию:\n"
 
-#: base/log_event.cpp:284
+#: base/log_event.cpp:282
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
 "Операция приведет к переключению модуля '{0}' потока '{1}' на поток '{2}'\n"
 
-#: base/log_event.cpp:289
+#: base/log_event.cpp:287
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -192,22 +205,26 @@ msgid "{} does not belong to a distupgrade repository"
 msgstr "{} не принадлежит репозиторию distupgrade"
 
 #: base/solver_problems.cpp:42
-msgid "{} has inferior architecture"
+#, fuzzy
+#| msgid "{} has inferior architecture"
+msgid "{0} from {1} has inferior architecture"
 msgstr "{} имеет низкую архитектуру"
 
 #: base/solver_problems.cpp:43
-msgid "problem with installed package "
+#, fuzzy
+#| msgid "problem with installed package "
+msgid "problem with installed package"
 msgstr "проблема с установленным пакетом "
 
-#: base/solver_problems.cpp:44 base/solver_problems.cpp:74
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
 msgstr "конфликтующие запросы"
 
-#: base/solver_problems.cpp:45 base/solver_problems.cpp:75
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
 msgid "unsupported request"
 msgstr "неподдерживаемый запрос"
 
-#: base/solver_problems.cpp:46 base/solver_problems.cpp:76
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
 msgid "nothing provides requested {}"
 msgstr "ничто не предоставляет запрошенное {}"
 
@@ -215,11 +232,11 @@ msgstr "ничто не предоставляет запрошенное {}"
 msgid "package {} does not exist"
 msgstr "пакет {} не существует"
 
-#: base/solver_problems.cpp:48 base/solver_problems.cpp:78
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 msgid "{} is provided by the system"
 msgstr "{} предоставляется системой"
 
-#: base/solver_problems.cpp:49 base/solver_problems.cpp:79
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
 msgstr "некоторая проблема с зависимостями"
 
@@ -227,212 +244,254 @@ msgstr "некоторая проблема с зависимостями"
 msgid "cannot install the best update candidate for package {}"
 msgstr "Не удается установить лучшего кандидата на обновление для пакета {}"
 
-#: base/solver_problems.cpp:51 base/solver_problems.cpp:81
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
 msgid "cannot install the best candidate for the job"
 msgstr "Невозможно установить лучшего кандидата для работы"
 
 #: base/solver_problems.cpp:52
-msgid "package {} is filtered out by modular filtering"
+#, fuzzy
+#| msgid "package {} is filtered out by modular filtering"
+msgid "package {0} from {1} is filtered out by modular filtering"
 msgstr "пакет {} отфильтровывается с помощью модульной фильтрации"
 
 #: base/solver_problems.cpp:53
-msgid "package {} does not have a compatible architecture"
+#, fuzzy
+#| msgid "package {} does not have a compatible architecture"
+msgid "package {0} from {1} does not have a compatible architecture"
 msgstr "пакет {} не имеет совместимой архитектуры"
 
 #: base/solver_problems.cpp:54
-msgid "package {} is not installable"
+#, fuzzy
+#| msgid "package {} is not installable"
+msgid "package {0} from {1} is not installable"
 msgstr "пакет {} не может быть установлен"
 
 #: base/solver_problems.cpp:55
-msgid "package {} is filtered out by exclude filtering"
+#, fuzzy
+#| msgid "package {} is filtered out by exclude filtering"
+msgid "package {0} from {1} is filtered out by exclude filtering"
 msgstr "пакет {} отфильтровывается с помощью фильтрации исключений"
 
 #: base/solver_problems.cpp:56
-msgid "nothing provides {0} needed by {1}"
+#, fuzzy
+#| msgid "nothing provides {0} needed by {1}"
+msgid "nothing provides {0} needed by {1} from {2}"
 msgstr "ничто не предоставляет {0}, необходимый для {1}"
 
 #: base/solver_problems.cpp:57
-msgid "cannot install both {0} and {1}"
+#, fuzzy
+#| msgid "cannot install both {0} and {1}"
+msgid "cannot install both {0} from {1} and {2} from {3}"
 msgstr "нельзя установить и {0}, и {1}"
 
 #: base/solver_problems.cpp:58
-msgid "package {0} conflicts with {1} provided by {2}"
+#, fuzzy
+#| msgid "package {0} conflicts with {1} provided by {2}"
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
 msgstr "пакет {0} конфликтует с {1}, предоставляемым {2}"
 
-#: base/solver_problems.cpp:59
-msgid "package {0} obsoletes {1} provided by {2}"
-msgstr "пакет {0} заменяет {1}, предоставляемый {2}"
-
 #: base/solver_problems.cpp:60
-msgid "installed package {0} obsoletes {1} provided by {2}"
-msgstr "установленный пакет {0} заменяет {1}, предоставляемый {2}"
+#, fuzzy
+#| msgid "package {0} conflicts with {1} provided by {2}"
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr "пакет {0} конфликтует с {1}, предоставляемым {2}"
 
 #: base/solver_problems.cpp:61
-msgid "package {0} implicitly obsoletes {1} provided by {2}"
-msgstr "пакет {0} косвенно заменяет {1}, предоставляемый {2}"
+#, fuzzy
+#| msgid "package {0} obsoletes {1} provided by {2}"
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr "пакет {0} заменяет {1}, предоставляемый {2}"
 
 #: base/solver_problems.cpp:62
-msgid "package {1} requires {0}, but none of the providers can be installed"
+#, fuzzy
+#| msgid "installed package {0} obsoletes {1} provided by {2}"
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr "установленный пакет {0} заменяет {1}, предоставляемый {2}"
+
+#: base/solver_problems.cpp:64
+#, fuzzy
+#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr "пакет {0} косвенно заменяет {1}, предоставляемый {2}"
+
+#: base/solver_problems.cpp:66
+#, fuzzy
+#| msgid "package {1} requires {0}, but none of the providers can be installed"
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
 msgstr ""
 "пакет {1} требует {0}, но ни один из поставщиков не может быть установлен"
 
-#: base/solver_problems.cpp:63
-msgid "package {1} conflicts with {0} provided by itself"
+#: base/solver_problems.cpp:68
+#, fuzzy
+#| msgid "package {1} requires {0}, but none of the providers can be installed"
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr ""
+"пакет {1} требует {0}, но ни один из поставщиков не может быть установлен"
+
+#: base/solver_problems.cpp:69
+#, fuzzy
+#| msgid "package {1} conflicts with {0} provided by itself"
+msgid "package {0} from {1} conflicts with {2} provided by itself"
 msgstr "пакет {1} конфликтует с пакетом {0}, предоставленным самостоятельно"
 
-#: base/solver_problems.cpp:64
-msgid "both package {0} and {2} obsolete {1}"
+#: base/solver_problems.cpp:70
+#, fuzzy
+#| msgid "both package {0} and {2} obsolete {1}"
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
 msgstr "оба пакета {0} и {2} заменяют {1}"
 
-#: base/solver_problems.cpp:66
+#: base/solver_problems.cpp:72
 msgid ""
 "The operation would result in removing the following protected packages: {}"
 msgstr "В результате операции будут удалены следующие защищенные пакеты: {}"
 
-#: base/solver_problems.cpp:69
+#: base/solver_problems.cpp:75
 msgid "The operation would result in removing of running kernel: {}"
 msgstr "В результате операции будет удалено запущенное ядро: {}"
 
-#: base/solver_problems.cpp:71
+#: base/solver_problems.cpp:77
 msgid "module {} does not belong to a distupgrade repository"
 msgstr "модуль {} не принадлежит репозиторию distupgrade"
 
-#: base/solver_problems.cpp:72
+#: base/solver_problems.cpp:78
 msgid "module {} has inferior architecture"
 msgstr "модуль {} имеет низкую архитектуру"
 
-#: base/solver_problems.cpp:73
+#: base/solver_problems.cpp:79
 msgid "problem with installed module {}"
 msgstr "проблема с установленным модулем {}"
 
-#: base/solver_problems.cpp:77
+#: base/solver_problems.cpp:83
 msgid "module {} does not exist"
 msgstr "модуль {} не существует"
 
-#: base/solver_problems.cpp:80
+#: base/solver_problems.cpp:86
 msgid "cannot install the best update candidate for module {}"
 msgstr "Не удается установить лучшего кандидата на обновление для модуля {}"
 
-#: base/solver_problems.cpp:82 base/solver_problems.cpp:85
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 msgid "module {} is disabled"
 msgstr "модуль {} отключен"
 
-#: base/solver_problems.cpp:83
+#: base/solver_problems.cpp:89
 msgid "module {} does not have a compatible architecture"
 msgstr "модуль {} не имеет совместимой архитектуры"
 
-#: base/solver_problems.cpp:84
+#: base/solver_problems.cpp:90
 msgid "module {} is not installable"
 msgstr "модуль {} не может быть установлен"
 
-#: base/solver_problems.cpp:86
+#: base/solver_problems.cpp:92
 msgid "nothing provides {0} needed by module {1}"
 msgstr "ничто не предоставляет {0}, необходимый для модуля {1}"
 
-#: base/solver_problems.cpp:87
+#: base/solver_problems.cpp:93
 msgid "cannot install both modules {0} and {1}"
 msgstr "нельзя установить оба модуля {0} и {1}"
 
-#: base/solver_problems.cpp:88
+#: base/solver_problems.cpp:94
 msgid "module {0} conflicts with {1} provided by {2}"
 msgstr "модуль {0} конфликтует с {1}, предоставляемым {2}"
 
-#: base/solver_problems.cpp:89
+#: base/solver_problems.cpp:95
 msgid "module {0} obsoletes {1} provided by {2}"
 msgstr "модуль {0} заменяет {1}, предоставляемый {2}"
 
-#: base/solver_problems.cpp:90
+#: base/solver_problems.cpp:96
 msgid "installed module {0} obsoletes {1} provided by {2}"
 msgstr "установленный модуль {0} заменяет {1}, предоставляемый {2}"
 
-#: base/solver_problems.cpp:91
+#: base/solver_problems.cpp:97
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
 msgstr "модуль {0} косвенно заменяет {1}, предоставляемый {2}"
 
-#: base/solver_problems.cpp:92
+#: base/solver_problems.cpp:98
 msgid "module {1} requires {0}, but none of the providers can be installed"
 msgstr ""
 "модуль {1} требует {0}, но ни один из поставщиков не может быть установлен"
 
-#: base/solver_problems.cpp:93
+#: base/solver_problems.cpp:99
 msgid "module {1} conflicts with {0} provided by itself"
 msgstr "модуль {1} конфликтует с {0}, предоставленным самостоятельно"
 
-#: base/solver_problems.cpp:94
+#: base/solver_problems.cpp:100
 msgid "both module {0} and {2} obsolete {1}"
 msgstr "оба модуля {0} и {2} заменяют {1}"
 
-#: base/solver_problems.cpp:326
+#: base/solver_problems.cpp:290
 msgid "Problem: "
 msgstr "Проблема: "
 
-#: base/solver_problems.cpp:330
+#: base/solver_problems.cpp:294
 msgid "Problem {}: "
 msgstr "Проблема {}: "
 
-#: base/transaction.cpp:74
+#: base/transaction.cpp:76
 msgid "This transaction has been already run before."
 msgstr "Эта транзакция уже выполнялась ранее."
 
-#: base/transaction.cpp:75
+#: base/transaction.cpp:77
 msgid "Cannot run transaction with resolving problems."
 msgstr "Невозможно запустить транзакцию с разрешением проблем."
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:78
 msgid "Rpm transaction check failed."
 msgstr "Сбой проверки транзакций rpm."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:80
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Не удалось получить блокировку транзакции rpm. Выполняется другая транзакция."
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:81
 msgid "Rpm transaction failed."
 msgstr "Сбой транзакции rpm."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:82
 msgid "Signature verification failed."
 msgstr "Сбой проверки подписей."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:86
 msgid "The repository does not have any PGP keys configured."
 msgstr "В репозитории не настроено ни одного ключа PGP."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:87
 msgid "Public key is not installed."
 msgstr "Публичный ключ не установлен."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:88
 msgid "Canceled by the user."
 msgstr "Отменено пользователем."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:89
 msgid "Public key import failed."
 msgstr "Сбой импорта публичного ключа."
 
-#: base/transaction.cpp:668
+#: base/transaction.cpp:936
 msgid "Invalid tsflag: {}"
 msgstr "Недопустимый tsflag: {}"
 
-#: base/transaction.cpp:1002
+#: base/transaction.cpp:1270
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Публичный ключ \"{}\" уже присутствует, не импортируется."
 
-#: base/transaction.cpp:1023
+#: base/transaction.cpp:1291
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
-#: base/transaction.cpp:1056
+#: base/transaction.cpp:1324
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
-#: base/transaction.cpp:1083
+#: base/transaction.cpp:1351
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Импорт ключа не помог, неправильный ключ?"
 
-#: base/transaction.cpp:1101
+#: base/transaction.cpp:1369
 msgid "Warning: skipped PGP checks for {} package(s)."
 msgstr "Предупреждение: пропущены PGP-проверки для {} пакета(ов)."
 
@@ -581,7 +640,7 @@ msgstr ""
 msgid "Option value is not set"
 msgstr "Значение опции не задано"
 
-#: conf/option_string_list.cpp:120
+#: conf/option_string_list.cpp:175
 msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
@@ -597,7 +656,7 @@ msgstr "Не удалось прочитать файлы конфигураци
 msgid "Failed to execute uname()"
 msgstr "Не удалось выполнить uname()"
 
-#: conf/vars.cpp:371 conf/vars.cpp:411
+#: conf/vars.cpp:370 conf/vars.cpp:410
 msgid "Variable \"{}\" is read-only"
 msgstr "Переменная \"{}\" доступна только для чтения"
 
@@ -620,7 +679,7 @@ msgstr "Невозможно включить несколько потоков 
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:746
+#: rpm/solv/goal_private.cpp:758
 msgid "no solution possible"
 msgstr "нет возможного решения"
 
@@ -685,7 +744,7 @@ msgstr "Plugins::load_plugins(): config_dir_path не может быть пус
 msgid "Cannot load plugins: {}"
 msgstr "Невозможно загрузить плагины: {}"
 
-#: repo/config_repo.cpp:582
+#: repo/config_repo.cpp:557
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Сбой вычисления SHA256"
 
@@ -969,10 +1028,17 @@ msgstr "Невозможно переустановить пакет \"{}\""
 msgid "Cannot remove package \"{}\""
 msgstr "Невозможно удалить пакет \"{}\""
 
-#. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:381
-msgid "Cannot {} package \"{}\""
-msgstr "Невозможно {} пакет \"{}\""
+#: rpm/transaction.cpp:364
+msgid "Cannot upgrade package \"{}\""
+msgstr "Невозможно обновить пакет \"{}\""
+
+#: rpm/transaction.cpp:368
+msgid "Cannot downgrade package \"{}\""
+msgstr "Невозможно понизить версию пакета \"{}\""
+
+#: rpm/transaction.cpp:372
+msgid "Cannot install package \"{}\""
+msgstr "Невозможно установить пакет \"{}\""
 
 #: rpm/versionlock_config.cpp:261 system/state.cpp:513
 msgid "{}"
@@ -1321,6 +1387,21 @@ msgstr "Не удалось создать резервную копию баз�
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Не удалось восстановить базу данных \"{}\""
+
+#~ msgid "Cannot {} package \"{}\""
+#~ msgstr "Невозможно {} пакет \"{}\""
+
+#~ msgid "packages"
+#~ msgstr "пакеты"
+
+#~ msgid "groups"
+#~ msgstr "группы"
+
+#~ msgid "environmental groups"
+#~ msgstr "группы среды"
+
+#~ msgid "modules"
+#~ msgstr "модули"
 
 #~ msgid "Failed to resolve modules."
 #~ msgstr "Не удалось разрешить модули."
