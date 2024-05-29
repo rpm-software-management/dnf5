@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module/module_db.hpp"
 #include "system/state.hpp"
 
-#include "libdnf5/utils/fs/file.hpp"
-
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/base/goal_elements.hpp>
 #include <libdnf5/module/module_errors.hpp>
@@ -37,9 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/module/nsvcap.hpp>
 #include <libdnf5/utils/format.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <iostream>
 #include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTest);
