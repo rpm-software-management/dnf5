@@ -44,7 +44,7 @@ private:
     sdbus::MethodReply downgrade(sdbus::MethodCall & call);
     sdbus::MethodReply reinstall(sdbus::MethodCall & call);
 
-    void list_fd(sdbus::MethodCall & call);
+    void list_fd(sdbus::MethodCall & call, const std::string & transfer_id);
 };
 
 #endif

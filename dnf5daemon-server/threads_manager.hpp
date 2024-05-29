@@ -108,22 +108,27 @@ public:
     template <class S>
     void handle_method_fd(
         S & service,
-        void (S::*method)(sdbus::MethodCall &),
+        void (S::*method)(sdbus::MethodCall &, const std::string &),
         sdbus::MethodCall & call,
         std::optional<std::string> thread_locale = std::nullopt) {
         auto worker = std::thread(
             [this](
                 S & service,
-                void (S::*method)(sdbus::MethodCall &),
+                void (S::*method)(sdbus::MethodCall &, const std::string &),
                 sdbus::MethodCall call,
                 std::optional<std::string> thread_locale = std::nullopt) {
+                static unsigned int counter{0};
                 locale_t new_locale{nullptr};
                 locale_t orig_locale{nullptr};
                 if (thread_locale) {
                     orig_locale = set_thread_locale(thread_locale.value(), new_locale);
                 }
 
-                const sdbus::MethodReply reply = call.createReply();
+                sdbus::MethodReply reply = call.createReply();
+                // generate unique transfer id based on client bus name and counter
+                const std::string transfer_id = fmt::format("{}-{}", call.getSender(), ++counter);
+                reply << transfer_id;
+
                 std::string error_msg;
                 try {
                     reply.send();
@@ -135,7 +140,7 @@ public:
 
                 if (error_msg.empty()) {
                     try {
-                        (service.*method)(call);
+                        (service.*method)(call, transfer_id);
                     } catch (...) {
                         // TODO(mblaha): log the error
                     }

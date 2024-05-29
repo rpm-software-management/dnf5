@@ -66,10 +66,10 @@ void Rpm::dbus_register() {
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM,
         "list_fd",
-        "a{sv}hs",
-        {"options", "file_descriptor", "transfer_id"},
-        "",
-        {},
+        "a{sv}h",
+        {"options", "file_descriptor"},
+        "s",
+        {"transfer_id"},
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method_fd(*this, &Rpm::list_fd, call, session.session_locale);
         });
@@ -418,16 +418,13 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     return reply;
 }
 
-void Rpm::list_fd(sdbus::MethodCall & call) {
+void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
     // get the output pipe file descriptor
     sdbus::UnixFd dbus_unix_fd;
     call >> dbus_unix_fd;
-    // id of the output filedescriptor
-    std::string out_fd_id;
-    call >> out_fd_id;
 
     int out_fd = dbus_unix_fd.get();
 
@@ -462,7 +459,7 @@ void Rpm::list_fd(sdbus::MethodCall & call) {
     auto dbus_object = get_session().get_dbus_object();
     auto signal = dbus_object->createSignal(call.getInterfaceName(), dnfdaemon::SIGNAL_WRITE_TO_FD_FINISHED);
     signal << error_msg.empty();
-    signal << out_fd_id;
+    signal << transfer_id;
     signal << error_msg;
     try {
         dbus_object->emitSignal(signal);
