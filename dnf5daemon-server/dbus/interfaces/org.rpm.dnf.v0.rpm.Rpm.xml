@@ -107,7 +107,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <method name="list_fd">
         <arg name="options" type="a{sv}" direction="in"/>
         <arg name="file_descriptor" type="h" direction="in"/>
-        <arg name="transfer_id" type="s" direction="in"/>
+        <arg name="transfer_id" type="s" direction="out"/>
     </method>
 
     <!--

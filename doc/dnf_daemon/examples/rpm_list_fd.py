@@ -40,7 +40,8 @@ def repoquery(iface_rpm, options):
     pipe_r, pipe_w = os.pipe()
     # transfer id serves as an identifier of the pipe transfer for a signal emitted
     # after server finish. This example does not use it.
-    iface_rpm.list_fd(options, pipe_w, "the_transfer_id")
+    transfer_id = iface_rpm.list_fd(options, pipe_w)
+    print("transfer_id: ", transfer_id)
     # close the write end - otherwise poll cannot detect the end of transmission
     os.close(pipe_w)
 
@@ -89,6 +90,8 @@ def repoquery(iface_rpm, options):
             try:
                 # skip all chars till begin of next JSON objects (new lines mostly)
                 json_obj_start = to_parse.find('{')
+                if json_obj_start < 0:
+                    break
                 obj, end = parser.raw_decode(to_parse[json_obj_start:])
                 yield obj
                 to_parse = to_parse[(json_obj_start+end):]
@@ -108,7 +111,7 @@ def repoquery(iface_rpm, options):
 
     # non-empty to_parse here means there are some unfinished (or generally unparsable)
     # JSON objects in the stream.
-    if to_parse:
+    if to_parse.strip():
         raise Exception("Failed to parse part of received data.")
 
 
