@@ -46,6 +46,18 @@ void CheckUpgradeCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Check for available package upgrades");
 
+    minimal = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    auto minimal_opt = parser.add_new_named_arg("minimal");
+    minimal_opt->set_long_name("minimal");
+    minimal_opt->set_description(
+        _("Reports the lowest versions of packages that fix advisories of type bugfix, enhancement, security, or "
+          "newpackage. In case that any option limiting advisories is used it reports the lowest versions of packages "
+          "that fix advisories matching selected advisory properties"));
+    minimal_opt->set_const_value("true");
+    minimal_opt->link_value(minimal);
+    cmd.register_named_arg(minimal_opt);
+
     changelogs = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto changelogs_opt = parser.add_new_named_arg("changelogs");
@@ -136,6 +148,18 @@ void CheckUpgradeCommand::run() {
     libdnf5::rpm::PackageQuery installed_query(ctx.get_base());
     installed_query.filter_installed();
 
+    if (minimal->get_value()) {
+        if ((advisory_name->get_value().empty() && !advisory_security->get_value() && !advisory_bugfix->get_value() &&
+             !advisory_enhancement->get_value() && !advisory_newpackage->get_value() &&
+             advisory_severity->get_value().empty() && advisory_bz->get_value().empty() &&
+             advisory_cve->get_value().empty())) {
+            advisory_security->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_bugfix->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_enhancement->set(libdnf5::Option::Priority::RUNTIME, true);
+            advisory_newpackage->set(libdnf5::Option::Priority::RUNTIME, true);
+        }
+    }
+
     // filter by advisory flags, e.g. `--security`
     size_t size_before_filter_advisories = upgrades_query.size();
     auto advisories = advisory_query_from_cli_input(
@@ -153,8 +177,13 @@ void CheckUpgradeCommand::run() {
             std::move(advisories.value()), installed_query, libdnf5::sack::QueryCmp::GTE);
     }
 
-    // Last, only include latest upgrades
-    upgrades_query.filter_latest_evr();
+    if (minimal->get_value()) {
+        // when minimal is requested, keep only the earliest version
+        upgrades_query.filter_earliest_evr();
+    } else {
+        // Last, only include latest upgrades
+        upgrades_query.filter_latest_evr();
+    }
 
     libdnf5::rpm::PackageQuery obsoletes_query(upgrades_query);
     obsoletes_query.filter_obsoletes(installed_query);
