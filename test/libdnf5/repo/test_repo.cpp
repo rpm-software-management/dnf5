@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/repo/repo_errors.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
