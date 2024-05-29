@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/repo/repo_errors.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>

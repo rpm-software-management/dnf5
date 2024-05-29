@@ -19,11 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/repo/repo_sack.hpp"
 
+#include "libdnf5/repo/repo_errors.hpp"
+
 #include "../module/module_sack_impl.hpp"
 #include "conf/config.h"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
-#include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
 #include "utils/auth.hpp"
