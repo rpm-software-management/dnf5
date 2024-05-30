@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
-#include "dnf5/offline.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils/string.hpp"
@@ -37,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
+#include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
@@ -313,7 +313,7 @@ void Context::Impl::load_repos(bool load_system) {
 
 void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     const auto & installroot = base.get_config().get_installroot_option().get_value();
-    const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+    const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
 
     constexpr const char * packages_in_trans_dir{"./packages"};
@@ -321,10 +321,10 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     constexpr const char * comps_in_trans_dir{"./comps"};
     const auto & comps_location = offline_datadir / comps_in_trans_dir;
 
-    const std::filesystem::path state_path{offline_datadir / dnf5::offline::TRANSACTION_STATE_FILENAME};
-    dnf5::offline::OfflineTransactionState state{state_path};
+    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+    libdnf5::offline::OfflineTransactionState state{state_path};
 
-    if (state.get_data().status != dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+    if (state.get_data().status != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
         std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
                   << "\t" << state.get_data().cmd_line << std::endl
                   << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
@@ -333,7 +333,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
         }
     }
 
-    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_INCOMPLETE;
+    state.get_data().status = libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE;
     state.write();
 
     // First, serialize the transaction
@@ -373,7 +373,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     // Download and transaction test complete. Fill out entries in offline
     // transaction state file.
-    state.get_data().status = dnf5::offline::STATUS_DOWNLOAD_COMPLETE;
+    state.get_data().status = libdnf5::offline::STATUS_DOWNLOAD_COMPLETE;
     state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
 
     std::vector<std::string> command_vector;
@@ -428,7 +428,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
 
     if (should_store_offline) {
         const auto & installroot = base.get_config().get_installroot_option().get_value();
-        const auto & offline_datadir = installroot / dnf5::offline::DEFAULT_DATADIR.relative_path();
+        const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
         std::filesystem::create_directories(offline_datadir);
 
         base.get_config().get_destdir_option().set(offline_datadir / "packages");

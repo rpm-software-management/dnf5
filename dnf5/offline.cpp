@@ -19,56 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/offline.hpp"
 
-#include "libdnf5/common/exception.hpp"
-
-#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
-#include <libdnf5/utils/fs/file.hpp>
-
 #ifdef WITH_SYSTEMD
 #include <systemd/sd-journal.h>
 #endif
 
 namespace dnf5::offline {
-
-OfflineTransactionState::OfflineTransactionState(std::filesystem::path path) : path(std::move(path)) {
-    read();
-}
-
-OfflineTransactionStateData & OfflineTransactionState::get_data() {
-    return data;
-}
-
-const std::exception_ptr & OfflineTransactionState::get_read_exception() const {
-    return read_exception;
-}
-
-std::filesystem::path OfflineTransactionState::get_path() const {
-    return path;
-}
-
-
-void OfflineTransactionState::read() {
-    try {
-        const std::ifstream file{path};
-        if (!file.good()) {
-            throw libdnf5::FileSystemError(errno, path, M_("error reading offline state file"));
-        }
-        const auto & value = toml::parse(path);
-        data = toml::find<OfflineTransactionStateData>(value, STATE_HEADER);
-        if (data.state_version != STATE_VERSION) {
-            throw libdnf5::RuntimeError(M_("incompatible version of state data"));
-        }
-    } catch (const std::exception & ex) {
-        read_exception = std::current_exception();
-        data = OfflineTransactionStateData{};
-    }
-}
-
-void OfflineTransactionState::write() {
-    auto file = libdnf5::utils::fs::File(path, "w");
-    file.write(toml::format(toml::value{{STATE_HEADER, data}}));
-    file.close();
-}
 
 void log_status(
     Context & context,

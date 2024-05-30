@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_OFFLINE_HPP
 
 #include <dnf5/context.hpp>
-#include <dnf5/offline.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_bool.hpp>
 #include <libdnf5/conf/option_number.hpp>
+#include <libdnf5/transaction/offline.hpp>
 
 const std::filesystem::path PATH_TO_PLYMOUTH{"/usr/bin/plymouth"};
 const std::filesystem::path PATH_TO_JOURNALCTL{"/usr/bin/journalctl"};
@@ -48,7 +48,7 @@ public:
 protected:
     std::filesystem::path get_magic_symlink() const { return magic_symlink; };
     std::filesystem::path get_datadir() const { return datadir; };
-    std::optional<dnf5::offline::OfflineTransactionState> state;
+    std::optional<libdnf5::offline::OfflineTransactionState> state;
 
 private:
     std::filesystem::path magic_symlink;
