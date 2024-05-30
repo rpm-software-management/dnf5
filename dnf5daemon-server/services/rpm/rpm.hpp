@@ -43,6 +43,7 @@ private:
     sdbus::MethodReply distro_sync(sdbus::MethodCall & call);
     sdbus::MethodReply downgrade(sdbus::MethodCall & call);
     sdbus::MethodReply reinstall(sdbus::MethodCall & call);
+    sdbus::MethodReply system_upgrade(sdbus::MethodCall & call);
 
     void list_fd(sdbus::MethodCall & call, const std::string & transfer_id);
 };

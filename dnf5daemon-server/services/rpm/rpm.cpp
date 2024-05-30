@@ -113,6 +113,16 @@ void Rpm::dbus_register() {
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
         });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM,
+        "system_upgrade",
+        "a{sv}",
+        {"options"},
+        "",
+        {},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Rpm::system_upgrade, call, session.session_locale);
+        });
 
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN, "ot", {"session_object_path", "total"});
@@ -618,6 +628,49 @@ sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
     setting.set_with_binaries(false);
     for (const auto & spec : specs) {
         goal.add_remove(spec, setting);
+    }
+
+    auto reply = call.createReply();
+    return reply;
+}
+
+sdbus::MethodReply Rpm::system_upgrade(sdbus::MethodCall & call) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        throw std::runtime_error("Not authorized");
+    }
+    auto base = session.get_base();
+
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+
+    // check that releasever is different than the detected one
+    auto target_releasever = base->get_vars()->get_value("releasever");
+    const std::filesystem::path installroot{base->get_config().get_installroot_option().get_value()};
+    const auto & detected_releasever = libdnf5::Vars::detect_release(base->get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        if (target_releasever == *detected_releasever) {
+            throw sdbus::Error(
+                dnfdaemon::ERROR, fmt::format("Need a 'releasever' different than the current system version."));
+        }
+    }
+
+    // get the upgrade mode
+    std::string upgrade_mode = dnfdaemon::key_value_map_get<std::string>(options, "mode", "distrosync");
+
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf5::GoalJobSettings settings;
+    if (upgrade_mode == "upgrade") {
+        goal.add_rpm_upgrade(settings);
+    } else if (upgrade_mode == "distrosync") {
+        goal.add_rpm_distro_sync(settings);
+    } else {
+        throw sdbus::Error(
+            dnfdaemon::ERROR,
+            fmt::format(
+                "Unsupported system-upgrade mode \"{}\". Only \"distrosync\" and \"upgrade\" modes are supported.",
+                upgrade_mode));
     }
 
     auto reply = call.createReply();
