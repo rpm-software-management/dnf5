@@ -51,27 +51,47 @@ const std::string STATE_HEADER{"offline-transaction-state"};
 const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "offline"};
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
 
+/// Data of the initiated offline transaction state, by default stored in the
+/// /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml file.
 struct OfflineTransactionStateData {
+    /// Version of the state file.
     int state_version = STATE_VERSION;
+    /// Current offline transaction status. One of download-incomplete, download-complete, ready, or transaction-incomplete.
     std::string status = STATUS_DOWNLOAD_INCOMPLETE;
+    /// Cachedir to be used for the offline transaction.
     std::string cachedir;
+    /// Target releasever for the offline transaction.
     std::string target_releasever;
+    /// Detected current releasever when the offline transaction was initialized.
     std::string system_releasever;
+    /// Dnf command used to initialize the offline transaction (e.g. "system-upgrade download").
     std::string verb;
+    /// Command line used to initialize the offline transaction.
     std::string cmd_line;
+    /// Power off the system after the operation is complete?
     bool poweroff_after = false;
+    /// module_platform_id for the offline transaction.
     std::string module_platform_id;
 };
 
+/// Class to handle offline transaction state.
 class OfflineTransactionState {
 public:
-    void write();
+    /// Constructs a new OfflineTransactionState instance based on the state file location.
+    /// @param path Path to the state file (default location is /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml).
     OfflineTransactionState(std::filesystem::path path);
+
+    /// Returns offline transaction state data.
     OfflineTransactionStateData & get_data();
+    /// Write the current state to the file.
+    void write();
+    /// Returns any exception caught during the reading of the state file (or nullptr if no exception occurred).
     const std::exception_ptr & get_read_exception() const;
+    /// Returns path to the state file.
     std::filesystem::path get_path() const;
 
 private:
+    /// Read offline transaction state data from the file
     void read();
     std::exception_ptr read_exception;
     std::filesystem::path path;
