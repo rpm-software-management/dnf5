@@ -31,6 +31,7 @@ namespace libdnf5::cli::output {
 enum { COL_REPO_ID, COL_REPO_NAME, COL_REPO_STATUS };
 
 void print_repolist_table(const std::vector<std::unique_ptr<IRepo>> & repos, bool with_status, size_t sort_column);
+void print_repolist_json(const std::vector<std::unique_ptr<IRepo>> & repos);
 
 }  // namespace libdnf5::cli::output
 

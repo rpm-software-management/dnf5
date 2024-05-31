@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/tty.hpp"
 
+#include <json.h>
 #include <libsmartcols/libsmartcols.h>
 
 namespace libdnf5::cli::output {
@@ -73,6 +74,20 @@ void print_repolist_table(const std::vector<std::unique_ptr<IRepo>> & repos, boo
 
     scols_print_table(table);
     scols_unref_table(table);
+}
+
+
+void print_repolist_json([[maybe_unused]] const std::vector<std::unique_ptr<IRepo>> & repos) {
+    json_object * json_repos = json_object_new_array();
+    for (const auto & repo : repos) {
+        json_object * json_repo = json_object_new_object();
+        json_object_object_add(json_repo, "id", json_object_new_string(repo->get_id().c_str()));
+        json_object_object_add(json_repo, "name", json_object_new_string(repo->get_name().c_str()));
+        json_object_object_add(json_repo, "is_enabled", json_object_new_boolean(repo->is_enabled()));
+        json_object_array_add(json_repos, json_repo);
+    }
+    std::cout << json_object_to_json_string_ext(json_repos, JSON_C_TO_STRING_PRETTY) << std::endl;
+    json_object_put(json_repos);
 }
 
 }  // namespace libdnf5::cli::output
