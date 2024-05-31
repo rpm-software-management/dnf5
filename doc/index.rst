@@ -19,6 +19,7 @@ Welcome to DNF5's documentation!
     misc/index
     best_practices/index
     templates/index
+    repository_format/index
     changes
 
 
