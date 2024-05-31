@@ -139,5 +139,22 @@ void create_store_option(dnf5::Command & command) {
     });
 }
 
+void create_json_option(dnf5::Command & command) {
+    auto & ctx = command.get_context();
+    auto & parser = command.get_context().get_argument_parser();
+    auto json = parser.add_new_named_arg("json");
+    json->set_long_name("json");
+    json->set_description("Request json output format");
+    json->set_const_value("true");
+    json->set_parse_hook_func([&ctx](
+                                  [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                  [[maybe_unused]] const char * option,
+                                  [[maybe_unused]] const char * value) {
+        ctx.set_json_output_requested(true);
+        return true;
+    });
+    command.get_argument_parser_command()->register_named_arg(json);
+}
+
 
 }  // namespace dnf5

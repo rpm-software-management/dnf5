@@ -173,6 +173,9 @@ public:
     void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
     bool get_should_store_offline() const { return should_store_offline; }
 
+    void set_json_output_requested(bool json_output) { this->json_output = json_output; }
+    bool get_json_output_requested() const { return json_output; }
+
     libdnf5::Base & get_base() { return base; };
 
     std::vector<std::pair<std::string, std::string>> & get_setopts() { return setopts; }
@@ -206,6 +209,7 @@ private:
     const char * comment{nullptr};
 
     bool should_store_offline = false;
+    bool json_output = false;
 
     bool quiet{false};
     bool dump_main_config{false};
@@ -656,6 +660,14 @@ void Context::set_should_store_offline(bool should_store_offline) {
 
 bool Context::get_should_store_offline() const {
     return p_impl->get_should_store_offline();
+}
+
+void Context::set_json_output_requested(bool json_output) {
+    p_impl->set_json_output_requested(json_output);
+}
+
+bool Context::get_json_output_requested() const {
+    return p_impl->get_json_output_requested();
 }
 
 libdnf5::Base & Context::get_base() {
