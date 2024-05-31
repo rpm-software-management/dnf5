@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_list.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/output/adapters/repo.hpp>
 #include <libdnf5-cli/output/repolist.hpp>
 
@@ -39,6 +40,8 @@ void RepoListCommand::set_argument_parser() {
     all->get_arg()->add_conflict_argument(*enabled->get_arg());
     all->get_arg()->add_conflict_argument(*disabled->get_arg());
     enabled->get_arg()->add_conflict_argument(*disabled->get_arg());
+
+    create_json_option(*this);
 }
 
 void RepoListCommand::run() {
@@ -82,7 +85,12 @@ void RepoListCommand::print(const libdnf5::repo::RepoQuery & query, bool with_st
         cli_repos.emplace_back(new libdnf5::cli::output::RepoAdapter<libdnf5::repo::RepoWeakPtr>(repo));
     }
 
-    libdnf5::cli::output::print_repolist_table(cli_repos, with_status, libdnf5::cli::output::COL_REPO_ID);
+    auto & ctx = get_context();
+    if (ctx.get_json_output_requested()) {
+        libdnf5::cli::output::print_repolist_json(cli_repos);
+    } else {
+        libdnf5::cli::output::print_repolist_table(cli_repos, with_status, libdnf5::cli::output::COL_REPO_ID);
+    }
 }
 
 }  // namespace dnf5
