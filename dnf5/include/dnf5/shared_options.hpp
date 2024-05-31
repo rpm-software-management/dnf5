@@ -63,9 +63,11 @@ void create_downloadonly_option(dnf5::Command & command);
 /// The value is stored in Context::transaction_store_path.
 void create_store_option(dnf5::Command & command);
 
-
 /// Create the `--offline` option for a command provided as an argument.
 void create_offline_option(dnf5::Command & command);
+
+/// Create the `--json` option for a command provided as an argument.
+void create_json_option(dnf5::Command & command);
 
 }  // namespace dnf5
 

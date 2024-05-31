@@ -149,6 +149,9 @@ public:
     void set_should_store_offline(bool should_store_offline);
     bool get_should_store_offline() const;
 
+    void set_json_output_requested(bool json_output);
+    bool get_json_output_requested() const;
+
     libdnf5::Base & get_base();
 
     std::vector<std::pair<std::string, std::string>> & get_setopts();
