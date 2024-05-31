@@ -46,12 +46,10 @@ public:
     void configure() override;
 
 protected:
-    std::filesystem::path get_magic_symlink() const { return magic_symlink; };
     std::filesystem::path get_datadir() const { return datadir; };
     std::optional<libdnf5::offline::OfflineTransactionState> state;
 
 private:
-    std::filesystem::path magic_symlink;
     std::filesystem::path datadir;
 };
 

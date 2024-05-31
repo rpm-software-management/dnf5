@@ -202,10 +202,6 @@ OfflineSubcommand::OfflineSubcommand(Context & context, const std::string & name
 
 void OfflineSubcommand::configure() {
     auto & ctx = get_context();
-    // This value comes from systemd, see
-    // https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates or
-    // systemd.offline-updates(7).
-    magic_symlink = "/system-update";
 
     const std::filesystem::path installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
@@ -347,8 +343,8 @@ void OfflineRebootCommand::run() {
         return;
     }
 
-    if (!std::filesystem::is_symlink(get_magic_symlink())) {
-        std::filesystem::create_symlink(get_datadir(), get_magic_symlink());
+    if (!std::filesystem::is_symlink(libdnf5::offline::MAGIC_SYMLINK)) {
+        std::filesystem::create_symlink(get_datadir(), libdnf5::offline::MAGIC_SYMLINK);
     }
 
     state->get_data().status = libdnf5::offline::STATUS_READY;
@@ -396,11 +392,11 @@ void OfflineExecuteCommand::configure() {
     OfflineSubcommand::configure();
     auto & ctx = get_context();
 
-    if (!std::filesystem::is_symlink(get_magic_symlink())) {
+    if (!std::filesystem::is_symlink(libdnf5::offline::MAGIC_SYMLINK)) {
         throw libdnf5::cli::CommandExitError(0, M_("Trigger file does not exist. Exiting."));
     }
 
-    if (!std::filesystem::equivalent(get_magic_symlink(), get_datadir())) {
+    if (!std::filesystem::equivalent(libdnf5::offline::MAGIC_SYMLINK, get_datadir())) {
         throw libdnf5::cli::CommandExitError(0, M_("Another offline transaction tool is running. Exiting."));
     }
 
@@ -437,7 +433,7 @@ void OfflineExecuteCommand::run() {
              "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`.")
         << std::endl;
 
-    std::filesystem::remove(get_magic_symlink());
+    std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK);
 
     if (state->get_data().status != libdnf5::offline::STATUS_READY) {
         throw libdnf5::cli::CommandExitError(1, M_("Use `dnf5 offline reboot` to begin the transaction."));
@@ -531,7 +527,7 @@ void OfflineCleanCommand::set_argument_parser() {
 
 void OfflineCleanCommand::run() {
     auto & ctx = get_context();
-    std::filesystem::remove(get_magic_symlink());
+    std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK);
     clean_datadir(ctx, get_datadir());
 }
 

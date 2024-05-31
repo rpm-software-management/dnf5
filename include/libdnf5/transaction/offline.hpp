@@ -40,6 +40,11 @@ const std::string STATUS_DOWNLOAD_COMPLETE{"download-complete"};
 const std::string STATUS_READY{"ready"};
 const std::string STATUS_TRANSACTION_INCOMPLETE{"transaction-incomplete"};
 
+// This value comes from systemd, see
+// https://www.freedesktop.org/wiki/Software/systemd/SystemUpdates or
+// systemd.offline-updates(7).
+const std::filesystem::path MAGIC_SYMLINK{"/system-update"};
+
 const int STATE_VERSION = 1;
 const std::string STATE_HEADER{"offline-transaction-state"};
 
