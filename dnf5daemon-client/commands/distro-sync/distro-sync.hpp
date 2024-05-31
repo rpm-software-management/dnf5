@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
-#include <libdnf5/conf/option.hpp>
+#include <libdnf5/conf/option_bool.hpp>
 
 namespace dnfdaemon::client {
 
@@ -35,6 +35,7 @@ public:
 
 private:
     std::vector<std::string> pkg_specs;
+    libdnf5::OptionBool offline_option{false};
 };
 
 }  // namespace dnfdaemon::client

@@ -62,6 +62,9 @@ void InstallCommand::set_argument_parser() {
     skip_unavailable->link_value(&skip_unavailable_option);
     cmd.register_named_arg(skip_unavailable);
 
+    auto offline_arg = create_offline_option(parser, &offline_option);
+    cmd.register_named_arg(offline_arg);
+
     auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
     specs_arg->set_description("List of packages to install");
     cmd.register_positional_arg(specs_arg);
@@ -88,7 +91,7 @@ void InstallCommand::run() {
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(pkg_specs, options);
 
-    run_transaction();
+    run_transaction(offline_option.get_value());
 }
 
 }  // namespace dnfdaemon::client
