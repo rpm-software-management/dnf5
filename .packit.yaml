@@ -1,17 +1,37 @@
 # See the documentation for more information:
 # https://packit.dev/docs/configuration/
 
-specfile_path: dnf5.spec
+packages:
+  dnf5:
+    specfile_path: dnf5.spec
 
-# add or remove files that should be synced
-files_to_sync:
-  - dnf5.spec
-  - .packit.yaml
+    # add or remove files that should be synced
+    files_to_sync:
+      - dnf5.spec
+      - .packit.yaml
 
-# name in upstream package repository or registry (e.g. in PyPI)
-upstream_package_name: dnf5
-# downstream (Fedora) RPM package name
-downstream_package_name: dnf5
+    # name in upstream package repository or registry (e.g. in PyPI)
+    upstream_package_name: dnf5
+    # downstream (Fedora) RPM package name
+    downstream_package_name: dnf5
+
+  # Test build with disabled modules.
+  # Use separate package configuration because Packit
+  # doesn't yet support dependencies between jobs so if we
+  # had multiple copr_builds it woudn't know which to use
+  # for tests jobs.
+  # https://github.com/packit/packit-service/issues/1720
+  dnf5-without-modules:
+    specfile_path: dnf5.spec
+
+    # add or remove files that should be synced
+    files_to_sync:
+      - dnf5.spec
+      - .packit.yaml
+
+    # name in upstream package repository or registry (e.g. in PyPI)
+    upstream_package_name: dnf5
+    downstream_package_name: dnf5
 
 jobs:
   - job: propose_downstream
@@ -19,14 +39,17 @@ jobs:
     dist_git_branches:
       - fedora-rawhide
     copy_upstream_release_description: true
+    packages: [dnf5]
   - job: koji_build
     trigger: commit
     dist_git_branches:
       - fedora-all
+    packages: [dnf5]
   - job: bodhi_update
     trigger: commit
     dist_git_branches:
       - fedora-all
+    packages: [dnf5]
   - job: copr_build
     trigger: pull_request
     targets:
@@ -35,6 +58,7 @@ jobs:
     actions:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
+    packages: [dnf5]
   - job: copr_build
     trigger: pull_request
     targets:
@@ -43,6 +67,7 @@ jobs:
     actions:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
+    packages: [dnf5]
   - job: tests
     trigger: pull_request
     identifier: "dnf5-tests"
@@ -51,6 +76,7 @@ jobs:
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/behave-dnf5$"
+    packages: [dnf5]
   - job: tests
     trigger: pull_request
     identifier: "createrepo_c-tests"
@@ -59,6 +85,7 @@ jobs:
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/behave-createrepo_c$"
+    packages: [dnf5]
   - job: tests
     trigger: pull_request
     identifier: "dnf-tests"
@@ -68,6 +95,7 @@ jobs:
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/behave-dnf$"
+    packages: [dnf5]
   - job: tests
     trigger: pull_request
     identifier: "dnf5daemon-tests"
@@ -76,3 +104,19 @@ jobs:
     fmf_url: https://github.com/rpm-software-management/ci-dnf-stack.git
     fmf_ref: main
     tmt_plan: "^/plans/integration/behave-dnf5daemon$"
+    packages: [dnf5]
+  - job: copr_build
+    identifier: "WITH_MODULEMD=OFF"
+    trigger: pull_request
+    branch: 'main'
+    targets:
+      - fedora-rawhide-x86_64
+    actions:
+      fix-spec-file:
+      # disable modulemd in spec to verify the build is passing without it
+      - sed -i dnf5.spec -e "s/bcond_without modulemd/bcond_with modulemd/"
+      # fill in Release as if packit would have done it
+      - bash -c "sed -i -r \"s/Release:(\s*)\S+/Release:\1${PACKIT_RPMSPEC_RELEASE}%{?dist}/\" dnf5.spec"
+      get-current-version:
+        - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
+    packages: [dnf5-without-modules]
