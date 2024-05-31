@@ -317,7 +317,6 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     std::filesystem::create_directories(offline_datadir);
 
     constexpr const char * packages_in_trans_dir{"./packages"};
-    const auto & packages_location = offline_datadir / packages_in_trans_dir;
     constexpr const char * comps_in_trans_dir{"./comps"};
     const auto & comps_location = offline_datadir / comps_in_trans_dir;
 
