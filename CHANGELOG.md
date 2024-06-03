@@ -1,3 +1,14 @@
+# 5.2.3.0
+
+- Update translations from weblate
+- const: Shared constant defining RPM transaction lock file
+- main: Implement checking of privileges before executing commands
+- exception: Add new exception for user insufficient privileges
+- locker: Move to public API
+- distro-sync: Add downloadonly option
+- commands: Fix using store option
+- Enhance warning about RPMs that were not validate by RPM
+
 # 5.2.2.0
 
 - Update translations from weblate
