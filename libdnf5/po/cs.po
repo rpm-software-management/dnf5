@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -483,71 +483,88 @@ msgstr "Problém: "
 msgid "Problem {}: "
 msgstr "Problém {}: "
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr "Tato transakce již proběhla dříve."
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr "Nelze spustit transakci s nevyřešenými problémy."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr "Kontrola transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr "Nepodařilo se získat zámek rpm transakce. Probíhá další transakce."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr "Transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr "Ověření podpisu selhalo."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr "Repozitář nemá nakonfigurované žádné klíče PGP."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr "Veřejný klíč není nainstalován."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr "Zrušeno uživatelem."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ""
+
+#: base/transaction.cpp:1376
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {} package(s)."
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Upozornění: vynechané PGP kontroly pro {} balík(y)."
+
+#: base/transaction.cpp:1378
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {} package(s)."
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
+msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
+msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1369,19 +1386,19 @@ msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr "Nepodařilo se otevřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr "Nepodařilo se získat zámek \"{}\""
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr "Nepodařilo se zavřít soubor zámku \"{}\""
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr "Nepodařilo se smazat soubor zámku \"{}\""
 

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
-"PO-Revision-Date: 2024-05-20 17:36+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-31 23:30+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -205,16 +205,12 @@ msgid "{} does not belong to a distupgrade repository"
 msgstr "{} tillhör inte ett distributionsuppgraderingsförråd"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
-msgstr "{} har sämre arkitektur"
+msgstr "{0} från {1} har sämre arkitektur"
 
 #: base/solver_problems.cpp:43
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed package"
-msgstr "problem med installerat paket "
+msgstr "problem med installerat paket"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -249,97 +245,74 @@ msgid "cannot install the best candidate for the job"
 msgstr "kan inte installera den bästa kandidaten för jobbet"
 
 #: base/solver_problems.cpp:52
-#, fuzzy
-#| msgid "package {} is filtered out by modular filtering"
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr "paket {} filtreras bort genom modulär filtrering"
+msgstr "paket {0} från {1} filtreras bort genom modulär filtrering"
 
 #: base/solver_problems.cpp:53
-#, fuzzy
-#| msgid "package {} does not have a compatible architecture"
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr "paket {} har inte en kompatibel arkitektur"
+msgstr "paket {0} från {1} har inte en kompatibel arkitektur"
 
 #: base/solver_problems.cpp:54
-#, fuzzy
-#| msgid "package {} is not installable"
 msgid "package {0} from {1} is not installable"
-msgstr "paket {} är inte installerbart"
+msgstr "paket {0} från {1} är inte installerbart"
 
 #: base/solver_problems.cpp:55
-#, fuzzy
-#| msgid "package {} is filtered out by exclude filtering"
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr "paket {} filtreras bort genom exkluderingsfiltrering"
+msgstr "paket {0} från {1} filtreras bort genom exkluderingsfiltrering"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
-#| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr "ingenting tillhandahåller {0} som behövs av {1}"
+msgstr "ingenting tillhandahåller {0} som behövs av {1} från {2}"
 
 #: base/solver_problems.cpp:57
-#, fuzzy
-#| msgid "cannot install both {0} and {1}"
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr "kan inte installera både{0} och {1}"
+msgstr "kan inte installera både{0} från {1} och {2} från {3}"
 
 #: base/solver_problems.cpp:58
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr "paket {0} är i konflikt med {1} från {2}"
+msgstr ""
+"paket {0} från {1} är i konflikt med {2} som tillhandahålls av {3} från {4}"
 
 #: base/solver_problems.cpp:60
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "paket {0} är i konflikt med {1} från {2}"
+msgstr ""
+"installerat paket {0} är i konflikt med {1} som tillhandahålls av {2} från "
+"{3}"
 
 #: base/solver_problems.cpp:61
-#, fuzzy
-#| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr "paket {0} är föråldrat {1} tillhandahållet av {2}"
+msgstr "paket {0} från {1} föråldrade {2} tillhandahållet av {3} från {4}"
 
 #: base/solver_problems.cpp:62
-#, fuzzy
-#| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
-msgstr "installerat paket {0} är föråldrat {1} tillhandahållet av {2}"
+msgstr "installerat paket {0} är föråldrat {1} tillhandahållet av {2} från {3}"
 
 #: base/solver_problems.cpp:64
-#, fuzzy
-#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
-msgstr "paket{0} är implicit föråldrat {1} tillhandahållet av {2}"
+msgstr ""
+"paket{0} från {1} implicit föråldrat {2} tillhandahållet av {3} från {4}"
 
 #: base/solver_problems.cpp:66
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
-msgstr "paket {1} kräver {0}, men ingen av leverantörerna kan installeras"
+msgstr ""
+"paket {1} från {2} kräver {0}, men ingen av leverantörerna kan installeras"
 
 #: base/solver_problems.cpp:68
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
-msgstr "paket {1} kräver {0}, men ingen av leverantörerna kan installeras"
+msgstr ""
+"installerat paket {1} kräver {0}, men ingen av leverantörerna kan installeras"
 
 #: base/solver_problems.cpp:69
-#, fuzzy
-#| msgid "package {1} conflicts with {0} provided by itself"
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr "paket {1} är i konflikt med {0} som tillhandahålls av sig självt"
+msgstr ""
+"paket {0} från {1} är i konflikt med {2} som tillhandahålls av sig självt"
 
 #: base/solver_problems.cpp:70
-#, fuzzy
-#| msgid "both package {0} and {2} obsolete {1}"
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "både paket {0} och {2} föråldrar {1}"
+msgstr "både paket {0} från {1} och {3} från {4} föråldrar {2}"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -426,73 +399,86 @@ msgstr "Problem: "
 msgid "Problem {}: "
 msgstr "Problem {}: "
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr "Denna transaktion har redan körts tidigare."
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr "Det går inte att köra transaktionen för att lösa problem."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr "Rpm transaktionskontroll misslyckades."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Misslyckades att erhålla rpm-transaktionslås. Ytterligare en transaktion "
 "pågår."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr "Rpm-transaktion misslyckades."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr "Signaturverifiering misslyckades."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr "Förrådet har inga PGP-nycklar konfigurerade."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr "Publik nyckel är inte installerad."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr "Avbröts av användaren."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr "Import av publik nyckel misslyckades."
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr "Ogiltig tsflag: {}"
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Publik nyckel \"{}\" finns redan, importerar inte."
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ett fel uppstod vid import av nyckeln \"{}\": {}"
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "PGP-kontroll för paket \"{}\" ({}) från förråd \"{}\" har misslyckats: "
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Importen av nyckeln hjälpte inte, fel nyckel?"
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
-msgstr "Varning: hoppade över PGP-kontroller för {} paket."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1376
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+msgstr "Varning: hoppade över PGP-kontroller för 1 paket från förråd: {}"
+
+#: base/transaction.cpp:1378
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] "Varning: hoppade över PGP-kontroller för {0} paket från: förråd: {1}"
+msgstr[1] ""
+"Varning: hoppade över PGP-kontroller för {0} paket från flera förråd: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1287,19 +1273,19 @@ msgstr "Kan inte ladda delat bibliotek \"{}\": {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Kan inte erhålla adressen till symbol \"{}\": {}"
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr "Misslyckades med att öppna låsfil \"{}\""
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr "Misslyckades att erhålla lås \"{}\""
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr "Misslyckades att stänga låsfil \"{}\""
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr "Misslyckades att ta bort låsfil \"{}\""
 

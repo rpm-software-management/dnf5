@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
 "PO-Revision-Date: 2024-05-28 08:58+0000\n"
 "Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -79,7 +79,8 @@ msgstr "Nur Hinweise mit einer CVE-Referenz anzeigen."
 
 #: commands/advisory/arguments.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
-msgstr "Auf Pakete in Hinweisen mit angegebenem Namen beschränkt. Listenoption."
+msgstr ""
+"Auf Pakete in Hinweisen mit angegebenem Namen beschränkt. Listenoption."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
@@ -109,8 +110,8 @@ msgid ""
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
 "Auf Pakete in Hinweisen mit angegebenem Schweregrad beschränken. "
-"Listenoption. Mögliche Werte \"critical\", \"important\", \"moderate\", \"low"
-"\", \"none\"."
+"Listenoption. Mögliche Werte \"critical\", \"important\", \"moderate\", "
+"\"low\", \"none\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
