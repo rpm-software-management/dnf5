@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
 "PO-Revision-Date: 2024-05-07 13:36+0000\n"
 "Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -25,6 +25,6 @@ msgstr ""
 "Valeur de définition de macro \"{}\" invalide. Format \"macro expr\" attendu."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:256
+#: builddep.cpp:257
 msgid "Failed to parse some inputs."
 msgstr "Échec de l'analyse de certaines entrées."

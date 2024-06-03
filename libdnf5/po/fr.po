@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
-"PO-Revision-Date: 2024-05-28 08:58+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-30 11:36+0000\n"
+"Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
 "Language: fr\n"
@@ -281,7 +280,8 @@ msgstr "le paquet {0} de {1} entre en conflit avec {2}, fourni par {3} de {4}"
 
 #: base/solver_problems.cpp:60
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "le paquet installé {0} entre en conflit avec {1}, fourni par {2} de {3}"
+msgstr ""
+"le paquet installé {0} entre en conflit avec {1}, fourni par {2} de {3}"
 
 #: base/solver_problems.cpp:61
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
@@ -317,7 +317,8 @@ msgstr "le paquet {0} de {1} entre en conflit avec {2}, fourni par lui-même"
 
 #: base/solver_problems.cpp:70
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "les paquets {0} de {1} et {3} de {4} rendent tous les deux {2} obsolète"
+msgstr ""
+"les paquets {0} de {1} et {3} de {4} rendent tous les deux {2} obsolète"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -408,73 +409,87 @@ msgstr "Problème : "
 msgid "Problem {}: "
 msgstr "Problème {} : "
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr "Cette transaction a déjà été exécutée par le passé."
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr ""
 "Impossible d'exécuter une transaction avec des problèmes de résolution."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr "Vérification de la transaction RPM échouée."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Impossible d'obtenir le verrou de transaction RPM. Une autre transaction est "
 "en cours."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr "Transaction RPM échouée."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr "Échec de la vérification de la signature."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr "Le dépôt n'a aucune clé PGP configurée."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr "La clé publique n'est pas installée."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr "Annulé par l'utilisateur."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr "Échec de l'importation de la clé publique."
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr "tsflag invalide : {}"
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "La clé publique \"{}\" est déjà présente, elle ne sera pas importée."
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Une erreur s'est produite lors de l'importation de la clé \"{}\" : {}"
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "La vérification PGP du paquet \"{}\" ({}) du dépôt \"{}\" a échoué : "
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr "L'importation de la clé n'a pas aidé, s'agissait-il de la bonne clé ?"
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
-msgstr "Attention : vérifications PGP ignorées pour {} paquet(s)."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1376
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+msgstr "Attention : vérifications PGP ignorées pour 1 paquet du dépôt : {}"
+
+#: base/transaction.cpp:1378
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"Attention : vérifications PGP ignorées pour {0} paquet du dépôt : {1}"
+msgstr[1] ""
+"Attention : vérifications PGP ignorées pour {0} paquets des dépôts : {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1312,19 +1327,19 @@ msgstr "Impossible de charger la bibliothèque partagée \"{}\" : {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Impossible d'obtenir l'adresse du symbole \"{}\" : {}"
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr "Échec de l'ouverture du fichier verrou \"{}\""
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr "Échec de l'obtention du verrou \"{}\""
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr "Échec de la fermeture du fichier verrou \"{}\""
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr "Échec de la suppression du fichier verrou \"{}\""
 

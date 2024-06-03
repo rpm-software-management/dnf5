@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
-"PO-Revision-Date: 2024-05-22 08:25+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-06-02 14:35+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -197,10 +197,8 @@ msgid "{0} from {1} has inferior architecture"
 msgstr "{}는 열악한 구조를 갖고 있습니다"
 
 #: base/solver_problems.cpp:43
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed package"
-msgstr "설치된 꾸러미 문제 "
+msgstr "설치된 꾸러미 문제"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -384,70 +382,81 @@ msgstr "문제: "
 msgid "Problem {}: "
 msgstr ""
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr ""
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr ""
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr ""
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr ""
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr ""
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr ""
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr ""
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr ""
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr ""
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr ""
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr ""
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr ""
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
 msgstr ""
+
+#: base/transaction.cpp:1376
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+msgstr ""
+
+#: base/transaction.cpp:1378
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1213,19 +1222,19 @@ msgstr ""
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr ""
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr ""
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr ""
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr ""
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr ""
 

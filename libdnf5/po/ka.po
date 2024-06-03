@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
-"PO-Revision-Date: 2024-05-19 07:36+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-30 11:36+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -202,16 +202,12 @@ msgid "{} does not belong to a distupgrade repository"
 msgstr "{}-ი distupgrade ტიპის რეპოზიტორიას არ მიეკუთვნება"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
-msgstr "{}-ს უარესი არქიტექტურა გააჩნია"
+msgstr "{0}-ს {1}-დან უფრო დაბალი არქიტექტურა გააჩნია"
 
 #: base/solver_problems.cpp:43
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed package"
-msgstr "პრობლემა დაყენებულ პაკეტთან "
+msgstr "პრობლემა დაყენებულ პაკეტთან"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -246,98 +242,75 @@ msgid "cannot install the best candidate for the job"
 msgstr "ამოცანის პირობებისთვის საუკეთესო კანდიდატის დაყენების შეცდომა"
 
 #: base/solver_problems.cpp:52
-#, fuzzy
-#| msgid "package {} is filtered out by modular filtering"
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr "პაკეტი {} მოდულარული ფილტრით გაიფილტრა"
+msgstr "{0} პაკეტი {1}-დან მოდულარული ფილტრით გაიფილტრა"
 
 #: base/solver_problems.cpp:53
-#, fuzzy
-#| msgid "package {} does not have a compatible architecture"
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr "პაკეტს {} თავსებადი არქიტექტურა არ გააჩნია"
+msgstr "{0} პაკეტს {1}-დან თავსებადი არქიტექტურა არ გააჩნია"
 
 #: base/solver_problems.cpp:54
-#, fuzzy
-#| msgid "package {} is not installable"
 msgid "package {0} from {1} is not installable"
-msgstr "პაკეტი {} დაყენებადი არაა"
+msgstr "{0} პაკეტი {1}-ადნ დაყენებადი არაა"
 
 #: base/solver_problems.cpp:55
-#, fuzzy
-#| msgid "package {} is filtered out by exclude filtering"
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr "პაკეტი {} გაიფილტრა ამოღების ფილტრის მიერ"
+msgstr "{0} პაკეტი {1}-დან გაიფილტრა ამოღების ფილტრის მიერ"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
-#| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr "არცერთი პაკეტი წარმოადგენს {0}-ს, რომელიც {1}-ს სჭირდება"
+msgstr "არცერთი პაკეტი წარმოადგენს {0}-ს, რომელიც {1}-ს სჭირდება {2}-დან"
 
 #: base/solver_problems.cpp:57
-#, fuzzy
-#| msgid "cannot install both {0} and {1}"
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr "{0}-ის და {1}-ის ერთდრულად დაყენება შეუძლებელია"
+msgstr "{0}-ის და {1}-ის {2}-დან ერთდროულად დაყენება შეუძლებელია"
 
 #: base/solver_problems.cpp:58
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr "პაკეტი {0} კონფლიქტშია {1}-სთან, რომელსაც {2} წარმოადგენს"
+msgstr "პაკეტი {0} კონფლიქტშია {1}-სთან, რომელსაც {2} წარმოადგენს {3} {4}-დან"
 
 #: base/solver_problems.cpp:60
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "პაკეტი {0} კონფლიქტშია {1}-სთან, რომელსაც {2} წარმოადგენს"
+msgstr "პაკეტი {0} კონფლიქტშია {1}-სთან, რომელსაც {2} წარმოადგენს {2} {3}-დან"
 
 #: base/solver_problems.cpp:61
-#, fuzzy
-#| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr "პაკეტი {0} მოძველებულად მონიშნავს {1}-ს, რომელსაც {2} წარმოადგენს"
+msgstr ""
+"პაკეტი {0} მოძველებულად მონიშნავს {1}-ს, რომელსაც {2} წარმოადგენს {3} {4}-დან"
 
 #: base/solver_problems.cpp:62
-#, fuzzy
-#| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
 msgstr ""
-"დაყენებული პაკეტი {0} მოძველებულად მონიშნვს {1}-ს, რომელსაც {2} წარმოადგენს"
+"დაყენებული პაკეტი {0} მოძველებულად მონიშანვს {1}-ს, რომელსაც წარმოადგენს {2} "
+"{3}-დან"
 
 #: base/solver_problems.cpp:64
-#, fuzzy
-#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
-msgstr "პაკეტი {0} მოძველებულად მონიშნავს {1}-ს, რომელსაც {2} წარმოადგენს"
+msgstr ""
+"პაკეტი {0} {1}-დან მოძველებულად მონიშნავს {2}-ს, რომელსაც წარმოადგენს {3}{4}-"
+"დან"
 
 #: base/solver_problems.cpp:66
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
-msgstr "პაკეტი {1} მოითხოვს {0}-ს, მაგრამ მომწოდებლების დაყენება შეუძლებელია"
+msgstr ""
+"პაკეტი {1} {2}-დან მოითხოვს {0}-ს, მაგრამ მომწოდებლების დაყენება შეუძლებელია"
 
 #: base/solver_problems.cpp:68
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
-msgstr "პაკეტი {1} მოითხოვს {0}-ს, მაგრამ მომწოდებლების დაყენება შეუძლებელია"
+msgstr ""
+"დაყენებული პაკეტი {1} მოითხოვს {0}-ს, მაგრამ მომწოდებლების დაყენება "
+"შეუძლებელია"
 
 #: base/solver_problems.cpp:69
-#, fuzzy
-#| msgid "package {1} conflicts with {0} provided by itself"
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr "პაკეტი {1} კონფლიქტშია {0}-სთან, რომელსაც თვითონვე წარმოადგენს"
+msgstr "პაკეტი {0} {1}-დან კონფლიქტშია {2}-სთან, რომელსაც თვითონვე წარმოადგენს"
 
 #: base/solver_problems.cpp:70
-#, fuzzy
-#| msgid "both package {0} and {2} obsolete {1}"
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "ორივე პაკეტი, {0} და {2}, {1}-ის მიერ მოძველებულადაა მონიშნული"
+msgstr "ორივე პაკეტი, {0} {1}-დან და {3} {4}-დან მოძველებულად მონიშნავს {2}-ს"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -426,71 +399,87 @@ msgstr "პრობლემა: "
 msgid "Problem {}: "
 msgstr "პრობლემა {}: "
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr "ეს ტრანზაქცია ადრე უკვე იყო გაშვებული."
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr "შეუძლებელია ტრანზაქციის გაშვება პრობლემების გადაწყვეტით."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr "Rpm-ის ტრანზაქციის შემოწმება ჩავარდა."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "შეცდომა rpm-ის ტრანზაქციის ბლოკის მიღებისას. მიმდინარეობს სხვა ტრანზაქცია."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr "Rpm-ის ტრანზაქცია ჩავარდა."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr "ხელმოწერის გადამოწმება ჩავარდა."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr "რეპოზიტორიას PGP გასაღებები მითითებული არ აქვს."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr "საჯარო გასაღები დაყენებული არაა."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr "გაუქმდა მომხმარებლის მიერ."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "PGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
-msgstr "გაფრთხილება: PGP-ით შემოწმების გამოტოვება {} პაკეტისთვის."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1376
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+msgstr ""
+"გაფრთხილება: PGP-ით შემოწმების გამოტოვება 1 პაკეტისთვის რეპოზიტორიიდან: {}"
+
+#: base/transaction.cpp:1378
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"გაფრთხილება: PGP-ით შემოწმების გამოტოვება {0} პაკეტისთვის რეპოზიტორიიდან: {1}"
+msgstr[1] ""
+"გაფრთხილება: PGP-ით შემოწმების გამოტოვება {0} პაკეტისთვის რეპოზიტორიებიდან: "
+"{1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1301,19 +1290,19 @@ msgstr "გაზიარებული ბიბლიოთეკის ფ�
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" გახსნისას"
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr "შეცდომა ბლოკის \"{}\" მიღებისას"
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" დახურვისას"
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr "შეცდომა დაბლოკვის ფაილის \"{}\" წაშლისას"
 

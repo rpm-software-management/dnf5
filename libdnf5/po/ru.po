@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-28 02:52+0000\n"
-"PO-Revision-Date: 2024-05-20 17:36+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-31 23:30+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ru/>\n"
@@ -205,16 +205,12 @@ msgid "{} does not belong to a distupgrade repository"
 msgstr "{} не принадлежит репозиторию distupgrade"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
-msgstr "{} имеет низкую архитектуру"
+msgstr "{0} из {1} имеет низкую архитектуру"
 
 #: base/solver_problems.cpp:43
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed package"
-msgstr "проблема с установленным пакетом "
+msgstr "проблема с установленным пакетом"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -249,99 +245,72 @@ msgid "cannot install the best candidate for the job"
 msgstr "Невозможно установить лучшего кандидата для работы"
 
 #: base/solver_problems.cpp:52
-#, fuzzy
-#| msgid "package {} is filtered out by modular filtering"
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr "пакет {} отфильтровывается с помощью модульной фильтрации"
+msgstr "пакет {0} из {1} отфильтровывается с помощью модульной фильтрации"
 
 #: base/solver_problems.cpp:53
-#, fuzzy
-#| msgid "package {} does not have a compatible architecture"
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr "пакет {} не имеет совместимой архитектуры"
+msgstr "пакет {0} из {1} не имеет совместимой архитектуры"
 
 #: base/solver_problems.cpp:54
-#, fuzzy
-#| msgid "package {} is not installable"
 msgid "package {0} from {1} is not installable"
-msgstr "пакет {} не может быть установлен"
+msgstr "пакет {0} из {1} не может быть установлен"
 
 #: base/solver_problems.cpp:55
-#, fuzzy
-#| msgid "package {} is filtered out by exclude filtering"
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr "пакет {} отфильтровывается с помощью фильтрации исключений"
+msgstr "пакет {0} из {1} отфильтровывается с помощью фильтрации исключений"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
-#| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr "ничто не предоставляет {0}, необходимый для {1}"
+msgstr "ничто не предоставляет {0}, необходимый для {1} из {2}"
 
 #: base/solver_problems.cpp:57
-#, fuzzy
-#| msgid "cannot install both {0} and {1}"
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr "нельзя установить и {0}, и {1}"
+msgstr "нельзя установить как {0} из {1}, так и {2} из {3}"
 
 #: base/solver_problems.cpp:58
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr "пакет {0} конфликтует с {1}, предоставляемым {2}"
+msgstr "пакет {0} из {1} конфликтует с {2}, предоставляемым {3} из {4}"
 
 #: base/solver_problems.cpp:60
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "пакет {0} конфликтует с {1}, предоставляемым {2}"
+msgstr "установленный пакет {0} конфликтует с {1}, предоставляемым {2} из {3}"
 
 #: base/solver_problems.cpp:61
-#, fuzzy
-#| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr "пакет {0} заменяет {1}, предоставляемый {2}"
+msgstr "пакет {0} из {1} заменяет {2}, предоставляемый {3} из {4}"
 
 #: base/solver_problems.cpp:62
-#, fuzzy
-#| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
-msgstr "установленный пакет {0} заменяет {1}, предоставляемый {2}"
+msgstr "установленный пакет {0} заменяет {1}, предоставляемый {2} из {3}"
 
 #: base/solver_problems.cpp:64
-#, fuzzy
-#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
-msgstr "пакет {0} косвенно заменяет {1}, предоставляемый {2}"
+msgstr "пакет {0} из {1} косвенно заменяет {2}, предоставляемый {3} из {4}"
 
 #: base/solver_problems.cpp:66
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
 msgstr ""
-"пакет {1} требует {0}, но ни один из поставщиков не может быть установлен"
+"пакет {1} из {2} требует {0}, но ни один из поставщиков не может быть "
+"установлен"
 
 #: base/solver_problems.cpp:68
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
 msgstr ""
-"пакет {1} требует {0}, но ни один из поставщиков не может быть установлен"
+"установленный пакет {1} требует {0}, но ни один из поставщиков не может быть "
+"установлен"
 
 #: base/solver_problems.cpp:69
-#, fuzzy
-#| msgid "package {1} conflicts with {0} provided by itself"
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr "пакет {1} конфликтует с пакетом {0}, предоставленным самостоятельно"
+msgstr ""
+"пакет {0} из {1} конфликтует с пакетом {2}, предоставленным самостоятельно"
 
 #: base/solver_problems.cpp:70
-#, fuzzy
-#| msgid "both package {0} and {2} obsolete {1}"
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "оба пакета {0} и {2} заменяют {1}"
+msgstr "оба пакета {0} из {1} и {3} из {4} заменяют {2}"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -429,71 +398,87 @@ msgstr "Проблема: "
 msgid "Problem {}: "
 msgstr "Проблема {}: "
 
-#: base/transaction.cpp:76
+#: base/transaction.cpp:77
 msgid "This transaction has been already run before."
 msgstr "Эта транзакция уже выполнялась ранее."
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
 msgstr "Невозможно запустить транзакцию с разрешением проблем."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
 msgstr "Сбой проверки транзакций rpm."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Не удалось получить блокировку транзакции rpm. Выполняется другая транзакция."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction failed."
 msgstr "Сбой транзакции rpm."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:83
 msgid "Signature verification failed."
 msgstr "Сбой проверки подписей."
 
-#: base/transaction.cpp:86
+#: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
 msgstr "В репозитории не настроено ни одного ключа PGP."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:88
 msgid "Public key is not installed."
 msgstr "Публичный ключ не установлен."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:89
 msgid "Canceled by the user."
 msgstr "Отменено пользователем."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "Public key import failed."
 msgstr "Сбой импорта публичного ключа."
 
-#: base/transaction.cpp:936
+#: base/transaction.cpp:937
 msgid "Invalid tsflag: {}"
 msgstr "Недопустимый tsflag: {}"
 
-#: base/transaction.cpp:1270
+#: base/transaction.cpp:1271
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Публичный ключ \"{}\" уже присутствует, не импортируется."
 
-#: base/transaction.cpp:1291
+#: base/transaction.cpp:1292
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
-#: base/transaction.cpp:1324
+#: base/transaction.cpp:1326
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
-#: base/transaction.cpp:1351
+#: base/transaction.cpp:1354
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Импорт ключа не помог, неправильный ключ?"
 
-#: base/transaction.cpp:1369
-msgid "Warning: skipped PGP checks for {} package(s)."
-msgstr "Предупреждение: пропущены PGP-проверки для {} пакета(ов)."
+#: base/transaction.cpp:1373
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1376
+msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+msgstr "Предупреждение: пропущены проверки PGP для 1 пакета из репозитория: {}"
+
+#: base/transaction.cpp:1378
+msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозитория: {1}"
+msgstr[1] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+msgstr[2] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -1303,19 +1288,19 @@ msgstr "Невозможно загрузить общую библиотеку 
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Невозможно получить адрес символа \"{}\": {}"
 
-#: utils/locker.cpp:43
+#: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
 msgstr "Не удалось открыть файл блокировки \"{}\""
 
-#: utils/locker.cpp:58
+#: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
 msgstr "Не удалось получить блокировку \"{}\""
 
-#: utils/locker.cpp:68
+#: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
 msgstr "Не удалось закрыть файл блокировки \"{}\""
 
-#: utils/locker.cpp:71
+#: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
 msgstr "Не удалось удалить файл блокировки \"{}\""
 
