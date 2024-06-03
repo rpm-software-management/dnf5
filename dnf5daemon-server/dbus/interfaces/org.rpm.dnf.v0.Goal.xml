@@ -85,6 +85,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Following @options are supported:
             - comment: string
                 Adds a comment to a transaction.
+            - offline: boolean, default false
+                If true, the transaction will be prepared to run during the next reboot. Otherwise, it will run immediately.
 
         Unknown options are ignored.
     -->

@@ -88,6 +88,10 @@ public:
     std::optional<std::string> session_locale;
     void confirm_key(const std::string & key_id, const bool confirmed);
     bool wait_for_key_confirmation(const std::string & key_id, sdbus::Signal & signal);
+    /// download packages for the current transaction
+    void download_transaction_packages();
+    /// prepare the current transaction to run during the next reboot
+    void store_transaction_offline();
 
 private:
     sdbus::IConnection & connection;
