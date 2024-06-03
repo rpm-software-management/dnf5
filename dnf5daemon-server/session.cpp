@@ -30,9 +30,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/transaction/offline.hpp>
+#include <libdnf5/utils/fs/file.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <optional>
 #include <string>
@@ -282,4 +286,97 @@ bool Session::check_authorization(
     */
 
     return res_is_authorized;
+}
+
+void Session::download_transaction_packages() {
+    libdnf5::repo::PackageDownloader downloader(base->get_weak_ptr());
+
+    // container is owner of package callbacks user_data
+    std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
+    for (auto & tspkg : transaction->get_transaction_packages()) {
+        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+            auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
+            data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
+            downloader.add(tspkg.get_package(), data.get());
+        }
+    }
+
+    downloader.download();
+}
+
+void Session::store_transaction_offline() {
+    const auto & installroot = base->get_config().get_installroot_option().get_value();
+    const auto & dest_dir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path() / "packages";
+    std::filesystem::create_directories(dest_dir);
+    base->get_config().get_destdir_option().set(dest_dir);
+    download_transaction_packages();
+
+    const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
+    std::filesystem::create_directories(offline_datadir);
+
+    constexpr const char * packages_in_trans_dir{"./packages"};
+    constexpr const char * comps_in_trans_dir{"./comps"};
+    const auto & comps_location = offline_datadir / comps_in_trans_dir;
+
+    const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+    libdnf5::offline::OfflineTransactionState state{state_path};
+
+    auto & state_data = state.get_data();
+
+    state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
+    state.write();
+
+    // First, serialize the transaction
+    transaction->store_comps(comps_location);
+
+    const auto transaction_json_path = offline_datadir / "transaction.json";
+    libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
+    transaction_json_file.write(transaction->serialize(packages_in_trans_dir, comps_in_trans_dir));
+    transaction_json_file.close();
+
+    // Then, test the serialized transaction
+    // TODO(mblaha): store transaction test/run problems in the session and add an API
+    // to retrieve it
+    const auto & test_goal = std::make_unique<libdnf5::Goal>(*base);
+    test_goal->add_serialized_transaction(transaction_json_path);
+    auto test_transaction = test_goal->resolve();
+    if (test_transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
+        throw sdbus::Error(dnfdaemon::ERROR_TRANSACTION, "failed to resolve serialized offline transaction.");
+    }
+    base->get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+
+    auto result = test_transaction.run();
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        throw sdbus::Error(
+            dnfdaemon::ERROR_TRANSACTION,
+            fmt::format(
+                "offline rpm transaction test failed with code {}.",
+                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(result)));
+    }
+
+    // Download and transaction test complete. Fill out entries in offline
+    // transaction state file.
+    state_data.set_cachedir(base->get_config().get_cachedir_option().get_value());
+
+    state_data.set_cmd_line("dnf5daemon-server");
+
+    const auto & detected_releasever = libdnf5::Vars::detect_release(base->get_weak_ptr(), installroot);
+    if (detected_releasever != nullptr) {
+        state_data.set_system_releasever(*detected_releasever);
+    }
+    state_data.set_target_releasever(base->get_vars()->get_value("releasever"));
+
+    const auto module_platform_id = base->get_config().get_module_platform_id_option();
+    if (!module_platform_id.empty()) {
+        state_data.set_module_platform_id(module_platform_id.get_value());
+    }
+
+    // create the magic symlink /system-update -> datadir
+    if (!std::filesystem::is_symlink(libdnf5::offline::MAGIC_SYMLINK)) {
+        std::filesystem::create_symlink(offline_datadir, libdnf5::offline::MAGIC_SYMLINK);
+    }
+    state_data.set_status(libdnf5::offline::STATUS_READY);
+
+    state.write();
 }
