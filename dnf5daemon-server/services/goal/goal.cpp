@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
-#include <libdnf5/repo/package_downloader.hpp>
+#include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/transaction/transaction_item.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -265,24 +265,6 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 }
 
 
-// TODO (mblaha) callbacks to report the status
-void download_packages(Session & session, libdnf5::base::Transaction & transaction) {
-    libdnf5::repo::PackageDownloader downloader(session.get_base()->get_weak_ptr());
-
-    // container is owner of package callbacks user_data
-    std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
-    for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
-            auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
-            data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
-            downloader.add(tspkg.get_package(), data.get());
-        }
-    }
-
-    downloader.download();
-}
-
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     transaction_resolved_assert();
     if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
@@ -293,29 +275,34 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
 
-    auto * transaction = session.get_transaction();
+    bool offline = dnfdaemon::key_value_map_get<bool>(options, "offline", false);
 
-    download_packages(session, *transaction);
+    if (offline) {
+        session.store_transaction_offline();
+        // TODO(mblaha): signalize reboot?
+    } else {
+        session.download_transaction_packages();
 
-    std::string comment;
-    if (options.find("comment") != options.end()) {
-        comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
+        std::string comment;
+        if (options.find("comment") != options.end()) {
+            comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
+        }
+
+        auto * transaction = session.get_transaction();
+        transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
+        transaction->set_description("dnf5daemon-server");
+        transaction->set_comment(comment);
+
+        auto rpm_result = transaction->run();
+        if (rpm_result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+            throw sdbus::Error(
+                dnfdaemon::ERROR_TRANSACTION,
+                fmt::format(
+                    "rpm transaction failed with code {}.",
+                    static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(rpm_result)));
+        }
+        // TODO(mblaha): clean up downloaded packages after successful transaction
     }
-
-    transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
-    transaction->set_description("dnf5daemon-server");
-    transaction->set_comment(comment);
-
-    auto rpm_result = transaction->run();
-    if (rpm_result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        throw sdbus::Error(
-            dnfdaemon::ERROR_TRANSACTION,
-            fmt::format(
-                "rpm transaction failed with code {}.",
-                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(rpm_result)));
-    }
-
-    // TODO(mblaha): clean up downloaded packages after successful transaction
 
     auto reply = call.createReply();
     return reply;
