@@ -1485,7 +1485,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 settings,
                 libdnf5::transaction::TransactionItemType::PACKAGE,
                 spec,
-                {},
+                query_to_vec_of_nevra_str(relevant_available_na),
                 log_level);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::INSTALLED_IN_DIFFERENT_VERSION;
         } else {
