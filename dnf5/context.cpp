@@ -173,7 +173,12 @@ public:
     void set_should_store_offline(bool should_store_offline) { this->should_store_offline = should_store_offline; }
     bool get_should_store_offline() const { return should_store_offline; }
 
-    void set_json_output_requested(bool json_output) { this->json_output = json_output; }
+    void set_json_output_requested(bool json_output) {
+        this->json_output = json_output;
+        if (json_output) {
+            set_quiet(true);
+        }
+    }
     bool get_json_output_requested() const { return json_output; }
 
     libdnf5::Base & get_base() { return base; };
