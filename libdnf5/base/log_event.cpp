@@ -220,9 +220,10 @@ std::string LogEvent::to_string(
         case GoalProblem::INSTALLED_IN_DIFFERENT_VERSION:
             if (action == GoalAction::REINSTALL) {
                 return ret.append(utils::sformat(
-                    _("Packages for argument '{}' installed and available, but in a different version => cannot "
-                      "reinstall"),
-                    *spec));
+                    _("Installed packages for argument '{0}' are not available in repositories in the same version, "
+                      "available versions: {1}, cannot reinstall."),
+                    *spec,
+                    libdnf5::utils::string::join(additional_data, ",")));
             } else if (goal_action_is_replay(action)) {
                 return ret.append(utils::sformat(
                     _("Cannot perform {0} because '{1}' is installed in a different version: '{2}'."),
