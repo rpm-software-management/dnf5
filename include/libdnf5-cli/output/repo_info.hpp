@@ -40,6 +40,8 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
+void print_repoinfo_json(const std::vector<std::unique_ptr<IRepoInfo>> & repos);
+
 }  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF5_CLI_OUTPUT_REPO_INFO_HPP

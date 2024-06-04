@@ -24,7 +24,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/utils/units.hpp"
 
+#include <json-c/json_object.h>
+
+#include <iostream>
+
 namespace libdnf5::cli::output {
+
+namespace {
+
+std::vector<std::string> flatten_distro_tags(const std::vector<std::pair<std::string, std::string>> & distro_tags) {
+    std::vector<std::string> distro_tags_flat;
+    for (auto & key_value : distro_tags) {
+        distro_tags_flat.push_back(key_value.second + " (" + key_value.first + ")");
+    }
+    return distro_tags_flat;
+}
+
+}  // namespace
 
 class RepoInfo::Impl : public KeyValueTable {
 public:
@@ -155,13 +171,9 @@ void RepoInfo::Impl::add_repo(IRepoInfo & repo) {
             add_line("Content tags", content_tags, nullptr, group_repodata);
         }
 
-        auto distro_tags_flat = repo.get_distro_tags();
-        if (!distro_tags_flat.empty()) {
-            std::vector<std::string> distro_tags;
-            for (auto & key_value : distro_tags_flat) {
-                distro_tags.push_back(key_value.second + " (" + key_value.first + ")");
-            }
-            add_line("Distro tags", distro_tags, nullptr, group_repodata);
+        auto distro_tags = repo.get_distro_tags();
+        if (!distro_tags.empty()) {
+            add_line("Distro tags", flatten_distro_tags(distro_tags), nullptr, group_repodata);
         }
 
         add_line("Revision", repo.get_revision(), nullptr, group_repodata);
@@ -193,6 +205,76 @@ void RepoInfo::add_repo(IRepoInfo & repo) {
 
 void RepoInfo::print() {
     p_impl->print();
+}
+
+void print_repoinfo_json([[maybe_unused]] const std::vector<std::unique_ptr<IRepoInfo>> & repos) {
+    json_object * json_repos = json_object_new_array();
+    for (const auto & repo : repos) {
+        json_object * json_repo = json_object_new_object();
+        json_object_object_add(json_repo, "id", json_object_new_string(repo->get_id().c_str()));
+        json_object_object_add(json_repo, "name", json_object_new_string(repo->get_name().c_str()));
+        json_object_object_add(json_repo, "is_enabled", json_object_new_boolean(repo->is_enabled()));
+        json_object_object_add(json_repo, "priority", json_object_new_int(repo->get_priority()));
+        json_object_object_add(json_repo, "cost", json_object_new_int(repo->get_cost()));
+        json_object_object_add(json_repo, "type", json_object_new_string(repo->get_type().c_str()));
+
+        json_object * json_exclude_pkgs = json_object_new_array();
+        for (const auto & pkg : repo->get_excludepkgs()) {
+            json_object_array_add(json_exclude_pkgs, json_object_new_string(pkg.c_str()));
+        }
+        json_object_object_add(json_repo, "exclude_pkgs", json_exclude_pkgs);
+
+        json_object * json_include_pkgs = json_object_new_array();
+        for (const auto & pkg : repo->get_includepkgs()) {
+            json_object_array_add(json_include_pkgs, json_object_new_string(pkg.c_str()));
+        }
+        json_object_object_add(json_repo, "include_pkgs", json_include_pkgs);
+
+        json_object_object_add(json_repo, "timestamp", json_object_new_int64(repo->get_timestamp()));
+        json_object_object_add(json_repo, "metadata_expire", json_object_new_int(repo->get_metadata_expire()));
+        json_object_object_add(
+            json_repo, "skip_if_unavailable", json_object_new_boolean(repo->get_skip_if_unavailable()));
+        json_object_object_add(json_repo, "repo_file_path", json_object_new_string(repo->get_repo_file_path().c_str()));
+
+        json_object * json_baseurls = json_object_new_array();
+        for (const auto & url : repo->get_baseurl()) {
+            json_object_array_add(json_baseurls, json_object_new_string(url.c_str()));
+        }
+        json_object_object_add(json_repo, "base_url", json_baseurls);
+
+        json_object_object_add(json_repo, "metalink", json_object_new_string(repo->get_metalink().c_str()));
+        json_object_object_add(json_repo, "mirrorlist", json_object_new_string(repo->get_mirrorlist().c_str()));
+
+        json_object * json_gpg_keys = json_object_new_array();
+        for (const auto & key : repo->get_gpgkey()) {
+            json_object_array_add(json_gpg_keys, json_object_new_string(key.c_str()));
+        }
+        json_object_object_add(json_repo, "gpg_key", json_gpg_keys);
+
+        json_object_object_add(json_repo, "repo_gpgcheck", json_object_new_boolean(repo->get_repo_gpgcheck()));
+        json_object_object_add(json_repo, "gpgcheck", json_object_new_boolean(repo->get_gpgcheck()));
+        json_object_object_add(json_repo, "available_pkgs", json_object_new_uint64(repo->get_available_pkgs()));
+        json_object_object_add(json_repo, "pkgs", json_object_new_uint64(repo->get_pkgs()));
+        json_object_object_add(json_repo, "size", json_object_new_uint64(repo->get_size()));
+
+        json_object * json_content_tags = json_object_new_array();
+        for (const auto & tag : repo->get_content_tags()) {
+            json_object_array_add(json_content_tags, json_object_new_string(tag.c_str()));
+        }
+        json_object_object_add(json_repo, "content_tags", json_content_tags);
+
+        json_object * json_distro_tags = json_object_new_array();
+        for (const auto & tag : flatten_distro_tags(repo->get_distro_tags())) {
+            json_object_array_add(json_distro_tags, json_object_new_string(tag.c_str()));
+        }
+        json_object_object_add(json_repo, "distro_tags", json_distro_tags);
+
+        json_object_object_add(json_repo, "revision", json_object_new_string(repo->get_revision().c_str()));
+        json_object_object_add(json_repo, "max_timestamp", json_object_new_int(repo->get_max_timestamp()));
+        json_object_array_add(json_repos, json_repo);
+    }
+    std::cout << json_object_to_json_string_ext(json_repos, JSON_C_TO_STRING_PRETTY) << std::endl;
+    json_object_put(json_repos);
 }
 
 }  // namespace libdnf5::cli::output
