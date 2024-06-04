@@ -106,6 +106,7 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
     }
     std::sort(repos.begin(), repos.end(), [](const auto & l, const auto & r) { return l->get_id() < r->get_id(); });
 
+    std::vector<std::unique_ptr<libdnf5::cli::output::IRepoInfo>> repo_wrappers;
     for (auto & repo : repos) {
         libdnf5::rpm::PackageQuery pkgs(get_context().get_base(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES);
         pkgs.filter_repo_id({repo->get_id()});
@@ -118,11 +119,20 @@ void RepoInfoCommand::print(const libdnf5::repo::RepoQuery & query, [[maybe_unus
             repo_size += pkg.get_download_size();
         }
 
-        libdnf5::cli::output::RepoInfo repo_info_table;
-        RepoInfoWrapper repo_wrapper(*repo, repo_size, pkgs.size(), available_pkgs.size());
-        repo_info_table.add_repo(repo_wrapper);
-        repo_info_table.print();
-        std::cout << std::endl;
+        repo_wrappers.emplace_back(
+            std::make_unique<RepoInfoWrapper>(*repo, repo_size, pkgs.size(), available_pkgs.size()));
+    }
+
+    auto & context = get_context();
+    if (context.get_json_output_requested()) {
+        libdnf5::cli::output::print_repoinfo_json(repo_wrappers);
+    } else {
+        for (auto & repo : repo_wrappers) {
+            libdnf5::cli::output::RepoInfo repo_info_table;
+            repo_info_table.add_repo(*repo);
+            repo_info_table.print();
+            std::cout << std::endl;
+        }
     }
 }
 
