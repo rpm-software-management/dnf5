@@ -153,6 +153,9 @@ std::string LogEvent::to_string(
                 } else {
                     return ret.append(utils::sformat(_("No match for group package: {}"), *spec));
                 }
+            } else if (goal_action_is_replay(action)) {
+                return ret.append(
+                    utils::sformat(_("Cannot perform {0}, no match for: {1}."), goal_action_to_string(action), *spec));
             }
             return ret.append(utils::sformat(_("No match for argument: {}"), *spec));
         case GoalProblem::NOT_FOUND_IN_REPOSITORIES:
@@ -160,16 +163,42 @@ std::string LogEvent::to_string(
                 _("No match for argument '{0}' in repositories '{1}'"),
                 *spec,
                 utils::string::join(settings->get_to_repo_ids(), ", ")));
-        case GoalProblem::NOT_INSTALLED:
+        case GoalProblem::NOT_INSTALLED: {
+            if (goal_action_is_replay(action)) {
+                return ret.append(utils::sformat(
+                    _("Cannot perform {0} for {1} '{2}' becasue it is not installed."),
+                    goal_action_to_string(action),
+                    transaction_item_type_to_string(*spec_type),
+                    *spec));
+            }
             return ret.append(utils::sformat(_("Packages for argument '{}' available, but not installed."), *spec));
+        }
         case GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE:
             return ret.append(utils::sformat(
                 _("Packages for argument '{}' available, but installed for a different architecture."), *spec));
         case GoalProblem::ONLY_SRC:
+            if (goal_action_is_replay(action)) {
+                return ret.append(utils::sformat(
+                    _("Cannot perform {0} because '{1}' matches only source packages."),
+                    goal_action_to_string(action),
+                    *spec));
+            }
             return ret.append(utils::sformat(_("Argument '{}' matches only source packages."), *spec));
         case GoalProblem::EXCLUDED:
+            if (goal_action_is_replay(action)) {
+                return ret.append(utils::sformat(
+                    _("Cannot perform {0} because '{1}' matches only excluded packages."),
+                    goal_action_to_string(action),
+                    *spec));
+            }
             return ret.append(utils::sformat(_("Argument '{}' matches only excluded packages."), *spec));
         case GoalProblem::EXCLUDED_VERSIONLOCK:
+            if (goal_action_is_replay(action)) {
+                return ret.append(utils::sformat(
+                    _("Cannot perform {0} because '{1}' matches only packages excluded by versionlock."),
+                    goal_action_to_string(action),
+                    *spec));
+            }
             return ret.append(utils::sformat(_("Argument '{}' matches only packages excluded by versionlock."), *spec));
         case GoalProblem::HINT_ICASE:
             if (additional_data.size() != 1) {
@@ -194,6 +223,12 @@ std::string LogEvent::to_string(
                     _("Packages for argument '{}' installed and available, but in a different version => cannot "
                       "reinstall"),
                     *spec));
+            } else if (goal_action_is_replay(action)) {
+                return ret.append(utils::sformat(
+                    _("Cannot perform {0} because '{1}' is installed in a different version: '{2}'."),
+                    goal_action_to_string(action),
+                    *spec,
+                    libdnf5::utils::string::join(additional_data, ",")));
             }
             return ret.append(utils::sformat(
                 _("Packages for argument '{}' installed and available, but in a different version."), *spec));
