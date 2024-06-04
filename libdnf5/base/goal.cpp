@@ -590,6 +590,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::REPLAY_REASON_OVERRIDE: {
                 libdnf_throw_assertion("Unsupported action \"REPLAY REASON OVERRIDE\"");
             }
+            case GoalAction::REVERT_COMPS_UPGRADE: {
+                libdnf_throw_assertion("Unsupported action \"REVERT_COMPS_UPGRADE\"");
+            }
         }
     }
     return ret;
@@ -2548,9 +2551,7 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
         group_replay.group_id = group.to_string();
         // Do not revert UPGRADE for groups. Groups don't have an upgrade path so they cannot be
         // upgraded or downgraded. The UPGRADE action is basically a synchronization with
-        // current group definition. Reverting synchronization is again synchronization but
-        // with the older group definition, this happens automatically by reverting the rpm
-        // actions. We only have to keep the UPGRADE action to have a record of the operation.
+        // current group definition. Revert happens automatically by reverting the rpm actions.
         if (group.get_action() != transaction::TransactionItemAction::UPGRADE) {
             auto reverted_action = REVERT_ACTION.find(group.get_action());
             if (reverted_action == REVERT_ACTION.end()) {
@@ -2559,7 +2560,15 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
             }
             group_replay.action = reverted_action->second;
         } else {
-            group_replay.action = transaction::TransactionItemAction::UPGRADE;
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REVERT_COMPS_UPGRADE,
+                libdnf5::GoalProblem::UNSUPPORTED_ACTION,
+                settings,
+                libdnf5::transaction::TransactionItemType::GROUP,
+                group_replay.group_id,
+                {},
+                libdnf5::Logger::Level::WARNING);
+            continue;
         }
 
         if (group_replay.action == Action::INSTALL && group.get_reason() == Reason::CLEAN) {
@@ -2578,9 +2587,8 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
         env_replay.environment_id = env.to_string();
         // Do not revert UPGRADE for environments. Environments don't have an upgrade path so they cannot be
         // upgraded or downgraded. The UPGRADE action is basically a synchronization with
-        // current environment definition. Reverting synchronization is again synchronization but
-        // with the older environment definition, this happens automatically by reverting the rpm
-        // actions. We only have to keep the UPGRADE action to have a record of the operation.
+        // current environment definition. Revert happens automatically by reverting the rpm
+        // actions.
         if (env.get_action() != transaction::TransactionItemAction::UPGRADE) {
             auto reverted_action = REVERT_ACTION.find(env.get_action());
             if (reverted_action == REVERT_ACTION.end()) {
@@ -2589,7 +2597,15 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
             }
             env_replay.action = reverted_action->second;
         } else {
-            env_replay.action = transaction::TransactionItemAction::UPGRADE;
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REVERT_COMPS_UPGRADE,
+                libdnf5::GoalProblem::UNSUPPORTED_ACTION,
+                settings,
+                libdnf5::transaction::TransactionItemType::ENVIRONMENT,
+                env_replay.environment_id,
+                {},
+                libdnf5::Logger::Level::WARNING);
+            continue;
         }
 
         replay.environments.push_back(env_replay);
