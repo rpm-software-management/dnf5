@@ -256,6 +256,13 @@ std::string LogEvent::to_string(
         case GoalProblem::WRITE_DEBUG:
             return ret.append(utils::sformat(_("Debug data written to \"{}\""), *additional_data.begin()));
         case GoalProblem::UNSUPPORTED_ACTION:
+            if (action == GoalAction::REVERT_COMPS_UPGRADE) {
+                return ret.append(utils::sformat(
+                    _("{0} upgrade cannot be reverted, however associated package actions will be. ({1} id: '{2}') ."),
+                    transaction_item_type_to_string(*spec_type),
+                    transaction_item_type_to_string(*spec_type),
+                    *spec));
+            }
             return ret.append(utils::sformat(
                 _("{} action for argument \"{}\" is not supported."), goal_action_to_string(action), *spec));
         case GoalProblem::MULTIPLE_STREAMS: {

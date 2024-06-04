@@ -146,7 +146,8 @@ enum class GoalAction {
     REPLAY_UPGRADE,
     REPLAY_REINSTALL,
     REPLAY_REASON_CHANGE,
-    REPLAY_REASON_OVERRIDE
+    REPLAY_REASON_OVERRIDE,
+    REVERT_COMPS_UPGRADE
 };
 
 /// Convert GoalAction enum to user-readable string

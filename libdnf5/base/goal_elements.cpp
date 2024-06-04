@@ -391,6 +391,8 @@ std::string goal_action_to_string(GoalAction action) {
             return "Reason change action";
         case GoalAction::REPLAY_REASON_OVERRIDE:
             return "Reason override";
+        case GoalAction::REVERT_COMPS_UPGRADE:
+            return "Revert comps upgrade";
     }
     return "";
 }
