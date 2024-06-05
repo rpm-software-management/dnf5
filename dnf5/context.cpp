@@ -323,16 +323,17 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
     libdnf5::offline::OfflineTransactionState state{state_path};
 
-    if (state.get_data().status != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+    auto & offline_data = state.get_data();
+    if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
         std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
-                  << "\t" << state.get_data().cmd_line << std::endl
+                  << "\t" << offline_data.get_cmd_line() << std::endl
                   << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }
     }
 
-    state.get_data().status = libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE;
+    offline_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
     state.write();
 
     // First, serialize the transaction
@@ -372,8 +373,8 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     // Download and transaction test complete. Fill out entries in offline
     // transaction state file.
-    state.get_data().status = libdnf5::offline::STATUS_DOWNLOAD_COMPLETE;
-    state.get_data().cachedir = base.get_config().get_cachedir_option().get_value();
+    offline_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_COMPLETE);
+    offline_data.set_cachedir(base.get_config().get_cachedir_option().get_value());
 
     std::vector<std::string> command_vector;
     auto * current_command = owner.get_selected_command();
@@ -381,17 +382,17 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
         command_vector.insert(command_vector.begin(), current_command->get_argument_parser_command()->get_id());
         current_command = current_command->get_parent_command();
     }
-    state.get_data().verb = libdnf5::utils::string::join(command_vector, " ");
-    state.get_data().cmd_line = get_cmdline();
+    offline_data.set_verb(libdnf5::utils::string::join(command_vector, " "));
+    offline_data.set_cmd_line(get_cmdline());
 
     const auto & detected_releasever = libdnf5::Vars::detect_release(base.get_weak_ptr(), installroot);
     if (detected_releasever != nullptr) {
-        state.get_data().system_releasever = *detected_releasever;
+        offline_data.set_system_releasever(*detected_releasever);
     }
-    state.get_data().target_releasever = base.get_vars()->get_value("releasever");
+    offline_data.set_target_releasever(base.get_vars()->get_value("releasever"));
 
     if (!base.get_config().get_module_platform_id_option().empty()) {
-        state.get_data().module_platform_id = base.get_config().get_module_platform_id_option().get_value();
+        offline_data.set_module_platform_id(base.get_config().get_module_platform_id_option().get_value());
     }
 
     state.write();
