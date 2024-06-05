@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-04-12 07:36+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-16 02:51+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ru/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -48,7 +48,7 @@ msgid "Missing value for named argument \"--{}\""
 msgstr "Недостающее значение для именованного аргумента \"--{}\""
 
 #: argument_parser.cpp:519
-msgid "Unexpected value for named argumend \"--{}\""
+msgid "Unexpected value for named argument \"--{}\""
 msgstr "Неожиданное значение для именованного аргумента \"--{}\""
 
 #: argument_parser.cpp:561

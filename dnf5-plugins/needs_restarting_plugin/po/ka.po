@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
 "PO-Revision-Date: 2024-03-21 05:35+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,6 +18,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.4\n"
 
-#: needs_restarting.cpp:232
+#: needs_restarting.cpp:229
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus-თან მიერთება შეუძლებელია: {}"

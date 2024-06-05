@@ -17,7 +17,7 @@ jobs:
   - job: propose_downstream
     trigger: release
     dist_git_branches:
-      - fedora-all
+      - fedora-rawhide
     copy_upstream_release_description: true
   - job: koji_build
     trigger: commit

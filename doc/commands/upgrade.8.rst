@@ -39,7 +39,9 @@ Options
 =======
 
 ``--minimal``
-    | Update packages only to the lowest available version that provides bug fixes, enhancements, or security fixes.
+    | Upgrade packages only to the lowest available versions that fix advisories of type bugfix, enhancement, security, or
+    | newpackage. In case that any option limiting advisories is used it upgrades packages only to the lowest versions
+    | that fix advisories matching selected advisory properties
 
 ``--allowerasing``
     | Allow erasing of installed packages to resolve any potential dependency problems.

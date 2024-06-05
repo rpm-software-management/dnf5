@@ -45,6 +45,7 @@ public:
     void run() override;
 
 protected:
+    libdnf5::OptionBool * minimal{nullptr};
     libdnf5::OptionBool * changelogs{nullptr};
     std::vector<std::string> pkg_specs;
 

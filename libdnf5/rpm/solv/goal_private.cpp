@@ -484,6 +484,7 @@ void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
 
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
     auto & pool = get_rpm_pool();
+    auto * installed_repo = pool->installed;
 
     libdnf_assert_goal_resolved();
 
@@ -564,9 +565,15 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
                         case SOLVER_RULE_PKG_SAME_NAME:
                             rule = ProblemRules::RULE_PKG_SAME_NAME;
                             break;
-                        case SOLVER_RULE_PKG_CONFLICTS:
-                            rule = ProblemRules::RULE_PKG_CONFLICTS;
-                            break;
+                        case SOLVER_RULE_PKG_CONFLICTS: {
+                            Solvable * src_solvable = pool.id2solvable(source);
+                            Solvable * tgt_solvable = pool.id2solvable(target);
+                            if (src_solvable->repo == installed_repo || tgt_solvable->repo == installed_repo) {
+                                rule = ProblemRules::RULE_PKG_INSTALLED_CONFLICTS;
+                            } else {
+                                rule = ProblemRules::RULE_PKG_CONFLICTS;
+                            }
+                        } break;
                         case SOLVER_RULE_PKG_OBSOLETES:
                             rule = ProblemRules::RULE_PKG_OBSOLETES;
                             break;
@@ -576,9 +583,14 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
                         case SOLVER_RULE_PKG_IMPLICIT_OBSOLETES:
                             rule = ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES;
                             break;
-                        case SOLVER_RULE_PKG_REQUIRES:
-                            rule = ProblemRules::RULE_PKG_REQUIRES;
-                            break;
+                        case SOLVER_RULE_PKG_REQUIRES: {
+                            Solvable * solvable = pool.id2solvable(source);
+                            if (solvable->repo == installed_repo) {
+                                rule = ProblemRules::RULE_PKG_INSTALLED_REQUIRES;
+                            } else {
+                                rule = ProblemRules::RULE_PKG_REQUIRES;
+                            }
+                        } break;
                         case SOLVER_RULE_PKG_SELF_CONFLICT:
                             rule = ProblemRules::RULE_PKG_SELF_CONFLICT;
                             break;

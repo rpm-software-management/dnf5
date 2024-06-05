@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "locker.hpp"
+#include "libdnf5/utils/locker.hpp"
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <unistd.h>
 
 namespace libdnf5::utils {
+
+Locker::Locker(const std::string & path) : path(path){};
 
 bool Locker::read_lock() {
     return lock(F_RDLCK);

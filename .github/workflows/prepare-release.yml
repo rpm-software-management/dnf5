@@ -20,7 +20,7 @@ jobs:
         uses: ./.github/actions/weblate-pull-translations
 
       - name: Prepare release content
-        uses: inknos/prepare-release@v1.1
+        uses: inknos/prepare-release@v1.2
         with:
           version: ${{ inputs.version }}
           specfiles: dnf5.spec

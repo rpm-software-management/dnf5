@@ -31,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 #include "transaction_module_impl.hpp"
 #include "transaction_package_impl.hpp"
-#include "utils/locker.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -39,11 +38,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query_cmp.hpp"
 #include "libdnf5/comps/group/query.hpp"
+#include "libdnf5/conf/const.hpp"
 #include "libdnf5/repo/package_downloader.hpp"
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/format.hpp"
+#include "libdnf5/utils/locker.hpp"
 
 #include <fmt/format.h>
 #include <unistd.h>
@@ -449,6 +450,7 @@ std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcep
 
 void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_goal) {
     auto & pool = get_rpm_pool(base);
+    auto * installed_repo = pool->installed;
 
     libdnf5::rpm::PackageQuery skip_broken(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
     libdnf5::rpm::PackageQuery skip_conflict(base, libdnf5::sack::ExcludeFlags::APPLY_EXCLUDES, true);
@@ -458,18 +460,25 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
     solver_problems.clear();
 
     for (auto & problem : goal_solver_problems) {
+        std::set<std::pair<int, int>> current_conflicting_rules;
         std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
 
         for (auto & [rule, source, dep, target, description] : problem) {
             std::vector<std::string> elements;
             ProblemRules tmp_rule = rule;
+            bool installed_conflicts = false;
             switch (rule) {
-                case ProblemRules::RULE_DISTUPGRADE:
                 case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3: {
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    break;
+                }
+                case ProblemRules::RULE_DISTUPGRADE:
                 case ProblemRules::RULE_UPDATE:
                 case ProblemRules::RULE_BEST_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
                     elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_JOB:
@@ -483,47 +492,90 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
                     elements.push_back(pool.dep2str(dep));
                     break;
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
-                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4: {
                     if (false) {
                         // TODO (jmracek) (modularExclude && modularExclude->has(source))
                     } else {
                         tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
                     }
-                    elements.push_back(pool.solvid2str(source));
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
                     break;
-                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                }
+                case ProblemRules::RULE_PKG_SELF_CONFLICT: {
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    elements.push_back(pool.dep2str(dep));
+                    break;
+                }
+                case ProblemRules::RULE_PKG_INSTALLED_REQUIRES:
                     elements.push_back(pool.dep2str(dep));
                     elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
-                case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_REQUIRES: {
                     skip_broken.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
+                    auto * src_solvable = pool.id2solvable(source);
                     elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
                     break;
-                case ProblemRules::RULE_PKG_SAME_NAME:
+                }
+                case ProblemRules::RULE_PKG_SAME_NAME: {
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.solvid2str(target));
-                    std::sort(elements.begin(), elements.end());
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    elements.push_back(src_solvable->repo->name);
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
                     break;
+                }
+                case ProblemRules::RULE_PKG_INSTALLED_CONFLICTS:
+                    installed_conflicts = true;
+                    [[fallthrough]];
                 case ProblemRules::RULE_PKG_CONFLICTS:
+                    if (current_conflicting_rules.contains(std::pair<int, int>(target, source))) {
+                        // do not add pkgA conflicts with pkgB rule if pkgB conflicts with PkgA rule is already present
+                        continue;
+                    }
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(source)));
                     skip_conflict.add(libdnf5::rpm::Package(base, libdnf5::rpm::PackageId(target)));
-                    elements.push_back(pool.solvid2str(source));
-                    elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(target));
-                    break;
+                    current_conflicting_rules.emplace(source, target);
+                    if (installed_conflicts) {
+                        // RULE_PKG_INSTALLED_CONFLICTS expects the first(source)
+                        // element to be an installed package
+                        if (pool.id2solvable(source)->repo != installed_repo) {
+                            std::swap(source, target);
+                        }
+                    }
+                    [[fallthrough]];
                 case ProblemRules::RULE_PKG_OBSOLETES:
-                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
-                case ProblemRules::RULE_YUMOBS:
+                case ProblemRules::RULE_YUMOBS: {
+                    auto * src_solvable = pool.id2solvable(source);
+                    elements.push_back(pool.solvable2str(src_solvable));
+                    if (!installed_conflicts) {
+                        elements.push_back(src_solvable->repo->name);
+                    }
+                    elements.push_back(pool.dep2str(dep));
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
+                    break;
+                }
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES: {
                     elements.push_back(pool.solvid2str(source));
                     elements.push_back(pool.dep2str(dep));
-                    elements.push_back(pool.solvid2str(target));
+                    auto * tgt_solvable = pool.id2solvable(target);
+                    elements.push_back(pool.solvable2str(tgt_solvable));
+                    elements.push_back(tgt_solvable->repo->name);
                     break;
+                }
                 case ProblemRules::RULE_UNKNOWN:
                     elements.push_back(description);
                     break;
@@ -853,7 +905,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     // acquire the lock
     std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
-    lock_file_path /= "run/dnf/rpmtransaction.lock";
+    lock_file_path /= std::filesystem::path(libdnf5::TRANSACTION_LOCK_FILEPATH).relative_path();
     std::filesystem::create_directories(lock_file_path.parent_path());
 
     libdnf5::utils::Locker locker(lock_file_path);
@@ -1264,7 +1316,8 @@ bool Transaction::Impl::check_gpg_signatures() {
     // TODO(mblaha): DNSsec key verification
     libdnf5::rpm::RpmSignature rpm_signature(base);
     std::set<std::string> processed_repos{};
-    int num_checks_skipped = 0;
+    unsigned long num_checks_skipped = 0;
+    std::set<std::string> repos_with_skipped_checks;
     for (const auto & trans_pkg : packages) {
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
             auto const & pkg = trans_pkg.get_package();
@@ -1277,6 +1330,7 @@ bool Transaction::Impl::check_gpg_signatures() {
             auto check_result = rpm_signature.check_package_signature(pkg);
             if (check_result == libdnf5::rpm::RpmSignature::CheckResult::SKIPPED) {
                 num_checks_skipped += 1;
+                repos_with_skipped_checks.insert(pkg.get_repo_id());
             } else if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                 // these two errors are possibly recoverable by importing the correct public key
                 auto is_error_recoverable =
@@ -1315,7 +1369,17 @@ bool Transaction::Impl::check_gpg_signatures() {
         }
     }
     if (num_checks_skipped > 0) {
-        auto warning_msg = utils::sformat(_("Warning: skipped PGP checks for {} package(s)."), num_checks_skipped);
+        auto repo_string = libdnf5::utils::string::join(
+            repos_with_skipped_checks, C_("It is a joining character for repositories IDs", ", "));
+        auto warning_msg =
+            (num_checks_skipped == 1)
+                ? utils::sformat(_("Warning: skipped PGP checks for 1 package from repository: {}"), repo_string)
+                : utils::sformat(
+                      P_("Warning: skipped PGP checks for {0} packages from repository: {1}",
+                         "Warning: skipped PGP checks for {0} packages from repositories: {1}",
+                         repos_with_skipped_checks.size()),
+                      num_checks_skipped,
+                      repo_string);
         signature_problems.push_back(warning_msg);
     }
     return result;

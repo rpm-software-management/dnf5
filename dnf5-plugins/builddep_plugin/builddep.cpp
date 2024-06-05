@@ -88,6 +88,7 @@ void BuildDepCommand::set_argument_parser() {
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_store_option(*this);
 }
 
 void BuildDepCommand::configure() {

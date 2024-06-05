@@ -76,6 +76,11 @@ Options
 ``--newpackage``
     | Consider only content contained in newpackage advisories.
 
+``--minimal``
+    | Reports the lowest versions of packages that fix advisories of type bugfix, enhancement, security, or
+    | newpackage. In case that any option limiting advisories is used it reports the lowest versions of packages
+    | that fix advisories matching selected advisory properties"
+
 
 Examples
 ========

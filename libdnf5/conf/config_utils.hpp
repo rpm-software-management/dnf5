@@ -26,30 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5 {
 
 
-template <typename T>
-static void option_T_list_append(T & option, Option::Priority priority, const std::string & value) {
-    if (value.empty()) {
-        option.set(priority, value);
-        return;
-    }
-    auto add_priority = priority < option.get_priority() ? option.get_priority() : priority;
-    auto val = option.from_string(value);
-    bool first = true;
-    for (auto & item : val) {
-        if (item.empty()) {
-            if (first) {
-                option.set(priority, item);
-            }
-        } else {
-            auto orig_value = option.get_value();
-            orig_value.insert(orig_value.end(), item);
-            option.set(add_priority, orig_value);
-        }
-        first = false;
-    }
-}
-
-
 /// @brief Replaces globs (like /etc/foo.d/\\*.foo) by content of matching files.
 ///
 /// Ignores comment lines (start with '#') and blank lines in files.

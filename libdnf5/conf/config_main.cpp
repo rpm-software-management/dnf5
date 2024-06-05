@@ -116,10 +116,10 @@ class ConfigMain::Impl {
     OptionStringList varsdir{VARS_DIRS};
     OptionStringList reposdir{REPOSITORY_CONF_DIRS};
     OptionBool debug_solver{false};
-    OptionStringList installonlypkgs{INSTALLONLYPKGS};
+    OptionStringAppendList installonlypkgs{INSTALLONLYPKGS};
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
-    OptionStringSet optional_metadata_types{
-        OptionStringSet::ValueType{libdnf5::METADATA_TYPE_COMPS, libdnf5::METADATA_TYPE_UPDATEINFO}};
+    OptionStringAppendSet optional_metadata_types{
+        OptionStringAppendSet::ValueType{libdnf5::METADATA_TYPE_COMPS, libdnf5::METADATA_TYPE_UPDATEINFO}};
     OptionNumber<std::uint32_t> installonly_limit{3, 0, [](const std::string & value) -> std::uint32_t {
                                                       if (value == "<off>") {
                                                           return 0;
@@ -131,7 +131,7 @@ class ConfigMain::Impl {
                                                       }
                                                   }};
 
-    OptionStringList tsflags{std::vector<std::string>{}};
+    OptionStringAppendList tsflags{std::vector<std::string>{}};
     OptionBool assumeyes{false};
     OptionBool assumeno{false};
     OptionBool check_config_file_age{true};
@@ -216,15 +216,15 @@ class ConfigMain::Impl {
     OptionNumber<std::uint32_t> retries{10};
     OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf5::xdg::get_user_cache_dir() / "libdnf5"};
     OptionBool fastestmirror{false};
-    OptionStringList excludepkgs{std::vector<std::string>{}};
-    OptionStringList includepkgs{std::vector<std::string>{}};
-    OptionStringList exclude_from_weak{std::vector<std::string>{}};
+    OptionStringAppendList excludepkgs{std::vector<std::string>{}};
+    OptionStringAppendList includepkgs{std::vector<std::string>{}};
+    OptionStringAppendList exclude_from_weak{std::vector<std::string>{}};
     OptionBool exclude_from_weak_autodetect{true};
     OptionString proxy{""};
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
     OptionStringSet proxy_auth_method{"any", "any|none|basic|digest|negotiate|ntlm|digest_ie|ntlm_wb", false};
-    OptionStringList protected_packages{std::vector<std::string>{"dnf5", "glob:/etc/dnf/protected.d/*.conf"}};
+    OptionStringAppendList protected_packages{std::vector<std::string>{"dnf5", "glob:/etc/dnf/protected.d/*.conf"}};
     OptionString username{""};
     OptionString password{""};
     OptionBool gpgcheck{false};
@@ -315,26 +315,10 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("varsdir", varsdir);
     owner.opt_binds().add("reposdir", reposdir);
     owner.opt_binds().add("debug_solver", debug_solver);
-
-    owner.opt_binds().add(
-        "installonlypkgs",
-        installonlypkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(installonlypkgs, priority, value);
-        },
-        nullptr,
-        true);
-
+    owner.opt_binds().add("installonlypkgs", installonlypkgs);
     owner.opt_binds().add("group_package_types", group_package_types);
     owner.opt_binds().add("installonly_limit", installonly_limit);
-
-    owner.opt_binds().add(
-        "tsflags",
-        tsflags,
-        [&](Option::Priority priority, const std::string & value) { option_T_list_append(tsflags, priority, value); },
-        nullptr,
-        true);
-
+    owner.opt_binds().add("tsflags", tsflags);
     owner.opt_binds().add("assumeyes", assumeyes);
     owner.opt_binds().add("assumeno", assumeno);
     owner.opt_binds().add("check_config_file_age", check_config_file_age);
@@ -406,43 +390,10 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("retries", retries);
     owner.opt_binds().add("cachedir", cachedir);
     owner.opt_binds().add("fastestmirror", fastestmirror);
-
-    owner.opt_binds().add(
-        "excludepkgs",
-        excludepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(excludepkgs, priority, value);
-        },
-        nullptr,
-        true);
-    //compatibility with yum
-    owner.opt_binds().add(
-        "exclude",
-        excludepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(excludepkgs, priority, value);
-        },
-        nullptr,
-        true);
-
-    owner.opt_binds().add(
-        "includepkgs",
-        includepkgs,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(includepkgs, priority, value);
-        },
-        nullptr,
-        true);
-
-    owner.opt_binds().add(
-        "exclude_from_weak",
-        exclude_from_weak,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(exclude_from_weak, priority, value);
-        },
-        nullptr,
-        true);
-
+    owner.opt_binds().add("excludepkgs", excludepkgs);
+    owner.opt_binds().add("exclude", excludepkgs);  //compatibility with yum
+    owner.opt_binds().add("includepkgs", includepkgs);
+    owner.opt_binds().add("exclude_from_weak", exclude_from_weak);
     owner.opt_binds().add("exclude_from_weak_autodetect", exclude_from_weak_autodetect);
     owner.opt_binds().add("proxy", proxy);
     owner.opt_binds().add("proxy_username", proxy_username);
@@ -461,15 +412,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
         nullptr,
         false);
 
-    owner.opt_binds().add(
-        "protected_packages",
-        protected_packages,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(protected_packages, priority, value);
-        },
-        nullptr,
-        false);
-
+    owner.opt_binds().add("protected_packages", protected_packages);
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("gpgcheck", gpgcheck);
@@ -494,15 +437,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("deltarpm", deltarpm);
     owner.opt_binds().add("deltarpm_percentage", deltarpm_percentage);
     owner.opt_binds().add("skip_if_unavailable", skip_if_unavailable);
-
-    owner.opt_binds().add(
-        "optional_metadata_types",
-        optional_metadata_types,
-        [&](Option::Priority priority, const std::string & value) {
-            option_T_list_append(optional_metadata_types, priority, value);
-        },
-        nullptr,
-        true);
+    owner.opt_binds().add("optional_metadata_types", optional_metadata_types);
 }
 
 ConfigMain::ConfigMain() {
@@ -681,10 +616,10 @@ const OptionBool & ConfigMain::get_debug_solver_option() const {
     return p_impl->debug_solver;
 }
 
-OptionStringList & ConfigMain::get_installonlypkgs_option() {
+OptionStringAppendList & ConfigMain::get_installonlypkgs_option() {
     return p_impl->installonlypkgs;
 }
-const OptionStringList & ConfigMain::get_installonlypkgs_option() const {
+const OptionStringAppendList & ConfigMain::get_installonlypkgs_option() const {
     return p_impl->installonlypkgs;
 }
 
@@ -695,10 +630,10 @@ const OptionStringList & ConfigMain::get_group_package_types_option() const {
     return p_impl->group_package_types;
 }
 
-OptionStringSet & ConfigMain::get_optional_metadata_types_option() {
+OptionStringAppendSet & ConfigMain::get_optional_metadata_types_option() {
     return p_impl->optional_metadata_types;
 }
-const OptionStringSet & ConfigMain::get_optional_metadata_types_option() const {
+const OptionStringAppendSet & ConfigMain::get_optional_metadata_types_option() const {
     return p_impl->optional_metadata_types;
 }
 
@@ -709,10 +644,10 @@ const OptionNumber<std::uint32_t> & ConfigMain::get_installonly_limit_option() c
     return p_impl->installonly_limit;
 }
 
-OptionStringList & ConfigMain::get_tsflags_option() {
+OptionStringAppendList & ConfigMain::get_tsflags_option() {
     return p_impl->tsflags;
 }
-const OptionStringList & ConfigMain::get_tsflags_option() const {
+const OptionStringAppendList & ConfigMain::get_tsflags_option() const {
     return p_impl->tsflags;
 }
 
@@ -1105,25 +1040,25 @@ const OptionBool & ConfigMain::get_fastestmirror_option() const {
     return p_impl->fastestmirror;
 }
 
-OptionStringList & ConfigMain::get_excludepkgs_option() {
+OptionStringAppendList & ConfigMain::get_excludepkgs_option() {
     return p_impl->excludepkgs;
 }
-const OptionStringList & ConfigMain::get_excludepkgs_option() const {
+const OptionStringAppendList & ConfigMain::get_excludepkgs_option() const {
     return p_impl->excludepkgs;
 }
 
-OptionStringList & ConfigMain::get_includepkgs_option() {
+OptionStringAppendList & ConfigMain::get_includepkgs_option() {
     return p_impl->includepkgs;
 }
-const OptionStringList & ConfigMain::get_includepkgs_option() const {
+const OptionStringAppendList & ConfigMain::get_includepkgs_option() const {
     return p_impl->includepkgs;
 }
 
-OptionStringList & ConfigMain::get_exclude_from_weak_option() {
+OptionStringAppendList & ConfigMain::get_exclude_from_weak_option() {
     return p_impl->exclude_from_weak;
 }
 
-const OptionStringList & ConfigMain::get_exclude_from_weak_option() const {
+const OptionStringAppendList & ConfigMain::get_exclude_from_weak_option() const {
     return p_impl->exclude_from_weak;
 }
 
@@ -1163,10 +1098,10 @@ const OptionStringSet & ConfigMain::get_proxy_auth_method_option() const {
     return p_impl->proxy_auth_method;
 }
 
-OptionStringList & ConfigMain::get_protected_packages_option() {
+OptionStringAppendList & ConfigMain::get_protected_packages_option() {
     return p_impl->protected_packages;
 }
-const OptionStringList & ConfigMain::get_protected_packages_option() const {
+const OptionStringAppendList & ConfigMain::get_protected_packages_option() const {
     return p_impl->protected_packages;
 }
 

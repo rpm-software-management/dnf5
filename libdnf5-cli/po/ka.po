@@ -1,13 +1,12 @@
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-04-12 07:36+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-15 07:36+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ka/>\n"
 "Language: ka\n"
@@ -15,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -46,7 +45,7 @@ msgid "Missing value for named argument \"--{}\""
 msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
 #: argument_parser.cpp:519
-msgid "Unexpected value for named argumend \"--{}\""
+msgid "Unexpected value for named argument \"--{}\""
 msgstr "მოულოდნელი მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
 #: argument_parser.cpp:561

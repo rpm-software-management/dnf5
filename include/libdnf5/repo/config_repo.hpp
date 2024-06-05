@@ -58,10 +58,10 @@ public:
     const OptionString & get_mediaid_option() const;
     OptionStringList & get_gpgkey_option();
     const OptionStringList & get_gpgkey_option() const;
-    OptionStringList & get_excludepkgs_option();
-    const OptionStringList & get_excludepkgs_option() const;
-    OptionStringList & get_includepkgs_option();
-    const OptionStringList & get_includepkgs_option() const;
+    OptionStringAppendList & get_excludepkgs_option();
+    const OptionStringAppendList & get_excludepkgs_option() const;
+    OptionStringAppendList & get_includepkgs_option();
+    const OptionStringAppendList & get_includepkgs_option() const;
     OptionChild<OptionBool> & get_fastestmirror_option();
     const OptionChild<OptionBool> & get_fastestmirror_option() const;
     OptionChild<OptionString> & get_proxy_option();
@@ -76,8 +76,8 @@ public:
     const OptionChild<OptionString> & get_username_option() const;
     OptionChild<OptionString> & get_password_option();
     const OptionChild<OptionString> & get_password_option() const;
-    OptionChild<OptionStringList> & get_protected_packages_option();
-    const OptionChild<OptionStringList> & get_protected_packages_option() const;
+    OptionChild<OptionStringAppendList> & get_protected_packages_option();
+    const OptionChild<OptionStringAppendList> & get_protected_packages_option() const;
     OptionChild<OptionBool> & get_gpgcheck_option();
     const OptionChild<OptionBool> & get_gpgcheck_option() const;
     OptionChild<OptionBool> & get_repo_gpgcheck_option();

@@ -28,10 +28,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
-/// Option that stores a container of strings. The type of the container is a template parameter.
-/// Support default value, and check of an input value using the regular expression
+/// Option that stores a container of strings. The type of the container is a
+/// template parameter. Non-type IsAppend template parameter is used to
+/// distinguish between regular list-like options (e.g. OptionStringList,
+/// OptionStringSet) and append options (e.g. OptionStringAppendList,
+/// OptionStringAppendSet).
+/// Support default value, and check of an input value using the regular expression.
 // @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
-template <typename T>
+template <typename T, bool IsAppend = false>
 class OptionStringContainer : public Option {
 public:
     using ValueType = T;
@@ -121,6 +125,9 @@ private:
 
 using OptionStringList = OptionStringContainer<std::vector<std::string>>;
 using OptionStringSet = OptionStringContainer<std::set<std::string>>;
+
+using OptionStringAppendList = OptionStringContainer<std::vector<std::string>, true>;
+using OptionStringAppendSet = OptionStringContainer<std::set<std::string>, true>;
 
 }  // namespace libdnf5
 

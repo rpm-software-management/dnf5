@@ -86,6 +86,8 @@ enum class ProblemRules {
     RULE_MODULE_PKG_SELF_CONFLICT,
     RULE_MODULE_YUMOBS,
     RULE_MODULE_UNKNOWN,
+    RULE_PKG_INSTALLED_CONFLICTS,
+    RULE_PKG_INSTALLED_REQUIRES,
 };
 
 /// Define a type of information, hint, or problem gathered during libdnf5::Goal::resolve()

@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 02:52+0000\n"
-"PO-Revision-Date: 2024-04-16 20:36+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2024-05-31 02:52+0000\n"
+"PO-Revision-Date: 2024-05-23 18:48+0000\n"
+"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -141,27 +142,23 @@ msgstr "ID_CVE,..."
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "Mostra apenas grupos disponíveis."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Mostra somente os grupos instalados."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Mostra também grupos ocultos."
 
 #: commands/group/group_list.hpp:59
-#, fuzzy
-#| msgid ""
-#| "Show only advisories containing packages with specified names. List "
-#| "option, supports globs."
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Mostra apenas os avisos que contenham pacotes com nomes específicos. Opção "
-"de lista, suporta caracteres curinga."
+"Mostra apenas grupos contendo pacotes com nomes especificados. Opção de "
+"lista, suporta caracteres curinga."
 
 #: commands/repoquery/repoquery.cpp:158
 msgid "Error parsing JSON object \"{}\": {}"
