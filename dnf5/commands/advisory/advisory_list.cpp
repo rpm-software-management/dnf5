@@ -66,10 +66,19 @@ void AdvisoryListCommand::process_and_print_queries(
 
     std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_installed_pkgs;
     std::vector<std::unique_ptr<libdnf5::cli::output::IAdvisoryPackage>> cli_not_installed_pkgs;
+    std::string reference_type;
     if (with_bz->get_value()) {
-        libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
+        reference_type = "bugzilla";
     } else if (with_cve->get_value()) {
-        libdnf5::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");
+        reference_type = "cve";
+    }
+    if (with_bz->get_value() || with_cve->get_value()) {
+        if (ctx.get_json_output_requested())
+            libdnf5::cli::output::print_advisorylist_references_json(
+                not_installed_pkgs, installed_pkgs, reference_type);
+        else
+            libdnf5::cli::output::print_advisorylist_references_table(
+                not_installed_pkgs, installed_pkgs, reference_type);
     } else {
         cli_installed_pkgs.reserve(installed_pkgs.size());
         for (const auto & obj : installed_pkgs) {
@@ -79,7 +88,11 @@ void AdvisoryListCommand::process_and_print_queries(
         for (const auto & obj : not_installed_pkgs) {
             cli_not_installed_pkgs.emplace_back(new output::AdvisoryPackageAdapter(obj));
         }
-        libdnf5::cli::output::print_advisorylist_table(cli_not_installed_pkgs, cli_installed_pkgs);
+        if (ctx.get_json_output_requested()) {
+            libdnf5::cli::output::print_advisorylist_json(cli_not_installed_pkgs, cli_installed_pkgs);
+        } else {
+            libdnf5::cli::output::print_advisorylist_table(cli_not_installed_pkgs, cli_installed_pkgs);
+        }
     }
 }
 
