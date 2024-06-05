@@ -1186,13 +1186,6 @@ int main(int argc, char * argv[]) try {
             return 0;
         }
 
-        auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
-        auto * download_callbacks = download_callbacks_uptr.get();
-        download_callbacks->set_show_total_bar_limit(static_cast<std::size_t>(-1));
-        if (!context.get_quiet()) {
-            base.set_download_callbacks(std::move(download_callbacks_uptr));
-        }
-
         // Parse command line arguments
         {
             auto & arg_parser = context.get_argument_parser();
@@ -1243,6 +1236,13 @@ int main(int argc, char * argv[]) try {
                 dnf5::print_versions(context);
                 return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
             }
+        }
+
+        auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
+        auto * download_callbacks = download_callbacks_uptr.get();
+        download_callbacks->set_show_total_bar_limit(static_cast<std::size_t>(-1));
+        if (!context.get_quiet()) {
+            base.set_download_callbacks(std::move(download_callbacks_uptr));
         }
 
         auto command = context.get_selected_command();
