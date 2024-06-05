@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_TRANSACTION_OFFLINE_HPP
 
 #include <libdnf5/conf/const.hpp>
-#include <toml.hpp>
 
 #include <filesystem>
+#include <memory>
 
 namespace libdnf5::offline {
 
@@ -45,41 +45,83 @@ const std::string STATUS_TRANSACTION_INCOMPLETE{"transaction-incomplete"};
 // systemd.offline-updates(7).
 const std::filesystem::path MAGIC_SYMLINK{"/system-update"};
 
-const int STATE_VERSION = 1;
-const std::string STATE_HEADER{"offline-transaction-state"};
-
 const std::filesystem::path DEFAULT_DATADIR{std::filesystem::path(libdnf5::SYSTEM_STATE_DIR) / "offline"};
 const std::filesystem::path TRANSACTION_STATE_FILENAME{"offline-transaction-state.toml"};
+
+class OfflineTransactionState;
 
 /// Data of the initiated offline transaction state, by default stored in the
 /// /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml file.
 struct OfflineTransactionStateData {
-    /// Version of the state file.
-    int state_version = STATE_VERSION;
-    /// Current offline transaction status. One of download-incomplete, download-complete, ready, or transaction-incomplete.
-    std::string status = STATUS_DOWNLOAD_INCOMPLETE;
-    /// Cachedir to be used for the offline transaction.
-    std::string cachedir;
-    /// Target releasever for the offline transaction.
-    std::string target_releasever;
-    /// Detected current releasever when the offline transaction was initialized.
-    std::string system_releasever;
-    /// Dnf command used to initialize the offline transaction (e.g. "system-upgrade download").
-    std::string verb;
-    /// Command line used to initialize the offline transaction.
-    std::string cmd_line;
-    /// Power off the system after the operation is complete?
-    bool poweroff_after = false;
-    /// module_platform_id for the offline transaction.
-    std::string module_platform_id;
+public:
+    friend OfflineTransactionState;
+
+    OfflineTransactionStateData();
+    ~OfflineTransactionStateData();
+
+    OfflineTransactionStateData(const OfflineTransactionStateData & src);
+    OfflineTransactionStateData & operator=(const OfflineTransactionStateData & src);
+
+    OfflineTransactionStateData(OfflineTransactionStateData && src) noexcept;
+    OfflineTransactionStateData & operator=(OfflineTransactionStateData && src) noexcept;
+
+    /// Set the transaction state data file version
+    void set_state_version(int state_version);
+    int get_state_version() const;
+
+    /// Set current offline transaction status. One of download-incomplete,
+    /// download-complete, ready, or transaction-incomplete.
+    void set_status(const std::string & status);
+    const std::string & get_status() const;
+
+    /// Set the cachedir to be used for the offline transaction.
+    void set_cachedir(const std::string & cachedir);
+    const std::string & get_cachedir() const;
+
+    /// Set the target releasever for the offline transaction.
+    void set_target_releasever(const std::string & target_releasever);
+    const std::string & get_target_releasever() const;
+
+    /// Set the detected releasever in time the offline transaction was initialized.
+    void set_system_releasever(const std::string & system_releasever);
+    const std::string & get_system_releasever() const;
+
+    /// Set the dnf command used to initialize the offline transaction (e.g. "system-upgrade download").
+    void set_verb(const std::string & verb);
+    const std::string & get_verb() const;
+
+    /// Set the command line used to initialize the offline transaction.
+    void set_cmd_line(const std::string & cmd_line);
+    const std::string & get_cmd_line() const;
+
+    /// Set whether the system power off after the operation is complete is required
+    void set_poweroff_after(bool poweroff_after);
+    bool get_poweroff_after() const;
+
+    /// Set module_platform_id for the offline transaction.
+    void set_module_platform_id(const std::string & module_platform_id);
+    const std::string & get_module_platform_id() const;
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
+
 
 /// Class to handle offline transaction state.
 class OfflineTransactionState {
 public:
+    OfflineTransactionState() = delete;
+    ~OfflineTransactionState();
+
     /// Constructs a new OfflineTransactionState instance based on the state file location.
     /// @param path Path to the state file (default location is /usr/lib/sysimage/libdnf5/offline/offline-transaction-state.toml).
     OfflineTransactionState(std::filesystem::path path);
+
+    OfflineTransactionState(const OfflineTransactionState & src);
+    OfflineTransactionState & operator=(const OfflineTransactionState & src);
+    OfflineTransactionState(OfflineTransactionState && src) noexcept;
+    OfflineTransactionState & operator=(OfflineTransactionState && src) noexcept;
 
     /// Returns offline transaction state data.
     OfflineTransactionStateData & get_data();
@@ -91,25 +133,12 @@ public:
     std::filesystem::path get_path() const;
 
 private:
+    class Impl;
     /// Read offline transaction state data from the file
     void read();
-    std::exception_ptr read_exception;
-    std::filesystem::path path;
-    OfflineTransactionStateData data;
+    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf5::offline
-
-TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
-    libdnf5::offline::OfflineTransactionStateData,
-    state_version,
-    status,
-    cachedir,
-    target_releasever,
-    system_releasever,
-    verb,
-    cmd_line,
-    poweroff_after,
-    module_platform_id)
 
 #endif  // LIBDNF5_TRANSACTION_OFFLINE_HPP
