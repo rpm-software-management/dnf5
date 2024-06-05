@@ -34,7 +34,16 @@ LIBDNF_CLI_API void print_advisorylist_table(
     std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_not_installed,
     std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_installed);
 
+LIBDNF_CLI_API void print_advisorylist_json(
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_not_installed,
+    std::vector<std::unique_ptr<IAdvisoryPackage>> & advisory_package_list_installed);
+
 LIBDNF_CLI_API void print_advisorylist_references_table(
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed,
+    std::string reference_type);
+
+LIBDNF_CLI_API void print_advisorylist_references_json(
     std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
     std::vector<libdnf5::advisory::AdvisoryPackage> & advisory_package_list_installed,
     std::string reference_type);

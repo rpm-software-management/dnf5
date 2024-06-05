@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_subcommand.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 class AdvisoryListCommand : public AdvisorySubCommand {
@@ -31,6 +33,7 @@ public:
     void set_argument_parser() override {
         AdvisorySubCommand::set_argument_parser();
         get_argument_parser_command()->set_description(_("List advisories"));
+        create_json_option(*this);
     }
 
 protected:
