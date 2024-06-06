@@ -716,6 +716,7 @@ config-manager, copr, and repoclosure commands.
 %{_mandir}/man8/dnf*-copr.8.*
 %{_mandir}/man8/dnf*-needs-restarting.8.*
 %{_mandir}/man8/dnf*-repoclosure.8.*
+%{_datadir}/dnf5/aliases.d/compatibility-plugins.conf
 
 
 # ========== dnf5-automatic plugin ==========
