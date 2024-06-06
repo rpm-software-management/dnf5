@@ -57,7 +57,8 @@ void HistoryStoreCommand::run() {
 
     std::filesystem::create_directories(output_option->get_value());
 
-    std::filesystem::path trans_file_path(output_option->get_value() + "transaction.json");
+    std::filesystem::path trans_file_path(output_option->get_value());
+    trans_file_path /= TRANSACTION_JSON;
 
     if (std::filesystem::exists(trans_file_path)) {
         std::cout << libdnf5::utils::sformat(
