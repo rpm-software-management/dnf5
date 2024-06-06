@@ -47,7 +47,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <regex>
 #include <set>
-#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -344,7 +343,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     // First, serialize the transaction
     transaction.store_comps(comps_location);
 
-    const auto transaction_json_path = offline_datadir / "transaction.json";
+    const auto transaction_json_path = offline_datadir / TRANSACTION_JSON;
     libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
     transaction_json_file.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
     transaction_json_file.close();
@@ -405,7 +404,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
 void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (!transaction_store_path.empty()) {
-        auto transaction_location = transaction_store_path / "transaction.json";
+        auto transaction_location = transaction_store_path / TRANSACTION_JSON;
         constexpr const char * packages_in_trans_dir{"./packages"};
         auto packages_location = transaction_store_path / packages_in_trans_dir;
         constexpr const char * comps_in_trans_dir{"./comps"};

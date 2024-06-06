@@ -449,7 +449,7 @@ void OfflineExecuteCommand::run() {
     const auto & installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     const auto & datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
-    const auto & transaction_json_path = datadir / "transaction.json";
+    const auto & transaction_json_path = datadir / TRANSACTION_JSON;
 
     const auto & goal = std::make_unique<libdnf5::Goal>(ctx.get_base());
 

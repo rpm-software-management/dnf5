@@ -32,16 +32,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 
 #include <filesystem>
-#include <functional>
 #include <iostream>
 #include <memory>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
 
 namespace dnf5 {
+
+constexpr const char * TRANSACTION_JSON = "transaction.json";
 
 class Plugins;
 
