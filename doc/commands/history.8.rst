@@ -59,7 +59,7 @@ Subcommands
     | Undo all transactions performed after the specified transaction.
 
 ``store``
-    | Store the transaction into the file.
+    | Store the transaction into a directory.
 
 ``replay``
     | Replay the transaction that was previously stored into the file.
