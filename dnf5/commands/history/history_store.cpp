@@ -36,11 +36,11 @@ void HistoryStoreCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     output_option = dynamic_cast<libdnf5::OptionString *>(
-        parser.add_init_value(std::make_unique<libdnf5::OptionString>("./transaction.json")));
+        parser.add_init_value(std::make_unique<libdnf5::OptionString>("./transaction")));
     auto query_format = parser.add_new_named_arg("output");
     query_format->set_long_name("output");
     query_format->set_short_name('o');
-    query_format->set_description("File path for storing the transaction, default is \"./transaction.json\"");
+    query_format->set_description("Path to a directory for storing the transaction, default is \"./transaction\"");
     query_format->set_has_value(true);
     query_format->set_arg_value_help("PATH");
     query_format->link_value(output_option);
@@ -55,11 +55,13 @@ void HistoryStoreCommand::run() {
     std::vector<libdnf5::transaction::Transaction> transactions;
     auto logger = get_context().get_base().get_logger();
 
-    std::filesystem::path tmp_path(output_option->get_value());
+    std::filesystem::create_directories(output_option->get_value());
 
-    if (std::filesystem::exists(tmp_path)) {
+    std::filesystem::path trans_file_path(output_option->get_value() + "transaction.json");
+
+    if (std::filesystem::exists(trans_file_path)) {
         std::cout << libdnf5::utils::sformat(
-            _("File \"{}\" already exists, it will be overwritten.\n"), tmp_path.string());
+            _("File \"{}\" already exists, it will be overwritten.\n"), trans_file_path.string());
         // ask user for the file overwrite confirmation
         if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().get_base().get_config())) {
             throw libdnf5::cli::AbortedByUserError();
@@ -81,12 +83,12 @@ void HistoryStoreCommand::run() {
 
     const std::string json = transactions[0].serialize();
 
-    auto tmp_file = libdnf5::utils::fs::TempFile(tmp_path.parent_path(), tmp_path.filename());
+    auto tmp_file = libdnf5::utils::fs::TempFile(trans_file_path.parent_path(), trans_file_path.filename());
     auto & file = tmp_file.open_as_file("w+");
     file.write(json);
     file.close();
 
-    std::filesystem::rename(tmp_file.get_path(), output_option->get_value());
+    std::filesystem::rename(tmp_file.get_path(), trans_file_path);
     tmp_file.release();
 }
 
