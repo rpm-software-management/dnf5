@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/repo/repo_callbacks.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/rpm/transaction_callbacks.hpp>
+#include <libdnf5/sdbus_compat.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -49,7 +50,8 @@ protected:
     Session & session;
     sdbus::IObject * dbus_object;
 
-    virtual sdbus::Signal create_signal(std::string interface, std::string signal_name);
+    virtual sdbus::Signal create_signal(
+        const SDBUS_INTERFACE_NAME_TYPE & interface, const SDBUS_SIGNAL_NAME_TYPE & signal_name);
     static bool is_time_to_print() {
         auto now = std::chrono::steady_clock::now();
         auto delta = now - prev_print_time;
@@ -76,7 +78,7 @@ public:
     int mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) override;
 
 private:
-    sdbus::Signal create_signal_download(const std::string & signal_name, void * user_data);
+    sdbus::Signal create_signal_download(const SDBUS_SIGNAL_NAME_TYPE & signal_name, void * user_data);
 };
 
 
@@ -146,7 +148,10 @@ public:
     void finish();
 
 private:
-    sdbus::Signal create_signal_pkg(std::string interface, std::string signal_name, const std::string & nevra);
+    sdbus::Signal create_signal_pkg(
+        const SDBUS_INTERFACE_NAME_TYPE & interface,
+        const SDBUS_SIGNAL_NAME_TYPE & signal_name,
+        const std::string & nevra);
 };
 
 }  // namespace dnf5daemon

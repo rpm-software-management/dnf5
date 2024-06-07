@@ -133,8 +133,8 @@ void Session::setup_base() {
 Session::Session(
     sdbus::IConnection & connection,
     dnfdaemon::KeyValueMap session_configuration,
-    std::string object_path,
-    std::string sender)
+    const sdbus::ObjectPath & object_path,
+    const std::string & sender)
     : connection(connection),
       session_configuration(session_configuration),
       object_path(object_path),
@@ -264,9 +264,9 @@ bool Session::read_all_repos() {
 bool Session::check_authorization(
     const std::string & actionid, const std::string & sender, bool allow_user_interaction) {
     // create proxy for PolicyKit1 object
-    const std::string destination_name = "org.freedesktop.PolicyKit1";
-    const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
-    const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
+    const SDBUS_SERVICE_NAME_TYPE destination_name{"org.freedesktop.PolicyKit1"};
+    const sdbus::ObjectPath object_path{"/org/freedesktop/PolicyKit1/Authority"};
+    const SDBUS_INTERFACE_NAME_TYPE interface_name{"org.freedesktop.PolicyKit1.Authority"};
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
     polkit_proxy->finishRegistration();
 

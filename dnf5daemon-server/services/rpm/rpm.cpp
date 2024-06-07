@@ -467,7 +467,8 @@ void Rpm::list_fd(sdbus::MethodCall & call, const std::string & transfer_id) {
 
     // signal client that the transfer has finished and the output file descriptor is closed
     auto dbus_object = get_session().get_dbus_object();
-    auto signal = dbus_object->createSignal(call.getInterfaceName(), dnfdaemon::SIGNAL_WRITE_TO_FD_FINISHED);
+    auto signal = dbus_object->createSignal(
+        SDBUS_INTERFACE_NAME_TYPE{call.getInterfaceName()}, dnfdaemon::SIGNAL_WRITE_TO_FD_FINISHED);
     signal << error_msg.empty();
     signal << transfer_id;
     signal << error_msg;

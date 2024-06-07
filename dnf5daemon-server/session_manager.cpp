@@ -70,7 +70,8 @@ void SessionManager::dbus_register() {
     dbus_object->finishRegistration();
 
     // register signal handler for NameOwnerChanged
-    name_changed_proxy = sdbus::createProxy(*connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
+    name_changed_proxy = sdbus::createProxy(
+        *connection, SDBUS_SERVICE_NAME_TYPE{"org.freedesktop.DBus"}, sdbus::ObjectPath{"/org/freedesktop/DBus"});
     name_changed_proxy->registerSignalHandler(
         "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal signal) -> void {
             threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, signal);
@@ -130,7 +131,7 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     call >> configuration;
 
     // generate UUID-like session id
-    const std::string sessionid = dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id();
+    const sdbus::ObjectPath sessionid{dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id()};
     // store newly created session
     {
         std::lock_guard<std::mutex> lock(sessions_mutex);
