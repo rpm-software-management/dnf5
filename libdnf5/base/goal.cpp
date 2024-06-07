@@ -172,6 +172,7 @@ public:
     void set_exclude_from_weak(const std::vector<std::string> & exclude_from_weak);
     void autodetect_unsatisfied_installed_weak_dependencies();
 
+    // Paths to elements (packages/groups/envs) in replay are taken relative to replay_location.
     GoalProblem add_replay_to_goal(
         base::Transaction & transaction,
         const transaction::TransactionReplay & replay,
@@ -692,6 +693,7 @@ GoalProblem Goal::Impl::add_replay_to_goal(
 
         std::optional<libdnf5::rpm::Package> local_pkg;
         if (!package_replay.package_path.empty()) {
+            // Package paths are relative to replay location
             local_pkg =
                 base->get_repo_sack()->add_stored_transaction_package(replay_location / package_replay.package_path);
         }
@@ -925,6 +927,7 @@ GoalProblem Goal::Impl::add_replay_to_goal(
             }
         }
         if (!group_replay.group_path.empty()) {
+            // Group paths are relative to replay location
             base->get_repo_sack()->add_stored_transaction_comps(replay_location / group_replay.group_path);
         }
 
@@ -997,6 +1000,7 @@ GoalProblem Goal::Impl::add_replay_to_goal(
         env_query_installed.filter_installed(true);
 
         if (!env_replay.environment_path.empty()) {
+            // Environment paths are relative to replay location
             base->get_repo_sack()->add_stored_transaction_comps(replay_location / env_replay.environment_path);
         }
         if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
