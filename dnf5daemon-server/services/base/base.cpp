@@ -33,6 +33,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 void Base::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"read_all_repos"},
+                sdbus::Signature{""},
+                {},
+                sdbus::Signature{"b"},
+                {"success"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Base::read_all_repos, call, session.session_locale);
+                },
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW,
+                sdbus::Signature{"ossx"},
+                {"session_object_path", "download_id", "description", "total_to_download"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS,
+                sdbus::Signature{"osxx"},
+                {"session_object_path", "download_id", "total_to_download", "downloaded"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_DOWNLOAD_END,
+                sdbus::Signature{"osus"},
+                {"session_object_path", "download_id", "transfer_status", "message"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE,
+                sdbus::Signature{"ossss"},
+                {"session_object_path", "download_id", "message", "url", "metadata"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
+                sdbus::Signature{"osasssx"},
+                {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"},
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_BASE);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", {}, "b", {"success"}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call, session.session_locale);
@@ -63,6 +104,7 @@ void Base::dbus_register() {
         dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST,
         "osasssx",
         {"session_object_path", "key_id", "user_ids", "key_fingerprint", "key_url", "timestamp"});
+#endif
 }
 
 sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
