@@ -700,13 +700,15 @@ GoalProblem Goal::Impl::add_replay_to_goal(
 
         const auto nevras = rpm::Nevra::parse(package_replay.nevra, {rpm::Nevra::Form::NEVRA});
         libdnf_assert(
-            nevras.size() > 0, "Cannot parse rpm nevra \"{}\" while replaying transaction.", package_replay.nevra);
+            nevras.size() == 1,
+            "Cannot parse rpm nevra or ambiguous \"{}\" while replaying transaction.",
+            package_replay.nevra);
 
         rpm::PackageQuery query_na(base);
         query_na.filter_name(nevras[0].get_name());
         query_na.filter_arch(nevras[0].get_arch());
         auto query_nevra = query_na;
-        query_nevra.filter_nevra(package_replay.nevra);
+        query_nevra.filter_nevra(nevras[0]);
 
         if (!package_replay.repo_id.empty()) {
             repo::RepoQuery enabled_repos(base);
