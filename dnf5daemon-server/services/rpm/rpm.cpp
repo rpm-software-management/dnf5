@@ -33,6 +33,183 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"distro_sync"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::distro_sync, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"downgrade"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"list"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"aa{sv}"},
+                {"packages"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::list, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"list_fd"},
+                sdbus::Signature{"a{sv}h"},
+                {"options", "file_descriptor"},
+                sdbus::Signature{"s"},
+                {"transfer_id"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method_fd(*this, &Rpm::list_fd, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"install"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::install, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"upgrade"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::upgrade, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"reinstall"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::reinstall, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"remove"},
+                sdbus::Signature{"asa{sv}"},
+                {"pkg_specs", "options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"system_upgrade"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Rpm::system_upgrade, call, session.session_locale);
+                },
+                {}},
+
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN,
+                sdbus::Signature{"ot"},
+                {"session_object_path", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_AFTER_COMPLETE,
+                sdbus::Signature{"ob"},
+                {"session_object_path", "success"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS,
+                sdbus::Signature{"ostt"},
+                {"session_object_path", "nevra", "processed", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_ACTION_START,
+                sdbus::Signature{"osut"},
+                {"session_object_path", "nevra", "action", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS,
+                sdbus::Signature{"ostt"},
+                {"session_object_path", "nevra", "processed", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP,
+                sdbus::Signature{"ost"},
+                {"session_object_path", "nevra", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START,
+                sdbus::Signature{"osu"},
+                {"session_object_path", "nevra", "scriptlet_type"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP,
+                sdbus::Signature{"osut"},
+                {"session_object_path", "nevra", "scriptlet_type", "return_code"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR,
+                sdbus::Signature{"osut"},
+                {"session_object_path", "nevra", "scriptlet_type", "return_code"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START,
+                sdbus::Signature{"ot"},
+                {"session_object_path", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS,
+                sdbus::Signature{"ott"},
+                {"session_object_path", "processed", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP,
+                sdbus::Signature{"ot"},
+                {"session_object_path", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START,
+                sdbus::Signature{"ot"},
+                {"session_object_path", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS,
+                sdbus::Signature{"ott"},
+                {"session_object_path", "processed", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP,
+                sdbus::Signature{"ot"},
+                {"session_object_path", "total"},
+                {}},
+            sdbus::SignalVTableItem{
+                dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR,
+                sdbus::Signature{"os"},
+                {"session_object_path", "nevra"},
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_RPM);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM,
         "distro_sync",
@@ -192,6 +369,7 @@ void Rpm::dbus_register() {
         {"session_object_path", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, "os", {"session_object_path", "nevra"});
+#endif
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {

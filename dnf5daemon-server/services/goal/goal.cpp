@@ -60,8 +60,64 @@ static std::string dbus_transaction_item_type_to_string(dnfdaemon::DbusTransacti
 
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
-    // TODO(mblaha) Adjust resolve method to accommodate also groups, environments,
-    // and modules as part of the transaction
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"resolve"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"a(sssa{sv}a{sv})u"},
+                {"transaction_items", "result"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"get_transaction_problems_string"},
+                {},
+                {},
+                sdbus::Signature{"as"},
+                {"problems"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Goal::get_transaction_problems_string, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"get_transaction_problems"},
+                {},
+                {},
+                sdbus::Signature{"aa{sv}"},
+                {"problems"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Goal::get_transaction_problems, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"do_transaction"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                {},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Goal::do_transaction, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"cancel"},
+                sdbus::Signature{""},
+                {},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Goal::cancel, call, session.session_locale);
+                },
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_GOAL);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL,
         "resolve",
@@ -118,6 +174,7 @@ void Goal::dbus_register() {
         dnfdaemon::INTERFACE_GOAL, "reset", "", {}, "", {}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::reset, call, session.session_locale);
         });
+#endif
 }
 
 sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {

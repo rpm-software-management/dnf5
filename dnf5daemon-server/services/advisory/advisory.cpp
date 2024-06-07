@@ -31,6 +31,20 @@ namespace dnfdaemon {
 
 void Advisory::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(sdbus::MethodVTableItem{
+            sdbus::MethodName{"list"},
+            sdbus::Signature{"a{sv}"},
+            {"options"},
+            sdbus::Signature{"aa{sv}"},
+            {"advisories"},
+            [this](sdbus::MethodCall call) -> void {
+                session.get_threads_manager().handle_method(*this, &Advisory::list, call, session.session_locale);
+            },
+            {}})
+        .forInterface(INTERFACE_ADVISORY);
+#else
     dbus_object->registerMethod(
         INTERFACE_ADVISORY,
         "list",
@@ -41,6 +55,7 @@ void Advisory::dbus_register() {
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Advisory::list, call, session.session_locale);
         });
+#endif
 }
 
 libdnf5::advisory::AdvisoryQuery Advisory::advisory_query_from_options(
