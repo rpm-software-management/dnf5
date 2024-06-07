@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/repo/repo_callbacks.hpp>
 #include <libdnf5/rpm/rpm_signature.hpp>
 #include <libdnf5/rpm/transaction_callbacks.hpp>
+#include <libdnf5/sdbus_compat.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
