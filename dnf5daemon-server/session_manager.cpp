@@ -47,6 +47,31 @@ SessionManager::~SessionManager() {
 
 void SessionManager::dbus_register() {
     dbus_object = sdbus::createObject(*connection, dnfdaemon::DBUS_OBJECT_PATH);
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"open_session"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"o"},
+                {"session_object_path"},
+                [this](sdbus::MethodCall call) -> void {
+                    threads_manager.handle_method(*this, &SessionManager::open_session, call);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"close_session"},
+                sdbus::Signature{"o"},
+                {"session_object_path"},
+                sdbus::Signature{"b"},
+                {"success"},
+                [this](sdbus::MethodCall call) -> void {
+                    threads_manager.handle_method(*this, &SessionManager::close_session, call);
+                },
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_SESSION_MANAGER);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER,
         "open_session",
@@ -69,14 +94,20 @@ void SessionManager::dbus_register() {
         });
     dbus_object->finishRegistration();
 
+#endif
+
     // register signal handler for NameOwnerChanged
     name_changed_proxy = sdbus::createProxy(
         *connection, SDBUS_SERVICE_NAME_TYPE{"org.freedesktop.DBus"}, sdbus::ObjectPath{"/org/freedesktop/DBus"});
     name_changed_proxy->registerSignalHandler(
-        "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal signal) -> void {
+        SDBUS_INTERFACE_NAME_TYPE{"org.freedesktop.DBus"},
+        SDBUS_SIGNAL_NAME_TYPE{"NameOwnerChanged"},
+        [this](sdbus::Signal signal) -> void {
             threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, signal);
         });
+#ifndef SDBUS_CPP_VERSION_2
     name_changed_proxy->finishRegistration();
+#endif
 }
 
 

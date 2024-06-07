@@ -52,6 +52,53 @@ Offline::Scheduled Offline::offline_transaction_scheduled() {
 
 void Offline::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"cancel"},
+                {},
+                {},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Offline::cancel, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"get_status"},
+                {},
+                {},
+                sdbus::Signature{"ba{sv}"},
+                {"is_pending", "transaction_status"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Offline::get_status, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"clean"},
+                {},
+                {},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Offline::clean, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"set_finish_action"},
+                sdbus::Signature{"s"},
+                {"action"},
+                sdbus::Signature{"bs"},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(
+                        *this, &Offline::set_finish_action, call, session.session_locale);
+                },
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_OFFLINE);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_OFFLINE,
         "cancel",
@@ -93,6 +140,7 @@ void Offline::dbus_register() {
             session.get_threads_manager().handle_method(
                 *this, &Offline::set_finish_action, call, session.session_locale);
         });
+#endif
 }
 
 sdbus::MethodReply Offline::get_status(sdbus::MethodCall & call) {
