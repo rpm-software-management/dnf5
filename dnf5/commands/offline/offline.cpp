@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_path.hpp>
+#include <libdnf5/sdbus_compat.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -48,10 +49,10 @@ using namespace libdnf5::cli;
 
 const std::string & ID_TO_IDENTIFY_BOOTS = libdnf5::offline::OFFLINE_STARTED_ID;
 
-const std::string SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
-const std::string SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
-const std::string SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
-const std::string SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
+const SDBUS_SERVICE_NAME_TYPE SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
+const sdbus::ObjectPath SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
+const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
+const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
 const std::string SYSTEMD_SERVICE_NAME{"dnf5-offline-transaction.service"};
 
 int call(const std::string & command, const std::vector<std::string> & args) {

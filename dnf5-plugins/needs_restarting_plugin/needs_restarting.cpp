@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/conf/option_string.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/sdbus_compat.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <utils/string.hpp>
 
@@ -33,10 +34,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <vector>
 
-const std::string SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
-const std::string SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
-const std::string SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
-const std::string SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
+const SDBUS_SERVICE_NAME_TYPE SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
+const sdbus::ObjectPath SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
+const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
+const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
 
 namespace dnf5 {
 
