@@ -70,8 +70,8 @@ Session::Session(
     std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
     sdbus::IConnection & connection,
     dnfdaemon::KeyValueMap session_configuration,
-    std::string object_path,
-    std::string sender)
+    const SDBUS_OBJECT_PATH_TYPE & object_path,
+    const std::string & sender)
     : connection(connection),
       base(std::make_unique<libdnf5::Base>(std::move(loggers))),
       goal(*base),
@@ -246,9 +246,9 @@ bool Session::read_all_repos() {
 bool Session::check_authorization(
     const std::string & actionid, const std::string & sender, bool allow_user_interaction) {
     // create proxy for PolicyKit1 object
-    const std::string destination_name = "org.freedesktop.PolicyKit1";
-    const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
-    const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
+    const SDBUS_SERVICE_NAME_TYPE destination_name{"org.freedesktop.PolicyKit1"};
+    const SDBUS_OBJECT_PATH_TYPE object_path{"/org/freedesktop/PolicyKit1/Authority"};
+    const SDBUS_INTERFACE_NAME_TYPE interface_name{"org.freedesktop.PolicyKit1.Authority"};
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
     polkit_proxy->finishRegistration();
 

@@ -162,7 +162,7 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     call >> configuration;
 
     // generate UUID-like session id
-    const std::string sessionid = dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id();
+    const SDBUS_OBJECT_PATH_TYPE sessionid{dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id()};
     // store newly created session
     {
         // create a vector of loggers with one logger
