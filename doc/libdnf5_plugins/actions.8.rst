@@ -94,6 +94,7 @@ Each non-comment line defines an action and consists of five items separated by 
    * ``${pid}`` - process ID
    * ``${plugin.version}`` - version of the actions plugin (added in version 0.3.0)
    * ``${conf.<option_name>}`` - option from base configuration
+   * ``${conf.<repoid_pattern>.<option_name>[=<value_pattern>]}`` - list of "repoid.option=value" pairs (added in version 1.1.0)
    * ``${var.<variable_name>}`` - variable
    * ``${tmp.<actions_plugin_variable_name>}`` - variable exists only in actions plugin context
    * ``${pkg.<package_attribute_name>}`` - value of the package attribute
@@ -132,19 +133,30 @@ Each non-comment line defines an action and consists of five items separated by 
    of when a particular ``package_filter`` is invoked depends on the position
    of the corresponding package in the transaction.
 
+   The ``repoid.option=value`` pairs in the list are separated by the ',' character.
+   The ',' character in the value is replaced by the escape sequence ``"\x2C"``.
+   If ``value_pattern`` is used, only pairs with the matching value are listed.
+   The ``repoid_pattern`` and ``value_pattern`` can contain globs.
+
 
 Action standard output format
 =============================
 
 The standard output of each executed action (command) is captured and processed.
-Each line of output can set the value or unset one actions plugin variable. It can also
-change the value of an option from the base configuration or a variable.
+Each line of output can change the value of a base configuration option, the value
+of a configuration option in matching repositories, or a variable.
+It can also set or unset one actions plugin variable. The value of this variable is available
+for the following command using the ``${tmp.<actions_plugin_variable_name>}`` substitution.
+
+Actions should change the repositories configuration in the ``repos_configured`` hook.
+At this point, the repositories configuration is loaded but not yet applied.
 
 Output line format
 ------------------
 * tmp.<actions_plugin_variable_name>=<value> - sets the value of action plugins variable <actions_plugin_variable_name>
 * tmp.<actions_plugin_variable_name> - removes the action plugins variable if it exists
 * conf.<option_name>=<value> -  sets the value of option <option_name> in the base configuration
+* conf.<repoid_pattern>.<option_name>=<value> -  sets the value of option <option_name> in the matching repositories (added in version 1.1.0)
 * var.<variable_name>=<value> - sets value of the vatiable <variable_name>
 
 
@@ -163,6 +175,15 @@ An example actions file:
 
    # Prints a message that the "post_base_setup" callback was called.
    post_base_setup::::/usr/bin/sh -c echo\ libdnf5\ post_base_setup\ was\ called.\ >>/tmp/actions-trans.log
+
+   # Prints a list of configured repositories with their enable state.
+   repos_configured::::/usr/bin/sh -c echo\ Repositories:\ ${conf.*.enabled}\ >>/tmp/repos.log
+
+   # Prints a list of repositories that use the http protocol in baseurl.
+   repos_configured::::/usr/bin/sh -c echo\ "${conf.*.baseurl=*http://*}"\ >>/tmp/baseurl_http.log
+
+   # Disables all repositories whose id starts with "rpmfusion".
+   repos_configured::::/usr/bin/sh -c echo\ conf.rpmfusion*.enabled=0
 
    # Prints the information about the start of the transaction.
    # Since package_filter is empty, it executes the commands once.
