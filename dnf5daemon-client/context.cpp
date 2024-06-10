@@ -37,7 +37,9 @@ void Context::init_session(sdbus::IConnection & connection) {
     // open dnf5daemon-server session
     auto cfg = static_cast<DaemonCommand *>(get_selected_command())->session_config();
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
+#ifndef SDBUS_CPP_VERSION_2
     session_manager_proxy->finishRegistration();
+#endif
 
     // set up the install root end setopts
     std::map<std::string, std::string> empty_options{};
@@ -63,7 +65,9 @@ void Context::init_session(sdbus::IConnection & connection) {
     // register progress bars callbacks
     download_cb = std::make_unique<DownloadCB>(*this);
     transaction_cb = std::make_unique<TransactionCB>(*this);
+#ifndef SDBUS_CPP_VERSION_2
     session_proxy->finishRegistration();
+#endif
 }
 
 
