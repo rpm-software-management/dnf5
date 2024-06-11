@@ -65,15 +65,55 @@ Subcommands
     | Replay the transaction that was previously stored into the file.
 
 
-Options
-=======
+Options for ``list`` and ``info``
+=================================
 
 ``--reverse``
     | Reverse the order of transactions in the output.
 
 
+Options for ``undo``
+====================
+
+``--skip-unavailable``
+    | Allow skipping packages actions that are not possible perform.
+
+``--ignore-extras``
+    | Don't consider extra packages pulled into the transaction as errors.
+    | They will still be reported as warnings.
+
+``--ignore-installed``
+    | Don't consider mismatches between installed and stored transaction packages as errors.
+    | They will still be reported as warnings.
+    | Using this option can result in an empty transaction.
+    | For install actions skip already installed packages.
+    | For upgrade actions skip groups or environments that are not installed.
+    | For remove actions skip not installed packages/groups/environments.
+
+
 Examples
 ========
+
+``dnf5 history list``
+    | List all transactions, where the most recent transaction is printed first.
+
+``dnf5 history info 4``
+    | Show detailed info about the fourth transaction.
+
+``dnf5 history info last``
+    | Show detailed info about the last transaction.
+
+``dnf5 history info last-1``
+    | Show detailed info about the second to last transaction.
+
+``dnf5 history list 4..8``
+    | List transactions with id in 4 to 8 range.
+
+``dnf5 history undo last``
+    | Undo the last transaction.
+
+``dnf5 history undo 4 --ignore-extras``
+    | Undo the fourth transaction ignoring extra packages pulled into the reverting transaction.
 
 
 See Also
