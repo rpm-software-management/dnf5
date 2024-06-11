@@ -13,6 +13,7 @@ target_link_libraries(builddep_cmd_plugin PRIVATE ${RPMBUILD})
 pkg_check_modules(RPM REQUIRED rpm)
 target_link_libraries(builddep_cmd_plugin PRIVATE ${RPM_LIBRARIES})
 
+target_link_libraries(builddep_cmd_plugin PRIVATE common)
 target_link_libraries(builddep_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(builddep_cmd_plugin PRIVATE dnf5)
 
