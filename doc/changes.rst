@@ -201,6 +201,9 @@ Changes to individual commands
 ``help``
   * Dropped. The functionality is replaced by the ``--help`` option.
 
+``history``
+  * ``undo`` subcommand now accepts ``--ignore-extras`` and ``--ignore-installed`` like original ``history replay`` command.
+
 ``info``
   * Dropped ``--all`` option since this behavior is the default one.
   * Dropped ``--updates`` option, only ``--upgrades`` is available now.
