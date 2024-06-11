@@ -166,7 +166,7 @@ std::string LogEvent::to_string(
         case GoalProblem::NOT_INSTALLED: {
             if (goal_action_is_replay(action)) {
                 return ret.append(utils::sformat(
-                    _("Cannot perform {0} for {1} '{2}' becasue it is not installed."),
+                    _("Cannot perform {0} for {1} '{2}' because it is not installed."),
                     goal_action_to_string(action),
                     transaction_item_type_to_string(*spec_type),
                     *spec));
