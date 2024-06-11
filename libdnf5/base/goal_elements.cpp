@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/base/goal_elements.hpp"
 
 #include "libdnf5/common/exception.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
 
 namespace libdnf5 {
 
@@ -344,55 +345,55 @@ libdnf5::comps::PackageType GoalJobSettings::resolve_group_package_types(const l
 std::string goal_action_to_string(GoalAction action) {
     switch (action) {
         case GoalAction::INSTALL:
-            return "Install";
+            return _("Install");
         case GoalAction::INSTALL_VIA_PROVIDE:
-            return "Install via provide";
+            return _("Install via provide");
         case GoalAction::INSTALL_BY_COMPS:
-            return "Install by group";
+            return _("Install by group");
         case GoalAction::UPGRADE:
-            return "Upgrade";
+            return _("Upgrade");
         case GoalAction::UPGRADE_ALL:
-            return "Upgrade all";
+            return _("Upgrade all");
         case GoalAction::UPGRADE_MINIMAL:
-            return "Upgrade minimal";
+            return _("Upgrade minimal");
         case GoalAction::UPGRADE_ALL_MINIMAL:
-            return "Upgrade all minimal";
+            return _("Upgrade all minimal");
         case GoalAction::DOWNGRADE:
-            return "Downgrade";
+            return _("Downgrade");
         case GoalAction::REINSTALL:
-            return "Reinstall";
+            return _("Reinstall");
         case GoalAction::INSTALL_OR_REINSTALL:
-            return "Install or reinstall";
+            return _("Install or reinstall");
         case GoalAction::REMOVE:
-            return "Remove";
+            return _("Remove");
         case GoalAction::DISTRO_SYNC:
-            return "Distrosync";
+            return _("Distrosync");
         case GoalAction::DISTRO_SYNC_ALL:
-            return "Distrosync all";
+            return _("Distrosync all");
         case GoalAction::REASON_CHANGE:
-            return "Reason Change";
+            return _("Reason Change");
         case GoalAction::RESOLVE:
-            return "Resolve";
+            return _("Resolve");
         case GoalAction::ENABLE:
-            return "Enable";
+            return _("Enable");
         case GoalAction::DISABLE:
-            return "Disable";
+            return _("Disable");
         case GoalAction::RESET:
-            return "Reset";
+            return _("Reset");
         case GoalAction::REPLAY_INSTALL:
-            return "Install action";
+            return _("Install action");
         case GoalAction::REPLAY_REMOVE:
-            return "Remove action";
+            return _("Remove action");
         case GoalAction::REPLAY_UPGRADE:
-            return "Upgrade action";
+            return _("Upgrade action");
         case GoalAction::REPLAY_REINSTALL:
-            return "Reinstall action";
+            return _("Reinstall action");
         case GoalAction::REPLAY_REASON_CHANGE:
-            return "Reason change action";
+            return _("Reason change action");
         case GoalAction::REPLAY_REASON_OVERRIDE:
-            return "Reason override";
+            return _("Reason override");
         case GoalAction::REVERT_COMPS_UPGRADE:
-            return "Revert comps upgrade";
+            return _("Revert comps upgrade");
     }
     return "";
 }
