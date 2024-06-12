@@ -58,6 +58,7 @@ Provides:       dnf5-command(module)
 Provides:       dnf5-command(offline)
 Provides:       dnf5-command(provides)
 Provides:       dnf5-command(reinstall)
+Provides:       dnf5-command(replay)
 Provides:       dnf5-command(remove)
 Provides:       dnf5-command(repo)
 Provides:       dnf5-command(repoquery)
@@ -308,6 +309,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-provides.8.*
 %{_mandir}/man8/dnf*-reinstall.8.*
 %{_mandir}/man8/dnf*-remove.8.*
+%{_mandir}/man8/dnf*-replay.8.*
 %{_mandir}/man8/dnf*-repo.8.*
 %{_mandir}/man8/dnf*-repoquery.8.*
 %{_mandir}/man8/dnf*-search.8.*

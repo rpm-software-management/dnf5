@@ -27,6 +27,7 @@ DNF5 Commands
     provides.8
     reinstall.8
     remove.8
+    replay.8
     repo.8
     repoquery.8
     search.8

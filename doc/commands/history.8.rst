@@ -61,9 +61,6 @@ Subcommands
 ``store``
     | Store the transaction into a directory.
 
-``replay``
-    | Replay the transaction that was previously stored into the file.
-
 
 Options for ``list`` and ``info``
 =================================

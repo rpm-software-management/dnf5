@@ -40,6 +40,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/provides/provides.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
+#include "commands/replay/replay.hpp"
 #include "commands/repo/repo.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/search/search.hpp"
@@ -674,6 +675,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
     context.add_and_initialize_command(std::make_unique<AutoremoveCommand>(context));
     context.add_and_initialize_command(std::make_unique<ProvidesCommand>(context));
+    context.add_and_initialize_command(std::make_unique<ReplayCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<LeavesCommand>(context));
     context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));

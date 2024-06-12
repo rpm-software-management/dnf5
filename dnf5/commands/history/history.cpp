@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "history_info.hpp"
 #include "history_list.hpp"
 #include "history_redo.hpp"
-#include "history_replay.hpp"
 #include "history_rollback.hpp"
 #include "history_store.hpp"
 #include "history_undo.hpp"
@@ -61,7 +60,6 @@ void HistoryCommand::register_subcommands() {
     // register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
     // register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
     register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
-    // register_subcommand(std::make_unique<HistoryReplayCommand>(get_context()), software_management_commands_group);
 }
 
 void HistoryCommand::pre_configure() {
