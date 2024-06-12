@@ -573,6 +573,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::RESET: {
                 libdnf_throw_assertion("Unsupported action \"RESET\"");
             }
+            case GoalAction::REPLAY_PARSE: {
+                libdnf_throw_assertion("Unsupported action \"REPLAY PARSE\"");
+            }
             case GoalAction::REPLAY_INSTALL: {
                 libdnf_throw_assertion("Unsupported action \"REPLAY INSTALL\"");
             }
@@ -661,10 +664,22 @@ GoalProblem Goal::Impl::add_serialized_transaction_to_goal(base::Transaction & t
 
     auto & [replay_path, settings] = *serialized_transaction;
     utils::fs::File replay_file(replay_path, "r");
-    auto replay_location = replay_path.remove_filename();
-    auto replay = transaction::parse_transaction_replay(replay_file.read());
-
-    return add_replay_to_goal(transaction, replay, settings, replay_location);
+    auto replay_location = replay_path;
+    replay_location.remove_filename();
+    try {
+        auto replay = transaction::parse_transaction_replay(replay_file.read());
+        return add_replay_to_goal(transaction, replay, settings, replay_location);
+    } catch (const libdnf5::transaction::TransactionReplayError & ex) {
+        transaction.p_impl->add_resolve_log(
+            GoalAction::REPLAY_PARSE,
+            libdnf5::GoalProblem::MALFORMED,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            replay_path,
+            {ex.what()},
+            libdnf5::Logger::Level::ERROR);
+        return libdnf5::GoalProblem::MALFORMED;
+    }
 }
 
 static std::set<std::string> query_to_vec_of_nevra_str(const libdnf5::rpm::PackageQuery & query) {

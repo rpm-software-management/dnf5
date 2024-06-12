@@ -121,7 +121,8 @@ enum class GoalProblem : uint32_t {
     MODULE_CANNOT_SWITH_STREAMS = (1 << 21),
     /// Error when transaction contains additional unexpected elements.
     /// Used when replaying transactions.
-    EXTRA = (1 << 22)
+    EXTRA = (1 << 22),
+    MALFORMED = (1 << 23)
 };
 
 /// Types of Goal actions
@@ -144,6 +145,7 @@ enum class GoalAction {
     ENABLE,
     DISABLE,
     RESET,
+    REPLAY_PARSE,
     REPLAY_INSTALL,
     REPLAY_REMOVE,
     REPLAY_UPGRADE,

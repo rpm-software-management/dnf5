@@ -337,6 +337,9 @@ std::string LogEvent::to_string(
                 *spec,
                 *additional_data.begin()));
         }
+        case GoalProblem::MALFORMED: {
+            return ret.append(utils::sformat(_("Cannot parse file: '{0}': {1}.\n"), *spec, *additional_data.begin()));
+        }
     }
     return ret;
 }
