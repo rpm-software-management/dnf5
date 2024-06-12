@@ -380,6 +380,8 @@ std::string goal_action_to_string(GoalAction action) {
             return _("Disable");
         case GoalAction::RESET:
             return _("Reset");
+        case GoalAction::REPLAY_PARSE:
+            return _("Parse serialized transaction");
         case GoalAction::REPLAY_INSTALL:
             return _("Install action");
         case GoalAction::REPLAY_REMOVE:
