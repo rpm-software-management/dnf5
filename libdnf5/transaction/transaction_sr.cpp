@@ -44,13 +44,6 @@ namespace libdnf5::transaction {
 constexpr const char * VERSION_MAJOR = "1";
 constexpr const char * VERSION_MINOR = "0";
 
-class TransactionReplayError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
-    const char * get_name() const noexcept override { return "TransactionReplayError"; }
-};
-
 TransactionReplay parse_transaction_replay(const std::string & json_serialized_transaction) {
     if (json_serialized_transaction.empty()) {
         throw TransactionReplayError(M_("Transaction replay JSON serialized transaction input is empty"));
