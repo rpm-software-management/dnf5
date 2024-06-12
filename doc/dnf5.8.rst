@@ -112,6 +112,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`remove <remove_command_ref-label>`
     | Remove packages.
 
+:ref:`replay <replay_command_ref-label>`
+    | Replay stored transactions.
+
 :ref:`repo <repo_command_ref-label>`
     | Manage repositories.
 

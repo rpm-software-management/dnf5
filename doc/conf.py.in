@@ -134,6 +134,7 @@ man_pages = [
     ('commands/provides.8', 'dnf5-provides', 'Provides Command', AUTHORS, 8),
     ('commands/reinstall.8', 'dnf5-reinstall', 'Reinstall Command', AUTHORS, 8),
     ('commands/remove.8', 'dnf5-remove', 'Remove Command', AUTHORS, 8),
+    ('commands/replay.8', 'dnf5-replay', 'Replay Command', AUTHORS, 8),
     ('commands/repo.8', 'dnf5-repo', 'Repo Command', AUTHORS, 8),
     ('commands/repoquery.8', 'dnf5-repoquery', 'Repoquery Command', AUTHORS, 8),
     ('commands/search.8', 'dnf5-search', 'Search Command', AUTHORS, 8),
