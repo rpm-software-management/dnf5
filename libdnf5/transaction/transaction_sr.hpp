@@ -29,6 +29,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::transaction {
 
+class TransactionReplayError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
+    const char * get_name() const noexcept override { return "TransactionReplayError"; }
+};
+
 
 struct GroupReplay {
     TransactionItemAction action;
