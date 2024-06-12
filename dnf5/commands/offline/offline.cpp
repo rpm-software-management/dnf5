@@ -206,7 +206,8 @@ void OfflineSubcommand::configure() {
     const std::filesystem::path installroot = ctx.get_base().get_config().get_installroot_option().get_value();
     datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(datadir);
-    state = std::make_optional<libdnf5::offline::OfflineTransactionState>(datadir / "offline-transaction-state.toml");
+    state = std::make_optional<libdnf5::offline::OfflineTransactionState>(
+        datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME);
 }
 
 void check_state(const libdnf5::offline::OfflineTransactionState & state) {
