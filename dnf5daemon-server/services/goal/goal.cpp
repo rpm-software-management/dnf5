@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
-#include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/transaction/transaction_item.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
