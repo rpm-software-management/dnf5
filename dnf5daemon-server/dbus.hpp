@@ -61,6 +61,7 @@ const char * const INTERFACE_RPM = "org.rpm.dnf.v0.rpm.Rpm";
 const char * const INTERFACE_GOAL = "org.rpm.dnf.v0.Goal";
 const char * const INTERFACE_GROUP = "org.rpm.dnf.v0.comps.Group";
 const char * const INTERFACE_ADVISORY = "org.rpm.dnf.v0.Advisory";
+const char * const INTERFACE_OFFLINE = "org.rpm.dnf.v0.Offline";
 const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
 // signals
