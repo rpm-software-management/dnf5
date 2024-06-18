@@ -72,6 +72,9 @@ sdbus::MethodReply Offline::check_pending(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        throw std::runtime_error("Not authorized");
+    }
     std::string error_msg;
     dnfdaemon::KeyValueMap options;
     call >> options;
@@ -97,6 +100,9 @@ sdbus::MethodReply Offline::clean(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        throw std::runtime_error("Not authorized");
+    }
     bool success{false};
     std::string error_msg{};
     // try load the offline transaction state
