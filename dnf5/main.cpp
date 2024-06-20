@@ -1444,6 +1444,11 @@ int main(int argc, char * argv[]) try {
 
     log_router.info("DNF5 finished");
 
+    // Print Complete! message only when transaction is created to prevent poluting output from repoquery or other command
+    if (auto * transaction = context.get_transaction(); transaction && !transaction->empty()) {
+        context.print_info(_("Complete!"));
+    }
+
     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
 } catch (const libdnf5::Error & e) {
     std::cerr << libdnf5::format(e, libdnf5::FormatDetailLevel::WithName);
