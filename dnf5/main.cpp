@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/check-upgrade/check-upgrade.hpp"
 #include "commands/check/check.hpp"
 #include "commands/clean/clean.hpp"
+#include "commands/debuginfo-install/debuginfo-install.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
@@ -671,6 +672,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<DistroSyncCommand>(context));
     context.add_and_initialize_command(std::make_unique<DowngradeCommand>(context));
     context.add_and_initialize_command(std::make_unique<ReinstallCommand>(context));
+    context.add_and_initialize_command(std::make_unique<DebuginfoInstallCommand>(context));
     context.add_and_initialize_command(std::make_unique<SwapCommand>(context));
     context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
     context.add_and_initialize_command(std::make_unique<AutoremoveCommand>(context));
