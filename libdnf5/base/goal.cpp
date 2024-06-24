@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
+#include "transaction/transaction_merge.hpp"
 #include "transaction/transaction_sr.hpp"
 #include "transaction_impl.hpp"
 #include "utils/string.hpp"
@@ -2810,111 +2811,141 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
         {Action::REPLACED, Action::INSTALL},
         {Action::REASON_CHANGE, Action::REASON_CHANGE},
     };
-    transaction::TransactionReplay replay;
     auto history = base->get_transaction_history();
 
     auto & [reverting_transactions, settings] = *revert_transactions;
-    //TODO(amatej): Implement merging of transactions and merge the vector
-    //              instead of taking the first one.
-    auto & reverting_transaction = reverting_transactions[0];
+    std::vector<transaction::TransactionReplay> reverted_transactions;
 
-    for (const auto & pkg : reverting_transaction.get_packages()) {
-        transaction::PackageReplay package_replay;
-        package_replay.nevra = libdnf5::rpm::to_nevra_string(pkg);
-        auto reverted_action = REVERT_ACTION.find(pkg.get_action());
-        libdnf_assert(
-            reverted_action != REVERT_ACTION.end(),
-            "Cannot revert action: \"{}\"",
-            transaction_item_action_to_string(pkg.get_action()));
-        package_replay.action = reverted_action->second;
+    for (auto & reverting_transaction : reverting_transactions) {
+        transaction::TransactionReplay replay;
+        for (const auto & pkg : reverting_transaction.get_packages()) {
+            transaction::PackageReplay package_replay;
+            package_replay.nevra = libdnf5::rpm::to_nevra_string(pkg);
+            auto reverted_action = REVERT_ACTION.find(pkg.get_action());
+            libdnf_assert(
+                reverted_action != REVERT_ACTION.end(),
+                "Cannot revert action: \"{}\"",
+                transaction_item_action_to_string(pkg.get_action()));
+            package_replay.action = reverted_action->second;
 
-        // We cannot tell the previous reason if the action is REASON_CHANGE it could have been anything.
-        // For reverted action INSTALL and reason CLEAN the previous reason could have been either DEPENDENCY or WEAK DEPENDENCY
-        // to pick the right one we have to look into history.
-        if ((package_replay.action == Action::REASON_CHANGE) ||
-            (package_replay.action == Action::INSTALL && pkg.get_reason() == Reason::CLEAN)) {
-            // We look up the reason based on only name and arch, this means we could find a different
-            // version of installonly package however we store only one reason for ALL versions of
-            // installonly packages so it doesn't matter.
-            package_replay.reason =
-                history->transaction_item_reason_at(pkg.get_name(), pkg.get_arch(), reverting_transaction.get_id() - 1);
-        } else if (
-            package_replay.action == Action::REMOVE &&
-            (pkg.get_reason() == Reason::DEPENDENCY || pkg.get_reason() == Reason::WEAK_DEPENDENCY)) {
-            package_replay.reason = Reason::CLEAN;
-        } else {
-            package_replay.reason = pkg.get_reason();
-        }
-
-        replay.packages.push_back(package_replay);
-    }
-
-    for (const auto & group : reverting_transaction.get_comps_groups()) {
-        transaction::GroupReplay group_replay;
-        group_replay.group_id = group.to_string();
-        // Do not revert UPGRADE for groups. Groups don't have an upgrade path so they cannot be
-        // upgraded or downgraded. The UPGRADE action is basically a synchronization with
-        // current group definition. Revert happens automatically by reverting the rpm actions.
-        if (group.get_action() != transaction::TransactionItemAction::UPGRADE) {
-            auto reverted_action = REVERT_ACTION.find(group.get_action());
-            if (reverted_action == REVERT_ACTION.end()) {
-                libdnf_throw_assertion(
-                    "Cannot revert action: \"{}\"", transaction_item_action_to_string(group.get_action()));
+            // We cannot tell the previous reason if the action is REASON_CHANGE it could have been anything.
+            // For reverted action INSTALL and reason CLEAN the previous reason could have been either DEPENDENCY or WEAK DEPENDENCY
+            // to pick the right one we have to look into history.
+            if ((package_replay.action == Action::REASON_CHANGE) ||
+                (package_replay.action == Action::INSTALL && pkg.get_reason() == Reason::CLEAN)) {
+                // We look up the reason based on only name and arch, this means we could find a different
+                // version of installonly package however we store only one reason for ALL versions of
+                // installonly packages so it doesn't matter.
+                package_replay.reason = history->transaction_item_reason_at(
+                    pkg.get_name(), pkg.get_arch(), reverting_transaction.get_id() - 1);
+            } else if (
+                package_replay.action == Action::REMOVE &&
+                (pkg.get_reason() == Reason::DEPENDENCY || pkg.get_reason() == Reason::WEAK_DEPENDENCY)) {
+                package_replay.reason = Reason::CLEAN;
+            } else {
+                package_replay.reason = pkg.get_reason();
             }
-            group_replay.action = reverted_action->second;
-        } else {
-            transaction.p_impl->add_resolve_log(
-                GoalAction::REVERT_COMPS_UPGRADE,
-                libdnf5::GoalProblem::UNSUPPORTED_ACTION,
-                settings,
-                libdnf5::transaction::TransactionItemType::GROUP,
-                group_replay.group_id,
-                {},
-                libdnf5::Logger::Level::WARNING);
-            continue;
+
+            replay.packages.push_back(package_replay);
         }
 
-        if (group_replay.action == Action::INSTALL && group.get_reason() == Reason::CLEAN) {
-            group_replay.reason = Reason::DEPENDENCY;
-        } else if (group_replay.action == Action::REMOVE && group.get_reason() == Reason::DEPENDENCY) {
-            group_replay.reason = Reason::CLEAN;
-        } else {
-            group_replay.reason = group.get_reason();
-        }
-
-        replay.groups.push_back(group_replay);
-    }
-
-    for (const auto & env : reverting_transaction.get_comps_environments()) {
-        transaction::EnvironmentReplay env_replay;
-        env_replay.environment_id = env.to_string();
-        // Do not revert UPGRADE for environments. Environments don't have an upgrade path so they cannot be
-        // upgraded or downgraded. The UPGRADE action is basically a synchronization with
-        // current environment definition. Revert happens automatically by reverting the rpm
-        // actions.
-        if (env.get_action() != transaction::TransactionItemAction::UPGRADE) {
-            auto reverted_action = REVERT_ACTION.find(env.get_action());
-            if (reverted_action == REVERT_ACTION.end()) {
-                libdnf_throw_assertion(
-                    "Cannot revert action: \"{}\"", transaction_item_action_to_string(env.get_action()));
+        for (const auto & group : reverting_transaction.get_comps_groups()) {
+            transaction::GroupReplay group_replay;
+            group_replay.group_id = group.to_string();
+            // Do not revert UPGRADE for groups. Groups don't have an upgrade path so they cannot be
+            // upgraded or downgraded. The UPGRADE action is basically a synchronization with
+            // current group definition. Revert happens automatically by reverting the rpm actions.
+            if (group.get_action() != transaction::TransactionItemAction::UPGRADE) {
+                auto reverted_action = REVERT_ACTION.find(group.get_action());
+                if (reverted_action == REVERT_ACTION.end()) {
+                    libdnf_throw_assertion(
+                        "Cannot revert action: \"{}\"", transaction_item_action_to_string(group.get_action()));
+                }
+                group_replay.action = reverted_action->second;
+            } else {
+                transaction.p_impl->add_resolve_log(
+                    GoalAction::REVERT_COMPS_UPGRADE,
+                    libdnf5::GoalProblem::UNSUPPORTED_ACTION,
+                    settings,
+                    libdnf5::transaction::TransactionItemType::GROUP,
+                    group_replay.group_id,
+                    {},
+                    libdnf5::Logger::Level::WARNING);
+                continue;
             }
-            env_replay.action = reverted_action->second;
-        } else {
-            transaction.p_impl->add_resolve_log(
-                GoalAction::REVERT_COMPS_UPGRADE,
-                libdnf5::GoalProblem::UNSUPPORTED_ACTION,
-                settings,
-                libdnf5::transaction::TransactionItemType::ENVIRONMENT,
-                env_replay.environment_id,
-                {},
-                libdnf5::Logger::Level::WARNING);
-            continue;
+
+            if (group_replay.action == Action::INSTALL && group.get_reason() == Reason::CLEAN) {
+                group_replay.reason = Reason::DEPENDENCY;
+            } else if (group_replay.action == Action::REMOVE && group.get_reason() == Reason::DEPENDENCY) {
+                group_replay.reason = Reason::CLEAN;
+            } else {
+                group_replay.reason = group.get_reason();
+            }
+
+            replay.groups.push_back(group_replay);
         }
 
-        replay.environments.push_back(env_replay);
+        for (const auto & env : reverting_transaction.get_comps_environments()) {
+            transaction::EnvironmentReplay env_replay;
+            env_replay.environment_id = env.to_string();
+            // Do not revert UPGRADE for environments. Environments don't have an upgrade path so they cannot be
+            // upgraded or downgraded. The UPGRADE action is basically a synchronization with
+            // current environment definition. Revert happens automatically by reverting the rpm
+            // actions.
+            if (env.get_action() != transaction::TransactionItemAction::UPGRADE) {
+                auto reverted_action = REVERT_ACTION.find(env.get_action());
+                if (reverted_action == REVERT_ACTION.end()) {
+                    libdnf_throw_assertion(
+                        "Cannot revert action: \"{}\"", transaction_item_action_to_string(env.get_action()));
+                }
+                env_replay.action = reverted_action->second;
+            } else {
+                transaction.p_impl->add_resolve_log(
+                    GoalAction::REVERT_COMPS_UPGRADE,
+                    libdnf5::GoalProblem::UNSUPPORTED_ACTION,
+                    settings,
+                    libdnf5::transaction::TransactionItemType::ENVIRONMENT,
+                    env_replay.environment_id,
+                    {},
+                    libdnf5::Logger::Level::WARNING);
+                continue;
+            }
+
+            replay.environments.push_back(env_replay);
+        }
+
+        reverted_transactions.push_back(replay);
     }
 
-    ret |= add_replay_to_goal(transaction, replay, settings);
+    std::reverse(reverted_transactions.begin(), reverted_transactions.end());
+
+    // Prepare installed map which is needed for merging
+    libdnf5::rpm::PackageQuery installed_query(base, libdnf5::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    installed_query.filter_installed();
+    std::unordered_map<std::string, std::vector<std::string>> installed;
+    for (const auto & pkg : installed_query) {
+        const auto name_arch = pkg.get_name() + "." + pkg.get_arch();
+        if (installed.contains(name_arch)) {
+            installed[name_arch].push_back(pkg.get_nevra());
+        } else {
+            installed[name_arch] = {pkg.get_nevra()};
+        }
+    }
+    auto [merged_transactions, problems] = merge_transactions(
+        reverted_transactions, installed, base->get_config().get_installonlypkgs_option().get_value());
+
+    for (const auto & problem : problems) {
+        transaction.p_impl->add_resolve_log(
+            GoalAction::MERGE,
+            libdnf5::GoalProblem::MERGE_ERROR,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            {},
+            {problem},
+            libdnf5::Logger::Level::WARNING);
+    }
+
+    ret |= add_replay_to_goal(transaction, merged_transactions, settings);
 
     return ret;
 }
