@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/comps/group/query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <transaction/transaction_sr.hpp>
 
 #include <iterator>
 #include <vector>
@@ -276,6 +277,63 @@ struct assertion_traits<libdnf5::system::ModuleState> {
     }
 };
 #endif
+
+template <>
+struct assertion_traits<libdnf5::transaction::PackageReplay> {
+    inline static bool equal(
+        const libdnf5::transaction::PackageReplay & left, const libdnf5::transaction::PackageReplay & right) {
+        return left.action == right.action && left.reason == right.reason && left.group_id == right.group_id &&
+               left.nevra == right.nevra && left.package_path == right.package_path && left.repo_id == right.repo_id;
+    }
+
+    inline static std::string toString(const libdnf5::transaction::PackageReplay & replay) {
+        return fmt::format(
+            "PackageReplay: nevra: {}, action: {}, reason: {}, repo_id: {}, group_id: {}, package_path: {}",
+            replay.nevra,
+            libdnf5::transaction::transaction_item_action_to_string(replay.action),
+            libdnf5::transaction::transaction_item_reason_to_string(replay.reason),
+            replay.repo_id,
+            replay.group_id,
+            std::string(replay.package_path));
+    }
+};
+
+template <>
+struct assertion_traits<libdnf5::transaction::GroupReplay> {
+    inline static bool equal(
+        const libdnf5::transaction::GroupReplay & left, const libdnf5::transaction::GroupReplay & right) {
+        return left.action == right.action && left.reason == right.reason && left.group_id == right.group_id &&
+               left.group_path == right.group_path && left.repo_id == right.repo_id;
+    }
+
+    inline static std::string toString(const libdnf5::transaction::GroupReplay & replay) {
+        return fmt::format(
+            "GroupReplay: group_id: {}, action: {}, reason: {}, repo_id: {}, group_path: {}",
+            replay.group_id,
+            libdnf5::transaction::transaction_item_action_to_string(replay.action),
+            libdnf5::transaction::transaction_item_reason_to_string(replay.reason),
+            replay.repo_id,
+            std::string(replay.group_path));
+    }
+};
+
+template <>
+struct assertion_traits<libdnf5::transaction::EnvironmentReplay> {
+    inline static bool equal(
+        const libdnf5::transaction::EnvironmentReplay & left, const libdnf5::transaction::EnvironmentReplay & right) {
+        return left.action == right.action && left.environment_id == right.environment_id &&
+               left.environment_path == right.environment_path && left.repo_id == right.repo_id;
+    }
+
+    inline static std::string toString(const libdnf5::transaction::EnvironmentReplay & replay) {
+        return fmt::format(
+            "EnvironmentReplay: environment_id: {}, action: {}, repo_id: {}, environment_path: {}",
+            replay.environment_id,
+            libdnf5::transaction::transaction_item_action_to_string(replay.action),
+            replay.repo_id,
+            std::string(replay.environment_path));
+    }
+};
 
 }  // namespace CPPUNIT_NS
 
