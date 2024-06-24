@@ -115,7 +115,7 @@ Provides:       dnf5-command(versionlock)
 # ========== versions of dependencies ==========
 
 %global libmodulemd_version 2.5.0
-%global librepo_version 1.15.0
+%global librepo_version 1.18.0
 %global libsolv_version 0.7.25
 %global sqlite_version 3.35.0
 %global swig_version 4

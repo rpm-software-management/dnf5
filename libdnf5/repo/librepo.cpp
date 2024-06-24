@@ -76,18 +76,13 @@ static std::string url_encode(const std::string & src) {
 }
 
 /// Format user password string
-/// Returns user and password in user:password form. If quote is True,
-/// special characters in user and password are URL encoded.
+/// Returns user and password in user:password form.
+/// Special characters in user and password are URL encoded.
 /// @param user Username
 /// @param passwd Password
-/// @param encode If quote is True, special characters in user and password are URL encoded.
 /// @return User and password in user:password form
-static std::string format_user_pass_string(const std::string & user, const std::string & passwd, bool encode) {
-    if (encode) {
-        return url_encode(user) + ":" + url_encode(passwd);
-    } else {
-        return user + ":" + passwd;
-    }
+static std::string format_user_pass_string(const std::string & user, const std::string & passwd) {
+    return url_encode(user) + ":" + url_encode(passwd);
 }
 
 LibrepoResult & LibrepoResult::operator=(LibrepoResult && other) noexcept {
@@ -139,12 +134,12 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
         handle.set_opt(LRO_IPRESOLVE, LR_IPRESOLVE_V6);
     }
 
-    auto userpwd = config.get_username_option().get_value();
-    if (!userpwd.empty()) {
-        // TODO Use URL encoded form, needs support in librepo
-        userpwd = format_user_pass_string(userpwd, config.get_password_option().get_value(), false);
-        handle.set_opt(LRO_USERPWD, userpwd.c_str());
-    }
+    handle.set_opt(
+        LRO_USERNAME,
+        config.get_username_option().get_value().empty() ? NULL : config.get_username_option().get_value().c_str());
+    handle.set_opt(
+        LRO_PASSWORD,
+        config.get_password_option().get_value().empty() ? NULL : config.get_password_option().get_value().c_str());
 
     if (!config.get_sslcacert_option().get_value().empty()) {
         handle.set_opt(LRO_SSLCACERT, config.get_sslcacert_option().get_value().c_str());
@@ -182,7 +177,7 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
     if (!config.get_proxy_username_option().empty()) {
         auto userpwd = config.get_proxy_username_option().get_value();
         if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, config.get_proxy_password_option().get_value(), true);
+            userpwd = format_user_pass_string(userpwd, config.get_proxy_password_option().get_value());
             handle.set_opt(LRO_PROXYUSERPWD, userpwd.c_str());
         }
     }
