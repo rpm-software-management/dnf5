@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifdef WITH_MODULEMD
+
 
 #include "test_module.hpp"
 
@@ -860,3 +862,5 @@ void ModuleTest::test_module_globs() {
     std::sort(active_module_specs.begin(), active_module_specs.end());
     CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
 }
+
+#endif  // WITH_MODULEMD

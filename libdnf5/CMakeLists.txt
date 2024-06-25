@@ -1,5 +1,11 @@
-# use any sources found under the current directory
+# use sources found under the current directory
 file(GLOB_RECURSE LIBDNF5_SOURCES *.cpp *.c)
+
+# exclude module sources if WITH_MODULEMD not defined
+if (NOT WITH_MODULEMD)
+    file(GLOB_RECURSE LIBDNF5_SOURCES_MODULES module/*.cpp)
+    list(REMOVE_ITEM LIBDNF5_SOURCES ${LIBDNF5_SOURCES_MODULES})
+endif()
 
 # create config header file
 configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
@@ -65,10 +71,12 @@ include_directories(${JSONC_INCLUDE_DIRS})
 target_link_libraries(libdnf5 PRIVATE ${JSONC_LIBRARIES})
 target_link_libraries(libdnf5_static PRIVATE ${JSONC_LIBRARIES})
 
-pkg_check_modules(LIBMODULEMD REQUIRED modulemd-2.0>=2.11.2)
-list(APPEND LIBDNF5_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
-target_link_libraries(libdnf5 PRIVATE ${LIBMODULEMD_LIBRARIES})
-target_link_libraries(libdnf5_static PRIVATE ${LIBMODULEMD_LIBRARIES})
+if (WITH_MODULEMD)
+    pkg_check_modules(LIBMODULEMD REQUIRED modulemd-2.0>=2.11.2)
+    list(APPEND LIBDNF5_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
+    target_link_libraries(libdnf5 PRIVATE ${LIBMODULEMD_LIBRARIES})
+    target_link_libraries(libdnf5_static PRIVATE ${LIBMODULEMD_LIBRARIES})
+endif()
 
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.25)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")

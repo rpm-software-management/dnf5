@@ -39,18 +39,21 @@ public:
     ~Goal();
 
     /// Add module enable request to the goal.
+    /// Throws libdnf5::AssertionError when used with libdnf5 compiled without modules enabled.
     /// @param spec             A string with module spec to enable.
     /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().enable(self, module_specs)
     void add_module_enable(const std::string & spec, const libdnf5::GoalJobSettings & settings);
 
     /// Add module disable request to the goal.
+    /// Throws libdnf5::AssertionError when used with libdnf5 compiled without modules enabled.
     /// @param spec             A string with module spec to disable.
     /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().disable(self, module_specs)
     void add_module_disable(const std::string & spec, const libdnf5::GoalJobSettings & settings);
 
     /// Add module reset request to the goal.
+    /// Throws libdnf5::AssertionError when used with libdnf5 compiled without modules enabled.
     /// @param spec             A string with module spec to reset.
     /// @param settings  A structure to override default goal settings.
     // @replaces dnf:dnf/module/module_base.py:method:ModuleBase().reset(self, module_specs)

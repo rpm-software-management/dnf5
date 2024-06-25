@@ -22,7 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../conf/config_utils.hpp"
 #include "base_impl.hpp"
 #include "conf/config.h"
+
+#ifdef WITH_MODULEMD
 #include "module/module_sack_impl.hpp"
+
+#include "libdnf5/module/module_sack.hpp"
+#endif
+
 #include "solv/pool.hpp"
 #include "utils/dnf4convert/dnf4convert.hpp"
 #include "utils/fs/utils.hpp"
@@ -55,9 +61,12 @@ Base::Impl::Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<
       log_router(std::move(loggers)),
       repo_sack(base),
       rpm_package_sack(base),
+#ifdef WITH_MODULEMD
       module_sack(base),
+#endif
       transaction_history(base),
-      vars(base) {}
+      vars(base) {
+}
 
 void Base::lock() {
     locked_base_mutex.lock();
@@ -233,9 +242,11 @@ void Base::setup() {
     // dnf4 persistor from /etc/dnf/modules.d/
     // Remove once reading of dnf4 data is not needed
     libdnf5::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
+#ifdef WITH_MODULEMD
     if ((!std::filesystem::exists(system_state.get_module_state_path()))) {
         system_state.reset_module_states(convertor.read_module_states());
     }
+#endif
 
     if (system_state.packages_import_required()) {
         // TODO(mblaha) - first try dnf5 history database, then fall back to dnf4
@@ -260,7 +271,9 @@ void Base::setup() {
     // (and force to recompute provides) or locked
     const char * arch = vars->get_value("arch").c_str();
     pool_setarch(**pool, arch);
+#ifdef WITH_MODULEMD
     p_impl->module_sack.p_impl->set_arch(arch);
+#endif
     pool_set_rootdir(**pool, installroot.get_value().c_str());
 
     p_impl->plugins.post_base_setup();
@@ -303,7 +316,11 @@ transaction::TransactionHistoryWeakPtr Base::get_transaction_history() {
     return p_impl->transaction_history.get_weak_ptr();
 }
 libdnf5::module::ModuleSackWeakPtr Base::get_module_sack() {
+#ifdef WITH_MODULEMD
     return p_impl->module_sack.get_weak_ptr();
+#else
+    libdnf_throw_assertion("libdnf5 compiled without module support.");
+#endif
 }
 
 VarsWeakPtr Base::get_vars() {

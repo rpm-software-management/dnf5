@@ -21,7 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_BASE_TRANSACTION_IMPL_HPP
 
 
+#ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
+#endif
 #include "rpm/solv/goal_private.hpp"
 
 #include "libdnf5/base/transaction.hpp"
@@ -49,7 +51,12 @@ public:
     Impl & operator=(const Impl & other);
 
     /// Set transaction according resolved goal and problems to EventLog
-    void set_transaction(rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems);
+    void set_transaction(
+        rpm::solv::GoalPrivate & solved_goal,
+#ifdef WITH_MODULEMD
+        module::ModuleSack & module_sack,
+#endif
+        GoalProblem problems);
 
     TransactionPackage make_transaction_package(
         Id id,
@@ -98,7 +105,9 @@ private:
     std::vector<TransactionGroup> groups;
     std::vector<TransactionEnvironment> environments;
     std::vector<TransactionModule> modules;
+#ifdef WITH_MODULEMD
     module::ModuleDBWeakPtr module_db;
+#endif
 
     /// <libdnf5::GoalAction, libdnf5::GoalProblem, libdnf5::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<LogEvent> resolve_logs;

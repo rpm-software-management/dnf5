@@ -8,9 +8,18 @@ set(GETTEXT_DOMAIN libdnf5-cli)
 add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 
-# use any sources found under the current directory
+# use sources found under the current directory
 file(GLOB_RECURSE LIBDNF5_CLI_SOURCES *.cpp)
 
+# exclude module sources if WITH_MODULEMD not defined
+if (NOT WITH_MODULEMD)
+    file(GLOB_RECURSE LIBDNF5_CLI_SOURCES_MODULES
+        output/adapters/module.cpp
+        output/moduleinfo.cpp
+        output/modulelist.cpp)
+
+    list(REMOVE_ITEM LIBDNF5_CLI_SOURCES ${LIBDNF5_CLI_SOURCES_MODULES})
+endif()
 
 # gather all pkg-config requires and write them to a .pc file later
 list(APPEND LIBDNF5_CLI_PC_REQUIRES)

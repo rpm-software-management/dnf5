@@ -21,8 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory/advisory_package_private.hpp"
 #include "base_private.hpp"
+#ifdef WITH_MODULEMD
 #include "module/module_goal_private.hpp"
 #include "module/module_sack_impl.hpp"
+#endif
 #include "rpm/package_query_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "rpm/package_set_impl.hpp"
@@ -38,7 +40,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/comps/group/query.hpp"
+#ifdef WITH_MODULEMD
 #include "libdnf5/module/module_errors.hpp"
+#endif
 #include "libdnf5/rpm/package_query.hpp"
 #include "libdnf5/rpm/reldep.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -147,7 +151,9 @@ public:
     GoalProblem resolve_group_specs(std::vector<GroupSpec> & specs, base::Transaction & transaction);
     void add_resolved_group_specs_to_goal(base::Transaction & transaction);
     void add_resolved_environment_specs_to_goal(base::Transaction & transaction);
+#ifdef WITH_MODULEMD
     GoalProblem add_module_specs_to_goal(base::Transaction & transaction);
+#endif
     GoalProblem add_serialized_transaction_to_goal(base::Transaction & transaction);
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
@@ -275,16 +281,31 @@ Goal::~Goal() = default;
 
 Goal::Impl::~Impl() = default;
 
-void Goal::add_module_enable(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+void Goal::add_module_enable(
+    [[maybe_unused]] const std::string & spec, [[maybe_unused]] const libdnf5::GoalJobSettings & settings) {
+#ifdef WITH_MODULEMD
     p_impl->module_specs.push_back(std::make_tuple(GoalAction::ENABLE, spec, settings));
+#else
+    libdnf_throw_assertion("libdnf5 compiled without module support.");
+#endif
 }
 
-void Goal::add_module_disable(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+void Goal::add_module_disable(
+    [[maybe_unused]] const std::string & spec, [[maybe_unused]] const libdnf5::GoalJobSettings & settings) {
+#ifdef WITH_MODULEMD
     p_impl->module_specs.push_back(std::make_tuple(GoalAction::DISABLE, spec, settings));
+#else
+    libdnf_throw_assertion("libdnf5 compiled without module support.");
+#endif
 }
 
-void Goal::add_module_reset(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+void Goal::add_module_reset(
+    [[maybe_unused]] const std::string & spec, [[maybe_unused]] const libdnf5::GoalJobSettings & settings) {
+#ifdef WITH_MODULEMD
     p_impl->module_specs.push_back(std::make_tuple(GoalAction::RESET, spec, settings));
+#else
+    libdnf_throw_assertion("libdnf5 compiled without module support.");
+#endif
 }
 
 void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
@@ -654,6 +675,8 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     return ret;
 }
 
+
+#ifdef WITH_MODULEMD
 GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     module::ModuleSack & module_sack = *base->get_module_sack();
@@ -708,6 +731,7 @@ GoalProblem Goal::Impl::add_module_specs_to_goal(base::Transaction & transaction
     }
     return ret;
 }
+#endif
 
 GoalProblem Goal::Impl::add_serialized_transaction_to_goal(base::Transaction & transaction) {
     if (!serialized_transaction) {
@@ -3013,6 +3037,7 @@ base::Transaction Goal::resolve() {
     sack->p_impl->make_provides_ready();
 
 
+#ifdef WITH_MODULEMD
     module::ModuleSack & module_sack = *p_impl->base->get_module_sack();
     ret |= p_impl->add_module_specs_to_goal(transaction);
 
@@ -3052,6 +3077,7 @@ base::Transaction Goal::resolve() {
     }
 
     module_sack.p_impl->enable_dependent_modules();
+#endif
 
 
     // TODO(jmracek) Apply comps second or later
@@ -3146,7 +3172,12 @@ base::Transaction Goal::resolve() {
             libdnf5::Logger::Level::WARNING);
     }
 
-    transaction.p_impl->set_transaction(p_impl->rpm_goal, module_sack, ret);
+    transaction.p_impl->set_transaction(
+        p_impl->rpm_goal,
+#ifdef WITH_MODULEMD
+        module_sack,
+#endif
+        ret);
 
     return transaction;
 }

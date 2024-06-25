@@ -28,22 +28,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/defs.h"
 #include "libdnf5/logger/log_router.hpp"
-#include "libdnf5/module/module_sack.hpp"
+#include "libdnf5/module/module_sack_weak.hpp"
 #include "libdnf5/plugin/plugin_info.hpp"
 #include "libdnf5/repo/download_callbacks.hpp"
 #include "libdnf5/repo/repo_sack.hpp"
 #include "libdnf5/rpm/package_sack.hpp"
 #include "libdnf5/transaction/transaction_history.hpp"
 
-#include <functional>
-#include <map>
-
 
 namespace libdnf5::module {
 
 class ModuleDB;
+class ModuleSack;
 
-}
+}  // namespace libdnf5::module
 
 
 namespace libdnf5 {
@@ -86,6 +84,7 @@ public:
     LogRouterWeakPtr get_logger();
     repo::RepoSackWeakPtr get_repo_sack();
     rpm::PackageSackWeakPtr get_rpm_package_sack();
+    /// Throws libdnf5::AssertionError when used with libdnf5 compiled without modules enabled.
     module::ModuleSackWeakPtr get_module_sack();
 
     /// Adds a request to enable/disable plugins that match the names (glob patterns) in the list.

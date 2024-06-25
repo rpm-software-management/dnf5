@@ -20,8 +20,14 @@ add_definitions(-DINSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\")
 # set SYSCONFIG_DIR, used to find the directory containing the dnf5 configuration
 add_definitions(-DSYSCONFIG_DIR=\"${CMAKE_INSTALL_FULL_SYSCONFDIR}\")
 
-# use any sources found under the current directory
+# use sources found under the current directory
 file(GLOB_RECURSE DNF5_SOURCES *.cpp)
+
+# exclude module sources if WITH_MODULEMD not defined
+if (NOT WITH_MODULEMD)
+    file(GLOB_RECURSE DNF5_SOURCES_MODULES commands/module/*.cpp)
+    list(REMOVE_ITEM DNF5_SOURCES ${DNF5_SOURCES_MODULES})
+endif()
 
 include_directories("${PROJECT_SOURCE_DIR}/dnf5/include/")
 include_directories(.)

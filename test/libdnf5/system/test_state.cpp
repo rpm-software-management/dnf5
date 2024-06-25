@@ -131,6 +131,7 @@ void StateTest::test_state_read() {
         .userinstalled = false, .packages = {"pkg1", "pkg2"}, .package_types = libdnf5::comps::PackageType::MANDATORY};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 
+#ifdef WITH_MODULEMD
     libdnf5::system::ModuleState module_state_1{
         .enabled_stream = "stream-1",
         .status = libdnf5::module::ModuleStatus::ENABLED,
@@ -139,6 +140,7 @@ void StateTest::test_state_read() {
     libdnf5::system::ModuleState module_state_2{
         .enabled_stream = "stream-2", .status = libdnf5::module::ModuleStatus::DISABLED};
     CPPUNIT_ASSERT_EQUAL(module_state_2, state.get_module_state("module-2"));
+#endif
     CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
 }
 
@@ -166,6 +168,7 @@ void StateTest::test_state_write() {
          .packages = {"pkg1", "pkg2"},
          .package_types = libdnf5::comps::PackageType::MANDATORY});
 
+#ifdef WITH_MODULEMD
     state.set_module_state(
         "module-1",
         {.enabled_stream = "stream-1",
@@ -173,6 +176,7 @@ void StateTest::test_state_write() {
          .installed_profiles = {"zigg", "zagg"}});
     state.set_module_state(
         "module-2", {.enabled_stream = "stream-2", .status = libdnf5::module::ModuleStatus::DISABLED});
+#endif
 
     state.set_rpmdb_cookie("foo");
 
@@ -181,14 +185,18 @@ void StateTest::test_state_write() {
     CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
     CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
     CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
+#ifdef WITH_MODULEMD
     CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
+#endif
     CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf5::utils::fs::File(path / "system.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
     state.remove_package_nevra_state("pkg-1.2-1.x86_64");
     state.remove_group_state("group-1");
+#ifdef WITH_MODULEMD
     state.remove_module_state("module-1");
+#endif
 
     state.save();
 
@@ -222,6 +230,7 @@ userinstalled = false
     CPPUNIT_ASSERT_EQUAL(
         groups_contents_after_remove, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
 
+#ifdef WITH_MODULEMD
     const std::string modules_contents_after_remove{R"""(version = "1.0"
 [modules]
 module-2 = {enabled_stream="stream-2",installed_profiles=[],state="Disabled"}
@@ -229,4 +238,5 @@ module-2 = {enabled_stream="stream-2",installed_profiles=[],state="Disabled"}
 
     CPPUNIT_ASSERT_EQUAL(
         modules_contents_after_remove, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
+#endif
 }

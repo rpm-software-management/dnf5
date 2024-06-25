@@ -143,6 +143,7 @@ WHERE
 )**";
 
 
+#ifdef WITH_MODULEMD
 std::map<std::string, libdnf5::system::ModuleState> Dnf4Convert::read_module_states() {
     std::map<std::string, libdnf5::system::ModuleState> module_states;
 
@@ -178,6 +179,7 @@ std::map<std::string, libdnf5::system::ModuleState> Dnf4Convert::read_module_sta
     }
     return module_states;
 }
+#endif
 
 
 bool Dnf4Convert::read_package_states_from_history(
