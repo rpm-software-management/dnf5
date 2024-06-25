@@ -259,6 +259,7 @@ struct assertion_traits<libdnf5::system::GroupState> {
     }
 };
 
+#ifdef WITH_MODULEMD
 template <>
 struct assertion_traits<libdnf5::system::ModuleState> {
     inline static bool equal(const libdnf5::system::ModuleState & left, const libdnf5::system::ModuleState & right) {
@@ -274,6 +275,7 @@ struct assertion_traits<libdnf5::system::ModuleState> {
             assertion_traits<std::vector<std::string>>::toString(module_state.installed_profiles));
     }
 };
+#endif
 
 }  // namespace CPPUNIT_NS
 

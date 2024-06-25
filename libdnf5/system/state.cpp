@@ -155,6 +155,7 @@ struct into<libdnf5::system::EnvironmentState> {
 };
 
 
+#ifdef WITH_MODULEMD
 template <>
 struct from<libdnf5::system::ModuleState> {
     static libdnf5::system::ModuleState from_toml(const value & v) {
@@ -181,6 +182,7 @@ struct into<libdnf5::system::ModuleState> {
         return res;
     }
 };
+#endif
 
 
 template <>
@@ -460,6 +462,7 @@ std::set<std::string> State::get_group_environments(const std::string & id) {
     return environments;
 }
 
+#ifdef WITH_MODULEMD
 const std::map<std::string, ModuleState> & State::get_module_states() {
     return module_states;
 }
@@ -483,6 +486,7 @@ void State::set_module_state(const std::string & name, const ModuleState & modul
 void State::remove_module_state(const std::string & name) {
     module_states.erase(name);
 }
+#endif
 
 
 std::string State::get_rpmdb_cookie() const {
@@ -518,7 +522,9 @@ void State::save() {
     utils::fs::File(get_group_state_path(), "w").write(toml_format(make_top_value("groups", group_states)));
     utils::fs::File(get_environment_state_path(), "w")
         .write(toml_format(make_top_value("environments", environment_states)));
+#ifdef WITH_MODULEMD
     utils::fs::File(get_module_state_path(), "w").write(toml_format(make_top_value("modules", module_states)));
+#endif
     utils::fs::File(get_system_state_path(), "w").write(toml_format(make_top_value("system", system_state)));
 }
 
@@ -551,7 +557,9 @@ void State::load() {
     group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
     environment_states =
         load_toml_data<std::map<std::string, EnvironmentState>>(get_environment_state_path(), "environments");
+#ifdef WITH_MODULEMD
     module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
+#endif
     system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
     package_groups_cache.reset();
 }

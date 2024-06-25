@@ -21,7 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/repo/repo_errors.hpp"
 
+#ifdef WITH_MODULEMD
 #include "../module/module_sack_impl.hpp"
+#endif
 #include "conf/config.h"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
@@ -576,7 +578,9 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     fix_group_missing_xml();
 
     base->get_rpm_package_sack()->load_config_excludes_includes();
+#ifdef WITH_MODULEMD
     base->get_module_sack()->p_impl->module_filtering();
+#endif
     repos_updated_and_loaded = true;
 
     base->p_impl->get_plugins().repos_loaded();

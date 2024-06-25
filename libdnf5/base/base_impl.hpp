@@ -20,12 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_BASE_BASE_IMPL_HPP
 #define LIBDNF5_BASE_BASE_IMPL_HPP
 
-
 #include "../advisory/advisory_sack.hpp"
 #include "plugin/plugins.hpp"
 #include "system/state.hpp"
 
 #include "libdnf5/base/base.hpp"
+#ifdef WITH_MODULEMD
+#include "libdnf5/module/module_sack.hpp"
+#endif
 
 
 namespace libdnf5 {
@@ -90,7 +92,9 @@ private:
     ConfigMain config;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
+#ifdef WITH_MODULEMD
     module::ModuleSack module_sack;
+#endif
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;

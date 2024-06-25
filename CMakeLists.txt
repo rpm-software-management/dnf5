@@ -1,5 +1,5 @@
 message("Running CMake on dnf5...")
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.6)
 
 
 include(VERSION.cmake)
@@ -119,6 +119,10 @@ if(WITH_TRANSLATIONS)
     add_custom_target(gettext-potfiles)
 endif()
 
+# When modules are enabled add WITH_MODULEMD definition for all sub-directories (all components).
+if (WITH_MODULEMD)
+    add_definitions(-DWITH_MODULEMD)
+endif()
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}/common")

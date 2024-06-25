@@ -433,7 +433,7 @@ void Repo::load_available_repo() {
     }
 
     // Load module metadata
-#ifdef MODULEMD
+#ifdef WITH_MODULEMD
     auto & logger = *p_impl->base->get_logger();
 
     std::string ext_fn = p_impl->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_MODULES);

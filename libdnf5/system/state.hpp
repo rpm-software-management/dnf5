@@ -60,12 +60,14 @@ public:
     std::vector<std::string> groups;
 };
 
+#ifdef WITH_MODULEMD
 class ModuleState {
 public:
     std::string enabled_stream;
     module::ModuleStatus status{module::ModuleStatus::AVAILABLE};
     std::vector<std::string> installed_profiles{};
 };
+#endif
 
 class SystemState {
 public:
@@ -208,6 +210,7 @@ public:
     /// @since 5.0
     std::set<std::string> get_group_environments(const std::string & id);
 
+#ifdef WITH_MODULEMD
     /// @return All module states.
     /// @since 5.0.8
     const std::map<std::string, ModuleState> & get_module_states();
@@ -221,6 +224,7 @@ public:
     /// @param name The module name to set the state for.
     /// @since 5.0.8
     void set_module_state(const std::string & name, const ModuleState & module_state);
+#endif
 
     /// Removes the state for a module name.
     /// @param name The module name to remove the state for.
@@ -248,10 +252,12 @@ private:
     /// @since 5.0
     bool packages_import_required();
 
+#ifdef WITH_MODULEMD
     /// Reset modules states to match given new values.
     /// @param new_states New values for modules states.
     /// @since 5.0
     void reset_module_states(std::map<std::string, ModuleState> new_states) { module_states = new_states; }
+#endif
 
     /// Reset packages system state to match given values.
     /// @param installed_packages Vector of tuples <rpm::Nevra nevra, TransactionItemReason reason, std::string repository_id> of currently installed packages
@@ -303,7 +309,9 @@ private:
     std::map<std::string, NevraState> nevra_states;
     std::map<std::string, GroupState> group_states;
     std::map<std::string, EnvironmentState> environment_states;
+#ifdef WITH_MODULEMD
     std::map<std::string, ModuleState> module_states;
+#endif
     SystemState system_state;
     std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
 };

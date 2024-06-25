@@ -474,7 +474,7 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
     auto optional_metadata = get_optional_metadata();
 
     dlist.push_back(MD_FILENAME_PRIMARY);
-#ifdef MODULEMD
+#ifdef WITH_MODULEMD
     dlist.push_back(MD_FILENAME_MODULES);
 #endif
     if (optional_metadata.extract(libdnf5::METADATA_TYPE_FILELISTS)) {

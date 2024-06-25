@@ -37,10 +37,12 @@ class Dnf4Convert {
 public:
     Dnf4Convert(const libdnf5::BaseWeakPtr & base) : base(base) {}
 
+#ifdef WITH_MODULEMD
     /// Reads modules state from ini files in dnf4 format
     /// @param path Path where module configuration is stored (e.g. /etc/dnf/modules.c)
     /// @return The map {module_name -> ModuleState object}
     std::map<std::string, libdnf5::system::ModuleState> read_module_states();
+#endif
 
     /// Reads installed packages, groups and environments from dnf4 history database.
     /// The state is then stored in parameters.

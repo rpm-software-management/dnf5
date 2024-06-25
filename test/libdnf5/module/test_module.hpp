@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifdef WITH_MODULEMD
+
 
 #ifndef LIBDNF5_TEST_MODULE_HPP
 #define LIBDNF5_TEST_MODULE_HPP
@@ -65,3 +67,5 @@ public:
 };
 
 #endif
+
+#endif  // WITH_MODULEMD

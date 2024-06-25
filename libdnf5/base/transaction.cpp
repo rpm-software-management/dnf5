@@ -21,8 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/transaction.hpp"
 
 #include "base_impl.hpp"
+#ifdef WITH_MODULEMD
 #include "module/module_db.hpp"
 #include "module/module_sack_impl.hpp"
+#endif
 #include "repo/temp_files_memory.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
@@ -186,11 +188,14 @@ Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
       packages(src.packages),
       groups(src.groups),
       environments(src.environments),
+#ifdef WITH_MODULEMD
       modules(src.modules),
       module_db(src.module_db),
+#endif
       resolve_logs(src.resolve_logs),
       transaction_problems(src.transaction_problems),
-      signature_problems(src.signature_problems) {}
+      signature_problems(src.signature_problems) {
+}
 
 Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     base = other.base;
@@ -200,8 +205,10 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     packages = other.packages;
     groups = other.groups;
     environments = other.environments;
+#ifdef WITH_MODULEMD
     modules = other.modules;
     module_db = other.module_db;
+#endif
     resolve_logs = other.resolve_logs;
     transaction_problems = other.transaction_problems;
     signature_problems = other.signature_problems;
@@ -649,7 +656,11 @@ void Transaction::Impl::process_solver_problems(rpm::solv::GoalPrivate & solved_
 }
 
 void Transaction::Impl::set_transaction(
-    rpm::solv::GoalPrivate & solved_goal, module::ModuleSack & module_sack, GoalProblem problems) {
+    rpm::solv::GoalPrivate & solved_goal,
+#ifdef WITH_MODULEMD
+    module::ModuleSack & module_sack,
+#endif
+    GoalProblem problems) {
     process_solver_problems(solved_goal);
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
@@ -734,6 +745,7 @@ void Transaction::Impl::set_transaction(
         groups.emplace_back(std::move(tsgrp));
     }
 
+#ifdef WITH_MODULEMD
     // Add modules to the transaction
     module_db = module_sack.p_impl->module_db->get_weak_ptr();
     for (auto & [name, stream] : module_db->get_all_newly_enabled_streams()) {
@@ -760,6 +772,7 @@ void Transaction::Impl::set_transaction(
         tsmodule.p_impl->replaces_append(std::string(name_streams.first), std::string(name_streams.second.second));
         modules.emplace_back(std::move(tsmodule));
     }
+#endif
 
     // Add reason change actions to the transaction
     for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
@@ -1053,6 +1066,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     auto logger = base->get_logger().get();
 
+#ifdef WITH_MODULEMD
     if (!modules.empty()) {
         module_db->save();
         try {
@@ -1061,6 +1075,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             logger->error("Cannot save system state: {}", ex.what());
         }
     }
+#endif
 
     int pipe_out_from_scriptlets[2];
     if (pipe(pipe_out_from_scriptlets) == -1) {
