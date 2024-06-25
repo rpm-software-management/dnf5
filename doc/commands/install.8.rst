@@ -33,7 +33,7 @@ Description
 
 The ``install`` command in ``DNF5`` is used for installing packages. It makes sure that
 all given packages defined in ``package-spec`` arguments and their dependencies are installed
-on the system.
+on the system. Environments can be installed with ``@environment-id`` as ``<package-spec>``.
 
 
 Options
