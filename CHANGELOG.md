@@ -1,3 +1,67 @@
+# 5.2.4.0
+
+- Update translations from weblate
+- Add "Complete!" message after succesfull transaction
+- Handle exceptions when parsing replay `JSON`
+- `TransactionReplayError` move to header `transaction_sr.hpp`
+- Add `replay` command to replay stored transactions
+- Add const `TRANSACTION_JSON` definition in one place
+- Update `history store` `output` option to use directories
+- [libdnf, actions plugin] Documentation: get/set repositories options
+- [libdnf, actions plugin] Support get/set repositories options, ver 1.1.0
+- [libdnf, actions plugin] Use enum for pipe ends instead of magic values
+- docs: Update nightly copr repo name
+- Add JSON output to advisory list
+- `undo`: document new options change in comparison to dnf4
+- Make goal action strings translatable
+- Fix a typo in log_event message
+- `undo`: update history man page
+- builddep: Add build-dep alias
+- Fix: dnf5 builddep plugin: Link with "common"
+- daemon: Generate transfer_id on server side
+- Re-enable unit tests that use hidden (private) libdnf5 symbols
+- libdnf5: Build static libdnf5 library, use it in unit tests
+- Fix: Export symbol goal_action_is_replay
+- Do not export symbols from private "/common/utils"
+- dnf5 app, dnf5 plugins: Do not export private symbols
+- dnf5: Define macros for assigning symbol visibility
+- libdnf5-cli library: Do not export private symbols
+- libdnf5-cli: Define macros for assigning symbol visibility
+- Disable libdnf5, libdnf5-cli, dnf5 cpr_plugin C++ unit tests
+- libdnf5 library, libdnf5 plugins: Do not export private symbols
+- libdnf5: Define macros for assigning symbol visibility
+- libdnf5: API: Do not use inline methods to call private methods
+- replay: make condition check strict and use parsed nevra
+- Add clarifying comments about path to replay
+- Turn reverting of comps upgrade into a warning
+- Add hints for `--ignore-installed` and `--ignore-extras`
+- Transaction replay: add checking for extra packages
+- Enahnce INSTALLED_IN_DIFFERENT_VERSION for reinstall with available pkgs
+- Add replay goal actions to `LogEvent` messages
+- Use `ignore_installed` option in transaction replay
+- Add clarifying comment for Replace action in transaction replay
+- Add clarifying comments to PackageReplay
+- Add autocomplete for history info
+- Add `ignore_installed` and `ignore_extras` to `GoalElements`
+- Add `history undo` command
+- Allow specifying number of repeats for `TransactionSpecArguments`
+- Goal: Add API for reverting history transactions
+- Split out `add_replay_to_goal` from adding serialized trans
+- Add `transaction_item_reason_at(...)` to get history reason
+- offline: Add pImpl for OfflineState classes
+- transaction: Docstrings for offline state classes
+- dnf5: Remove unused variable
+- offline: Add offline update magic symlink constant
+- Move offline from dnf5 to libdnf5
+- main: Move download callbacks setup after cmd parsing
+- context: Set quiet mode on json output
+- repoinfo: Implement json output
+- repolist: Implement json output
+- context: Prepare shared json option
+- Update description of --minimal option
+- Add --minimal option for check-ugrade command
+- spec: Fix files and directories ownership
+
 # 5.2.3.0
 
 - Update translations from weblate
