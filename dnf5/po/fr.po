@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Léane GRASSER <pierre.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 02:52+0000\n"
-"PO-Revision-Date: 2024-05-31 23:30+0000\n"
-"Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
+"POT-Creation-Date: 2024-06-22 02:52+0000\n"
+"PO-Revision-Date: 2024-06-24 12:53+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/fr/>\n"
 "Language: fr\n"
@@ -23,7 +25,7 @@ msgstr ""
 msgid "Print details about advisories"
 msgstr "Afficher des détails sur les avertissements"
 
-#: commands/advisory/advisory_list.hpp:33
+#: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
 msgstr "Lister les avertissements"
 
@@ -168,6 +170,19 @@ msgstr ""
 msgid "CVE_ID,..."
 msgstr "ID_DE_CVE,…"
 
+#: commands/check-upgrade/check-upgrade.cpp:54
+msgid ""
+"Reports the lowest versions of packages that fix advisories of type bugfix, "
+"enhancement, security, or newpackage. In case that any option limiting "
+"advisories is used it reports the lowest versions of packages that fix "
+"advisories matching selected advisory properties"
+msgstr ""
+"Rapporte la version des paquets la plus basse qui résout les avertissements "
+"de type bugfix (correction de bugs), enhancement (amélioration), security "
+"(sécurité) ou newpackage (nouveau paquet). Si une option limitant les "
+"avertissements est utilisée, sont alors affichées uniquement les versions "
+"des paquets les plus basses résolvant les avertissements correspondants."
+
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "{} problème(s) découvert(s) lors de la vérification de {} paquet(s)"
@@ -188,7 +203,7 @@ msgstr "Échec du nettoyage du cache des dépôts ({0}) : {1}"
 msgid "Invalid urlprotocol option: {}"
 msgstr "Option urlprotocol invalide : {}"
 
-#: commands/download/download.cpp:139 main.cpp:612
+#: commands/download/download.cpp:139 main.cpp:613
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Architecture \"{0}\" non prise en charge. Choisissez-en une parmi {1}"
 
@@ -241,29 +256,54 @@ msgstr "Inclure les paquets optionnels du groupe."
 msgid "Operate on groups only, no packages are changed."
 msgstr "Opérer uniquement sur les groupes, sans modifier les paquets."
 
-#: commands/history/arguments.hpp:34
+#: commands/history/arguments.hpp:37
 msgid "Transaction ID"
 msgstr "ID de transaction"
 
-#: commands/history/arguments.hpp:41
+#: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
 msgstr "Inverser l'ordre des transactions."
 
-#: commands/history/history_store.cpp:62
+#: commands/history/arguments.hpp:54
+msgid ""
+"Don't consider mismatches between installed and stored transaction packages "
+"as errors. This can result in an empty transaction because among other "
+"things the option can ignore failing Remove actions."
+msgstr ""
+"Ne pas considérer comme des erreurs les différences entre les paquets "
+"installés et ceux dans les transactions stockées. Activer cette option peut "
+"résulter en une transaction vide car, entre autres, les actions Supprimer en "
+"échec pourraient être ignorées."
+
+#: commands/history/arguments.hpp:67
+msgid "Don't consider extra packages pulled into the transaction as errors."
+msgstr ""
+"Ne pas considérer les paquets supplémentaires ajoutés à la transaction comme "
+"des erreurs."
+
+#: commands/history/history_store.cpp:65
 msgid "File \"{}\" already exists, it will be overwritten.\n"
 msgstr "Le fichier \"{}\" existe déjà, il sera écrasé.\n"
 
-#: commands/history/history_store.cpp:76
+#: commands/history/history_store.cpp:79
 msgid "No transactions selected for storing, exactly one required."
 msgstr ""
 "Aucune transaction sélectionnée pour être stockée, vous devez en "
 "sélectionner exactement une."
 
-#: commands/history/history_store.cpp:79
+#: commands/history/history_store.cpp:82
 msgid "Multiple transactions selected for storing, only one allowed."
 msgstr ""
 "Plusieurs transactions sélectionnées pour être stockées alors qu'une seule "
 "est autorisée."
+
+#: commands/history/history_undo.cpp:56
+msgid "No matching transaction ID found, exactly one required."
+msgstr "Aucun ID de transaction correspondant, 1 ID requis."
+
+#: commands/history/history_undo.cpp:60
+msgid "Matched more than one transaction ID, exactly one required."
+msgstr "Plus d'un ID de transaction correspondant, un seul est requis."
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
@@ -342,11 +382,11 @@ msgstr "Motif à rechercher dans les NSVCA de module."
 msgid "No matches found for \"{}\"."
 msgstr "Aucun résultat pour \"{}\"."
 
-#: commands/offline/offline.cpp:189
+#: commands/offline/offline.cpp:190
 msgid "Manage offline transactions"
 msgstr "Gérer les transactions hors ligne"
 
-#: commands/offline/offline.cpp:224
+#: commands/offline/offline.cpp:221
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -355,11 +395,11 @@ msgstr ""
 "vous avez utilisée pour amorcer la transaction hors ligne, ex. `dnf5 system-"
 "upgrade download [OPTIONS]`."
 
-#: commands/offline/offline.cpp:247
+#: commands/offline/offline.cpp:244
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Impossible de se connecter à D-Bus : {}"
 
-#: commands/offline/offline.cpp:276
+#: commands/offline/offline.cpp:273
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -367,35 +407,35 @@ msgstr ""
 "Préparer le système à effectuer la transaction hors ligne et redémarrer pour "
 "débuter la transaction."
 
-#: commands/offline/offline.cpp:283
+#: commands/offline/offline.cpp:280
 msgid "Power off the system after the operation is complete"
 msgstr "Éteindre le système une fois que l'opération est terminée"
 
-#: commands/offline/offline.cpp:294
+#: commands/offline/offline.cpp:291
 msgid "No offline transaction is stored."
 msgstr "Aucune transaction hors ligne n'est stockée."
 
-#: commands/offline/offline.cpp:301
+#: commands/offline/offline.cpp:299
 msgid "System is not ready for offline transaction."
 msgstr "Le système n'est pas prêt à la transaction hors ligne."
 
-#: commands/offline/offline.cpp:304
+#: commands/offline/offline.cpp:302
 msgid "Data directory {} does not exist."
 msgstr "Le dossier des données ({}) n'existe pas."
 
-#: commands/offline/offline.cpp:328
+#: commands/offline/offline.cpp:326
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 "{} ne fait pas partie des dépendances faibles (Wants/WantedBy) de system-"
 "update.target."
 
-#: commands/offline/offline.cpp:337
+#: commands/offline/offline.cpp:335
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 "Le système va maintenant redémarrer pour effectuer la mise à jour vers la "
 "version "
 
-#: commands/offline/offline.cpp:341
+#: commands/offline/offline.cpp:339
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -403,7 +443,7 @@ msgstr ""
 "Le système va maintenant redémarrer pour effectuer la transaction hors ligne "
 "amorcée par la commande suivante :"
 
-#: commands/offline/offline.cpp:372
+#: commands/offline/offline.cpp:370
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -411,16 +451,16 @@ msgstr ""
 "Utilisation interne uniquement, ne doit pas être exécutée par "
 "l'utilisateur·ice. Exécuter la transaction dans l'environnement hors ligne."
 
-#: commands/offline/offline.cpp:399
+#: commands/offline/offline.cpp:397
 msgid "Trigger file does not exist. Exiting."
 msgstr "Le fichier de déclenchement n'existe pas. Sortie."
 
-#: commands/offline/offline.cpp:403
+#: commands/offline/offline.cpp:401
 msgid "Another offline transaction tool is running. Exiting."
 msgstr ""
 "Un autre outil de transaction hors ligne est en cours d'exécution. Sortie."
 
-#: commands/offline/offline.cpp:435
+#: commands/offline/offline.cpp:436
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -431,53 +471,53 @@ msgstr ""
 "jour du système ou une autre transaction hors ligne, vous devriez exécuter "
 "`dnf5 offline reboot`."
 
-#: commands/offline/offline.cpp:442
+#: commands/offline/offline.cpp:443
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Utilisez `dnf5 offline reboot` pour débuter la transaction."
 
-#: commands/offline/offline.cpp:493
+#: commands/offline/offline.cpp:494
 msgid "Transaction failed: "
 msgstr "Échec de la transaction : "
 
-#: commands/offline/offline.cpp:562
+#: commands/offline/offline.cpp:563
 msgid "Error reading journal: {}"
 msgstr "Erreur lors de la lecture du journal : {}"
 
-#: commands/offline/offline.cpp:568
+#: commands/offline/offline.cpp:569
 msgid "Add journal match failed: {}"
 msgstr "Échec de l'ajout d'un filtre du journal : {}"
 
-#: commands/offline/offline.cpp:596
+#: commands/offline/offline.cpp:597
 msgid "No logs were found."
 msgstr "Aucun journal n'a été trouvé."
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:601
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Les journaux de ces démarrages semblent contenir des entrées liées à une "
 "transaction hors ligne :"
 
-#: commands/offline/offline.cpp:617
+#: commands/offline/offline.cpp:618
 msgid "Cannot find logs with this index."
 msgstr "Impossible de trouver un journal avec cet indice."
 
-#: commands/offline/offline.cpp:624
+#: commands/offline/offline.cpp:625
 msgid "Unable to match systemd journal entry."
 msgstr "Impossible de trouver une entrée du journal systemd correspondante."
 
-#: commands/offline/offline.cpp:636
+#: commands/offline/offline.cpp:637
 msgid "Show logs from past offline transactions"
 msgstr ""
 "Afficher les entrées de journal des transactions hors ligne précédentes"
 
-#: commands/offline/offline.cpp:644
+#: commands/offline/offline.cpp:645
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Le journal à afficher. Exécutez la commande sans aucun argument pour obtenir "
 "une liste des journaux disponibles."
 
-#: commands/offline/offline.cpp:659
+#: commands/offline/offline.cpp:660
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -485,22 +525,22 @@ msgstr ""
 "systemd n'est pas pris en charge dans cette version de DNF 5 ; la sous-"
 "commande `log` est indisponible."
 
-#: commands/offline/offline.cpp:664
+#: commands/offline/offline.cpp:665
 msgid "Show status of the current offline transaction"
 msgstr "Afficher l'état de la transaction hors ligne actuelle"
 
-#: commands/offline/offline.cpp:680
+#: commands/offline/offline.cpp:681
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Une transaction hors ligne a été amorcée par la commande suivante :"
 
-#: commands/offline/offline.cpp:682
+#: commands/offline/offline.cpp:683
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Exécutez `dnf5 offline reboot` pour redémarrer et effectuer la transaction "
 "hors ligne."
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:685
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -509,7 +549,7 @@ msgstr ""
 "`dnf5 offline log` pour plus d'informations. Commande ayant amorcé la "
 "transaction :"
 
-#: commands/offline/offline.cpp:689
+#: commands/offline/offline.cpp:690
 msgid "Unknown offline transaction status: "
 msgstr "État de transaction hors ligne inconnu : "
 
@@ -583,6 +623,20 @@ msgstr "Stocker une transaction distro-sync à effectuer hors ligne"
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "Stocker une transaction de mise à jour à effectuer hors ligne"
 
+#: commands/upgrade/upgrade.cpp:48
+msgid ""
+"Upgrade packages only to the lowest versions that fix advisories of type "
+"bugfix, enhancement, security, or newpackage. In case that any option "
+"limiting advisories is used it upgrades packages only to the lowest versions "
+"that fix advisories that matching selected advisory property"
+msgstr ""
+"Mettre à jour les paquets vers la version la plus basse qui résout les "
+"avertissements de type bugfix (correction de bugs), enhancement "
+"(amélioration), security (sécurité) ou newpackage (nouveau paquet). Si une "
+"option limitant les avertissements est utilisée, seuls les avertissements "
+"correspondants sont pris en compte pour la sélection des paquets à mettre à "
+"jour."
+
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
@@ -647,15 +701,15 @@ msgstr "Ajout de l'exclusion versionlock \"{0} = {1}\"."
 msgid "Package \"{}\" is already excluded."
 msgstr "Le paquet \"{}\" est déjà exclu."
 
-#: context.cpp:84
+#: context.cpp:83
 msgid "The key was successfully imported."
 msgstr "La clé a été importée avec succès."
 
-#: context.cpp:252
+#: context.cpp:260
 msgid "No matching repositories for \"{}\""
 msgstr "Aucun dépôt correspondant à \"{}\""
 
-#: context.cpp:406
+#: context.cpp:414
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten.\n"
@@ -671,31 +725,31 @@ msgstr "Impossible de charger la bibliothèque partagée \"{}\" : {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Impossible d'obtenir l'adresse du symbole \"{}\" : {}"
 
-#: main.cpp:124
+#: main.cpp:125
 msgid "Utility for packages maintaining"
 msgstr "Utilitaire de maintenance des paquets"
 
-#: main.cpp:125
+#: main.cpp:126
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 est un programme de maintenance des paquets."
 
-#: main.cpp:126
+#: main.cpp:127
 msgid "Unclassified options:"
 msgstr "Options non classées :"
 
-#: main.cpp:129
+#: main.cpp:130
 msgid "Global options:"
 msgstr "Options globales :"
 
-#: main.cpp:134
+#: main.cpp:135
 msgid "Print help"
 msgstr "Afficher l'aide"
 
-#: main.cpp:141
+#: main.cpp:142
 msgid "Configuration file location"
 msgstr "Emplacement du fichier de configuration"
 
-#: main.cpp:149
+#: main.cpp:150
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -705,7 +759,7 @@ msgstr ""
 "pertinent. Empêche l'affichage de messages à propos de l'état actuel de dnf5 "
 "ou de ses actions."
 
-#: main.cpp:164
+#: main.cpp:165
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -713,29 +767,29 @@ msgstr ""
 "Exécuter entièrement à partir du cache système, ne pas mettre à jour le "
 "cache et l'utiliser même s'il est expiré."
 
-#: main.cpp:171
+#: main.cpp:172
 msgid "Force refreshing metadata before running the command."
 msgstr ""
 "Forcer l'actualisation des métadonnées avant l'exécution de la commande."
 
-#: main.cpp:187
+#: main.cpp:188
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "Échec de l'expiration du cache des dépôts ({0}) : {1}"
 
-#: main.cpp:204
+#: main.cpp:205
 msgid "create additional repository using id and path"
 msgstr "créer un dépôt supplémentaire à partir d'un ID et d'un chemin d'accès"
 
-#: main.cpp:212
+#: main.cpp:213
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr ""
 "repofrompath: repoid et spécification de chemin d'accès \"{}\" incorrects"
 
-#: main.cpp:224
+#: main.cpp:225
 msgid "set arbitrary config and repo options"
 msgstr "définir arbitrairement des options de configuration et de dépôt"
 
-#: main.cpp:226
+#: main.cpp:227
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -746,38 +800,38 @@ msgid ""
 "g. --setopt=tsflags=) will clear the option."
 msgstr ""
 
-#: main.cpp:235 main.cpp:274
+#: main.cpp:236 main.cpp:275
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: valeur d'argument \"{}\" mal formatée"
 
-#: main.cpp:242
+#: main.cpp:243
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: valeur d'argument mal formatée : le dernier caractère ne peut pas être "
 "'.' : {}"
 
-#: main.cpp:255
+#: main.cpp:256
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\" : {1}"
 
-#: main.cpp:281
+#: main.cpp:282
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:290
+#: main.cpp:291
 msgid "automatically answer yes for all questions"
 msgstr "répondre automatiquement oui à toutes les questions"
 
-#: main.cpp:297
+#: main.cpp:298
 msgid "automatically answer no for all questions"
 msgstr "répondre automatiquement non à toutes les questions"
 
-#: main.cpp:311
+#: main.cpp:312
 msgid "do not limit the transaction to the best candidate"
 msgstr "ne pas limiter la transaction au meilleur candidat"
 
-#: main.cpp:322
+#: main.cpp:323
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -785,11 +839,11 @@ msgstr ""
 "Ne pas installer les fichiers marqués comme étant de la documentation (cela "
 "inclut les pages man et les documents texinfo)"
 
-#: main.cpp:338
+#: main.cpp:339
 msgid "exclude packages by name or glob"
 msgstr "exclure des paquets par nom ou par glob"
 
-#: main.cpp:357
+#: main.cpp:358
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -797,7 +851,7 @@ msgstr ""
 "Activer des dépôts additionnels. Option liste. Prend en charge les globs, "
 "peut être spécifiée plusieurs fois."
 
-#: main.cpp:375
+#: main.cpp:376
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -805,7 +859,7 @@ msgstr ""
 "Désactiver des dépôts. Option liste. Prend en charge les globs, peut être "
 "spécifiée plusieurs fois."
 
-#: main.cpp:393
+#: main.cpp:394
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -813,12 +867,12 @@ msgstr ""
 "Activer uniquement certains dépôts. Option liste. Prend en charge les globs, "
 "peut être spécifiée plusieurs fois."
 
-#: main.cpp:415
+#: main.cpp:416
 msgid "disable gpg signature checking (if RPM policy allows)"
 msgstr ""
 "désactiver la vérification des signatures GPG (si la politique RPM le permet)"
 
-#: main.cpp:441
+#: main.cpp:442
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -826,7 +880,7 @@ msgstr ""
 "Activer des plugins libdnf5 par nom. Option liste. Prend en charge les "
 "globs, peut être spécifiée plusieurs fois."
 
-#: main.cpp:456
+#: main.cpp:457
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -834,11 +888,11 @@ msgstr ""
 "Désactiver des plugins libdnf5 par nom. Option liste. Prend en charge les "
 "globs, peut être spécifiée plusieurs fois."
 
-#: main.cpp:473
+#: main.cpp:474
 msgid "add a comment to transaction"
 msgstr "ajouter un commentaire à une transaction"
 
-#: main.cpp:475
+#: main.cpp:476
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -846,11 +900,11 @@ msgstr ""
 "Ajoute un commentaire à l'action. Si une transaction a lieu, le commentaire "
 "y est stocké."
 
-#: main.cpp:488
+#: main.cpp:489
 msgid "set install root"
 msgstr "définir la racine d'installation"
 
-#: main.cpp:495
+#: main.cpp:496
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -858,13 +912,13 @@ msgstr ""
 "utiliser la configuration, les dossiers de dépôts et les variables du "
 "système hôte plutôt que de la racine d'installation"
 
-#: main.cpp:504
+#: main.cpp:505
 msgid "override the value of $releasever in config and repo files"
 msgstr ""
 "forcer la valeur de $releasever, ignorant la valeur provenant des fichiers "
 "de configuration et des dépôts"
 
-#: main.cpp:517
+#: main.cpp:518
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -872,84 +926,99 @@ msgstr ""
 "Afficher les nouveaux paquets feuilles installés et les paquets étant "
 "devenus feuille après une transaction."
 
-#: main.cpp:531
+#: main.cpp:532
 msgid "Dump detailed solving results into files"
 msgstr "Vider les résultats de résolution détaillés dans des fichiers"
 
-#: main.cpp:540
+#: main.cpp:541
 msgid "Print main configuration values to stdout"
 msgstr "Écrire les valeurs de configuration principales dans stdout"
 
-#: main.cpp:557
+#: main.cpp:558
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Écrire les valeurs de configuration des dépôts dans stdout. Option liste. "
 "Prend en charge les globs"
 
-#: main.cpp:572
+#: main.cpp:573
 msgid "Print variable values to stdout"
 msgstr "Écrire les valeurs des variables dans stdout"
 
-#: main.cpp:586
+#: main.cpp:587
 msgid "Show DNF5 version and exit"
 msgstr "Afficher la version de DNF5 et quitter"
 
-#: main.cpp:593
+#: main.cpp:594
 msgid "Force the use of a different architecture."
 msgstr "Forcer l'utilisation d'une architecture différente."
 
-#: main.cpp:631
+#: main.cpp:632
 msgid "Software Management Commands:"
 msgstr "Commandes de gestion des logiciels :"
 
-#: main.cpp:638
+#: main.cpp:639
 msgid "Query Commands:"
 msgstr "Commandes de requête :"
 
-#: main.cpp:645
+#: main.cpp:646
 msgid "Subcommands:"
 msgstr "Sous-commandes :"
 
-#: main.cpp:830
+#: main.cpp:832
 msgid "======== Main configuration: ========"
 msgstr "======== Configuration principale : ========"
 
-#: main.cpp:871
+#: main.cpp:873
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Configuration du dépôt \"{}\" : ========"
 
-#: main.cpp:892
+#: main.cpp:894
 msgid "======== Variables: ========"
 msgstr "======== Variables : ========"
 
-#: main.cpp:975
+#: main.cpp:977
 msgid "{} to skip unavailable packages"
 msgstr "{} pour passer les paquets indisponibles"
 
-#: main.cpp:1016
+#: main.cpp:985
+msgid "{} to allow extra packages in the transaction"
+msgstr "{} pour autoriser l'ajout de paquets supplémentaires à la transaction"
+
+#: main.cpp:998
+msgid ""
+"{} to allow mismatches between installed and stored transaction packages. "
+"This can result in an empty transaction because among other things the "
+"option can ignore failing Remove actions."
+msgstr ""
+"{} pour autoriser les différences entre les paquets installés et ceux dans "
+"la transaction stockée. Activer cette option peut résulter en une "
+"transaction vide car, entre autres, les actions Supprimer en échec "
+"pourraient être ignorées."
+
+#: main.cpp:1045
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} pour ne pas limiter la transaction aux meilleurs candidats"
 
-#: main.cpp:1023
+#: main.cpp:1052
 msgid "{} to allow erasing of installed packages to resolve problems"
 msgstr ""
 "{} pour autoriser la suppression de paquets installés pour résoudre des "
 "problèmes"
 
-#: main.cpp:1031
+#: main.cpp:1060
 msgid "{} to load additional filelists metadata"
 msgstr "{} pour charger des métadonnées filelists supplémentaires"
 
-#: main.cpp:1038
+#: main.cpp:1067
 msgid "{} to skip uninstallable packages"
 msgstr "{} pour passer les paquets impossibles à installer"
 
-#: main.cpp:1044
+#: main.cpp:1073
 msgid "You can try to add to command line:"
 msgstr "Vous pouvez essayer d'ajouter à la ligne de commande :"
 
-#: main.cpp:1062
+#: main.cpp:1091
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -957,7 +1026,7 @@ msgstr ""
 "Aucun plugin correspondant aux motifs suivants n'a été trouvé lors de "
 "l'activation des plugins libdnf : {}"
 
-#: main.cpp:1063
+#: main.cpp:1092
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -965,11 +1034,11 @@ msgstr ""
 "Aucun plugin correspondant aux motifs suivants n'a été trouvé lors de la "
 "désactivation des plugins libdnf : {}"
 
-#: main.cpp:1219 main.cpp:1399
+#: main.cpp:1241 main.cpp:1428
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Ajoutez \"--help\" pour plus d'informations sur les arguments."
 
-#: main.cpp:1321
+#: main.cpp:1350
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -980,13 +1049,9 @@ msgstr ""
 "l'option \"--assumeno\" ou l'option \"--downloadonly\" pour exécuter la "
 "commande sans modifier l'état du système."
 
-#: offline.cpp:54
-msgid "error reading offline state file"
-msgstr "erreur lors de la lecture du fichier d'état hors ligne"
-
-#: offline.cpp:59
-msgid "incompatible version of state data"
-msgstr "version des données d'état incompatible"
+#: main.cpp:1449
+msgid "Complete!"
+msgstr "Terminé !"
 
 #: shared_options.cpp:32
 msgid "Allow erasing of installed packages to resolve problems"
@@ -1000,3 +1065,9 @@ msgstr "Autoriser la résolution de problèmes depsolve en ignorant des paquets"
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
 msgstr "Autoriser dnf5 à ignorer les paquets indisponibles"
+
+#~ msgid "error reading offline state file"
+#~ msgstr "erreur lors de la lecture du fichier d'état hors ligne"
+
+#~ msgid "incompatible version of state data"
+#~ msgstr "version des données d'état incompatible"

@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Léane GRASSER <pierre.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 02:52+0000\n"
-"PO-Revision-Date: 2024-05-30 11:36+0000\n"
-"Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
+"POT-Creation-Date: 2024-06-22 02:52+0000\n"
+"PO-Revision-Date: 2024-06-21 03:01+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
 "Language: fr\n"
@@ -27,14 +29,118 @@ msgstr ""
 "Mauvais ID libsolv pour l'avertissement \"{}\", le nom résoluble \"{}\" ne "
 "commence pas par le préfixe d'avertissement \"{}\""
 
-#: base/goal.cpp:390
+#: base/goal.cpp:401
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument non pris en charge pour l'action REMOVE : {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1142
+#: base/goal.cpp:1447
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valeur de configuration pour multilib_policy incorrecte : {}"
+
+#: base/goal_elements.cpp:348
+msgid "Install"
+msgstr "Installer"
+
+#: base/goal_elements.cpp:350
+msgid "Install via provide"
+msgstr "Installer (via fournisseur)"
+
+#: base/goal_elements.cpp:352
+msgid "Install by group"
+msgstr "Installer par groupe"
+
+#: base/goal_elements.cpp:354
+msgid "Upgrade"
+msgstr "Mettre à jour"
+
+#: base/goal_elements.cpp:356
+msgid "Upgrade all"
+msgstr "Tout mettre à jour"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade minimal"
+msgstr "Mettre à jour (version minimale)"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all minimal"
+msgstr "Tout mettre à jour (version minimale)"
+
+#: base/goal_elements.cpp:362
+msgid "Downgrade"
+msgstr "Installer une version antérieure"
+
+#: base/goal_elements.cpp:364
+msgid "Reinstall"
+msgstr "Réinstaller"
+
+#: base/goal_elements.cpp:366
+msgid "Install or reinstall"
+msgstr "Installer ou réinstaller"
+
+#: base/goal_elements.cpp:368
+msgid "Remove"
+msgstr "Supprimer"
+
+#: base/goal_elements.cpp:370
+msgid "Distrosync"
+msgstr "Distrosync"
+
+#: base/goal_elements.cpp:372
+msgid "Distrosync all"
+msgstr "Tout distrosync"
+
+#: base/goal_elements.cpp:374
+msgid "Reason Change"
+msgstr "Changer la raison"
+
+#: base/goal_elements.cpp:376
+msgid "Resolve"
+msgstr "Résoudre"
+
+#: base/goal_elements.cpp:378
+msgid "Enable"
+msgstr "Activer"
+
+#: base/goal_elements.cpp:380
+msgid "Disable"
+msgstr "Désactiver"
+
+#: base/goal_elements.cpp:382
+msgid "Reset"
+msgstr "Réinitialiser"
+
+#: base/goal_elements.cpp:384
+msgid "Parse serialized transaction"
+msgstr "Analyser la transaction sérialisée"
+
+#: base/goal_elements.cpp:386
+msgid "Install action"
+msgstr "Action d'installation"
+
+#: base/goal_elements.cpp:388
+msgid "Remove action"
+msgstr "Action de suppression"
+
+#: base/goal_elements.cpp:390
+msgid "Upgrade action"
+msgstr "Action de mise à jour"
+
+#: base/goal_elements.cpp:392
+msgid "Reinstall action"
+msgstr "Action de réinstallation"
+
+#: base/goal_elements.cpp:394
+msgid "Reason change action"
+msgstr "Action de changement de la raison"
+
+#: base/goal_elements.cpp:396
+msgid "Reason override"
+msgstr "Forçage de raison"
+
+#: base/goal_elements.cpp:398
+msgid "Revert comps upgrade"
+msgstr "Annuler la mise à jour des comps"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -61,19 +167,27 @@ msgstr "Aucune correspondance pour le groupe de l'environnement : {}"
 msgid "No match for group package: {}"
 msgstr "Aucune correspondance pour le paquet du groupe : {}"
 
-#: base/log_event.cpp:157
+#: base/log_event.cpp:158
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "Impossible d'effectuer {0}, aucune correspondance pour : {1}."
+
+#: base/log_event.cpp:160
 msgid "No match for argument: {}"
 msgstr "Aucune correspondance pour l'argument : {}"
 
-#: base/log_event.cpp:160
+#: base/log_event.cpp:163
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Aucune correspondance pour l'argument '{0}' dans les dépôts '{1}'"
 
-#: base/log_event.cpp:164
+#: base/log_event.cpp:169
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "Impossible d'effectuer {0} pour {1} '{2}' car il n'est pas installé."
+
+#: base/log_event.cpp:174
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Paquets pour l'argument '{}' disponibles mais pas installés."
 
-#: base/log_event.cpp:167
+#: base/log_event.cpp:178
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -81,28 +195,47 @@ msgstr ""
 "Paquets pour l'argument '{}' disponibles mais installés pour une "
 "architecture différente."
 
-#: base/log_event.cpp:169
-msgid "Argument '{}' matches only source packages."
-msgstr "Seuls des paquets sources correspondent à l'argument '{}'."
+#: base/log_event.cpp:182
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr ""
+"Impossible d'effectuer {0} car '{1}' ne correspond qu'à des paquets de code "
+"source."
 
-#: base/log_event.cpp:171
+#: base/log_event.cpp:186
+msgid "Argument '{}' matches only source packages."
+msgstr "Seuls des paquets de code source correspondent à l'argument '{}'."
+
+#: base/log_event.cpp:190
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr ""
+"Impossible d'effectuer {0} car '{1}' ne correspond qu'à des paquets exclus."
+
+#: base/log_event.cpp:194
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Seuls des paquets exclus correspondent à l'argument '{}'."
 
-#: base/log_event.cpp:173
+#: base/log_event.cpp:198
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"Impossible d'effectuer {0} car '{1}' ne correspond qu'à des paquets exclus "
+"par versionlock."
+
+#: base/log_event.cpp:202
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
 "Seuls des paquets exclus par versionlock correspondent à l'argument '{}'."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:207
 msgid "  * Maybe you meant: {}"
 msgstr "  * Vous vouliez peut-être dire : {}"
 
-#: base/log_event.cpp:181
+#: base/log_event.cpp:210
 msgid "There are following alternatives for '{0}': {1}"
-msgstr "Les alternatives suivantes existent pour '{0}' : {1}"
+msgstr "Il existe les alternatives à '{0}' suivantes : {1}"
 
-#: base/log_event.cpp:188
+#: base/log_event.cpp:217
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -110,15 +243,23 @@ msgstr ""
 "La version installée du paquet '{}' est la version disponible la plus "
 "faible, impossible de rétrograder le paquet."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:223
 msgid ""
-"Packages for argument '{}' installed and available, but in a different "
-"version => cannot reinstall"
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
 msgstr ""
-"Les paquets correspondant à l'argument '{}' sont installés et disponibles, "
-"mais dans une version différente => impossible de les réinstaller"
+"Les paquets installés correspondant à l'argument '{0}' ne sont pas "
+"disponibles dans la même version dans les dépôts, versions disponibles : "
+"{1}, réinstallation impossible."
 
-#: base/log_event.cpp:199
+#: base/log_event.cpp:229
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr ""
+"Impossible d'effectuer {0} car '{1}' est installé dans une version "
+"différente : '{2}'."
+
+#: base/log_event.cpp:235
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
@@ -126,34 +267,42 @@ msgstr ""
 "Les paquets correspondant à l'argument '{}' sont installés et disponibles, "
 "mais dans une version différente."
 
-#: base/log_event.cpp:201
+#: base/log_event.cpp:237
 msgid "Packages for argument '{}' installed, but not available."
 msgstr ""
 "Les paquets correspondant à l'argument '{}' sont installés, mais pas "
 "disponibles."
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:246
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Le paquet \"{}\" est déjà installé avec pour raison \"{}\"."
 
-#: base/log_event.cpp:212
+#: base/log_event.cpp:248
 msgid "Package \"{}\" is already installed."
 msgstr "Le paquet \"{}\" est déjà installé."
 
-#: base/log_event.cpp:221
+#: base/log_event.cpp:257
 msgid "Debug data written to \"{}\""
 msgstr "Données de débogage écrites dans \"{}\""
 
-#: base/log_event.cpp:224
+#: base/log_event.cpp:261
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"La mise à jour de {0} ne peut pas être annulée, mais les actions sur les "
+"autres paquets le seront. (ID de {1} : '{2}')"
+
+#: base/log_event.cpp:267
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "L'action {} n'est pas prise en charge avec l'argument \"{}\"."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:233
+#: base/log_event.cpp:276
 msgid "Unable to resolve argument '{}':"
 msgstr "Impossible de résoudre l'argument '{}' :"
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:280
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -171,23 +320,23 @@ msgstr[1] ""
 "  — L'argument '{}' correspond à {} flux ('{}') du module '{}', mais aucun "
 "d'entre eux n'est activé ou par défaut."
 
-#: base/log_event.cpp:244
+#: base/log_event.cpp:287
 msgid "', '"
 msgstr "', '"
 
-#: base/log_event.cpp:253
+#: base/log_event.cpp:296
 msgid "Modular dependency problems:\n"
 msgstr "Problèmes de dépendances modulaires :\n"
 
-#: base/log_event.cpp:260
+#: base/log_event.cpp:303
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Problèmes de dépendances modulaires avec les derniers modules :\n"
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:310
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Problèmes de dépendances modulaires avec les modules par défaut :\n"
 
-#: base/log_event.cpp:282
+#: base/log_event.cpp:325
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
@@ -195,7 +344,7 @@ msgstr ""
 "L'opération aurait pour effet d'échanger le flux '{1}' du module '{0}' avec "
 "le flux '{2}'\n"
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:330
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -203,6 +352,18 @@ msgstr ""
 "Erreur : impossible d'échanger les flux activés d'un module sauf si "
 "l'opération est activée explicitement par l'option de configuration "
 "module_stream_switch."
+
+#: base/log_event.cpp:335
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"Le paquet supplémentaire '{0}' (avec pour action '{1}') qui n'était pas "
+"présent dans la transaction stockée a été ajouté à la transaction.\n"
+
+#: base/log_event.cpp:341
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "Impossible d'analyser le fichier : '{0}' : {1}.\n"
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
@@ -234,7 +395,7 @@ msgstr "le paquet {} n'existe pas"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 msgid "{} is provided by the system"
-msgstr "{} est fourni(e) par le système"
+msgstr "{} est fourni par le système"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
@@ -453,36 +614,36 @@ msgstr "Annulé par l'utilisateur."
 msgid "Public key import failed."
 msgstr "Échec de l'importation de la clé publique."
 
-#: base/transaction.cpp:937
+#: base/transaction.cpp:963
 msgid "Invalid tsflag: {}"
 msgstr "tsflag invalide : {}"
 
-#: base/transaction.cpp:1271
+#: base/transaction.cpp:1297
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "La clé publique \"{}\" est déjà présente, elle ne sera pas importée."
 
-#: base/transaction.cpp:1292
+#: base/transaction.cpp:1318
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Une erreur s'est produite lors de l'importation de la clé \"{}\" : {}"
 
-#: base/transaction.cpp:1326
+#: base/transaction.cpp:1352
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "La vérification PGP du paquet \"{}\" ({}) du dépôt \"{}\" a échoué : "
 
-#: base/transaction.cpp:1354
+#: base/transaction.cpp:1380
 msgid "Import of the key didn't help, wrong key?"
 msgstr "L'importation de la clé n'a pas aidé, s'agissait-il de la bonne clé ?"
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1399
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1376
+#: base/transaction.cpp:1402
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Attention : vérifications PGP ignorées pour 1 paquet du dépôt : {}"
 
-#: base/transaction.cpp:1378
+#: base/transaction.cpp:1404
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -988,75 +1149,75 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Échec de l'importation de la clé publique \"{}\" dans la rpmdb : {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:116
+#: rpm/transaction.cpp:112
 msgid "Cannot set root directory \"{}\""
 msgstr "Impossible de définir le répertoire racine à la valeur \"{}\""
 
-#: rpm/transaction.cpp:127
+#: rpm/transaction.cpp:123
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Erreur %i lors de l'ouverture de la base de données RPM"
 
-#: rpm/transaction.cpp:136
+#: rpm/transaction.cpp:132
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr ""
 "La fonction rpmdbCookie() n'a pas retourné le cookie de la base de données "
 "RPM."
 
-#: rpm/transaction.cpp:201
+#: rpm/transaction.cpp:197
 msgid "Failed to order the rpm transaction."
 msgstr "Échec du tri de la transaction RPM."
 
-#: rpm/transaction.cpp:237
+#: rpm/transaction.cpp:233
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "Échec de la définition du fichier scriptlet de sortie, impossible de "
 "dupliquer le descripteur de fichier : {}"
 
-#: rpm/transaction.cpp:256
+#: rpm/transaction.cpp:252
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 "Échec de la définition du fichier scriptlet de sortie, impossible d'ouvrir "
 "le fichier \"{}\" : {}"
 
-#: rpm/transaction.cpp:277
+#: rpm/transaction.cpp:273
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 "Échec de la lecture de l'en-tête de paquet, impossible d'ouvrir le fichier "
 "\"{}\" : {}"
 
-#: rpm/transaction.cpp:294
+#: rpm/transaction.cpp:290
 msgid "Failed to read package header from file \"{}\""
 msgstr "Échec de la lecture de l'en-tête de paquet dans le fichier \"{}\""
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:303
 msgid "Cannot init rpm database iterator"
 msgstr "Impossible d'initialiser l'itérateur de base de données RPM"
 
-#: rpm/transaction.cpp:311
+#: rpm/transaction.cpp:307
 msgid "Package was not found in rpm database"
 msgstr "Le paquet n'a pas pu être trouvé dans la base de données RPM"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:327
+#: rpm/transaction.cpp:323
 msgid "Cannot reinstall package \"{}\""
 msgstr "Impossible de réinstaller le paquet \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:345
+#: rpm/transaction.cpp:341
 msgid "Cannot remove package \"{}\""
 msgstr "Impossible de supprimer le paquet \"{}\""
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:360
 msgid "Cannot upgrade package \"{}\""
 msgstr "Impossible de mettre à jour le paquet \"{}\""
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:364
 msgid "Cannot downgrade package \"{}\""
 msgstr "Impossible de rétrograder le paquet \"{}\""
 
-#: rpm/transaction.cpp:372
+#: rpm/transaction.cpp:368
 msgid "Cannot install package \"{}\""
 msgstr "Impossible d'installer le paquet \"{}\""
 
@@ -1129,6 +1290,14 @@ msgstr ""
 "Échec de l'insertion de l'enregistrement dans la table 'item' de la base de "
 "données de l'historique"
 
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "erreur lors de la lecture du fichier d'état hors ligne"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "version des données d'état incompatible"
+
 #: transaction/transaction.cpp:96
 msgid "Invalid transaction state: {}"
 msgstr "État de transaction invalide : {}"
@@ -1153,84 +1322,84 @@ msgstr "État d'élement de transaction invalide : {}"
 msgid "Invalid transaction item type: {}"
 msgstr "Type d'élément de transaction invalide : {}"
 
-#: transaction/transaction_sr.cpp:56
+#: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "L'entrée au format JSON de transaction sérialisée à rejouer est vide"
 
-#: transaction/transaction_sr.cpp:65
+#: transaction/transaction_sr.cpp:58
 msgid "Error during transaction replay JSON parsing : {}"
 msgstr "Erreur lors de l'analyse du JSON de la transaction à rejouer : {}"
 
-#: transaction/transaction_sr.cpp:75
+#: transaction/transaction_sr.cpp:68
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
 msgstr "Format de version inattendu : \"{}\", version prise en charge : \"{}\""
 
-#: transaction/transaction_sr.cpp:81
+#: transaction/transaction_sr.cpp:74
 msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr ""
 "Version majeure incompatible : \"{}\", version majeure prise en charge : "
 "\"{}\""
 
-#: transaction/transaction_sr.cpp:88
+#: transaction/transaction_sr.cpp:81
 msgid "Invalid minor version: \"{}\", number expected."
 msgstr "Version mineure invalide : \"{}\", nombre attendu."
 
-#: transaction/transaction_sr.cpp:91
+#: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\"."
 msgstr "Clé \"version\" manquante."
 
-#: transaction/transaction_sr.cpp:104
+#: transaction/transaction_sr.cpp:97
 msgid "Unexpected type of \"environments\", array expected."
 msgstr ""
 "Type de la variable \"environments\" inattendu, un tableau est attendu."
 
-#: transaction/transaction_sr.cpp:112
+#: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment."
 msgstr "Clé d'objet \"id\" manquante dans l'un des environnements."
 
-#: transaction/transaction_sr.cpp:117
+#: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment."
 msgstr "Clé d'objet \"action\" manquante dans l'un des environnements."
 
-#: transaction/transaction_sr.cpp:142
+#: transaction/transaction_sr.cpp:135
 msgid "Unexpected type of \"groups\", array expected."
 msgstr "Type de la variable \"groups\" inattendu, un tableau est attendu."
 
-#: transaction/transaction_sr.cpp:150
+#: transaction/transaction_sr.cpp:143
 msgid "Missing object key \"id\" in a group."
 msgstr "Clé d'objet \"id\" manquante dans l'un des groupes."
 
-#: transaction/transaction_sr.cpp:155
+#: transaction/transaction_sr.cpp:148
 msgid "Missing object key \"action\" in a group."
 msgstr "Clé d'objet \"action\" manquante dans l'un des groupes."
 
-#: transaction/transaction_sr.cpp:160
+#: transaction/transaction_sr.cpp:153
 msgid "Missing object key \"reason\" in a group."
 msgstr "Clé d'objet \"reason\" manquante dans l'un des groupes."
 
-#: transaction/transaction_sr.cpp:189
+#: transaction/transaction_sr.cpp:182
 msgid "Unexpected type of \"rpms\", array expected."
 msgstr "Type de la variable \"rpms\" inattendu, un tableau est attendu."
 
-#: transaction/transaction_sr.cpp:198
+#: transaction/transaction_sr.cpp:191
 msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgstr "Analyse du NEVRA impossible pour le RPM \"{}\"."
 
-#: transaction/transaction_sr.cpp:206
+#: transaction/transaction_sr.cpp:199
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
 msgstr ""
 "L'une des clés d'objet \"nevra\" ou \"package_path\" sont requises dans un "
 "RPM."
 
-#: transaction/transaction_sr.cpp:211
+#: transaction/transaction_sr.cpp:204
 msgid "Missing object key \"action\" in an rpm."
 msgstr "Clé d'objet \"action\" manquante dans un RPM."
 
-#: transaction/transaction_sr.cpp:216
+#: transaction/transaction_sr.cpp:209
 msgid "Missing object key \"reason\" in an rpm."
 msgstr "Clé d'objet \"reason\" manquante dans un RPM."
 
-#: transaction/transaction_sr.cpp:223
+#: transaction/transaction_sr.cpp:216
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\"."

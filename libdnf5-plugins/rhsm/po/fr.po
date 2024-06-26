@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-07 11:21+0100\n"
-"PO-Revision-Date: 2024-05-07 13:36+0000\n"
-"Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
+"PO-Revision-Date: 2024-06-19 17:36+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-rhsm/fr/>\n"
 "Language: fr\n"
@@ -16,14 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: rhsm.cpp:97
 msgid "Missing path to repository configuration directory"
-msgstr "Chemin d'accès au répertoire des configurations de dépôt manquant"
+msgstr "Chemin d'accès au répertoire des configurations des dépôts manquant"
 
 #: rhsm.cpp:134
 msgid "Cannot save repository configuration to file \"{}\": {}"
-msgstr ""
-"Impossible d'enregistrer la configuration de dépôt dans le fichier \"{}\" : "
-"{}"
+msgstr "Impossible d'enregistrer la configuration de dépôt sous \"{}\" : {}"

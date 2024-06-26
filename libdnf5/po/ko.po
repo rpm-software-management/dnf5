@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 김인수 <simmon@nplob.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Joungmin Lee <leejm516@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 02:52+0000\n"
-"PO-Revision-Date: 2024-06-02 14:35+0000\n"
+"POT-Creation-Date: 2024-06-22 02:52+0000\n"
+"PO-Revision-Date: 2024-06-21 03:01+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -24,130 +25,271 @@ msgid ""
 "Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
 "advisory prefix \"{}\""
 msgstr ""
+"권고 \"{}\"용 나쁜 libsolv id, 해결 할 수 있는 \"{}\"은 권고 접두사 \"{}\"를 "
+"가지지 않습니다"
 
-#: base/goal.cpp:390
+#: base/goal.cpp:401
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "제거(REMOVE) 동작을 위해 미지원된 인수: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1142
+#: base/goal.cpp:1447
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "multilib_policy용 잘못된 구성 값: {}"
+
+#: base/goal_elements.cpp:348
+msgid "Install"
+msgstr "설치"
+
+#: base/goal_elements.cpp:350
+msgid "Install via provide"
+msgstr "제공을 통한 설치"
+
+#: base/goal_elements.cpp:352
+msgid "Install by group"
+msgstr "그룹으로 설치"
+
+#: base/goal_elements.cpp:354
+msgid "Upgrade"
+msgstr "향상"
+
+#: base/goal_elements.cpp:356
+msgid "Upgrade all"
+msgstr "모두 향상"
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade minimal"
+msgstr "최소 향상"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all minimal"
+msgstr "모두 최소로 향상"
+
+#: base/goal_elements.cpp:362
+msgid "Downgrade"
+msgstr "하향설치"
+
+#: base/goal_elements.cpp:364
+msgid "Reinstall"
+msgstr "재설치"
+
+#: base/goal_elements.cpp:366
+msgid "Install or reinstall"
+msgstr "설치 또는 재설치"
+
+#: base/goal_elements.cpp:368
+msgid "Remove"
+msgstr "제거"
+
+#: base/goal_elements.cpp:370
+msgid "Distrosync"
+msgstr "배포동기화"
+
+#: base/goal_elements.cpp:372
+msgid "Distrosync all"
+msgstr "모두 배포동기화"
+
+#: base/goal_elements.cpp:374
+msgid "Reason Change"
+msgstr "변경 원인"
+
+#: base/goal_elements.cpp:376
+msgid "Resolve"
+msgstr "해결"
+
+#: base/goal_elements.cpp:378
+msgid "Enable"
+msgstr "활성화"
+
+#: base/goal_elements.cpp:380
+msgid "Disable"
+msgstr "비활성화"
+
+#: base/goal_elements.cpp:382
+msgid "Reset"
+msgstr "재설정"
+
+#: base/goal_elements.cpp:384
+msgid "Parse serialized transaction"
+msgstr "직렬화된 연결을 구문 분석합니다"
+
+#: base/goal_elements.cpp:386
+msgid "Install action"
+msgstr "설치 동작"
+
+#: base/goal_elements.cpp:388
+msgid "Remove action"
+msgstr "제거 동작"
+
+#: base/goal_elements.cpp:390
+msgid "Upgrade action"
+msgstr "향상 동작"
+
+#: base/goal_elements.cpp:392
+msgid "Reinstall action"
+msgstr "재설치 동작"
+
+#: base/goal_elements.cpp:394
+msgid "Reason change action"
+msgstr "변경 원인에 따른 동작"
+
+#: base/goal_elements.cpp:396
+msgid "Reason override"
+msgstr "원인 재정의"
+
+#: base/goal_elements.cpp:398
+msgid "Revert comps upgrade"
+msgstr "comps 향상 복귀"
 
 #: base/log_event.cpp:141
-#, fuzzy
-#| msgid "No match for argument: {}"
 msgid "No packages to remove for argument: {}"
-msgstr "일치하는 인수가 없습니다 :{}"
+msgstr "인수를 위해 제거하려는 꾸러미가 없습니다: {}"
 
 #: base/log_event.cpp:143
-#, fuzzy
-#| msgid "No match for argument: {}"
 msgid "No groups to remove for argument: {}"
-msgstr "일치하는 인수가 없습니다 :{}"
+msgstr "인수를 위해 제거하려는 그룹이 없습니다 :{}"
 
 #: base/log_event.cpp:146
-#, fuzzy
-#| msgid "No match for argument: {}"
 msgid "No environmental groups to remove for argument: {}"
-msgstr "일치하는 인수가 없습니다 :{}"
+msgstr "인수를 위해 제거하려는 환경 그룹이 없습니다: {}"
 
 #: base/log_event.cpp:148
-#, fuzzy
-#| msgid "No match for argument: {}"
 msgid "No modules to remove for argument: {}"
-msgstr "일치하는 인수가 없습니다 :{}"
+msgstr "인수를 위해 제거하려는 모듈이 없습니다: {}"
 
 #: base/log_event.cpp:152
 msgid "No match for group from environment: {}"
-msgstr ""
+msgstr "환경에서 그룹과 일치하지 않습니다: {}"
 
 #: base/log_event.cpp:154
 msgid "No match for group package: {}"
-msgstr "그룹 꾸러미를 위해 일치하는 항목이 없습니다: {}"
+msgstr "그룹 꾸러미와 일치하지 않습니다: {}"
 
-#: base/log_event.cpp:157
-msgid "No match for argument: {}"
-msgstr "일치하는 인수가 없습니다 :{}"
+#: base/log_event.cpp:158
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "{0}를 수행 할 수 없고, 일치하지 않습니다: {1}."
 
 #: base/log_event.cpp:160
+msgid "No match for argument: {}"
+msgstr "인수와 일치하지 않습니다 :{}"
+
+#: base/log_event.cpp:163
 msgid "No match for argument '{0}' in repositories '{1}'"
-msgstr ""
+msgstr "저장소 '{1}'에서 인수 '{0}'와 일치하지 않습니다"
 
-#: base/log_event.cpp:164
+#: base/log_event.cpp:169
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "설치되지 않았기 때문에 {1} '{2}'를 위해 {0}를 수행 할 수 없습니다."
+
+#: base/log_event.cpp:174
 msgid "Packages for argument '{}' available, but not installed."
-msgstr ""
+msgstr "인수 '{}'에 해당하는 꾸러미가 존재하지만 설치되어 있지 않습니다."
 
-#: base/log_event.cpp:167
+#: base/log_event.cpp:178
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
+"인수 '{}'를 위한 꾸러미는 사용 할 수 있지만 다른 구조를 위해 설치되었습니다."
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:182
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr "'{1}'은 원천 꾸러미만 일치하기 때문에 {0}를 수행 할 수 없습니다."
+
+#: base/log_event.cpp:186
 msgid "Argument '{}' matches only source packages."
-msgstr ""
+msgstr "인수 '{}'는 원천 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:171
+#: base/log_event.cpp:190
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr "'{1}' 는 예외적인 꾸러미만 일치하기 때문에 {0} 를 수행 할 수 없습니다."
+
+#: base/log_event.cpp:194
 msgid "Argument '{}' matches only excluded packages."
-msgstr ""
+msgstr "인수 '{}' 는 예외적인 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:173
+#: base/log_event.cpp:198
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"'{1}'는 versionlock에 의해 예외적인 꾸러미만 일치하기 때문에 {0} 를 수행 할 "
+"수 없습니다."
+
+#: base/log_event.cpp:202
 msgid "Argument '{}' matches only packages excluded by versionlock."
-msgstr ""
+msgstr "인수 '{}'는 versionlock에 의해 예외적인 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:207
 msgid "  * Maybe you meant: {}"
 msgstr "  * 다음을 의미 할 수도 있습니다: {}"
 
-#: base/log_event.cpp:181
+#: base/log_event.cpp:210
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "다음 대안이 있습니다 '{0}': {1}"
 
-#: base/log_event.cpp:188
+#: base/log_event.cpp:217
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
+"\"{}\" 꾸러미의 최저 사용 가능 버전이 이미 설치되었으며, 이를 하향 할 수 없습"
+"니다."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:223
 msgid ""
-"Packages for argument '{}' installed and available, but in a different "
-"version => cannot reinstall"
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
 msgstr ""
+"인수 '{0}'를 위해 설치된 꾸러미는 동일한 버전의 저장소에서 사용 할 수 없으"
+"며, 사용 가능한 버전: {1}, 재설치 할 수 없습니다."
 
-#: base/log_event.cpp:199
+#: base/log_event.cpp:229
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr ""
+"'{1}'은 다른 버전으로 설치되었기 때문에 {0} 을 수행 할 수 없습니다: '{2}'."
+
+#: base/log_event.cpp:235
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
-msgstr ""
+msgstr "인수 '{}'를 위한 꾸러미가 설치되고 사용 할 수 있지만, 다른 버전입니다."
 
-#: base/log_event.cpp:201
+#: base/log_event.cpp:237
 msgid "Packages for argument '{}' installed, but not available."
-msgstr ""
+msgstr "인수 '{}'를 위한 꾸러미가 설치되었지만, 사용 할 수 없습니다."
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:246
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr ""
+msgstr "꾸러미 \"{}\"가 이미 원인 \"{}\"으로 설치되어 있습니다."
 
-#: base/log_event.cpp:212
+#: base/log_event.cpp:248
 msgid "Package \"{}\" is already installed."
-msgstr ""
+msgstr "\"{}\" 꾸러미는 이미 설치되었습니다."
 
-#: base/log_event.cpp:221
+#: base/log_event.cpp:257
 msgid "Debug data written to \"{}\""
-msgstr ""
+msgstr "\"{}\"로 작성된 디버그 자료"
 
-#: base/log_event.cpp:224
-msgid "{} action for argument \"{}\" is not supported."
+#: base/log_event.cpp:261
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
 msgstr ""
+"{0} 향상은 되돌릴 수 없지만, 연관된 꾸러미 동작은 가능합니다 ({1} id: "
+"'{2}') ."
+
+#: base/log_event.cpp:267
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "인수 \"{}\"를 위한 {} 동작이 지원되지 않습니다."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:233
+#: base/log_event.cpp:276
 msgid "Unable to resolve argument '{}':"
 msgstr "인수를 해결 할 수 없습니다 '{}':"
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:280
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -157,44 +299,59 @@ msgid_plural ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr[0] ""
+"\n"
+"  - 인수 '{}'는 모듈 '{}'의 {} 스트림 ('{}')과 일치하지만, 스트림의 어떤 것"
+"도 활성화 되었거나 기본값이 아닙니다."
 
-#: base/log_event.cpp:244
+#: base/log_event.cpp:287
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
-#: base/log_event.cpp:253
+#: base/log_event.cpp:296
 msgid "Modular dependency problems:\n"
-msgstr ""
+msgstr "모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:260
+#: base/log_event.cpp:303
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "최신 모듈을 갖는 모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:310
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "기본값과 함께 모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:282
+#: base/log_event.cpp:325
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr "이 작업은 '{0}' 모듈을 '{1}' 스트림에서 ‘{2}' 스트림으로 전환합니다\n"
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:330
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"오류: 환경설정 옵션 module_stream_switch를 통해 명시적으로 활성화하지 않으면 "
+"모듈의 활성화된 스트림 전환이 불가능합니다."
+
+#: base/log_event.cpp:335
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"저장된 연결에서 존재하지 않는 추가 꾸러미 '{0}' (동작 '{1}'과 함께)는 연결로 "
+"참여되었습니다.\n"
+
+#: base/log_event.cpp:341
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "파일을 구문 분석 할 수 없습니다: '{0}': {1}.\n"
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{}가 distupgrade 저장소에 속하지 않습니다"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
-msgstr "{}는 열악한 구조를 갖고 있습니다"
+msgstr "{0}은 ({1}에서) 열악한 구조를 갖고 있습니다"
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
@@ -214,7 +371,7 @@ msgstr "요청된 {}에 어떤 것도 제공하지 않습니다"
 
 #: base/solver_problems.cpp:47
 msgid "package {} does not exist"
-msgstr ""
+msgstr "꾸러미 {}가 존재하지 않습니다"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 msgid "{} is provided by the system"
@@ -234,68 +391,73 @@ msgstr "작업에 가장 적합한 후보를 설치 할 수 없습니다"
 
 #: base/solver_problems.cpp:52
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}은 모듈식으로 걸러 제거됩니다"
 
 #: base/solver_problems.cpp:53
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}는 호환 구조가 없습니다"
 
 #: base/solver_problems.cpp:54
 msgid "package {0} from {1} is not installable"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}을 설치할 수 없습니다"
 
 #: base/solver_problems.cpp:55
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}는 제외 필터링으로 걸러졌습니다"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
-#| msgid "nothing provides requested {}"
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr "요청된 {}에 어떤 것도 제공하지 않습니다"
+msgstr "{2}에서 {1}에 의해 필요한 {0}을 제공하는 것이 없습니다"
 
 #: base/solver_problems.cpp:57
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr ""
+msgstr "{1}의 {0} 및 {3}의 {2} 모두를 설치 할 수 없습니다"
 
 #: base/solver_problems.cpp:58
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}은 {4}에서 {3}에 의해 제공된 {2}와 충돌합니다"
 
 #: base/solver_problems.cpp:60
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr ""
+msgstr "설치된 꾸러미 {0}은 {3}에서 {2}에 의해 제공된 {1}과 충돌합니다"
 
 #: base/solver_problems.cpp:61
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
 msgstr ""
+"{1}에서 꾸러미 {0}은 {4}에서 {3}에 의해 제공된 {2}를 더 이상 사용하지 않습니"
+"다"
 
 #: base/solver_problems.cpp:62
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
 msgstr ""
+"설치된 꾸러미 {0}은 {3}에서 {2}에 의해 제공된 {1}을 더 이상 사용하지 않습니다"
 
 #: base/solver_problems.cpp:64
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
 msgstr ""
+"{1}에서 꾸러미 {0}은 {4}에서 {3}에 의해 제공된 {2}를 암시적으로 더 이상 사용"
+"하지 않습니다"
 
 #: base/solver_problems.cpp:66
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
 msgstr ""
+"{2}에서 꾸러미 {1}는 {0}가 필요하지만, 공급 업체가 없어 설치할 수 없습니다"
 
 #: base/solver_problems.cpp:68
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
 msgstr ""
+"설치된 꾸러미 {1}에는 {0}이 필요하지만, 공급 업체가 없어 설치할 수 없습니다"
 
 #: base/solver_problems.cpp:69
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0}은 자체적으로 제공된 {2}와 충돌합니다"
 
 #: base/solver_problems.cpp:70
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr ""
+msgstr "{1}에서 꾸러미 {0} 및 {4}에서 {3} 모두 {2}를 더 이상 사용하지 않습니다"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -304,15 +466,15 @@ msgstr "이 작업은 다음과 같은 보호된 꾸러미가 제거됩니다: {
 
 #: base/solver_problems.cpp:75
 msgid "The operation would result in removing of running kernel: {}"
-msgstr ""
+msgstr "실행은 동작 중인 커널이 제거되는 결과를 갖습니다: {}"
 
 #: base/solver_problems.cpp:77
 msgid "module {} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "모듈 {}은 distupgrade 저장소에 속하지 않습니다"
 
 #: base/solver_problems.cpp:78
 msgid "module {} has inferior architecture"
-msgstr ""
+msgstr "모듈 {}은 열등한 구조를 갖습니다"
 
 #: base/solver_problems.cpp:79
 msgid "problem with installed module {}"
@@ -320,7 +482,7 @@ msgstr "설치된 모듈 문제 {}"
 
 #: base/solver_problems.cpp:83
 msgid "module {} does not exist"
-msgstr ""
+msgstr "모듈 {}이 존재하지 않습니다"
 
 #: base/solver_problems.cpp:86
 msgid "cannot install the best update candidate for module {}"
@@ -328,51 +490,51 @@ msgstr "모듈에 가장 적합한 최신화 후보를 설치 할 수 없습니�
 
 #: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 msgid "module {} is disabled"
-msgstr ""
+msgstr "모듈 {}이 비활성화 되었습니다"
 
 #: base/solver_problems.cpp:89
 msgid "module {} does not have a compatible architecture"
-msgstr ""
+msgstr "모듈 {}은 호환 구조를 가지지 않습니다"
 
 #: base/solver_problems.cpp:90
 msgid "module {} is not installable"
-msgstr ""
+msgstr "모듈 {}을 설치 할 수 없습니다"
 
 #: base/solver_problems.cpp:92
 msgid "nothing provides {0} needed by module {1}"
-msgstr ""
+msgstr "모듈 {1}에 의해 필요한 {0}을 제공 하는 것이 없습니다"
 
 #: base/solver_problems.cpp:93
 msgid "cannot install both modules {0} and {1}"
-msgstr ""
+msgstr "모듈 {0} 및 {1}을 모두 설치 할 수 없습니다"
 
 #: base/solver_problems.cpp:94
 msgid "module {0} conflicts with {1} provided by {2}"
-msgstr ""
+msgstr "모듈 {0}이 {2}에 의해 제공된 {1}과 충돌합니다"
 
 #: base/solver_problems.cpp:95
 msgid "module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "모듈 {0}은 {2}에 의해 제공된 더 이상 사용하지 않는 {1}"
 
 #: base/solver_problems.cpp:96
 msgid "installed module {0} obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "설치된 모듈 {0}은 {2}에 의해 제공되는 더 이상 사용되지 않는 {1}"
 
 #: base/solver_problems.cpp:97
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
-msgstr ""
+msgstr "모듈 {0}은 {2}에 의해 제공되는 암시적으로 사용하지 않는 {1}"
 
 #: base/solver_problems.cpp:98
 msgid "module {1} requires {0}, but none of the providers can be installed"
-msgstr ""
+msgstr "모듈 {1}은 {0}이 필요하지만, 공급자가 없어도 설치 될 수 있습니다"
 
 #: base/solver_problems.cpp:99
 msgid "module {1} conflicts with {0} provided by itself"
-msgstr ""
+msgstr "모듈 {1}은 자체적으로 제공된 {0}과 충돌합니다"
 
 #: base/solver_problems.cpp:100
 msgid "both module {0} and {2} obsolete {1}"
-msgstr ""
+msgstr "모듈 {0} 및 {2} 모두 더 이상 사용되지 않음 {1}"
 
 #: base/solver_problems.cpp:290
 msgid "Problem: "
@@ -380,83 +542,83 @@ msgstr "문제: "
 
 #: base/solver_problems.cpp:294
 msgid "Problem {}: "
-msgstr ""
+msgstr "문제 {}: "
 
 #: base/transaction.cpp:77
 msgid "This transaction has been already run before."
-msgstr ""
+msgstr "이와 같은 연결은 전에 이미 실행되었습니다."
 
 #: base/transaction.cpp:78
 msgid "Cannot run transaction with resolving problems."
-msgstr ""
+msgstr "문제를 해결하면서 연결을 실행 할 수 없습니다."
 
 #: base/transaction.cpp:79
 msgid "Rpm transaction check failed."
-msgstr ""
+msgstr "rpm 연결 점검이 실패했습니다."
 
 #: base/transaction.cpp:81
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
-msgstr ""
+msgstr "rpm 연결 잠금을 획득하는 데 실패함. 다른 연결이 진행 중에 있습니다."
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction failed."
-msgstr ""
+msgstr "rpm 연결이 실패함."
 
 #: base/transaction.cpp:83
 msgid "Signature verification failed."
-msgstr ""
+msgstr "서명 검증이 실패함."
 
 #: base/transaction.cpp:87
 msgid "The repository does not have any PGP keys configured."
-msgstr ""
+msgstr "저장소는 구성된 어떤 PGP 키를 갖고 있지 않습니다."
 
 #: base/transaction.cpp:88
 msgid "Public key is not installed."
-msgstr ""
+msgstr "공개 키가 설치되어 있지 않습니다."
 
 #: base/transaction.cpp:89
 msgid "Canceled by the user."
-msgstr ""
+msgstr "사용자에 의해 취소되었습니다."
 
 #: base/transaction.cpp:90
 msgid "Public key import failed."
-msgstr ""
+msgstr "공개 키 가져오기에 실패함."
 
-#: base/transaction.cpp:937
+#: base/transaction.cpp:963
 msgid "Invalid tsflag: {}"
-msgstr ""
+msgstr "잘못된 tsflag: {}"
 
-#: base/transaction.cpp:1271
+#: base/transaction.cpp:1297
 msgid "Public key \"{}\" is already present, not importing."
-msgstr ""
+msgstr "공개 키 \"{}\"가 이미 존재하고, 가져오지 않습니다."
 
-#: base/transaction.cpp:1292
+#: base/transaction.cpp:1318
 msgid "An error occurred importing key \"{}\": {}"
-msgstr ""
+msgstr "키를 가져오는 중에 발생하였습니다 \"{}\": {}"
 
-#: base/transaction.cpp:1326
+#: base/transaction.cpp:1352
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr ""
+msgstr "repo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
 
-#: base/transaction.cpp:1354
+#: base/transaction.cpp:1380
 msgid "Import of the key didn't help, wrong key?"
-msgstr ""
+msgstr "키 가져오기가 도움이 되지 않습니다, 잘못된 키입니까?"
 
-#: base/transaction.cpp:1373
+#: base/transaction.cpp:1399
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
-#: base/transaction.cpp:1376
+#: base/transaction.cpp:1402
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr ""
+msgstr "경고: 저장소에서 1 꾸러미를 위해 PGP 점검을 건너뜁니다: {}"
 
-#: base/transaction.cpp:1378
+#: base/transaction.cpp:1404
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
-msgstr[0] ""
+msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 PGP 점검을 건너뜀: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -464,158 +626,163 @@ msgstr "시스템 오류"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
-msgstr ""
+msgstr "일반 RuntimeError 예외"
 
 #: common/sack/query.cpp:27
 msgid "Query must contain exactly one object."
-msgstr ""
+msgstr "질의는 정확히 하나의 개체가 포함되어야 합니다."
 
 #: common/xdg.cpp:43
 msgid "get_user_home_dir(): Cannot determine the user's home directory"
-msgstr ""
+msgstr "get_user_home_dir(): 사용자의 홈 디렉토리를 결정 할 수 없습니다"
 
 #: common/xdg.cpp:98
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
+"get_user_runtime_dir(): 사용자의 runtime 디렉토리를 결정 할 수 없습니다"
 
 #: comps/environment/environment.cpp:307
 msgid "failed to save xml document for comps"
-msgstr ""
+msgstr "comps를 위해 xml 문서를 저장하는 데 실패함"
 
 #: comps/group/group.cpp:331
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
-msgstr ""
+msgstr "파일에 그룹 \"{}\"을 위해 xml 문서를 저장하는 데 실패함 \"{}\": {}"
 
 #: comps/group/package.cpp:118 comps/group/package.cpp:121
 msgid "Invalid package type: {}"
-msgstr ""
+msgstr "잘못된 꾸러미 유형: {}"
 
 #: conf/config_main.cpp:53
 msgid "Input is empty. Must contain a value."
-msgstr ""
+msgstr "입력이 비었습니다. 값이 포함되어야 합니다."
 
 #: conf/config_main.cpp:59
 msgid "Input value '{}' must not be negative"
-msgstr ""
+msgstr "입력값 '{}'은 음수가 아니어야 합니다"
 
 #: conf/config_main.cpp:64
 msgid "Could not convert '{}' to bytes"
-msgstr ""
+msgstr "'{}'를 바이트로 변환 할 수 없습니다"
 
 #: conf/config_main.cpp:80
 msgid "Unknown unit '{}'"
-msgstr ""
+msgstr "알 수 없는 단위 '{}'"
 
 #: conf/config_main.cpp:258
 msgid "The throttle value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "쓰로틀 값 {}은 허용된 범위 {} 밖에 있습니다 {} ... {}"
 
 #: conf/config_parser.cpp:54
 msgid "Section \"{}\" not found"
-msgstr ""
+msgstr "부분 \"{}\"을 찾을 수 없습니다"
 
 #: conf/config_parser.cpp:59
 msgid "Section \"{}\" does not contain option \"{}\""
-msgstr ""
+msgstr "부분 \"{}\"은 옵션 \"{}\"을 포함하지 않습니다"
 
 #: conf/config_parser.cpp:96
 msgid "Configuration file \"{}\" not found"
-msgstr ""
+msgstr "구성 파일 \"{}\"을 찾을 수 없습니다"
 
 #: conf/config_parser.cpp:98
 msgid "Unable to access configuration file \"{}\""
-msgstr ""
+msgstr "구성 파일 \"{}\"을 접근 할 수 없음"
 
 #: conf/config_parser.cpp:101
 msgid "Error in configuration file \"{}\""
-msgstr ""
+msgstr "구성 파일 \"{}\"에서 오류"
 
 #: conf/option_binds.cpp:29
 msgid "Option \"{}\" not found"
-msgstr ""
+msgstr "옵션 \"{}\"을 찾을 수 없음"
 
 #: conf/option_binds.cpp:32
 msgid "Option \"{}\" already exists"
-msgstr ""
+msgstr "옵션 \"{}\"이 이미 존재합니다"
 
 #: conf/option_bool.cpp:82
 msgid "Invalid boolean value \"{}\""
-msgstr ""
+msgstr "잘못된 부울 값 \"{}\""
 
 #: conf/option_enum.cpp:68
 msgid "Enum option value \"{}\" not allowed"
-msgstr ""
+msgstr "Enum 옵션 값 \"{}\"이 허용되지 않습니다"
 
 #: conf/option_number.cpp:99
 msgid "Input value {} is outside the allowed range {} ... {}"
-msgstr ""
+msgstr "입력 값 {}이 허용된 범위 {} ... {} 밖입니다"
 
 #: conf/option_number.cpp:112
 msgid "Invalid number option value \"{}\""
-msgstr ""
+msgstr "잘못된 번호 옵션 값 \"{}\""
 
 #: conf/option_path.cpp:93
 msgid "Only absolute paths allowed, relative path \"{}\" detected"
-msgstr ""
+msgstr "절대 경로만 허용되며, 상대 경로 \"{}\"가 탐지되었습니다"
 
 #: conf/option_path.cpp:98
 msgid "Path \"{}\" does not exist"
-msgstr ""
+msgstr "경로 \"{}\"가 존재하지 않습니다"
 
 #: conf/option_seconds.cpp:38
 msgid "Empty time option value"
-msgstr ""
+msgstr "빈 시간 옵션 값"
 
 #: conf/option_seconds.cpp:50
 msgid "Invalid time option value \"{}\", number or \"never\" expected"
-msgstr ""
+msgstr "잘못된 시간 옵션 값 \"{}\", 번호 또는 \"never\"가 예상됩니다"
 
 #: conf/option_seconds.cpp:54
 msgid ""
 "Invalid time option value \"{}\", negative values except \"-1\" not allowed"
-msgstr ""
+msgstr "잘못된 시간 옵션 값 \"{}\", \"-1\" 예외인 음수 값은 허용되지 않습니다"
 
 #: conf/option_seconds.cpp:59
 msgid "Unknown time format \"{}\""
-msgstr ""
+msgstr "알 수 없는 시간 형식 \"{}\""
 
 #: conf/option_seconds.cpp:78
 msgid "Unknown time unit '{}'"
-msgstr ""
+msgstr "알 수 없는 시간 단위 '{}'"
 
 #: conf/option_string.cpp:89
 msgid ""
 "Input value \"{}\" not allowed, allowed values for this option are defined "
 "by regular expression \"{}\""
 msgstr ""
+"입력 값 \"{}\"은 허용되지 않으며, 이와 같은 옵션을 위한 허용된 값은 정규식 "
+"\"{}\"에 의해 정의됩니다"
 
 #. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
 #. or extend exception (add name) in upper layer.
 #: conf/option_string.cpp:114
 msgid "Option value is not set"
-msgstr ""
+msgstr "옵션 값이 설정되지 않았습니다"
 
 #: conf/option_string_list.cpp:175
 msgid ""
 "Input item value \"{}\" not allowed, allowed values for this option are "
 "defined by regular expression \"{}\""
 msgstr ""
+"입력 항목 값 \"{}\"은 허용되지 않으며, 이와 같은 옵션을 위한 허용된 값은 정규"
+"식 \"{}\"에 의해 정의됩니다"
 
 #: conf/vars.cpp:63
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "rpm config 파일을 읽는 데 실패함"
 
 #: conf/vars.cpp:89
 msgid "Failed to execute uname()"
-msgstr ""
+msgstr "uname()을 실행하는 데 실패함"
 
 #: conf/vars.cpp:370 conf/vars.cpp:410
 msgid "Variable \"{}\" is read-only"
-msgstr ""
+msgstr "변수 \"{}\" 는 읽기-전용입니다"
 
 #: logger/rotating_file_logger.cpp:59
 msgid "Cannot open log file"
-msgstr ""
+msgstr "기록 파일을 열 수 없습니다"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 msgid "No such module: {}"
@@ -638,361 +805,373 @@ msgstr "해결책 없음"
 
 #: module/module_metadata.cpp:102
 msgid "Failed to update from string: {}"
-msgstr ""
+msgstr "문자열에서 최신화 하는 데 실패함: {}"
 
 #: module/module_metadata.cpp:129
 msgid "Failed to resolve module metadata: {}"
-msgstr ""
+msgstr "모듈 메타자료를 확인 하는 데 실패함: {}"
 
 #: module/module_metadata.cpp:140
 msgid "Failed to upgrade defaults: {}"
-msgstr ""
+msgstr "기본값을 향상하는 데 실패함: {}"
 
 #: module/module_metadata.cpp:144
 msgid "Failed to upgrade streams: {}"
-msgstr ""
+msgstr "스트림을 향상하는 데 실패함: {}"
 
 #: module/module_sack.cpp:93
 msgid "Failed to load module metadata for repository \"{}\": {}"
-msgstr ""
+msgstr "저장소를 위해 모듈 메타자료를 적재하는 데 실패함 \"{}\": {}"
 
 #: module/module_sack.cpp:594
 msgid "Missing '='"
-msgstr ""
+msgstr "누락 '='"
 
 #: module/module_sack.cpp:598 module/module_sack.cpp:606
 msgid "Missing '\"' in the value"
-msgstr ""
+msgstr "값에서 누락된 '\"'"
 
 #: module/module_sack.cpp:602
 msgid "Missing ':' in the value"
-msgstr ""
+msgstr "값에서 누락된 ':'"
 
 #: module/module_sack.cpp:911
 msgid "Invalid module status: {}"
-msgstr ""
+msgstr "잘못된 모듈 상태: {}"
 
 #: plugin/plugins.cpp:66
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
+"미지원 플러그인 API 조합. 플러그인에 의해 제공되는 API 버전은 \"{}.{}\"입니"
+"다. libdnf에서 API 버전은 \"{}.{}\"입니다."
 
 #: plugin/plugins.cpp:115
 msgid "Cannot find plugin library \"{}\""
-msgstr ""
+msgstr "플러그인 라이브러리 \"{}\"를 찾을 수 없습니다"
 
 #: plugin/plugins.cpp:182
 msgid "Invalid option value: enabled={}"
-msgstr ""
+msgstr "잘못된 옵션 값: enabled={}"
 
 #: plugin/plugins.cpp:206
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
-msgstr ""
+msgstr "Plugins::load_plugins(): config_dir_path는 비워 둘 수 없습니다"
 
 #: plugin/plugins.cpp:231
 msgid "Cannot load plugins: {}"
-msgstr ""
+msgstr "플러그인을 적재 할 수 없습니다: {}"
 
 #: repo/config_repo.cpp:557
 msgid "get_unique_id(): Computation of SHA256 failed"
-msgstr ""
+msgstr "get_unique_id(): SHA256 연산이 실패함"
 
 #: repo/file_downloader.cpp:143
 msgid "Cannot download files, cacheonly option is activated."
-msgstr ""
+msgstr "파일을 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
 #: repo/file_downloader.cpp:204
 msgid "Failed to download files"
-msgstr ""
+msgstr "파일을 내려받는 데 실패함"
 
 #: repo/librepo.cpp:123
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
 msgstr ""
-"최대 내려받기 속도가 최저보다 낮습니다. 최저속도나 변환 환경구성을 변경해 주"
-"세요"
+"최대 내려받기 속도가 최저보다 낮으며, minrate 또는 throttle의 구성을 변경해 "
+"주세요"
 
 #: repo/package_downloader.cpp:147
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
+"\"{0}\" 꾸러미를 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
 #: repo/package_downloader.cpp:222
 msgid "Failed to download packages"
-msgstr ""
+msgstr "꾸러미를 내려받는 데 실패함"
 
 #: repo/repo.cpp:60
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
-msgstr ""
+msgstr "적재하는 데 실패함 RPM \"{}\": \".rpm\" 확장을 가지지 않습니다"
 
 #: repo/repo.cpp:64
 msgid "Failed to access RPM \"{}\": {}"
-msgstr ""
+msgstr "접근 하는 데 실패함 RPM \"{}\": {}"
 
 #: repo/repo.cpp:106
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
-msgstr ""
+msgstr "잘못된 저장소 id \"{}\": 예상치 못한 문자 '{}'"
 
 #: repo/repo.cpp:149
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
+"저장소 \"{}\"는 원천(baseurl, mirrorlist 또는 metalink) 구성을 갖고 있지 않습"
+"니다."
 
 #: repo/repo.cpp:160
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
-msgstr ""
+msgstr "저장소 \"{}는 미지원 유형 \"{}\"을 가지며, 건너뜁니다."
 
 #: repo/repo.cpp:408
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
 msgstr ""
+"저장소를 적재 하는 데 실패함: \"primary\" 자료는 표시되지 않거나 미지원되는 "
+"형식"
 
 #: repo/repo.cpp:466
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
-msgstr ""
+msgstr "comps를 적재하는 데 실패함 \"{}: \".xml\" 확장을 가지고 있지 않습니다"
 
 #: repo/repo.cpp:473
 msgid "Failed to load xml Comps \"{}\": {}"
-msgstr ""
+msgstr "xml Comps를 적재하는 데 실패함 \"{}\": {}"
 
 #: repo/repo.cpp:490
 msgid "Failed to load RPM \"{}\": {}"
-msgstr ""
+msgstr "적재하는 데 실패함 RPM \"{}\": {}"
 
 #: repo/repo_cache.cpp:229
 msgid "Unable to determine id of the repository in the cache."
-msgstr ""
+msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 
 #: repo/repo_cache_private.hpp:56
 msgid "Empty path to the repository cache directory."
-msgstr ""
+msgstr "저장소 캐쉬 디렉토리에 빈 경로."
 
 #: repo/repo_downloader.cpp:138
 msgid "Librepo error: {}"
-msgstr ""
+msgstr "Librepo 오류: {}"
 
 #: repo/repo_downloader.cpp:170
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr ""
+msgstr "저장소 \"{}\"를 위한 메타자료 ({}: \"{}\")를 내려받는 데 실패함"
 
 #: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
+"만약 metalink \"{}\"가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
 #: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
+"만약 repomd ({}: \"{}\")가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
 #: repo/repo_downloader.cpp:335
 msgid "Error loading local metadata for repository \"{}\""
-msgstr ""
+msgstr "저장소 \"{}\"를 위해 로컬 메타자료를 적재 중에 오류"
 
 #: repo/repo_downloader.cpp:455
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
+"저장소 \"{}\"를 위해 유효한 원천(baseurl, mirrorlist 또는 metalink)을 찾을 "
+"수 없습니다"
 
 #: repo/repo_pgp.cpp:60
 msgid "Failed to import pgp keys into temporary keyring: {}"
-msgstr ""
+msgstr "pgp 키를 임시 키링에 가져오는 데 실패함: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
 msgid "Failed to list pgp keys: {}"
-msgstr ""
+msgstr "pgp 키를 나열하는 데 실패함: {}"
 
 #: repo/repo_pgp.cpp:140
 msgid "Failed to import pgp keys: {}"
-msgstr ""
+msgstr "pgp 키를 가져오는 데 실패함: {}"
 
 #: repo/repo_sack.cpp:125
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
-msgstr ""
+msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
 #: repo/repo_sack.cpp:496
 msgid "Cache-only enabled but no cache for repository \"{}\""
-msgstr ""
+msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 
 #: repo/solv_repo.cpp:258
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위해 repomd를 적재하는 데 실패함: {}."
 
 #: repo/solv_repo.cpp:266
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위해 우선 적재하는 데 실패함: {}."
 
 #: repo/solv_repo.cpp:311
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
-msgstr ""
+msgstr "시스템 repo를 위한 확장된 repodate 유형이 지원되지 않습니다: \"{}\"."
 
 #: repo/solv_repo.cpp:377
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 확장을 적재하는 데 실패함: {}"
 
 #: repo/solv_repo.cpp:412
 msgid "Failed to load system repo from root \"{}\": {}"
-msgstr ""
+msgstr "root에서 시스템 repo를 적재하는 데 실패함 \"{}\": {}"
 
 #: repo/solv_repo.cpp:511
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 적재하는 데 실패함: {}"
 
 #: repo/solv_repo.cpp:563
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "repo \"{}\"를 위한 기본 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
 #: repo/solv_repo.cpp:580
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위한 기본 캐쉬를 재-적재하는 데 실패함: {}"
 
 #: repo/solv_repo.cpp:644
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
-msgstr ""
+msgstr "repo \"{}\"를 위한 {} 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
 #: repo/solv_repo.cpp:665
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
-msgstr ""
+msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 재-적재하는 데 실패함: {}"
 
 #: repo/temp_files_memory.cpp:52
 msgid ""
 "An error occurred when parsing the temporary files memory file at '{}': {}"
-msgstr ""
+msgstr "임시 파일 메모리 파일을 구문 분석 중에 오류가 발생했습니다 \"{}\": {}"
 
 #: rpm/nevra.cpp:82
 msgid "NEVRA string \"{}\" contains ':' multiple times"
-msgstr ""
+msgstr "NEVRA 문자열 \"{}\"은 ':'를 여러 번 포함합니다"
 
 #: rpm/nevra.cpp:86
 msgid "Invalid character '{}' in NEVRA string \"{}\""
-msgstr ""
+msgstr "NEVRA 문자열 \"{}\"에서 잘못된 문자 \"{}\""
 
 #: rpm/package.cpp:80
 msgid "Package with rpmdbid was not found"
-msgstr ""
+msgstr "rpmdbid를 갖는 꾸러미는 찾을 수 없습니다"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
-msgstr ""
+msgstr "의존성 문자열을 구문 분석 할 수 없습니다"
 
 #: rpm/rpm_signature.cpp:45
 msgid "No corresponding key was found."
-msgstr ""
+msgstr "일치하는 키를 찾을 수 없습니다."
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "서명이 유효하지만, 키는 신뢰 할 수 없습니다."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "꾸러미가 서명되지 않았습니다."
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "꾸러미를 여는 중에 문제가 발생되었습니다."
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "rpm 연결 rootDIR 설정하는 데 실패함 \"{}\"."
 
 #: rpm/rpm_signature.cpp:283
 msgid "\"{}\": key is not an armored public key."
-msgstr ""
+msgstr "\"{}\": 키는 강화된 공개 키가 아닙니다."
 
 #: rpm/rpm_signature.cpp:288
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
-msgstr ""
+msgstr "공개 키 \"{}\"를 rpmdb로 가져오는 데 실패함: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:116
+#: rpm/transaction.cpp:112
 msgid "Cannot set root directory \"{}\""
-msgstr ""
+msgstr "root 디렉토리 \"{}\"로 설정 할 수 없습니다"
 
-#: rpm/transaction.cpp:127
+#: rpm/transaction.cpp:123
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "rpm 데이타베이스를 여는 동안 오류 %i가 발생했습니다"
 
-#: rpm/transaction.cpp:136
+#: rpm/transaction.cpp:132
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "rpmdbCookie() 함수는 rpm 데이타베이스의 쿠키를 반환하지 않습니다."
 
-#: rpm/transaction.cpp:201
+#: rpm/transaction.cpp:197
 msgid "Failed to order the rpm transaction."
-msgstr ""
+msgstr "rpm 연결을 명령하는 데 실패함."
 
-#: rpm/transaction.cpp:237
+#: rpm/transaction.cpp:233
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
+"구현 출력 파일을 설정하는 데 실패함, 파일 설명자를 복제 할 수 없습니다: {}"
 
-#: rpm/transaction.cpp:256
+#: rpm/transaction.cpp:252
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "구현 출력 파일을 설정하는 데 실패함, 파일을 열 수 없습니다 \"{}\": {}"
 
-#: rpm/transaction.cpp:277
+#: rpm/transaction.cpp:273
 msgid "Failed to read package header, cannot open file \"{}\": {}"
-msgstr ""
+msgstr "꾸러미 헤더를 읽는 데 실패함, 파일을 열 수 없습니다 \"{}\": {}"
 
-#: rpm/transaction.cpp:294
+#: rpm/transaction.cpp:290
 msgid "Failed to read package header from file \"{}\""
-msgstr ""
+msgstr "파일에서 꾸러미 헤더를 읽은 데 실패함 \"{}\""
+
+#: rpm/transaction.cpp:303
+msgid "Cannot init rpm database iterator"
+msgstr "rpm 데이타베이스 반복자(database iterator)를 초기화 할 수 없습니다"
 
 #: rpm/transaction.cpp:307
-msgid "Cannot init rpm database iterator"
-msgstr ""
-
-#: rpm/transaction.cpp:311
 msgid "Package was not found in rpm database"
-msgstr ""
+msgstr "꾸러미가 rpm 데이타베이스에서 찾을 수 없습니다"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:327
+#: rpm/transaction.cpp:323
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "꾸러미를 재설치 할 수 없습니다 \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:345
+#: rpm/transaction.cpp:341
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "꾸러미를 제거 할 수 없습니다 \"{}\""
+
+#: rpm/transaction.cpp:360
+msgid "Cannot upgrade package \"{}\""
+msgstr "꾸러미를 향상 할 수 없습니다 \"{}\""
 
 #: rpm/transaction.cpp:364
-msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgid "Cannot downgrade package \"{}\""
+msgstr "꾸러미를 하향 할 수 없습니다 \"{}\""
 
 #: rpm/transaction.cpp:368
-msgid "Cannot downgrade package \"{}\""
-msgstr ""
-
-#: rpm/transaction.cpp:372
 msgid "Cannot install package \"{}\""
 msgstr "꾸러미를 설치 할 수 없습니다 \"{}\""
 
 #: rpm/versionlock_config.cpp:261 system/state.cpp:513
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "epoch \"{}\"를 숫자로 변환하는 데 실패함"
 
 #: solv/solver.cpp:79
 msgid "Writing debugsolver data into \"{}\" failed: {}"
-msgstr ""
+msgstr "debugsolver 자료를 \"{}\"로 작성하는 데 실패함: {}"
 
 #: system/state.cpp:226 system/state.cpp:235
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
-msgstr ""
+msgstr "잘못된 TOML 버전 \"{}\", \"MAJOR.MINOR\" 예상됨"
 
 #: system/state.cpp:243
 msgid "{} state for \"{}\" not found."
-msgstr ""
+msgstr "\"{}\"를 위한 {} 상태를 찾을 수 없습니다."
 
 #: system/state.cpp:540
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
-msgstr ""
+msgstr "미지원 TOML 버전 \"{}\", 최대 지원된 버전은 \"{}\"입니다"
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
@@ -1021,117 +1200,130 @@ msgid ""
 "Failed to insert record into table 'comps_environment_group' in history "
 "database"
 msgstr ""
+"히스토리 데이타베이스에서 레코드를 테이블 'comps_environment_group'로 삽입하"
+"는 데 실패함"
 
 #: transaction/db/db.cpp:71
 msgid "Unable to get 'version' from table 'config'"
-msgstr ""
+msgstr "테이블 'config'에서 'version'을 가져 올 수 없습니다"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/item.cpp:43
 msgid "Failed to insert record into table 'item' in history database"
 msgstr ""
+"히스토리 데이타베이스에서 레코드를 테이블 'item'으로 삽입하는 데 실패함"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "오프라인 상태 파일을 읽는 중 오류"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "상태 자료의 호환되지 않는 버전"
 
 #: transaction/transaction.cpp:96
 msgid "Invalid transaction state: {}"
-msgstr ""
+msgstr "잘못된 연결 상태: {}"
 
 #: transaction/transaction.cpp:282
 msgid "Transaction has already started!"
-msgstr ""
+msgstr "연결은 이미 시작되었습니다!"
 
 #: transaction/transaction_item_action.cpp:28
 msgid "Invalid transaction item action: {}"
-msgstr ""
+msgstr "잘못된 연결 항목 동작: {}"
 
 #: transaction/transaction_item_reason.cpp:28
 msgid "Invalid transaction item reason: {}"
-msgstr ""
+msgstr "잘못된 연결 항목 원인: {}"
 
 #: transaction/transaction_item_state.cpp:28
 msgid "Invalid transaction item state: {}"
-msgstr ""
+msgstr "잘못된 연결 항목 상태: {}"
 
 #: transaction/transaction_item_type.cpp:28
 msgid "Invalid transaction item type: {}"
-msgstr ""
+msgstr "잘못된 연결 항목 유형: {}"
 
-#: transaction/transaction_sr.cpp:56
+#: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
-msgstr ""
+msgstr "연결 재생될 때, JSON 직렬화된 연결 입력이 비어 있습니다"
 
-#: transaction/transaction_sr.cpp:65
+#: transaction/transaction_sr.cpp:58
 msgid "Error during transaction replay JSON parsing : {}"
-msgstr ""
+msgstr "연결이 재생되는 동안 JSON 구문 분석 중 오류: {}"
 
-#: transaction/transaction_sr.cpp:75
+#: transaction/transaction_sr.cpp:68
 msgid "Unexpected version format: \"{}\", supported version is \"{}\""
-msgstr ""
+msgstr "예상치 못한 버전 형식: \"{}\", 지원 되는 버전은 \"{}\"입니다"
+
+#: transaction/transaction_sr.cpp:74
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "호환되지 않은 주요 버전: \"{}\", 지원되는 주요 버전은 \"{}\"입니다"
 
 #: transaction/transaction_sr.cpp:81
-msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
-msgstr ""
-
-#: transaction/transaction_sr.cpp:88
 msgid "Invalid minor version: \"{}\", number expected."
 msgstr "잘못된 하위 버전: \"{}\", 번호가 예상됩니다."
 
-#: transaction/transaction_sr.cpp:91
+#: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\"."
-msgstr ""
+msgstr "누락된 키 \"version\"."
 
-#: transaction/transaction_sr.cpp:104
+#: transaction/transaction_sr.cpp:97
 msgid "Unexpected type of \"environments\", array expected."
-msgstr ""
+msgstr "\"environments\"의 예상치 못한 유형, 배열이 예상됩니다."
 
-#: transaction/transaction_sr.cpp:112
+#: transaction/transaction_sr.cpp:105
 msgid "Missing object key \"id\" in an environment."
-msgstr ""
+msgstr "환경에서 누락된 객체 키 \"id\"."
 
-#: transaction/transaction_sr.cpp:117
+#: transaction/transaction_sr.cpp:110
 msgid "Missing object key \"action\" in an environment."
-msgstr ""
+msgstr "환경에서 누락된 객체 키 \"action\"."
 
-#: transaction/transaction_sr.cpp:142
+#: transaction/transaction_sr.cpp:135
 msgid "Unexpected type of \"groups\", array expected."
-msgstr ""
+msgstr "\"groups\"의 예상치 못한 유형, 배열이 예상됩니다."
 
-#: transaction/transaction_sr.cpp:150
+#: transaction/transaction_sr.cpp:143
 msgid "Missing object key \"id\" in a group."
-msgstr ""
+msgstr "그룹에서 누락된 객체 키 \"id\"."
 
-#: transaction/transaction_sr.cpp:155
+#: transaction/transaction_sr.cpp:148
 msgid "Missing object key \"action\" in a group."
-msgstr ""
+msgstr "그룹에서 누락된 객체 키 \"action\"."
 
-#: transaction/transaction_sr.cpp:160
+#: transaction/transaction_sr.cpp:153
 msgid "Missing object key \"reason\" in a group."
-msgstr ""
+msgstr "그룹에서 누락된 객체 키 \"reason\"."
 
-#: transaction/transaction_sr.cpp:189
+#: transaction/transaction_sr.cpp:182
 msgid "Unexpected type of \"rpms\", array expected."
-msgstr ""
+msgstr "\"rpms\"의 예상치 못한 유형, 배열이 예상됩니다."
 
-#: transaction/transaction_sr.cpp:198
+#: transaction/transaction_sr.cpp:191
 msgid "Cannot parse NEVRA for rpm \"{}\"."
-msgstr ""
+msgstr "rpm \"{}\"을 위한 NEVRA를 구문 분석 할 수 없습니다."
 
-#: transaction/transaction_sr.cpp:206
+#: transaction/transaction_sr.cpp:199
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
-msgstr ""
+msgstr "\"nevra\" 또는 \"package_path\" 중에 객체 키는 rpm에서 필요합니다."
 
-#: transaction/transaction_sr.cpp:211
+#: transaction/transaction_sr.cpp:204
 msgid "Missing object key \"action\" in an rpm."
-msgstr ""
+msgstr "rpm에서 누락된 객체 키 \"action\"."
+
+#: transaction/transaction_sr.cpp:209
+msgid "Missing object key \"reason\" in an rpm."
+msgstr "rpm에서 누락된 객체 키 \"reason\"."
 
 #: transaction/transaction_sr.cpp:216
-msgid "Missing object key \"reason\" in an rpm."
-msgstr ""
-
-#: transaction/transaction_sr.cpp:223
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\"."
 msgstr ""
+"원인 \"Group\" 및 동작 \"Reason Change\" 과 함께 rpm에서 누락된 필 수 객체 "
+"키 \"group_id\"."
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1139,7 +1331,7 @@ msgstr "파일을 열 수 없음"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "fd에서 파일을 열 수 없습니다"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
@@ -1151,160 +1343,160 @@ msgstr "파일을 읽는 도중 오류 발생"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "파일 쓰기 중 오류"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "파일 비우는 중 오류"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "파일에서 찾기 중 오류"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "파일 위치 검색 중 오류"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "파일에서 행을 읽는 중 오류"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "파일 설명자 검색 중 오류"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "임시 디렉토리를 생성 할 수 없습니다"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "임시 파일을 생성 할 수 없습니다"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "임시 파일을 닫을 수 없습니다"
 
 #: utils/iniparser.cpp:126
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "행 {}에서 누락된 ']'"
 
 #: utils/iniparser.cpp:129
 msgid "Empty section name on line {}"
-msgstr ""
+msgstr "행 {}에서 빈 부분 이름"
 
 #: utils/iniparser.cpp:137
 msgid "Text after section on line {}"
-msgstr ""
+msgstr "행 {}에서 부분 후에 텍스트"
 
 #: utils/iniparser.cpp:147
 msgid "Missing section header on line {}"
-msgstr ""
+msgstr "행 {}에서 누락된 부분 헤더"
 
 #: utils/iniparser.cpp:152
 msgid "Illegal continuation line on line {}"
-msgstr ""
+msgstr "행 {}에서 잘못된 연속 행"
 
 #: utils/iniparser.cpp:159
 msgid "Missing option name on line {}"
-msgstr ""
+msgstr "행 {}에서 누락된 옵션 이름"
 
 #: utils/iniparser.cpp:163
 msgid "Missing '=' on line {}"
-msgstr ""
+msgstr "행 {}에서 누락된 '='"
 
 #. returns localized message, problem with later translation
 #: utils/library.cpp:32
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "공유된 라이브러리를 적재 할 수 없습니다 \"{}\": {}"
 
 #: utils/library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "기호의 주소를 획득 할 수 없습니다 \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "잠금 파일을 열 수 없습니다 \"{}\""
 
 #: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "잠금 \"{}\"을 획득 하는 데 실패함"
 
 #: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "잠금 파일 \"{}\"을 닫는 데 실패함"
 
 #: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "잠금 파일 \"{}\"을 삭제하는 데 실패함"
 
 #: utils/sqlite3/sqlite3.cpp:29
 msgid "SQL statement compilation failed: \"{}\""
-msgstr ""
+msgstr "SQL 문 컴파일이 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:31
 msgid "Binding integer value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "정수 값을 SQL 문에 바인딩 하는 데 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:33
 msgid "Binding integer64 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "정수64 값을 SQL 문에 바인딩 하는 데 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:35
 msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "unsigned integer32 값을 SQL 문으로 바인딩을 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:37
 msgid "Binding double value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "double 값을 SQL 문으로 바인딩을 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:39
 msgid "Binding bool value to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "부울 값을 SQL 문으로 바인딩을 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:40
 msgid "Binding text to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "텍스트를 SQL 문으로 바인딩을 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:41
 msgid "Binding blob to SQL statement failed: \"{}\""
-msgstr ""
+msgstr "blob를 SQL 문으로 바인딩을 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:42
 msgid "SQL statement evaluation failed: \"{}\""
-msgstr ""
+msgstr "SQL 문 평가를 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:44
 msgid "Insufficient memory or result exceed maximum SQLite3 string length"
-msgstr ""
+msgstr "메모리가 부족하거나 결과가 SQLite3 문자열 최대 길이를 초과합니다"
 
 #: utils/sqlite3/sqlite3.cpp:46
 msgid "Column \"{}\" not found"
-msgstr ""
+msgstr "열 \"{}\"을 찾지 못했습니다"
 
 #: utils/sqlite3/sqlite3.cpp:48
 msgid "SQL statement execution failed: \"{}\""
-msgstr ""
+msgstr "SQL 문 실행에 실패함: \"{}\""
 
 #: utils/sqlite3/sqlite3.cpp:68
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "데이타베이스 \"{}\"를 여는데 실패함"
 
 #: utils/sqlite3/sqlite3.cpp:105
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "데이타베이스 \"{}\"를 닫는데 실패함"
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 msgid "Failed to open backup database \"{}\""
-msgstr ""
+msgstr "백업 데이타베이스 \"{}\"를 여는 데 실패함"
 
 #: utils/sqlite3/sqlite3.cpp:132
 msgid "Failed to backup database \"{}\" into \"{}\""
-msgstr ""
+msgstr "데이타베이스 \"{}\"를 \"{}\"로 백업하는 데 실패함"
 
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
-msgstr ""
+msgstr "데이타베이스 \"{}\"를 복구하는 데 실패함"
 
 #~ msgid "packages"
 #~ msgstr "꾸러미"

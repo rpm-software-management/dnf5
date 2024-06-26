@@ -1,39 +1,39 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# 김인수 <simmon@nplob.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-01-11 22:23+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
-"projects/dnf5/dnf5-plugin-repoclosure/pt_BR/>\n"
-"Language: pt_BR\n"
+"PO-Revision-Date: 2024-06-04 09:28+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: repoclosure.cpp:45
 msgid "Print list of unresolved dependencies for repositories"
-msgstr "Imprime uma lista de dependências não resolvidas para repositórios"
+msgstr "저장소를 위해 해결되지 못한 의존성의 목록 출력"
 
 #: repoclosure.cpp:154
 msgid "No match for argument \"{}\"."
-msgstr "Nenhuma correspondência para o argumento \"{}\"."
+msgstr "인수 \"{}\"와 일치하지 않습니다."
 
 #: repoclosure.cpp:160
 msgid "Failed to resolve package specifications."
-msgstr "Falha ao resolver especificações do pacote."
+msgstr "꾸러미 사양을 확인하는 데 실패함."
 
 #: repoclosure.cpp:215
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
-"Erro: Repoclosure encerrado com dependências não resolvidas ({}) em {} "
-"pacotes."
+"오류: {} 꾸러미 전반에 걸쳐 해결되지 않은 의존성 ({})으로 재-폐쇄되어 종료되"
+"었습니다."
