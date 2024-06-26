@@ -784,6 +784,28 @@ void RepoSack::enable_source_repos() {
     }
 }
 
+void RepoSack::enable_debug_repos() {
+    RepoQuery enabled_repos(p_impl->base);
+    enabled_repos.filter_enabled(true);
+    for (const auto & repo : enabled_repos) {
+        RepoQuery debug_query(p_impl->base);
+        // There is no way how to find source (or debuginfo) repository for
+        // given repo. This is only guessing according to the current practice:
+        auto repoid = repo->get_id();
+        if (libdnf5::utils::string::ends_with(repoid, "-rpms")) {
+            debug_query.filter_id(repoid.substr(0, repoid.size() - 5) + "-debug-rpms");
+        } else {
+            debug_query.filter_id(repoid + "-debuginfo");
+        }
+        for (auto & debug_repo : debug_query) {
+            if (!debug_repo->is_enabled()) {
+                // TODO(mblaha): log debug repo enabling
+                debug_repo->enable();
+            }
+        }
+    }
+}
+
 void RepoSack::internalize_repos() {
     auto rq = RepoQuery(p_impl->base);
     for (auto & repo : rq.get_data()) {

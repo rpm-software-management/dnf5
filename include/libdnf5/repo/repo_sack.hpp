@@ -142,6 +142,12 @@ public:
     /// @since 5.0
     void enable_source_repos();
 
+    /// For each enabled repository enable corresponding debug repository.
+    /// When repo ID has suffix -rpm then it enables <ID>-debug-rpms
+    /// otherwise it enables <ID>-debuginfo
+    /// @since 5.2.4
+    void enable_debug_repos();
+
     ~RepoSack();
 
 private:
