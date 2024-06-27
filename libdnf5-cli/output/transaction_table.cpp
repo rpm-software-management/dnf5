@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/transaction/transaction_item_type.hpp>
 #include <libdnf5/utils/to_underlying.hpp>
 #include <libsmartcols/libsmartcols.h>
+#include <stdlib.h>
 
 #include <algorithm>
 #include <optional>
@@ -66,6 +67,7 @@ const char * action_color(libdnf5::transaction::TransactionItemAction action) {
 }
 
 constexpr const char * SKIPPED_COLOR = "red";
+constexpr const char * PKG_HIGHLIGHT_COLOR = "lightblue";
 
 
 class TransactionTableSection {
@@ -225,35 +227,42 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_table_enable_noheadings(*tb, 1);
     struct libscols_line * header_ln = scols_table_new_line(*tb, NULL);
 
-    auto column = scols_table_new_column(*tb, "Package", 0.3, 0);
+    int single_line_min = 130;
+    auto termwidth = (int)scols_table_get_termwidth(*tb);
+    int scols_fl = SCOLS_FL_WRAP;
+    if (termwidth < single_line_min) {
+        scols_fl = SCOLS_FL_TRUNC;
+    }
+
+    auto column = scols_table_new_column(*tb, "Package", 0.2, 0);
     auto header = scols_column_get_header(column);
     auto cell = scols_line_get_cell(header_ln, COL_NAME);
     scols_cell_set_data(cell, scols_cell_get_data(header));
-    scols_cell_set_color(cell, "bold");
+    scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
     column = scols_table_new_column(*tb, "Arch", 6, 0);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_ARCH);
     scols_cell_set_data(cell, scols_cell_get_data(header));
-    scols_cell_set_color(cell, "bold");
+    scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
-    column = scols_table_new_column(*tb, "Version", 0.3, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Version", 0.1, scols_fl);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_EVR);
     scols_cell_set_data(cell, scols_cell_get_data(header));
-    scols_cell_set_color(cell, "bold");
+    scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
-    column = scols_table_new_column(*tb, "Repository", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, "Repository", 0.1, scols_fl);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_REPO);
     scols_cell_set_data(cell, scols_cell_get_data(header));
-    scols_cell_set_color(cell, "bold");
+    scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
-    column = scols_table_new_column(*tb, "Size", 9, SCOLS_FL_RIGHT);
+    column = scols_table_new_column(*tb, "Size", 0.1, SCOLS_FL_RIGHT);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_SIZE);
     scols_cell_set_data(cell, scols_cell_get_data(header));
-    scols_cell_set_color(cell, "bold");
+    scols_cell_set_color(cell, PKG_HIGHLIGHT_COLOR);
 
     sections.emplace_back("", header_ln);
 
@@ -271,6 +280,10 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     auto tsgrps = transaction.get_transaction_groups();
     std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp);
 
+    //std::string arrow = " <- ";
+    if (termwidth < single_line_min) {
+        scols_column_set_whint(scols_table_get_column(*tb, COL_NAME), 0.35);  // priorizize pakage name over versions
+    }
     for (const auto & tspkg : tspkgs) {
         // TODO(lukash) handle OBSOLETED correctly through the transaction table output
         if (tspkg->get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
@@ -312,43 +325,124 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
             section.set_last_line(ln_reason);
         }
+
+        struct libscols_line * ln_pre = nullptr;
         for (auto & replaced : tspkg->get_replaces()) {
-            // highlight incoming packages with epoch/version change
-            if (tspkg->get_package()->get_epoch() != replaced->get_epoch() ||
-                tspkg->get_package()->get_version() != replaced->get_version()) {
-                auto cl_evr = scols_line_get_cell(ln, COL_EVR);
-                scols_cell_set_color(cl_evr, "bold");
+            if (pkg->get_name() == replaced->get_name() && termwidth < single_line_min) {
+                ln_pre = scols_table_new_line(*tb, ln);
+            }
+            // print ARCH
+            if (tspkg->get_package()->get_arch() != replaced->get_arch()) {
+                if (ln_pre != nullptr) {
+                    auto cl_arch = scols_line_get_cell(ln, COL_ARCH);
+                    scols_cell_set_color(cl_arch, "brown");
+                    scols_cell_set_data(cl_arch, pkg->get_arch().c_str());
+                    auto cl_prearch = scols_line_get_cell(ln_pre, COL_ARCH);
+                    scols_cell_set_color(cl_prearch, "brown");
+                    scols_cell_set_data(cl_prearch, replaced->get_arch().c_str());
+                } else {
+                    auto cl_arch = scols_line_get_cell(ln, COL_ARCH);
+                    scols_cell_set_color(cl_arch, "brown");
+                    scols_cell_set_data(cl_arch, (pkg->get_arch() + " (" + replaced->get_arch() + ")").c_str());
+                }
             }
 
-            struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
-            // TODO(jmracek) Translate it
-            std::string name("replacing ");
-            name.append(replaced->get_name());
-            scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
-            scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
-            scols_line_set_data(ln_replaced, COL_EVR, replaced->get_evr().c_str());
-            scols_line_set_data(ln_replaced, COL_REPO, replaced->get_from_repo_id().c_str());
-
-            auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
-            scols_line_set_data(
-                ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
-            auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
-            auto obsoleted_color = "brown";
-
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
-            if (pkg->get_arch() == replaced->get_arch()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
-            } else {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+            // print REPO
+            if (pkg->get_repo_id() != replaced->get_from_repo_id()) {
+                if (ln_pre != nullptr) {
+                    scols_cell_set_color(scols_line_get_cell(ln, COL_REPO), "magenta");
+                    scols_line_set_data(ln, COL_REPO, pkg->get_repo_id().c_str());
+                    scols_cell_set_color(scols_line_get_cell(ln_pre, COL_REPO), "magenta");
+                    scols_line_set_data(ln_pre, COL_REPO, replaced->get_from_repo_id().c_str());
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln, COL_REPO), "magenta");
+                    scols_line_set_data(
+                        ln, COL_REPO, (pkg->get_repo_id() + " (" + replaced->get_from_repo_id() + ")").c_str());
+                }
             }
+
+            // print SIZE, filter changes on small package, bigger pakages need 10% of size change
+            double long difference =
+                abs((double long)100 - ((double long)100 / (double long)pkg->get_install_size() *
+                                        (double long)replaced->get_install_size()));
+            unsigned long small = (pkg->get_install_size() < replaced->get_install_size())
+                                      ? pkg->get_install_size()
+                                      : replaced->get_install_size();
+            unsigned long test = 1000 - (small / 200);
+            unsigned long index = 10;
+            if (test > 10) {
+                index = test;
+            }
+            if (difference > index) {
+                scols_cell_set_color(scols_line_get_cell(ln, COL_SIZE), "red");
+                auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
+                if (ln_pre != nullptr) {
+                    scols_cell_set_color(scols_line_get_cell(ln_pre, COL_SIZE), "red");
+                    scols_line_set_data(
+                        ln, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(tspkg_size).c_str());
+                    scols_line_set_data(
+                        ln_pre, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
+                } else {
+                    scols_line_set_data(
+                        ln,
+                        COL_SIZE,
+                        (libdnf5::cli::utils::units::format_size_aligned(tspkg_size) + " (" +
+                         libdnf5::cli::utils::units::format_size_aligned(replaced_size) + ")")
+                            .c_str());
+                }
+            }
+
+            // highlight incoming packages with epoch, major/minor version change
+            std::string tmpver = tspkg->get_package()->get_version();
+            std::string tmprepver = replaced->get_version();
+            std::string version = tmpver.substr(0, tmpver.find_first_of(".-", tmpver.find('.') + 1));
+            std::string rep_version = tmprepver.substr(0, tmprepver.find_first_of(".-", tmprepver.find('.') + 1));
+            if (tspkg->get_package()->get_epoch() != replaced->get_epoch() || version != rep_version) {
+                scols_cell_set_color(scols_line_get_cell(ln, COL_EVR), "lightblue");
+                if (ln_pre != nullptr) {
+                    scols_cell_set_color(scols_line_get_cell(ln_pre, COL_EVR), "lightblue");
+                }
+            }
+
+            // print Version
             if (pkg->get_name() == replaced->get_name()) {
-                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
-            } else {
+                if (pkg->get_evr() != replaced->get_evr()) {
+                    if (ln_pre != nullptr) {
+                        scols_line_set_data(ln, COL_EVR, pkg->get_evr().c_str());
+                        scols_line_set_data(ln_pre, COL_EVR, replaced->get_evr().c_str());
+                    } else {
+                        auto cl_evr = scols_line_get_cell(ln, COL_EVR);
+                        scols_cell_set_data(
+                            cl_evr,
+                            fmt::format("{:20s}{}{}{}", pkg->get_evr(), " (", replaced->get_evr(), ")").c_str());
+                    }
+                }
+            } else {  // print replacing versions
+                struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
+                // TODO(jmracek) Translate it
+                std::string name("   replacing ");
+                name.append(replaced->get_name());
+                scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
+                scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
+                scols_line_set_data(ln_replaced, COL_EVR, replaced->get_evr().c_str());
+                scols_line_set_data(ln_replaced, COL_REPO, replaced->get_from_repo_id().c_str());
+
+                auto replaced_size = static_cast<int64_t>(replaced->get_install_size());
+                scols_line_set_data(
+                    ln_replaced, COL_SIZE, libdnf5::cli::utils::units::format_size_aligned(replaced_size).c_str());
+                auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
+                auto obsoleted_color = "brown";
+
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
+                if (pkg->get_arch() == replaced->get_arch()) {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
+                } else {
+                    scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+                }
                 scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
             }
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
-            section.set_last_line(ln_replaced);
         }
     }
 
