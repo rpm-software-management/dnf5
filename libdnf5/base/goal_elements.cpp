@@ -396,6 +396,8 @@ std::string goal_action_to_string(GoalAction action) {
             return _("Reason override");
         case GoalAction::REVERT_COMPS_UPGRADE:
             return _("Revert comps upgrade");
+        case GoalAction::INSTALL_DEBUG:
+            return _("Install debug RPMs");
     }
     return "";
 }

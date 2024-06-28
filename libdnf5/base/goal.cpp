@@ -48,6 +48,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <iostream>
 #include <map>
+#include <unordered_map>
 
 namespace {
 
@@ -72,6 +73,46 @@ void add_obsoletes_to_data(const libdnf5::rpm::PackageQuery & base_query, libdnf
     libdnf5::rpm::PackageQuery obsoletes_query(base_query);
     obsoletes_query.filter_obsoletes(data_query);
     data |= obsoletes_query;
+}
+
+/// Add install job of debug packages for installed packages to Goal
+///
+/// @return bool False when no match for any package
+bool install_debug_from_packages(
+    libdnf5::BaseWeakPtr base,
+    std::string & debug_name,
+    const std::vector<libdnf5::rpm::Package> & packages,
+    libdnf5::solv::IdQueue & result_queue,
+    libdnf5::rpm::solv::GoalPrivate & goal,
+    bool skip_broken,
+    bool best,
+    bool clean_requirements_on_remove) {
+    std::vector<std::string> nevras;
+    for (const auto & package : packages) {
+        std::string nevra(debug_name);
+        nevra.append("-");
+        nevra.append(package.get_epoch());
+        nevra.append(":");
+        nevra.append(package.get_version());
+        nevra.append("-");
+        nevra.append(package.get_release());
+        nevra.append(".");
+        nevra.append(package.get_arch());
+        nevras.emplace_back(std::move(nevra));
+    }
+    libdnf5::rpm::PackageQuery query(base);
+    query.filter_nevra(nevras);
+    if (query.empty()) {
+        return false;
+    }
+    libdnf5::solv::IdQueue install_queue;
+    for (auto package : query) {
+        Id id = package.get_id().id;
+        install_queue.push_back(id);
+        result_queue.push_back(id);
+    }
+    goal.add_install(install_queue, skip_broken, best, clean_requirements_on_remove);
+    return true;
 }
 
 
@@ -114,6 +155,8 @@ public:
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
+    std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_debug_to_goal(
+        base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
@@ -246,6 +289,10 @@ void Goal::add_module_reset(const std::string & spec, const libdnf5::GoalJobSett
 
 void Goal::add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
     p_impl->add_spec(GoalAction::INSTALL, spec, settings);
+}
+
+void Goal::add_debug_install(const std::string & spec, const libdnf5::GoalJobSettings & settings) {
+    p_impl->add_spec(GoalAction::INSTALL_DEBUG, spec, settings);
 }
 
 void Goal::add_upgrade(const std::string & spec, const libdnf5::GoalJobSettings & settings, bool minimal) {
@@ -554,6 +601,11 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     settings.resolve_skip_broken(cfg_main),
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
+            } break;
+            case GoalAction::INSTALL_DEBUG: {
+                auto [problem, idqueue] = add_install_debug_to_goal(transaction, spec, settings);
+                rpm_goal.add_transaction_user_installed(idqueue);
+                ret |= problem;
             } break;
             case GoalAction::INSTALL_OR_REINSTALL: {
                 libdnf_throw_assertion("Unsupported action \"INSTALL_OR_REINSTALL\"");
@@ -1447,6 +1499,178 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         throw RuntimeError(M_("Incorrect configuration value for multilib_policy: {}"), multilib_policy);
     }
 
+    return {GoalProblem::NO_PROBLEM, result_queue};
+}
+
+std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_goal(
+    base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
+    auto & cfg_main = base->get_config();
+    bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+    auto log_level = skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR;
+    bool best = settings.resolve_best(cfg_main);
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    bool skip_broken = settings.resolve_skip_broken(cfg_main);
+
+    libdnf5::solv::IdQueue result_queue;
+
+    rpm::PackageQuery query(base);
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
+    if (!nevra_pair.first) {
+        auto problem = transaction.p_impl->report_not_found(GoalAction::INSTALL_DEBUG, spec, settings, log_level);
+        if (skip_unavailable) {
+            return {GoalProblem::NO_PROBLEM, result_queue};
+        } else {
+            return {problem, result_queue};
+        }
+    }
+    // Use a package name as a key
+    std::unordered_map<std::string, std::vector<libdnf5::rpm::Package>> candidate_map;
+    std::unordered_map<std::string, std::vector<libdnf5::rpm::Package>> available;
+    for (auto package : query) {
+        if (package.is_installed()) {
+            candidate_map[package.get_name()].push_back(package);
+        } else {
+            available[package.get_name()].push_back(package);
+        }
+    }
+    // installed versions of packages have priority, replace / add them to the m
+    candidate_map.merge(available);
+
+    const std::string debug_suffix{"-debuginfo"};
+    const std::string debug_source_suffix{"-debugsource"};
+
+    // Remove debuginfo packages if their base packages are in the query.
+    // They can get there through globs and they break the installation
+    // of debug packages with the same version as the installed base
+    // packages. If the base package of a debuginfo package is not in
+    // the query, the user specified a debug package on the command
+    // line. We don't want to ignore those, so we will install them.
+    // But, in this case the version will not be matched to the
+    // installed version of the base package, as that would require
+    // another query and is further complicated if the user specifies a
+    // version themselves etc.
+    for (auto iter = candidate_map.begin(); iter != candidate_map.end();) {
+        auto name = iter->first;
+        if (libdnf5::utils::string::ends_with(name, debug_suffix)) {
+            name.resize(name.size() - debug_suffix.size());
+            auto iterator = candidate_map.find(name);
+            if (iterator != candidate_map.end()) {
+                // remove debuginfo when base name is in candidate_map
+                candidate_map.erase(iter++);
+                continue;
+            }
+            // Install debuginfo and remove it from candiddates (to prevent double testing)
+            libdnf5::solv::IdQueue install_queue;
+            for (auto package : iter->second) {
+                Id pkg_id = package.get_id().id;
+                install_queue.push_back(pkg_id);
+                result_queue.push_back(pkg_id);
+            }
+            rpm_goal.add_install(install_queue, skip_broken, best, clean_requirements_on_remove);
+            candidate_map.erase(iter++);
+            continue;
+        } else if (libdnf5::utils::string::ends_with(name, debug_source_suffix)) {
+            name.resize(name.size() - debug_source_suffix.size());
+            auto iterator = candidate_map.find(name);
+            if (iterator != candidate_map.end()) {
+                candidate_map.erase(iter++);
+                continue;
+            }
+            // Install debugsource and remove it from candiddates (to prevent double testing)
+            libdnf5::solv::IdQueue install_queue;
+            for (auto package : iter->second) {
+                Id pkg_id = package.get_id().id;
+                install_queue.push_back(pkg_id);
+                result_queue.push_back(pkg_id);
+            }
+            rpm_goal.add_install(install_queue, skip_broken, best, clean_requirements_on_remove);
+            candidate_map.erase(iter++);
+            continue;
+        }
+        ++iter;
+    }
+    for (auto & item : candidate_map) {
+        auto & first_pkg = *item.second.begin();
+        auto debug_name = first_pkg.get_debuginfo_name();
+        auto debuginfo_name_of_source = first_pkg.get_debuginfo_name_of_source();
+        auto debug_source_name = first_pkg.get_debugsource_name();
+
+        if (first_pkg.is_installed()) {
+            std::unordered_map<std::string, std::vector<libdnf5::rpm::Package>> arch_map;
+            for (auto & package : item.second) {
+                arch_map[package.get_arch()].push_back(package);
+            }
+            for (auto arch_item : arch_map) {
+                if (!install_debug_from_packages(
+                        base,
+                        debug_name,
+                        arch_item.second,
+                        result_queue,
+                        rpm_goal,
+                        skip_broken,
+                        best,
+                        clean_requirements_on_remove)) {
+                    // Because there is no debuginfo for the package, lets install deguginfo of the source package
+                    if (!install_debug_from_packages(
+                            base,
+                            debuginfo_name_of_source,
+                            arch_item.second,
+                            result_queue,
+                            rpm_goal,
+                            skip_broken,
+                            best,
+                            clean_requirements_on_remove)) {
+                        // TODO(jmracek) report when proper debug RPM is not found
+                    }
+                }
+                if (!install_debug_from_packages(
+                        base,
+                        debug_source_name,
+                        arch_item.second,
+                        result_queue,
+                        rpm_goal,
+                        skip_broken,
+                        best,
+                        clean_requirements_on_remove)) {
+                    // TODO(jmracek) report when proper debug RPM is not found
+                }
+            }
+            continue;
+        }
+        if (!install_debug_from_packages(
+                base,
+                debug_name,
+                item.second,
+                result_queue,
+                rpm_goal,
+                skip_broken,
+                best,
+                clean_requirements_on_remove)) {
+            // Because there is no debuginfo for the package, lets install deguginfo of the source package
+            if (!install_debug_from_packages(
+                    base,
+                    debuginfo_name_of_source,
+                    item.second,
+                    result_queue,
+                    rpm_goal,
+                    skip_broken,
+                    best,
+                    clean_requirements_on_remove)) {
+                // TODO(jmracek) report when proper debug RPM is not found
+            }
+        }
+        if (!install_debug_from_packages(
+                base,
+                debug_source_name,
+                item.second,
+                result_queue,
+                rpm_goal,
+                skip_broken,
+                best,
+                clean_requirements_on_remove)) {
+            // TODO(jmracek) report when proper debug RPM is not found
+        }
+    }
     return {GoalProblem::NO_PROBLEM, result_queue};
 }
 

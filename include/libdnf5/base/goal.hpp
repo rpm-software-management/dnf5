@@ -65,6 +65,12 @@ public:
     /// @param settings  A structure to override default goal settings.
     void add_install(const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
+    /// Process spec to install related debug info and debug source packages
+    /// @param spec  A string with installation spec
+    /// @param settings  A structure to override default goal settings.
+    void add_debug_install(
+        const std::string & spec, const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
+
     /// High level API for an artifact upgrade. See `add_install()` for details.
     /// @param spec      A string with upgrade spec
     /// @param settings  A structure to override default goal settings.
