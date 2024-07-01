@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF5_UTILS_HPP
 
 #include "system/state.hpp"
+#include "utils/string.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <libdnf5/advisory/advisory_set.hpp>
@@ -303,17 +304,19 @@ struct assertion_traits<libdnf5::transaction::GroupReplay> {
     inline static bool equal(
         const libdnf5::transaction::GroupReplay & left, const libdnf5::transaction::GroupReplay & right) {
         return left.action == right.action && left.reason == right.reason && left.group_id == right.group_id &&
-               left.group_path == right.group_path && left.repo_id == right.repo_id;
+               left.group_path == right.group_path && left.repo_id == right.repo_id &&
+               left.package_types == right.package_types;
     }
 
     inline static std::string toString(const libdnf5::transaction::GroupReplay & replay) {
         return fmt::format(
-            "GroupReplay: group_id: {}, action: {}, reason: {}, repo_id: {}, group_path: {}",
+            "GroupReplay: group_id: {}, action: {}, reason: {}, repo_id: {}, group_path: {}, package_types: {}",
             replay.group_id,
             libdnf5::transaction::transaction_item_action_to_string(replay.action),
             libdnf5::transaction::transaction_item_reason_to_string(replay.reason),
             replay.repo_id,
-            std::string(replay.group_path));
+            std::string(replay.group_path),
+            libdnf5::utils::string::join(package_types_to_strings(replay.package_types), ","));
     }
 };
 

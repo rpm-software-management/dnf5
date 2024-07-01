@@ -47,6 +47,7 @@ static void add_transaction_item_group(
     group_replay.action = action;
     group_replay.reason = TransactionItemReason::USER;
     group_replay.group_id = id;
+    group_replay.package_types = libdnf5::comps::PackageType::DEFAULT;
     trans.groups.push_back(group_replay);
 }
 
@@ -96,7 +97,12 @@ void TransactionMergeTest::only_one_transaction() {
         {TransactionItemAction::INSTALL, TransactionItemReason::USER, "", "bash-4-1.x86_64", "", ""}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.packages);
     std::vector<GroupReplay> expected_groups = {
-        {TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected_groups, replay.groups);
     std::vector<EnvironmentReplay> expected_envs = {
         {TransactionItemAction::INSTALL, "basic-desktop-environment", "", ""}};
@@ -124,7 +130,12 @@ void TransactionMergeTest::two_disjoint() {
         {TransactionItemAction::INSTALL, TransactionItemReason::USER, "", "bash-4-1.x86_64", "", ""}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.packages);
     std::vector<GroupReplay> expected_groups = {
-        {TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected_groups, replay.groups);
     std::vector<EnvironmentReplay> expected_envs = {
         {TransactionItemAction::INSTALL, "basic-desktop-environment", "", ""}};
@@ -1374,7 +1385,13 @@ void TransactionMergeTest::group_install_install() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), problems);
 }
@@ -1389,7 +1406,13 @@ void TransactionMergeTest::group_install_upgrade() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), problems);
 }
@@ -1419,7 +1442,13 @@ void TransactionMergeTest::group_remove_upgrade() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     std::vector<std::string> expected_problems = {
         {"Action 'Upgrade' 'vlc' cannot be merged because it is not present at that point -> "
@@ -1437,7 +1466,13 @@ void TransactionMergeTest::group_remove_remove() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::REMOVE, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::REMOVE,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     std::vector<std::string> expected_problems = {
         {"Action 'Remove' 'vlc' cannot be merged after it was 'Remove' in preceding "
@@ -1455,7 +1490,13 @@ void TransactionMergeTest::group_upgrade_upgrade() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::UPGRADE, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::UPGRADE,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), problems);
 }
@@ -1470,7 +1511,13 @@ void TransactionMergeTest::group_upgrade_remove() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::REMOVE, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::REMOVE,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), problems);
 }
@@ -1485,7 +1532,13 @@ void TransactionMergeTest::group_upgrade_install() {
 
     auto [replay, problems] = libdnf5::transaction::merge_transactions({trans1, trans2}, na_to_installed_nevras);
 
-    std::vector<GroupReplay> expected = {{TransactionItemAction::INSTALL, TransactionItemReason::USER, "vlc", "", ""}};
+    std::vector<GroupReplay> expected = {
+        {TransactionItemAction::INSTALL,
+         TransactionItemReason::USER,
+         "vlc",
+         "",
+         "",
+         libdnf5::comps::PackageType::DEFAULT}};
     CPPUNIT_ASSERT_EQUAL(expected, replay.groups);
     CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), problems);
 }
