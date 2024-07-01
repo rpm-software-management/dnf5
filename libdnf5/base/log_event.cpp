@@ -340,6 +340,27 @@ std::string LogEvent::to_string(
         case GoalProblem::MALFORMED: {
             return ret.append(utils::sformat(_("Cannot parse file: '{0}': {1}.\n"), *spec, *additional_data.begin()));
         }
+        case GoalProblem::NOT_FOUND_DEBUGINFO: {
+            if (additional_data.empty()) {
+                throw std::invalid_argument("Missing description of missing debuginfo packages");
+            }
+            return ret.append(utils::sformat(
+                _("Could not find debuginfo package for the following packages resolved from the argument '{0}': {1}"),
+                *spec,
+                utils::string::join(
+                    additional_data, C_("String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`", ", "))));
+        }
+        case GoalProblem::NOT_FOUND_DEBUGSOURCE: {
+            if (additional_data.empty()) {
+                throw std::invalid_argument("Missing description of missing debugsource packages");
+            }
+            return ret.append(utils::sformat(
+                _("Could not find debugsource package for the following packages resolved from the argument '{0}': "
+                  "{1}"),
+                *spec,
+                utils::string::join(
+                    additional_data, C_("String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`", ", "))));
+        }
     }
     return ret;
 }

@@ -1613,6 +1613,9 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_
         }
         ++iter;
     }
+
+    std::set<std::string> no_debuginfo_for_packages;
+    std::set<std::string> no_debugsource_for_packages;
     for (auto & item : candidate_map) {
         auto & first_pkg = *item.second.begin();
         auto debug_name = first_pkg.get_debuginfo_name();
@@ -1644,7 +1647,9 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_
                             skip_broken,
                             best,
                             clean_requirements_on_remove)) {
-                        // TODO(jmracek) report when proper debug RPM is not found
+                        for (auto & package : arch_item.second) {
+                            no_debuginfo_for_packages.emplace(package.get_full_nevra());
+                        }
                     }
                 }
                 if (!install_debug_from_packages(
@@ -1656,7 +1661,9 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_
                         skip_broken,
                         best,
                         clean_requirements_on_remove)) {
-                    // TODO(jmracek) report when proper debug RPM is not found
+                    for (auto & package : arch_item.second) {
+                        no_debugsource_for_packages.emplace(package.get_full_nevra());
+                    }
                 }
             }
             continue;
@@ -1680,7 +1687,9 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_
                     skip_broken,
                     best,
                     clean_requirements_on_remove)) {
-                // TODO(jmracek) report when proper debug RPM is not found
+                for (auto & package : item.second) {
+                    no_debuginfo_for_packages.emplace(package.get_full_nevra());
+                }
             }
         }
         if (!install_debug_from_packages(
@@ -1692,8 +1701,30 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_debug_to_
                 skip_broken,
                 best,
                 clean_requirements_on_remove)) {
-            // TODO(jmracek) report when proper debug RPM is not found
+            for (auto & package : item.second) {
+                no_debugsource_for_packages.emplace(package.get_full_nevra());
+            }
         }
+    }
+    if (!no_debuginfo_for_packages.empty()) {
+        transaction.p_impl->add_resolve_log(
+            GoalAction::INSTALL_DEBUG,
+            GoalProblem::NOT_FOUND_DEBUGINFO,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            spec,
+            no_debuginfo_for_packages,
+            libdnf5::Logger::Level::WARNING);
+    }
+    if (!no_debugsource_for_packages.empty()) {
+        transaction.p_impl->add_resolve_log(
+            GoalAction::INSTALL_DEBUG,
+            GoalProblem::NOT_FOUND_DEBUGSOURCE,
+            settings,
+            libdnf5::transaction::TransactionItemType::PACKAGE,
+            spec,
+            no_debugsource_for_packages,
+            libdnf5::Logger::Level::WARNING);
     }
     return {GoalProblem::NO_PROBLEM, result_queue};
 }
