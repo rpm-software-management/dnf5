@@ -172,6 +172,9 @@ Changes to individual commands
   * Existing repository files are not modified; drop-in override files are created instead.
   * See the :ref:`config-manager documentation <config_manager_plugin_ref-label>` for more information.
 
+``debuginfo-install``
+  * Now does not support `autoupdate` functionality. The permanent enablement of debug repositories can be achieved
+    using `config-manager` command.
 ``distro-sync``
   * Now when any argument doesn't match an installed package, DNF5 fails. The behavior can be modified by the ``--skip-unavailable`` option.
   * Dropped ``distrosync`` and ``distribution-synchronization`` aliases.
