@@ -44,6 +44,7 @@ struct GroupReplay {
     // Path to serialized comps group relative to the transaction json file
     std::filesystem::path group_path;
     std::string repo_id;
+    libdnf5::comps::PackageType package_types;
 };
 
 struct EnvironmentReplay {

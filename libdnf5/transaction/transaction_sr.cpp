@@ -130,6 +130,8 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string reason;
         std::string group_path;
         std::string repo_id;
+        std::string joined_package_types;
+        comps::PackageType package_types;
 
         if (json_object_is_type(json_groups, json_type_array) == 0) {
             throw TransactionReplayError(M_("Unexpected type of \"groups\", array expected."));
@@ -158,13 +160,22 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(group, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
             }
+            if (json_object_object_get_ex(group, "package_types", &value) != 0) {
+                joined_package_types = json_object_get_string(value);
+                auto package_types_vec = libdnf5::utils::string::split(joined_package_types, ",");
+                std::for_each(package_types_vec.begin(), package_types_vec.end(), libdnf5::utils::string::trim);
+                package_types = comps::package_type_from_string(package_types_vec);
+            } else {
+                package_types = comps::PackageType();
+            }
 
             transaction_replay.groups.push_back(
                 {transaction_item_action_from_string(action),
                  transaction_item_reason_from_string(reason),
                  group_id,
                  group_path,
-                 repo_id});
+                 repo_id,
+                 package_types});
         }
     }
 
@@ -282,6 +293,11 @@ std::string json_serialize(const TransactionReplay & transaction_replay) {
                 json_object_object_add(json_group, "group_path", json_object_new_string(group.group_path.c_str()));
             }
             json_object_object_add(json_group, "repo_id", json_object_new_string(group.repo_id.c_str()));
+            json_object_object_add(
+                json_group,
+                "package_types",
+                json_object_new_string(
+                    libdnf5::utils::string::join(package_types_to_strings(group.package_types), ", ").c_str()));
             json_object_array_add(json_groups, json_group);
         }
         json_object_object_add(root, "groups", json_groups);

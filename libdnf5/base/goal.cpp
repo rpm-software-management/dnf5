@@ -1012,6 +1012,7 @@ GoalProblem Goal::Impl::add_replay_to_goal(
     for (const auto & group_replay : replay.groups) {
         libdnf5::GoalJobSettings settings_per_group = settings;
         settings_per_group.set_group_no_packages(true);
+        settings_per_group.set_group_package_types(group_replay.package_types);
         settings_per_group.set_group_search_groups(true);
         settings_per_group.set_group_search_environments(false);
         if (!group_replay.repo_id.empty()) {

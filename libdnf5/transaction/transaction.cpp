@@ -350,6 +350,7 @@ std::string Transaction::serialize() {
         group_replay.action = group.get_action();
         group_replay.reason = group.get_reason();
         group_replay.repo_id = group.get_repoid();
+        group_replay.package_types = group.get_package_types();
 
         transaction_replay.groups.push_back(group_replay);
     }
