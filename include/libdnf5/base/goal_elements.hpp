@@ -122,7 +122,9 @@ enum class GoalProblem : uint32_t {
     /// Error when transaction contains additional unexpected elements.
     /// Used when replaying transactions.
     EXTRA = (1 << 22),
-    MALFORMED = (1 << 23)
+    MALFORMED = (1 << 23),
+    NOT_FOUND_DEBUGINFO = (1 << 24),
+    NOT_FOUND_DEBUGSOURCE = (1 << 25)
 };
 
 /// Types of Goal actions
