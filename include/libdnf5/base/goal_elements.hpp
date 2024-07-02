@@ -124,7 +124,8 @@ enum class GoalProblem : uint32_t {
     EXTRA = (1 << 22),
     MALFORMED = (1 << 23),
     NOT_FOUND_DEBUGINFO = (1 << 24),
-    NOT_FOUND_DEBUGSOURCE = (1 << 25)
+    NOT_FOUND_DEBUGSOURCE = (1 << 25),
+    MERGE_ERROR = (1 << 26)
 };
 
 /// Types of Goal actions
@@ -155,7 +156,8 @@ enum class GoalAction {
     REPLAY_REASON_CHANGE,
     REPLAY_REASON_OVERRIDE,
     REVERT_COMPS_UPGRADE,
-    INSTALL_DEBUG
+    INSTALL_DEBUG,
+    MERGE
 };
 
 /// Convert GoalAction enum to user-readable string

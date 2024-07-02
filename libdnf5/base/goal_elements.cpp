@@ -398,6 +398,8 @@ std::string goal_action_to_string(GoalAction action) {
             return _("Revert comps upgrade");
         case GoalAction::INSTALL_DEBUG:
             return _("Install debug RPMs");
+        case GoalAction::MERGE:
+            return _("Transaction merge");
     }
     return "";
 }

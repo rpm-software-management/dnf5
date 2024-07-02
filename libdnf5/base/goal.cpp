@@ -670,6 +670,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::REVERT_COMPS_UPGRADE: {
                 libdnf_throw_assertion("Unsupported action \"REVERT_COMPS_UPGRADE\"");
             }
+            case GoalAction::MERGE: {
+                libdnf_throw_assertion("Unsupported action \"MERGE\"");
+            }
         }
     }
     return ret;
