@@ -78,10 +78,10 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         if (std::find_if(versions[1].begin(), versions[1].end(), [](unsigned char c) {
                 return std::isdigit(c) == 0;
             }) != versions[1].end()) {
-            throw TransactionReplayError(M_("Invalid minor version: \"{}\", number expected."), versions[1]);
+            throw TransactionReplayError(M_("Invalid minor version: \"{}\", number expected"), versions[1]);
         }
     } else {
-        throw TransactionReplayError(M_("Missing key \"version\"."));
+        throw TransactionReplayError(M_("Missing key \"version\""));
     }
 
 
@@ -94,7 +94,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string repo_id;
 
         if (json_object_is_type(json_environments, json_type_array) == 0) {
-            throw TransactionReplayError(M_("Unexpected type of \"environments\", array expected."));
+            throw TransactionReplayError(M_("Unexpected type of \"environments\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_environments); ++i) {
@@ -102,12 +102,12 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(environment, "id", &value) != 0) {
                 environment_id = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"id\" in an environment."));
+                throw TransactionReplayError(M_("Missing object key \"id\" in an environment"));
             }
             if (json_object_object_get_ex(environment, "action", &value) != 0) {
                 action = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"action\" in an environment."));
+                throw TransactionReplayError(M_("Missing object key \"action\" in an environment"));
             }
             if (json_object_object_get_ex(environment, "environment_path", &value) != 0) {
                 environment_path = json_object_get_string(value);
@@ -130,9 +130,11 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string reason;
         std::string group_path;
         std::string repo_id;
+        std::string joined_package_types;
+        comps::PackageType package_types;
 
         if (json_object_is_type(json_groups, json_type_array) == 0) {
-            throw TransactionReplayError(M_("Unexpected type of \"groups\", array expected."));
+            throw TransactionReplayError(M_("Unexpected type of \"groups\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_groups); ++i) {
@@ -140,17 +142,17 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(group, "id", &value) != 0) {
                 group_id = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"id\" in a group."));
+                throw TransactionReplayError(M_("Missing object key \"id\" in a group"));
             }
             if (json_object_object_get_ex(group, "action", &value) != 0) {
                 action = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"action\" in a group."));
+                throw TransactionReplayError(M_("Missing object key \"action\" in a group"));
             }
             if (json_object_object_get_ex(group, "reason", &value) != 0) {
                 reason = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"reason\" in a group."));
+                throw TransactionReplayError(M_("Missing object key \"reason\" in a group"));
             }
             if (json_object_object_get_ex(group, "group_path", &value) != 0) {
                 group_path = json_object_get_string(value);
@@ -158,13 +160,20 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             if (json_object_object_get_ex(group, "repo_id", &value) != 0) {
                 repo_id = json_object_get_string(value);
             }
+            if (json_object_object_get_ex(group, "package_types", &value) != 0) {
+                joined_package_types = json_object_get_string(value);
+                auto package_types_vec = libdnf5::utils::string::split(joined_package_types, ",");
+                std::for_each(package_types_vec.begin(), package_types_vec.end(), libdnf5::utils::string::trim);
+                package_types = comps::package_type_from_string(package_types_vec);
+            }
 
             transaction_replay.groups.push_back(
                 {transaction_item_action_from_string(action),
                  transaction_item_reason_from_string(reason),
                  group_id,
                  group_path,
-                 repo_id});
+                 repo_id,
+                 package_types});
         }
     }
 
@@ -179,7 +188,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
         std::string package_path;
 
         if (json_object_is_type(json_packages, json_type_array) == 0) {
-            throw TransactionReplayError(M_("Unexpected type of \"rpms\", array expected."));
+            throw TransactionReplayError(M_("Unexpected type of \"rpms\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_packages); ++i) {
@@ -188,7 +197,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
                 nevra = json_object_get_string(value);
                 // Verify we have a full nevra
                 if (libdnf5::rpm::Nevra::parse(nevra, {libdnf5::rpm::Nevra::Form::NEVRA}).empty()) {
-                    throw TransactionReplayError(M_("Cannot parse NEVRA for rpm \"{}\"."), nevra);
+                    throw TransactionReplayError(M_("Cannot parse NEVRA for rpm \"{}\""), nevra);
                 }
             }
             if (json_object_object_get_ex(package, "package_path", &value) != 0) {
@@ -196,17 +205,17 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             }
             if (nevra.empty() && package_path.empty()) {
                 throw TransactionReplayError(
-                    M_("Either \"nevra\" or \"package_path\" object key is required in an rpm."));
+                    M_("Either \"nevra\" or \"package_path\" object key is required in an rpm"));
             }
             if (json_object_object_get_ex(package, "action", &value) != 0) {
                 action = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"action\" in an rpm."));
+                throw TransactionReplayError(M_("Missing object key \"action\" in an rpm"));
             }
             if (json_object_object_get_ex(package, "reason", &value) != 0) {
                 reason = json_object_get_string(value);
             } else {
-                throw TransactionReplayError(M_("Missing object key \"reason\" in an rpm."));
+                throw TransactionReplayError(M_("Missing object key \"reason\" in an rpm"));
             }
             if (json_object_object_get_ex(package, "group_id", &value) != 0) {
                 group_id = json_object_get_string(value);
@@ -214,7 +223,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
                 if (reason == "Group" && action == "Reason Change") {
                     throw TransactionReplayError(
                         M_("Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" and action "
-                           "\"Reason Change\"."));
+                           "\"Reason Change\""));
                 }
             }
             if (json_object_object_get_ex(package, "repo_id", &value) != 0) {
@@ -282,6 +291,11 @@ std::string json_serialize(const TransactionReplay & transaction_replay) {
                 json_object_object_add(json_group, "group_path", json_object_new_string(group.group_path.c_str()));
             }
             json_object_object_add(json_group, "repo_id", json_object_new_string(group.repo_id.c_str()));
+            json_object_object_add(
+                json_group,
+                "package_types",
+                json_object_new_string(
+                    libdnf5::utils::string::join(package_types_to_strings(group.package_types), ", ").c_str()));
             json_object_array_add(json_groups, json_group);
         }
         json_object_object_add(root, "groups", json_groups);

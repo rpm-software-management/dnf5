@@ -1458,6 +1458,7 @@ std::string Transaction::serialize(
         group_replay.reason = group.get_reason();
         // TODO(amatej): does each group has to have at least one repo?
         group_replay.repo_id = *(group.get_group().get_repos().begin());
+        group_replay.package_types = group.get_package_types();
 
         if (!comps_path.empty()) {
             group_replay.group_path = build_comps_xml_path(comps_path, xml_group.get_groupid());
