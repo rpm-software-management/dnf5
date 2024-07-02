@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_ROLLBACK_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_ROLLBACK_HPP
 
+#include "commands/history/arguments.hpp"
+
 #include <dnf5/context.hpp>
 
 
@@ -31,7 +33,13 @@ class HistoryRollbackCommand : public Command {
 public:
     explicit HistoryRollbackCommand(Context & context) : Command(context, "rollback") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
+
+private:
+    std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> ignore_extras{nullptr};
+    std::unique_ptr<libdnf5::cli::session::BoolOption> ignore_installed{nullptr};
 };
 
 

@@ -361,6 +361,9 @@ std::string LogEvent::to_string(
                 utils::string::join(
                     additional_data, C_("String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`", ", "))));
         }
+        case GoalProblem::MERGE_ERROR: {
+            return ret.append(utils::sformat(_("Transaction merge error: '{0}'"), *additional_data.begin()));
+        }
     }
     return ret;
 }

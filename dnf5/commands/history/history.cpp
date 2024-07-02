@@ -58,7 +58,7 @@ void HistoryCommand::register_subcommands() {
     cmd.register_group(software_management_commands_group);
     register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
     // register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
-    // register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
     register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
 }
 
