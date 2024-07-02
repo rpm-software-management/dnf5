@@ -17,27 +17,24 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNF5DAEMON_CLIENT_COMMANDS_UPGRADE_UPGRADE_HPP
-#define DNF5DAEMON_CLIENT_COMMANDS_UPGRADE_UPGRADE_HPP
+#ifndef DNF5DAEMON_SERVER_SERVICES_OFFLINE_OFFLINE_HPP
+#define DNF5DAEMON_SERVER_SERVICES_OFFLINE_OFFLINE_HPP
 
-#include "commands/command.hpp"
+#include "session.hpp"
 
-#include <libdnf5/conf/option_bool.hpp>
+#include <sdbus-c++/sdbus-c++.h>
 
-namespace dnfdaemon::client {
-
-class UpgradeCommand : public TransactionCommand {
+class Offline : public IDbusSessionService {
 public:
-    explicit UpgradeCommand(Context & context) : TransactionCommand(context, "upgrade") {}
-    void set_parent_command() override;
-    void set_argument_parser() override;
-    void run() override;
+    using IDbusSessionService::IDbusSessionService;
+    ~Offline() = default;
+    void dbus_register();
+    void dbus_deregister();
 
 private:
-    std::vector<std::string> pkg_specs{};
-    libdnf5::OptionBool offline_option{false};
+    sdbus::MethodReply check_pending(sdbus::MethodCall & call);
+    sdbus::MethodReply set_finish_action(sdbus::MethodCall & call);
+    sdbus::MethodReply clean(sdbus::MethodCall & call);
 };
-
-}  // namespace dnfdaemon::client
 
 #endif

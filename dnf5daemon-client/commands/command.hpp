@@ -42,7 +42,7 @@ public:
 class TransactionCommand : public DaemonCommand {
 public:
     explicit TransactionCommand(Context & context, const std::string & name) : DaemonCommand(context, name){};
-    void run_transaction();
+    void run_transaction(bool offline = false);
 };
 
 

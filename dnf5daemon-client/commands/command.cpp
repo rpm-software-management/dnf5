@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-void TransactionCommand::run_transaction() {
+void TransactionCommand::run_transaction(bool offline) {
     auto & ctx = get_context();
     dnfdaemon::KeyValueMap options = {};
 
@@ -80,6 +80,7 @@ void TransactionCommand::run_transaction() {
 
     // do the transaction
     options.clear();
+    options["offline"] = offline;
     ctx.session_proxy->callMethod("do_transaction")
         .onInterface(dnfdaemon::INTERFACE_GOAL)
         .withTimeout(static_cast<uint64_t>(-1))

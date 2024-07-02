@@ -51,6 +51,9 @@ void RemoveCommand::set_argument_parser() {
     specs_arg->set_description("List of packages to remove");
     cmd.register_positional_arg(specs_arg);
 
+    auto offline_arg = create_offline_option(parser, &offline_option);
+    cmd.register_named_arg(offline_arg);
+
     // run remove command always with allow_erasing on
     context.allow_erasing.set(libdnf5::Option::Priority::RUNTIME, true);
 }
@@ -69,7 +72,7 @@ void RemoveCommand::run() {
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(pkg_specs, options);
 
-    run_transaction();
+    run_transaction(offline_option.get_value());
 }
 
 }  // namespace dnfdaemon::client

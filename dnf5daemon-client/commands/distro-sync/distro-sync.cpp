@@ -49,6 +49,9 @@ void DistroSyncCommand::set_argument_parser() {
     auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED, pkg_specs);
     specs_arg->set_description("Patterns");
     cmd.register_positional_arg(specs_arg);
+
+    auto offline_arg = create_offline_option(parser, &offline_option);
+    cmd.register_named_arg(offline_arg);
 }
 
 void DistroSyncCommand::run() {
@@ -65,7 +68,7 @@ void DistroSyncCommand::run() {
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(pkg_specs, options);
 
-    run_transaction();
+    run_transaction(offline_option.get_value());
 }
 
 }  // namespace dnfdaemon::client

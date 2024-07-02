@@ -21,7 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/url.hpp"
 
+#include <libdnf5-cli/argument_parser.hpp>
+
 #include <filesystem>
+
+namespace {
 
 static void normalize_paths(int specs_count, const char * const specs[], std::vector<std::string> & pkg_specs) {
     const std::string_view ext(".rpm");
@@ -39,6 +43,10 @@ static void normalize_paths(int specs_count, const char * const specs[], std::ve
     }
 }
 
+}  // anonymous namespace
+
+namespace dnfdaemon::client {
+
 libdnf5::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
     libdnf5::cli::ArgumentParser & parser, int nargs, std::vector<std::string> & pkg_specs) {
     auto specs = parser.add_new_positional_arg("pkg_specs", nargs, nullptr, nullptr);
@@ -49,3 +57,15 @@ libdnf5::cli::ArgumentParser::PositionalArg * pkg_specs_argument(
         });
     return specs;
 }
+
+libdnf5::cli::ArgumentParser::NamedArg * create_offline_option(
+    libdnf5::cli::ArgumentParser & parser, libdnf5::Option * value) {
+    auto offline = parser.add_new_named_arg("offline");
+    offline->set_long_name("offline");
+    offline->set_description("Store the transaction to be performed offline");
+    offline->set_const_value("true");
+    offline->link_value(value);
+    return offline;
+}
+
+}  // namespace dnfdaemon::client
