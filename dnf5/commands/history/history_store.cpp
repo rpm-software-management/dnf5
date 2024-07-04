@@ -76,7 +76,7 @@ void HistoryStoreCommand::run() {
     }
 
     if (transactions.empty()) {
-        throw libdnf5::cli::CommandExitError(1, M_("No transactions selected for storing, exactly one required."));
+        throw libdnf5::cli::CommandExitError(1, M_("No matching transaction ID found, exactly one required."));
     }
     if (transactions.size() != 1) {
         throw libdnf5::cli::CommandExitError(1, M_("Multiple transactions selected for storing, only one allowed."));
