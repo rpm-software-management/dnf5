@@ -37,14 +37,14 @@ void HistoryStoreCommand::set_argument_parser() {
 
     output_option = dynamic_cast<libdnf5::OptionString *>(
         parser.add_init_value(std::make_unique<libdnf5::OptionString>("./transaction")));
-    auto query_format = parser.add_new_named_arg("output");
-    query_format->set_long_name("output");
-    query_format->set_short_name('o');
-    query_format->set_description("Path to a directory for storing the transaction, default is \"./transaction\"");
-    query_format->set_has_value(true);
-    query_format->set_arg_value_help("PATH");
-    query_format->link_value(output_option);
-    cmd.register_named_arg(query_format);
+    auto output_arg = parser.add_new_named_arg("output");
+    output_arg->set_long_name("output");
+    output_arg->set_short_name('o');
+    output_arg->set_description("Path to a directory for storing the transaction, default is \"./transaction\"");
+    output_arg->set_has_value(true);
+    output_arg->set_arg_value_help("PATH");
+    output_arg->link_value(output_option);
+    cmd.register_named_arg(output_arg);
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }
