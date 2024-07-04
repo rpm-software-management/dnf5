@@ -263,17 +263,14 @@ void Transaction::fill_transaction_groups(
             new_grp.set_repoid(*tsgrp.get_group().get_repos().begin());
         }
 
-        libdnf5::comps::PackageType package_types{0};
         for (const auto & group_package : group.get_packages()) {
             auto & new_grp_pkg = new_grp.new_package();
             auto name = group_package.get_name();
             new_grp_pkg.set_name(name);
             new_grp_pkg.set_package_type(group_package.get_type());
             new_grp_pkg.set_installed(installed_names.contains(name) ? true : false);
-            package_types |= group_package.get_type();
         }
-
-        new_grp.set_package_types(package_types);
+        new_grp.set_package_types(tsgrp.get_package_types());
     }
 }
 
