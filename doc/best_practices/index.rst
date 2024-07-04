@@ -7,6 +7,7 @@ Best practices
 * If clang-format produces sub-optimal output, consider using ``// clang-format off|on`` where appropriate
 * Use templates and lambdas only if really necessary
 * Avoid ``shared_ptr`` because it isn't supported in all SWIG bindings
+* Set symbol visibility - ABI
 
 We follow the following coding style:
 
@@ -18,3 +19,4 @@ We follow the following coding style:
     coding_style_py
     documentation_strings
     project_layout
+    symbol_visibility
