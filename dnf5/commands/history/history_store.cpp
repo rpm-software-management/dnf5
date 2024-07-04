@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/history/transaction_id.hpp"
 
+#include <fmt/format.h>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/temp.hpp>
@@ -91,6 +92,7 @@ void HistoryStoreCommand::run() {
 
     std::filesystem::rename(tmp_file.get_path(), trans_file_path);
     tmp_file.release();
+    get_context().print_info(fmt::format("Transaction saved to {}.", output_option->get_value()));
 }
 
 }  // namespace dnf5
