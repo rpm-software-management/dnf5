@@ -263,7 +263,7 @@ void Context::Impl::apply_repository_setopts() {
 
 void Context::Impl::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
     for (auto & spec : pkg_specs) {
-        if (libdnf5::utils::is_file_pattern(spec)) {
+        if (libdnf5::utils::is_file_pattern(spec) && !spec.ends_with(".rpm")) {
             base.get_config().get_optional_metadata_types_option().add_item(
                 libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_FILELISTS);
             return;
