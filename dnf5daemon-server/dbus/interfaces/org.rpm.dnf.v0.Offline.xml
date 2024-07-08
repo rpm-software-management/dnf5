@@ -62,7 +62,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--
         set_finish_action:
-        @action: string, if set to "poweroff", the system will be powered off after applying the offline transaction. Otherwise the system will reboot.
+        @action: string, one of "poweroff", or "reboot". If set to "poweroff", the system will be powered off after applying the offline transaction. Otherwise the system will reboot.
         @success: boolean, true if the action was successfully set
         @error_msg: string, contains error encountered while setting the action
 
