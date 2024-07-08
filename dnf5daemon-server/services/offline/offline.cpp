@@ -163,24 +163,36 @@ sdbus::MethodReply Offline::set_finish_action(sdbus::MethodCall & call) {
     }
     bool success{false};
     std::string error_msg{};
-    // try load the offline transaction state
-    const std::filesystem::path state_path{
-        libdnf5::offline::MAGIC_SYMLINK / libdnf5::offline::TRANSACTION_STATE_FILENAME};
-    libdnf5::offline::OfflineTransactionState state{state_path};
-    const auto & read_exception = state.get_read_exception();
-    if (read_exception == nullptr) {
-        // set the poweroff_after item accordingly
-        std::string finish_action;
-        call >> finish_action;
-        state.get_data().set_poweroff_after(finish_action == "poweroff");
-        // write the new state
-        state.write();
-        success = true;
+
+    std::string finish_action;
+    call >> finish_action;
+    // check finish_action validity
+    if (finish_action != "poweroff" && finish_action != "reboot") {
+        error_msg = fmt::format(
+            "Unsupported finish action \"{}\". Valid options are \"reboot\", or \"poweroff\".", finish_action);
     } else {
-        try {
-            std::rethrow_exception(read_exception);
-        } catch (const std::exception & ex) {
-            error_msg = ex.what();
+        const std::filesystem::path state_path{get_datadir() / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+        std::error_code ec;
+        // check presence of transaction state file
+        if (!std::filesystem::exists(state_path, ec)) {
+            error_msg = "No offline transaction is configured. Cannot set the finish action.";
+        } else {
+            // try load the offline transaction state
+            libdnf5::offline::OfflineTransactionState state{state_path};
+            const auto & read_exception = state.get_read_exception();
+            if (read_exception == nullptr) {
+                // set the poweroff_after item accordingly
+                state.get_data().set_poweroff_after(finish_action == "poweroff");
+                // write the new state
+                state.write();
+                success = true;
+            } else {
+                try {
+                    std::rethrow_exception(read_exception);
+                } catch (const std::exception & ex) {
+                    error_msg = ex.what();
+                }
+            }
         }
     }
     auto reply = call.createReply();
