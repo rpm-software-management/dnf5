@@ -35,8 +35,8 @@ public:
 
 private:
     sdbus::MethodReply cancel(sdbus::MethodCall & call);
-    sdbus::MethodReply check_pending(sdbus::MethodCall & call);
     sdbus::MethodReply clean(sdbus::MethodCall & call);
+    sdbus::MethodReply get_status(sdbus::MethodCall & call);
     sdbus::MethodReply set_finish_action(sdbus::MethodCall & call);
 
     enum class Scheduled { NOT_SCHEDULED, ANOTHER_TOOL, SCHEDULED };
