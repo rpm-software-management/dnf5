@@ -26,13 +26,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <interface name="org.rpm.dnf.v0.Offline">
     <!--
-        check_pending:
+        get_status:
         @pending: boolean, true if there is a pending offline transaction
+        @transaction_status: the status of the current offline dnf5 transaction
 
-        Check whether there is an offline transaction configured for the next reboot initiated by dnf5.
+        Check whether there is an offline transaction configured for the next reboot initiated by dnf5 and return its status.
     -->
-    <method name="check_pending">
+    <method name="get_status">
         <arg name="pending" type="b" direction="out" />
+        <arg name="transaction_status" type="a{sv}" direction="out" />
     </method>
 
 
