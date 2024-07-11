@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repo/repo.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
+#include "commands/system-upgrade/system-upgrade.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
 
@@ -211,6 +212,7 @@ static void add_commands(Context & context) {
 
     context.add_and_initialize_command(std::make_unique<AdvisoryCommand>(context));
     context.add_and_initialize_command(std::make_unique<CleanCommand>(context));
+    context.add_and_initialize_command(std::make_unique<SystemUpgradeCommand>(context));
 }
 
 }  // namespace dnfdaemon::client
