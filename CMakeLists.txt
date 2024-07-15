@@ -34,6 +34,7 @@ option(WITH_MODULEMD "Build with modulemd modules support" ON)
 option(WITH_ZCHUNK "Build with zchunk delta compression support" ON)
 option(WITH_SYSTEMD "Build with systemd and D-Bus features" ON)
 option(ENABLE_SOLV_URPMREORDER "Build with support for URPM-like solution reordering?" OFF)
+option(ENABLE_SOLV_FOCUSNEW "Build with SOLVER_FLAG_FOCUS_NEW libsolv flag enabled to ensure new dependencies are installed in latests versions?" ON)
 
 # build options - documentation
 option(WITH_HTML "Build HTML documentation" ON)
@@ -105,6 +106,9 @@ add_definitions(-DPROJECT_VERSION_MICRO=${VERSION_MICRO})
 # libsolv options
 if(ENABLE_SOLV_URPMREORDER)
     add_definitions(-DLIBSOLV_FLAG_URPMREORDER=1)
+endif()
+if(ENABLE_SOLV_FOCUSNEW)
+    add_definitions(-DLIBSOLV_FLAG_FOCUSNEW=1)
 endif()
 
 if(WITH_SANITIZERS)
