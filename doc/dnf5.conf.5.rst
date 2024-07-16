@@ -172,11 +172,11 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``group_package_types``
     :ref:`list <list-label>`
 
-    List of the following: ``optional``, ``default``, ``mandatory``.
+    List of the following: ``optional``, ``default``, ``mandatory`` or ``conditional``.
 
-    Tells DNF5 which type of packages in groups will be installed when 'groupinstall' is called.
+    Tells DNF5 which type of packages in groups will be installed when 'group install' is called.
 
-    Default: ``default,mandatory``.
+    Default: ``default, mandatory, conditional``.
 
 .. _ignorearch_options-label:
 
