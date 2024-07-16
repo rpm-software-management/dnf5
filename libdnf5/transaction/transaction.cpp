@@ -331,7 +331,8 @@ std::string Transaction::serialize() {
     for (const auto & pkg : get_packages()) {
         PackageReplay package_replay;
 
-        package_replay.nevra = pkg.to_string();
+        // Use to_nevra_string in order to have nevra wihtout epoch if it is 0
+        package_replay.nevra = rpm::to_nevra_string(pkg);
         package_replay.action = pkg.get_action();
         package_replay.reason = pkg.get_reason();
         package_replay.repo_id = pkg.get_repoid();
