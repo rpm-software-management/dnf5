@@ -436,6 +436,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         std::filesystem::create_directories(offline_datadir);
 
         base.get_config().get_destdir_option().set(offline_datadir / "packages");
+        transaction.set_download_local_pkgs(true);
     }
 
     transaction.download();
