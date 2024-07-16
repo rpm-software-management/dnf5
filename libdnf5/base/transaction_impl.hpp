@@ -122,6 +122,9 @@ private:
     // history db transaction id
     int64_t history_db_id = 0;
 
+    // whether also the command line repo packages should be downloaded to the destination
+    bool download_local_pkgs{false};
+
     TransactionRunResult _run(
         std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,

@@ -187,6 +187,12 @@ public:
     /// specified path.
     void store_comps(const std::filesystem::path & comps_path) const;
 
+    /// Set whether local packages should be copied to the destination directory during the download().
+    ///
+    /// Default: false
+    void set_download_local_pkgs(bool value);
+    bool get_download_local_pkgs() const noexcept;
+
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;

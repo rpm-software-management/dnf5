@@ -412,7 +412,8 @@ void Transaction::download() {
     libdnf5::repo::PackageDownloader downloader(p_impl->base);
     for (auto & tspkg : this->get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE) {
+            (get_download_local_pkgs() ||
+             tspkg.get_package().get_repo()->get_type() != libdnf5::repo::Repo::Type::COMMANDLINE)) {
             downloader.add(tspkg.get_package());
         }
     }
@@ -1504,6 +1505,14 @@ void Transaction::store_comps(const std::filesystem::path & comps_path) const {
         auto xml_environment = environment.get_environment();
         xml_environment.serialize(build_comps_xml_path(comps_path, xml_environment.get_environmentid()));
     }
+}
+
+bool Transaction::get_download_local_pkgs() const noexcept {
+    return p_impl->download_local_pkgs;
+}
+
+void Transaction::set_download_local_pkgs(bool value) {
+    p_impl->download_local_pkgs = value;
 }
 
 }  // namespace libdnf5::base
