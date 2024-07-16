@@ -2470,8 +2470,6 @@ void Goal::Impl::add_group_remove_to_goal(
 void Goal::Impl::add_group_upgrade_to_goal(
     base::Transaction & transaction, comps::GroupQuery group_query, GoalJobSettings & settings) {
     auto & system_state = base->p_impl->get_system_state();
-    auto & cfg_main = base->get_config();
-    auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
 
     comps::GroupQuery available_groups(base);
     available_groups.filter_installed(false);
@@ -2498,18 +2496,19 @@ void Goal::Impl::add_group_upgrade_to_goal(
             continue;
         }
         auto available_group = available_group_query.get();
+        auto state_group = system_state.get_group_state(group_id);
+
         // upgrade the group itself
         rpm_goal.add_group(
             available_group,
             transaction::TransactionItemAction::UPGRADE,
             installed_group.get_reason(),
-            allowed_package_types);
+            state_group.package_types);
 
         if (settings.get_group_no_packages()) {
             continue;
         }
 
-        auto state_group = system_state.get_group_state(group_id);
 
         // set of package names that are part of the installed version of the group
         std::set<std::string> old_set{};
