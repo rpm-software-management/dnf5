@@ -21,21 +21,42 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 #include "utils.hpp"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 #include <libdnf5/repo/repo.hpp>
+#include <libdnf5/repo/repo_cache.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 #include <unistd.h>
 
 #include <iostream>
 #include <string>
 #include <thread>
+#include <unordered_set>
+
+static const std::unordered_set<std::string> ALLOWED_CACHE_TYPES = {
+    "all",
+    "packages",
+    "metadata",
+    "dbcache",
+    "expire-cache",
+};
 
 void Base::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", {}, "b", {"success"}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_BASE,
+        "clean",
+        "s",
+        {"cache_type"},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Base::clean, call, session.session_locale);
         });
 
     dbus_object->registerSignal(
@@ -69,5 +90,60 @@ sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
     bool retval = session.read_all_repos();
     auto reply = call.createReply();
     reply << retval;
+    return reply;
+}
+
+sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        throw std::runtime_error("Not authorized");
+    }
+
+    bool success{false};
+    std::string error_msg{};
+
+    // get the cache types and check its validity
+    std::string cache_type{};
+    call >> cache_type;
+    if (ALLOWED_CACHE_TYPES.find(cache_type) == ALLOWED_CACHE_TYPES.end()) {
+        error_msg = fmt::format("Unsupported cache type to clean up: \"{}\".", cache_type);
+    } else {
+        auto base = session.get_base();
+        std::filesystem::path cachedir{base->get_config().get_cachedir_option().get_value()};
+        std::error_code ec;
+        std::vector<std::string> remove_errs{};
+        for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
+            if (!dir_entry.is_directory()) {
+                continue;
+            }
+            libdnf5::repo::RepoCache cache(*base, dir_entry.path());
+            try {
+                if (cache_type == "all") {
+                    cache.remove_all();
+                } else if (cache_type == "packages") {
+                    cache.remove_packages();
+                } else if (cache_type == "metadata") {
+                    cache.remove_metadata();
+                } else if (cache_type == "dbcache") {
+                    cache.remove_solv_files();
+                } else if (cache_type == "expire-cache") {
+                    cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
+                }
+            } catch (const std::exception & ex) {
+                remove_errs.emplace_back(fmt::format(" - \"{0}\": {1}", dir_entry.path().native(), ex.what()));
+            }
+        }
+        if (ec) {
+            error_msg = fmt::format("Cannot iterate the cache directory: \"{}\".", cachedir.string());
+        } else if (!remove_errs.empty()) {
+            error_msg =
+                fmt::format("Failed to cleanup repository cache:\n{}", libdnf5::utils::string::join(remove_errs, "\n"));
+        } else {
+            success = true;
+        }
+    }
+
+    auto reply = call.createReply();
+    reply << success;
+    reply << error_msg;
     return reply;
 }
