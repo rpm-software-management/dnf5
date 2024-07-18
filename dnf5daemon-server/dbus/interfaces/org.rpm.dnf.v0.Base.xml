@@ -36,6 +36,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        clean:
+        @cache_type: cache type to clean up. Supported types are "all", "packages", "metadata", "dbcache", and "expire-cache".
+        @success: `true` if the cache was successfully cleaned, `false` otherwise.
+        @error_msg: string, contains errors encountered while cleaning the cache.
+
+
+        Remove or expire cached data.
+    -->
+    <method name="clean">
+        <arg name="cache_type" type="s" direction="in"/>
+        <arg name="success" type="b" direction="out"/>
+        <arg name="error_msg" type="s" direction="out"/>
+    </method>
+
+    <!--
         download_add_new:
         @session_object_path: object path of the dnf5daemon session
         @download_id: unique id of downloaded object (repo or package)

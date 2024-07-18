@@ -35,6 +35,7 @@ public:
     void dbus_deregister();
 
 private:
+    sdbus::MethodReply clean(sdbus::MethodCall & call);
     sdbus::MethodReply read_all_repos(sdbus::MethodCall & call);
 };
 
