@@ -208,13 +208,11 @@ void RepoqueryCommand::run() {
         return;
     }
 
-    std::string fd_id;
     ctx.session_proxy->callMethod("list_fd")
         .onInterface(dnfdaemon::INTERFACE_RPM)
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
-        .withArguments(sdbus::UnixFd{pipefd[1]})
-        .withArguments(fd_id);
+        .withArguments(sdbus::UnixFd{pipefd[1]});
     close(pipefd[1]);
 
     int in_fd = pipefd[0];
