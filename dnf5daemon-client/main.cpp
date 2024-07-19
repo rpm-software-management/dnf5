@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "commands/advisory/advisory.hpp"
+#include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/group/group.hpp"
@@ -209,6 +210,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<RepolistCommand>(context, "repoinfo"));
 
     context.add_and_initialize_command(std::make_unique<AdvisoryCommand>(context));
+    context.add_and_initialize_command(std::make_unique<CleanCommand>(context));
 }
 
 }  // namespace dnfdaemon::client
