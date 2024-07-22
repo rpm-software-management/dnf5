@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "copr_constants.hpp"
 
+#include "libdnf5/utils/os_release.hpp"
+
 #include <filesystem>
 
 
@@ -41,6 +43,8 @@ void CoprConfig::load_all_configuration() {
         // TODO(praiskup): Read the default path from configuration.
         // https://github.com/rpm-software-management/dnf5/issues/513
         etc_dir = "/etc";
+
+    libdnf5::utils::OSRelease os_release(etc_dir / "os-release");
 
     load_copr_config_file("/usr/share/dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.vendor.conf");

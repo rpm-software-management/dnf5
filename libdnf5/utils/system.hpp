@@ -17,21 +17,16 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNF5_COMMANDS_COPR_OS_RELEASE_HPP
-#define DNF5_COMMANDS_COPR_OS_RELEASE_HPP
-
-#include <map>
+#ifndef SYSTEM_HPP
+#define SYSTEM_HPP
 #include <string>
 
-class OSRelease {
-private:
-    static bool initialized_;
-    static std::map<std::string, std::string> map;
-    void initialize();
+namespace libdnf5::utils {
 
-public:
-    OSRelease();
-    std::string get_value(const std::string & key, const std::string & default_value = "UNSET");
-};
+void init_lib_rpm(const char * arch);
+std::string detect_arch();
+std::string get_os();
 
-#endif  // DNF5_COMMANDS_COPR_OS_RELEASE_HPP
+}  // namespace libdnf5::utils
+
+#endif  // SYSTEM_HPP
