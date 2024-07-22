@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_COPR_COPR_CONFIG_HPP
 #define DNF5_COMMANDS_COPR_COPR_CONFIG_HPP
 
-#include "os_release.hpp"
-
 #include <glob.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/conf/config_parser.hpp>
@@ -31,7 +29,6 @@ namespace dnf5 {
 class CoprConfig : public libdnf5::ConfigParser {
 private:
     libdnf5::Base & base;
-    OSRelease os_release;
 
     void load_copr_config_file(const std::string & filename);
     void load_all_configuration();

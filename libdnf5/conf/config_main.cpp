@@ -21,14 +21,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config.h"
 #include "config_utils.hpp"
+#include "utils/system.hpp"
 
 #include "libdnf5/common/xdg.hpp"
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
+#include "libdnf5/utils/os_release.hpp"
 
 #include <glob.h>
+#include <libdnf5/rpm/arch.hpp>
 
 #include <algorithm>
 #include <array>
@@ -84,6 +87,15 @@ static int str_to_bytes(const std::string & str) {
     return static_cast<int>(res);
 }
 
+static std::string get_user_agent() {
+    utils::OSRelease os_release;
+    return std::format("libdnf ({} {}; {}; {}.{})",
+        os_release.get_value("NAME"),
+        os_release.get_value("VERSION_ID"),
+        os_release.get_value("VARIANT_ID"),
+        utils::get_os(),
+        rpm::get_base_arch(utils::detect_arch()));
+}
 
 class ConfigMain::Impl {
     friend class ConfigMain;
@@ -206,7 +218,7 @@ class ConfigMain::Impl {
     OptionBool module_stream_switch{false};
     OptionBool module_obsoletes{false};
 
-    OptionString user_agent{"libdnf"};  // TODO(jrohel): getUserAgent()
+    OptionString user_agent{get_user_agent()};
     OptionBool countme{false};
     OptionBool protect_running_kernel{true};
     OptionBool build_cache{true};
