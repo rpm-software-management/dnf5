@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-06-21 03:01+0000\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"PO-Revision-Date: 2024-07-22 10:38+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -29,12 +29,12 @@ msgstr ""
 "Felaktigt libsolv-id för rekommendationen \"{}\", lösbart namn \"{}\" har "
 "inte ett rekommendationsprefix \"{}\""
 
-#: base/goal.cpp:401
+#: base/goal.cpp:470
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument som inte stöds för TA BORT åtgärd: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1447
+#: base/goal.cpp:1528
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Felaktigt konfigurationsvärde för multilib_policy: {}"
 
@@ -141,6 +141,14 @@ msgstr "Orsak åsidosättande"
 #: base/goal_elements.cpp:398
 msgid "Revert comps upgrade"
 msgstr "Återställ comps-uppgradering"
+
+#: base/goal_elements.cpp:400
+msgid "Install debug RPMs"
+msgstr "Installera felsöknings RPMer"
+
+#: base/goal_elements.cpp:402
+msgid "Transaction merge"
+msgstr "Transaktionssammanslagning"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -354,6 +362,31 @@ msgstr ""
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Kan inte analysera fil '{0}':{1}.\n"
 
+#: base/log_event.cpp:348
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Kunde inte hitta debuginfo paket för följande paket lösta från argument "
+"'{0}': {1}"
+
+#: base/log_event.cpp:351 base/log_event.cpp:362
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:358
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Kunde inte hitta debugkäll paket för följande paket löst från argument "
+"'{0}' : {1}"
+
+#: base/log_event.cpp:365
+msgid "Transaction merge error: '{0}'"
+msgstr "Transaktionssammanslagningsfel: '{0}'"
+
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{} tillhör inte ett distributionsuppgraderingsförråd"
@@ -553,80 +586,80 @@ msgstr "Problem: "
 msgid "Problem {}: "
 msgstr "Problem {}: "
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:79
 msgid "This transaction has been already run before."
 msgstr "Denna transaktion har redan körts tidigare."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:80
 msgid "Cannot run transaction with resolving problems."
 msgstr "Det går inte att köra transaktionen för att lösa problem."
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:81
 msgid "Rpm transaction check failed."
 msgstr "Rpm transaktionskontroll misslyckades."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:83
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Misslyckades att erhålla rpm-transaktionslås. Ytterligare en transaktion "
 "pågår."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:84
 msgid "Rpm transaction failed."
 msgstr "Rpm-transaktion misslyckades."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:85
 msgid "Signature verification failed."
 msgstr "Signaturverifiering misslyckades."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:89
 msgid "The repository does not have any PGP keys configured."
 msgstr "Förrådet har inga PGP-nycklar konfigurerade."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:90
 msgid "Public key is not installed."
 msgstr "Publik nyckel är inte installerad."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:91
 msgid "Canceled by the user."
 msgstr "Avbröts av användaren."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:92
 msgid "Public key import failed."
 msgstr "Import av publik nyckel misslyckades."
 
-#: base/transaction.cpp:963
+#: base/transaction.cpp:976
 msgid "Invalid tsflag: {}"
 msgstr "Ogiltig tsflag: {}"
 
-#: base/transaction.cpp:1297
+#: base/transaction.cpp:1312
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Publik nyckel \"{}\" finns redan, importerar inte."
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1333
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ett fel uppstod vid import av nyckeln \"{}\": {}"
 
-#: base/transaction.cpp:1352
+#: base/transaction.cpp:1367
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "PGP-kontroll för paket \"{}\" ({}) från förråd \"{}\" har misslyckats: "
 
-#: base/transaction.cpp:1380
+#: base/transaction.cpp:1395
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Importen av nyckeln hjälpte inte, fel nyckel?"
 
-#: base/transaction.cpp:1399
+#: base/transaction.cpp:1414
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1402
+#: base/transaction.cpp:1417
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Varning: hoppade över PGP-kontroller för 1 paket från förråd: {}"
 
-#: base/transaction.cpp:1404
+#: base/transaction.cpp:1419
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -892,7 +925,7 @@ msgstr "Kan inte ladda ner filer, alternativet cacheonly är aktiverat."
 msgid "Failed to download files"
 msgstr "Misslyckades med att ladda ner filer"
 
-#: repo/librepo.cpp:123
+#: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
@@ -1000,7 +1033,7 @@ msgstr "Misslyckades att lista pgp nycklar: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Misslyckades att importera pgp nycklar: {}"
 
-#: repo/repo_sack.cpp:125
+#: repo/repo_sack.cpp:128
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1008,7 +1041,7 @@ msgstr ""
 "Misslyckades att skapa förråd \"{}\": Id finns mer än en gång i "
 "konfigurationen"
 
-#: repo/repo_sack.cpp:496
+#: repo/repo_sack.cpp:499
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Endast cache aktiverat men ingen cache för förråd \"{}\""
 
@@ -1171,7 +1204,7 @@ msgstr "Kunde inte nergradera paket \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Kan inte installera paket \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:513
+#: rpm/versionlock_config.cpp:261 system/state.cpp:517
 msgid "{}"
 msgstr "{}"
 
@@ -1184,15 +1217,15 @@ msgstr "Misslyckades att konvertera epok \"{}\" till nummer"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Misslyckades att skriva felsökningsdata till \"{}\": {}"
 
-#: system/state.cpp:226 system/state.cpp:235
+#: system/state.cpp:228 system/state.cpp:237
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Ogiltig TOML version \"{}\", \"HUVUD.SMÄRRE\" förväntas"
 
-#: system/state.cpp:243
+#: system/state.cpp:245
 msgid "{} state for \"{}\" not found."
 msgstr "{} tillstånd för \"{}\" hittades inte."
 
-#: system/state.cpp:540
+#: system/state.cpp:546
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Ostödd TOML-version \"{}\", maximalt stödd version är \"{}\""
 
@@ -1247,7 +1280,7 @@ msgstr "inkompatibel version av tillståndsdata"
 msgid "Invalid transaction state: {}"
 msgstr "Ogiltig transaktionstillstånd: {}"
 
-#: transaction/transaction.cpp:282
+#: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
 msgstr "Transaktionen har redan börjat!"
 
@@ -1267,6 +1300,86 @@ msgstr "Ogiltigt transaktionsobjekts tillstånd: {}"
 msgid "Invalid transaction item type: {}"
 msgstr "Ogiltig transaktionsobjektstyp: {}"
 
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman efter det att det gjordes '{2}' i "
+"föregående transaktioner -> inställning '{0}'."
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Åtgärd 'Uppgradera' '{0}' kan inte slås samman eftersom det inte är "
+"närvarande vid den punkten -> inställningen 'Installera'."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"Åtgärd 'Installera om' '{0}' kan inte slås samman eftersom det inte är "
+"närvarande vid den punkten -> inställningen 'Installera'."
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman efter att det var '{2}' i föregående "
+"transaktion -> inställning '{0}'."
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "Oväntad åtgärd påträffades: '{0}' under transaktionssammanslagningen."
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman eftersom den inte är närvarande vid "
+"den punkten -> hoppar över den."
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman eftersom den inte är närvarande vid "
+"den punkten -> inställningen 'INSTALLERA'."
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman eftersom det inte är närvarande vid "
+"den tidpunkten (nuvarande versioner är: {2}) -> hoppar över det."
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman eftersom det redan finns vid den "
+"punkten -> hoppar över det."
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"Åtgärd '{0}' '{1}' kan inte slås samman eftersom det redan är installerat i "
+"version '{2}' -> behåller åtgärden från äldre transaktion med '{1}'."
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "Ogiltig åtgärd påträffad: '{0}' under transaktionssammanslagning."
+
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "Transaktionsuppspelning JSON-serialiserad transaktionsindata är tom"
@@ -1284,68 +1397,68 @@ msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr "Inkompatibel huvudversion: \"{}\", stödd huvudversion är \"{}\""
 
 #: transaction/transaction_sr.cpp:81
-msgid "Invalid minor version: \"{}\", number expected."
-msgstr "Ogiltig underversion version: \"{}\", nummer förväntades."
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Ogiltig underversion version: \"{}\", nummer förväntades"
 
 #: transaction/transaction_sr.cpp:84
-msgid "Missing key \"version\"."
-msgstr "Saknar nyckel \"version\"."
+msgid "Missing key \"version\""
+msgstr "Saknar nyckel \"version\""
 
 #: transaction/transaction_sr.cpp:97
-msgid "Unexpected type of \"environments\", array expected."
-msgstr "Oväntad typ av \"environments\", en vektor förväntades."
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "Oväntad typ av \"environments\", en vektor förväntades"
 
 #: transaction/transaction_sr.cpp:105
-msgid "Missing object key \"id\" in an environment."
-msgstr "Saknar objekt nyckel \"id\" i en miljö."
+msgid "Missing object key \"id\" in an environment"
+msgstr "Saknar objekt nyckel \"id\" i en miljö"
 
 #: transaction/transaction_sr.cpp:110
-msgid "Missing object key \"action\" in an environment."
-msgstr "Saknar objekt nyckel \"action\" i en miljö."
+msgid "Missing object key \"action\" in an environment"
+msgstr "Saknar objekt nyckel \"action\" i en miljö"
 
-#: transaction/transaction_sr.cpp:135
-msgid "Unexpected type of \"groups\", array expected."
-msgstr "Oväntad typ av \"groups\", en vektor förväntades."
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "Oväntad typ av \"groups\", en vektor förväntades"
 
-#: transaction/transaction_sr.cpp:143
-msgid "Missing object key \"id\" in a group."
-msgstr "Saknar objekt nyckel \"id\" i en grupp."
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "Saknar objekt nyckel \"id\" i en grupp"
 
-#: transaction/transaction_sr.cpp:148
-msgid "Missing object key \"action\" in a group."
-msgstr "Saknar objektnyckel \"action\" i en grupp."
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "Saknar objektnyckel \"action\" i en grupp"
 
-#: transaction/transaction_sr.cpp:153
-msgid "Missing object key \"reason\" in a group."
-msgstr "Saknar objektnyckel \"reason\" i en grupp."
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "Saknar objektnyckel \"reason\" i en grupp"
 
-#: transaction/transaction_sr.cpp:182
-msgid "Unexpected type of \"rpms\", array expected."
-msgstr "Oväntad typ av \"rpms\", array förväntad."
+#: transaction/transaction_sr.cpp:193
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "Oväntad typ av \"rpms\", array förväntad"
 
-#: transaction/transaction_sr.cpp:191
-msgid "Cannot parse NEVRA for rpm \"{}\"."
-msgstr "Kan inte analysera NEVRA för rpm \"{}\"."
+#: transaction/transaction_sr.cpp:202
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "Kan inte analysera NEVRA för rpm \"{}\""
 
-#: transaction/transaction_sr.cpp:199
-msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
-msgstr "Antingen \"nevra\" eller \"package_path\" objektnyckel krävs i en rpm."
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr "Antingen \"nevra\" eller \"package_path\" objektnyckel krävs i en rpm"
 
-#: transaction/transaction_sr.cpp:204
-msgid "Missing object key \"action\" in an rpm."
-msgstr "Saknar objektnyckel \"action\" i en rpm."
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "Saknar objektnyckel \"action\" i en rpm"
 
-#: transaction/transaction_sr.cpp:209
-msgid "Missing object key \"reason\" in an rpm."
-msgstr "Saknar objektnyckel \"reason\" i en rpm."
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "Saknar objektnyckel \"reason\" i en rpm"
 
-#: transaction/transaction_sr.cpp:216
+#: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-"and action \"Reason Change\"."
+"and action \"Reason Change\""
 msgstr ""
 "Saknar den obligatoriska objektnyckeln \"group_id\" i en rpm med anledning "
-"\"Group\" och åtgärden \"Reason Change\"."
+"\"Group\" och åtgärden \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"

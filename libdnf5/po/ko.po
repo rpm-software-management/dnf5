@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-06-21 03:01+0000\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"PO-Revision-Date: 2024-07-19 08:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -28,12 +28,12 @@ msgstr ""
 "권고 \"{}\"용 나쁜 libsolv id, 해결 할 수 있는 \"{}\"은 권고 접두사 \"{}\"를 "
 "가지지 않습니다"
 
-#: base/goal.cpp:401
+#: base/goal.cpp:470
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "제거(REMOVE) 동작을 위해 미지원된 인수: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1447
+#: base/goal.cpp:1528
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "multilib_policy용 잘못된 구성 값: {}"
 
@@ -140,6 +140,14 @@ msgstr "원인 재정의"
 #: base/goal_elements.cpp:398
 msgid "Revert comps upgrade"
 msgstr "comps 향상 복귀"
+
+#: base/goal_elements.cpp:400
+msgid "Install debug RPMs"
+msgstr "디버그 RPM 설치"
+
+#: base/goal_elements.cpp:402
+msgid "Transaction merge"
+msgstr "연결 병합"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -345,6 +353,31 @@ msgstr ""
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "파일을 구문 분석 할 수 없습니다: '{0}': {1}.\n"
 
+#: base/log_event.cpp:348
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"인수에서 해결된 다음 꾸러미를 위한 debuginfo 꾸러미를 찾을 수 없습니다 "
+"'{0}': {1}"
+
+#: base/log_event.cpp:351 base/log_event.cpp:362
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:358
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"인수에서 해결된 다음 꾸러미를 위한 debugsource 꾸러미를 찾을 수 없습니다 "
+"'{0}': {1}"
+
+#: base/log_event.cpp:365
+msgid "Transaction merge error: '{0}'"
+msgstr "연결 병합 오류: '{0}'"
+
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{}가 distupgrade 저장소에 속하지 않습니다"
@@ -544,77 +577,77 @@ msgstr "문제: "
 msgid "Problem {}: "
 msgstr "문제 {}: "
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:79
 msgid "This transaction has been already run before."
 msgstr "이와 같은 연결은 전에 이미 실행되었습니다."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:80
 msgid "Cannot run transaction with resolving problems."
 msgstr "문제를 해결하면서 연결을 실행 할 수 없습니다."
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:81
 msgid "Rpm transaction check failed."
 msgstr "rpm 연결 점검이 실패했습니다."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:83
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr "rpm 연결 잠금을 획득하는 데 실패함. 다른 연결이 진행 중에 있습니다."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:84
 msgid "Rpm transaction failed."
 msgstr "rpm 연결이 실패함."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:85
 msgid "Signature verification failed."
 msgstr "서명 검증이 실패함."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:89
 msgid "The repository does not have any PGP keys configured."
 msgstr "저장소는 구성된 어떤 PGP 키를 갖고 있지 않습니다."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:90
 msgid "Public key is not installed."
 msgstr "공개 키가 설치되어 있지 않습니다."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:91
 msgid "Canceled by the user."
 msgstr "사용자에 의해 취소되었습니다."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:92
 msgid "Public key import failed."
 msgstr "공개 키 가져오기에 실패함."
 
-#: base/transaction.cpp:963
+#: base/transaction.cpp:976
 msgid "Invalid tsflag: {}"
 msgstr "잘못된 tsflag: {}"
 
-#: base/transaction.cpp:1297
+#: base/transaction.cpp:1312
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "공개 키 \"{}\"가 이미 존재하고, 가져오지 않습니다."
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1333
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "키를 가져오는 중에 발생하였습니다 \"{}\": {}"
 
-#: base/transaction.cpp:1352
+#: base/transaction.cpp:1367
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "repo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
 
-#: base/transaction.cpp:1380
+#: base/transaction.cpp:1395
 msgid "Import of the key didn't help, wrong key?"
 msgstr "키 가져오기가 도움이 되지 않습니다, 잘못된 키입니까?"
 
-#: base/transaction.cpp:1399
+#: base/transaction.cpp:1414
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1402
+#: base/transaction.cpp:1417
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "경고: 저장소에서 1 꾸러미를 위해 PGP 점검을 건너뜁니다: {}"
 
-#: base/transaction.cpp:1404
+#: base/transaction.cpp:1419
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -875,7 +908,7 @@ msgstr "파일을 내려받을 수 없으며, cacheonly 옵션이 활성화 되�
 msgid "Failed to download files"
 msgstr "파일을 내려받는 데 실패함"
 
-#: repo/librepo.cpp:123
+#: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
@@ -983,13 +1016,13 @@ msgstr "pgp 키를 나열하는 데 실패함: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "pgp 키를 가져오는 데 실패함: {}"
 
-#: repo/repo_sack.cpp:125
+#: repo/repo_sack.cpp:128
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:496
+#: repo/repo_sack.cpp:499
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 
@@ -1148,7 +1181,7 @@ msgstr "꾸러미를 하향 할 수 없습니다 \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "꾸러미를 설치 할 수 없습니다 \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:513
+#: rpm/versionlock_config.cpp:261 system/state.cpp:517
 msgid "{}"
 msgstr "{}"
 
@@ -1161,15 +1194,15 @@ msgstr "epoch \"{}\"를 숫자로 변환하는 데 실패함"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "debugsolver 자료를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: system/state.cpp:226 system/state.cpp:235
+#: system/state.cpp:228 system/state.cpp:237
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "잘못된 TOML 버전 \"{}\", \"MAJOR.MINOR\" 예상됨"
 
-#: system/state.cpp:243
+#: system/state.cpp:245
 msgid "{} state for \"{}\" not found."
 msgstr "\"{}\"를 위한 {} 상태를 찾을 수 없습니다."
 
-#: system/state.cpp:540
+#: system/state.cpp:546
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "미지원 TOML 버전 \"{}\", 최대 지원된 버전은 \"{}\"입니다"
 
@@ -1225,7 +1258,7 @@ msgstr "상태 자료의 호환되지 않는 버전"
 msgid "Invalid transaction state: {}"
 msgstr "잘못된 연결 상태: {}"
 
-#: transaction/transaction.cpp:282
+#: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
 msgstr "연결은 이미 시작되었습니다!"
 
@@ -1245,6 +1278,86 @@ msgstr "잘못된 연결 항목 상태: {}"
 msgid "Invalid transaction item type: {}"
 msgstr "잘못된 연결 항목 유형: {}"
 
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"동작 '{0}' '{1}'은 이전 거래에서 '{2}' 이후에 병합 할 수 없습니다 -> '{0}' 설"
+"정."
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"동작 '향상' '{0}'은 그 지점에서 존재하지 않기 때문에 병합 할 수 없습니다 -> "
+"'설치' 설정."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"동작 '재설치' '{0}'은 그 지점에서 존재하지 않기 때문에 병합 할 수 없습니다 -"
+"> '설치' 설정."
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"동작 '{0}' '{1}'은 앞선 연결에서 '{2}' 이후에 병합 할 수 없습니다 -> '{0}' 설"
+"정."
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "예상치 못한 동작에 빠졌습니다: 연결 병합 중에 '{0}'."
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+"동작 '{0}' '{1}'은 그 시점에서 존재하지 않기 때문에 병합 할 수 없습니다 -> 이"
+"를 건너 뛰기."
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+"동작 '{0}' '{1}'은 그 시점에서 존재하지 않기 때문에 병합 할 수 없습니다 -> "
+"\"설치\" 설정."
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"동작 '{0}' '{1}'은 그 시점에서 존재하지 않기 때문에 병합 할 수 없습니다(존재 "
+"버전: {2}) -> 이를 건너 뛰기."
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"동작 '{0}' '{1}'은 그 시점에서 이미 존재하기 때문에 병합 할 수 없습니다 -> 이"
+"를 건너 뛰기."
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"동작 '{0}' '{1}'은 버전 '{2}'로 이미 설치되어 있기 때문에 병합 할 수 없습니"
+"다 -> '{1}'을 갖는 이전 연결에서 동작을 유지하기."
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "잘못된 동작에 빠졌습니다: 연결 병합 중에 '{0}'."
+
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
 msgstr "연결 재생될 때, JSON 직렬화된 연결 입력이 비어 있습니다"
@@ -1262,68 +1375,68 @@ msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
 msgstr "호환되지 않은 주요 버전: \"{}\", 지원되는 주요 버전은 \"{}\"입니다"
 
 #: transaction/transaction_sr.cpp:81
-msgid "Invalid minor version: \"{}\", number expected."
-msgstr "잘못된 하위 버전: \"{}\", 번호가 예상됩니다."
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "잘못된 하위 버전: \"{}\", 번호가 예상됩니다"
 
 #: transaction/transaction_sr.cpp:84
-msgid "Missing key \"version\"."
-msgstr "누락된 키 \"version\"."
+msgid "Missing key \"version\""
+msgstr "누락된 키 \"version\""
 
 #: transaction/transaction_sr.cpp:97
-msgid "Unexpected type of \"environments\", array expected."
-msgstr "\"environments\"의 예상치 못한 유형, 배열이 예상됩니다."
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "\"environments\"의 예상치 못한 유형, 배열이 예상됩니다"
 
 #: transaction/transaction_sr.cpp:105
-msgid "Missing object key \"id\" in an environment."
-msgstr "환경에서 누락된 객체 키 \"id\"."
+msgid "Missing object key \"id\" in an environment"
+msgstr "환경에서 누락된 객체 키 \"id\""
 
 #: transaction/transaction_sr.cpp:110
-msgid "Missing object key \"action\" in an environment."
-msgstr "환경에서 누락된 객체 키 \"action\"."
+msgid "Missing object key \"action\" in an environment"
+msgstr "환경에서 누락된 객체 키 \"action\""
 
-#: transaction/transaction_sr.cpp:135
-msgid "Unexpected type of \"groups\", array expected."
-msgstr "\"groups\"의 예상치 못한 유형, 배열이 예상됩니다."
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "\"groups\"의 예상치 못한 유형, 배열이 예상됩니다"
 
-#: transaction/transaction_sr.cpp:143
-msgid "Missing object key \"id\" in a group."
-msgstr "그룹에서 누락된 객체 키 \"id\"."
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "그룹에서 누락된 객체 키 \"id\""
 
-#: transaction/transaction_sr.cpp:148
-msgid "Missing object key \"action\" in a group."
-msgstr "그룹에서 누락된 객체 키 \"action\"."
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "그룹에서 누락된 객체 키 \"action\""
 
-#: transaction/transaction_sr.cpp:153
-msgid "Missing object key \"reason\" in a group."
-msgstr "그룹에서 누락된 객체 키 \"reason\"."
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "그룹에서 누락된 객체 키 \"reason\""
 
-#: transaction/transaction_sr.cpp:182
-msgid "Unexpected type of \"rpms\", array expected."
-msgstr "\"rpms\"의 예상치 못한 유형, 배열이 예상됩니다."
+#: transaction/transaction_sr.cpp:193
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "\"rpms\"의 예상치 못한 유형, 배열이 예상됩니다"
 
-#: transaction/transaction_sr.cpp:191
-msgid "Cannot parse NEVRA for rpm \"{}\"."
-msgstr "rpm \"{}\"을 위한 NEVRA를 구문 분석 할 수 없습니다."
+#: transaction/transaction_sr.cpp:202
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "rpm을 위한 NEVRA를 구문 분석 할 수 없습니다 \"{}\""
 
-#: transaction/transaction_sr.cpp:199
-msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
-msgstr "\"nevra\" 또는 \"package_path\" 중에 객체 키는 rpm에서 필요합니다."
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr "\"nevra\" 또는 \"package_path\" 중에 객체 키는 rpm에서 필요합니다"
 
-#: transaction/transaction_sr.cpp:204
-msgid "Missing object key \"action\" in an rpm."
-msgstr "rpm에서 누락된 객체 키 \"action\"."
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "rpm에서 누락된 객체 키 \"action\""
 
-#: transaction/transaction_sr.cpp:209
-msgid "Missing object key \"reason\" in an rpm."
-msgstr "rpm에서 누락된 객체 키 \"reason\"."
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "rpm에서 누락된 객체 키 \"reason\""
 
-#: transaction/transaction_sr.cpp:216
+#: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-"and action \"Reason Change\"."
+"and action \"Reason Change\""
 msgstr ""
 "원인 \"Group\" 및 동작 \"Reason Change\" 과 함께 rpm에서 누락된 필 수 객체 "
-"키 \"group_id\"."
+"키 \"group_id\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"

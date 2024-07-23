@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
 "PO-Revision-Date: 2024-03-17 02:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -29,12 +29,12 @@ msgstr ""
 "ID libsolv inválido para aviso \"{}\", o nome solucionável \"{}\" não tem "
 "prefixo de aviso \"{}\""
 
-#: base/goal.cpp:401
+#: base/goal.cpp:470
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumento não suportado para ação REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1447
+#: base/goal.cpp:1528
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuração incorreto para multilib_policy: {}"
 
@@ -141,6 +141,16 @@ msgstr ""
 #: base/goal_elements.cpp:398
 msgid "Revert comps upgrade"
 msgstr ""
+
+#: base/goal_elements.cpp:400
+msgid "Install debug RPMs"
+msgstr ""
+
+#: base/goal_elements.cpp:402
+#, fuzzy
+#| msgid "No transaction in progress"
+msgid "Transaction merge"
+msgstr "Nenhuma transação em andamento"
 
 #: base/log_event.cpp:141
 #, fuzzy
@@ -382,6 +392,27 @@ msgstr ""
 #| msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Não foi possível analisar NEVRA para o rpm \"{}\"."
+
+#: base/log_event.cpp:348
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+
+#: base/log_event.cpp:351 base/log_event.cpp:362
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ""
+
+#: base/log_event.cpp:358
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+
+#: base/log_event.cpp:365
+msgid "Transaction merge error: '{0}'"
+msgstr ""
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
@@ -643,80 +674,80 @@ msgstr "Problema: "
 msgid "Problem {}: "
 msgstr "Problema {}: "
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:79
 msgid "This transaction has been already run before."
 msgstr "Esta transação já foi executada antes."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:80
 msgid "Cannot run transaction with resolving problems."
 msgstr "Não é possível executar a transação com a resolução de problemas."
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:81
 msgid "Rpm transaction check failed."
 msgstr "Falha na verificação da transação RPM."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:83
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Falha ao obter bloqueio de transação rpm. Outra transação está em andamento."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:84
 msgid "Rpm transaction failed."
 msgstr "Falha na transação RPM."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:85
 msgid "Signature verification failed."
 msgstr "A verificação da assinatura falhou."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:89
 msgid "The repository does not have any PGP keys configured."
 msgstr "O repositório não possui nenhuma chave PGP configurada."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:90
 msgid "Public key is not installed."
 msgstr "A chave pública não está instalada."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:91
 msgid "Canceled by the user."
 msgstr "Cancelada pelo usuário."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:92
 msgid "Public key import failed."
 msgstr "Falha na importação da chave pública."
 
-#: base/transaction.cpp:963
+#: base/transaction.cpp:976
 msgid "Invalid tsflag: {}"
 msgstr "tsflag inválida: {}"
 
-#: base/transaction.cpp:1297
+#: base/transaction.cpp:1312
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "A chave pública \"{}\" já está presente, não será importada."
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1333
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ocorreu um erro ao importar a chave \"{}\": {}"
 
-#: base/transaction.cpp:1352
+#: base/transaction.cpp:1367
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "A verificação PGP do pacote \"{}\" ({}) do repositório \"{}\" falhou: "
 
-#: base/transaction.cpp:1380
+#: base/transaction.cpp:1395
 msgid "Import of the key didn't help, wrong key?"
 msgstr "A importação da chave não ajudou, chave errada?"
 
-#: base/transaction.cpp:1399
+#: base/transaction.cpp:1414
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1402
+#: base/transaction.cpp:1417
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Aviso: ignoradas as verificações de PGP para {} pacote(s)."
 
-#: base/transaction.cpp:1404
+#: base/transaction.cpp:1419
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
@@ -986,7 +1017,7 @@ msgstr "Não é possível baixar arquivos, a opção cacheonly está ativada."
 msgid "Failed to download files"
 msgstr "Falha ao baixar arquivos"
 
-#: repo/librepo.cpp:123
+#: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
@@ -1101,7 +1132,7 @@ msgstr "Falha ao listar chaves pgp: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Falha ao importar chaves pgp: {}"
 
-#: repo/repo_sack.cpp:125
+#: repo/repo_sack.cpp:128
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1109,7 +1140,7 @@ msgstr ""
 "Falha ao criar o repositório \"{}\": o ID está presente mais de uma vez na "
 "configuração"
 
-#: repo/repo_sack.cpp:496
+#: repo/repo_sack.cpp:499
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Somente cache ativado, mas sem cache para o repositório \"{}\""
 
@@ -1286,7 +1317,7 @@ msgstr "Não é possível remover o pacote \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Não é possível reinstalar o pacote \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:513
+#: rpm/versionlock_config.cpp:261 system/state.cpp:517
 msgid "{}"
 msgstr "{}"
 
@@ -1299,15 +1330,15 @@ msgstr "Falha ao converter a época \"{}\" para número"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Falha ao gravar os dados do solucionador de depuração em \"{}\": {}"
 
-#: system/state.cpp:226 system/state.cpp:235
+#: system/state.cpp:228 system/state.cpp:237
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Versão TOML \"{}\" inválida, esperava-se \"MAJOR.MINOR\""
 
-#: system/state.cpp:243
+#: system/state.cpp:245
 msgid "{} state for \"{}\" not found."
 msgstr "Estado {} para \"{}\" não encontrado."
 
-#: system/state.cpp:540
+#: system/state.cpp:546
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Versão TOML \"{}\" não suportada, a versão máxima suportada é \"{}\""
 
@@ -1365,7 +1396,7 @@ msgstr ""
 msgid "Invalid transaction state: {}"
 msgstr "Estado de transação inválido: {}"
 
-#: transaction/transaction.cpp:282
+#: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
 msgstr "A transação já foi iniciada!"
 
@@ -1384,6 +1415,68 @@ msgstr "Estado de item de transação inválido: {}"
 #: transaction/transaction_item_type.cpp:28
 msgid "Invalid transaction item type: {}"
 msgstr "Tipo de item de transação inválido: {}"
+
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr ""
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
@@ -1405,66 +1498,99 @@ msgstr ""
 "Versão principal incompatível: \"{}\", a versão principal suportada é \"{}\""
 
 #: transaction/transaction_sr.cpp:81
-msgid "Invalid minor version: \"{}\", number expected."
+#, fuzzy
+#| msgid "Invalid minor version: \"{}\", number expected."
+msgid "Invalid minor version: \"{}\", number expected"
 msgstr "Versão mínima inválida: \"{}\", esperava número."
 
 #: transaction/transaction_sr.cpp:84
-msgid "Missing key \"version\"."
+#, fuzzy
+#| msgid "Missing key \"version\"."
+msgid "Missing key \"version\""
 msgstr "Faltando a chave \"version\"."
 
 #: transaction/transaction_sr.cpp:97
-msgid "Unexpected type of \"environments\", array expected."
+#, fuzzy
+#| msgid "Unexpected type of \"environments\", array expected."
+msgid "Unexpected type of \"environments\", array expected"
 msgstr "Tipo inesperado de \"environments\", esperava array."
 
 #: transaction/transaction_sr.cpp:105
-msgid "Missing object key \"id\" in an environment."
+#, fuzzy
+#| msgid "Missing object key \"id\" in an environment."
+msgid "Missing object key \"id\" in an environment"
 msgstr "Faltando chave de objeto \"id\" em um ambiente."
 
 #: transaction/transaction_sr.cpp:110
-msgid "Missing object key \"action\" in an environment."
+#, fuzzy
+#| msgid "Missing object key \"action\" in an environment."
+msgid "Missing object key \"action\" in an environment"
 msgstr "Faltando a chave de objeto \"action\" em um ambiente."
 
-#: transaction/transaction_sr.cpp:135
-msgid "Unexpected type of \"groups\", array expected."
+#: transaction/transaction_sr.cpp:137
+#, fuzzy
+#| msgid "Unexpected type of \"groups\", array expected."
+msgid "Unexpected type of \"groups\", array expected"
 msgstr "Tipo inesperado de \"groups\", esperava array."
 
-#: transaction/transaction_sr.cpp:143
-msgid "Missing object key \"id\" in a group."
+#: transaction/transaction_sr.cpp:145
+#, fuzzy
+#| msgid "Missing object key \"id\" in a group."
+msgid "Missing object key \"id\" in a group"
 msgstr "Faltando a chave de objeto \"id\" em um grupo."
 
-#: transaction/transaction_sr.cpp:148
-msgid "Missing object key \"action\" in a group."
+#: transaction/transaction_sr.cpp:150
+#, fuzzy
+#| msgid "Missing object key \"action\" in a group."
+msgid "Missing object key \"action\" in a group"
 msgstr "Faltando a chave de objeto \"action\" em um grupo."
 
-#: transaction/transaction_sr.cpp:153
-msgid "Missing object key \"reason\" in a group."
+#: transaction/transaction_sr.cpp:155
+#, fuzzy
+#| msgid "Missing object key \"reason\" in a group."
+msgid "Missing object key \"reason\" in a group"
 msgstr "Faltando a chave de objeto \"reason\" em um grupo."
 
-#: transaction/transaction_sr.cpp:182
-msgid "Unexpected type of \"rpms\", array expected."
+#: transaction/transaction_sr.cpp:193
+#, fuzzy
+#| msgid "Unexpected type of \"rpms\", array expected."
+msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Tipo inesperado de \"rpms\", esperava array."
 
-#: transaction/transaction_sr.cpp:191
-msgid "Cannot parse NEVRA for rpm \"{}\"."
+#: transaction/transaction_sr.cpp:202
+#, fuzzy
+#| msgid "Cannot parse NEVRA for rpm \"{}\"."
+msgid "Cannot parse NEVRA for rpm \"{}\""
 msgstr "Não foi possível analisar NEVRA para o rpm \"{}\"."
 
-#: transaction/transaction_sr.cpp:199
-msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+#: transaction/transaction_sr.cpp:210
+#, fuzzy
+#| msgid ""
+#| "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
 msgstr ""
 "A chave do objeto \"nevra\" ou \"package_path\" é necessária em um rpm."
 
-#: transaction/transaction_sr.cpp:204
-msgid "Missing object key \"action\" in an rpm."
+#: transaction/transaction_sr.cpp:215
+#, fuzzy
+#| msgid "Missing object key \"action\" in an rpm."
+msgid "Missing object key \"action\" in an rpm"
 msgstr "Faltando a chave de objeto \"action\" em um rpm."
 
-#: transaction/transaction_sr.cpp:209
-msgid "Missing object key \"reason\" in an rpm."
+#: transaction/transaction_sr.cpp:220
+#, fuzzy
+#| msgid "Missing object key \"reason\" in an rpm."
+msgid "Missing object key \"reason\" in an rpm"
 msgstr "Faltando a chave de objeto \"reason\" em um rpm."
 
-#: transaction/transaction_sr.cpp:216
+#: transaction/transaction_sr.cpp:227
+#, fuzzy
+#| msgid ""
+#| "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+#| "and action \"Reason Change\"."
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-"and action \"Reason Change\"."
+"and action \"Reason Change\""
 msgstr ""
 "Faltando chave de objeto \"group_id\" obrigatória em um rpm com motivo "
 "\"Group\" e ação \"Reason Change\"."
