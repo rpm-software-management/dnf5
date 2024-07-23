@@ -1,23 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-05-14 01:26+0000\n"
-"Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5-plugin-needs-restarting/de/>\n"
-"Language: de\n"
+"PO-Revision-Date: 2024-07-10 07:38+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-needs-restarting/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: needs_restarting.cpp:229
 msgid "Couldn't connect to D-Bus: {}"
-msgstr "Konnte keine Verbindung zum D-Bus herstellen: {}"
+msgstr "D-Bus ile bağlantı kuulamadı: {}"

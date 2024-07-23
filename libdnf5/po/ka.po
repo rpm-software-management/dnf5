@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-06-21 03:01+0000\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"PO-Revision-Date: 2024-07-18 02:47+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -27,12 +27,12 @@ msgstr ""
 "არასწორი libsolv id რეკომენდაციისთვის \"{}\", ამოხსნად სახელს \"{}\" არ აქვს "
 "რეკომენდაციის პრეფიქსი \"{}\""
 
-#: base/goal.cpp:401
+#: base/goal.cpp:470
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "მხარდაუჭერელი არგუმენტი ქმედებისთვის REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1447
+#: base/goal.cpp:1528
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "არასწორი კონფიგურაციის მნიშვნელობა multilib_policy-სთვის: {}"
 
@@ -139,6 +139,14 @@ msgstr "მიზეზის გადაფარვა"
 #: base/goal_elements.cpp:398
 msgid "Revert comps upgrade"
 msgstr "Comps-ის ვერსიის აწევის დაბრუნება"
+
+#: base/goal_elements.cpp:400
+msgid "Install debug RPMs"
+msgstr "გამართვის RPM-ების დაყენება"
+
+#: base/goal_elements.cpp:402
+msgid "Transaction merge"
+msgstr "ტრანზაქციის შერწყმა"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -358,6 +366,31 @@ msgstr ""
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "ვერ დავამუშავე ფაილი: '{0}':{1}.\n"
 
+#: base/log_event.cpp:348
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"ვერ ვიპოვე debuginfo პაკეტი შემდეგი პაკეტებისგან, ამოიხსნა არგუმენტიდან "
+"'{0}': {1}"
+
+#: base/log_event.cpp:351 base/log_event.cpp:362
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:358
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"ვერ ვიპოვე debugsource პაკეტი შემდეგი პაკეტებისთვის, რომლებიც ამოიხსნა "
+"არგუმენტიდან '{0}': {1}"
+
+#: base/log_event.cpp:365
+msgid "Transaction merge error: '{0}'"
+msgstr "ტრანზაქციის შერწყმის შეცდომა: '{0}'"
+
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{}-ი distupgrade ტიპის რეპოზიტორიას არ მიეკუთვნება"
@@ -560,79 +593,79 @@ msgstr "პრობლემა: "
 msgid "Problem {}: "
 msgstr "პრობლემა {}: "
 
-#: base/transaction.cpp:77
+#: base/transaction.cpp:79
 msgid "This transaction has been already run before."
 msgstr "ეს ტრანზაქცია ადრე უკვე იყო გაშვებული."
 
-#: base/transaction.cpp:78
+#: base/transaction.cpp:80
 msgid "Cannot run transaction with resolving problems."
 msgstr "შეუძლებელია ტრანზაქციის გაშვება პრობლემების გადაწყვეტით."
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:81
 msgid "Rpm transaction check failed."
 msgstr "Rpm-ის ტრანზაქციის შემოწმება ჩავარდა."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:83
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "შეცდომა rpm-ის ტრანზაქციის ბლოკის მიღებისას. მიმდინარეობს სხვა ტრანზაქცია."
 
-#: base/transaction.cpp:82
+#: base/transaction.cpp:84
 msgid "Rpm transaction failed."
 msgstr "Rpm-ის ტრანზაქცია ჩავარდა."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:85
 msgid "Signature verification failed."
 msgstr "ხელმოწერის გადამოწმება ჩავარდა."
 
-#: base/transaction.cpp:87
+#: base/transaction.cpp:89
 msgid "The repository does not have any PGP keys configured."
 msgstr "რეპოზიტორიას PGP გასაღებები მითითებული არ აქვს."
 
-#: base/transaction.cpp:88
+#: base/transaction.cpp:90
 msgid "Public key is not installed."
 msgstr "საჯარო გასაღები დაყენებული არაა."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:91
 msgid "Canceled by the user."
 msgstr "გაუქმდა მომხმარებლის მიერ."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:92
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:963
+#: base/transaction.cpp:976
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:1297
+#: base/transaction.cpp:1312
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:1318
+#: base/transaction.cpp:1333
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1352
+#: base/transaction.cpp:1367
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "PGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1380
+#: base/transaction.cpp:1395
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1399
+#: base/transaction.cpp:1414
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1402
+#: base/transaction.cpp:1417
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr ""
 "გაფრთხილება: PGP-ით შემოწმების გამოტოვება 1 პაკეტისთვის რეპოზიტორიიდან: {}"
 
-#: base/transaction.cpp:1404
+#: base/transaction.cpp:1419
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -905,7 +938,7 @@ msgstr "ფაილების გადმოწერა შეუძლე�
 msgid "Failed to download files"
 msgstr "ფაილების გადმოწერის შეცდომა"
 
-#: repo/librepo.cpp:123
+#: repo/librepo.cpp:118
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
@@ -1014,7 +1047,7 @@ msgstr "PGP გასაღების ჩამოთვლა ჩავარ
 msgid "Failed to import pgp keys: {}"
 msgstr "ჩავარდა შემოტანა PGP გასაღებებისთვის: {}"
 
-#: repo/repo_sack.cpp:125
+#: repo/repo_sack.cpp:128
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1022,7 +1055,7 @@ msgstr ""
 "რეპოს \"{}\" შექმნა ჩავარდა: კონფიგურაციაში, ეს ID-ები, ერთზე მეტჯერაა "
 "ნახსენები"
 
-#: repo/repo_sack.cpp:496
+#: repo/repo_sack.cpp:499
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "მხოლოდ-კეში ჩართულია, მაგრამ რეპოზიტორიას \"{}\" კეში არ გააჩნია"
 
@@ -1191,7 +1224,7 @@ msgstr "ვერ ჩამოვწიე ვერსია პაკეტი
 msgid "Cannot install package \"{}\""
 msgstr "ვერ დავაყენე პაკეტი \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:513
+#: rpm/versionlock_config.cpp:261 system/state.cpp:517
 msgid "{}"
 msgstr "{}"
 
@@ -1204,15 +1237,15 @@ msgstr "ეპოქის \"{}\" რიცხვში გადაყვან
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "შეცდომა debugsolver-ის მონაცემების \"{}\"-ში ჩაწერისას: {}"
 
-#: system/state.cpp:226 system/state.cpp:235
+#: system/state.cpp:228 system/state.cpp:237
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "არასწორი TOML-ის ვერსია \"{}\", მოველოდი \"MAJOR.MINOR\""
 
-#: system/state.cpp:243
+#: system/state.cpp:245
 msgid "{} state for \"{}\" not found."
 msgstr "{} მდგომარეობა \"{}\"-სთვის აღმოჩენილი არაა."
 
-#: system/state.cpp:540
+#: system/state.cpp:546
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
@@ -1267,7 +1300,7 @@ msgstr "მდგომარეობის მონაცემების �
 msgid "Invalid transaction state: {}"
 msgstr "არასწორი ტრანზაქციის მდგომარეობა: {}"
 
-#: transaction/transaction.cpp:282
+#: transaction/transaction.cpp:279
 msgid "Transaction has already started!"
 msgstr "ტრანზაქცია უკვე გაშვებულია!"
 
@@ -1286,6 +1319,86 @@ msgstr "არასწორი ტრანზაქციის ელემ�
 #: transaction/transaction_item_type.cpp:28
 msgid "Invalid transaction item type: {}"
 msgstr "არასწორი ტრანზაქციის ელემენტის ტიპი: {}"
+
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+"ქმედება '{0}' '{1}' ვერ იქნება შერწყმული მას შემდეგ, რაც ის იყო '{2}' წინა "
+"ტრანზაქციებში -> პარამეტრი '{0}'."
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"ქმედება 'Upgrade' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს -> "
+"ვაყენებ 'Install'-ს."
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+"ქმედება 'Reinstall' '{0}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს -"
+"> ვაყენებ 'Install'-ს."
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ის წინა ტრანზაქციაში იყო "
+"'{2}' -> ვაყენებ '{0}'-ს."
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr "აღმოჩენილია მოულოდნელი ქმედება: '{0}' ტრანზაქციის შერწყმისას."
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს -> ის "
+"გამოტოვებული იქნება."
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს -> "
+"ვაყენებ 'INSTALL'-ს."
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ახლა ის არ არსებობს "
+"(ახლანდელი ვერსიებია: {2}-> ის გამოტოვებული იქნება."
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, რადგან ახლა ის უკვე არსებობს -> ის "
+"გამოტოვებული იქნება."
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+"ქმედება '{0}' '{1}' შერწყმული ვერ იქნება, ვერსიაში '{2}' უკვე დაყენებულია -> "
+"ვინარჩუნებ ქმედებას ძველი ტრანზაქციიდან '{1}'-ით."
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "აღმოჩენილია არასწორი ქმედება: '{0}' ტრანზაქციის შერწყმისას."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
@@ -1306,69 +1419,69 @@ msgstr ""
 "მხარდაუჭერელი ძირითადი ვერსია \"{}\". მხარდაჭერილი ძირითადი ვერსიაა \"{}\""
 
 #: transaction/transaction_sr.cpp:81
-msgid "Invalid minor version: \"{}\", number expected."
-msgstr "არასწორი მცირე ვერსია: '{}\". მოველოდი რიცხვს."
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "არასწორი მცირე ვერსია: '{}\". მოველოდი რიცხვს"
 
 #: transaction/transaction_sr.cpp:84
-msgid "Missing key \"version\"."
-msgstr "ვერ ვიპოვე პარამეტრი \"version\"."
+msgid "Missing key \"version\""
+msgstr "ვერ ვიპოვე პარამეტრი \"version\""
 
 #: transaction/transaction_sr.cpp:97
-msgid "Unexpected type of \"environments\", array expected."
-msgstr "\"environments\"-ის მოულოდნელი ტიპი. მოველოდი მასივს."
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "\"environments\"-ის მოულოდნელი ტიპი. მოველოდი მასივს"
 
 #: transaction/transaction_sr.cpp:105
-msgid "Missing object key \"id\" in an environment."
-msgstr "გარემოში ობიექტის პარამეტრი \"id\" ვერ ვიპოვე."
+msgid "Missing object key \"id\" in an environment"
+msgstr "გარემოში ობიექტის პარამეტრი \"id\" ვერ ვიპოვე"
 
 #: transaction/transaction_sr.cpp:110
-msgid "Missing object key \"action\" in an environment."
-msgstr "გარემოში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე."
+msgid "Missing object key \"action\" in an environment"
+msgstr "გარემოში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:135
-msgid "Unexpected type of \"groups\", array expected."
-msgstr "\"groups\"-ის მოულოდნელი ტიპი. მოველოდი მასივს."
+#: transaction/transaction_sr.cpp:137
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "\"groups\"-ის მოულოდნელი ტიპი. მოველოდი მასივს"
 
-#: transaction/transaction_sr.cpp:143
-msgid "Missing object key \"id\" in a group."
-msgstr "ჯგუფში ობიექტის პარამეტრი \"id\" ვერ ვიპოვე."
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "ჯგუფში ობიექტის პარამეტრი \"id\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:148
-msgid "Missing object key \"action\" in a group."
-msgstr "ჯგუფში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე."
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "ჯგუფში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:153
-msgid "Missing object key \"reason\" in a group."
-msgstr "ჯგუფში ობიექტის პარამეტრი \"reason\" ვერ ვიპოვე."
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "ჯგუფში ობიექტის პარამეტრი \"reason\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:182
-msgid "Unexpected type of \"rpms\", array expected."
-msgstr "\"rpms\"-ის მოულოდნელი ტიპი. მოველოდი მასივს."
+#: transaction/transaction_sr.cpp:193
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "\"rpms\"-ის მოულოდნელი ტიპი. მოველოდი მასივს"
 
-#: transaction/transaction_sr.cpp:191
-msgid "Cannot parse NEVRA for rpm \"{}\"."
-msgstr "NEVRA-ის დამუშავება შეუძლებელია rpm-სთვის \"{}\"."
+#: transaction/transaction_sr.cpp:202
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "NEVRA-ის დამუშავება შეუძლებელია rpm-სთვის \"{}\""
 
-#: transaction/transaction_sr.cpp:199
-msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm."
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
 msgstr ""
-"აუცილებელია rpm-ში \"nevra\" ან \"package_path\" ობიექტის პარამეტრის ქონა."
+"აუცილებელია rpm-ში \"nevra\" ან \"package_path\" ობიექტის პარამეტრის ქონა"
 
-#: transaction/transaction_sr.cpp:204
-msgid "Missing object key \"action\" in an rpm."
-msgstr "'rpm'-ში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე."
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "'rpm'-ში ობიექტის პარამეტრი \"action\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:209
-msgid "Missing object key \"reason\" in an rpm."
-msgstr "'rpm'-ში ობიექტის პარამეტრი \"reason\" ვერ ვიპოვე."
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "'rpm'-ში ობიექტის პარამეტრი \"reason\" ვერ ვიპოვე"
 
-#: transaction/transaction_sr.cpp:216
+#: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-"and action \"Reason Change\"."
+"and action \"Reason Change\""
 msgstr ""
 "'rpm'-ში აუცილებელი ობიექტის პარამეტრი \"group_id\" ვერ ვიპოვე მიზეზით "
-"\"Group\" და ქმედებით \"Reason Change\"."
+"\"Group\" და ქმედებით \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"

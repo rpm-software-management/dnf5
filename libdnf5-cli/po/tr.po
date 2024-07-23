@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Sabri Ünal <libreajans@gmail.com>, 2024.
+# Ali Azbay <aliyapkod@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-02-26 01:35+0000\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"PO-Revision-Date: 2024-07-19 08:38+0000\n"
+"Last-Translator: Ali Azbay <aliyapkod@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/tr/>\n"
 "Language: tr\n"
@@ -16,11 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr ""
+"\"{}\" adlandırılmış argüman(named argument) \"{}\" ile birlikte kullanılamaz"
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
@@ -29,6 +31,7 @@ msgstr "\"{}\", \"{}\" komutu içinde izin verilmez"
 #: argument_parser.cpp:66
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr ""
+"\"{}\" konumsal argüman(positional argument) \"{}\" ile birlikte kullanılamaz"
 
 #: argument_parser.cpp:110
 msgid "Argument id \"{}\" already registered in group \"{}\""
@@ -61,7 +64,7 @@ msgstr ""
 
 #: argument_parser.cpp:665
 msgid "Description:"
-msgstr ""
+msgstr "Açıklama:"
 
 #: argument_parser.cpp:915
 msgid "Command id \"{}\" already registered for command \"{}\""

@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Sabri Ünal <yakushabb@gmail.com>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-07 11:21+0100\n"
-"PO-Revision-Date: 2024-03-15 22:35+0000\n"
-"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
+"PO-Revision-Date: 2024-07-10 07:38+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-rhsm/tr/>\n"
 "Language: tr\n"
@@ -16,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: rhsm.cpp:97
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Depo yapılandırma dizini için yol eksik"
 
 #: rhsm.cpp:134
 msgid "Cannot save repository configuration to file \"{}\": {}"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 02:52+0000\n"
-"PO-Revision-Date: 2024-06-24 12:53+0000\n"
+"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"PO-Revision-Date: 2024-07-10 07:38+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
@@ -33,176 +33,204 @@ msgstr "{}: Yanlış biçimlendirilen argüman değeri \"{}\""
 
 #: addrepo.cpp:196
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "\"{}={}\" depo seçeneği ayarlanamıyor: {}"
 
 #: addrepo.cpp:204 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "\"{}\" seçeneğini farklı bir değerle tekrar ayarlar: \"{}\" != \"{}\""
 
 #: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Depo yapılandırma dizini için yol eksik"
 
 #: addrepo.cpp:320
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Depo yapılandırma dosyası \"{}\" kopyalanamadı: {}"
 
 #: addrepo.cpp:331
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Depo yapılandırma dosyası \"{}\" indirilemedi: {}"
 
 #: addrepo.cpp:353
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
+"Eklenen depo yapılandırma dosyasında hata. \"{}={}\" depo seçeneği "
+"ayarlanamıyor: {}"
 
 #: addrepo.cpp:387
 msgid "Bad baseurl: {}={}"
-msgstr ""
+msgstr "Hatalı temel url: {}={}"
 
 #: addrepo.cpp:395
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
+"--from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> seçeneklerinden biri boş olmayan bir URL olmalıdır"
 
 #: addrepo.cpp:440
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Depo yapılandırma dosyası \"{}\" kaydedilemedi: {}"
 
 #: addrepo.cpp:462
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
+"\"{}\" dosyası zaten var ve \"{}\" depolarını yapılandırıyor. \"--add-or-"
+"replace\" veya \"--overwrite\" ekleyin."
 
 #: addrepo.cpp:465
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
+"\"{}\" dosyası zaten var ve \"{}\" depolarını yapılandırıyor. Üzerine yazmak "
+"için \"--overwrite\" ekleyin."
 
 #: addrepo.cpp:485 addrepo.cpp:511
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
+msgstr "\"{}\" kimliğine sahip bir depo {} dosyasında zaten yapılandırıldı"
 
 #: addrepo.cpp:497 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr ""
+msgstr "\"{}\" dizininden depolar okunamıyor: {}"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Hatalı biçimlendirilen argüman değeri: Son anahtar karakter '.' olamaz: "
+"{}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: Boş depo kimliğine izin verilmiyor: {}"
 
 #: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "\"{}\" depo seçeneği ayarlanamıyor: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"\"{}\" seçeneğini (\"{}\" deposu için) farklı bir değerle tekrar ayarlar: "
+"\"{}\" != \"{}\""
 
 #: setopt.cpp:130
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Seçenek ayarlanamıyor: \"{}\": {}"
 
 #: setopt.cpp:170
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Değiştirilecek eşleşen depo yok: {}"
 
 #: setvar.cpp:60
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "\"{}\" ayarlanamıyor: \"{}\" değişkeni salt okunur"
 
 #: setvar.cpp:68
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "\"{}\" değişkenini farklı bir değerle tekrar ayarlar: \"{}\" != \"{}\""
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr ""
+msgstr "Değişkenler dizini için yol eksik"
 
 #: setvar.cpp:110
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr ""
+msgstr "Değişken \"{}\" dosyasına yazılamıyor: {}"
 
 #: shared.hpp:58
 msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"\"{}\" yolu var, ancak bir dizin veya bir dizine sembolik bağlantı değil."
 
 #: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
-msgstr ""
+msgstr "\"{}\" yolu var, ancak var olmayan bir nesneye bir sembolik bağlantı."
 
 #: shared.hpp:69
 msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"\"{}\" dizini yok. Eksik dizinleri oluşturmak için \"--create-missing-dir\" "
+"ekleyin."
 
 #: shared.hpp:80
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
-msgstr ""
+msgstr "Değişken adı yalnızca ASCII harfleri, rakamlar ve '_' içerebilir: {}"
 
 #: unsetopt.cpp:93
 msgid "config-manager: Request to remove unsupported repository option: {}"
-msgstr ""
+msgstr "config-manager: Desteklenmeyen depo seçeneğini kaldırma isteği: {}"
 
 #: unsetopt.cpp:105
 msgid "config-manager: Request to remove unsupported main option: {}"
-msgstr ""
+msgstr "config-manager: Desteklenmeyen ana seçeneği kaldırma isteği: {}"
 
 #: unsetopt.cpp:140
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Ana seçeneği kaldırma isteği ancak yapılandırma dosyasında "
+"yok: {}"
 
 #: unsetopt.cpp:152
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Ana seçeneği kaldırma isteği ancak yapılandırma dosyası "
+"bulunamadı: {}"
 
 #: unsetopt.cpp:186
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Depo seçeneğini kaldırma isteği ancak depo kimliği geçersiz "
+"kılmalarda yok: {}"
 
 #: unsetopt.cpp:194
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Depo seçeneğini kaldırma isteği ancak geçersiz kılmalarda "
+"yok: {}.{}"
 
 #: unsetopt.cpp:214
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Depo seçeneğini kaldırma isteği ancak geçersiz kılmaları "
+"içeren dosya bulunamadı: {}"
 
 #: unsetvar.cpp:69
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: Değişkeni kaldırma isteği ancak değişkenler dizini "
+"bulunamadı: {}"
 
 #: unsetvar.cpp:82
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Değişkeni kaldırma isteği ancak değişkenler dizininde yok: {}"
 
 #: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr ""
+msgstr "\"{}\" değişken dosyası kaldırılamıyor: {}"
