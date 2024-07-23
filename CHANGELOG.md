@@ -1,3 +1,37 @@
+# 5.2.5.0
+
+- Update translations from weblate
+- Use the same nevra format for history and regular transactions
+- `history store` add user friendly message when operation succeeds
+- Improve `history store` message to mention transaction ID
+- Rename wrongly names `query_format` name to `output_arg`
+- Store to the db only requested package types for group
+- Update `group_package_types` docs to match dnf5
+- When upgrading a group keep stored package types
+- transaction_sr: Remove excessive "." from exceptions
+- TransactionReplay: handle group package types
+- dnfdaemon: Replace check_pending() with get_status()
+- dnfdaemon: Strict set_finish_action() value check
+- dnfdaemon: Add new API for offline transactions
+- dnfdaemon-client: --offline option for transactions
+- dnfdaemon: Support for running a transaction offline
+- Documentation: ABI: Defining public (exported) symbols
+- Fix DNF5: Don't trigger filelists download if abs path to local RPM
+- Add `history rollback` command
+- Use transaction merging when reverting transactions
+- Add private `merge_transactions(...)` API
+- Add `MERGE` goal action and `MERGE_ERROR` goal problem
+- Add reports when corresponding debug package is not available
+- Implement conditional compilation `-DWITH_MODULEMD=OFF`
+- Add a copr build with disabled modules to verify it works
+- Remove unused includes in test_modules
+- Clean up `repo` header includes
+- Add documentation of debuginfo-install command
+- Add debuginfo-install command
+- Add install_debug to goal
+- Add method to enable debug repository
+- Support colon in username, use LRO_USERNAME and LRO_PASSWORD
+
 # 5.2.4.0
 
 - Update translations from weblate
