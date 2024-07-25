@@ -326,46 +326,7 @@ void Transaction::finish(TransactionState state) {
 }
 
 std::string Transaction::serialize() {
-    TransactionReplay transaction_replay;
-
-    for (const auto & pkg : get_packages()) {
-        PackageReplay package_replay;
-
-        // Use to_nevra_string in order to have nevra wihtout epoch if it is 0
-        package_replay.nevra = rpm::to_nevra_string(pkg);
-        package_replay.action = pkg.get_action();
-        package_replay.reason = pkg.get_reason();
-        package_replay.repo_id = pkg.get_repoid();
-        //TODO(amatej): Add the group_id for reason change?
-
-        transaction_replay.packages.push_back(package_replay);
-    }
-
-    for (const auto & group : get_comps_groups()) {
-        GroupReplay group_replay;
-
-        group_replay.group_id = group.to_string();
-        group_replay.action = group.get_action();
-        group_replay.reason = group.get_reason();
-        group_replay.repo_id = group.get_repoid();
-        group_replay.package_types = group.get_package_types();
-
-        transaction_replay.groups.push_back(group_replay);
-    }
-
-    for (const auto & environment : get_comps_environments()) {
-        EnvironmentReplay environment_replay;
-
-        environment_replay.environment_id = environment.to_string();
-        environment_replay.action = environment.get_action();
-        environment_replay.repo_id = environment.get_repoid();
-
-        transaction_replay.environments.push_back(environment_replay);
-    }
-
-    ////TODO(amatej): potentially add modules
-
-    return json_serialize(transaction_replay);
+    return json_serialize(to_replay(*this));
 }
 
 
