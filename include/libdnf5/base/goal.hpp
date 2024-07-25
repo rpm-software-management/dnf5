@@ -384,6 +384,16 @@ public:
         const std::vector<libdnf5::transaction::Transaction> & transactions,
         const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
 
+    /// @warning This method is experimental/unstable and should not be relied on. It may be removed without warning
+    /// Add redo request of history transaction to the goal.
+    /// Can be called only once per Goal.
+    ///
+    /// @param transaction                      A history transaction to be repeated.
+    /// @param settings                         A structure to override default goal settings.
+    void add_redo_transaction(
+        const libdnf5::transaction::Transaction & transaction,
+        const libdnf5::GoalJobSettings & settings = libdnf5::GoalJobSettings());
+
     /// When true it allows to remove installed packages to resolve dependency problems
     void set_allow_erasing(bool value);
 

@@ -159,6 +159,7 @@ public:
     GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     GoalProblem resolve_reverted_transactions(base::Transaction & transaction);
+    GoalProblem resolve_redo_transaction(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf5::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
@@ -271,6 +272,7 @@ private:
     std::unique_ptr<std::tuple<std::filesystem::path, GoalJobSettings>> serialized_transaction;
 
     std::unique_ptr<std::tuple<std::vector<transaction::Transaction>, GoalJobSettings>> revert_transactions;
+    std::unique_ptr<std::tuple<transaction::Transaction, GoalJobSettings>> redo_transaction;
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -2950,6 +2952,13 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
     return ret;
 }
 
+GoalProblem Goal::Impl::resolve_redo_transaction(base::Transaction & transaction) {
+    if (!redo_transaction) {
+        return GoalProblem::NO_PROBLEM;
+    }
+    auto & [trans, settings] = *redo_transaction;
+    return add_replay_to_goal(transaction, transaction::to_replay(trans), settings);
+}
 
 void Goal::Impl::add_paths_to_goal() {
     if (rpm_filepaths.empty()) {
@@ -3093,6 +3102,7 @@ base::Transaction Goal::resolve() {
     // Both serialized and reverted transactions use TransactionReplay.
     ret |= p_impl->add_serialized_transaction_to_goal(transaction);
     ret |= p_impl->resolve_reverted_transactions(transaction);
+    ret |= p_impl->resolve_redo_transaction(transaction);
 
     p_impl->add_paths_to_goal();
 
@@ -3261,6 +3271,12 @@ void Goal::add_revert_transactions(
         std::make_unique<std::tuple<std::vector<transaction::Transaction>, GoalJobSettings>>(transactions, settings);
 }
 
+void Goal::add_redo_transaction(
+    const libdnf5::transaction::Transaction & transaction, const libdnf5::GoalJobSettings & settings) {
+    libdnf_user_assert(!p_impl->redo_transaction, "Redo transactions cannot be set multiple times.");
+    p_impl->redo_transaction =
+        std::make_unique<std::tuple<transaction::Transaction, GoalJobSettings>>(transaction, settings);
+}
 
 void Goal::reset() {
     p_impl->module_specs.clear();

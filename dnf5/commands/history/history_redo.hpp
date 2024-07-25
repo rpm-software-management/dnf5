@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_REDO_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_REDO_HPP
 
+#include "commands/history/arguments.hpp"
+
 #include <dnf5/context.hpp>
 
 
@@ -31,7 +33,10 @@ class HistoryRedoCommand : public Command {
 public:
     explicit HistoryRedoCommand(Context & context) : Command(context, "redo") {}
     void set_argument_parser() override;
+    void configure() override;
     void run() override;
+
+    std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
 };
 
 
