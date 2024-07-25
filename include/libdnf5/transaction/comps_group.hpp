@@ -48,6 +48,11 @@ public:
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
     std::string to_string() const;
 
+    /// Get types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
+    ///
+    // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
+    libdnf5::comps::PackageType get_package_types() const noexcept;
+
     CompsGroup(const CompsGroup & src);
     CompsGroup & operator=(const CompsGroup & src);
     CompsGroup(CompsGroup && src) noexcept;
@@ -91,11 +96,6 @@ private:
     ///
     // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setTranslatedName(const std::string & value)
     LIBDNF_LOCAL void set_translated_name(const std::string & value);
-
-    /// Get types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
-    ///
-    // @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
-    LIBDNF_LOCAL libdnf5::comps::PackageType get_package_types() const noexcept;
 
     /// Set types of the packages to be installed with the group (related xml elements: `<comps><group><packagelist><packagereq type="VALUE" ...>`)
     ///
