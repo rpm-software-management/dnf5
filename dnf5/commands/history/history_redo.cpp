@@ -66,6 +66,12 @@ void HistoryRedoCommand::run() {
     auto settings = libdnf5::GoalJobSettings();
     settings.set_ignore_extras(true);
     settings.set_ignore_installed(true);
+    // If a package is already installed in the requested version but with a different reason override the reason.
+    // This is useful when redoing an interrupted transaction.
+    // The longest part of a transaction is running rpm changes, saving reasons is done after rpm finishes. If a transaction
+    // is interrupted in the middle of the rpm part some rpms are changed but reasons are not updated at all. To handle this
+    // enforce the reasons in the selected transaction.
+    settings.set_override_reasons(true);
     goal->add_redo_transaction(target_trans[0], settings);
 }
 
