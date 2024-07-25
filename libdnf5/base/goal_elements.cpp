@@ -177,6 +177,10 @@ class GoalJobSettings::Impl {
     /// Used by history undo, system upgrade, ...
     bool ignore_installed{false};
 
+    /// For replaying transactions override reasons for already installed packages.
+    /// Used by history redo.
+    bool override_reasons{false};
+
     GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
@@ -516,6 +520,13 @@ void GoalJobSettings::set_ignore_installed(bool ignore_installed) {
 }
 bool GoalJobSettings::get_ignore_installed() const {
     return p_impl->ignore_installed;
+}
+
+void GoalJobSettings::set_override_reasons(bool override_reasons) {
+    p_impl->override_reasons = override_reasons;
+}
+bool GoalJobSettings::get_override_reasons() const {
+    return p_impl->override_reasons;
 }
 
 }  // namespace libdnf5

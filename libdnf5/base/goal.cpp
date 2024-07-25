@@ -859,8 +859,21 @@ GoalProblem Goal::Impl::add_replay_to_goal(
 
                     if (!query_na.empty() && is_installonly.empty()) {
                         query_nevra.filter_installed();
-                        auto problem = query_nevra.empty() ? GoalProblem::INSTALLED_IN_DIFFERENT_VERSION
-                                                           : GoalProblem::ALREADY_INSTALLED;
+                        auto problem = GoalProblem::INSTALLED_IN_DIFFERENT_VERSION;
+
+                        if (!query_nevra.empty()) {
+                            problem = GoalProblem::ALREADY_INSTALLED;
+                            if (settings.get_override_reasons()) {
+                                if ((*query_nevra.begin()).get_reason() != package_replay.reason) {
+                                    rpm_reason_change_specs.push_back(std::make_tuple(
+                                        package_replay.reason,
+                                        package_replay.nevra,
+                                        package_replay.group_id,
+                                        settings_per_package));
+                                }
+                            }
+                        }
+
                         auto log_level = libdnf5::Logger::Level::WARNING;
                         if (!settings.get_ignore_installed()) {
                             log_level = libdnf5::Logger::Level::ERROR;
