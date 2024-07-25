@@ -888,7 +888,9 @@ GoalProblem Goal::Impl::add_replay_to_goal(
                             package_replay.nevra,
                             query_to_vec_of_nevra_str(query_na),
                             log_level);
-                        continue;
+                        if (problem == GoalProblem::ALREADY_INSTALLED) {
+                            continue;
+                        }
                     }
                 }
             }
