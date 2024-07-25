@@ -16,8 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-..
-    # TODO(jkolarik): Command not ready yet in upstream ...
 
 .. _history_command_ref-label:
 
@@ -54,6 +52,9 @@ Subcommands
 
 ``redo``
     | Repeat the specified transaction.
+    | Automatically uses ``--ignore-extras`` and ``--ignore-installed``.
+    | Unlike the rest of history commands it overrides reasons for transaction packages that are already installed.
+    | This command is useful to finish interrupted transactons.
 
 ``rollback``
     | Undo all transactions performed after the specified transaction.
@@ -69,11 +70,15 @@ Options for ``list`` and ``info``
     | Reverse the order of transactions in the output.
 
 
-Options for ``undo``
-====================
+Options for ``undo``, ``rollback`` and ``redo``
+===============================================
 
 ``--skip-unavailable``
     | Allow skipping packages actions that are not possible perform.
+
+
+Options for ``undo`` and ``rollback``
+=====================================
 
 ``--ignore-extras``
     | Don't consider extra packages pulled into the transaction as errors.
