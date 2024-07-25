@@ -16,6 +16,7 @@ DNF5 Commands
     download.8
     environment.8
     group.8
+    history.8
     info.8
     install.8
     leaves.8
@@ -37,5 +38,3 @@ DNF5 Commands
     versionlock.8
 
 ..
-    # TODO(jkolarik): history not ready yet
-    history.8

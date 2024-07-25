@@ -122,7 +122,7 @@ man_pages = [
     ('commands/download.8', 'dnf5-download', 'Download Command', AUTHORS, 8),
     ('commands/environment.8', 'dnf5-environment', 'Environment Command', AUTHORS, 8),
     ('commands/group.8', 'dnf5-group', 'Group Command', AUTHORS, 8),
-    # TODO(jkolarik): ('commands/history.8', 'dnf5-history', 'History Command', AUTHORS, 8),
+    ('commands/history.8', 'dnf5-history', 'History Command', AUTHORS, 8),
     ('commands/info.8', 'dnf5-info', 'Info Command', AUTHORS, 8),
     ('commands/install.8', 'dnf5-install', 'Install Command', AUTHORS, 8),
     ('commands/leaves.8', 'dnf5-leaves', 'Leaves Command', AUTHORS, 8),

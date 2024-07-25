@@ -79,6 +79,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`group <group_command_ref-label>`
     | Manage comps groups.
 
+:ref:`history <history_command_ref-label>`
+    | Manage transaction history.
+
 :ref:`info <info_command_ref-label>`
     | Provide detailed information about installed or available packages.
 
@@ -135,11 +138,6 @@ For more details see the separate man page for the specific command, f.e. ``man 
 
 :ref:`versionlock <versionlock_command_ref-label>`
     | Protect packages from updates to newer versions.
-
-..
-    # TODO(jkolarik): History command is not ready yet
-    :ref:`history <history_command_ref-label>`
-        | Manage transaction history.
 
 
 Plugin commands
@@ -417,6 +415,7 @@ Commands:
     | :manpage:`dnf5-download(8)`, :ref:`Download command <download_command_ref-label>`
     | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
     | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
+    | :manpage:`dnf5-history(8)`, :ref:`History command, <history_command_ref-label>`
     | :manpage:`dnf5-info(8)`, :ref:`Info command <info_command_ref-label>`
     | :manpage:`dnf5-install(8)`, :ref:`Install command <install_command_ref-label>`
     | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
@@ -436,9 +435,6 @@ Commands:
     | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
     | :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versionlock_command_ref-label>`
 
-..
-    # TODO(jkolarik): History command is not ready yet
-    | :manpage:`dnf5-history(8)`, :ref:`History command, <history_command_ref-label>`
 
 Application Plugins:
     | :manpage:`dnf5-automatic(8)`, :ref:`Automatic command <automatic_plugin_ref-label>`

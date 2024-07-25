@@ -296,8 +296,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf*-download.8.*
 %{_mandir}/man8/dnf*-environment.8.*
 %{_mandir}/man8/dnf*-group.8.*
-# TODO(jkolarik): history is not ready yet
-# %%{_mandir}/man8/dnf*-history.8.*
+%{_mandir}/man8/dnf*-history.8.*
 %{_mandir}/man8/dnf*-info.8.*
 %{_mandir}/man8/dnf*-install.8.*
 %{_mandir}/man8/dnf*-leaves.8.*
