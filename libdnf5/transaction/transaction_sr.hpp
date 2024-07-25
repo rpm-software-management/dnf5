@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_TRANSACTION_TRANSACTION_REPLAY_HPP
 #define LIBDNF5_TRANSACTION_TRANSACTION_REPLAY_HPP
 
+#include "libdnf5/transaction/transaction.hpp"
+
 #include <libdnf5/comps/environment/environment.hpp>
 #include <libdnf5/comps/group/group.hpp>
 #include <libdnf5/transaction/transaction_item_action.hpp>
@@ -75,6 +77,7 @@ struct TransactionReplay {
 
 TransactionReplay parse_transaction_replay(const std::string & json_serialized_transaction);
 std::string json_serialize(const TransactionReplay & transaction_replay);
+TransactionReplay to_replay(libdnf5::transaction::Transaction & trans);
 
 }  // namespace libdnf5::transaction
 
