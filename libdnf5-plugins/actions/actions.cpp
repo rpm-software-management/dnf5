@@ -45,7 +45,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{1, 1, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 1, 1};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -274,14 +274,14 @@ std::pair<std::string, bool> Actions::substitute(
             }
         } else if (var_name.starts_with("conf.")) {
             auto key = std::string(var_name.substr(5));
-            const auto dot_pos = key.rfind('.');
-            if (dot_pos != std::string::npos) {
+            const auto equal_pos = key.find('=');
+            const auto dot_pos = key.find('.');
+            if (dot_pos < equal_pos) {
                 // It is a repository option. The repoid is part of the key and can contain globs.
                 // Will be substituted by a list of "repoid.option=value" pairs for the matching repositories.
                 // Pairs are separated by ',' character. The ',' character in the value is replaced by escape sequence.
                 // Supported formats: `<repoid_pattern>.<opt_name>` or `<repoid_pattern>.<opt_name>=<value_pattern>`
                 std::string value_pattern;
-                const auto equal_pos = key.find('=');
                 if (equal_pos != std::string::npos) {
                     value_pattern = key.substr(equal_pos + 1);
                     key = key.substr(0, equal_pos);
