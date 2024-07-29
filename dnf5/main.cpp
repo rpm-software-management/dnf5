@@ -814,7 +814,7 @@ static void print_transaction_size_stats(Context & context) {
     const auto [size_diff_value, size_diff_unit] = libdnf5::cli::utils::units::to_size(std::abs(size_diff));
     if (size_diff >= 0) {
         context.print_info(fmt::format(
-            "After this operation {:.0f} {:s} will be used (install {:.0f} {:s}, remove {:.0f} {:s}).",
+            "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, remove {:.0f} {:s}).",
             size_diff_value,
             size_diff_unit,
             install_size_value,
@@ -823,7 +823,7 @@ static void print_transaction_size_stats(Context & context) {
             remove_size_unit));
     } else {
         context.print_info(fmt::format(
-            "After this operation {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s}).",
+            "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s}).",
             size_diff_value,
             size_diff_unit,
             install_size_value,
