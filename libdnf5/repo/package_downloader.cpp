@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <fmt/format.h>
 #include <librepo/librepo.h>
 
 #include <algorithm>
@@ -136,9 +137,6 @@ void PackageDownloader::download() try {
 
     auto & config = p_impl->base->get_config();
     auto use_cache_only = config.get_cacheonly_option().get_value() == "all";
-    // map package.location->destination
-    std::map<std::filesystem::path, std::filesystem::path> local_files;
-
     GError * err{nullptr};
 
     std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
@@ -152,16 +150,34 @@ void PackageDownloader::download() try {
 
         std::filesystem::create_directory(pkg_target.destination);
 
-        if (pkg_target.package.is_available_locally()) {
-            local_files[pkg_target.package.get_location()] = pkg_target.destination;
-            continue;
-        }
-
         if (auto * download_callbacks = pkg_target.package.get_base()->get_download_callbacks()) {
             pkg_target.user_cb_data = download_callbacks->add_new_download(
                 pkg_target.user_data,
                 pkg_target.package.get_full_nevra().c_str(),
                 static_cast<double>(pkg_target.package.get_download_size()));
+        }
+
+        if (pkg_target.package.is_available_locally()) {
+            // Copy local packages to their destination directories
+            std::filesystem::path source = pkg_target.package.get_package_path();
+            std::filesystem::path destination = pkg_target.destination / source.filename();
+            std::error_code ec;
+            if (!std::filesystem::equivalent(source, destination, ec)) {
+                std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing, ec);
+                if (auto * download_callbacks = pkg_target.package.get_base()->get_download_callbacks()) {
+                    std::string msg;
+                    DownloadCallbacks::TransferStatus status;
+                    if (ec) {
+                        status = DownloadCallbacks::TransferStatus::ERROR;
+                        msg = ec.message();
+                    } else {
+                        status = DownloadCallbacks::TransferStatus::ALREADYEXISTS;
+                        msg = fmt::format("Copied from {}", source.string());
+                    }
+                    download_callbacks->end(pkg_target.user_cb_data, status, msg.c_str());
+                }
+            }
+            continue;
         }
 
         auto * lr_target = lr_packagetarget_new_v3(
@@ -186,15 +202,6 @@ void PackageDownloader::download() try {
         }
 
         lr_targets.emplace_back(lr_target);
-    }
-
-    // Copy local packages to their destination directories
-    for (const auto & [source, destination] : local_files) {
-        auto dest = destination / source.filename();
-        std::error_code ec;
-        if (!std::filesystem::equivalent(source, dest, ec)) {
-            std::filesystem::copy(source, dest, std::filesystem::copy_options::overwrite_existing);
-        }
     }
 
     // Adding items to the end of GSList is slow. We go from the back and add items to the beginning.
