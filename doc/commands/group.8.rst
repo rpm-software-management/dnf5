@@ -34,8 +34,9 @@ Description
 ===========
 
 The ``group`` command in ``DNF5`` offers several queries for getting information about groups, packages
-related to them and it is also used for groups installation. Note that some
-things dnf-4 listed as groups are now listed with ``environment list``.
+related to them and it is also used for groups installation.
+To query environments use separate ``environment`` command.
+Note: ``dnf-4`` listed both environments and groups with the ``group`` command.
 
 Optional ``group-spec`` arguments could be passed to filter only groups with given names.
 
