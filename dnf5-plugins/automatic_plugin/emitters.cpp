@@ -218,11 +218,11 @@ void EmitterEmail::notify() {
 
                 FILE * payload_file = fmemopen(payload.data(), payload.size(), "r");
                 curl_easy_setopt(curl, CURLOPT_READDATA, payload_file);
-                fclose(payload_file);
 
                 curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
                 res = curl_easy_perform(curl);
+                fclose(payload_file);
                 if (res != CURLE_OK) {
                     std::cerr << "libcurl error while sending e-mail: " << curl_easy_strerror(res) << std::endl;
                 }
