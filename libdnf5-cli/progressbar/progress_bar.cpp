@@ -159,6 +159,13 @@ void ProgressBar::set_total_ticks(int64_t value) {
 }
 
 
+void ProgressBar::pop_message() {
+    if (!messages.empty()) {
+        messages.pop_back();
+    }
+}
+
+
 std::ostream & operator<<(std::ostream & os, ProgressBar & bar) {
     bar.to_stream(os);
     return os;
