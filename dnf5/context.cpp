@@ -41,6 +41,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/fs/file.hpp>
 #include <libdnf5/utils/patterns.hpp>
+#include <rpm/rpmtypes.h>
 
 #include <algorithm>
 #include <cctype>
@@ -871,10 +872,24 @@ void RpmTransCB::script_stop(
     [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
-    [[maybe_unused]] uint64_t return_code) {
-    active_progress_bar->add_message(
-        libdnf5::cli::progressbar::MessageType::INFO,
-        fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+    uint64_t return_code) {
+    switch (return_code) {
+        case RPMRC_OK:
+            // remove the script_start message in case the script finished successfully
+            active_progress_bar->pop_message();
+            break;
+        case RPMRC_NOTFOUND:
+            // Non-critical rpm scriptlet errors do not call script_error callback.
+            // Print the error message here.
+            active_progress_bar->add_message(
+                libdnf5::cli::progressbar::MessageType::WARNING,
+                fmt::format("Error in {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+            [[fallthrough]];
+        default:
+            active_progress_bar->add_message(
+                libdnf5::cli::progressbar::MessageType::INFO,
+                fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+    }
     multi_progress_bar.print();
 }
 
