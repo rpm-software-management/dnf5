@@ -692,6 +692,7 @@ Summary:        Plugins for dnf5
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libcurl%{?_isa} >= 7.62.0
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Provides:       dnf5-command(builddep)
 Provides:       dnf5-command(changelog)
@@ -727,6 +728,8 @@ Summary:        Package manager - automated upgrades
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libcurl-full%{?_isa}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Provides:       dnf5-command(automatic)
 %if %{with dnf5_obsoletes_dnf}
 Provides:       dnf-automatic = %{version}-%{release}
