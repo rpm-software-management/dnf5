@@ -96,6 +96,7 @@ private:
 
     std::string get_persistdir() const;
     void add_countme_flag(LibrepoHandle & handle);
+    time_t get_system_epoch() const;
 
     std::set<std::string> get_optional_metadata() const;
 
