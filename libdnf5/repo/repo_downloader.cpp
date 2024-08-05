@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/util.h>
+#include <sys/stat.h>
 
 #include <filesystem>
 #include <fstream>
@@ -714,7 +715,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
     file_path /= COUNTME_COOKIE;
 
     int ver = COUNTME_VERSION;    // file format version (for future use)
-    time_t epoch = 0;             // position of first-ever counted window
+    time_t epoch = 0;             // position of first observed window
     time_t win = COUNTME_OFFSET;  // position of last counted window
     int budget = -1;              // budget for this window (-1 = generate)
     // TODO(lukash) ideally replace with utils::fs::File (via adding scanf() support?),
@@ -746,8 +747,15 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
 
         // Compute the position of this window
         win = now - (delta % COUNTME_WINDOW);
+
+        // Compute the epoch from this system's epoch or, if unknown, declare
+        // this window as the epoch (unless stored in the cookie previously).
+        time_t sysepoch = get_system_epoch();
+        if (sysepoch)
+            epoch = sysepoch - ((sysepoch - COUNTME_OFFSET) % COUNTME_WINDOW);
         if (!epoch)
             epoch = win;
+
         // Window step (0 at epoch)
         int64_t step = (win - epoch) / COUNTME_WINDOW;
 
@@ -781,6 +789,31 @@ std::set<std::string> RepoDownloader::get_optional_metadata() const {
     } else {
         return config.get_main_config().get_optional_metadata_types_option().get_value();
     }
+}
+
+
+/* Returns this system's installation time ("epoch") as a UNIX timestamp.
+ *
+ * Uses the machine-id(5) file's mtime as a good-enough source of truth.  This
+ * file is typically tied to the system's installation or first boot where it's
+ * populated by an installer tool or init system, respectively, and is never
+ * changed afterwards.
+ *
+ * Some systems, such as containers that don't run an init system, may have the
+ * file missing, empty or uninitialized, in which case this function returns 0.
+ */
+time_t RepoDownloader::get_system_epoch() const {
+    std::string filename = "/etc/machine-id";
+    std::string id;
+    struct stat st;
+
+    if (stat(filename.c_str(), &st) != 0 || !st.st_size)
+        return 0;
+    std::ifstream(filename) >> id;
+    if (id == "uninitialized")
+        return 0;
+
+    return st.st_mtime;
 }
 
 
