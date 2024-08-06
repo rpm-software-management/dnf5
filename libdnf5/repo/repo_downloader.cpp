@@ -682,6 +682,9 @@ const std::array<const int, 3> COUNTME_BUCKETS = {{2, 5, 25}};
 /// This is to align the time window with an absolute point in time rather
 /// than the last counting event (which could facilitate tracking across
 /// multiple such events).
+///
+/// In the below comments, the window's current position will be referred to
+/// as "this window" for brevity.
 void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
     auto & logger = *base->get_logger();
 
@@ -753,7 +756,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
         for (i = 0; i < COUNTME_BUCKETS.size(); ++i)
             if (step < COUNTME_BUCKETS[i])
                 break;
-        uint32_t bucket = i + 1;  // Buckets are indexed from 1
+        uint32_t bucket = i + 1;  // Buckets are numbered from 1
 
         // Set the flag
         std::string flag = "countme=" + std::to_string(bucket);
