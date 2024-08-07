@@ -431,15 +431,20 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     :ref:`string <string-label>`
 
-    For superuser overwrites the :ref:`cachedir <_cachedir_options-label>` option value.
+    For superuser overwrites the :ref:`cachedir <cachedir_options-label>` option value.
 
     Allows to differentiate user and superuser cachedir.
 
     Default: ``/var/cache/libdnf5``.
 
-.. _system_state_options-label:
+.. _system_state_dir_options-label:
 
-``system_state``
+``system_state_dir``
+    :ref:`string <string-label>`
+
+    System state files location. See :manpage:`dnf5-system-state(7)`, :ref:`system state <systemstate_misc_ref-label>` for details.
+
+    Default: ``/usr/lib/sysimage/libdnf5``.
 
 .. _tsflags_options-label:
 

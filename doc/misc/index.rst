@@ -14,3 +14,4 @@ Miscellaneous
     installroot.7
     modularity.7
     specs.7
+    system-state.7
