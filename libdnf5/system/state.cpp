@@ -297,6 +297,10 @@ StateNotFoundError::StateNotFoundError(const std::string & type, const std::stri
     : libdnf5::Error(M_("{} state for \"{}\" not found."), type, key) {}
 
 
+StateLoadError::StateLoadError(const std::string & path, const std::string & error)
+    : libdnf5::Error(M_("Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"), path, error) {}
+
+
 State::State(const std::filesystem::path & path) : path(path) {
     load();
 }
@@ -600,7 +604,7 @@ static T load_toml_data(const std::string & path, const std::string & key) {
         return {};
     }
 
-    auto toml_value = toml::parse(path);
+    const auto toml_value = toml::parse(path);
 
     auto version_string = toml::find<std::string>(toml_value, "version");
     auto version_parsed = parse_version(version_string);
@@ -616,15 +620,29 @@ static T load_toml_data(const std::string & path, const std::string & key) {
 
 
 void State::load() {
-    package_states = load_toml_data<std::map<std::string, PackageState>>(get_package_state_path(), "packages");
-    nevra_states = load_toml_data<std::map<std::string, NevraState>>(get_nevra_state_path(), "nevras");
-    group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
-    environment_states =
-        load_toml_data<std::map<std::string, EnvironmentState>>(get_environment_state_path(), "environments");
+    std::string path;
+    try {
+        path = get_package_state_path();
+        package_states = load_toml_data<std::map<std::string, PackageState>>(path, "packages");
+        path = get_nevra_state_path();
+        nevra_states = load_toml_data<std::map<std::string, NevraState>>(path, "nevras");
+        path = get_group_state_path();
+        group_states = load_toml_data<std::map<std::string, GroupState>>(path, "groups");
+        path = get_environment_state_path();
+        environment_states = load_toml_data<std::map<std::string, EnvironmentState>>(path, "environments");
 #ifdef WITH_MODULEMD
-    module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
+        path = get_module_state_path();
+        module_states = load_toml_data<std::map<std::string, ModuleState>>(path, "modules");
 #endif
-    system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
+        path = get_system_state_path();
+        system_state = load_toml_data<SystemState>(path, "system");
+    } catch (const InvalidVersionError & ex) {
+        throw;
+    } catch (const UnsupportedVersionError & ex) {
+        throw;
+    } catch (const std::exception & ex) {
+        throw StateLoadError(path, ex.what());
+    }
     package_groups_cache.reset();
 }
 
