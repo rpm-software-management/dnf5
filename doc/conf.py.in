@@ -158,6 +158,7 @@ man_pages = [
     ('misc/installroot.7', 'dnf5-installroot', 'Installroot Parameter', AUTHORS, 7),
     ('misc/modularity.7', 'dnf5-modularity', 'Modularity Overview', AUTHORS, 7),
     ('misc/specs.7', 'dnf5-specs', 'Patterns Specification', AUTHORS, 7),
+    ('misc/system-state.7', 'dnf5-system-state', 'System state', AUTHORS, 7),
     ('dnf_daemon/dnf5daemon_client.8', 'dnf5daemon-client', 'Command-line interface for Dnf5daemon', AUTHORS, 8),
     ('dnf_daemon/dnf5daemon_server.8', 'dnf5daemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
     ('dnf_daemon/dnf5daemon_dbus_api.8', 'dnf5daemon-dbus-api', 'DBus API Reference for Dnf5daemon', AUTHORS, 8),
