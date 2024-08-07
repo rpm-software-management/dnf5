@@ -782,7 +782,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DPACKAGE_VERSION=%{version} \
     -DPERL_INSTALLDIRS=vendor \
     \
-    -DENABLE_SOLV_FOCUSNEW=%{?focus_new:ON}%{!?focus_new:OFF} \
+    -DENABLE_SOLV_FOCUSNEW=%{?with_focus_new:ON}%{!?with_focus_new:OFF} \
     \
     -DWITH_DNF5DAEMON_CLIENT=%{?with_dnf5daemon_client:ON}%{!?with_dnf5daemon_client:OFF} \
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
