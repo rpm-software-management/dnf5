@@ -9,5 +9,6 @@ LIBDNF5 Plugins
     :maxdepth: 1
 
     actions.8
+    expired-pgp-keys.8
 
 ..
