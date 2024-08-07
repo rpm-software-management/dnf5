@@ -101,6 +101,14 @@ public:
     const char * get_name() const noexcept override { return "UnsupportedVersionError"; }
 };
 
+class StateLoadError : public libdnf5::Error {
+public:
+    StateLoadError(const std::string & path, const std::string & error);
+
+    const char * get_domain_name() const noexcept override { return "libdnf5::system"; }
+    const char * get_name() const noexcept override { return "StateLoadError"; }
+};
+
 
 /// A class providing information and allowing modification of the DNF system
 /// state. The state consists of a list of userinstalled packages, installed
