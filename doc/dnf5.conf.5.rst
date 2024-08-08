@@ -99,7 +99,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Has a reasonable root-writable default depending on the distribution. DNF5
     needs to be able to create files and directories at this location.
 
-    Regular user default: ``/home/$USER/.cache/libdnf5``.
+    Regular user default: ``~/.cache/libdnf5``.
 
     For superuser the value is overwritten by :ref:`system_cachedir <_system_cachedir_options-label>` option.
 
@@ -259,7 +259,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Directory where the log files will be stored.
 
-    Regular user default: ``/home/$USER/.local/state``.
+    Regular user default: ``~/.local/state``.
 
     Superuser default: ``/var/log``.
 

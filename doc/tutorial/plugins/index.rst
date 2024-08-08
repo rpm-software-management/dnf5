@@ -28,7 +28,7 @@ Debugging Tips
 
 To test your freshly built DNF5 Plugin, redirect DNF5 to load it by setting
 the ``DNF5_PLUGINS_DIR`` environmental variable to your build directory (e.g.,
-``DNF5_PLUGINS_DIR=/home/user/dnf5/build/dnf5-plugins/template_plugin``).
+``DNF5_PLUGINS_DIR=~/dnf5/build/dnf5-plugins/template_plugin``).
 
 Speaking about LIBDNF5 Plugins, utilize the ``LIBDNF_PLUGINS_CONFIG_DIR``
 environmental variable to configure the directory with the plugin's configuration.
