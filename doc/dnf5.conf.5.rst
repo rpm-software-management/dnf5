@@ -259,7 +259,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Directory where the log files will be stored.
 
-    Default: ``/var/log``.
+    Regular user default: ``/home/$USER/.local/state``.
+
+    Superuser default: ``/var/log``.
 
 .. _log_rotate_options-label:
 
