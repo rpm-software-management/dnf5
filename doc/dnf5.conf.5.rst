@@ -99,7 +99,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Has a reasonable root-writable default depending on the distribution. DNF5
     needs to be able to create files and directories at this location.
 
-    Default: ``/var/cache/libdnf5``.
+    Regular user default: ``/home/$USER/.cache/libdnf5``.
+
+    For superuser the value is overwritten by :ref:`system_cachedir <_system_cachedir_options-label>` option.
 
 .. _cacheonly_options-label:
 
@@ -412,6 +414,18 @@ repository configuration file should aside from repo ID consists of baseurl, met
     along with \-\ :ref:`-installroot <installroot_options-label>` option.
 
     Default: TODO add default
+
+.. _system_cachedir_options-label:
+
+``system_cachedir``
+
+    :ref:`string <string-label>`
+
+    For superuser overwrites the :ref:`cachedir <_cachedir_options-label>` option value.
+
+    Allows to differentiate user and superuser cachedir.
+
+    Default: ``/var/cache/libdnf5``.
 
 .. _system_state_options-label:
 
