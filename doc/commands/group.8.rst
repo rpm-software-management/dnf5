@@ -57,8 +57,10 @@ Subcommands
 ``install``
     Mark the specified groups installed and install packages it contains.
     Also include optional packages of the group if the ``--with-optional`` option is
-    specified. All `Mandatory` and `Default` packages will be installed whenever
-    possible. `Conditional` packages are installed if they meet their requirement.
+    specified. By default all `Mandatory` and `Default` packages will be installed whenever
+    possible. `Conditional` packages are installed if they meet their requirement. This can
+    be configured by :manpage:`dnf5-conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
+
     If the group is already (partially) installed, the command  installs the missing
     packages from the group.
 

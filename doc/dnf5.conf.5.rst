@@ -176,7 +176,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     List of the following: ``optional``, ``default``, ``mandatory`` or ``conditional``.
 
-    Tells DNF5 which type of packages in groups will be installed when 'group install' is called.
+    Tells DNF5 which type of packages in groups will be installed when 'group install <group-spec>'
+    or 'install @<group-spec>' is called.
 
     Default: ``default, mandatory, conditional``.
 
