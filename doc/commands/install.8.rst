@@ -25,15 +25,25 @@
 Synopsis
 ========
 
-``dnf5 install [options] <package-spec>...``
+``dnf5 install [options] <package-spec>|@<group-spec>|@<environment-spec>...``
 
 
 Description
 ===========
 
-The ``install`` command in ``DNF5`` is used for installing packages. It makes sure that
-all given packages defined in ``package-spec`` arguments and their dependencies are installed
-on the system. Environments can be installed with ``@environment-id`` as ``<package-spec>``.
+The ``install`` command in ``DNF5`` is used for installing packages, groups or environments.
+
+When installing packages defined in ``package-spec`` arguments, ``DNF5`` ensures that the packages
+and their dependencies are installed on the system.
+If the specified packages are already installed, DNF5 does not check their dependencies again and
+simply verifies that the packages themselves are present.
+
+When installing groups defined in ``group-spec`` arguments, ``DNF5`` ensures that the groups and
+their packages are installed on the system. Installs only group packages matching configured package
+type. See :manpage:`dnf5-conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
+
+When installing environments defined in ``environment-spec`` arguments, ``DNF5`` ensures that the
+environments and their groups are installed on the system.
 
 
 Options
