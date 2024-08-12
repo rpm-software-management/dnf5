@@ -37,14 +37,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <type_traits>
 #include <vector>
-
+#include <ranges>
+#include <filesystem>
+#include <cstddef>
 namespace dnf5 {
 
 using namespace libdnf5;
 
 namespace {
 
-enum class ProblemType { MISSING_REQUIRE, CONFLICT, OBSOLETED, DUPLICATE };
+enum class ProblemType { MISSING_REQUIRE, CONFLICT, OBSOLETED, DUPLICATE, PATH_CONFLICT };
 
 // Package is identified by "nevra". But there may be a situation where there are several packages with
 // the same "nevra" in the system (broken installation?).
@@ -109,6 +111,62 @@ cli::ArgumentParser::NamedArg * create_option(
     return option;
 }
 
+
+inline std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
+    std::map<std::string, std::vector<std::string>> PATH_dir;
+    std::map<std::string, std::vector<std::string>> Duplicates;
+    const std::string PATH = getenv("PATH");
+
+    // parse PATH variable
+    for (const auto path : PATH | std::views::split(':')) {
+        PATH_dir.insert({path.data(), {}});
+    }
+
+    // populate file list
+    for (const auto& [dir, _] : PATH_dir) {
+        for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+            std::string path = entry.path().string();
+            std::size_t found = path.find_last_of("/\\");
+            PATH_dir[dir].push_back(path.substr(found + 1));
+        }
+    }
+
+    //generate vector with all files
+    std::vector<std::string> Total_vec;
+    std::set<std::string> Duplicate_commands;
+    for (const auto& [key, vec] : PATH_dir) {
+        //prealoocate memory
+        Total_vec.reserve(Total_vec.size() + vec.size());
+        Total_vec.insert( Total_vec.end(), vec.begin(), vec.end() );
+    }
+    std::sort(Total_vec.begin(), Total_vec.end());
+    //collapse vector into set
+    std::set<std::string> Total_set(std::make_move_iterator(Total_vec.begin()),
+                                    std::make_move_iterator(Total_vec.end()));
+    // generate duplicated programs
+    set_difference(Total_vec.begin(), Total_vec.end(),
+                   Total_set.begin(), Total_set.end(),
+                   std::inserter(Duplicate_commands, Duplicate_commands.begin()));
+    //quick return path
+    if (Duplicate_commands.empty()) { return Duplicates;}
+    else{
+        //populate map
+        for(const auto& item : Duplicate_commands) {
+            Duplicates.insert({item, {}});
+        }
+        //fill out map
+        for(const auto& [key, _] : Duplicates) {
+            //compare value to find ofending path
+            for(const auto& [innerkey, files] : PATH_dir) {
+                if(std::find(files.begin(), files.end(), key) != files.end()) {
+                    Duplicates[key].insert(Duplicates[key].end(), innerkey);
+                }
+            }
+        }
+    }
+
+    return Duplicates;
+}
 
 inline bool is_package_installonly(Header h) noexcept {
     rpmtd td = rpmtdNew();
