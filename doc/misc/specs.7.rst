@@ -161,14 +161,16 @@ Specifying File Provides
 If a ``spec`` starts with either ``/`` or ``*/``, it is considered as a potential file provide.
 
 
-Groups
+Comps
 ======
 
-``<group-spec>`` allows one to select (environment) groups a particular operation should work
-on. It is a case insensitive string (supporting globbing characters) that is
-matched against a group's ID, canonical name and name translated into the
+``<group-spec>``|``<environment-spec>`` allows one to select groups|environments a particular
+operation should work on. It is a case insensitive string (supporting globbing characters) that
+is matched against a group's|environment's ID, canonical name and name translated into the
 current ``LC_MESSAGES`` locale (if possible).
 
+Comps ``specs`` are prefixed by ``@`` for commands that also accept package ``specs``.
+For example see :manpage:`dnf5-install(8)`, :ref:`Install Command <install_command_ref-label>`.
 
 Modules
 =======
