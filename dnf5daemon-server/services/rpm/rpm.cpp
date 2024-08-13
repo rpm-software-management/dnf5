@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus.hpp"
 #include "package.hpp"
 
+#include <libdnf5/base/goal_elements.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -122,6 +123,16 @@ void Rpm::dbus_register() {
         {},
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::system_upgrade, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM,
+        "check_install",
+        "sa{sv}",
+        {"pkg_spec", "options"},
+        "aa{sv}",
+        {"packages"},  // inbound packages with {reason, name, epoch, version, release, evr, arch, install size, download size}
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Rpm::check_install, call, session.session_locale);
         });
 
     dbus_object->registerSignal(
@@ -674,5 +685,46 @@ sdbus::MethodReply Rpm::system_upgrade(sdbus::MethodCall & call) {
     }
 
     auto reply = call.createReply();
+    return reply;
+}
+
+sdbus::MethodReply Rpm::check_install(sdbus::MethodCall & call) {
+    auto base = session.get_base();
+    session.fill_sack();
+
+    // read options from dbus call
+    std::string pkg_spec;
+    call >> pkg_spec;
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+
+    dnfdaemon::KeyValueMapList out_packages;
+    libdnf5::Goal goal(*base);
+    libdnf5::GoalJobSettings settings;
+    goal.add_install(pkg_spec, settings);
+    auto transaction = goal.resolve();
+    if (transaction.get_problems() == libdnf5::GoalProblem::NO_PROBLEM) {
+        std::vector<std::string> pkg_attrs{
+            "name",
+            "epoch",
+            "version",
+            "release",
+            "arch",
+            "repo_id",
+            "download_size",
+            "install_size",
+            "evr",
+        };
+        for (auto & tspkg : transaction.get_transaction_packages()) {
+            if (transaction_item_action_is_inbound(tspkg.get_action())) {
+                auto pkgmap = package_to_map(tspkg.get_package(), pkg_attrs);
+                pkgmap["install_reason"] = transaction_item_reason_to_string(tspkg.get_reason());
+                out_packages.emplace_back(std::move(pkgmap));
+            }
+        }
+    }
+
+    auto reply = call.createReply();
+    reply << out_packages;
     return reply;
 }
