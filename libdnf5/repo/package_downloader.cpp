@@ -115,13 +115,7 @@ PackageDownloader::~PackageDownloader() = default;
 
 
 void PackageDownloader::add(const libdnf5::rpm::Package & package, void * user_data) {
-    auto default_path = std::filesystem::path(package.get_repo()->get_cachedir()) / "packages";
-    auto & destdir_option = p_impl->base->get_config().get_destdir_option();
-    if (destdir_option.empty()) {
-        add(package, default_path, user_data);
-    } else {
-        add(package, destdir_option.get_value(), user_data);
-    }
+    add(package, package.get_repo()->get_packages_download_dir(), user_data);
 }
 
 

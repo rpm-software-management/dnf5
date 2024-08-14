@@ -392,7 +392,7 @@ std::string Package::get_package_path() const {
             return get_location();
         }
         // Returns the path to the cached file.
-        auto dir = std::filesystem::path(repo->get_cachedir()) / "packages";
+        auto dir = repo->get_packages_download_dir();
         return dir / std::filesystem::path(get_location()).filename();
     } else {
         return "";

@@ -626,5 +626,13 @@ void Repo::mark_fresh() {
     p_impl->expired = false;
 }
 
+std::filesystem::path Repo::get_packages_download_dir() const {
+    auto destdir_option = p_impl->base->get_config().get_destdir_option();
+    if (destdir_option.empty()) {
+        return std::filesystem::path(get_cachedir()) / "packages";
+    } else {
+        return destdir_option.get_value();
+    }
+}
 
 }  // namespace libdnf5::repo
