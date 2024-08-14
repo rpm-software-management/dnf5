@@ -139,6 +139,8 @@ public:
     libdnf5::BaseWeakPtr get_base() const;
 
     /// For each enabled repository enable corresponding source repository.
+    /// When repo ID has suffix -rpm then it enables <ID>-source-rpms
+    /// otherwise it enables <ID>-source
     /// @since 5.0
     void enable_source_repos();
 
