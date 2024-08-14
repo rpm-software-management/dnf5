@@ -169,6 +169,15 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``False``.
 
+.. _destdir_options-label:
+
+``destdir``
+    :ref:`string <string-label>`
+
+    Redirect downloaded packages to provided directory.
+
+    Default: <package repository :ref:`cachedir <cachedir_options-label>`>/packages
+
 .. _group_package_types_options-label:
 
 ``group_package_types``
