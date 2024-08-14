@@ -189,10 +189,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``history_list_view``
 
-.. _destdir_options-label:
-
-``destdir``
-
 .. _comment_options-label:
 
 ``comment``
