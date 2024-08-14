@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/rpm/package.hpp"
 
+#include <filesystem>
 #include <memory>
 
 
@@ -371,6 +372,11 @@ private:
 
     // Add xml comps file at `path` to the repository.
     LIBDNF_LOCAL void add_xml_comps(const std::string & path);
+
+    /// Gets path to the directory where repository packages are downloaded.
+    /// Takes destdir config option into account.
+    LIBDNF_LOCAL std::filesystem::path get_packages_download_dir() const;
+
 
     std::unique_ptr<Impl> p_impl;
 };
