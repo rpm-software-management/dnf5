@@ -61,6 +61,11 @@ else()
   message (STATUS "Using fallback bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
 endif()
 
+find_package(toml11 REQUIRED)
+if (toml11_VERSION VERSION_LESS 4.0.0)
+    add_definitions(-DTOML11_COMPAT)
+endif()
+
 install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR})
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}" PATTERN ".gitkeep" EXCLUDE)
