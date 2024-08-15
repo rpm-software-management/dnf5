@@ -46,10 +46,17 @@ struct from<libdnf5::system::PackageState> {
 
 template <>
 struct into<libdnf5::system::PackageState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::PackageState & pkg_state) {
         toml::value res;
-
         res["reason"] = pkg_state.reason;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::PackageState & pkg_state) {
+        toml::basic_value<TC> res;
+        res["reason"] = pkg_state.reason;
+        res.as_table_fmt().fmt = toml::table_format::oneline;
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -72,10 +79,17 @@ struct from<libdnf5::system::NevraState> {
 
 template <>
 struct into<libdnf5::system::NevraState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::NevraState & nevra_state) {
         toml::value res;
-
         res["from_repo"] = nevra_state.from_repo;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::NevraState & nevra_state) {
+        toml::basic_value<TC> res;
+        res["from_repo"] = nevra_state.from_repo;
+        res.as_table_fmt().fmt = toml::table_format::oneline;
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -92,8 +106,16 @@ struct from<libdnf5::comps::PackageType> {
 
 template <>
 struct into<libdnf5::comps::PackageType> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::comps::PackageType & package_types) {
         return libdnf5::comps::package_types_to_strings(package_types);
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::comps::PackageType & package_types) {
+        toml::basic_value<TC> res = libdnf5::comps::package_types_to_strings(package_types);
+        res.as_array_fmt().fmt = toml::array_format::oneline;
+        return res;
+#endif  // #ifdef TOML11_COMPAT
     }
 };
 
@@ -117,12 +139,20 @@ struct from<libdnf5::system::GroupState> {
 
 template <>
 struct into<libdnf5::system::GroupState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::GroupState & group_state) {
         toml::value res;
-
-        res["userinstalled"] = group_state.userinstalled;
         res["package_types"] = group_state.package_types;
         res["packages"] = group_state.packages;
+        res["userinstalled"] = group_state.userinstalled;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::GroupState & group_state) {
+        toml::basic_value<TC> res;
+        res["package_types"] = group_state.package_types;
+        res["packages"] = group_state.packages;
+        res["userinstalled"] = group_state.userinstalled;
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -145,10 +175,17 @@ struct from<libdnf5::system::EnvironmentState> {
 
 template <>
 struct into<libdnf5::system::EnvironmentState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::EnvironmentState & environment_state) {
         toml::value res;
-
         res["groups"] = environment_state.groups;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::EnvironmentState & environment_state) {
+        toml::basic_value<TC> res;
+        res["groups"] = environment_state.groups;
+        res.as_table_fmt().fmt = toml::table_format::oneline;
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -172,12 +209,20 @@ struct from<libdnf5::system::ModuleState> {
 
 template <>
 struct into<libdnf5::system::ModuleState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::ModuleState & module_state) {
         toml::value res;
-
         res["enabled_stream"] = module_state.enabled_stream;
         res["state"] = libdnf5::module::module_status_to_string(module_state.status);
         res["installed_profiles"] = module_state.installed_profiles;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::ModuleState & module_state) {
+        toml::basic_value<TC> res;
+        res["enabled_stream"] = module_state.enabled_stream;
+        res["installed_profiles"] = module_state.installed_profiles;
+        res["state"] = libdnf5::module::module_status_to_string(module_state.status);
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -199,10 +244,17 @@ struct from<libdnf5::system::SystemState> {
 
 template <>
 struct into<libdnf5::system::SystemState> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::system::SystemState & system_state) {
         toml::value res;
-
         res["rpmdb_cookie"] = system_state.rpmdb_cookie;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::system::SystemState & system_state) {
+        toml::basic_value<TC> res;
+        res["rpmdb_cookie"] = system_state.rpmdb_cookie;
+        res.as_table_fmt().fmt = toml::table_format::oneline;
+#endif  // #ifdef TOML11_COMPAT
 
         return res;
     }
@@ -499,15 +551,27 @@ void State::set_rpmdb_cookie(const std::string & cookie) {
 }
 
 
+#ifdef TOML11_COMPAT
 template <typename T>
 static toml::value make_top_value(const std::string & key, const T & value) {
-    return toml::value({{key, value}, {"version", make_version()}});
+    return toml::value({{key, value}, { "version", make_version() }});
 }
 
 
 static std::string toml_format(const toml::value & value) {
     return toml::format<toml::discard_comments, std::map, std::vector>(value);
 }
+#else
+template <typename T>
+static toml::ordered_value make_top_value(const std::string & key, const T & value) {
+    return toml::ordered_value({{"version", make_version()}, {key, toml::ordered_value(value)}});
+}
+
+
+static std::string toml_format(const toml::ordered_value & value) {
+    return toml::format(value);
+}
+#endif  // #ifdef TOML11_COMPAT
 
 
 void State::save() {

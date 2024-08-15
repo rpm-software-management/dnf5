@@ -73,12 +73,15 @@ system = {rpmdb_cookie="foo"}
 )"""};
 
 
-// workaround, because of different behavior before toml 3.7.1
 static std::string trim(std::string str) {
+    // workaround, because of different behavior before toml 3.7.1
     str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](char c) { return c != '\n'; }));
     str.erase(
         std::unique(str.begin(), str.end(), [](char c1, char c2) { return c1 == '\n' && c2 == '\n'; }), str.end());
 
+    // workaround, because of different behavior before toml 4.0.0
+    // since 4.0.0 even oneline table format has all elements separated by spaces
+    str.erase(std::remove_if(str.begin(), str.end(), [](char c) { return c == ' '; }), str.end());
     return str;
 }
 
@@ -182,13 +185,13 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(trim(packages_contents), trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(trim(nevras_contents), trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(trim(groups_contents), trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
 #ifdef WITH_MODULEMD
-    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(trim(modules_contents), trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
 #endif
-    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf5::utils::fs::File(path / "system.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(trim(system_contents), trim(libdnf5::utils::fs::File(path / "system.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
@@ -207,7 +210,7 @@ void StateTest::test_state_write() {
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        packages_contents_after_remove, trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
+        trim(packages_contents_after_remove), trim(libdnf5::utils::fs::File(path / "packages.toml", "r").read()));
 
     const std::string nevras_contents_after_remove{R"""(version = "1.0"
 [nevras]
@@ -216,7 +219,7 @@ void StateTest::test_state_write() {
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        nevras_contents_after_remove, trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
+        trim(nevras_contents_after_remove), trim(libdnf5::utils::fs::File(path / "nevras.toml", "r").read()));
 
     const std::string groups_contents_after_remove{
         R"""(version = "1.0"
@@ -228,15 +231,32 @@ userinstalled = false
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        groups_contents_after_remove, trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
+        trim(groups_contents_after_remove), trim(libdnf5::utils::fs::File(path / "groups.toml", "r").read()));
 
 #ifdef WITH_MODULEMD
-    const std::string modules_contents_after_remove{R"""(version = "1.0"
+    // Before toml11-devel-4.0.0 the formatting was different
+    const std::string modules_contents_after_remove_compat{R"""(version = "1.0"
 [modules]
 module-2 = {enabled_stream="stream-2",installed_profiles=[],state="Disabled"}
 )"""};
 
-    CPPUNIT_ASSERT_EQUAL(
-        modules_contents_after_remove, trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read()));
+    const std::string modules_contents_after_remove{R"""(version = "1.0"
+[modules]
+[modules.module-2]
+enabled_stream = "stream-2"
+installed_profiles = []
+state = "Disabled"
+)"""};
+
+    const auto trimmed_read = trim(libdnf5::utils::fs::File(path / "modules.toml", "r").read());
+    if (trim(modules_contents_after_remove) != trimmed_read &&
+        trim(modules_contents_after_remove_compat) != trimmed_read) {
+        CPPUNIT_FAIL(fmt::format(
+            "Expected either (with toml11 > 4.0.0): {}\nor: {}\nFound: {}",
+            modules_contents_after_remove,
+            modules_contents_after_remove_compat,
+            trimmed_read));
+    }
+
 #endif
 }
