@@ -111,7 +111,8 @@ if globs are present in the ``<package-spec>``.
 
 ``<package-spec>`` matches NEVRAs the same way ``<package-name-spec>`` does,
 but in case matching NEVRAs fails, it attempts to match against provides and
-file provides of packages as well.
+file provides of packages as well. It also looks for ``<package-name-spec>``
+as file name, provided by packages, under ``/usr/bin`` and ``/usr/sbin``.
 
 You can specify globs as part of any of the five NEVRA components. You can also
 specify a glob pattern to match over multiple NEVRA components (in other words,
