@@ -16,8 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-.. TODO(jkolarik): Fix --disableexcludes references, the option is dropped now.
-
 .. _dnf5_conf-label:
 
 ##############################
@@ -741,6 +739,12 @@ configuration.
 
     Default: ``75``
 
+.. _disable_excludes_options-label:
+``disable_excludes``
+    :ref:`list <list-label>`
+
+    Used to disable packages filtering. It can include a list of repository IDs (globs allowed) for which repository-specific excludes are ignored. If it contains the special value ``main``, excludes from the main configuration files are bypassed. If it contains the special value ``*``, no excludes filtering is applied at all.
+
 .. _enablegroups_options-label:
 
 ``enablegroups``
@@ -758,7 +762,7 @@ configuration.
     Exclude packages of this repository, specified by a name or a glob and
     separated by a comma, from all operations.
 
-    Can be disabled using ``--disableexcludes`` command line switch.
+    Can be disabled using ``disable_excludes`` config option.
 
     Default: ``[]``.
 
@@ -788,7 +792,7 @@ configuration.
     so if you 'excludepkgs=*.i386' and 'includepkgs=python*' then only packages starting with python
     that do not have an i386 arch will be seen by DNF5 in this repo.
 
-    Can be disabled using ``--disableexcludes`` command line switch.
+    Can be disabled using ``disable_excludes`` config option.
 
     Default: ``[]``.
 

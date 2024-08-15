@@ -330,8 +330,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf*-aliases.7.*
 %{_mandir}/man7/dnf*-caching.7.*
 %{_mandir}/man7/dnf*-comps.7.*
-# TODO(jkolarik): filtering is not ready yet
-# %%{_mandir}/man7/dnf*-filtering.7.*
+%{_mandir}/man7/dnf*-filtering.7.*
 %{_mandir}/man7/dnf*-forcearch.7.*
 %{_mandir}/man7/dnf*-installroot.7.*
 # TODO(jkolarik): modularity is not ready yet
