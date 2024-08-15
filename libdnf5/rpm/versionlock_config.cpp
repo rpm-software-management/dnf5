@@ -55,8 +55,14 @@ struct from<libdnf5::rpm::VersionlockCondition> {
 
 template <>
 struct into<libdnf5::rpm::VersionlockCondition> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::rpm::VersionlockCondition & condition) {
         toml::value res;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::rpm::VersionlockCondition & condition) {
+        toml::basic_value<TC> res;
+#endif  // #ifdef TOML11_COMPAT
 
         res["key"] = condition.get_key_str();
         res["comparator"] = condition.get_comparator_str();
@@ -83,8 +89,14 @@ struct from<libdnf5::rpm::VersionlockPackage> {
 
 template <>
 struct into<libdnf5::rpm::VersionlockPackage> {
+#ifdef TOML11_COMPAT
     static toml::value into_toml(const libdnf5::rpm::VersionlockPackage & package) {
         toml::value res;
+#else
+    template <typename TC>
+    static toml::basic_value<TC> into_toml(const libdnf5::rpm::VersionlockPackage & package) {
+        toml::basic_value<TC> res;
+#endif  // #ifdef TOML11_COMPAT
 
         res["name"] = package.get_name();
         auto comment = package.get_comment();
@@ -245,14 +257,25 @@ VersionlockConfig::VersionlockConfig(const std::filesystem::path & path) : path(
     packages = toml::find_or<std::vector<VersionlockPackage>>(toml_value, "packages", {});
 }
 
+#ifdef TOML11_COMPAT
 template <typename T>
 static toml::value make_top_value(const std::string & key, const T & value) {
-    return toml::value({{key, value}, {"version", CONFIG_FILE_VERSION}});
+    return toml::value({{key, value}, { "version", CONFIG_FILE_VERSION }});
 }
 
 static std::string toml_format(const toml::value & value) {
     return toml::format<toml::discard_comments, std::map, std::vector>(value);
 }
+#else
+template <typename T>
+static toml::ordered_value make_top_value(const std::string & key, const T & value) {
+    return toml::ordered_value({{key, value}, {"version", CONFIG_FILE_VERSION}});
+}
+
+static std::string toml_format(const toml::ordered_value & value) {
+    return toml::format(value);
+}
+#endif  // #ifdef TOML11_COMPAT
 
 void VersionlockConfig::save() {
     std::error_code ecode;
