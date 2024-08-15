@@ -153,7 +153,7 @@ man_pages = [
     ('misc/aliases.7', 'dnf5-aliases', 'Aliases for command line arguments', AUTHORS, 7),
     ('misc/caching.7', 'dnf5-caching', 'Caching', AUTHORS, 7),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
-    # TODO(jkolarik): ('misc/filtering.7', 'dnf5-filtering', 'Packages Filtering', AUTHORS, 7),
+    ('misc/filtering.7', 'dnf5-filtering', 'Packages Filtering', AUTHORS, 7),
     ('misc/forcearch.7', 'dnf5-forcearch', 'Forcearch Parameter', AUTHORS, 7),
     ('misc/installroot.7', 'dnf5-installroot', 'Installroot Parameter', AUTHORS, 7),
     # TODO(jkolarik): ('misc/modularity.7', 'dnf5-modularity', 'Modularity Overview', AUTHORS, 7),

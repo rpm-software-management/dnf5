@@ -157,10 +157,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``config_file_age``
 
-.. _disable_excludes_options-label:
-
-``disable_excludes``
-
 .. _allow_downgrade_options-label:
 
 ``allow_downgrade``
