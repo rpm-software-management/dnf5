@@ -142,11 +142,11 @@ private:
     std::vector<std::pair<std::string, std::string>> get_conf(const std::string & key);
     std::vector<std::pair<std::string, std::string>> set_conf(const std::string & key, const std::string & value);
 
-    void process_plain_communication(int in_fd);
-    void process_command_output_line(std::string_view line);
+    void process_plain_communication(const CommandToRun & command, int in_fd);
+    void process_command_output_line(const CommandToRun & command, std::string_view line);
 
-    void process_json_communication(int in_fd, int out_fd);
-    void process_json_command(struct json_object * request, int out_fd);
+    void process_json_communication(const CommandToRun & command, int in_fd, int out_fd);
+    void process_json_command(const CommandToRun & command, struct json_object * request, int out_fd);
 
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
@@ -782,7 +782,7 @@ std::vector<std::pair<std::string, std::string>> Actions::set_conf(const std::st
 }
 
 
-void Actions::process_plain_communication(int in_fd) {
+void Actions::process_plain_communication(const CommandToRun & command, int in_fd) {
     char read_buf[256];
     std::string input;
     std::size_t num_tested_chars = 0;
@@ -797,7 +797,8 @@ void Actions::process_plain_communication(int in_fd) {
                 if (line_end_pos == std::string::npos) {
                     num_tested_chars = input_view.size();
                 } else {
-                    process_command_output_line(input_view.substr(line_begin_pos, line_end_pos - line_begin_pos));
+                    process_command_output_line(
+                        command, input_view.substr(line_begin_pos, line_end_pos - line_begin_pos));
                     num_tested_chars = line_begin_pos = line_end_pos + 1;
                 }
             } while (num_tested_chars < input_view.size());
@@ -808,7 +809,7 @@ void Actions::process_plain_communication(int in_fd) {
             line_begin_pos = 0;
         } else {
             if (!input.empty()) {
-                process_command_output_line(input);
+                process_command_output_line(command, input);
             }
             break;
         }
@@ -816,7 +817,7 @@ void Actions::process_plain_communication(int in_fd) {
 }
 
 
-void Actions::process_command_output_line(std::string_view line) {
+void Actions::process_command_output_line(const CommandToRun & command, std::string_view line) {
     auto & base = get_base();
 
     auto eq_pos = line.find('=');
@@ -831,7 +832,11 @@ void Actions::process_command_output_line(std::string_view line) {
     }
     if (eq_pos == std::string::npos) {
         base.get_logger()->error(
-            "Actions plugin: Syntax error: Missing equal sign (=) in command output line \"{}\"", std::string(line));
+            "Actions plugin: Syntax error from hook in file \"{}\" on line {}: Missing equal sign (=) in command "
+            "output line \"{}\"",
+            command.action.file_path.string(),
+            command.action.line_number,
+            std::string(line));
         return;
     }
     if (line.starts_with("conf.")) {
@@ -840,7 +845,11 @@ void Actions::process_command_output_line(std::string_view line) {
         try {
             set_conf(key, conf_value);
         } catch (const ConfigError & ex) {
-            base.get_logger()->error("Actions plugin: {}", ex.what());
+            base.get_logger()->error(
+                "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                command.action.file_path.string(),
+                command.action.line_number,
+                ex.what());
         }
     } else if (line.starts_with("var.")) {
         std::string var_name(line.substr(4, eq_pos - 4));
@@ -848,8 +857,10 @@ void Actions::process_command_output_line(std::string_view line) {
         base.get_vars()->set(var_name, var_value, libdnf5::Vars::Priority::PLUGIN);
     } else {
         base.get_logger()->error(
-            "Actions plugin: Command output line not in correct format (has to start with \"tmp.\" or \"conf.\" or "
-            "\"var.\"): \"{}\"",
+            "Actions plugin: Syntax error from hook in file \"{}\" on line {}: Command output line has to start with "
+            "\"tmp.\" or \"conf.\" or \"var.\": \"{}\"",
+            command.action.file_path.string(),
+            command.action.line_number,
             std::string(line));
     }
 }
@@ -865,7 +876,7 @@ class WriteError : public std::runtime_error {
 };
 
 
-void Actions::process_json_communication(int in_fd, int out_fd) {
+void Actions::process_json_communication(const CommandToRun & command, int in_fd, int out_fd) {
     auto & base = get_base();
     char read_buf[256];
     size_t read_offset = 0;
@@ -876,7 +887,11 @@ void Actions::process_json_communication(int in_fd, int out_fd) {
         auto ret = read(in_fd, read_buf + read_offset, sizeof(read_buf) - read_offset);
         if (ret < 0) {
             auto err = std::strerror(errno);
-            base.get_logger()->error("Actions plugin: Error reading from pipe: {}", err);
+            base.get_logger()->error(
+                "Actions plugin: Error reading from pipe from hook in file \"{}\" on line {}: {}",
+                command.action.file_path.string(),
+                command.action.line_number,
+                err);
             return;
         }
         auto len = static_cast<size_t>(ret) + read_offset;
@@ -890,7 +905,11 @@ void Actions::process_json_communication(int in_fd, int out_fd) {
                     continue;
                 }
                 if (read_buf[i] != '{') {
-                    base.get_logger()->error("Actions plugin: Syntax error: Missing starting '{{' char in json input");
+                    base.get_logger()->error(
+                        "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: Missing "
+                        "starting '{{' char",
+                        command.action.file_path.string(),
+                        command.action.line_number);
                     return;
                 }
                 if (i > 0) {
@@ -911,21 +930,33 @@ void Actions::process_json_communication(int in_fd, int out_fd) {
                 first_read = true;
 
                 try {
-                    process_json_command(jobj, out_fd);
+                    process_json_command(command, jobj, out_fd);
                 } catch (const WriteError & ex) {
-                    base.get_logger()->error("Actions plugin: {}", ex.what());
+                    base.get_logger()->error(
+                        "Actions plugin: Error in process request from hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        ex.what());
                     return;
                 }
             } else {
                 auto jerr = json_tokener_get_error(tok);
                 if (jerr != json_tokener_continue) {
-                    base.get_logger()->error("Actions plugin: Fatal json error");
+                    base.get_logger()->error(
+                        "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        json_tokener_error_desc(jerr));
                     return;
                 }
             }
         } else {
             if (!first_read) {
-                base.get_logger()->error("Actions plugin: Syntax error: Unterminated command in json input");
+                base.get_logger()->error(
+                    "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: Incomplete "
+                    "input",
+                    command.action.file_path.string(),
+                    command.action.line_number);
             }
             return;
         }
@@ -1071,7 +1102,7 @@ libdnf5::sack::QueryCmp cmp_operator_from_string(std::string_view str_operator) 
 }
 
 
-void Actions::process_json_command(struct json_object * request, int out_fd) {
+void Actions::process_json_command(const CommandToRun & command, struct json_object * request, int out_fd) {
     auto & base = get_base();
     auto logger = base.get_logger();
 
@@ -1110,7 +1141,11 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error("Actions plugin: {}", ex.what());
+                    logger->error(
+                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1432,7 +1467,11 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error("Actions plugin: {}", ex.what());
+                    logger->error(
+                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1472,7 +1511,11 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ReadOnlyVariableError & ex) {
-                    logger->error("Actions plugin: {}", ex.what());
+                    logger->error(
+                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1569,7 +1612,11 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error("Actions plugin: {}", ex.what());
+                    logger->error(
+                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1587,19 +1634,47 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
             auto level = get_string_view(jargs, "level");
             auto message = std::string(get_string_view(jargs, "message"));
             if (level == "CRITICAL") {
-                logger->critical("Actions plugin: {}", message);
+                logger->critical(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "ERROR") {
-                logger->error("Actions plugin: {}", message);
+                logger->error(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "WARNING") {
-                logger->warning("Actions plugin: {}", message);
+                logger->warning(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "NOTICE") {
-                logger->notice("Actions plugin: {}", message);
+                logger->notice(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "INFO") {
-                logger->info("Actions plugin: {}", message);
+                logger->info(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "DEBUG") {
-                logger->debug("Actions plugin: {}", message);
+                logger->debug(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else if (level == "TRACE") {
-                logger->trace("Actions plugin: {}", message);
+                logger->trace(
+                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
+                    command.action.file_path.string(),
+                    command.action.line_number,
+                    message);
             } else {
                 json_object_object_add_ex(
                     jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
@@ -1617,7 +1692,11 @@ void Actions::process_json_command(struct json_object * request, int out_fd) {
         }
         throw JsonRequestError(fmt::format("Unknown operation \"{}\"", op));
     } catch (const JsonRequestError & ex) {
-        logger->error("Actions plugin: {}", ex.what());
+        logger->error(
+            "Actions plugin: Hook in file \"{}\" on line {}: {}",
+            command.action.file_path.string(),
+            command.action.line_number,
+            ex.what());
         json_object_object_add_ex(jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
         json_object_object_add_ex(
             jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
@@ -1694,10 +1773,10 @@ void Actions::execute_command(CommandToRun & command) {
         switch (command.action.mode) {
             case Action::Mode::PLAIN:
                 close(pipe_to_child[PipeEnd::WRITE]);  // close immediately, don't send anything to child in PLAIN mode
-                process_plain_communication(pipe_out_from_child[PipeEnd::READ]);
+                process_plain_communication(command, pipe_out_from_child[PipeEnd::READ]);
                 break;
             case Action::Mode::JSON:
-                process_json_communication(pipe_out_from_child[PipeEnd::READ], pipe_to_child[PipeEnd::WRITE]);
+                process_json_communication(command, pipe_out_from_child[PipeEnd::READ], pipe_to_child[PipeEnd::WRITE]);
                 close(pipe_to_child[PipeEnd::WRITE]);
                 break;
         }
