@@ -60,6 +60,9 @@ target_link_libraries(libdnf5_static PRIVATE common)
 # link libraries and set pkg-config requires
 
 find_package(toml11 REQUIRED)
+if (toml11_VERSION VERSION_LESS 4.0.0)
+    add_definitions(-DTOML11_COMPAT)
+endif()
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
