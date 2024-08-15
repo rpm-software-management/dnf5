@@ -65,7 +65,7 @@ void TempFilesMemory::add_files(const std::vector<std::string> & paths) {
 
     // write new contents to a temporary file and then move the new file atomically
     auto temporary_path = full_memory_path.string() + ".temp";
-    auto new_data = toml::format(toml::value({{FILE_PATHS_TOML_KEY, files}}));
+    auto new_data = toml::format(toml::value(toml::table{{FILE_PATHS_TOML_KEY, files}}));
     // Although it's not clear for the documentation if it is possible,
     // it occurred, that the file was empty, which results in parsing error,
     // see https://github.com/rpm-software-management/dnf5/issues/1001
