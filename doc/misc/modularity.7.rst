@@ -104,18 +104,18 @@ Non-modular RPMs must remain unavailable and must never get on the system.
 
 This happens when:
 
-* user disables a repository via ``--disablerepo`` or uses ``--repoid``
+* user disables a repository via ``--disable-repo`` or uses ``--repo``
 * user removes a .repo file from disk
 * repository is not available and has ``skip_if_unavailable=true``
 
-DNF keeps copies of the latest modulemd for every active stream
+DNF5 keeps copies of the latest modulemd for every active stream
 and uses them if there's no modulemd available for the stream.
 This keeps package filtering working correctly.
 
 The copies are made any time a transaction is resolved and started.
-That includes RPM transactions as well as any ``dnf module <enable|disable|reset>`` operations.
+That includes RPM transactions as well as any ``dnf5 module <enable|disable|reset>`` operations.
 
-When the fail-safe data is used, dnf show such modules as part of @modulefailsafe repository.
+When the fail-safe data is used, DNF5 show such modules as part of @modulefailsafe repository.
 
 
 Orphaned modular packages
@@ -123,6 +123,6 @@ Orphaned modular packages
 
 All packages that are built as a part of a module have ``%{modularitylabel}`` RPM header set.
 If such package becomes part of RPM transaction and cannot be associated with any available
-modulemd, DNF prevents from getting it on the system (package is available, but cannot be
+modulemd, DNF5 prevents from getting it on the system (package is available, but cannot be
 installed, upgraded, etc.). Packages from Hotfix repositories or Commandline repository are not
 affected by Fail-safe mechanisms.

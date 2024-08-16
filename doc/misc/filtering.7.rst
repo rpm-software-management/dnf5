@@ -61,7 +61,7 @@ For details see :manpage:`dnf5-versionlock(8)`, :ref:`Versionlock command <versi
 Modular filtering
 =================
 
-Please see `the modularity documentation` for details on how Modular Filtering works.
+For details on how modular filtering works please see :manpage:`dnf5-modularity(7)`, :ref:`the modularity documentation <modularity_misc_ref-label>`.
 
 With modularity, only RPM packages from ``active`` module streams are included in the available package set. RPM packages from ``inactive`` module streams, as well as non-modular packages with the same name or provides as a package from an ``active`` module stream, are filtered out. Modular filtering is not applied to packages added from the command line, installed packages, or packages from repositories with ``module_hotfixes=true`` in their ``.repo`` file.
 
