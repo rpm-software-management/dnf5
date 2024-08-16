@@ -213,6 +213,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        system_upgrade:
+        @options: an array of key/value pairs to modify system_upgrade behavior
+
+        Prepare a transaction for upgrade to the new distribution release. The prepared transaction should be executed during reboot (see `offline` option of the `do_transaction` method of the `Goal` interface).
+        The method relies on the `releasever` option being correctly set to the new distribution release during the `open_session()` call.
+
+        Following @options are supported:
+
+            - mode: string (one of "distrosync", "upgrade", default is "distrosync")
+                By default the system_upgrade behaves like `dnf distro-sync`, always installing packages from the new release, even if they are older than the currently installed version. If set to "upgrade", packages from the new release are not installed if they are older than what is currently installed (behave like `dnf upgrade`).
+
+        Unknown options are ignored.
+    -->
+    <method name="system_upgrade">
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         transaction_elem_progress:
         @session_object_path: object path of the dnf5daemon session
         @nevra: full NEVRA of the package

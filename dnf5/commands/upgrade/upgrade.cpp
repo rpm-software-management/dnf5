@@ -53,7 +53,7 @@ void UpgradeCommand::set_argument_parser() {
     cmd.register_named_arg(minimal_opt);
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_description("List of package specs to upgrade");
+    keys->set_description("List of [<package-spec>|@<group-spec>|@<environment-spec>] to upgrade");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {

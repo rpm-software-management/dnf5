@@ -95,6 +95,8 @@ public:
 
     // messages
     void add_message(MessageType type, const std::string & message) { messages.emplace_back(type, message); }
+    /// remove the last message
+    void pop_message();
     const std::vector<Message> & get_messages() const noexcept { return messages; }
 
     // auto-finish feature; turn off if you want to handle state manually

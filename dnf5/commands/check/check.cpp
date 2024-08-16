@@ -141,8 +141,8 @@ inline std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
     }
     std::sort(Total_vec.begin(), Total_vec.end());
     //collapse vector into set
-    std::set<std::string> Total_set(std::make_move_iterator(Total_vec.begin()),
-                                    std::make_move_iterator(Total_vec.end()));
+    std::unordered_set<std::string> Total_set{std::make_move_iterator(Total_vec.begin()),
+                                    std::make_move_iterator(Total_vec.end())};
     // generate duplicated programs
     set_difference(Total_vec.begin(), Total_vec.end(),
                    Total_set.begin(), Total_set.end(),
@@ -357,6 +357,16 @@ void CheckCommand::run() {
             }
         }
     }
+    auto const PATH_conflict = has_duplicate_in_PATH();
+    for(const auto& [file, paths] : PATH_conflict) {
+        std::stringstream ss;
+        for(auto it = paths.begin(); it != paths.end(); it++) {
+            ss << *it << "\n";
+        }
+        problems.[file].insert(Problem {
+            .type = ProblemType::PATH_CONFLICT, .nevra = "", .file_or_provide = std::string(ss.str())
+        })
+    }
 
     rpmtsFree(ts);
 
@@ -386,6 +396,8 @@ void CheckCommand::run() {
                     case ProblemType::DUPLICATE:
                         std::cout << fmt::format(" duplicate with \"{}\"", problem.nevra) << std::endl;
                         break;
+                    case ProblemType::PATH_CONFLICT:
+                        std::cout << fmt::format("The executable \"{}\"  is found in multiple paths: \n {} ", std::string(package_id), problem.file_or_provide) << std::endl;
                 }
             }
         }

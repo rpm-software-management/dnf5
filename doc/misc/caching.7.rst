@@ -69,7 +69,7 @@ Following directory structure illustrates a typical DNF5 cache directory:
             └── updates.solv
 
 The default root cache directory is ``/var/cache/libdnf5``, but when DNF5 runs as another user,
-it uses the cache from ``/home/$USER/.cache/libdnf5`` with the same structure. The root cache
+it uses the cache from ``~/.cache/libdnf5`` with the same structure. The root cache
 directory can be redefined using the ``system_cachedir`` configuration option, and the user
 cachedir with the ``cachedir`` option.
 

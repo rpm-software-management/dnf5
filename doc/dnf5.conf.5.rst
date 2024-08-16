@@ -99,7 +99,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Has a reasonable root-writable default depending on the distribution. DNF5
     needs to be able to create files and directories at this location.
 
-    Default: ``/var/cache/libdnf5``.
+    Regular user default: ``~/.cache/libdnf5``.
+
+    For superuser the value is overwritten by :ref:`system_cachedir <_system_cachedir_options-label>` option.
 
 .. _cacheonly_options-label:
 
@@ -167,6 +169,15 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``False``.
 
+.. _destdir_options-label:
+
+``destdir``
+    :ref:`string <string-label>`
+
+    Redirect downloaded packages to provided directory.
+
+    Default: <package repository :ref:`cachedir <cachedir_options-label>`>/packages
+
 .. _group_package_types_options-label:
 
 ``group_package_types``
@@ -174,7 +185,8 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     List of the following: ``optional``, ``default``, ``mandatory`` or ``conditional``.
 
-    Tells DNF5 which type of packages in groups will be installed when 'group install' is called.
+    Tells DNF5 which type of packages in groups will be installed when 'group install <group-spec>'
+    or 'install @<group-spec>' is called.
 
     Default: ``default, mandatory, conditional``.
 
@@ -257,7 +269,9 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Directory where the log files will be stored.
 
-    Default: ``/var/log``.
+    Regular user default: ``~/.local/state``.
+
+    Superuser default: ``/var/log``.
 
 .. _log_rotate_options-label:
 
@@ -412,6 +426,18 @@ repository configuration file should aside from repo ID consists of baseurl, met
     along with \-\ :ref:`-installroot <installroot_options-label>` option.
 
     Default: TODO add default
+
+.. _system_cachedir_options-label:
+
+``system_cachedir``
+
+    :ref:`string <string-label>`
+
+    For superuser overwrites the :ref:`cachedir <_cachedir_options-label>` option value.
+
+    Allows to differentiate user and superuser cachedir.
+
+    Default: ``/var/cache/libdnf5``.
 
 .. _system_state_options-label:
 
@@ -570,6 +596,15 @@ Repo Options
 
     Default: ``True``.
 
+
+Source and debuginfo repository names
+=====================================
+
+For a given repository with an identifier in the form "<ID>-rpms", its corresponding source repository is expected to have an identifier in the form "<ID>-source-rpms" and debuginfo repository an identifier in the form "<ID>-debug-rpms". Otherwise (if the repository identifier doesn't have the "-rpms" suffix), the source repository is expected to have an identifier in the form "<ID>-source" and debuginfo repository an identifier in the form "<ID>-debuginfo".
+
+For example, for repository "fedora", the source repository is "fedora-source" and debuginfo repository is "fedora-debuginfo". For repository "fedora-rpms", the source repository is "fedora-source-rpms" and debuginfo repository is "fedora-debug-rpms".
+
+
 Repo Variables
 ==============
 
@@ -636,23 +671,50 @@ configuration.
 ``countme``
     :ref:`boolean <boolean-label>`
 
-    Determines whether a special flag should be added to a single, randomly
-    chosen metalink/mirrorlist query each week.
-    This allows the repository owner to estimate the number of systems
-    consuming it, by counting such queries over a week's time, which is much
-    more accurate than just counting unique IP addresses (which is subject to
-    both overcounting and undercounting due to short DHCP leases and NAT,
-    respectively).
+    When enabled, one (and only one) HTTP GET request for the metalink file
+    will be selected at random every week to carry a special URL flag.
 
-    The flag is a simple "countme=N" parameter appended to the metalink and
-    mirrorlist URL, where N is an integer representing the "longevity" bucket
-    this system belongs to.
-    The following 4 buckets are defined, based on how many full weeks have
-    passed since the beginning of the week when this system was installed: 1 =
-    first week, 2 = first month (2-4 weeks), 3 = six months (5-24 weeks) and 4
-    = more than six months (> 24 weeks).
-    This information is meant to help distinguish short-lived installs from
-    long-term ones, and to gather other statistics about system lifecycle.
+    This flag allows the repository provider to estimate the number of systems
+    consuming the repository, by counting such requests over a week's time.
+    This method is more accurate than just counting unique IP addresses (which
+    is subject to both overcounting and undercounting due to short DHCP leases
+    and NAT, respectively).
+
+    This is *not* an out-of-band HTTP request made for this purpose alone.
+    Only requests initiated by DNF during normal operation, such as to check
+    for metadata updates, can get this flag.
+
+    The flag is a simple "countme=N" parameter appended to the metalink URL
+    where N is an integer representing the age "bucket" this system belongs to.
+    Four buckets are defined, based on how many full weeks have passed since
+    the installation of a system:
+
+    ======  ===============================
+    bucket  system age
+    ======  ===============================
+    1       first week
+    2       first month (2 - 4 weeks)
+    3       first 6 months (5 - 24 weeks)
+    4       more than 6 months (> 24 weeks)
+    ======  ===============================
+
+    This number is meant to help distinguish short-lived (throwaway) machines
+    from long-term installs and get a better picture of how systems are used
+    over time.
+
+    To determine a system's installation time ("epoch"), the ``machine-id(5)``
+    file's modification time is used as the single source of truth. This file
+    is semantically tied to the system's lifetime as it's typically populated
+    at installation time or during the first boot by an installer tool or init
+    system (such as ``systemd(1)``), respectively, and remains unchanged.
+
+    If the file is empty or missing (such as in containers), the time of the
+    very first request made using the expanded metalink URL (i.e. with any
+    repository variables such as ``$releasever`` substituted) that carried the
+    flag is declared as the epoch.
+
+    If no metalink URL is defined for this repository but a mirrorlist URL is,
+    the latter is used for this purpose instead.
 
     Default: ``False``.
 

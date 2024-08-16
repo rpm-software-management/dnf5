@@ -386,7 +386,7 @@ Changes to individual options
 .. _cachedir_option_conf_changes_ref-label:
 
 ``cachedir``
-  * The default user cached dir is now at ``/home/$USER/.cache/libdnf5``.
+  * The default user cached dir is now at ``~/.cache/libdnf5``.
   * The default root cache directory, configured by the ``system_cachedir`` option, is now ``/var/cache/libdnf5``.
   * Users no longer access the root's cache directly; instead, metadata is copied to the user's location if it's empty or invalid.
   * For additional information, refer to the :ref:`Caching <caching_misc_ref-label>` man page.

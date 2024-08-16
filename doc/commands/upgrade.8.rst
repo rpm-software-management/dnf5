@@ -25,14 +25,19 @@
 Synopsis
 ========
 
-``dnf5 upgrade [options] [<package-spec>...]``
+``dnf5 upgrade [options] [<package-spec>|@<group-spec>|@<environment-spec>...]``
 
 
 Description
 ===========
 
-The ``upgrade`` command in ``DNF5`` is used for upgrading installed packages to the
-newer available version.
+The ``upgrade`` command in ``DNF5`` is used for upgrading installed packages, groups or
+environments to newer available version.
+
+Since groups and environments are not versioned the upgrade basically means a synchronization
+with the currently available definition. In addition group upgrade also upgrades all packages
+the group contains and environment upgrade also upgrades all groups the environment contains.
+
 
 
 Options

@@ -108,6 +108,13 @@ Provides:       dnf5-command(versionlock)
 %bcond_with    performance_tests
 %bcond_with    dnf5daemon_tests
 
+# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
+%if 0%{?rhel} && 0%{?rhel} < 10
+%bcond_with    focus_new
+%else
+%bcond_without focus_new
+%endif
+
 %if %{with clang}
     %global toolchain clang
 %endif
@@ -116,7 +123,11 @@ Provides:       dnf5-command(versionlock)
 
 %global libmodulemd_version 2.5.0
 %global librepo_version 1.18.0
-%global libsolv_version 0.7.25
+%if %{with focus_new}
+    %global libsolv_version 0.7.30
+%else
+    %global libsolv_version 0.7.25
+%endif
 %global sqlite_version 3.35.0
 %global swig_version 4
 %global zchunk_version 0.9.11
@@ -770,6 +781,8 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %cmake \
     -DPACKAGE_VERSION=%{version} \
     -DPERL_INSTALLDIRS=vendor \
+    \
+    -DENABLE_SOLV_FOCUSNEW=%{?with_focus_new:ON}%{!?with_focus_new:OFF} \
     \
     -DWITH_DNF5DAEMON_CLIENT=%{?with_dnf5daemon_client:ON}%{!?with_dnf5daemon_client:OFF} \
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
