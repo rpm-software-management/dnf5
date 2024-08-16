@@ -126,7 +126,7 @@ inline std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
     for (const auto& [dir, _] : PATH_dir) {
         for (const auto& entry : std::filesystem::directory_iterator(dir)) {
             std::string path = entry.path().string();
-            std::size_t found = path.find_last_of("/\\");
+            std::size_t found = path.find_last_of("/");
             PATH_dir[dir].push_back(path.substr(found + 1));
         }
     }
