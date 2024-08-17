@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "check.hpp"
 
+#include "libdnf5/rpm/package_query.hpp"
+
 #include <fmt/format.h>
 #include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -31,15 +33,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmte.h>
 #include <rpm/rpmts.h>
 
+#include <cstddef>
+#include <filesystem>
 #include <iostream>
 #include <map>
+#include <ranges>
 #include <set>
 #include <string>
 #include <type_traits>
 #include <vector>
-#include <ranges>
-#include <filesystem>
-#include <cstddef>
 namespace dnf5 {
 
 using namespace libdnf5;
@@ -112,7 +114,7 @@ cli::ArgumentParser::NamedArg * create_option(
 }
 
 
-inline std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
+std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
     std::map<std::string, std::vector<std::string>> PATH_dir;
     std::map<std::string, std::vector<std::string>> Duplicates;
     const std::string PATH = getenv("PATH");
@@ -126,7 +128,7 @@ inline std::map<std::string, std::vector<std::string>> has_duplicate_in_PATH() {
     for (const auto& [dir, _] : PATH_dir) {
         for (const auto& entry : std::filesystem::directory_iterator(dir)) {
             std::string path = entry.path().string();
-            std::size_t found = path.find_last_of("/");
+            std::size_t found = path.find_last_of('/');
             PATH_dir[dir].push_back(path.substr(found + 1));
         }
     }
@@ -358,13 +360,25 @@ void CheckCommand::run() {
         }
     }
     auto const PATH_conflict = has_duplicate_in_PATH();
+    libdnf5::Base base;
+    base.get_config().get_plugins_option().set(false);
+    base.load_config();
+    base.setup();
     for(const auto& [file, paths] : PATH_conflict) {
-        std::stringstream ss;
-        for(auto it = paths.begin(); it != paths.end(); it++) {
-            ss << *it << "\n";
+        std::string ss(file + "\n");
+        libdnf5::rpm::PackageQuery query(base);
+        query.filter_file(file);
+        std::string nevra;
+
+        for(const auto & pkg : query) {
+            nevra = std::string(pkg.get_full_nevra());
+            break;
         }
-        problems.[file].insert(Problem {
-            .type = ProblemType::PATH_CONFLICT, .nevra = "", .file_or_provide = std::string(ss.str())
+        for(const auto & it : paths) {
+            ss.append(it + "\n");
+        }
+        problems.[PkgId(nevra)].insert(Problem {
+            .type = ProblemType::PATH_CONFLICT, .nevra = nevra, .file_or_provide = ss
         })
     }
 
@@ -397,7 +411,12 @@ void CheckCommand::run() {
                         std::cout << fmt::format(" duplicate with \"{}\"", problem.nevra) << std::endl;
                         break;
                     case ProblemType::PATH_CONFLICT:
-                        std::cout << fmt::format("The executable \"{}\"  is found in multiple paths: \n {} ", std::string(package_id), problem.file_or_provide) << std::endl;
+                        //unpack embeded package name
+                        auto name_len = problem.file_or_provide.find("\n");
+                        auto executable  = problem.file_or_provide.substr(0, name_len);
+                        auto paths = problem.file_or_provide.erase(0, name_len + 1);
+
+                        std::cout << fmt::format("The package \"{}\" with the executable \"{}\"  is found in multiple paths: \n {} ", problem.nevra , executable, paths) << std::endl;
                 }
             }
         }
