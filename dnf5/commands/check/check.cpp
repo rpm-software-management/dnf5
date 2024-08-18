@@ -377,7 +377,7 @@ void CheckCommand::run() {
         for(const auto & it : paths) {
             ss.append(it + "\n");
         }
-        problems.[PkgId(nevra)].insert(Problem {
+        problems[PkgId(nevra)].insert(Problem {
             .type = ProblemType::PATH_CONFLICT, .nevra = nevra, .file_or_provide = ss
         })
     }
