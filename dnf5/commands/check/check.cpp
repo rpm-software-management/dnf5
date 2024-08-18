@@ -379,7 +379,7 @@ void CheckCommand::run() {
         }
         problems[PkgId(nevra)].insert(Problem {
             .type = ProblemType::PATH_CONFLICT, .nevra = nevra, .file_or_provide = ss
-        })
+        });
     }
 
     rpmtsFree(ts);
@@ -414,7 +414,8 @@ void CheckCommand::run() {
                         //unpack embeded package name
                         auto name_len = problem.file_or_provide.find("\n");
                         auto executable  = problem.file_or_provide.substr(0, name_len);
-                        auto paths = problem.file_or_provide.erase(0, name_len + 1);
+                        auto paths = problem.file_or_provide;
+                        paths.erase(0, name_len + 1);
 
                         std::cout << fmt::format("The package \"{}\" with the executable \"{}\"  is found in multiple paths: \n {} ", problem.nevra , executable, paths) << std::endl;
                 }
