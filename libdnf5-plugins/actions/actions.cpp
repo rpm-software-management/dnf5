@@ -73,6 +73,19 @@ struct CommandToRun {
 };
 
 
+// Enum of supported hooks
+enum class Hooks {
+    PRE_BASE_SETUP,
+    POST_BASE_SETUP,
+    REPOS_CONFIGURED,
+    REPOS_LOADED,
+    PRE_ADD_CMDLINE_PACKAGES,
+    POST_ADD_CMDLINE_PACKAGES,
+    PRE_TRANS,
+    POST_TRANS
+};
+
+
 class Actions final : public plugin::IPlugin {
 public:
     Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
@@ -97,29 +110,45 @@ public:
 
     void init() override { parse_action_files(); }
 
-    void pre_base_setup() override { on_hook(pre_base_setup_actions); }
+    void pre_base_setup() override {
+        current_hook = Hooks::PRE_BASE_SETUP;
+        on_hook(pre_base_setup_actions);
+    }
 
-    void post_base_setup() override { on_hook(post_base_setup_actions); }
+    void post_base_setup() override {
+        current_hook = Hooks::POST_BASE_SETUP;
+        on_hook(post_base_setup_actions);
+    }
 
-    void repos_configured() override { on_hook(repos_configured_actions); }
+    void repos_configured() override {
+        current_hook = Hooks::REPOS_CONFIGURED;
+        on_hook(repos_configured_actions);
+    }
 
-    void repos_loaded() override { on_hook(repos_loaded_actions); }
+    void repos_loaded() override {
+        current_hook = Hooks::REPOS_LOADED;
+        on_hook(repos_loaded_actions);
+    }
 
     void pre_add_cmdline_packages(const std::vector<std::string> & paths) override {
+        current_hook = Hooks::PRE_ADD_CMDLINE_PACKAGES;
         this->cmdline_packages_paths = &paths;
         on_hook(pre_add_cmdline_packages_actions);
     }
 
     void post_add_cmdline_packages() override {
+        current_hook = Hooks::POST_ADD_CMDLINE_PACKAGES;
         this->cmdline_packages_paths = nullptr;
         on_hook(post_add_cmdline_packages_actions);
     }
 
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
+        current_hook = Hooks::PRE_TRANS;
         on_transaction(transaction, pre_trans_actions);
     }
 
     void post_transaction(const libdnf5::base::Transaction & transaction) override {
+        current_hook = Hooks::POST_TRANS;
         on_transaction(transaction, post_trans_actions);
     }
 
@@ -157,6 +186,9 @@ private:
     std::vector<Action> post_add_cmdline_packages_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
+
+    // Currently serviced hook
+    Hooks current_hook;
 
     // During `pre_add_cmdline_packages` hook it points to paths to commandline packages. Otherwise it is nullptr.
     const std::vector<std::string> * cmdline_packages_paths = nullptr;
@@ -562,16 +594,7 @@ void Actions::parse_action_files() {
                 continue;
             }
 
-            enum class Hooks {
-                PRE_BASE_SETUP,
-                POST_BASE_SETUP,
-                REPOS_CONFIGURED,
-                REPOS_LOADED,
-                PRE_ADD_CMDLINE_PACKAGES,
-                POST_ADD_CMDLINE_PACKAGES,
-                PRE_TRANS,
-                POST_TRANS
-            } hook;
+            Hooks hook;
             if (line.starts_with("pre_base_setup:")) {
                 hook = Hooks::PRE_BASE_SETUP;
             } else if (line.starts_with("post_base_setup:")) {
@@ -1203,6 +1226,12 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                 json_object_object_add_ex(
                     jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
             } else if (domain == "packages" || domain == "trans_packages") {
+                if (domain == "trans_packages" && current_hook != Hooks::PRE_TRANS &&
+                    current_hook != Hooks::POST_TRANS) {
+                    throw JsonRequestError(
+                        "Domain \"trans_packages\" used outside the hooks \"pre_transaction\" and "
+                        "\"post_transaction\"");
+                }
                 auto * jargs = get_object(request, "args");
 
                 const std::pair<
@@ -1263,6 +1292,15 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                 auto * joutput = get_array(jargs, "output");
                 for (size_t idx = 0; idx < json_object_array_length(joutput); ++idx) {
                     const auto requested_attr = get_string_view(json_object_array_get_idx(joutput, idx));
+                    if (domain != "trans_packages") {
+                        if (requested_attr == "direction") {
+                            throw JsonRequestError(
+                                "Requested output \"direction\" outside the domain \"trans_packages\"");
+
+                        } else if (requested_attr == "action") {
+                            throw JsonRequestError("Requested output \"action\" outside the domain \"trans_packages\"");
+                        }
+                    }
                     for (std::size_t idx = 0; idx < sizeof(attrs_list) / sizeof(attrs_list[0]); ++idx) {
                         if (attrs_list[idx].first == requested_attr) {
                             requested_attrs |= 1 << idx;
@@ -1304,6 +1342,10 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                         auto * jfilter = json_object_array_get_idx(jfilters, idx);
                         auto filter_key = get_string_view(jfilter, "key");
                         if (filter_key == "direction") {
+                            if (domain != "trans_packages") {
+                                throw JsonRequestError(
+                                    "Used \"direction\" filter outside the \"trans_packages\" domain");
+                            }
                             auto direction = get_string_view(jfilter, "value");
                             if (direction == "IN") {
                                 edirection = Action::Direction::IN;
@@ -1399,17 +1441,19 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                 json_object_object_add_ex(
                     jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
             } else if (domain == "cmdline_packages_paths") {
+                if (current_hook != Hooks::PRE_ADD_CMDLINE_PACKAGES) {
+                    throw JsonRequestError(
+                        "Domain \"cmdline_packages_paths\" used outside the \"pre_add_cmdline_packages\" hook.");
+                }
                 auto * jargs = get_object(request, "args");
 
                 auto * jpaths = json_object_new_array();
                 json_object_object_add_ex(jreturn, "cmdline_packages_paths", jpaths, JSON_C_OBJECT_ADD_CONSTANT_KEY);
 
-                const std::vector<std::string> empty_paths;
-                const auto & in_paths = cmdline_packages_paths ? *cmdline_packages_paths : empty_paths;
                 auto * jfilters = get_any_object_or_null(jargs, "filters");
                 if (jfilters) {
                     get_array(jargs, "filters");  // check, must be array
-                    for (const auto & path : in_paths) {
+                    for (const auto & path : *cmdline_packages_paths) {
                         bool match_all_filters = true;
                         for (size_t idx = 0; idx < json_object_array_length(jfilters); ++idx) {
                             auto * jfilter = json_object_array_get_idx(jfilters, idx);
@@ -1433,7 +1477,7 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                         }
                     }
                 } else {
-                    for (const auto & path : in_paths) {
+                    for (const auto & path : *cmdline_packages_paths) {
                         json_object_array_add(jpaths, json_object_new_string(path.c_str()));
                     }
                 }
@@ -1553,6 +1597,10 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
             json_object_object_add_ex(
                 jresult, "domain", json_object_new_string(domain.data()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
             if (domain == "repoconf") {
+                if (current_hook != Hooks::REPOS_CONFIGURED) {
+                    throw JsonRequestError(
+                        "Injecting a new repository configuration outside the \"repos_configured\" hook");
+                }
                 auto * jargs = get_object(request, "args");
                 auto * jkeys_val = get_array(jargs, "keys_val");
 
