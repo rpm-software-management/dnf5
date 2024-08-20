@@ -333,7 +333,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf*-filtering.7.*
 %{_mandir}/man7/dnf*-forcearch.7.*
 %{_mandir}/man7/dnf*-installroot.7.*
- %%{_mandir}/man7/dnf*-modularity.7.*
+%{_mandir}/man7/dnf*-modularity.7.*
 %{_mandir}/man7/dnf*-specs.7.*
 %{_mandir}/man5/dnf*.conf.5.*
 %{_mandir}/man5/dnf*.conf-todo.5.*
