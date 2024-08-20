@@ -62,7 +62,7 @@ void HistoryStoreCommand::run() {
     trans_file_path /= TRANSACTION_JSON;
 
     if (std::filesystem::exists(trans_file_path)) {
-        std::cout << libdnf5::utils::sformat(
+        std::cerr << libdnf5::utils::sformat(
             _("File \"{}\" already exists, it will be overwritten.\n"), trans_file_path.string());
         // ask user for the file overwrite confirmation
         if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().get_base().get_config())) {

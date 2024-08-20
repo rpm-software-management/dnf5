@@ -70,18 +70,18 @@ public:
             return false;
         }
 
-        std::cout << "Importing PGP key 0x" << key_info.get_short_key_id() << ":\n";
+        std::cerr << "Importing PGP key 0x" << key_info.get_short_key_id() << ":\n";
         for (auto & user_id : key_info.get_user_ids()) {
-            std::cout << " Userid     : \"" << user_id << "\"\n";
+            std::cerr << " Userid     : \"" << user_id << "\"\n";
         }
-        std::cout << " Fingerprint: " << key_info.get_fingerprint() << "\n";
-        std::cout << " From       : " << key_info.get_url() << std::endl;
+        std::cerr << " Fingerprint: " << key_info.get_fingerprint() << "\n";
+        std::cerr << " From       : " << key_info.get_url() << std::endl;
 
         return libdnf5::cli::utils::userconfirm::userconfirm(*config);
     }
 
     void repokey_imported([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
-        std::cout << _("The key was successfully imported.") << std::endl;
+        std::cerr << _("The key was successfully imported.") << std::endl;
     }
 
 private:
@@ -252,7 +252,7 @@ void Context::Impl::apply_repository_setopts() {
                 repo->get_config().opt_binds().at(key).new_string(
                     libdnf5::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
-                std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
+                std::cerr << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
             }
         }
     }
@@ -331,7 +331,7 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     auto & offline_data = state.get_data();
     if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
-        std::cout << "There is already an offline transaction queued, initiated by the following command:" << std::endl
+        std::cerr << "There is already an offline transaction queued, initiated by the following command:" << std::endl
                   << "\t" << offline_data.get_cmd_line() << std::endl
                   << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
@@ -412,7 +412,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         constexpr const char * comps_in_trans_dir{"./comps"};
         auto comps_location = transaction_store_path / comps_in_trans_dir;
         if (std::filesystem::exists(transaction_location)) {
-            std::cout << libdnf5::utils::sformat(
+            std::cerr << libdnf5::utils::sformat(
                 _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
                 transaction_store_path.string());
             if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
