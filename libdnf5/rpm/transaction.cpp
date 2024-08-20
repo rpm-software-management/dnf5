@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf5/logger/log_router.hpp>
 #include <rpm/rpmbuild.h>
 #include <rpm/rpmdb.h>
 #include <rpm/rpmlib.h>
@@ -36,9 +37,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmtag.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
+#include <cstring>
+#include <exception>
 #include <map>
-
+#include <mutex>
+#include <string_view>
+#include <thread>
 
 namespace libdnf5::rpm {
 
@@ -198,6 +204,41 @@ void Transaction::fill(const base::Transaction & transaction) {
     };
 }
 
+void Transaction::process_scriptlets_output(int fd, Transaction * transaction) {
+    auto logger = transaction->base->get_logger().get();
+    try {
+        char buf[512];
+        do {
+            auto len = read(fd, buf, sizeof(buf));
+            if (len > 0) {
+                std::string_view str(buf, static_cast<size_t>(len));
+                {
+                    std::lock_guard<std::mutex> lock(transaction->last_script_output_mutex);
+                    transaction->last_script_output.append(str);
+                }
+                std::string_view::size_type start = 0;
+                do {
+                    auto end = str.find('\n', start);
+                    logger->info("[scriptlet] {}", str.substr(start, end - start));
+                    if (end == std::string_view::npos) {
+                        break;
+                    }
+                    start = end + 1;
+                } while (start < str.size());
+            } else {
+                if (len == -1) {
+                    logger->error("Transaction::Run: Cannot read scriptlet output from pipe: {}", std::strerror(errno));
+                }
+                break;
+            }
+        } while (true);
+    } catch (const std::exception & ex) {
+        // The thread must not throw exceptions.
+        logger->error("Transaction::Run: Exception while processing scriptlet output: {}", ex.what());
+    }
+    close(fd);
+}
+
 int Transaction::run() {
     rpmprobFilterFlags ignore_set = RPMPROB_FILTER_NONE;
     if (downgrade_requested) {
@@ -205,6 +246,25 @@ int Transaction::run() {
     }
     if (base->get_config().get_ignorearch_option().get_value()) {
         ignore_set |= RPMPROB_FILTER_IGNOREARCH;
+    }
+    // do not process the scriptlets output for test transactions
+    bool catch_scriptlet_output = (get_flags() & RPMTRANS_FLAG_TEST) != RPMTRANS_FLAG_TEST;
+    auto logger = base->get_logger().get();
+    int pipe_out_from_scriptlets[2];
+    std::thread thread_processes_scriptlets_output;
+    if (catch_scriptlet_output) {
+        if (pipe(pipe_out_from_scriptlets) == -1) {
+            logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));
+            return -1;
+        }
+
+        // This thread processes the output of RPM scriptlets.
+        thread_processes_scriptlets_output = std::thread(process_scriptlets_output, pipe_out_from_scriptlets[0], this);
+
+        // Set file descriptor for output of scriptlets in transaction.
+        set_script_out_fd(pipe_out_from_scriptlets[1]);
+        // set_script_out_fd() copies the file descriptor using dup(). Closing the original fd.
+        close(pipe_out_from_scriptlets[1]);
     }
     rpmtsSetNotifyStyle(ts, 1);
     rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
@@ -219,6 +279,12 @@ int Transaction::run() {
         callbacks->after_complete(rc == 0);
     }
     rpmtsSetNotifyCallback(ts, nullptr, nullptr);
+
+    if (catch_scriptlet_output) {
+        // Reset/close file descriptor for output of RPM scriptlets. Required to end thread_processes_scriptlets_output.
+        set_script_out_fd(-1);
+        thread_processes_scriptlets_output.join();
+    }
 
     return rc;
 }

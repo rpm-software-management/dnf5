@@ -342,6 +342,10 @@ private:
     bool downgrade_requested{false};
     std::vector<TransactionItem> transaction_items;
 
+    /// The outputs of the last executed scriptlet is stored here
+    std::string last_script_output;
+    std::mutex last_script_output_mutex;
+
     RpmLogGuard rpm_log_guard;
 
 
@@ -426,6 +430,9 @@ private:
         const rpm_loff_t total,
         [[maybe_unused]] const void * pkg_key,
         rpmCallbackData data);
+
+    /// Reads the output of scriptlets from the file descriptor and processes them.
+    static void process_scriptlets_output(int fd, Transaction * transaction);
 };
 
 }  // namespace libdnf5::rpm
