@@ -165,7 +165,10 @@ public:
 
     void print_info(std::string_view msg) const;
 
-    void set_output_stream(std::ostream & new_output_stream) { output_stream = new_output_stream; }
+    void set_output_stream(std::ostream & new_output_stream) {
+        err_stream = new_output_stream;
+        out_stream = new_output_stream;
+    }
 
     void set_transaction_store_path(std::filesystem::path path) { transaction_store_path = path; }
     const std::filesystem::path & get_transaction_store_path() const { return transaction_store_path; }
@@ -223,8 +226,8 @@ private:
     bool show_new_leaves{false};
     std::string get_cmd_line();
 
-    std::reference_wrapper<std::ostream> output_stream = std::cout;
-    std::reference_wrapper<std::ostream> info_stream = std::cerr;
+    std::reference_wrapper<std::ostream> out_stream = std::cout;
+    std::reference_wrapper<std::ostream> err_stream = std::cerr;
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
@@ -510,7 +513,7 @@ libdnf5::Goal * Context::Impl::get_goal(bool new_if_not_exist) {
 
 void Context::Impl::print_info(std::string_view msg) const {
     if (!quiet) {
-        info_stream.get() << msg << std::endl;
+        err_stream.get() << msg << std::endl;
     }
 }
 
