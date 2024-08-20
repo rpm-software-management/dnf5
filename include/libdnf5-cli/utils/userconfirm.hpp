@@ -45,7 +45,7 @@ bool userconfirm(Config & config) {
         msg = "Is this ok [y/N]: ";
     }
     while (true) {
-        std::cout << msg;
+        std::cerr << msg;
 
         std::string choice;
         std::getline(std::cin, choice);

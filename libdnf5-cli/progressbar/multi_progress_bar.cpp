@@ -35,14 +35,14 @@ MultiProgressBar::MultiProgressBar() : total(0, "Total") {
     total.set_auto_finish(false);
     total.start();
     if (tty::is_interactive()) {
-        std::cout << tty::cursor_hide;
+        std::cerr << tty::cursor_hide;
     }
 }
 
 
 MultiProgressBar::~MultiProgressBar() {
     if (tty::is_interactive()) {
-        std::cout << tty::cursor_show;
+        std::cerr << tty::cursor_show;
     }
 }
 
