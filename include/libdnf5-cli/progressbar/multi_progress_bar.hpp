@@ -44,8 +44,8 @@ public:
 
     void add_bar(std::unique_ptr<ProgressBar> && bar);
     void print() {
-        std::cout << *this;
-        std::cout << std::flush;
+        std::cerr << *this;
+        std::cerr << std::flush;
     }
     LIBDNF_CLI_API friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
 

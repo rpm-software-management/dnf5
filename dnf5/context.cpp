@@ -224,6 +224,7 @@ private:
     std::string get_cmd_line();
 
     std::reference_wrapper<std::ostream> output_stream = std::cout;
+    std::reference_wrapper<std::ostream> info_stream = std::cerr;
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
@@ -509,7 +510,7 @@ libdnf5::Goal * Context::Impl::get_goal(bool new_if_not_exist) {
 
 void Context::Impl::print_info(std::string_view msg) const {
     if (!quiet) {
-        output_stream.get() << msg << std::endl;
+        info_stream.get() << msg << std::endl;
     }
 }
 

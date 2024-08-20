@@ -104,7 +104,7 @@ int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, con
 void DownloadCallbacks::reset_progress_bar() {
     multi_progress_bar.reset();
     if (printed) {
-        std::cout << std::endl;
+        std::cerr << std::endl;
         printed = false;
     }
 }
