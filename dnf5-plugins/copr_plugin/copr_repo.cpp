@@ -395,7 +395,7 @@ std::string CoprRepo::get_projectname() {
 
 
 void CoprRepo::save_interactive() {
-    std::cout << COPR_THIRD_PARTY_WARNING;
+    std::cerr << COPR_THIRD_PARTY_WARNING;
     if (!libdnf5::cli::utils::userconfirm::userconfirm(base->get_config()))
         return;
 
@@ -416,9 +416,9 @@ void CoprRepo::save_interactive() {
             the_list << "     baseurl=" << repo.get_baseurl() << std::endl;
         }
 
-        std::cout << std::endl;
-        std::cout << libdnf5::utils::sformat(COPR_EXTERNAL_DEPS_WARNING, the_list.str());
-        std::cout << std::endl;
+        std::cerr << std::endl;
+        std::cerr << libdnf5::utils::sformat(COPR_EXTERNAL_DEPS_WARNING, the_list.str());
+        std::cerr << std::endl;
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base->get_config())) {
             for (auto & p : repositories) {
                 auto & repo = p.second;

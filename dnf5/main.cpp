@@ -1393,14 +1393,14 @@ int main(int argc, char * argv[]) try {
 
                 if (auto transaction_store_path = context.get_transaction_store_path();
                     !transaction_store_path.empty()) {
-                    std::cout << "The operation will only store the transaction in " << transaction_store_path << "."
+                    std::cerr << "The operation will only store the transaction in " << transaction_store_path << "."
                               << std::endl;
                 } else if (base.get_config().get_downloadonly_option().get_value()) {
-                    std::cout << "The operation will only download packages for the transaction." << std::endl;
+                    std::cerr << "The operation will only download packages for the transaction." << std::endl;
                 } else {
                     for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                         if (tsflag == "test") {
-                            std::cout
+                            std::cerr
                                 << "Test mode enabled: Only package downloads, pgp key installations and transaction "
                                    "checks "
                                    "will be performed."

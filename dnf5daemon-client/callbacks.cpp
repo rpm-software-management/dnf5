@@ -217,12 +217,12 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         std::string url;
         signal >> key_id >> user_ids >> fingerprint >> url;
 
-        std::cout << std::endl << "Importing PGP key 0x" + key_id << ":\n";
+        std::cerr << std::endl << "Importing PGP key 0x" + key_id << ":\n";
         for (auto & user_id : user_ids) {
-            std::cout << " Userid     : \"" + user_id << "\"\n";
+            std::cerr << " Userid     : \"" + user_id << "\"\n";
         }
-        std::cout << " Fingerprint: " + fingerprint << std::endl;
-        std::cout << " From       : " + url << std::endl;
+        std::cerr << " Fingerprint: " + fingerprint << std::endl;
+        std::cerr << " From       : " + url << std::endl;
 
         // ask user for the key import confirmation
         auto confirmed = libdnf5::cli::utils::userconfirm::userconfirm(context);
