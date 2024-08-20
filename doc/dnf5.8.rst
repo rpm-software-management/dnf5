@@ -456,16 +456,12 @@ Miscellaneous:
     | :manpage:`dnf5-aliases(7)`, :ref:`Aliases for command line arguments <aliases_misc_ref-label>`
     | :manpage:`dnf5-caching(7)`, :ref:`Caching <caching_misc_ref-label>`
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
+    | :manpage:`dnf5-filtering(7)`, :ref:`Packages filtering, <filtering_misc_ref-label>`
     | :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>`
     | :manpage:`dnf5-installroot(7)`, :ref:`Installroot parameter <installroot_misc_ref-label>`
-    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-
-..
-    # TODO(jkolarik): Filtering is not ready yet
-    | :manpage:`dnf5-filtering(7)`, :ref:`Packages filtering, <filtering_misc_ref-label>`
-
-    # TODO(jkolarik): Modularity is not ready yet
     | :manpage:`dnf5-modularity(7)`, :ref:`Modularity overview, <modularity_misc_ref-label>`
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
+    | :manpage:`dnf5-system-state(7)`, :ref:`System state <systemstate_misc_ref-label>`
 
 Project homepage:
     | https://github.com/rpm-software-management/dnf5
