@@ -843,6 +843,27 @@ void RpmTransCB::cpio_error(const libdnf5::rpm::TransactionItem & item) {
     multi_progress_bar.print();
 }
 
+void RpmTransCB::script_output(
+    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] libdnf5::rpm::Nevra nevra,
+    [[maybe_unused]] libdnf5::rpm::TransactionCallbacks::ScriptType type,
+    uint64_t return_code,
+    const std::string output) {
+    if (!output.empty() && return_code != RPMRC_OK) {
+        libdnf5::cli::progressbar::MessageType msg_type;
+        if (return_code == RPMRC_NOTFOUND) {
+            msg_type = libdnf5::cli::progressbar::MessageType::WARNING;
+        } else {
+            msg_type = libdnf5::cli::progressbar::MessageType::ERROR;
+        }
+        active_progress_bar->add_message(msg_type, "Scriptlet output:");
+        for (auto & line : libdnf5::utils::string::split(output, "\n")) {
+            active_progress_bar->add_message(msg_type, line);
+        }
+        multi_progress_bar.print();
+    }
+}
+
 void RpmTransCB::script_error(
     [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
     libdnf5::rpm::Nevra nevra,
@@ -883,7 +904,10 @@ void RpmTransCB::script_stop(
             // Print the error message here.
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::WARNING,
-                fmt::format("Error in {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+                fmt::format(
+                    "Non-critical error in {} scriptlet: {}",
+                    script_type_to_string(type),
+                    to_full_nevra_string(nevra)));
             [[fallthrough]];
         default:
             active_progress_bar->add_message(

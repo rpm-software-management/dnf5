@@ -224,6 +224,13 @@ public:
 
     void cpio_error(const libdnf5::rpm::TransactionItem & item) override;
 
+    void script_output(
+        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type,
+        uint64_t return_code,
+        const std::string output) override;
+
     void script_error(
         [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
         libdnf5::rpm::Nevra nevra,
