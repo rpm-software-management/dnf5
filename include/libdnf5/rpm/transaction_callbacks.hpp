@@ -92,6 +92,14 @@ public:
     virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
     virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type);
     virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
+    /// Called after the scriptlet finished
+    /// @param item Transaction item
+    /// @param nevra NEVRA of the package the scriptlet belongs to
+    /// @param type Type of the scriptlet
+    /// @param return_code Return code of the scriptlet: OK, non-critical error, error
+    /// @param output Output produced by the scriptlet
+    virtual void script_output(
+        const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code, const std::string output);
     virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
     virtual void verify_progress(uint64_t amount, uint64_t total);
     virtual void verify_start(uint64_t total);

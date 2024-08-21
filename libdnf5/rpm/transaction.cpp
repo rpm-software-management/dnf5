@@ -672,6 +672,8 @@ void * Transaction::ts_callback(
                     to_full_nevra_string(nevra),
                     total);
                 if (callbacks) {
+                    std::lock_guard<std::mutex> lock(transaction.last_script_output_mutex);
+                    callbacks->script_output(item, nevra, script_type, return_code, transaction.last_script_output);
                     callbacks->script_error(item, nevra, script_type, return_code);
                 }
             } else {
@@ -693,6 +695,8 @@ void * Transaction::ts_callback(
             if (callbacks) {
                 callbacks->script_start(item, nevra, script_type);
             }
+            std::lock_guard<std::mutex> lock(transaction.last_script_output_mutex);
+            transaction.last_script_output = "";
             break;
         }
         case RPMCALLBACK_SCRIPT_STOP: {
@@ -706,6 +710,7 @@ void * Transaction::ts_callback(
                 to_full_nevra_string(nevra),
                 total);
             if (callbacks) {
+                callbacks->script_output(item, nevra, script_type, total, transaction.last_script_output);
                 callbacks->script_stop(item, nevra, script_type, total);
             }
             break;

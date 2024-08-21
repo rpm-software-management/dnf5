@@ -85,6 +85,8 @@ void TransactionCallbacks::script_start(const TransactionItem *, Nevra, ScriptTy
 
 void TransactionCallbacks::script_stop(const TransactionItem *, Nevra, ScriptType, uint64_t) {}
 
+void TransactionCallbacks::script_output(const TransactionItem *, Nevra, ScriptType, uint64_t, const std::string) {}
+
 void TransactionCallbacks::elem_progress(const TransactionItem &, uint64_t, uint64_t) {}
 
 void TransactionCallbacks::verify_progress(uint64_t, uint64_t) {}
