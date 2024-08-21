@@ -1753,49 +1753,102 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
 }
 
 
-void Actions::execute_command(CommandToRun & command) {
+class Pipe {
+public:
+    Pipe() {
+        if (pipe(fds) == -1) {
+            throw ActionsPluginError(M_("Cannot create pipe: {}"), std::string{std::strerror(errno)});
+        }
+    }
+
+    Pipe(const Pipe &) = delete;
+    Pipe & operator=(const Pipe &) = delete;
+
+    Pipe(Pipe && other) noexcept { *this = std::move(other); }
+
+    Pipe & operator=(Pipe && pipe) noexcept {
+        if (this != &pipe) {
+            fds[PipeEnd::READ] = pipe.fds[PipeEnd::READ];
+            fds[PipeEnd::WRITE] = pipe.fds[PipeEnd::WRITE];
+            pipe.fds[PipeEnd::READ] = -1;
+            pipe.fds[PipeEnd::WRITE] = -1;
+        }
+        return *this;
+    }
+
+    int get_in() const noexcept { return fds[PipeEnd::READ]; }
+    int get_out() const noexcept { return fds[PipeEnd::WRITE]; }
+
+    void close_in() noexcept { close(PipeEnd::READ); }
+    void close_out() noexcept { close(PipeEnd::WRITE); }
+
+    ~Pipe() {
+        close_in();
+        close_out();
+    }
+
+private:
     enum PipeEnd { READ = 0, WRITE = 1 };
+
+    void close(int fd_idx) noexcept {
+        if (fds[fd_idx] != -1) {
+            ::close(fds[fd_idx]);
+            fds[fd_idx] = -1;
+        }
+    }
+
+    int fds[2];
+};
+
+
+/// The class template OnScopeExit is a general-purpose scope guard
+/// intended to call its exit function when a scope is exited.
+template <typename TExitFunction>
+    requires requires(TExitFunction f) {
+        { f() } noexcept;
+    }
+class OnScopeExit {
+public:
+    OnScopeExit(TExitFunction && function) noexcept : exit_function{std::move(function)} {}
+
+    ~OnScopeExit() noexcept { exit_function(); }
+
+    OnScopeExit(const OnScopeExit &) = delete;
+    OnScopeExit(OnScopeExit &&) = delete;
+    OnScopeExit & operator=(const OnScopeExit &) = delete;
+    OnScopeExit & operator=(OnScopeExit &&) = delete;
+
+private:
+    TExitFunction exit_function;
+};
+
+
+void Actions::execute_command(CommandToRun & command) {
     auto & base = get_base();
 
-    int pipe_out_from_child[2];
-    int pipe_to_child[2];
-    if (pipe(pipe_to_child) == -1) {
-        base.get_logger()->error("Actions plugin: Cannot create pipe: {}", std::strerror(errno));
-        return;
-    }
-    if (pipe(pipe_out_from_child) == -1) {
-        auto errnum = errno;
-        close(pipe_to_child[PipeEnd::WRITE]);
-        close(pipe_to_child[PipeEnd::READ]);
-        base.get_logger()->error("Actions plugin: Cannot create pipe: {}", std::strerror(errnum));
-        return;
-    }
+    Pipe pipe_out_from_child;
+    Pipe pipe_to_child;
 
     auto child_pid = fork();
     if (child_pid == -1) {
-        auto errnum = errno;
-        close(pipe_to_child[PipeEnd::WRITE]);
-        close(pipe_to_child[PipeEnd::READ]);
-        close(pipe_out_from_child[PipeEnd::WRITE]);
-        close(pipe_out_from_child[PipeEnd::READ]);
-        base.get_logger()->error("Actions plugin: Cannot fork: {}", std::strerror(errnum));
+        base.get_logger()->error("Actions plugin: Cannot fork: {}", std::strerror(errno));
     } else if (child_pid == 0) {
-        close(pipe_to_child[PipeEnd::WRITE]);       // close writing end of the pipe on the child side
-        close(pipe_out_from_child[PipeEnd::READ]);  // close reading end of the pipe on the child side
+        pipe_to_child.close_out();       // close writing end of the pipe on the child side
+        pipe_out_from_child.close_in();  // close reading end of the pipe on the child side
 
         // bind stdin of the child process to the reading end of the pipe
-        if (dup2(pipe_to_child[PipeEnd::READ], fileno(stdin)) == -1) {
+        if (dup2(pipe_to_child.get_in(), fileno(stdin)) == -1) {
             base.get_logger()->error("Actions plugin: Cannot bind command stdin: {}", std::strerror(errno));
             _exit(255);
         }
-        close(pipe_to_child[PipeEnd::READ]);
+        pipe_to_child.close_in();
 
         // bind stdout of the child process to the writing end of the pipe
-        if (dup2(pipe_out_from_child[PipeEnd::WRITE], fileno(stdout)) == -1) {
+        if (dup2(pipe_out_from_child.get_out(), fileno(stdout)) == -1) {
             base.get_logger()->error("Actions plugin: Cannot bind command stdout: {}", std::strerror(errno));
             _exit(255);
         }
-        close(pipe_out_from_child[PipeEnd::WRITE]);
+        pipe_out_from_child.close_out();
 
         std::vector<char *> args;
         args.reserve(command.args.size() + 1);
@@ -1815,22 +1868,24 @@ void Actions::execute_command(CommandToRun & command) {
             "Actions plugin: Cannot execute \"{}{}\": {}", command.command, args_string, std::strerror(errnum));
         _exit(255);
     } else {
-        close(pipe_to_child[PipeEnd::READ]);
-        close(pipe_out_from_child[PipeEnd::WRITE]);
+        OnScopeExit finish([&pipe_to_child, &pipe_out_from_child, child_pid]() noexcept {
+            pipe_to_child.close_out();
+            pipe_out_from_child.close_in();
+            waitpid(child_pid, nullptr, 0);
+        });
+
+        pipe_to_child.close_in();
+        pipe_out_from_child.close_out();
 
         switch (command.action.mode) {
             case Action::Mode::PLAIN:
-                close(pipe_to_child[PipeEnd::WRITE]);  // close immediately, don't send anything to child in PLAIN mode
-                process_plain_communication(command, pipe_out_from_child[PipeEnd::READ]);
+                pipe_to_child.close_out();  // close immediately, don't send anything to child in PLAIN mode
+                process_plain_communication(command, pipe_out_from_child.get_in());
                 break;
             case Action::Mode::JSON:
-                process_json_communication(command, pipe_out_from_child[PipeEnd::READ], pipe_to_child[PipeEnd::WRITE]);
-                close(pipe_to_child[PipeEnd::WRITE]);
+                process_json_communication(command, pipe_out_from_child.get_in(), pipe_to_child.get_out());
                 break;
         }
-
-        close(pipe_out_from_child[PipeEnd::READ]);
-        waitpid(child_pid, nullptr, 0);
     }
 }
 
