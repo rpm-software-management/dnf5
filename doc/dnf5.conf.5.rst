@@ -590,7 +590,28 @@ repository configuration file should aside from repo ID consists of baseurl, met
 Repo Options
 ============
 
-.. _enabled_options-label:
+.. _baseurl_repo_options-label:
+
+``baseurl``
+    :ref:`list <list-label>`
+
+    List of URLs for the repository.
+
+    Default [].
+
+    URLs are tried in the listed order (equivalent to yum’s “failovermethod=priority” behaviour).
+
+.. _cost_repo_options-label:
+
+``cost``
+    :ref:`integer <integer-label>`
+
+    The relative cost of accessing this repository, defaulting to 1000. This
+    value is compared when the priorities of two repositories are the same. The
+    repository with the lowest cost is picked. It is useful to make the library
+    prefer on-disk repositories to remote ones.
+
+.. _enabled_repo_options-label:
 
 ``enabled``
     :ref:`boolean <boolean-label>`
@@ -598,6 +619,66 @@ Repo Options
     Include this repository as a package source.
 
     Default: ``True``.
+
+.. _gpgkey_repo_options-label:
+
+``gpgkey``
+    :ref:`list <list-label>`
+
+    URLs of a GPG key files that can be used for signing metadata and packages
+    of this repository. If a file can not be verified using
+    the already imported keys, import of keys from this option is attempted and
+    the keys are then used for verification.
+
+    Default: ``[]``
+
+.. _metalink_repo_options-label:
+
+``metalink``
+    :ref:`string <string-label>`
+
+    URL of a metalink for the repository.
+
+    Default: ``None``.
+
+.. _mirrorlist_repo_options-label:
+
+``mirrorlist``
+    :ref:`string <string-label>`
+
+    URL of a mirrorlist for the repository.
+
+    Default: ``None``.
+
+
+.. _name_repo_options-label:
+
+``name``
+    :ref:`string <string-label>`
+
+    A human-readable name of the repository. Defaults to the ID of the repository.
+
+.. _priority_repo_options-label:
+
+``priority``
+    :ref:`integer <integer-label>`
+
+    The priority value of this repository. If there is more than
+    one candidate package for a particular operation, the one from a repo with
+    the lowest priority value is picked, possibly despite being less convenient
+    otherwise (e.g. by being a lower version).
+
+    Default: 99
+
+.. _type_repo_options-label:
+
+``type``
+    :ref:`string <string-label>`
+
+    Type of repository metadata. Supported values are: ``rpm-md``. Aliases for
+    ``rpm-md``: ``rpm``, ``repomd``, ``rpmmd``, ``yum``, ``YUM``.
+
+    Default: empty.
 
 
 Source and debuginfo repository names
