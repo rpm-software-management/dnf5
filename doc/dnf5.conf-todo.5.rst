@@ -53,17 +53,9 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``log_compress``
 
-.. _transaction_history_dir_options-label:
-
-``transaction_history_dir``
-
 .. _transformdb_options-label:
 
 ``transformdb``
-
-.. _recent_options-label:
-
-``recent``
 
 .. _reset_nice_options-label:
 
@@ -78,10 +70,6 @@ This section does not track any deprecated option. For such options see :ref:`De
     more debug output is put to stdout.
 
     Default: ``2``.
-
-.. _debugdir_options-label:
-
-``debugdir``
 
 .. _diskspacecheck_options-label:
 
@@ -137,16 +125,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
     Default: ``False``.
 
-.. _use_host_config_options-label:
-
-``use_host_config``
-
-.. _allow_downgrade_options-label:
-
-``allow_downgrade``
-
-.. _bugtracker_url_options-label:
-
 ``bugtracker_url``
 
 .. _history_record_options-label:
@@ -157,14 +135,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``history_record_packages``
 
-.. _skip_broken_options-label:
-
-``skip_broken``
-
-.. _skip_unavailable_options-label:
-
-``skip_unavailable``
-
 .. _history_list_view_options-label:
 
 ``history_list_view``
@@ -172,22 +142,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 .. _comment_options-label:
 
 ``comment``
-
-.. _downloadonly_options-label:
-
-``downloadonly``
-
-.. _build_cache_options-label:
-
-``build_cache``
-
-.. _exclude_from_weak_options-label:
-
-``exclude_from_weak``
-
-.. _exclude_from_weak_autodetect_options-label:
-
-``exclude_from_weak_autodetect``
 
 .. _releasever_options-label:
 
@@ -199,15 +153,6 @@ This section does not track any deprecated option. For such options see :ref:`De
     :ref:`boolean <boolean-label>`
 
     If enabled, DNF5 tries to apply modular obsoletes when possible.
-
-    Default: ``False``.
-
-.. _module_stream_switch_options-label:
-
-``module_stream_switch``
-    :ref:`boolean <boolean-label>`
-
-    If enabled, allows switching enabled streams of a module.
 
     Default: ``False``.
 
