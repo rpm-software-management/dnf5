@@ -136,10 +136,18 @@ public:
     void set_load_available_repos(LoadAvailableRepos which);
     LoadAvailableRepos get_load_available_repos() const noexcept;
 
-    /// If quiet mode is not active, it will print `msg` to standard output.
+    /// Print `msg` to the output stream, which by default is stdout.
+    void print_output(std::string_view msg) const;
+
+    /// If quiet mode is not active, it will print `msg` to the error stream, which by default is stderr.
     void print_info(std::string_view msg) const;
 
+    /// Print `msg` to the error stream, which by default is stderr.
+    void print_error(std::string_view msg) const;
+
     void set_output_stream(std::ostream & new_output_stream);
+
+    void set_error_stream(std::ostream & new_error_stream);
 
     // When set current transaction is not executed but rather stored to the specified path.
     void set_transaction_store_path(std::filesystem::path path);

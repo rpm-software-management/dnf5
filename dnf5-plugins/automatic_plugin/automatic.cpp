@@ -306,6 +306,7 @@ void AutomaticCommand::pre_configure() {
     }
 
     context.set_output_stream(output_stream);
+    context.set_error_stream(output_stream);
 }
 
 void AutomaticCommand::configure() {
