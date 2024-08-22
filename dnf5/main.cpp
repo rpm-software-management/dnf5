@@ -187,11 +187,8 @@ void RootCommand::set_argument_parser() {
             try {
                 cache.write_attribute(libdnf5::repo::RepoCache::ATTRIBUTE_EXPIRED);
             } catch (const std::exception & ex) {
-                std::cerr << libdnf5::utils::sformat(
-                                 _("Failed to expire repository cache in path \"{0}\": {1}"),
-                                 dir_entry.path().native(),
-                                 ex.what())
-                          << std::endl;
+                ctx.print_error(libdnf5::utils::sformat(
+                    _("Failed to expire repository cache in path \"{0}\": {1}"), dir_entry.path().native(), ex.what()));
             }
         }
         return true;
@@ -742,37 +739,34 @@ static void print_versions(Context & context) {
     constexpr const char * appl_name = "dnf5";
     {
         const auto & version = get_application_version();
-        std::cout
-            << fmt::format(
-                   "{} version {}.{}.{}.{}", appl_name, version.prime, version.major, version.minor, version.micro)
-            << std::endl;
+        context.print_output(fmt::format(
+            "{} version {}.{}.{}.{}", appl_name, version.prime, version.major, version.minor, version.micro));
         const auto & api_version = get_plugin_api_version();
-        std::cout << fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor)
-                  << std::endl;
+        context.print_output(
+            fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor));
     }
     {
         const auto & version = libdnf5::get_library_version();
-        std::cout << fmt::format(
-                         "libdnf5 version {}.{}.{}.{}", version.prime, version.major, version.minor, version.micro)
-                  << std::endl;
+        context.print_output(
+            fmt::format("libdnf5 version {}.{}.{}.{}", version.prime, version.major, version.minor, version.micro));
         const auto & api_version = libdnf5::get_plugin_api_version();
-        std::cout << fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor) << std::endl;
+        context.print_output(fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor));
     }
 
     bool first{true};
     for (const auto & plugin : context.get_plugins().get_plugins()) {
         if (first) {
             first = false;
-            std::cout << fmt::format("\nLoaded {} plugins:", appl_name) << std::endl;
+            context.print_output(fmt::format("\nLoaded {} plugins:", appl_name));
         } else {
-            std::cout << std::endl;
+            context.print_output("");
         }
         auto * iplugin = plugin->get_iplugin();
-        std::cout << fmt::format("  name: {}", iplugin->get_name()) << std::endl;
+        context.print_output(fmt::format("  name: {}", iplugin->get_name()));
         const auto & version = iplugin->get_version();
-        std::cout << fmt::format("  version: {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
+        context.print_output(fmt::format("  version: {}.{}.{}", version.major, version.minor, version.micro));
         const auto & api_version = iplugin->get_api_version();
-        std::cout << fmt::format("  API version: {}.{}", api_version.major, api_version.minor) << std::endl;
+        context.print_output(fmt::format("  API version: {}.{}", api_version.major, api_version.minor));
     }
 }
 
@@ -835,7 +829,7 @@ static void print_transaction_size_stats(Context & context) {
 
 static void dump_main_configuration(Context & context) {
     libdnf5::Base & base = context.get_base();
-    std::cout << _("======== Main configuration: ========") << std::endl;
+    context.print_output(_("======== Main configuration: ========"));
     for (const auto & option : base.get_config().opt_binds()) {
         const auto & val = option.second;
         std::string value;
@@ -846,9 +840,9 @@ static void dump_main_configuration(Context & context) {
         } catch (const libdnf5::OptionError &) {
         }
         if (was_set) {
-            std::cout << fmt::format("{} = {}", option.first, value) << std::endl;
+            context.print_output(fmt::format("{} = {}", option.first, value));
         } else {
-            std::cout << fmt::format("{}", option.first) << std::endl;
+            context.print_output(fmt::format("{}", option.first));
         }
     }
 }
@@ -876,8 +870,8 @@ static void dump_repository_configuration(Context & context, const std::vector<s
     }
 
     for (auto & repo : matching_repos) {
-        std::cout << libdnf5::utils::sformat(_("======== \"{}\" repository configuration: ========"), repo->get_id())
-                  << std::endl;
+        context.print_output(
+            libdnf5::utils::sformat(_("======== \"{}\" repository configuration: ========"), repo->get_id()));
         for (const auto & option : repo->get_config().opt_binds()) {
             const auto & val = option.second;
             std::string value;
@@ -888,19 +882,19 @@ static void dump_repository_configuration(Context & context, const std::vector<s
             } catch (const libdnf5::OptionError &) {
             }
             if (was_set) {
-                std::cout << fmt::format("{} = {}", option.first, value) << std::endl;
+                context.print_output(fmt::format("{} = {}", option.first, value));
             } else {
-                std::cout << fmt::format("{}", option.first) << std::endl;
+                context.print_output(fmt::format("{}", option.first));
             }
         }
     }
 }
 
 static void dump_variables(Context & context) {
-    std::cout << _("======== Variables: ========") << std::endl;
+    context.print_output(_("======== Variables: ========"));
     for (const auto & var : context.get_base().get_vars()->get_variables()) {
         const auto & val = var.second;
-        std::cout << fmt::format("{} = {}", var.first, val.value) << std::endl;
+        context.print_output(fmt::format("{} = {}", var.first, val.value));
     }
 }
 
@@ -937,11 +931,11 @@ static void print_new_leaves(Context & context) {
     }
 
     if (!new_leaves_na.empty()) {
-        std::cout << "New leaves:" << std::endl;
+        context.print_output("New leaves:");
         for (const auto & leaf_pkg : new_leaves_na) {
-            std::cout << " " << leaf_pkg << std::endl;
+            context.print_output(fmt::format(" {}", leaf_pkg));
         }
-        std::cout << std::endl;
+        context.print_output("");
     }
 }
 
@@ -1076,9 +1070,9 @@ static void print_resolve_hints(dnf5::Context & context) {
     }
 
     if (hints.size() > 0) {
-        std::cerr << _("You can try to add to command line:") << std::endl;
+        context.print_error(_("You can try to add to command line:"));
         for (const auto & hint : hints) {
-            std::cerr << "  " << hint << std::endl;
+            context.print_error(fmt::format("  {}", hint));
         }
     }
 }
@@ -1112,7 +1106,7 @@ static void print_no_match_libdnf_plugin_patterns(dnf5::Context & context) {
                 for (; it != no_match_pattern_set.end(); ++it) {
                     patterns += ", " + *it;
                 }
-                std::cerr << libdnf5::utils::sformat(TM_(no_match_message, 1), patterns) << std::endl;
+                context.print_error(libdnf5::utils::sformat(TM_(no_match_message, 1), patterns));
             }
         }
     }
@@ -1242,20 +1236,18 @@ int main(int argc, char * argv[]) try {
                     }
                 }
                 if (help_printed) {
-                    std::cerr << ex.what() << "." << std::endl;
+                    context.print_error(fmt::format("{}.", ex.what()));
                 } else {
-                    std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.")
-                              << std::endl;
+                    context.print_error(fmt::format(
+                        "{}{}", ex.what(), _(". Add \"--help\" for more information about the arguments.")));
                 }
                 // If the error is an unknown top-level command, suggest
                 // installing a package that provides the command
                 if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
                     if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
-                        std::cerr
-                            << fmt::format(
-                                   "It could be a command provided by a plugin, try: dnf5 install 'dnf5-command({})'",
-                                   unknown_arg_ex->get_argument())
-                            << std::endl;
+                        context.print_error(fmt::format(
+                            "It could be a command provided by a plugin, try: dnf5 install 'dnf5-command({})'",
+                            unknown_arg_ex->get_argument()));
                     }
                 }
                 return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
@@ -1393,18 +1385,16 @@ int main(int argc, char * argv[]) try {
 
                 if (auto transaction_store_path = context.get_transaction_store_path();
                     !transaction_store_path.empty()) {
-                    std::cerr << "The operation will only store the transaction in " << transaction_store_path << "."
-                              << std::endl;
+                    context.print_error(fmt::format(
+                        "The operation will only store the transaction in {}", transaction_store_path.string()));
                 } else if (base.get_config().get_downloadonly_option().get_value()) {
-                    std::cerr << "The operation will only download packages for the transaction." << std::endl;
+                    context.print_error("The operation will only download packages for the transaction.");
                 } else {
                     for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                         if (tsflag == "test") {
-                            std::cerr
-                                << "Test mode enabled: Only package downloads, pgp key installations and transaction "
-                                   "checks "
-                                   "will be performed."
-                                << std::endl;
+                            context.print_error(
+                                "Test mode enabled: Only package downloads, pgp key installations and transaction "
+                                "checks will be performed.");
                         }
                     }
                 }
@@ -1416,13 +1406,12 @@ int main(int argc, char * argv[]) try {
                 context.download_and_run(*context.get_transaction());
             }
         } catch (libdnf5::cli::GoalResolveError & ex) {
-            std::cerr << ex.what() << std::endl;
+            context.print_error(ex.what());
             if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
                 !base.get_config().get_use_host_config_option().get_value()) {
-                std::cerr
-                    << "No repositories were loaded from the installroot. To use the configuration and repositories "
-                       "of the host system, pass --use-host-config."
-                    << std::endl;
+                context.print_error(
+                    "No repositories were loaded from the installroot. To use the configuration and repositories "
+                    "of the host system, pass --use-host-config.");
             } else {
                 if (context.get_transaction() != nullptr) {
                     // download command can throw GoalResolveError without context.transaction being set
@@ -1431,10 +1420,11 @@ int main(int argc, char * argv[]) try {
             }
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         } catch (libdnf5::cli::ArgumentParserError & ex) {
-            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+            context.print_error(
+                fmt::format("{}{}", ex.what(), _(". Add \"--help\" for more information about the arguments.")));
             return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
         } catch (libdnf5::cli::CommandExitError & ex) {
-            std::cerr << ex.what() << std::endl;
+            context.print_error(ex.what());
             return ex.get_exit_code();
         } catch (libdnf5::cli::SilentCommandExitError & ex) {
             return ex.get_exit_code();
