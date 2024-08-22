@@ -864,6 +864,18 @@ configuration.
 
     Default: ``False``.
 
+.. _gpgcheck_options-label:
+
+``gpgcheck``
+    :ref:`boolean <boolean-label>`
+
+    Whether to perform GPG signature check on packages found in this repository.
+
+    The default is False.
+
+    Doesn't apply for packages passed directly as arguments, as they are not in any repository,
+    see :ref:`localpkg_gpgcheck <localpkg_gpgcheck_options-label>`.
+
 .. _includepkgs_options-label:
 
 ``includepkgs``
@@ -898,9 +910,6 @@ configuration.
     :ref:`boolean <boolean-label>`
 
     If enabled, DNF5 will perform a GPG signature check on local packages (packages in a file, not in a repository).
-
-    This option is subject to the active RPM security policy
-    (see :ref:`gpgcheck <gpgcheck_options-label>` for more details).
 
     Default: ``False``.
 
