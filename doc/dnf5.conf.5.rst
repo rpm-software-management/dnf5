@@ -423,7 +423,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     The behavior of ``reposdir`` could differ when it is used
     along with \-\ :ref:`-installroot <installroot_options-label>` option.
 
-    Default: TODO add default
+    Default: [``/etc/yum.repos.d``, ``/etc/distro.repos.d``, ``/usr/share/dnf5/repos.d``]
 
 .. _system_cachedir_options-label:
 
