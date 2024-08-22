@@ -302,49 +302,17 @@ This section does not track any deprecated option. For such options see :ref:`De
 Repo Options
 ============
 
-.. _baseurl_repo_options-label:
-
-``baseurl``
-
-.. _cost_repo_options-label:
-
-``cost``
-
-.. _gpgcheck_options-label:
-
 ``gpgcheck``
 
 .. _gpgkey_repo_options-label:
-
-``gpgkey``
-
-.. _metalink_repo_options-label:
-
-``metalink``
 
 .. _metadata_timer_sync_options-label:
 
 ``metadata_timer_sync``
 
-.. _mirrorlist_repo_options-label:
-
-``mirrorlist``
-
 .. _module_hotfixes_repo_options-label:
 
 ``module_hotfixes``
-
-.. _name_repo_options-label:
-
-``name``
-
-.. _priority_repo_options-label:
-
-``priority``
-
-.. _type_repo_options-label:
-
-``type``
 
 
 Repo Variables
