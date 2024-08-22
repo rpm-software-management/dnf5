@@ -163,12 +163,12 @@ public:
     void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
     LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
 
+    void print_output(std::string_view msg) const;
     void print_info(std::string_view msg) const;
+    void print_error(std::string_view msg) const;
 
-    void set_output_stream(std::ostream & new_output_stream) {
-        err_stream = new_output_stream;
-        out_stream = new_output_stream;
-    }
+    void set_output_stream(std::ostream & new_output_stream) { out_stream = new_output_stream; }
+    void set_error_stream(std::ostream & new_error_stream) { err_stream = new_error_stream; }
 
     void set_transaction_store_path(std::filesystem::path path) { transaction_store_path = path; }
     const std::filesystem::path & get_transaction_store_path() const { return transaction_store_path; }
@@ -511,10 +511,16 @@ libdnf5::Goal * Context::Impl::get_goal(bool new_if_not_exist) {
     return goal.get();
 }
 
+void Context::Impl::print_output(std::string_view msg) const {
+    out_stream.get() << msg << std::endl;
+}
 void Context::Impl::print_info(std::string_view msg) const {
     if (!quiet) {
         err_stream.get() << msg << std::endl;
     }
+}
+void Context::Impl::print_error(std::string_view msg) const {
+    err_stream.get() << msg << std::endl;
 }
 
 
@@ -654,6 +660,9 @@ void Context::print_info(std::string_view msg) const {
 }
 void Context::set_output_stream(std::ostream & new_output_stream) {
     p_impl->set_output_stream(new_output_stream);
+}
+void Context::set_error_stream(std::ostream & new_error_stream) {
+    p_impl->set_error_stream(new_error_stream);
 }
 
 void Context::set_transaction_store_path(std::filesystem::path path) {
