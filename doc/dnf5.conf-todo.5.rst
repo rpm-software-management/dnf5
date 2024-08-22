@@ -77,10 +77,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
 ``reset_nice``
 
-.. _system_cachedir_options-label:
-
-``system_cachedir``
-
 .. _debuglevel_options-label:
 
 ``debuglevel``
@@ -152,10 +148,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 .. _use_host_config_options-label:
 
 ``use_host_config``
-
-.. _config_file_age_options-label:
-
-``config_file_age``
 
 .. _allow_downgrade_options-label:
 
