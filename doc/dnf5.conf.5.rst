@@ -408,7 +408,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``pluginconfpath``
     :ref:`list <list-label>`
 
-    List of directories that are searched for plugin configurations to load.
+    List of directories that are searched for libdnf5 plugin configurations to load.
 
     All configuration files found in these directories, that are named same as a
     plugin, are parsed.
@@ -420,7 +420,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``pluginpath``
     :ref:`list <list-label>`
 
-    List of directories that are searched for plugins to load. Plugins found in
+    List of directories that are searched for libdnf5 plugins to load. Plugins found in
     *any of the directories* in this configuration option are used.
 
     Default: a Python version-specific path.
@@ -430,7 +430,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``plugins``
     :ref:`boolean <boolean-label>`
 
-    If enabled, DNF5 plugins are enabled.
+    If enabled, libdnf5 plugins are enabled.
 
     Default: ``True``.
 
