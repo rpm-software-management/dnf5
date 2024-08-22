@@ -33,10 +33,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 [main] Options
 ==============
 
-.. _arch_options-label:
-
-``arch``
-
 .. _autocheck_running_kernel_options-label:
 
 ``autocheck_running_kernel``
@@ -48,10 +44,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
     .. NOTE::
        YUM compatibility option
-
-.. _basearch_options-label:
-
-``basearch``
 
 .. _logfilelevel_options-label:
 
