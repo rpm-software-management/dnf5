@@ -255,7 +255,7 @@ void Context::Impl::apply_repository_setopts() {
                 repo->get_config().opt_binds().at(key).new_string(
                     libdnf5::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
-                std::cerr << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
+                print_error("setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what());
             }
         }
     }
@@ -334,9 +334,9 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     auto & offline_data = state.get_data();
     if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
-        std::cerr << "There is already an offline transaction queued, initiated by the following command:" << std::endl
-                  << "\t" << offline_data.get_cmd_line() << std::endl
-                  << "Continuing will cancel the old offline transaction and replace it with this one." << std::endl;
+        print_error("There is already an offline transaction queued, initiated by the following command:");
+        print_error(fmt::format("\t{}", offline_data.get_cmd_line()));
+        print_error("Continuing will cancel the old offline transaction and replace it with this one.");
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }
@@ -365,19 +365,19 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     print_info("Testing offline transaction");
     auto result = test_transaction.run();
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
-                  << std::endl;
+        print_error(
+            fmt::format("Transaction failed: {}", libdnf5::base::Transaction::transaction_result_to_string(result)));
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
-            std::cerr << entry << std::endl;
+            print_error(entry);
         }
         for (auto & problem : test_transaction.get_transaction_problems()) {
-            std::cerr << "  - " << problem << std::endl;
+            print_error(fmt::format("  - {}", problem));
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 
     for (auto const & entry : test_transaction.get_gpg_signature_problems()) {
-        std::cerr << entry << std::endl;
+        print_error(entry);
     }
 
     // Download and transaction test complete. Fill out entries in offline
@@ -415,9 +415,9 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         constexpr const char * comps_in_trans_dir{"./comps"};
         auto comps_location = transaction_store_path / comps_in_trans_dir;
         if (std::filesystem::exists(transaction_location)) {
-            std::cerr << libdnf5::utils::sformat(
-                _("Location \"{}\" already contains a stored transaction, it will be overwritten.\n"),
-                transaction_store_path.string());
+            print_error(libdnf5::utils::sformat(
+                _("Location \"{}\" already contains a stored transaction, it will be overwritten."),
+                transaction_store_path.string()));
             if (libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
                 std::filesystem::remove_all(packages_location);
                 std::filesystem::remove_all(comps_location);
@@ -452,10 +452,10 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
 
     if (should_store_offline) {
         store_offline(transaction);
-        std::cout << "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
-                     "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
-                     "offline clean`."
-                  << std::endl;
+        print_info(
+            "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
+            "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+            "offline clean`.");
         return;
     }
 
@@ -487,19 +487,19 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     auto result = transaction.run();
     print_info("");
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cerr << "Transaction failed: " << libdnf5::base::Transaction::transaction_result_to_string(result)
-                  << std::endl;
+        print_error(
+            fmt::format("Transaction failed: {}", libdnf5::base::Transaction::transaction_result_to_string(result)));
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
-            std::cerr << entry << std::endl;
+            print_error(entry);
         }
         for (auto & problem : transaction.get_transaction_problems()) {
-            std::cerr << "  - " << problem << std::endl;
+            print_error(problem);
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
 
     for (auto const & entry : transaction.get_gpg_signature_problems()) {
-        std::cerr << entry << std::endl;
+        print_error(entry);
     }
     // TODO(mblaha): print a summary of successful transaction
 }
@@ -655,8 +655,14 @@ Context::LoadAvailableRepos Context::get_load_available_repos() const noexcept {
     return p_impl->get_load_available_repos();
 }
 
+void Context::print_output(std::string_view msg) const {
+    p_impl->print_output(msg);
+}
 void Context::print_info(std::string_view msg) const {
     p_impl->print_info(msg);
+}
+void Context::print_error(std::string_view msg) const {
+    p_impl->print_error(msg);
 }
 void Context::set_output_stream(std::ostream & new_output_stream) {
     p_impl->set_output_stream(new_output_stream);
