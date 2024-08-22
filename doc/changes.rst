@@ -411,11 +411,18 @@ Changes to individual options
   * Supported values are now extended to the following list: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``.
 
 
-Newly introduced options
-------------------------
+Newly introduced configuration options
+--------------------------------------
 ``allow_downgrade``
   * New option used to enable or disable downgrade of dependencies when resolving transaction.
 
 ``skip_broken``, ``skip_unavailable``, ``strict``
   * New options ``skip_broken``, ``skip_unavailable`` were added due to deprecation of ``strict`` option.
   * See the :ref:`strict deprecation <strict_option_conf_changes_ref-label>` above.
+
+
+Dropped configuration options
+-----------------------------
+``arch`` and ``basearch``
+  * It is no longer possible to change the detected architecute in configuration files.
+  * See the :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>` for overriding architecture.
