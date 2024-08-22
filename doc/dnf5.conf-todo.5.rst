@@ -302,10 +302,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 Repo Options
 ============
 
-``gpgcheck``
-
-.. _gpgkey_repo_options-label:
-
 .. _metadata_timer_sync_options-label:
 
 ``metadata_timer_sync``
