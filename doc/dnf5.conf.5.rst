@@ -41,6 +41,15 @@ repository configuration file should aside from repo ID consists of baseurl, met
 [main] Options
 ==============
 
+.. _allow_downgrade_options-label:
+
+``allow_downgrade``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 allows downgrading packages while resolving dependencies.
+
+    Default: ``True``.
+
 .. _allow_vendor_change_options-label:
 
 ``allow_vendor_change``
@@ -147,13 +156,23 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: ``True``.
 
+.. _debugdir_options-label:
+
+``debugdir``
+    :ref:`string <string-label>`
+
+    Location where libsolv debug files will be created when enabled
+    by :ref:`debug_solver <_debug_solver_options-label>`.
+
+    Default `./debugdata`.
+
 .. _debug_solver_options-label:
 
 ``debug_solver``
     :ref:`boolean <boolean-label>`
 
     If enabled, libsolv debug files will be created when solving the
-    transaction. The debug files are created in the `./debugdata` directory.
+    transaction. The debug files are created in the :ref:`debugdir <_debugdir_options-label>` directory.
 
     Default: ``False``.
 
@@ -175,6 +194,29 @@ repository configuration file should aside from repo ID consists of baseurl, met
     Redirect downloaded packages to provided directory.
 
     Default: <package repository :ref:`cachedir <cachedir_options-label>`>/packages
+
+.. _exclude_from_weak_options-label:
+
+``exclude_from_weak``
+    :ref:`list <list-label>`
+
+    Prevent installing packages as weak dependencies (recommends or
+    supplements). The packages can be specified by a name or a glob and
+    separated by a comma.
+
+    Defaults to [].
+
+.. _exclude_from_weak_autodetect_options-label:
+
+``exclude_from_weak_autodetect``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will autodetect unmet weak dependencies (recommends or
+    supplements) of packages installed on the system. Providers of these weak
+    dependencies will not be installed by dnf as weak dependencies any more
+    (they will still be installed if pulled in as a regular dependency).
+
+    Defaults to true.
 
 .. _group_package_types_options-label:
 
@@ -304,6 +346,15 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Default: empty.
 
+.. _module_stream_switch_options-label:
+
+``module_stream_switch``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, allows switching enabled streams of a module.
+
+    Default: ``False``.
+
 .. _multilib_policy_options-label:
 
 ``multilib_policy``
@@ -413,6 +464,16 @@ repository configuration file should aside from repo ID consists of baseurl, met
     .. NOTE::
        YUM compatibility option
 
+.. _recent_options-label:
+
+``recent``
+    :ref:`integer <integer-label>`
+
+    Sets the time period in days used for the ``--recent`` option in the :ref:`repoquery <repoquery_command_ref-label>`,
+    :ref:`info <info_command_ref-label>` and :ref:`list <list_command_ref-label>` commands.
+
+    Default: 7
+
 .. _reposdir_options-label:
 
 ``reposdir``
@@ -424,6 +485,26 @@ repository configuration file should aside from repo ID consists of baseurl, met
     along with \-\ :ref:`-installroot <installroot_options-label>` option.
 
     Default: [``/etc/yum.repos.d``, ``/etc/distro.repos.d``, ``/usr/share/dnf5/repos.d``]
+
+.. _skip_broken_options-label:
+
+``skip_broken``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will skip uninstallable packages instead of failing while
+    resolving dependencies.
+
+    Default: ``False``.
+
+.. _skip_unavailable_options-label:
+
+``skip_unavailable``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will skip unavailable packages instead of failing while
+    preparing rpm transactions.
+
+    Default: ``False``.
 
 .. _system_cachedir_options-label:
 
@@ -445,6 +526,16 @@ repository configuration file should aside from repo ID consists of baseurl, met
     System state files location. See :manpage:`dnf5-system-state(7)`, :ref:`system state <systemstate_misc_ref-label>` for details.
 
     Default: ``/usr/lib/sysimage/libdnf5``.
+
+.. _transaction_history_dir_options-label:
+
+``transaction_history_dir``
+
+    :ref:`string <string-label>`
+
+    History database location.
+
+    By default it has the same value as :ref:`system_state_dir <_system_state_dir_options-label>`.
 
 .. _tsflags_options-label:
 
@@ -482,6 +573,12 @@ repository configuration file should aside from repo ID consists of baseurl, met
 .. _use_host_config_options-label:
 
 ``use_host_config``
+
+    Use configuration files and variable definitions from the host system rather
+    than the installroot.
+    :ref:`See <installroot_misc_ref-label>` :manpage:`dnf5-installroot(7)` for more info.
+
+    Default: ``False``.
 
 .. _varsdir_options-label:
 
@@ -749,6 +846,17 @@ configuration.
     Meaningful when used with the :ref:`throttle option <throttle_options-label>`.
 
     Default: ``0``.
+
+.. _build_cache_options-label:
+
+``build_cache``
+    :ref:`boolean <boolean-label>`
+
+    If enabled, DNF5 will save libsolv cache generated from downloaded metadata
+    to cachedir. These solv files are loaded during subsequent runs which
+    significantly speeds up DNF5.
+
+    Default: ``True``.
 
 .. _countme_options-label:
 
