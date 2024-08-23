@@ -48,9 +48,6 @@ Changes to individual options
 ``--color``
   * Dropped. Now only the ``color`` configuration option is available.
 
-``-c``
-  * The short version of the ``--config`` option has been dropped.
-
 .. TODO(jkolarik): Not implemented yet
    ``-d, --debuglevel``
      * Dropped. Now only the ``debuglevel`` configuration option is available.
