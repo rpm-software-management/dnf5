@@ -870,13 +870,15 @@ TransactionPackage Transaction::Impl::make_transaction_package(
 }
 
 // Reads the output of scriptlets from the file descriptor and processes them.
-static void process_scriptlets_output(int fd, Logger * logger) {
+void Transaction::Impl::process_scriptlets_output(int fd) {
+    auto logger = base->get_logger().get();
     try {
         char buf[512];
         do {
             auto len = read(fd, buf, sizeof(buf));
             if (len > 0) {
                 std::string_view str(buf, static_cast<size_t>(len));
+                append_last_script_output(str);
                 std::string_view::size_type start = 0;
                 do {
                     auto end = str.find('\n', start);
@@ -1085,13 +1087,15 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
     // This thread processes the output of RPM scriptlets.
-    std::thread thread_processes_scriptlets_output(process_scriptlets_output, pipe_out_from_scriptlets[0], logger);
+    std::thread thread_processes_scriptlets_output(
+        &Transaction::Impl::process_scriptlets_output, this, pipe_out_from_scriptlets[0]);
 
     // Set file descriptor for output of scriptlets in transaction.
     rpm_transaction.set_script_out_fd(pipe_out_from_scriptlets[1]);
     // set_script_out_fd() copies the file descriptor using dup(). Closing the original fd.
     close(pipe_out_from_scriptlets[1]);
 
+    rpm_transaction.set_base_transaction(transaction);
     rpm_transaction.set_callbacks(std::move(callbacks));
     rpm_transaction.set_flags(rpm_transaction_flags);
 
@@ -1427,6 +1431,21 @@ bool Transaction::Impl::check_gpg_signatures() {
     return result;
 }
 
+std::string Transaction::Impl::get_last_script_output() {
+    std::lock_guard<std::mutex> lock(last_script_output_mutex);
+    return last_script_output;
+}
+
+void Transaction::Impl::clear_last_script_output() {
+    std::lock_guard<std::mutex> lock(last_script_output_mutex);
+    last_script_output.clear();
+}
+
+void Transaction::Impl::append_last_script_output(std::string_view output) {
+    std::lock_guard<std::mutex> lock(last_script_output_mutex);
+    last_script_output.append(output);
+}
+
 std::string Transaction::serialize(
     const std::filesystem::path & packages_path, const std::filesystem::path & comps_path) const {
     transaction::TransactionReplay transaction_replay;
@@ -1513,6 +1532,14 @@ bool Transaction::get_download_local_pkgs() const noexcept {
 
 void Transaction::set_download_local_pkgs(bool value) {
     p_impl->download_local_pkgs = value;
+}
+
+std::string Transaction::get_last_script_output() {
+    return p_impl->get_last_script_output();
+}
+
+void Transaction::clear_last_script_output() {
+    p_impl->clear_last_script_output();
 }
 
 }  // namespace libdnf5::base

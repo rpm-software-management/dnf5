@@ -193,12 +193,17 @@ public:
     void set_download_local_pkgs(bool value);
     bool get_download_local_pkgs() const noexcept;
 
+    /// Retrieve output of the last executed rpm scriptlet.
+    std::string get_last_script_output();
+
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;
     friend class TransactionModule;
     friend class TransactionPackage;
     friend class libdnf5::Goal;
+    friend class libdnf5::rpm::
+        Transaction;  // to access clear_last_script_output() from the rpm transaction SCRIPT_START callback
 
     LIBDNF_LOCAL Transaction(const libdnf5::BaseWeakPtr & base);
 
@@ -209,6 +214,9 @@ private:
     std::optional<uint32_t> user_id;
     std::string comment;
     std::string description;
+
+    /// Clear the recorded last scriptlet output
+    LIBDNF_LOCAL void clear_last_script_output();
 };
 
 }  // namespace libdnf5::base

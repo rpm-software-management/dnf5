@@ -618,6 +618,10 @@ void * Transaction::ts_callback(
         }
         case RPMCALLBACK_SCRIPT_START: {
             // amount is script tag
+            if (callbacks_holder.base_transaction) {
+                // a new scriptlet is running, clear the stored output
+                callbacks_holder.base_transaction->clear_last_script_output();
+            }
             auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
             auto nevra = trans_element_to_nevra(trans_element);
             logger.info(
