@@ -259,6 +259,8 @@ private:
 
     DNF_LOCAL static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
+    DNF_LOCAL void script_output_to_progress(libdnf5::cli::progressbar::MessageType message_type);
+
     libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
     Context & context;
