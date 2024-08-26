@@ -281,6 +281,12 @@ public:
         callbacks_holder.callbacks = std::move(callbacks);
     }
 
+    /// Set pointer to the running libdnf5::Base::Transaction.
+    /// @param base_transaction a pointer to the transaction
+    void set_base_transaction(libdnf5::base::Transaction * base_transaction) {
+        callbacks_holder.base_transaction = base_transaction;
+    }
+
     /// Fill the RPM transaction from base::Transaction.
     /// @param transcation The base::Transaction object.
     void fill(const base::Transaction & transaction);
@@ -327,12 +333,13 @@ private:
     struct CallbacksHolder {
         std::unique_ptr<TransactionCallbacks> callbacks;
         Transaction * transaction;
+        libdnf5::base::Transaction * base_transaction;
     };
 
     BaseWeakPtr base;
     rpmts ts;
     FD_t script_fd{nullptr};
-    CallbacksHolder callbacks_holder{nullptr, this};
+    CallbacksHolder callbacks_holder{nullptr, this, nullptr};
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
 
     TransactionItem * last_added_item{nullptr};  // item added by last install/reinstall/erase/...
