@@ -80,7 +80,7 @@ std::string detect_arch() {
 }
 
 std::string get_os() {
-    const char* value;
+    const char * value;
     init_lib_rpm(detect_arch().c_str());
     rpmGetOsInfo(&value, nullptr);
     return value;

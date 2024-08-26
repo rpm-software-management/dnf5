@@ -385,7 +385,8 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 }
 
 void Vars::detect_vars(const std::string & installroot) {
-    set_lazy("arch", []() -> auto { return std::make_unique<std::string>(utils::detect_arch()); }, Priority::AUTO);
+    set_lazy(
+        "arch", []() -> auto { return std::make_unique<std::string>(utils::detect_arch()); }, Priority::AUTO);
 
     utils::init_lib_rpm(get_value("arch").c_str());
 
