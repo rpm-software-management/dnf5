@@ -89,12 +89,20 @@ static int str_to_bytes(const std::string & str) {
 
 static std::string get_user_agent() {
     utils::OSRelease os_release;
-    return std::format("libdnf ({} {}; {}; {}.{})",
+    auto os = utils::get_os();
+    auto base_arch = rpm::get_base_arch(utils::detect_arch());
+
+    if (!(os_release.contains("NAME") && os_release.contains("VERSION_ID") && !os.empty() && !base_arch.empty())) {
+        return "libdnf";
+    }
+
+    return std::format(
+        "libdnf ({} {}; {}; {}.{})",
         os_release.get_value("NAME"),
         os_release.get_value("VERSION_ID"),
-        os_release.get_value("VARIANT_ID"),
-        utils::get_os(),
-        rpm::get_base_arch(utils::detect_arch()));
+        os_release.get_value("VARIANT_ID", "generic"),
+        os,
+        base_arch);
 }
 
 class ConfigMain::Impl {

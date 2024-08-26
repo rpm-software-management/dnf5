@@ -27,9 +27,14 @@ namespace libdnf5::utils {
 
 std::string OSRelease::get_value(const std::string & key, const std::string & default_value) {
     initialize();
-    if (map.find(key) == map.end())
+    if (!map.contains(key))
         return default_value;
     return map[key];
+}
+
+bool OSRelease::contains(const std::string & key) {
+    initialize();
+    return map.contains(key);
 }
 
 
@@ -43,7 +48,7 @@ void OSRelease::initialize() {
         return;
 
     const std::regex r_no_quotes("^([A-Z_]+)=(\\w+)");
-    const std::regex r_quotes("^([A-Z_]+)=\"([\\w\\s]+)\"");
+    const std::regex r_quotes("^([A-Z_]+)=\"(.+)\"");
     std::smatch match;
     std::string line;
 
