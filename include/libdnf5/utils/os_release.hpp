@@ -44,6 +44,11 @@ public:
     /// @param default_value Default value to return if the value for `key` isn't set.
     std::string get_value(const std::string & key, const std::string & default_value = "UNSET");
 
+    /// Returns whether the corresponding os-release value is set for `key`.
+    ///
+    /// @param key The os-release key to check if set.
+    bool contains(const std::string & key);
+
 private:
     std::filesystem::path path;
     bool initialized_ = false;
