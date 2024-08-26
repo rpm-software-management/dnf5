@@ -37,6 +37,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <solv/transaction.h>
 
+#include <mutex>
+
 
 namespace libdnf5::base {
 
@@ -91,6 +93,12 @@ public:
         const std::optional<uint32_t> user_id,
         const std::string & comment);
 
+    /// Handling of rpm scriptlets output
+    std::string get_last_script_output();
+    void clear_last_script_output();
+    void append_last_script_output(std::string_view output);
+    void process_scriptlets_output(int fd);
+
 private:
     friend Transaction;
     friend class libdnf5::Goal;
@@ -124,6 +132,9 @@ private:
 
     // whether also the command line repo packages should be downloaded to the destination
     bool download_local_pkgs{false};
+
+    std::string last_script_output{};
+    std::mutex last_script_output_mutex;
 
     TransactionRunResult _run(
         std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
