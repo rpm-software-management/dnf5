@@ -493,7 +493,7 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
             print_error(entry);
         }
         for (auto & problem : transaction.get_transaction_problems()) {
-            print_error(problem);
+            print_error(fmt::format("  - {}", problem));
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
