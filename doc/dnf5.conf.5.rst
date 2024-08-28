@@ -785,6 +785,7 @@ For a given repository with an identifier in the form "<ID>-rpms", its correspon
 
 For example, for repository "fedora", the source repository is "fedora-source" and debuginfo repository is "fedora-debuginfo". For repository "fedora-rpms", the source repository is "fedora-source-rpms" and debuginfo repository is "fedora-debug-rpms".
 
+.. _repo_variables-label:
 
 Repo Variables
 ==============
