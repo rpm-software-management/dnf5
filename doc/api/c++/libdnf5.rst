@@ -10,3 +10,4 @@ libdnf5
     libdnf5_goal
     libdnf5_goal_elements
     libdnf5_query_cmp
+    libdnf5_vars
