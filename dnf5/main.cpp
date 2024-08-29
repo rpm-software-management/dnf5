@@ -1406,12 +1406,13 @@ int main(int argc, char * argv[]) try {
                 context.download_and_run(*context.get_transaction());
             }
         } catch (libdnf5::cli::GoalResolveError & ex) {
-            context.print_error(ex.what());
+            std::cerr << ex.what() << std::endl;
             if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
                 !base.get_config().get_use_host_config_option().get_value()) {
-                context.print_error(
-                    "No repositories were loaded from the installroot. To use the configuration and repositories "
-                    "of the host system, pass --use-host-config.");
+                std::cerr
+                    << "No repositories were loaded from the installroot. To use the configuration and repositories "
+                       "of the host system, pass --use-host-config."
+                    << std::endl;
             } else {
                 if (context.get_transaction() != nullptr) {
                     // download command can throw GoalResolveError without context.transaction being set
@@ -1420,11 +1421,10 @@ int main(int argc, char * argv[]) try {
             }
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         } catch (libdnf5::cli::ArgumentParserError & ex) {
-            context.print_error(
-                fmt::format("{}{}", ex.what(), _(". Add \"--help\" for more information about the arguments.")));
+            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
             return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
         } catch (libdnf5::cli::CommandExitError & ex) {
-            context.print_error(ex.what());
+            std::cerr << ex.what() << std::endl;
             return ex.get_exit_code();
         } catch (libdnf5::cli::SilentCommandExitError & ex) {
             return ex.get_exit_code();
