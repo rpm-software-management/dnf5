@@ -75,7 +75,7 @@ int DownloadCB::progress(void * user_cb_data, double total_to_download, double d
         }
     } catch (...) {
     }
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCB::end(void * user_cb_data, TransferStatus status, const char * msg) {
@@ -86,7 +86,7 @@ int DownloadCB::end(void * user_cb_data, TransferStatus status, const char * msg
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
@@ -98,7 +98,7 @@ int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
-    return 0;
+    return ReturnCode::OK;
 }
 
 

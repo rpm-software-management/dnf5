@@ -60,7 +60,7 @@ int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, d
     if (is_time_to_print()) {
         print();
     }
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const char * msg) {
@@ -87,7 +87,7 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
             break;
     }
     print();
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
@@ -98,7 +98,7 @@ int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, con
     }
     progress_bar->add_message(libdnf5::cli::progressbar::MessageType::ERROR, message);
     print();
-    return 0;
+    return ReturnCode::OK;
 }
 
 void DownloadCallbacks::reset_progress_bar() {
