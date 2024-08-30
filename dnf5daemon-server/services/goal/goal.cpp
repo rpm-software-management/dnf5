@@ -104,6 +104,16 @@ void Goal::dbus_register() {
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::do_transaction, call, session.session_locale);
         });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_GOAL,
+        "cancel",
+        "",
+        {},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Goal::cancel, call, session.session_locale);
+        });
 }
 
 sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
@@ -269,6 +279,7 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
+    session.set_cancel_download(Session::CancelDownload::NOT_REQUESTED);
 
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
@@ -281,6 +292,7 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
         // TODO(mblaha): signalize reboot?
     } else {
         session.download_transaction_packages();
+        session.set_cancel_download(Session::CancelDownload::NOT_ALLOWED);
 
         std::string comment;
         if (options.find("comment") != options.end()) {
@@ -304,5 +316,33 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     }
 
     auto reply = call.createReply();
+    return reply;
+}
+
+sdbus::MethodReply Goal::cancel(sdbus::MethodCall & call) {
+    bool success{true};
+    std::string error_msg;
+
+    switch (session.get_cancel_download()) {
+        case Session::CancelDownload::NOT_REQUESTED:
+            session.set_cancel_download(Session::CancelDownload::REQUESTED);
+            break;
+        case Session::CancelDownload::REQUESTED:
+            success = false;
+            error_msg = "Cancellation was already requested.";
+            break;
+        case Session::CancelDownload::NOT_ALLOWED:
+            success = false;
+            error_msg = "Cancellation is not allowed after the RPM transaction has started.";
+            break;
+        case Session::CancelDownload::NOT_RUNNING:
+            success = false;
+            error_msg = "No transaction is running.";
+            break;
+    }
+
+    auto reply = call.createReply();
+    reply << success;
+    reply << error_msg;
     return reply;
 }

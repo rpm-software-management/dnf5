@@ -313,6 +313,7 @@ void Session::store_transaction_offline() {
     std::filesystem::create_directories(dest_dir);
     base->get_config().get_destdir_option().set(dest_dir);
     download_transaction_packages();
+    set_cancel_download(Session::CancelDownload::NOT_ALLOWED);
 
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
