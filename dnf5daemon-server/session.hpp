@@ -52,6 +52,7 @@ protected:
 
 class Session {
 public:
+    enum class CancelDownload { NOT_RUNNING, NOT_REQUESTED, REQUESTED, NOT_ALLOWED };
     Session(
         std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
         sdbus::IConnection & connection,
@@ -93,6 +94,11 @@ public:
     /// prepare the current transaction to run during the next reboot
     void store_transaction_offline();
 
+    /// Getter for download cancel request flag.
+    CancelDownload get_cancel_download() { return cancel_download.load(); }
+    /// Setter for download cancel request flag.
+    void set_cancel_download(CancelDownload value) { cancel_download.store(value); }
+
 private:
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf5::Base> base;
@@ -110,6 +116,7 @@ private:
     std::mutex key_import_mutex;
     std::condition_variable key_import_condition;
     std::map<std::string, KeyConfirmationStatus> key_import_status{};  // map key_id: confirmation status
+    std::atomic<CancelDownload> cancel_download{CancelDownload::NOT_RUNNING};
 };
 
 #endif

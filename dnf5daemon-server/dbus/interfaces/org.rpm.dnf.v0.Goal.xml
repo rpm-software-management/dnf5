@@ -94,6 +94,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="options" type="a{sv}" direction="in" />
     </method>
 
+    <!--
+        cancel:
+        @success: true if the cancellation was sucessfully requested
+        @error_msg: error message if the cancellation was refused
+
+        Cancel the transaction that was initiated by `do_transaction()`. The transaction can only be canceled during the package download phase. Once the RPM transaction has begun, cancellation is no longer permitted.
+    -->
+    <method name="cancel">
+        <arg name="success" type="b" />
+        <arg name="error_msg" type="s" />
+    </method>
+
 </interface>
 
 </node>

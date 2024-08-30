@@ -66,6 +66,9 @@ void * DownloadCB::add_new_download(void * user_data, const char * description, 
 }
 
 int DownloadCB::progress(void * user_cb_data, double total_to_download, double downloaded) {
+    if (session.get_cancel_download() == Session::CancelDownload::REQUESTED) {
+        return ReturnCode::ERROR;
+    }
     try {
         if (is_time_to_print()) {
             auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, user_cb_data);
