@@ -30,14 +30,14 @@ void * DownloadCallbacks::add_new_download(
 
 int DownloadCallbacks::end(
     [[maybe_unused]] void * user_cb_data, [[maybe_unused]] TransferStatus status, [[maybe_unused]] const char * msg) {
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCallbacks::progress(
     [[maybe_unused]] void * user_cb_data,
     [[maybe_unused]] double total_to_download,
     [[maybe_unused]] double downloaded) {
-    return 0;
+    return ReturnCode::OK;
 }
 
 int DownloadCallbacks::mirror_failure(
@@ -45,7 +45,7 @@ int DownloadCallbacks::mirror_failure(
     [[maybe_unused]] const char * msg,
     [[maybe_unused]] const char * url,
     [[maybe_unused]] const char * metadata) {
-    return 0;
+    return ReturnCode::OK;
 }
 
 void DownloadCallbacks::fastest_mirror(

@@ -67,6 +67,10 @@ public:
     /// Transfer status codes.
     enum class TransferStatus { SUCCESSFUL, ALREADYEXISTS, ERROR };
 
+    /// Download callbacks return values.
+    /// RETURN_OK - all is fine, RETURN_ABORT - abort just the current download, RETURN_ERROR - abort all downloading
+    enum ReturnCode : int { OK = 0, ABORT = 1, ERROR = 2 };
+
     DownloadCallbacks() = default;
     DownloadCallbacks(const DownloadCallbacks &) = delete;
     DownloadCallbacks(DownloadCallbacks &&) = delete;
