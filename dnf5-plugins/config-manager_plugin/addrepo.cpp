@@ -346,6 +346,12 @@ void ConfigManagerAddRepoCommand::add_repos_from_repofile(
         // Test if the repository options can be set.
         for (const auto & [repo_id, repo_opts] : parser.get_data()) {
             for (const auto & [key, key_val] : repo_opts) {
+                // Skip empty lines and comment lines (ConfigParser stores the empty line and comment line
+                // in an automatically generated key whose name starts with the '#' character).
+                if (key.starts_with('#')) {
+                    continue;
+                }
+
                 try {
                     tmp_repo_conf.opt_binds().at(key).new_string(Option::Priority::RUNTIME, key_val);
                 } catch (const Error & ex) {
