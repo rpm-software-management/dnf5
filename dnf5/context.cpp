@@ -325,6 +325,27 @@ void Context::Impl::load_repos(bool load_system) {
 }
 
 void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
+    // Test the transaction
+    base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+    print_info(_("Testing offline transaction"));
+    auto result = transaction.run();
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        print_error(libdnf5::utils::sformat(
+            _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
+        for (auto const & entry : transaction.get_gpg_signature_problems()) {
+            print_error(entry);
+        }
+        for (auto & problem : transaction.get_transaction_problems()) {
+            print_error(libdnf5::utils::sformat(_("  - {}"), problem));
+        }
+        throw libdnf5::cli::SilentCommandExitError(1);
+    }
+
+    for (auto const & entry : transaction.get_gpg_signature_problems()) {
+        print_error(entry);
+    }
+
+    // Serialize the transaction
     const auto & installroot = base.get_config().get_installroot_option().get_value();
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
@@ -349,40 +370,12 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     offline_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
     state.write();
 
-    // First, serialize the transaction
     transaction.store_comps(comps_location);
 
     const auto transaction_json_path = offline_datadir / TRANSACTION_JSON;
     libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
     transaction_json_file.write(transaction.serialize(packages_in_trans_dir, comps_in_trans_dir));
     transaction_json_file.close();
-
-    // Then, test the serialized transaction
-    const auto & goal = std::make_unique<libdnf5::Goal>(base);
-    goal->add_serialized_transaction(transaction_json_path);
-    auto test_transaction = goal->resolve();
-    if (test_transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
-        throw libdnf5::cli::GoalResolveError(transaction);
-    }
-    base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
-
-    print_info(_("Testing offline transaction"));
-    auto result = test_transaction.run();
-    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        print_error(libdnf5::utils::sformat(
-            _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
-        for (auto const & entry : transaction.get_gpg_signature_problems()) {
-            print_error(entry);
-        }
-        for (auto & problem : test_transaction.get_transaction_problems()) {
-            print_error(libdnf5::utils::sformat(_("  - {}"), problem));
-        }
-        throw libdnf5::cli::SilentCommandExitError(1);
-    }
-
-    for (auto const & entry : test_transaction.get_gpg_signature_problems()) {
-        print_error(entry);
-    }
 
     // Download and transaction test complete. Fill out entries in offline
     // transaction state file.
