@@ -349,7 +349,6 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     const auto & installroot = base.get_config().get_installroot_option().get_value();
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
-
     constexpr const char * packages_in_trans_dir{"./packages"};
     constexpr const char * comps_in_trans_dir{"./comps"};
     const auto & comps_location = offline_datadir / comps_in_trans_dir;
@@ -358,15 +357,6 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     libdnf5::offline::OfflineTransactionState state{state_path};
 
     auto & offline_data = state.get_data();
-    if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
-        print_error(_("There is already an offline transaction queued, initiated by the following command:"));
-        print_error(fmt::format("\t{}", offline_data.get_cmd_line()));
-        print_error(_("Continuing will cancel the old offline transaction and replace it with this one."));
-        if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
-            throw libdnf5::cli::AbortedByUserError();
-        }
-    }
-
     offline_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
     state.write();
 
@@ -436,6 +426,19 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
         const auto & installroot = base.get_config().get_installroot_option().get_value();
         const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
         std::filesystem::create_directories(offline_datadir);
+        const std::filesystem::path state_path{offline_datadir / libdnf5::offline::TRANSACTION_STATE_FILENAME};
+        libdnf5::offline::OfflineTransactionState state{state_path};
+
+        // Check whether there is another pending offline transaction present
+        auto & offline_data = state.get_data();
+        if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
+            print_error(_("There is already an offline transaction queued, initiated by the following command:"));
+            print_error(fmt::format("\t{}", offline_data.get_cmd_line()));
+            print_error(_("Continuing will cancel the old offline transaction and replace it with this one."));
+            if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
+                throw libdnf5::cli::AbortedByUserError();
+            }
+        }
 
         base.get_config().get_destdir_option().set(offline_datadir / "packages");
         transaction.set_download_local_pkgs(true);
