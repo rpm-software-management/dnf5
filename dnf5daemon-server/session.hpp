@@ -99,6 +99,8 @@ public:
     /// Setter for download cancel request flag.
     void set_cancel_download(CancelDownload value) { cancel_download.store(value); }
 
+    void reset_goal();
+
 private:
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf5::Base> base;
