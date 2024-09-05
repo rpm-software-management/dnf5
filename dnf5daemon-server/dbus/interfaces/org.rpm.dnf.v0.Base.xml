@@ -60,7 +60,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         A new download has started.
     -->
     <signal name="download_add_new">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="download_id" type="s" />
         <arg name="description" type="s" />
         <arg name="total_to_download" type="x" />
@@ -76,7 +76,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Progress in downloading.
     -->
     <signal name="download_progress">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="download_id" type="s" />
         <arg name="total_to_download" type="x" />
         <arg name="downloaded" type="x" />
@@ -93,7 +93,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Mirror failure during the download.
     -->
     <signal name="download_mirror_failure">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="download_id" type="s" />
         <arg name="message" type="s" />
         <arg name="url" type="s" />
@@ -110,7 +110,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Downloading has ended.
     -->
     <signal name="download_end">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="download_id" type="s" />
         <arg name="transfer_status" type="u" />
         <arg name="message" type="s" />
@@ -128,7 +128,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Request for repository key import confirmation.
     -->
     <signal name="repo_key_import_request">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="key_id" type="s" />
         <arg name="user_ids" type="as" />
         <arg name="key_fingerprint" type="s" />

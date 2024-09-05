@@ -240,7 +240,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Overall progress in transaction item processing. Called right before an item is processed.
     -->
     <signal name="transaction_elem_progress">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="processed" type="t" />
         <arg name="total" type="t" />
@@ -254,7 +254,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Send right before the rpm transaction is run.
     -->
     <signal name="transaction_before_begin">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="total" type="t" />
     </signal>
 
@@ -266,7 +266,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Send right after the rpm transaction run finished.
     -->
     <signal name="transaction_after_complete">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="success" type="b" />
     </signal>
 
@@ -280,7 +280,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Processing (installation or removal) of the package has started.
     -->
     <signal name="transaction_action_start">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="action" type="u" />
         <arg name="total" type="t" />
@@ -296,7 +296,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Progress in processing of the package.
     -->
     <signal name="transaction_action_progress">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="processed" type="t" />
         <arg name="total" type="t" />
@@ -311,7 +311,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Processing of the package has finished.
     -->
     <signal name="transaction_action_stop">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="total" type="t" />
     </signal>
@@ -325,7 +325,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         The scriptlet has started.
     -->
     <signal name="transaction_script_start">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="scriptlet_type" type="u" />
     </signal>
@@ -340,7 +340,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         The scriptlet has successfully finished.
     -->
     <signal name="transaction_script_stop">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="scriptlet_type" type="u" />
         <arg name="return_code" type="t" />
@@ -356,7 +356,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         The scriptlet has finished with an error.
     -->
     <signal name="transaction_script_error">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
         <arg name="scriptlet_type" type="u" />
         <arg name="return_code" type="t" />
@@ -370,7 +370,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Package files verification has started.
     -->
     <signal name="transaction_verify_start">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="total" type="t" />
     </signal>
 
@@ -383,7 +383,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Progress in processing of the package.
     -->
     <signal name="transaction_verify_progress">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="processed" type="t" />
         <arg name="total" type="t" />
     </signal>
@@ -396,7 +396,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Package files verification has finished.
     -->
     <signal name="transaction_verify_stop">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="total" type="t" />
     </signal>
 
@@ -408,7 +408,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Preparation of transaction packages has started.
     -->
     <signal name="transaction_transaction_start">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="total" type="t" />
     </signal>
 
@@ -421,7 +421,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Progress in preparation of transaction packages.
     -->
     <signal name="transaction_transaction_progress">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="processed" type="t" />
         <arg name="total" type="t" />
     </signal>
@@ -434,7 +434,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Preparation of transaction packages has finished.
     -->
     <signal name="transaction_transaction_stop">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="total" type="t" />
     </signal>
 
@@ -446,7 +446,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Error while unpacking the package.
     -->
     <signal name="transaction_unpack_error">
-        <arg name="session_object_path" type="o" />
+        <arg name="session_object_path" type="s" />
         <arg name="nevra" type="s" />
     </signal>
 

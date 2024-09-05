@@ -125,73 +125,73 @@ void Rpm::dbus_register() {
         });
 
     dbus_object->registerSignal(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN, "ot", {"session_object_path", "total"});
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_BEFORE_BEGIN, "st", {"session_object_path", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_AFTER_COMPLETE,
-        "ob",
+        "sb",
         {"session_object_path", "success"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS,
-        "ostt",
+        "sstt",
         {"session_object_path", "nevra", "processed", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_ACTION_START,
-        "osut",
+        "ssut",
         {"session_object_path", "nevra", "action", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS,
-        "ostt",
+        "sstt",
         {"session_object_path", "nevra", "processed", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP,
-        "ost",
+        "sst",
         {"session_object_path", "nevra", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START,
-        "osu",
+        "ssu",
         {"session_object_path", "nevra", "scriptlet_type"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP,
-        "osut",
+        "ssut",
         {"session_object_path", "nevra", "scriptlet_type", "return_code"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR,
-        "osut",
+        "ssut",
         {"session_object_path", "nevra", "scriptlet_type", "return_code"});
     dbus_object->registerSignal(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "ot", {"session_object_path", "total"});
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, "st", {"session_object_path", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS,
-        "ott",
+        "stt",
         {"session_object_path", "processed", "total"});
     dbus_object->registerSignal(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "ot", {"session_object_path", "total"});
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, "st", {"session_object_path", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START,
-        "ot",
+        "st",
         {"session_object_path", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS,
-        "ott",
+        "stt",
         {"session_object_path", "processed", "total"});
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP,
-        "ot",
+        "st",
         {"session_object_path", "total"});
     dbus_object->registerSignal(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, "os", {"session_object_path", "nevra"});
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, "ss", {"session_object_path", "nevra"});
 }
 
 std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
