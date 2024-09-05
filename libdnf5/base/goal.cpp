@@ -3296,12 +3296,17 @@ void Goal::add_redo_transaction(
 void Goal::reset() {
     p_impl->module_specs.clear();
     p_impl->rpm_specs.clear();
+    p_impl->rpm_reason_change_specs.clear();
     p_impl->rpm_ids.clear();
     p_impl->group_specs.clear();
     p_impl->rpm_filepaths.clear();
     p_impl->resolved_group_specs.clear();
     p_impl->resolved_environment_specs.clear();
+    p_impl->group_specs.clear();
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
+    p_impl->serialized_transaction.reset();
+    p_impl->revert_transactions.reset();
+    p_impl->redo_transaction.reset();
 }
 
 BaseWeakPtr Goal::get_base() const {
