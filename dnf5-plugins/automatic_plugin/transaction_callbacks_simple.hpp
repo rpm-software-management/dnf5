@@ -36,21 +36,21 @@ public:
           output_stream(output_stream) {}
 
     void transaction_start(uint64_t total) override;
-    void install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
-    void uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) override;
-    void unpack_error(const libdnf5::rpm::TransactionItem & item) override;
-    void cpio_error(const libdnf5::rpm::TransactionItem & item) override;
+    void install_start(const libdnf5::base::TransactionPackage & item, uint64_t total) override;
+    void uninstall_start(const libdnf5::base::TransactionPackage & item, uint64_t total) override;
+    void unpack_error(const libdnf5::base::TransactionPackage & item) override;
+    void cpio_error(const libdnf5::base::TransactionPackage & item) override;
     void script_error(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
         libdnf5::rpm::Nevra nevra,
         libdnf5::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override;
     void script_start(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
         libdnf5::rpm::Nevra nevra,
         libdnf5::rpm::TransactionCallbacks::ScriptType type) override;
     void script_stop(
-        [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+        [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
         libdnf5::rpm::Nevra nevra,
         libdnf5::rpm::TransactionCallbacks::ScriptType type,
         [[maybe_unused]] uint64_t return_code) override;

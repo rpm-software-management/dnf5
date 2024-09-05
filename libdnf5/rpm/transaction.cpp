@@ -311,7 +311,7 @@ Header Transaction::get_header(unsigned int rec_offset) {
     return hdr;
 }
 
-void Transaction::reinstall(TransactionItem & item) {
+void Transaction::reinstall(base::TransactionPackage & item) {
     auto file_path = item.get_package().get_package_path();
     auto * header = read_pkg_header(file_path);
     last_added_item = &item;
@@ -328,7 +328,7 @@ void Transaction::reinstall(TransactionItem & item) {
         item.get_package().get_full_nevra());
 }
 
-void Transaction::erase(TransactionItem & item) {
+void Transaction::erase(base::TransactionPackage & item) {
     auto rpmdb_id = static_cast<unsigned int>(item.get_package().get_rpmdbid());
     auto * header = get_header(rpmdb_id);
     int unused = -1;
@@ -352,7 +352,7 @@ void Transaction::erase(TransactionItem & item) {
     }
 }
 
-void Transaction::install_up_down(TransactionItem & item, libdnf5::transaction::TransactionItemAction action) {
+void Transaction::install_up_down(base::TransactionPackage & item, libdnf5::transaction::TransactionItemAction action) {
     BgettextMessage msg_error;
     std::string msg_action;
     bool upgrade{true};
@@ -493,7 +493,7 @@ void * Transaction::ts_callback(
     auto & logger = *transaction.base->get_logger();
     auto * const callbacks = callbacks_holder.callbacks.get();
     auto * const trans_element = static_cast<rpmte>(const_cast<void *>(te));
-    auto * const item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
+    auto * const item = trans_element ? static_cast<base::TransactionPackage *>(rpmteUserdata(trans_element)) : nullptr;
 
     switch (what) {
         case RPMCALLBACK_INST_PROGRESS:

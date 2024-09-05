@@ -35,6 +35,7 @@ class TransactionPackage;
 namespace libdnf5::rpm {
 
 
+/// @deprecated This alias is confusing, do not use it.
 /// Class represents one item in transaction set.
 using TransactionItem = base::TransactionPackage;
 
@@ -96,20 +97,20 @@ public:
     /// @param item The TransactionPackage class instance for the package currently being installed
     /// @param amount The portion of the package already installed
     /// @param total The disk space used by the package after installation
-    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void install_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total);
 
     /// Installation of a package has started
     ///
     /// @param item The TransactionPackage class instance for the package currently being installed
     /// @param total The disk space used by the package after installation
-    virtual void install_start(const TransactionItem & item, uint64_t total);
+    virtual void install_start(const libdnf5::base::TransactionPackage & item, uint64_t total);
 
     /// Installation of a package finished
     ///
     /// @param item The TransactionPackage class instance for the package currently being installed
     /// @param amount The portion of the package that has been installed
     /// @param total The disk space used by the package after installation
-    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void install_stop(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total);
 
     /// Preparation of a package has started.
     ///
@@ -132,30 +133,30 @@ public:
     /// @param item The TransactionPackage class instance for the package currently being removed
     /// @param amount The portion of the package already uninstalled
     /// @param total The disk space freed by the package after removal
-    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void uninstall_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total);
 
     /// Removal of a package has started
     ///
     /// @param item The TransactionPackage class instance for the package currently being removed
     /// @param total The disk space freed by the package after removal
-    virtual void uninstall_start(const TransactionItem & item, uint64_t total);
+    virtual void uninstall_start(const libdnf5::base::TransactionPackage & item, uint64_t total);
 
     /// Removal of a package finished
     ///
     /// @param item The TransactionPackage class instance for the package currently being removed
     /// @param amount The portion of the package already uninstalled
     /// @param total The disk space freed by the package after removal
-    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void uninstall_stop(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total);
 
     /// Unpacking of the package failed.
     ///
     /// @param item The TransactionPackage class instance representing the package that failed to unpack
-    virtual void unpack_error(const TransactionItem & item);
+    virtual void unpack_error(const libdnf5::base::TransactionPackage & item);
 
     /// cpio error during the package installation. Currently not used by librpm.
     ///
     /// @param item The TransactionPackage class instance representing the package that caused the error
-    virtual void cpio_error(const TransactionItem & item);
+    virtual void cpio_error(const libdnf5::base::TransactionPackage & item);
 
     /// Execution of the rpm scriptlet finished with error
     ///
@@ -163,14 +164,15 @@ public:
     /// @param nevra Nevra of the package that owns the executed or triggered scriptlet.
     /// @param type Type of the scriptlet
     /// @param return_code The return code of the scriptlet execution
-    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
+    virtual void script_error(
+        const libdnf5::base::TransactionPackage * item, Nevra nevra, ScriptType type, uint64_t return_code);
 
     /// Execution of the rpm scriptlet has started
     ///
     /// @param item The TransactionPackage class instance for the package that owns the executed or triggered scriptlet. It can be `nullptr` if the scriptlet owner is not part of the transaction (e.g., a package installation triggered an update of the man database, owned by man-db package).
     /// @param nevra Nevra of the package that owns the executed or triggered scriptlet.
     /// @param type Type of the scriptlet
-    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type);
+    virtual void script_start(const libdnf5::base::TransactionPackage * item, Nevra nevra, ScriptType type);
 
     /// Execution of the rpm scriptlet finished without critical error
     ///
@@ -178,13 +180,14 @@ public:
     /// @param nevra Nevra of the package that owns the executed or triggered scriptlet.
     /// @param type Type of the scriptlet
     /// @param return_code The return code of the scriptlet execution
-    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code);
+    virtual void script_stop(
+        const libdnf5::base::TransactionPackage * item, Nevra nevra, ScriptType type, uint64_t return_code);
 
     /// The installation/removal process for the item has started
     ///
     /// @param amount Index of the package currently being processed. Items are indexed starting from 0.
     /// @param total The total number of packages in the transaction
-    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total);
+    virtual void elem_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total);
 
     /// Verification of a package files has started.
     ///
