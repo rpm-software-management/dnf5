@@ -756,14 +756,14 @@ libdnf5::cli::progressbar::MultiProgressBar * RpmTransCB::get_multi_progress_bar
 }
 
 void RpmTransCB::install_progress(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
+    [[maybe_unused]] const libdnf5::base::TransactionPackage & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
     active_progress_bar->set_ticks(static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
 }
 
-void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) {
+void RpmTransCB::install_start(const libdnf5::base::TransactionPackage & item, uint64_t total) {
     const char * msg{nullptr};
     switch (item.get_action()) {
         case libdnf5::transaction::TransactionItemAction::UPGRADE:
@@ -798,7 +798,7 @@ void RpmTransCB::install_start(const libdnf5::rpm::TransactionItem & item, uint6
 }
 
 void RpmTransCB::install_stop(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
     multi_progress_bar.print();
@@ -821,14 +821,14 @@ void RpmTransCB::transaction_stop([[maybe_unused]] uint64_t total) {
 }
 
 void RpmTransCB::uninstall_progress(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
+    [[maybe_unused]] const libdnf5::base::TransactionPackage & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
     active_progress_bar->set_ticks(static_cast<int64_t>(amount));
     if (is_time_to_print()) {
         multi_progress_bar.print();
     }
 }
 
-void RpmTransCB::uninstall_start(const libdnf5::rpm::TransactionItem & item, uint64_t total) {
+void RpmTransCB::uninstall_start(const libdnf5::base::TransactionPackage & item, uint64_t total) {
     const char * msg{nullptr};
     if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE ||
         item.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
@@ -841,21 +841,21 @@ void RpmTransCB::uninstall_start(const libdnf5::rpm::TransactionItem & item, uin
 }
 
 void RpmTransCB::uninstall_stop(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
     multi_progress_bar.print();
 }
 
 
-void RpmTransCB::unpack_error(const libdnf5::rpm::TransactionItem & item) {
+void RpmTransCB::unpack_error(const libdnf5::base::TransactionPackage & item) {
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::ERROR, "Unpack error: " + item.get_package().get_full_nevra());
     active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
     multi_progress_bar.print();
 }
 
-void RpmTransCB::cpio_error(const libdnf5::rpm::TransactionItem & item) {
+void RpmTransCB::cpio_error(const libdnf5::base::TransactionPackage & item) {
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::ERROR, "Cpio error: " + item.get_package().get_full_nevra());
     active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
@@ -874,7 +874,7 @@ void RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::Mess
 }
 
 void RpmTransCB::script_error(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
@@ -890,7 +890,7 @@ void RpmTransCB::script_error(
 }
 
 void RpmTransCB::script_start(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type) {
     active_progress_bar->add_message(
@@ -900,7 +900,7 @@ void RpmTransCB::script_start(
 }
 
 void RpmTransCB::script_stop(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
@@ -929,7 +929,7 @@ void RpmTransCB::script_stop(
 }
 
 void RpmTransCB::elem_progress(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem & item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
     //std::cout << "Element progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;

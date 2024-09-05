@@ -57,11 +57,11 @@ void TransactionCallbacks::before_begin(uint64_t) {}
 
 void TransactionCallbacks::after_complete(bool) {}
 
-void TransactionCallbacks::install_progress(const TransactionItem &, uint64_t, uint64_t) {}
+void TransactionCallbacks::install_progress(const libdnf5::base::TransactionPackage &, uint64_t, uint64_t) {}
 
-void TransactionCallbacks::install_start(const TransactionItem &, uint64_t) {}
+void TransactionCallbacks::install_start(const libdnf5::base::TransactionPackage &, uint64_t) {}
 
-void TransactionCallbacks::install_stop(const TransactionItem &, uint64_t, uint64_t) {}
+void TransactionCallbacks::install_stop(const libdnf5::base::TransactionPackage &, uint64_t, uint64_t) {}
 
 void TransactionCallbacks::transaction_progress(uint64_t, uint64_t) {}
 
@@ -69,23 +69,23 @@ void TransactionCallbacks::transaction_start(uint64_t) {}
 
 void TransactionCallbacks::transaction_stop(uint64_t) {}
 
-void TransactionCallbacks::uninstall_progress(const TransactionItem &, uint64_t, uint64_t) {}
+void TransactionCallbacks::uninstall_progress(const libdnf5::base::TransactionPackage &, uint64_t, uint64_t) {}
 
-void TransactionCallbacks::uninstall_start(const TransactionItem &, uint64_t) {}
+void TransactionCallbacks::uninstall_start(const libdnf5::base::TransactionPackage &, uint64_t) {}
 
-void TransactionCallbacks::uninstall_stop(const TransactionItem &, uint64_t, uint64_t) {}
+void TransactionCallbacks::uninstall_stop(const libdnf5::base::TransactionPackage &, uint64_t, uint64_t) {}
 
-void TransactionCallbacks::unpack_error(const TransactionItem &) {}
+void TransactionCallbacks::unpack_error(const libdnf5::base::TransactionPackage &) {}
 
-void TransactionCallbacks::cpio_error(const TransactionItem &) {}
+void TransactionCallbacks::cpio_error(const libdnf5::base::TransactionPackage &) {}
 
-void TransactionCallbacks::script_error(const TransactionItem *, Nevra, ScriptType, uint64_t) {}
+void TransactionCallbacks::script_error(const libdnf5::base::TransactionPackage *, Nevra, ScriptType, uint64_t) {}
 
-void TransactionCallbacks::script_start(const TransactionItem *, Nevra, ScriptType) {}
+void TransactionCallbacks::script_start(const libdnf5::base::TransactionPackage *, Nevra, ScriptType) {}
 
-void TransactionCallbacks::script_stop(const TransactionItem *, Nevra, ScriptType, uint64_t) {}
+void TransactionCallbacks::script_stop(const libdnf5::base::TransactionPackage *, Nevra, ScriptType, uint64_t) {}
 
-void TransactionCallbacks::elem_progress(const TransactionItem &, uint64_t, uint64_t) {}
+void TransactionCallbacks::elem_progress(const libdnf5::base::TransactionPackage &, uint64_t, uint64_t) {}
 
 void TransactionCallbacks::verify_progress(uint64_t, uint64_t) {}
 

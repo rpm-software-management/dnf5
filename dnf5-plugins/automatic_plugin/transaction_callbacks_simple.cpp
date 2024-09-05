@@ -33,7 +33,7 @@ void TransactionCallbacksSimple::transaction_start([[maybe_unused]] uint64_t tot
 
 
 void TransactionCallbacksSimple::install_start(
-    const libdnf5::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) {
+    const libdnf5::base::TransactionPackage & item, [[maybe_unused]] uint64_t total) {
     switch (item.get_action()) {
         case libdnf5::transaction::TransactionItemAction::UPGRADE:
             output_stream << "  Upgrading ";
@@ -66,7 +66,7 @@ void TransactionCallbacksSimple::install_start(
 }
 
 void TransactionCallbacksSimple::uninstall_start(
-    const libdnf5::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) {
+    const libdnf5::base::TransactionPackage & item, [[maybe_unused]] uint64_t total) {
     if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
         output_stream << "  Erasing ";
     } else {
@@ -75,16 +75,16 @@ void TransactionCallbacksSimple::uninstall_start(
     output_stream << item.get_package().get_full_nevra() << std::endl;
 }
 
-void TransactionCallbacksSimple::unpack_error(const libdnf5::rpm::TransactionItem & item) {
+void TransactionCallbacksSimple::unpack_error(const libdnf5::base::TransactionPackage & item) {
     output_stream << "  Unpack error: " << item.get_package().get_full_nevra() << std::endl;
 }
 
-void TransactionCallbacksSimple::cpio_error(const libdnf5::rpm::TransactionItem & item) {
+void TransactionCallbacksSimple::cpio_error(const libdnf5::base::TransactionPackage & item) {
     output_stream << "  Cpio error: " << item.get_package().get_full_nevra() << std::endl;
 }
 
 void TransactionCallbacksSimple::script_error(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
@@ -93,7 +93,7 @@ void TransactionCallbacksSimple::script_error(
 }
 
 void TransactionCallbacksSimple::script_start(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type) {
     output_stream << "  Running " << script_type_to_string(type) << " scriptlet: " << to_full_nevra_string(nevra)
@@ -101,7 +101,7 @@ void TransactionCallbacksSimple::script_start(
 }
 
 void TransactionCallbacksSimple::script_stop(
-    [[maybe_unused]] const libdnf5::rpm::TransactionItem * item,
+    [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
     [[maybe_unused]] uint64_t return_code) {

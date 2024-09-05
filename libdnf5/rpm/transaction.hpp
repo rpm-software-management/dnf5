@@ -48,10 +48,6 @@ namespace libdnf5::rpm {
 class RpmProblemSet;
 
 
-/// Class represents one item in transaction set.
-using TransactionItem = base::TransactionPackage;
-
-
 /// Class for access RPM header
 class RpmHeader {
 public:
@@ -103,8 +99,8 @@ public:
     rpmProblemType get_type() const { return rpmProblemGetType(problem); }
 
     /// Return pointer to transaction item associated to the problem or nullptr.
-    const TransactionItem * get_transaction_item() const noexcept {
-        return static_cast<const TransactionItem *>(rpmProblemGetKey(problem));
+    const base::TransactionPackage * get_transaction_item() const noexcept {
+        return static_cast<const base::TransactionPackage *>(rpmProblemGetKey(problem));
     }
 
     /// Return a generic data string from a problem
@@ -342,12 +338,12 @@ private:
     CallbacksHolder callbacks_holder{nullptr, this, nullptr};
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
 
-    TransactionItem * last_added_item{nullptr};  // item added by last install/reinstall/erase/...
-    bool last_item_added_ts_element{false};      // Did the last item add the element ts?
+    base::TransactionPackage * last_added_item{nullptr};  // item added by last install/reinstall/erase/...
+    bool last_item_added_ts_element{false};               // Did the last item add the element ts?
 
     std::map<unsigned int, rpmte> implicit_ts_elements;  // elements added to the librpm transaction by librpm itself
     bool downgrade_requested{false};
-    std::vector<TransactionItem> transaction_items;
+    std::vector<base::TransactionPackage> transaction_items;
 
     RpmLogGuard rpm_log_guard;
 
@@ -365,7 +361,7 @@ private:
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be installed
-    void install(TransactionItem & item) {
+    void install(base::TransactionPackage & item) {
         install_up_down(item, libdnf5::transaction::TransactionItemAction::INSTALL);
     }
 
@@ -373,7 +369,7 @@ private:
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
-    void upgrade(TransactionItem & item) {
+    void upgrade(base::TransactionPackage & item) {
         install_up_down(item, libdnf5::transaction::TransactionItemAction::UPGRADE);
     }
 
@@ -381,17 +377,17 @@ private:
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
-    void downgrade(TransactionItem & item) {
+    void downgrade(base::TransactionPackage & item) {
         install_up_down(item, libdnf5::transaction::TransactionItemAction::DOWNGRADE);
     }
 
     /// Add package to be reinstalled to transaction set.
     /// @param item  item to be reinstalled
-    void reinstall(TransactionItem & item);
+    void reinstall(base::TransactionPackage & item);
 
     /// Add package to be erased to transaction set.
     /// @param item  item to be erased
-    void erase(TransactionItem & item);
+    void erase(base::TransactionPackage & item);
 
     /// Add package to be installed to transaction set.
     /// The transaction set is checked for duplicate package names.
@@ -399,7 +395,7 @@ private:
     /// @param item  item to be erased
     /// @param action  one of TransactionItemAction::UPGRADE,
     ///     TransactionItemAction::DOWNGRADE, TransactionItemAction::INSTALL
-    void install_up_down(TransactionItem & item, libdnf5::transaction::TransactionItemAction action);
+    void install_up_down(base::TransactionPackage & item, libdnf5::transaction::TransactionItemAction action);
 
     static Nevra trans_element_to_nevra(rpmte te);
 

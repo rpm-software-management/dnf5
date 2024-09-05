@@ -53,7 +53,7 @@ transaction.download();
 // complete list of the callbacks see `libdnf5::rpm::TransactionCallbacks`
 // documentation.
 class TransactionCallbacks : public libdnf5::rpm::TransactionCallbacks {
-    void install_start(const libdnf5::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) override {
+    void install_start(const libdnf5::base::TransactionPackage & item, [[maybe_unused]] uint64_t total) override {
         std::cout << transaction_item_action_to_string(item.get_action()) << " " << item.get_package().get_nevra()
                   << std::endl;
     }
