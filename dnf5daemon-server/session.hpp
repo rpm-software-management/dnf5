@@ -70,7 +70,7 @@ public:
         return dnfdaemon::key_value_map_get<ItemType>(session_configuration, key);
     }
 
-    std::string get_object_path() { return object_path; };
+    const sdbus::ObjectPath & get_object_path() const { return object_path; };
     sdbus::IConnection & get_connection() { return connection; };
     libdnf5::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
@@ -105,7 +105,7 @@ private:
     libdnf5::Goal goal;
     std::unique_ptr<libdnf5::base::Transaction> transaction{nullptr};
     dnfdaemon::KeyValueMap session_configuration;
-    std::string object_path;
+    sdbus::ObjectPath object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};
     ThreadsManager threads_manager;
     std::atomic<dnfdaemon::RepoStatus> repositories_status{dnfdaemon::RepoStatus::NOT_READY};
