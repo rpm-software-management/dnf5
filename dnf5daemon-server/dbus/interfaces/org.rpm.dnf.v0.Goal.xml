@@ -106,6 +106,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="error_msg" type="s" direction="out" />
     </method>
 
+    <!--
+        reset:
+        Reset the prepared rpm transaction. After this call the session is ready to perform another rpm transaction.
+    -->
+    <method name="reset">
+    </method>
+
 </interface>
 
 </node>

@@ -114,6 +114,10 @@ void Goal::dbus_register() {
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::cancel, call, session.session_locale);
         });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_GOAL, "reset", "", {}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Goal::reset, call, session.session_locale);
+        });
 }
 
 sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
@@ -344,5 +348,11 @@ sdbus::MethodReply Goal::cancel(sdbus::MethodCall & call) {
     auto reply = call.createReply();
     reply << success;
     reply << error_msg;
+    return reply;
+}
+
+sdbus::MethodReply Goal::reset(sdbus::MethodCall & call) {
+    session.reset_goal();
+    auto reply = call.createReply();
     return reply;
 }

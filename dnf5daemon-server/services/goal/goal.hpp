@@ -37,6 +37,7 @@ private:
     sdbus::MethodReply get_transaction_problems(sdbus::MethodCall & call);
     sdbus::MethodReply do_transaction(sdbus::MethodCall & call);
     sdbus::MethodReply cancel(sdbus::MethodCall & call);
+    sdbus::MethodReply reset(sdbus::MethodCall & call);
 };
 
 #endif
