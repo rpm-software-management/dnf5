@@ -102,8 +102,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Cancel the transaction that was initiated by `do_transaction()`. The transaction can only be canceled during the package download phase. Once the RPM transaction has begun, cancellation is no longer permitted.
     -->
     <method name="cancel">
-        <arg name="success" type="b" />
-        <arg name="error_msg" type="s" />
+        <arg name="success" type="b" direction="out" />
+        <arg name="error_msg" type="s" direction="out" />
     </method>
 
 </interface>
