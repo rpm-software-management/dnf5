@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-07-15 14:38+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-07-28 18:38+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ru/>\n"
@@ -27,124 +27,124 @@ msgstr ""
 "Плохой идентификатор libsolv для рекомендации \"{}\", имя решаемой задачи "
 "\"{}\" не имеет префикса рекомендации \"{}\""
 
-#: base/goal.cpp:470
+#: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Неподдерживаемый аргумент для действия REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1528
+#: base/goal.cpp:1545
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Неверное значение конфигурации для multilib_policy: {}"
 
-#: base/goal_elements.cpp:348
+#: base/goal_elements.cpp:352
 msgid "Install"
 msgstr "Установить"
 
-#: base/goal_elements.cpp:350
+#: base/goal_elements.cpp:354
 msgid "Install via provide"
 msgstr "Установить с помощью программы"
 
-#: base/goal_elements.cpp:352
+#: base/goal_elements.cpp:356
 msgid "Install by group"
 msgstr "Установить по группам"
 
-#: base/goal_elements.cpp:354
+#: base/goal_elements.cpp:358
 msgid "Upgrade"
 msgstr "Обновить"
 
-#: base/goal_elements.cpp:356
+#: base/goal_elements.cpp:360
 msgid "Upgrade all"
 msgstr "Обновить все"
 
-#: base/goal_elements.cpp:358
+#: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
 msgstr "Обновить минимально"
 
-#: base/goal_elements.cpp:360
+#: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
 msgstr "Обновить все минимально"
 
-#: base/goal_elements.cpp:362
+#: base/goal_elements.cpp:366
 msgid "Downgrade"
 msgstr "Откатить"
 
-#: base/goal_elements.cpp:364
+#: base/goal_elements.cpp:368
 msgid "Reinstall"
 msgstr "Переустановить"
 
-#: base/goal_elements.cpp:366
+#: base/goal_elements.cpp:370
 msgid "Install or reinstall"
 msgstr "Установка или переустановка"
 
-#: base/goal_elements.cpp:368
+#: base/goal_elements.cpp:372
 msgid "Remove"
 msgstr "Удалить"
 
-#: base/goal_elements.cpp:370
+#: base/goal_elements.cpp:374
 msgid "Distrosync"
 msgstr "Дистросинхронизация"
 
-#: base/goal_elements.cpp:372
+#: base/goal_elements.cpp:376
 msgid "Distrosync all"
 msgstr "Дистросинхронизация всех"
 
-#: base/goal_elements.cpp:374
+#: base/goal_elements.cpp:378
 msgid "Reason Change"
 msgstr "Изменение причины"
 
-#: base/goal_elements.cpp:376
+#: base/goal_elements.cpp:380
 msgid "Resolve"
 msgstr "Разрешение"
 
-#: base/goal_elements.cpp:378
+#: base/goal_elements.cpp:382
 msgid "Enable"
 msgstr "Включить"
 
-#: base/goal_elements.cpp:380
+#: base/goal_elements.cpp:384
 msgid "Disable"
 msgstr "Отключить"
 
-#: base/goal_elements.cpp:382
+#: base/goal_elements.cpp:386
 msgid "Reset"
 msgstr "Сбросить"
 
-#: base/goal_elements.cpp:384
+#: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
 msgstr "Разбор сериализованной транзакции"
 
-#: base/goal_elements.cpp:386
+#: base/goal_elements.cpp:390
 msgid "Install action"
 msgstr "Действие по установке"
 
-#: base/goal_elements.cpp:388
+#: base/goal_elements.cpp:392
 msgid "Remove action"
 msgstr "Действие по удалению"
 
-#: base/goal_elements.cpp:390
+#: base/goal_elements.cpp:394
 msgid "Upgrade action"
 msgstr "Действие по обновлению"
 
-#: base/goal_elements.cpp:392
+#: base/goal_elements.cpp:396
 msgid "Reinstall action"
 msgstr "Действие по переустановке"
 
-#: base/goal_elements.cpp:394
+#: base/goal_elements.cpp:398
 msgid "Reason change action"
 msgstr "Действие по изменению причины"
 
-#: base/goal_elements.cpp:396
+#: base/goal_elements.cpp:400
 msgid "Reason override"
 msgstr "Отмена причины"
 
-#: base/goal_elements.cpp:398
+#: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
 msgstr "Вернуть обновление Компов"
 
-#: base/goal_elements.cpp:400
+#: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
 msgstr "Установка отладочных RPM"
 
-#: base/goal_elements.cpp:402
+#: base/goal_elements.cpp:406
 msgid "Transaction merge"
 msgstr "Объединение транзакций"
 
@@ -631,36 +631,36 @@ msgstr "Отменено пользователем."
 msgid "Public key import failed."
 msgstr "Сбой импорта публичного ключа."
 
-#: base/transaction.cpp:976
+#: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
 msgstr "Недопустимый tsflag: {}"
 
-#: base/transaction.cpp:1312
+#: base/transaction.cpp:1317
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Публичный ключ \"{}\" уже присутствует, не импортируется."
 
-#: base/transaction.cpp:1333
+#: base/transaction.cpp:1338
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
-#: base/transaction.cpp:1367
+#: base/transaction.cpp:1372
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
-#: base/transaction.cpp:1395
+#: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Импорт ключа не помог, неправильный ключ?"
 
-#: base/transaction.cpp:1414
+#: base/transaction.cpp:1419
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1417
+#: base/transaction.cpp:1422
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Предупреждение: пропущены проверки PGP для 1 пакета из репозитория: {}"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1424
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -706,23 +706,23 @@ msgstr "Не удалось сохранить xml-документ для гр�
 msgid "Invalid package type: {}"
 msgstr "Недопустимый тип пакета: {}"
 
-#: conf/config_main.cpp:53
+#: conf/config_main.cpp:56
 msgid "Input is empty. Must contain a value."
 msgstr "Ввод пуст. Должен содержать значение."
 
-#: conf/config_main.cpp:59
+#: conf/config_main.cpp:62
 msgid "Input value '{}' must not be negative"
 msgstr "Входное значение '{}' не должно быть отрицательным"
 
-#: conf/config_main.cpp:64
+#: conf/config_main.cpp:67
 msgid "Could not convert '{}' to bytes"
 msgstr "Не удалось преобразовать '{}' в байты"
 
-#: conf/config_main.cpp:80
+#: conf/config_main.cpp:83
 msgid "Unknown unit '{}'"
 msgstr "Неизвестная единица '{}'"
 
-#: conf/config_main.cpp:258
+#: conf/config_main.cpp:278
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Значение дросселя {} находится вне допустимого диапазона {} ... {}"
 
@@ -824,15 +824,7 @@ msgstr ""
 "Значение элемента ввода \"{}\" недопустимо, допустимые значения для этой "
 "опции определяются регулярным выражением \"{}\""
 
-#: conf/vars.cpp:63
-msgid "failed to read rpm config files"
-msgstr "Не удалось прочитать файлы конфигурации rpm"
-
-#: conf/vars.cpp:89
-msgid "Failed to execute uname()"
-msgstr "Не удалось выполнить uname()"
-
-#: conf/vars.cpp:370 conf/vars.cpp:410
+#: conf/vars.cpp:313 conf/vars.cpp:353
 msgid "Variable \"{}\" is read-only"
 msgstr "Переменная \"{}\" доступна только для чтения"
 
@@ -855,7 +847,7 @@ msgstr "Невозможно включить несколько потоков 
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:758
+#: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
 msgstr "нет возможного решения"
 
@@ -940,11 +932,11 @@ msgstr ""
 "Максимальная скорость загрузки ниже минимальной, пожалуйста, измените "
 "конфигурацию minrate или throttle"
 
-#: repo/package_downloader.cpp:147
+#: repo/package_downloader.cpp:141
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Невозможно загрузить пакет \"{0}\", активирована опция \"cacheonly\"."
 
-#: repo/package_downloader.cpp:222
+#: repo/package_downloader.cpp:244
 msgid "Failed to download packages"
 msgstr "Не удалось загрузить пакеты"
 
@@ -998,29 +990,29 @@ msgstr "Невозможно определить идентификатор р�
 msgid "Empty path to the repository cache directory."
 msgstr "Пустой путь к каталогу кэша репозитория."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
 msgstr "Ошибка Librepo: {}"
 
-#: repo/repo_downloader.cpp:170
+#: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "Не удалось загрузить метаданные ({}: \"{}\") для репозитория \"{}\""
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:242
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Ошибка при проверке синхронизации metalink \"{}\" для репозитория \"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:272
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Ошибка при проверке синхронизации repomd ({}: \"{}\") для репозитория \"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Ошибка при загрузке локальных метаданных для репозитория \"{}\""
 
-#: repo/repo_downloader.cpp:455
+#: repo/repo_downloader.cpp:456
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1216,7 +1208,7 @@ msgstr "Невозможно понизить версию пакета \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Невозможно установить пакет \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:517
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
 msgstr "{}"
 
@@ -1229,15 +1221,19 @@ msgstr "Не удалось преобразовать эпоху \"{}\" в чи
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Сбой записи данных отладчика в \"{}\": {}"
 
-#: system/state.cpp:228 system/state.cpp:237
+#: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Недопустимая версия TOML \"{}\", ожидается \"MAJOR.MINOR\""
 
-#: system/state.cpp:245
+#: system/state.cpp:297
 msgid "{} state for \"{}\" not found."
 msgstr "Состояние {} для \"{}\" не найдено."
 
-#: system/state.cpp:546
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+
+#: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "Неподдерживаемая версия TOML \"{}\", максимальная поддерживаемая версия - "
@@ -1415,103 +1411,69 @@ msgstr ""
 "\"{}\""
 
 #: transaction/transaction_sr.cpp:81
-#, fuzzy
-#| msgid "Invalid minor version: \"{}\", number expected."
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr "Недопустимая минорная версия: \"{}\", ожидается число."
+msgstr "Недопустимая минорная версия: \"{}\", ожидается число"
 
 #: transaction/transaction_sr.cpp:84
-#, fuzzy
-#| msgid "Missing key \"version\"."
 msgid "Missing key \"version\""
-msgstr "Отсутствует ключ \"version\"."
+msgstr "Отсутствует ключ \"version\""
 
 #: transaction/transaction_sr.cpp:97
-#, fuzzy
-#| msgid "Unexpected type of \"environments\", array expected."
 msgid "Unexpected type of \"environments\", array expected"
-msgstr "Неожиданный тип \"environments\", ожидается массив."
+msgstr "Неожиданный тип \"environments\", ожидается массив"
 
 #: transaction/transaction_sr.cpp:105
-#, fuzzy
-#| msgid "Missing object key \"id\" in an environment."
 msgid "Missing object key \"id\" in an environment"
-msgstr "Отсутствует ключ объекта \"id\" в среде."
+msgstr "Отсутствует ключ объекта \"id\" в среде"
 
 #: transaction/transaction_sr.cpp:110
-#, fuzzy
-#| msgid "Missing object key \"action\" in an environment."
 msgid "Missing object key \"action\" in an environment"
-msgstr "Отсутствует объектный ключ \"action\" в среде."
+msgstr "Отсутствует объектный ключ \"action\" в среде"
 
 #: transaction/transaction_sr.cpp:137
-#, fuzzy
-#| msgid "Unexpected type of \"groups\", array expected."
 msgid "Unexpected type of \"groups\", array expected"
-msgstr "Неожиданный тип \"groups\", ожидается массив."
+msgstr "Неожиданный тип \"groups\", ожидается массив"
 
 #: transaction/transaction_sr.cpp:145
-#, fuzzy
-#| msgid "Missing object key \"id\" in a group."
 msgid "Missing object key \"id\" in a group"
-msgstr "Отсутствует объект-ключ \"id\" в группе."
+msgstr "Отсутствует объект-ключ \"id\" в группе"
 
 #: transaction/transaction_sr.cpp:150
-#, fuzzy
-#| msgid "Missing object key \"action\" in a group."
 msgid "Missing object key \"action\" in a group"
-msgstr "Отсутствует объект-ключ \"action\" в группе."
+msgstr "Отсутствует объект-ключ \"action\" в группе"
 
 #: transaction/transaction_sr.cpp:155
-#, fuzzy
-#| msgid "Missing object key \"reason\" in a group."
 msgid "Missing object key \"reason\" in a group"
-msgstr "Отсутствует объект-ключ \"reason\" в группе."
+msgstr "Отсутствует объект-ключ \"reason\" в группе"
 
 #: transaction/transaction_sr.cpp:193
-#, fuzzy
-#| msgid "Unexpected type of \"rpms\", array expected."
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr "Неожиданный тип \"rpms\", ожидается массив."
+msgstr "Неожиданный тип \"rpms\", ожидается массив"
 
 #: transaction/transaction_sr.cpp:202
-#, fuzzy
-#| msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr "Невозможно разобрать NEVRA для rpm \"{}\"."
+msgstr "Невозможно разобрать NEVRA для rpm \"{}\""
 
 #: transaction/transaction_sr.cpp:210
-#, fuzzy
-#| msgid ""
-#| "Either \"nevra\" or \"package_path\" object key is required in an rpm."
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
 msgstr ""
-"В rpm требуется либо объект-ключ \"nevra\", либо объект-ключ "
-"\"package_path\"."
+"В rpm требуется либо объект-ключ \"nevra\", либо объект-ключ \"package_path\""
 
 #: transaction/transaction_sr.cpp:215
-#, fuzzy
-#| msgid "Missing object key \"action\" in an rpm."
 msgid "Missing object key \"action\" in an rpm"
-msgstr "Отсутствует объект-ключ \"action\" в rpm."
+msgstr "Отсутствует объект-ключ \"action\" в rpm"
 
 #: transaction/transaction_sr.cpp:220
-#, fuzzy
-#| msgid "Missing object key \"reason\" in an rpm."
 msgid "Missing object key \"reason\" in an rpm"
-msgstr "Отсутствует объект-ключ \"reason\" в rpm."
+msgstr "Отсутствует объект-ключ \"reason\" в rpm"
 
 #: transaction/transaction_sr.cpp:227
-#, fuzzy
-#| msgid ""
-#| "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-#| "and action \"Reason Change\"."
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
 "Отсутствует обязательный ключ-объект \"group_id\" в rpm с причиной \"Group\" "
-"и действием \"Reason Change\"."
+"и действием \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1686,6 +1648,14 @@ msgstr "Не удалось создать резервную копию баз�
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Не удалось восстановить базу данных \"{}\""
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "Не удалось прочитать файлы конфигурации rpm"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Не удалось выполнить uname()"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Невозможно {} пакет \"{}\""

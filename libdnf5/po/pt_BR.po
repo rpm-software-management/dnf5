@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-03-17 02:36+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-07-26 20:38+0000\n"
+"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -29,152 +29,142 @@ msgstr ""
 "ID libsolv inválido para aviso \"{}\", o nome solucionável \"{}\" não tem "
 "prefixo de aviso \"{}\""
 
-#: base/goal.cpp:470
+#: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argumento não suportado para ação REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1528
+#: base/goal.cpp:1545
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valor de configuração incorreto para multilib_policy: {}"
 
-#: base/goal_elements.cpp:348
-msgid "Install"
-msgstr ""
-
-#: base/goal_elements.cpp:350
-msgid "Install via provide"
-msgstr ""
-
 #: base/goal_elements.cpp:352
-msgid "Install by group"
-msgstr ""
+msgid "Install"
+msgstr "Instalar"
 
 #: base/goal_elements.cpp:354
-msgid "Upgrade"
-msgstr ""
+msgid "Install via provide"
+msgstr "Instalar usando provide"
 
 #: base/goal_elements.cpp:356
-msgid "Upgrade all"
-msgstr ""
+msgid "Install by group"
+msgstr "Instalar por grupo"
 
 #: base/goal_elements.cpp:358
-msgid "Upgrade minimal"
-msgstr ""
+msgid "Upgrade"
+msgstr "Atualizar"
 
 #: base/goal_elements.cpp:360
-msgid "Upgrade all minimal"
-msgstr ""
+msgid "Upgrade all"
+msgstr "Atualizar tudo"
 
 #: base/goal_elements.cpp:362
-msgid "Downgrade"
-msgstr ""
+msgid "Upgrade minimal"
+msgstr "Atualização mínima"
 
 #: base/goal_elements.cpp:364
-msgid "Reinstall"
-msgstr ""
+msgid "Upgrade all minimal"
+msgstr "Atualizar tudo (minimal)"
 
 #: base/goal_elements.cpp:366
-msgid "Install or reinstall"
-msgstr ""
+msgid "Downgrade"
+msgstr "Desatualizar"
 
 #: base/goal_elements.cpp:368
-msgid "Remove"
-msgstr ""
+msgid "Reinstall"
+msgstr "Reinstalar"
 
 #: base/goal_elements.cpp:370
-msgid "Distrosync"
-msgstr ""
+msgid "Install or reinstall"
+msgstr "Instalar ou reinstalar"
 
 #: base/goal_elements.cpp:372
-msgid "Distrosync all"
-msgstr ""
+msgid "Remove"
+msgstr "Remover"
 
 #: base/goal_elements.cpp:374
-msgid "Reason Change"
-msgstr ""
+msgid "Distrosync"
+msgstr "Distrosync"
 
 #: base/goal_elements.cpp:376
-msgid "Resolve"
-msgstr ""
+msgid "Distrosync all"
+msgstr "Distrosync em tudo"
 
 #: base/goal_elements.cpp:378
-msgid "Enable"
-msgstr ""
+msgid "Reason Change"
+msgstr "Mudar o motivo"
 
 #: base/goal_elements.cpp:380
-msgid "Disable"
-msgstr ""
+msgid "Resolve"
+msgstr "Resolver"
 
 #: base/goal_elements.cpp:382
-msgid "Reset"
-msgstr ""
+msgid "Enable"
+msgstr "Habilitar"
 
 #: base/goal_elements.cpp:384
-msgid "Parse serialized transaction"
-msgstr ""
+msgid "Disable"
+msgstr "Desabilitar"
 
 #: base/goal_elements.cpp:386
-msgid "Install action"
-msgstr ""
+msgid "Reset"
+msgstr "Redefinir"
 
 #: base/goal_elements.cpp:388
-msgid "Remove action"
-msgstr ""
+msgid "Parse serialized transaction"
+msgstr "Analisar transação em série"
 
 #: base/goal_elements.cpp:390
-msgid "Upgrade action"
-msgstr ""
+msgid "Install action"
+msgstr "Ação ao instalar"
 
 #: base/goal_elements.cpp:392
-msgid "Reinstall action"
-msgstr ""
+msgid "Remove action"
+msgstr "Ação ao remover"
 
 #: base/goal_elements.cpp:394
-msgid "Reason change action"
-msgstr ""
+msgid "Upgrade action"
+msgstr "Ação ao atualizar"
 
 #: base/goal_elements.cpp:396
-msgid "Reason override"
-msgstr ""
+msgid "Reinstall action"
+msgstr "Ação ao reinstalar"
 
 #: base/goal_elements.cpp:398
-msgid "Revert comps upgrade"
-msgstr ""
+msgid "Reason change action"
+msgstr "Ação ao mudar o motivo"
 
 #: base/goal_elements.cpp:400
-msgid "Install debug RPMs"
-msgstr ""
+msgid "Reason override"
+msgstr "Substituir o motivo"
 
 #: base/goal_elements.cpp:402
-#, fuzzy
-#| msgid "No transaction in progress"
+msgid "Revert comps upgrade"
+msgstr "Reverter atualização de comps"
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr "Instalar RPMs de depuração"
+
+#: base/goal_elements.cpp:406
 msgid "Transaction merge"
-msgstr "Nenhuma transação em andamento"
+msgstr "Mesclagem de transações"
 
 #: base/log_event.cpp:141
-#, fuzzy
-#| msgid "No {} to remove for argument: {}"
 msgid "No packages to remove for argument: {}"
-msgstr "Nenhum {} para remover para o argumento: {}"
+msgstr "Nenhum pacote para remover para o argumento: {}"
 
 #: base/log_event.cpp:143
-#, fuzzy
-#| msgid "No {} to remove for argument: {}"
 msgid "No groups to remove for argument: {}"
-msgstr "Nenhum {} para remover para o argumento: {}"
+msgstr "Nenhum grupo para remover para o argumento: {}"
 
 #: base/log_event.cpp:146
-#, fuzzy
-#| msgid "No {} to remove for argument: {}"
 msgid "No environmental groups to remove for argument: {}"
-msgstr "Nenhum {} para remover para o argumento: {}"
+msgstr "Nenhum grupo de ambiente para remover para o argumento: {}"
 
 #: base/log_event.cpp:148
-#, fuzzy
-#| msgid "No {} to remove for argument: {}"
 msgid "No modules to remove for argument: {}"
-msgstr "Nenhum {} para remover para o argumento: {}"
+msgstr "Nenhum módulo para remover para o argumento: {}"
 
 #: base/log_event.cpp:152
 msgid "No match for group from environment: {}"
@@ -186,7 +176,7 @@ msgstr "Nenhuma correspondência para o pacote do grupo: \"{}\""
 
 #: base/log_event.cpp:158
 msgid "Cannot perform {0}, no match for: {1}."
-msgstr ""
+msgstr "Não é possível executar {0}, nenhuma correspondência para: {1}."
 
 #: base/log_event.cpp:160
 msgid "No match for argument: {}"
@@ -198,7 +188,7 @@ msgstr "Nenhuma correspondência para o argumento '{0}' nos repositórios '{1}'"
 
 #: base/log_event.cpp:169
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
-msgstr ""
+msgstr "Não é possível executar {0} para {1} '{2}' porque não está instalado."
 
 #: base/log_event.cpp:174
 msgid "Packages for argument '{}' available, but not installed."
@@ -213,33 +203,32 @@ msgstr ""
 "arquitetura diferente."
 
 #: base/log_event.cpp:182
-#, fuzzy
-#| msgid "Argument '{}' matches only source packages."
 msgid "Cannot perform {0} because '{1}' matches only source packages."
-msgstr "O argumento '{}' corresponde apenas aos pacotes fonte."
+msgstr ""
+"Não é possível executar {0} porque '{1}' corresponde apenas aos pacotes do "
+"código fonte."
 
 #: base/log_event.cpp:186
 msgid "Argument '{}' matches only source packages."
 msgstr "O argumento '{}' corresponde apenas aos pacotes fonte."
 
 #: base/log_event.cpp:190
-#, fuzzy
-#| msgid "Argument '{}' matches only excluded packages."
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
-msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
+msgstr ""
+"Não é possível executar {0} porque '{1}' corresponde apenas a pacotes "
+"excluídos."
 
 #: base/log_event.cpp:194
 msgid "Argument '{}' matches only excluded packages."
 msgstr "O argumento '{}' corresponde apenas a pacotes excluídos."
 
 #: base/log_event.cpp:198
-#, fuzzy
-#| msgid "Argument '{}' matches only packages excluded by versionlock."
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
 msgstr ""
-"O argumento '{}' corresponde apenas a pacotes excluídos pelo versionlock."
+"Não é possível executar {0} porque '{1}' corresponde apenas a pacotes "
+"excluídos por versionlock."
 
 #: base/log_event.cpp:202
 msgid "Argument '{}' matches only packages excluded by versionlock."
@@ -263,27 +252,20 @@ msgstr ""
 "possível fazer downgrade dela."
 
 #: base/log_event.cpp:223
-#, fuzzy
-#| msgid ""
-#| "Packages for argument '{}' installed and available, but in a different "
-#| "version => cannot reinstall"
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
-"Pacotes para o argumento '{}' instalados e disponíveis, mas em uma versão "
-"diferente => não é possível reinstalar"
+"Pacotes instalados para o argumento '{0}' não estão disponíveis em "
+"repositórios na mesma versão, versões disponíveis: {1}, não podem ser "
+"reinstalados."
 
 #: base/log_event.cpp:229
-#, fuzzy
-#| msgid ""
-#| "Packages for argument '{}' installed and available, but in a different "
-#| "version."
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
-"Pacotes para o argumento '{}' instalados e disponíveis, mas em uma versão "
-"diferente."
+"Não é possível executar {0} porque '{1}' está instalado em uma versão "
+"diferente: '{2}'."
 
 #: base/log_event.cpp:235
 msgid ""
@@ -314,6 +296,8 @@ msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
+"{0} a atualização não pode ser revertida, no entanto as ações sobre pacotes "
+"associados poderão ser. ({1} id: '{2}') ."
 
 #: base/log_event.cpp:267
 msgid "{} action for argument \"{}\" is not supported."
@@ -321,17 +305,10 @@ msgstr "A ação {} para o argumento \"{}\" não é compatível."
 
 #. Format a leading line of the error message.
 #: base/log_event.cpp:276
-#, fuzzy
-#| msgid "Unable to resolve argument '{}':{}"
 msgid "Unable to resolve argument '{}':"
-msgstr "Não foi possível resolver o argumento '{}': {}"
+msgstr "Não foi possível resolver o argumento '{}':"
 
 #: base/log_event.cpp:280
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of "
-#| "the streams are enabled or default."
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -342,8 +319,8 @@ msgid_plural ""
 "streams are enabled or default."
 msgstr[0] ""
 "\n"
-"  - O argumento '{}' corresponde a {} fluxos ('{}') do módulo '{}', mas "
-"nenhum dos fluxos está ativado ou é padrão."
+"  - O argumento '{}' corresponde a {} fluxo ('{}') do módulo '{}', mas o "
+"fluxo está desativado ou não é padrão."
 msgstr[1] ""
 "\n"
 "  - O argumento '{}' corresponde a {} fluxos ('{}') do módulo '{}', mas "
@@ -351,84 +328,85 @@ msgstr[1] ""
 
 #: base/log_event.cpp:287
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:296
-#, fuzzy
-#| msgid "some dependency problem"
 msgid "Modular dependency problems:\n"
-msgstr "algum problema de dependência"
+msgstr "problemas de dependências modulares:\n"
 
 #: base/log_event.cpp:303
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "Problemas de dependência modular com os módulos mais recentes:\n"
 
 #: base/log_event.cpp:310
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "Problemas de dependência modular com os padrões:\n"
 
 #: base/log_event.cpp:325
-#, fuzzy
-#| msgid "The operation would result in removing of running kernel: {}"
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
-msgstr "A operação resultaria na remoção do kernel em execução: {}"
+msgstr ""
+"A operação resultaria na troca do módulo '{0}' stream '{1}' para stream "
+"'{2}'\n"
 
 #: base/log_event.cpp:330
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
+"Erro: Não é possível alternar fluxos habilitados de um módulo, a menos que "
+"explicitamente habilitado por meio da opção de configuração "
+"module_stream_switch."
 
 #: base/log_event.cpp:335
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
+"O pacote extra '{0}' (com ação '{1}') que não está presente na transação "
+"armazenada foi puxado para a transação.\n"
 
 #: base/log_event.cpp:341
-#, fuzzy
-#| msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgid "Cannot parse file: '{0}': {1}.\n"
-msgstr "Não foi possível analisar NEVRA para o rpm \"{}\"."
+msgstr "Não foi possível analisar o arquivo: '{0}': {1}.\n"
 
 #: base/log_event.cpp:348
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Não foi possível encontrar o pacote debuginfo para os seguintes pacotes "
+"resolvidos pelo argumento '{0}': {1}"
 
 #: base/log_event.cpp:351 base/log_event.cpp:362
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:358
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
+"Não foi possível encontrar o pacote debugsource para os seguintes pacotes "
+"resolvidos pelo argumento '{0}': {1}"
 
 #: base/log_event.cpp:365
 msgid "Transaction merge error: '{0}'"
-msgstr ""
+msgstr "Erro de mesclagem da transação: '{0}'"
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
 msgstr "{} não pertence a um repositório distupgrade"
 
 #: base/solver_problems.cpp:42
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "{0} from {1} has inferior architecture"
-msgstr "{} tem uma arquitetura inferior"
+msgstr "{0} de {1} tem uma arquitetura inferior"
 
 #: base/solver_problems.cpp:43
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed package"
-msgstr "problema com o pacote instalado "
+msgstr "problema com o pacote instalado"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -464,97 +442,73 @@ msgid "cannot install the best candidate for the job"
 msgstr "não é possível instalar o melhor candidato para a tarefa"
 
 #: base/solver_problems.cpp:52
-#, fuzzy
-#| msgid "package {} is filtered out by modular filtering"
 msgid "package {0} from {1} is filtered out by modular filtering"
-msgstr "pacote {} é filtrado pela filtragem modular"
+msgstr "o pacote {0} de {1} é excluído pela filtragem modular"
 
 #: base/solver_problems.cpp:53
-#, fuzzy
-#| msgid "package {} does not have a compatible architecture"
 msgid "package {0} from {1} does not have a compatible architecture"
-msgstr "o pacote {} não possui uma arquitetura compatível"
+msgstr "o pacote {0} de {1} não possui uma arquitetura compatível"
 
 #: base/solver_problems.cpp:54
-#, fuzzy
-#| msgid "package {} is not installable"
 msgid "package {0} from {1} is not installable"
-msgstr "pacote {} não é instalável"
+msgstr "o pacote {0} de {1} não é instalável"
 
 #: base/solver_problems.cpp:55
-#, fuzzy
-#| msgid "package {} is filtered out by exclude filtering"
 msgid "package {0} from {1} is filtered out by exclude filtering"
-msgstr "o pacote {} está filtrado pela filtragem de exclusão"
+msgstr "o pacote {0} de {1} está excluído pela filtragem de exclusão"
 
 #: base/solver_problems.cpp:56
-#, fuzzy
-#| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by {1} from {2}"
-msgstr "nada fornece {0} necessário para {1}"
+msgstr "nada fornece {0} necessário por {1} de {2}"
 
 #: base/solver_problems.cpp:57
-#, fuzzy
-#| msgid "cannot install both {0} and {1}"
 msgid "cannot install both {0} from {1} and {2} from {3}"
-msgstr "não é possível instalar {0} e {1}"
+msgstr "não é possível instalar ambos {0} de {1}, e {2} de {3}"
 
 #: base/solver_problems.cpp:58
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
-msgstr "o pacote {0} entra em conflito com {1} fornecido por {2}"
+msgstr "o pacote {0} de {1} entra em conflito com {2} fornecido por {3} de {4}"
 
 #: base/solver_problems.cpp:60
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
-msgstr "o pacote {0} entra em conflito com {1} fornecido por {2}"
+msgstr ""
+"o pacote instalado {0} entra em conflito com {1} fornecido por {2} de {3}"
 
 #: base/solver_problems.cpp:61
-#, fuzzy
-#| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
-msgstr "o pacote {0} torna obsoleto {1} fornecido por {2}"
+msgstr "o pacote {0} de {1} torna obsoleto {2} fornecido por {3} de {4}"
 
 #: base/solver_problems.cpp:62
-#, fuzzy
-#| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
-msgstr "o pacote instalado {0} torna obsoleto {1} fornecido por {2}"
+msgstr "o pacote instalado {0} torna obsoleto {1} fornecido por {2} de {3}"
 
 #: base/solver_problems.cpp:64
-#, fuzzy
-#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
-msgstr "o pacote {0} implicitamente torna obsoleto {1} fornecido por {2}"
+msgstr ""
+"o pacote {0} de {1} implicitamente torna obsoleto {2} fornecido por {3} de "
+"{4}"
 
 #: base/solver_problems.cpp:66
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "package {1} from {2} requires {0}, but none of the providers can be installed"
-msgstr "o pacote {1} requer {0}, mas nenhum dos provedores pode ser instalado"
+msgstr ""
+"o pacote {1} de {2} requer {0}, mas nenhum dos provedores pode ser instalado"
 
 #: base/solver_problems.cpp:68
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid ""
 "installed package {1} requires {0}, but none of the providers can be "
 "installed"
-msgstr "o pacote {1} requer {0}, mas nenhum dos provedores pode ser instalado"
+msgstr ""
+"o pacote instalado {1} requer {0}, mas nenhum dos provedores pode ser "
+"instalado"
 
 #: base/solver_problems.cpp:69
-#, fuzzy
-#| msgid "package {1} conflicts with {0} provided by itself"
 msgid "package {0} from {1} conflicts with {2} provided by itself"
-msgstr "o pacote {1} entra em conflito com {0} fornecido por ele mesmo"
+msgstr "o pacote {0} de {1} entra em conflito com {2}, fornecido por ele mesmo"
 
 #: base/solver_problems.cpp:70
-#, fuzzy
-#| msgid "both package {0} and {2} obsolete {1}"
 msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
-msgstr "ambos os pacotes {0} e {2} tornam obsoletos {1}"
+msgstr "ambos os pacotes {0} de {1} e {3} de {4} tornam obsoletos {2}"
 
 #: base/solver_problems.cpp:72
 msgid ""
@@ -566,105 +520,73 @@ msgid "The operation would result in removing of running kernel: {}"
 msgstr "A operação resultaria na remoção do kernel em execução: {}"
 
 #: base/solver_problems.cpp:77
-#, fuzzy
-#| msgid "{} does not belong to a distupgrade repository"
 msgid "module {} does not belong to a distupgrade repository"
-msgstr "{} não pertence a um repositório distupgrade"
+msgstr "o módulo {} não pertence a um repositório distupgrade"
 
 #: base/solver_problems.cpp:78
-#, fuzzy
-#| msgid "{} has inferior architecture"
 msgid "module {} has inferior architecture"
-msgstr "{} tem uma arquitetura inferior"
+msgstr "o módulo {} tem uma arquitetura inferior"
 
 #: base/solver_problems.cpp:79
-#, fuzzy
-#| msgid "problem with installed package "
 msgid "problem with installed module {}"
-msgstr "problema com o pacote instalado "
+msgstr "problema com o módulo instalado {}"
 
 #: base/solver_problems.cpp:83
-#, fuzzy
-#| msgid "package {} does not exist"
 msgid "module {} does not exist"
-msgstr "o pacote {} não existe"
+msgstr "o módulo {} não existe"
 
 #: base/solver_problems.cpp:86
-#, fuzzy
-#| msgid "cannot install the best update candidate for package {}"
 msgid "cannot install the best update candidate for module {}"
 msgstr ""
-"não é possível instalar o melhor candidato à atualização para o pacote {}"
+"não é possível instalar o melhor candidato de atualização para o módulo {}"
 
 #: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 msgid "module {} is disabled"
-msgstr ""
+msgstr "o módulo {} está desabilitado"
 
 #: base/solver_problems.cpp:89
-#, fuzzy
-#| msgid "package {} does not have a compatible architecture"
 msgid "module {} does not have a compatible architecture"
-msgstr "o pacote {} não possui uma arquitetura compatível"
+msgstr "o módulo {} não possui uma arquitetura compatível"
 
 #: base/solver_problems.cpp:90
-#, fuzzy
-#| msgid "package {} is not installable"
 msgid "module {} is not installable"
-msgstr "pacote {} não é instalável"
+msgstr "o módulo {} não é instalável"
 
 #: base/solver_problems.cpp:92
-#, fuzzy
-#| msgid "nothing provides {0} needed by {1}"
 msgid "nothing provides {0} needed by module {1}"
-msgstr "nada fornece {0} necessário para {1}"
+msgstr "nada fornece {0} necessário pelo módulo {1}"
 
 #: base/solver_problems.cpp:93
-#, fuzzy
-#| msgid "cannot install both {0} and {1}"
 msgid "cannot install both modules {0} and {1}"
-msgstr "não é possível instalar {0} e {1}"
+msgstr "não é possível instalar ambos os módulos {0} e {1}"
 
 #: base/solver_problems.cpp:94
-#, fuzzy
-#| msgid "package {0} conflicts with {1} provided by {2}"
 msgid "module {0} conflicts with {1} provided by {2}"
-msgstr "o pacote {0} entra em conflito com {1} fornecido por {2}"
+msgstr "o módulo {0} entra em conflito com {1} fornecido por {2}"
 
 #: base/solver_problems.cpp:95
-#, fuzzy
-#| msgid "package {0} obsoletes {1} provided by {2}"
 msgid "module {0} obsoletes {1} provided by {2}"
-msgstr "o pacote {0} torna obsoleto {1} fornecido por {2}"
+msgstr "o módulo {0} torna obsoleto {1} fornecido por {2}"
 
 #: base/solver_problems.cpp:96
-#, fuzzy
-#| msgid "installed package {0} obsoletes {1} provided by {2}"
 msgid "installed module {0} obsoletes {1} provided by {2}"
-msgstr "o pacote instalado {0} torna obsoleto {1} fornecido por {2}"
+msgstr "o módulo instalado {0} torna obsoleto {1} fornecido por {2}"
 
 #: base/solver_problems.cpp:97
-#, fuzzy
-#| msgid "package {0} implicitly obsoletes {1} provided by {2}"
 msgid "module {0} implicitly obsoletes {1} provided by {2}"
-msgstr "o pacote {0} implicitamente torna obsoleto {1} fornecido por {2}"
+msgstr "o módulo {0} implicitamente torna obsoleto {1} fornecido por {2}"
 
 #: base/solver_problems.cpp:98
-#, fuzzy
-#| msgid "package {1} requires {0}, but none of the providers can be installed"
 msgid "module {1} requires {0}, but none of the providers can be installed"
-msgstr "o pacote {1} requer {0}, mas nenhum dos provedores pode ser instalado"
+msgstr "o módulo {1} requer {0}, mas nenhum dos provedores pode ser instalado"
 
 #: base/solver_problems.cpp:99
-#, fuzzy
-#| msgid "package {1} conflicts with {0} provided by itself"
 msgid "module {1} conflicts with {0} provided by itself"
-msgstr "o pacote {1} entra em conflito com {0} fornecido por ele mesmo"
+msgstr "o módulo {1} entra em conflito com {0} fornecido por ele mesmo"
 
 #: base/solver_problems.cpp:100
-#, fuzzy
-#| msgid "both package {0} and {2} obsolete {1}"
 msgid "both module {0} and {2} obsolete {1}"
-msgstr "ambos os pacotes {0} e {2} tornam obsoletos {1}"
+msgstr "ambos os módulos {0} e {2} tornam obsoletos {1}"
 
 #: base/solver_problems.cpp:290
 msgid "Problem: "
@@ -716,45 +638,45 @@ msgstr "Cancelada pelo usuário."
 msgid "Public key import failed."
 msgstr "Falha na importação da chave pública."
 
-#: base/transaction.cpp:976
+#: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
 msgstr "tsflag inválida: {}"
 
-#: base/transaction.cpp:1312
+#: base/transaction.cpp:1317
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "A chave pública \"{}\" já está presente, não será importada."
 
-#: base/transaction.cpp:1333
+#: base/transaction.cpp:1338
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Ocorreu um erro ao importar a chave \"{}\": {}"
 
-#: base/transaction.cpp:1367
+#: base/transaction.cpp:1372
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "A verificação PGP do pacote \"{}\" ({}) do repositório \"{}\" falhou: "
 
-#: base/transaction.cpp:1395
+#: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
 msgstr "A importação da chave não ajudou, chave errada?"
 
-#: base/transaction.cpp:1414
+#: base/transaction.cpp:1419
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
-#: base/transaction.cpp:1417
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {} package(s)."
+#: base/transaction.cpp:1422
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "Aviso: ignoradas as verificações de PGP para {} pacote(s)."
+msgstr ""
+"Aviso: ignoradas as verificações de PGP para 1 pacote do repositório: {}"
 
-#: base/transaction.cpp:1419
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {} package(s)."
+#: base/transaction.cpp:1424
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
-msgstr[0] "Aviso: ignoradas as verificações de PGP para {} pacote(s)."
-msgstr[1] "Aviso: ignoradas as verificações de PGP para {} pacote(s)."
+msgstr[0] ""
+"Aviso: ignoradas as verificações de PGP para {0} pacote do repositório:{1}"
+msgstr[1] ""
+"Aviso: ignoradas as verificações de PGP para {0} pacotes dos repositórios: "
+"{1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -792,23 +714,23 @@ msgstr "Falha ao salvar o documento xml do grupo \"{}\" no arquivo \"{}\": {}"
 msgid "Invalid package type: {}"
 msgstr "Tipo de pacote inválido: {}"
 
-#: conf/config_main.cpp:53
+#: conf/config_main.cpp:56
 msgid "Input is empty. Must contain a value."
 msgstr "A entrada está vazia. Deve conter um valor."
 
-#: conf/config_main.cpp:59
+#: conf/config_main.cpp:62
 msgid "Input value '{}' must not be negative"
 msgstr "O valor de entrada '{}' não deve ser negativo"
 
-#: conf/config_main.cpp:64
+#: conf/config_main.cpp:67
 msgid "Could not convert '{}' to bytes"
 msgstr "Não foi possível converter '{}' em bytes"
 
-#: conf/config_main.cpp:80
+#: conf/config_main.cpp:83
 msgid "Unknown unit '{}'"
 msgstr "Unidade desconhecida '{}'"
 
-#: conf/config_main.cpp:258
+#: conf/config_main.cpp:278
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "O valor de aceleração {} está fora do intervalo permitido {} ... {}"
 
@@ -910,15 +832,7 @@ msgstr ""
 "O valor do item de entrada \"{}\" não é permitido, os valores permitidos "
 "para esta opção são definidos pela expressão regular \"{}\""
 
-#: conf/vars.cpp:63
-msgid "failed to read rpm config files"
-msgstr "falha ao ler os arquivos de configuração rpm"
-
-#: conf/vars.cpp:89
-msgid "Failed to execute uname()"
-msgstr "Falha ao executar uname()"
-
-#: conf/vars.cpp:370 conf/vars.cpp:410
+#: conf/vars.cpp:313 conf/vars.cpp:353
 msgid "Variable \"{}\" is read-only"
 msgstr "A variável \"{}\" é somente leitura"
 
@@ -941,7 +855,7 @@ msgstr "Não é possível habilitar vários fluxos para o módulo '{}'"
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:758
+#: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
 msgstr "sem solução possível"
 
@@ -1025,13 +939,13 @@ msgstr ""
 "A velocidade máxima de download é inferior à mínima. Por favor, altere a "
 "configuração de minrate ou throttle"
 
-#: repo/package_downloader.cpp:147
+#: repo/package_downloader.cpp:141
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Não é possível fazer download do pacote \"{0}\", a opção cacheonly está "
 "ativada."
 
-#: repo/package_downloader.cpp:222
+#: repo/package_downloader.cpp:244
 msgid "Failed to download packages"
 msgstr "Falha ao baixar pacotes"
 
@@ -1066,16 +980,12 @@ msgstr ""
 "formato não suportado"
 
 #: repo/repo.cpp:466
-#, fuzzy
-#| msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
-msgstr "Falha ao carregar RPM \"{}\": não possui a extensão \".rpm\""
+msgstr "Falha ao carregar comps \"{}\": não possui a extensão \".xml\""
 
 #: repo/repo.cpp:473
-#, fuzzy
-#| msgid "Failed to load RPM \"{}\": {}"
 msgid "Failed to load xml Comps \"{}\": {}"
-msgstr "Falha ao carregar RPM \"{}\": {}"
+msgstr "Falha ao carregar comps xml \"{}\": {}"
 
 #: repo/repo.cpp:490
 msgid "Failed to load RPM \"{}\": {}"
@@ -1089,31 +999,31 @@ msgstr "Não foi possível determinar o ID do repositório no cache."
 msgid "Empty path to the repository cache directory."
 msgstr "Caminho vazio para o diretório de cache do repositório."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
 msgstr "Erro no librepo: {}"
 
-#: repo/repo_downloader.cpp:170
+#: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "Falha ao baixar metadados ({}: \"{}\") para o repositório \"{}\""
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:242
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Erro ao verificar se o metalink \"{}\" está sincronizado com o repositório "
 "\"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:272
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Erro ao verificar se repomd ({}: \"{}\") está sincronizado com o repositório "
 "\"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Erro ao carregar metadados locais para o repositório \"{}\""
 
-#: repo/repo_downloader.cpp:455
+#: repo/repo_downloader.cpp:456
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1300,24 +1210,18 @@ msgid "Cannot remove package \"{}\""
 msgstr "Não é possível remover o pacote \"{}\""
 
 #: rpm/transaction.cpp:360
-#, fuzzy
-#| msgid "Cannot remove package \"{}\""
 msgid "Cannot upgrade package \"{}\""
-msgstr "Não é possível remover o pacote \"{}\""
+msgstr "Não é possível atualizar o pacote \"{}\""
 
 #: rpm/transaction.cpp:364
-#, fuzzy
-#| msgid "Cannot remove package \"{}\""
 msgid "Cannot downgrade package \"{}\""
-msgstr "Não é possível remover o pacote \"{}\""
+msgstr "Não é possível desatualizar o pacote \"{}\""
 
 #: rpm/transaction.cpp:368
-#, fuzzy
-#| msgid "Cannot reinstall package \"{}\""
 msgid "Cannot install package \"{}\""
-msgstr "Não é possível reinstalar o pacote \"{}\""
+msgstr "Não é possível instalar o pacote \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:517
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
 msgstr "{}"
 
@@ -1330,15 +1234,19 @@ msgstr "Falha ao converter a época \"{}\" para número"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Falha ao gravar os dados do solucionador de depuração em \"{}\": {}"
 
-#: system/state.cpp:228 system/state.cpp:237
+#: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Versão TOML \"{}\" inválida, esperava-se \"MAJOR.MINOR\""
 
-#: system/state.cpp:245
+#: system/state.cpp:297
 msgid "{} state for \"{}\" not found."
 msgstr "Estado {} para \"{}\" não encontrado."
 
-#: system/state.cpp:546
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+
+#: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Versão TOML \"{}\" não suportada, a versão máxima suportada é \"{}\""
 
@@ -1383,14 +1291,12 @@ msgstr ""
 "Falha ao inserir registro na tabela 'item' no banco de dados de histórico"
 
 #: transaction/offline.cpp:195
-#, fuzzy
-#| msgid "error reading a line from file"
 msgid "error reading offline state file"
-msgstr "erro ao ler uma linha do arquivo"
+msgstr "erro ao ler arquivo de estado offline"
 
 #: transaction/offline.cpp:200
 msgid "incompatible version of state data"
-msgstr ""
+msgstr "versão de dados de estado incompatível"
 
 #: transaction/transaction.cpp:96
 msgid "Invalid transaction state: {}"
@@ -1421,62 +1327,80 @@ msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada depois de ter sido '{2}' em "
+"transações anteriores -> configuração '{0}'."
 
 #: transaction/transaction_merge.cpp:116
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"A ação 'Atualizar' '{0}' não pode ser mesclada porque não está presente "
+"naquele ponto -> configuração 'Instalar'."
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
+"A ação 'Reinstalar' '{0}' não pode ser mesclada porque não está presente "
+"naquele ponto -> configuração 'Instalar'."
 
 #: transaction/transaction_merge.cpp:194
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada depois de ter sido '{2}' na "
+"transação anterior -> configuração '{0}'."
 
 #: transaction/transaction_merge.cpp:215
 msgid "Unexpected action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Ação inesperada encontrada: '{0}' durante a mesclagem de transações."
 
 #: transaction/transaction_merge.cpp:224
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> skipping it."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada porque não está presente naquele "
+"ponto -> ignorada."
 
 #: transaction/transaction_merge.cpp:245
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> setting 'INSTALL'."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada porque não está presente naquele "
+"ponto -> configuração 'Instalar'."
 
 #: transaction/transaction_merge.cpp:266
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada porque não está presente naquele "
+"ponto (as versões atuais são: {2}) -> ignorada."
 
 #: transaction/transaction_merge.cpp:277
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada porque já está presente naquele "
+"ponto -> ignorada."
 
 #: transaction/transaction_merge.cpp:294
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
 msgstr ""
+"A ação '{0}' '{1}' não pode ser mesclada porque já está instalada na versão "
+"'{2}' -> mantendo a ação da transação mais antiga com '{1}'."
 
 #: transaction/transaction_merge.cpp:304
 msgid "Invalid action encountered: '{0}' during transaction merge."
-msgstr ""
+msgstr "Ação inválida encontrada: '{0}' durante a mesclagem de transações."
 
 #: transaction/transaction_sr.cpp:49
 msgid "Transaction replay JSON serialized transaction input is empty"
@@ -1498,102 +1422,68 @@ msgstr ""
 "Versão principal incompatível: \"{}\", a versão principal suportada é \"{}\""
 
 #: transaction/transaction_sr.cpp:81
-#, fuzzy
-#| msgid "Invalid minor version: \"{}\", number expected."
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr "Versão mínima inválida: \"{}\", esperava número."
+msgstr "Versão mínima inválida: \"{}\", esperava número"
 
 #: transaction/transaction_sr.cpp:84
-#, fuzzy
-#| msgid "Missing key \"version\"."
 msgid "Missing key \"version\""
-msgstr "Faltando a chave \"version\"."
+msgstr "Faltando a chave \"version\""
 
 #: transaction/transaction_sr.cpp:97
-#, fuzzy
-#| msgid "Unexpected type of \"environments\", array expected."
 msgid "Unexpected type of \"environments\", array expected"
-msgstr "Tipo inesperado de \"environments\", esperava array."
+msgstr "Tipo inesperado de \"environments\", esperava array"
 
 #: transaction/transaction_sr.cpp:105
-#, fuzzy
-#| msgid "Missing object key \"id\" in an environment."
 msgid "Missing object key \"id\" in an environment"
-msgstr "Faltando chave de objeto \"id\" em um ambiente."
+msgstr "Faltando chave de objeto \"id\" em um ambiente"
 
 #: transaction/transaction_sr.cpp:110
-#, fuzzy
-#| msgid "Missing object key \"action\" in an environment."
 msgid "Missing object key \"action\" in an environment"
-msgstr "Faltando a chave de objeto \"action\" em um ambiente."
+msgstr "Faltando a chave de objeto \"action\" em um ambiente"
 
 #: transaction/transaction_sr.cpp:137
-#, fuzzy
-#| msgid "Unexpected type of \"groups\", array expected."
 msgid "Unexpected type of \"groups\", array expected"
-msgstr "Tipo inesperado de \"groups\", esperava array."
+msgstr "Tipo inesperado de \"groups\", esperava array"
 
 #: transaction/transaction_sr.cpp:145
-#, fuzzy
-#| msgid "Missing object key \"id\" in a group."
 msgid "Missing object key \"id\" in a group"
-msgstr "Faltando a chave de objeto \"id\" em um grupo."
+msgstr "Faltando a chave de objeto \"id\" em um grupo"
 
 #: transaction/transaction_sr.cpp:150
-#, fuzzy
-#| msgid "Missing object key \"action\" in a group."
 msgid "Missing object key \"action\" in a group"
-msgstr "Faltando a chave de objeto \"action\" em um grupo."
+msgstr "Faltando a chave de objeto \"action\" em um grupo"
 
 #: transaction/transaction_sr.cpp:155
-#, fuzzy
-#| msgid "Missing object key \"reason\" in a group."
 msgid "Missing object key \"reason\" in a group"
-msgstr "Faltando a chave de objeto \"reason\" em um grupo."
+msgstr "Faltando a chave de objeto \"reason\" em um grupo"
 
 #: transaction/transaction_sr.cpp:193
-#, fuzzy
-#| msgid "Unexpected type of \"rpms\", array expected."
 msgid "Unexpected type of \"rpms\", array expected"
-msgstr "Tipo inesperado de \"rpms\", esperava array."
+msgstr "Tipo inesperado de \"rpms\", esperava array"
 
 #: transaction/transaction_sr.cpp:202
-#, fuzzy
-#| msgid "Cannot parse NEVRA for rpm \"{}\"."
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr "Não foi possível analisar NEVRA para o rpm \"{}\"."
+msgstr "Não foi possível analisar NEVRA para o rpm \"{}\""
 
 #: transaction/transaction_sr.cpp:210
-#, fuzzy
-#| msgid ""
-#| "Either \"nevra\" or \"package_path\" object key is required in an rpm."
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr ""
-"A chave do objeto \"nevra\" ou \"package_path\" é necessária em um rpm."
+msgstr "A chave de objeto \"nevra\" ou \"package_path\" é necessária em um rpm"
 
 #: transaction/transaction_sr.cpp:215
-#, fuzzy
-#| msgid "Missing object key \"action\" in an rpm."
 msgid "Missing object key \"action\" in an rpm"
-msgstr "Faltando a chave de objeto \"action\" em um rpm."
+msgstr "Faltando a chave de objeto \"action\" em um rpm"
 
 #: transaction/transaction_sr.cpp:220
-#, fuzzy
-#| msgid "Missing object key \"reason\" in an rpm."
 msgid "Missing object key \"reason\" in an rpm"
-msgstr "Faltando a chave de objeto \"reason\" em um rpm."
+msgstr "Faltando a chave de objeto \"reason\" em um rpm"
 
 #: transaction/transaction_sr.cpp:227
-#, fuzzy
-#| msgid ""
-#| "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
-#| "and action \"Reason Change\"."
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
 "Faltando chave de objeto \"group_id\" obrigatória em um rpm com motivo "
-"\"Group\" e ação \"Reason Change\"."
+"\"Group\" e ação \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1769,6 +1659,14 @@ msgstr "Falha ao fazer backup do banco de dados \"{}\" para \"{}\""
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Falha ao restaurar o banco de dados \"{}\""
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "falha ao ler os arquivos de configuração rpm"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Falha ao executar uname()"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Não é possível {} o pacote \"{}\""

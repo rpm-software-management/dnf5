@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-07-19 08:38+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-09-06 08:13+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -29,124 +29,124 @@ msgstr ""
 "Mauvais ID libsolv pour l'avertissement \"{}\", le nom résoluble \"{}\" ne "
 "commence pas par le préfixe d'avertissement \"{}\""
 
-#: base/goal.cpp:470
+#: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument non pris en charge pour l'action REMOVE : {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1528
+#: base/goal.cpp:1545
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valeur de configuration pour multilib_policy incorrecte : {}"
 
-#: base/goal_elements.cpp:348
+#: base/goal_elements.cpp:352
 msgid "Install"
 msgstr "Installer"
 
-#: base/goal_elements.cpp:350
+#: base/goal_elements.cpp:354
 msgid "Install via provide"
 msgstr "Installer (via fournisseur)"
 
-#: base/goal_elements.cpp:352
+#: base/goal_elements.cpp:356
 msgid "Install by group"
 msgstr "Installer par groupe"
 
-#: base/goal_elements.cpp:354
+#: base/goal_elements.cpp:358
 msgid "Upgrade"
 msgstr "Mettre à jour"
 
-#: base/goal_elements.cpp:356
+#: base/goal_elements.cpp:360
 msgid "Upgrade all"
 msgstr "Tout mettre à jour"
 
-#: base/goal_elements.cpp:358
+#: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
 msgstr "Mettre à jour (version minimale)"
 
-#: base/goal_elements.cpp:360
+#: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
 msgstr "Tout mettre à jour (version minimale)"
 
-#: base/goal_elements.cpp:362
+#: base/goal_elements.cpp:366
 msgid "Downgrade"
 msgstr "Installer une version antérieure"
 
-#: base/goal_elements.cpp:364
+#: base/goal_elements.cpp:368
 msgid "Reinstall"
 msgstr "Réinstaller"
 
-#: base/goal_elements.cpp:366
+#: base/goal_elements.cpp:370
 msgid "Install or reinstall"
 msgstr "Installer ou réinstaller"
 
-#: base/goal_elements.cpp:368
+#: base/goal_elements.cpp:372
 msgid "Remove"
 msgstr "Supprimer"
 
-#: base/goal_elements.cpp:370
+#: base/goal_elements.cpp:374
 msgid "Distrosync"
 msgstr "Distrosync"
 
-#: base/goal_elements.cpp:372
+#: base/goal_elements.cpp:376
 msgid "Distrosync all"
 msgstr "Tout distrosync"
 
-#: base/goal_elements.cpp:374
+#: base/goal_elements.cpp:378
 msgid "Reason Change"
 msgstr "Changer la raison"
 
-#: base/goal_elements.cpp:376
+#: base/goal_elements.cpp:380
 msgid "Resolve"
 msgstr "Résoudre"
 
-#: base/goal_elements.cpp:378
+#: base/goal_elements.cpp:382
 msgid "Enable"
 msgstr "Activer"
 
-#: base/goal_elements.cpp:380
+#: base/goal_elements.cpp:384
 msgid "Disable"
 msgstr "Désactiver"
 
-#: base/goal_elements.cpp:382
+#: base/goal_elements.cpp:386
 msgid "Reset"
 msgstr "Réinitialiser"
 
-#: base/goal_elements.cpp:384
+#: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
 msgstr "Analyser la transaction sérialisée"
 
-#: base/goal_elements.cpp:386
+#: base/goal_elements.cpp:390
 msgid "Install action"
 msgstr "Action d'installation"
 
-#: base/goal_elements.cpp:388
+#: base/goal_elements.cpp:392
 msgid "Remove action"
 msgstr "Action de suppression"
 
-#: base/goal_elements.cpp:390
+#: base/goal_elements.cpp:394
 msgid "Upgrade action"
 msgstr "Action de mise à jour"
 
-#: base/goal_elements.cpp:392
+#: base/goal_elements.cpp:396
 msgid "Reinstall action"
 msgstr "Action de réinstallation"
 
-#: base/goal_elements.cpp:394
+#: base/goal_elements.cpp:398
 msgid "Reason change action"
 msgstr "Action de changement de la raison"
 
-#: base/goal_elements.cpp:396
+#: base/goal_elements.cpp:400
 msgid "Reason override"
 msgstr "Forçage de raison"
 
-#: base/goal_elements.cpp:398
+#: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
 msgstr "Annuler la mise à jour des comps"
 
-#: base/goal_elements.cpp:400
+#: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
 msgstr "Installer des RPM de débogage"
 
-#: base/goal_elements.cpp:402
+#: base/goal_elements.cpp:406
 msgid "Transaction merge"
 msgstr "Fusion de transactions"
 
@@ -647,36 +647,36 @@ msgstr "Annulé par l'utilisateur."
 msgid "Public key import failed."
 msgstr "Échec de l'importation de la clé publique."
 
-#: base/transaction.cpp:976
+#: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
 msgstr "tsflag invalide : {}"
 
-#: base/transaction.cpp:1312
+#: base/transaction.cpp:1317
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "La clé publique \"{}\" est déjà présente, elle ne sera pas importée."
 
-#: base/transaction.cpp:1333
+#: base/transaction.cpp:1338
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Une erreur s'est produite lors de l'importation de la clé \"{}\" : {}"
 
-#: base/transaction.cpp:1367
+#: base/transaction.cpp:1372
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "La vérification PGP du paquet \"{}\" ({}) du dépôt \"{}\" a échoué : "
 
-#: base/transaction.cpp:1395
+#: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
 msgstr "L'importation de la clé n'a pas aidé, s'agissait-il de la bonne clé ?"
 
-#: base/transaction.cpp:1414
+#: base/transaction.cpp:1419
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1417
+#: base/transaction.cpp:1422
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Attention : vérifications PGP ignorées pour 1 paquet du dépôt : {}"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1424
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -723,23 +723,23 @@ msgstr ""
 msgid "Invalid package type: {}"
 msgstr "Type de paquet invalide : {}"
 
-#: conf/config_main.cpp:53
+#: conf/config_main.cpp:56
 msgid "Input is empty. Must contain a value."
 msgstr "L'entrée est vide. Elle doit contenir une valeur."
 
-#: conf/config_main.cpp:59
+#: conf/config_main.cpp:62
 msgid "Input value '{}' must not be negative"
 msgstr "La valeur en entrée '{}' ne doit pas être négative"
 
-#: conf/config_main.cpp:64
+#: conf/config_main.cpp:67
 msgid "Could not convert '{}' to bytes"
 msgstr "Impossible de convertir '{}' en octets"
 
-#: conf/config_main.cpp:80
+#: conf/config_main.cpp:83
 msgid "Unknown unit '{}'"
 msgstr "Unité '{}' inconnue"
 
-#: conf/config_main.cpp:258
+#: conf/config_main.cpp:278
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 "La valeur limitant la vitesse de téléchargement ({}) n'est pas comprise dans "
@@ -846,15 +846,7 @@ msgstr ""
 "Élement de valeur en entrée \"{}\" non autorisé, les valeurs autorisées pour "
 "cette option sont définies par l'expression régulière \"{}\""
 
-#: conf/vars.cpp:63
-msgid "failed to read rpm config files"
-msgstr "échec de la lecture des fichiers de configuration RPM"
-
-#: conf/vars.cpp:89
-msgid "Failed to execute uname()"
-msgstr "Échec de l'exécution de uname()"
-
-#: conf/vars.cpp:370 conf/vars.cpp:410
+#: conf/vars.cpp:313 conf/vars.cpp:353
 msgid "Variable \"{}\" is read-only"
 msgstr "La variable \"{}\" est en lecture seule"
 
@@ -877,7 +869,7 @@ msgstr "Impossible d'activer plusieurs flux pour le module '{}'"
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:758
+#: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
 msgstr "aucune solution possible"
 
@@ -964,12 +956,12 @@ msgstr ""
 "La vitesse de téléchargement maximale est inférieure au minimum, modifiez la "
 "valeur de minrate ou throttle"
 
-#: repo/package_downloader.cpp:147
+#: repo/package_downloader.cpp:141
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Impossible de télécharger le paquet \"{0}\", l'option cacheonly est activée."
 
-#: repo/package_downloader.cpp:222
+#: repo/package_downloader.cpp:244
 msgid "Failed to download packages"
 msgstr "Échec du téléchargement des paquets"
 
@@ -1024,32 +1016,32 @@ msgstr "Impossible de déterminer l'ID du dépôt dans le cache."
 msgid "Empty path to the repository cache directory."
 msgstr "Le chemin d'accès au répertoire du cache des dépôts est vide."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
 msgstr "Erreur librepo : {}"
 
-#: repo/repo_downloader.cpp:170
+#: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr ""
 "Échec du téléchargement des métadonnées ({}: \"{}\") pour le dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:242
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Erreur lors de la vérification de la synchronisation du metalink \"{}\" du "
 "dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:272
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Erreur lors de la vérification de la synchronisation du repomd ({}: \"{}\") "
 "du dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Erreur lors du chargement des métadonnées locales du dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:455
+#: repo/repo_downloader.cpp:456
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1254,7 +1246,7 @@ msgstr "Impossible de rétrograder le paquet \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Impossible d'installer le paquet \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:517
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
 msgstr "{}"
 
@@ -1267,15 +1259,21 @@ msgstr "Échec de la conversion de l'epoch \"{}\" en nombre"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Échec de l'écriture des données debugsolver dans \"{}\" : {}"
 
-#: system/state.cpp:228 system/state.cpp:237
+#: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Version TOML \"{}\" invalide, \"V_MAJEURE.V_MINEURE\" attendu"
 
-#: system/state.cpp:245
+#: system/state.cpp:297
 msgid "{} state for \"{}\" not found."
 msgstr "État {} pour \"{}\" introuvable."
 
-#: system/state.cpp:546
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+"Le chargement du fichier TOML d'état système {} a échoué (voir dnf5-system-"
+"state(7)) : {}"
+
+#: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "Version TOML \"{}\" non prise en charge, la version prise en charge maximale "
@@ -1706,3 +1704,11 @@ msgstr "Échec de la sauvegarde de la base de données \"{}\" dans \"{}\""
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Échec de la restauration de la base de données \"{}\""
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "échec de la lecture des fichiers de configuration RPM"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Échec de l'exécution de uname()"

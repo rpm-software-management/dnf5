@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-04-14 02:35+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-08-03 03:41+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -146,6 +146,10 @@ msgstr ""
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
+#: commands/clean/clean.cpp:88
+msgid "Error cleaning the cache: {}"
+msgstr "კეშის გასუფთავების შეცდომა: {}"
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr "მხოლოდ ხელმისაწვდომი ჯგუფების ჩვენება."
@@ -178,13 +182,13 @@ msgstr ""
 "აუცილებელია, ბრძანება ზემომხმარებლის პრივილეგიებით გაუშვათ (ძირითადად, "
 "მომხმარებლის სახელია root)."
 
-#: main.cpp:155
+#: main.cpp:157
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
 "იქნება '.': {}"
 
-#: main.cpp:242 main.cpp:279
+#: main.cpp:246 main.cpp:283
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."

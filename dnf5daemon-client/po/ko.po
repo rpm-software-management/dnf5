@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-06-08 02:49+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-08-04 18:39+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -138,6 +138,10 @@ msgstr ""
 msgid "CVE_ID,..."
 msgstr "CVE_ID,..."
 
+#: commands/clean/clean.cpp:88
+msgid "Error cleaning the cache: {}"
+msgstr "캐쉬 청소 중 오류: {}"
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr "사용 가능한 그룹만 표시합니다."
@@ -170,12 +174,12 @@ msgstr ""
 "이 명령은 슈퍼유저 권한으로 실행해야합니다 (대부분의 시스템에서 root 사용자"
 "로 실행)."
 
-#: main.cpp:155
+#: main.cpp:157
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: 잘못된 형식의 인수 값: 마지막 키 문자는 다음과 같을 수 없습니다 '.': {}"
 
-#: main.cpp:242 main.cpp:279
+#: main.cpp:246 main.cpp:283
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ".인수에 대한 더 많은 정보를 위해 \"--help\"를 추가합니다."

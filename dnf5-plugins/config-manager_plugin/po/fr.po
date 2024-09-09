@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-06-19 17:36+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
@@ -54,7 +54,7 @@ msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr ""
 "Éched du téléchargement du fichier de configuration de dépôt \"{}\" : {}"
 
-#: addrepo.cpp:353
+#: addrepo.cpp:359
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -62,11 +62,11 @@ msgstr ""
 "Erreur dans le fichier de configuration de dépôt ajouté. Impossible de "
 "définir l'option de dépôt \"{}={}\" : {}"
 
-#: addrepo.cpp:387
+#: addrepo.cpp:393
 msgid "Bad baseurl: {}={}"
 msgstr "baseurl incorrecte : {}={}"
 
-#: addrepo.cpp:395
+#: addrepo.cpp:401
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -75,12 +75,12 @@ msgstr ""
 "set=mirrorlist=<URL>, --set=metalink=<URL> doit être définie avec une URL "
 "non vide"
 
-#: addrepo.cpp:440
+#: addrepo.cpp:446
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr ""
 "Échec de l'enregistrement du fichier de configuration de dépôt \"{}\" : {}"
 
-#: addrepo.cpp:462
+#: addrepo.cpp:468
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -88,7 +88,7 @@ msgstr ""
 "Le fichier \"{}\" existe déjà et configure les dépôts avec les ID \"{}\". "
 "Ajoutez \"--add-or-replace\" ou \"--overwrite\"."
 
-#: addrepo.cpp:465
+#: addrepo.cpp:471
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -96,11 +96,11 @@ msgstr ""
 "Le fichier \"{}\" existe déjà et configure les dépôts avec les ID \"{}\". "
 "Ajoutez \"--overwrite\" pour écraser le fichier."
 
-#: addrepo.cpp:485 addrepo.cpp:511
+#: addrepo.cpp:491 addrepo.cpp:517
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Un dépôt avec pour ID \"{}\" est déjà configuré dans le fichier : {}"
 
-#: addrepo.cpp:497 setopt.cpp:263
+#: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Impossible de lire les dépôts dans le répertoire \"{}\" : {}"
 

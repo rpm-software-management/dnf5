@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -27,124 +27,124 @@ msgstr ""
 "Chybné id libsolv pro doporučení \"{}\", řešitelný název \"{}\" nemá "
 "doporučenou předponu \"{}\""
 
-#: base/goal.cpp:470
+#: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nepodporovaný argument pro akci REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1528
+#: base/goal.cpp:1545
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
 
-#: base/goal_elements.cpp:348
+#: base/goal_elements.cpp:352
 msgid "Install"
 msgstr ""
 
-#: base/goal_elements.cpp:350
+#: base/goal_elements.cpp:354
 msgid "Install via provide"
 msgstr ""
 
-#: base/goal_elements.cpp:352
+#: base/goal_elements.cpp:356
 msgid "Install by group"
 msgstr ""
 
-#: base/goal_elements.cpp:354
+#: base/goal_elements.cpp:358
 msgid "Upgrade"
 msgstr ""
 
-#: base/goal_elements.cpp:356
+#: base/goal_elements.cpp:360
 msgid "Upgrade all"
 msgstr ""
 
-#: base/goal_elements.cpp:358
+#: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
 msgstr ""
 
-#: base/goal_elements.cpp:360
+#: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
 msgstr ""
 
-#: base/goal_elements.cpp:362
+#: base/goal_elements.cpp:366
 msgid "Downgrade"
 msgstr ""
 
-#: base/goal_elements.cpp:364
+#: base/goal_elements.cpp:368
 msgid "Reinstall"
 msgstr ""
 
-#: base/goal_elements.cpp:366
+#: base/goal_elements.cpp:370
 msgid "Install or reinstall"
 msgstr ""
 
-#: base/goal_elements.cpp:368
+#: base/goal_elements.cpp:372
 msgid "Remove"
 msgstr ""
 
-#: base/goal_elements.cpp:370
+#: base/goal_elements.cpp:374
 msgid "Distrosync"
 msgstr ""
 
-#: base/goal_elements.cpp:372
+#: base/goal_elements.cpp:376
 msgid "Distrosync all"
 msgstr ""
 
-#: base/goal_elements.cpp:374
+#: base/goal_elements.cpp:378
 msgid "Reason Change"
 msgstr ""
 
-#: base/goal_elements.cpp:376
+#: base/goal_elements.cpp:380
 msgid "Resolve"
 msgstr ""
 
-#: base/goal_elements.cpp:378
+#: base/goal_elements.cpp:382
 msgid "Enable"
 msgstr ""
 
-#: base/goal_elements.cpp:380
+#: base/goal_elements.cpp:384
 msgid "Disable"
 msgstr ""
 
-#: base/goal_elements.cpp:382
+#: base/goal_elements.cpp:386
 msgid "Reset"
 msgstr ""
 
-#: base/goal_elements.cpp:384
+#: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
 msgstr ""
 
-#: base/goal_elements.cpp:386
+#: base/goal_elements.cpp:390
 msgid "Install action"
 msgstr ""
 
-#: base/goal_elements.cpp:388
+#: base/goal_elements.cpp:392
 msgid "Remove action"
 msgstr ""
 
-#: base/goal_elements.cpp:390
+#: base/goal_elements.cpp:394
 msgid "Upgrade action"
 msgstr ""
 
-#: base/goal_elements.cpp:392
+#: base/goal_elements.cpp:396
 msgid "Reinstall action"
 msgstr ""
 
-#: base/goal_elements.cpp:394
+#: base/goal_elements.cpp:398
 msgid "Reason change action"
 msgstr ""
 
-#: base/goal_elements.cpp:396
+#: base/goal_elements.cpp:400
 msgid "Reason override"
 msgstr ""
 
-#: base/goal_elements.cpp:398
+#: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
 msgstr ""
 
-#: base/goal_elements.cpp:400
+#: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
 msgstr ""
 
-#: base/goal_elements.cpp:402
+#: base/goal_elements.cpp:406
 #, fuzzy
 #| msgid "No transaction in progress"
 msgid "Transaction merge"
@@ -717,39 +717,39 @@ msgstr "Zrušeno uživatelem."
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:976
+#: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:1312
+#: base/transaction.cpp:1317
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:1333
+#: base/transaction.cpp:1338
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1367
+#: base/transaction.cpp:1372
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1395
+#: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1414
+#: base/transaction.cpp:1419
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1417
+#: base/transaction.cpp:1422
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1424
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
@@ -793,23 +793,23 @@ msgstr ""
 msgid "Invalid package type: {}"
 msgstr "Neplatný typ balíčku: {}"
 
-#: conf/config_main.cpp:53
+#: conf/config_main.cpp:56
 msgid "Input is empty. Must contain a value."
 msgstr "Vstup je prázdný. Musí obsahovat hodnotu."
 
-#: conf/config_main.cpp:59
+#: conf/config_main.cpp:62
 msgid "Input value '{}' must not be negative"
 msgstr "Vstupní hodnota '{}' nesmí být záporná"
 
-#: conf/config_main.cpp:64
+#: conf/config_main.cpp:67
 msgid "Could not convert '{}' to bytes"
 msgstr "Nelze převést '{}' na bajty"
 
-#: conf/config_main.cpp:80
+#: conf/config_main.cpp:83
 msgid "Unknown unit '{}'"
 msgstr "Neznámá jednotka '{}'"
 
-#: conf/config_main.cpp:258
+#: conf/config_main.cpp:278
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Hodnota throttle {} je mimo povolený rozsah {} ... {}"
 
@@ -912,15 +912,7 @@ msgstr ""
 "Hodnota vstupní položky \"{}\" není povolena, povolené hodnoty pro tuto "
 "volbu jsou definovány regulárním výrazem \"{}\""
 
-#: conf/vars.cpp:63
-msgid "failed to read rpm config files"
-msgstr "nepodařilo se přečíst konfigurační rpm soubory"
-
-#: conf/vars.cpp:89
-msgid "Failed to execute uname()"
-msgstr "Nepodařilo se spustit uname()"
-
-#: conf/vars.cpp:370 conf/vars.cpp:410
+#: conf/vars.cpp:313 conf/vars.cpp:353
 msgid "Variable \"{}\" is read-only"
 msgstr "Proměnná \"{}\" je pouze pro čtení"
 
@@ -943,7 +935,7 @@ msgstr "Nelze povolit více streamů pro modul '{}'"
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:758
+#: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
 msgstr "žádné řešení není možné"
 
@@ -1029,11 +1021,11 @@ msgstr ""
 "Maximální rychlost stahování je nižší než minimální. Změňte prosím "
 "konfiguraci minrate nebo throttle"
 
-#: repo/package_downloader.cpp:147
+#: repo/package_downloader.cpp:141
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nelze stáhnout balíček \"{0}\", je aktivována volba cacheonly."
 
-#: repo/package_downloader.cpp:222
+#: repo/package_downloader.cpp:244
 msgid "Failed to download packages"
 msgstr "Stažení balíčků se nezdařilo"
 
@@ -1091,30 +1083,30 @@ msgstr "Nelze určit ID repozitáře v mezipaměti."
 msgid "Empty path to the repository cache directory."
 msgstr "Prázdná cesta k adresáři mezipaměti repozitáře."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
 msgstr "Chyba Librepo: {}"
 
-#: repo/repo_downloader.cpp:170
+#: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:242
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda je metalink \"{}\" synchronizován pro úložiště \"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:272
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda jsou repomd ({}: \"{}\") synchronizována pro "
 "repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Chyba při načítání místních metadat pro repozitář „{}“"
 
-#: repo/repo_downloader.cpp:455
+#: repo/repo_downloader.cpp:456
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1318,7 +1310,7 @@ msgstr "Nelze odstranit balíček \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:517
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
 msgstr "{}"
 
@@ -1331,15 +1323,19 @@ msgstr "Nepodařilo se převést epochu \"{}\" na číslo"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Zápis dat debugsolveru do \"{}\" se nezdařil: {}"
 
-#: system/state.cpp:228 system/state.cpp:237
+#: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Neplatná verze TOML \"{}\", očekává se \"MAJOR.MINOR\""
 
-#: system/state.cpp:245
+#: system/state.cpp:297
 msgid "{} state for \"{}\" not found."
 msgstr "Stav {} pro \"{}\" nebyl nalezen."
 
-#: system/state.cpp:546
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+
+#: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
 
@@ -1736,6 +1732,14 @@ msgstr "Zálohování databáze \"{}\" do \"{}\" se nezdařilo"
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "Obnovení databáze \"{}\" se nezdařilo"
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "nepodařilo se přečíst konfigurační rpm soubory"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Nepodařilo se spustit uname()"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Nelze {} balíček \"{}\""

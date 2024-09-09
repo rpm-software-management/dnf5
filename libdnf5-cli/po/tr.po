@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Sabri Ünal <libreajans@gmail.com>, 2024.
 # Ali Azbay <aliyapkod@gmail.com>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-07-19 08:38+0000\n"
-"Last-Translator: Ali Azbay <aliyapkod@gmail.com>\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-08-02 02:46+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/tr/>\n"
 "Language: tr\n"
@@ -21,8 +22,7 @@ msgstr ""
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
-"\"{}\" adlandırılmış argüman(named argument) \"{}\" ile birlikte kullanılamaz"
+msgstr "\"{}\" ile belirtilen \"{}\" argümanı birlikte kullanılamaz"
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
@@ -35,32 +35,32 @@ msgstr ""
 
 #: argument_parser.cpp:110
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "\"{}\" argüman kimliği \"{}\" grubunda zaten kayıtlı"
 
 #: argument_parser.cpp:237
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "\"{}\" argüman kimliğinde geçersiz '.' karakteri"
 
 #: argument_parser.cpp:345 argument_parser.cpp:350
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "\"{}\" konumsal argümanı için çok az değer"
 
 #: argument_parser.cpp:511
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Belirtilen \"--{}\" argümanı için değer eksik"
 
 #: argument_parser.cpp:519
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Belirtilen \"--{}\" argümanı için beklenmeyen değer"
 
 #: argument_parser.cpp:561
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Belirtilen \"-{}\" argümanı için değer eksik"
 
 #. print usage
 #: argument_parser.cpp:657
 msgid "Usage:"
-msgstr ""
+msgstr "Kullanım:"
 
 #: argument_parser.cpp:665
 msgid "Description:"
@@ -68,68 +68,69 @@ msgstr "Açıklama:"
 
 #: argument_parser.cpp:915
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "\"{}\" komut kimliği \"{}\" komutu için zaten kayıtlı"
 
 #: argument_parser.cpp:926
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Belirtilen \"{}\" argüman kimliği \"{}\" komutu için zaten kayıtlı"
 
 #: argument_parser.cpp:936
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "\"{}\" konumsal argüman kimliği \"{}\" komutu için zaten kayıtlı"
 
 #: argument_parser.cpp:946
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "\"{}\" grup kimliği \"{}\" komutu için zaten kayıtlı"
 
 #: argument_parser.cpp:973
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr ""
+msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip alt komut içermiyor"
 
 #: argument_parser.cpp:981
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
+"\"{}\" komut kimliği \"{}\" kimliğine sahip belirtilen argümanı içermiyor"
 
 #: argument_parser.cpp:989
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr ""
+msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip konumsal argüman içermiyor"
 
 #: argument_parser.cpp:996
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr ""
+msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip grup içermiyor"
 
 #: argument_parser.cpp:1103 argument_parser.cpp:1307
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Bilinmeyen argüman \"{}\" (\"{}\" komutu için)"
 
 #: argument_parser.cpp:1118 argument_parser.cpp:1322
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "\"{}\" konumsal argümanı eksik (\"{}\" komutu için)"
 
 #: argument_parser.cpp:1525
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "\"{}\" yol kimliğine sahip belirtilen argüman bulunamadı"
 
 #: argument_parser.cpp:1535
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "\"{}\" yol kimliğine sahip konumsal argüman bulunamadı"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr ""
+msgstr "İşlem kullanıcı tarafından iptal edildi."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "İşlem çözümlenemedi"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr ""
+msgstr "İpucu: [d] öntanımlı, [e] etkin, [x] devre dışı, [i] kurulu, [a] aktif"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "İpucu: [d] öntanımlı, [e] etkin, [x] devre dışı, [i] kurulu"
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr ""
+msgstr "Komut eksik"
