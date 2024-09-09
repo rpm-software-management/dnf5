@@ -141,6 +141,7 @@ Options
     | Limit to packages that are not installed as dependencies or weak dependencies.
     | This means limit to packages that were installed at the user request or indirectly as a part of a module profile or comps group. Additionally it returns packages with unknown reason.
     | The result may be influenced by the "exclude" option in the configuration file.
+    | To get an exact reason of the installation, use ``--queryformat '%{name} %{reason}\n'`` option.
 
 ``--whatconflicts=CAPABILITY,...``
     | Limit to packages that conflict with any of <capabilities>.
