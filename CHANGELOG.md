@@ -1,3 +1,86 @@
+# 5.2.6.0
+
+- Update translations from weblate
+- dnfdaemon: Correct argument direction in interface definition of Goal::cancel method
+- dnfdaemon: Signals should use "object_path" type for the session_object_path argument
+- rpm: TransactionCallbacks class documentation
+- doc: Add TransactionCallback class to API docs
+- main: Don't use Context::print_error when catching libdnf5 errors
+- Fix transaction problem formatting
+- config-manager: Fix addrepo from-repofile with empty/comment lines
+- dnfdaemon: API to cancel current running transaction
+- DownloadCallbacks: Enum for possible return codes
+- Use Context::print_output, Context::print_error in main.cpp
+- context: Add print_error and print_output
+- Context::set_output_stream should set out_stream & err_stream
+- Move some output from stdout to stderr
+- Print "info" and progress bars to stderr, not stdout
+- conf: clarify plugin types
+- conf: update documented options
+- Document dropping of `arch` and `basearch` conf options
+- conf-todo: remove already documented options
+- conf: document both repo and main `gpgcheck` option
+- conf: document several `repo` options
+- conf: `reposdir` add missing default
+- dnf5: Print rpm scriptlets outputs to the user
+- transaction: Store outputs of the last rpm scriptlet
+- rpm::transaction: Base::Transaction to callback holder
+- Install `defs.h` include for `libdnf5-cli`
+- [dnf5] Add argument "-c" - alias to "--config" (dnf4 compatibility)
+- fix formatting issues
+- fix: address various issues mentioned in PR review
+- feat: implement a proper default user-agent string
+- doc: Add references from dnf5(8) to new man pages
+- doc: Add man page describing the system state
+- state: Catch all errors during system state load
+- state.cpp: update to new toml11-devel-4.0.0 version API
+- versionlock_config.cpp: update to new toml11-devel-4.0.0 version API
+- temp_files_memory.cpp: fully specify arg for toml::format
+- cmdline_aliases: update to `toml11-devel-4.0.0` API
+- spec: fix modularity man page
+- doc: Include modularity documentation
+- doc: Revise packages filtering doc section
+- package_downloader: Always call download callbacks
+- repo: New Repo.get_packages_download_dir() method
+- doc: Document destdir main config option
+- doc: Naming of source and debug repos
+- doc: fix arguments for `install`, `upgrade` and `remove`
+- doc: add `environment-spec` to specs.7.rst
+- doc: link `group_package_types` with install and group install
+- doc: Use ~ instead of /home/$USER
+- Update the man page entry for the countme option
+- Fix countme bucket calculation
+- Fix up some comments in addCountmeFlag()
+- doc: enhance `logdir` default description
+- doc: describe `cachedir` and `system_cachedir` relationship
+- doc: Add system-upgrade example using D-Bus API
+- dnf5daemon-client: system-upgrade command
+- dnfdaemon: Add system_upgrade() method to Rpm interface
+- spec: fix cmake focus_new arg
+- Use `SOLVER_FLAG_FOCUS_NEW` to install latests versions of deps
+- builddep: Support the --with/--without options to toggle bconds
+- dnf5: Reduce the noise around running scriptlets
+- cli: Method to drop the last progress bar message
+- spec: Stricten a dependency on DNF libraries in plugin subpackages
+- Fix a use-after-free in EmitterEmail::notify()
+- Clarify `group` command man page: `environment` note
+- Add some docs about environments
+- dnfdaemon-client: Fix repoquery command
+- dnfdaemon-client: Clean command implemetation
+- dnfdaemon: D-Bus API for cleaning caches
+- Add an example how to disable repo to `repo` command man page
+- Improve "After this operation" disk usage messages
+- replay: Allow up/down-grade if NA is already installed
+- Add `redo` to and install history documentation
+- Add `override_reasons` to `GoalJobSettings` and use it in `redo`
+- Add `history redo` command
+- Extract private API `to_replay()` for `libdnf5::transaction::Transaction`
+- Make `get_package_types()` from libdnf5::transaction::CompsGroup public
+- package_downloader: Add local files to callbacks
+- dnf5: Offline transactions work with local rpm files
+- package_downloader: Handle local files
+- transaction: Flag whether download local packages
+
 # 5.2.5.0
 
 - Update translations from weblate
