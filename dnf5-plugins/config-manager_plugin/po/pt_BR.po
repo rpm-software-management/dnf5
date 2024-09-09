@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-03-17 02:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -51,7 +51,7 @@ msgstr "Falha ao copiar o arquivo de configuração de repositório \"{}\": {}"
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Falha ao baixar o arquivo de configuração de repositório \"{}\": {}"
 
-#: addrepo.cpp:353
+#: addrepo.cpp:359
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -59,11 +59,11 @@ msgstr ""
 "Erro no arquivo de configuração de repositório adicionado. Não é possível "
 "definir a opção de repositório \"{}={}\": {}"
 
-#: addrepo.cpp:387
+#: addrepo.cpp:393
 msgid "Bad baseurl: {}={}"
 msgstr "baseurl inválida: {}={}"
 
-#: addrepo.cpp:395
+#: addrepo.cpp:401
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -72,11 +72,11 @@ msgstr ""
 "set=mirrorlist=<URL>, --set=metalink=<URL> deve ser definida com uma URL não "
 "vazia"
 
-#: addrepo.cpp:440
+#: addrepo.cpp:446
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Falha ao salvar o arquivo de configuração de repositório \"{}\": {}"
 
-#: addrepo.cpp:462
+#: addrepo.cpp:468
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -84,7 +84,7 @@ msgstr ""
 "O arquivo \"{}\" já existe e configura repositórios com IDs \"{}\". Adicione "
 "\"--add-or-replace\" ou \"--overwrite\"."
 
-#: addrepo.cpp:465
+#: addrepo.cpp:471
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -92,11 +92,11 @@ msgstr ""
 "O arquivo \"{}\" já existe e configura repositórios com IDs \"{}\". Adicione "
 "\"--overwrite\" para sobrescrever."
 
-#: addrepo.cpp:485 addrepo.cpp:511
+#: addrepo.cpp:491 addrepo.cpp:517
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Um repositório com id \"{}\" já configurado no arquivo: {}"
 
-#: addrepo.cpp:497 setopt.cpp:263
+#: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Não é possível ler repositórios do diretório \"{}\": {}"
 

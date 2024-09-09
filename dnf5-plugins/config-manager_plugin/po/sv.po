@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-03-10 07:36+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -52,7 +52,7 @@ msgstr "Misslyckades att kopiera förrådets konfigurationsfil \"{}\": {}"
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Misslyckades att ladda ner förrådets konfigurationsfil \"{}\": {}"
 
-#: addrepo.cpp:353
+#: addrepo.cpp:359
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -60,11 +60,11 @@ msgstr ""
 "Fel i tillagd konfigurationsfil för förråd. Kan inte ställa in "
 "lagringsalternativ \"{}={}\": {}"
 
-#: addrepo.cpp:387
+#: addrepo.cpp:393
 msgid "Bad baseurl: {}={}"
 msgstr "Dålig basurl: {}={}"
 
-#: addrepo.cpp:395
+#: addrepo.cpp:401
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -72,11 +72,11 @@ msgstr ""
 "En av --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> måste vara inställd på en icke-tom URL"
 
-#: addrepo.cpp:440
+#: addrepo.cpp:446
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Misslyckades att spara konfigurationsfil för förråd \"{}: {}"
 
-#: addrepo.cpp:462
+#: addrepo.cpp:468
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -84,7 +84,7 @@ msgstr ""
 "Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
 "\"--add-or-replace\" eller \"--overwrite\"."
 
-#: addrepo.cpp:465
+#: addrepo.cpp:471
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -92,11 +92,11 @@ msgstr ""
 "Filen \"{}\" finns redan och konfigurerar förråd med ID:n \"{}\". Lägg till "
 "--overwrite\" för att skriva över."
 
-#: addrepo.cpp:485 addrepo.cpp:511
+#: addrepo.cpp:491 addrepo.cpp:517
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Ett förråd med id \"{}\" är redan konfigurerat i fil {}"
 
-#: addrepo.cpp:497 setopt.cpp:263
+#: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Kan inte läsa in förråd från katalog \"{}\": {}"
 

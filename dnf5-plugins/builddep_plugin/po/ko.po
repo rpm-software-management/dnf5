@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-05-16 02:51+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -25,6 +25,6 @@ msgstr ""
 "매크로 정의 \"{}\"를 위해 유효하지 못한 값: \"macro expr\" 형식이 예상됩니다."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:257
+#: builddep.cpp:288
 msgid "Failed to parse some inputs."
 msgstr "일부 입력을 구문 분석하는 데 실패함."

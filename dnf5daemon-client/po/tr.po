@@ -1,106 +1,104 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 03:00+0000\n"
-"PO-Revision-Date: 2024-05-28 08:58+0000\n"
-"Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
-"dnf5daemon-client/de/>\n"
-"Language: de\n"
+"PO-Revision-Date: 2024-08-11 14:40+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr "Details zu Hinweisen ausgeben"
+msgstr "Tavsiyeler hakkında ayrıntıları yazdır"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr "Hinweise auflisten"
+msgstr "Tavsiyeleri listele"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr "Hinweise zu beliebigen Versionen installierter Pakete anzeigen."
+msgstr "Kurulu paketlerin herhangi bir sürümünü içeren tavsiyeleri göster."
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
 msgstr ""
-"Hinweise zu neueren Versionen installierter Pakete anzeigen. Dies ist das "
-"Standardverhalten."
+"Kurulu paketlerin daha yeni sürümlerini içeren tavsiyeleri göster. Bu "
+"öntanımlı davranıştır."
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
-msgstr ""
-"Hinweise zu identischen oder älteren Versionen installierter Pakete anzeigen."
+msgstr "Kurulu paketlerin aynı ve eski sürümlerini içeren tavsiyeleri göster."
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
-"Hinweise zu neueren Versionen der installierten Pakete, für die eine neue "
-"Version verfügbar ist, anzeigen."
+"Daha yeni bir sürümü var olan kurulu paketlerin daha yeni sürümlerini içeren "
+"tavsiyeleri göster."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Nur Hinweise anzeigen, die Pakete mit den angegebenen Namen enthalten. "
-"Listenoption, unterstützt Platzhalter."
+"Yalnızca belirtilen adlara sahip paketleri içeren tavsiyeleri göster. Liste "
+"seçeneği, globları destekler."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "PAKET_NAME,..."
+msgstr "PAKET_ADI,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr "Liste der Muster die mit den Hinweisnamen übereinstimmen."
+msgstr "Tavsiye adlarıyla eşleşen desenlerin listesi."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr "Nur Hinweise mit einer Bugzilla-Referenz anzeigen."
+msgstr "Yalnızca bir bugzilla'ya kaynak gösteren tavsiyeleri göster."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr "Nur Hinweise mit einer CVE-Referenz anzeigen."
+msgstr "Yalnızca bir CVE'ye kaynak gösteren tavsiyeleri göster."
 
 #: commands/advisory/arguments.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
 msgstr ""
-"Auf Pakete in Hinweisen mit angegebenem Namen beschränkt. Listenoption."
+"Belirtilen ada sahip tavsiyelerdeki paketlerle sınırla. Liste seçeneği."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr "HINWEIS_NAME,..."
+msgstr "TAVSİYE_ADI,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr "Auf Pakete mit Sicherheitshinweisen beschränken."
+msgstr "Güvenlik tavsiyelerindeki paketlerle sınırla."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr "Auf Pakete mit Hinweisen zu Fehlerkorrekturen beschränken."
+msgstr "Hata düzeltme tavsiyelerindeki paketlerle sınırla."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr "Auf Pakete mit Hinweisen zu Verbesserungen beschränken."
+msgstr "İyileştirme tavsiyelerindeki paketlerle sınırla."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr "Auf Pakete mit Hinweisen in neuen Paketen beschränken."
+msgstr "Yeni paket tavsiyelerindeki paketlerle sınırla."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -109,83 +107,82 @@ msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Auf Pakete in Hinweisen mit angegebenem Schweregrad beschränken. "
-"Listenoption. Mögliche Werte \"critical\", \"important\", \"moderate\", "
-"\"low\", \"none\"."
+"Belirtilen önem derecesine sahip tavsiyelerdeki paketlerle sınırla. Liste "
+"seçeneği. \"critical\", \"important\", \"moderate\", \"low\", \"none\" "
+"seçeneklerinden biri olabilir."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr "HINWEIS_SCHWEREGRAD,..."
+msgstr "TAVSİYE_ÖNEMİ,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
-"Auf Pakete mit Hinweisen beschränken, die eine Bugzilla-ID beheben, z.B. "
-"123123. Listenoption."
+"Bir Bugzilla kimliğini (örn. 123123) düzelten tavsiyelerdeki paketlerle "
+"sınırla. Liste seçeneği."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr "BUGZILLA_ID,..."
+msgstr "BUGZILLA_KİMLİĞİ,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Auf Pakete mit Hinweisen beschränken, die eine CVE-ID (Common "
-"Vulnerabilities and Exposures) beheben, z.B. CVE-2201-0123. Listenoption."
+"Bir CVE (Common Vulnerabilities and Exposures) kimliğini (örn. "
+"CVE-2201-0123) düzelten tavsiyelerdeki paketlerle sınırla. Liste seçeneği."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr "CVE_ID,..."
+msgstr "CVE_KİMLİĞİ,..."
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "Önbellek temizlenirken hata oluştu: {}"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr "Nur verfügbare Gruppen anzeigen."
+msgstr "Yalnızca kullanılabilir grupları göster."
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr "Nur installierte Gruppen anzeigen."
+msgstr "Yalnızca kurulu grupları göster."
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr "Auch versteckte Gruppen anzeigen."
+msgstr "Gizli grupları da göster."
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Nur Gruppen anzeigen, die Pakete mit den angegebenen Namen enthalten. "
-"Listenoption, unterstützt Platzhalter."
+"Yalnızca belirtilen adlara sahip paketleri içeren grupları göster. Liste "
+"seçeneği, globları destekler."
 
 #: commands/repoquery/repoquery.cpp:158
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "Fehler beim Parsen von JSON-Objekt \"{}\": {}"
+msgstr "\"{}\" JSON nesnesi ayrıştırılırken hata oluştu: {}"
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
 msgstr ""
-"Dieser Befehl muss mit Superuser-Privilegien ausgeführt werden (auf den "
-"meisten Systemen unter dem Benutzer root)."
+"Bu komutun süper kullanıcı yetkileriyle (çoğu sistemdeki root kullanıcısı "
+"ile) çalıştırılması gerekmektedir."
 
 #: main.cpp:157
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Schlecht formatierter Argumentwert: Letzter Schlüsselwert kann nicht '.' "
-"sein: {}"
+"{}: Hatalı biçimlendirilen argüman değeri: Son anahtar karakter '.' olamaz: "
+"{}"
 
 #: main.cpp:246 main.cpp:283
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
-". Fügen Sie \"--help\" hinzu, um weitere Informationen zu den Argumenten zu "
-"erhalten."
+". Argümanlar hakkında daha fazla bilgi için \"--help\" seçeneğini ekleyin."

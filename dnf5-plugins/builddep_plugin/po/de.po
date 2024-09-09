@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-05-14 01:26+0000\n"
 "Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -26,6 +26,6 @@ msgstr ""
 "erwartet."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:257
+#: builddep.cpp:288
 msgid "Failed to parse some inputs."
 msgstr "Einige Eingaben konnten nicht analysiert werden."

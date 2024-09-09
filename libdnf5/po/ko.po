@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
-"PO-Revision-Date: 2024-07-19 08:38+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"PO-Revision-Date: 2024-09-08 13:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -28,124 +28,124 @@ msgstr ""
 "권고 \"{}\"용 나쁜 libsolv id, 해결 할 수 있는 \"{}\"은 권고 접두사 \"{}\"를 "
 "가지지 않습니다"
 
-#: base/goal.cpp:470
+#: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
 msgstr "제거(REMOVE) 동작을 위해 미지원된 인수: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1528
+#: base/goal.cpp:1545
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "multilib_policy용 잘못된 구성 값: {}"
 
-#: base/goal_elements.cpp:348
+#: base/goal_elements.cpp:352
 msgid "Install"
 msgstr "설치"
 
-#: base/goal_elements.cpp:350
+#: base/goal_elements.cpp:354
 msgid "Install via provide"
 msgstr "제공을 통한 설치"
 
-#: base/goal_elements.cpp:352
+#: base/goal_elements.cpp:356
 msgid "Install by group"
 msgstr "그룹으로 설치"
 
-#: base/goal_elements.cpp:354
+#: base/goal_elements.cpp:358
 msgid "Upgrade"
 msgstr "향상"
 
-#: base/goal_elements.cpp:356
+#: base/goal_elements.cpp:360
 msgid "Upgrade all"
 msgstr "모두 향상"
 
-#: base/goal_elements.cpp:358
+#: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
 msgstr "최소 향상"
 
-#: base/goal_elements.cpp:360
+#: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
 msgstr "모두 최소로 향상"
 
-#: base/goal_elements.cpp:362
+#: base/goal_elements.cpp:366
 msgid "Downgrade"
 msgstr "하향설치"
 
-#: base/goal_elements.cpp:364
+#: base/goal_elements.cpp:368
 msgid "Reinstall"
 msgstr "재설치"
 
-#: base/goal_elements.cpp:366
+#: base/goal_elements.cpp:370
 msgid "Install or reinstall"
 msgstr "설치 또는 재설치"
 
-#: base/goal_elements.cpp:368
+#: base/goal_elements.cpp:372
 msgid "Remove"
 msgstr "제거"
 
-#: base/goal_elements.cpp:370
+#: base/goal_elements.cpp:374
 msgid "Distrosync"
 msgstr "배포동기화"
 
-#: base/goal_elements.cpp:372
+#: base/goal_elements.cpp:376
 msgid "Distrosync all"
 msgstr "모두 배포동기화"
 
-#: base/goal_elements.cpp:374
+#: base/goal_elements.cpp:378
 msgid "Reason Change"
 msgstr "변경 원인"
 
-#: base/goal_elements.cpp:376
+#: base/goal_elements.cpp:380
 msgid "Resolve"
 msgstr "해결"
 
-#: base/goal_elements.cpp:378
+#: base/goal_elements.cpp:382
 msgid "Enable"
 msgstr "활성화"
 
-#: base/goal_elements.cpp:380
+#: base/goal_elements.cpp:384
 msgid "Disable"
 msgstr "비활성화"
 
-#: base/goal_elements.cpp:382
+#: base/goal_elements.cpp:386
 msgid "Reset"
 msgstr "재설정"
 
-#: base/goal_elements.cpp:384
+#: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
 msgstr "직렬화된 연결을 구문 분석합니다"
 
-#: base/goal_elements.cpp:386
+#: base/goal_elements.cpp:390
 msgid "Install action"
 msgstr "설치 동작"
 
-#: base/goal_elements.cpp:388
+#: base/goal_elements.cpp:392
 msgid "Remove action"
 msgstr "제거 동작"
 
-#: base/goal_elements.cpp:390
+#: base/goal_elements.cpp:394
 msgid "Upgrade action"
 msgstr "향상 동작"
 
-#: base/goal_elements.cpp:392
+#: base/goal_elements.cpp:396
 msgid "Reinstall action"
 msgstr "재설치 동작"
 
-#: base/goal_elements.cpp:394
+#: base/goal_elements.cpp:398
 msgid "Reason change action"
 msgstr "변경 원인에 따른 동작"
 
-#: base/goal_elements.cpp:396
+#: base/goal_elements.cpp:400
 msgid "Reason override"
 msgstr "원인 재정의"
 
-#: base/goal_elements.cpp:398
+#: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
 msgstr "comps 향상 복귀"
 
-#: base/goal_elements.cpp:400
+#: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
 msgstr "디버그 RPM 설치"
 
-#: base/goal_elements.cpp:402
+#: base/goal_elements.cpp:406
 msgid "Transaction merge"
 msgstr "연결 병합"
 
@@ -618,36 +618,36 @@ msgstr "사용자에 의해 취소되었습니다."
 msgid "Public key import failed."
 msgstr "공개 키 가져오기에 실패함."
 
-#: base/transaction.cpp:976
+#: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
 msgstr "잘못된 tsflag: {}"
 
-#: base/transaction.cpp:1312
+#: base/transaction.cpp:1317
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "공개 키 \"{}\"가 이미 존재하고, 가져오지 않습니다."
 
-#: base/transaction.cpp:1333
+#: base/transaction.cpp:1338
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "키를 가져오는 중에 발생하였습니다 \"{}\": {}"
 
-#: base/transaction.cpp:1367
+#: base/transaction.cpp:1372
 msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "repo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
 
-#: base/transaction.cpp:1395
+#: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
 msgstr "키 가져오기가 도움이 되지 않습니다, 잘못된 키입니까?"
 
-#: base/transaction.cpp:1414
+#: base/transaction.cpp:1419
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1417
+#: base/transaction.cpp:1422
 msgid "Warning: skipped PGP checks for 1 package from repository: {}"
 msgstr "경고: 저장소에서 1 꾸러미를 위해 PGP 점검을 건너뜁니다: {}"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1424
 msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
@@ -686,23 +686,23 @@ msgstr "파일에 그룹 \"{}\"을 위해 xml 문서를 저장하는 데 실패�
 msgid "Invalid package type: {}"
 msgstr "잘못된 꾸러미 유형: {}"
 
-#: conf/config_main.cpp:53
+#: conf/config_main.cpp:56
 msgid "Input is empty. Must contain a value."
 msgstr "입력이 비었습니다. 값이 포함되어야 합니다."
 
-#: conf/config_main.cpp:59
+#: conf/config_main.cpp:62
 msgid "Input value '{}' must not be negative"
 msgstr "입력값 '{}'은 음수가 아니어야 합니다"
 
-#: conf/config_main.cpp:64
+#: conf/config_main.cpp:67
 msgid "Could not convert '{}' to bytes"
 msgstr "'{}'를 바이트로 변환 할 수 없습니다"
 
-#: conf/config_main.cpp:80
+#: conf/config_main.cpp:83
 msgid "Unknown unit '{}'"
 msgstr "알 수 없는 단위 '{}'"
 
-#: conf/config_main.cpp:258
+#: conf/config_main.cpp:278
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "쓰로틀 값 {}은 허용된 범위 {} 밖에 있습니다 {} ... {}"
 
@@ -801,15 +801,7 @@ msgstr ""
 "입력 항목 값 \"{}\"은 허용되지 않으며, 이와 같은 옵션을 위한 허용된 값은 정규"
 "식 \"{}\"에 의해 정의됩니다"
 
-#: conf/vars.cpp:63
-msgid "failed to read rpm config files"
-msgstr "rpm config 파일을 읽는 데 실패함"
-
-#: conf/vars.cpp:89
-msgid "Failed to execute uname()"
-msgstr "uname()을 실행하는 데 실패함"
-
-#: conf/vars.cpp:370 conf/vars.cpp:410
+#: conf/vars.cpp:313 conf/vars.cpp:353
 msgid "Variable \"{}\" is read-only"
 msgstr "변수 \"{}\" 는 읽기-전용입니다"
 
@@ -832,7 +824,7 @@ msgstr "모듈를 위해 다중 스트림을 활성화 할 수 없습니다 '{}'
 #. }
 #. TODO(lukash) replace with a proper and descriptive exception
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
-#: rpm/solv/goal_private.cpp:758
+#: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
 msgstr "해결책 없음"
 
@@ -916,12 +908,12 @@ msgstr ""
 "최대 내려받기 속도가 최저보다 낮으며, minrate 또는 throttle의 구성을 변경해 "
 "주세요"
 
-#: repo/package_downloader.cpp:147
+#: repo/package_downloader.cpp:141
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "\"{0}\" 꾸러미를 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
-#: repo/package_downloader.cpp:222
+#: repo/package_downloader.cpp:244
 msgid "Failed to download packages"
 msgstr "꾸러미를 내려받는 데 실패함"
 
@@ -975,29 +967,29 @@ msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 msgid "Empty path to the repository cache directory."
 msgstr "저장소 캐쉬 디렉토리에 빈 경로."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
 msgstr "Librepo 오류: {}"
 
-#: repo/repo_downloader.cpp:170
+#: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "저장소 \"{}\"를 위한 메타자료 ({}: \"{}\")를 내려받는 데 실패함"
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:242
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "만약 metalink \"{}\"가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:272
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "만약 repomd ({}: \"{}\")가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "저장소 \"{}\"를 위해 로컬 메타자료를 적재 중에 오류"
 
-#: repo/repo_downloader.cpp:455
+#: repo/repo_downloader.cpp:456
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1181,7 +1173,7 @@ msgstr "꾸러미를 하향 할 수 없습니다 \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "꾸러미를 설치 할 수 없습니다 \"{}\""
 
-#: rpm/versionlock_config.cpp:261 system/state.cpp:517
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
 msgstr "{}"
 
@@ -1194,15 +1186,20 @@ msgstr "epoch \"{}\"를 숫자로 변환하는 데 실패함"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "debugsolver 자료를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: system/state.cpp:228 system/state.cpp:237
+#: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "잘못된 TOML 버전 \"{}\", \"MAJOR.MINOR\" 예상됨"
 
-#: system/state.cpp:245
+#: system/state.cpp:297
 msgid "{} state for \"{}\" not found."
 msgstr "\"{}\"를 위한 {} 상태를 찾을 수 없습니다."
 
-#: system/state.cpp:546
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr "시스템 상태 TOML 파일 {}를 적재하는 데 실패했습니다 (dnf5-system-state(7)을 "
+"참고하세요): {}"
+
+#: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "미지원 TOML 버전 \"{}\", 최대 지원된 버전은 \"{}\"입니다"
 
@@ -1610,6 +1607,14 @@ msgstr "데이타베이스 \"{}\"를 \"{}\"로 백업하는 데 실패함"
 #: utils/sqlite3/sqlite3.cpp:158
 msgid "Failed to restore database \"{}\""
 msgstr "데이타베이스 \"{}\"를 복구하는 데 실패함"
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "rpm config 파일을 읽는 데 실패함"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "uname()을 실행하는 데 실패함"
 
 #~ msgid "packages"
 #~ msgstr "꾸러미"

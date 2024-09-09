@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 02:52+0000\n"
+"POT-Creation-Date: 2024-09-06 03:00+0000\n"
 "PO-Revision-Date: 2024-02-02 12:15+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -25,6 +25,6 @@ msgstr ""
 "Neplatná hodnota pro definici makra \"{}\". Očekává se formát \"macro expr\"."
 
 #. failed to parse some of inputs (invalid spec, no package matched...)
-#: builddep.cpp:257
+#: builddep.cpp:288
 msgid "Failed to parse some inputs."
 msgstr "Některé vstupy se nepodařilo parsovat."
