@@ -18,6 +18,7 @@ Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 %if %{without dnf5_obsoletes_dnf}
 Requires:       dnf-data
 %endif
+Recommends:     (dnf5-plugins if dnf-plugins-core)
 Recommends:     bash-completion
 Requires:       coreutils
 
