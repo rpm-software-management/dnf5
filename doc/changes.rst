@@ -146,7 +146,6 @@ Changes to individual commands
 
 ``automatic``
   * Now a DNF5 plugin.
-  * Configuration file has been moved from ``/etc/dnf/automatic.conf`` to ``/etc/dnf/dnf5-plugins/automatic.conf``. However, its contents remain compatible.
   * The specific systemd units, ``dnf-automatic-download``, ``dnf-automatic-install``, and ``dnf-automatic-notifyonly``, have been dropped. Only one ``dnf5-automatic`` timer is shipped.
   * See the :ref:`Automatic command <automatic_plugin_ref-label>` for more information.
 
