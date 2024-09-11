@@ -33,7 +33,7 @@ Description
 
 Alternative CLI to ``dnf upgrade`` with specific facilities to make it suitable to be executed automatically and regularly from systemd timers, cron jobs and similar.
 
-The operation of the tool is controlled by configuration files. Default values are set from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` config file. Host-specific overrides from ``/etc/dnf/dnf5-plugins/automatic.conf`` are then applied.
+The operation of the tool is controlled by configuration files. Default values are set from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` config file. Host-specific overrides from ``/etc/dnf/automatic.conf`` are then applied.
 
 The tool synchronizes package metadata as needed and then checks for updates available for the given system and then either exits, downloads the packages or downloads and applies the updates. The outcome of the operation is then reported by a selected mechanism, for instance via the standard output, email or MOTD messages.
 
@@ -65,7 +65,7 @@ The following options can be used to override values from the configuration file
 Run dnf5 automatic service
 ==========================
 
-The service is typically executed using the systemd timer ``dnf5-automatic.timer``. To configure the service, customize the ``/etc/dnf/dnf5-plugins/automatic.conf`` file. You can either copy the distribution config file from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` and use it as a baseline, or create your own configuration file from scratch with only the required overrides.
+The service is typically executed using the systemd timer ``dnf5-automatic.timer``. To configure the service, customize the ``/etc/dnf/automatic.conf`` file. You can either copy the distribution config file from ``/usr/share/dnf5/dnf5-plugins/automatic.conf`` and use it as a baseline, or create your own configuration file from scratch with only the required overrides.
 
 Then enable the timer unit:
 

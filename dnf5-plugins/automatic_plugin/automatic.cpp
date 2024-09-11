@@ -281,22 +281,33 @@ void AutomaticCommand::pre_configure() {
 
     // read the config files in following order (/etc overrides /usr):
     //      - [installroot]/usr/share/dnf5/dnf5-plugins/automatic.conf
-    //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf
+    //      - [installroot]/etc/dnf/dnf5-plugins/automatic.conf [deprecated]
+    //      - [installroot]/etc/dnf/automatic.conf
     auto & main_config = base.get_config();
     bool use_host_config{main_config.get_use_host_config_option().get_value()};
     std::filesystem::path installroot_path{main_config.get_installroot_option().get_value()};
-    std::vector<std::filesystem::path> possible_paths{"/usr/share/dnf5/dnf5-plugins", "/etc/dnf/dnf5-plugins"};
-    for (const auto & pth : possible_paths) {
+    std::vector<std::tuple<std::filesystem::path, bool>> possible_paths{
+        {"/usr/share/dnf5/dnf5-plugins", false}, {"/etc/dnf/dnf5-plugins", true}, {"/etc/dnf", false}};
+    auto & logger = *base.get_logger();
+    for (const auto & [pth, deprecated] : possible_paths) {
         std::filesystem::path conf_file_path{pth / "automatic.conf"};
         if (!use_host_config) {
             conf_file_path = installroot_path / conf_file_path.relative_path();
         }
         if (std::filesystem::exists(conf_file_path)) {
+            if (deprecated) {
+                auto msg = libdnf5::utils::sformat(
+                    _("Warning: Configuration file location \"{}\" for dnf automatic is deprecated. See "
+                      "dnf5-automatic(8) for details."),
+                    conf_file_path.string());
+                logger.warning(msg);
+                std::cerr << msg << std::endl;
+            }
             libdnf5::ConfigParser parser;
             parser.read(conf_file_path);
             base.get_config().load_from_parser(
-                parser, "base", *base.get_vars(), *base.get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
-            config_automatic.load_from_parser(parser, *base.get_vars(), *base.get_logger());
+                parser, "base", *base.get_vars(), logger, libdnf5::Option::Priority::AUTOMATICCONFIG);
+            config_automatic.load_from_parser(parser, *base.get_vars(), logger);
         }
     }
 
