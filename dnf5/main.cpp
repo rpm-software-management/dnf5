@@ -739,34 +739,36 @@ static void print_versions(Context & context) {
     constexpr const char * appl_name = "dnf5";
     {
         const auto & version = get_application_version();
-        context.print_output(fmt::format(
-            "{} version {}.{}.{}.{}", appl_name, version.prime, version.major, version.minor, version.micro));
+        context.print_output(libdnf5::utils::sformat(
+            _("{} version {}.{}.{}.{}"), appl_name, version.prime, version.major, version.minor, version.micro));
         const auto & api_version = get_plugin_api_version();
         context.print_output(
-            fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor));
+            libdnf5::utils::sformat(_("{} plugin API version {}.{}"), appl_name, api_version.major, api_version.minor));
     }
     {
         const auto & version = libdnf5::get_library_version();
-        context.print_output(
-            fmt::format("libdnf5 version {}.{}.{}.{}", version.prime, version.major, version.minor, version.micro));
+        context.print_output(libdnf5::utils::sformat(
+            _("libdnf5 version {}.{}.{}.{}"), version.prime, version.major, version.minor, version.micro));
         const auto & api_version = libdnf5::get_plugin_api_version();
-        context.print_output(fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor));
+        context.print_output(
+            libdnf5::utils::sformat(_("libdnf5 plugin API version {}.{}"), api_version.major, api_version.minor));
     }
 
     bool first{true};
     for (const auto & plugin : context.get_plugins().get_plugins()) {
         if (first) {
             first = false;
-            context.print_output(fmt::format("\nLoaded {} plugins:", appl_name));
+            context.print_output(libdnf5::utils::sformat(_("\nLoaded {} plugins:"), appl_name));
         } else {
             context.print_output("");
         }
         auto * iplugin = plugin->get_iplugin();
-        context.print_output(fmt::format("  name: {}", iplugin->get_name()));
+        context.print_output(libdnf5::utils::sformat(_("  name: {}"), iplugin->get_name()));
         const auto & version = iplugin->get_version();
-        context.print_output(fmt::format("  version: {}.{}.{}", version.major, version.minor, version.micro));
+        context.print_output(
+            libdnf5::utils::sformat(_("  version: {}.{}.{}"), version.major, version.minor, version.micro));
         const auto & api_version = iplugin->get_api_version();
-        context.print_output(fmt::format("  API version: {}.{}", api_version.major, api_version.minor));
+        context.print_output(libdnf5::utils::sformat(_("  API version: {}.{}"), api_version.major, api_version.minor));
     }
 }
 
@@ -794,8 +796,8 @@ static void print_transaction_size_stats(Context & context) {
         const auto [in_pkgs_size_value, in_pkgs_size_unit] = libdnf5::cli::utils::units::to_size(in_pkgs_size);
         const auto [dwnl_pkgs_size_value, dwnl_pkgs_size_unit] =
             libdnf5::cli::utils::units::to_size(download_pkgs_size);
-        context.print_info(fmt::format(
-            "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}.",
+        context.print_info(libdnf5::utils::sformat(
+            _("Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."),
             in_pkgs_size_value,
             in_pkgs_size_unit,
             dwnl_pkgs_size_value,
@@ -807,8 +809,8 @@ static void print_transaction_size_stats(Context & context) {
     const auto size_diff = install_size - remove_size;
     const auto [size_diff_value, size_diff_unit] = libdnf5::cli::utils::units::to_size(std::abs(size_diff));
     if (size_diff >= 0) {
-        context.print_info(fmt::format(
-            "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, remove {:.0f} {:s}).",
+        context.print_info(libdnf5::utils::sformat(
+            _("After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, remove {:.0f} {:s})."),
             size_diff_value,
             size_diff_unit,
             install_size_value,
@@ -816,8 +818,8 @@ static void print_transaction_size_stats(Context & context) {
             remove_size_value,
             remove_size_unit));
     } else {
-        context.print_info(fmt::format(
-            "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s}).",
+        context.print_info(libdnf5::utils::sformat(
+            _("After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s})."),
             size_diff_value,
             size_diff_unit,
             install_size_value,
@@ -866,7 +868,7 @@ static void dump_repository_configuration(Context & context, const std::vector<s
     }
 
     for (auto repo_id : not_matchind_repos_id) {
-        log_router.warning("No matching repo to dump configuration: \"{}\"", repo_id);
+        log_router.warning(_("No matching repo to dump configuration: \"{}\""), repo_id);
     }
 
     for (auto & repo : matching_repos) {
@@ -931,9 +933,9 @@ static void print_new_leaves(Context & context) {
     }
 
     if (!new_leaves_na.empty()) {
-        context.print_output("New leaves:");
+        context.print_output(_("New leaves:"));
         for (const auto & leaf_pkg : new_leaves_na) {
-            context.print_output(fmt::format(" {}", leaf_pkg));
+            context.print_output(libdnf5::utils::sformat(_(" {}"), leaf_pkg));
         }
         context.print_output("");
     }
@@ -1185,7 +1187,7 @@ int main(int argc, char * argv[]) try {
         }
         cmdline += argv[i];
     }
-    loggers.front()->info("--- DNF5 launched with arguments: \"{}\" ---", cmdline);
+    loggers.front()->info(_("--- DNF5 launched with arguments: \"{}\" ---"), cmdline);
 
     // Creates a context and passes the loggers to it. We want to capture all messages from the context in the log.
     dnf5::Context context(std::move(loggers));
@@ -1236,17 +1238,17 @@ int main(int argc, char * argv[]) try {
                     }
                 }
                 if (help_printed) {
-                    context.print_error(fmt::format("{}.", ex.what()));
+                    context.print_error(libdnf5::utils::sformat(_("{}."), ex.what()));
                 } else {
-                    context.print_error(fmt::format(
-                        "{}{}", ex.what(), _(". Add \"--help\" for more information about the arguments.")));
+                    context.print_error(libdnf5::utils::sformat(
+                        _("{}. Add \"--help\" for more information about the arguments."), ex.what()));
                 }
                 // If the error is an unknown top-level command, suggest
                 // installing a package that provides the command
                 if (auto * unknown_arg_ex = dynamic_cast<libdnf5::cli::ArgumentParserUnknownArgumentError *>(&ex)) {
                     if (unknown_arg_ex->get_command() == "dnf5" && unknown_arg_ex->get_argument()[0] != '-') {
-                        context.print_error(fmt::format(
-                            "It could be a command provided by a plugin, try: dnf5 install 'dnf5-command({})'",
+                        context.print_error(libdnf5::utils::sformat(
+                            _("It could be a command provided by a plugin, try: dnf5 install 'dnf5-command({})'"),
                             unknown_arg_ex->get_argument()));
                     }
                 }
@@ -1288,7 +1290,7 @@ int main(int argc, char * argv[]) try {
             // read and execute access. If not, chdir to /
             auto fd = open(".", O_RDONLY);
             if (fd == -1) {
-                log_router.warning("No read/execute access in current directory, moving to /");
+                log_router.warning(_("No read/execute access in current directory, moving to /"));
                 std::filesystem::current_path("/");
             } else {
                 close(fd);
@@ -1385,16 +1387,16 @@ int main(int argc, char * argv[]) try {
 
                 if (auto transaction_store_path = context.get_transaction_store_path();
                     !transaction_store_path.empty()) {
-                    context.print_error(fmt::format(
-                        "The operation will only store the transaction in {}", transaction_store_path.string()));
+                    context.print_error(libdnf5::utils::sformat(
+                        _("The operation will only store the transaction in {}"), transaction_store_path.string()));
                 } else if (base.get_config().get_downloadonly_option().get_value()) {
-                    context.print_error("The operation will only download packages for the transaction.");
+                    context.print_error(_("The operation will only download packages for the transaction."));
                 } else {
                     for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                         if (tsflag == "test") {
                             context.print_error(
-                                "Test mode enabled: Only package downloads, pgp key installations and transaction "
-                                "checks will be performed.");
+                                _("Test mode enabled: Only package downloads, PGP key installations and transaction "
+                                  "checks will be performed."));
                         }
                     }
                 }
@@ -1410,8 +1412,8 @@ int main(int argc, char * argv[]) try {
             if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
                 !base.get_config().get_use_host_config_option().get_value()) {
                 std::cerr
-                    << "No repositories were loaded from the installroot. To use the configuration and repositories "
-                       "of the host system, pass --use-host-config."
+                    << _("No repositories were loaded from the installroot. To use the configuration and repositories "
+                         "of the host system, pass --use-host-config.")
                     << std::endl;
             } else {
                 if (context.get_transaction() != nullptr) {
@@ -1421,7 +1423,9 @@ int main(int argc, char * argv[]) try {
             }
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         } catch (libdnf5::cli::ArgumentParserError & ex) {
-            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
+            std::cerr << libdnf5::utils::sformat(
+                             _("{}. Add \"--help\" for more information about the arguments."), ex.what())
+                      << std::endl;
             return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
         } catch (libdnf5::cli::CommandExitError & ex) {
             std::cerr << ex.what() << std::endl;
@@ -1430,7 +1434,7 @@ int main(int argc, char * argv[]) try {
             return ex.get_exit_code();
         } catch (std::runtime_error & ex) {
             std::cerr << libdnf5::format(ex, libdnf5::FormatDetailLevel::Plain);
-            log_router.error("Command returned error: {}", ex.what());
+            log_router.error(_("Command returned error: {}"), ex.what());
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         }
     } catch (std::runtime_error & ex) {
@@ -1438,7 +1442,7 @@ int main(int argc, char * argv[]) try {
         return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
     }
 
-    log_router.info("DNF5 finished");
+    log_router.info(_("DNF5 finished"));
 
     // Print Complete! message only when transaction is created to prevent poluting output from repoquery or other command
     if (auto * transaction = context.get_transaction(); transaction && !transaction->empty()) {

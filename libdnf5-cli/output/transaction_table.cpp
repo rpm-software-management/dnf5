@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/common/exception.hpp>
 #include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/transaction/transaction_item_type.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/to_underlying.hpp>
 #include <libsmartcols/libsmartcols.h>
 
@@ -123,30 +124,63 @@ public:
     void add_skip() { skips++; }
 
     void print(std::FILE * fd = stdout) const {
-        std::fputs("Transaction Summary:\n", fd);
+        std::fputs(_("Transaction Summary:\n"), fd);
         if (installs != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Installing:", installs).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Installing:      {:4} package\n", " Installing:      {:4} packages\n", installs), installs)
+                    .c_str(),
+                fd);
         }
         if (reinstalls != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Reinstalling:    {:4} package\n", " Reinstalling:    {:4} packages\n", reinstalls), reinstalls)
+                    .c_str(),
+                fd);
         }
         if (upgrades != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Upgrading:       {:4} package\n", " Upgrading:       {:4} packages\n", upgrades), upgrades)
+                    .c_str(),
+                fd);
         }
         if (replaced != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Replacing:       {:4} package\n", " Replacing:       {:4} package\n", replaced), replaced)
+                    .c_str(),
+                fd);
         }
         if (removes != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Removing:", removes).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Removing:        {:4} package\n", " Removing:        {:4} packages\n", removes), removes)
+                    .c_str(),
+                fd);
         }
         if (downgrades != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Downgrading:     {:4} package\n", " Downgrading:     {:4} packages\n", downgrades), downgrades)
+                    .c_str(),
+                fd);
         }
         if (reason_changes != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Changing reason: {:4} package\n", " Changing reason: {:4} packages\n", reason_changes),
+                    reason_changes)
+                    .c_str(),
+                fd);
         }
         if (skips != 0) {
-            std::fputs(fmt::format(" {:15} {:4} packages\n", "Skipping:", skips).c_str(), fd);
+            std::fputs(
+                libdnf5::utils::sformat(
+                    P_(" Skipping:        {:4} package\n", " Skipping:        {:4} packages\n", skips), skips)
+                    .c_str(),
+                fd);
         }
         std::fputc('\n', fd);
     }
@@ -225,31 +259,31 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_table_enable_noheadings(*tb, 1);
     struct libscols_line * header_ln = scols_table_new_line(*tb, NULL);
 
-    auto column = scols_table_new_column(*tb, "Package", 0.3, 0);
+    auto column = scols_table_new_column(*tb, _("Package"), 0.3, 0);
     auto header = scols_column_get_header(column);
     auto cell = scols_line_get_cell(header_ln, COL_NAME);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, "Arch", 6, 0);
+    column = scols_table_new_column(*tb, _("Arch"), 6, 0);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_ARCH);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, "Version", 0.3, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, _("Version"), 0.3, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_EVR);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, "Repository", 0.1, SCOLS_FL_TRUNC);
+    column = scols_table_new_column(*tb, _("Repository"), 0.1, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_REPO);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, "Size", 9, SCOLS_FL_RIGHT);
+    column = scols_table_new_column(*tb, _("Size"), 9, SCOLS_FL_RIGHT);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_SIZE);
     scols_cell_set_data(cell, scols_cell_get_data(header));
@@ -304,8 +338,8 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         if (tspkg->get_action() == libdnf5::transaction::TransactionItemAction::REASON_CHANGE) {
             auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
             struct libscols_line * ln_reason = scols_table_new_line(*tb, ln);
-            std::string reason = fmt::format(
-                "{} -> {}",
+            std::string reason = libdnf5::utils::sformat(
+                _("{} -> {}"),
                 libdnf5::transaction::transaction_item_reason_to_string(pkg->get_reason()),
                 libdnf5::transaction::transaction_item_reason_to_string(tspkg->get_reason()));
             scols_line_set_data(ln_reason, COL_NAME, ("   " + reason).c_str());
@@ -321,9 +355,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
             }
 
             struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
-            // TODO(jmracek) Translate it
-            std::string name("replacing ");
-            name.append(replaced->get_name());
+            std::string name(libdnf5::utils::sformat(_("replacing {}"), replaced->get_name()));
             scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
             scols_line_set_data(ln_replaced, COL_ARCH, replaced->get_arch().c_str());
             scols_line_set_data(ln_replaced, COL_EVR, replaced->get_evr().c_str());
@@ -359,7 +391,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const grp_name = grp->get_name();
         if (grp_name.empty()) {
-            scols_line_set_data(ln, COL_NAME, " <name-unset>");
+            scols_line_set_data(ln, COL_NAME, _(" <name-unset>"));
         } else {
             scols_line_set_data(ln, COL_NAME, (" " + grp_name).c_str());
         }
@@ -376,7 +408,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         struct libscols_line * ln = scols_table_new_line(*tb, header_ln);
         auto const env_name = env->get_name();
         if (env_name.empty()) {
-            scols_line_set_data(ln, COL_NAME, " <name-unset>");
+            scols_line_set_data(ln, COL_NAME, _(" <name-unset>"));
         } else {
             scols_line_set_data(ln, COL_NAME, (" " + env_name).c_str());
         }
@@ -399,15 +431,15 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         if (replaces.size() == 1 && replaces[0].first == tsmodule->get_module_name()) {
             // There is only one replaced module and the module name is the same, report it on one line
             scols_line_set_data(
-                ln, COL_EVR, fmt::format("{} -> {}", tsmodule->get_module_stream(), replaces[0].second).c_str());
+                ln,
+                COL_EVR,
+                libdnf5::utils::sformat(_("{} -> {}"), tsmodule->get_module_stream(), replaces[0].second).c_str());
         } else {
             // There are multiple replaced modules, report it using the "replacing" lines
             scols_line_set_data(ln, COL_EVR, tsmodule->get_module_stream().c_str());
             for (auto & replaced : replaces) {
                 struct libscols_line * ln_replaced = scols_table_new_line(*tb, ln);
-                // TODO(jmracek) Translate it
-                std::string name("replacing ");
-                name.append(replaced.first);
+                std::string name(libdnf5::utils::sformat(_("replacing "), replaced.first));
                 scols_line_set_data(ln_replaced, COL_NAME, ("   " + name).c_str());
                 scols_line_set_data(ln_replaced, COL_EVR, replaced.second.c_str());
                 auto replaced_color = action_color(libdnf5::transaction::TransactionItemAction::REPLACED);
@@ -420,8 +452,9 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
 
     // vector of different types of skipped packages along with the header for the type
     std::vector<std::pair<std::vector<std::unique_ptr<libdnf5::cli::output::IPackage>>, std::string>> skipped;
-    skipped.emplace_back(transaction.get_conflicting_packages(), "Skipping packages with conflicts:");
-    skipped.emplace_back(transaction.get_broken_dependency_packages(), "Skipping packages with broken dependencies:");
+    skipped.emplace_back(transaction.get_conflicting_packages(), _("Skipping packages with conflicts:"));
+    skipped.emplace_back(
+        transaction.get_broken_dependency_packages(), _("Skipping packages with broken dependencies:"));
     for (const auto & [skipped_packages, header] : skipped) {
         std::optional<std::reference_wrapper<TransactionTableSection>> section;
         for (const auto & pkg : skipped_packages) {
@@ -481,34 +514,36 @@ TransactionTableSection & TransactionTable::Impl::add_section(
 
         switch (action) {
             case libdnf5::transaction::TransactionItemAction::INSTALL:
-                text = "Installing";
                 if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
-                    text += " dependencies";
+                    text = _("Installing dependencies:");
                 } else if (reason == libdnf5::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
-                    text += " weak dependencies";
+                    text = _("Installing weak dependencies:");
                 } else if (reason == libdnf5::transaction::TransactionItemReason::GROUP) {
-                    text += " group/module packages";
+                    text = _("Installing group/module packages:");
+                } else {
+                    text = _("Installing:");
                 }
                 break;
             case libdnf5::transaction::TransactionItemAction::UPGRADE:
-                text = "Upgrading";
+                text = _("Upgrading:");
                 break;
             case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
-                text = "Downgrading";
+                text = _("Downgrading:");
                 break;
             case libdnf5::transaction::TransactionItemAction::REINSTALL:
-                text = "Reinstalling";
+                text = _("Reinstalling:");
                 break;
             case libdnf5::transaction::TransactionItemAction::REMOVE:
-                text = "Removing";
                 if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
-                    text += " dependent packages";
+                    text = _("Removing dependent packages:");
                 } else if (reason == libdnf5::transaction::TransactionItemReason::CLEAN) {
-                    text += " unused dependencies";
+                    text = _("Removing unused dependencies:");
+                } else {
+                    text = _("Removing:");
                 }
                 break;
             case libdnf5::transaction::TransactionItemAction::REASON_CHANGE:
-                text = "Changing reason";
+                text = _("Changing reason:");
                 break;
             case libdnf5::transaction::TransactionItemAction::REPLACED:
             case libdnf5::transaction::TransactionItemAction::ENABLE:
@@ -519,7 +554,6 @@ TransactionTableSection & TransactionTable::Impl::add_section(
                     "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
         }
 
-        text += ":";
         sections.emplace_back(text, line);
 
         current_type = libdnf5::transaction::TransactionItemType::PACKAGE;
@@ -540,23 +574,23 @@ TransactionTableSection & TransactionTable::Impl::add_section(
 
         switch (action) {
             case libdnf5::transaction::TransactionItemAction::INSTALL:
-                text = "Installing groups";
                 if (reason == libdnf5::transaction::TransactionItemReason::DEPENDENCY) {
-                    text += " dependencies";
+                    text = _("Installing groups dependencies:");
+                } else {
+                    text = _("Installing groups:");
                 }
                 break;
             case libdnf5::transaction::TransactionItemAction::REMOVE:
-                text = "Removing groups";
+                text = _("Removing groups:");
                 break;
             case libdnf5::transaction::TransactionItemAction::UPGRADE:
-                text = "Upgrading groups";
+                text = _("Upgrading groups:");
                 break;
             default:
                 libdnf_throw_assertion(
                     "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
         }
 
-        text += ":";
         sections.emplace_back(text, line);
 
         current_type = libdnf5::transaction::TransactionItemType::GROUP;
@@ -577,20 +611,19 @@ TransactionTableSection & TransactionTable::Impl::add_section(
 
         switch (action) {
             case libdnf5::transaction::TransactionItemAction::INSTALL:
-                text = "Installing environmental groups";
+                text = _("Installing environmental groups:");
                 break;
             case libdnf5::transaction::TransactionItemAction::REMOVE:
-                text = "Removing environmental groups";
+                text = _("Removing environmental groups:");
                 break;
             case libdnf5::transaction::TransactionItemAction::UPGRADE:
-                text = "Upgrading environmental groups";
+                text = _("Upgrading environmental groups:");
                 break;
             default:
                 libdnf_throw_assertion(
                     "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
         }
 
-        text += ":";
         sections.emplace_back(text, line);
 
         current_type = libdnf5::transaction::TransactionItemType::ENVIRONMENT;
@@ -611,23 +644,22 @@ TransactionTableSection & TransactionTable::Impl::add_section(
 
         switch (action) {
             case libdnf5::transaction::TransactionItemAction::ENABLE:
-                text = "Enabling module streams";
+                text = _("Enabling module streams:");
                 break;
             case libdnf5::transaction::TransactionItemAction::DISABLE:
-                text = "Disabling modules";
+                text = _("Disabling modules:");
                 break;
             case libdnf5::transaction::TransactionItemAction::RESET:
-                text = "Resetting modules";
+                text = _("Resetting modules:");
                 break;
             case libdnf5::transaction::TransactionItemAction::SWITCH:
-                text = "Switching module streams";
+                text = _("Switching module streams:");
                 break;
             default:
                 libdnf_throw_assertion(
                     "Unexpected action in print_transaction_table: {}", libdnf5::utils::to_underlying(action));
         }
 
-        text += ":";
         sections.emplace_back(text, line);
 
         current_type = libdnf5::transaction::TransactionItemType::MODULE;
@@ -695,7 +727,7 @@ bool print_transaction_table(ITransaction & transaction) {
     table.print_table();
 
     if (transaction.empty()) {
-        std::cout << "Nothing to do." << std::endl;
+        std::cout << _("Nothing to do.") << std::endl;
         return false;
     }
 
