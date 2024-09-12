@@ -70,12 +70,15 @@ public:
             return false;
         }
 
-        std::cerr << "Importing PGP key 0x" << key_info.get_short_key_id() << ":\n";
+        std::cerr << libdnf5::utils::sformat(_("Importing PGP key 0x{}:\n"), key_info.get_short_key_id());
         for (auto & user_id : key_info.get_user_ids()) {
-            std::cerr << " Userid     : \"" << user_id << "\"\n";
+            std::cerr << libdnf5::utils::sformat(_(" UserID     : \"{}\"\n"), user_id);
         }
-        std::cerr << " Fingerprint: " << key_info.get_fingerprint() << "\n";
-        std::cerr << " From       : " << key_info.get_url() << std::endl;
+        std::cerr << libdnf5::utils::sformat(
+            _(" Fingerprint: {}\n"
+              " From       : {}\n"),
+            key_info.get_fingerprint(),
+            key_info.get_url());
 
         return libdnf5::cli::utils::userconfirm::userconfirm(*config);
     }
@@ -255,7 +258,8 @@ void Context::Impl::apply_repository_setopts() {
                 repo->get_config().opt_binds().at(key).new_string(
                     libdnf5::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
-                print_error("setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what());
+                print_error(
+                    libdnf5::utils::sformat(_("setopt: \"{}.{}\": {}"), setopt.first, setopt.second, ex.what()));
             }
         }
     }
@@ -307,7 +311,7 @@ void Context::Impl::load_repos(bool load_system) {
         repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
     }
 
-    print_info("Updating and loading repositories:");
+    print_info(_("Updating and loading repositories:"));
     if (load_system) {
         base.get_repo_sack()->load_repos();
     } else {
@@ -317,7 +321,7 @@ void Context::Impl::load_repos(bool load_system) {
     if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
         download_callbacks->reset_progress_bar();
     }
-    print_info("Repositories loaded.");
+    print_info(_("Repositories loaded."));
 }
 
 void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
@@ -334,9 +338,9 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
 
     auto & offline_data = state.get_data();
     if (offline_data.get_status() != libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE) {
-        print_error("There is already an offline transaction queued, initiated by the following command:");
+        print_error(_("There is already an offline transaction queued, initiated by the following command:"));
         print_error(fmt::format("\t{}", offline_data.get_cmd_line()));
-        print_error("Continuing will cancel the old offline transaction and replace it with this one.");
+        print_error(_("Continuing will cancel the old offline transaction and replace it with this one."));
         if (!libdnf5::cli::utils::userconfirm::userconfirm(base.get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }
@@ -362,16 +366,16 @@ void Context::Impl::store_offline(libdnf5::base::Transaction & transaction) {
     }
     base.get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
 
-    print_info("Testing offline transaction");
+    print_info(_("Testing offline transaction"));
     auto result = test_transaction.run();
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        print_error(
-            fmt::format("Transaction failed: {}", libdnf5::base::Transaction::transaction_result_to_string(result)));
+        print_error(libdnf5::utils::sformat(
+            _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
             print_error(entry);
         }
         for (auto & problem : test_transaction.get_transaction_problems()) {
-            print_error(fmt::format("  - {}", problem));
+            print_error(libdnf5::utils::sformat(_("  - {}"), problem));
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
@@ -453,13 +457,13 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (should_store_offline) {
         store_offline(transaction);
         print_info(
-            "Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
-            "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
-            "offline clean`.");
+            _("Transaction stored to be performed offline. Run `dnf5 offline reboot` to reboot and run the "
+              "transaction. To cancel the transaction and delete the downloaded files, use `dnf5 "
+              "offline clean`."));
         return;
     }
 
-    print_info("Running transaction");
+    print_info(_("Running transaction"));
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
@@ -487,13 +491,13 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     auto result = transaction.run();
     print_info("");
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        print_error(
-            fmt::format("Transaction failed: {}", libdnf5::base::Transaction::transaction_result_to_string(result)));
+        print_error(libdnf5::utils::sformat(
+            _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
         for (auto const & entry : transaction.get_gpg_signature_problems()) {
             print_error(entry);
         }
         for (auto & problem : transaction.get_transaction_problems()) {
-            print_error(fmt::format("  - {}", problem));
+            print_error(libdnf5::utils::sformat(_("  - {}"), problem));
         }
         throw libdnf5::cli::SilentCommandExitError(1);
     }
@@ -767,13 +771,13 @@ void RpmTransCB::install_start(const libdnf5::base::TransactionPackage & item, u
     const char * msg{nullptr};
     switch (item.get_action()) {
         case libdnf5::transaction::TransactionItemAction::UPGRADE:
-            msg = "Upgrading ";
+            msg = _("Upgrading {}");
             break;
         case libdnf5::transaction::TransactionItemAction::DOWNGRADE:
-            msg = "Downgrading ";
+            msg = _("Downgrading {}");
             break;
         case libdnf5::transaction::TransactionItemAction::REINSTALL:
-            msg = "Reinstalling ";
+            msg = _("Reinstalling {}");
             break;
         case libdnf5::transaction::TransactionItemAction::INSTALL:
         case libdnf5::transaction::TransactionItemAction::REMOVE:
@@ -786,15 +790,15 @@ void RpmTransCB::install_start(const libdnf5::base::TransactionPackage & item, u
         case libdnf5::transaction::TransactionItemAction::SWITCH:
             auto & logger = *context.get_base().get_logger();
             logger.warning(
-                "Unexpected action in TransactionPackage: {}",
+                _("Unexpected action in TransactionPackage: {}"),
                 static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(
                     item.get_action()));
             return;
     }
     if (!msg) {
-        msg = "Installing ";
+        msg = _("Installing {}");
     }
-    new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
+    new_progress_bar(static_cast<int64_t>(total), libdnf5::utils::sformat(msg, item.get_package().get_full_nevra()));
 }
 
 void RpmTransCB::install_stop(
@@ -812,7 +816,7 @@ void RpmTransCB::transaction_progress(uint64_t amount, [[maybe_unused]] uint64_t
 }
 
 void RpmTransCB::transaction_start(uint64_t total) {
-    new_progress_bar(static_cast<int64_t>(total), "Prepare transaction");
+    new_progress_bar(static_cast<int64_t>(total), _("Prepare transaction"));
 }
 
 void RpmTransCB::transaction_stop([[maybe_unused]] uint64_t total) {
@@ -832,12 +836,12 @@ void RpmTransCB::uninstall_start(const libdnf5::base::TransactionPackage & item,
     const char * msg{nullptr};
     if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE ||
         item.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
-        msg = "Erasing ";
+        msg = _("Erasing {}");
     }
     if (!msg) {
-        msg = "Cleanup ";
+        msg = _("Cleanup {}");
     }
-    new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
+    new_progress_bar(static_cast<int64_t>(total), libdnf5::utils::sformat(msg, item.get_package().get_full_nevra()));
 }
 
 void RpmTransCB::uninstall_stop(
@@ -850,14 +854,16 @@ void RpmTransCB::uninstall_stop(
 
 void RpmTransCB::unpack_error(const libdnf5::base::TransactionPackage & item) {
     active_progress_bar->add_message(
-        libdnf5::cli::progressbar::MessageType::ERROR, "Unpack error: " + item.get_package().get_full_nevra());
+        libdnf5::cli::progressbar::MessageType::ERROR,
+        libdnf5::utils::sformat(_("Unpack error: {}"), item.get_package().get_full_nevra()));
     active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
     multi_progress_bar.print();
 }
 
 void RpmTransCB::cpio_error(const libdnf5::base::TransactionPackage & item) {
     active_progress_bar->add_message(
-        libdnf5::cli::progressbar::MessageType::ERROR, "Cpio error: " + item.get_package().get_full_nevra());
+        libdnf5::cli::progressbar::MessageType::ERROR,
+        libdnf5::utils::sformat(_("Cpio error: {}"), item.get_package().get_full_nevra()));
     active_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::ERROR);
     multi_progress_bar.print();
 }
@@ -866,7 +872,7 @@ void RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::Mess
     auto transaction = context.get_transaction();
     auto output = transaction->get_last_script_output();
     if (!output.empty()) {
-        active_progress_bar->add_message(message_type, "Scriptlet output:");
+        active_progress_bar->add_message(message_type, _("Scriptlet output:"));
         for (auto & line : libdnf5::utils::string::split(output, "\n")) {
             active_progress_bar->add_message(message_type, line);
         }
@@ -880,8 +886,8 @@ void RpmTransCB::script_error(
     uint64_t return_code) {
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::ERROR,
-        fmt::format(
-            "Error in {} scriptlet: {} return code {}",
+        libdnf5::utils::sformat(
+            _("Error in {} scriptlet: {} return code {}"),
             script_type_to_string(type),
             to_full_nevra_string(nevra),
             return_code));
@@ -895,7 +901,8 @@ void RpmTransCB::script_start(
     libdnf5::rpm::TransactionCallbacks::ScriptType type) {
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::INFO,
-        fmt::format("Running {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+        libdnf5::utils::sformat(
+            _("Running {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
     multi_progress_bar.print();
 }
 
@@ -914,8 +921,8 @@ void RpmTransCB::script_stop(
             // Print the error message here.
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::WARNING,
-                fmt::format(
-                    "Non-critical error in {} scriptlet: {}",
+                libdnf5::utils::sformat(
+                    _("Non-critical error in {} scriptlet: {}"),
                     script_type_to_string(type),
                     to_full_nevra_string(nevra)));
             script_output_to_progress(libdnf5::cli::progressbar::MessageType::WARNING);
@@ -923,7 +930,8 @@ void RpmTransCB::script_stop(
         default:
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::INFO,
-                fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
+                libdnf5::utils::sformat(
+                    _("Stop {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
     }
     multi_progress_bar.print();
 }
@@ -932,7 +940,7 @@ void RpmTransCB::elem_progress(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
-    //std::cout << "Element progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;
+    //std::cout << libdnf5::utils::sformat(_("Element progress: {} {}/{}"), item.get_package().get_full_nevra(), amount, total) << std::endl;
 }
 
 void RpmTransCB::verify_progress(uint64_t amount, [[maybe_unused]] uint64_t total) {
@@ -943,7 +951,7 @@ void RpmTransCB::verify_progress(uint64_t amount, [[maybe_unused]] uint64_t tota
 }
 
 void RpmTransCB::verify_start([[maybe_unused]] uint64_t total) {
-    new_progress_bar(static_cast<int64_t>(total), "Verify package files");
+    new_progress_bar(static_cast<int64_t>(total), _("Verify package files"));
 }
 
 void RpmTransCB::verify_stop([[maybe_unused]] uint64_t total) {
