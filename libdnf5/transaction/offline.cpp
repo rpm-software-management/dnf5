@@ -207,7 +207,11 @@ void OfflineTransactionState::read() {
 
 void OfflineTransactionState::write() {
     auto file = libdnf5::utils::fs::File(p_impl->path, "w");
+#ifdef TOML11_COMPAT
     file.write(toml::format(toml::value{{STATE_HEADER, p_impl->data.p_impl->data}}));
+#else
+    file.write(toml::format(toml::value{toml::table{{STATE_HEADER, p_impl->data.p_impl->data}}}));
+#endif
     file.close();
 }
 
