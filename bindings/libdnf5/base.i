@@ -69,8 +69,12 @@
 
 %template(VectorLogEvent) std::vector<libdnf5::base::LogEvent>;
 
+%include "libdnf5/base/transaction_environment.hpp"
+%include "libdnf5/base/transaction_group.hpp"
 %include "libdnf5/base/transaction_package.hpp"
 
+%template(VectorBaseTransactionEnvironment) std::vector<libdnf5::base::TransactionEnvironment>;
+%template(VectorBaseTransactionGroup) std::vector<libdnf5::base::TransactionGroup>;
 %template(VectorBaseTransactionPackage) std::vector<libdnf5::base::TransactionPackage>;
 
 %include "libdnf5/base/goal.hpp"
