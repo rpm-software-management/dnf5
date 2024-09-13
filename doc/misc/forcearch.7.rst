@@ -41,3 +41,10 @@ Examples
 
 ``dnf5 repoquery --forcearch=aarch64 --arch=aarch64``
     Query all packages available for the AArch64 architecture. If your system has a different native architecture, then both ``--arch`` and ``--forcearch`` are necessary here. ``--arch`` will filter for only packages with the ``aarch64`` architecture, and ``--forcearch`` sets the "arch" and "basearch" substitution variables to ensure the correct repositories are queried.
+
+
+See Also
+========
+
+    | :ref:`Tutorial to override the system architecture for C++ API users <tutorial-session-force-arch-label>`
+    | :ref:`Tutorial to override the system architecture for Python API users <tutorial-bindings-python3-session-force-arch-label>`
