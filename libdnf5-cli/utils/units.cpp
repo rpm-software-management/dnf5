@@ -52,7 +52,14 @@ std::pair<float, const char *> to_size(int64_t num) {
 
 std::string format_size_aligned(int64_t num) {
     auto [value, unit] = to_size(num);
-    return fmt::format("{0:.1f} {1:>3s}", value, unit);
+    return fmt::format(
+#ifdef FMT_PRE_8
+        "{0:.1f} {1:>3s}",
+#else
+        "{0:.1Lf} {1:>3s}",
+#endif
+        value,
+        unit);
 }
 
 

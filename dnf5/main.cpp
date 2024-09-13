@@ -77,7 +77,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/locker.hpp>
 #include <libdnf5/version.hpp>
-#include <locale.h>
 #include <string.h>
 
 #include <algorithm>
@@ -85,6 +84,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <iostream>
+#include <locale>
 
 constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
 
@@ -940,11 +940,11 @@ static void print_new_leaves(Context & context) {
 }
 
 static void set_locale() {
-    auto * locale = setlocale(LC_ALL, "");
-    if (locale) {
-        return;
+    try {
+        std::locale::global(std::locale(""));
+    } catch (std::runtime_error & ex) {
+        std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
     }
-    std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
 }
 
 }  // namespace dnf5

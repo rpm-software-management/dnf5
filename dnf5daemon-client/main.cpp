@@ -42,13 +42,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/stream_logger.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
-#include <locale.h>
 #include <string.h>
 
 #include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <locale>
 
 namespace dnfdaemon::client {
 
@@ -220,7 +220,11 @@ static void add_commands(Context & context) {
 int main(int argc, char * argv[]) {
     std::unique_ptr<sdbus::IConnection> connection;
 
-    setlocale(LC_ALL, "");
+    try {
+        std::locale::global(std::locale(""));
+    } catch (std::runtime_error & ext) {
+    }
+
 
     dnfdaemon::client::Context context;
 
