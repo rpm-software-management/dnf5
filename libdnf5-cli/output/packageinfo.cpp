@@ -52,25 +52,27 @@ void print_package_info(
     scols_table_enable_noheadings(table, 1);
     scols_table_new_column(table, "key", 1, 0);
     scols_table_new_column(table, "value", 1, SCOLS_FL_WRAP);
-    scols_table_set_column_separator(table, " : ");
+    // Note for translators: This is a right-aligned column separator in
+    // a package properties table as in "Name    : bash".
+    scols_table_set_column_separator(table, _(" : "));
     if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
     }
 
     // Add package
-    struct libscols_line * first_line = add_line(table, "Name", pkg.get_name());
+    struct libscols_line * first_line = add_line(table, _("Name"), pkg.get_name());
     if (colorizer) {
         scols_line_set_color(first_line, colorizer->get_pkg_color(pkg).c_str());
     }
 
-    add_line(table, "Epoch", pkg.get_epoch());
-    add_line(table, "Version", pkg.get_version());
-    add_line(table, "Release", pkg.get_release());
-    add_line(table, "Architecture", pkg.get_arch());
+    add_line(table, _("Epoch"), pkg.get_epoch());
+    add_line(table, _("Version"), pkg.get_version());
+    add_line(table, _("Release"), pkg.get_release());
+    add_line(table, _("Architecture"), pkg.get_arch());
 
     if (!obsoletes.empty()) {
         auto iterator = obsoletes.begin();
-        add_line(table, "Obsoletes", iterator->get_full_nevra());
+        add_line(table, _("Obsoletes"), iterator->get_full_nevra());
         ++iterator;
         for (; iterator != obsoletes.end(); ++iterator) {
             add_line(table, "", iterator->get_full_nevra());
@@ -79,29 +81,32 @@ void print_package_info(
 
     if (!pkg.is_installed()) {
         add_line(
-            table, "Download size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_download_size())));
+            table,
+            _("Download size"),
+            utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_download_size())));
     }
-    add_line(table, "Installed size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_install_size())));
+    add_line(
+        table, _("Installed size"), utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_install_size())));
     if (pkg.get_arch() != "src") {
-        add_line(table, "Source", pkg.get_sourcerpm());
+        add_line(table, _("Source"), pkg.get_sourcerpm());
     }
     if (pkg.is_installed()) {
-        add_line(table, "From repository", pkg.get_from_repo_id());
+        add_line(table, _("From repository"), pkg.get_from_repo_id());
     } else {
-        add_line(table, "Repository", pkg.get_repo_id());
+        add_line(table, _("Repository"), pkg.get_repo_id());
     }
-    add_line(table, "Summary", pkg.get_summary());
-    add_line(table, "URL", pkg.get_url());
-    add_line(table, "License", pkg.get_license());
+    add_line(table, _("Summary"), pkg.get_summary());
+    add_line(table, _("URL"), pkg.get_url());
+    add_line(table, _("License"), pkg.get_license());
 
     auto lines = libdnf5::utils::string::split(pkg.get_description(), "\n");
     auto iterator = lines.begin();
-    add_line(table, "Description", *iterator);
+    add_line(table, _("Description"), *iterator);
     ++iterator;
     for (; iterator != lines.end(); ++iterator) {
         add_line(table, "", *iterator);
     }
-    add_line(table, "Vendor", pkg.get_vendor());
+    add_line(table, _("Vendor"), pkg.get_vendor());
 
     scols_print_table(table);
     scols_unref_table(table);
