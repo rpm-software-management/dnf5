@@ -39,6 +39,7 @@ class TutorialTest : public CppUnit::TestCase {
 
     CPPUNIT_TEST(test_query);
     CPPUNIT_TEST(test_transaction);
+    CPPUNIT_TEST(test_force_arch);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -51,6 +52,7 @@ public:
     void test_load_system_repos();
     void test_query();
     void test_transaction();
+    void test_force_arch();
 
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";

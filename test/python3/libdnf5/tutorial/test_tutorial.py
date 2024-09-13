@@ -90,3 +90,10 @@ class TestTutorial(base_test_case.BaseTestCase):
 
         exec(file, {'installroot': self.installroot,
                     'cachedir': self.cachedir, 'baseurl': self.baseurl})
+
+    def test_force_arch(self):
+        file = ""
+        with open("tutorial/session/force_arch.py", "r") as f:
+            file += f.read()
+
+        exec(file, {'installroot': self.installroot, 'cachedir': self.cachedir})

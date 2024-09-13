@@ -80,3 +80,8 @@ void TutorialTest::test_transaction() {
 #include "repo/load_repo.cpp"
 #include "transaction/transaction.cpp"
 }
+
+
+void TutorialTest::test_force_arch() {
+#include "session/force_arch.cpp"
+}
