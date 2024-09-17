@@ -85,6 +85,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <iostream>
+#include <utility>
 
 constexpr const char * DNF5_LOGGER_FILENAME = "dnf5.log";
 
@@ -773,29 +774,38 @@ static void print_versions(Context & context) {
 }
 
 static void print_transaction_size_stats(Context & context) {
-    int64_t in_pkgs_size{0};
-    int64_t download_pkgs_size{0};
-    int64_t install_size{0};
-    int64_t remove_size{0};
+    unsigned long long int in_pkgs_size{0};
+    unsigned long long int download_pkgs_size{0};
+    unsigned long long int install_size{0};
+    unsigned long long int remove_size{0};
 
     for (const auto & trans_pkg : context.get_transaction()->get_transaction_packages()) {
         const auto pkg = trans_pkg.get_package();
         if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
             const auto pkg_size = pkg.get_download_size();
             in_pkgs_size += pkg_size;
+            if (in_pkgs_size < pkg_size)
+                return;
             if (!pkg.is_available_locally()) {
                 download_pkgs_size += pkg_size;
+                if (download_pkgs_size < pkg_size)
+                    return;
             }
             install_size += pkg.get_install_size();
+            if (install_size < pkg.get_install_size())
+                return;
         } else if (transaction_item_action_is_outbound(trans_pkg.get_action())) {
             remove_size += pkg.get_install_size();
+            if (remove_size < pkg.get_install_size())
+                return;
         }
     }
 
-    if (in_pkgs_size != 0) {
-        const auto [in_pkgs_size_value, in_pkgs_size_unit] = libdnf5::cli::utils::units::to_size(in_pkgs_size);
+    if (in_pkgs_size != 0 && std::in_range<int64_t>(in_pkgs_size) && std::in_range<int64_t>(download_pkgs_size)) {
+        const auto [in_pkgs_size_value, in_pkgs_size_unit] =
+            libdnf5::cli::utils::units::to_size(static_cast<int64_t>(in_pkgs_size));
         const auto [dwnl_pkgs_size_value, dwnl_pkgs_size_unit] =
-            libdnf5::cli::utils::units::to_size(download_pkgs_size);
+            libdnf5::cli::utils::units::to_size(static_cast<int64_t>(download_pkgs_size));
         context.print_info(libdnf5::utils::sformat(
             _("Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."),
             in_pkgs_size_value,
@@ -804,9 +814,14 @@ static void print_transaction_size_stats(Context & context) {
             dwnl_pkgs_size_unit));
     }
 
-    const auto [install_size_value, install_size_unit] = libdnf5::cli::utils::units::to_size(install_size);
-    const auto [remove_size_value, remove_size_unit] = libdnf5::cli::utils::units::to_size(remove_size);
-    const auto size_diff = install_size - remove_size;
+    if (!std::in_range<int64_t>(install_size) || !std::in_range<int64_t>(remove_size) ||
+        !std::in_range<int64_t>(install_size - remove_size))
+        return;
+    const auto [install_size_value, install_size_unit] =
+        libdnf5::cli::utils::units::to_size(static_cast<int64_t>(install_size));
+    const auto [remove_size_value, remove_size_unit] =
+        libdnf5::cli::utils::units::to_size(static_cast<int64_t>(remove_size));
+    const int64_t size_diff = static_cast<int64_t>(install_size - remove_size);
     const auto [size_diff_value, size_diff_unit] = libdnf5::cli::utils::units::to_size(std::abs(size_diff));
     if (size_diff >= 0) {
         context.print_info(libdnf5::utils::sformat(
