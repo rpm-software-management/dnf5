@@ -47,6 +47,9 @@ target_link_libraries(libdnf5-cli PRIVATE common)
 target_link_libraries(libdnf5-cli PUBLIC libdnf5)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
+if (LIBFMT_VERSION VERSION_LESS 8.0.0)
+    add_definitions(-DFMT_PRE_8)
+endif()
 list(APPEND LIBDNF5_CLI_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
 target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 
