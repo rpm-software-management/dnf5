@@ -186,14 +186,14 @@ public:
     }
 
 private:
-    int installs = 0;
-    int reinstalls = 0;
-    int upgrades = 0;
-    int downgrades = 0;
-    int removes = 0;
-    int replaced = 0;
-    int reason_changes = 0;
-    int skips = 0;
+    unsigned int installs = 0;
+    unsigned int reinstalls = 0;
+    unsigned int upgrades = 0;
+    unsigned int downgrades = 0;
+    unsigned int removes = 0;
+    unsigned int replaced = 0;
+    unsigned int reason_changes = 0;
+    unsigned int skips = 0;
 };
 
 
