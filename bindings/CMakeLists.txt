@@ -29,6 +29,7 @@ set(SWIG_COMPILE_OPTIONS
     -Wno-missing-declarations
     -Wno-missing-field-initializers
     -Wno-sign-compare
+    -Wno-sign-conversion
     -Wno-sometimes-uninitialized
     -Wno-strict-aliasing
     -Wno-unused-function
