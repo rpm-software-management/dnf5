@@ -319,10 +319,15 @@ private:
     friend class PackageDownloader;
     friend class solv::Pool;
 
-    /// Loads the repository objects into sacks.
+    /// Loads the repository objects into sacks. Only the first call actually loads the repo.
     ///
     /// Also writes the libsolv's solv/solvx cache files.
     LIBDNF_LOCAL void load();
+
+    /// Empties currently loaded repo and loads it again.
+    LIBDNF_LOCAL void reload();
+
+    LIBDNF_LOCAL void _load();
 
     /// Downloads repository metadata.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
