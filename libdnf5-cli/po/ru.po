@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"POT-Creation-Date: 2024-09-18 03:00+0000\n"
 "PO-Revision-Date: 2024-05-16 02:51+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -140,6 +140,267 @@ msgstr ""
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
 msgstr "Подсказка: [d]по умолчанию, [e]включено, [x]отключено, [i]установлено"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr ""
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr ""
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr ""
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+msgid "Version"
+msgstr ""
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr ""
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr ""
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr ""
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr ""
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr ""
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr ""
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr ""
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+msgid "Repository"
+msgstr ""
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr ""
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr ""
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr ""
+
+#: output/packageinfo.cpp:104
+#, fuzzy
+#| msgid "Description:"
+msgid "Description"
+msgstr "Описание:"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr ""
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr ""
+
+#: output/transaction_table.cpp:131
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:138
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:145
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:152
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} package\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:159
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:166
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:173
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:181
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: output/transaction_table.cpp:262
+msgid "Package"
+msgstr ""
+
+#: output/transaction_table.cpp:268
+msgid "Arch"
+msgstr ""
+
+#: output/transaction_table.cpp:286
+msgid "Size"
+msgstr ""
+
+#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+msgid "{} -> {}"
+msgstr ""
+
+#: output/transaction_table.cpp:358
+msgid "replacing {}"
+msgstr ""
+
+#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+msgid " <name-unset>"
+msgstr ""
+
+#: output/transaction_table.cpp:442
+msgid "replacing "
+msgstr ""
+
+#: output/transaction_table.cpp:455
+msgid "Skipping packages with conflicts:"
+msgstr ""
+
+#: output/transaction_table.cpp:457
+msgid "Skipping packages with broken dependencies:"
+msgstr ""
+
+#: output/transaction_table.cpp:518
+msgid "Installing dependencies:"
+msgstr ""
+
+#: output/transaction_table.cpp:520
+msgid "Installing weak dependencies:"
+msgstr ""
+
+#: output/transaction_table.cpp:522
+msgid "Installing group/module packages:"
+msgstr ""
+
+#: output/transaction_table.cpp:524
+msgid "Installing:"
+msgstr ""
+
+#: output/transaction_table.cpp:528
+msgid "Upgrading:"
+msgstr ""
+
+#: output/transaction_table.cpp:531
+msgid "Downgrading:"
+msgstr ""
+
+#: output/transaction_table.cpp:534
+msgid "Reinstalling:"
+msgstr ""
+
+#: output/transaction_table.cpp:538
+msgid "Removing dependent packages:"
+msgstr ""
+
+#: output/transaction_table.cpp:540
+msgid "Removing unused dependencies:"
+msgstr ""
+
+#: output/transaction_table.cpp:542
+msgid "Removing:"
+msgstr ""
+
+#: output/transaction_table.cpp:546
+msgid "Changing reason:"
+msgstr ""
+
+#: output/transaction_table.cpp:578
+msgid "Installing groups dependencies:"
+msgstr ""
+
+#: output/transaction_table.cpp:580
+msgid "Installing groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:584
+msgid "Removing groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:587
+msgid "Upgrading groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:614
+msgid "Installing environmental groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:617
+msgid "Removing environmental groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:620
+msgid "Upgrading environmental groups:"
+msgstr ""
+
+#: output/transaction_table.cpp:647
+msgid "Enabling module streams:"
+msgstr ""
+
+#: output/transaction_table.cpp:650
+msgid "Disabling modules:"
+msgstr ""
+
+#: output/transaction_table.cpp:653
+msgid "Resetting modules:"
+msgstr ""
+
+#: output/transaction_table.cpp:656
+msgid "Switching module streams:"
+msgstr ""
+
+#: output/transaction_table.cpp:730
+msgid "Nothing to do."
+msgstr ""
 
 #: session.cpp:149
 msgid "Missing command"

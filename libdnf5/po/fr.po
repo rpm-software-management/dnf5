@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 03:00+0000\n"
-"PO-Revision-Date: 2024-09-06 08:13+0000\n"
+"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"PO-Revision-Date: 2024-09-17 08:46+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
@@ -92,7 +92,7 @@ msgstr "Tout distrosync"
 
 #: base/goal_elements.cpp:378
 msgid "Reason Change"
-msgstr "Changer la raison"
+msgstr "Changer le motif"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
@@ -132,11 +132,11 @@ msgstr "Action de réinstallation"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
-msgstr "Action de changement de la raison"
+msgstr "Action de changement de motif"
 
 #: base/goal_elements.cpp:400
 msgid "Reason override"
-msgstr "Forçage de raison"
+msgstr "Forçage de motif"
 
 #: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
@@ -283,7 +283,7 @@ msgstr ""
 
 #: base/log_event.cpp:246
 msgid "Package \"{}\" is already installed with reason \"{}\"."
-msgstr "Le paquet \"{}\" est déjà installé avec pour raison \"{}\"."
+msgstr "Le paquet \"{}\" est déjà installé avec pour motif \"{}\"."
 
 #: base/log_event.cpp:248
 msgid "Package \"{}\" is already installed."
@@ -1240,7 +1240,7 @@ msgstr "Impossible de mettre à jour le paquet \"{}\""
 
 #: rpm/transaction.cpp:364
 msgid "Cannot downgrade package \"{}\""
-msgstr "Impossible de rétrograder le paquet \"{}\""
+msgstr "Impossible d'installer la version antérieure du paquet \"{}\""
 
 #: rpm/transaction.cpp:368
 msgid "Cannot install package \"{}\""
@@ -1516,8 +1516,8 @@ msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
-"Clé d'objet obligatoire \"group_id\" manquante dans un RPM ayant pour raison "
-"\"Group\" et pour action \"Changer la raison\""
+"Clé d'objet obligatoire \"group_id\" manquante dans un RPM ayant pour motif "
+"\"Group\" et pour action \"Changer le motif\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
