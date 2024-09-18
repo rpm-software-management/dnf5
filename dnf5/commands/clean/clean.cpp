@@ -22,10 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/shared_options.hpp"
 
+#include <errno.h>
 #include <libdnf5-cli/argument_parser.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/format.hpp>
 
 #include <filesystem>
 #include <iostream>
@@ -168,7 +170,14 @@ void CleanCommand::run() {
     }
 
     if (ec) {
-        throw std::runtime_error(fmt::format("Cannot iterate the cache directory: \"{}\"", cachedir.string()));
+        if (ec.value() == ENOENT) {
+            std::cout << libdnf5::utils::sformat(
+                             _("Cache directory \"{}\" does not exist. Nothing to clean."), cachedir.string())
+                      << std::endl;
+            return;
+        }
+        throw std::runtime_error(
+            libdnf5::utils::sformat(_("Cannot iterate cache directory \"{}\": {}"), cachedir.string(), ec.message()));
     }
 
     std::cout << fmt::format(
