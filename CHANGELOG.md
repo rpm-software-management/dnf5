@@ -1,3 +1,27 @@
+# 5.2.6.1
+
+- Update translations from weblate
+- build: Add -Wsign-conversion to CXXFLAGS
+- Fix a sign propagation in calculating transaction size statistics
+- dnf5: Check offline transaction state before download
+- dnf5: Run transaction test for offline transactions
+- I18N: Mark messages in "dnf info" output for a translation
+- Fix: libdnf5-cli: TransactionSummary counters data type
+- doc: Document arch override for API users
+- I18N: Mark messages in "dnf install" output for a translation
+- swig: Add wrappers for TransactionEnvironment and TransactionGroup
+- doc: add typical dnf5 workflow
+- doc: generate `ArgumentParser` c++ docs
+- doc: generate `Vars` c++ and python docs
+- doc: add missing python ConfigRepo to match c++
+- doc: add RepoSack to both cpp and python docs
+- doc: fix order in api/c++/libdnf5.rst
+- offline: Update usage of toml11-devel
+- transaction_callbacks: Deprecate libnf5::rpm::TransactionItem alias
+- spec: Recommend dnf5-plugins if dnf-plugins-core installed
+- automatic: Use original dnf4 config file location
+- doc: dnf5-repoquery: Mention %{reason} query tag at --userinstalled
+
 # 5.2.6.0
 
 - Update translations from weblate
