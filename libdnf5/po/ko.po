@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 03:00+0000\n"
+"POT-Creation-Date: 2024-09-18 03:00+0000\n"
 "PO-Revision-Date: 2024-09-08 13:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -1196,7 +1196,8 @@ msgstr "\"{}\"를 위한 {} 상태를 찾을 수 없습니다."
 
 #: system/state.cpp:301
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
-msgstr "시스템 상태 TOML 파일 {}를 적재하는 데 실패했습니다 (dnf5-system-state(7)을 "
+msgstr ""
+"시스템 상태 TOML 파일 {}를 적재하는 데 실패했습니다 (dnf5-system-state(7)을 "
 "참고하세요): {}"
 
 #: system/state.cpp:614

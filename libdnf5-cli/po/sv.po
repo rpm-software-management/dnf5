@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 03:00+0000\n"
-"PO-Revision-Date: 2024-05-15 07:36+0000\n"
+"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"PO-Revision-Date: 2024-09-18 06:34+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/sv/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -127,6 +127,257 @@ msgstr ""
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
 msgstr "Ledtråd: [d]standard, [e]aktiverad, [x]avaktiverad, [i]installerad"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "Namn"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr "Epok"
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+msgid "Version"
+msgstr "Version"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "Utgåva"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "Arkitektur"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "Föråldrade"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "Nedladdningsstorlek"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "Installerad storlek"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "Källa"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "Från förråd"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+msgid "Repository"
+msgstr "Förråd"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "Summering"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "URL"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "Licens"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "Beskrivning"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "Leverantör"
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "Transaktionssammanfattning:\n"
+
+#: output/transaction_table.cpp:131
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " Installerar:      {:4} paket\n"
+msgstr[1] " Installerar:      {:4} flera paket\n"
+
+#: output/transaction_table.cpp:138
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] " Ominstallerar:    {:4} paket\n"
+msgstr[1] " Ominstallerar:    {:4} flera paket\n"
+
+#: output/transaction_table.cpp:145
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] " Uppgraderar:       {:4} paket\n"
+msgstr[1] " Uppgraderar:       {:4} flera paket\n"
+
+#: output/transaction_table.cpp:152
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} package\n"
+msgstr[0] " Byter ut:       {:4} paket\n"
+msgstr[1] " Byter ut:       {:4} flera paket\n"
+
+#: output/transaction_table.cpp:159
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] " Tar bort:        {:4} paket\n"
+msgstr[1] " Tar bort:        {:4} flera paket\n"
+
+#: output/transaction_table.cpp:166
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] " Nedgraderar:     {:4} paket\n"
+msgstr[1] " Nedgraderar:     {:4} flera paket\n"
+
+#: output/transaction_table.cpp:173
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] " Ändrar andledning: {:4} på paket\n"
+msgstr[1] " Ändrar anledning: {:4} på flera paket\n"
+
+#: output/transaction_table.cpp:181
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] " Hoppar över:        {:4} paket\n"
+msgstr[1] " Hoppar över:        {:4} flera paket\n"
+
+#: output/transaction_table.cpp:262
+msgid "Package"
+msgstr "Paket"
+
+#: output/transaction_table.cpp:268
+msgid "Arch"
+msgstr "Arkitektur"
+
+#: output/transaction_table.cpp:286
+msgid "Size"
+msgstr "Storlek"
+
+#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:358
+msgid "replacing {}"
+msgstr "byter ut {}"
+
+#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+msgid " <name-unset>"
+msgstr " <namnet ej satt>"
+
+#: output/transaction_table.cpp:442
+msgid "replacing "
+msgstr "ersätter "
+
+#: output/transaction_table.cpp:455
+msgid "Skipping packages with conflicts:"
+msgstr "Hoppar över paket med konflikter:"
+
+#: output/transaction_table.cpp:457
+msgid "Skipping packages with broken dependencies:"
+msgstr "Hoppar över paket med brutna beroenden:"
+
+#: output/transaction_table.cpp:518
+msgid "Installing dependencies:"
+msgstr "Installerar beroenden:"
+
+#: output/transaction_table.cpp:520
+msgid "Installing weak dependencies:"
+msgstr "Installerar svaga beroenden:"
+
+#: output/transaction_table.cpp:522
+msgid "Installing group/module packages:"
+msgstr "Installerar grupp/modulpaket:"
+
+#: output/transaction_table.cpp:524
+msgid "Installing:"
+msgstr "Installerar:"
+
+#: output/transaction_table.cpp:528
+msgid "Upgrading:"
+msgstr "Uppgraderar:"
+
+#: output/transaction_table.cpp:531
+msgid "Downgrading:"
+msgstr "Nedgraderar:"
+
+#: output/transaction_table.cpp:534
+msgid "Reinstalling:"
+msgstr "Ominstallerar:"
+
+#: output/transaction_table.cpp:538
+msgid "Removing dependent packages:"
+msgstr "Tar bort beroende paket:"
+
+#: output/transaction_table.cpp:540
+msgid "Removing unused dependencies:"
+msgstr "Tar bort oanvända beroenden:"
+
+#: output/transaction_table.cpp:542
+msgid "Removing:"
+msgstr "Tar bort:"
+
+#: output/transaction_table.cpp:546
+msgid "Changing reason:"
+msgstr "Ändrar anledning:"
+
+#: output/transaction_table.cpp:578
+msgid "Installing groups dependencies:"
+msgstr "Installera gruppberoenden:"
+
+#: output/transaction_table.cpp:580
+msgid "Installing groups:"
+msgstr "Installerar grupper:"
+
+#: output/transaction_table.cpp:584
+msgid "Removing groups:"
+msgstr "Tar bort grupper:"
+
+#: output/transaction_table.cpp:587
+msgid "Upgrading groups:"
+msgstr "Uppgraderar grupper:"
+
+#: output/transaction_table.cpp:614
+msgid "Installing environmental groups:"
+msgstr "Installerar miljögrupper:"
+
+#: output/transaction_table.cpp:617
+msgid "Removing environmental groups:"
+msgstr "Tar bort miljögrupper:"
+
+#: output/transaction_table.cpp:620
+msgid "Upgrading environmental groups:"
+msgstr "Uppgraderar miljögrupper:"
+
+#: output/transaction_table.cpp:647
+msgid "Enabling module streams:"
+msgstr "Aktiverar modulströmmar:"
+
+#: output/transaction_table.cpp:650
+msgid "Disabling modules:"
+msgstr "Avaktiverar moduler:"
+
+#: output/transaction_table.cpp:653
+msgid "Resetting modules:"
+msgstr "Återställer moduler:"
+
+#: output/transaction_table.cpp:656
+msgid "Switching module streams:"
+msgstr "Byter modulströmmar:"
+
+#: output/transaction_table.cpp:730
+msgid "Nothing to do."
+msgstr "Inget att göra."
 
 #: session.cpp:149
 msgid "Missing command"
