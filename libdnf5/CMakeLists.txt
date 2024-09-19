@@ -142,9 +142,6 @@ list(JOIN LIBDNF5_PC_REQUIRES_PRIVATE ", " LIBDNF5_PC_REQUIRES_PRIVATE_STRING)
 configure_file("libdnf5.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf5.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
 
-# Makes an empty directory for libdnf5 cache
-install(DIRECTORY DESTINATION "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf5")
-
 # Makes an empty directory for libdnf5 distribution drop-in configuration files
 install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dnf5/libdnf.conf.d")
 
