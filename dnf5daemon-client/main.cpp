@@ -217,10 +217,23 @@ static void add_commands(Context & context) {
 
 }  // namespace dnfdaemon::client
 
+
+static void set_locale() {
+    if (setlocale(LC_ALL, "")) {
+        return;
+    }
+    if (setlocale(LC_ALL, "C.UTF-8")) {
+        std::cerr << "Failed to set locale, defaulting to \"C.UTF-8\"" << std::endl;
+        return;
+    }
+    std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
+}
+
+
 int main(int argc, char * argv[]) {
     std::unique_ptr<sdbus::IConnection> connection;
 
-    setlocale(LC_ALL, "");
+    set_locale();
 
     dnfdaemon::client::Context context;
 

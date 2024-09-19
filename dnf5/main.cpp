@@ -957,8 +957,11 @@ static void print_new_leaves(Context & context) {
 }
 
 static void set_locale() {
-    auto * locale = setlocale(LC_ALL, "");
-    if (locale) {
+    if (setlocale(LC_ALL, "")) {
+        return;
+    }
+    if (setlocale(LC_ALL, "C.UTF-8")) {
+        std::cerr << "Failed to set locale, defaulting to \"C.UTF-8\"" << std::endl;
         return;
     }
     std::cerr << "Failed to set locale, defaulting to \"C\"" << std::endl;
