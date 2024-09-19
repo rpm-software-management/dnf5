@@ -36,7 +36,7 @@ namespace dnfdaemon::client {
 
 bool DbusCallback::signature_valid(sdbus::Signal & signal) {
     // check that signal is emitted by the correct session object
-    std::string object_path;
+    sdbus::ObjectPath object_path;
     signal >> object_path;
     return object_path == context.get_session_object_path();
 }
