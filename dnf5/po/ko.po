@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
 "PO-Revision-Date: 2024-09-04 06:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -172,17 +172,29 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "{} 꾸러미에서 발견된 {} 문제를 점검합니다"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "정리하려는 캐쉬 유형의 목록. 지원된 유형: {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "알 수 없는 캐쉬 유형 \"{0}\". 지원된 유형: {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "경로에서 저장소 캐쉬를 정리하는 데 실패함 \"{0}\": {1}"
+
+#: commands/clean/clean.cpp:175
+#, fuzzy
+#| msgid "Data directory {} does not exist."
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "자료 디렉토리 {}가 존재하지 않습니다."
+
+#: commands/clean/clean.cpp:180
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "공유된 라이브러리를 적재 할 수 없습니다 \"{}\": {}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
