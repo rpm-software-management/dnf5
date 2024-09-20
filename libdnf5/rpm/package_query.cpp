@@ -388,7 +388,7 @@ std::vector<std::vector<unsigned int>> kosaraju(const std::vector<std::vector<un
         }
 
         if (sccredges.empty()) {
-            std::vector scc(stack.begin() + s, stack.end());
+            std::vector scc(stack.begin() + static_cast<std::vector<unsigned int>::difference_type>(s), stack.end());
             std::sort(scc.begin(), scc.end());
             leaves.emplace_back(std::move(scc));
         } else {
