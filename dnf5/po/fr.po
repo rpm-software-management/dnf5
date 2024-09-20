@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
-"PO-Revision-Date: 2024-09-18 12:40+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"PO-Revision-Date: 2024-09-20 08:57+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/fr/>\n"
@@ -188,17 +188,25 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "{} problème(s) découvert(s) lors de la vérification de {} paquet(s)"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Liste des types de cache à nettoyer. Types pris en charge : {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Type de cache inconnu ({0}). Types pris en charge : {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Échec du nettoyage du cache des dépôts ({0}) : {1}"
+
+#: commands/clean/clean.cpp:175
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "Le répertoire du cache ({}) n'existe pas. Rien à nettoyer."
+
+#: commands/clean/clean.cpp:180
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "Impossible de parcourir le répertoire du cache ({}) : {}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"

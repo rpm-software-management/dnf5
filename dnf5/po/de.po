@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
 "PO-Revision-Date: 2024-06-23 18:19+0000\n"
 "Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -176,17 +176,29 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Prüfung stellte {} Problem(e) in {} Paket(en) fest"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Liste der zu bereinigenden Cache-Typen. Unterstützte Typen: {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Unbekannter Cache-Typ \"{0}\". Unterstützte Typen: {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Bereinigung des Repository-Cache fehlgeschlagen im Pfad \"{0}\": {1}"
+
+#: commands/clean/clean.cpp:175
+#, fuzzy
+#| msgid "Data directory {} does not exist."
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "Datenverzeichnis {} existiert nicht."
+
+#: commands/clean/clean.cpp:180
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "Shared-Library kann nicht geladen werden \"{}\": {}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"

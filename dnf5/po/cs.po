@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
@@ -170,17 +170,27 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Zkontroluje zjištěné {} problémy v {} balíčcích"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Seznam typů mezipaměti k vyčištění. Podporované typy: {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Neznámý typ mezipaměti \"{0}\". Podporované typy: {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Nepodařilo se vyčistit mezipaměť repozitory na cestě \"{0}\": {1}"
+
+#: commands/clean/clean.cpp:175
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr ""
+
+#: commands/clean/clean.cpp:180
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"

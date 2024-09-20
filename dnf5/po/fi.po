@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
 "PO-Revision-Date: 2024-09-05 13:38+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -180,18 +180,26 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Tarkista löydetyt {} ongelmat {} paketeissa"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Luettelo puhdistettavista välimuistityypeistä. Tuetut tyypit: {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Tuntematon välimuistityyppi \"{0}\". Tuetut tyypit: {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr ""
 "Tietovaraston välimuistin puhdistaminen polussa \"{0}\" epäonnistui: {1}"
+
+#: commands/clean/clean.cpp:175
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr ""
+
+#: commands/clean/clean.cpp:180
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr ""
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"

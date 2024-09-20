@@ -4,9 +4,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
-"PO-Revision-Date: 2024-05-15 07:36+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"PO-Revision-Date: 2024-09-20 02:52+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ka/>\n"
 "Language: ka\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -133,254 +134,252 @@ msgstr "მინიშნება: [d]ნაგულისხმები, [e
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "ეპოქა"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:274
 msgid "Version"
-msgstr ""
+msgstr "ვერსია"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "გამოცემა"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "არქიტექტურა"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "მოძველებულად მონიშნავს"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "გადმოწერის ზომა"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "დაყენებული ზომა"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "წყარო"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "რეპოზიტორიიდან"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:280
 msgid "Repository"
-msgstr ""
+msgstr "რეპოზიტორია"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "შეჯამება"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "ლიცენზია"
 
 #: output/packageinfo.cpp:104
-#, fuzzy
-#| msgid "Description:"
 msgid "Description"
-msgstr "აღწერა:"
+msgstr "აღწერა"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "მომწოდებელი"
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "ტრანზაქციის შეჯამება:\n"
 
 #: output/transaction_table.cpp:131
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " დაყენება:      {:4} პაკეტის\n"
+msgstr[1] " დაყენება      {:4} პაკეტის\n"
 
 #: output/transaction_table.cpp:138
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " თავიდან დაყენება:      {:4} პაკეტისთვის\n"
+msgstr[1] " თავიდან დაყენება:      {:4} პაკეტისთვის\n"
 
 #: output/transaction_table.cpp:145
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " ვერსიის აწევა:      {:4} პაკეტისთვის\n"
+msgstr[1] " ვერსიის აწევა:      {:4} პაკეტისთვის\n"
 
 #: output/transaction_table.cpp:152
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " ჩანაცვლდება:      {:4} პაკეტი\n"
+msgstr[1] " ჩანაცვლდება:      {:4} პაკეტი\n"
 
 #: output/transaction_table.cpp:159
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " წაიშლება:      {:4} პაკეტი\n"
+msgstr[1] " წაიშლება:      {:4} პაკეტი\n"
 
 #: output/transaction_table.cpp:166
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " ვერსიის ჩამოწევა:      {:4} პაკეტისთვის\n"
+msgstr[1] " ვერსიის ჩამოწევა:      {:4} პაკეტისთვის\n"
 
 #: output/transaction_table.cpp:173
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " მიზეზის შეცვლა: {:4} პაკეტისთვის\n"
+msgstr[1] " მიზეზის შეცვლა: {:4} პაკეტისთვის\n"
 
 #: output/transaction_table.cpp:181
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " გამოტოვებული იქნება: {:4} პაკეტი\n"
+msgstr[1] " გამოტოვებული იქნება: {:4} პაკეტი\n"
 
 #: output/transaction_table.cpp:262
 msgid "Package"
-msgstr ""
+msgstr "პაკეტი"
 
 #: output/transaction_table.cpp:268
 msgid "Arch"
-msgstr ""
+msgstr "არქიტექტურა"
 
 #: output/transaction_table.cpp:286
 msgid "Size"
-msgstr ""
+msgstr "ზომა"
 
 #: output/transaction_table.cpp:342 output/transaction_table.cpp:436
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} -> {}"
 
 #: output/transaction_table.cpp:358
 msgid "replacing {}"
-msgstr ""
+msgstr "{}-ის ჩანაცვლება"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"
-msgstr ""
+msgstr " <name-unset>"
 
 #: output/transaction_table.cpp:442
 msgid "replacing "
-msgstr ""
+msgstr "ჩანაცვლება "
 
 #: output/transaction_table.cpp:455
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "გამოტოვებული იქნება პაკეტები კონფლიქტებით:"
 
 #: output/transaction_table.cpp:457
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "გამოტოვებული იქნება პაკეტები გაფუჭებული დამოკიდებულებებით:"
 
 #: output/transaction_table.cpp:518
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "დამოკიდებულებების დაყენება:"
 
 #: output/transaction_table.cpp:520
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "სუსტი დამოკიდებულებების დაყენება:"
 
 #: output/transaction_table.cpp:522
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "ჯგუფის/მოდულის პაკეტის დაყენება:"
 
 #: output/transaction_table.cpp:524
 msgid "Installing:"
-msgstr ""
+msgstr "დაყენება:"
 
 #: output/transaction_table.cpp:528
 msgid "Upgrading:"
-msgstr ""
+msgstr "ვერსიის აწევა:"
 
 #: output/transaction_table.cpp:531
 msgid "Downgrading:"
-msgstr ""
+msgstr "ვერსიის დაწევა:"
 
 #: output/transaction_table.cpp:534
 msgid "Reinstalling:"
-msgstr ""
+msgstr "გადაყენება:"
 
 #: output/transaction_table.cpp:538
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "დამოკიდებული პაკეტების წაშლა:"
 
 #: output/transaction_table.cpp:540
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "გამოუყენებელი დამოკიდებულებების წაშლა:"
 
 #: output/transaction_table.cpp:542
 msgid "Removing:"
-msgstr ""
+msgstr "წაიშლება:"
 
 #: output/transaction_table.cpp:546
 msgid "Changing reason:"
-msgstr ""
+msgstr "შეცვლის მიზეზი:"
 
 #: output/transaction_table.cpp:578
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "ჯგუფის დამოკიდებულებები დაყენება:"
 
 #: output/transaction_table.cpp:580
 msgid "Installing groups:"
-msgstr ""
+msgstr "ჯგუფების დაყენება:"
 
 #: output/transaction_table.cpp:584
 msgid "Removing groups:"
-msgstr ""
+msgstr "ჯგუფების წაშლა:"
 
 #: output/transaction_table.cpp:587
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "ჯგუფების განახლება:"
 
 #: output/transaction_table.cpp:614
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "გარემოს ჯგუფების დაყენება:"
 
 #: output/transaction_table.cpp:617
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "გარემოს ჯგუფების წაშლა:"
 
 #: output/transaction_table.cpp:620
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "გარემოს ჯგუფების ვერსიის აწევა:"
 
 #: output/transaction_table.cpp:647
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "მოდულის ნაკადების ჩართვა:"
 
 #: output/transaction_table.cpp:650
 msgid "Disabling modules:"
-msgstr ""
+msgstr "გაითიშება მოდულები:"
 
 #: output/transaction_table.cpp:653
 msgid "Resetting modules:"
-msgstr ""
+msgstr "ჩამოიყრება მოდულები:"
 
 #: output/transaction_table.cpp:656
 msgid "Switching module streams:"
-msgstr ""
+msgstr "მოდულური ნაკადების გადართვა:"
 
 #: output/transaction_table.cpp:730
 msgid "Nothing to do."
-msgstr ""
+msgstr "გასაკეთებელი არაფერია."
 
 #: session.cpp:149
 msgid "Missing command"

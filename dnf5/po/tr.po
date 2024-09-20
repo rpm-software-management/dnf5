@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 03:00+0000\n"
+"POT-Creation-Date: 2024-09-20 03:02+0000\n"
 "PO-Revision-Date: 2024-09-03 06:38+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -175,17 +175,29 @@ msgstr ""
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Bulunan {} sorunu {} pakette denetle"
 
-#: commands/clean/clean.cpp:88
+#: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Temizlenecek önbellek türlerinin listesi. Desteklenen türler: {0}"
 
-#: commands/clean/clean.cpp:106
+#: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Bilinmeyen önbellek türü \"{0}\". Desteklenen türler: {1}"
 
-#: commands/clean/clean.cpp:163
+#: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "\"{0}\" yolunda depo önbelleği temizlenemedi: {1}"
+
+#: commands/clean/clean.cpp:175
+#, fuzzy
+#| msgid "Data directory {} does not exist."
+msgid "Cache directory \"{}\" does not exist. Nothing to clean."
+msgstr "{} veri dizini yok."
+
+#: commands/clean/clean.cpp:180
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot iterate cache directory \"{}\": {}"
+msgstr "\"{}\" paylaşılan kütüphanesi yüklenemiyor: {}"
 
 #: commands/download/download.cpp:112
 msgid "Invalid urlprotocol option: {}"
