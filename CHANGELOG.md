@@ -1,3 +1,18 @@
+# 5.2.6.2
+
+- Update translations from weblate
+- [libdnf, actions plugin] Pipe and OnScopeExit in execute_command
+- [libdnf, actions plugin] Check if the received JSON request is allowed
+- [libdnf, actions plugin] Add location of hook definition to logged mesg
+- [libdnf, actions plugin] Implement "json" communication mode
+- [libdnf, actions plugin] Support for "mode" option in action line
+- [libdnf, actions plugin] substitute: Fix detection of repos config option
+- setlocale: If locale setting fails, try using C.UTF-8 as fallback
+- Do not install /var/cache/libdnf5 directory
+- dnf5daemon-server: Run transaction test for offline transactions
+- Fix deserialization when checking signals `object_path`
+- chore: static_cast to fix sign conversion warning
+
 # 5.2.6.1
 
 - Update translations from weblate
