@@ -308,6 +308,7 @@ void Session::download_transaction_packages() {
 }
 
 void Session::store_transaction_offline() {
+    // Download transaction packages
     const auto & installroot = base->get_config().get_installroot_option().get_value();
     const auto & dest_dir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path() / "packages";
     std::filesystem::create_directories(dest_dir);
@@ -315,6 +316,20 @@ void Session::store_transaction_offline() {
     download_transaction_packages();
     set_cancel_download(Session::CancelDownload::NOT_ALLOWED);
 
+    // Test the transaction
+    // TODO(mblaha): store transaction test/run problems in the session and add an API
+    // to retrieve it
+    base->get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
+    auto result = transaction->run();
+    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
+        throw sdbus::Error(
+            dnfdaemon::ERROR_TRANSACTION,
+            fmt::format(
+                "offline rpm transaction test failed with code {}.",
+                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(result)));
+    }
+
+    // Serialize the transaction
     const auto & offline_datadir = installroot / libdnf5::offline::DEFAULT_DATADIR.relative_path();
     std::filesystem::create_directories(offline_datadir);
 
@@ -330,33 +345,12 @@ void Session::store_transaction_offline() {
     state_data.set_status(libdnf5::offline::STATUS_DOWNLOAD_INCOMPLETE);
     state.write();
 
-    // First, serialize the transaction
     transaction->store_comps(comps_location);
 
     const auto transaction_json_path = offline_datadir / "transaction.json";
     libdnf5::utils::fs::File transaction_json_file{transaction_json_path, "w"};
     transaction_json_file.write(transaction->serialize(packages_in_trans_dir, comps_in_trans_dir));
     transaction_json_file.close();
-
-    // Then, test the serialized transaction
-    // TODO(mblaha): store transaction test/run problems in the session and add an API
-    // to retrieve it
-    const auto & test_goal = std::make_unique<libdnf5::Goal>(*base);
-    test_goal->add_serialized_transaction(transaction_json_path);
-    auto test_transaction = test_goal->resolve();
-    if (test_transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
-        throw sdbus::Error(dnfdaemon::ERROR_TRANSACTION, "failed to resolve serialized offline transaction.");
-    }
-    base->get_config().get_tsflags_option().set(libdnf5::Option::Priority::RUNTIME, "test");
-
-    auto result = test_transaction.run();
-    if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
-        throw sdbus::Error(
-            dnfdaemon::ERROR_TRANSACTION,
-            fmt::format(
-                "offline rpm transaction test failed with code {}.",
-                static_cast<std::underlying_type_t<libdnf5::base::Transaction::TransactionRunResult>>(result)));
-    }
 
     // Download and transaction test complete. Fill out entries in offline
     // transaction state file.
