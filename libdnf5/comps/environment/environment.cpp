@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/comps/environment/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -104,6 +105,10 @@ bool Environment::operator!=(const Environment & rhs) const noexcept {
 
 bool Environment::operator<(const Environment & rhs) const {
     return get_environmentid() < rhs.get_environmentid() || get_repos() < rhs.get_repos();
+}
+
+libdnf5::BaseWeakPtr Environment::get_base() {
+    return p_impl->base;
 }
 
 std::string Environment::get_environmentid() const {

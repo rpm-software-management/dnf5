@@ -56,6 +56,10 @@ public:
     Environment(Environment && src) noexcept;
     Environment & operator=(Environment && src) noexcept;
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.2.6
+    libdnf5::BaseWeakPtr get_base();
+
     /// @return The Environment id.
     /// @since 5.0
     std::string get_environmentid() const;

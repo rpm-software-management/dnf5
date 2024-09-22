@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/comps/group/group.hpp"
 
 extern "C" {
@@ -135,6 +136,10 @@ GroupQuery & GroupQuery::operator=(const GroupQuery & src) {
     return *this;
 }
 GroupQuery & GroupQuery::operator=(GroupQuery && src) noexcept = default;
+
+libdnf5::BaseWeakPtr GroupQuery::get_base() {
+    return p_impl->base;
+}
 
 void GroupQuery::filter_package_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     for (auto it = get_data().begin(); it != get_data().end();) {

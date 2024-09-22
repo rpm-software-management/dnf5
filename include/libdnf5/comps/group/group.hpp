@@ -57,6 +57,10 @@ public:
     Group(Group && src) noexcept;
     Group & operator=(Group && src) noexcept;
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.2.6
+    libdnf5::BaseWeakPtr get_base();
+
     /// @return The Group id.
     /// @since 5.0
     std::string get_groupid() const;

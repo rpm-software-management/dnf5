@@ -46,6 +46,10 @@ public:
     EnvironmentQuery(EnvironmentQuery && src) noexcept;
     EnvironmentQuery & operator=(EnvironmentQuery && src) noexcept;
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.2.6
+    libdnf5::BaseWeakPtr get_base();
+
     void filter_environmentid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
     void filter_environmentid(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
