@@ -46,6 +46,10 @@ public:
     GroupQuery(GroupQuery && src) noexcept;
     GroupQuery & operator=(GroupQuery && src) noexcept;
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.2.6
+    libdnf5::BaseWeakPtr get_base();
+
     void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);
 
     void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf5::sack::QueryCmp::EQ);

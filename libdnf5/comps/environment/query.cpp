@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 
 extern "C" {
@@ -136,6 +137,10 @@ EnvironmentQuery & EnvironmentQuery::operator=(const EnvironmentQuery & src) {
     return *this;
 }
 EnvironmentQuery & EnvironmentQuery::operator=(EnvironmentQuery && src) noexcept = default;
+
+libdnf5::BaseWeakPtr EnvironmentQuery::get_base() {
+    return p_impl->base;
+}
 
 void EnvironmentQuery::filter_environmentid(const std::string & pattern, sack::QueryCmp cmp) {
     filter(Impl::F::environmentid, pattern, cmp);

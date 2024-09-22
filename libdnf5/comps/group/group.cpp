@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/xml.hpp"
 
 #include "libdnf5/base/base.hpp"
+#include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/comps/group/package.hpp"
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -105,6 +106,10 @@ bool Group::operator<(const Group & rhs) const {
     return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
 }
 
+
+libdnf5::BaseWeakPtr Group::get_base() {
+    return p_impl->base;
+}
 
 std::string Group::get_groupid() const {
     return solv::CompsPool::split_solvable_name(
