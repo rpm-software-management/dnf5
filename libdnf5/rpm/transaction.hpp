@@ -321,6 +321,10 @@ public:
     /// @param file_path  new file path
     void set_script_out_file(const std::string & file_path);
 
+    /// Retrieve recently emitted rpm log messages. After the method is called,
+    /// the stored rpm log messages are cleared.
+    std::vector<std::string> extract_rpm_messages();
+
     /// @return A `Base` object to which the transaction belongs.
     /// @since 5.0
     BaseWeakPtr get_base() const;
