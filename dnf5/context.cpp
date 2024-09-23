@@ -880,19 +880,9 @@ int RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::Messa
 
 void RpmTransCB::script_error(
     [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
-    libdnf5::rpm::Nevra nevra,
-    libdnf5::rpm::TransactionCallbacks::ScriptType type,
-    uint64_t return_code) {
-    active_progress_bar->add_message(
-        libdnf5::cli::progressbar::MessageType::ERROR,
-        libdnf5::utils::sformat(
-            _("Error in {} scriptlet: {} return code {}"),
-            script_type_to_string(type),
-            to_full_nevra_string(nevra),
-            return_code));
-    script_output_to_progress(libdnf5::cli::progressbar::MessageType::ERROR);
-    multi_progress_bar.print();
-}
+    [[maybe_unused]] libdnf5::rpm::Nevra nevra,
+    [[maybe_unused]] libdnf5::rpm::TransactionCallbacks::ScriptType type,
+    [[maybe_unused]] uint64_t return_code) {}
 
 void RpmTransCB::script_start(
     [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
@@ -910,27 +900,40 @@ void RpmTransCB::script_stop(
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
+    libdnf5::cli::progressbar::MessageType message_type = libdnf5::cli::progressbar::MessageType::WARNING;
     switch (return_code) {
         case RPMRC_OK:
-            // remove the script_start message in case the script finished successfully
-            active_progress_bar->pop_message();
+            active_progress_bar->add_message(
+                libdnf5::cli::progressbar::MessageType::INFO,
+                libdnf5::utils::sformat(
+                    _("Stop {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
             break;
         case RPMRC_NOTFOUND:
-            // Non-critical rpm scriptlet errors do not call script_error callback.
-            // Print the error message here.
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::WARNING,
                 libdnf5::utils::sformat(
                     _("Non-critical error in {} scriptlet: {}"),
                     script_type_to_string(type),
                     to_full_nevra_string(nevra)));
-            script_output_to_progress(libdnf5::cli::progressbar::MessageType::WARNING);
-            [[fallthrough]];
+            break;
         default:
+            message_type = libdnf5::cli::progressbar::MessageType::ERROR;
             active_progress_bar->add_message(
-                libdnf5::cli::progressbar::MessageType::INFO,
+                libdnf5::cli::progressbar::MessageType::ERROR,
                 libdnf5::utils::sformat(
-                    _("Stop {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
+                    _("Error in {} scriptlet: {} return code {}"),
+                    script_type_to_string(type),
+                    to_full_nevra_string(nevra),
+                    return_code));
+            break;
+    }
+    int loglines = script_output_to_progress(message_type);
+    if (return_code == RPMRC_OK && loglines == 0) {
+        // remove the script start/stop messages in case the script
+        // finished successfully and no rpm log message or scriptlet
+        // output was printed.
+        active_progress_bar->pop_message();
+        active_progress_bar->pop_message();
     }
     multi_progress_bar.print();
 }
