@@ -755,6 +755,16 @@ libdnf5::cli::progressbar::MultiProgressBar * RpmTransCB::get_multi_progress_bar
     return &multi_progress_bar;
 }
 
+int RpmTransCB::rpm_messages_to_progress(const libdnf5::cli::progressbar::MessageType message_type) {
+    auto transaction = context.get_transaction();
+    int retval = 0;
+    for (const auto & msg : transaction->get_rpm_messages()) {
+        active_progress_bar->add_message(message_type, libdnf5::utils::sformat("[RPM] {}", msg));
+        ++retval;
+    }
+    return retval;
+}
+
 void RpmTransCB::install_progress(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item, uint64_t amount, [[maybe_unused]] uint64_t total) {
     active_progress_bar->set_ticks(static_cast<int64_t>(amount));
@@ -801,6 +811,7 @@ void RpmTransCB::install_stop(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
+    rpm_messages_to_progress(libdnf5::cli::progressbar::MessageType::WARNING);
     multi_progress_bar.print();
 }
 
@@ -844,11 +855,13 @@ void RpmTransCB::uninstall_stop(
     [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
     [[maybe_unused]] uint64_t amount,
     [[maybe_unused]] uint64_t total) {
+    rpm_messages_to_progress(libdnf5::cli::progressbar::MessageType::WARNING);
     multi_progress_bar.print();
 }
 
 
 void RpmTransCB::unpack_error(const libdnf5::base::TransactionPackage & item) {
+    rpm_messages_to_progress(libdnf5::cli::progressbar::MessageType::ERROR);
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::ERROR,
         libdnf5::utils::sformat(_("Unpack error: {}"), item.get_package().get_full_nevra()));
@@ -906,7 +919,7 @@ void RpmTransCB::script_stop(
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::INFO,
                 libdnf5::utils::sformat(
-                    _("Stop {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
+                    _("Finished {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
             break;
         case RPMRC_NOTFOUND:
             active_progress_bar->add_message(
@@ -921,13 +934,11 @@ void RpmTransCB::script_stop(
             active_progress_bar->add_message(
                 libdnf5::cli::progressbar::MessageType::ERROR,
                 libdnf5::utils::sformat(
-                    _("Error in {} scriptlet: {} return code {}"),
-                    script_type_to_string(type),
-                    to_full_nevra_string(nevra),
-                    return_code));
+                    _("Error in {} scriptlet: {}"), script_type_to_string(type), to_full_nevra_string(nevra)));
             break;
     }
     int loglines = script_output_to_progress(message_type);
+    loglines += rpm_messages_to_progress(message_type);
     if (return_code == RPMRC_OK && loglines == 0) {
         // remove the script start/stop messages in case the script
         // finished successfully and no rpm log message or scriptlet
