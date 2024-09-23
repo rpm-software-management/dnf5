@@ -267,7 +267,11 @@ private:
 
     DNF_LOCAL static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
-    DNF_LOCAL void script_output_to_progress(libdnf5::cli::progressbar::MessageType message_type);
+    /// Print the current scriptlet output to the user using the currently active
+    /// progressbar.
+    /// @param message_type type of the messages (e.g. WARNING, or ERROR)
+    /// @return  the number of printed lines
+    DNF_LOCAL int script_output_to_progress(libdnf5::cli::progressbar::MessageType message_type);
 
     libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf5::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};

@@ -864,15 +864,18 @@ void RpmTransCB::cpio_error(const libdnf5::base::TransactionPackage & item) {
     multi_progress_bar.print();
 }
 
-void RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::MessageType message_type) {
+int RpmTransCB::script_output_to_progress(const libdnf5::cli::progressbar::MessageType message_type) {
     auto transaction = context.get_transaction();
     auto output = transaction->get_last_script_output();
+    int retval = 0;
     if (!output.empty()) {
         active_progress_bar->add_message(message_type, _("Scriptlet output:"));
         for (auto & line : libdnf5::utils::string::split(output, "\n")) {
             active_progress_bar->add_message(message_type, line);
+            ++retval;
         }
     }
+    return retval;
 }
 
 void RpmTransCB::script_error(
