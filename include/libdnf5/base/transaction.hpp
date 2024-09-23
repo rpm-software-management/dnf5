@@ -196,6 +196,9 @@ public:
     /// Retrieve output of the last executed rpm scriptlet.
     std::string get_last_script_output();
 
+    /// Retrieve captured RPM log messages
+    std::vector<std::string> get_rpm_messages();
+
 private:
     friend class TransactionEnvironment;
     friend class TransactionGroup;
@@ -217,6 +220,9 @@ private:
 
     /// Clear the recorded last scriptlet output
     LIBDNF_LOCAL void clear_last_script_output();
+
+    /// Store captured RPM log messages
+    LIBDNF_LOCAL void set_rpm_messages(std::vector<std::string> && rpm_messages);
 };
 
 }  // namespace libdnf5::base
