@@ -1446,6 +1446,14 @@ void Transaction::Impl::append_last_script_output(std::string_view output) {
     last_script_output.append(output);
 }
 
+std::vector<std::string> Transaction::Impl::get_rpm_messages() {
+    return rpm_messages;
+}
+
+void Transaction::Impl::set_rpm_messages(std::vector<std::string> && rpm_messages) {
+    this->rpm_messages = std::move(rpm_messages);
+}
+
 std::string Transaction::serialize(
     const std::filesystem::path & packages_path, const std::filesystem::path & comps_path) const {
     transaction::TransactionReplay transaction_replay;
@@ -1540,6 +1548,14 @@ std::string Transaction::get_last_script_output() {
 
 void Transaction::clear_last_script_output() {
     p_impl->clear_last_script_output();
+}
+
+std::vector<std::string> Transaction::get_rpm_messages() {
+    return p_impl->get_rpm_messages();
+}
+
+void Transaction::set_rpm_messages(std::vector<std::string> && rpm_messages) {
+    p_impl->set_rpm_messages(std::move(rpm_messages));
 }
 
 }  // namespace libdnf5::base

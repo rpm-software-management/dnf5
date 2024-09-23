@@ -99,6 +99,10 @@ public:
     void append_last_script_output(std::string_view output);
     void process_scriptlets_output(int fd);
 
+    /// Getter/setter for RPM log messages
+    std::vector<std::string> get_rpm_messages();
+    void set_rpm_messages(std::vector<std::string> && messages);
+
 private:
     friend Transaction;
     friend class libdnf5::Goal;
@@ -135,6 +139,8 @@ private:
 
     std::string last_script_output{};
     std::mutex last_script_output_mutex;
+
+    std::vector<std::string> rpm_messages;
 
     TransactionRunResult _run(
         std::unique_ptr<libdnf5::rpm::TransactionCallbacks> && callbacks,
