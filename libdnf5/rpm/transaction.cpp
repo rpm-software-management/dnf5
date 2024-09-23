@@ -398,6 +398,10 @@ Nevra Transaction::trans_element_to_nevra(rpmte te) {
     return nevra;
 };
 
+std::vector<std::string> Transaction::extract_rpm_messages() {
+    return rpm_log_guard.extract_rpm_logs_buffer();
+}
+
 int Transaction::ts_change_callback(int event, rpmte te, rpmte other, void * data) {
     auto * transaction = static_cast<Transaction *>(data);
 
@@ -544,6 +548,9 @@ void * Transaction::ts_callback(
             break;
         case RPMCALLBACK_TRANS_STOP:
             logger.info("RPM callback transaction stop, total {}", total);
+            if (callbacks_holder.base_transaction) {
+                callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+            }
             if (callbacks) {
                 callbacks->transaction_stop(total);
             }
@@ -566,6 +573,9 @@ void * Transaction::ts_callback(
             break;
         case RPMCALLBACK_UNINST_STOP:
             libdnf_assert_transaction_item_set();
+            if (callbacks_holder.base_transaction) {
+                callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+            }
             logger.info(
                 "RPM callback uninstall stop \"{}\" amount {} total {}",
                 to_full_nevra_string(trans_element_to_nevra(trans_element)),
@@ -577,6 +587,9 @@ void * Transaction::ts_callback(
             break;
         case RPMCALLBACK_UNPACK_ERROR:
             libdnf_assert_transaction_item_set();
+            if (callbacks_holder.base_transaction) {
+                callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+            }
             logger.error(
                 "RPM callback unpack error \"{}\"", to_full_nevra_string(trans_element_to_nevra(trans_element)));
             if (callbacks) {
@@ -636,6 +649,9 @@ void * Transaction::ts_callback(
         case RPMCALLBACK_SCRIPT_STOP: {
             // amount is script tag
             // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
+            if (callbacks_holder.base_transaction) {
+                callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+            }
             auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
             auto nevra = trans_element_to_nevra(trans_element);
             logger.info(
@@ -650,6 +666,9 @@ void * Transaction::ts_callback(
         }
         case RPMCALLBACK_INST_STOP:
             libdnf_assert_transaction_item_set();
+            if (callbacks_holder.base_transaction) {
+                callbacks_holder.base_transaction->set_rpm_messages(transaction.extract_rpm_messages());
+            }
             logger.info(
                 "RPM callback install stop \"{}\" amount {} total {}",
                 to_full_nevra_string(trans_element_to_nevra(trans_element)),
