@@ -42,9 +42,18 @@ class RpmLogGuard : public RpmLogGuardBase {
 public:
     RpmLogGuard(const BaseWeakPtr & base);
     ~RpmLogGuard();
+    BaseWeakPtr & get_base();
+
+    /// Add new RPM message to the buffer.
+    void add_rpm_log(std::string_view log);
+
+    /// Retrieve RPM messages that have been received since the last call of this method.
+    std::vector<std::string> extract_rpm_logs_buffer();
 
 private:
     int old_log_mask{0};
+    std::vector<std::string> rpm_logs_buffer{};
+    BaseWeakPtr base;
 };
 
 class RpmLogGuardStrings : public RpmLogGuardBase {

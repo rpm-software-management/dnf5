@@ -53,17 +53,21 @@ static int rpmlog_callback(rpmlogRec rec, rpmlogCallbackData data) {
     }
 
     std::string_view msg(rpmlogRecMessage(rec));
-    if (msg[msg.length() - 1] == '\n') {
+    if (!msg.empty() && msg[msg.length() - 1] == '\n') {
         msg.remove_suffix(1);
     }
 
-    static_cast<libdnf5::Logger *>(data)->log(level, "[rpm] {}", msg);
+
+    RpmLogGuard * log_guard = static_cast<RpmLogGuard *>(data);
+    log_guard->add_rpm_log(msg);
+    auto & logger = *log_guard->get_base()->get_logger();
+    logger.log(level, "[rpm] {}", msg);
     return 0;
 }
 
 
-RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : RpmLogGuardBase() {
-    rpmlogSetCallback(&rpmlog_callback, &*base->get_logger());
+RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : RpmLogGuardBase(), base(base) {
+    rpmlogSetCallback(&rpmlog_callback, this);
 
     // TODO(lukash) once Logger supports log mask, propagate to rpm
     // logs everything up to RPMLOG_INFO -> everything except RPMLOG_DEBUG, which is fairly low-level
@@ -76,6 +80,19 @@ RpmLogGuard::~RpmLogGuard() {
     rpmlogSetMask(old_log_mask);
 }
 
+BaseWeakPtr & RpmLogGuard::get_base() {
+    return base;
+}
+
+void RpmLogGuard::add_rpm_log(std::string_view log) {
+    rpm_logs_buffer.emplace_back(log);
+}
+
+std::vector<std::string> RpmLogGuard::extract_rpm_logs_buffer() {
+    auto retval = std::move(rpm_logs_buffer);
+    rpm_logs_buffer.clear();
+    return retval;
+}
 
 static int rpmlog_callback_strings(rpmlogRec rec, rpmlogCallbackData data) {
     std::string msg(rpmlogRecMessage(rec));
