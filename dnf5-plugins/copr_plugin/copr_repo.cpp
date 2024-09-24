@@ -277,7 +277,11 @@ CoprRepo::CoprRepo(
     std::string results_url = json->get_dict_item("results_url")->string();
     std::string baseurl = results_url + "/" + project_owner + "/" + project_dirname + "/" + baseurl_chroot + "/";
     std::string name = "Copr repo for " + project_dirname + " owned by " + project_owner;
+
     std::string gpgkey = results_url + "/" + project_owner + "/" + project_name + "/" + "pubkey.gpg";
+    if (json->has_key("pubkey_url")) {
+        gpgkey = json->get_dict_item("pubkey_url")->string();
+    }
 
     auto main_repo_json = json_repos->get_dict_item(json_selector)->get_dict_item("arch")->get_dict_item(arch);
     auto main_repo = CoprRepoPart(repo_id, name, true, baseurl, gpgkey);
