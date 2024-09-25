@@ -337,6 +337,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man7/dnf*-modularity.7.*
 %{_mandir}/man7/dnf*-specs.7.*
 %{_mandir}/man7/dnf*-system-state.7.*
+%{_mandir}/man7/dnf*-changes-from-dnf4.7.*
 %{_mandir}/man5/dnf*.conf.5.*
 %{_mandir}/man5/dnf*.conf-todo.5.*
 %{_mandir}/man5/dnf*.conf-deprecated.5.*

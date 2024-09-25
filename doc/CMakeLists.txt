@@ -94,6 +94,7 @@ if(WITH_MAN)
          install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-modularity.7 DESTINATION share/man/man7)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-specs.7 DESTINATION share/man/man7)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-system-state.7 DESTINATION share/man/man7)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-changes-from-dnf4.7 DESTINATION share/man/man7)
 
         # plugin commands
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-automatic.8 DESTINATION share/man/man8)
