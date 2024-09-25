@@ -20,7 +20,7 @@ Welcome to DNF5's documentation!
     misc/index
     best_practices/index
     templates/index
-    changes
+    changes_from_dnf4.7
 
 
 Indices and tables
