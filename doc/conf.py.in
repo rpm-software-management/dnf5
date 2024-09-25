@@ -159,6 +159,7 @@ man_pages = [
     ('misc/modularity.7', 'dnf5-modularity', 'Modularity Overview', AUTHORS, 7),
     ('misc/specs.7', 'dnf5-specs', 'Patterns Specification', AUTHORS, 7),
     ('misc/system-state.7', 'dnf5-system-state', 'System state', AUTHORS, 7),
+    ('changes_from_dnf4.7', 'dnf5-changes-from-dnf4', 'Changes from the DNF4', AUTHORS, 7),
     ('dnf_daemon/dnf5daemon_client.8', 'dnf5daemon-client', 'Command-line interface for Dnf5daemon', AUTHORS, 8),
     ('dnf_daemon/dnf5daemon_server.8', 'dnf5daemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
     ('dnf_daemon/dnf5daemon_dbus_api.8', 'dnf5daemon-dbus-api', 'DBus API Reference for Dnf5daemon', AUTHORS, 8),
