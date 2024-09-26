@@ -377,7 +377,7 @@ void TransactionCB::action_start(sdbus::Signal & signal) {
                 msg = "Installing";
                 break;
             case dnfdaemon::RpmTransactionItemActions::ERASE:
-                msg = "Erasing";
+                msg = "Removing";
                 break;
             case dnfdaemon::RpmTransactionItemActions::DOWNGRADE:
                 msg = "Downgrading";

@@ -68,7 +68,7 @@ void TransactionCallbacksSimple::install_start(
 void TransactionCallbacksSimple::uninstall_start(
     const libdnf5::base::TransactionPackage & item, [[maybe_unused]] uint64_t total) {
     if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE) {
-        output_stream << "  Erasing ";
+        output_stream << "  Removing ";
     } else {
         output_stream << "  Cleanup ";
     }

@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 AllowErasingOption::AllowErasingOption(libdnf5::cli::session::Command & command)
-    : BoolOption(command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
+    : BoolOption(command, "allowerasing", '\0', _("Allow removing of installed packages to resolve problems"), false) {}
 
 AllowErasingOption::~AllowErasingOption() = default;
 

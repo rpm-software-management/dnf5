@@ -40,7 +40,7 @@ Options
 =======
 
 ``--allowerasing``
-    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow removing of installed packages to resolve any potential dependency problems.
 
 ``--skip-broken``
     | Resolve any dependency problems by removing packages that are causing problems from the transaction.
@@ -68,7 +68,7 @@ Examples
     | Downgrade the ``nano`` package to the given version.
 
 ``dnf5 downgrade gcc glibc --allowerasing``
-    | Downgrade ``gcc``, ``glibc`` packages and allow erasing of installed packages when needed.
+    | Downgrade ``gcc``, ``glibc`` packages and allow removing of installed packages when needed.
 
 
 See Also
