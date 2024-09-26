@@ -39,7 +39,7 @@ Options
 =======
 
 ``--allowerasing``
-    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow removing of installed packages to resolve any potential dependency problems.
 
 ``--skip-broken``
     | Resolve any dependency problems by removing packages that are causing problems from the transaction.

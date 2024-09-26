@@ -39,7 +39,7 @@ Options
 =======
 
 ``--allowerasing``
-    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow removing of installed packages to resolve any potential dependency problems.
 
 ``--offline``
     | Store the transaction to be performed offline. See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.

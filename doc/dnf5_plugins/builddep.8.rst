@@ -48,7 +48,7 @@ Options
     | Enable or disable conditional build OPTION when parsing spec files. Does not apply for source rpm files.
 
 ``--allowerasing``
-    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow removing of installed packages to resolve any potential dependency problems.
 
 ``--skip-unavailable``
     | Allow skipping packages that are not possible to downgrade. All remaining packages will be downgraded.

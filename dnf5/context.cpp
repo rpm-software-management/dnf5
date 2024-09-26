@@ -832,7 +832,7 @@ void RpmTransCB::uninstall_start(const libdnf5::base::TransactionPackage & item,
     const char * msg{nullptr};
     if (item.get_action() == libdnf5::transaction::TransactionItemAction::REMOVE ||
         item.get_action() == libdnf5::transaction::TransactionItemAction::REPLACED) {
-        msg = _("Erasing {}");
+        msg = _("Removing {}");
     }
     if (!msg) {
         msg = _("Cleanup {}");

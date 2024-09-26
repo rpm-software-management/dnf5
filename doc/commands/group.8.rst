@@ -114,7 +114,7 @@ Options for ``install``, ``remove`` and ``upgrade``
     | Used with ``install`` and ``remove`` commands.
 
 ``--allowerasing``
-    | Allow erasing of installed packages to resolve any potential dependency problems.
+    | Allow removing of installed packages to resolve any potential dependency problems.
     | Used with ``install`` and ``upgrade`` commands.
 
 ``--skip-broken``

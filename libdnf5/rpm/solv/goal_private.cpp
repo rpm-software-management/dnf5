@@ -96,7 +96,7 @@ void construct_job(
 void init_solver(libdnf5::solv::Pool & pool, libdnf5::solv::Solver & solver) {
     solver.init(pool);
 
-    /* don't erase packages that are no longer in repo during distupgrade */
+    /* don't remove packages that are no longer in repo during distupgrade */
     solver.set_flag(SOLVER_FLAG_KEEP_ORPHANS, 1);
     /* no arch change for forcebest */
     solver.set_flag(SOLVER_FLAG_BEST_OBEY_POLICY, 1);
@@ -424,7 +424,7 @@ libdnf5::GoalProblem GoalPrivate::resolve() {
 
     // either allow solutions callback or installonlies, both at the same time are not supported
     if (limit_installonly_packages(job, protected_running_kernel.id)) {
-        // allow erasing non-installonly packages that depend on a kernel about to be erased
+        // allow removing non-installonly packages that depend on a kernel about to be removed
         allow_uninstall_all_but_protected(*pool, job, protected_packages.get(), protected_running_kernel);
         if (libsolv_solver.solve(job)) {
             return libdnf5::GoalProblem::SOLVER_ERROR;

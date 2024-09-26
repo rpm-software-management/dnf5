@@ -338,7 +338,7 @@ private:
     CallbacksHolder callbacks_holder{nullptr, this, nullptr};
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
 
-    base::TransactionPackage * last_added_item{nullptr};  // item added by last install/reinstall/erase/...
+    base::TransactionPackage * last_added_item{nullptr};  // item added by last install/reinstall/remove/...
     bool last_item_added_ts_element{false};               // Did the last item add the element ts?
 
     std::map<unsigned int, rpmte> implicit_ts_elements;  // elements added to the librpm transaction by librpm itself
@@ -385,14 +385,14 @@ private:
     /// @param item  item to be reinstalled
     void reinstall(base::TransactionPackage & item);
 
-    /// Add package to be erased to transaction set.
+    /// Add package to be removed to transaction set.
     /// @param item  item to be erased
     void erase(base::TransactionPackage & item);
 
     /// Add package to be installed to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
-    /// @param item  item to be erased
+    /// @param item  item to be removed
     /// @param action  one of TransactionItemAction::UPGRADE,
     ///     TransactionItemAction::DOWNGRADE, TransactionItemAction::INSTALL
     void install_up_down(base::TransactionPackage & item, libdnf5::transaction::TransactionItemAction action);
@@ -401,7 +401,7 @@ private:
 
     /// Function triggered by rpmtsNotifyChange()
     ///
-    /// On explicit install/erase add events, "other" is NULL, on implicit
+    /// On explicit install/remove add events, "other" is NULL, on implicit
     /// add events (erasures due to obsolete/upgrade/reinstall, replaced by newer)
     /// it points to the replacing package.
     ///

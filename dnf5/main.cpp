@@ -1069,7 +1069,7 @@ static void print_resolve_hints(dnf5::Context & context) {
             const std::string_view arg{"--allowerasing"};
             if (has_named_arg(command, arg.substr(2))) {
                 hints.emplace_back(
-                    libdnf5::utils::sformat(_("{} to allow erasing of installed packages to resolve problems"), arg));
+                    libdnf5::utils::sformat(_("{} to allow removing of installed packages to resolve problems"), arg));
             }
         }
 
