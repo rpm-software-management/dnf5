@@ -456,7 +456,9 @@ void OfflineExecuteCommand::run() {
 
     goal->add_serialized_transaction(transaction_json_path);
 
-    auto transaction = goal->resolve();
+    auto & context = get_context();
+    context.set_transaction(goal->resolve());
+    auto transaction = *context.get_transaction();
     if (transaction.get_problems() != libdnf5::GoalProblem::NO_PROBLEM) {
         std::cerr << "Failed to resolve transaction. This indicates some bigger problem, since the offline transaction "
                      "was already successfully resolved before. Was the cache at "
