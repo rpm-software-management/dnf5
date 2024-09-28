@@ -69,6 +69,9 @@ void DownloadCommand::set_argument_parser() {
     url_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
+    allmirrors_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+
     srpm_option = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
@@ -96,6 +99,12 @@ void DownloadCommand::set_argument_parser() {
     url->set_description("Print a URL where the rpms can be downloaded instead of downloading");
     url->set_const_value("true");
     url->link_value(url_option);
+
+    auto allmirrors = parser.add_new_named_arg("allmirrors");
+    allmirrors->set_long_name("allmirrors");
+    allmirrors->set_description(_("When running with --url, prints URLs from all available mirrors"));
+    allmirrors->set_const_value("true");
+    allmirrors->link_value(allmirrors_option);
 
     urlprotocol_valid_options = {"http", "https", "ftp", "file"};
     urlprotocol_option = {};
@@ -152,6 +161,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(srpm);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
+    cmd.register_named_arg(allmirrors);
     cmd.register_positional_arg(keys);
 }
 
@@ -273,7 +283,13 @@ void DownloadCommand::run() {
                 ctx.get_base().get_logger()->warning("Failed to get mirror for package: \"{}\"", pkg.get_name());
                 continue;
             }
-            std::cout << urls[0] << std::endl;
+            std::cout << urls[0];
+            if (allmirrors_option->get_value()) {
+                for (size_t index = 1; index < urls.size(); ++index) {
+                    std::cout << " " << urls[index];
+                }
+            }
+            std::cout << std::endl;
         }
         return;
     }

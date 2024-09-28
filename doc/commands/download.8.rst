@@ -59,6 +59,9 @@ Options
 ``--urlprotocol``
     | To be used together with ``--url``. It filters out the URLs to the specified protocols: ``http``, ``https``, ``ftp``, or ``file``. This option can be used multiple times.
 
+``--allmirrors``
+    | To be used together with ``--url``. It prints out space-separated URLs from all available mirrors for each package.
+
 
 Examples
 ========
