@@ -51,7 +51,7 @@ endif()
 
 
 # list of all modules that will be included in libdnf5 bindings
-list(APPEND SWIG_LIBDNF5_MODULES advisory base common comps conf logger repo rpm transaction plugin)
+list(APPEND SWIG_LIBDNF5_MODULES advisory base common comps conf logger repo rpm transaction plugin utils)
 
 
 # list of all modules that will be included in libdnf5-cli bindings
