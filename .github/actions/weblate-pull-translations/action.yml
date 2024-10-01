@@ -1,4 +1,4 @@
-name: Retrieve *.po files from weblate repository
+name: Retrieve *.po and *.pot files from weblate repository
 
 runs:
   using: "composite"
@@ -9,7 +9,7 @@ runs:
         repository: ${{ github.repository }}-l10n
         path: .l10n
 
-    - name: Copy *.po files from weblate repository
+    - name: Copy *.po and *.pot files from weblate repository
       shell: bash
       run: |
         pushd .l10n
@@ -17,9 +17,9 @@ runs:
           source_path=""
           if [ -f "${component}/PATH" ]; then
             read -r source_path < "${component}/PATH"
-            for po in "${component}"/*.po; do
-              if [ -f "$po" ]; then
-                cp "${po}" "../${source_path}/"
+            for file in "${component}"/*.{po,pot}; do
+              if [ -f "$file" ]; then
+                cp "${file}" "../${source_path}/"
               fi
             done
             git -C .. add "${source_path}"
@@ -32,7 +32,7 @@ runs:
       run: |
         rm -rf .l10n
 
-    - name: Commit *.po files
+    - name: Commit *.po and *.pot files
       shell: bash
       run: |
         # only commit if there is any change in translations
