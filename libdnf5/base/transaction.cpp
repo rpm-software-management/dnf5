@@ -1417,15 +1417,16 @@ bool Transaction::Impl::check_gpg_signatures() {
     if (num_checks_skipped > 0) {
         auto repo_string = libdnf5::utils::string::join(
             repos_with_skipped_checks, C_("It is a joining character for repositories IDs", ", "));
-        auto warning_msg =
-            (num_checks_skipped == 1)
-                ? utils::sformat(_("Warning: skipped PGP checks for 1 package from repository: {}"), repo_string)
-                : utils::sformat(
-                      P_("Warning: skipped PGP checks for {0} packages from repository: {1}",
-                         "Warning: skipped PGP checks for {0} packages from repositories: {1}",
-                         repos_with_skipped_checks.size()),
-                      num_checks_skipped,
-                      repo_string);
+        auto warning_msg = utils::sformat(
+            (repos_with_skipped_checks.size() == 1)
+                ? P_("Warning: skipped PGP checks for {0} package from repository: {1}",
+                     "Warning: skipped PGP checks for {0} packages from repository: {1}",
+                     num_checks_skipped)
+                : P_("Warning: skipped PGP checks for {0} package from repositories: {1}",
+                     "Warning: skipped PGP checks for {0} packages from repositories: {1}",
+                     num_checks_skipped),
+            num_checks_skipped,
+            repo_string);
         signature_problems.push_back(warning_msg);
     }
     return result;
