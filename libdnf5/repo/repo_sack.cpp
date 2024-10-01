@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "conf/config.h"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
+#include "solv/pool.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
 #include "utils/auth.hpp"
@@ -70,6 +71,23 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 constexpr const char * STORED_TRANSACTION_NAME = "@stored_transaction";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
+
+void load_repos_common(libdnf5::BaseWeakPtr & base) {
+    auto optional_metadata = base->get_config().get_optional_metadata_types_option().get_value();
+    if (!optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
+        // Configures the pool_addfileprovides_queue() method to only add files from primary.xml.
+        // This ensures the method works correctly even if filelist.xml metadata are not loaded.
+        // When searching for file provides outside of primary.xml this flag incurs a big performance
+        // hit because libsolv has to go through all the files for each file provide therefore don't
+        // set it if filelists are loaded.
+        set_rpm_pool_flag(base, POOL_FLAG_ADDFILEPROVIDESFILTERED, 1);
+    }
+
+    if (!base->are_repos_configured()) {
+        base->notify_repos_configured();
+    }
+}
+
 
 }  // namespace
 
@@ -598,9 +616,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 void RepoSack::load_repos() {
     auto & base = p_impl->base;
 
-    if (!base->are_repos_configured()) {
-        base->notify_repos_configured();
-    }
+    load_repos_common(base);
 
     // create the system repository if it does not exist
     base->get_repo_sack()->get_system_repo();
@@ -612,9 +628,7 @@ void RepoSack::load_repos() {
 void RepoSack::load_repos(Repo::Type type) {
     auto & base = p_impl->base;
 
-    if (!base->are_repos_configured()) {
-        base->notify_repos_configured();
-    }
+    load_repos_common(base);
 
     libdnf_user_assert(
         (type == libdnf5::repo::Repo::Type::AVAILABLE) || (type == libdnf5::repo::Repo::Type::SYSTEM),
