@@ -17,27 +17,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF5_UTILS_PATTERNS_HPP
-#define LIBDNF5_UTILS_PATTERNS_HPP
+#include "libdnf5/utils/patterns.hpp"
 
-#include "libdnf5/defs.h"
-
-#include <string>
+#include <cstring>
 
 namespace libdnf5::utils {
 
-/// @brief Check if a given pattern is a GLOB.
-///
-/// @param pattern Text pattern to be test
-/// @return True if a given pattern is a GLOB
-LIBDNF_API bool is_glob_pattern(const char * pattern) noexcept;
+bool is_glob_pattern(const char * pattern) noexcept {
+    return strpbrk(pattern, "*[?") != nullptr;
+}
 
-/// @brief Check if a given pattern is a file path.
-///
-/// @param pattern Text pattern to be test
-/// @return True if a given pattern is a file path
-LIBDNF_API bool is_file_pattern(const std::string & pattern) noexcept;
+bool is_file_pattern(const std::string & pattern) noexcept {
+    return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
+}
 
 }  // namespace libdnf5::utils
-
-#endif  // LIBDNF5_UTILS_PATTERNS_HPP
