@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_UTILS_PATTERNS_HPP
 #define LIBDNF5_UTILS_PATTERNS_HPP
 
+#include <cstring>
+#include <string>
+
 namespace libdnf5::utils {
 
 /// @brief Check if a given pattern is a GLOB.
