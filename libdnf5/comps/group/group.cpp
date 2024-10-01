@@ -323,7 +323,14 @@ void Group::serialize(const std::string & path) {
     }
 
     // Save the document
-    if (xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1) == -1) {
+    auto save_result = xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1);
+
+    // Memory free
+    xmlFreeDoc(doc);
+    // reset the error handler to default
+    xmlSetGenericErrorFunc(NULL, NULL);
+
+    if (save_result == -1) {
         // There can be duplicit messages in the libxml2 errors so make them unique
         auto it = unique(xml_errors.begin(), xml_errors.end());
         xml_errors.resize(static_cast<size_t>(distance(xml_errors.begin(), it)));
@@ -333,11 +340,6 @@ void Group::serialize(const std::string & path) {
             path,
             libdnf5::utils::string::join(xml_errors, ", "));
     }
-
-    // Memory free
-    xmlFreeDoc(doc);
-    // reset the error handler to default
-    xmlSetGenericErrorFunc(NULL, NULL);
 }
 
 libdnf5::transaction::TransactionItemReason Group::get_reason() const {
