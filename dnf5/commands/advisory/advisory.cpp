@@ -33,7 +33,7 @@ void AdvisoryCommand::set_parent_command() {
 }
 
 void AdvisoryCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage advisories");
+    get_argument_parser_command()->set_description(_("Manage advisories"));
 }
 
 void AdvisoryCommand::register_subcommands() {

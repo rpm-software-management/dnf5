@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/option_string.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 namespace dnf5 {
 
@@ -38,7 +39,7 @@ void DistroSyncCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Upgrade or downgrade installed software to the latest available versions");
+    cmd.set_description(_("Upgrade or downgrade installed software to the latest available versions"));
 
     patterns_to_distro_sync_options = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(

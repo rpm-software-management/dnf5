@@ -37,7 +37,7 @@ void RemoveCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Remove (uninstall) software");
+    cmd.set_description(_("Remove (uninstall) software"));
 
     auto noautoremove = parser.add_new_named_arg("no-autoremove");
     noautoremove->set_long_name("no-autoremove");

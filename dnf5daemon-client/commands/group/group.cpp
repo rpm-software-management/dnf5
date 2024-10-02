@@ -38,7 +38,7 @@ void GroupCommand::set_argument_parser() {
     auto & parser = context.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Manage comps groups");
+    cmd.set_description(_("Manage comps groups"));
 
     // query commands
     auto * query_commands_group = parser.add_new_group("group_query_commands");

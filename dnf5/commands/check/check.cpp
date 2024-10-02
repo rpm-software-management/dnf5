@@ -244,7 +244,7 @@ void CheckCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Check for problems in the packagedb");
+    cmd.set_description(_("Check for problems in the packagedb"));
     cmd.set_long_description(
         "Checks the local packagedb and produces information on any problems it finds.\n"
         "The set of checks performed can be specified with options.");

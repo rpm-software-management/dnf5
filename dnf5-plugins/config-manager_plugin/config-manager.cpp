@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "unsetopt.hpp"
 #include "unsetvar.hpp"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 namespace dnf5 {
 
 using namespace libdnf5::cli;
@@ -38,7 +40,7 @@ void ConfigManagerCommand::set_parent_command() {
 
 void ConfigManagerCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Manage configuration");
+    cmd.set_description(_("Manage configuration"));
     cmd.set_long_description("Manage main and repositories configuration, variables and add new repositories.");
 }
 

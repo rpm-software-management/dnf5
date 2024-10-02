@@ -32,7 +32,7 @@ void EnvironmentCommand::set_parent_command() {
 }
 
 void EnvironmentCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage comps environments");
+    get_argument_parser_command()->set_description(_("Manage comps environments"));
 }
 
 void EnvironmentCommand::register_subcommands() {

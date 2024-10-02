@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "versionlock_exclude.hpp"
 #include "versionlock_list.hpp"
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 namespace dnf5 {
 
 void VersionlockCommand::set_parent_command() {
@@ -35,7 +37,7 @@ void VersionlockCommand::set_parent_command() {
 }
 
 void VersionlockCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage versionlock configuration");
+    get_argument_parser_command()->set_description(_("Manage versionlock configuration"));
 }
 
 void VersionlockCommand::register_subcommands() {

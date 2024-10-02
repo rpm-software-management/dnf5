@@ -35,7 +35,7 @@ void AutoremoveCommand::set_parent_command() {
 
 void AutoremoveCommand::set_argument_parser() {
     get_argument_parser_command()->set_description(
-        "Remove all unneeded packages originally installed as dependencies.");
+        _("Remove all unneeded packages originally installed as dependencies."));
     create_offline_option(*this);
     create_store_option(*this);
 }

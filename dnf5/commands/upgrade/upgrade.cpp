@@ -38,7 +38,7 @@ void UpgradeCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Upgrade software");
+    cmd.set_description(_("Upgrade software"));
 
     minimal = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));

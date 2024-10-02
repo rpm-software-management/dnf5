@@ -266,7 +266,7 @@ void RootCommand::set_argument_parser() {
     setvar->set_long_name("setvar");
     setvar->set_has_value(true);
     setvar->set_arg_value_help("VAR_NAME=VALUE");
-    setvar->set_description("set arbitrary variable");
+    setvar->set_description(_("set arbitrary variable"));
     setvar->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -303,7 +303,7 @@ void RootCommand::set_argument_parser() {
 
     auto best = parser.add_new_named_arg("best");
     best->set_long_name("best");
-    best->set_description(("try the best available package versions in transactions"));
+    best->set_description(_("try the best available package versions in transactions"));
     best->set_const_value("true");
     best->link_value(&config.get_best_option());
     global_options_group->register_argument(best);
@@ -430,7 +430,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
-    no_plugins->set_description("Disable all libdnf5 plugins");
+    no_plugins->set_description(_("Disable all libdnf5 plugins"));
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.get_plugins_option());
     global_options_group->register_argument(no_plugins);

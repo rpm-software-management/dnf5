@@ -41,7 +41,7 @@ void SearchCommand::set_parent_command() {
 
 void SearchCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Search for software matching all specified strings");
+    cmd.set_description(_("Search for software matching all specified strings"));
 
     all = std::make_unique<SearchAllOption>(*this);
     patterns = std::make_unique<SearchPatternsArguments>(*this, get_context());

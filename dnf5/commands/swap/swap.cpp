@@ -39,7 +39,7 @@ void SwapCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Remove software and install another in one transaction");
+    cmd.set_description(_("Remove software and install another in one transaction"));
 
     auto remove_spec_arg = parser.add_new_positional_arg("remove_spec", 1, nullptr, nullptr);
     remove_spec_arg->set_description("The spec that will be removed");

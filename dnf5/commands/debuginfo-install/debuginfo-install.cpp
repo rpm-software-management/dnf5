@@ -42,7 +42,7 @@ void DebuginfoInstallCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    get_argument_parser_command()->set_description("Install debuginfo packages.");
+    get_argument_parser_command()->set_description(_("Install debuginfo packages."));
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);

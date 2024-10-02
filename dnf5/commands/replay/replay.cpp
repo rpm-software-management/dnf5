@@ -35,7 +35,7 @@ void ReplayCommand::set_parent_command() {
 
 void ReplayCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Replay a transaction that was previously stored to a directory");
+    cmd.set_description(_("Replay a transaction that was previously stored to a directory"));
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 

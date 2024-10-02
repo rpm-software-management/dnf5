@@ -44,7 +44,7 @@ void CheckUpgradeCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Check for available package upgrades");
+    cmd.set_description(_("Check for available package upgrades"));
 
     minimal = dynamic_cast<libdnf5::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
