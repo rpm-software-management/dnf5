@@ -35,7 +35,7 @@ void MarkCommand::set_parent_command() {
 }
 
 void MarkCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Change the reason of an installed package");
+    get_argument_parser_command()->set_description(_("Change the reason of an installed package"));
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_store_option(*this);
 }

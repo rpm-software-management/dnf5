@@ -37,7 +37,7 @@ void ReinstallCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Reinstall software");
+    cmd.set_description(_("Reinstall software"));
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
     keys->set_description("List of package specs to reinstall");

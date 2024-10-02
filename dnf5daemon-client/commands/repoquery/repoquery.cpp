@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <limits.h>
 #include <poll.h>
@@ -91,7 +92,7 @@ void RepoqueryCommand::set_argument_parser() {
         patterns_options);
     keys->set_description("List of keys to match");
 
-    cmd.set_description("search for packages matching various criteria");
+    cmd.set_description(_("search for packages matching various criteria"));
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);

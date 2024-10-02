@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_list.hpp"
 
 #include <dnf5/shared_options.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 namespace dnf5 {
 
@@ -34,7 +35,7 @@ void RepoCommand::set_parent_command() {
 }
 
 void RepoCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage repositories");
+    get_argument_parser_command()->set_description(_("Manage repositories"));
 }
 
 void RepoCommand::register_subcommands() {

@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf5/conf/option_string.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 #include <memory>
 
@@ -44,7 +45,7 @@ void DistroSyncCommand::set_argument_parser() {
     auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_description("Upgrade or downgrade installed software to the latest available versions");
+    cmd.set_description(_("Upgrade or downgrade installed software to the latest available versions"));
 
     auto specs_arg = pkg_specs_argument(parser, libdnf5::cli::ArgumentParser::PositionalArg::UNLIMITED, pkg_specs);
     specs_arg->set_description("Patterns");

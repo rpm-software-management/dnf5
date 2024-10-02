@@ -77,7 +77,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Search for packages matching various criteria");
+    cmd.set_description(_("Search for packages matching various criteria"));
 
     // OPTION GROUPS
 

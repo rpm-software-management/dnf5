@@ -40,7 +40,7 @@ void ModuleCommand::set_parent_command() {
 }
 
 void ModuleCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Manage modules");
+    get_argument_parser_command()->set_description(_("Manage modules"));
 }
 
 void ModuleCommand::register_subcommands() {

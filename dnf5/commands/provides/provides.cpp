@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/output/provides.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 #include <iostream>
 
@@ -44,7 +45,7 @@ void ProvidesCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_description("Find what package provides the given value");
+    cmd.set_description(_("Find what package provides the given value"));
 
     auto * keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
     keys->set_description("List of package specs to query");

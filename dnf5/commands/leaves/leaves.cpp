@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 
 #include <iostream>
 
@@ -38,7 +39,7 @@ void LeavesCommand::set_parent_command() {
 
 void LeavesCommand::set_argument_parser() {
     get_argument_parser_command()->set_description(
-        "List groups of installed packages not required by other installed packages");
+        _("List groups of installed packages not required by other installed packages"));
     get_argument_parser_command()->set_long_description(
         R"(The `leaves` command is used to list all leaf packages.
 
