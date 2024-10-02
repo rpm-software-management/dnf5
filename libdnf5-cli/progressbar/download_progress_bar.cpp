@@ -150,7 +150,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
 
     bool color_used = false;
 
-    if (tty::is_interactive()) {
+    if (tty::is_colorized()) {
         switch (get_state()) {
             case ProgressBarState::READY:
             case ProgressBarState::STARTED:
@@ -189,7 +189,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         stream << prefix;
 
         color_used = false;
-        if (tty::is_interactive()) {
+        if (tty::is_colorized()) {
             // color the message in interactive terminal
             switch (message_type) {
                 case MessageType::INFO:
