@@ -41,7 +41,7 @@ const std::string MODULELIST_TABLE_HINT = _("Hint: [d]efault, [e]nabled, [x]disa
 
 struct libscols_table * create_modulelist_table() {
     struct libscols_table * table = scols_new_table();
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "Name", 0.15, 0);

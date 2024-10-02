@@ -55,7 +55,7 @@ void print_package_info(
     // Note for translators: This is a right-aligned column separator in
     // a package properties table as in "Name    : bash".
     scols_table_set_column_separator(table, _(" : "));
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, 1);
     }
 

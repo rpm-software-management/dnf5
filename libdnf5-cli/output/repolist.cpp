@@ -30,8 +30,10 @@ namespace {
 
 struct libscols_table * create_repolist_table(bool with_status) {
     struct libscols_table * table = scols_new_table();
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, 1);
+    }
+    if (libdnf5::cli::tty::is_interactive()) {
         scols_table_enable_maxout(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "repo id", 0.4, 0);

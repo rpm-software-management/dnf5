@@ -151,7 +151,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
 
     bool color_used = false;
 
-    if (tty::is_interactive()) {
+    if (tty::is_coloring_enabled()) {
         switch (get_state()) {
             case ProgressBarState::READY:
             case ProgressBarState::STARTED:
@@ -194,7 +194,7 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         if (prefix_width < terminal_width) {
             // only proceed if there is at least some space for the message
             color_used = false;
-            if (tty::is_interactive()) {
+            if (tty::is_coloring_enabled()) {
                 // color the message in interactive terminal
                 switch (message_type) {
                     case MessageType::INFO:

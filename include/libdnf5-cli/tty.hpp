@@ -55,6 +55,11 @@ LIBDNF_CLI_API std::ostream & cursor_show(std::ostream & stream);
 LIBDNF_CLI_API int get_width();
 LIBDNF_CLI_API bool is_interactive();
 
+enum class ColoringEnabled { AUTO, ALWAYS, NEVER };
+
+LIBDNF_CLI_API void coloring_enable(ColoringEnabled);
+LIBDNF_CLI_API bool is_coloring_enabled();
+
 
 }  // namespace libdnf5::cli::tty
 

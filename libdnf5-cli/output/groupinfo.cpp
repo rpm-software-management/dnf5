@@ -90,7 +90,7 @@ struct libscols_table * create_groupinfo_table(IGroup & group) {
     struct libscols_column * cl = scols_table_new_column(table, "value", 10, SCOLS_FL_WRAP);
     scols_column_set_safechars(cl, "\n");
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, true);
     }
     auto sy = scols_new_symbols();

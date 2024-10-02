@@ -46,7 +46,7 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
     scols_table_new_column(table.get(), "Action(s)", 0, 0);
     scols_table_new_column(table.get(), "Altered", 0, SCOLS_FL_RIGHT);
 
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table.get(), 1);
     }
 

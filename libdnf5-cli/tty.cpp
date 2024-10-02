@@ -67,6 +67,16 @@ bool is_interactive() {
     return isatty(fileno(stdout)) == 1;
 }
 
+static ColoringEnabled coloring = ColoringEnabled::AUTO;
+
+void coloring_enable(ColoringEnabled value) {
+    coloring = value;
+}
+
+bool is_coloring_enabled() {
+    return coloring == ColoringEnabled::AUTO ? is_interactive() : coloring == ColoringEnabled::ALWAYS;
+}
+
 
 #define TTY_COMMAND(name, escape_code)           \
     std::ostream & name(std::ostream & stream) { \
