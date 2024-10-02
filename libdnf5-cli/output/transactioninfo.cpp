@@ -62,7 +62,7 @@ std::string generate_user_info_str(uint32_t user_id) {
 template <class Item>
 void print_transaction_item_table(std::vector<Item> items, const char * title) {
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> item_list(scols_new_table(), &scols_unref_table);
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(item_list.get(), 1);
     }
     scols_cell_set_data(scols_table_get_title(item_list.get()), title);

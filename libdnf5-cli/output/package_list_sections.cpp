@@ -42,7 +42,7 @@ void PackageListSections::print(const std::unique_ptr<PkgColorizer> & colorizer)
     libscols_table * table = nullptr;
     table = scols_new_table();
     scols_table_enable_noheadings(table, 1);
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, 1);
     }
     scols_table_new_column(table, "Name", 1, 0);

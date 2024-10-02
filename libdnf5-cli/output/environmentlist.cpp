@@ -33,7 +33,7 @@ enum { COL_ENVIRONMENT_ID, COL_ENVIRONMENT_NAME, COL_INSTALLED };
 
 struct libscols_table * create_environmentlist_table() {
     struct libscols_table * table = scols_new_table();
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
         scols_table_enable_colors(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "ID", 20, 0);

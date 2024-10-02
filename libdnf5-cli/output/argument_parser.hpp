@@ -40,7 +40,7 @@ public:
     explicit Usage() {
         table = scols_new_table();
         scols_table_enable_noheadings(table, 1);
-        if (libdnf5::cli::tty::is_interactive()) {
+        if (libdnf5::cli::tty::is_coloring_enabled()) {
             scols_table_enable_colors(table, 1);
         }
 

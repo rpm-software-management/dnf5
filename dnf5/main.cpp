@@ -63,6 +63,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5-cli/output/adapters/transaction.hpp>
 #include <libdnf5-cli/output/transaction_table.hpp>
 #include <libdnf5-cli/session.hpp>
+#include <libdnf5-cli/tty.hpp>
 #include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5-cli/utils/userconfirm.hpp>
 #include <libdnf5/base/base.hpp>
@@ -171,6 +172,14 @@ void RootCommand::set_argument_parser() {
     cacheonly->set_const_value("all");
     cacheonly->link_value(&config.get_cacheonly_option());
     global_options_group->register_argument(cacheonly);
+
+    auto color = parser.add_new_named_arg("color");
+    color->set_long_name("color");
+    color->set_has_value(true);
+    color->set_arg_value_help("COLOR");
+    color->set_description(_("Control whether color is used."));
+    color->link_value(&config.get_color_option());
+    global_options_group->register_argument(color);
 
     auto refresh = parser.add_new_named_arg("refresh");
     refresh->set_long_name("refresh");
@@ -1394,6 +1403,17 @@ int main(int argc, char * argv[]) try {
             }
 
             base.setup();
+
+            auto & coloring = base.get_config().get_color_option().get_value();
+            if (coloring == "always") {
+                libdnf5::cli::tty::coloring_enable(libdnf5::cli::tty::ColoringEnabled::ALWAYS);
+            } else if (coloring == "never") {
+                libdnf5::cli::tty::coloring_enable(libdnf5::cli::tty::ColoringEnabled::NEVER);
+            } else if (libdnf5::cli::tty::is_interactive()) {
+                libdnf5::cli::tty::coloring_enable(libdnf5::cli::tty::ColoringEnabled::ALWAYS);
+            } else {
+                libdnf5::cli::tty::coloring_enable(libdnf5::cli::tty::ColoringEnabled::NEVER);
+            }
 
             print_no_match_libdnf_plugin_patterns(context);
 
