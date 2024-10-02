@@ -75,7 +75,7 @@ public:
     libdnf5::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
-    libdnf5::Goal & get_goal() { return goal; };
+    libdnf5::Goal & get_goal() { return *goal; };
     libdnf5::base::Transaction * get_transaction() { return transaction.get(); };
     void set_transaction(const libdnf5::base::Transaction & src) {
         transaction.reset(new libdnf5::base::Transaction(src));
@@ -106,7 +106,7 @@ public:
 private:
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf5::Base> base;
-    libdnf5::Goal goal;
+    std::unique_ptr<libdnf5::Goal> goal;
     std::unique_ptr<libdnf5::base::Transaction> transaction{nullptr};
     dnfdaemon::KeyValueMap session_configuration;
     sdbus::ObjectPath object_path;
