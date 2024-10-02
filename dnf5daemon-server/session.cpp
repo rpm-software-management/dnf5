@@ -79,7 +79,7 @@ Session::Session(
     std::string sender)
     : connection(connection),
       base(std::make_unique<libdnf5::Base>(std::move(loggers))),
-      goal(*base),
+      goal(std::make_unique<libdnf5::Goal>(*base)),
       session_configuration(session_configuration),
       object_path(object_path),
       sender(sender) {
@@ -380,5 +380,5 @@ void Session::store_transaction_offline() {
 
 void Session::reset_goal() {
     transaction.reset(nullptr);
-    goal.reset();
+    goal->reset();
 }
