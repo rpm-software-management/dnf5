@@ -54,6 +54,20 @@ void HistoryStoreCommand::run() {
     const auto ts_specs = transaction_specs->get_value();
     libdnf5::transaction::TransactionHistory history(get_context().get_base());
     std::vector<libdnf5::transaction::Transaction> transactions;
+
+    if (ts_specs.empty()) {
+        transactions = list_transactions_from_specs(history, {"last"});
+    } else {
+        transactions = list_transactions_from_specs(history, ts_specs);
+    }
+
+    if (transactions.empty()) {
+        throw libdnf5::cli::CommandExitError(1, M_("No matching transaction ID found, exactly one required."));
+    }
+    if (transactions.size() != 1) {
+        throw libdnf5::cli::CommandExitError(1, M_("Multiple transactions selected for storing, only one allowed."));
+    }
+
     auto logger = get_context().get_base().get_logger();
 
     std::filesystem::create_directories(output_option->get_value());
@@ -68,19 +82,6 @@ void HistoryStoreCommand::run() {
         if (!libdnf5::cli::utils::userconfirm::userconfirm(get_context().get_base().get_config())) {
             throw libdnf5::cli::AbortedByUserError();
         }
-    }
-
-    if (ts_specs.empty()) {
-        transactions = list_transactions_from_specs(history, {"last"});
-    } else {
-        transactions = list_transactions_from_specs(history, ts_specs);
-    }
-
-    if (transactions.empty()) {
-        throw libdnf5::cli::CommandExitError(1, M_("No matching transaction ID found, exactly one required."));
-    }
-    if (transactions.size() != 1) {
-        throw libdnf5::cli::CommandExitError(1, M_("Multiple transactions selected for storing, only one allowed."));
     }
 
     const std::string json = transactions[0].serialize();
