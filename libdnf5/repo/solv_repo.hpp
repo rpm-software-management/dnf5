@@ -141,6 +141,11 @@ private:
     /// Ranges of solvables for different types of data, used for writing libsolv cache files
     int main_solvables_start{0};
     int main_solvables_end{0};
+
+    /// Range of repodata from the primary.xml, used for writing libsolv cache files
+    int main_repodata_start{0};
+    int main_repodata_end{0};
+
     int updateinfo_solvables_start{0};
     int updateinfo_solvables_end{0};
 
