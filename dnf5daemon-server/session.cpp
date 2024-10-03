@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <libdnf5/conf/const.hpp>
+#include <libdnf5/logger/stream_logger.hpp>
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/fs/file.hpp>
@@ -71,27 +72,16 @@ static const std::unordered_set<std::string> ALLOWED_MAIN_CONF_OVERRIDES = {
     "strict",
 };
 
-Session::Session(
-    std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
-    sdbus::IConnection & connection,
-    dnfdaemon::KeyValueMap session_configuration,
-    std::string object_path,
-    std::string sender)
-    : connection(connection),
-      base(std::make_unique<libdnf5::Base>(std::move(loggers))),
-      goal(std::make_unique<libdnf5::Goal>(*base)),
-      session_configuration(session_configuration),
-      object_path(object_path),
-      sender(sender) {
-    if (session_configuration.find("locale") != session_configuration.end()) {
-        session_locale = session_configuration_value<std::string>("locale");
-    }
+void Session::setup_base() {
+    std::vector<std::unique_ptr<libdnf5::Logger>> loggers;
+    loggers.emplace_back(std::make_unique<libdnf5::StdCStreamLogger>(std::cerr));
+    base = std::make_unique<libdnf5::Base>(std::move(loggers));
 
     auto & config = base->get_config();
 
     // adjust base.config from session_configuration config overrides
-    std::map<std::string, std::string> default_overrides{};
-    auto conf_overrides = session_configuration_value<std::map<std::string, std::string>>("config", default_overrides);
+    auto conf_overrides =
+        session_configuration_value<std::map<std::string, std::string>>("config", std::map<std::string, std::string>{});
     auto opt_binds = config.opt_binds();
     std::optional<bool> am_i_root;
     for (auto & opt : conf_overrides) {
@@ -130,6 +120,30 @@ Session::Session(
 
     // load repo configuration
     base->get_repo_sack()->create_repos_from_system_configuration();
+    repositories_status = dnfdaemon::RepoStatus::NOT_READY;
+
+    base->set_download_callbacks(std::make_unique<dnf5daemon::DownloadCB>(*this));
+
+    // Goal and Transaction instances depend on the base, so reset them as well
+    goal = std::make_unique<libdnf5::Goal>(*base);
+    transaction.reset(nullptr);
+}
+
+Session::Session(
+    sdbus::IConnection & connection,
+    dnfdaemon::KeyValueMap session_configuration,
+    std::string object_path,
+    std::string sender)
+    : connection(connection),
+      session_configuration(session_configuration),
+      object_path(object_path),
+      sender(sender) {
+    if (session_configuration.find("locale") != session_configuration.end()) {
+        session_locale = session_configuration_value<std::string>("locale");
+    }
+
+    dbus_object = sdbus::createObject(connection, object_path);
+    setup_base();
 
     // instantiate all services provided by the daemon
     services.emplace_back(std::make_unique<Base>(*this));
@@ -140,14 +154,11 @@ Session::Session(
     services.emplace_back(std::make_unique<Group>(*this));
     services.emplace_back(std::make_unique<dnfdaemon::Advisory>(*this));
 
-    dbus_object = sdbus::createObject(connection, object_path);
     // Register all provided services on d-bus
     for (auto & s : services) {
         s->dbus_register();
     }
     dbus_object->finishRegistration();
-
-    base->set_download_callbacks(std::make_unique<dnf5daemon::DownloadCB>(*this));
 }
 
 Session::~Session() {
