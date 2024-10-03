@@ -112,11 +112,12 @@ void Session::setup_base() {
     base->load_config();
 
     // set variables
-    base->setup();
     if (session_configuration.find("releasever") != session_configuration.end()) {
         auto releasever = session_configuration_value<std::string>("releasever");
         base->get_vars()->set("releasever", releasever);
     }
+
+    base->setup();
 
     // load repo configuration
     base->get_repo_sack()->create_repos_from_system_configuration();
