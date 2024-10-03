@@ -54,7 +54,6 @@ class Session {
 public:
     enum class CancelDownload { NOT_RUNNING, NOT_REQUESTED, REQUESTED, NOT_ALLOWED };
     Session(
-        std::vector<std::unique_ptr<libdnf5::Logger>> && loggers,
         sdbus::IConnection & connection,
         dnfdaemon::KeyValueMap session_configuration,
         std::string object_path,
@@ -104,6 +103,8 @@ public:
     void reset_goal();
 
 private:
+    void setup_base();
+
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf5::Base> base;
     std::unique_ptr<libdnf5::Goal> goal;
