@@ -242,10 +242,13 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
     checksum_calc(checksum, repomd_file);
 
     int solvables_start = pool->nsolvables;
+    int repodata_start = repo->nrepodata;
 
     if (load_solv_cache(pool, nullptr, 0)) {
         main_solvables_start = solvables_start;
         main_solvables_end = pool->nsolvables;
+        main_repodata_start = repodata_start;
+        main_repodata_end = repo->nrepodata;
 
         return;
     }
@@ -271,6 +274,8 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
     main_solvables_start = solvables_start;
     main_solvables_end = pool->nsolvables;
+    main_repodata_start = repodata_start;
+    main_repodata_end = repo->nrepodata;
 
     if (config.get_build_cache_option().get_value()) {
         write_main(true);
@@ -404,6 +409,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
     }
 
     int solvables_start = pool->nsolvables;
+    int repodata_start = repo->nrepodata;
 
     // TODO(egoode) investigate performance hit of RPM_ADD_WITH_CHANGELOG, possibly make this configurable
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR | RPM_ADD_WITH_CHANGELOG;
@@ -423,6 +429,8 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     main_solvables_start = solvables_start;
     main_solvables_end = pool->nsolvables;
+    main_repodata_start = repodata_start;
+    main_repodata_end = repo->nrepodata;
 }
 
 
@@ -552,9 +560,11 @@ void SolvRepo::write_main(bool load_after_write) {
     SolvUserdata solv_userdata{};
     userdata_fill(&solv_userdata);
 
+
     Repowriter * writer = repowriter_create(repo);
     repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
     repowriter_set_solvablerange(writer, main_solvables_start, main_solvables_end);
+    repowriter_set_repodatarange(writer, main_repodata_start, main_repodata_end);
     int res = repowriter_write(writer, cache_file.get());
     repowriter_free(writer);
 
@@ -574,6 +584,11 @@ void SolvRepo::write_main(bool load_after_write) {
         fs::File file(cache_tmp_file.get_path(), "r");
 
         repo_empty(repo, 1);
+
+        // While the number of solvables (main_solvables_start/end) doesn't
+        // change when we reload the repo from solv file the repodata can/do change.
+        main_repodata_start = repo->nrepodata;
+
         int ret = repo_add_solv(repo, file.get(), 0);
         if (ret) {
             throw SolvError(
@@ -582,6 +597,8 @@ void SolvRepo::write_main(bool load_after_write) {
                 cache_tmp_file.get_path().native(),
                 std::string(pool_errstr(*pool)));
         }
+
+        main_repodata_end = repo->nrepodata;
     }
 
     std::filesystem::permissions(
