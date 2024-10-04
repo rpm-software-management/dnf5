@@ -29,7 +29,6 @@ DNFDAEMON_OBJECT_PATH = '/' + DNFDAEMON_BUS_NAME.replace('.', '/')
 
 IFACE_SESSION_MANAGER = '{}.SessionManager'.format(DNFDAEMON_BUS_NAME)
 IFACE_REPO = '{}.rpm.Repo'.format(DNFDAEMON_BUS_NAME)
-IFACE_REPOCONF = '{}.rpm.RepoConf'.format(DNFDAEMON_BUS_NAME)
 IFACE_RPM = '{}.rpm.Rpm'.format(DNFDAEMON_BUS_NAME)
 IFACE_GOAL = '{}.Goal'.format(DNFDAEMON_BUS_NAME)
 
@@ -75,7 +74,7 @@ class InstallrootCase(unittest.TestCase):
             "config": {
                 "config_file_path": self.config_file_path,
                 "installroot": self.installroot,
-                "plugins": False,
+                "plugins": "False",
                 "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
                 "reposdir": self.reposdir,
             }
@@ -91,4 +90,5 @@ class InstallrootCase(unittest.TestCase):
             dbus_interface=IFACE_GOAL)
 
     def tearDown(self):
+        self.iface_session.close_session(self.session)
         shutil.rmtree(self.installroot)
