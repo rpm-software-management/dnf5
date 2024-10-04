@@ -41,6 +41,7 @@ class InstallTest(support.InstallrootCase):
                     dbus.Dictionary({           # transaction item attrs
                     }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({           # package
+                        dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('evr'): dbus.String('2-1', variant_level=1),
@@ -141,6 +142,7 @@ class InstallTest(support.InstallrootCase):
                     dbus.Dictionary({           # transaction item attrs
                     }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({           # package
+                        dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
