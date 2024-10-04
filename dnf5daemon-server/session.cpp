@@ -394,3 +394,7 @@ void Session::reset_goal() {
     transaction.reset(nullptr);
     goal->reset();
 }
+
+void Session::reset_base() {
+    setup_base();
+}

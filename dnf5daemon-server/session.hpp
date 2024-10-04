@@ -101,6 +101,7 @@ public:
     std::mutex & get_transaction_mutex() { return transaction_mutex; }
 
     void reset_goal();
+    void reset_base();
 
 private:
     void setup_base();
