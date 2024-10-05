@@ -23,11 +23,15 @@ import base_test_case
 
 class TestCompsIterators(base_test_case.BaseTestCase):
     def test_group_query_iterable(self):
+        self.add_repo_repomd("repomd-comps-core")
         query = libdnf5.comps.GroupQuery(self.base)
         self.assertIsInstance(query.get_base().get(), libdnf5.base.Base)
-        _ = [grp.get_groupid() for grp in query]
+        assert [grp.get_groupid() for grp in query]
+        self.assertIsInstance(next(iter(query)).get_base().get(), libdnf5.base.Base)
 
     def test_environment_query_iterable(self):
+        self.add_repo_repomd("repomd-comps-core-environment")
         query = libdnf5.comps.EnvironmentQuery(self.base)
         self.assertIsInstance(query.get_base().get(), libdnf5.base.Base)
-        _ = [env.get_environmentid() for env in query]
+        assert [env.get_environmentid() for env in query]
+        self.assertIsInstance(next(iter(query)).get_base().get(), libdnf5.base.Base)
