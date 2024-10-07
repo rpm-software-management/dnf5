@@ -265,8 +265,16 @@ void Context::Impl::apply_repository_setopts() {
     }
 
     if (!missing_repo_ids.empty()) {
-        throw libdnf5::cli::ArgumentParserError(
-            M_("No matching repositories for \"{}\""), libdnf5::utils::string::join(missing_repo_ids, ", "));
+        auto missing_repo_ids_string = libdnf5::utils::string::join(missing_repo_ids, _(", "));
+        if (base.get_config().get_installroot_option().get_value() != "/" &&
+            !base.get_config().get_use_host_config_option().get_value()) {
+            throw libdnf5::cli::ArgumentParserError(
+                M_("No matching repositories for {}. To use repositories from a host system, pass --use-host-config "
+                   "option"),
+                missing_repo_ids_string);
+        } else {
+            throw libdnf5::cli::ArgumentParserError(M_("No matching repositories for {}"), missing_repo_ids_string);
+        }
     }
 }
 
