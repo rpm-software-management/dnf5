@@ -3,3 +3,4 @@ __pycache__
 *.log
 *.tar.gz
 libdnf5/conf/config.h
+*.pot
