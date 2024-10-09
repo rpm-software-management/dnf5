@@ -58,7 +58,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> username{main_config.get_username_option()};
     OptionChild<OptionString> password{main_config.get_password_option()};
     OptionChild<OptionStringAppendList> protected_packages{main_config.get_protected_packages_option()};
-    OptionChild<OptionBool> gpgcheck{main_config.get_gpgcheck_option()};
+    OptionChild<OptionBool> pkg_gpgcheck{main_config.get_pkg_gpgcheck_option()};
     OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
     OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
     OptionChild<OptionNumber<std::uint32_t>> retries{main_config.get_retries_option()};
@@ -143,7 +143,9 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("protected_packages", protected_packages);
-    owner.opt_binds().add("gpgcheck", gpgcheck);
+    owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
+    // Compatibility alias for pkg_gpgcheck
+    owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enablegroups", enablegroups);
     owner.opt_binds().add("retries", retries);
@@ -322,10 +324,17 @@ const OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_o
 }
 
 OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() {
-    return p_impl->gpgcheck;
+    return p_impl->pkg_gpgcheck;
 }
 const OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() const {
-    return p_impl->gpgcheck;
+    return p_impl->pkg_gpgcheck;
+}
+
+OptionChild<OptionBool> & ConfigRepo::get_pkg_gpgcheck_option() {
+    return p_impl->pkg_gpgcheck;
+}
+const OptionChild<OptionBool> & ConfigRepo::get_pkg_gpgcheck_option() const {
+    return p_impl->pkg_gpgcheck;
 }
 
 OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_option() {

@@ -973,9 +973,10 @@ configuration.
 
     Default: ``False``.
 
+.. _pkg_gpgcheck_options-label:
 .. _gpgcheck_options-label:
 
-``gpgcheck``
+``pkg_gpgcheck``
     :ref:`boolean <boolean-label>`
 
     Whether to perform GPG signature check on packages found in this repository.
@@ -984,6 +985,8 @@ configuration.
 
     Doesn't apply for packages passed directly as arguments, as they are not in any repository,
     see :ref:`localpkg_gpgcheck <localpkg_gpgcheck_options-label>`.
+
+    Due to compatibility `gpgcheck` option is supported as well but `pkg_gpgcheck` is preferred.
 
 .. _includepkgs_options-label:
 

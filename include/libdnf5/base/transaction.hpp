@@ -165,7 +165,7 @@ public:
 
     /// @brief Check signatures of packages in the resolved transaction.
     ///
-    /// @return True if all packages have correct signatures or checking is turned off with `gpgcheck` option,
+    /// @return True if all packages have correct signatures or checking is turned off with `pkg_gpgcheck` option,
     /// otherwise false. More info about occurred problems can be retrieved using the `get_gpg_signature_problems`
     /// method.
     bool check_gpg_signatures();
