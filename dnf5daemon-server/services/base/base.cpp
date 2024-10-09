@@ -58,6 +58,10 @@ void Base::dbus_register() {
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::clean, call, session.session_locale);
         });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_BASE, "reset", "", {}, "", {}, [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Base::reset, call, session.session_locale);
+        });
 
     dbus_object->registerSignal(
         dnfdaemon::INTERFACE_BASE,
@@ -145,5 +149,11 @@ sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
     auto reply = call.createReply();
     reply << success;
     reply << error_msg;
+    return reply;
+}
+
+sdbus::MethodReply Base::reset(sdbus::MethodCall & call) {
+    session.reset_base();
+    auto reply = call.createReply();
     return reply;
 }

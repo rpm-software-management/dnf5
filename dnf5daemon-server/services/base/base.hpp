@@ -36,6 +36,7 @@ public:
 
 private:
     sdbus::MethodReply clean(sdbus::MethodCall & call);
+    sdbus::MethodReply reset(sdbus::MethodCall & call);
     sdbus::MethodReply read_all_repos(sdbus::MethodCall & call);
 };
 
