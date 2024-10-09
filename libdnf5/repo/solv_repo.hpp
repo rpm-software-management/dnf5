@@ -120,6 +120,10 @@ public:
     /// @return      True if the group was successfully read.
     bool read_group_solvable_from_xml(const std::string & path);
 
+    /// Free all solvables in the repository. The repository will be empty
+    /// after this call.
+    void empty();
+
 private:
     // "type_name == nullptr" means load "primary" cache (.solv file)
     bool load_solv_cache(solv::Pool & pool, const char * type_name, int flags);
