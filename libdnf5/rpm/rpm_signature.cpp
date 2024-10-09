@@ -192,7 +192,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Packa
         }
     } else {
         auto & repo_config = repo->get_config();
-        if (!repo_config.get_gpgcheck_option().get_value()) {
+        if (!repo_config.get_pkg_gpgcheck_option().get_value()) {
             return CheckResult::SKIPPED;
         }
     }

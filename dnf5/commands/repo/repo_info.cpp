@@ -71,7 +71,8 @@ public:
         return repo->get_config().get_skip_if_unavailable_option().get_value();
     }
     std::vector<std::string> get_gpgkey() const override { return repo->get_config().get_gpgkey_option().get_value(); }
-    bool get_gpgcheck() const override { return repo->get_config().get_gpgcheck_option().get_value(); }
+    bool get_gpgcheck() const override { return repo->get_config().get_pkg_gpgcheck_option().get_value(); }
+    bool get_pkg_gpgcheck() const override { return repo->get_config().get_pkg_gpgcheck_option().get_value(); }
     bool get_repo_gpgcheck() const override { return repo->get_config().get_repo_gpgcheck_option().get_value(); }
     std::string get_repo_file_path() const override { return repo->get_repo_file_path(); }
     std::string get_revision() const override { return repo->get_revision(); }

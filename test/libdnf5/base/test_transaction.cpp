@@ -45,7 +45,7 @@ void BaseTransactionTest::test_check_gpg_signatures_no_gpgcheck() {
 void BaseTransactionTest::test_check_gpg_signatures_fail() {
     add_repo_repomd("repomd-repo1");
 
-    base.get_config().get_gpgcheck_option().set(true);
+    base.get_config().get_pkg_gpgcheck_option().set(true);
 
     libdnf5::Goal goal(base);
     goal.add_rpm_install("pkg");

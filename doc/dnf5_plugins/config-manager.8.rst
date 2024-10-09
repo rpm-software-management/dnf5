@@ -167,11 +167,11 @@ Examples
 ``dnf5 config-manager setopt repo1.proxy=http://proxy.example.com:3128/ repo2.proxy=http://proxy.example.com:3128/``
     Sets override for ``proxy`` option in repositories with repository IDs ``repo1`` and ``repo2``.
 
-``dnf5 config-manager setopt '*-debuginfo.gpgcheck=0'``
-    Sets override for the ``gpgcheck`` option in all repositories whose repository ID ends with ``-debuginfo``.
+``dnf5 config-manager setopt '*-debuginfo.pkg_gpgcheck=0'``
+    Sets override for the ``pkg_gpgcheck`` option in all repositories whose repository ID ends with ``-debuginfo``.
 
-``dnf5 config-manager unsetopt '*-debuginfo.gpgcheck'``
-    Remove override for the ``gpgcheck`` option in all repositories whose repository ID ends with ``-debuginfo``.
+``dnf5 config-manager unsetopt '*-debuginfo.pkg_gpgcheck'``
+    Remove override for the ``pkg_gpgcheck`` option in all repositories whose repository ID ends with ``-debuginfo``.
 
 ``dnf5 config-manager setopt keepcache=1 log_size=10M``
     Enables the ``keepcache`` main option and sets the maximum size of logger files to 10 mebibytes (10 * 1024 * 1024 bytes).

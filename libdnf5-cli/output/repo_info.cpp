@@ -122,7 +122,7 @@ void RepoInfo::Impl::add_repo(IRepoInfo & repo) {
     }
 
     add_line("Verify repodata", fmt::format("{}", repo.get_repo_gpgcheck()), nullptr, group_gpg);
-    add_line("Verify packages", fmt::format("{}", repo.get_gpgcheck()), nullptr, group_gpg);
+    add_line("Verify packages", fmt::format("{}", repo.get_pkg_gpgcheck()), nullptr, group_gpg);
 
     // TODO(jkolarik): Verbose is not implemented and not used yet
     // if (verbose) {
@@ -252,7 +252,7 @@ void print_repoinfo_json([[maybe_unused]] const std::vector<std::unique_ptr<IRep
         json_object_object_add(json_repo, "gpg_key", json_gpg_keys);
 
         json_object_object_add(json_repo, "repo_gpgcheck", json_object_new_boolean(repo->get_repo_gpgcheck()));
-        json_object_object_add(json_repo, "gpgcheck", json_object_new_boolean(repo->get_gpgcheck()));
+        json_object_object_add(json_repo, "pkg_gpgcheck", json_object_new_boolean(repo->get_pkg_gpgcheck()));
         json_object_object_add(json_repo, "available_pkgs", json_object_new_uint64(repo->get_available_pkgs()));
         json_object_object_add(json_repo, "pkgs", json_object_new_uint64(repo->get_pkgs()));
         json_object_object_add(json_repo, "size", json_object_new_uint64(repo->get_size()));
