@@ -247,7 +247,7 @@ class ConfigMain::Impl {
     OptionStringAppendList protected_packages{std::vector<std::string>{"dnf5", "glob:/etc/dnf/protected.d/*.conf"}};
     OptionString username{""};
     OptionString password{""};
-    OptionBool gpgcheck{false};
+    OptionBool pkg_gpgcheck{false};
     OptionBool repo_gpgcheck{false};
     OptionBool enabled{true};
     OptionBool enablegroups{true};
@@ -435,7 +435,9 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("protected_packages", protected_packages);
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
-    owner.opt_binds().add("gpgcheck", gpgcheck);
+    owner.opt_binds().add("pkg_gpgcheck", pkg_gpgcheck);
+    // Compatiblity alias for pkg_gpgcheck
+    owner.opt_binds().add("gpgcheck", pkg_gpgcheck);
     owner.opt_binds().add("repo_gpgcheck", repo_gpgcheck);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("enablegroups", enablegroups);
@@ -1140,10 +1142,17 @@ const OptionString & ConfigMain::get_password_option() const {
 }
 
 OptionBool & ConfigMain::get_gpgcheck_option() {
-    return p_impl->gpgcheck;
+    return p_impl->pkg_gpgcheck;
 }
 const OptionBool & ConfigMain::get_gpgcheck_option() const {
-    return p_impl->gpgcheck;
+    return p_impl->pkg_gpgcheck;
+}
+
+OptionBool & ConfigMain::get_pkg_gpgcheck_option() {
+    return p_impl->pkg_gpgcheck;
+}
+const OptionBool & ConfigMain::get_pkg_gpgcheck_option() const {
+    return p_impl->pkg_gpgcheck;
 }
 
 OptionBool & ConfigMain::get_repo_gpgcheck_option() {

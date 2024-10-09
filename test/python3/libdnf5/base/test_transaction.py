@@ -36,7 +36,9 @@ class TestTransaction(base_test_case.BaseTestCase):
                          transaction.get_gpg_signature_problems())
 
     def test_check_gpg_signatures_fail(self):
+        # Both options need to be available
         self.base.get_config().gpgcheck = True
+        self.base.get_config().pkg_gpgcheck = True
 
         goal = libdnf5.base.Goal(self.base)
         goal.add_rpm_install("pkg")

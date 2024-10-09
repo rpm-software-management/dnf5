@@ -58,7 +58,7 @@ enum class RepoAttribute {
     skip_if_unavailable,
 
     gpgkey,
-    gpgcheck,
+    pkg_gpgcheck,
     repo_gpgcheck,
 
     proxy,
@@ -106,7 +106,8 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
     {"skip_if_unavailable", RepoAttribute::skip_if_unavailable},
 
     {"gpgkey", RepoAttribute::gpgkey},
-    {"gpgcheck", RepoAttribute::gpgcheck},
+    {"gpgcheck", RepoAttribute::pkg_gpgcheck},
+    {"pkg_gpgcheck", RepoAttribute::pkg_gpgcheck},
     {"repo_gpgcheck", RepoAttribute::repo_gpgcheck},
 
     {"proxy", RepoAttribute::proxy},
@@ -183,8 +184,8 @@ dnfdaemon::KeyValueMap repo_to_map(
             case RepoAttribute::gpgkey:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_gpgkey_option().get_value());
                 break;
-            case RepoAttribute::gpgcheck:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().get_gpgcheck_option().get_value());
+            case RepoAttribute::pkg_gpgcheck:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_pkg_gpgcheck_option().get_value());
                 break;
             case RepoAttribute::repo_gpgcheck:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_repo_gpgcheck_option().get_value());

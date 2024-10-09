@@ -55,6 +55,8 @@ public:
     virtual std::vector<std::string> get_includepkgs() const = 0;
     virtual bool get_skip_if_unavailable() const = 0;
     virtual std::vector<std::string> get_gpgkey() const = 0;
+    virtual bool get_pkg_gpgcheck() const = 0;
+    /// @deprecated It is going to be removed, use get_pkg_gpgcheck()
     virtual bool get_gpgcheck() const = 0;
     virtual bool get_repo_gpgcheck() const = 0;
     virtual std::string get_repo_file_path() const = 0;
