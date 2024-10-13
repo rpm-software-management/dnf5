@@ -22,7 +22,7 @@ Recommends:     (dnf5-plugins if dnf-plugins-core)
 Recommends:     bash-completion
 Requires:       coreutils
 
-%if 0%{?rhel} > 10
+%if 0%{?fedora} || 0%{?rhel} > 10
 Provides:       microdnf = %{version}-%{release}
 Obsoletes:      microdnf < 4
 %endif
@@ -270,7 +270,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/yum
 %endif
 
-%if 0%{?rhel} > 10
+%if 0%{?fedora} || 0%{?rhel} > 10
 %{_bindir}/microdnf
 %endif
 
@@ -855,7 +855,7 @@ mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/comps_groups
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/offline
 touch %{buildroot}%{_sysconfdir}/dnf/versionlock.toml
 
-%if 0%{?rhel} > 10
+%if 0%{?fedora} || 0%{?rhel} > 10
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %endif
 
