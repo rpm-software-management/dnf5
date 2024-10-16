@@ -419,10 +419,10 @@ void RootCommand::set_argument_parser() {
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
                                           [[maybe_unused]] const char * value) {
-        ctx.get_base().get_config().get_gpgcheck_option().set(libdnf5::Option::Priority::COMMANDLINE, 0);
+        ctx.get_base().get_config().get_pkg_gpgcheck_option().set(libdnf5::Option::Priority::COMMANDLINE, 0);
         ctx.get_base().get_config().get_repo_gpgcheck_option().set(libdnf5::Option::Priority::COMMANDLINE, 0);
         // Store to vector. Use it later when repositories configuration will be loaded.
-        ctx.get_setopts().emplace_back("*.gpgcheck", "0");
+        ctx.get_setopts().emplace_back("*.pkg_gpgcheck", "0");
         ctx.get_setopts().emplace_back("*.repo_gpgcheck", "0");
         return true;
     });

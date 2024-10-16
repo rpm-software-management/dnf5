@@ -244,8 +244,12 @@ public:
     const OptionString & get_username_option() const;
     OptionString & get_password_option();
     const OptionString & get_password_option() const;
+    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
     OptionBool & get_gpgcheck_option();
+    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
     const OptionBool & get_gpgcheck_option() const;
+    OptionBool & get_pkg_gpgcheck_option();
+    const OptionBool & get_pkg_gpgcheck_option() const;
     OptionBool & get_repo_gpgcheck_option();
     const OptionBool & get_repo_gpgcheck_option() const;
     OptionBool & get_enabled_option();

@@ -45,7 +45,8 @@ public:
     std::vector<std::string> get_includepkgs() const { return rawdata.at("includepkgs"); }
     bool get_skip_if_unavailable() const { return rawdata.at("skip_if_unavailable"); }
     std::vector<std::string> get_gpgkey() const { return rawdata.at("gpgkey"); }
-    bool get_gpgcheck() const { return rawdata.at("gpgcheck"); }
+    bool get_gpgcheck() const { return rawdata.at("pkg_gpgcheck"); }
+    bool get_pkg_gpgcheck() const { return rawdata.at("pkg_gpgcheck"); }
     bool get_repo_gpgcheck() const { return rawdata.at("repo_gpgcheck"); }
     std::string get_repo_file_path() const { return rawdata.at("repofile"); }
     std::string get_revision() const { return rawdata.at("revision"); }

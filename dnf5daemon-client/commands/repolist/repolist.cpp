@@ -134,7 +134,7 @@ void RepolistCommand::run() {
             "includepkgs",
             "skip_if_unavailable",
             "gpgkey",
-            "gpgcheck",
+            "pkg_gpgcheck",
             "repo_gpgcheck",
             "repofile",
             "revision",

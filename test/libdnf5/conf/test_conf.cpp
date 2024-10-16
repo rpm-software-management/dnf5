@@ -57,3 +57,14 @@ void ConfTest::test_config_repo() {
     std::vector<std::string> baseurl = {"http://example.com/value123", "http://example.com/456"};
     CPPUNIT_ASSERT_EQUAL(baseurl, config_repo.get_baseurl_option().get_value());
 }
+
+void ConfTest::test_config_pkg_gpgcheck() {
+    // Ensure both pkg_gpgcheck and gpgcheck point to the same underlying OptionBool object
+
+    // For ConfigMain
+    CPPUNIT_ASSERT_EQUAL(&config.get_pkg_gpgcheck_option(), &config.get_gpgcheck_option());
+
+    // For ConfigRepo
+    repo::ConfigRepo config_repo(config, "test-repo");
+    CPPUNIT_ASSERT_EQUAL(&config_repo.get_pkg_gpgcheck_option(), &config_repo.get_gpgcheck_option());
+}
