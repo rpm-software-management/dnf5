@@ -256,4 +256,48 @@ TransactionItemReason TransactionDbUtils::transaction_item_reason_at(
     return TransactionItemReason::NONE;
 }
 
+static constexpr const char * ITEM_COUNT_SQL = R"**(
+    SELECT
+        "trans"."id",
+        COUNT("trans_item"."trans_id") AS "item_count"
+    FROM "trans"
+    LEFT JOIN "trans_item" ON "trans"."id" = "trans_item"."trans_id"
+)**";
+
+std::unordered_map<int64_t, int64_t> TransactionDbUtils::transactions_item_counts(
+    const BaseWeakPtr & base, const std::vector<Transaction> & transactions) {
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = ITEM_COUNT_SQL;
+
+    if (!transactions.empty()) {
+        sql += " WHERE \"trans\".\"id\" IN (";
+        for (size_t i = 0; i < transactions.size(); ++i) {
+            if (i == 0) {
+                sql += "?";
+            } else {
+                sql += ", ?";
+            }
+        }
+        sql += ")";
+    }
+
+    // GROUP BY has to be after WHERE clause
+    sql += "GROUP BY \"trans\".\"id\"";
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
+
+    for (size_t i = 0; i < transactions.size(); ++i) {
+        query.bind(static_cast<int>(i + 1), transactions[i].get_id());
+    }
+
+    std::unordered_map<int64_t, int64_t> id_to_count;
+
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
+        id_to_count.emplace(query.get<int>("id"), query.get<int64_t>("item_count"));
+    }
+
+    return id_to_count;
+}
+
 }  // namespace libdnf5::transaction

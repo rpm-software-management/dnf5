@@ -27,7 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-LIBDNF_CLI_API void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list);
+LIBDNF_CLI_API void print_transaction_list(
+    std::vector<libdnf5::transaction::Transaction> & ts_list,
+    const std::unordered_map<int64_t, int64_t> id_to_item_count = {});
 
 }  // namespace libdnf5::cli::output
 
