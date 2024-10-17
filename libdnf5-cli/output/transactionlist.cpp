@@ -24,12 +24,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/tty.hpp"
 
+#include "libdnf5/transaction/transaction_history.hpp"
+
 #include <libsmartcols/libsmartcols.h>
 
 
 namespace libdnf5::cli::output {
 
 void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list) {
+    std::unordered_map<int64_t, int64_t> id_to_item_count;
+    if (!ts_list.empty()) {
+        libdnf5::transaction::TransactionHistory history(ts_list[0].get_base());
+        id_to_item_count = history.get_transaction_item_counts(ts_list);
+    }
+
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
     scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
@@ -49,11 +57,7 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
         scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
-        scols_line_set_data(
-            ln,
-            4,
-            std::to_string(ts.get_packages().size() + ts.get_comps_groups().size() + ts.get_comps_environments().size())
-                .c_str());
+        scols_line_set_data(ln, 4, std::to_string(id_to_item_count.at(ts.get_id())).c_str());
     }
 
     scols_print_table(table.get());

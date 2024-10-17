@@ -64,6 +64,10 @@ public:
     /// Get reason for name-arch at a point in history specified by transaction id.
     static TransactionItemReason transaction_item_reason_at(
         const BaseWeakPtr & base, const std::string & name, const std::string & arch, int64_t transaction_id_point);
+
+    /// Get transaction item count for history transactions specified by transaction ids.
+    static std::unordered_map<int64_t, int64_t> transactions_item_counts(
+        const BaseWeakPtr & base, const std::vector<Transaction> & transactions);
 };
 
 }  // namespace libdnf5::transaction

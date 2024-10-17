@@ -80,4 +80,9 @@ TransactionItemReason TransactionHistory::transaction_item_reason_at(
     return TransactionDbUtils::transaction_item_reason_at(p_impl->base, name, arch, transaction_id_point);
 }
 
+std::unordered_map<int64_t, int64_t> TransactionHistory::get_transaction_item_counts(
+    const std::vector<Transaction> & transactions) {
+    return TransactionDbUtils::transactions_item_counts(p_impl->base, transactions);
+}
+
 }  // namespace libdnf5::transaction
