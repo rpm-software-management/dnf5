@@ -38,7 +38,6 @@ class TestPackageQuery < BaseTestCase
         query.filter_name(["pkg"])
         assert_equal(1, query.size())
 
-        # TODO(dmach): implement each() so the query can be easily iterated or converted to an array
         actual = []
         it = query.begin()
         while it != query.end()
@@ -55,7 +54,6 @@ class TestPackageQuery < BaseTestCase
         query.filter_name(["pk*"], Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 
-        # TODO(dmach): implement each() so the query can be easily iterated or converted to an array
         actual = []
         it = query.begin()
         while it != query.end()
@@ -64,5 +62,33 @@ class TestPackageQuery < BaseTestCase
         end
 
         assert_equal(["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"], actual)
+    end
+
+    def test_implements_enumerable()
+        query = Rpm::PackageQuery.new(@base)
+        query.filter_name(["pkg"])
+        assert_equal(1, query.size())
+
+        # Using each() without a block should return Enumerator.
+        assert_instance_of(Enumerator, query.each)
+
+        # Using each() with a block should return the collection.
+        assert_instance_of(Rpm::PackageSet, query.each(&:get_name))
+
+        actual_nevra = query.map { |pkg| pkg.get_nevra }
+
+        assert_equal(["pkg-1.2-3.x86_64"], actual_nevra)
+
+        # ---
+
+        query = Rpm::PackageQuery.new(@base)
+        query.filter_name(["pk*"], Common::QueryCmp_GLOB)
+        assert_equal(2, query.size())
+
+        # Test other method than each that comes with Enumerable
+        actual = query.select { |pkg| pkg.get_name == "pkg-libs" }
+
+        assert_equal(1, actual.size)
+        assert_equal('pkg-libs-1:1.3-4.x86_64', actual.first.get_nevra)
     end
 end
