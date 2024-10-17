@@ -29,7 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::cli::output {
 
-void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_list) {
+void print_transaction_list(
+    std::vector<libdnf5::transaction::Transaction> & ts_list,
+    const std::unordered_map<int64_t, int64_t> id_to_item_count) {
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
     scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
@@ -49,11 +51,15 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
         scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
-        scols_line_set_data(
-            ln,
-            4,
-            std::to_string(ts.get_packages().size() + ts.get_comps_groups().size() + ts.get_comps_environments().size())
-                .c_str());
+        std::string trans_item_count;
+        if (id_to_item_count.at(ts.get_id())) {
+            trans_item_count = std::to_string(id_to_item_count.at(ts.get_id()));
+        } else {
+            // Fallback to manual calculation (very slow if the packages, groups and environments have to be fetched from DB)
+            trans_item_count = std::to_string(
+                ts.get_packages().size() + ts.get_comps_groups().size() + ts.get_comps_environments().size());
+        }
+        scols_line_set_data(ln, 4, trans_item_count.c_str());
     }
 
     scols_print_table(table.get());
