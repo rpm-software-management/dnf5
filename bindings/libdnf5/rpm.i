@@ -10,6 +10,7 @@
 // Mixin modules for Ruby. This has to be declared before inclusion of the
 // related header file.
 %mixin libdnf5::rpm::PackageSet "Enumerable";
+%mixin libdnf5::rpm::ReldepList "Enumerable";
 #endif
 
 %include <exception.i>
@@ -106,6 +107,11 @@ add_iterator(PackageSet)
 add_iterator(ReldepList)
 
 add_ruby_each(libdnf5::rpm::PackageSet)
+// Reldep needs special treatment so that the add_ruby_each can use it.
+#if defined(SWIGRUBY)
+fix_swigtype_trait(libdnf5::rpm::Reldep)
+#endif
+add_ruby_each(libdnf5::rpm::ReldepList)
 
 %feature("director") TransactionCallbacks;
 %include "libdnf5/rpm/transaction_callbacks.hpp"
