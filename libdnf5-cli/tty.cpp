@@ -55,6 +55,17 @@ bool is_interactive() {
     return isatty(fileno(stdout)) == 1;
 }
 
+bool colorized = true;  // Review notes: Maybe encapsulate this in a class
+
+bool is_colorized() {
+    return colorized;
+}
+
+
+void set_colorized(bool value) {
+    colorized = value;
+}
+
 
 #define TTY_COMMAND(name, escape_code)           \
     std::ostream & name(std::ostream & stream) { \
