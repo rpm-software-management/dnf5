@@ -6,6 +6,10 @@
 %module "libdnf5/advisory"
 #endif
 
+#if defined(SWIGRUBY)
+%mixin libdnf5::advisory::AdvisorySet "Enumerable";
+#endif
+
 %include <exception.i>
 %include <std_vector.i>
 
@@ -57,3 +61,8 @@
 %template(VectorAdvisoryReference) std::vector<libdnf5::advisory::AdvisoryReference>;
 
 add_iterator(AdvisorySet)
+
+#if defined(SWIGRUBY)
+fix_swigtype_trait(libdnf5::advisory::Advisory)
+#endif
+add_ruby_each(libdnf5::advisory::AdvisorySet)
