@@ -86,6 +86,14 @@ public:
     TransactionItemReason transaction_item_reason_at(
         const std::string & name, const std::string & arch, int64_t transaction_id_point);
 
+    /// Get counts of transaction items for specified transactions.
+    /// It gets the counts in a single db query.
+    ///
+    /// @param transactions Get counts for these transactions.
+    ///
+    /// @return Mapped transaction id -> count.
+    std::unordered_map<int64_t, int64_t> get_transaction_item_counts(const std::vector<Transaction> & transactions);
+
 private:
     /// Create a new Transaction object.
     LIBDNF_LOCAL libdnf5::transaction::Transaction new_transaction();

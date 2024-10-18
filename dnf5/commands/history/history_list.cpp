@@ -54,7 +54,9 @@ void HistoryListCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
-    libdnf5::cli::output::print_transaction_list(transactions);
+    auto item_counts = history.get_transaction_item_counts(transactions);
+
+    libdnf5::cli::output::print_transaction_list(transactions, item_counts);
 }
 
 }  // namespace dnf5
