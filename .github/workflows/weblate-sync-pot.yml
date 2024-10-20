@@ -39,13 +39,13 @@ jobs:
         run: |
           git config --global user.name "GitHub Workflow"
           git config --global user.email "github-actions@github.com"
-          pushd src
+          pushd src/build
           for f in $(find * -type f -name "*.pot"); do
             potfile=$(basename $f)
             component=${potfile%.*}
-            mkdir -p ../l10n/${component}
-            cp ${f} ../l10n/${component}/${potfile}
-            echo ${f%/*} > ../l10n/${component}/PATH
+            mkdir -p ../../l10n/${component}
+            cp ${f} ../../l10n/${component}/${potfile}
+            echo ${f%/*} > ../../l10n/${component}/PATH
           done
           popd
           git -C l10n add "*"
