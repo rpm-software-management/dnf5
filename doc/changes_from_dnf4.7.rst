@@ -52,7 +52,7 @@ Changes to individual options
    ``-d, --debuglevel``
      * Dropped. Now only the ``debuglevel`` configuration option is available.
 
-``--disableexcludes``
+``--disableexcludes`` and ``--disableexcludepkgs``
   * Dropped. Now only the ``disable_excludes`` configuration option is available.
 
 ``--disable, --enable``
