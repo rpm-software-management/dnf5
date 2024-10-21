@@ -80,19 +80,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 
     Default: ``True``.
 
-.. _errorlevel_options-label:
-
-``errorlevel``
-    :ref:`integer <integer-label>`
-
-    Error messages output level, in the range ``0`` to ``10``. The higher the number the
-    more error output is put to stderr.
-
-    Default: ``3``.
-
-    .. WARNING::
-       This is deprecated in DNF and overwritten by -verbose commandline option.
-
 .. _exit_on_lock_options-label:
 
 ``exit_on_lock``

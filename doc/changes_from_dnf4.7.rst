@@ -66,7 +66,7 @@ Changes to individual options
   * When downloading packages using the ``system-upgrade`` or ``offline`` command, the target path construction now utilizes the configured ``installroot`` and ``cachedir`` options.
 
 ``-e, --errorlevel``
-  * Dropped. Now only the ``errorlevel`` configuration option is available.
+  * Both the ``--errorlevel`` option and ``errorlevel`` configuration option are dropped.
 
 ``--help-cmd``
   * Dropped. Now only the ``-h`` or ``--help`` options are available.
@@ -422,3 +422,6 @@ Dropped configuration options
 ``arch`` and ``basearch``
   * It is no longer possible to change the detected architecute in configuration files.
   * See the :manpage:`dnf5-forcearch(7)`, :ref:`Forcearch parameter <forcearch_misc_ref-label>` for overriding architecture.
+
+``errorlevel``
+  * The option was deprecated in dnf < 5 and is dropped now.

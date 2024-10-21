@@ -44,8 +44,6 @@ public:
 
     OptionNumber<std::int32_t> & get_debuglevel_option();
     const OptionNumber<std::int32_t> & get_debuglevel_option() const;
-    OptionNumber<std::int32_t> & get_errorlevel_option();
-    const OptionNumber<std::int32_t> & get_errorlevel_option() const;
     OptionPath & get_installroot_option();
     const OptionPath & get_installroot_option() const;
     OptionPath & get_config_file_path_option();
