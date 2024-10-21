@@ -99,6 +99,8 @@ public:
     /// Setter for download cancel request flag.
     void set_cancel_download(CancelDownload value) { cancel_download.store(value); }
 
+    std::mutex & get_transaction_mutex() { return transaction_mutex; }
+
     void reset_goal();
 
 private:
@@ -116,6 +118,7 @@ private:
     // repository key import confirmation
     enum class KeyConfirmationStatus { PENDING, CONFIRMED, REJECTED };
     std::mutex key_import_mutex;
+    std::mutex transaction_mutex;
     std::condition_variable key_import_condition;
     std::map<std::string, KeyConfirmationStatus> key_import_status{};  // map key_id: confirmation status
     std::atomic<CancelDownload> cancel_download{CancelDownload::NOT_RUNNING};
