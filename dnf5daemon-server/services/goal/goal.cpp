@@ -283,6 +283,14 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
+
+    auto & transaction_mutex = session.get_transaction_mutex();
+    if (!transaction_mutex.try_lock()) {
+        //TODO(mblaha): use specialized exception class
+        throw std::runtime_error("Cannot acquire transaction lock (another transaction is running).");
+    }
+    std::lock_guard<std::mutex> transaction_lock(transaction_mutex, std::adopt_lock);
+
     session.set_cancel_download(Session::CancelDownload::NOT_REQUESTED);
 
     // read options from dbus call
