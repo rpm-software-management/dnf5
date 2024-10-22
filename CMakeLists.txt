@@ -7,6 +7,7 @@ project(dnf5 LANGUAGES CXX C VERSION ${VERSION_PRIME}.${VERSION_MAJOR}.${VERSION
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set (SYSTEMD_DIR "/usr/lib/systemd/system")
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
@@ -134,6 +135,7 @@ include_directories("${PROJECT_SOURCE_DIR}/common")
 
 # libdnf5
 add_subdirectory("common")
+add_subdirectory("etc")
 add_subdirectory("include")
 add_subdirectory("libdnf5")
 add_subdirectory("libdnf5-cli")
