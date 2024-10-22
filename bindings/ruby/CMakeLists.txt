@@ -15,7 +15,7 @@ function(add_ruby_module LIBRARY_NAME MODULE_NAME)
     set_source_files_properties(../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTIES CPLUSPLUS ON)
     set_property(SOURCE ../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTY SWIG_MODULE_NAME ${MODULE_NAME})
     set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS}
-        -module ${MODULE_NAME} -ruby
+        -module ${MODULE_NAME}
     )
     swig_add_library(${TARGET_NAME} LANGUAGE ruby SOURCES ../../${LIBRARY_NAME}/${MODULE_NAME}.i)
     set_property(TARGET ${TARGET_NAME} PROPERTY OUTPUT_NAME ${MODULE_NAME})
