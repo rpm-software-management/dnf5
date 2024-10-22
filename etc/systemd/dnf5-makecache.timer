@@ -1,0 +1,15 @@
+[Unit]
+Description=dnf5 makecache
+ConditionKernelCommandLine=!rd.live.image
+# See comment in dnf5-makecache.service
+ConditionPathExists=!/run/ostree-booted
+Wants=network-online.target
+
+[Timer]
+OnBootSec=10min
+OnUnitInactiveSec=1h
+RandomizedDelaySec=60m
+Unit=dnf5-makecache.service
+
+[Install]
+WantedBy=timers.target
