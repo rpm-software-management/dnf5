@@ -165,6 +165,9 @@ public:
     /// into a `libdnf5::Goal` and replayed.
     std::string serialize();
 
+    /// @return A `Base` object to which the transaction belongs.
+    BaseWeakPtr get_base() const;
+
 private:
     friend Transformer;
     friend libdnf5::base::Transaction;

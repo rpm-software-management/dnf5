@@ -362,6 +362,10 @@ TransactionState Transaction::get_state() const noexcept {
     return p_impl->state;
 }
 
+BaseWeakPtr Transaction::get_base() const {
+    return p_impl->base;
+}
+
 
 // Setters
 void Transaction::set_id(int64_t value) {
