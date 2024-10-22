@@ -44,6 +44,12 @@ public:
 
     OptionNumber<std::int32_t> & get_debuglevel_option();
     const OptionNumber<std::int32_t> & get_debuglevel_option() const;
+    /// @deprecated errorlevel option does nothing and is scheduled for removal
+    [[deprecated("errorlevel option does nothing and is scheduled for removal")]] OptionNumber<std::int32_t> &
+    get_errorlevel_option();
+    /// @deprecated errorlevel option does nothing and is scheduled for removal
+    [[deprecated("errorlevel option does nothing and is scheduled for removal")]] const OptionNumber<std::int32_t> &
+    get_errorlevel_option() const;
     OptionPath & get_installroot_option();
     const OptionPath & get_installroot_option() const;
     OptionPath & get_config_file_path_option();
