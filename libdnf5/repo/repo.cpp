@@ -216,12 +216,7 @@ void Repo::download_metadata(const std::string & destdir) {
     p_impl->downloader->download_metadata(destdir);
 }
 
-void Repo::load() {
-    // Each repository can only be loaded once. This one has already loaded, so just return instantly
-    if (is_loaded()) {
-        return;
-    }
-
+void Repo::_load() {
     make_solv_repo();
 
     if (p_impl->type == Type::AVAILABLE) {
@@ -232,6 +227,21 @@ void Repo::load() {
 
     p_impl->solv_repo->set_needs_internalizing();
     p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+}
+
+void Repo::load() {
+    // Each repository can only be loaded once. This one has already loaded, so just return instantly
+    if (is_loaded()) {
+        return;
+    }
+    _load();
+}
+
+void Repo::reload() {
+    if (p_impl->solv_repo) {
+        p_impl->solv_repo->empty();
+    }
+    _load();
 }
 
 void Repo::add_libsolv_testcase(const std::string & path) {

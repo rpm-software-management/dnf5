@@ -809,4 +809,9 @@ void SolvRepo::create_environment_solvable(
     repodata_internalize(data);
 }
 
+void SolvRepo::empty() {
+    // TODO(mblaha): is resuseid=true safe enough?
+    repo_empty(repo, true);
+}
+
 }  // namespace libdnf5::repo
