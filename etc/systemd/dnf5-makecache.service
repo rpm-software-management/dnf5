@@ -4,6 +4,7 @@ Description=dnf5 makecache
 # while someone might theoretically want the cache updated, in practice
 # anyone who wants that could override this via a file in /etc.
 ConditionPathExists=!/run/ostree-booted
+ConditionACPower=true
 
 After=network-online.target
 
