@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <memory>
+#include <unordered_set>
 
 
 namespace libdnf5::transaction {
@@ -92,11 +93,16 @@ static std::unique_ptr<libdnf5::utils::SQLite3::Statement> comps_group_package_i
 void CompsGroupPackageDbUtils::comps_group_packages_insert(libdnf5::utils::SQLite3 & conn, CompsGroup & group) {
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
     auto query = comps_group_package_insert_new_query(conn);
+    std::unordered_set<std::string> inserted_packages;
     for (auto & pkg : group.get_packages()) {
         // insert package name into 'pkg_name' table if not exists
-        pkg_name_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, pkg.get_name());
-        query->bindv(
-            group.get_item_id(), pkg.get_name(), pkg.get_installed(), static_cast<int>(pkg.get_package_type()));
+        auto [pkg_name, inserted] = inserted_packages.emplace(pkg.get_name());
+        if (!inserted) {
+            // the package is duplicated in comps definition, skip it
+            continue;
+        }
+        pkg_name_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, *pkg_name);
+        query->bindv(group.get_item_id(), *pkg_name, pkg.get_installed(), static_cast<int>(pkg.get_package_type()));
         query->step();
         pkg.set_id(query->last_insert_rowid());
         query->reset();
