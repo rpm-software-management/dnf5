@@ -29,12 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 ThreadsManager::ThreadsManager() {
     // collecting finished worker threads
-    running_threads_collector = std::thread([this]() {
-        while (!finish_collector) {
-            join_threads(true);
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-    });
+    running_threads_collector = std::thread(&ThreadsManager::join_threads, this);
 }
 
 ThreadsManager::~ThreadsManager() {
@@ -49,30 +44,40 @@ void ThreadsManager::register_thread(std::thread && thread) {
 void ThreadsManager::mark_thread_finished(std::thread::id thread_id) {
     std::lock_guard<std::mutex> lock(running_threads_mutex);
     finished_threads.emplace_back(std::move(thread_id));
+    signal_finished_thread.notify_one();
 }
 
-void ThreadsManager::join_threads(const bool only_finished) {
-    std::vector<std::thread> to_be_joined{};
-
-    {
-        std::lock_guard<std::mutex> lock(running_threads_mutex);
-        for (auto thread = running_threads.begin(); thread < running_threads.end();) {
-            auto in_finished = std::find(finished_threads.begin(), finished_threads.end(), thread->get_id());
-            if (thread->joinable() && (!only_finished || (in_finished != finished_threads.end()))) {
-                to_be_joined.push_back(std::move(*thread));
-                running_threads.erase(thread);
-                if (in_finished != finished_threads.end()) {
-                    finished_threads.erase(in_finished);
+void ThreadsManager::join_threads() {
+    while (true) {
+        std::unique_lock<std::mutex> lock(running_threads_mutex);
+        while (!finish_collector && finished_threads.empty()) {
+            signal_finished_thread.wait(lock);
+        }
+        std::vector<std::thread> to_be_joined{};
+        {
+            for (auto thread = running_threads.begin(); thread < running_threads.end();) {
+                auto in_finished = std::find(finished_threads.begin(), finished_threads.end(), thread->get_id());
+                if (thread->joinable() && (finish_collector || (in_finished != finished_threads.end()))) {
+                    to_be_joined.push_back(std::move(*thread));
+                    running_threads.erase(thread);
+                    if (in_finished != finished_threads.end()) {
+                        finished_threads.erase(in_finished);
+                    }
+                } else {
+                    ++thread;
                 }
-            } else {
-                ++thread;
             }
         }
-    }
+        lock.unlock();
 
-    for (auto thread = to_be_joined.begin(); thread < to_be_joined.end(); ++thread) {
-        // join the thread and remove it from registry
-        thread->join();
+        for (auto thread = to_be_joined.begin(); thread < to_be_joined.end(); ++thread) {
+            // join the thread and remove it from registry
+            thread->join();
+        }
+
+        if (finish_collector) {
+            break;
+        }
     }
 }
 
@@ -82,7 +87,7 @@ void ThreadsManager::finish() {
     }
     // join all threads
     finish_collector = true;
-    join_threads(false);
+    signal_finished_thread.notify_all();
     running_threads_collector.join();
 }
 

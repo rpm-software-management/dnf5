@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <optional>
@@ -42,7 +43,7 @@ public:
     void register_thread(std::thread && thread);
     void mark_thread_finished(std::thread::id thread_id);
     void current_thread_finished() { mark_thread_finished(std::this_thread::get_id()); };
-    void join_threads(const bool only_finished);
+    void join_threads();
     void finish();
 
     template <class S>
@@ -198,6 +199,7 @@ public:
     }
 
 private:
+    std::condition_variable signal_finished_thread;
     std::mutex running_threads_mutex;
     // flag whether to break the finished threads collector infinite loop
     std::atomic<bool> finish_collector{false};
