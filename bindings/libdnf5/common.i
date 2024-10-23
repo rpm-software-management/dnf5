@@ -134,6 +134,42 @@ del ClassName##__iter__
 #endif
 %enddef
 
+%define fix_swigtype_trait(ClassName)
+%traits_swigtype(ClassName)
+%fragment(SWIG_Traits_frag(ClassName));
+%enddef
+
+%define add_ruby_each(ClassName)
+#if defined(SWIGRUBY)
+/* Using swig::from method on a class instance (= $self in %extend blocks below) fails.
+ * We need to define these traits so that it compiles. This seems to be an issue related
+ * to namespacing:
+ * https://github.com/swig/swig/issues/973
+ * and to using a pointer in some places:
+ * https://github.com/swig/swig/issues/2938
+ */
+fix_swigtype_trait(ClassName)
+
+%extend ClassName {
+    VALUE each() {
+        // If no block is provided, returns Enumerator.
+        RETURN_ENUMERATOR(swig::from($self), 0, 0);
+
+        VALUE r;
+        auto i = self->begin();
+        auto e = self->end();
+
+        for (; i != e; ++i) {
+            r = swig::from(*i);
+            rb_yield(r);
+        }
+
+        return swig::from($self);
+    }
+}
+#endif
+%enddef
+
 %define add_str(ClassName)
 #if defined(SWIGPYTHON)
 %extend ClassName {
