@@ -53,6 +53,7 @@ class UpgradeTest(support.InstallrootCase):
                     dbus.Dictionary({               # transaction item attrs
                     }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({               # package
+                        dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
                         dbus.String('evr'): dbus.String('2-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
@@ -72,6 +73,7 @@ class UpgradeTest(support.InstallrootCase):
                     dbus.Dictionary({               # transaction item attrs
                     }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({               # package
+                        dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
@@ -99,7 +101,7 @@ class UpgradeTest(support.InstallrootCase):
         resolved, result = self.iface_goal.resolve(
             dbus.Dictionary({}, signature='sv'))
 
-        self.assertEqual(result, 1)
+        self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([

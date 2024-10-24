@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <unistd.h>
 
 #include <iostream>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <unordered_set>
@@ -57,6 +58,16 @@ void Base::dbus_register() {
         {"success", "error_msg"},
         [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::clean, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_BASE,
+        "reset",
+        "",
+        {},
+        "bs",
+        {"success", "error_msg"},
+        [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Base::reset, call, session.session_locale);
         });
 
     dbus_object->registerSignal(
@@ -142,6 +153,24 @@ sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
         }
     }
 
+    auto reply = call.createReply();
+    reply << success;
+    reply << error_msg;
+    return reply;
+}
+
+sdbus::MethodReply Base::reset(sdbus::MethodCall & call) {
+    bool success{true};
+    std::string error_msg{};
+
+    auto & transaction_mutex = session.get_transaction_mutex();
+    if (!transaction_mutex.try_lock()) {
+        success = false;
+        error_msg = "Cannot reset, an rpm transaction is running.";
+    } else {
+        std::lock_guard<std::mutex> transaction_lock(transaction_mutex, std::adopt_lock);
+        session.reset_base();
+    }
     auto reply = call.createReply();
     reply << success;
     reply << error_msg;
