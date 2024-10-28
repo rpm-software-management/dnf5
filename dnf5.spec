@@ -242,6 +242,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(warnings)
+BuildRequires:  perl(FindBin)
 %endif
 %endif
 

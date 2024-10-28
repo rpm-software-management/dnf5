@@ -4,7 +4,7 @@ endif()
 
 
 find_package(Perl REQUIRED)
-foreach(MODULE "strict" "Test::More" "Test::Exception" "warnings")
+foreach(MODULE "strict" "Test::More" "Test::Exception" "warnings" "FindBin")
     message(STATUS "Checking for ${MODULE} Perl module")
     execute_process(
         COMMAND "${PERL_EXECUTABLE}" -e "require ${MODULE}"
