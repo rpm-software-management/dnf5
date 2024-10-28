@@ -111,6 +111,7 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 
 %ignore libdnf5::ReadOnlyVariableError;
 %include "libdnf5/conf/vars.hpp"
+%template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 
 %include "libdnf5/conf/config.hpp"
 %include "libdnf5/conf/config_main.hpp"
