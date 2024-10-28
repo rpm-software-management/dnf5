@@ -15,21 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
+require 'test/unit'
+include Test::Unit::Assertions
 
-import libdnf5
+require 'libdnf5/conf'
 
-import base_test_case
+require 'base_test_case'
 
 
-class TestVars(base_test_case.BaseTestCase):
-    def test_getting_undefined_variable(self):
-        vars = self.base.get_vars()
-        self.assertRaises(IndexError, vars.get_value, "undefined")
-
-    def test_detect_release(self):
-        installroot = self.base.get_config().installroot
-        # Cannot detect release in nonexistent directory, return None
-        release = libdnf5.conf.Vars.detect_release(
-            self.base.get_weak_ptr(), os.path.join(installroot, "nonexist"))
-        self.assertEqual(release, None)
+class TestVars < BaseTestCase
+    def test_detect_release()
+        installroot = @base.get_config().get_installroot_option().get_value()
+        # Cannot detect release in nonexistent directory, return nil
+        release = Conf::Vars::detect_release(@base.get_weak_ptr(), File.join(installroot, "nonexist"))
+        assert_equal(nil, release)
+    end
+end
