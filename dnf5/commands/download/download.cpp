@@ -304,7 +304,6 @@ void DownloadCommand::run() {
 
     std::cout << "Downloading Packages:" << std::endl;
     downloader.download();
-    std::cout << std::endl;
 }
 
 
