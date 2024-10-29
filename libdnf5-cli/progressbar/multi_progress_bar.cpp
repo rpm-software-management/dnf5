@@ -124,11 +124,8 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
         bar->set_number(numbers.back());
         numbers.pop_back();
-        if (mbar.line_printed) {
-            stream << std::endl;
-        }
         stream << *bar;
-        mbar.line_printed = true;
+        stream << std::endl;
         mbar.bars_done.push_back(bar);
         // TODO(dmach): use iterator
         mbar.bars_todo.erase(mbar.bars_todo.begin() + static_cast<int>(i));
@@ -200,7 +197,8 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
 
         stream << mbar.total;
-        mbar.num_of_lines_to_clear += 2;
+        stream << std::endl;
+        mbar.num_of_lines_to_clear += 3;
     }
 
     return stream;

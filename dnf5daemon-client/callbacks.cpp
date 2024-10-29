@@ -89,7 +89,6 @@ void DownloadCB::print() {
 void DownloadCB::reset_progress_bar() {
     multi_progress_bar.reset();
     if (printed) {
-        std::cerr << std::endl;
         printed = false;
     }
 }

@@ -456,7 +456,6 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     if (base.get_config().get_downloadonly_option().get_value()) {
         return;
     }
-    print_info("");
 
     if (should_store_offline) {
         store_offline(transaction);
@@ -493,7 +492,6 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
     }
 
     auto result = transaction.run();
-    print_info("");
     if (result != libdnf5::base::Transaction::TransactionRunResult::SUCCESS) {
         print_error(libdnf5::utils::sformat(
             _("Transaction failed: {}"), libdnf5::base::Transaction::transaction_result_to_string(result)));
