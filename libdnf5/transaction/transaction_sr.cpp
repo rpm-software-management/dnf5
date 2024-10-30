@@ -88,17 +88,17 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
     // PARSE ENVIRONMENTS
     struct json_object * json_environments = nullptr;
     if (json_object_object_get_ex(data, "environments", &json_environments) != 0) {
-        std::string action;
-        std::string environment_id;
-        std::string environment_path;
-        std::string repo_id;
-
         if (json_object_is_type(json_environments, json_type_array) == 0) {
             throw TransactionReplayError(M_("Unexpected type of \"environments\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_environments); ++i) {
+            std::string action;
+            std::string environment_id;
+            std::string environment_path;
+            std::string repo_id;
             struct json_object * environment = json_object_array_get_idx(json_environments, i);
+
             if (json_object_object_get_ex(environment, "id", &value) != 0) {
                 environment_id = json_object_get_string(value);
             } else {
@@ -125,20 +125,20 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
     // PARSE GROUPS
     struct json_object * json_groups = nullptr;
     if (json_object_object_get_ex(data, "groups", &json_groups) != 0) {
-        std::string action;
-        std::string group_id;
-        std::string reason;
-        std::string group_path;
-        std::string repo_id;
-        std::string joined_package_types;
-        comps::PackageType package_types;
-
         if (json_object_is_type(json_groups, json_type_array) == 0) {
             throw TransactionReplayError(M_("Unexpected type of \"groups\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_groups); ++i) {
+            std::string action;
+            std::string group_id;
+            std::string reason;
+            std::string group_path;
+            std::string repo_id;
+            std::string joined_package_types;
+            comps::PackageType package_types;
             struct json_object * group = json_object_array_get_idx(json_groups, i);
+
             if (json_object_object_get_ex(group, "id", &value) != 0) {
                 group_id = json_object_get_string(value);
             } else {
@@ -182,19 +182,19 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
     // PARSE PACKAGES
     struct json_object * json_packages = nullptr;
     if (json_object_object_get_ex(data, "rpms", &json_packages) != 0) {
-        std::string action;
-        std::string nevra;
-        std::string reason;
-        std::string repo_id;
-        std::string group_id;
-        std::string package_path;
-
         if (json_object_is_type(json_packages, json_type_array) == 0) {
             throw TransactionReplayError(M_("Unexpected type of \"rpms\", array expected"));
         }
 
         for (std::size_t i = 0; i < json_object_array_length(json_packages); ++i) {
+            std::string action;
+            std::string nevra;
+            std::string reason;
+            std::string repo_id;
+            std::string group_id;
+            std::string package_path;
             struct json_object * package = json_object_array_get_idx(json_packages, i);
+
             if (json_object_object_get_ex(package, "nevra", &value) != 0) {
                 nevra = json_object_get_string(value);
                 // Verify we have a full nevra
