@@ -61,12 +61,21 @@ public:
           destination(destination),
           user_data(user_data) {}
 
+    ~FileTarget() {
+        if (need_call_end_callback) {
+            if (auto * download_callbacks = base->get_download_callbacks()) {
+                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+            }
+        }
+    }
+
     BaseWeakPtr base;
     RepoWeakPtr repo;
     std::string url;
     std::string destination;
     void * user_data;
     void * user_cb_data{nullptr};
+    bool need_call_end_callback{false};
 };
 
 
@@ -76,6 +85,8 @@ static int end_callback(void * data, LrTransferStatus status, const char * msg) 
     auto * file_target = static_cast<FileTarget *>(data);
     auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
     if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
+        libdnf_assert(file_target->need_call_end_callback == true, "unexpected end_callback call");
+        file_target->need_call_end_callback = false;
         return download_callbacks->end(file_target->user_cb_data, cb_status, msg);
     }
     return 0;
@@ -162,6 +173,7 @@ void FileDownloader::download() try {
         if (download_callbacks) {
             file_target.user_cb_data =
                 download_callbacks->add_new_download(file_target.user_data, file_target.url.c_str(), -1);
+            file_target.need_call_end_callback = true;
         }
 
         auto lr_target = lr_downloadtarget_new(
