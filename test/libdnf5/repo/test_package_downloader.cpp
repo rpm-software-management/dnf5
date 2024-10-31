@@ -36,6 +36,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
 class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
+    void * add_new_download(
+        [[maybe_unused]] void * user_data,
+        [[maybe_unused]] const char * description,
+        [[maybe_unused]] double total_to_download) override {
+        ++add_new_download_cnt;
+        return nullptr;
+    }
+
     int end([[maybe_unused]] void * user_cb_data, TransferStatus status, const char * msg) override {
         ++end_cnt;
         end_status = status;
@@ -60,6 +68,7 @@ public:
         return 0;
     }
 
+    int add_new_download_cnt = 0;
     int end_cnt = 0;
     TransferStatus end_status = TransferStatus::ERROR;
     std::string end_msg;
@@ -87,6 +96,7 @@ void PackageDownloaderTest::test_package_downloader() {
 
     downloader.download();
 
+    CPPUNIT_ASSERT_EQUAL(1, cbs->add_new_download_cnt);
     CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
     CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
     CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_msg);
@@ -114,10 +124,18 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
     CPPUNIT_ASSERT_EQUAL((size_t)0, memory.get_files().size());
 
     auto downloader = libdnf5::repo::PackageDownloader(base);
+
+    auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
+    auto cbs = cbs_unique_ptr.get();
+    base.set_download_callbacks(std::move(cbs_unique_ptr));
+
     for (const auto & package : query) {
         downloader.add(package);
     }
     downloader.download();
+
+    CPPUNIT_ASSERT_EQUAL(4, cbs->add_new_download_cnt);
+    CPPUNIT_ASSERT_EQUAL(4, cbs->end_cnt);
 
     auto paths_prefix = std::filesystem::path(repo->get_cachedir()) / std::filesystem::path("packages");
     const std::vector<std::string> expected = {
