@@ -55,10 +55,19 @@ public:
           destination(destination),
           user_data(user_data) {}
 
+    ~PackageTarget() {
+        if (need_call_end_callback) {
+            if (auto * download_callbacks = package.get_base()->get_download_callbacks()) {
+                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, "Interrupted");
+            }
+        }
+    }
+
     libdnf5::rpm::Package package;
     std::string destination;
     void * user_data;
     void * user_cb_data{nullptr};
+    bool need_call_end_callback{false};
 };
 
 static int end_callback(void * data, LrTransferStatus status, const char * msg) {
@@ -67,6 +76,8 @@ static int end_callback(void * data, LrTransferStatus status, const char * msg) 
     auto * package_target = static_cast<PackageTarget *>(data);
     auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
+        libdnf_assert(package_target->need_call_end_callback == true, "unexpected end_callback call");
+        package_target->need_call_end_callback = false;
         return download_callbacks->end(package_target->user_cb_data, cb_status, msg);
     }
     return 0;
@@ -149,6 +160,7 @@ void PackageDownloader::download() try {
                 pkg_target.user_data,
                 pkg_target.package.get_full_nevra().c_str(),
                 static_cast<double>(pkg_target.package.get_download_size()));
+            pkg_target.need_call_end_callback = true;
         }
 
         if (pkg_target.package.is_available_locally()) {
@@ -174,6 +186,7 @@ void PackageDownloader::download() try {
                         msg = fmt::format("Copied from {}", source.string());
                     }
                 }
+                pkg_target.need_call_end_callback = false;
                 download_callbacks->end(pkg_target.user_cb_data, status, msg.c_str());
             }
             continue;
