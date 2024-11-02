@@ -53,7 +53,40 @@
 %include "libdnf5/repo/config_repo.hpp"
 
 %feature("director") DownloadCallbacks;
+
+%typemap(directorin, noblock=1) void * user_cb_data {
+    $input = SWIG_From_int(static_cast<int>(reinterpret_cast<intptr_t>($1)));
+}
+
+%typemap(directorout, noblock=1) void * {
+    int swig_val;
+    int swig_res = SWIG_AsVal_int($1, &swig_val);
+    if (!SWIG_IsOK(swig_res)) {
+        Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""int""'");
+    }
+    $result = reinterpret_cast<void *>(swig_val);
+}
+
+%typemap(in, noblock=1) void * user_cb_data {
+    {
+        int swig_val;
+        int swig_res = SWIG_AsVal_int($input, &swig_val);
+        if (!SWIG_IsOK(swig_res)) {
+            Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in input value of type '""int""'");
+        }
+        $1 = reinterpret_cast<void *>(swig_val);
+    }
+}
+
+%typemap(out, noblock=1) void * {
+    $result = SWIG_From_int(static_cast<int>(reinterpret_cast<intptr_t>($1)));
+}
+
 %include "libdnf5/repo/download_callbacks.hpp"
+%typemap(directorin) void *;
+%typemap(directorout) void * user_cb_data;
+%typemap(in) void * user_cb_data;
+%typemap(out) void *;
 wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 
 %ignore FileDownloadError;
