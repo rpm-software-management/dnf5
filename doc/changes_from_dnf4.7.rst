@@ -128,9 +128,9 @@ Newly introduced options
 Commands
 --------
 
-Optional arguments
-^^^^^^^^^^^^^^^^^^
-Commands cannot have optional subcommands and optional arguments. Optional subcommands were ambiguous,
+Optional subcommands
+^^^^^^^^^^^^^^^^^^^^
+Commands cannot have optional subcommands. Optional subcommands were ambiguous,
 making it unclear whether the input was intended as a command argument or a subcommand. Subcommands are now mandatory if present.
 
 Examples:
