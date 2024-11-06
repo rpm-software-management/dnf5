@@ -17,60 +17,28 @@
 
 use strict;
 use warnings;
-no if $] >= 5.010, warnings => qw(experimental::smartmatch);
 
 use Test::More;
-use Cwd qw(cwd);
-use File::Temp qw(tempdir);
-use File::Spec::Functions 'catfile';
+
+use FindBin;
+use lib "$FindBin::Bin/..";
+use BaseTestCase;
 
 
-use libdnf5::base;
-
-my $base = new libdnf5::base::Base();
-
-# Sets path to cache directory.
-my $tmpdir = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
-$base->get_config()->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
-$base->get_config()->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/cache");
-
-# Prevent loading plugins from host
-$base->get_config()->get_plugins_option()->set("False");
-
-# Sets base internals according to configuration
-$base->setup();
-
-my $repo_sack = $base->get_repo_sack();
-
-# Creates new repositories in the repo_sack
+# Create an instance of BaseTestCase, it will be shared for all tests
+my $test = new BaseTestCase();
 my $repoid = "repomd-repo1";
-my $repo = $repo_sack->create_repo($repoid);
+my $repo = $test->add_repo_repomd($repoid);
 
-# Tunes repository configuration (baseurl is mandatory)
-my $project_source_dir = $ENV{"PROJECT_SOURCE_DIR"};
-my $repo_path = catfile($project_source_dir, "/test/data/repos-repomd/repomd-repo1/");
-my $baseurl = "file://" . $repo_path;
-my $repo_cfg = $repo->get_config();
-$repo_cfg->get_baseurl_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
-
-# fetch repo metadata and load it
-$repo_sack->load_repos($libdnf5::repo::Repo::Type::AVAILABLE);
-
-#test_size()
+# test_size()
 {
-    my $query = new libdnf5::rpm::PackageQuery($base);
+    my $query = new libdnf5::rpm::PackageQuery($test->{base});
     is($query->size(), 3);
 }
 
-my @nevras = ("CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64");
-my @nevras_contains = ("CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64",
-                       "CQRlib-devel-1.1.2-16.fc29.src", "CQRlib-devel-1.1.2-16.fc29.x86_64");
-my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
-                   "nodejs-1:5.12.1-1.fc29.src", "nodejs-1:5.12.1-1.fc29.x86_64");
-
 # Test QueryCmp::EQ
 {
-    my $query = new libdnf5::rpm::PackageQuery($base);
+    my $query = new libdnf5::rpm::PackageQuery($test->{base});
     $query->filter_name(["pkg"]);
     is($query->size(), 1);
 
@@ -88,7 +56,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::GLOB
 {
-    my $query = new libdnf5::rpm::PackageQuery($base);
+    my $query = new libdnf5::rpm::PackageQuery($test->{base});
     $query->filter_name(["pk*"], $libdnf5::common::QueryCmp_GLOB);
     is($query->size(), 2);
 
