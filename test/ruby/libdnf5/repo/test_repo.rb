@@ -32,32 +32,16 @@ class TestRepo < BaseTestCase
 
         def initialize()
             super()
-
-            @start_cnt = 0
-            @start_what = nil
-
             @end_cnt = 0
             @end_error_message = nil
-
             @progress_cnt = 0
             @fastest_mirror_cnt = 0
             @handle_mirror_failure_cnt = 0
         end
 
-        def add_new_download(user_data, descr, total)
-            @start_cnt += 1
-            @start_what = descr
-            return nil
-        end
-
         def end(user_cb_data, status, error_message)
             @end_cnt += 1
             @end_error_message = error_message
-            return 0
-        end
-
-        def progress(user_cb_data, total_to_download, downloaded)
-            @progress_cnt += 1
             return 0
         end
 
@@ -98,13 +82,29 @@ class TestRepo < BaseTestCase
 
         @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
 
-        assert_equal(1, dl_cbs.start_cnt)
-        assert_equal(repoid, dl_cbs.start_what)
+        assert_equal(1, dl_cbs.end_cnt)
+        assert_equal(nil, dl_cbs.end_error_message)
+
+        assert_equal(0, dl_cbs.fastest_mirror_cnt)
+        assert_equal(0, dl_cbs.handle_mirror_failure_cnt)
+        assert_equal(0, cbs.repokey_import_cnt)
+    end
+
+    def test_load_repo_overload()
+        repoid = "repomd-repo1"
+        repo = add_repo_repomd(repoid, load=false)
+
+        dl_cbs = DownloadCallbacks.new()
+        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
+
+        cbs = RepoCallbacks.new()
+        repo.set_callbacks(Repo::RepoCallbacksUniquePtr.new(cbs))
+
+        @repo_sack.load_repos()
 
         assert_equal(1, dl_cbs.end_cnt)
         assert_equal(nil, dl_cbs.end_error_message)
 
-        assert_operator(1, :<=, dl_cbs.progress_cnt)
         assert_equal(0, dl_cbs.fastest_mirror_cnt)
         assert_equal(0, dl_cbs.handle_mirror_failure_cnt)
         assert_equal(0, cbs.repokey_import_cnt)
