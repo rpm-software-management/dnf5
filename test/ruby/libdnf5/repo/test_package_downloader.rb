@@ -25,34 +25,47 @@ require 'base_test_case'
 
 class TestPackageDownloader < BaseTestCase
     class PackageDownloadCallbacks < Repo::DownloadCallbacks
-        attr_accessor :end_cnt, :end_status, :end_msg
-        attr_accessor :progress_cnt, :mirror_failure_cnt
+        attr_accessor :user_cb_data_container
+        attr_accessor :start_cnt, :progress_cnt, :mirror_failure_cnt, :end_cnt
+        attr_accessor :user_cb_data_array, :end_status, :end_msg
 
         def initialize()
             super()
-
-            @end_cnt = 0
-            @end_status = nil
-            @end_msg = nil
-
+            @user_cb_data_container = []  # Hold references to user_cb_data
+            @start_cnt = 0
             @progress_cnt = 0
             @mirror_failure_cnt = 0
+            @end_cnt = 0
+            @user_cb_data_array = []
+            @end_status = []
+            @end_msg = []
         end
 
-        def end(user_data, status, msg)
+        def add_new_download(user_data, description, total_to_download)
+            @start_cnt += 1
+            user_cb_data = "Package: " + description
+            @user_cb_data_container.push(user_cb_data)
+            return @user_cb_data_container.length() - 1  # Index of last added element
+        end
+
+        def end(user_cb_data, status, msg)
             @end_cnt += 1
-            @end_status = status
-            @end_msg = msg
+            assert(user_cb_data>=0 && user_cb_data <=1, "end: user_cb_data = #{user_cb_data.inspect}")
+            @user_cb_data_array.push(user_cb_data)
+            @end_status.push(status)
+            @end_msg.push(msg)
             return 0
         end
 
-        def progress(user_data, total_to_download, downloaded)
+        def progress(user_cb_data, total_to_download, downloaded)
             @progress_cnt += 1
+            assert(user_cb_data>=0 && user_cb_data <=1, "progress: user_cb_data = #{user_cb_data.inspect}")
             return 0
         end
 
-        def mirror_failure(user_data, msg, url)
+        def mirror_failure(user_cb_data, msg, url)
             @mirror_failure_cnt += 1
+            assert(user_cb_data>=0 && user_cb_data <=1, "mirror_failure: user_cb_data = #{user_cb_data.inspect}")
             return 0
         end
     end
@@ -62,16 +75,19 @@ class TestPackageDownloader < BaseTestCase
 
         query = Rpm::PackageQuery.new(@base)
         query.filter_name(["one"])
-        query.filter_version(["2"])
         query.filter_arch(["noarch"])
-        assert_equal(1, query.size())
+        assert_equal(2, query.size())
 
         downloader = Repo::PackageDownloader.new(@base)
 
         cbs = PackageDownloadCallbacks.new()
         @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(cbs))
 
-        downloader.add(query.begin().value)
+        it = query.begin()
+        while it != query.end()
+            downloader.add(it.value)
+            it.next()
+        end
 
         downloader.download()
 
@@ -79,11 +95,15 @@ class TestPackageDownloader < BaseTestCase
         downloader = nil
         GC.start
 
-        assert_equal(1, cbs.end_cnt)
-        assert_equal(PackageDownloadCallbacks::TransferStatus_SUCCESSFUL, cbs.end_status)
-        assert_equal(nil, cbs.end_msg)
+        assert_equal(["Package: one-0:1-1.noarch", "Package: one-0:2-1.noarch"], [cbs.user_cb_data_container[0], cbs.user_cb_data_container[1]].sort())
 
-        assert_operator(1, :<=, cbs.progress_cnt)
+        assert_equal(2, cbs.start_cnt)
+        assert_operator(2, :<=, cbs.progress_cnt)
         assert_equal(0, cbs.mirror_failure_cnt)
+        assert_equal(2, cbs.end_cnt)
+
+        assert_equal([0, 1], cbs.user_cb_data_array.sort())
+        assert_equal([PackageDownloadCallbacks::TransferStatus_SUCCESSFUL, PackageDownloadCallbacks::TransferStatus_SUCCESSFUL], cbs.end_status)
+        assert_equal([nil, nil], cbs.end_msg)
     end
 end

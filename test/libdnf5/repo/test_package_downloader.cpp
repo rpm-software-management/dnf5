@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/repo/package_downloader.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 
+#include <algorithm>
 #include <filesystem>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
@@ -41,13 +42,15 @@ public:
         [[maybe_unused]] const char * description,
         [[maybe_unused]] double total_to_download) override {
         ++add_new_download_cnt;
-        return nullptr;
+        std::string user_cb_data = std::string("Package: ") + description;
+        return user_cb_data_container.emplace_back(std::move(user_cb_data)).data();
     }
 
     int end([[maybe_unused]] void * user_cb_data, TransferStatus status, const char * msg) override {
         ++end_cnt;
-        end_status = status;
-        end_msg = libdnf5::utils::string::c_to_str(msg);
+        user_cb_data_array.emplace_back(static_cast<const char *>(user_cb_data));
+        end_status.emplace_back(status);
+        end_msg.emplace_back(libdnf5::utils::string::c_to_str(msg));
         return 0;
     }
 
@@ -68,13 +71,16 @@ public:
         return 0;
     }
 
-    int add_new_download_cnt = 0;
-    int end_cnt = 0;
-    TransferStatus end_status = TransferStatus::ERROR;
-    std::string end_msg;
+    std::vector<std::string> user_cb_data_container;
 
+    int add_new_download_cnt = 0;
     int progress_cnt = 0;
     int mirror_failure_cnt = 0;
+    int end_cnt = 0;
+
+    std::vector<const char *> user_cb_data_array;
+    std::vector<TransferStatus> end_status;
+    std::vector<std::string> end_msg;
 };
 
 void PackageDownloaderTest::test_package_downloader() {
@@ -82,9 +88,8 @@ void PackageDownloaderTest::test_package_downloader() {
 
     libdnf5::rpm::PackageQuery query(base);
     query.filter_name("one");
-    query.filter_version("2");
     query.filter_arch("noarch");
-    CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, query.size());
 
     auto downloader = libdnf5::repo::PackageDownloader(base);
 
@@ -92,17 +97,33 @@ void PackageDownloaderTest::test_package_downloader() {
     auto cbs = cbs_unique_ptr.get();
     base.set_download_callbacks(std::move(cbs_unique_ptr));
 
-    downloader.add(*query.begin());
+    for (const auto & package : query) {
+        downloader.add(package);
+    }
 
     downloader.download();
 
-    CPPUNIT_ASSERT_EQUAL(1, cbs->add_new_download_cnt);
-    CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
-    CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
-    CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_msg);
+    std::sort(cbs->user_cb_data_container.begin(), cbs->user_cb_data_container.end());
+    CPPUNIT_ASSERT_EQUAL(
+        (std::vector<std::string>{"Package: one-0:1-1.noarch", "Package: one-0:2-1.noarch"}),
+        cbs->user_cb_data_container);
 
-    CPPUNIT_ASSERT_GREATEREQUAL(1, cbs->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(2, cbs->add_new_download_cnt);
+    CPPUNIT_ASSERT_EQUAL(2, cbs->end_cnt);
+    CPPUNIT_ASSERT_GREATEREQUAL(2, cbs->progress_cnt);
     CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
+
+    std::sort(cbs->user_cb_data_array.begin(), cbs->user_cb_data_array.end(), [](const char * a, const char * b) {
+        return std::string_view(a).compare(b) < 0;
+    });
+    CPPUNIT_ASSERT_EQUAL(cbs->user_cb_data_container[0].c_str(), cbs->user_cb_data_array[0]);
+    CPPUNIT_ASSERT_EQUAL(cbs->user_cb_data_container[1].c_str(), cbs->user_cb_data_array[1]);
+
+    CPPUNIT_ASSERT_EQUAL(
+        (std::vector<DownloadCallbacks::TransferStatus>{
+            DownloadCallbacks::TransferStatus::SUCCESSFUL, DownloadCallbacks::TransferStatus::SUCCESSFUL}),
+        cbs->end_status);
+    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"", ""}), cbs->end_msg);
 }
 
 void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
@@ -136,6 +157,8 @@ void PackageDownloaderTest::test_package_downloader_temp_files_memory() {
 
     CPPUNIT_ASSERT_EQUAL(4, cbs->add_new_download_cnt);
     CPPUNIT_ASSERT_EQUAL(4, cbs->end_cnt);
+    CPPUNIT_ASSERT_GREATEREQUAL(4, cbs->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
 
     auto paths_prefix = std::filesystem::path(repo->get_cachedir()) / std::filesystem::path("packages");
     const std::vector<std::string> expected = {
