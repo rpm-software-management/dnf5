@@ -105,9 +105,9 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     text_buffer.clear();
 
     if (is_interactive && mbar.num_of_lines_to_clear > 0) {
-        text_buffer << tty::clear_line;
-        for (std::size_t i = 1; i < mbar.num_of_lines_to_clear; i++) {
-            text_buffer << tty::cursor_up << tty::clear_line;
+        if (mbar.num_of_lines_to_clear > 1) {
+            // Move the cursor up by the number of lines we want to write over
+            text_buffer << "\033[" << (mbar.num_of_lines_to_clear - 1) << "A";
         }
         text_buffer << "\r";
     } else if (mbar.line_printed) {
