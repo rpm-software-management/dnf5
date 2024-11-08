@@ -34,6 +34,7 @@ option(WITH_COMPS "Build with comps groups and environments support" ON)
 option(WITH_MODULEMD "Build with modulemd modules support" ON)
 option(WITH_ZCHUNK "Build with zchunk delta compression support" ON)
 option(WITH_SYSTEMD "Build with systemd and D-Bus features" ON)
+option(WITH_APPSTREAM "Build with appstream support" ON)
 option(ENABLE_SOLV_URPMREORDER "Build with support for URPM-like solution reordering?" OFF)
 option(ENABLE_SOLV_FOCUSNEW "Build with SOLVER_FLAG_FOCUS_NEW libsolv flag enabled to ensure new dependencies are installed in latests versions?" ON)
 
@@ -127,6 +128,10 @@ endif()
 # When modules are enabled add WITH_MODULEMD definition for all sub-directories (all components).
 if (WITH_MODULEMD)
     add_definitions(-DWITH_MODULEMD)
+endif()
+
+if (WITH_APPSTREAM)
+    add_definitions(-DWITH_APPSTREAM)
 endif()
 
 include_directories("${PROJECT_SOURCE_DIR}/include")

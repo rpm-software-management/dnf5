@@ -52,6 +52,9 @@ extern "C" {
 #include <filesystem>
 #include <set>
 
+#ifdef WITH_APPSTREAM
+#include <appstream.h>
+#endif
 
 namespace libdnf5::repo {
 
@@ -203,6 +206,31 @@ void Repo::read_metadata_cache() {
     p_impl->downloader->load_local();
 }
 
+void Repo::install_appstream() {
+#ifdef WITH_APPSTREAM
+    if (!p_impl->config.get_main_config().get_optional_metadata_types_option().get_value().contains(
+            libdnf5::METADATA_TYPE_APPSTREAM))
+        return;
+
+    std::string repo_id = p_impl->config.get_id();
+    auto appstream_metadata = p_impl->downloader->get_appstream_metadata();
+    for (auto & item : appstream_metadata) {
+        const std::string path = item.second;
+        GError * local_error = NULL;
+
+        if (!as_utils_install_metadata_file(
+                AS_METADATA_LOCATION_CACHE, path.c_str(), repo_id.c_str(), NULL, &local_error)) {
+            p_impl->base->get_logger()->debug(
+                "Failed to install Appstream metadata file '{}' for repo '{}': {}",
+                path,
+                repo_id,
+                local_error ? local_error->message : "Unknown error");
+        }
+
+        g_clear_error(&local_error);
+    }
+#endif
+}
 
 bool Repo::is_in_sync() {
     if (!p_impl->config.get_metalink_option().empty() && !p_impl->config.get_metalink_option().get_value().empty()) {
@@ -412,6 +440,13 @@ void Repo::load_available_repo() {
 
     auto optional_metadata = p_impl->config.get_main_config().get_optional_metadata_types_option().get_value();
     const bool all_metadata = optional_metadata.contains(libdnf5::METADATA_TYPE_ALL);
+
+    if (all_metadata || optional_metadata.contains(libdnf5::METADATA_TYPE_APPSTREAM)) {
+        auto appstream_metadata = p_impl->downloader->get_appstream_metadata();
+        for (auto & item : appstream_metadata) {
+            p_impl->solv_repo->load_repo_ext(RepodataType::APPSTREAM, item.first, *p_impl->downloader.get());
+        }
+    }
 
     if (all_metadata || optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
         p_impl->solv_repo->load_repo_ext(RepodataType::FILELISTS, *p_impl->downloader.get());

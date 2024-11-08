@@ -575,6 +575,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
                 repo->mark_fresh();
                 repo->read_metadata_cache();
+                repo->install_appstream();
 
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                 send_to_sack_loader(repo);

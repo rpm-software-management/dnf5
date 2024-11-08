@@ -71,6 +71,7 @@ Provides:       dnf5-command(versionlock)
 
 # ========== build options ==========
 
+%bcond_without appstream
 %bcond_without dnf5daemon_client
 %bcond_without dnf5daemon_server
 %bcond_without libdnf_cli
@@ -143,6 +144,9 @@ BuildRequires:  bash-completion
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  gettext
+%if %{with appstream}
+BuildRequires:  pkgconfig(appstream) >= 0.16
+%endif
 BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(json-c)
@@ -797,6 +801,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     \
     -DENABLE_SOLV_FOCUSNEW=%{?with_focus_new:ON}%{!?with_focus_new:OFF} \
     \
+    -DWITH_APPSTREAM=%{?with_appstream:ON}%{!?with_appstream:OFF} \
     -DWITH_DNF5DAEMON_CLIENT=%{?with_dnf5daemon_client:ON}%{!?with_dnf5daemon_client:OFF} \
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
     -DWITH_LIBDNF5_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
