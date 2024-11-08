@@ -77,6 +77,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_without dnf5
 %bcond_without dnf5_plugins
 %bcond_without plugin_actions
+%bcond_without plugin_appstream
 %bcond_without plugin_rhsm
 %bcond_without python_plugins_loader
 
@@ -604,6 +605,24 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %{_mandir}/man8/libdnf5-actions.8.*
 %endif
 
+# ========== libdnf5-plugin-appstream ==========
+
+%if %{with plugin_appstream}
+
+%package -n libdnf5-plugin-appstream
+Summary:        Libdnf5 plugin to install repo Appstream data
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+BuildRequires:  pkgconfig(appstream) >= 0.16
+
+%description -n libdnf5-plugin-appstream
+Libdnf5 plugin that installs repository's Appstream data, for repositories which provide them.
+
+%files -n libdnf5-plugin-appstream
+%{_libdir}/libdnf5/plugins/appstream.so
+%config %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
+
+%endif
 
 # ========== libdnf5-plugin-plugin_rhsm ==========
 
@@ -805,6 +824,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_LIBDNF5_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
     -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
     -DWITH_PLUGIN_ACTIONS=%{?with_plugin_actions:ON}%{!?with_plugin_actions:OFF} \
+    -DWITH_PLUGIN_APPSTREAM=%{?with_plugin_appstream:ON}%{!?with_plugin_appstream:OFF} \
     -DWITH_PLUGIN_RHSM=%{?with_plugin_rhsm:ON}%{!?with_plugin_rhsm:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \

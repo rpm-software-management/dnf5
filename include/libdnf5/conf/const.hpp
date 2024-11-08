@@ -64,9 +64,15 @@ constexpr const char * METADATA_TYPE_OTHER = "other";
 constexpr const char * METADATA_TYPE_PRESTO = "presto";
 constexpr const char * METADATA_TYPE_UPDATEINFO = "updateinfo";
 constexpr const char * METADATA_TYPE_ALL = "all";
+constexpr const char * METADATA_TYPE_APPSTREAM = "appstream";
 
 const std::set<std::string> OPTIONAL_METADATA_TYPES{
-    METADATA_TYPE_COMPS, METADATA_TYPE_FILELISTS, METADATA_TYPE_OTHER, METADATA_TYPE_PRESTO, METADATA_TYPE_UPDATEINFO};
+    METADATA_TYPE_COMPS,
+    METADATA_TYPE_FILELISTS,
+    METADATA_TYPE_OTHER,
+    METADATA_TYPE_PRESTO,
+    METADATA_TYPE_UPDATEINFO,
+    METADATA_TYPE_APPSTREAM};
 
 }  // namespace libdnf5
 
