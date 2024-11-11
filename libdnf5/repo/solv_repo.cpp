@@ -84,13 +84,13 @@ bool SolvRepo::can_use_solvfile_cache(solv::Pool & pool, fs::File & solvfile_cac
     int dnf_solv_userdata_len_read;
 
     int ret_code = solv_read_userdata(solvfile_cache.get(), &dnf_solv_userdata_read, &dnf_solv_userdata_len_read);
-    std::unique_ptr<SolvUserdata, decltype(&solv_free)> solv_userdata(
-        reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read), &solv_free);
     if (ret_code != 0) {
         logger.warning(
             ("Failed to read solv userdata: \"{}\": for: {}"), pool_errstr(*pool), solvfile_cache.get_path().native());
         return false;
     }
+    std::unique_ptr<SolvUserdata, decltype(&solv_free)> solv_userdata(
+        reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read), &solv_free);
 
     if (dnf_solv_userdata_len_read != SOLV_USERDATA_SIZE) {
         logger.warning(
