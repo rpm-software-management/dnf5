@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
 "PO-Revision-Date: 2024-05-26 19:16+0000\n"
 "Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -178,27 +178,27 @@ msgstr "Sie können eines der verfügbaren Chroots explizit auswählen:"
 msgid "Can't parse Copr repo spec: "
 msgstr "Konnte die Copr-Repo-Spezifikation nicht parsen: "
 
-#: copr_repo.cpp:335
+#: copr_repo.cpp:339
 msgid "Can't remove the {} repo file"
 msgstr "Konnte die {} repo-Datei nicht entfernen"
 
-#: copr_repo.cpp:338
+#: copr_repo.cpp:342
 msgid "Repo file {} successfully removed"
 msgstr "Repo-Datei {} erfolgreich entfernt"
 
-#: copr_repo.cpp:384
+#: copr_repo.cpp:388
 msgid "Can't find item {} in {}"
 msgstr "Konnte Element {} nicht in {} finden"
 
-#: copr_repo.cpp:440
+#: copr_repo.cpp:444
 msgid "Removing old config file '{}'"
 msgstr "Alte Konfigurationsdatei '{}' wird entfernt"
 
-#: copr_repo.cpp:443
+#: copr_repo.cpp:447
 msgid "Can't remove"
 msgstr "Konnte nicht entfernen"
 
-#: copr_repo.cpp:517
+#: copr_repo.cpp:521
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -206,18 +206,18 @@ msgstr ""
 "Copr Repo-Datei '{}' im alten Format, Behebung mit erneuter Aktivierung $ {} "
 "copr enable {}"
 
-#: copr_repo.cpp:551
+#: copr_repo.cpp:555
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Repo-ID '{}' in '{}' ist verdächtig"
 
-#: copr_repo.cpp:558
+#: copr_repo.cpp:562
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Repo-ID ’{}’ gehört nicht zu '{}' Repo-Datei"
 
-#: copr_repo.cpp:608
+#: copr_repo.cpp:612
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr-Repository '{}' in '{}' deaktiviert."
 
-#: copr_repo.cpp:622 copr_repo.cpp:647
+#: copr_repo.cpp:626 copr_repo.cpp:651
 msgid "Repository '{}' not found on this system"
 msgstr "Repository '{}' nicht auf diesem System gefunden"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-09-17 08:46+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-15 17:15+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
@@ -673,15 +673,20 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "Attention : vérifications PGP ignorées pour 1 paquet du dépôt : {}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Attention : vérifications PGP ignorées pour {0} paquet du dépôt : {1}"
+msgstr[1] ""
+"Attention : vérifications PGP ignorées pour {0} paquets du dépôt : {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Attention : vérifications PGP ignorées pour {0} paquet du dépôt : {1}"
+"Attention : vérifications PGP ignorées pour {0} paquet des dépôts : {1}"
 msgstr[1] ""
 "Attention : vérifications PGP ignorées pour {0} paquets des dépôts : {1}"
 
@@ -709,11 +714,11 @@ msgstr ""
 "get_user_runtime_dir(): Impossible de déterminer le répertoire runtime de "
 "l'utilisateur"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "échec de l'enregistrement du document XML contenant les comps"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "Échec de l'enregistrement du document XML pour le groupe \"{}\" dans le "
@@ -850,7 +855,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "La variable \"{}\" est en lecture seule"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Impossible d'ouvrir le fichier journal"
 
@@ -935,16 +940,16 @@ msgstr "Plugins::load_plugins(): config_dir_path ne peut pas être vide"
 msgid "Cannot load plugins: {}"
 msgstr "Impossible de charger les plugins : {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Échec du calcul du SHA256"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr ""
 "Impossible de télécharger les fichiers, l'option cacheonly est activée."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Échec du téléchargement des fichiers"
 
@@ -956,12 +961,12 @@ msgstr ""
 "La vitesse de téléchargement maximale est inférieure au minimum, modifiez la "
 "valeur de minrate ou throttle"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Impossible de télécharger le paquet \"{0}\", l'option cacheonly est activée."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Échec du téléchargement des paquets"
 
@@ -1060,7 +1065,7 @@ msgstr "Échec de la récupération de la liste des clés PGP : {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Échec de l'importation des clés PGP : {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1068,54 +1073,54 @@ msgstr ""
 "Échec de la création du dépôt \"{}\" : l'ID est présent plus d'une fois dans "
 "la configuration"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "L'option cacheonly est activée mais le dépôt \"{}\" n'est pas en cache"
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Échec du chargement du repomd du dépôt \"{}\" depuis \"{}\" : {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Échec du chargement des primary du dépôt \"{}\" : {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Type étendu de repodata non pris en charge pour le dépôt système : \"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du chargement de l'extension {} pour le dépôt \"{}\" à partir de "
 "\"{}\" : {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Échec du chargement du dépôt système à partir de la racine \"{}\" : {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du chargement du cache {} pour le dépôt \"{}\" à partir de \"{}\" : {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Échec de l'écriture du cache primary pour le dépôt \"{}\" dans \"{}\" : {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du rechargement du cache primary pour le dépôt \"{}\" à partir de "
 "\"{}\" : {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Échec de l'écriture du cache {} pour le dépôt \"{}\" dans\"{}\" : {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du rechargement du cache {} pour le dépôt \"{}\" à partir de \"{}\" : "
@@ -1150,7 +1155,9 @@ msgstr "Aucune clé correspondante n'a pu être trouvée."
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr "La signature est valide, mais la clé n'est pas marquée comme fiable."
+msgstr ""
+"La signature est valide, mais la clé n'est pas considérée comme étant de "
+"confiance."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
@@ -1461,7 +1468,7 @@ msgstr "Version mineure invalide : \"{}\", nombre attendu"
 msgid "Missing key \"version\""
 msgstr "Clé \"version\" manquante"
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "Type de la variable \"environments\" inattendu, un tableau est attendu"
 
@@ -1473,7 +1480,7 @@ msgstr "Clé d'objet \"id\" manquante dans l'un des environnements"
 msgid "Missing object key \"action\" in an environment"
 msgstr "Clé d'objet \"action\" manquante dans l'un des environnements"
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "Type de la variable \"groups\" inattendu, un tableau est attendu"
 
@@ -1489,7 +1496,7 @@ msgstr "Clé d'objet \"action\" manquante dans l'un des groupes"
 msgid "Missing object key \"reason\" in a group"
 msgstr "Clé d'objet \"reason\" manquante dans l'un des groupes"
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Type de la variable \"rpms\" inattendu, un tableau est attendu"
 
@@ -1712,3 +1719,6 @@ msgstr "échec de la lecture des fichiers de configuration RPM"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Échec de l'exécution de uname()"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr "Attention : vérifications PGP ignorées pour 1 paquet du dépôt : {}"

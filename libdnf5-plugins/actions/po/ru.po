@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-02-02 13:47+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-09-22 16:14+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ru/>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:487 actions.cpp:495 actions.cpp:503 actions.cpp:511
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -27,22 +27,22 @@ msgstr ""
 "Ошибка в файле \"{}\" в строке {}: Ожидается формат \"HOOK:PKG_FILTER:"
 "DIRECTION:OPTIONS:CMD\""
 
-#: actions.cpp:533
+#: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Ошибка в файле \"{}\" в строке {}: Неизвестное значение опции \"enabled\" "
 "\"{}\""
 
-#: actions.cpp:540
+#: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Ошибка в файле \"{}\" в строке {}: Неизвестный параметр \"{}\""
 
-#: actions.cpp:575
+#: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Ошибка в файле \"{}\" в строке {}: Неизвестный хук \"{}\""
 
-#: actions.cpp:585
+#: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -50,18 +50,26 @@ msgstr ""
 "Ошибка в файле \"{}\" в строке {}: Пакетный фильтр может быть использован "
 "только в хуках PRE_TRANS и POST_TRANS"
 
-#: actions.cpp:595
+#: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "Ошибка в файле \"{}\" в строке {}: Невозможно использовать направление без "
 "фильтра пакетов"
 
-#: actions.cpp:612
+#: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 "Ошибка в файле \"{}\" в строке {}: Неизвестное направление пакета \"{}\""
 
-#: actions.cpp:621
+#: actions.cpp:664
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "Ошибка в файле \"{}\" в строке {}: Неизвестный режим \"{}\""
+
+#: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Ошибка в файле \"{}\" в строке {}: Отсутствующая команда"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr "Невозможно создать канал: {}"

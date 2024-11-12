@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-09-07 09:38+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-02 17:38+0000\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fi/>\n"
 "Language: fi\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -659,13 +659,26 @@ msgid ", "
 msgstr ""
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr ""
-"Varoitus: ohitettiin PGP-tarkistukset yhdelle tietotovarastosta peräisin "
-"paketille: {}"
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#| msgid_plural ""
+#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Varoitus: ohitettiin PGP-tarkistukset {0}:lle tietotovarastosta peräisin "
+"paketteille: {1}"
+msgstr[1] ""
+"Varoitus: ohitettiin PGP-tarkistukset {0}:lle tietotovarastoista peräisin "
+"paketteille: {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#| msgid_plural ""
+#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
@@ -696,11 +709,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): Käyttäjän ajonaikaista hakemistoa ei voida määrittää"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr ""
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "XML-asiakirjan tallentaminen tiedostoon \"{}\" ryhmälle \"{}\" epäonnistui: "
@@ -832,7 +845,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "Muuttuja \"{}\" on vain luku -tilassa"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Lokitiedostoa ei voi avata"
 
@@ -918,17 +931,17 @@ msgstr ""
 msgid "Cannot load plugins: {}"
 msgstr "Laajennuksia ei voi ladata: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256:n laskenta epäonnistui"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr ""
 "Ei voi ladata tiedostoja, vain välimuistin -vaihtoehto cacheonly on "
 "aktivoitu."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Tiedostojen lataaminen epäonnistui"
 
@@ -940,13 +953,13 @@ msgstr ""
 "Enimmäislatausnopeus on pienempi kuin vähimmäislataussnopeus. Muuta minrate-"
 "vähimmäisnopeuden tai throttle-askelten asetuksia"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Pakettia \"{0}\" ei voi ladata, vain välimuisti -vaihtoehto cacheonly on "
 "aktivoitu."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Pakettien lataaminen epäonnistui"
 
@@ -1001,7 +1014,7 @@ msgstr ""
 
 #: repo/repo_downloader.cpp:139
 msgid "Librepo error: {}"
-msgstr ""
+msgstr "Librepo-virhe: {}"
 
 #: repo/repo_downloader.cpp:171
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
@@ -1030,59 +1043,59 @@ msgstr ""
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
 msgid "Failed to list pgp keys: {}"
-msgstr ""
+msgstr "PGP-avainten listaaminen epäonnistui: {}"
 
 #: repo/repo_pgp.cpp:140
 msgid "Failed to import pgp keys: {}"
-msgstr ""
+msgstr "PGP-avainten tuominen epäonnistui: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr ""
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 
@@ -1113,15 +1126,15 @@ msgstr ""
 
 #: rpm/rpm_signature.cpp:46
 msgid "The signature is valid, but the key is not trusted."
-msgstr ""
+msgstr "Allekirjoitus on kelvollinen, mutta avaimeen ei luoteta."
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "Pakettia ei ole allekirjoitettu."
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."
-msgstr ""
+msgstr "Pakettia avatessa ilmeni virhe."
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
@@ -1181,24 +1194,24 @@ msgstr ""
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:323
 msgid "Cannot reinstall package \"{}\""
-msgstr ""
+msgstr "Pakettia \"{}\" ei voi asentaa uudelleen"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
 #: rpm/transaction.cpp:341
 msgid "Cannot remove package \"{}\""
-msgstr ""
+msgstr "Pakettia \"{}\" ei voi poistaa"
 
 #: rpm/transaction.cpp:360
 msgid "Cannot upgrade package \"{}\""
-msgstr ""
+msgstr "Pakettia \"{}\" ei voi päivittää"
 
 #: rpm/transaction.cpp:364
 msgid "Cannot downgrade package \"{}\""
-msgstr ""
+msgstr "Pakettia \"{}\" ei voi varhentaa"
 
 #: rpm/transaction.cpp:368
 msgid "Cannot install package \"{}\""
-msgstr ""
+msgstr "Pakettia \"{}\" ei voi asentaa"
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:585
 msgid "{}"
@@ -1384,7 +1397,7 @@ msgstr ""
 msgid "Missing key \"version\""
 msgstr ""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr ""
 
@@ -1396,7 +1409,7 @@ msgstr ""
 msgid "Missing object key \"action\" in an environment"
 msgstr ""
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr ""
 
@@ -1412,7 +1425,7 @@ msgstr ""
 msgid "Missing object key \"reason\" in a group"
 msgstr ""
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr ""
 
@@ -1452,11 +1465,11 @@ msgstr ""
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "virhe tiedostoa luettaessa"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "virhe tiedostoa kirjoittaessa"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
@@ -1521,7 +1534,7 @@ msgstr ""
 #. returns localized message, problem with later translation
 #: utils/library.cpp:32
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "Jaettua kirjastoa \"{}\" ei voi ladata: {}"
 
 #: utils/library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
@@ -1529,19 +1542,19 @@ msgstr ""
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
-msgstr ""
+msgstr "Lukkotiedoston \"{}\" avaaminen epäonnistui"
 
 #: utils/locker.cpp:60
 msgid "Failed to obtain lock \"{}\""
-msgstr ""
+msgstr "Lukon \"{}\" varaaminen epäonnistui"
 
 #: utils/locker.cpp:70
 msgid "Failed to close lock file \"{}\""
-msgstr ""
+msgstr "Lukkotiedoston \"{}\" sulkeminen epäonnistui"
 
 #: utils/locker.cpp:73
 msgid "Failed to delete lock file \"{}\""
-msgstr ""
+msgstr "Lukkotiedoston \"{}\" poistaminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:29
 msgid "SQL statement compilation failed: \"{}\""
@@ -1593,11 +1606,11 @@ msgstr ""
 
 #: utils/sqlite3/sqlite3.cpp:68
 msgid "Failed to open database \"{}\""
-msgstr ""
+msgstr "Tietokannan \"{}\" avaaminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:105
 msgid "Failed to close database \"{}\""
-msgstr ""
+msgstr "Tietokannan \"{}\" sulkeminen epäonnistui"
 
 #: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
 msgid "Failed to open backup database \"{}\""
@@ -1618,3 +1631,8 @@ msgstr ""
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr ""
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr ""
+#~ "Varoitus: ohitettiin PGP-tarkistukset yhdelle tietotovarastosta peräisin "
+#~ "paketille: {}"

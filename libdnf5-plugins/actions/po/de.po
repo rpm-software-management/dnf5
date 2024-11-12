@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
+# Fabio D <fabio1977@arcor.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-05-13 19:50+0000\n"
-"Last-Translator: Dennis Koerner <dennis@bumblebeeman.dev>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-05 21:08+0000\n"
+"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/de/>\n"
 "Language: de\n"
@@ -16,9 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
-#: actions.cpp:487 actions.cpp:495 actions.cpp:503 actions.cpp:511
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,22 +27,22 @@ msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
 "CMD\" Format erwartet"
 
-#: actions.cpp:533
+#: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Wert \"{}\" der Option "
 "\"aktiviert\""
 
-#: actions.cpp:540
+#: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannte Option \"{}\""
 
-#: actions.cpp:575
+#: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Hook \"{}\""
 
-#: actions.cpp:585
+#: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -49,18 +50,26 @@ msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Paketfilter kann nur in PRE_TRANS und "
 "POST_TRANS Hooks genutzt werden"
 
-#: actions.cpp:595
+#: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Richtung kann nicht ohne Paket Filter "
 "genutzt werden"
 
-#: actions.cpp:612
+#: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Unbekannte Richtung des Pakets \"{}\""
 
-#: actions.cpp:621
+#: actions.cpp:664
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Modus \"{}\""
+
+#: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Fehlendes Kommando"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr "Kann keine Pipe erstellen: {}"

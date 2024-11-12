@@ -4,13 +4,14 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
+# Ciro Mota <ciro.mota@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-08-07 02:47+0000\n"
-"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-30 12:08+0000\n"
+"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: commands/advisory/advisory.cpp:35
+msgid "Manage advisories"
+msgstr "Gerenciar avisos"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -145,6 +150,17 @@ msgstr "ID_CVE,..."
 msgid "Error cleaning the cache: {}"
 msgstr "Erro ao limpar o cache: {}"
 
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+"Atualize ou faça downgrade do software instalado para as versões mais "
+"recentes disponíveis"
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr "Gerenciar grupos"
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr "Mostra apenas grupos disponíveis."
@@ -165,7 +181,15 @@ msgstr ""
 "Mostra apenas grupos contendo pacotes com nomes especificados. Opção de "
 "lista, suporta caracteres curinga."
 
-#: commands/repoquery/repoquery.cpp:158
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr "Gerenciar repositórios"
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr "pesquisar por pacotes correspondendo aos critérios"
+
+#: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "Erro ao analisar o objeto JSON \"{}\": {}"
 
@@ -184,6 +208,6 @@ msgstr ""
 "{}: Formatação inválida no valor de argumento: O último caractere da chave "
 "não pode ser '.': {}"
 
-#: main.cpp:246 main.cpp:283
+#: main.cpp:259 main.cpp:296
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Adicione \"--help\" para mais informações sobre os argumentos."

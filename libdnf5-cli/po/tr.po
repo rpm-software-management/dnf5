@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-08-02 02:46+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-09-21 14:54+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/tr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -135,254 +135,252 @@ msgstr "İpucu: [d] öntanımlı, [e] etkin, [x] devre dışı, [i] kurulu"
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "Ad"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Dönem"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:274
 msgid "Version"
-msgstr ""
+msgstr "Sürüm"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "Dağıtım"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "Mimari"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Kullanım dışı bıraktığı"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "İndirme boyutu"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "Kurulu boyutu"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "Kaynak"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "Geldiği depo"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:280
 msgid "Repository"
-msgstr ""
+msgstr "Depo"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "Özet"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "Lisans"
 
 #: output/packageinfo.cpp:104
-#, fuzzy
-#| msgid "Description:"
 msgid "Description"
-msgstr "Açıklama:"
+msgstr "Açıklama"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Sağlayıcı"
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "İşlem Özeti:\n"
 
 #: output/transaction_table.cpp:131
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Kuruluyor:       {:4} paket\n"
+msgstr[1] " Kuruluyor:       {:4} paket\n"
 
 #: output/transaction_table.cpp:138
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Yeniden kuruluyor: {:4} paket\n"
+msgstr[1] " Yeniden kuruluyor: {:4} paket\n"
 
 #: output/transaction_table.cpp:145
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Yükseltiliyor:   {:4} paket\n"
+msgstr[1] " Yükseltiliyor:   {:4} paket\n"
 
 #: output/transaction_table.cpp:152
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Değiştiriliyor:  {:4} paket\n"
+msgstr[1] " Değiştiriliyor:  {:4} paket\n"
 
 #: output/transaction_table.cpp:159
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Kaldırılıyor:    {:4} paket\n"
+msgstr[1] " Kaldırılıyor:    {:4} paket\n"
 
 #: output/transaction_table.cpp:166
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Sürümü düşürülüyor: {:4} package\n"
+msgstr[1] " Sürümü düşürülüyor: {:4} package\n"
 
 #: output/transaction_table.cpp:173
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Sebep değiştiriliyor: {:4} package\n"
+msgstr[1] " Sebep değiştiriliyor: {:4} package\n"
 
 #: output/transaction_table.cpp:181
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Atlanıyor:       {:4} package\n"
+msgstr[1] " Atlanıyor:       {:4} package\n"
 
 #: output/transaction_table.cpp:262
 msgid "Package"
-msgstr ""
+msgstr "Paket"
 
 #: output/transaction_table.cpp:268
 msgid "Arch"
-msgstr ""
+msgstr "Mimari"
 
 #: output/transaction_table.cpp:286
 msgid "Size"
-msgstr ""
+msgstr "Boyut"
 
 #: output/transaction_table.cpp:342 output/transaction_table.cpp:436
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} -> {}"
 
 #: output/transaction_table.cpp:358
 msgid "replacing {}"
-msgstr ""
+msgstr "{} değiştiriliyor"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"
-msgstr ""
+msgstr " <ad-ayarlanmadı>"
 
 #: output/transaction_table.cpp:442
 msgid "replacing "
-msgstr ""
+msgstr "değiştiriliyor "
 
 #: output/transaction_table.cpp:455
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "Çakışan paketler atlanıyor:"
 
 #: output/transaction_table.cpp:457
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "Hatalı bağımlılıkları olan paketler atlanıyor:"
 
 #: output/transaction_table.cpp:518
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "Bağımlılıklar kuruluyor:"
 
 #: output/transaction_table.cpp:520
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Zayıf bağımlılıklar kuruluyor:"
 
 #: output/transaction_table.cpp:522
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "Grup/modül paketleri kuruluyor:"
 
 #: output/transaction_table.cpp:524
 msgid "Installing:"
-msgstr ""
+msgstr "Kuruluyor:"
 
 #: output/transaction_table.cpp:528
 msgid "Upgrading:"
-msgstr ""
+msgstr "Yükseltiliyor:"
 
 #: output/transaction_table.cpp:531
 msgid "Downgrading:"
-msgstr ""
+msgstr "Sürümü düşürülüyor:"
 
 #: output/transaction_table.cpp:534
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Yeniden kuruluyor:"
 
 #: output/transaction_table.cpp:538
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "Bağımlı paketler kaldırılıyor:"
 
 #: output/transaction_table.cpp:540
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "Kullanılmayan bağımlılıklar kaldırılıyor:"
 
 #: output/transaction_table.cpp:542
 msgid "Removing:"
-msgstr ""
+msgstr "Kaldırılıyor:"
 
 #: output/transaction_table.cpp:546
 msgid "Changing reason:"
-msgstr ""
+msgstr "Sebep değiştiriliyor:"
 
 #: output/transaction_table.cpp:578
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "Grup bağımlılıkları kuruluyor:"
 
 #: output/transaction_table.cpp:580
 msgid "Installing groups:"
-msgstr ""
+msgstr "Gruplar kuruluyor:"
 
 #: output/transaction_table.cpp:584
 msgid "Removing groups:"
-msgstr ""
+msgstr "Gruplar kaldırılıyor:"
 
 #: output/transaction_table.cpp:587
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "Gruplar yükseltiliyor:"
 
 #: output/transaction_table.cpp:614
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Ortam grupları kuruluyor:"
 
 #: output/transaction_table.cpp:617
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Ortam grupları kaldırılıyor:"
 
 #: output/transaction_table.cpp:620
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Ortam grupları yükseltiliyor:"
 
 #: output/transaction_table.cpp:647
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Modül akışları etkinleştiriliyor:"
 
 #: output/transaction_table.cpp:650
 msgid "Disabling modules:"
-msgstr ""
+msgstr "Modüller devre dışı bırakılıyor:"
 
 #: output/transaction_table.cpp:653
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Modüller sıfırlanıyor:"
 
 #: output/transaction_table.cpp:656
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Modül akışları değiştiriliyor:"
 
 #: output/transaction_table.cpp:730
 msgid "Nothing to do."
-msgstr ""
+msgstr "Yapılacak bir şey yok."
 
 #: session.cpp:149
 msgid "Missing command"

@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Fabio D <fabio1977@arcor.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-05-21 19:51+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-05 21:08+0000\n"
+"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/de/>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -138,254 +138,252 @@ msgstr "Hinweis: [d]Standard, aktivi[e]rt, [x]deaktiviert, [i]nstalliert"
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Epoch"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:274
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "Release"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "Architektur"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Nicht mehr benötigte"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "Download Größe"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "Installationsgröße"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "Aus dem Repository"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:280
 msgid "Repository"
-msgstr ""
+msgstr "Paketquelle"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: output/packageinfo.cpp:104
-#, fuzzy
-#| msgid "Description:"
 msgid "Description"
-msgstr "Beschreibung:"
+msgstr "Beschreibung"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "Anbieter"
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "Transaktionszusammenfasung:\n"
 
 #: output/transaction_table.cpp:131
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Installiere:      {:4} Paket\n"
+msgstr[1] " Installiere:      {:4} Pakete\n"
 
 #: output/transaction_table.cpp:138
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Reinstalliere:    {:4} Paket\n"
+msgstr[1] " Reinstalliere:    {:4} Pakete\n"
 
 #: output/transaction_table.cpp:145
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Upgrade:       {:4} Paket\n"
+msgstr[1] " Upgrade:       {:4} Pakete\n"
 
 #: output/transaction_table.cpp:152
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Ersetze:       {:4} Paket\n"
+msgstr[1] " Ersetze:       {:4} Pakete\n"
 
 #: output/transaction_table.cpp:159
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Entferne:        {:4} Paket\n"
+msgstr[1] " Entferne:        {:4} Pakete\n"
 
 #: output/transaction_table.cpp:166
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Downgrade:     {:4} Paket\n"
+msgstr[1] " Downgrade:     {:4} Pakete\n"
 
 #: output/transaction_table.cpp:173
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Ändere reason: {:4} Paket\n"
+msgstr[1] " Ändere reason: {:4} Pakete\n"
 
 #: output/transaction_table.cpp:181
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " Überspringe:        {:4} Paket\n"
+msgstr[1] " Überspringe:        {:4} Pakete\n"
 
 #: output/transaction_table.cpp:262
 msgid "Package"
-msgstr ""
+msgstr "Paket"
 
 #: output/transaction_table.cpp:268
 msgid "Arch"
-msgstr ""
+msgstr "Architektur"
 
 #: output/transaction_table.cpp:286
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: output/transaction_table.cpp:342 output/transaction_table.cpp:436
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} -> {}"
 
 #: output/transaction_table.cpp:358
 msgid "replacing {}"
-msgstr ""
+msgstr "ersetze {}"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"
-msgstr ""
+msgstr " <Name-nicht-festgelegt>"
 
 #: output/transaction_table.cpp:442
 msgid "replacing "
-msgstr ""
+msgstr "ersetze "
 
 #: output/transaction_table.cpp:455
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "Überspringe Pakete mit Konflikten:"
 
 #: output/transaction_table.cpp:457
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "Pakete mit nicht auflösbaren Abhängigkeiten werden übersprungen:"
 
 #: output/transaction_table.cpp:518
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "Abhängigkeiten werden installiert:"
 
 #: output/transaction_table.cpp:520
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "Schwache Abhängigkeiten werden installiert:"
 
 #: output/transaction_table.cpp:522
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "Pakete der Gruppe/des Moduls werden installiert:"
 
 #: output/transaction_table.cpp:524
 msgid "Installing:"
-msgstr ""
+msgstr "Installiere:"
 
 #: output/transaction_table.cpp:528
 msgid "Upgrading:"
-msgstr ""
+msgstr "Aktualisiere:"
 
 #: output/transaction_table.cpp:531
 msgid "Downgrading:"
-msgstr ""
+msgstr "Downgrading:"
 
 #: output/transaction_table.cpp:534
 msgid "Reinstalling:"
-msgstr ""
+msgstr "Reinstalliere:"
 
 #: output/transaction_table.cpp:538
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "Abhängige Pakete werden entfernt:"
 
 #: output/transaction_table.cpp:540
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "Nicht benötigte Abhängigkeiten werden entfernt:"
 
 #: output/transaction_table.cpp:542
 msgid "Removing:"
-msgstr ""
+msgstr "Wird entfernt:"
 
 #: output/transaction_table.cpp:546
 msgid "Changing reason:"
-msgstr ""
+msgstr "Ändere reason:"
 
 #: output/transaction_table.cpp:578
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "Gruppen Abhängigkeiten werden installiert:"
 
 #: output/transaction_table.cpp:580
 msgid "Installing groups:"
-msgstr ""
+msgstr "Gruppen werden installiert:"
 
 #: output/transaction_table.cpp:584
 msgid "Removing groups:"
-msgstr ""
+msgstr "Gruppen werden entfernt:"
 
 #: output/transaction_table.cpp:587
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "Gruppen werden aktualisiert:"
 
 #: output/transaction_table.cpp:614
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Installiere Umgebungs Gruppen:"
 
 #: output/transaction_table.cpp:617
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Entferne Umgebungs Gruppen:"
 
 #: output/transaction_table.cpp:620
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Aktualisiere Umgebungs Gruppen:"
 
 #: output/transaction_table.cpp:647
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Modul-Streams aktivieren:"
 
 #: output/transaction_table.cpp:650
 msgid "Disabling modules:"
-msgstr ""
+msgstr "Module werden deaktiviert:"
 
 #: output/transaction_table.cpp:653
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Module werden zurückgesetzt:"
 
 #: output/transaction_table.cpp:656
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Schalte Modul-Streams um:"
 
 #: output/transaction_table.cpp:730
 msgid "Nothing to do."
-msgstr ""
+msgstr "Nichts zu tun."
 
 #: session.cpp:149
 msgid "Missing command"

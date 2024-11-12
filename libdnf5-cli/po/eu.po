@@ -1,0 +1,385 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-04 16:00+0000\n"
+"Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
+"Language-Team: Basque <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-cli/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.2\n"
+
+#: argument_parser.cpp:62
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:64
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:66
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:110
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:237
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:345 argument_parser.cpp:350
+msgid "Too few values for positional argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:511
+msgid "Missing value for named argument \"--{}\""
+msgstr ""
+
+#: argument_parser.cpp:519
+msgid "Unexpected value for named argument \"--{}\""
+msgstr ""
+
+#: argument_parser.cpp:561
+msgid "Missing value for named argument \"-{}\""
+msgstr ""
+
+#. print usage
+#: argument_parser.cpp:657
+msgid "Usage:"
+msgstr "Erabilera:"
+
+#: argument_parser.cpp:665
+msgid "Description:"
+msgstr "Deskribapena:"
+
+#: argument_parser.cpp:915
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:926
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:936
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:946
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:973
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:981
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:989
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:996
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1103 argument_parser.cpp:1307
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1118 argument_parser.cpp:1322
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:1525
+msgid "Named argument with path id \"{}\" not found"
+msgstr ""
+
+#: argument_parser.cpp:1535
+msgid "Positional argument with path id \"{}\" not found"
+msgstr ""
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "Erabiltzaileak eragiketa abortatu du."
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "Transakzioaren ebazpenak huts egin du"
+
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr ""
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr ""
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+#, fuzzy
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "Izena"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr ""
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+msgid "Version"
+msgstr "Bertsioa"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "Argitalpena"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "Arkitektura"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "Zaharkituak"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "Deskargaren tamaina"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "Instalatutako tamaina"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "Iturburua"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "Biltegitik"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+msgid "Repository"
+msgstr "Biltegia"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "Laburpena"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "URLa"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "Lizentzia"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "Deskribapena"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "Hornitzailea"
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "Transakzioaren laburpena:\n"
+
+#: output/transaction_table.cpp:131
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " Instalatzen:      Pakete {:4}\n"
+msgstr[1] " Instalatzen:      {:4} pakete\n"
+
+#: output/transaction_table.cpp:138
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:145
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:152
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} package\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:159
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:166
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:173
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:181
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: output/transaction_table.cpp:262
+msgid "Package"
+msgstr "Paketea"
+
+#: output/transaction_table.cpp:268
+msgid "Arch"
+msgstr "Ark."
+
+#: output/transaction_table.cpp:286
+msgid "Size"
+msgstr "Tam."
+
+#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+#, fuzzy
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:358
+msgid "replacing {}"
+msgstr "{} ordezten"
+
+#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+msgid " <name-unset>"
+msgstr ""
+
+#: output/transaction_table.cpp:442
+msgid "replacing "
+msgstr ""
+
+#: output/transaction_table.cpp:455
+msgid "Skipping packages with conflicts:"
+msgstr "Gatazkak dituzten paketeak saltatzen:"
+
+#: output/transaction_table.cpp:457
+msgid "Skipping packages with broken dependencies:"
+msgstr "Mendekotasun hautsiak dituzten paketeak saltatzen:"
+
+#: output/transaction_table.cpp:518
+msgid "Installing dependencies:"
+msgstr "Mendekotasunak instalatzen:"
+
+#: output/transaction_table.cpp:520
+msgid "Installing weak dependencies:"
+msgstr "Mendekotasun ahulak instalatzen:"
+
+#: output/transaction_table.cpp:522
+msgid "Installing group/module packages:"
+msgstr "Talde/modulu paketeak instalatzen:"
+
+#: output/transaction_table.cpp:524
+msgid "Installing:"
+msgstr "Instalatzen:"
+
+#: output/transaction_table.cpp:528
+msgid "Upgrading:"
+msgstr "Bertsio-berritzen:"
+
+#: output/transaction_table.cpp:531
+msgid "Downgrading:"
+msgstr "Zaharragoa instalatzen:"
+
+#: output/transaction_table.cpp:534
+msgid "Reinstalling:"
+msgstr "Berrinstalatzen:"
+
+#: output/transaction_table.cpp:538
+msgid "Removing dependent packages:"
+msgstr "Mendeko paketeak kentzen:"
+
+#: output/transaction_table.cpp:540
+msgid "Removing unused dependencies:"
+msgstr "Erabili gabeko mendekotasunak kentzen:"
+
+#: output/transaction_table.cpp:542
+msgid "Removing:"
+msgstr "Kentzen:"
+
+#: output/transaction_table.cpp:546
+msgid "Changing reason:"
+msgstr "Arrazoia aldatzen:"
+
+#: output/transaction_table.cpp:578
+msgid "Installing groups dependencies:"
+msgstr "Talde-mendekotasunak instalatzen:"
+
+#: output/transaction_table.cpp:580
+msgid "Installing groups:"
+msgstr "Taldeak instalatzen:"
+
+#: output/transaction_table.cpp:584
+msgid "Removing groups:"
+msgstr "Taldeak kentzen:"
+
+#: output/transaction_table.cpp:587
+msgid "Upgrading groups:"
+msgstr "Taldeak bertsio-berritzen:"
+
+#: output/transaction_table.cpp:614
+msgid "Installing environmental groups:"
+msgstr "Ingurune-taldeak instalatzen:"
+
+#: output/transaction_table.cpp:617
+msgid "Removing environmental groups:"
+msgstr "Ingurune-taldeak kentzen:"
+
+#: output/transaction_table.cpp:620
+msgid "Upgrading environmental groups:"
+msgstr "Ingurune-taldeak bertsio-berritzen:"
+
+#: output/transaction_table.cpp:647
+msgid "Enabling module streams:"
+msgstr "Modulu-korronteak gaitzen:"
+
+#: output/transaction_table.cpp:650
+msgid "Disabling modules:"
+msgstr "Moduluak desgaitzen:"
+
+#: output/transaction_table.cpp:653
+msgid "Resetting modules:"
+msgstr "Moduluak berrezartzen:"
+
+#: output/transaction_table.cpp:656
+msgid "Switching module streams:"
+msgstr "Modulu-korronteak trukatzen:"
+
+#: output/transaction_table.cpp:730
+msgid "Nothing to do."
+msgstr "Ez dago egiteko ezer."
+
+#: session.cpp:149
+msgid "Missing command"
+msgstr "Komandoa falta da"

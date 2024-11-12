@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-05-11 02:51+0000\n"
-"Last-Translator: Pierre GRASSER <pierre.grasser@proton.me>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-08 14:56+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-repoclosure/fr/>\n"
 "Language: fr\n"
@@ -16,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: repoclosure.cpp:45
 msgid "Print list of unresolved dependencies for repositories"
-msgstr "Afficher la liste des dépendances des dépôts non résolues"
+msgstr "Afficher la liste des dépendances non résolues des dépôts"
 
 #: repoclosure.cpp:154
 msgid "No match for argument \"{}\"."

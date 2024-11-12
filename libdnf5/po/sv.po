@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-09-09 18:38+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-08 14:56+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
 "Language: sv\n"
@@ -251,8 +251,8 @@ msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
 msgstr ""
-"Installerade paket för argument '{0}' är inte tillgängliga i förråd i samma "
-"version, tillgängliga versioner: {1}, kan inte installera om"
+"Installerade paket för argument ”{0}” är inte tillgängliga i förråd i samma "
+"version, tillgängliga versioner: {1}, kan inte installera om."
 
 #: base/log_event.cpp:229
 msgid ""
@@ -298,7 +298,7 @@ msgstr "{} åtgärd för argument \"{}\" stöds inte."
 #. Format a leading line of the error message.
 #: base/log_event.cpp:276
 msgid "Unable to resolve argument '{}':"
-msgstr "Kunde inte lösa argument '{}':{}"
+msgstr "Kunde inte lösa upp argumentet ”{}”:"
 
 #: base/log_event.cpp:280
 msgid ""
@@ -656,15 +656,19 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "Varning: hoppade över PGP-kontroller för 1 paket från förråd: {}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Varning: hoppade över PGP-kontroller för paketet {0} från förråd: {1}"
+msgstr[1] ""
+"Varning: hoppade över PGP-kontroller för {0} paket från flera förråd: {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
-msgstr[0] ""
-"Varning: hoppade över PGP-kontroller för {0} paket från: förråd: {1}"
+msgstr[0] "Varning: hoppade över PGP-kontroller för {0} paket från förråd: {1}"
 msgstr[1] ""
 "Varning: hoppade över PGP-kontroller för {0} paket från flera förråd: {1}"
 
@@ -688,11 +692,11 @@ msgstr "get_user_home_dir(): Kan inte fastställa användarens hemkatalog"
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr "get_user_runtime_dir(): Kan inte bestämma användarens körtidskatalog"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "misslyckades att spara xml dokument för composes"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "Misslyckades att spara xml dokument för grupp \"{} till fil \"{}: {}"
 
@@ -822,7 +826,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "Variabeln \"{}\" är skrivskyddad"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Kan inte öppna logg fil"
 
@@ -905,15 +909,15 @@ msgstr "Plugins::load_plugins(): config_dir_path kan inte vara tom"
 msgid "Cannot load plugins: {}"
 msgstr "Kan inte ladda plugins: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Beräkning av SHA256 misslyckades"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr "Kan inte ladda ner filer, alternativet cacheonly är aktiverat."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Misslyckades med att ladda ner filer"
 
@@ -925,12 +929,12 @@ msgstr ""
 "Maximal nedladdningshastighet är lägre än minimum, vänligen ändra "
 "konfigurationen av minrate eller throttle"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Kunde inte ladda ner paketet \"{0}\", alternativet cacheonly är aktiverat."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Misslyckades med att ladda ner paket"
 
@@ -1025,7 +1029,7 @@ msgstr "Misslyckades att lista pgp nycklar: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Misslyckades att importera pgp nycklar: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1033,48 +1037,48 @@ msgstr ""
 "Misslyckades att skapa förråd \"{}\": Id finns mer än en gång i "
 "konfigurationen"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Endast cache aktiverat men ingen cache för förråd \"{}\""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Misslyckades att ladda repomd för förråd \"{}\" från \"{}\": {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Misslyckades att ladda primärt för förråd \"{}\" från \"{}\": {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "Utvidgad repodatatyp som inte stöds för systemförråd: \"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda {} utökning för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Misslyckades att ladda systemförråd från root \"{}\": {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda {} cache för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "Misslyckades att skriva primärcache för förråd \"{}\" till \"{}\": {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Misslyckades att ladda om primär cache för förråd \"{}\" från \"{}\": {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Misslyckades att skriva {} cache för förråd \"{}\" till \"{}\": {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Misslyckades att ladda om {} cache för förråd \"{}\" från \"{}\": {}"
 
@@ -1401,7 +1405,7 @@ msgstr "Ogiltig underversion version: \"{}\", nummer förväntades"
 msgid "Missing key \"version\""
 msgstr "Saknar nyckel \"version\""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "Oväntad typ av \"environments\", en vektor förväntades"
 
@@ -1413,7 +1417,7 @@ msgstr "Saknar objekt nyckel \"id\" i en miljö"
 msgid "Missing object key \"action\" in an environment"
 msgstr "Saknar objekt nyckel \"action\" i en miljö"
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "Oväntad typ av \"groups\", en vektor förväntades"
 
@@ -1429,7 +1433,7 @@ msgstr "Saknar objektnyckel \"action\" i en grupp"
 msgid "Missing object key \"reason\" in a group"
 msgstr "Saknar objektnyckel \"reason\" i en grupp"
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Oväntad typ av \"rpms\", array förväntad"
 
@@ -1639,6 +1643,9 @@ msgstr "misslyckades att läsa rpm konfigurationsfiler"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Misslyckades med att köra uname()"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr "Varning: hoppade över PGP-kontroller för 1 paket från förråd: {}"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Kan inte {} med paketet \"{}\""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
 "PO-Revision-Date: 2024-03-17 02:36+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -99,6 +99,10 @@ msgstr "Um repositório com id \"{}\" já configurado no arquivo: {}"
 #: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Não é possível ler repositórios do diretório \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr ""
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""

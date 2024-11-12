@@ -1,0 +1,212 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-10 02:54+0000\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/ro/>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: commands/advisory/advisory.cpp:35
+msgid "Manage advisories"
+msgstr "Gestionează avizele"
+
+#: commands/advisory/advisory_info.hpp:34
+msgid "Print details about advisories"
+msgstr "Afișează detalii despre avize"
+
+#: commands/advisory/advisory_list.hpp:34
+msgid "List advisories"
+msgstr "Listează avizele"
+
+#: commands/advisory/arguments.hpp:32
+msgid "Show advisories containing any version of installed packages."
+msgstr "Afișează avizele care conțin orice versiune a pachetelor instalate."
+
+#: commands/advisory/arguments.hpp:43
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
+msgstr ""
+"Afișează avizele care conțin versiuni mai noi ale pachetelor instalate. "
+"Acesta este comportamentul implicit."
+
+#: commands/advisory/arguments.hpp:55
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"Afișează avizele care conțin versiuni egale și mai vechi ale pachetelor "
+"instalate."
+
+#: commands/advisory/arguments.hpp:67
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"Afișează avizele care conțin versiuni mai noi ale pachetelor instalate "
+"pentru care este disponibilă o versiune mai nouă."
+
+#: commands/advisory/arguments.hpp:80
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Afișează numai avizele care conțin pachete cu numele specificate. Opțiune "
+"listă, acceptă caractere joker."
+
+#: commands/advisory/arguments.hpp:81
+msgid "PACKAGE_NAME,..."
+msgstr "NUME_PACHET,..."
+
+#: commands/advisory/arguments.hpp:88
+msgid "List of patterns matched against advisory names."
+msgstr "Lista modelelor comparate cu numele avizelor."
+
+#: commands/advisory/arguments.hpp:95
+msgid "Show only advisories referencing a bugzilla."
+msgstr "Afișează doar avizele care fac referire la o eroare „bugzilla”."
+
+#: commands/advisory/arguments.hpp:102
+msgid "Show only advisories referencing a CVE."
+msgstr "Afișează numai avizele care fac referire la un CVE."
+
+#: commands/advisory/arguments.hpp:113
+msgid "Limit to packages in advisories with specified name. List option."
+msgstr ""
+"Limitează la pachetele din avizele cu numele specificat. Opțiune listă."
+
+#: commands/advisory/arguments.hpp:114
+msgid "ADVISORY_NAME,..."
+msgstr "NUME_AVIZ,..."
+
+#: commands/advisory/arguments.hpp:121
+msgid "Limit to packages in security advisories."
+msgstr "Limitează la pachetele din avizele de securitate."
+
+#: commands/advisory/arguments.hpp:128
+msgid "Limit to packages in bugfix advisories."
+msgstr "Limitează la pachetele din avizele de remediere a erorilor."
+
+#: commands/advisory/arguments.hpp:135
+msgid "Limit to packages in enhancement advisories."
+msgstr "Limitează la pachetele din avizele de îmbunătățire."
+
+#: commands/advisory/arguments.hpp:142
+msgid "Limit to packages in newpackage advisories."
+msgstr "Limitează la pachetele din avizele de pachete noi."
+
+#. Note for translators: "critical" etc. quoted words are
+#. literals that should not be translated.
+#: commands/advisory/arguments.hpp:155
+msgid ""
+"Limit to packages in advisories with specified severity. List option. Can be "
+"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"Limitează la pachetele din avizele cu severitatea specificată. Opțiune "
+"listă. Poate fi „critical”, „important”, „moderate”, „low”, „none”."
+
+#: commands/advisory/arguments.hpp:157
+msgid "ADVISORY_SEVERITY,..."
+msgstr "SEVERITATE_AVIZ,..."
+
+#: commands/advisory/arguments.hpp:169
+msgid ""
+"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
+"option."
+msgstr ""
+"Limitează la pachetele din avizele care corectează un ID Bugzilla, de "
+"exemplu 123123. Opțiune listă."
+
+#: commands/advisory/arguments.hpp:170
+msgid "BUGZILLA_ID,..."
+msgstr "ID_BUGZILLA,..."
+
+#: commands/advisory/arguments.hpp:180
+msgid ""
+"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
+"Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"Limitează la pachetele din avizele care corectează un ID CVE (Common "
+"Vulnerabilities and Exposures), de exemplu CVE-2201-0123. Opțiune listă."
+
+#: commands/advisory/arguments.hpp:182
+msgid "CVE_ID,..."
+msgstr "ID_CVE,..."
+
+#: commands/clean/clean.cpp:88
+msgid "Error cleaning the cache: {}"
+msgstr "Eroare la ștergerea cache-ului: {}"
+
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+"Actualizarea sau retrogradarea software-ului instalat la cele mai recente "
+"versiuni disponibile"
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr "Gestionează grupurile comps"
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr "Afișează numai grupurile disponibile."
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr "Afișează numai grupurile instalate."
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr "Afișează, de asemenea, grupurile ascunse."
+
+#: commands/group/group_list.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Afișează numai grupurile care conțin pachete cu numele specificate. Opțiune "
+"listă, acceptă caractere jokers."
+
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr "Gestionează depozitele"
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr "caută pachete care corespund diferitelor criterii"
+
+#: commands/repoquery/repoquery.cpp:159
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr "Eroare la analizarea obiectului JSON „{}”: {}"
+
+#: exception.cpp:28
+msgid ""
+"This command has to be run with superuser privileges (under the root user on "
+"most systems)."
+msgstr ""
+"Această comandă trebuie să fie executată cu privilegii de superutilizator "
+"(sub utilizatorul root pe majoritatea sistemelor)."
+
+#: main.cpp:157
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Valoare argument formatată greșit: Ultimul caracter al cheii nu poate fi "
+"„.”: {}"
+
+#: main.cpp:259 main.cpp:296
+msgid ". Add \"--help\" for more information about the arguments."
+msgstr ". Adăugați „--help” pentru mai multe informații despre argumente."

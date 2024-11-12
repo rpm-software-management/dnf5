@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-06-08 02:49+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-10 02:54+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ko/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
@@ -97,6 +97,10 @@ msgstr "id \"{}\"를 갖는 저장소는 이미 파일에서 구성되어 있습
 #: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "디렉토리에서 저장소를 읽을 수 없습니다 \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "환경설정을 관리합니다"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""

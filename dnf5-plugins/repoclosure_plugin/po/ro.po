@@ -1,0 +1,40 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-01 12:38+0000\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/ro/>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: repoclosure.cpp:45
+msgid "Print list of unresolved dependencies for repositories"
+msgstr "Afișează lista de dependențe nerezolvate pentru depozite"
+
+#: repoclosure.cpp:154
+msgid "No match for argument \"{}\"."
+msgstr "Nu există nicio potrivire pentru argumentul „{}”."
+
+#: repoclosure.cpp:160
+msgid "Failed to resolve package specifications."
+msgstr "Rezolvarea specificațiilor pachetului a eșuat."
+
+#: repoclosure.cpp:215
+msgid ""
+"Error: Repoclosure ended with unresolved dependencies ({}) across {} "
+"packages."
+msgstr ""
+"Eroare: «repoclosure» s-a încheiat cu dependențe nerezolvate ({}) între {} "
+"pachete."

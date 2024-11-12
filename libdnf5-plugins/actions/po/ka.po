@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2023-11-28 02:51+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-09-22 03:36+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ka/>\n"
@@ -16,9 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:487 actions.cpp:495 actions.cpp:503 actions.cpp:511
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,22 +26,22 @@ msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: მოველოდი ფორმატს \"HOOK:PKG_FILTER:DIRECTION:"
 "OPTIONS:CMD\""
 
-#: actions.cpp:533
+#: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "შეცდომა ფაილში \"{}\" ფაილში {}: უცნობი \"enabled\" პარამეტრის მნიშვნელობა "
 "\"{}\""
 
-#: actions.cpp:540
+#: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პარამეტრი \"{}\""
 
-#: actions.cpp:575
+#: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი ჰუკი \"{}\""
 
-#: actions.cpp:585
+#: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -49,17 +49,25 @@ msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: პაკეტების ფილტრი, მხოლოდ, PRE_TRANS და "
 "POST_TRANS ჰუკებში შეგიძლიათ, გამოიყენოთ"
 
-#: actions.cpp:595
+#: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "შეცდომა ფაილში \"{}\" ხაზზე {}: მიმართულებას პაკეტების ფილტრის გარეშე ვერ "
 "გამოიყენებთ"
 
-#: actions.cpp:612
+#: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პაკეტის მიმართულება \"{}\""
 
-#: actions.cpp:621
+#: actions.cpp:664
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი რეჟიმი \"{}\""
+
+#: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: ნაკლული ბრძანება"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr "ვერ შევქმენი ფაიფი: {}"

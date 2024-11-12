@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-08-03 03:41+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-09 04:13+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ka/>\n"
@@ -17,7 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: commands/advisory/advisory.cpp:35
+msgid "Manage advisories"
+msgstr "რეკომენდაციების მართვა"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -150,6 +154,15 @@ msgstr "CVE_ID,..."
 msgid "Error cleaning the cache: {}"
 msgstr "კეშის გასუფთავების შეცდომა: {}"
 
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr "ასწიეთ ან ჩამოსწიეთ დაყენებული პროგრამები უახლეს ხელმისაწვდომ ვერსიაზე"
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr "Comps ჯგუფების მართვა"
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr "მხოლოდ ხელმისაწვდომი ჯგუფების ჩვენება."
@@ -170,7 +183,15 @@ msgstr ""
 "მხოლოდ იმ ჯგუფების ჩვენება, რომლებიც შეიცავენ პაკეტებს, რომლებსაც აქვთ "
 "შესაბამისის სახელები. სიის პარამეტრი. აქვს გლობების მხარდაჭერა."
 
-#: commands/repoquery/repoquery.cpp:158
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr "რეპოზიტორიების მართვა"
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr "პაკეტების ძებნა სასურველი პირობებით"
+
+#: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "დამუშავების შეცდომა JSON ობიექტისთვის \"{}\": {}"
 
@@ -189,6 +210,6 @@ msgstr ""
 "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
 "იქნება '.': {}"
 
-#: main.cpp:246 main.cpp:283
+#: main.cpp:259 main.cpp:296
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr "დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."

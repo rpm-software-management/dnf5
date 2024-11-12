@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-04-03 08:36+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-11-04 06:51+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/ru/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
@@ -99,6 +99,10 @@ msgstr "Репозиторий с идентификатором \"{}\" уже �
 #: addrepo.cpp:503 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Невозможно прочитать репозитории из каталога \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "Управление конфигурацией"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
