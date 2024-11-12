@@ -1,7 +1,7 @@
 %global project_version_prime 5
 %global project_version_major 2
-%global project_version_minor 6
-%global project_version_micro 2
+%global project_version_minor 7
+%global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 11]
 
@@ -895,6 +895,9 @@ popd
 %ldconfig_scriptlets
 
 %changelog
+* Tue Nov 12 2024 Packit Team <hello@packit.dev> - 5.2.7.0-1
+- New upstream release 5.2.7.0
+
 * Fri Sep 20 2024 Packit Team <hello@packit.dev> - 5.2.6.2-1
 - New upstream release 5.2.6.2
 
