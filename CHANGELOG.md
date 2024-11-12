@@ -1,3 +1,70 @@
+# 5.2.7.0
+
+- Update translations from weblate
+- dnfdaemon: resolve and do_transaction cannot run simultaneously
+- dnfdaemon: Base.reset() API
+- dnfdaemon: Call base.setup() after setting releasever
+- dnfdaemon: Move base initialization to special method
+- dnfdaemon: Store session goal in unique_ptr
+- dnfdaemon: Add transaction mutex to the Session class
+- daemon tests: Adjust tests to current behavior
+- daemon tests: Drop test_repoconf.py
+- repo: Fix invalid free()
+- Optimise multi_progress_bar tty control sequences
+- MultiProgressBar now buffers the output text to a single write
+- Clear up changes doc about optional subcommands
+- PackageDownloader unit tests: Number of add_new_download and end calls
+- DownloadCallbacks: Ensure `end` for every successful `add_new_download`
+- Behave more like the old service, with the "--timer" option.
+- Run "makecache" periodically to keep the cache ready.
+- Add couple progress bar unit tests
+- When `multi_progress_bar` finishes print new line automatically
+- Fix parsing of offline transaction JSON file
+- Optimize getting counts of transaction items
+- Add `get_base()` to `libdnf::transaction::Transaction`
+- historydb: Prevent insertion of duplicate group packages
+- Update dnf5.conf.5 to reflect change in fastestmirror behavior
+- Return `ConfigMain::get_errorlevel_option()` API
+- build: Remove an explicit swig option -ruby
+- Document dropped `--disableexcludepkgs` option
+- Drop `errorlevel` config option
+- Test that both pkg_gpgcheck and gpgcheck point to the same OptionBool
+- Change `gpgcheck` option to `pkg_gpgcheck` but stay compatible
+- chore: Clean up Fedora 37-related conditionals in RPM spec
+- log: Preserve log messages during RPM transaction
+- Recommend --use-host-config if --installroot is used and not all repositories can be enabled
+- test: Normalize Python code
+- Make most descriptions for dnf5 --help translatable.
+- test python3: improve comps tests
+- comps: add get_base() to {Group,Environment}{,Query}
+- doc: "dnf repoquery --unsatisfied" is not supported
+- Unit tests for libdnf5::utils::[is_glob_pattern | is_file_pattern]
+- [swig] Bindings for libdnf5::utils::[is_glob_pattern | is_file_pattern]
+- Allow unlimited number of arguments for history `list` and `info`
+- `history store` command: move arg verificion above user confirmation
+- libdnf5::utils::patterns: No inline API functions, mark noexcept
+- Fix libdnf5::utils::patterns: Include missing headers
+- When writing main solv file (primary.xml) don't store filelists
+- Set `POOL_FLAG_ADDFILEPROVIDESFILTERED` only when not loading filelists
+- i18n: Fix plural forms for "Warning: skipped PGP checks..." message
+- i18n: Update translation templates from Weblate
+- dnf5: OfflineExecuteCommand needs to set transaction
+- dnf5: Print RPM logs to the user
+- dnf5: Refactor scriptlet output printing
+- dnf5: script_output_to_progress() return number of lines
+- rpm.Transaction: Handle RPM transaction log messages
+- transaction: Store RPM log messages
+- RpmLogGuard: Add a buffer for recently emitted logs
+- comps: Fix memory issues in group serialization
+- Add --allmirros option for `dnf download --url`
+- Consistently use "removing" instead of "erasing" packages
+- dnfdaemon: D-Bus API to reset the goal
+- dnfdaemon: Add reset_goal() method
+- goal: Add missing members to reset() method
+- man: Package changes from DNF4 doc as man page
+- doc: Rename the file documenting changes from DNF4
+- copr: use pubkey URL returned by Copr API
+
 # 5.2.6.2
 
 - Update translations from weblate
