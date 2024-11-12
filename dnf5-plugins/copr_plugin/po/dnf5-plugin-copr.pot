@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 10:48+0100\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgid "Copr hub (the web-UI/API server) hostname"
 msgstr ""
 
 #: copr.cpp:88
+#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
@@ -33,6 +34,7 @@ msgid ""
 msgstr ""
 
 #: copr.cpp:106
+#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr ""
 
@@ -57,6 +59,7 @@ msgid ""
 msgstr ""
 
 #: copr_constants.hpp:41
+#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -77,12 +80,14 @@ msgid "print useful info about the system, useful for debugging"
 msgstr ""
 
 #: copr_disable.cpp:34
+#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
 
 #: copr_enable.cpp:37
+#, c++-format
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
@@ -99,11 +104,13 @@ msgid "list Copr repositories"
 msgstr ""
 
 #: copr_remove.cpp:34
+#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 
 #: copr_repo.cpp:88
+#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr ""
 
@@ -131,44 +138,53 @@ msgstr ""
 msgid "Can't parse Copr repo spec: "
 msgstr ""
 
-#: copr_repo.cpp:335
+#: copr_repo.cpp:339
+#, c++-format
 msgid "Can't remove the {} repo file"
 msgstr ""
 
-#: copr_repo.cpp:338
+#: copr_repo.cpp:342
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr ""
 
-#: copr_repo.cpp:384
-msgid "Can't find {} item in {}"
+#: copr_repo.cpp:388
+#, c++-format
+msgid "Can't find item {} in {}"
 msgstr ""
 
-#: copr_repo.cpp:440
+#: copr_repo.cpp:444
+#, c++-format
 msgid "Removing old config file '{}'"
 msgstr ""
 
-#: copr_repo.cpp:443
+#: copr_repo.cpp:447
 msgid "Can't remove"
 msgstr ""
 
-#: copr_repo.cpp:517
+#: copr_repo.cpp:521
+#, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
 
-#: copr_repo.cpp:551
+#: copr_repo.cpp:555
+#, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr ""
 
-#: copr_repo.cpp:558
+#: copr_repo.cpp:562
+#, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr ""
 
-#: copr_repo.cpp:608
+#: copr_repo.cpp:612
+#, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr ""
 
-#: copr_repo.cpp:622 copr_repo.cpp:647
+#: copr_repo.cpp:626 copr_repo.cpp:651
+#, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr ""

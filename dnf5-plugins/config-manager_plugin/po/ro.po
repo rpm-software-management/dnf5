@@ -1,0 +1,246 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-10 02:54+0000\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-config-manager/ro/>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: addrepo.cpp:153
+msgid "from-repofile: \"{}\" file does not exist"
+msgstr "from-repofile: fișierul „{}” nu există"
+
+#: addrepo.cpp:156
+msgid "from-repofile: {}"
+msgstr "from-repofile: {}"
+
+#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: valoarea argumentului „{}” este greșit formatată"
+
+#: addrepo.cpp:196
+msgid "Cannot set repository option \"{}={}\": {}"
+msgstr "Nu se poate defini opțiunea depozitului „{}={}”: {}"
+
+#: addrepo.cpp:204 setopt.cpp:138
+msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
+msgstr "Definește din nou opțiunea „{}” cu o valoare diferită: „{}” != ”{}”"
+
+#: addrepo.cpp:270
+msgid "Missing path to repository configuration directory"
+msgstr "Lipsește ruta către directorul de configurare a depozitului"
+
+#: addrepo.cpp:320
+msgid "Failed to copy repository configuration file \"{}\": {}"
+msgstr "Copierea fișierului de configurare a depozitului „{}” a eșuat: {}"
+
+#: addrepo.cpp:331
+msgid "Failed to download repository configuration file \"{}\": {}"
+msgstr "Descărcarea fișierului de configurare a depozitului a eșuat „{}”: {}"
+
+#: addrepo.cpp:359
+msgid ""
+"Error in added repository configuration file. Cannot set repository option "
+"\"{}={}\": {}"
+msgstr ""
+"Eroare în fișierul de configurare a depozitului adăugat. Nu se poate defini "
+"opțiunea depozitului „{}={}”: {}"
+
+#: addrepo.cpp:393
+msgid "Bad baseurl: {}={}"
+msgstr "baseurl incorectă: {}={}"
+
+#: addrepo.cpp:401
+msgid ""
+"One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> must be set to a non-empty URL"
+msgstr ""
+"Una dintre opțiunile „--from-repofile=<URL>”, „--set=baseurl=<URL>”, „--"
+"set=mirrorlist=<URL>”, „--set=metalink=<URL>” trebuie să fie definită la o "
+"adresă URL nevidă"
+
+#: addrepo.cpp:446
+msgid "Failed to save repository configuration file \"{}\": {}"
+msgstr "Salvarea fișierului de configurare a depozitului „{}” a eșuat: {}"
+
+#: addrepo.cpp:468
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--add-or-replace\" or \"--overwrite\"."
+msgstr ""
+"Fișierul „{}” există deja și configurează depozitele cu ID-urile „{}”. "
+"Adăugați „--add-or-replace” sau „--overwrite”."
+
+#: addrepo.cpp:471
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--overwrite\" to overwrite."
+msgstr ""
+"Fișierul „{}” există deja și configurează depozitele cu ID-urile „{}”. "
+"Adăugați „--overwrite” pentru a-l suprascrie."
+
+#: addrepo.cpp:491 addrepo.cpp:517
+msgid "A repository with id \"{}\" already configured in file: {}"
+msgstr "Un depozit cu id-ul „{}” este deja configurat în fișierul: {}"
+
+#: addrepo.cpp:503 setopt.cpp:263
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "Nu se pot citi depozitele din directorul „{}”: {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "Gestionează configurația"
+
+#: setopt.cpp:91 unsetopt.cpp:72
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Valoare argument formatată greșit: Ultimul caracter al cheii nu poate fi "
+"„.”: {}"
+
+#: setopt.cpp:100 unsetopt.cpp:81
+msgid "{}: Empty repository id is not allowed: {}"
+msgstr "{}: Id-ul de depozit, gol, nu este permis: {}"
+
+#: setopt.cpp:109
+msgid "Cannot set repository option \"{}\": {}"
+msgstr "Nu se poate defini opțiunea depozitului „{}”: {}"
+
+#: setopt.cpp:116 setopt.cpp:179
+msgid ""
+"Sets the \"{}\" option of the repository \"{}\" again with a different "
+"value: \"{}\" != \"{}\""
+msgstr ""
+"Definește din nou opțiunea „{}” a depozitului „{}” cu o valoare diferită: "
+"„{}” != ”{}”"
+
+#: setopt.cpp:130
+msgid "Cannot set option: \"{}\": {}"
+msgstr "Nu se poate defini opțiunea: „{}\": {}"
+
+#: setopt.cpp:170
+msgid "No matching repository to modify: {}"
+msgstr "Nu există niciun depozit corespondent de modificat: {}"
+
+#: setvar.cpp:60
+msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
+msgstr "Nu se poate defini „{}”: variabila „{}” este numai-pentru-citire"
+
+#: setvar.cpp:68
+msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
+msgstr "Definește din nou variabila „{}” cu o valoare diferită: „{}” != ”{}”"
+
+#: setvar.cpp:97 unsetvar.cpp:63
+msgid "Missing path to vars directory"
+msgstr "Lipsește ruta către directorul de variabile"
+
+#: setvar.cpp:110
+msgid "Cannot write variable to file \"{}\": {}"
+msgstr "Nu se poate scrie variabila în fișierul „{}”: {}"
+
+#: shared.hpp:58
+msgid ""
+"The path \"{}\" exists, but it is not a directory or a symlink to a "
+"directory."
+msgstr ""
+"Ruta „{}” există, dar nu este un director sau o legătură simbolică către un "
+"director."
+
+#: shared.hpp:63
+msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
+msgstr ""
+"Ruta „{}” există, dar este o legătură simbolică către un obiect inexistent."
+
+#: shared.hpp:69
+msgid ""
+"Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
+"missing directories."
+msgstr ""
+"Directorul „{}” nu există. Adăugați „--create-missing-dir” pentru a crea "
+"directoarele lipsă."
+
+#: shared.hpp:80
+msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
+msgstr "Numele variabilei poate conține numai litere ASCII, numere și „_”: {}"
+
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii de depozit neacceptate: {}"
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii principale neacceptate: {}"
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii principale, dar aceasta nu "
+"este prezentă în fișierul de configurare: {}"
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+"config-manager: cerere de a elimina opțiunea principală, dar fișierul de "
+"configurare nu a fost găsit: {}"
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii de depozit, dar repoid nu "
+"este prezent în suprascrieri „overrides”: {}"
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii depozit (repository), dar "
+"aceasta nu este prezentă în suprascrieri „overrides”: {}.{}"
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: cerere de eliminare a opțiunii de depozit, dar fișierul cu "
+"suprascrieri „overrides” nu a fost găsit: {}"
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"config-manager: cerere de eliminare a variabilei, dar directorul de "
+"variabile nu a fost găsit: {}"
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: cerere de eliminare a variabilei, dar aceasta nu este "
+"prezentă în directorul de variabile: {}"
+
+#: unsetvar.cpp:88
+msgid "Cannot remove variable file \"{}\": {}"
+msgstr "Nu se poate elimina fișierul de variabile „{}”: {}"

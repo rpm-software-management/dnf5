@@ -1,0 +1,1659 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-09 14:13+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5/pl/>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.8.2\n"
+
+#: advisory/advisory.cpp:81
+msgid ""
+"Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have "
+"advisory prefix \"{}\""
+msgstr ""
+"Zły identyfikator libsolv dla ostrzeżenia „{}”, rozpoznawalna nazwa „{}” nie "
+"zaczyna się od przedrostka ostrzeżenia „{}”"
+
+#: base/goal.cpp:472
+msgid "Unsupported argument for REMOVE action: {}"
+msgstr "Nieobsługiwany argument dla akcji USUŃ: {}"
+
+#. TODO(lukash) throw a proper exception
+#: base/goal.cpp:1545
+msgid "Incorrect configuration value for multilib_policy: {}"
+msgstr "Nieprawidłowa wartość konfiguracji dla multilib_policy: {}"
+
+#: base/goal_elements.cpp:352
+msgid "Install"
+msgstr "Zainstaluj"
+
+#: base/goal_elements.cpp:354
+msgid "Install via provide"
+msgstr ""
+
+#: base/goal_elements.cpp:356
+msgid "Install by group"
+msgstr ""
+
+#: base/goal_elements.cpp:358
+msgid "Upgrade"
+msgstr "Zaktualizuj"
+
+#: base/goal_elements.cpp:360
+msgid "Upgrade all"
+msgstr "Zaktualizuj wszystko"
+
+#: base/goal_elements.cpp:362
+msgid "Upgrade minimal"
+msgstr "Minimalna aktualizacja"
+
+#: base/goal_elements.cpp:364
+msgid "Upgrade all minimal"
+msgstr ""
+
+#: base/goal_elements.cpp:366
+msgid "Downgrade"
+msgstr "Instalacja poprzedniej wersji"
+
+#: base/goal_elements.cpp:368
+msgid "Reinstall"
+msgstr "Ponowna instalacja"
+
+#: base/goal_elements.cpp:370
+msgid "Install or reinstall"
+msgstr ""
+
+#: base/goal_elements.cpp:372
+msgid "Remove"
+msgstr ""
+
+#: base/goal_elements.cpp:374
+msgid "Distrosync"
+msgstr ""
+
+#: base/goal_elements.cpp:376
+msgid "Distrosync all"
+msgstr ""
+
+#: base/goal_elements.cpp:378
+msgid "Reason Change"
+msgstr ""
+
+#: base/goal_elements.cpp:380
+msgid "Resolve"
+msgstr ""
+
+#: base/goal_elements.cpp:382
+msgid "Enable"
+msgstr "Włącz"
+
+#: base/goal_elements.cpp:384
+msgid "Disable"
+msgstr "Wyłącz"
+
+#: base/goal_elements.cpp:386
+msgid "Reset"
+msgstr "Przywróć"
+
+#: base/goal_elements.cpp:388
+msgid "Parse serialized transaction"
+msgstr ""
+
+#: base/goal_elements.cpp:390
+msgid "Install action"
+msgstr ""
+
+#: base/goal_elements.cpp:392
+msgid "Remove action"
+msgstr ""
+
+#: base/goal_elements.cpp:394
+msgid "Upgrade action"
+msgstr ""
+
+#: base/goal_elements.cpp:396
+msgid "Reinstall action"
+msgstr ""
+
+#: base/goal_elements.cpp:398
+msgid "Reason change action"
+msgstr ""
+
+#: base/goal_elements.cpp:400
+msgid "Reason override"
+msgstr ""
+
+#: base/goal_elements.cpp:402
+msgid "Revert comps upgrade"
+msgstr ""
+
+#: base/goal_elements.cpp:404
+msgid "Install debug RPMs"
+msgstr ""
+
+#: base/goal_elements.cpp:406
+msgid "Transaction merge"
+msgstr ""
+
+#: base/log_event.cpp:141
+msgid "No packages to remove for argument: {}"
+msgstr "Brak pakietów do usunięcia dla argumentu: {}"
+
+#: base/log_event.cpp:143
+msgid "No groups to remove for argument: {}"
+msgstr "Brak grup do usunięcia dla argumentu: {}"
+
+#: base/log_event.cpp:146
+msgid "No environmental groups to remove for argument: {}"
+msgstr "Brak grup środowiskowych do usunięcia z powodu argumentu: {}"
+
+#: base/log_event.cpp:148
+msgid "No modules to remove for argument: {}"
+msgstr "Brak modułów do usunięcia dla argumentu: {}"
+
+#: base/log_event.cpp:152
+msgid "No match for group from environment: {}"
+msgstr "Brak dopasowania dla grupy ze środowiska: {}"
+
+#: base/log_event.cpp:154
+msgid "No match for group package: {}"
+msgstr "Brak dopasowania do pakietu grupowego: {}"
+
+#: base/log_event.cpp:158
+msgid "Cannot perform {0}, no match for: {1}."
+msgstr "Nie można wykonać {0}, brak dopasowania dla: {1}."
+
+#: base/log_event.cpp:160
+msgid "No match for argument: {}"
+msgstr "Brak dopasowania dla argumentu: {}"
+
+#: base/log_event.cpp:163
+msgid "No match for argument '{0}' in repositories '{1}'"
+msgstr "Brak dopasowania dla argumentu '{0}' w repozytoriach '{1}'"
+
+#: base/log_event.cpp:169
+msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
+msgstr "Nie można wykonać {0} dla {1} '{2}', ponieważ nie jest zainstalowany."
+
+#: base/log_event.cpp:174
+msgid "Packages for argument '{}' available, but not installed."
+msgstr "Pakiety dla argumentu '{}' są dostępne, ale nie zainstalowane."
+
+#: base/log_event.cpp:178
+msgid ""
+"Packages for argument '{}' available, but installed for a different "
+"architecture."
+msgstr ""
+"Pakiety dla argumentu '{}' są dostępne, ale zainstalowane dla innej "
+"architektury."
+
+#: base/log_event.cpp:182
+msgid "Cannot perform {0} because '{1}' matches only source packages."
+msgstr ""
+"Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do pakietów źródłowych."
+
+#: base/log_event.cpp:186
+msgid "Argument '{}' matches only source packages."
+msgstr "Argument '{}' pasuje tylko do pakietów źródłowych."
+
+#: base/log_event.cpp:190
+msgid "Cannot perform {0} because '{1}' matches only excluded packages."
+msgstr ""
+"Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do wykluczonych pakietów."
+
+#: base/log_event.cpp:194
+msgid "Argument '{}' matches only excluded packages."
+msgstr "Argument '{}' pasuje tylko do wykluczonych pakietów."
+
+#: base/log_event.cpp:198
+msgid ""
+"Cannot perform {0} because '{1}' matches only packages excluded by "
+"versionlock."
+msgstr ""
+"Nie można wykonać {0}, ponieważ '{1}' pasuje tylko do pakietów wykluczonych "
+"przez versionlock."
+
+#: base/log_event.cpp:202
+msgid "Argument '{}' matches only packages excluded by versionlock."
+msgstr "Argument '{}' pasuje tylko do pakietów wykluczonych przez versionlock."
+
+#: base/log_event.cpp:207
+msgid "  * Maybe you meant: {}"
+msgstr "  • Czy chodziło o: {}"
+
+#: base/log_event.cpp:210
+msgid "There are following alternatives for '{0}': {1}"
+msgstr "Istnieją następujące alternatywy dla '{0}': {1}"
+
+#: base/log_event.cpp:217
+msgid ""
+"The lowest available version of the \"{}\" package is already installed, "
+"cannot downgrade it."
+msgstr ""
+"Najniższa dostępna wersja pakietu „{}” jest już zainstalowana. Nie można jej "
+"obniżyć."
+
+#: base/log_event.cpp:223
+msgid ""
+"Installed packages for argument '{0}' are not available in repositories in "
+"the same version, available versions: {1}, cannot reinstall."
+msgstr ""
+"Zainstalowane pakiety dla argumentu „{0}” nie są dostępne w repozytoriach w "
+"tej samej wersji, dostępne wersje: {1}, nie można zainstalować ponownie."
+
+#: base/log_event.cpp:229
+msgid ""
+"Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
+msgstr ""
+"Nie można wykonać {0}, ponieważ '{1}' jest zainstalowany w innej wersji: "
+"'{2}'."
+
+#: base/log_event.cpp:235
+msgid ""
+"Packages for argument '{}' installed and available, but in a different "
+"version."
+msgstr ""
+"Pakiety dla argumentu '{}' są zainstalowane i dostępne, ale w innej wersji."
+
+#: base/log_event.cpp:237
+msgid "Packages for argument '{}' installed, but not available."
+msgstr "Pakiety dla argumentu '{}' zostały zainstalowane, ale są niedostępne."
+
+#: base/log_event.cpp:246
+msgid "Package \"{}\" is already installed with reason \"{}\"."
+msgstr "Pakiet „{}” został już zainstalowany z powodu „{}”."
+
+#: base/log_event.cpp:248
+msgid "Package \"{}\" is already installed."
+msgstr "Pakiet „{}” jest już zainstalowany."
+
+#: base/log_event.cpp:257
+msgid "Debug data written to \"{}\""
+msgstr "Dane debugowania zapisane w „{}”"
+
+#: base/log_event.cpp:261
+msgid ""
+"{0} upgrade cannot be reverted, however associated package actions will be. "
+"({1} id: '{2}') ."
+msgstr ""
+"{0} uaktualnienia nie można cofnąć, ale powiązane z nim działania pakietu "
+"będą cofnięte. ({1} id: '{2}') ."
+
+#: base/log_event.cpp:267
+msgid "{} action for argument \"{}\" is not supported."
+msgstr "{} akcja dla argumentu \"{}\" nie jest obsługiwana."
+
+#. Format a leading line of the error message.
+#: base/log_event.cpp:276
+msgid "Unable to resolve argument '{}':"
+msgstr "Nie można rozwiązać argumentu '{}':"
+
+#: base/log_event.cpp:280
+msgid ""
+"\n"
+"  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
+"not enabled or default."
+msgid_plural ""
+"\n"
+"  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
+"streams are enabled or default."
+msgstr[0] ""
+"\n"
+"  - Argument '{}' pasuje do {} strumienia ('{}') modułu '{}', ale strumień "
+"nie jest włączony lub domyślny."
+msgstr[1] ""
+"\n"
+"  - Argument '{}' pasuje do {} strumieni ('{}') modułu '{}', ale żaden ze "
+"strumieni nie jest włączony ani domyślny."
+msgstr[2] ""
+"\n"
+"  - Argument '{}' pasuje do {} strumieni ('{}') modułu '{}', ale żaden ze "
+"strumieni nie jest włączony ani domyślny."
+
+#: base/log_event.cpp:287
+msgid "', '"
+msgstr "', '"
+
+#: base/log_event.cpp:296
+msgid "Modular dependency problems:\n"
+msgstr "Problemy zależności modułowych:\n"
+
+#: base/log_event.cpp:303
+msgid "Modular dependency problems with the latest modules:\n"
+msgstr "Problemy zależności modułowych w najnowszych modułach:\n"
+
+#: base/log_event.cpp:310
+msgid "Modular dependency problems with the defaults:\n"
+msgstr "Problemy z zależnościami modułowymi przy ustawieniach domyślnych:\n"
+
+#: base/log_event.cpp:325
+msgid ""
+"The operation would result in switching of module '{0}' stream '{1}' to "
+"stream '{2}'\n"
+msgstr ""
+"Operacja spowoduje przełączenie strumienia modułu '{0}' '{1}' na strumień "
+"'{2}'\n"
+
+#: base/log_event.cpp:330
+msgid ""
+"Error: It is not possible to switch enabled streams of a module unless "
+"explicitly enabled via configuration option module_stream_switch."
+msgstr ""
+"Błąd: Nie można przełączać włączonych strumieni modułu, chyba że zostanie to "
+"wyraźnie włączone za pomocą opcji konfiguracji module_stream_switch."
+
+#: base/log_event.cpp:335
+msgid ""
+"Extra package '{0}' (with action '{1}') which is not present in the stored "
+"transaction was pulled into the transaction.\n"
+msgstr ""
+"Dodatkowy pakiet '{0}' (z akcją '{1}'), którego nie ma w zapisanej "
+"transakcji, został wciągnięty do transakcji.\n"
+
+#: base/log_event.cpp:341
+msgid "Cannot parse file: '{0}': {1}.\n"
+msgstr "Nie można przeanalizować pliku: '{0}': {1}.\n"
+
+#: base/log_event.cpp:348
+msgid ""
+"Could not find debuginfo package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Nie można znaleźć pakietu debuginfo dla następujących pakietów rozwiązanych "
+"na podstawie argumentu '{0}': {1}"
+
+#: base/log_event.cpp:351 base/log_event.cpp:362
+msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
+msgid ", "
+msgstr ", "
+
+#: base/log_event.cpp:358
+msgid ""
+"Could not find debugsource package for the following packages resolved from "
+"the argument '{0}': {1}"
+msgstr ""
+"Nie można znaleźć pakietu debugsource dla następujących pakietów "
+"rozwiązanych na podstawie argumentu '{0}': {1}"
+
+#: base/log_event.cpp:365
+msgid "Transaction merge error: '{0}'"
+msgstr "Błąd scalania transakcji: '{0}'"
+
+#: base/solver_problems.cpp:41
+msgid "{} does not belong to a distupgrade repository"
+msgstr "{} nie należy do repozytorium distupgrade"
+
+#: base/solver_problems.cpp:42
+msgid "{0} from {1} has inferior architecture"
+msgstr "{0} z {1} ma gorszą architekturę"
+
+#: base/solver_problems.cpp:43
+msgid "problem with installed package"
+msgstr "problem z zainstalowanym pakietem"
+
+#: base/solver_problems.cpp:44 base/solver_problems.cpp:80
+msgid "conflicting requests"
+msgstr "sprzeczne żądania"
+
+#: base/solver_problems.cpp:45 base/solver_problems.cpp:81
+msgid "unsupported request"
+msgstr "nieobsługiwane żądanie"
+
+#: base/solver_problems.cpp:46 base/solver_problems.cpp:82
+msgid "nothing provides requested {}"
+msgstr "nic nie dostarcza żądanego {}"
+
+#: base/solver_problems.cpp:47
+msgid "package {} does not exist"
+msgstr "pakiet {} nie istnieje"
+
+#: base/solver_problems.cpp:48 base/solver_problems.cpp:84
+msgid "{} is provided by the system"
+msgstr "{} jest dostarczany przez system"
+
+#: base/solver_problems.cpp:49 base/solver_problems.cpp:85
+msgid "some dependency problem"
+msgstr "jakiś problem z zależnością"
+
+#: base/solver_problems.cpp:50
+msgid "cannot install the best update candidate for package {}"
+msgstr ""
+"nie można zainstalować najlepszego kandydata do aktualizacji dla pakietu {}"
+
+#: base/solver_problems.cpp:51 base/solver_problems.cpp:87
+msgid "cannot install the best candidate for the job"
+msgstr "nie można zainstalować najlepszego kandydata do zadania"
+
+#: base/solver_problems.cpp:52
+msgid "package {0} from {1} is filtered out by modular filtering"
+msgstr "pakiet {0} z {1} jest filtrowany przez filtrowanie modułowe"
+
+#: base/solver_problems.cpp:53
+msgid "package {0} from {1} does not have a compatible architecture"
+msgstr "pakiet {0} z {1} nie ma zgodnej architektury"
+
+#: base/solver_problems.cpp:54
+msgid "package {0} from {1} is not installable"
+msgstr "pakiet {0} z {1} nie jest instalowalny"
+
+#: base/solver_problems.cpp:55
+msgid "package {0} from {1} is filtered out by exclude filtering"
+msgstr "pakiet {0} z {1} jest filtrowany przez filtrowanie wykluczające"
+
+#: base/solver_problems.cpp:56
+msgid "nothing provides {0} needed by {1} from {2}"
+msgstr "nic nie dostarcza {0} potrzebnego {1} od {2}"
+
+#: base/solver_problems.cpp:57
+msgid "cannot install both {0} from {1} and {2} from {3}"
+msgstr "nie można zainstalować jednocześnie {0} z {1} i {2} z {3}"
+
+#: base/solver_problems.cpp:58
+msgid "package {0} from {1} conflicts with {2} provided by {3} from {4}"
+msgstr "pakiet {0} z {1} koliduje z {2} dostarczonym przez {3} z {4}"
+
+#: base/solver_problems.cpp:60
+msgid "installed package {0} conflicts with {1} provided by {2} from {3}"
+msgstr "zainstalowany pakiet {0} koliduje z {1} dostarczonym przez {2} z {3}"
+
+#: base/solver_problems.cpp:61
+msgid "package {0} from {1} obsoletes {2} provided by {3} from {4}"
+msgstr "pakiet {0} z {1} jest nieaktualny, {2} dostarczony przez {3} z {4}"
+
+#: base/solver_problems.cpp:62
+msgid "installed package {0} obsoletes {1} provided by {2} from {3}"
+msgstr ""
+"zainstalowany pakiet {0} powoduje przestarzałość {1} dostarczonego przez {2} "
+"z {3}"
+
+#: base/solver_problems.cpp:64
+msgid "package {0} from {1} implicitly obsoletes {2} provided by {3} from {4}"
+msgstr ""
+"pakiet {0} z {1} niejawnie czyni przestarzałym {2} dostarczony przez {3} z "
+"{4}"
+
+#: base/solver_problems.cpp:66
+msgid ""
+"package {1} from {2} requires {0}, but none of the providers can be installed"
+msgstr "pakiet {1} z {2} wymaga {0}, ale żaden z dostawców go nie dostarcza"
+
+#: base/solver_problems.cpp:68
+msgid ""
+"installed package {1} requires {0}, but none of the providers can be "
+"installed"
+msgstr ""
+
+#: base/solver_problems.cpp:69
+msgid "package {0} from {1} conflicts with {2} provided by itself"
+msgstr ""
+"pakiet {0} z {1} powoduje konflikt z {2} dostarczonym przez niego samego"
+
+#: base/solver_problems.cpp:70
+msgid "both package {0} from {1} and {3} from {4} obsolete {2}"
+msgstr "oba pakiety {0} z {1} i {3} z {4} są przestarzałe {2}"
+
+#: base/solver_problems.cpp:72
+msgid ""
+"The operation would result in removing the following protected packages: {}"
+msgstr "Operacja spowoduje usunięcie następujących chronionych pakietów: {}"
+
+#: base/solver_problems.cpp:75
+msgid "The operation would result in removing of running kernel: {}"
+msgstr "Operacja spowoduje usunięcie działającego jądra: {}"
+
+#: base/solver_problems.cpp:77
+msgid "module {} does not belong to a distupgrade repository"
+msgstr "moduł {} nie należy do repozytorium distupgrade"
+
+#: base/solver_problems.cpp:78
+msgid "module {} has inferior architecture"
+msgstr "moduł {} ma gorszą architekturę"
+
+#: base/solver_problems.cpp:79
+msgid "problem with installed module {}"
+msgstr "problem z zainstalowanym modułem {}"
+
+#: base/solver_problems.cpp:83
+msgid "module {} does not exist"
+msgstr "moduł {} nie istnieje"
+
+#: base/solver_problems.cpp:86
+msgid "cannot install the best update candidate for module {}"
+msgstr ""
+"nie można zainstalować najlepszego kandydata do aktualizacji dla modułu {}"
+
+#: base/solver_problems.cpp:88 base/solver_problems.cpp:91
+msgid "module {} is disabled"
+msgstr "moduł {} jest wyłączony"
+
+#: base/solver_problems.cpp:89
+msgid "module {} does not have a compatible architecture"
+msgstr "moduł {} nie ma zgodnej architektury"
+
+#: base/solver_problems.cpp:90
+msgid "module {} is not installable"
+msgstr "moduł {} nie jest instalowalny"
+
+#: base/solver_problems.cpp:92
+msgid "nothing provides {0} needed by module {1}"
+msgstr "nic nie dostarcza {0} potrzebnego modułowi {1}"
+
+#: base/solver_problems.cpp:93
+msgid "cannot install both modules {0} and {1}"
+msgstr "nie można zainstalować obu modułów {0} i {1}"
+
+#: base/solver_problems.cpp:94
+msgid "module {0} conflicts with {1} provided by {2}"
+msgstr "moduł {0} koliduje z {1} dostarczonym przez {2}"
+
+#: base/solver_problems.cpp:95
+msgid "module {0} obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:96
+msgid "installed module {0} obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:97
+msgid "module {0} implicitly obsoletes {1} provided by {2}"
+msgstr ""
+
+#: base/solver_problems.cpp:98
+msgid "module {1} requires {0}, but none of the providers can be installed"
+msgstr "moduł {1} wymaga {0}, ale żaden z dostawców go nie dostarcza"
+
+#: base/solver_problems.cpp:99
+msgid "module {1} conflicts with {0} provided by itself"
+msgstr ""
+
+#: base/solver_problems.cpp:100
+msgid "both module {0} and {2} obsolete {1}"
+msgstr ""
+
+#: base/solver_problems.cpp:290
+msgid "Problem: "
+msgstr "Problem: "
+
+#: base/solver_problems.cpp:294
+msgid "Problem {}: "
+msgstr "Problem {}: "
+
+#: base/transaction.cpp:79
+msgid "This transaction has been already run before."
+msgstr "Ta transakcja została już wcześniej przeprowadzona."
+
+#: base/transaction.cpp:80
+msgid "Cannot run transaction with resolving problems."
+msgstr ""
+
+#: base/transaction.cpp:81
+msgid "Rpm transaction check failed."
+msgstr "Sprawdzenie transakcji rpm nie powiodło się."
+
+#: base/transaction.cpp:83
+msgid ""
+"Failed to obtain rpm transaction lock. Another transaction is in progress."
+msgstr ""
+"Nie udało się uzyskać blokady transakcji rpm. Inna transakcja jest w toku."
+
+#: base/transaction.cpp:84
+msgid "Rpm transaction failed."
+msgstr "Transakcja rpm nie powiodła się."
+
+#: base/transaction.cpp:85
+msgid "Signature verification failed."
+msgstr "Weryfikacja podpisu nie powiodła się."
+
+#: base/transaction.cpp:89
+msgid "The repository does not have any PGP keys configured."
+msgstr "W repozytorium nie skonfigurowano żadnych kluczy PGP."
+
+#: base/transaction.cpp:90
+msgid "Public key is not installed."
+msgstr "Klucz publiczny nie został zainstalowany."
+
+#: base/transaction.cpp:91
+msgid "Canceled by the user."
+msgstr "Anulowane przez użytkownika."
+
+#: base/transaction.cpp:92
+msgid "Public key import failed."
+msgstr "Import klucza publicznego nie powiódł się."
+
+#: base/transaction.cpp:979
+msgid "Invalid tsflag: {}"
+msgstr ""
+
+#: base/transaction.cpp:1317
+msgid "Public key \"{}\" is already present, not importing."
+msgstr "Klucz publiczny „{}” jest już obecny, nie można go zaimportować."
+
+#: base/transaction.cpp:1338
+msgid "An error occurred importing key \"{}\": {}"
+msgstr "Wystąpił błąd podczas importowania klucza „{}”: {}"
+
+#: base/transaction.cpp:1372
+msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr ""
+"Sprawdzenie PGP pakietu „{}” ({}) w repozytorium „{}” nie powiodło się: "
+
+#: base/transaction.cpp:1400
+msgid "Import of the key didn't help, wrong key?"
+msgstr "Zaimportowanie klucza nie pomogło, zły klucz?"
+
+#: base/transaction.cpp:1419
+msgctxt "It is a joining character for repositories IDs"
+msgid ", "
+msgstr ", "
+
+#: base/transaction.cpp:1422
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietu z repozytorium: {1}"
+msgstr[1] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietów z repozytorium: {1}"
+msgstr[2] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietów z repozytorium: {1}"
+
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietu z repozytoriów: {1}"
+msgstr[1] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietów z repozytoriów: {1}"
+msgstr[2] ""
+"Ostrzeżenie: pominięto sprawdzanie PGP dla {0} pakietów z repozytoriów: {1}"
+
+#: common/exception.cpp:78
+msgid "System error"
+msgstr "Błąd systemu"
+
+#: common/exception.cpp:199
+msgid "General RuntimeError exception"
+msgstr "Ogólny wyjątek RuntimeError"
+
+#: common/sack/query.cpp:27
+msgid "Query must contain exactly one object."
+msgstr "Zapytanie musi zawierać dokładnie jeden obiekt."
+
+#: common/xdg.cpp:43
+msgid "get_user_home_dir(): Cannot determine the user's home directory"
+msgstr "get_user_home_dir(): Nie można określić katalogu domowego użytkownika"
+
+#: common/xdg.cpp:98
+msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
+msgstr ""
+"get_user_runtime_dir(): Nie można określić katalogu wykonawczego użytkownika"
+
+#: comps/environment/environment.cpp:312
+msgid "failed to save xml document for comps"
+msgstr "nie udało się zapisać dokumentu xml dla comps"
+
+#: comps/group/group.cpp:343
+msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
+msgstr "Nie udało się zapisać dokumentu XML dla grupy „{}” do pliku „{}”: {}"
+
+#: comps/group/package.cpp:118 comps/group/package.cpp:121
+msgid "Invalid package type: {}"
+msgstr "Nieprawidłowy typ pakietu: {}"
+
+#: conf/config_main.cpp:56
+msgid "Input is empty. Must contain a value."
+msgstr "Dane wejściowe są puste. Muszą zawierać wartość."
+
+#: conf/config_main.cpp:62
+msgid "Input value '{}' must not be negative"
+msgstr "Wartość wejściowa '{}' nie może być ujemna"
+
+#: conf/config_main.cpp:67
+msgid "Could not convert '{}' to bytes"
+msgstr "Nie można przekonwertować '{}' na bajty"
+
+#: conf/config_main.cpp:83
+msgid "Unknown unit '{}'"
+msgstr "Nieznana jednostka '{}'"
+
+#: conf/config_main.cpp:278
+msgid "The throttle value {} is outside the allowed range {} ... {}"
+msgstr ""
+
+#: conf/config_parser.cpp:54
+msgid "Section \"{}\" not found"
+msgstr "Sekcja „{}” nie została znaleziona"
+
+#: conf/config_parser.cpp:59
+msgid "Section \"{}\" does not contain option \"{}\""
+msgstr "Sekcja „{}” nie zawiera opcji „{}”"
+
+#: conf/config_parser.cpp:96
+msgid "Configuration file \"{}\" not found"
+msgstr "Nie znaleziono pliku konfiguracyjnego „{}”"
+
+#: conf/config_parser.cpp:98
+msgid "Unable to access configuration file \"{}\""
+msgstr "Nie można uzyskać dostępu do pliku konfiguracyjnego „{}”"
+
+#: conf/config_parser.cpp:101
+msgid "Error in configuration file \"{}\""
+msgstr "Błąd w pliku konfiguracyjnym „{}”"
+
+#: conf/option_binds.cpp:29
+msgid "Option \"{}\" not found"
+msgstr "Opcja „{}” nie została znaleziona"
+
+#: conf/option_binds.cpp:32
+msgid "Option \"{}\" already exists"
+msgstr "Opcja „{}” już istnieje"
+
+#: conf/option_bool.cpp:82
+msgid "Invalid boolean value \"{}\""
+msgstr "Nieprawidłowa wartość logiczna „{}”"
+
+#: conf/option_enum.cpp:68
+msgid "Enum option value \"{}\" not allowed"
+msgstr "Wartość opcji wyliczeniowej „{}” jest niedozwolona"
+
+#: conf/option_number.cpp:99
+msgid "Input value {} is outside the allowed range {} ... {}"
+msgstr "Wartość wejściowa {} jest poza dozwolonym zakresem {} ... {}"
+
+#: conf/option_number.cpp:112
+msgid "Invalid number option value \"{}\""
+msgstr "Nieprawidłowa wartość opcji liczbowej „{}”"
+
+#: conf/option_path.cpp:93
+msgid "Only absolute paths allowed, relative path \"{}\" detected"
+msgstr "Dozwolone są tylko ścieżki absolutne, wykryto ścieżkę względną „{}”"
+
+#: conf/option_path.cpp:98
+msgid "Path \"{}\" does not exist"
+msgstr "Ścieżka „{}” nie istnieje"
+
+#: conf/option_seconds.cpp:38
+msgid "Empty time option value"
+msgstr "Wartość opcji czasu pustego"
+
+#: conf/option_seconds.cpp:50
+msgid "Invalid time option value \"{}\", number or \"never\" expected"
+msgstr "Nieprawidłowa wartość opcji czasu „{}”, liczba lub oczekiwano „never”"
+
+#: conf/option_seconds.cpp:54
+msgid ""
+"Invalid time option value \"{}\", negative values except \"-1\" not allowed"
+msgstr ""
+"Nieprawidłowa wartość opcji czasu „{}”, wartości ujemne z wyjątkiem „-1” są "
+"niedozwolone"
+
+#: conf/option_seconds.cpp:59
+msgid "Unknown time format \"{}\""
+msgstr "Nieznany format czasu „{}”"
+
+#: conf/option_seconds.cpp:78
+msgid "Unknown time unit '{}'"
+msgstr "Nieznana jednostka czasu '{}'"
+
+#: conf/option_string.cpp:89
+msgid ""
+"Input value \"{}\" not allowed, allowed values for this option are defined "
+"by regular expression \"{}\""
+msgstr ""
+"Wartość wejściowa „{}” jest niedozwolona. Dozwolone wartości dla tej opcji "
+"są zdefiniowane przez wyrażenie regularne „{}”"
+
+#. TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+#. or extend exception (add name) in upper layer.
+#: conf/option_string.cpp:114
+msgid "Option value is not set"
+msgstr "Wartość opcji nie jest ustawiona"
+
+#: conf/option_string_list.cpp:175
+msgid ""
+"Input item value \"{}\" not allowed, allowed values for this option are "
+"defined by regular expression \"{}\""
+msgstr ""
+"Wartość elementu wejściowego „{}” jest niedozwolona. Dozwolone wartości dla "
+"tej opcji są zdefiniowane przez wyrażenie regularne „{}”"
+
+#: conf/vars.cpp:313 conf/vars.cpp:353
+msgid "Variable \"{}\" is read-only"
+msgstr "Zmienna „{}” jest tylko do odczytu"
+
+#: logger/rotating_file_logger.cpp:65
+msgid "Cannot open log file"
+msgstr "Nie można otworzyć pliku dziennika"
+
+#: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
+msgid "No such module: {}"
+msgstr "Nie ma takiego modułu: {}"
+
+#: module/module_db.cpp:268
+msgid "Cannot enable multiple streams for module '{}'"
+msgstr "Nie można włączyć wielu strumieni dla modułu '{}'"
+
+#. TODO(pkratoch) replace with a proper and descriptive exception
+#. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+#. throw Goal::Error(_("no solution, cannot remove protected package"),
+#. DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+#. }
+#. TODO(lukash) replace with a proper and descriptive exception
+#: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
+#: rpm/solv/goal_private.cpp:764
+msgid "no solution possible"
+msgstr "brak możliwego rozwiązania"
+
+#: module/module_metadata.cpp:102
+msgid "Failed to update from string: {}"
+msgstr "Nie udało się zaktualizować z ciągu: {}"
+
+#: module/module_metadata.cpp:129
+msgid "Failed to resolve module metadata: {}"
+msgstr "Nie udało się rozwiązać metadanych modułu: {}"
+
+#: module/module_metadata.cpp:140
+msgid "Failed to upgrade defaults: {}"
+msgstr "Nie udało się uaktualnić ustawień domyślnych: {}"
+
+#: module/module_metadata.cpp:144
+msgid "Failed to upgrade streams: {}"
+msgstr "Nie udało się uaktualnić strumieni: {}"
+
+#: module/module_sack.cpp:93
+msgid "Failed to load module metadata for repository \"{}\": {}"
+msgstr "Nie udało się załadować metadanych modułu dla repozytorium „{}”: {}"
+
+#: module/module_sack.cpp:594
+msgid "Missing '='"
+msgstr "Brakuje '='"
+
+#: module/module_sack.cpp:598 module/module_sack.cpp:606
+msgid "Missing '\"' in the value"
+msgstr "Brak znaku \" w wartości"
+
+#: module/module_sack.cpp:602
+msgid "Missing ':' in the value"
+msgstr "Brak znaku „:” w wartości"
+
+#: module/module_sack.cpp:911
+msgid "Invalid module status: {}"
+msgstr "Nieprawidłowy status modułu: {}"
+
+#: plugin/plugins.cpp:66
+msgid ""
+"Unsupported plugin API combination. API version provided by plugin "
+"\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
+msgstr ""
+"Nieobsługiwana kombinacja API wtyczki. Wersja API dostarczona przez wtyczkę "
+"„{}” („{}”) to „{}.{}”. Wersja API w libdnf to „{}.{}”."
+
+#: plugin/plugins.cpp:115
+msgid "Cannot find plugin library \"{}\""
+msgstr "Nie można znaleźć biblioteki wtyczek „{}”"
+
+#: plugin/plugins.cpp:182
+msgid "Invalid option value: enabled={}"
+msgstr "Nieprawidłowa wartość opcji: enabled={}"
+
+#: plugin/plugins.cpp:206
+msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
+msgstr "Plugins::load_plugins(): config_dir_path nie może być pusty"
+
+#: plugin/plugins.cpp:231
+msgid "Cannot load plugins: {}"
+msgstr "Nie można załadować wtyczek: {}"
+
+#: repo/config_repo.cpp:566
+msgid "get_unique_id(): Computation of SHA256 failed"
+msgstr "get_unique_id(): Obliczenie SHA256 nie powiodło się"
+
+#: repo/file_downloader.cpp:154
+msgid "Cannot download files, cacheonly option is activated."
+msgstr "Nie można pobrać plików, opcja cacheonly jest aktywna."
+
+#: repo/file_downloader.cpp:216
+msgid "Failed to download files"
+msgstr "Nie udało się pobrać plików"
+
+#: repo/librepo.cpp:118
+msgid ""
+"Maximum download speed is lower than minimum, please change configuration of "
+"minrate or throttle"
+msgstr ""
+"Maksymalna prędkość pobierania jest mniejsza niż minimalna. Proszę zmienić "
+"konfigurację „minrate” lub „throttle”"
+
+#: repo/package_downloader.cpp:152
+msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
+msgstr "Nie można pobrać pakietu „{0}”, opcja cacheonly jest aktywna."
+
+#: repo/package_downloader.cpp:257
+msgid "Failed to download packages"
+msgstr "Nie udało się pobrać pakietów"
+
+#: repo/repo.cpp:60
+msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
+msgstr "Nie udało się załadować RPM „{}”: nie ma rozszerzenia „.rpm”"
+
+#: repo/repo.cpp:64
+msgid "Failed to access RPM \"{}\": {}"
+msgstr "Nie udało się uzyskać dostępu do RPM „{}”: {}"
+
+#: repo/repo.cpp:106
+msgid "Invalid repository id \"{}\": unexpected character '{}'"
+msgstr "Nieprawidłowy identyfikator repozytorium „{}”: nieoczekiwany znak „{}”"
+
+#: repo/repo.cpp:149
+msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
+msgstr ""
+"Repozytorium „{}” nie ma ustawionego źródła (baseurl, mirrorlist lub "
+"metalink)."
+
+#: repo/repo.cpp:160
+msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
+msgstr "Repozytorium „{}” ma nieobsługiwany typ „{}”, pomijanie."
+
+#: repo/repo.cpp:408
+msgid ""
+"Failed to load repository: \"primary\" data not present or in unsupported "
+"format"
+msgstr ""
+"Nie udało się załadować repozytorium: dane „podstawowe” nie są obecne lub są "
+"w nieobsługiwanym formacie"
+
+#: repo/repo.cpp:466
+msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
+msgstr "Nie udało się załadować kompozycji „{}”: nie ma rozszerzenia „.xml”"
+
+#: repo/repo.cpp:473
+msgid "Failed to load xml Comps \"{}\": {}"
+msgstr "Nie udało się załadować kompozycji xml \"{}\": {}"
+
+#: repo/repo.cpp:490
+msgid "Failed to load RPM \"{}\": {}"
+msgstr "Nie udało się załadować RPM „{}”: {}"
+
+#: repo/repo_cache.cpp:229
+msgid "Unable to determine id of the repository in the cache."
+msgstr "Nie można ustalić identyfikatora repozytorium w pamięci podręcznej."
+
+#: repo/repo_cache_private.hpp:56
+msgid "Empty path to the repository cache directory."
+msgstr "Pusta ścieżka do katalogu pamięci podręcznej repozytorium."
+
+#: repo/repo_downloader.cpp:139
+msgid "Librepo error: {}"
+msgstr "Błąd librepo: {}"
+
+#: repo/repo_downloader.cpp:171
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
+msgstr "Nie udało się pobrać metadanych ({}: \"{}\") dla repozytorium \"{}\""
+
+#: repo/repo_downloader.cpp:242
+msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
+msgstr ""
+"Wystąpił błąd podczas sprawdzania, czy metalink „{}” jest zsynchronizowany z "
+"repozytorium „{}”"
+
+#: repo/repo_downloader.cpp:272
+msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
+msgstr ""
+"Wystąpił błąd podczas sprawdzania, czy repomd ({}: \"{}\") jest "
+"zsynchronizowany z repozytorium \"{}\""
+
+#: repo/repo_downloader.cpp:336
+msgid "Error loading local metadata for repository \"{}\""
+msgstr "Błąd podczas ładowania lokalnych metadanych dla repozytorium „{}”"
+
+#: repo/repo_downloader.cpp:456
+msgid ""
+"No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
+msgstr ""
+"Nie znaleziono prawidłowego źródła (baseurl, mirrorlist lub metalink) dla "
+"repozytorium „{}”"
+
+#: repo/repo_pgp.cpp:60
+msgid "Failed to import pgp keys into temporary keyring: {}"
+msgstr ""
+"Nie udało się zaimportować kluczy PGP do tymczasowego zestawu kluczy: {}"
+
+#: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
+msgid "Failed to list pgp keys: {}"
+msgstr "Nie udało się wyświetlić kluczy pgp: {}"
+
+#: repo/repo_pgp.cpp:140
+msgid "Failed to import pgp keys: {}"
+msgstr "Nie udało się zaimportować kluczy pgp: {}"
+
+#: repo/repo_sack.cpp:146
+msgid ""
+"Failed to create repo \"{}\": Id is present more than once in the "
+"configuration"
+msgstr ""
+"Nie udało się utworzyć repozytorium „{}”: Identyfikator występuje więcej niż "
+"raz w konfiguracji"
+
+#: repo/repo_sack.cpp:517
+msgid "Cache-only enabled but no cache for repository \"{}\""
+msgstr ""
+"Włączono tylko pamięć podręczną, ale brak pamięci podręcznej dla "
+"repozytorium „{}”"
+
+#: repo/solv_repo.cpp:261
+msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
+msgstr "Nie udało się załadować repomd dla repozytorium „{}” z „{}”: {}."
+
+#: repo/solv_repo.cpp:269
+msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
+msgstr ""
+"Nie udało się załadować „podstawowych” danych repozytorium „{}” z „{}”: {}."
+
+#: repo/solv_repo.cpp:316
+msgid "Unsupported extended repodata type for the system repo: \"{}\"."
+msgstr ""
+"Nieobsługiwany rozszerzony typ repozytorium danych dla repozytorium "
+"systemowego: „{}”."
+
+#: repo/solv_repo.cpp:382
+msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
+msgstr ""
+"Nie udało się załadować rozszerzenia {} dla repozytorium „{}” z „{}”: {}"
+
+#: repo/solv_repo.cpp:418
+msgid "Failed to load system repo from root \"{}\": {}"
+msgstr ""
+
+#: repo/solv_repo.cpp:519
+msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr ""
+"Nie udało się załadować pamięci podręcznej {} dla repozytorium „{}” z „{}”: "
+"{}"
+
+#: repo/solv_repo.cpp:573
+msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
+msgstr ""
+"Nie udało się zapisać podstawowej pamięci podręcznej głównej dla "
+"repozytorium „{}” do „{}”: {}"
+
+#: repo/solv_repo.cpp:595
+msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
+msgstr ""
+"Nie udało się ponownie załadować podstawowej pamięci podręcznej dla "
+"repozytorium „{}” z „{}”: {}"
+
+#: repo/solv_repo.cpp:661
+msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
+msgstr ""
+"Nie udało się zapisać pamięci podręcznej {} dla repozytorium „{}” do „{}”: {}"
+
+#: repo/solv_repo.cpp:682
+msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
+msgstr ""
+"Nie udało się ponownie załadować pamięci podręcznej {} dla repozytorium „{}” "
+"z „{}”: {}"
+
+#: repo/temp_files_memory.cpp:52
+msgid ""
+"An error occurred when parsing the temporary files memory file at '{}': {}"
+msgstr ""
+"Wystąpił błąd podczas analizowania pliku pamięci plików tymczasowych w '{}': "
+"{}"
+
+#: rpm/nevra.cpp:82
+msgid "NEVRA string \"{}\" contains ':' multiple times"
+msgstr "Ciąg NEVRA „{}” zawiera ':' wiele razy"
+
+#: rpm/nevra.cpp:86
+msgid "Invalid character '{}' in NEVRA string \"{}\""
+msgstr "Nieprawidłowy znak „{}” w ciągu NEVRA „{}”"
+
+#: rpm/package.cpp:80
+msgid "Package with rpmdbid was not found"
+msgstr "Nie znaleziono pakietu z rpmdbid"
+
+#: rpm/reldep.cpp:116 rpm/reldep.cpp:123
+msgid "Cannot parse a dependency string"
+msgstr "Nie można przeanalizować ciągu zależności"
+
+#: rpm/rpm_signature.cpp:45
+msgid "No corresponding key was found."
+msgstr "Nie znaleziono odpowiadającego klucza."
+
+#: rpm/rpm_signature.cpp:46
+msgid "The signature is valid, but the key is not trusted."
+msgstr "Podpis jest ważny, ale klucz nie jest zaufany."
+
+#: rpm/rpm_signature.cpp:47
+msgid "The package is not signed."
+msgstr "Pakiet nie jest podpisany."
+
+#: rpm/rpm_signature.cpp:48
+msgid "Problem occurred when opening the package."
+msgstr "Wystąpił problem podczas otwierania pakietu."
+
+#: rpm/rpm_signature.cpp:64
+msgid "Failed to set rpm transaction rootDir \"{}\"."
+msgstr "Nie udało się ustawić katalogu głównego transakcji rpm „{}”."
+
+#: rpm/rpm_signature.cpp:283
+msgid "\"{}\": key is not an armored public key."
+msgstr "„{}”: klucz nie jest opancerzonym kluczem publicznym."
+
+#: rpm/rpm_signature.cpp:288
+msgid "Failed to import public key \"{}\" to rpmdb: {}"
+msgstr "Nie udało się zaimportować klucza publicznego „{}” do rpmdb: {}"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:112
+msgid "Cannot set root directory \"{}\""
+msgstr "Nie można ustawić katalogu głównego „{}”"
+
+#: rpm/transaction.cpp:123
+#, c-format
+msgid "Error %i opening rpm database"
+msgstr "Błąd %i podczas otwierania bazy danych rpm"
+
+#: rpm/transaction.cpp:132
+msgid "The rpmdbCookie() function did not return cookie of rpm database."
+msgstr "Funkcja rpmdbCookie() nie zwróciła pliku cookie bazy danych rpm."
+
+#: rpm/transaction.cpp:197
+msgid "Failed to order the rpm transaction."
+msgstr "Nie udało się uporządkować transakcji rpm."
+
+#: rpm/transaction.cpp:233
+msgid ""
+"Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
+msgstr ""
+"Nie udało się ustawić pliku wyjściowego scriptletu, nie można zduplikować "
+"deskryptora pliku: {}"
+
+#: rpm/transaction.cpp:252
+msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
+msgstr ""
+"Nie udało się ustawić pliku wyjściowego scriptletu, nie można otworzyć pliku "
+"\"{}\": {}"
+
+#: rpm/transaction.cpp:273
+msgid "Failed to read package header, cannot open file \"{}\": {}"
+msgstr ""
+"Nie udało się odczytać nagłówka pakietu, nie można otworzyć pliku \"{}\": {}"
+
+#: rpm/transaction.cpp:290
+msgid "Failed to read package header from file \"{}\""
+msgstr "Nie udało się odczytać nagłówka pakietu z pliku „{}”"
+
+#: rpm/transaction.cpp:303
+msgid "Cannot init rpm database iterator"
+msgstr "Nie można zainicjować iteratora bazy danych rpm"
+
+#: rpm/transaction.cpp:307
+msgid "Package was not found in rpm database"
+msgstr "Pakiet nie został znaleziony w bazie danych rpm"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:323
+msgid "Cannot reinstall package \"{}\""
+msgstr "Nie można ponownie zainstalować pakietu „{}”"
+
+#. TODO(jrohel): Why? Librpm does not provide this information.
+#: rpm/transaction.cpp:341
+msgid "Cannot remove package \"{}\""
+msgstr "Nie można usunąć pakietu „{}”"
+
+#: rpm/transaction.cpp:360
+msgid "Cannot upgrade package \"{}\""
+msgstr "Nie można uaktualnić pakietu „{}”"
+
+#: rpm/transaction.cpp:364
+msgid "Cannot downgrade package \"{}\""
+msgstr "Nie można obniżyć wersji pakietu „{}”"
+
+#: rpm/transaction.cpp:368
+msgid "Cannot install package \"{}\""
+msgstr "Nie można zainstalować pakietu „{}”"
+
+#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+msgid "{}"
+msgstr "{}"
+
+#. TODO(lukash) throw proper exception class
+#: solv/pool.cpp:174
+msgid "Failed to convert epoch \"{}\" to number"
+msgstr "Nie udało się przekonwertować epoki „{}” na liczbę"
+
+#: solv/solver.cpp:79
+msgid "Writing debugsolver data into \"{}\" failed: {}"
+msgstr "Nie udało się zapisać danych debugera do „{}”: {}"
+
+#: system/state.cpp:280 system/state.cpp:289
+msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
+msgstr "Nieprawidłowa wersja TOML „{}”, oczekiwano „MAJOR.MINOR”"
+
+#: system/state.cpp:297
+msgid "{} state for \"{}\" not found."
+msgstr "{} stan dla \"{}\" nie został znaleziony."
+
+#: system/state.cpp:301
+msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
+msgstr ""
+"Ładowanie pliku TOML stanu systemu {} nie powiodło się (patrz dnf5-system-"
+"state(7)): {}"
+
+#: system/state.cpp:614
+msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
+msgstr "Nieobsługiwana wersja TOML „{}”, maksymalna obsługiwana wersja to „{}”"
+
+#: transaction/Swdb.cpp:91
+msgid "In progress"
+msgstr "W trakcie wykonywania"
+
+#: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
+#: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
+msgid "Not in progress"
+msgstr "Nie jest w trakcie wykonywania"
+
+#: transaction/Swdb.cpp:158
+msgid "No transaction in progress"
+msgstr "Brak transakcji w toku"
+
+#: transaction/Transformer.cpp:647
+msgid "Transformer: can't open history persist dir"
+msgstr "Transformer: nie można otworzyć trwałego katalogu historii"
+
+#: transaction/Transformer.cpp:660
+msgid "Couldn't find a history database"
+msgstr "Nie można odnaleźć bazy danych historii"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/comps_environment_group.cpp:100
+msgid ""
+"Failed to insert record into table 'comps_environment_group' in history "
+"database"
+msgstr ""
+"Nie udało się wstawić rekordu do tabeli „comps_environment_group” w bazie "
+"danych historii"
+
+#: transaction/db/db.cpp:71
+msgid "Unable to get 'version' from table 'config'"
+msgstr "Nie można pobrać „version” z tabeli „config”"
+
+#. TODO(dmach): replace with a better exception class
+#: transaction/db/item.cpp:43
+msgid "Failed to insert record into table 'item' in history database"
+msgstr ""
+"Nie udało się wstawić rekordu do tabeli „element” w bazie danych historii"
+
+#: transaction/offline.cpp:195
+msgid "error reading offline state file"
+msgstr "błąd podczas odczytu pliku stanu offline"
+
+#: transaction/offline.cpp:200
+msgid "incompatible version of state data"
+msgstr "niekompatybilna wersja danych stanu"
+
+#: transaction/transaction.cpp:96
+msgid "Invalid transaction state: {}"
+msgstr "Nieprawidłowy stan transakcji: {}"
+
+#: transaction/transaction.cpp:279
+msgid "Transaction has already started!"
+msgstr "Transakcja już się rozpoczęła!"
+
+#: transaction/transaction_item_action.cpp:28
+msgid "Invalid transaction item action: {}"
+msgstr "Nieprawidłowa akcja elementu transakcji: {}"
+
+#: transaction/transaction_item_reason.cpp:28
+msgid "Invalid transaction item reason: {}"
+msgstr ""
+
+#: transaction/transaction_item_state.cpp:28
+msgid "Invalid transaction item state: {}"
+msgstr ""
+
+#: transaction/transaction_item_type.cpp:28
+msgid "Invalid transaction item type: {}"
+msgstr ""
+
+#: transaction/transaction_merge.cpp:102
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transactions -> setting '{0}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:116
+msgid ""
+"Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
+msgid ""
+"Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
+"point -> setting 'Install'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:194
+msgid ""
+"Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
+"transaction -> setting '{0}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:215
+msgid "Unexpected action encountered: '{0}' during transaction merge."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:224
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:245
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point -"
+"> setting 'INSTALL'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:266
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is not present at that point "
+"(present versions are: {2}) -> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:277
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already present at that "
+"point -> skipping it."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:294
+msgid ""
+"Action '{0}' '{1}' cannot be merged because it is already installed in "
+"version '{2}' -> keeping the action from older transaction with '{1}'."
+msgstr ""
+
+#: transaction/transaction_merge.cpp:304
+msgid "Invalid action encountered: '{0}' during transaction merge."
+msgstr "Napotkano nieprawidłową akcję: '{0}' podczas scalania transakcji."
+
+#: transaction/transaction_sr.cpp:49
+msgid "Transaction replay JSON serialized transaction input is empty"
+msgstr ""
+"Powtórka transakcji. Dane wejściowe transakcji zserializowanej w formacie "
+"JSON są puste"
+
+#: transaction/transaction_sr.cpp:58
+msgid "Error during transaction replay JSON parsing : {}"
+msgstr ""
+
+#: transaction/transaction_sr.cpp:68
+msgid "Unexpected version format: \"{}\", supported version is \"{}\""
+msgstr "Nieoczekiwany format wersji: „{}”, obsługiwana wersja to „{}”"
+
+#: transaction/transaction_sr.cpp:74
+msgid "Incompatible major version: \"{}\", supported major version is \"{}\""
+msgstr "Niezgodna wersja główna: „{}”, obsługiwana wersja główna to „{}”"
+
+#: transaction/transaction_sr.cpp:81
+msgid "Invalid minor version: \"{}\", number expected"
+msgstr "Nieprawidłowa wersja pomocnicza: „{}”, oczekiwano numeru"
+
+#: transaction/transaction_sr.cpp:84
+msgid "Missing key \"version\""
+msgstr "Brak klucza „wersja”"
+
+#: transaction/transaction_sr.cpp:92
+msgid "Unexpected type of \"environments\", array expected"
+msgstr "Nieoczekiwany typ „środowisk”, oczekiwano tablicy"
+
+#: transaction/transaction_sr.cpp:105
+msgid "Missing object key \"id\" in an environment"
+msgstr "Brak klucza obiektu „id” w środowisku"
+
+#: transaction/transaction_sr.cpp:110
+msgid "Missing object key \"action\" in an environment"
+msgstr "Brak klucza obiektu „akcja” w środowisku"
+
+#: transaction/transaction_sr.cpp:129
+msgid "Unexpected type of \"groups\", array expected"
+msgstr "Nieoczekiwany typ „grup”, oczekiwano tablicy"
+
+#: transaction/transaction_sr.cpp:145
+msgid "Missing object key \"id\" in a group"
+msgstr "Brak klucza obiektu „id” w grupie"
+
+#: transaction/transaction_sr.cpp:150
+msgid "Missing object key \"action\" in a group"
+msgstr "Brak klucza obiektu „akcja” w grupie"
+
+#: transaction/transaction_sr.cpp:155
+msgid "Missing object key \"reason\" in a group"
+msgstr "Brak klucza obiektu „powód” w grupie"
+
+#: transaction/transaction_sr.cpp:186
+msgid "Unexpected type of \"rpms\", array expected"
+msgstr "Nieoczekiwany typ „rpms”, oczekiwano tablicy"
+
+#: transaction/transaction_sr.cpp:202
+msgid "Cannot parse NEVRA for rpm \"{}\""
+msgstr "Nie można przeanalizować NEVRA pod kątem rpm „{}”"
+
+#: transaction/transaction_sr.cpp:210
+msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
+msgstr "W pliku rpm wymagany jest klucz obiektu „nevra” lub „package_path”"
+
+#: transaction/transaction_sr.cpp:215
+msgid "Missing object key \"action\" in an rpm"
+msgstr "Brakujący obiekt kluczowy „akcja” w rpm"
+
+#: transaction/transaction_sr.cpp:220
+msgid "Missing object key \"reason\" in an rpm"
+msgstr "Brak klucza obiektu „reason” w rpm"
+
+#: transaction/transaction_sr.cpp:227
+msgid ""
+"Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
+"and action \"Reason Change\""
+msgstr ""
+
+#: utils/fs/file.cpp:86
+msgid "cannot open file"
+msgstr "nie można otworzyć pliku"
+
+#: utils/fs/file.cpp:99
+msgid "cannot open file from fd"
+msgstr "nie można otworzyć pliku z fd"
+
+#: utils/fs/file.cpp:109
+msgid "cannot close file"
+msgstr "nie można zamknąć pliku"
+
+#: utils/fs/file.cpp:139 utils/fs/file.cpp:168
+msgid "error reading file"
+msgstr "błąd odczytu pliku"
+
+#: utils/fs/file.cpp:154 utils/fs/file.cpp:180
+msgid "error writing file"
+msgstr "błąd zapisu pliku"
+
+#: utils/fs/file.cpp:189
+msgid "error flushing file"
+msgstr "błąd podczas opróżniania pliku"
+
+#: utils/fs/file.cpp:198
+msgid "error seeking in file"
+msgstr "błąd wyszukiwania w pliku"
+
+#: utils/fs/file.cpp:209
+msgid "error retrieving file position"
+msgstr "błąd podczas pobierania pozycji pliku"
+
+#: utils/fs/file.cpp:297
+msgid "error reading a line from file"
+msgstr "błąd odczytu linii z pliku"
+
+#: utils/fs/file.cpp:335
+msgid "error retrieving file descriptor"
+msgstr "błąd podczas pobierania deskryptora pliku"
+
+#: utils/fs/temp.cpp:42
+msgid "cannot create temporary directory"
+msgstr "nie można utworzyć katalogu tymczasowego"
+
+#: utils/fs/temp.cpp:89
+msgid "cannot create temporary file"
+msgstr "nie można utworzyć pliku tymczasowego"
+
+#: utils/fs/temp.cpp:142
+msgid "cannot close temporary file"
+msgstr "nie można zamknąć pliku tymczasowego"
+
+#: utils/iniparser.cpp:126
+msgid "Missing ']' on line {}"
+msgstr "Brakuje ']' w wierszu {}"
+
+#: utils/iniparser.cpp:129
+msgid "Empty section name on line {}"
+msgstr "Pusta nazwa sekcji w linii {}"
+
+#: utils/iniparser.cpp:137
+msgid "Text after section on line {}"
+msgstr "Tekst po sekcji w linii {}"
+
+#: utils/iniparser.cpp:147
+msgid "Missing section header on line {}"
+msgstr "Brak nagłówka sekcji w wierszu {}"
+
+#: utils/iniparser.cpp:152
+msgid "Illegal continuation line on line {}"
+msgstr "Nielegalna kontynuacja linii w linii {}"
+
+#: utils/iniparser.cpp:159
+msgid "Missing option name on line {}"
+msgstr "Brak nazwy opcji w linii {}"
+
+#: utils/iniparser.cpp:163
+msgid "Missing '=' on line {}"
+msgstr "Brakuje znaku „=” w wierszu {}"
+
+#. returns localized message, problem with later translation
+#: utils/library.cpp:32
+msgid "Cannot load shared library \"{}\": {}"
+msgstr "Nie można załadować biblioteki współdzielonej „{}”: {}"
+
+#: utils/library.cpp:47
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr "Nie można uzyskać adresu symbolu „{}”: {}"
+
+#: utils/locker.cpp:45
+msgid "Failed to open lock file \"{}\""
+msgstr "Nie udało się otworzyć pliku blokady \"{}\""
+
+#: utils/locker.cpp:60
+msgid "Failed to obtain lock \"{}\""
+msgstr "Nie udało się uzyskać blokady „{}”"
+
+#: utils/locker.cpp:70
+msgid "Failed to close lock file \"{}\""
+msgstr "Nie udało się zamknąć pliku blokady „{}”"
+
+#: utils/locker.cpp:73
+msgid "Failed to delete lock file \"{}\""
+msgstr "Nie udało się usunąć pliku blokady „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:29
+msgid "SQL statement compilation failed: \"{}\""
+msgstr "Kompilacja instrukcji SQL nie powiodła się: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:31
+msgid "Binding integer value to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać wartości całkowitej z poleceniem SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:33
+msgid "Binding integer64 value to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać wartości integer64 z poleceniem SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:35
+msgid "Binding unsigned integer32 value to SQL statement failed: \"{}\""
+msgstr ""
+"Powiązanie wartości typu unsigned integer32 z poleceniem SQL nie powiodło "
+"się: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:37
+msgid "Binding double value to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać wartości double z instrukcją SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:39
+msgid "Binding bool value to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać wartości logicznej z poleceniem SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:40
+msgid "Binding text to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać tekstu z instrukcją SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:41
+msgid "Binding blob to SQL statement failed: \"{}\""
+msgstr "Nie udało się powiązać blobu z instrukcją SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:42
+msgid "SQL statement evaluation failed: \"{}\""
+msgstr "Nie można ocenić instrukcji SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:44
+msgid "Insufficient memory or result exceed maximum SQLite3 string length"
+msgstr "Za mało pamięci lub wynik przekracza maksymalną długość ciągu SQLite3"
+
+#: utils/sqlite3/sqlite3.cpp:46
+msgid "Column \"{}\" not found"
+msgstr "Kolumna „{}” nie została znaleziona"
+
+#: utils/sqlite3/sqlite3.cpp:48
+msgid "SQL statement execution failed: \"{}\""
+msgstr "Nie udało się wykonać instrukcji SQL: „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:68
+msgid "Failed to open database \"{}\""
+msgstr "Nie udało się otworzyć bazy danych „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:105
+msgid "Failed to close database \"{}\""
+msgstr "Nie udało się zamknąć bazy danych „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:117 utils/sqlite3/sqlite3.cpp:143
+msgid "Failed to open backup database \"{}\""
+msgstr "Nie udało się otworzyć bazy danych kopii zapasowej „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:132
+msgid "Failed to backup database \"{}\" into \"{}\""
+msgstr "Nie udało się utworzyć kopii zapasowej bazy danych „{}” w „{}”"
+
+#: utils/sqlite3/sqlite3.cpp:158
+msgid "Failed to restore database \"{}\""
+msgstr "Nie udało się przywrócić bazy danych „{}”"
+
+#: utils/system.cpp:34
+msgid "failed to read rpm config files"
+msgstr "nie udało się odczytać plików konfiguracyjnych rpm"
+
+#: utils/system.cpp:52
+msgid "Failed to execute uname()"
+msgstr "Nie udało się wykonać uname()"

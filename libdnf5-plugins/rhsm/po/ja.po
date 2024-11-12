@@ -1,0 +1,27 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Inci sakura <incisakura@icloud.com>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-07 11:21+0100\n"
+"PO-Revision-Date: 2024-11-05 06:01+0000\n"
+"Last-Translator: Inci sakura <incisakura@icloud.com>\n"
+"Language-Team: Japanese <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-rhsm/ja/>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.2\n"
+
+#: rhsm.cpp:97
+msgid "Missing path to repository configuration directory"
+msgstr "リポジトリ設定ディレクトリのパスがありません"
+
+#: rhsm.cpp:134
+msgid "Cannot save repository configuration to file \"{}\": {}"
+msgstr "リポジトリ設定をファイル \"{}\" に保存できませんでした: {}"

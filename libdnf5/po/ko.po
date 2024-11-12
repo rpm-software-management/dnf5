@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-09-08 13:38+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-05 02:52+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -644,11 +644,13 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "경고: 저장소에서 1 꾸러미를 위해 PGP 점검을 건너뜁니다: {}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 PGP 점검을 건너뜀: {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 PGP 점검을 건너뜀: {1}"
@@ -674,11 +676,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): 사용자의 runtime 디렉토리를 결정 할 수 없습니다"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "comps를 위해 xml 문서를 저장하는 데 실패함"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "파일에 그룹 \"{}\"을 위해 xml 문서를 저장하는 데 실패함 \"{}\": {}"
 
@@ -805,7 +807,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "변수 \"{}\" 는 읽기-전용입니다"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "기록 파일을 열 수 없습니다"
 
@@ -888,15 +890,15 @@ msgstr "Plugins::load_plugins(): config_dir_path는 비워 둘 수 없습니다"
 msgid "Cannot load plugins: {}"
 msgstr "플러그인을 적재 할 수 없습니다: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256 연산이 실패함"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr "파일을 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "파일을 내려받는 데 실패함"
 
@@ -908,12 +910,12 @@ msgstr ""
 "최대 내려받기 속도가 최저보다 낮으며, minrate 또는 throttle의 구성을 변경해 "
 "주세요"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "\"{0}\" 꾸러미를 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "꾸러미를 내려받는 데 실패함"
 
@@ -1008,53 +1010,53 @@ msgstr "pgp 키를 나열하는 데 실패함: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "pgp 키를 가져오는 데 실패함: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 repomd를 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 우선 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "시스템 repo를 위한 확장된 repodate 유형이 지원되지 않습니다: \"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 확장을 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "root에서 시스템 repo를 적재하는 데 실패함 \"{}\": {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 기본 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 기본 캐쉬를 재-적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 {} 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 재-적재하는 데 실패함: {}"
 
@@ -1318,7 +1320,7 @@ msgid ""
 "> skipping it."
 msgstr ""
 "동작 '{0}' '{1}'은 그 시점에서 존재하지 않기 때문에 병합 할 수 없습니다 -> 이"
-"를 건너 뛰기."
+"를 건너뛰기."
 
 #: transaction/transaction_merge.cpp:245
 msgid ""
@@ -1334,7 +1336,7 @@ msgid ""
 "(present versions are: {2}) -> skipping it."
 msgstr ""
 "동작 '{0}' '{1}'은 그 시점에서 존재하지 않기 때문에 병합 할 수 없습니다(존재 "
-"버전: {2}) -> 이를 건너 뛰기."
+"버전: {2}) -> 이를 건너뛰는 중."
 
 #: transaction/transaction_merge.cpp:277
 msgid ""
@@ -1342,7 +1344,7 @@ msgid ""
 "point -> skipping it."
 msgstr ""
 "동작 '{0}' '{1}'은 그 시점에서 이미 존재하기 때문에 병합 할 수 없습니다 -> 이"
-"를 건너 뛰기."
+"를 건너뛰는 중."
 
 #: transaction/transaction_merge.cpp:294
 msgid ""
@@ -1380,7 +1382,7 @@ msgstr "잘못된 하위 버전: \"{}\", 번호가 예상됩니다"
 msgid "Missing key \"version\""
 msgstr "누락된 키 \"version\""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "\"environments\"의 예상치 못한 유형, 배열이 예상됩니다"
 
@@ -1392,7 +1394,7 @@ msgstr "환경에서 누락된 객체 키 \"id\""
 msgid "Missing object key \"action\" in an environment"
 msgstr "환경에서 누락된 객체 키 \"action\""
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "\"groups\"의 예상치 못한 유형, 배열이 예상됩니다"
 
@@ -1408,7 +1410,7 @@ msgstr "그룹에서 누락된 객체 키 \"action\""
 msgid "Missing object key \"reason\" in a group"
 msgstr "그룹에서 누락된 객체 키 \"reason\""
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "\"rpms\"의 예상치 못한 유형, 배열이 예상됩니다"
 
@@ -1616,6 +1618,9 @@ msgstr "rpm config 파일을 읽는 데 실패함"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "uname()을 실행하는 데 실패함"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr "경고: 저장소에서 1 꾸러미를 위해 PGP 점검을 건너뜁니다: {}"
 
 #~ msgid "packages"
 #~ msgstr "꾸러미"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-07-26 20:38+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-10-30 12:08+0000\n"
 "Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/pt_BR/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -664,16 +664,21 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr ""
-"Aviso: ignoradas as verificações de PGP para 1 pacote do repositório: {}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Aviso: ignoradas as verificações de PGP para {0} pacote do repositório: {1}"
+msgstr[1] ""
+"Aviso: ignoradas as verificações de PGP para {0} pacotes dos repositórios: "
+"{1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Aviso: ignoradas as verificações de PGP para {0} pacote do repositório:{1}"
+"Aviso: ignoradas as verificações de PGP para {0} pacote do repositório: {1}"
 msgstr[1] ""
 "Aviso: ignoradas as verificações de PGP para {0} pacotes dos repositórios: "
 "{1}"
@@ -702,11 +707,11 @@ msgstr ""
 "get_user_runtime_dir(): Não é possível determinar o diretório de tempo de "
 "execução (runtime) do usuário"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "falha ao salvar o documento xml para comps"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "Falha ao salvar o documento xml do grupo \"{}\" no arquivo \"{}\": {}"
 
@@ -836,7 +841,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "A variável \"{}\" é somente leitura"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Não é possível abrir o arquivo de log"
 
@@ -919,15 +924,15 @@ msgstr "Plugins::load_plugins(): config_dir_path não pode estar vazio"
 msgid "Cannot load plugins: {}"
 msgstr "Não é possível carregar plugins: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Falha no cálculo do SHA256"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr "Não é possível baixar arquivos, a opção cacheonly está ativada."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Falha ao baixar arquivos"
 
@@ -939,13 +944,13 @@ msgstr ""
 "A velocidade máxima de download é inferior à mínima. Por favor, altere a "
 "configuração de minrate ou throttle"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Não é possível fazer download do pacote \"{0}\", a opção cacheonly está "
 "ativada."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Falha ao baixar pacotes"
 
@@ -1042,7 +1047,7 @@ msgstr "Falha ao listar chaves pgp: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Falha ao importar chaves pgp: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1050,52 +1055,52 @@ msgstr ""
 "Falha ao criar o repositório \"{}\": o ID está presente mais de uma vez na "
 "configuração"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Somente cache ativado, mas sem cache para o repositório \"{}\""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Falha ao carregar o repomd para o repositório \"{}\" de \"{}\": {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Falha ao carregar o primário do repositório \"{}\" de \"{}\": {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Tipo de repodata estendido não compatível para o repositório do sistema: "
 "\"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Falha ao carregar a extensão {} para o repositório \"{}\" de \"{}\": {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Falha ao carregar o repositório do sistema a partir da raiz \"{}\": {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Falha ao carregar o cache de {} para o repositório \"{}\" de \"{}\": {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "Falha ao gravar cache primário do repositório \"{}\" em \"{}\": {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Falha ao recarregar o cache primário do repositório \"{}\" de \"{}\": {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Falha ao gravar o cache de {} do repositório \"{}\" em \"{}\": {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Falha ao recarregar o cache de {} para o repositório \"{}\" de \"{}\": {}"
@@ -1245,6 +1250,8 @@ msgstr "Estado {} para \"{}\" não encontrado."
 #: system/state.cpp:301
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
+"Falha ao carregar o arquivo TOML do estado do sistema {} (consulte dnf5-"
+"system-state(7)): {}"
 
 #: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
@@ -1429,7 +1436,7 @@ msgstr "Versão mínima inválida: \"{}\", esperava número"
 msgid "Missing key \"version\""
 msgstr "Faltando a chave \"version\""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "Tipo inesperado de \"environments\", esperava array"
 
@@ -1441,7 +1448,7 @@ msgstr "Faltando chave de objeto \"id\" em um ambiente"
 msgid "Missing object key \"action\" in an environment"
 msgstr "Faltando a chave de objeto \"action\" em um ambiente"
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "Tipo inesperado de \"groups\", esperava array"
 
@@ -1457,7 +1464,7 @@ msgstr "Faltando a chave de objeto \"action\" em um grupo"
 msgid "Missing object key \"reason\" in a group"
 msgstr "Faltando a chave de objeto \"reason\" em um grupo"
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Tipo inesperado de \"rpms\", esperava array"
 
@@ -1667,6 +1674,10 @@ msgstr "falha ao ler os arquivos de configuração rpm"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Falha ao executar uname()"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr ""
+#~ "Aviso: ignoradas as verificações de PGP para 1 pacote do repositório: {}"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Não é possível {} o pacote \"{}\""

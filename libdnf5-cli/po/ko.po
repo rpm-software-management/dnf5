@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-06-08 02:49+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-09-24 05:28+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -134,246 +134,244 @@ msgstr "힌트 : [d] efault, [e] nabled, [x] disabled, [i] stalled"
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "기간"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:274
 msgid "Version"
-msgstr ""
+msgstr "버전"
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr ""
+msgstr "출시"
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr ""
+msgstr "구조"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "더 이상 사용하지 않음"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr ""
+msgstr "내려받는 크기"
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr ""
+msgstr "설치된 크기"
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr ""
+msgstr "원천"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr ""
+msgstr "저장소에서"
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:280
 msgid "Repository"
-msgstr ""
+msgstr "저장소"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr ""
+msgstr "요약"
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr ""
+msgstr "저작권"
 
 #: output/packageinfo.cpp:104
-#, fuzzy
-#| msgid "Description:"
 msgid "Description"
-msgstr "설명:"
+msgstr "설명"
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr ""
+msgstr "제조사"
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr ""
+msgstr "연결 요약:\n"
 
 #: output/transaction_table.cpp:131
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 설치 중:      {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:138
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 재설치 중:    {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:145
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 향상 중:       {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:152
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] ""
+msgstr[0] " 교체 중:       {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:159
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 제거 중:        {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:166
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 하향 중:     {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:173
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 원인 변경 중: {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:181
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] ""
+msgstr[0] " 건너뛰는 중:        {:4} 꾸러미\n"
 
 #: output/transaction_table.cpp:262
 msgid "Package"
-msgstr ""
+msgstr "꾸러미"
 
 #: output/transaction_table.cpp:268
 msgid "Arch"
-msgstr ""
+msgstr "구조"
 
 #: output/transaction_table.cpp:286
 msgid "Size"
-msgstr ""
+msgstr "크기"
 
 #: output/transaction_table.cpp:342 output/transaction_table.cpp:436
 msgid "{} -> {}"
-msgstr ""
+msgstr "{} -> {}"
 
 #: output/transaction_table.cpp:358
 msgid "replacing {}"
-msgstr ""
+msgstr "대체 중 {}"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"
-msgstr ""
+msgstr " <name-unset>"
 
 #: output/transaction_table.cpp:442
 msgid "replacing "
-msgstr ""
+msgstr "교체 "
 
 #: output/transaction_table.cpp:455
 msgid "Skipping packages with conflicts:"
-msgstr ""
+msgstr "충돌이 있는 꾸러미 건너뛰기:"
 
 #: output/transaction_table.cpp:457
 msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgstr "손상된 종속성이 있는 꾸러미 건너뛰기:"
 
 #: output/transaction_table.cpp:518
 msgid "Installing dependencies:"
-msgstr ""
+msgstr "종속 꾸러미 설치 중:"
 
 #: output/transaction_table.cpp:520
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "취약한 종속 꾸러미 설치 중:"
 
 #: output/transaction_table.cpp:522
 msgid "Installing group/module packages:"
-msgstr ""
+msgstr "그룹/모듈 꾸러미 설치 중:"
 
 #: output/transaction_table.cpp:524
 msgid "Installing:"
-msgstr ""
+msgstr "설치 중:"
 
 #: output/transaction_table.cpp:528
 msgid "Upgrading:"
-msgstr ""
+msgstr "향상 중:"
 
 #: output/transaction_table.cpp:531
 msgid "Downgrading:"
-msgstr ""
+msgstr "하향설치 중:"
 
 #: output/transaction_table.cpp:534
 msgid "Reinstalling:"
-msgstr ""
+msgstr "재설치 중:"
 
 #: output/transaction_table.cpp:538
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "종속된 꾸러미 제거 중:"
 
 #: output/transaction_table.cpp:540
 msgid "Removing unused dependencies:"
-msgstr ""
+msgstr "사용하지 않는 의존성 제거 중:"
 
 #: output/transaction_table.cpp:542
 msgid "Removing:"
-msgstr ""
+msgstr "제거 중:"
 
 #: output/transaction_table.cpp:546
 msgid "Changing reason:"
-msgstr ""
+msgstr "변경 원인:"
 
 #: output/transaction_table.cpp:578
 msgid "Installing groups dependencies:"
-msgstr ""
+msgstr "그룹 의존성 설치 중:"
 
 #: output/transaction_table.cpp:580
 msgid "Installing groups:"
-msgstr ""
+msgstr "그룹 설치 중:"
 
 #: output/transaction_table.cpp:584
 msgid "Removing groups:"
-msgstr ""
+msgstr "그룹 제거 중:"
 
 #: output/transaction_table.cpp:587
 msgid "Upgrading groups:"
-msgstr ""
+msgstr "그룹 향상 중:"
 
 #: output/transaction_table.cpp:614
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "환경 그룹 설치 중:"
 
 #: output/transaction_table.cpp:617
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "환경 그룹 제거 중:"
 
 #: output/transaction_table.cpp:620
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "환경 그룹 향상 중:"
 
 #: output/transaction_table.cpp:647
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "모듈 스트림 활성화:"
 
 #: output/transaction_table.cpp:650
 msgid "Disabling modules:"
-msgstr ""
+msgstr "모듈 비활성화:"
 
 #: output/transaction_table.cpp:653
 msgid "Resetting modules:"
-msgstr ""
+msgstr "모듈 재설정:"
 
 #: output/transaction_table.cpp:656
 msgid "Switching module streams:"
-msgstr ""
+msgstr "모듈 스트림 전환 중:"
 
 #: output/transaction_table.cpp:730
 msgid "Nothing to do."
-msgstr ""
+msgstr "처리가 필요하지 않습니다."
 
 #: session.cpp:149
 msgid "Missing command"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
 "PO-Revision-Date: 2024-02-02 12:15+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -19,6 +19,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.3.1\n"
+
+#: commands/advisory/advisory.cpp:35
+#, fuzzy
+#| msgid "List advisories"
+msgid "Manage advisories"
+msgstr "Seznam doporučení"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -145,6 +151,15 @@ msgstr "CVE_ID,..."
 msgid "Error cleaning the cache: {}"
 msgstr ""
 
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr ""
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr ""
@@ -169,7 +184,15 @@ msgstr ""
 "Zobrazit pouze doporučení obsahující balíčky se zadanými názvy. Seznam "
 "možností, podporuje globs."
 
-#: commands/repoquery/repoquery.cpp:158
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr ""
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr ""
+
+#: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr ""
 
@@ -188,6 +211,6 @@ msgstr ""
 "{}: Špatně naformátovaná hodnota argumentu: Poslední klíčový znak nemůže být "
 "'.': {}"
 
-#: main.cpp:246 main.cpp:283
+#: main.cpp:259 main.cpp:296
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Přidejte \"--help\" pro více informací o argumentech."

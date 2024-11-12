@@ -4,14 +4,14 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
+# Fabio D <fabio1977@arcor.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-07-26 20:38+0000\n"
-"Last-Translator: Henning <boredsquirrel@users.noreply.translate."
-"fedoraproject.org>\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-11-05 21:08+0000\n"
+"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/de/>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -147,8 +147,6 @@ msgid "Install debug RPMs"
 msgstr "Installiere debug RPMs"
 
 #: base/goal_elements.cpp:406
-#, fuzzy
-#| msgid "No transaction in progress"
 msgid "Transaction merge"
 msgstr "Zusammenführung von Transaktionen"
 
@@ -374,12 +372,11 @@ msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Kann Datei nicht parsen: : '{0}': {1}.\n"
 
 #: base/log_event.cpp:348
-#, fuzzy
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Konnte debuginfo-Paket für folgende Pakete nicht finden, ausgehend vom "
+"Konnte Debuginfo-Paket für folgende Pakete nicht finden, ausgehend vom "
 "Argument '{0}': {1}"
 
 #: base/log_event.cpp:351 base/log_event.cpp:362
@@ -388,18 +385,16 @@ msgid ", "
 msgstr ", "
 
 #: base/log_event.cpp:358
-#, fuzzy
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
-"Konnte debug-Quellen Paket für folgende Pakete nicht finden, ausgehend vom "
+"Konnte Debug-Quellen Paket für folgende Pakete nicht finden, ausgehend vom "
 "Argument '{0}': {1}"
 
 #: base/log_event.cpp:365
-#, fuzzy
 msgid "Transaction merge error: '{0}'"
-msgstr "Fehler bei Zusammenführung der Transaktionen: '{0}'"
+msgstr "Fehler beim Zusammenführen der Transaktionen: '{0}'"
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
@@ -688,18 +683,22 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "Warnung: Übersprungene PGP Prüfung für 1 Paket aus dem Repository: {}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Warnung: Übersprungene PGP Prüfungen für {0} Paket aus dem Repository: {1}"
+msgstr[1] ""
+"Warnung: Übersprungene PGP Prüfungen für {0} Pakete aus dem Repository: {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Paket(e) aus dem Repository: {1}"
+"Warnung: Übersprungene PGP Prüfungen für {0} Paket aus dem Repositories: {1}"
 msgstr[1] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Paket(e) aus den Repositories: "
-"{1}"
+"Warnung: Übersprungene PGP Prüfungen für {0} Pakete aus den Repositories: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -722,11 +721,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): Kann Laufzeitverzeichnis des Nutzers nicht bestimmen"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "speichern eines XML-Dokuments für comps fehlgeschlagen"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "Speichern des XML-Dokuments für Gruppe \"{}\" in Datei \"{}\" "
@@ -858,7 +857,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "Variable \"{}\" ist nur lesbar"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Logdatei kann nicht geöffnet werden"
 
@@ -942,15 +941,15 @@ msgstr "Plugins::load_plugins(): config_dir_path darf nicht leer sein"
 msgid "Cannot load plugins: {}"
 msgstr "Kann Plugins nicht laden: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Die Berechnung von SHA256 ist fehlgeschlagen"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr "Kann Dateien nicht herunterladen, die Option cacheonly ist aktiviert."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Herunterladen der Dateien fehlgeschlagen"
 
@@ -963,13 +962,13 @@ msgstr ""
 "Downloadgeschwindigkeit. Bitte passen Sie die Einstellung von minrate oder "
 "throttle an"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Kann das Paket \"{0}\" nicht herunterladen, die Option cacheonly ist "
 "aktiviert."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Herunterladen der Pakete fehlgeschlagen"
 
@@ -1072,7 +1071,7 @@ msgstr "Auflisten der PGP-Schlüssel fehlgeschlagen: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Importieren der PGP-Schlüssel fehlgeschlagen: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1080,57 +1079,57 @@ msgstr ""
 "Erstellen von Repo \"{}\" fehlgeschlagen: ID ist mehr als einmal in der "
 "Konfiguration enthalten"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Cache-only ist aktiviert, aber kein Cache für Repository \"{}\""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Laden von repomd für Repo \"{}\" aus \"{}\" fehlgeschlagen: {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Laden des \"primary\" für Repository \"{}\" aus \"{}\" fehlgeschlagen: {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nicht unterstützter erweiterter Repository-Datentyp für das System-"
 "Repository: \"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Laden der {} Erweiterung für Repository \"{}\" aus \"{}\" fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Laden des System-Repository aus der Wurzel \"{}\" fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Laden des {} Caches für Repository \"{}\" aus \"{}\" fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Schreiben des primären Caches für Repository \"{}\" aus \"{}\" "
 "fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Erneutes Laden des primären Caches für Repository \"{}\" aus \"{}\" "
 "fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Schreiben des {} Caches für Repository \"{}\" aus \"{}\" fehlgeschlagen: {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Erneutes Laden des {} Caches für Repository \"{}\" aus \"{}\" "
@@ -1285,6 +1284,8 @@ msgstr "Zustand {} für \"{}\" nicht gefunden."
 #: system/state.cpp:301
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
+"Laden der System Status TOML Datei {} fehlgeschlagen (siehe dnf5-system-"
+"state(7)): {}"
 
 #: system/state.cpp:614
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
@@ -1366,25 +1367,22 @@ msgid "Invalid transaction item type: {}"
 msgstr "Ungültiger Typ des Transaktionselements: {}"
 
 #: transaction/transaction_merge.cpp:102
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transactions -> setting '{0}'."
 msgstr ""
 "Aktion '{0}' '{1}' kann nicht zusammengeführt werden, nachdem es in vorigen "
-"Transaktionen '{2}' wurde -> Einstellung '{0}'."
+"Transaktionen '{2}' wurde -> Setting '{0}'."
 
 #: transaction/transaction_merge.cpp:116
-#, fuzzy
 msgid ""
 "Action 'Upgrade' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
 msgstr ""
-"Aktion 'Upgrade' '{0}' kann nicht zusammengeführt werden, weil es an diesem "
-"Punkt nicht präsent ist -> konfiguriere 'Install'."
+"Aktion 'Upgrade' '{0}' kann nicht zusammengeführt werden, weil sie an diesem "
+"Punkt nicht existiert -> konfiguriere 'Install'."
 
 #: transaction/transaction_merge.cpp:174 transaction/transaction_merge.cpp:231
-#, fuzzy
 msgid ""
 "Action 'Reinstall' '{0}' cannot be merged because it is not present at that "
 "point -> setting 'Install'."
@@ -1393,7 +1391,6 @@ msgstr ""
 "Punkt nicht existiert -> konfiguriere 'Install'."
 
 #: transaction/transaction_merge.cpp:194
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged after it was '{2}' in preceding "
 "transaction -> setting '{0}'."
@@ -1402,14 +1399,12 @@ msgstr ""
 "vorigen Transaktion '{2}' wurde -> konfiguriere '{0}'."
 
 #: transaction/transaction_merge.cpp:215
-#, fuzzy
 msgid "Unexpected action encountered: '{0}' during transaction merge."
 msgstr ""
 "Unerwartete Aktion aufgetreten: '{0}' bei der Zusammenführung der "
 "Transaktion."
 
 #: transaction/transaction_merge.cpp:224
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> skipping it."
@@ -1418,7 +1413,6 @@ msgstr ""
 "Zeitpunkt nicht existiert -> überspringe."
 
 #: transaction/transaction_merge.cpp:245
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point -"
 "> setting 'INSTALL'."
@@ -1427,7 +1421,6 @@ msgstr ""
 "Zeitpunkt nicht existiert -> konfiguriere 'INSTALL'."
 
 #: transaction/transaction_merge.cpp:266
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is not present at that point "
 "(present versions are: {2}) -> skipping it."
@@ -1436,16 +1429,14 @@ msgstr ""
 "Zeitpunkt nicht existiert (vorhandene Versionen sind: {2}) -> überspringe."
 
 #: transaction/transaction_merge.cpp:277
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already present at that "
 "point -> skipping it."
 msgstr ""
 "Aktion '{0}' '{1}' kann nicht zusammengeführt werden, da sie zu diesem "
-"Zeitpunkt nicht existiert -> überspringe"
+"Zeitpunkt bereits existiert -> überspringe."
 
 #: transaction/transaction_merge.cpp:294
-#, fuzzy
 msgid ""
 "Action '{0}' '{1}' cannot be merged because it is already installed in "
 "version '{2}' -> keeping the action from older transaction with '{1}'."
@@ -1455,7 +1446,6 @@ msgstr ""
 "wird behalten."
 
 #: transaction/transaction_merge.cpp:304
-#, fuzzy
 msgid "Invalid action encountered: '{0}' during transaction merge."
 msgstr ""
 "Ungültige Aktion aufgetreten: '{0}' während der Zusammenführunt der "
@@ -1483,13 +1473,13 @@ msgstr ""
 
 #: transaction/transaction_sr.cpp:81
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr "Ungültige Nebenversion \"{}\", Nummer erwartet"
+msgstr "Ungültige Nebenversion: \"{}\", Nummer erwartet"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
 msgstr "Fehlender Schlüssel \"version\""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "Unerwarteter Typ von \"environments\", ein Array wird erwartet"
 
@@ -1501,7 +1491,7 @@ msgstr "Fehlender Objekt-Schlüssel \"id\" in einer Umgebung"
 msgid "Missing object key \"action\" in an environment"
 msgstr "Fehlender Objekt-Schlüssel \"action\" in einer Umgebung"
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "Unerwarteter Typ von \"groups\", ein Array wird erwartet"
 
@@ -1517,7 +1507,7 @@ msgstr "Fehlender Objekt-Schlüssel \"action\" in einer Gruppe"
 msgid "Missing object key \"reason\" in a group"
 msgstr "Fehlender Objekt-Schlüssel \"reason\" in einer Gruppe"
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Unerwarteter Typ von \"rpms\", Array wird erwartet"
 
@@ -1545,7 +1535,7 @@ msgid ""
 "and action \"Reason Change\""
 msgstr ""
 "Fehlender erforderlicher Objekt-Schlüssel \"group_id\" in einer rpm mit "
-"Grund \"Group\" und Aktion \"Reason Change\""
+"reason \"Group\" und action \"Reason Change\""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
@@ -1733,3 +1723,7 @@ msgstr "Lesen der rpm-Konfigurationsdateien fehlgeschlagen"
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Ausführen von uname() fehlgeschlagen"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr ""
+#~ "Warnung: Übersprungene PGP Prüfung für 1 Paket aus dem Repository: {}"

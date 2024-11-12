@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-17 17:14+0000\n"
+"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5daemon-client/pl/>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: commands/advisory/advisory.cpp:35
+msgid "Manage advisories"
+msgstr "Zarządzaj ostrzeżeniami"
+
+#: commands/advisory/advisory_info.hpp:34
+msgid "Print details about advisories"
+msgstr "Wydrukuj szczegóły dotyczące ostrzeżeń"
+
+#: commands/advisory/advisory_list.hpp:34
+msgid "List advisories"
+msgstr "Wyświetl ostrzeżenia"
+
+#: commands/advisory/arguments.hpp:32
+msgid "Show advisories containing any version of installed packages."
+msgstr "Pokaż ostrzeżenia zawierające dowolną wersję zainstalowanych pakietów."
+
+#: commands/advisory/arguments.hpp:43
+msgid ""
+"Show advisories containing newer versions of installed packages. This is the "
+"default behavior."
+msgstr ""
+"Pokaż ostrzeżenia zawierające nowsze wersje zainstalowanych pakietów. Jest "
+"to domyślne zachowanie."
+
+#: commands/advisory/arguments.hpp:55
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+"Pokaż ostrzeżenia zawierające takie same i starsze wersje zainstalowanych "
+"pakietów."
+
+#: commands/advisory/arguments.hpp:67
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+"Pokaż ostrzeżenia zawierające nowsze wersje zainstalowanych pakietów, dla "
+"których jest dostępna nowsza wersja."
+
+#: commands/advisory/arguments.hpp:80
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Pokaż tylko komunikaty zawierające pakiety o określonych nazwach. Opcja "
+"listy, obsługuje wzorce."
+
+#: commands/advisory/arguments.hpp:81
+msgid "PACKAGE_NAME,..."
+msgstr "NAZWA_PAKIETU,..."
+
+#: commands/advisory/arguments.hpp:88
+msgid "List of patterns matched against advisory names."
+msgstr "Lista wzorców dopasowanych do nazw ostrzeżeń."
+
+#: commands/advisory/arguments.hpp:95
+msgid "Show only advisories referencing a bugzilla."
+msgstr "Pokaż tylko ostrzeżenia odnoszące się do bugzilli."
+
+#: commands/advisory/arguments.hpp:102
+msgid "Show only advisories referencing a CVE."
+msgstr "Pokaż tylko ostrzeżenia odnoszące się do CVE."
+
+#: commands/advisory/arguments.hpp:113
+msgid "Limit to packages in advisories with specified name. List option."
+msgstr "Ogranicz do pakietów w ostrzeżeniach o określonej nazwie. Opcja listy."
+
+#: commands/advisory/arguments.hpp:114
+msgid "ADVISORY_NAME,..."
+msgstr "NAZWA_OSTRZEŻENIA,..."
+
+#: commands/advisory/arguments.hpp:121
+msgid "Limit to packages in security advisories."
+msgstr "Ogranicz do pakietów w ostrzeżeniach dotyczących bezpieczeństwa."
+
+#: commands/advisory/arguments.hpp:128
+msgid "Limit to packages in bugfix advisories."
+msgstr "Ogranicz do pakietów w ostrzeżeniach o poprawkach błędów."
+
+#: commands/advisory/arguments.hpp:135
+msgid "Limit to packages in enhancement advisories."
+msgstr "Ogranicz do pakietów objętych ostrzeżeniami dotyczącymi ulepszeń."
+
+#: commands/advisory/arguments.hpp:142
+msgid "Limit to packages in newpackage advisories."
+msgstr "Ogranicz do pakietów w ostrzeżeniach dotyczących nowych pakietów."
+
+#. Note for translators: "critical" etc. quoted words are
+#. literals that should not be translated.
+#: commands/advisory/arguments.hpp:155
+msgid ""
+"Limit to packages in advisories with specified severity. List option. Can be "
+"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+"Ogranicz do pakietów w ostrzeżeniach o określonej powadze. Opcja listy. Może "
+"być „critical\", „important\", „moderate\", „low\", „none\"."
+
+#: commands/advisory/arguments.hpp:157
+msgid "ADVISORY_SEVERITY,..."
+msgstr "POWAGA_OSTRZEŻENIA,..."
+
+#: commands/advisory/arguments.hpp:169
+msgid ""
+"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
+"option."
+msgstr ""
+"Ogranicz do pakietów w ostrzeżeniach, które naprawiają identyfikator "
+"Bugzilli, np. 123123. Opcja listy."
+
+#: commands/advisory/arguments.hpp:170
+msgid "BUGZILLA_ID,..."
+msgstr "ID_BUGZILLI..."
+
+#: commands/advisory/arguments.hpp:180
+msgid ""
+"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
+"Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+"Ogranicz do pakietów w ostrzeżeniach, które naprawiają identyfikator CVE "
+"(Common Vulnerabilities and Exposures), np. CVE-2201-0123. Opcja listy."
+
+#: commands/advisory/arguments.hpp:182
+msgid "CVE_ID,..."
+msgstr "ID_CVE,..."
+
+#: commands/clean/clean.cpp:88
+msgid "Error cleaning the cache: {}"
+msgstr "Błąd podczas czyszczenia pamięci podręcznej: {}"
+
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+"Uaktualnij lub obniż wersję zainstalowanego oprogramowania do najnowszych "
+"dostępnych wersji"
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr "Zarządzaj grupami comps"
+
+#: commands/group/group_list.hpp:37
+msgid "Show only available groups."
+msgstr "Pokaż tylko dostępne grupy."
+
+#: commands/group/group_list.hpp:43
+msgid "Show only installed groups."
+msgstr "Pokaż tylko zainstalowane grupy."
+
+#: commands/group/group_list.hpp:49
+msgid "Show also hidden groups."
+msgstr "Pokaż także ukryte grupy."
+
+#: commands/group/group_list.hpp:59
+msgid ""
+"Show only groups containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+"Pokaż tylko grupy zawierające pakiety o określonych nazwach. Opcja listy, "
+"obsługuje wzorce."
+
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr "Zarządzaj repozytoriami"
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr "wyszukaj pakiety spełniające różne kryteria"
+
+#: commands/repoquery/repoquery.cpp:159
+msgid "Error parsing JSON object \"{}\": {}"
+msgstr "Błąd podczas parsowania obiektu JSON „{}”: {}"
+
+#: exception.cpp:28
+msgid ""
+"This command has to be run with superuser privileges (under the root user on "
+"most systems)."
+msgstr ""
+"To polecenie musi zostać uruchomione z uprawnieniami superużytkownika (w "
+"większości systemów z uprawnieniami użytkownika root)."
+
+#: main.cpp:157
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Nieprawidłowo sformatowana wartość argumentu: Ostatni znak klucza nie "
+"może być '.': {}"
+
+#: main.cpp:259 main.cpp:296
+msgid ". Add \"--help\" for more information about the arguments."
+msgstr ". Aby uzyskać więcej informacji o argumentach, dodaj „--help”."

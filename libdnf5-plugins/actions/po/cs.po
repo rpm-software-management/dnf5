@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
 "PO-Revision-Date: 2024-02-02 13:11+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.3.1\n"
 
-#: actions.cpp:487 actions.cpp:495 actions.cpp:503 actions.cpp:511
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,21 +26,21 @@ msgstr ""
 "Chyba v souboru \"{}\" na řádku {}: očekává se formát \"HOOK:PKG_FILTER:"
 "DIRECTION:OPTIONS:CMD\""
 
-#: actions.cpp:533
+#: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Chyba v souboru \"{}\" na řádku {}: Neznámá hodnota volby \"enabled\" \"{}\""
 
-#: actions.cpp:540
+#: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámá volba \"{}\""
 
-#: actions.cpp:575
+#: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámý háček \"{}\""
 
-#: actions.cpp:585
+#: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -48,16 +48,26 @@ msgstr ""
 "Chyba v souboru \"{}\" na řádku {}: Filtr balíčků lze použít pouze v háčcích "
 "PRE_TRANS a POST_TRANS"
 
-#: actions.cpp:595
+#: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "Chyba v souboru \"{}\" na řádku {}: Nelze použít směr bez filtru balíčku"
 
-#: actions.cpp:612
+#: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámý směr balíčku \"{}\""
 
-#: actions.cpp:621
+#: actions.cpp:664
+#, fuzzy
+#| msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "Chyba v souboru \"{}\" na řádku {}: Neznámý háček \"{}\""
+
+#: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Chyba v souboru \"{}\" na řádku {}: Chybějící příkaz"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr ""

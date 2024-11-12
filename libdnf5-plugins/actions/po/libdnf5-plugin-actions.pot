@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-07 11:21+0100\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,31 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: actions.cpp:392 actions.cpp:400 actions.cpp:408 actions.cpp:416
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+#, c++-format
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION::CMD\" format "
-"expected"
+"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
+"format expected"
 msgstr ""
 
-#: actions.cpp:433
+#: actions.cpp:581
+#, c++-format
+msgid ""
+"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+msgstr ""
+
+#: actions.cpp:590
+#, c++-format
+msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+msgstr ""
+
+#: actions.cpp:616
+#, c++-format
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr ""
 
-#: actions.cpp:443
+#: actions.cpp:626
+#, c++-format
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
 msgstr ""
 
-#: actions.cpp:453
+#: actions.cpp:636
+#, c++-format
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 
-#: actions.cpp:470
+#: actions.cpp:653
+#, c++-format
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 
-#: actions.cpp:479
+#: actions.cpp:664
+#, c++-format
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr ""
+
+#: actions.cpp:670
+#, c++-format
 msgid "Error in file \"{}\" on line {}: Missing command"
+msgstr ""
+
+#: actions.cpp:1760
+#, c++-format
+msgid "Cannot create pipe: {}"
 msgstr ""

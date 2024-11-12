@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-08-03 03:41+0000\n"
+"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"PO-Revision-Date: 2024-10-08 08:41+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/fr/>\n"
@@ -17,7 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
+
+#: commands/advisory/advisory.cpp:35
+msgid "Manage advisories"
+msgstr "Gérer les avertissements"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -154,6 +158,17 @@ msgstr "ID_DE_CVE,…"
 msgid "Error cleaning the cache: {}"
 msgstr "Erreur lors du nettoyage du cache : {}"
 
+#: commands/distro-sync/distro-sync.cpp:48
+msgid ""
+"Upgrade or downgrade installed software to the latest available versions"
+msgstr ""
+"Installer la dernière version disponible des logiciels installés "
+"(réinstallation de versions antérieures possible)"
+
+#: commands/group/group.cpp:41
+msgid "Manage comps groups"
+msgstr "Gérer les groupes de comps"
+
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
 msgstr "Afficher uniquement les groupes disponibles."
@@ -174,7 +189,15 @@ msgstr ""
 "Afficher uniquement les groupes qui contiennent les paquets correspondant "
 "aux noms spécifiés. Option liste, prend en charge les globs."
 
-#: commands/repoquery/repoquery.cpp:158
+#: commands/repo/repo.cpp:37
+msgid "Manage repositories"
+msgstr "Gérer les dépôts"
+
+#: commands/repoquery/repoquery.cpp:95
+msgid "search for packages matching various criteria"
+msgstr "rechercher les paquets correspondant à certains critères"
+
+#: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
 msgstr "Erreur lors de l'analyse de l'objet JSON \"{}\" : {}"
 
@@ -193,6 +216,6 @@ msgstr ""
 "{}: valeur d'argument mal formatée : le dernier caractère ne peut pas être "
 "'.' : {}"
 
-#: main.cpp:246 main.cpp:283
+#: main.cpp:259 main.cpp:296
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Ajoutez \"--help\" pour plus d'informations sur les arguments."

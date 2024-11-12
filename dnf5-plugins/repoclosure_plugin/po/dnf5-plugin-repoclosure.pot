@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 10:48+0100\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,17 @@ msgstr ""
 msgid "Print list of unresolved dependencies for repositories"
 msgstr ""
 
-#: repoclosure.cpp:150
+#: repoclosure.cpp:154
+#, c++-format
 msgid "No match for argument \"{}\"."
 msgstr ""
 
-#: repoclosure.cpp:156
+#: repoclosure.cpp:160
 msgid "Failed to resolve package specifications."
 msgstr ""
 
-#: repoclosure.cpp:211
+#: repoclosure.cpp:215
+#, c++-format
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."

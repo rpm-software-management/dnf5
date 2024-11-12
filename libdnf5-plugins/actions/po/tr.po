@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
-"PO-Revision-Date: 2024-07-10 07:38+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"PO-Revision-Date: 2024-09-21 14:54+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/tr/>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:487 actions.cpp:495 actions.cpp:503 actions.cpp:511
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -27,22 +27,22 @@ msgstr ""
 "\"{}\" dosyasının {}. satırında hata: \"KANCA:PKT_FİLTRESİ::YÖN:KOMUT\" "
 "biçimi bekleniyor"
 
-#: actions.cpp:533
+#: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Bilinmeyen \"enabled\" seçeneği değeri "
 "\"{}\""
 
-#: actions.cpp:540
+#: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "\"{}\" dosyasının {} satırında hata: \"{}\" seçeneği bilinmiyor"
 
-#: actions.cpp:575
+#: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kanca \"{}\""
 
-#: actions.cpp:585
+#: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
@@ -50,16 +50,24 @@ msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Paket filtresi yalnızca PRE_TRANS ve "
 "POST_TRANS kancalarında kullanılabilir"
 
-#: actions.cpp:595
+#: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Paket filtresi olmadan yön kullanılamaz"
 
-#: actions.cpp:612
+#: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen paket yönü \"{}\""
 
-#: actions.cpp:621
+#: actions.cpp:664
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kip \"{}\""
+
+#: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "\"{}\" dosyasının {} satırında hata: Eksik komut"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr "Boru (pipe) oluşturulamıyor: {}"

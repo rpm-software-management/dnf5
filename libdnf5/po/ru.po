@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 03:02+0000\n"
+"POT-Creation-Date: 2024-11-06 03:01+0000\n"
 "PO-Revision-Date: 2024-09-19 09:54+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -657,11 +657,26 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for 1 package from repository: {}"
-msgstr "Предупреждение: пропущены проверки PGP для 1 пакета из репозитория: {}"
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#| msgid_plural ""
+#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid_plural ""
+"Warning: skipped PGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозитория: {1}"
+msgstr[1] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
+msgstr[2] ""
+"Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
 
-#: base/transaction.cpp:1424
-msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1425
+#, fuzzy
+#| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#| msgid_plural ""
+#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
+msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped PGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
@@ -694,11 +709,11 @@ msgstr ""
 "get_user_runtime_dir(): Не удается определить каталог времени выполнения "
 "пользователя"
 
-#: comps/environment/environment.cpp:307
+#: comps/environment/environment.cpp:312
 msgid "failed to save xml document for comps"
 msgstr "Не удалось сохранить xml-документ для Компов"
 
-#: comps/group/group.cpp:331
+#: comps/group/group.cpp:343
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "Не удалось сохранить xml-документ для группы \"{}\" в файл \"{}\": {}"
 
@@ -828,7 +843,7 @@ msgstr ""
 msgid "Variable \"{}\" is read-only"
 msgstr "Переменная \"{}\" доступна только для чтения"
 
-#: logger/rotating_file_logger.cpp:59
+#: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
 msgstr "Невозможно открыть файл журнала"
 
@@ -912,15 +927,15 @@ msgstr "Plugins::load_plugins(): config_dir_path не может быть пус
 msgid "Cannot load plugins: {}"
 msgstr "Невозможно загрузить плагины: {}"
 
-#: repo/config_repo.cpp:557
+#: repo/config_repo.cpp:566
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Сбой вычисления SHA256"
 
-#: repo/file_downloader.cpp:143
+#: repo/file_downloader.cpp:154
 msgid "Cannot download files, cacheonly option is activated."
 msgstr "Невозможно загрузить файлы, активирована опция \"cacheonly\"."
 
-#: repo/file_downloader.cpp:204
+#: repo/file_downloader.cpp:216
 msgid "Failed to download files"
 msgstr "Не удалось загрузить файлы"
 
@@ -932,11 +947,11 @@ msgstr ""
 "Максимальная скорость загрузки ниже минимальной, пожалуйста, измените "
 "конфигурацию minrate или throttle"
 
-#: repo/package_downloader.cpp:141
+#: repo/package_downloader.cpp:152
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Невозможно загрузить пакет \"{0}\", активирована опция \"cacheonly\"."
 
-#: repo/package_downloader.cpp:244
+#: repo/package_downloader.cpp:257
 msgid "Failed to download packages"
 msgstr "Не удалось загрузить пакеты"
 
@@ -1031,7 +1046,7 @@ msgstr "Не удалось перечислить pgp-ключи: {}"
 msgid "Failed to import pgp keys: {}"
 msgstr "Не удалось импортировать pgp-ключи: {}"
 
-#: repo/repo_sack.cpp:128
+#: repo/repo_sack.cpp:146
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1039,52 +1054,52 @@ msgstr ""
 "Не удалось создать репозиторий \"{}\": Идентификатор присутствует в "
 "конфигурации более одного раза"
 
-#: repo/repo_sack.cpp:499
+#: repo/repo_sack.cpp:517
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Включено только кэширование, но нет кэша для репозитория \"{}\""
 
-#: repo/solv_repo.cpp:258
+#: repo/solv_repo.cpp:261
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Не удалось загрузить repomd для репозитория \"{}\" из \"{}\": {}."
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:269
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Не удалось загрузить первичные данные для репозитория \"{}\" из \"{}\": {}."
 
-#: repo/solv_repo.cpp:311
+#: repo/solv_repo.cpp:316
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Неподдерживаемый расширенный тип репо-данных для системного репозитория: "
 "\"{}\"."
 
-#: repo/solv_repo.cpp:377
+#: repo/solv_repo.cpp:382
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Не удалось загрузить расширение {} для репозитория \"{}\" из \"{}\": {}"
 
-#: repo/solv_repo.cpp:412
+#: repo/solv_repo.cpp:418
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Не удалось загрузить системный репозиторий из корня \"{}\": {}"
 
-#: repo/solv_repo.cpp:511
+#: repo/solv_repo.cpp:519
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Не удалось загрузить кеш {} для репозитория \"{}\" из \"{}\": {}"
 
-#: repo/solv_repo.cpp:563
+#: repo/solv_repo.cpp:573
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "Не удалось записать первичный кэш для репозитория \"{}\" в \"{}\": {}"
 
-#: repo/solv_repo.cpp:580
+#: repo/solv_repo.cpp:595
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Не удалось перезагрузить первичный кэш для репозитория \"{}\" из \"{}\": {}"
 
-#: repo/solv_repo.cpp:644
+#: repo/solv_repo.cpp:661
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Не удалось записать кеш {} для репозитория \"{}\" в \"{}\": {}"
 
-#: repo/solv_repo.cpp:665
+#: repo/solv_repo.cpp:682
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Не удалось перезагрузить кеш {} для репозитория \"{}\" из \"{}\": {}"
 
@@ -1420,7 +1435,7 @@ msgstr "Недопустимая минорная версия: \"{}\", ожид
 msgid "Missing key \"version\""
 msgstr "Отсутствует ключ \"version\""
 
-#: transaction/transaction_sr.cpp:97
+#: transaction/transaction_sr.cpp:92
 msgid "Unexpected type of \"environments\", array expected"
 msgstr "Неожиданный тип \"environments\", ожидается массив"
 
@@ -1432,7 +1447,7 @@ msgstr "Отсутствует ключ объекта \"id\" в среде"
 msgid "Missing object key \"action\" in an environment"
 msgstr "Отсутствует объектный ключ \"action\" в среде"
 
-#: transaction/transaction_sr.cpp:137
+#: transaction/transaction_sr.cpp:129
 msgid "Unexpected type of \"groups\", array expected"
 msgstr "Неожиданный тип \"groups\", ожидается массив"
 
@@ -1448,7 +1463,7 @@ msgstr "Отсутствует объект-ключ \"action\" в группе"
 msgid "Missing object key \"reason\" in a group"
 msgstr "Отсутствует объект-ключ \"reason\" в группе"
 
-#: transaction/transaction_sr.cpp:193
+#: transaction/transaction_sr.cpp:186
 msgid "Unexpected type of \"rpms\", array expected"
 msgstr "Неожиданный тип \"rpms\", ожидается массив"
 
@@ -1658,6 +1673,10 @@ msgstr "Не удалось прочитать файлы конфигураци
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"
 msgstr "Не удалось выполнить uname()"
+
+#~ msgid "Warning: skipped PGP checks for 1 package from repository: {}"
+#~ msgstr ""
+#~ "Предупреждение: пропущены проверки PGP для 1 пакета из репозитория: {}"
 
 #~ msgid "Cannot {} package \"{}\""
 #~ msgstr "Невозможно {} пакет \"{}\""
