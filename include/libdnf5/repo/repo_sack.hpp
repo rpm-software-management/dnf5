@@ -91,6 +91,9 @@ public:
     /// @return The system repository.
     libdnf5::repo::RepoWeakPtr get_system_repo();
 
+    /// Reloads the system repository. If the system repository has not been created yet, it will create and load it.
+    void reload_system_repo();
+
     /// Add given paths to comdline repository.
     /// @param paths Vector of paths to rpm files to be inserted to cmdline repo. Can contain paths to local files or URLs of remote rpm files. Specifications that are neither file paths, nor URLs are ignored.
     /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.

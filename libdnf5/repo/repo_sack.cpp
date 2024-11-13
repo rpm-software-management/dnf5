@@ -304,6 +304,10 @@ RepoWeakPtr RepoSack::get_system_repo() {
     return p_impl->system_repo->get_weak_ptr();
 }
 
+void RepoSack::reload_system_repo() {
+    get_system_repo()->reload();
+}
+
 /**
  *
  * @param repos Set of repositories to load
