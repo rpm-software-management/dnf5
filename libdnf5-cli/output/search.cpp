@@ -41,7 +41,7 @@ std::string key_to_string(const matched_key_pair & key_pair) {
     if (key_match == SearchKeyMatch::PARTIAL) {
         return key;
     } else {
-        return key + " (exact)";
+        return key + _(" (exact)");
     }
 }
 
@@ -86,7 +86,7 @@ std::string construct_highlight_regex_format() {
 
 void print_search_results(const SearchResults & results) {
     if (results.group_results.empty()) {
-        std::cout << "No matches found." << std::endl;
+        std::cout << _("No matches found.") << std::endl;
         return;
     }
 
@@ -97,7 +97,7 @@ void print_search_results(const SearchResults & results) {
     };
 
     for (auto const & result : results.group_results) {
-        std::cout << bold << "Matched fields: " << reset << construct_keys_string(result.matched_keys) << std::endl;
+        std::cout << bold << _("Matched fields: ") << reset << construct_keys_string(result.matched_keys) << std::endl;
 
         for (auto const & package : result.matched_packages.packages) {
             std::cout << " ";
