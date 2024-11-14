@@ -153,7 +153,7 @@ void PackageDownloader::download() try {
                 pkg_target.package.get_nevra());
         }
 
-        std::filesystem::create_directory(pkg_target.destination);
+        std::filesystem::create_directories(pkg_target.destination);
 
         if (auto * download_callbacks = pkg_target.package.get_base()->get_download_callbacks()) {
             pkg_target.user_cb_data = download_callbacks->add_new_download(
