@@ -120,3 +120,12 @@ jobs:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
     packages: [dnf5-without-modules]
+  - job: tests
+    trigger: pull_request
+    identifier: "ABI check"
+    targets:
+      - fedora-rawhide
+    fmf_url: https://github.com/kontura/ci-dnf-stack.git
+    fmf_ref: main
+    tmt_plan: "^/plans/integration/abi-libdnf5$"
+    packages: [dnf5]
