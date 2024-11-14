@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/utils/patterns.hpp>
 
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
+
 #include <algorithm>
 #include <iostream>
 #include <numeric>
