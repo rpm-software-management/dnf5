@@ -15,6 +15,7 @@ DNF5 Plugins
     copr.8
     needs_restarting.8
     repoclosure.8
+    reposync.8
 
 ..
     # TODO(jkolarik): config-manager

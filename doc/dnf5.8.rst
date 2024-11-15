@@ -167,6 +167,9 @@ These are available after installing the ``dnf5-plugins`` package.
 :ref:`repoclosure <repoclosure_plugin_ref-label>`
     | Display a list of unresolved dependencies for repositories.
 
+:ref:`reposync <reposync_plugin_ref-label>`
+    | Synchronize packages and metadata of a remote DNF repository to a local directory.
+
 
 Options
 =======

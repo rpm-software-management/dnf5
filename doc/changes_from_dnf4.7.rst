@@ -251,6 +251,9 @@ Changes to individual commands
 ``repoclosure``
   * Dropped ``--pkg`` option. Positional arguments can now be used to specify packages to check closure for.
 
+``reposync``
+  * Dropped ``--downloadcomps`` option. Consider using ``--download-metadata`` option which downloads all available repository metadata, not only comps groups.
+
 ``repolist``
   * The ``repolist`` and ``repoinfo`` commands are now subcommands of the ``repo`` command: ``repo list`` and ``repo info``.
 
