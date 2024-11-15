@@ -104,6 +104,7 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-copr.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-needs-restarting.8 DESTINATION share/man/man8)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-repoclosure.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-reposync.8 DESTINATION share/man/man8)
     endif()
 
 endif()
