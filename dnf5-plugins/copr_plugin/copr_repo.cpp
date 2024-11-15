@@ -258,9 +258,11 @@ CoprRepo::CoprRepo(
         baseurl_chroot = selected_chroot;
         if (!available_chroots.contains(selected_chroot))
             available_chroots_error(available_chroots, selected_chroot);
-        // remove the "-<arch>" suffix
-        json_selector = std::regex_replace(selected_chroot, std::regex("-[^-]*"), "");
-        arch = std::regex_replace(selected_chroot, std::regex(".*-"), "");
+        // Chroot can look like: fedora-rawhide-x86_64
+        // Split on second/last "-" to: "fedora-rawhide" and "x86_64"
+        size_t second_dash_pos = selected_chroot.find_last_of("-");
+        json_selector = selected_chroot.substr(0, second_dash_pos);
+        arch = selected_chroot.substr(second_dash_pos + 1);
     } else {
         baseurl_chroot = get_repo_triplet(available_chroots, config_name_version, arch, json_selector);
         if (baseurl_chroot.empty()) {
