@@ -65,6 +65,16 @@ static int rpmlog_callback(rpmlogRec rec, rpmlogCallbackData data) {
     return 0;
 }
 
+RpmLogGuardBase::~RpmLogGuardBase() {
+    // Reset the RPM log callback to nullptr to prevent undefined behavior if the
+    // callback data retains a reference to the RpmLogGuard object after it has
+    // been destroyed.
+    // The class doesn't reset the original callback upon destruction, because
+    // although `rpmlogSetCallback()` returns the old callback, there's no way
+    // to also retrieve the `rpmlogCallbackData` associated with it, so the
+    // data can't be reset.
+    rpmlogSetCallback(nullptr, nullptr);
+}
 
 RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : RpmLogGuardBase(), base(base) {
     rpmlogSetCallback(&rpmlog_callback, this);

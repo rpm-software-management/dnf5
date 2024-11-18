@@ -31,7 +31,7 @@ namespace libdnf5::rpm {
 class RpmLogGuardBase {
 public:
     RpmLogGuardBase() : rpm_log_mutex_guard(rpm_log_mutex) {}
-    ~RpmLogGuardBase() {}
+    virtual ~RpmLogGuardBase();
 
 private:
     static std::mutex rpm_log_mutex;
