@@ -96,6 +96,9 @@ public:
     RpmSignature & operator=(RpmSignature && src) noexcept;
 
     /// Check signature of the `package` using public keys stored in rpm database.
+    /// The method respects the repository's pkg_gpgcheck option (or
+    /// localpkg_gpgcheck for packages originating from the command line) and
+    /// skips the check if these options are set to `false`.
     /// @param package: package to check.
     /// @return CheckResult::OK - the check passed
     ///         CheckResult::SKIPPED - the check was skipped
@@ -104,6 +107,16 @@ public:
     ///         CheckResult::FAILED_NOT_SIGNED - package is not signed but signature is required
     ///         CheckResult::FAILED - check failed for another reason
     CheckResult check_package_signature(const Package & pkg) const;
+
+    /// Check signature of rpm file in `path` location using public keys stored in
+    /// rpm database.
+    /// @param package: package to check.
+    /// @return CheckResult::OK - the check passed
+    ///         CheckResult::FAILED_KEY_MISSING - no corresponding key found in rpmdb
+    ///         CheckResult::FAILED_NOT_TRUSTED - signature is valid but the key is not trusted
+    ///         CheckResult::FAILED_NOT_SIGNED - package is not signed but signature is required
+    ///         CheckResult::FAILED - check failed for another reason
+    CheckResult check_package_signature(const std::string & path) const;
 
     /// Import public key into rpm database.
     /// @param key: GPG key to be imported into rpm database.

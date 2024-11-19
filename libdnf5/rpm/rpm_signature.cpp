@@ -183,20 +183,7 @@ RpmSignature & RpmSignature::operator=(const RpmSignature & src) {
 RpmSignature & RpmSignature::operator=(RpmSignature && src) noexcept = default;
 
 
-RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Package & pkg) const {
-    // is package gpg check even required?
-    auto repo = pkg.get_repo();
-    if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
-        if (!p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value()) {
-            return CheckResult::SKIPPED;
-        }
-    } else {
-        auto & repo_config = repo->get_config();
-        if (!repo_config.get_pkg_gpgcheck_option().get_value()) {
-            return CheckResult::SKIPPED;
-        }
-    }
-
+RpmSignature::CheckResult RpmSignature::check_package_signature(const std::string & path) const {
     // rpmcliVerifySignatures is the only API rpm provides for signature verification.
     // Unfortunately to distinguish key_missing/not_signed/verification_failed cases
     // we need to temporarily increase log level to RPMLOG_INFO, collect the log
@@ -212,8 +199,8 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Packa
     auto oldmask = rpmlogSetMask(RPMLOG_UPTO(RPMLOG_PRI(RPMLOG_INFO)));
 
     rpmtsSetVfyLevel(ts_ptr.get(), RPMSIG_SIGNATURE_TYPE);
-    std::string path = pkg.get_package_path();
-    char * const path_array[2] = {&path[0], NULL};
+    std::string path_non_const{path};
+    char * const path_array[2] = {&path_non_const[0], NULL};
     auto rc = rpmcliVerifySignatures(ts_ptr.get(), path_array);
 
     rpmlogSetMask(oldmask);
@@ -263,6 +250,23 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Packa
         return CheckResult::FAILED_NOT_SIGNED;
     }
     return CheckResult::FAILED;
+}
+
+RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Package & pkg) const {
+    // is package gpg check even required?
+    auto repo = pkg.get_repo();
+    if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+        if (!p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value()) {
+            return CheckResult::SKIPPED;
+        }
+    } else {
+        auto & repo_config = repo->get_config();
+        if (!repo_config.get_pkg_gpgcheck_option().get_value()) {
+            return CheckResult::SKIPPED;
+        }
+    }
+
+    return check_package_signature(pkg.get_package_path());
 }
 
 bool RpmSignature::key_present(const KeyInfo & key) const {
