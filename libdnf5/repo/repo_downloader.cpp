@@ -470,38 +470,42 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
 }
 
 void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
-    std::vector<const char *> dlist;
-
     auto optional_metadata = get_optional_metadata();
 
-    dlist.push_back(MD_FILENAME_PRIMARY);
+    if (optional_metadata.extract(libdnf5::METADATA_TYPE_ALL)) {
+        h.set_opt(LRO_YUMDLIST, LR_RPMMD_FULL);
+    } else {
+        std::vector<const char *> dlist;
+        dlist.push_back(MD_FILENAME_PRIMARY);
 #ifdef WITH_MODULEMD
-    dlist.push_back(MD_FILENAME_MODULES);
+        dlist.push_back(MD_FILENAME_MODULES);
 #endif
-    if (optional_metadata.extract(libdnf5::METADATA_TYPE_FILELISTS)) {
-        dlist.push_back(MD_FILENAME_FILELISTS);
-    }
-    if (optional_metadata.extract(libdnf5::METADATA_TYPE_OTHER)) {
-        dlist.push_back(MD_FILENAME_OTHER);
-    }
-    if (optional_metadata.extract(libdnf5::METADATA_TYPE_PRESTO)) {
-        dlist.push_back(MD_FILENAME_PRESTODELTA);
-    }
-    if (optional_metadata.extract(libdnf5::METADATA_TYPE_COMPS)) {
-        dlist.push_back(MD_FILENAME_GROUP_GZ);
-    }
-    if (optional_metadata.extract(libdnf5::METADATA_TYPE_UPDATEINFO)) {
-        dlist.push_back(MD_FILENAME_UPDATEINFO);
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_FILELISTS)) {
+            dlist.push_back(MD_FILENAME_FILELISTS);
+        }
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_OTHER)) {
+            dlist.push_back(MD_FILENAME_OTHER);
+        }
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_PRESTO)) {
+            dlist.push_back(MD_FILENAME_PRESTODELTA);
+        }
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_COMPS)) {
+            dlist.push_back(MD_FILENAME_GROUP_GZ);
+        }
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_UPDATEINFO)) {
+            dlist.push_back(MD_FILENAME_UPDATEINFO);
+        }
+
+        // download the rest metadata added by 3rd parties
+        for (auto & item : optional_metadata) {
+            dlist.push_back(item.c_str());
+        }
+        dlist.push_back(nullptr);
+        h.set_opt(LRO_YUMDLIST, dlist.data());
     }
 
-    // download the rest metadata added by 3rd parties
-    for (auto & item : optional_metadata) {
-        dlist.push_back(item.c_str());
-    }
-    dlist.push_back(nullptr);
     h.set_opt(LRO_PRESERVETIME, static_cast<long>(preserve_remote_time));
     h.set_opt(LRO_REPOTYPE, LR_YUMREPO);
-    h.set_opt(LRO_YUMDLIST, dlist.data());
     h.set_opt(LRO_INTERRUPTIBLE, 1L);
     h.set_opt(LRO_GPGCHECK, config.get_repo_gpgcheck_option().get_value());
     h.set_opt(LRO_MAXMIRRORTRIES, static_cast<long>(max_mirror_tries));
