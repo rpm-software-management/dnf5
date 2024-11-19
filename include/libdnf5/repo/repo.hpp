@@ -310,6 +310,10 @@ public:
     /// Return string representation of the Type enum
     static std::string type_to_string(Type type);
 
+    /// Downloads repository metadata.
+    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
+    void download_metadata(const std::string & destdir);
+
 private:
     class LIBDNF_LOCAL Impl;
     friend class RepoSack;
@@ -323,10 +327,6 @@ private:
     ///
     /// Also writes the libsolv's solv/solvx cache files.
     LIBDNF_LOCAL void load();
-
-    /// Downloads repository metadata.
-    // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
-    LIBDNF_LOCAL void download_metadata(const std::string & destdir);
 
     LIBDNF_LOCAL void add_libsolv_testcase(const std::string & path);
 
