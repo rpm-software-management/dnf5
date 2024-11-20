@@ -32,8 +32,6 @@ namespace libdnf5::repo {
 namespace {
 
 constexpr const char * CACHE_ATTRS_DIR = "attrs";
-constexpr const char * CACHE_MIRRORLIST_FILE = "mirrorlist";
-constexpr const char * CACHE_METALINK_FILE = "metalink.xml";
 
 
 // Removes a file or empty directory.
