@@ -140,6 +140,11 @@ Choosing how the results should be reported.
 
     How the system is called in the reports.
 
+``emit_no_updates``
+    boolean, default: False
+
+    Whether to emit a message when nothing interesting happened - the operation succeeded and no packages were available/installed.
+
 
 ---------------------
 ``[command]`` section

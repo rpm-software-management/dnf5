@@ -52,6 +52,7 @@ ConfigAutomaticCommands::ConfigAutomaticCommands() {
 ConfigAutomaticEmitters::ConfigAutomaticEmitters() {
     opt_binds().add("emit_via", emit_via);
     opt_binds().add("system_name", system_name);
+    opt_binds().add("emit_no_updates", emit_no_updates);
 }
 
 std::string ConfigAutomaticEmitters::gethostname() {
