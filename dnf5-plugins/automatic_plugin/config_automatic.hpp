@@ -57,6 +57,7 @@ public:
 
     libdnf5::OptionStringList emit_via{std::vector<std::string>{"stdio"}};
     libdnf5::OptionString system_name{gethostname()};
+    libdnf5::OptionBool emit_no_updates{false};
 
 private:
     static std::string gethostname();

@@ -425,25 +425,27 @@ void AutomaticCommand::run() {
         }
     }
 
-    for (const auto & emitter_name : config_automatic.config_emitters.emit_via.get_value()) {
-        std::unique_ptr<Emitter> emitter;
-        if (emitter_name == "stdio") {
-            emitter = std::make_unique<EmitterStdIO>(config_automatic, transaction, output_stream, success);
-        } else if (emitter_name == "motd") {
-            emitter = std::make_unique<EmitterMotd>(config_automatic, transaction, output_stream, success);
-        } else if (emitter_name == "command") {
-            emitter = std::make_unique<EmitterCommand>(config_automatic, transaction, output_stream, success);
-        } else if (emitter_name == "command_email") {
-            emitter = std::make_unique<EmitterCommandEmail>(config_automatic, transaction, output_stream, success);
-        } else if (emitter_name == "email") {
-            emitter = std::make_unique<EmitterEmail>(config_automatic, transaction, output_stream, success);
-        } else {
-            auto & logger = *base.get_logger();
-            logger.warning(_("Unknown report emitter for dnf5 automatic: \"{}\"."), emitter_name);
-            continue;
+    auto emit_no_updates = config_automatic.config_emitters.emit_no_updates.get_value();
+    if (emit_no_updates || !success || !transaction.empty())
+        for (const auto & emitter_name : config_automatic.config_emitters.emit_via.get_value()) {
+            std::unique_ptr<Emitter> emitter;
+            if (emitter_name == "stdio") {
+                emitter = std::make_unique<EmitterStdIO>(config_automatic, transaction, output_stream, success);
+            } else if (emitter_name == "motd") {
+                emitter = std::make_unique<EmitterMotd>(config_automatic, transaction, output_stream, success);
+            } else if (emitter_name == "command") {
+                emitter = std::make_unique<EmitterCommand>(config_automatic, transaction, output_stream, success);
+            } else if (emitter_name == "command_email") {
+                emitter = std::make_unique<EmitterCommandEmail>(config_automatic, transaction, output_stream, success);
+            } else if (emitter_name == "email") {
+                emitter = std::make_unique<EmitterEmail>(config_automatic, transaction, output_stream, success);
+            } else {
+                auto & logger = *base.get_logger();
+                logger.warning(_("Unknown report emitter for dnf5 automatic: \"{}\"."), emitter_name);
+                continue;
+            }
+            emitter->notify();
         }
-        emitter->notify();
-    }
 
     if (!success) {
         throw libdnf5::cli::SilentCommandExitError(1);
