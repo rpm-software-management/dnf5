@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/tty.hpp"
 
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
+
 #include <unistd.h>
 
 #include <algorithm>
@@ -31,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::cli::progressbar {
 
 
-MultiProgressBar::MultiProgressBar() : total(0, "Total") {
+MultiProgressBar::MultiProgressBar() : total(0, _("Total")) {
     total.set_auto_finish(false);
     total.start();
     if (tty::is_interactive()) {
