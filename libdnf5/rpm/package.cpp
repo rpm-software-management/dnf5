@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/rpm/package_query.hpp"
+#include "libdnf5/utils/bgettext/bgettext-lib.h"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <fcntl.h>
@@ -474,7 +475,7 @@ std::string Package::get_from_repo_id() const {
     try {
         return p_impl->base->p_impl->get_system_state().get_package_from_repo(get_nevra());
     } catch (const std::runtime_error & e) {
-        return "<unknown>";
+        return _("<unknown>");
     }
 }
 
