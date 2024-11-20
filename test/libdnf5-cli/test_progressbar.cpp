@@ -76,7 +76,7 @@ void ProgressbarTest::test_multi_progress_bar() {
         "\\[1/2\\] test1     [ ]*      100% |   0.0   B\\/s |  10.0   B |  ?     \n"
         "\\[2/2\\] test2     [ ]*      100% |   0.0   B\\/s |  10.0   B |  ?     \n"
         "--------------------[-]*------------------------------------------------\n"
-        "\\[2/2\\] Total     [ ]*      100% |   0.0   B\\/s |  20.0   B |  00m00s\n";
+        "\\[2/2\\] Total     [ ]*      100% | ????? ??B\\/s |  20.0   B |  ??m??s\n";
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         fmt::format("Expression: \"{}\" doesn't match output: \"{}\"", expected, oss.str()),
