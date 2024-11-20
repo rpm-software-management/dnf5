@@ -33,6 +33,8 @@ namespace {
 constexpr const char * CACHE_METADATA_DIR = "repodata";
 constexpr const char * CACHE_PACKAGES_DIR = "packages";
 constexpr const char * CACHE_SOLV_FILES_DIR = "solv";
+constexpr const char * CACHE_METALINK_FILE = "metalink.xml";
+constexpr const char * CACHE_MIRRORLIST_FILE = "mirrorlist";
 
 }  // namespace
 

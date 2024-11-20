@@ -536,9 +536,17 @@ bool Repo::clone_root_metadata() {
     repo_cache.remove_solv_files();
 
     auto repodata_cachedir = std::filesystem::path(repo_cachedir) / CACHE_METADATA_DIR;
+    auto root_repodata_metalink = std::filesystem::path(root_repo_cachedir) / CACHE_METALINK_FILE;
+    auto root_repodata_mirrorlist = std::filesystem::path(root_repo_cachedir) / CACHE_MIRRORLIST_FILE;
     try {
         std::filesystem::create_directories(repodata_cachedir);
         std::filesystem::copy(root_repodata_cachedir, repodata_cachedir);
+        if (std::filesystem::exists(root_repodata_metalink)) {
+            std::filesystem::copy(root_repodata_metalink, repo_cachedir);
+        }
+        if (std::filesystem::exists(root_repodata_mirrorlist)) {
+            std::filesystem::copy(root_repodata_mirrorlist, repo_cachedir);
+        }
     } catch (const std::filesystem::filesystem_error & e) {
         logger.debug(
             "Error when cloning root repodata from \"{}\" to \"{}\" : \"{}\"",
