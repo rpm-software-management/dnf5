@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "builddep.hpp"
 
 #include "utils/string.hpp"
+#include "utils/url.hpp"
+
+#include "libdnf5/repo/file_downloader.hpp"
 
 #include <dnf5/shared_options.hpp>
 #include <libdnf5-cli/exception.hpp>
@@ -136,19 +139,35 @@ void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const s
     const std::string_view ext_srpm(".src.rpm");
     const std::string_view ext_nosrpm(".nosrc.rpm");
     std::set<std::string> unique_items;
+    libdnf5::repo::FileDownloader downloader(get_context().get_base());
     for (int i = 0; i < specs_count; ++i) {
         const std::string_view spec(specs[i]);
+        // Remote specs are downloaded to temp files which have random suffix.
+        // They cannot be used to compare extensions.
+        std::string spec_location(specs[i]);
         if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
-            // TODO(mblaha): download remote URLs to temporary location + remove them afterwards
+            if (libdnf5::utils::url::is_url(spec_location)) {
+                if (spec_location.starts_with("file://")) {
+                    spec_location = spec_location.substr(7);
+                } else {
+                    // Download remote argument
+                    downloaded_remotes.push_back(std::make_unique<libdnf5::utils::fs::TempFile>(
+                        std::filesystem::path(spec_location).filename()));
+                    downloader.add(specs[i], downloaded_remotes.back()->get_path());
+                    spec_location = downloaded_remotes.back()->get_path();
+                }
+            }
+
             if (spec.ends_with(ext_spec)) {
-                spec_file_paths.emplace_back(spec);
+                spec_file_paths.emplace_back(std::move(spec_location));
             } else if (spec.ends_with(ext_srpm) || spec.ends_with(ext_nosrpm)) {
-                srpm_file_paths.emplace_back(spec);
+                srpm_file_paths.emplace_back(std::move(spec_location));
             } else {
-                pkg_specs.emplace_back(spec);
+                pkg_specs.emplace_back(std::move(spec_location));
             }
         }
     }
+    downloader.download();
 }
 
 bool BuildDepCommand::add_from_spec_file(

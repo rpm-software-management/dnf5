@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_BUILD_DEP_BUILD_DEP_HPP
 
 
+#include "libdnf5/utils/fs/temp.hpp"
+
 #include <dnf5/context.hpp>
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/option_bool.hpp>
@@ -54,6 +56,9 @@ private:
     std::vector<std::string> spec_file_paths{};
     std::vector<std::string> srpm_file_paths{};
     std::vector<std::pair<std::string, std::string>> rpm_macros{};
+
+    // Args downloaded into temp files which are automatically cleaned up
+    std::vector<std::unique_ptr<libdnf5::utils::fs::TempFile>> downloaded_remotes{};
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
 };
