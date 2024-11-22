@@ -388,9 +388,11 @@ repository configuration file should aside from repo ID consists of baseurl, met
 ``optional_metadata_types``
     :ref:`list <list-label>`
 
-    List of the following: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``
+    List of the following: ``comps``, ``filelists``, ``other``, ``presto``, ``updateinfo``, ``all``
 
-    Defines which types of metadata are to be loaded in addition to primary and modules, which are loaded always as they are essential. Note that the list can be extended by individual DNF commands during runtime.
+    Specifies the types of metadata to load in addition to the essential ``primary`` and ``modules`` metadata, which are always loaded. Note that individual DNF commands may extend this list at runtime.
+
+    Note: The list includes only metadata types recognized by DNF. However, a repository's metadata may include various other types (e.g., AppStream or metadata stored as databases instead of XML files). The special value ``all`` represents all metadata types present in the repository, including those unknown to DNF.
 
     Default: ``comps,updateinfo``
 
