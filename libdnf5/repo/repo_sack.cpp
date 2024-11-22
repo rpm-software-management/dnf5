@@ -74,7 +74,8 @@ constexpr const char * STORED_TRANSACTION_NAME = "@stored_transaction";
 
 void load_repos_common(libdnf5::BaseWeakPtr & base) {
     auto optional_metadata = base->get_config().get_optional_metadata_types_option().get_value();
-    if (!optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
+    if (!optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS) &&
+        !optional_metadata.contains(libdnf5::METADATA_TYPE_ALL)) {
         // Configures the pool_addfileprovides_queue() method to only add files from primary.xml.
         // This ensures the method works correctly even if filelist.xml metadata are not loaded.
         // When searching for file provides outside of primary.xml this flag incurs a big performance
