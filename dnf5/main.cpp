@@ -1076,7 +1076,8 @@ static void print_resolve_hints(dnf5::Context & context) {
         if (broken_file_dep) {
             const std::string_view arg{"--setopt=optional_metadata_types=filelists"};
             auto optional_metadata = conf.get_optional_metadata_types_option().get_value();
-            if (!optional_metadata.contains("filelists")) {
+            if (!optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS) &&
+                !optional_metadata.contains(libdnf5::METADATA_TYPE_ALL)) {
                 hints.emplace_back(libdnf5::utils::sformat(_("{} to load additional filelists metadata"), arg));
             }
         }
