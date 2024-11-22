@@ -111,7 +111,7 @@ void ChangelogCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     context.get_base().get_config().get_optional_metadata_types_option().add(
-        libdnf5::Option::Priority::RUNTIME, libdnf5::OPTIONAL_METADATA_TYPES);
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_OTHER);
 }
 
 void ChangelogCommand::run() {
