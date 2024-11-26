@@ -92,7 +92,7 @@ Options
     Caution: Any file under the ``safe-write-path`` can be overwritten. This option
     can only be used when syncing a single repository.
 
-``--source``
+``--srpm``
     Downloads source packages. Equivalent to using ``--arch=src``.
 
 ``--urls, -u``
