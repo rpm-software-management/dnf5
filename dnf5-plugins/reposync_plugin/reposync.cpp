@@ -83,18 +83,18 @@ void ReposyncCommand::set_argument_parser() {
     });
     cmd.register_named_arg(arch_arg);
 
-    auto * source_arg = parser.add_new_named_arg("source");
-    source_arg->set_long_name("source");
-    source_arg->set_description("Download source packages");
-    source_arg->set_has_value(false);
-    source_arg->set_parse_hook_func([this](
-                                        [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
-                                        [[maybe_unused]] const char * option,
-                                        [[maybe_unused]] const char * value) {
+    auto * srpm_arg = parser.add_new_named_arg("srpm");
+    srpm_arg->set_long_name("srpm");
+    srpm_arg->set_description("Download source packages");
+    srpm_arg->set_has_value(false);
+    srpm_arg->set_parse_hook_func([this](
+                                      [[maybe_unused]] libdnf5::cli::ArgumentParser::NamedArg * arg,
+                                      [[maybe_unused]] const char * option,
+                                      [[maybe_unused]] const char * value) {
         arch_option.emplace("src");
         return true;
     });
-    cmd.register_named_arg(source_arg);
+    cmd.register_named_arg(srpm_arg);
 
     newest_option = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "newest-only", 'n', "Download only newest packages per-repo", false);
