@@ -59,6 +59,12 @@ Options
 ``--no-allow-downgrade``
     | Disable downgrade of dependencies when resolving the requested operation.
 
+``--spec``
+    | Treat command line arguments following this option as spec files.
+
+``--srpm``
+    | Treat command line arguments following this option as source rpms.
+
 
 Arguments
 =========

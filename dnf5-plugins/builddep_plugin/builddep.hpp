@@ -57,6 +57,8 @@ private:
     std::vector<std::string> srpm_file_paths{};
     std::vector<std::pair<std::string, std::string>> rpm_macros{};
 
+    std::string spec_type{"auto"};
+
     // Args downloaded into temp files which are automatically cleaned up
     std::vector<std::unique_ptr<libdnf5::utils::fs::TempFile>> downloaded_remotes{};
 
