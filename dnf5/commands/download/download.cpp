@@ -54,7 +54,7 @@ void DownloadCommand::set_argument_parser() {
     patterns_to_download_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
-        ArgumentParser::PositionalArg::UNLIMITED,
+        ArgumentParser::PositionalArg::AT_LEAST_ONE,
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_download_options);
     keys->set_description("List of keys to match");
