@@ -1,4 +1,4 @@
-file(GLOB_RECURSE DNF5_HEADERS *.hpp)
+file(GLOB_RECURSE DNF5_HEADERS *.hpp *.h)
 
 # preserve relative paths of the header files
 foreach(abspath ${DNF5_HEADERS})
