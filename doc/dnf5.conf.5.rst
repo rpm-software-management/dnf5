@@ -564,7 +564,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     ``_RPMVSF_NODIGESTS`` VS flags.
 
     The ``test`` option provides a transaction check without performing the transaction.
-    It includes downloading of packages, gpg keys check (including permanent import of
+    It includes downloading of packages, PGP keys check (including permanent import of
     additional keys if necessary), and rpm check to prevent file conflicts.
 
     The ``nocaps`` is supported with rpm-4.14 or later. When ``nocaps`` is used but rpm
@@ -724,7 +724,7 @@ Repo Options
 ``gpgkey``
     :ref:`list <list-label>`
 
-    URLs of a GPG key files that can be used for signing metadata and packages
+    URLs of a PGP key files that can be used for signing metadata and packages
     of this repository. If a file can not be verified using
     the already imported keys, import of keys from this option is attempted and
     the keys are then used for verification.
@@ -981,7 +981,7 @@ configuration.
 ``pkg_gpgcheck``
     :ref:`boolean <boolean-label>`
 
-    Whether to perform GPG signature check on packages found in this repository.
+    Whether to perform PGP signature check on packages found in this repository.
 
     The default is False.
 
@@ -1023,7 +1023,7 @@ configuration.
 ``localpkg_gpgcheck``
     :ref:`boolean <boolean-label>`
 
-    If enabled, DNF5 will perform a GPG signature check on local packages (packages in a file, not in a repository).
+    If enabled, DNF5 will perform a PGP signature check on local packages (packages in a file, not in a repository).
 
     Default: ``False``.
 
@@ -1172,11 +1172,11 @@ configuration.
 ``repo_gpgcheck``
     :ref:`boolean <boolean-label>`
 
-    If enabled, DNF5 will perform GPG signature check on this repository's metadata.
+    If enabled, DNF5 will perform PGP signature check on this repository's metadata.
 
 
     .. NOTE::
-       GPG keys for this check are stored separately from GPG keys used in package signature
+       PGP keys for this check are stored separately from PGP keys used in package signature
        verification. Furthermore, they are also stored separately for each repository.
 
        This means that DNF5 may ask to import the same key multiple times. For example, when a key was

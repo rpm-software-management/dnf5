@@ -119,7 +119,7 @@ public:
     CheckResult check_package_signature(const std::string & path) const;
 
     /// Import public key into rpm database.
-    /// @param key: GPG key to be imported into rpm database.
+    /// @param key: PGP key to be imported into rpm database.
     bool import_key(const KeyInfo & key) const;
 
     /// Check public key presence in rpm database

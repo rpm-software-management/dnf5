@@ -414,7 +414,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
-    no_gpgchecks->set_description(_("disable gpg signature checking (if RPM policy allows)"));
+    no_gpgchecks->set_description(_("disable PGP signature checking (if RPM policy allows)"));
     no_gpgchecks->set_parse_hook_func([&ctx](
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
