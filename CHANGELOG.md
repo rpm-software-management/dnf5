@@ -1,3 +1,35 @@
+# 5.2.8.0
+
+- Update translations from weblate
+- doc: Use PGP instead of GPG
+- Install defs.h for /usr/include/dnf5/context.hpp
+- Download cmd: Require at leats one argument/package to download
+- Fix copr chroot specification: replace faulty regex with simpler split
+- Add packit job to run ABI check plan on testing farm
+- changelog_plugin: Limit required metadata to "other"
+- doc: Document new `all` optional_metadata_types value
+- Accept also "all" whenever optional metadata are checked
+- repo: Add option to download all repository metadata
+- rpm: New API to check PGP signature of RPM file
+- spec: toggle dnf5_obsoletes_dnf for RHEL 11
+- repo: While cloning root metadata copy also metalink
+- repo: Make Repo::download_metadata() method public
+- I18N: Mark <unknown> message in dnf list --installed output for a translation
+- package_downloader: Ensure creation of intermediate directories
+- Make `test_multi_progress_bar` test more resilient
+- I18N: Mark "Total" message in MultiProgressBar() for a translation
+- builddep: add support for remote arguments
+- Hint when an unknown option is available on different commands
+- reformatting to meet clang-format requirements
+- add missing include
+- I18N: Mark messages in "dnf search" output for a translation
+- Extend unit tests with `user_cb_data` in `repo::DownloadCallbacks`
+- SWIG bindings for `user_cb_data` in `repo::DownloadCallbacks`
+- Basic Perl unit tests for DownloadCallbacks and RepoCallbacks
+- Perl unit tests: Clean package_query tests, use BaseTestCase
+- Make `BaseTestCase` for Perl unit test
+- rpm: Reset RPM log callback upon RpmLogGuard destruction
+
 # 5.2.7.0
 
 - Update translations from weblate
