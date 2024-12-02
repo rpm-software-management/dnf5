@@ -253,7 +253,7 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(const std::strin
 }
 
 RpmSignature::CheckResult RpmSignature::check_package_signature(const rpm::Package & pkg) const {
-    // is package gpg check even required?
+    // is package PGP check even required?
     auto repo = pkg.get_repo();
     if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
         if (!p_impl->base->get_config().get_localpkg_gpgcheck_option().get_value()) {
