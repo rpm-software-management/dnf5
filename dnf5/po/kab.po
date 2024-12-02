@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-24 02:52+0000\n"
+"PO-Revision-Date: 2024-11-21 09:12+0000\n"
 "Last-Translator: ButterflyOfFire <butterflyoffire@users.noreply.translate."
 "fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -887,7 +887,7 @@ msgstr ""
 
 #: context.cpp:973
 msgid "Verify package files"
-msgstr ""
+msgstr "Asenqed n yifuyla n ikemmusen"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
@@ -1155,12 +1155,16 @@ msgstr ""
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
+"Teɣzi tuɣridt n ikemmusen i d-iteddun tesɛa azal n {:.0f} {:s}. Ilaq-asen "
+"wezḍam n {:.0f} {:s}."
 
 #: main.cpp:828
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
+"Seld tamhelt-a, ad ttwasqedcen {:.0f} {:s} nniḍen (sbedd {:.0f} {:s}, kkes {:"
+".0f} {:s})."
 
 #: main.cpp:837
 msgid ""

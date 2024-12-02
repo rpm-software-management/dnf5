@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-05 08:02+0000\n"
+"PO-Revision-Date: 2024-11-18 19:16+0000\n"
 "Last-Translator: Inci sakura <incisakura@icloud.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ja/>\n"
@@ -845,7 +845,7 @@ msgstr "{} に一致するリポジトリがありません"
 
 #: context.cpp:322
 msgid "Updating and loading repositories:"
-msgstr "リポジトリを更新して読み込み中:"
+msgstr "リポジトリの更新を読み込み中:"
 
 #: context.cpp:332
 msgid "Repositories loaded."
@@ -1251,24 +1251,20 @@ msgstr "  API バージョン: {}.{}"
 #: main.cpp:810
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
-msgstr ""
-"受信するパッケージの合計サイズ {:.0f} {:s} 。ダウンロードする必要があるサイ"
-"ズ {:.0f} {:s} 。"
+msgstr "パッケージサイズ {:.0f} {:s} 、ダウンロードサイズ {:.0f} {:s} 。"
 
 #: main.cpp:828
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
-msgstr ""
-"操作完了後、{:.0f} {:s} が追加で使用されます（インストール {:.0f} {:s}、削除 "
-"{:.0f} {:s}）。"
+msgstr "完了後、{:.0f} {:s} のサイズが利用されます（インストール {:.0f} {:s}、削除 {:"
+".0f} {:s}）。"
 
 #: main.cpp:837
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
-msgstr ""
-"操作完了後、 {:.0f} {:s} が解放されます（インストール {:.0f} {:s}、削除 "
+msgstr "完了後、 {:.0f} {:s} のサイズが解放されます（インストール {:.0f} {:s}、削除 "
 "{:.0f} {:s}）。"
 
 #: main.cpp:849

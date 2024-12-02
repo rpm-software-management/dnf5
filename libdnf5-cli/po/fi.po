@@ -2,13 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-11-04 06:51+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2024-11-20 14:32+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/fi/>\n"
 "Language: fi\n"
@@ -20,7 +23,7 @@ msgstr ""
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr ""
+msgstr "\"{}\" ei ole sallittu yhdessä nimetyn argumentin \"{}\" kanssa"
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
@@ -28,31 +31,31 @@ msgstr "\"{}\" ei ole sallittu komennossa \"{}\""
 
 #: argument_parser.cpp:66
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr ""
+msgstr "\"{}\" ei ole sallittu yhdessä sijaintiargumentin \"{}\" kanssa"
 
 #: argument_parser.cpp:110
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr ""
+msgstr "Argumenttitunnus \"{}\" on jo rekisteröity ryhmässä \"{}\""
 
 #: argument_parser.cpp:237
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr ""
+msgstr "Virheellinen merkki '.' argumenttitunnuksessa \"{}\""
 
 #: argument_parser.cpp:345 argument_parser.cpp:350
 msgid "Too few values for positional argument \"{}\""
-msgstr ""
+msgstr "Liian vähän arvoja sijaintiargumentille \"{}\""
 
 #: argument_parser.cpp:511
 msgid "Missing value for named argument \"--{}\""
-msgstr ""
+msgstr "Puuttuva arvo nimetylle argumentille \"--{}\""
 
 #: argument_parser.cpp:519
 msgid "Unexpected value for named argument \"--{}\""
-msgstr ""
+msgstr "Odottamaton arvo nimetylle argumentille \"--{}\""
 
 #: argument_parser.cpp:561
 msgid "Missing value for named argument \"-{}\""
-msgstr ""
+msgstr "Puuttuva arvo nimetylle argumentille \"-{}\""
 
 #. print usage
 #: argument_parser.cpp:657
@@ -65,35 +68,35 @@ msgstr "Kuvaus:"
 
 #: argument_parser.cpp:915
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Komentotunnus \"{}\" on jo rekisteröity komennolle \"{}\""
 
 #: argument_parser.cpp:926
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Nimetty argumenttitunnus \"{}\" on jo rekisteröity komennolle \"{}\""
 
 #: argument_parser.cpp:936
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Sijaintiargumentin tunnus \"{}\" on jo rekisteröity komennolle \"{}\""
 
 #: argument_parser.cpp:946
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr ""
+msgstr "Ryhmätunnus \"{}\" on jo rekisteröity komennolle \"{}\""
 
 #: argument_parser.cpp:973
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr ""
+msgstr "Komentotunnus \"{}\" ei sisällä alikomentoa tunnuksella \"{}\""
 
 #: argument_parser.cpp:981
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr ""
+msgstr "Komentotunnus \"{}\" ei sisällä nimettyä argumenttia tunnuksella \"{}\""
 
 #: argument_parser.cpp:989
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr ""
+msgstr "Komentotunnus \"{}\" ei sisällä sijaintiargumenttia tunnuksella \"{}\""
 
 #: argument_parser.cpp:996
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr ""
+msgstr "Komentotunnus \"{}\" ei sisällä ryhmää, jonka tunnus on \"{}\""
 
 #: argument_parser.cpp:1103 argument_parser.cpp:1307
 msgid "Unknown argument \"{}\" for command \"{}\""
@@ -101,15 +104,15 @@ msgstr "Tuntematon argumentti \"{}\" komennolle \"{}\""
 
 #: argument_parser.cpp:1118 argument_parser.cpp:1322
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr ""
+msgstr "Puuttuva sijaintiargumentti \"{}\" komennolle \"{}\""
 
 #: argument_parser.cpp:1525
 msgid "Named argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Nimettyä argumenttia polkutunnuksella \"{}\" ei löydy"
 
 #: argument_parser.cpp:1535
 msgid "Positional argument with path id \"{}\" not found"
-msgstr ""
+msgstr "Sijaintiargumenttia polkutunnuksella \"{}\" ei löydy"
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
@@ -117,21 +120,22 @@ msgstr "Toimenpide peruttu käyttäjän toimesta."
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "Tapahtuman ratkaiseminen epäonnistui"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
 msgstr ""
+"Vihje: [o]letus, [k]äytössä, [p]oistettu käytöstä, [a]sennettu, [ak]tiivinen"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "Vihje: [o]letus, [k]äytössä, [p]oistettu käytöstä, [a]sennettu"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr ""
+msgstr " : "
 
 #. Add package
 #: output/packageinfo.cpp:63
@@ -140,7 +144,7 @@ msgstr "Nimi"
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr ""
+msgstr "Ajanjakso"
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:274
 msgid "Version"
@@ -156,7 +160,7 @@ msgstr "Arkkitehtuuri"
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr ""
+msgstr "Vanhentaa"
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
@@ -256,7 +260,7 @@ msgstr "Paketti"
 
 #: output/transaction_table.cpp:268
 msgid "Arch"
-msgstr "Arkkitehtuuri"
+msgstr "Arkkiteht."
 
 #: output/transaction_table.cpp:286
 msgid "Size"
@@ -272,7 +276,7 @@ msgstr "korvaa {}"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"
-msgstr ""
+msgstr " <nimi-ei-määritelty>"
 
 #: output/transaction_table.cpp:442
 msgid "replacing "
@@ -316,7 +320,7 @@ msgstr "Asennetaan uudelleen:"
 
 #: output/transaction_table.cpp:538
 msgid "Removing dependent packages:"
-msgstr ""
+msgstr "Poistetaan riippuvaiset paketit:"
 
 #: output/transaction_table.cpp:540
 msgid "Removing unused dependencies:"
@@ -328,7 +332,7 @@ msgstr "Poistetaan:"
 
 #: output/transaction_table.cpp:546
 msgid "Changing reason:"
-msgstr ""
+msgstr "Muutetaan syy:"
 
 #: output/transaction_table.cpp:578
 msgid "Installing groups dependencies:"
@@ -348,31 +352,31 @@ msgstr "Päivitetään ryhmät:"
 
 #: output/transaction_table.cpp:614
 msgid "Installing environmental groups:"
-msgstr ""
+msgstr "Asennetaan ympäristöryhmiä:"
 
 #: output/transaction_table.cpp:617
 msgid "Removing environmental groups:"
-msgstr ""
+msgstr "Poistetaan ympäristöryhmiä:"
 
 #: output/transaction_table.cpp:620
 msgid "Upgrading environmental groups:"
-msgstr ""
+msgstr "Päivitetään ympäristöryhmiä:"
 
 #: output/transaction_table.cpp:647
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "Otetaan moduulivirtoja käyttöön:"
 
 #: output/transaction_table.cpp:650
 msgid "Disabling modules:"
-msgstr ""
+msgstr "Poistetaan moduuleita käytöstä:"
 
 #: output/transaction_table.cpp:653
 msgid "Resetting modules:"
-msgstr ""
+msgstr "Nollataan moduuleita:"
 
 #: output/transaction_table.cpp:656
 msgid "Switching module streams:"
-msgstr ""
+msgstr "Vaihdetaan moduulivirtoja:"
 
 #: output/transaction_table.cpp:730
 msgid "Nothing to do."

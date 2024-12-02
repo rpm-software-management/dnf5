@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-19 11:38+0000\n"
+"PO-Revision-Date: 2024-11-19 09:15+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pa/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -24,7 +24,7 @@ msgstr "ਸਲਾਹਾਂ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/advisory/advisory_info.hpp:33
 msgid "Print details about advisories"
-msgstr ""
+msgstr "ਸਲਾਹਾਂ ਬਾਰੇ ਵੇਰਵੇ ਦਿਓ"
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
@@ -48,11 +48,11 @@ msgstr "ਮੌਜੂਦ"
 
 #: commands/advisory/advisory_summary.hpp:33
 msgid "Print summary of advisories"
-msgstr ""
+msgstr "ਸਲਾਹਾਂ ਦੇ ਸਾਰ ਬਾਰੇ ਜਾਣਕਾਰੀ ਦਿਓ"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਦੇ ਕਿਸੇ ਵੀ ਵਰਜ਼ਨ ਬਾਰੇ ਸਲਾਹਾਂ ਵੇਖਾਓ।"
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
@@ -79,7 +79,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:83
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "ਪੈਕੇਜ_ਨਾਂ,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
@@ -193,7 +193,7 @@ msgstr ""
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
 msgid "Install debuginfo packages."
-msgstr ""
+msgstr "debuginfo ਪੈਕੇਜ ਇੰਸਟਾਲ ਕਰੋ।"
 
 #: commands/distro-sync/distro-sync.cpp:42
 msgid ""
@@ -269,7 +269,7 @@ msgstr ""
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr ""
+msgstr "ਟਰਾਂਸੈਕਸ਼ਨ ID"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
@@ -288,7 +288,7 @@ msgstr ""
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "ਟਰਾਂਸੈਕਸ਼ਨ ਅਤੀਤ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -308,7 +308,7 @@ msgstr ""
 
 #: commands/history/history_store.cpp:80
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "ਫਾਈਲ \"{}\" ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ, ਇਸ ਦੇ ਉੱਤੇ ਲਿਖਿਆ ਜਾਵੇਗਾ।\n"
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
@@ -363,7 +363,7 @@ msgstr ""
 
 #: commands/list/list.cpp:93
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜਾਂ ਲਈ ਅੱਪਗਰੇਡਾਂ ਨੂੰ ਵੇਖਾਓ।"
 
 #: commands/list/list.cpp:97
 msgid "List packages which will be removed by the 'dnf autoremove' command."
@@ -419,7 +419,7 @@ msgstr ""
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "ਮੋਡੀਊਲਾਂ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
@@ -427,7 +427,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:190
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "ਆਫ਼ਲਾਈਨ ਟਰਾਂਸੈਕਸ਼ਨ ਦਾ ਇੰਤਜ਼ਾਮ"
 
 #: commands/offline/offline.cpp:222
 msgid ""
@@ -437,7 +437,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:245
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "D-Bus ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: {}"
 
 #: commands/offline/offline.cpp:274
 msgid ""
@@ -459,7 +459,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:303
 msgid "Data directory {} does not exist."
-msgstr ""
+msgstr "ਡਾਟਾ ਡਾਇਰੈਕਟਰੀ {} ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
 #: commands/offline/offline.cpp:327
 msgid "{} is not wanted by system-update.target."
@@ -498,7 +498,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:444
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr ""
+msgstr "ਟਰਾਂਸੈਕਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ `dnf5 offline reboot` ਨੂੰ ਵਰਤੋਂ।"
 
 #: commands/offline/offline.cpp:497
 msgid "Transaction failed: "
@@ -506,7 +506,7 @@ msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਅਸਫ਼ਲ ਹੈ: "
 
 #: commands/offline/offline.cpp:566
 msgid "Error reading journal: {}"
-msgstr ""
+msgstr "ਜਰਨਲ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ: {}"
 
 #: commands/offline/offline.cpp:572
 msgid "Add journal match failed: {}"
@@ -514,7 +514,7 @@ msgstr ""
 
 #: commands/offline/offline.cpp:600
 msgid "No logs were found."
-msgstr ""
+msgstr "ਕੋਈ ਲਾਗ ਨਹੀਂ ਲੱਭਿਆ।"
 
 #: commands/offline/offline.cpp:604
 msgid "The following boots appear to contain offline transaction logs:"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "ਅਸਮਰੱਥ ਕੀਤੀਆਂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਵੇਖਾਓ।"
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
@@ -741,17 +741,19 @@ msgstr ""
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
-msgstr ""
+msgstr " ਵਰਤੋਂਕਾਰ-ਆਈਡੀ     : \"{}\"\n"
 
 #: context.cpp:78
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
+" ਫਿੰਗਰਪਰਿੰਟ: {}\n"
+" ਵਲੋਂ       : {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
-msgstr ""
+msgstr "ਕੁੰਜੀ ਨੂੰ ਕਾਮਯਾਬੀ ਨਾਲ ਇੰਪੋਰਟ ਕੀਤਾ ਗਿਆ।"
 
 #: context.cpp:262
 msgid "setopt: \"{}.{}\": {}"
@@ -785,7 +787,7 @@ msgstr ""
 
 #: context.cpp:342 context.cpp:497
 msgid "Transaction failed: {}"
-msgstr ""
+msgstr "ਟਰਾਂਸੈਕਸ਼ਨ ਫੇਲ੍ਹ ਹੈ: {}"
 
 #: context.cpp:347 context.cpp:502
 msgid "  - {}"
@@ -894,7 +896,7 @@ msgstr ""
 
 #: main.cpp:129
 msgid "Utility for packages maintaining"
-msgstr ""
+msgstr "ਪੈਕੇਜ ਦੇ ਇੰਤਜ਼ਾਮ ਲਈ ਸਹੂਲਤ"
 
 #: main.cpp:130
 msgid "DNF5 is a program for maintaining packages."
@@ -1031,7 +1033,7 @@ msgstr ""
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
-msgstr ""
+msgstr "ਸਭ libdnf5 ਪਲੱਗਇਨਾਂ ਨੂੰ ਅਸਮਰੱਥ ਕਰੋ"
 
 #: main.cpp:443
 msgid ""
@@ -1057,7 +1059,7 @@ msgstr ""
 
 #: main.cpp:490
 msgid "set install root"
-msgstr ""
+msgstr "ਇੰਸਟਾਲ root ਸੈਟ ਕਰੋ"
 
 #: main.cpp:497
 msgid ""
@@ -1094,7 +1096,7 @@ msgstr ""
 
 #: main.cpp:588
 msgid "Show DNF5 version and exit"
-msgstr ""
+msgstr "DNF5 ਵਰਜ਼ਨ ਦੇਖਾਓ ਅਤੇ ਬੰਦ ਕਰੋ"
 
 #: main.cpp:595
 msgid "Force the use of a different architecture."
@@ -1106,11 +1108,11 @@ msgstr "ਸਾਫਟਵੇਅਰ ਇੰਤਜ਼ਾਮ ਕਮਾਡਾਂ:"
 
 #: main.cpp:640
 msgid "Query Commands:"
-msgstr ""
+msgstr "ਕਿਊਰੀ ਕਮਾਂਡ:"
 
 #: main.cpp:647
 msgid "Subcommands:"
-msgstr ""
+msgstr "ਸਬ-ਕਮਾਂਡ:"
 
 #: main.cpp:744
 msgid "{} version {}.{}.{}.{}"
@@ -1133,6 +1135,8 @@ msgid ""
 "\n"
 "Loaded {} plugins:"
 msgstr ""
+"\n"
+"ਲੋਡ ਕੀਤੀਆਂ {} ਪਲੱਗਇਨ:"
 
 #: main.cpp:767
 msgid "  name: {}"
@@ -1150,18 +1154,22 @@ msgstr "  API ਵਰਜ਼ਨ: {}.{}"
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
+"ਆਉਣ ਵਾਲੇ ਪੈਕੇਜਾਂ ਦਾ ਕੁੱਲ ਆਕਾਰ {:.0f} {:s}। {:.0f} {:s} ਡਾਊਨਲੋਡ ਕਰਨ ਦੀ ਲੋੜ ਹੈ।"
 
 #: main.cpp:828
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
+"ਇਸ ਕਾਰਵਾਈ ਦੇ ਬਾਅਦ, {:.0f} {:s} ਵਾਧੂ ਨੂੰ ਵਰਤਿਆ ਜਾਵੇਗਾ (ਇੰਸਟਾਲ ਕਰਨਾ {:.0f} {:s}, ਹਟਾਉਣਾ {:.0f} "
+"{:s})।"
 
 #: main.cpp:837
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
+"ਕਾਰਵਾਈ ਦੇ ਬਾਅਦ, {:.0f} {:s} ਥਾਂ ਖਾਲੀ ਕੀਤੀ ਜਾਵੇਗੀ (ਇੰਸਟਾਲ ਕਰਨਾ {:.0f} {:s}, ਹਟਾਉਣਾ {:.0f} {:s})।"
 
 #: main.cpp:849
 msgid "======== Main configuration: ========"
@@ -1173,7 +1181,7 @@ msgstr ""
 
 #: main.cpp:891
 msgid "======== \"{}\" repository configuration: ========"
-msgstr ""
+msgstr "======== \"{}\" ਰਿਪੋਰਜ਼ਟਰੀ ਦੀ ਸੰਰਚਨਾ: ========"
 
 #: main.cpp:911
 msgid "======== Variables: ========"
@@ -1185,7 +1193,7 @@ msgstr ""
 
 #: main.cpp:953
 msgid " {}"
-msgstr ""
+msgstr " {}"
 
 #: main.cpp:997
 msgid "{} to skip unavailable packages"
