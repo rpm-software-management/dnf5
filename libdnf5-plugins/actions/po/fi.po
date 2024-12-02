@@ -2,61 +2,73 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-11-20 13:17+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
 msgstr ""
+"Virhe tiedostossa \"{}\" rivillä {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
+"CMD\" -muoto odotettavissa"
 
 #: actions.cpp:581
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
+"Virhe tiedostossa \"{}\" rivillä {}: Tuntematon `enabled` -vaihtoehdon arvo "
+"\"{}\""
 
 #: actions.cpp:590
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr ""
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon vaihtoehto \"{}\""
 
 #: actions.cpp:616
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr ""
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon koukku \"{}\""
 
 #: actions.cpp:626
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
 "PRE_TRANS and POST_TRANS hooks"
 msgstr ""
+"Virhe tiedostossa \"{}\" rivillä {}: Pakettisuodatinta voidaan käyttää vain "
+"PRE_TRANS- ja POST_TRANS-koukuissa"
 
 #: actions.cpp:636
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
+"Virhe tiedostossa \"{}\" rivillä {}: Suuntaa ei voi käyttää ilman "
+"pakettisuodatinta"
 
 #: actions.cpp:653
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr ""
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon paketin suunta \"{}\""
 
 #: actions.cpp:664
 msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr ""
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon tila \"{}\""
 
 #: actions.cpp:670
 msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr ""
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Puuttuva komento"
 
 #: actions.cpp:1760
 msgid "Cannot create pipe: {}"
-msgstr ""
+msgstr "Putkea ei voi luoda: {}"

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-13 15:06+0000\n"
+"PO-Revision-Date: 2024-11-20 13:16+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -215,16 +215,15 @@ msgstr "디버그 정보 꾸러미를 설치합니다."
 #: commands/distro-sync/distro-sync.cpp:42
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr ""
-"설치된 소프트웨어를 최신 사용 가능한 버전으로 업그레이드 또는 다운그레이드"
+msgstr "설치된 소프트웨어를 최신의 사용 가능한 버전으로 향상 또는 하향"
 
 #: commands/downgrade/downgrade.cpp:40
 msgid "Downgrade software"
-msgstr "소프트웨어 다운그레이드"
+msgstr "소프트웨어 하향설치"
 
 #: commands/download/download.cpp:105
 msgid "When running with --url, prints URLs from all available mirrors"
-msgstr "--url로 실행할 때, 모든 사용 가능한 미러에서 URL을 출력합니다"
+msgstr "--url과 함께 사용하여 실행하면, 모든 사용 가능한 미러에서 URL을 출력합니다"
 
 #: commands/download/download.cpp:121
 msgid "Invalid urlprotocol option: {}"
@@ -532,9 +531,9 @@ msgid ""
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
-"경고: `_execute` 명령은 내부적으로만 사용되며 사용자가 직접 실행하도록 의도하"
-"지 않았습니다. 시스템 업그레이드/오프라인 연결을 시작하려면 `dnf5 offline "
-"reboot`를 실행하십시오."
+"경고: `_execute` 명령은 내부적으로만 사용되며 사용자가 직접 실행하도록 "
+"의도하지 않았습니다. 시스템 향상/오프라인 연결을 시작하려면, `dnf5 offline "
+"reboot`를 실행하세요."
 
 #: commands/offline/offline.cpp:444
 msgid "Use `dnf5 offline reboot` to begin the transaction."
@@ -618,7 +617,7 @@ msgstr "지정된 값을 제공하는 꾸러미를 찾습니다"
 
 #: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
-msgstr "소프트웨어 다시 설치"
+msgstr "소프트웨어 재설치"
 
 #: commands/remove/remove.cpp:40
 msgid "Remove (uninstall) software"
@@ -1236,9 +1235,8 @@ msgstr "  API 버전: {}.{}"
 #: main.cpp:810
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
-msgstr ""
-"들어온 꾸러미의 크기 합계는 is {:.0f} {:s}입니다. {:.0f} {:s} 내려받기가 필요"
-"합니다."
+msgstr "들어온 꾸러미의 크기 합계는 {:.0f} {:s}입니다. 내려받는 데 필요한 {:.0f} {:s}"
+"가 필요합니다."
 
 #: main.cpp:828
 msgid ""

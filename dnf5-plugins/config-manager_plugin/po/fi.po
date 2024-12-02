@@ -2,23 +2,27 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-11-20 13:17+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-config-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: addrepo.cpp:153
 #, c++-format
 msgid "from-repofile: \"{}\" file does not exist"
-msgstr ""
+msgstr "from-repofile: tiedostoa \"{}\" ei ole olemassa"
 
 #: addrepo.cpp:156
 #, c++-format
@@ -28,31 +32,31 @@ msgstr ""
 #: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
 #, c++-format
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr ""
+msgstr "{}: Virheellisesti muotoiltu argumentin arvo \"{}\""
 
 #: addrepo.cpp:196
 #, c++-format
 msgid "Cannot set repository option \"{}={}\": {}"
-msgstr ""
+msgstr "Tietovaraston vaihtoehtoa \"{}={}\" ei voi asettaa: {}"
 
 #: addrepo.cpp:204 setopt.cpp:138
 #, c++-format
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Asettaa vaihtoehdon \"{}\" uudelleen eri arvolla: \"{}\" != \"{}\""
 
 #: addrepo.cpp:270
 msgid "Missing path to repository configuration directory"
-msgstr ""
+msgstr "Tietovaraston määrityshakemiston polku puuttuu"
 
 #: addrepo.cpp:320
 #, c++-format
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Tietovaraston määritystiedoston \"{}\" kopioiminen epäonnistui: {}"
 
 #: addrepo.cpp:331
 #, c++-format
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Tietovaraston määritystiedoston \"{}\" lataaminen epäonnistui: {}"
 
 #: addrepo.cpp:359
 #, c++-format
@@ -60,22 +64,26 @@ msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
+"Virhe lisätyssä tietovaraston määritystiedostossa. Tietovaraston vaihtoehtoa "
+"\"{}={}\" ei voi asettaa: {}"
 
 #: addrepo.cpp:393
 #, c++-format
 msgid "Bad baseurl: {}={}"
-msgstr ""
+msgstr "Virheellinen perus-URL: {}={}"
 
 #: addrepo.cpp:401
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
 msgstr ""
+"Yksi vaihtoehdoista --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> on asetettava ei-tyhjäksi URL:ksi"
 
 #: addrepo.cpp:446
 #, c++-format
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
+msgstr "Tietovaraston määritystiedoston \"{}\" tallentaminen epäonnistui: {}"
 
 #: addrepo.cpp:468
 #, c++-format
@@ -83,6 +91,8 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
 msgstr ""
+"Tiedosto \"{}\" on jo olemassa ja määrittää tietovarastot tunnuksella \"{}\""
+". Lisää `--add-or-replace` tai `--overwrite`."
 
 #: addrepo.cpp:471
 #, c++-format
@@ -90,36 +100,40 @@ msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
 msgstr ""
+"Tiedosto \"{}\" on jo olemassa ja määrittää tietovarastot tunnuksella \"{}\""
+". Lisää `--overwrite` korvataksesi."
 
 #: addrepo.cpp:491 addrepo.cpp:517
 #, c++-format
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
+msgstr "Tietovarasto, jonka tunnus on \"{}\", on jo määritetty tiedostossa: {}"
 
 #: addrepo.cpp:503 setopt.cpp:263
 #, c++-format
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr ""
+msgstr "Tietovarastoja ei voi lukea hakemistosta \"{}\": {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Hallitse kokoonpanoa"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 #, c++-format
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
+"{}: Virheellisesti muotoiltu argumenttiarvo: Viimeinen avainmerkki ei voi "
+"olla '.': {}"
 
 #: setopt.cpp:100 unsetopt.cpp:81
 #, c++-format
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
+msgstr "{}: Tietovaraston tunnuksen jättäminen tyhjäksi ei ole sallittua: {}"
 
 #: setopt.cpp:109
 #, c++-format
 msgid "Cannot set repository option \"{}\": {}"
-msgstr ""
+msgstr "Tietovaraston vaihtoehtoa \"{}\" ei voi asettaa: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 #, c++-format
@@ -127,35 +141,37 @@ msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
+"Asettaa tietovaraston \"{}\" vaihtoehdon \"{}\" uudelleen eri arvolla: \"{}\""
+" != \"{}\""
 
 #: setopt.cpp:130
 #, c++-format
 msgid "Cannot set option: \"{}\": {}"
-msgstr ""
+msgstr "Vaihtoehtoa ei voi asettaa: \"{}\": {}"
 
 #: setopt.cpp:170
 #, c++-format
 msgid "No matching repository to modify: {}"
-msgstr ""
+msgstr "Ei vastaavaa muokattavaa tietovarastoa: {}"
 
 #: setvar.cpp:60
 #, c++-format
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
-msgstr ""
+msgstr "Ei voida asettaa \"{}\": Muuttuja \"{}\" on vain luku -tilassa"
 
 #: setvar.cpp:68
 #, c++-format
 msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
-msgstr ""
+msgstr "Asettaa muuttujan \"{}\" uudelleen eri arvolla: \"{}\" != \"{}\""
 
 #: setvar.cpp:97 unsetvar.cpp:63
 msgid "Missing path to vars directory"
-msgstr ""
+msgstr "Puuttuva polku vars-hakemistoon"
 
 #: setvar.cpp:110
 #, c++-format
 msgid "Cannot write variable to file \"{}\": {}"
-msgstr ""
+msgstr "Muuttujaa ei voida kirjoittaa tiedostoon \"{}\": {}"
 
 #: shared.hpp:58
 #, c++-format
@@ -175,21 +191,23 @@ msgid ""
 "Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
 "missing directories."
 msgstr ""
+"Hakemistoa \"{}\" ei ole olemassa. Lisää `--create-missing-dir` luodaksesi "
+"puuttuvia hakemistoja."
 
 #: shared.hpp:80
 #, c++-format
 msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
-msgstr ""
+msgstr "Muuttujan nimi voi sisältää vain ASCII-kirjaimia, numeroita ja '_': {}"
 
 #: unsetopt.cpp:93
 #, c++-format
 msgid "config-manager: Request to remove unsupported repository option: {}"
-msgstr ""
+msgstr "config-manager: Pyyntö poistaa ei-tuettu tietovarastoasetus: {}"
 
 #: unsetopt.cpp:105
 #, c++-format
 msgid "config-manager: Request to remove unsupported main option: {}"
-msgstr ""
+msgstr "config-manager: Pyyntö poistaa ei-tuettu päävaihtoehto: {}"
 
 #: unsetopt.cpp:140
 #, c++-format
@@ -197,12 +215,16 @@ msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Pyyntö poistaa päävaihtoehto, mutta sitä ei ole "
+"määritystiedostossa: {}"
 
 #: unsetopt.cpp:152
 #, c++-format
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Pyyntö poistaa päävaihtoehto, mutta määritystiedostoa ei "
+"löydy: {}"
 
 #: unsetopt.cpp:186
 #, c++-format

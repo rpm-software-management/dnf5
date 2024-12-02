@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-10 02:54+0000\n"
+"PO-Revision-Date: 2024-11-18 10:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -150,8 +150,7 @@ msgstr "캐쉬 청소 중 오류: {}"
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
-msgstr ""
-"설치된 소프트웨어를 최신 사용 가능한 버전으로 업그레이드 또는 다운그레이드"
+msgstr "설치된 소프트웨어를 최신의 사용 가능한 버전으로 향상 또는 하향"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"

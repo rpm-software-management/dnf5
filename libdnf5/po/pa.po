@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-10-19 11:38+0000\n"
+"PO-Revision-Date: 2024-11-19 09:15+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/pa/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -26,7 +26,7 @@ msgstr ""
 
 #: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "ਹਟਾਉਣ ਕਾਰਵਾਈ ਦੌਰਾਨ ਗ਼ੈਰਸਹਾਇਕ ਆਰਗੂਮੈਂਟ: {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1545
@@ -223,17 +223,18 @@ msgstr ""
 
 #: base/log_event.cpp:207
 msgid "  * Maybe you meant: {}"
-msgstr ""
+msgstr "  * ਕੀ ਤੁਹਾਡਾ ਮਤਲਬ ਸੀ: {}"
 
 #: base/log_event.cpp:210
 msgid "There are following alternatives for '{0}': {1}"
-msgstr ""
+msgstr "'{0}' ਲਈ ਅੱਗੇ ਦਿੱਤੇ ਬਦਲ ਹਨ: {1}"
 
 #: base/log_event.cpp:217
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
 msgstr ""
+"ਪੈਕੇਜ \"{}\" ਲਈ ਸਭ ਤੋਂ ਹੇਠਲਾ ਵਰਜ਼ਨ ਪਹਿਲਾਂ ਹੀ ਇੰਸਟਾਲ ਹੈ, ਹੋਰ ਡਾਊਨਗਰੇਡ ਨਹੀਂ ਹੋ ਸਕਦਾ ਹੈ।"
 
 #: base/log_event.cpp:223
 msgid ""
@@ -364,7 +365,7 @@ msgstr ""
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
-msgstr ""
+msgstr "ਇੰਸਟਾਲ ਹੋਏ ਪੈਕੇਜ ਨਾਲ ਸਮੱਸਿਆ"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
@@ -372,7 +373,7 @@ msgstr ""
 
 #: base/solver_problems.cpp:45 base/solver_problems.cpp:81
 msgid "unsupported request"
-msgstr ""
+msgstr "ਗ਼ੈਰ-ਸਹਾਇਕ ਬੇਨਤੀ"
 
 #: base/solver_problems.cpp:46 base/solver_problems.cpp:82
 msgid "nothing provides requested {}"
@@ -569,7 +570,7 @@ msgstr ""
 
 #: base/transaction.cpp:85
 msgid "Signature verification failed."
-msgstr ""
+msgstr "ਦਸਤਖਤ ਜਾਂਚ ਅਸਫ਼ਲ ਹੋਈ ਹੈ।"
 
 #: base/transaction.cpp:89
 msgid "The repository does not have any PGP keys configured."
@@ -577,7 +578,7 @@ msgstr ""
 
 #: base/transaction.cpp:90
 msgid "Public key is not installed."
-msgstr ""
+msgstr "ਪਬਲਿਕ ਕੁੰਜੀ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ।"
 
 #: base/transaction.cpp:91
 msgid "Canceled by the user."
@@ -585,7 +586,7 @@ msgstr "ਵਰਤੋਂਕਾਰ ਵਲੋਂ ਰੱਦ ਕੀਤਾ ਹੈ।"
 
 #: base/transaction.cpp:92
 msgid "Public key import failed."
-msgstr ""
+msgstr "ਪਬਲਿਕ ਕੁੰਜੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਫੇਲ੍ਹ ਹੈ।"
 
 #: base/transaction.cpp:979
 msgid "Invalid tsflag: {}"
@@ -775,7 +776,7 @@ msgstr ""
 
 #: logger/rotating_file_logger.cpp:65
 msgid "Cannot open log file"
-msgstr ""
+msgstr "ਲਾਗ ਫਾਇਲ ਨੂੰ ਖੋਲ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 msgid "No such module: {}"
@@ -1044,7 +1045,7 @@ msgstr ""
 
 #: rpm/rpm_signature.cpp:47
 msgid "The package is not signed."
-msgstr ""
+msgstr "ਪੈਕੇਜ ਸਾਈਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
 
 #: rpm/rpm_signature.cpp:48
 msgid "Problem occurred when opening the package."

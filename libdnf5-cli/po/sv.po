@@ -1,13 +1,14 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
 # Luna Jernberg <bittin@reimu.nl>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Göran Uddeborg <goeran@uddeborg.se>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-09-18 06:34+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2024-11-25 00:38+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/sv/>\n"
 "Language: sv\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -207,49 +208,49 @@ msgstr "Transaktionssammanfattning:\n"
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Installerar:      {:4} paket\n"
-msgstr[1] " Installerar:      {:4} flera paket\n"
+msgstr[1] " Installerar:      {:4} paket\n"
 
 #: output/transaction_table.cpp:138
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] " Ominstallerar:    {:4} paket\n"
-msgstr[1] " Ominstallerar:    {:4} flera paket\n"
+msgstr[0] " Installerar om:   {:4} paket\n"
+msgstr[1] " Installerar om:   {:4} paket\n"
 
 #: output/transaction_table.cpp:145
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] " Uppgraderar:       {:4} paket\n"
-msgstr[1] " Uppgraderar:       {:4} flera paket\n"
+msgstr[0] " Uppgraderar:      {:4} paket\n"
+msgstr[1] " Uppgraderar:      {:4} paket\n"
 
 #: output/transaction_table.cpp:152
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] " Byter ut:       {:4} paket\n"
-msgstr[1] " Byter ut:       {:4} flera paket\n"
+msgstr[0] " Ersätter:         {:4} paket\n"
+msgstr[1] " Ersätter:         {:4} paket\n"
 
 #: output/transaction_table.cpp:159
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] " Tar bort:        {:4} paket\n"
-msgstr[1] " Tar bort:        {:4} flera paket\n"
+msgstr[0] " Tar bort:         {:4} paket\n"
+msgstr[1] " Tar bort:         {:4} paket\n"
 
 #: output/transaction_table.cpp:166
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] " Nedgraderar:     {:4} paket\n"
-msgstr[1] " Nedgraderar:     {:4} flera paket\n"
+msgstr[0] " Nedgraderar:      {:4} paket\n"
+msgstr[1] " Nedgraderar:      {:4} paket\n"
 
 #: output/transaction_table.cpp:173
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] " Ändrar andledning: {:4} på paket\n"
-msgstr[1] " Ändrar anledning: {:4} på flera paket\n"
+msgstr[0] " Ändrar orsak:     {:4} paket\n"
+msgstr[1] " Ändrar orsak:     {:4} paket\n"
 
 #: output/transaction_table.cpp:181
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] " Hoppar över:        {:4} paket\n"
-msgstr[1] " Hoppar över:        {:4} flera paket\n"
+msgstr[0] " Hoppar över:      {:4} paket\n"
+msgstr[1] " Hoppar över:      {:4} paket\n"
 
 #: output/transaction_table.cpp:262
 msgid "Package"
@@ -265,11 +266,11 @@ msgstr "Storlek"
 
 #: output/transaction_table.cpp:342 output/transaction_table.cpp:436
 msgid "{} -> {}"
-msgstr "{} -> {}"
+msgstr "{} → {}"
 
 #: output/transaction_table.cpp:358
 msgid "replacing {}"
-msgstr "byter ut {}"
+msgstr "ersätter {}"
 
 #: output/transaction_table.cpp:394 output/transaction_table.cpp:411
 msgid " <name-unset>"

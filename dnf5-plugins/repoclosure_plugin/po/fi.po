@@ -2,33 +2,39 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-11-20 13:53+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-repoclosure/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: repoclosure.cpp:45
 msgid "Print list of unresolved dependencies for repositories"
-msgstr ""
+msgstr "Tulosta luettelo tietovarastojen ratkaisemattomista riippuvuuksista"
 
 #: repoclosure.cpp:154
 msgid "No match for argument \"{}\"."
-msgstr ""
+msgstr "Ei vastaavuutta argumentille \"{}\"."
 
 #: repoclosure.cpp:160
 msgid "Failed to resolve package specifications."
-msgstr ""
+msgstr "Paketin teknisten tietojen ratkaiseminen epäonnistui."
 
 #: repoclosure.cpp:215
 msgid ""
 "Error: Repoclosure ended with unresolved dependencies ({}) across {} "
 "packages."
 msgstr ""
+"Virhe: Repoclosure päättyi ratkaisemattomiin riippuvuuksiin ({}) {} "
+"pakettien välillä."
