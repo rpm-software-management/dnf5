@@ -107,6 +107,9 @@ TTY_COMMAND(clear_line, "\033[2K")
 // tty::cursor_up
 TTY_COMMAND(cursor_up, "\x1b[A")
 
+// tty::cursor_down
+TTY_COMMAND(cursor_down, "\x1b[B")
+
 // tty::cursor_hide
 TTY_COMMAND(cursor_hide, "\x1b[?25l")
 
