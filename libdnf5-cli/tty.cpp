@@ -52,6 +52,18 @@ int get_width() {
 
 
 bool is_interactive() {
+    // Use a custom "DNF5_FORCE_INTERACTIVE" variable for testing purposes.
+    // "interactivity" depends on stdout configuration which is hard to control sometimes
+    char * force_interactive = std::getenv("DNF5_FORCE_INTERACTIVE");
+    if (force_interactive != nullptr) {
+        try {
+            // Convert to an int which is then converted to bool,
+            // so when defined accept 0 as FALSE and non 0 as TRUE
+            return std::stoi(force_interactive);
+        } catch (std::invalid_argument & ex) {
+        } catch (std::out_of_range & ex) {
+        }
+    }
     return isatty(fileno(stdout)) == 1;
 }
 
