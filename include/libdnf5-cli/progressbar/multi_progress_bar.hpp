@@ -43,6 +43,9 @@ public:
     ~MultiProgressBar();
 
     void add_bar(std::unique_ptr<ProgressBar> && bar);
+
+    // In interactive mode MultiProgressBar doesn't print a newline after unfinished progressbars.
+    // Finished progressbars always end with a newline.
     void print() {
         std::cerr << *this;
         std::cerr << std::flush;
@@ -69,6 +72,7 @@ private:
     std::vector<ProgressBar *> bars_todo;
     std::vector<ProgressBar *> bars_done;
     DownloadProgressBar total;
+    // Whether the last line was printed without a new line ending (such as an in progress bar)
     bool line_printed{false};
     std::size_t num_of_lines_to_clear{0};
 };
