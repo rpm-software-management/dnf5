@@ -159,6 +159,11 @@ void ReposyncCommand::configure() {
             M_("Can't use --norepopath with multiple repositories enabled"));
     }
 
+    if (!safe_write_path_option->get_value().empty() && repos_query.size() > 1) {
+        throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
+            M_("Can't use --safe-write-path with multiple repositories enabled"));
+    }
+
     // Default destination for downloaded repos is the current directory
     context.get_base().get_config().get_destdir_option().set(libdnf5::Option::Priority::DEFAULT, ".");
 
