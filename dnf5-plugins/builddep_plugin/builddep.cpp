@@ -131,7 +131,7 @@ void BuildDepCommand::set_argument_parser() {
                                       [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                       [[maybe_unused]] const char * option,
                                       [[maybe_unused]] const char * value) {
-        this->spec_type = "spec";
+        this->arg_type = ArgType::SPEC;
         return true;
     });
     cmd.register_named_arg(spec_arg);
@@ -143,7 +143,7 @@ void BuildDepCommand::set_argument_parser() {
                                       [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                       [[maybe_unused]] const char * option,
                                       [[maybe_unused]] const char * value) {
-        this->spec_type = "srpm";
+        this->arg_type = ArgType::SRPM;
         return true;
     });
     cmd.register_named_arg(srpm_arg);
@@ -182,18 +182,22 @@ void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const s
                     spec_location = downloaded_remotes.back()->get_path();
                 }
             }
-            if (spec_type == "spec") {
-                spec_file_paths.emplace_back(std::move(spec_location));
-            } else if (spec_type == "srpm") {
-                srpm_file_paths.emplace_back(std::move(spec_location));
-            } else {
-                if (spec.ends_with(ext_spec)) {
+            switch (arg_type) {
+                case ArgType::SPEC:
                     spec_file_paths.emplace_back(std::move(spec_location));
-                } else if (spec.ends_with(ext_srpm) || spec.ends_with(ext_nosrpm)) {
+                    break;
+                case ArgType::SRPM:
                     srpm_file_paths.emplace_back(std::move(spec_location));
-                } else {
-                    pkg_specs.emplace_back(std::move(spec_location));
-                }
+                    break;
+                case ArgType::AUTO:
+                    if (spec.ends_with(ext_spec)) {
+                        spec_file_paths.emplace_back(std::move(spec_location));
+                    } else if (spec.ends_with(ext_srpm) || spec.ends_with(ext_nosrpm)) {
+                        srpm_file_paths.emplace_back(std::move(spec_location));
+                    } else {
+                        pkg_specs.emplace_back(std::move(spec_location));
+                    }
+                    break;
             }
         }
     }
