@@ -1303,7 +1303,7 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                     }
                     for (std::size_t idx = 0; idx < sizeof(attrs_list) / sizeof(attrs_list[0]); ++idx) {
                         if (attrs_list[idx].first == requested_attr) {
-                            requested_attrs |= 1 << idx;
+                            requested_attrs |= 1U << idx;
                         }
                     }
                 }
