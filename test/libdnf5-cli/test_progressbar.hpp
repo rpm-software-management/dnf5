@@ -29,12 +29,17 @@ class ProgressbarTest : public CppUnit::TestCase {
 
     CPPUNIT_TEST(test_download_progress_bar);
     CPPUNIT_TEST(test_multi_progress_bar);
+    CPPUNIT_TEST(test_multi_progress_bar_unfinished);
 
     CPPUNIT_TEST_SUITE_END();
 
 public:
+    void setUp() override;
+    void tearDown() override;
+
     void test_download_progress_bar();
     void test_multi_progress_bar();
+    void test_multi_progress_bar_unfinished();
 };
 
 

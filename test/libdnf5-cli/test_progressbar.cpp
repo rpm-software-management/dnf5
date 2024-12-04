@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_progressbar.hpp"
 
 #include "../shared/private_accessor.hpp"
+#include "../shared/utils.hpp"
 
-#include <fmt/format.h>
-#include <fnmatch.h>
 #include <libdnf5-cli/progressbar/download_progress_bar.hpp>
 #include <libdnf5-cli/progressbar/multi_progress_bar.hpp>
 
@@ -38,23 +37,42 @@ create_getter(to_stream, &libdnf5::cli::progressbar::DownloadProgressBar::to_str
 
 }  //namespace
 
+void ProgressbarTest::setUp() {
+    // MultiProgressBar behaves differently depending on interactivity
+    setenv("DNF5_FORCE_INTERACTIVE", "0", 1);
+    // Force columns to 70 to make output independ of where it is run
+    setenv("FORCE_COLUMNS", "70", 1);
+}
+
+void ProgressbarTest::tearDown() {
+    unsetenv("DNF5_FORCE_INTERACTIVE");
+    unsetenv("FORCE_COLUMNS");
+}
+
 void ProgressbarTest::test_download_progress_bar() {
+    // In non interactive mode download progress bar is printed only when finished.
+
     auto download_progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
-    download_progress_bar->set_ticks(10);
-    download_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    download_progress_bar->set_ticks(4);
+    download_progress_bar->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+    auto download_progress_bar_raw = download_progress_bar.get();
 
     std::ostringstream oss;
     (*download_progress_bar.*get(to_stream{}))(oss);
-    // When running the tests binary directly (run_tests_cli) it uses terminal size to determine white space count.
-    // To ensure the tests works match any number of white space.
-    std::string expected = "\\[0/0\\] test      [ ]*      100% |   0.0   B\\/s |  10.0   B |  ?     ";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        fmt::format("Expression: \"{}\" doesn't match output: \"{}\"", expected, oss.str()),
-        fnmatch(expected.c_str(), oss.str().c_str(), FNM_EXTMATCH),
-        0);
+    Pattern expected = "";
+    ASSERT_MATCHES(expected, oss.str());
+
+    download_progress_bar_raw->set_ticks(10);
+    download_progress_bar_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    (*download_progress_bar.*get(to_stream{}))(oss);
+
+    expected = "\\[0/0\\] test                    100% | ????? ??B\\/s |  10.0   B | ???????";
+    ASSERT_MATCHES(expected, oss.str());
 }
 
 void ProgressbarTest::test_multi_progress_bar() {
+    // In non interactive mode finished multiline progressbar ends with a new line.
+
     auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
     download_progress_bar1->set_ticks(10);
     download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
@@ -68,18 +86,54 @@ void ProgressbarTest::test_multi_progress_bar() {
     multi_progress_bar.add_bar(std::move(download_progress_bar2));
     std::ostringstream oss;
     oss << multi_progress_bar;
-    auto output = oss.str();
 
-    // When running the tests binary directly (run_tests_cli) it uses terminal size to determine white space and dash count.
-    // To ensure the tests works match any number of white space and dashes.
-    std::string expected =
-        "\\[1/2\\] test1     [ ]*      100% |   0.0   B\\/s |  10.0   B |  ?     \n"
-        "\\[2/2\\] test2     [ ]*      100% |   0.0   B\\/s |  10.0   B |  ?     \n"
-        "--------------------[-]*------------------------------------------------\n"
-        "\\[2/2\\] Total     [ ]*      100% | ????? ??B\\/s |  20.0   B |  ??m??s\n";
+    Pattern expected =
+        "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "\\[2/2\\] test2                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/2\\] Total                   100% | ????? ??B\\/s |  20.0   B | ???????\n";
+    ASSERT_MATCHES(expected, oss.str());
+}
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        fmt::format("Expression: \"{}\" doesn't match output: \"{}\"", expected, oss.str()),
-        fnmatch(expected.c_str(), oss.str().c_str(), FNM_EXTMATCH),
-        0);
+void ProgressbarTest::test_multi_progress_bar_unfinished() {
+    // In non-interacitve mode:
+    // - unfinished progressbars are not printed
+    // - total is not printed until all progressbars are finished
+
+    auto download_progress_bar1 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test1");
+    download_progress_bar1->set_ticks(10);
+    download_progress_bar1->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+
+    auto download_progress_bar2 = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test2");
+    download_progress_bar2->set_ticks(4);
+    download_progress_bar2->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+    auto download_progress_bar2_raw = download_progress_bar2.get();
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.add_bar(std::move(download_progress_bar1));
+    multi_progress_bar.add_bar(std::move(download_progress_bar2));
+    std::ostringstream oss;
+
+    oss << multi_progress_bar;
+    Pattern expected = "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n";
+    ASSERT_MATCHES(expected, oss.str());
+
+    // More iterations
+    download_progress_bar2_raw->set_ticks(5);
+    oss << multi_progress_bar;
+    download_progress_bar2_raw->set_ticks(6);
+    oss << multi_progress_bar;
+    expected = "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n";
+    ASSERT_MATCHES(expected, oss.str());
+
+    // Next iteration
+    download_progress_bar2_raw->set_ticks(10);
+    download_progress_bar2_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
+    oss << multi_progress_bar;
+    expected =
+        "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "\\[2/2\\] test2                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
+        "----------------------------------------------------------------------\n"
+        "\\[2/2\\] Total                   100% | ????? ??B\\/s |  20.0   B | ???????\n";
+    ASSERT_MATCHES(expected, oss.str());
 }
