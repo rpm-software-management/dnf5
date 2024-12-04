@@ -292,7 +292,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     sections.emplace_back("", header_ln);
 
     scols_table_enable_maxout(*tb, 1);
-    scols_table_enable_colors(*tb, libdnf5::cli::tty::is_interactive());
+    scols_table_enable_colors(*tb, libdnf5::cli::tty::is_colorized());
 
     // TODO(dmach): use colors from config
     // TODO(dmach): highlight version changes (rebases)
