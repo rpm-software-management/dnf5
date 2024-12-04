@@ -154,7 +154,7 @@ Changes to individual commands
   * Specific variants of the command, ``autoremove-n``, ``autoremove-na``, and ``autoremove-nevra``, are not supported anymore.
 
 ``builddep``
-  * Dropped ``--spec`` and ``--srpm`` arguments as automatic detection from file extensions is implemented now.
+  * The ``--spec`` and ``--srpm`` options only apply to arguments that follow them. This allows for use cases that combine spec files and source RPMs (e.g., ``dnf5 builddep --spec pkg1.spec.in --srpm pkg2.src.rpm``). However, the previously supported syntax ``dnf builddep pkg1.spec.in --spec`` no longer has any effect.
 
 ``config-manager``
   * New behavior introduced.
