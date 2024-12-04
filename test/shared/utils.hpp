@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <fnmatch.h>
 #include <libdnf5/advisory/advisory_set.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/base/transaction_package.hpp>
@@ -346,5 +347,17 @@ std::vector<libdnf5::comps::Environment> to_vector(const libdnf5::Set<libdnf5::c
 std::vector<libdnf5::comps::Group> to_vector(const libdnf5::Set<libdnf5::comps::Group> & group_set);
 std::vector<libdnf5::rpm::Reldep> to_vector(const libdnf5::rpm::ReldepList & reldep_list);
 std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & package_set);
+
+#define ASSERT_MATCHES(pattern, actual) \
+    CPPUNIT_ASSERT_MESSAGE(             \
+        fmt::format("Expression:\n\"{}\"\ndoesn't match:\n\"{}\"", pattern.value, actual), pattern.matches(actual))
+
+// Together with ASSERT_MATCHES implements convenient fnmatch pattern matching
+class Pattern {
+public:
+    Pattern(const char * str) : value(str){};
+    bool matches(const std::string & actual) { return !fnmatch(value.c_str(), actual.c_str(), FNM_EXTMATCH); }
+    std::string value;
+};
 
 #endif  // TEST_LIBDNF5_UTILS_HPP
