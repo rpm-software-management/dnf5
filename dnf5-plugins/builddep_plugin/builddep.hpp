@@ -44,6 +44,8 @@ public:
     void goal_resolved() override;
 
 private:
+    enum class ArgType { AUTO, SPEC, SRPM };
+
     void parse_builddep_specs(int specs_count, const char * const specs[]);
     bool add_from_spec_file(
         std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const char * spec_file_name);
@@ -57,7 +59,7 @@ private:
     std::vector<std::string> srpm_file_paths{};
     std::vector<std::pair<std::string, std::string>> rpm_macros{};
 
-    std::string spec_type{"auto"};
+    ArgType arg_type{ArgType::AUTO};
 
     // Args downloaded into temp files which are automatically cleaned up
     std::vector<std::unique_ptr<libdnf5::utils::fs::TempFile>> downloaded_remotes{};
