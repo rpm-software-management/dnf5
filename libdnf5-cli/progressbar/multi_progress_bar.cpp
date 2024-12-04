@@ -204,8 +204,12 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
 
         text_buffer << mbar.total;
-        text_buffer << std::endl;
-        mbar.num_of_lines_to_clear += 3;
+        mbar.num_of_lines_to_clear += 2;
+        if (mbar.total.is_finished()) {
+            text_buffer << std::endl;
+        } else {
+            mbar.line_printed = true;
+        }
     }
 
     stream << text_buffer.str();  // Single syscall to output all commands
