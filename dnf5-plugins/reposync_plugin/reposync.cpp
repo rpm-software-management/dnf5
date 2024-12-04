@@ -33,7 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 #include <string_view>
-#include <unordered_set>
 #include <vector>
 
 namespace {
@@ -236,7 +235,6 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
         query.filter_arch(std::vector<std::string>(arch_option.begin(), arch_option.end()));
     }
 
-    std::unordered_set<std::filesystem::path> seen_paths;
     for (auto pkg : query) {
         auto pkg_path = std::filesystem::weakly_canonical(std::filesystem::absolute(repo_path / pkg.get_location()));
 
@@ -252,13 +250,9 @@ ReposyncCommand::download_list_type ReposyncCommand::get_packages_list(const lib
                 repo.get_id(),
                 safe_write_path.string());
         }
-
-        if (seen_paths.contains(pkg_path)) {
-            // skip packages that would have been downloaded to the same location
-            continue;
-        }
-        seen_paths.emplace(pkg_path);
-        result.emplace_back(std::move(pkg_path), std::move(pkg));
+        // std::map assures that duplicated packages with the same download
+        // path are skipped
+        result.emplace(std::move(pkg_path), std::move(pkg));
     }
 
     return result;
@@ -292,15 +286,10 @@ void ReposyncCommand::delete_old_local_packages(
         return;
     }
 
-    std::unordered_set<std::string> downloaded_paths;
-    for (const auto & [pth, pkg] : pkg_list) {
-        downloaded_paths.emplace(pth);
-    }
-
     for (const auto & entry : delete_iterator) {
         if (entry.is_regular_file(ec)) {
             const auto & file_path = entry.path();
-            if (file_path.extension() == ".rpm" && !downloaded_paths.contains(file_path)) {
+            if (file_path.extension() == ".rpm" && !pkg_list.contains(file_path)) {
                 // Remove every *.rpm file that was not downloaded from the repo
                 std::filesystem::remove(file_path, ec);
                 if (ec) {

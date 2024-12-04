@@ -30,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <string>
 #include <unordered_set>
-#include <vector>
 
 namespace dnf5 {
 
@@ -44,7 +43,7 @@ public:
     void run() override;
 
 private:
-    using download_list_type = std::vector<std::pair<std::filesystem::path, libdnf5::rpm::Package>>;
+    using download_list_type = std::map<std::filesystem::path, libdnf5::rpm::Package>;
 
     std::unique_ptr<libdnf5::cli::session::BoolOption> newest_option{nullptr};
     std::unique_ptr<libdnf5::cli::session::BoolOption> remote_time_option{nullptr};
