@@ -112,8 +112,6 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
             text_buffer << "\033[" << (mbar.num_of_lines_to_clear - 1) << "A";
         }
         text_buffer << "\r";
-    } else if (mbar.line_printed) {
-        text_buffer << std::endl;
     }
 
     mbar.num_of_lines_to_clear = 0;
