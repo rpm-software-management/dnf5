@@ -15,21 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
+use strict;
+use warnings;
 
-import libdnf5
+use Test::More;
 
-import base_test_case
+use FindBin;
+use lib "$FindBin::Bin/..";  # Add to search path
+use BaseTestCase;
+
+use File::Spec::Functions 'catfile';
+
+use libdnf5::conf;
 
 
-class TestVars(base_test_case.BaseTestCase):
-    def test_getting_undefined_variable(self):
-        vars = self.base.get_vars()
-        self.assertRaises(IndexError, vars.get_value, "undefined")
+# test_detect_release
+{
+    my $test = new BaseTestCase();
 
-    def test_detect_release(self):
-        installroot = self.base.get_config().installroot
-        # Cannot detect release in nonexistent directory, return None
-        release = libdnf5.conf.Vars.detect_release(
-            self.base.get_weak_ptr(), os.path.join(installroot, "nonexist"))
-        self.assertEqual(release, None)
+    my $installroot = $test->{base}->get_config()->get_installroot_option()->get_value();
+
+    # Cannot detect release in nonexistent directory, return undef
+    my $release = libdnf5::conf::Vars::detect_release($test->{base}->get_weak_ptr(), catfile($installroot, "nonexist"));
+    is($release, undef);
+}
+
+done_testing();

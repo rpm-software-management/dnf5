@@ -34,6 +34,7 @@ set(SWIG_COMPILE_OPTIONS
     -Wno-strict-aliasing
     -Wno-unused-function
     -Wno-unused-parameter
+    -Wno-unused-but-set-variable
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")

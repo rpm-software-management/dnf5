@@ -109,8 +109,22 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %ignore ConfigParserOptionNotFoundError;
 %include "libdnf5/conf/config_parser.hpp"
 
+%newobject libdnf5::Vars::detect_release;
+%extend libdnf5::Vars {
+  static char * detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
+    std::unique_ptr<std::string> release = libdnf5::Vars::detect_release(base, install_root_path);
+    if (release) {
+      char * release_cstr = new char[release->size() + 1];
+      strcpy(release_cstr, release->c_str());
+      return release_cstr;
+    }
+    return nullptr;
+  }
+};
+%ignore libdnf5::Vars::detect_release;
 %ignore libdnf5::ReadOnlyVariableError;
 %include "libdnf5/conf/vars.hpp"
+%template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 
 %include "libdnf5/conf/config.hpp"
 %include "libdnf5/conf/config_main.hpp"

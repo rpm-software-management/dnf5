@@ -48,7 +48,6 @@
 #define CV __perl_CV
 
 %template(BaseWeakPtr) libdnf5::WeakPtr<libdnf5::Base, false>;
-%template(VarsWeakPtr) libdnf5::WeakPtr<libdnf5::Vars, false>;
 
 %ignore std::vector<libdnf5::plugin::PluginInfo>::insert;
 %ignore std::vector<libdnf5::plugin::PluginInfo>::pop;
