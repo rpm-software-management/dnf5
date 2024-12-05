@@ -1,3 +1,27 @@
+# 5.2.8.1
+
+- Update translations from weblate
+- doc: Replace another instance of "PGP" with "OpenPGP"
+- doc: Use OpenPGP instead of PGP
+- Python API: Method DownloadCallbacks.add_new_download can return None
+- changes_from_dnf4: fix formatting of indented `list` points
+- test: add progressbar tests for interactive mode
+- test: enhance progressbar tests for non interactive mode
+- test: add `ASSERT_MATCHES` for convenient fnmatch pattern matching
+- When determining interactivity add `DNF5_FORCE_INTERACTIVE` override
+- Fix overwriting of old output from `MultiProgressBar`
+- Add `cursor_down` TTY_COMMAND
+- Fix new line printing for unfinished Total progress bar
+- Remove new line printing fix in non-interactive mode
+- reposync: Do not allow --safe-write-path with multiple repos.
+- reposync: Optimization of internal structures
+- reposync: Rename --source to --srpm
+- Implement reposync plugin
+- builddep: Fix changes_from_dnf4 documentation
+- builddep: Use enum to determine argument type
+- builddep: Add support for --spec and --srpm options
+- Fix libdnf5 actions plugin sign conversion compilation err
+
 # 5.2.8.0
 
 - Update translations from weblate
