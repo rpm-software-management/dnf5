@@ -41,7 +41,7 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf5::cli::session::Session {
 public:
-    Context() : repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
+    Context() : repositories_status(dnfdaemon::RepoStatus::NOT_READY) {};
 
     /// Initialize dbus connection and server session
     void init_session(sdbus::IConnection & connection);

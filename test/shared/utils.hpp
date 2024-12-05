@@ -355,7 +355,7 @@ std::vector<libdnf5::rpm::Package> to_vector(const libdnf5::rpm::PackageSet & pa
 // Together with ASSERT_MATCHES implements convenient fnmatch pattern matching
 class Pattern {
 public:
-    Pattern(const char * str) : value(str){};
+    Pattern(const char * str) : value(str) {};
     bool matches(const std::string & actual) { return !fnmatch(value.c_str(), actual.c_str(), FNM_EXTMATCH); }
     std::string value;
 };

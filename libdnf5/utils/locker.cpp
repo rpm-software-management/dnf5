@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::utils {
 
-Locker::Locker(const std::string & path) : path(path){};
+Locker::Locker(const std::string & path) : path(path) {};
 
 bool Locker::read_lock() {
     return lock(F_RDLCK);

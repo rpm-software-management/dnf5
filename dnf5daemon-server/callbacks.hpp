@@ -140,7 +140,7 @@ public:
     void verify_stop(uint64_t total) override;
 
     void unpack_error(const libdnf5::base::TransactionPackage & item) override;
-    void cpio_error(const libdnf5::base::TransactionPackage & /*item*/) override{};
+    void cpio_error(const libdnf5::base::TransactionPackage & /*item*/) override {};
 
     // whole rpm transaction is finished
     void finish();

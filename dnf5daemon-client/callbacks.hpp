@@ -32,7 +32,7 @@ class Context;
 
 class DbusCallback {
 public:
-    explicit DbusCallback(Context & context) : context(context){};
+    explicit DbusCallback(Context & context) : context(context) {};
     virtual ~DbusCallback() = default;
 
 protected:

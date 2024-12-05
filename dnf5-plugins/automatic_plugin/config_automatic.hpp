@@ -103,7 +103,7 @@ public:
 
 class ConfigAutomatic {
 public:
-    ConfigAutomatic(){};
+    ConfigAutomatic() {};
     ~ConfigAutomatic() = default;
 
     void load_from_parser(

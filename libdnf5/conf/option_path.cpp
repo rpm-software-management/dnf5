@@ -31,7 +31,7 @@ namespace libdnf5 {
 
 class OptionPath::Impl {
 public:
-    Impl(bool exists, bool abs_path) : exists(exists), abs_path(abs_path){};
+    Impl(bool exists, bool abs_path) : exists(exists), abs_path(abs_path) {};
 
 private:
     friend OptionPath;

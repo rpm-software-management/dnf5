@@ -28,7 +28,7 @@ namespace libdnf5::repo {
 
 class RepoQuery::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base){};
+    Impl(const BaseWeakPtr & base) : base(base) {};
 
 private:
     friend RepoQuery;

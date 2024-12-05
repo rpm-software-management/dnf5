@@ -40,7 +40,7 @@ class Session;
 
 class IDbusSessionService {
 public:
-    explicit IDbusSessionService(Session & session) : session(session){};
+    explicit IDbusSessionService(Session & session) : session(session) {};
     virtual ~IDbusSessionService() = default;
     virtual void dbus_register() = 0;
 

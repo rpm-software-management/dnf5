@@ -23,7 +23,7 @@ namespace libdnf5 {
 
 class Option::Impl {
 public:
-    Impl(Priority priority) : priority(priority){};
+    Impl(Priority priority) : priority(priority) {};
 
 private:
     friend Option;

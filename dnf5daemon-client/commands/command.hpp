@@ -29,7 +29,7 @@ namespace dnfdaemon::client {
 
 class DaemonCommand : public libdnf5::cli::session::Command {
 public:
-    explicit DaemonCommand(Context & context, const std::string & name) : Command(context, name){};
+    explicit DaemonCommand(Context & context, const std::string & name) : Command(context, name) {};
     virtual dnfdaemon::KeyValueMap session_config() {
         dnfdaemon::KeyValueMap cfg = {};
         return cfg;
@@ -41,7 +41,7 @@ public:
 
 class TransactionCommand : public DaemonCommand {
 public:
-    explicit TransactionCommand(Context & context, const std::string & name) : DaemonCommand(context, name){};
+    explicit TransactionCommand(Context & context, const std::string & name) : DaemonCommand(context, name) {};
     void run_transaction(bool offline = false);
 };
 

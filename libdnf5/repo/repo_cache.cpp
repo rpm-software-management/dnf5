@@ -94,7 +94,7 @@ RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator+=(const RepoCach
     return *this;
 }
 
-RepoCacheRemoveStatistics::RepoCacheRemoveStatistics() : p_impl(new Impl()){};
+RepoCacheRemoveStatistics::RepoCacheRemoveStatistics() : p_impl(new Impl()) {};
 RepoCacheRemoveStatistics::~RepoCacheRemoveStatistics() = default;
 
 RepoCacheRemoveStatistics::RepoCacheRemoveStatistics(const RepoCacheRemoveStatistics & src) = default;

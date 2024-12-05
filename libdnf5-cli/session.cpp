@@ -293,7 +293,7 @@ StringArgumentList::StringArgumentList(
 
 StringArgumentList::StringArgumentList(
     libdnf5::cli::session::Command & command, const std::string & name, const std::string & desc)
-    : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
+    : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED) {};
 
 StringArgumentList::~StringArgumentList() = default;
 
