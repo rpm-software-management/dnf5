@@ -108,3 +108,33 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
             cbs.end_status,
             [PackageDownloadCallbacks.TransferStatus_SUCCESSFUL, PackageDownloadCallbacks.TransferStatus_SUCCESSFUL])
         self.assertEqual(cbs.end_msg, [None, None])
+
+
+class TestPackageDownloaderReturnNone(base_test_case.BaseTestCase):
+    # Previously, add_new_download could only return None. This test adds a
+    # check to ensure backwards-compatibility with that API.
+    def test_package_downloader_return_none(self):
+        class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
+            def __init__(self):
+                super(PackageDownloadCallbacks, self).__init__()
+
+            def add_new_download(self, user_data, description, total_to_download):
+                return None
+
+        repo = self.add_repo_rpm("rpm-repo1")
+
+        query = libdnf5.rpm.PackageQuery(self.base)
+        query.filter_name(["one"])
+        query.filter_arch(["noarch"])
+        self.assertEqual(query.size(), 2)
+
+        downloader = libdnf5.repo.PackageDownloader(self.base)
+
+        cbs = PackageDownloadCallbacks()
+        self.base.set_download_callbacks(
+            libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
+
+        for package in query:
+            downloader.add(package)
+
+        downloader.download()
