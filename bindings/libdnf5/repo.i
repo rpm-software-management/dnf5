@@ -61,10 +61,15 @@
 %typemap(directorout, noblock=1) void * {
     int swig_val;
     int swig_res = SWIG_AsVal_int($1, &swig_val);
-    if (!SWIG_IsOK(swig_res)) {
+    if (SWIG_IsOK(swig_res)) {
+        $result = reinterpret_cast<void *>(swig_val);
+#if defined(SWIGPYTHON)
+    } else if (Py_IsNone($1)) {
+        $result = 0;
+#endif
+    } else {
         Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""int""'");
     }
-    $result = reinterpret_cast<void *>(swig_val);
 }
 
 %typemap(in, noblock=1) void * user_cb_data {
