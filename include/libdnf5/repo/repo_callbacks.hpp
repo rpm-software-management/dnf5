@@ -44,7 +44,7 @@ public:
     RepoCallbacks & operator=(const RepoCallbacks &) = delete;
     RepoCallbacks & operator=(RepoCallbacks &&) = delete;
 
-    /// PGP key import callback. Allows to confirm or deny the import.
+    /// OpenPGP key import callback. Allows to confirm or deny the import.
     /// @param key_info The key that is about to be imported
     /// @return `true` to import the key, `false` to not import
     virtual bool repokey_import(const libdnf5::rpm::KeyInfo & key_info);

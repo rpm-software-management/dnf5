@@ -53,7 +53,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @key_id: id of the key in question
         @confirmed: whether the key import is confirmed by user
 
-        Confirm repository PGP key import.
+        Confirm repository OpenPGP key import.
     -->
     <method name="confirm_key">
         <arg name="key_id" type="s" direction="in"/>

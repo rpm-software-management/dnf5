@@ -264,7 +264,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | It sets the ``RPMTRANS_FLAG_NODOCS`` flag.
 
 ``--no-gpgchecks``
-    | Skip checking PGP signatures on packages (if ``RPM`` policy allows that).
+    | Skip checking OpenPGP signatures on packages (if ``RPM`` policy allows that).
 
 ``--no-plugins``
     | Disable all libdnf5 plugins.

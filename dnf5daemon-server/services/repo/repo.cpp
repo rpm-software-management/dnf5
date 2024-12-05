@@ -180,7 +180,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_skip_if_unavailable_option().get_value());
                 break;
 
-            // pgp
+            // OpenPGP
             case RepoAttribute::gpgkey:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().get_gpgkey_option().get_value());
                 break;

@@ -384,7 +384,7 @@ void OfflineExecuteCommand::pre_configure() {
     // Additional removal could trigger unwanted changes in transaction.
     ctx.get_base().get_config().get_clean_requirements_on_remove_option().set(false);
     ctx.get_base().get_config().get_install_weak_deps_option().set(false);
-    // Disable gpgcheck entirely, since PGP integrity will have already been
+    // Disable gpgcheck entirely, since OpenPGP integrity will have already been
     // checked when the transaction was prepared and serialized. This way, we
     // don't need to keep track of which packages need to be gpgchecked.
     ctx.get_base().get_config().get_pkg_gpgcheck_option().set(false);
