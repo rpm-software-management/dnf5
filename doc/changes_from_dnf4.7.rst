@@ -214,6 +214,7 @@ Changes to individual commands
 ``list``
   * Dropped ``--all`` option since this behavior is the default one.
   * Changed the behavior of the ``--available`` option.
+
     * In DNF4, only packages not installed or with higher versions were listed. This behavior remains unchanged when the option is not used, reducing duplications in the "Installed Packages" section.
     * When using the ``--available`` option, DNF5 considers all versions available in enabled repositories, irrespective of the installed version.
 
