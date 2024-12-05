@@ -609,6 +609,23 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %{_mandir}/man8/libdnf5-actions.8.*
 %endif
 
+# ========== libdnf5-plugin-appstream ==========
+
+%if %{with appstream}
+
+%package -n libdnf5-plugin-appstream
+Summary:        Libdnf5 plugin to install repo Appstream data
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+
+%description -n libdnf5-plugin-appstream
+Libdnf5 plugin that installs repository's Appstream data, for repositories which provide them.
+
+%files -n libdnf5-plugin-appstream
+%{_libdir}/libdnf5/plugins/appstream.so
+%config %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
+
+%endif
 
 # ========== libdnf5-plugin-plugin_rhsm ==========
 

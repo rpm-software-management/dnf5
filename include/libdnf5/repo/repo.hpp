@@ -144,10 +144,6 @@ public:
     // @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
     void read_metadata_cache();
 
-    /// Installs downloaded Appstream data for the repo, if available and
-    /// if built with the Appstream support.
-    void install_appstream();
-
     /// Checks whether the locally downloaded metadata are in sync with the origin.
     /// @return `true` if metadata are in sync with the origin, `false` otherwise.
     bool is_in_sync();
@@ -317,6 +313,9 @@ public:
     /// Downloads repository metadata.
     // @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
+
+    /// Returns a list of pairs of the rpmmd type and filename of the Appstream data of the repo
+    std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
 private:
     class LIBDNF_LOCAL Impl;

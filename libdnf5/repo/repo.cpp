@@ -52,10 +52,6 @@ extern "C" {
 #include <filesystem>
 #include <set>
 
-#ifdef WITH_APPSTREAM
-#include <appstream.h>
-#endif
-
 namespace libdnf5::repo {
 
 static void is_readable_rpm(const std::string & fn) {
@@ -206,30 +202,8 @@ void Repo::read_metadata_cache() {
     p_impl->downloader->load_local();
 }
 
-void Repo::install_appstream() {
-#ifdef WITH_APPSTREAM
-    if (!p_impl->config.get_main_config().get_optional_metadata_types_option().get_value().contains(
-            libdnf5::METADATA_TYPE_APPSTREAM))
-        return;
-
-    std::string repo_id = p_impl->config.get_id();
-    auto appstream_metadata = p_impl->downloader->get_appstream_metadata();
-    for (auto & item : appstream_metadata) {
-        const std::string path = item.second;
-        GError * local_error = NULL;
-
-        if (!as_utils_install_metadata_file(
-                AS_METADATA_LOCATION_CACHE, path.c_str(), repo_id.c_str(), NULL, &local_error)) {
-            p_impl->base->get_logger()->debug(
-                "Failed to install Appstream metadata file '{}' for repo '{}': {}",
-                path,
-                repo_id,
-                local_error ? local_error->message : "Unknown error");
-        }
-
-        g_clear_error(&local_error);
-    }
-#endif
+std::vector<std::pair<std::string, std::string>> Repo::get_appstream_metadata() const {
+    return get_downloader().get_appstream_metadata();
 }
 
 bool Repo::is_in_sync() {

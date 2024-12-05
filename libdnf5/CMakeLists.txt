@@ -81,13 +81,6 @@ if (WITH_MODULEMD)
     target_link_libraries(libdnf5_static PRIVATE ${LIBMODULEMD_LIBRARIES})
 endif()
 
-if (WITH_APPSTREAM)
-    pkg_check_modules(APPSTREAM REQUIRED appstream>=0.16)
-    include_directories(${APPSTREAM_INCLUDE_DIRS})
-    target_link_libraries(libdnf5 PRIVATE ${APPSTREAM_LIBRARIES})
-    target_link_libraries(libdnf5_static PRIVATE ${APPSTREAM_LIBRARIES})
-endif()
-
 if (ENABLE_SOLV_FOCUSNEW)
     pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.30)
 else()
