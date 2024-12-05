@@ -120,7 +120,8 @@ void RepoPgp::import_key(int fd, const std::string & url) {
     auto known_keys = load_keys_ids_from_keyring();
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_key_id()) != known_keys.end()) {
-            logger.debug("Pgp key 0x{} for repository {} already imported.", key_info.get_key_id(), config.get_id());
+            logger.debug(
+                "OpenPGP key 0x{} for repository {} already imported.", key_info.get_key_id(), config.get_id());
             continue;
         }
 
