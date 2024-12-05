@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-02 13:38+0000\n"
+"PO-Revision-Date: 2024-12-05 11:38+0000\n"
 "Last-Translator: Joan Aymà <joan@ayma.cat>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ca/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -239,75 +239,78 @@ msgstr "Desactualitzar programari"
 #: commands/download/download.cpp:105
 msgid "When running with --url, prints URLs from all available mirrors"
 msgstr ""
+"Quan s'executa amb --url, informa les URLs de tots els miralls disponibles"
 
 #: commands/download/download.cpp:121
 #, c++-format
 msgid "Invalid urlprotocol option: {}"
-msgstr ""
+msgstr "Opció de protocol url invàlida: {}"
 
 #: commands/download/download.cpp:148 main.cpp:614
 #, c++-format
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr ""
+msgstr "Arquitectura \"{0}\" no suporta. Sisplau escull una de \"{1}\""
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:183
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr ""
+msgstr "L'opció \"--alldeps\" ha d'usar-se amb \"--resolve\""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr ""
+msgstr "Mostra sols entorns disponibles."
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr ""
+msgstr "Mostra sols entorns disponibles."
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr ""
+msgstr "Patró que coincideix amb els IDs d'entorn."
 
 #: commands/environment/environment.cpp:35
 msgid "Manage comps environments"
-msgstr ""
+msgstr "Administra entorns de comps"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "Mostra sols els grups disponibles."
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "Mostra també els grups ocults."
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "Mostra sols els grups instal·lats."
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Mostra sols els grups que contenen paquets amb els noms especificats. Opció "
+"tipus llista, suporta globs."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr ""
+msgstr "Patró coincident amb IDs dels grups."
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr ""
+msgstr "Inclou paquets opcions del grup."
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr ""
+msgstr "Opera sols en els grups, sense fer canvis als paquets."
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
-msgstr ""
+msgstr "ID de transacció"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
-msgstr ""
+msgstr "Inverteix l'ordre de les transaccions."
 
 #: commands/history/arguments.hpp:54
 msgid ""
@@ -315,35 +318,44 @@ msgid ""
 "as errors. This can result in an empty transaction because among other "
 "things the option can ignore failing Remove actions."
 msgstr ""
+"No tinguis en compte com errors les diferències entre els paquets instalats "
+"i els de la transacció desada. Això podria provocar una transacció buida "
+"perquè entre altres coses aquesta opció pot ignorar accions d'esborrar "
+"fallides."
 
 #: commands/history/arguments.hpp:67
 msgid "Don't consider extra packages pulled into the transaction as errors."
-msgstr ""
+msgstr "No consideris com errors els paquets extra inclosos a la transacció."
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "Gestiona l'historial de transaccions"
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
 #: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:56
 msgid "No matching transaction ID found, exactly one required."
 msgstr ""
+"No s'ha trobat cap ID de transacció coincident, se'n requereix exactament un."
 
 #: commands/history/history_redo.cpp:57
 #: commands/history/history_rollback.cpp:61
 #: commands/history/history_undo.cpp:60
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr ""
+"S'han trobat més d'un ID de transacció coincident, se'n requereix exactament "
+"un."
 
 #: commands/history/history_store.cpp:68
 msgid "Multiple transactions selected for storing, only one allowed."
 msgstr ""
+"Múltiples transaccions seleccionades per emmagatzemar, se'n permet solament "
+"una."
 
 #: commands/history/history_store.cpp:80
 #, c++-format
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "El fitxer \"{}\" ja existeix, es sobreescriurà.\n"
 
 #: commands/history/transaction_id.cpp:32
 #, c++-format
@@ -351,120 +363,129 @@ msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
+"Rang d'ID de transaccions \"{}\" invàlid, s'esperava \"ID\" o \"ID..ID\", on "
+"ID és \"NÚMERO\", \"last\" o \"last-NÚMERO\"."
 
 #: commands/install/install.cpp:41
 msgid "Install software"
-msgstr ""
+msgstr "Instal·la programari"
 
 #: commands/leaves/leaves.cpp:42
 msgid ""
 "List groups of installed packages not required by other installed packages"
 msgstr ""
+"Llista els grups dels paquets instal·lats que no els requereixen cap altre "
+"paquet"
 
 #: commands/list/list.cpp:44
 msgid "Lists packages depending on the packages' relation to the system"
-msgstr ""
+msgstr "Llista els paquets segons com estan relacionats amb el sistema"
 
 #: commands/list/list.cpp:47
 msgid "List of keys to match case insensitively"
 msgstr ""
+"Llista de claus per coincidir sense diferenciar entre majúscules i minúscules"
 
 #: commands/list/list.cpp:59
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr ""
+msgstr "Mostra totes les versions dels paquets, no solament les més recents."
 
 #: commands/list/list.cpp:65
 msgid "List installed packages."
-msgstr ""
+msgstr "Llista els paquets instal·lats."
 
 #: commands/list/list.cpp:69
 msgid "List available packages."
-msgstr ""
+msgstr "Llista els paquets disponibles."
 
 #: commands/list/list.cpp:76
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
+"Llista els paquets extra, és a dir, els paquets instal·lats al sistema que "
+"no estan disponibles en cap repositori conegut."
 
 #: commands/list/list.cpp:84
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
 msgstr ""
+"Llista els paquets instal·lats al sistema que són obsolets per altres "
+"paquets de qualsevol repertori conegut."
 
 #: commands/list/list.cpp:89
 msgid "List packages recently added into the repositories."
-msgstr ""
+msgstr "Llista els paquets afegits recentment als repositoris."
 
 #: commands/list/list.cpp:93
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "Llista les actualitzacions disponibles dels paquets instal·lats."
 
 #: commands/list/list.cpp:97
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr ""
+msgstr "Llista els paquets que seran esborrats per la comanda 'dnf autoremove'."
 
 #: commands/list/list.cpp:194 commands/list/list.cpp:199
 msgid "Installed packages"
-msgstr ""
+msgstr "Paquets instal·lats"
 
 #: commands/list/list.cpp:195 commands/list/list.cpp:208
 msgid "Available packages"
-msgstr ""
+msgstr "Paquets disponibles"
 
 #: commands/list/list.cpp:216
 msgid "Available upgrades"
-msgstr ""
+msgstr "Actualitzacions disponibles"
 
 #: commands/list/list.cpp:232
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Paquets obsolets"
 
 #: commands/list/list.cpp:237
 msgid "Autoremove packages"
-msgstr ""
+msgstr "Esborra paquets automàticament"
 
 #: commands/list/list.cpp:241
 msgid "Extra packages"
-msgstr ""
+msgstr "Paquets extra"
 
 #: commands/list/list.cpp:252
 msgid "Recently added packages"
-msgstr ""
+msgstr "Paquets recentment afegits"
 
 #: commands/list/list.cpp:257
 msgid "No matching packages to list"
-msgstr ""
+msgstr "Cap paquet coincident per llistar"
 
 #: commands/mark/mark.cpp:38
 msgid "Change the reason of an installed package"
-msgstr ""
+msgstr "Canvia la raó d'un paquet instal·lat"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "Mostra els mòduls habilitats."
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "Mostra els mòduls deshabilitats."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "Patró coincident amb NSVCAs del mòdul."
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "Gestiona els mòduls"
 
 #: commands/module/module_list.cpp:85
 #, c++-format
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "Cap coincidència amb \"{}\"."
 
 #: commands/offline/offline.cpp:190
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "Gestiona les transaccions fora de línia"
 
 #: commands/offline/offline.cpp:222
 #, c++-format

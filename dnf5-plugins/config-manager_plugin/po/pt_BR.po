@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
+# "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-03-17 02:36+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"PO-Revision-Date: 2024-12-03 14:38+0000\n"
+"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5-plugin-config-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: addrepo.cpp:153
 msgid "from-repofile: \"{}\" file does not exist"
@@ -102,7 +103,7 @@ msgstr "Não é possível ler repositórios do diretório \"{}\": {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Gerenciar configuração"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
