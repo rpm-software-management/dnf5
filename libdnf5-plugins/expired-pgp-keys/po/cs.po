@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bot <dummy@bot.cz>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-25 06:01+0000\n"
+"PO-Revision-Date: 2024-07-25 06:01+0000\n"
+"Last-Translator: Bot <dummy@bot.cz>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-expired-pgp-keys/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: expired-pgp-keys.cpp:182
+#, c++-format
+msgid "The following PGP key has expired on {}:"
+msgstr "Následující PGP klíč vypršel dne {}:"
+
+#: expired-pgp-keys.cpp:186
+msgid "For more information about the key:"
+msgstr "Pro více informací o klíči:"
+
+#: expired-pgp-keys.cpp:189
+msgid "As a result, installing packages signed with this key will fail."
+msgstr "V důsledku toho se instalace balíčků podepsaných tímto klíčem nezdaří."
+
+#: expired-pgp-keys.cpp:190
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr "Doporučuje se odstranit vypršelý klíč, aby bylo možné importovat"
+
+#: expired-pgp-keys.cpp:191
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+"aktualizovaný klíč. To může zanechat již nainstalované balíčky neověřitelné."
+
+#: expired-pgp-keys.cpp:194
+msgid "The system will now proceed with removing the key."
+msgstr "Systém nyní přistoupí k odstranění klíče."
+
+#: expired-pgp-keys.cpp:199
+msgid "Key successfully removed."
+msgstr "Klíč byl úspěšně odstraněn."
+
+#: expired-pgp-keys.cpp:201
+msgid "Failed to remove the key."
+msgstr "Nepodařilo se odstranit klíč."
