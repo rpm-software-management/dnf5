@@ -23,14 +23,14 @@ namespace libdnf5 {
 
 class OptionString::Impl {
 public:
-    Impl(std::string && default_value) : icase(false), default_value(default_value), value(std::move(default_value)){};
-    Impl() : icase(false){};
-    Impl(std::string && regex, bool icase) : regex(std::move(regex)), icase(icase){};
+    Impl(std::string && default_value) : icase(false), default_value(default_value), value(std::move(default_value)) {};
+    Impl() : icase(false) {};
+    Impl(std::string && regex, bool icase) : regex(std::move(regex)), icase(icase) {};
     Impl(std::string && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
           default_value(default_value),
-          value(std::move(default_value)){};
+          value(std::move(default_value)) {};
 
     std::string regex;
     bool icase;

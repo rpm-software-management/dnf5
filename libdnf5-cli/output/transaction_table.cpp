@@ -74,7 +74,7 @@ public:
     TransactionTableSection(std::string header, struct libscols_line * line)
         : header(std::move(header)),
           first_line(line),
-          last_line(line){};
+          last_line(line) {};
     std::string get_header() const { return header; }
     struct libscols_line * get_first_line() const { return first_line; }
     struct libscols_line * get_last_line() const { return last_line; }

@@ -36,20 +36,20 @@ public:
         : icase(false),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}){};
+          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
     Impl(T && default_value, std::string && regex, bool icase)
         : regex(std::move(regex)),
           icase(icase),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}){};
+          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
     Impl(T && default_value, std::string && regex, bool icase, std::string && delimiters)
         : regex(std::move(regex)),
           icase(icase),
           delimiters(std::move(delimiters)),
           default_value(default_value),
           value(default_value),
-          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}){};
+          value_append({{Option::Priority::DEFAULT, std::move(default_value)}}) {};
 
     // For append options the method stores the value to value_append multimap and
     // then recalculates this->value.

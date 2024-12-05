@@ -31,8 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <type_traits>
 
-#define LIBDNF_LOCATION \
-    { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
+#define LIBDNF_LOCATION {__FILE__, __LINE__, __PRETTY_FUNCTION__}
 
 /// An assert macro that throws `libdnf5::AssertionError`.
 ///

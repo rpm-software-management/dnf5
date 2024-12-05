@@ -30,7 +30,7 @@ private:
     std::string hostname;
 
 public:
-    explicit RepoListCB(const std::string & host) : hostname(host){};
+    explicit RepoListCB(const std::string & host) : hostname(host) {};
     dnf5::CoprRepoCallback list = [&](dnf5::CoprRepo & cr) {
         if (!hostname.empty() && cr.get_id().rfind(hostname + "/", 0) != 0)
             return;

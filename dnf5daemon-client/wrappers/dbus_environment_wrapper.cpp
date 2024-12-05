@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-DbusEnvironmentWrapper::DbusEnvironmentWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
+DbusEnvironmentWrapper::DbusEnvironmentWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {};
 
 std::set<std::string> DbusEnvironmentWrapper::get_repos() const {
     std::vector<std::string> repos_vector = rawdata.at("repos");

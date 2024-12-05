@@ -746,7 +746,7 @@ void PackageQuery::filter_arch(const std::vector<std::string> & patterns, libdnf
 namespace {
 
 struct NevraID {
-    NevraID() : name(0), arch(0), evr(0){};
+    NevraID() : name(0), arch(0), evr(0) {};
     NevraID(const NevraID & src) = default;
     NevraID(NevraID && src) noexcept = default;
     NevraID & operator=(const NevraID & src) = default;

@@ -23,7 +23,7 @@ namespace libdnf5 {
 
 class LogRouter::Impl {
 public:
-    Impl(){};
+    Impl() {};
     Impl(std::vector<std::unique_ptr<Logger>> && loggers) : loggers(std::move(loggers)) {}
 
 private:
@@ -31,7 +31,7 @@ private:
     std::vector<std::unique_ptr<Logger>> loggers;
 };
 
-LogRouter::LogRouter() : p_impl(new Impl()){};
+LogRouter::LogRouter() : p_impl(new Impl()) {};
 
 LogRouter::~LogRouter() = default;
 

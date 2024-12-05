@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::module {
 
 
-ModuleMetadata::ModuleMetadata(const BaseWeakPtr & base) : base(base){};
+ModuleMetadata::ModuleMetadata(const BaseWeakPtr & base) : base(base) {};
 ModuleMetadata::ModuleMetadata(libdnf5::Base & base) : base(base.get_weak_ptr()) {}
 
 

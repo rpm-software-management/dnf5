@@ -30,7 +30,7 @@ namespace dnfdaemon::client {
 
 class DbusPackageWrapper {
 public:
-    explicit DbusPackageWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
+    explicit DbusPackageWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {};
 
     int get_id() { return rawdata.at("id"); }
     std::string get_name() const { return rawdata.at("name"); }

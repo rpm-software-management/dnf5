@@ -34,7 +34,7 @@ namespace libdnf5::solv {
 
 class Solver {
 public:
-    Solver(){};
+    Solver() {};
     explicit Solver(Pool & pool);
 
     Solver(const Solver & solver) = delete;

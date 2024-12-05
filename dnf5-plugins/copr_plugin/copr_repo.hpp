@@ -42,7 +42,7 @@ void available_chroots_error(
 
 class CoprRepoPart {
 public:
-    CoprRepoPart(){};
+    CoprRepoPart() {};
     explicit CoprRepoPart(libdnf5::repo::RepoWeakPtr dnfRepo) {
         /// Copr enable/disable simply always generates the repofile from
         /// scratch ('enable' from the json provided by Copr Frontend, 'disable'
@@ -175,7 +175,7 @@ private:
 
 class CoprRepo {
 public:
-    CoprRepo(){};
+    CoprRepo() {};
 
     explicit CoprRepo(
         libdnf5::Base & base,

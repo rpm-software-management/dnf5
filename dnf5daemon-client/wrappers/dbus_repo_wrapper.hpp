@@ -29,7 +29,7 @@ namespace dnfdaemon::client {
 
 class DbusRepoWrapper : public libdnf5::cli::output::IRepoInfo {
 public:
-    explicit DbusRepoWrapper(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
+    explicit DbusRepoWrapper(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {};
 
     std::string get_id() const { return rawdata.at("id"); }
     std::string get_name() const { return rawdata.at("name"); }

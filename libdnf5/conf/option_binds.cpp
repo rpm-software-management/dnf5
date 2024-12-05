@@ -40,7 +40,7 @@ public:
           get_value_str_func(std::move(get_value_string_func)),
           is_append_option(add_value) {}
 
-    Impl(Option & option) : option(&option){};
+    Impl(Option & option) : option(&option) {};
 
 private:
     friend OptionBinds::Item;

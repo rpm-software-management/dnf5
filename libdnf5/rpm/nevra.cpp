@@ -293,7 +293,7 @@ int rpmvercmp(const char * lhs, const char * rhs) {
     return ::rpmvercmp(lhs, rhs);
 }
 
-Nevra::Nevra() : p_impl(new Impl()){};
+Nevra::Nevra() : p_impl(new Impl()) {};
 Nevra::~Nevra() = default;
 
 Nevra::Nevra(const Nevra & src) = default;

@@ -64,7 +64,7 @@ public:
 
 OfflineTransactionStateData::~OfflineTransactionStateData() = default;
 
-OfflineTransactionStateData::OfflineTransactionStateData() : p_impl(std::make_unique<Impl>()){};
+OfflineTransactionStateData::OfflineTransactionStateData() : p_impl(std::make_unique<Impl>()) {};
 OfflineTransactionStateData::OfflineTransactionStateData(const OfflineTransactionStateData & src)
     : p_impl(new Impl(*src.p_impl)) {}
 OfflineTransactionStateData::OfflineTransactionStateData(OfflineTransactionStateData && src) noexcept = default;

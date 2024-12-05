@@ -59,7 +59,7 @@ private:
 class RpmLogGuardStrings : public RpmLogGuardBase {
 public:
     RpmLogGuardStrings();
-    ~RpmLogGuardStrings(){};
+    ~RpmLogGuardStrings() {};
 
     const std::vector<std::string> & get_rpm_logs() const { return rpm_logs; }
     void add_rpm_log(const std::string & log) { rpm_logs.emplace_back(log); }
