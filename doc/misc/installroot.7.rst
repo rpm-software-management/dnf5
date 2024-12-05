@@ -31,7 +31,7 @@ relative to where all packages will be installed. Think of it like doing
 before the chroot is created.
 
 `cachedir`, `system_cachedir`, `log` files, `releasever`, and `gpgkey` are
-taken from or stored in the installroot. PGP keys are imported into the
+taken from or stored in the installroot. OpenPGP keys are imported into the
 installroot from a path relative to the host which can be specified in the
 repository section of configuration files.
 

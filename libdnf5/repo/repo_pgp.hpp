@@ -40,8 +40,8 @@ public:
     Key(const LrGpgKey * key, const LrGpgSubkey * subkey, const std::string & url, const std::string & path);
 };
 
-/// Wraps pgp in a higher-level interface.
-/// @exception RepoPgpError (public) Thrown on any pgp-related error.
+/// Wraps OpenPGP in a higher-level interface.
+/// @exception RepoPgpError (public) Thrown on any OpenPGP-related error.
 class RepoPgp {
 public:
     RepoPgp(const BaseWeakPtr & base, const ConfigRepo & config);

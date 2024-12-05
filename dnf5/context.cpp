@@ -70,7 +70,7 @@ public:
             return false;
         }
 
-        std::cerr << libdnf5::utils::sformat(_("Importing PGP key 0x{}:\n"), key_info.get_short_key_id());
+        std::cerr << libdnf5::utils::sformat(_("Importing OpenPGP key 0x{}:\n"), key_info.get_short_key_id());
         for (auto & user_id : key_info.get_user_ids()) {
             std::cerr << libdnf5::utils::sformat(_(" UserID     : \"{}\"\n"), user_id);
         }

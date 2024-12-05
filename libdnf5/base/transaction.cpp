@@ -86,7 +86,7 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
 };
 
 const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RESULT_DICT = {
-    {base::ImportRepoKeysResult::NO_KEYS, M_("The repository does not have any PGP keys configured.")},
+    {base::ImportRepoKeysResult::NO_KEYS, M_("The repository does not have any OpenPGP keys configured.")},
     {base::ImportRepoKeysResult::ALREADY_PRESENT, M_("Public key is not installed.")},
     {base::ImportRepoKeysResult::IMPORT_DECLINED, M_("Canceled by the user.")},
     {base::ImportRepoKeysResult::IMPORT_FAILED, M_("Public key import failed.")},
@@ -1369,7 +1369,7 @@ bool Transaction::Impl::check_gpg_signatures() {
             auto const & pkg = trans_pkg.get_package();
             auto repo = pkg.get_repo();
             auto err_msg = utils::sformat(
-                _("PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "),
+                _("OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "),
                 pkg.get_nevra(),
                 pkg.get_package_path(),
                 repo->get_id());
@@ -1419,11 +1419,11 @@ bool Transaction::Impl::check_gpg_signatures() {
             repos_with_skipped_checks, C_("It is a joining character for repositories IDs", ", "));
         auto warning_msg = utils::sformat(
             (repos_with_skipped_checks.size() == 1)
-                ? P_("Warning: skipped PGP checks for {0} package from repository: {1}",
-                     "Warning: skipped PGP checks for {0} packages from repository: {1}",
+                ? P_("Warning: skipped OpenPGP checks for {0} package from repository: {1}",
+                     "Warning: skipped OpenPGP checks for {0} packages from repository: {1}",
                      num_checks_skipped)
-                : P_("Warning: skipped PGP checks for {0} package from repositories: {1}",
-                     "Warning: skipped PGP checks for {0} packages from repositories: {1}",
+                : P_("Warning: skipped OpenPGP checks for {0} package from repositories: {1}",
+                     "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}",
                      num_checks_skipped),
             num_checks_skipped,
             repo_string);

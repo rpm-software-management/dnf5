@@ -131,10 +131,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         repo_key_import_request:
         @session_object_path: object path of the dnf5daemon session
-        @key_id: PGP key id
+        @key_id: OpenPGP key id
         @user_ids: User id
-        @key_fingerprint: Fingerprint of the PGP key
-        @key_url: URL of the PGP key
+        @key_fingerprint: Fingerprint of the OpenPGP key
+        @key_url: URL of the OpenPGP key
         @timestamp: timestamp when the key was created
 
         Request for repository key import confirmation.

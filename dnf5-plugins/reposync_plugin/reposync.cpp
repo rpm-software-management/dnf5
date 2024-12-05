@@ -318,7 +318,7 @@ bool ReposyncCommand::pgp_check_packages(const download_list_type & pkg_list) {
             auto check_result = rpm_signature.check_package_signature(pth);
             if (check_result != libdnf5::rpm::RpmSignature::CheckResult::OK) {
                 std::cerr << libdnf5::utils::sformat(
-                                 _("Removing '{}' with failing PGP check: {}"),
+                                 _("Removing '{}' with failing OpenPGP check: {}"),
                                  pth.string(),
                                  rpm_signature.check_result_to_string(check_result))
                           << std::endl;
@@ -407,7 +407,7 @@ void ReposyncCommand::run() {
             }
             if (gpgcheck_option->get_value()) {
                 if (!pgp_check_packages(pkg_list)) {
-                    throw libdnf5::cli::CommandExitError(1, M_("PGP signature check failed"));
+                    throw libdnf5::cli::CommandExitError(1, M_("OpenPGP signature check failed"));
                 }
             }
         }

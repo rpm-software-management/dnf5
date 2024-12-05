@@ -94,7 +94,7 @@ This section does not track any deprecated option. For such options see :ref:`De
 ``gpgkey_dns_verification``
     :ref:`boolean <boolean-label>`
 
-    If enabled, DNF5 will attempt to automatically verify PGP verification keys using the DNS
+    If enabled, DNF5 will attempt to automatically verify OpenPGP verification keys using the DNS
     system.
 
     This option requires the unbound python module (python3-unbound) to

@@ -57,13 +57,13 @@ std::vector<Key> RepoPgp::rawkey2infos(int fd, const std::string & url, const st
 
     GError * err = NULL;
     if (!lr_gpg_import_key_from_fd(fd, tmpdir.get_path().c_str(), &err)) {
-        throw_repo_pgp_error(M_("Failed to import pgp keys into temporary keyring: {}"), err);
+        throw_repo_pgp_error(M_("Failed to import OpenPGP keys into temporary keyring: {}"), err);
     }
 
     std::unique_ptr<LrGpgKey, decltype(&lr_gpg_keys_free)> lr_keys{
         lr_gpg_list_keys(TRUE, tmpdir.get_path().c_str(), &err), &lr_gpg_keys_free};
     if (err) {
-        throw_repo_pgp_error(M_("Failed to list pgp keys: {}"), err);
+        throw_repo_pgp_error(M_("Failed to list OpenPGP keys: {}"), err);
     }
 
     for (const auto * lr_key = lr_keys.get(); lr_key; lr_key = lr_gpg_key_get_next(lr_key)) {
@@ -90,7 +90,7 @@ std::vector<std::string> RepoPgp::load_keys_ids_from_keyring() {
         std::unique_ptr<LrGpgKey, decltype(&lr_gpg_keys_free)> lr_keys{
             lr_gpg_list_keys(FALSE, keyring_dir.c_str(), &err), &lr_gpg_keys_free};
         if (err) {
-            throw_repo_pgp_error(M_("Failed to list pgp keys: {}"), err);
+            throw_repo_pgp_error(M_("Failed to list OpenPGP keys: {}"), err);
         }
 
         for (const auto * lr_key = lr_keys.get(); lr_key; lr_key = lr_gpg_key_get_next(lr_key)) {
@@ -137,13 +137,13 @@ void RepoPgp::import_key(int fd, const std::string & url) {
         GError * err = NULL;
         if (!lr_gpg_import_key_from_memory(
                 key_info.get_raw_key().c_str(), key_info.get_raw_key().size(), keyring_dir.c_str(), &err)) {
-            throw_repo_pgp_error(M_("Failed to import pgp keys: {}"), err);
+            throw_repo_pgp_error(M_("Failed to import OpenPGP keys: {}"), err);
         }
 
         if (callbacks) {
             callbacks->repokey_imported(key_info);
         }
-        logger.debug("Imported pgp key 0x{} for repository {}.", key_info.get_key_id(), config.get_id());
+        logger.debug("Imported OpenPGP key 0x{} for repository {}.", key_info.get_key_id(), config.get_id());
     }
 }
 

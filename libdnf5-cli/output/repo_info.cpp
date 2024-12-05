@@ -113,8 +113,8 @@ void RepoInfo::Impl::add_repo(IRepoInfo & repo) {
         add_line("Mirrorlist", mirrorlist, nullptr, group_urls);
     }
 
-    // PGP
-    auto group_gpg = add_line("PGP", "", nullptr);
+    // OpenPGP
+    auto group_gpg = add_line("OpenPGP", "", nullptr);
 
     auto gpg_keys = repo.get_gpgkey();
     if (!gpg_keys.empty()) {

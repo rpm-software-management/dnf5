@@ -60,10 +60,10 @@ Options
     Otherwise, DNF will encounter errors when attempting to install older packages.
 
 ``--gpgcheck, -g``
-    Remove packages that fail PGP signature verification after downloading. The
+    Remove packages that fail OpenPGP signature verification after downloading. The
     command exits with a code of ``1`` if at least one package is removed.
 
-    Note: For repositories configured with ``gpgcheck=0``, PGP signatures are not
+    Note: For repositories configured with ``gpgcheck=0``, OpenPGP signatures are not
     checked, even when this option is used.
 
 ``--metadata-path=<path>``

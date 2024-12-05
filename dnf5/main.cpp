@@ -414,7 +414,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
-    no_gpgchecks->set_description(_("disable PGP signature checking (if RPM policy allows)"));
+    no_gpgchecks->set_description(_("disable OpenPGP signature checking (if RPM policy allows)"));
     no_gpgchecks->set_parse_hook_func([&ctx](
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
@@ -1459,9 +1459,9 @@ int main(int argc, char * argv[]) try {
                 } else {
                     for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                         if (tsflag == "test") {
-                            context.print_error(
-                                _("Test mode enabled: Only package downloads, PGP key installations and transaction "
-                                  "checks will be performed."));
+                            context.print_error(_(
+                                "Test mode enabled: Only package downloads, OpenPGP key installations and transaction "
+                                "checks will be performed."));
                         }
                     }
                 }

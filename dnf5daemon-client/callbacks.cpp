@@ -216,7 +216,7 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         std::string url;
         signal >> key_id >> user_ids >> fingerprint >> url;
 
-        std::cerr << std::endl << "Importing PGP key 0x" + key_id << ":\n";
+        std::cerr << std::endl << "Importing OpenPGP key 0x" + key_id << ":\n";
         for (auto & user_id : user_ids) {
             std::cerr << " Userid     : \"" + user_id << "\"\n";
         }

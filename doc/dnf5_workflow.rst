@@ -42,8 +42,8 @@ Typical DNF5 workflow consists of:
         #. load metadata from cache if valid
         #. try to reuse root's cache
         #. metadata download
-        #. metadata PGP check
-        #. if required import repository PGP keys and try again
+        #. metadata OpenPGP check
+        #. if required import repository OpenPGP keys and try again
 #. libdnf5 plugin ``repos_loaded`` hook
 #. run command specific ``load_additional_packages`` step
 #. run command specific ``run`` step
@@ -56,7 +56,7 @@ Typical DNF5 workflow consists of:
     #. print transaction table
     #. check for user approval
     #. download inbound transaction packages
-    #. check PGP signatures for inbound transaction packages
+    #. check OpenPGP signatures for inbound transaction packages
     #. lock transaction ``libdnf5::utils::Locker``
     #. create rpm transaction
     #. run rpm test transaction
