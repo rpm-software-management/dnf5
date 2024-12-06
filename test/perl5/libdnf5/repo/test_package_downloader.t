@@ -36,6 +36,7 @@ use BaseTestCase;
         $self->{progress_cnt} = 0;
         $self->{mirror_failure_cnt} = 0;
         $self->{end_cnt} = 0;
+        $self->{user_data_array} = [];
         $self->{user_cb_data_array} = [];
         $self->{end_status} = [];
         $self->{end_msg} = [];
@@ -45,6 +46,7 @@ use BaseTestCase;
     sub add_new_download {
         my ($self, $user_data, $description, $total_to_download) = @_;
         $self->{start_cnt}++;
+        push(@{$self->{user_data_array}}, $user_data);
         my $user_cb_data = "Package: " . $description;
         push(@{$self->{user_cb_data_container}}, $user_cb_data);
         return scalar @{$self->{user_cb_data_container}} - 1;
@@ -89,10 +91,12 @@ my $downloader = new libdnf5::repo::PackageDownloader($test->{base});
 my $cbs = new PackageDownloadCallbacks();
 $test->{base}->set_download_callbacks(new libdnf5::repo::DownloadCallbacksUniquePtr($cbs));
 
+my $user_data = 2;
 my $it = $query->begin();
 my $e = $query->end();
 while ($it != $e) {
-    $downloader->add($it->value());
+    $downloader->add($it->value(), $user_data);
+    $user_data *= 5;
     $it->next();
 }
 $downloader->download();
@@ -105,6 +109,8 @@ is($cbs->{start_cnt}, 2, "start_cnt");
 is($cbs->{end_cnt}, 2, "end_cnt");
 ok($cbs->{progress_cnt} >= 2, "progress_cnt");
 is($cbs->{mirror_failure_cnt}, 0, "mirror_failure_cnt");
+
+is_deeply($cbs->{user_data_array}, [2, 10], "user_data_array");
 
 is_deeply($cbs->{user_cb_data_array}, [0, 1], "user_cb_data_array");
 is_deeply($cbs->{end_status}, [$libdnf5::repo::DownloadCallbacks::TransferStatus_SUCCESSFUL,  $libdnf5::repo::DownloadCallbacks::TransferStatus_SUCCESSFUL]);

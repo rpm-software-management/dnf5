@@ -31,11 +31,20 @@ use BaseTestCase;
     sub new {
         my $class = shift;
         my $self = $class->SUPER::new(@_);
+        $self->{last_user_data} = undef;
+        $self->{start_cnt} = 0;
         $self->{end_cnt} = 0;
         $self->{end_error_message} = undef;
         $self->{fastest_mirror_cnt} = 0;
         $self->{handle_mirror_failure_cnt} = 0;
         return bless($self, $class);
+    }
+
+    sub add_new_download {
+        my ($self, $user_data, $description, $total_to_download) = @_;
+        $self->{start_cnt}++;
+        $self->{last_user_data} = $user_data;
+        return 0;
     }
 
     sub end {
@@ -82,6 +91,10 @@ use BaseTestCase;
     my $repoid = "repomd-repo1";
     my $repo = $test->add_repo_repomd($repoid, 0);
 
+    my $USER_DATA = 25;
+    $repo->set_user_data($USER_DATA);
+    is($repo->get_user_data(), $USER_DATA);
+
     my $dl_cbs = new DownloadCallbacks();
     $test->{base}->set_download_callbacks(new libdnf5::repo::DownloadCallbacksUniquePtr($dl_cbs));
     $dl_cbs = $test->{base}->get_download_callbacks();
@@ -91,6 +104,9 @@ use BaseTestCase;
 
     $test->{repo_sack}->load_repos($libdnf5::repo::Repo::Type_AVAILABLE);
 
+    is($dl_cbs->{last_user_data}, $USER_DATA);
+
+    is($dl_cbs->{start_cnt}, 1);
     is($dl_cbs->{end_cnt}, 1);
     is($dl_cbs->{end_error_message}, undef);
 
