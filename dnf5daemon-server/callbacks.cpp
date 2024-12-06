@@ -35,7 +35,8 @@ DbusCallback::DbusCallback(Session & session) : session(session) {
     dbus_object = session.get_dbus_object();
 }
 
-sdbus::Signal DbusCallback::create_signal(std::string interface, std::string signal_name) {
+sdbus::Signal DbusCallback::create_signal(
+    const SDBUS_INTERFACE_NAME_TYPE & interface, const SDBUS_SIGNAL_NAME_TYPE & signal_name) {
     auto signal = dbus_object->createSignal(interface, signal_name);
     signal.setDestination(session.get_sender());
     signal << session.get_object_path();
@@ -45,7 +46,7 @@ sdbus::Signal DbusCallback::create_signal(std::string interface, std::string sig
 std::chrono::time_point<std::chrono::steady_clock> DbusCallback::prev_print_time = std::chrono::steady_clock::now();
 
 
-sdbus::Signal DownloadCB::create_signal_download(const std::string & signal_name, void * user_data) {
+sdbus::Signal DownloadCB::create_signal_download(const SDBUS_SIGNAL_NAME_TYPE & signal_name, void * user_data) {
     auto signal = create_signal(dnfdaemon::INTERFACE_BASE, signal_name);
     if (user_data) {
         auto * data = reinterpret_cast<DownloadUserData *>(user_data);
@@ -121,7 +122,9 @@ bool KeyImportRepoCB::repokey_import(const libdnf5::rpm::KeyInfo & key_info) {
 
 
 sdbus::Signal DbusTransactionCB::create_signal_pkg(
-    std::string interface, std::string signal_name, const std::string & nevra) {
+    const SDBUS_INTERFACE_NAME_TYPE & interface,
+    const SDBUS_SIGNAL_NAME_TYPE & signal_name,
+    const std::string & nevra) {
     auto signal = create_signal(interface, signal_name);
     signal << nevra;
     return signal;

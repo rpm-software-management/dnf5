@@ -42,7 +42,7 @@ void TransactionCommand::run_transaction(bool offline) {
     dnfdaemon::KeyValueMap options = {};
 
     // resolve the transaction
-    options["allow_erasing"] = ctx.allow_erasing.get_value();
+    options["allow_erasing"] = sdbus::Variant(ctx.allow_erasing.get_value());
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
     unsigned int result_int;
     ctx.session_proxy->callMethod("resolve")
@@ -80,7 +80,7 @@ void TransactionCommand::run_transaction(bool offline) {
 
     // do the transaction
     options.clear();
-    options["offline"] = offline;
+    options["offline"] = sdbus::Variant(offline);
     ctx.session_proxy->callMethod("do_transaction")
         .onInterface(dnfdaemon::INTERFACE_GOAL)
         .withTimeout(static_cast<uint64_t>(-1))

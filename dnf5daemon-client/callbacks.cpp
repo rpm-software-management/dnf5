@@ -46,23 +46,23 @@ DownloadCB::DownloadCB(Context & context) : DbusCallback(context) {
     // register signal handlers
     auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, [this](sdbus::Signal signal) -> void {
             this->add_new_download(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_END, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_END, [this](sdbus::Signal signal) -> void {
             this->end(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, [this](sdbus::Signal signal) -> void {
             this->progress(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, [this](sdbus::Signal signal) -> void {
             this->mirror_failure(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal signal) -> void {
             this->key_import(signal);
         });
 }
@@ -242,55 +242,55 @@ TransactionCB::TransactionCB(Context & context) : DbusCallback(context) {
     // register signal handlers
     auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, [this](sdbus::Signal signal) -> void {
             this->verify_start(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM,
-        dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS,
-        [this](sdbus::Signal & signal) -> void { this->verify_progress(signal); });
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS, [this](sdbus::Signal signal) -> void {
+            this->verify_progress(signal);
+        });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, [this](sdbus::Signal signal) -> void {
             this->verify_end(signal);
         });
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START,
-        [this](sdbus::Signal & signal) -> void { this->transaction_start(signal); });
+        [this](sdbus::Signal signal) -> void { this->transaction_start(signal); });
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS,
-        [this](sdbus::Signal & signal) -> void { this->transaction_progress(signal); });
+        [this](sdbus::Signal signal) -> void { this->transaction_progress(signal); });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM,
-        dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP,
-        [this](sdbus::Signal & signal) -> void { this->transaction_end(signal); });
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP, [this](sdbus::Signal signal) -> void {
+            this->transaction_end(signal);
+        });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, [this](sdbus::Signal signal) -> void {
             this->action_start(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM,
-        dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS,
-        [this](sdbus::Signal & signal) -> void { this->action_progress(signal); });
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, [this](sdbus::Signal signal) -> void {
+            this->action_progress(signal);
+        });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, [this](sdbus::Signal signal) -> void {
             this->action_end(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, [this](sdbus::Signal signal) -> void {
             this->script_start(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, [this](sdbus::Signal signal) -> void {
             this->script_stop(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, [this](sdbus::Signal signal) -> void {
             this->script_error(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_FINISHED, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_FINISHED, [this](sdbus::Signal signal) -> void {
             this->finished(signal);
         });
 }
