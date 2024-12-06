@@ -205,6 +205,12 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
             }
         }
 
+        // Add padding to fully fill the terminal_width, this is because MultiProgressBar
+        // overrides its own messages, it doesn't clear the lines.
+        // If the message is short some leftover characters could be still present after it.
+        if (message.length() < terminal_width - 4) {
+            message.append(terminal_width - message.length() - 4, ' ');
+        }
         // print only part of the message that fits the terminal width
         // subtracted '4' relates to the '>>> ' prefix
         stream << message.substr(0, terminal_width - 4);
