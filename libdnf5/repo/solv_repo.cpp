@@ -179,6 +179,9 @@ static const char * repodata_type_to_name(RepodataType type) {
             return RepoDownloader::MD_FILENAME_GROUP;
         case RepodataType::OTHER:
             return RepoDownloader::MD_FILENAME_OTHER;
+        case RepodataType::APPSTREAM:
+            libdnf_throw_assertion("No static filename for RepodataType::APPSTREAM");
+            break;
     }
 
     libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
@@ -197,6 +200,8 @@ static int repodata_type_to_flags(RepodataType type) {
             return 0;
         case RepodataType::OTHER:
             return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
+        case RepodataType::APPSTREAM:
+            return 0;
     }
 
     libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
@@ -313,17 +318,22 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
         case RepodataType::OTHER:
         case RepodataType::PRESTO:
         case RepodataType::UPDATEINFO:
+        case RepodataType::APPSTREAM:
             throw SolvError(M_("Unsupported extended repodata type for the system repo: \"{}\"."), type_name);
     }
 }
 
-
 void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
+    std::string type_name = "";
+    load_repo_ext(type, type_name, downloader);
+}
+
+void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name, const RepoDownloader & downloader) {
     auto & logger = *base->get_logger();
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
 
-    std::string type_name = repodata_type_to_name(type);
+    std::string type_name = in_type_name.empty() ? repodata_type_to_name(type) : in_type_name;
 
     std::string ext_fn;
 
@@ -375,6 +385,8 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
         case RepodataType::OTHER:
             res = repo_add_rpmmd(repo, ext_file.get(), 0, REPO_EXTEND_SOLVABLES);
             break;
+        case RepodataType::APPSTREAM:
+            break;
     }
 
     if (res != 0) {
@@ -388,9 +400,9 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
 
     if (config.get_build_cache_option().get_value()) {
         if (type == RepodataType::COMPS) {
-            write_ext(comps_repo->nrepodata - 1, type);
+            write_ext(comps_repo->nrepodata - 1, type, type_name);
         } else {
-            write_ext(repo->nrepodata - 1, type);
+            write_ext(repo->nrepodata - 1, type, type_name);
         }
     }
 }
@@ -610,14 +622,13 @@ void SolvRepo::write_main(bool load_after_write) {
 }
 
 
-void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
+void SolvRepo::write_ext(Id repodata_id, RepodataType type, const std::string & type_name) {
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     auto & logger = *base->get_logger();
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
 
-    const std::string type_name = repodata_type_to_name(type);
     const auto solvfile_path = solv_file_path(type_name.c_str());
     const auto solvfile_parent_dir = solvfile_path.parent_path();
 

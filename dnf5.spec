@@ -71,6 +71,7 @@ Provides:       dnf5-command(versionlock)
 
 # ========== build options ==========
 
+%bcond_without appstream
 %bcond_without dnf5daemon_client
 %bcond_without dnf5daemon_server
 %bcond_without libdnf_cli
@@ -143,6 +144,9 @@ BuildRequires:  bash-completion
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  gettext
+%if %{with appstream}
+BuildRequires:  pkgconfig(appstream) >= 0.16
+%endif
 BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(json-c)
@@ -605,6 +609,23 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %{_mandir}/man8/libdnf5-actions.8.*
 %endif
 
+# ========== libdnf5-plugin-appstream ==========
+
+%if %{with appstream}
+
+%package -n libdnf5-plugin-appstream
+Summary:        Libdnf5 plugin to install repo Appstream data
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+
+%description -n libdnf5-plugin-appstream
+Libdnf5 plugin that installs repository's Appstream data, for repositories which provide them.
+
+%files -n libdnf5-plugin-appstream
+%{_libdir}/libdnf5/plugins/appstream.so
+%config %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
+
+%endif
 
 # ========== libdnf5-plugin-plugin_rhsm ==========
 
@@ -801,6 +822,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     \
     -DENABLE_SOLV_FOCUSNEW=%{?with_focus_new:ON}%{!?with_focus_new:OFF} \
     \
+    -DWITH_APPSTREAM=%{?with_appstream:ON}%{!?with_appstream:OFF} \
     -DWITH_DNF5DAEMON_CLIENT=%{?with_dnf5daemon_client:ON}%{!?with_dnf5daemon_client:OFF} \
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
     -DWITH_LIBDNF5_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
