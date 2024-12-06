@@ -278,7 +278,7 @@ void CompsGroupTest::test_serialize() {
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
-    auto serialize_path = temp->get_path() / "serialized-standard.xml";
+    auto serialize_path = temp_dir->get_path() / "serialized-standard.xml";
     standard.serialize(serialize_path);
 
     std::string actual = libdnf5::utils::fs::File(serialize_path, "r").read();

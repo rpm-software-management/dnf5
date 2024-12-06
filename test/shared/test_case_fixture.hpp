@@ -35,7 +35,7 @@ public:
     std::unique_ptr<libdnf5::Base> get_preconfigured_base();
 
     // Only gets created if get_preconfigured_base() is called
-    std::unique_ptr<libdnf5::utils::fs::TempDir> temp;
+    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
 };
 
 

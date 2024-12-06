@@ -71,7 +71,7 @@ std::string repo_to_string(const dnf5::CoprRepo & repo) {
 }
 
 void CoprRepoTest::prepare_env() {
-    installroot = temp->get_path() / "installroot";
+    installroot = temp_dir->get_path() / "installroot";
     std::filesystem::create_directory(installroot);
     confdir = installroot / "etc";
     std::filesystem::create_directory(confdir);

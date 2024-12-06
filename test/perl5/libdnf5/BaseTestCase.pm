@@ -36,11 +36,11 @@ sub new {
 
     $self->{base} = new libdnf5::base::Base();
 
-    $self->{tmpdir} = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
+    $self->{temp_dir} = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
 
     my $config = $self->{base}->get_config();
-    $config->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $self->{tmpdir}."/installroot");
-    $config->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $self->{tmpdir}."/cache");
+    $config->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $self->{temp_dir}."/installroot");
+    $config->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $self->{temp_dir}."/cache");
     $config->get_optional_metadata_types_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $libdnf5::conf::OPTIONAL_METADATA_TYPES);
 
     # Prevent loading plugins from host
