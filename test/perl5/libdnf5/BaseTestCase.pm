@@ -27,8 +27,8 @@ use libdnf5::base;
 use libdnf5::repo;
 
 
-my $PROJECT_BINARY_DIR = $ENV{"PROJECT_BINARY_DIR"};
-my $PROJECT_SOURCE_DIR = $ENV{"PROJECT_SOURCE_DIR"};
+our $PROJECT_BINARY_DIR = $ENV{"PROJECT_BINARY_DIR"};
+our $PROJECT_SOURCE_DIR = $ENV{"PROJECT_SOURCE_DIR"};
 
 sub new {
     my $class = shift;
