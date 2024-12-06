@@ -33,7 +33,7 @@ using namespace libdnf5::repo;
 
 void TempFilesMemoryTest::setUp() {
     BaseTestCase::setUp();
-    parent_dir_path = temp->get_path();
+    parent_dir_path = temp_dir->get_path();
     full_path = parent_dir_path / TempFilesMemory::MEMORY_FILENAME;
 }
 
