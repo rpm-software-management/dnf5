@@ -34,6 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
+namespace {
 
 class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
@@ -42,6 +43,7 @@ public:
         [[maybe_unused]] const char * description,
         [[maybe_unused]] double total_to_download) override {
         ++add_new_download_cnt;
+        user_data_array.emplace_back(user_data);
         std::string user_cb_data = std::string("Package: ") + description;
         return user_cb_data_container.emplace_back(std::move(user_cb_data)).data();
     }
@@ -78,10 +80,14 @@ public:
     int mirror_failure_cnt = 0;
     int end_cnt = 0;
 
+    std::vector<void *> user_data_array;
     std::vector<const char *> user_cb_data_array;
     std::vector<TransferStatus> end_status;
     std::vector<std::string> end_msg;
 };
+
+}  // namespace
+
 
 void PackageDownloaderTest::test_package_downloader() {
     auto repo = add_repo_rpm("rpm-repo1");
@@ -97,8 +103,9 @@ void PackageDownloaderTest::test_package_downloader() {
     auto cbs = cbs_unique_ptr.get();
     base.set_download_callbacks(std::move(cbs_unique_ptr));
 
+    std::string user_data = "User data";
     for (const auto & package : query) {
-        downloader.add(package);
+        downloader.add(package, &user_data);
     }
 
     downloader.download();
@@ -112,6 +119,10 @@ void PackageDownloaderTest::test_package_downloader() {
     CPPUNIT_ASSERT_EQUAL(2, cbs->end_cnt);
     CPPUNIT_ASSERT_GREATEREQUAL(2, cbs->progress_cnt);
     CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
+
+    for (auto * item : cbs->user_data_array) {
+        CPPUNIT_ASSERT_EQUAL(&user_data, static_cast<std::string *>(item));
+    }
 
     std::sort(cbs->user_cb_data_array.begin(), cbs->user_cb_data_array.end(), [](const char * a, const char * b) {
         return std::string_view(a).compare(b) < 0;

@@ -35,12 +35,14 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
                 self.progress_cnt = 0
                 self.mirror_failure_cnt = 0
                 self.end_cnt = 0
+                self.user_data_array = []
                 self.user_cb_data_array = []
                 self.end_status = []
                 self.end_msg = []
 
             def add_new_download(self, user_data, description, total_to_download):
                 self.start_cnt += 1
+                self.user_data_array.append(user_data)
                 user_cb_data_reference = "Package: " + description
                 self.user_cb_data_container.append(user_cb_data_reference)
                 return len(self.user_cb_data_container) - 1
@@ -78,8 +80,10 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         self.base.set_download_callbacks(
             libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
 
+        user_data = 2
         for package in query:
-            downloader.add(package)
+            downloader.add(package, user_data)
+            user_data *= 5
 
         downloader.download()
 
@@ -95,6 +99,8 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         self.assertGreaterEqual(cbs.progress_cnt, 2)
         self.assertEqual(cbs.mirror_failure_cnt, 0)
         self.assertEqual(cbs.end_cnt, 2)
+
+        self.assertEqual(cbs.user_data_array, [2, 10])
 
         cbs.user_cb_data_array.sort()
         self.assertEqual(cbs.user_cb_data_array, [0, 1])

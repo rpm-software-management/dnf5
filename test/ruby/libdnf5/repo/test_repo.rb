@@ -25,18 +25,28 @@ require 'base_test_case'
 
 
 class TestRepo < BaseTestCase
+    USER_DATA = 25
+
     class DownloadCallbacks < Repo::DownloadCallbacks
-        attr_accessor :start_cnt, :start_what
+        attr_accessor :start_cnt, :last_user_data
         attr_accessor :end_cnt, :end_error_message
         attr_accessor :progress_cnt, :fastest_mirror_cnt, :handle_mirror_failure_cnt
 
         def initialize()
             super()
+            @last_user_data = nil
+            @start_cnt = 0
             @end_cnt = 0
             @end_error_message = nil
             @progress_cnt = 0
             @fastest_mirror_cnt = 0
             @handle_mirror_failure_cnt = 0
+        end
+
+        def add_new_download(user_data, description, total_to_download)
+            @start_cnt += 1
+            @last_user_data = user_data
+            return 0
         end
 
         def end(user_cb_data, status, error_message)
@@ -74,6 +84,9 @@ class TestRepo < BaseTestCase
         repoid = "repomd-repo1"
         repo = add_repo_repomd(repoid, load=false)
 
+        repo.set_user_data(USER_DATA)
+        assert_equal(USER_DATA, repo.get_user_data())
+
         dl_cbs = DownloadCallbacks.new()
         @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
 
@@ -82,6 +95,9 @@ class TestRepo < BaseTestCase
 
         @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
 
+        assert_equal(USER_DATA, dl_cbs.last_user_data)
+
+        assert_equal(1, dl_cbs.start_cnt)
         assert_equal(1, dl_cbs.end_cnt)
         assert_equal(nil, dl_cbs.end_error_message)
 

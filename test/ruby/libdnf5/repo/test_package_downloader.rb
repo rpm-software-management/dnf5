@@ -27,7 +27,7 @@ class TestPackageDownloader < BaseTestCase
     class PackageDownloadCallbacks < Repo::DownloadCallbacks
         attr_accessor :user_cb_data_container
         attr_accessor :start_cnt, :progress_cnt, :mirror_failure_cnt, :end_cnt
-        attr_accessor :user_cb_data_array, :end_status, :end_msg
+        attr_accessor :user_data_array, :user_cb_data_array, :end_status, :end_msg
 
         def initialize()
             super()
@@ -36,6 +36,7 @@ class TestPackageDownloader < BaseTestCase
             @progress_cnt = 0
             @mirror_failure_cnt = 0
             @end_cnt = 0
+            @user_data_array = []
             @user_cb_data_array = []
             @end_status = []
             @end_msg = []
@@ -43,6 +44,7 @@ class TestPackageDownloader < BaseTestCase
 
         def add_new_download(user_data, description, total_to_download)
             @start_cnt += 1
+            @user_data_array.push(user_data)
             user_cb_data = "Package: " + description
             @user_cb_data_container.push(user_cb_data)
             return @user_cb_data_container.length() - 1  # Index of last added element
@@ -83,9 +85,11 @@ class TestPackageDownloader < BaseTestCase
         cbs = PackageDownloadCallbacks.new()
         @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(cbs))
 
+        user_data = 2
         it = query.begin()
         while it != query.end()
-            downloader.add(it.value)
+            downloader.add(it.value, user_data)
+            user_data *= 5
             it.next()
         end
 
@@ -101,6 +105,8 @@ class TestPackageDownloader < BaseTestCase
         assert_operator(2, :<=, cbs.progress_cnt)
         assert_equal(0, cbs.mirror_failure_cnt)
         assert_equal(2, cbs.end_cnt)
+
+        assert_equal([2, 10], cbs.user_data_array)
 
         assert_equal([0, 1], cbs.user_cb_data_array.sort())
         assert_equal([PackageDownloadCallbacks::TransferStatus_SUCCESSFUL, PackageDownloadCallbacks::TransferStatus_SUCCESSFUL], cbs.end_status)

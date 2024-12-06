@@ -24,11 +24,20 @@ import base_test_case
 
 class TestRepo(base_test_case.BaseTestCase):
     class DownloadCallbacks(libdnf5.repo.DownloadCallbacks):
-        end_cnt = 0
-        end_error_message = None
 
-        fastest_mirror_cnt = 0
-        handle_mirror_failure_cnt = 0
+        def __init__(self):
+            super().__init__()
+            self.last_user_data = None
+            self.start_cnt = 0
+            self.end_cnt = 0
+            self.end_error_message = None
+            self.fastest_mirror_cnt = 0
+            self.handle_mirror_failure_cnt = 0
+
+        def add_new_download(self, user_data, description, total_to_download):
+            self.start_cnt += 1
+            self.last_user_data = user_data
+            return 0
 
         def end(self, user_cb_data, status, error_message):
             self.end_cnt += 1
@@ -53,6 +62,10 @@ class TestRepo(base_test_case.BaseTestCase):
         repoid = "repomd-repo1"
         repo = self.add_repo_repomd(repoid, load=False)
 
+        USER_DATA = 25
+        repo.set_user_data(USER_DATA)
+        self.assertEqual(repo.get_user_data(), USER_DATA)
+
         dl_cbs = self.DownloadCallbacks()
         self.base.set_download_callbacks(
             libdnf5.repo.DownloadCallbacksUniquePtr(dl_cbs))
@@ -64,6 +77,9 @@ class TestRepo(base_test_case.BaseTestCase):
 
         self.repo_sack.load_repos(libdnf5.repo.Repo.Type_AVAILABLE)
 
+        self.assertEqual(dl_cbs.last_user_data, USER_DATA)
+
+        self.assertEqual(dl_cbs.start_cnt, 1)
         self.assertEqual(dl_cbs.end_cnt, 1)
         self.assertEqual(dl_cbs.end_error_message, None)
 

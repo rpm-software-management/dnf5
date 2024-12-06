@@ -28,16 +28,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
+namespace {
+
 // Accessor of private Base::p_impl, see private_accessor.hpp
 create_private_getter_template;
 create_getter(load, &libdnf5::repo::Repo::load);
-
-void RepoTest::test_load_system_repo() {
-    // TODO(lukash) there's no rpmdb in the installroot, create data for the test
-    (*(repo_sack->get_system_repo()).*get(load{}))();
-}
-
-namespace {
 
 class DownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
@@ -46,6 +41,7 @@ public:
         const char * description,
         [[maybe_unused]] double total_to_download) override {
         ++start_cnt;
+        last_user_data = user_data;
         start_what = description;
         return nullptr;
     }
@@ -81,6 +77,8 @@ public:
         return 0;
     }
 
+    void * last_user_data = nullptr;
+
     int start_cnt = 0;
     std::string start_what;
 
@@ -104,9 +102,17 @@ public:
 
 }  // namespace
 
+void RepoTest::test_load_system_repo() {
+    // TODO(lukash) there's no rpmdb in the installroot, create data for the test
+    (*(repo_sack->get_system_repo()).*get(load{}))();
+}
+
 void RepoTest::test_load_repo() {
     std::string repoid("repomd-repo1");
     auto repo = add_repo_repomd(repoid, false);
+
+    std::string user_data = "User data";
+    repo->set_user_data(&user_data);
 
     auto dl_callbacks = std::make_unique<DownloadCallbacks>();
     auto dl_callbacks_ptr = dl_callbacks.get();
@@ -117,6 +123,8 @@ void RepoTest::test_load_repo() {
     repo->set_callbacks(std::move(callbacks));
 
     repo_sack->load_repos(libdnf5::repo::Repo::Type::AVAILABLE);
+
+    CPPUNIT_ASSERT_EQUAL(&user_data, static_cast<std::string *>(dl_callbacks_ptr->last_user_data));
 
     CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->start_cnt);
     CPPUNIT_ASSERT_EQUAL(repoid, dl_callbacks_ptr->start_what);
