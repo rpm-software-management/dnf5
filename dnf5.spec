@@ -511,7 +511,6 @@ Perl 5 bindings for the libdnf5-cli library.
 
 %if %{with python3}
 %package -n python3-libdnf5
-%{?python_provide:%python_provide python3-libdnf5}
 Summary:        Python 3 bindings for the libdnf5 library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
@@ -531,7 +530,6 @@ Python 3 bindings for the libdnf library.
 
 %if %{with python3} && %{with libdnf_cli}
 %package -n python3-libdnf5-cli
-%{?python_provide:%python_provide python3-libdnf5-cli}
 Summary:        Python 3 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
