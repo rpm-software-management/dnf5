@@ -17,26 +17,21 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef LIBDNF5_TEST_REPO_FILE_DOWNLOADER_HPP
+#define LIBDNF5_TEST_REPO_FILE_DOWNLOADER_HPP
 
-#ifndef TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
-#define TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
+#include "../shared/base_test_case.hpp"
 
-#include "libdnf5/utils/fs/temp.hpp"
-
-#include <cppunit/TestCase.h>
-#include <libdnf5/base/base.hpp>
+#include <cppunit/extensions/HelperMacros.h>
 
 
-class TestCaseFixture : public CppUnit::TestCase {
+class FileDownloaderTest : public BaseTestCase {
+    CPPUNIT_TEST_SUITE(FileDownloaderTest);
+    CPPUNIT_TEST(test_file_downloader);
+    CPPUNIT_TEST_SUITE_END();
+
 public:
-    void setUp() override;
-    void tearDown() override;
-
-    std::unique_ptr<libdnf5::Base> get_preconfigured_base();
-
-    // Only gets created if get_preconfigured_base() is called
-    std::unique_ptr<libdnf5::utils::fs::TempDir> temp_dir;
+    void test_file_downloader();
 };
 
-
-#endif  // TEST_LIBDNF5_TESTCASE_FIXTURE_HPP
+#endif

@@ -39,6 +39,8 @@ using namespace libdnf5::rpm;
 using namespace libdnf5::transaction;
 
 
+namespace {
+
 class PackageDownloadCallbacks : public libdnf5::repo::DownloadCallbacks {
 public:
     int end(
@@ -75,6 +77,8 @@ public:
     int progress_cnt{0};
     int mirror_failure_cnt{0};
 };
+
+}  // namespace
 
 
 void RpmTransactionTest::test_transaction() {
