@@ -140,6 +140,11 @@ Choosing how the results should be reported.
 
     How the system is called in the reports.
 
+``only_changed``
+    boolean, default: False
+
+    Whether to only emit messages if something interesting happened - the update operation failed, or changed packages were available and/or installed. If this is set, no messages will be emitted if the update operation succeeded and there were no changed packages.
+
 
 ---------------------
 ``[command]`` section
