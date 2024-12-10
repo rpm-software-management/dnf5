@@ -48,21 +48,29 @@
 
 #define CV __perl_CV
 
+%{
+static inline void * integer_to_void_ptr(int value) noexcept {
+    return reinterpret_cast<void *>(static_cast<intptr_t>(value));
+}
+
+static inline int void_ptr_to_int(void * value) noexcept {
+    return static_cast<int>(reinterpret_cast<intptr_t>(value));
+}
+%}
+
 %feature("valuewrapper") Package;
 
 %include "libdnf5/repo/config_repo.hpp"
 
-%feature("director") DownloadCallbacks;
-
-%typemap(directorin, noblock=1) void * user_cb_data {
-    $input = SWIG_From_int(static_cast<int>(reinterpret_cast<intptr_t>($1)));
+%typemap(directorin, noblock=1) void * {
+    $input = SWIG_From_int(void_ptr_to_int($1));
 }
 
 %typemap(directorout, noblock=1) void * {
     int swig_val;
     int swig_res = SWIG_AsVal_int($1, &swig_val);
     if (SWIG_IsOK(swig_res)) {
-        $result = reinterpret_cast<void *>(swig_val);
+        $result = integer_to_void_ptr(swig_val);
 #if defined(SWIGPYTHON)
     } else if (Py_IsNone($1)) {
         $result = 0;
@@ -72,37 +80,66 @@
     }
 }
 
-%typemap(in, noblock=1) void * user_cb_data {
+%typemap(in, noblock=1) void * {
     {
         int swig_val;
         int swig_res = SWIG_AsVal_int($input, &swig_val);
         if (!SWIG_IsOK(swig_res)) {
             Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in input value of type '""int""'");
         }
-        $1 = reinterpret_cast<void *>(swig_val);
+        $1 = integer_to_void_ptr(swig_val);
     }
 }
 
 %typemap(out, noblock=1) void * {
-    $result = SWIG_From_int(static_cast<int>(reinterpret_cast<intptr_t>($1)));
+    $result = SWIG_From_int(void_ptr_to_int($1));
 }
 
+%feature("director") DownloadCallbacks;
 %include "libdnf5/repo/download_callbacks.hpp"
 %typemap(directorin) void *;
-%typemap(directorout) void * user_cb_data;
-%typemap(in) void * user_cb_data;
+%typemap(directorout) void *;
+%typemap(in) void *;
 %typemap(out) void *;
 wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
 
+%extend libdnf5::repo::FileDownloader {
+    void add(libdnf5::repo::RepoWeakPtr & repo, const std::string & url, const std::string & destination, int user_data = 0) {
+        $self->add(repo, url, destination, integer_to_void_ptr(user_data));
+    }
+    void add(const std::string & url, const std::string & destination, int user_data = 0) {
+        $self->add(url, destination, integer_to_void_ptr(user_data));
+    }
+};
+%ignore libdnf5::repo::FileDownloader::add;
 %ignore FileDownloadError;
 %include "libdnf5/repo/file_downloader.hpp"
 
+%extend libdnf5::repo::PackageDownloader {
+    void add(const libdnf5::rpm::Package & package, int user_data = 0) {
+        $self->add(package, integer_to_void_ptr(user_data));
+    }
+    void add(const libdnf5::rpm::Package & package, const std::string & destination, int user_data = 0) {
+        $self->add(package, destination, integer_to_void_ptr(user_data));
+    }
+};
+%ignore libdnf5::repo::PackageDownloader::add;
 %ignore PackageDownloadError;
 %include "libdnf5/repo/package_downloader.hpp"
 
 %ignore RepoCacheError;
 %include "libdnf5/repo/repo_cache.hpp"
 
+%extend libdnf5::repo::Repo {
+  void set_user_data(int user_data) noexcept {
+      $self->set_user_data(integer_to_void_ptr(user_data));
+  }
+  int get_user_data() const noexcept {
+    return void_ptr_to_int($self->get_user_data());
+  }
+};
+%ignore libdnf5::repo::Repo::set_user_data;
+%ignore libdnf5::repo::Repo::get_user_data;
 %include "libdnf5/repo/repo.hpp"
 
 %include "libdnf5/repo/repo_weak.hpp"
