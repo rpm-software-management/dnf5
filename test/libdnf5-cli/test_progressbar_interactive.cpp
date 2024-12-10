@@ -180,8 +180,8 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_messages() {
     (*download_progress_bar.*get(to_stream{}))(oss);
     Pattern expected =
         "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1\n"
-        ">>> test message2";
+        ">>> test message1                                                     \n"
+        ">>> test message2                                                     ";
     ASSERT_MATCHES(expected, oss.str());
 
     download_progress_bar->pop_message();
@@ -238,7 +238,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_messages_with_tota
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1\n"
+        ">>> test message1                                                     \n"
         "----------------------------------------------------------------------\n"
         "\\[0/1\\] Total                    40% | ????? ??B\\/s |   4.0   B | ???????";
 
@@ -318,8 +318,8 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages_with_tot
     Pattern expected =
         "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
         "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1\n"
-        ">>> test message2\n"
+        ">>> test message1                                                     \n"
+        ">>> test message2                                                     \n"
         "----------------------------------------------------------------------\n"
         "\\[1/2\\] Total                    70% | ????? ??B\\/s |  14.0   B | ???????";
 
@@ -363,7 +363,7 @@ void ProgressbarInteractiveTest::test_multi_progress_bar_with_messages() {
     oss << multi_progress_bar;
     Pattern expected =
         "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1";
+        ">>> test message1                                                     ";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -417,8 +417,8 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages() {
     Pattern expected =
         "\\[1/2\\] test1                   100% | ????? ??B\\/s |  10.0   B | ???????\n"
         "\\[2/2\\] test2                    40% | ????? ??B\\/s |   4.0   B | ???????\n"
-        ">>> test message1\n"
-        ">>> test message2";
+        ">>> test message1                                                     \n"
+        ">>> test message2                                                     ";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 
@@ -464,6 +464,42 @@ void ProgressbarInteractiveTest::test_multi_progress_bars_with_messages() {
         "Complete!\n"
         "\n"
         "";
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+}
+
+void ProgressbarInteractiveTest::test_multi_progress_bar_with_short_messages() {
+    // With single bar and Total disabled
+    // First print long message and remove it (successful scriptlet for package with long name),
+    // then print short msg (different package that prints something to the log and the message stays).
+
+    auto download_progress_bar = std::make_unique<libdnf5::cli::progressbar::DownloadProgressBar>(10, "test");
+
+    libdnf5::cli::progressbar::MultiProgressBar multi_progress_bar;
+    multi_progress_bar.set_total_bar_visible_limit(libdnf5::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+    auto download_progress_bar_raw = download_progress_bar.get();
+    multi_progress_bar.add_bar(std::move(download_progress_bar));
+
+    download_progress_bar_raw->set_ticks(4);
+    download_progress_bar_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::STARTED);
+    download_progress_bar_raw->add_message(
+        libdnf5::cli::progressbar::MessageType::INFO, "test loooooooooooooooooooooooooooooooooooooooooong message");
+
+    std::ostringstream oss;
+    oss << multi_progress_bar;
+    Pattern expected =
+        "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+        ">>> test loooooooooooooooooooooooooooooooooooooooooong message        ";
+
+    ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
+
+    download_progress_bar_raw->pop_message();
+    download_progress_bar_raw->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test short message");
+
+    oss << multi_progress_bar;
+    expected =
+        "\\[1/1\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
+        ">>> test short message                                                ";
 
     ASSERT_MATCHES(expected, perform_control_sequences(oss.str()));
 }
