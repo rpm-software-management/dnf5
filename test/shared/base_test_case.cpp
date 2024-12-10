@@ -21,7 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base_test_case.hpp"
 
 #include "base/base_impl.hpp"
+#include "logger_redirector.hpp"
 #include "private_accessor.hpp"
+#include "test_logger.hpp"
 #include "utils.hpp"
 #include "utils/string.hpp"
 
@@ -221,6 +223,8 @@ libdnf5::rpm::Package BaseTestCase::first_query_pkg(libdnf5::rpm::PackageQuery &
 
 void BaseTestCase::setUp() {
     TestCaseFixture::setUp();
+
+    base.get_logger()->add_logger(std::make_unique<LoggerRedirector>(test_logger));
 
     // TODO we could use get_preconfigured_base() for this now, but that would
     // need changing the `base` member to a unique_ptr
