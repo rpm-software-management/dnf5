@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5-cli/progressbar/download_progress_bar.hpp"
 
+#include "../utils/utf8.hpp"
+
 #include "libdnf5-cli/tty.hpp"
 
 #include <algorithm>
@@ -181,8 +183,10 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         auto message_type = msg.first;
         auto message = msg.second;
 
+        const auto & prefix = ">>> ";
+
         stream << std::endl;
-        stream << ">>> ";
+        stream << prefix;
 
         color_used = false;
         if (tty::is_interactive()) {
@@ -208,12 +212,14 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
         // Add padding to fully fill the terminal_width, this is because MultiProgressBar
         // overrides its own messages, it doesn't clear the lines.
         // If the message is short some leftover characters could be still present after it.
-        if (message.length() < terminal_width - 4) {
-            message.append(terminal_width - message.length() - 4, ' ');
+        const auto prefix_width = libdnf5::cli::utils::utf8::width(prefix);
+        const auto message_width = libdnf5::cli::utils::utf8::width(message);
+        if (message_width < terminal_width - prefix_width) {
+            message.append(terminal_width - message_width - prefix_width, ' ');
         }
+
         // print only part of the message that fits the terminal width
-        // subtracted '4' relates to the '>>> ' prefix
-        stream << message.substr(0, terminal_width - 4);
+        stream << libdnf5::cli::utils::utf8::substr_width(message, 0, terminal_width - prefix_width);
 
         if (color_used) {
             stream << tty::reset;
