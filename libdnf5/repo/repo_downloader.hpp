@@ -56,6 +56,7 @@ public:
     static constexpr const char * MD_FILENAME_GROUP_GZ = "group_gz";
     static constexpr const char * MD_FILENAME_GROUP = "group";
     static constexpr const char * MD_FILENAME_MODULES = "modules";
+    static constexpr const char * MD_FILENAME_APPSTREAM = "appstream";
 
     RepoDownloader(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type);
 
@@ -74,6 +75,7 @@ public:
     void * get_user_data() const noexcept;
 
     const std::string & get_metadata_path(const std::string & metadata_type) const;
+    std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
 
 private:
@@ -99,6 +101,7 @@ private:
     time_t get_system_epoch() const;
 
     std::set<std::string> get_optional_metadata() const;
+    bool is_appstream_metadata_type(const std::string & type) const;
 
     libdnf5::BaseWeakPtr base;
     const ConfigRepo & config;
