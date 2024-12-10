@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../shared/base_test_case.hpp"
+#include "../shared/test_logger.hpp"
 
 #include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/CompilerOutputter.h>
@@ -35,19 +36,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-// HACK: CppUnit doesn't give access to the actual test case it is running. The
-// given pointer is an instance of CppUnit::TestCaller, which has the test case
-// itself as a private member with no getter.
-//
-// Here we mimic the structure of CppUnit::TestCaller and make the pointer
-// accessible.
-class HackTestCaller : CppUnit::TestCase {
-public:
-    bool m_ownFixture;              // unused
-    CppUnit::TestCase * m_fixture;  // our test case class
-};
-
-
 class TimingListener : public CppUnit::TestListener {
 public:
     void startTest(CppUnit::Test *) override { start = std::chrono::high_resolution_clock::now(); }
@@ -62,28 +50,19 @@ private:
     std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::from_time_t(0);
 };
 
+
 class LogCaptureListener : public CppUnit::TestListener {
 public:
-    void startTest(CppUnit::Test * t) override {
-        auto * f = reinterpret_cast<HackTestCaller *>(t);
-        auto * tc = dynamic_cast<BaseTestCase *>(f->m_fixture);
-
-        if (tc) {
-            tc->base.get_logger()->add_logger(std::make_unique<libdnf5::MemoryBufferLogger>(10000, 256));
-        }
+    void startTest(CppUnit::Test *) override {
+        // Global test_logger is used. Clear it befor starting new test.
+        test_logger.clear();
     }
 
-    void addFailure(const CppUnit::TestFailure & failure) override {
-        auto * f = reinterpret_cast<HackTestCaller *>(failure.failedTest());
-        auto * tc = dynamic_cast<BaseTestCase *>(f->m_fixture);
-
-        if (tc) {
-            std::cout << std::endl << "Dnf log:" << std::endl;
-            libdnf5::StdCStreamLogger cout_logger(std::cout);
-            dynamic_cast<libdnf5::MemoryBufferLogger *>(tc->base.get_logger()->get_logger(0))
-                ->write_to_logger(cout_logger);
-            std::cout << std::endl << std::flush;
-        }
+    void addFailure(const CppUnit::TestFailure &) override {
+        std::cout << std::endl << "Dnf log:" << std::endl;
+        libdnf5::StdCStreamLogger cout_logger(std::cout);
+        test_logger.write_to_logger(cout_logger);
+        std::cout << std::endl;
     }
 };
 
