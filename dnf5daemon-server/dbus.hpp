@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_DBUS_HPP
 #define DNF5DAEMON_SERVER_DBUS_HPP
 
+#include <libdnf5/sdbus_compat.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <map>
@@ -51,46 +52,46 @@ using AdvisoryReference = sdbus::Struct<std::string, std::string, std::string, s
 
 // constants
 
-const char * const DBUS_NAME = "org.rpm.dnf.v0";
-const char * const DBUS_OBJECT_PATH = "/org/rpm/dnf/v0";
+const SDBUS_SERVICE_NAME_TYPE DBUS_NAME{"org.rpm.dnf.v0"};
+const sdbus::ObjectPath DBUS_OBJECT_PATH{"/org/rpm/dnf/v0"};
 
 // interfaces
-const char * const INTERFACE_BASE = "org.rpm.dnf.v0.Base";
-const char * const INTERFACE_REPO = "org.rpm.dnf.v0.rpm.Repo";
-const char * const INTERFACE_RPM = "org.rpm.dnf.v0.rpm.Rpm";
-const char * const INTERFACE_GOAL = "org.rpm.dnf.v0.Goal";
-const char * const INTERFACE_GROUP = "org.rpm.dnf.v0.comps.Group";
-const char * const INTERFACE_ADVISORY = "org.rpm.dnf.v0.Advisory";
-const char * const INTERFACE_OFFLINE = "org.rpm.dnf.v0.Offline";
-const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_BASE{"org.rpm.dnf.v0.Base"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_REPO{"org.rpm.dnf.v0.rpm.Repo"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_RPM{"org.rpm.dnf.v0.rpm.Rpm"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_GOAL{"org.rpm.dnf.v0.Goal"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_GROUP{"org.rpm.dnf.v0.comps.Group"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_ADVISORY{"org.rpm.dnf.v0.Advisory"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_OFFLINE{"org.rpm.dnf.v0.Offline"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_SESSION_MANAGER{"org.rpm.dnf.v0.SessionManager"};
 
 // signals
-const char * const SIGNAL_DOWNLOAD_ADD_NEW = "download_add_new";
-const char * const SIGNAL_DOWNLOAD_PROGRESS = "download_progress";
-const char * const SIGNAL_DOWNLOAD_END = "download_end";
-const char * const SIGNAL_DOWNLOAD_MIRROR_FAILURE = "download_mirror_failure";
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_DOWNLOAD_ADD_NEW{"download_add_new"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_DOWNLOAD_PROGRESS{"download_progress"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_DOWNLOAD_END{"download_end"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_DOWNLOAD_MIRROR_FAILURE{"download_mirror_failure"};
 
-const char * const SIGNAL_REPO_KEY_IMPORT_REQUEST = "repo_key_import_request";
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_REPO_KEY_IMPORT_REQUEST{"repo_key_import_request"};
 
-const char * const SIGNAL_TRANSACTION_BEFORE_BEGIN = "transaction_before_begin";
-const char * const SIGNAL_TRANSACTION_AFTER_COMPLETE = "transaction_after_complete";
-const char * const SIGNAL_TRANSACTION_TRANSACTION_START = "transaction_transaction_start";
-const char * const SIGNAL_TRANSACTION_TRANSACTION_PROGRESS = "transaction_transaction_progress";
-const char * const SIGNAL_TRANSACTION_TRANSACTION_STOP = "transaction_transaction_stop";
-const char * const SIGNAL_TRANSACTION_VERIFY_START = "transaction_verify_start";
-const char * const SIGNAL_TRANSACTION_VERIFY_PROGRESS = "transaction_verify_progress";
-const char * const SIGNAL_TRANSACTION_VERIFY_STOP = "transaction_verify_stop";
-const char * const SIGNAL_TRANSACTION_ACTION_START = "transaction_action_start";
-const char * const SIGNAL_TRANSACTION_ACTION_PROGRESS = "transaction_action_progress";
-const char * const SIGNAL_TRANSACTION_ACTION_STOP = "transaction_action_stop";
-const char * const SIGNAL_TRANSACTION_SCRIPT_START = "transaction_script_start";
-const char * const SIGNAL_TRANSACTION_SCRIPT_STOP = "transaction_script_stop";
-const char * const SIGNAL_TRANSACTION_SCRIPT_ERROR = "transaction_script_error";
-const char * const SIGNAL_TRANSACTION_UNPACK_ERROR = "transaction_unpack_error";
-const char * const SIGNAL_TRANSACTION_ELEM_PROGRESS = "transaction_elem_progress";
-const char * const SIGNAL_TRANSACTION_FINISHED = "transaction_finished";
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_BEFORE_BEGIN{"transaction_before_begin"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_AFTER_COMPLETE{"transaction_after_complete"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_TRANSACTION_START{"transaction_transaction_start"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_TRANSACTION_PROGRESS{"transaction_transaction_progress"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_TRANSACTION_STOP{"transaction_transaction_stop"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_VERIFY_START{"transaction_verify_start"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_VERIFY_PROGRESS{"transaction_verify_progress"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_VERIFY_STOP{"transaction_verify_stop"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_ACTION_START{"transaction_action_start"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_ACTION_PROGRESS{"transaction_action_progress"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_ACTION_STOP{"transaction_action_stop"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_SCRIPT_START{"transaction_script_start"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_SCRIPT_STOP{"transaction_script_stop"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_SCRIPT_ERROR{"transaction_script_error"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_UNPACK_ERROR{"transaction_unpack_error"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_ELEM_PROGRESS{"transaction_elem_progress"};
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_TRANSACTION_FINISHED{"transaction_finished"};
 
-const char * const SIGNAL_WRITE_TO_FD_FINISHED = "write_to_fd_finished";
+const SDBUS_SIGNAL_NAME_TYPE SIGNAL_WRITE_TO_FD_FINISHED{"write_to_fd_finished"};
 
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.Repo.conf_write";
@@ -99,11 +100,11 @@ const char * const POLKIT_CONFIRM_KEY_IMPORT = "org.rpm.dnf.v0.rpm.Repo.confirm_
 const char * const POLKIT_CONFIG_OVERRIDE = "org.rpm.dnf.v0.base.Config.override";
 
 // errors
-const char * const ERROR = "org.rpm.dnf.v0.Error";
-const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.Repo.ConfError";
-const char * const ERROR_REPO_ID_UNKNOWN = "org.rpm.dnf.v0.rpm.Repo.NoMatchingIdError";
-const char * const ERROR_RESOLVE = "org.rpm.dnf.v0.rpm.Rpm.ResolveError";
-const char * const ERROR_TRANSACTION = "org.rpm.dnf.v0.rpm.Rpm.TransactionError";
+const SDBUS_ERROR_NAME_TYPE ERROR{"org.rpm.dnf.v0.Error"};
+const SDBUS_ERROR_NAME_TYPE ERROR_REPOCONF{"org.rpm.dnf.v0.rpm.Repo.ConfError"};
+const SDBUS_ERROR_NAME_TYPE ERROR_REPO_ID_UNKNOWN{"org.rpm.dnf.v0.rpm.Repo.NoMatchingIdError"};
+const SDBUS_ERROR_NAME_TYPE ERROR_RESOLVE{"org.rpm.dnf.v0.rpm.Rpm.ResolveError"};
+const SDBUS_ERROR_NAME_TYPE ERROR_TRANSACTION{"org.rpm.dnf.v0.rpm.Rpm.TransactionError"};
 
 }  // namespace dnfdaemon
 
