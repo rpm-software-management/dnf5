@@ -814,16 +814,15 @@ static void print_transaction_size_stats(Context & context) {
             dwnl_pkgs_size_unit));
     }
 
-    if (!std::in_range<int64_t>(install_size) || !std::in_range<int64_t>(remove_size) ||
-        !std::in_range<int64_t>(install_size - remove_size))
+    if (!std::in_range<int64_t>(install_size) || !std::in_range<int64_t>(remove_size))
         return;
     const auto [install_size_value, install_size_unit] =
         libdnf5::cli::utils::units::to_size(static_cast<int64_t>(install_size));
     const auto [remove_size_value, remove_size_unit] =
         libdnf5::cli::utils::units::to_size(static_cast<int64_t>(remove_size));
-    const int64_t size_diff = static_cast<int64_t>(install_size - remove_size);
-    const auto [size_diff_value, size_diff_unit] = libdnf5::cli::utils::units::to_size(std::abs(size_diff));
-    if (size_diff >= 0) {
+    if (install_size >= remove_size) {
+        const auto [size_diff_value, size_diff_unit] =
+            libdnf5::cli::utils::units::to_size(static_cast<int64_t>(install_size - remove_size));
         context.print_info(libdnf5::utils::sformat(
             _("After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, remove {:.0f} {:s})."),
             size_diff_value,
@@ -833,6 +832,8 @@ static void print_transaction_size_stats(Context & context) {
             remove_size_value,
             remove_size_unit));
     } else {
+        const auto [size_diff_value, size_diff_unit] =
+            libdnf5::cli::utils::units::to_size(static_cast<int64_t>(remove_size - install_size));
         context.print_info(libdnf5::utils::sformat(
             _("After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s})."),
             size_diff_value,
