@@ -33,7 +33,7 @@ namespace libdnf5::cli::output {
 
 KeyValueTable::KeyValueTable() {
     tb = scols_new_table();
-    if (libdnf5::cli::tty::is_interactive()) {
+    if (libdnf5::cli::tty::is_colorized()) {
         scols_table_enable_colors(tb, true);
     }
 
