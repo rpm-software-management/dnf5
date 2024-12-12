@@ -149,7 +149,7 @@ public:
         if (replaced != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Replacing:       {:4} package\n", " Replacing:       {:4} package\n", replaced), replaced)
+                    P_(" Replacing:       {:4} package\n", " Replacing:       {:4} packages\n", replaced), replaced)
                     .c_str(),
                 fd);
         }
