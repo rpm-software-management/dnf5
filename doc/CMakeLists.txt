@@ -41,6 +41,10 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/libdnf5-actions.8 DESTINATION share/man/man8)
     endif()
 
+    if(WITH_PLUGIN_EXPIRED_PGP_KEYS)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/libdnf5-expired-pgp-keys.8 DESTINATION share/man/man8)
+    endif()
+
     if(WITH_DNF5DAEMON_CLIENT)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-client.8 DESTINATION share/man/man8)
     endif()
