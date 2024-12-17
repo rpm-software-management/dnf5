@@ -7,5 +7,5 @@ Description: Library for working with a terminal in a command-line package manag
 Version: @PROJECT_VERSION@
 Requires: @LIBDNF5_CLI_PC_REQUIRES_STRING@
 Requires.private: @LIBDNF5_CLI_PC_REQUIRES_PRIVATE_STRING@
-Libs: -L${libdir} -ldnf-cli
+Libs: -L${libdir} -ldnf5-cli
 Cflags: -I${includedir}
