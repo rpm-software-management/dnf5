@@ -52,7 +52,6 @@ extern "C" {
 #include <filesystem>
 #include <set>
 
-
 namespace libdnf5::repo {
 
 static void is_readable_rpm(const std::string & fn) {
@@ -203,6 +202,9 @@ void Repo::read_metadata_cache() {
     p_impl->downloader->load_local();
 }
 
+std::vector<std::pair<std::string, std::string>> Repo::get_appstream_metadata() const {
+    return get_downloader().get_appstream_metadata();
+}
 
 bool Repo::is_in_sync() {
     if (!p_impl->config.get_metalink_option().empty() && !p_impl->config.get_metalink_option().get_value().empty()) {
@@ -412,6 +414,13 @@ void Repo::load_available_repo() {
 
     auto optional_metadata = p_impl->config.get_main_config().get_optional_metadata_types_option().get_value();
     const bool all_metadata = optional_metadata.contains(libdnf5::METADATA_TYPE_ALL);
+
+    if (all_metadata || optional_metadata.contains(libdnf5::METADATA_TYPE_APPSTREAM)) {
+        auto appstream_metadata = p_impl->downloader->get_appstream_metadata();
+        for (auto & item : appstream_metadata) {
+            p_impl->solv_repo->load_repo_ext(RepodataType::APPSTREAM, item.first, *p_impl->downloader.get());
+        }
+    }
 
     if (all_metadata || optional_metadata.contains(libdnf5::METADATA_TYPE_FILELISTS)) {
         p_impl->solv_repo->load_repo_ext(RepodataType::FILELISTS, *p_impl->downloader.get());
