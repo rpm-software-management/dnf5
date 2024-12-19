@@ -276,6 +276,9 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--refresh``
     | Force refreshing metadata before running the command.
 
+``--color=<color>``
+    | Control whether color is used in terminal output. Valid values are ``always``, ``never`` and ``auto`` (default).
+
 ``--repo=REPO_ID,...``
     | Enable just specified repositories.
     | This is a list option which can be specified multiple times.
