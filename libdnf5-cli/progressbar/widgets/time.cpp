@@ -48,7 +48,7 @@ std::string TimeWidget::to_string() const {
         ss << format_time(get_bar()->get_elapsed_seconds(), false);
     } else {
         // in progress -> display remaining time
-        ss << format_time(get_bar()->get_remaining_seconds(), true);
+        ss << format_time(get_bar()->get_remaining_seconds(), false);
     }
     return ss.str();
 }
