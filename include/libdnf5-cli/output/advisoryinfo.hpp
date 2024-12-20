@@ -40,6 +40,19 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
+class LIBDNF_CLI_API AdvisoryInfoJSON {
+public:
+    AdvisoryInfoJSON();
+    ~AdvisoryInfoJSON();
+
+    void add_advisory(IAdvisory & advisory);
+    void print();
+
+private:
+    class LIBDNF_CLI_LOCAL Impl;
+    std::unique_ptr<Impl> p_impl;
+};
+
 }  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF5_CLI_OUTPUT_ADVISORYLIST_HPP
