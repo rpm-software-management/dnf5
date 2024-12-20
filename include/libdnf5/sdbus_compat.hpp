@@ -17,22 +17,23 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "dbus_repo_wrapper.hpp"
+#ifndef DNF5DAEMON_SERVER_SDBUS_COMPAT_HPP
+#define DNF5DAEMON_SERVER_SDBUS_COMPAT_HPP
 
-namespace dnfdaemon::client {
+#ifdef SDBUS_CPP_VERSION_2
 
-std::vector<std::pair<std::string, std::string>> DbusRepoWrapper::get_distro_tags() const {
-    // sdbus::Variant cannot handle vector<pair<string,string>> so values are
-    // serialized to vector<string>.
-    // convert [tag1, val1, tag2, val2,...] back to [(tag1, val1), (tag2, val2),...]
-    std::vector<std::pair<std::string, std::string>> dt{};
-    auto tags_raw = std::vector<std::string>(rawdata.at("distro_tags"));
-    if (!tags_raw.empty()) {
-        for (size_t i = 0; i < (tags_raw.size() - 1); i += 2) {
-            dt.emplace_back(tags_raw[i], tags_raw[i + 1]);
-        }
-    }
-    return dt;
-}
+#define SDBUS_INTERFACE_NAME_TYPE sdbus::InterfaceName
+#define SDBUS_SIGNAL_NAME_TYPE    sdbus::SignalName
+#define SDBUS_SERVICE_NAME_TYPE   sdbus::ServiceName
+#define SDBUS_ERROR_NAME_TYPE     sdbus::Error::Name
 
-}  // namespace dnfdaemon::client
+#else
+
+#define SDBUS_INTERFACE_NAME_TYPE std::string
+#define SDBUS_SIGNAL_NAME_TYPE    std::string
+#define SDBUS_SERVICE_NAME_TYPE   std::string
+#define SDBUS_ERROR_NAME_TYPE     std::string
+
+#endif
+
+#endif

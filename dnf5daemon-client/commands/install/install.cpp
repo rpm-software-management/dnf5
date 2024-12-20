@@ -80,10 +80,10 @@ void InstallCommand::run() {
     dnfdaemon::KeyValueMap options = {};
     // pass the `skip_*` value to the server only when explicitly set by command line option
     if (skip_broken_option.get_priority() >= libdnf5::Option::Priority::COMMANDLINE) {
-        options["skip_broken"] = skip_broken_option.get_value();
+        options["skip_broken"] = sdbus::Variant(skip_broken_option.get_value());
     }
     if (skip_unavailable_option.get_priority() >= libdnf5::Option::Priority::COMMANDLINE) {
-        options["skip_unavailable"] = skip_unavailable_option.get_value();
+        options["skip_unavailable"] = sdbus::Variant(skip_unavailable_option.get_value());
     }
 
     ctx.session_proxy->callMethod("install")
