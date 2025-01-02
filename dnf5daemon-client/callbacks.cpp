@@ -134,7 +134,7 @@ void DownloadCB::end(sdbus::Signal & signal) {
             return;
         }
 
-        int status_i;
+        unsigned int status_i;
         std::string msg;
         signal >> status_i;
         signal >> msg;
@@ -364,7 +364,7 @@ void TransactionCB::transaction_end(sdbus::Signal & signal) {
 void TransactionCB::action_start(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
         std::string nevra;
-        int action_i;
+        unsigned int action_i;
         uint64_t total;
         signal >> nevra;
         signal >> action_i;
