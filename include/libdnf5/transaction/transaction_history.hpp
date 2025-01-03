@@ -94,6 +94,13 @@ public:
     /// @return Mapped transaction id -> count.
     std::unordered_map<int64_t, int64_t> get_transaction_item_counts(const std::vector<Transaction> & transactions);
 
+    /// Filter out transactions that don't contain any rpm with matching name
+    ///
+    /// @param transactions     Vector of Transactions to filter
+    /// @param pkg_names        Vector of rpm package names to match
+    void filter_transactions_by_pkg_names(
+        std::vector<Transaction> & transactions, const std::vector<std::string> & pkg_names);
+
 private:
     /// Create a new Transaction object.
     LIBDNF_LOCAL libdnf5::transaction::Transaction new_transaction();

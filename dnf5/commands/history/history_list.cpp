@@ -23,8 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5-cli/output/transactionlist.hpp>
 
-#include <iostream>
-
 
 namespace dnf5 {
 
@@ -35,6 +33,7 @@ void HistoryListCommand::set_argument_parser() {
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
     reverse = std::make_unique<ReverseOption>(*this);
+    contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
 }
 
 void HistoryListCommand::run() {
@@ -46,6 +45,10 @@ void HistoryListCommand::run() {
         transactions = history.list_all_transactions();
     } else {
         transactions = list_transactions_from_specs(history, transaction_specs->get_value());
+    }
+
+    if (!contains_pkgs->get_value().empty()) {
+        history.filter_transactions_by_pkg_names(transactions, contains_pkgs->get_value());
     }
 
     if (reverse->get_value()) {
