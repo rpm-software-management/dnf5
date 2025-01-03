@@ -292,6 +292,8 @@ int main(int argc, char * argv[]) {
 
         // Run selected command
         command->run();
+
+        connection->leaveEventLoop();
     } catch (libdnf5::cli::ArgumentParserError & ex) {
         std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
         return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);

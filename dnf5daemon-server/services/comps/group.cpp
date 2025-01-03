@@ -118,10 +118,31 @@ dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const 
 
 void Group::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(sdbus::MethodVTableItem{
+            sdbus::MethodName{"list"},
+            sdbus::Signature{"a{sv}"},
+            {"options"},
+            sdbus::Signature{"aa{sv}"},
+            {"groups"},
+            [this](sdbus::MethodCall call) -> void {
+                session.get_threads_manager().handle_method(*this, &Group::list, call, session.session_locale);
+            },
+            {}})
+        .forInterface(dnfdaemon::INTERFACE_GROUP);
+#else
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GROUP, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GROUP,
+        "list",
+        "a{sv}",
+        {"options"},
+        "aa{sv}",
+        {"groups"},
+        [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Group::list, call, session.session_locale);
         });
+#endif
 }
 
 sdbus::MethodReply Group::list(sdbus::MethodCall & call) {

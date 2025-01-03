@@ -12,7 +12,7 @@ add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 include_directories(.)
 
 pkg_check_modules(JSONC REQUIRED json-c)
-pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++>=0.9.0)
+include(sdbus_cpp)
 find_package(Threads)
 
 include_directories(${JSONC_INCLUDE_DIRS})

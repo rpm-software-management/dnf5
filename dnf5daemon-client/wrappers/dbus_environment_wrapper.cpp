@@ -24,7 +24,7 @@ namespace dnfdaemon::client {
 DbusEnvironmentWrapper::DbusEnvironmentWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {};
 
 std::set<std::string> DbusEnvironmentWrapper::get_repos() const {
-    std::vector<std::string> repos_vector = rawdata.at("repos");
+    auto repos_vector = std::vector<std::string>(rawdata.at("repos"));
     std::set<std::string> repos_set(repos_vector.begin(), repos_vector.end());
     return repos_set;
 };
