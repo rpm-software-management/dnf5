@@ -202,6 +202,7 @@ Changes to individual commands
 
 ``history``
   * ``undo`` subcommand now accepts ``--ignore-extras`` and ``--ignore-installed`` like original ``history replay`` command.
+  * ``userinstalled`` subcommand was dropped. It is replaced by ``dnf repoquery --userinstalled``.
   * ``store`` subcommand now creates a directory with transaction JSON file instead of a single transaction JSON file directly.
   * ``store`` subcommand's ``--output`` option now accepts a directory path instead of a file. The default is ``./transaction``.
   * ``replay`` subcommand was moved to a standalone ``replay`` command, that now accepts a path to a directory instead of a file path.
