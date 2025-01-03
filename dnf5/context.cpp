@@ -1073,7 +1073,7 @@ std::vector<std::string> match_specs(
     bool installed,
     bool available,
     bool paths,
-    bool nevra_for_same_name,
+    bool only_nevras,
     const char * file_name_regex) {
     auto & base = ctx.get_base();
 
@@ -1128,19 +1128,15 @@ std::vector<std::string> match_specs(
         matched_pkgs_query.resolve_pkg_spec(pattern + '*', settings, true);
 
         for (const auto & package : matched_pkgs_query) {
-            auto [it, inserted] = result_set.insert(package.get_name());
-
-            // Package name was already present - not inserted. There are multiple packages with the same name.
-            // If requested, removes the name and inserts a full nevra for these packages.
-            if (nevra_for_same_name && !inserted) {
-                result_set.erase(it);
-                libdnf5::rpm::PackageQuery name_query(matched_pkgs_query);
-                name_query.filter_name({package.get_name()});
-                for (const auto & pkg : name_query) {
-                    result_set.insert(pkg.get_full_nevra());
-                    matched_pkgs_query.remove(pkg);
+            if (!only_nevras) {
+                if (auto name = package.get_name(); name.length() >= pattern.length()) {
+                    // The output must not include a package name shorter than the length of the input patter
+                    // (we don't want to shorten the user-specified input).
+                    result_set.insert(std::move(name));
                 }
             }
+
+            result_set.insert(package.get_full_nevra());
         }
     }
 
