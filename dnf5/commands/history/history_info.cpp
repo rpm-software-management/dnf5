@@ -60,9 +60,17 @@ void HistoryInfoCommand::run() {
         std::sort(transactions.begin(), transactions.end());
     }
 
-    for (auto ts : transactions) {
-        libdnf5::cli::output::print_transaction_info(ts);
-        std::cout << std::endl;
+    if (!transactions.empty()) {
+        for (auto ts : transactions) {
+            libdnf5::cli::output::print_transaction_info(ts);
+            std::cout << std::endl;
+        }
+    } else {
+        if (ts_specs.empty()) {
+            std::cout << _("No match found, history info defaults to considering only the last transaction, specify "
+                           "\"1..last\" range to search all transactions.")
+                      << std::endl;
+        }
     }
 }
 
