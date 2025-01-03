@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "callbacks.hpp"
 #include "commands/advisory/advisory.hpp"
 #include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
@@ -231,8 +232,6 @@ static void set_locale() {
 
 
 int main(int argc, char * argv[]) {
-    std::unique_ptr<sdbus::IConnection> connection;
-
     set_locale();
 
     dnfdaemon::client::Context context;
@@ -272,6 +271,7 @@ int main(int argc, char * argv[]) {
     try {
         command->pre_configure();
 
+        std::unique_ptr<sdbus::IConnection> connection;
         try {
             connection = sdbus::createSystemBusConnection();
         } catch (const sdbus::Error & ex) {
@@ -290,10 +290,20 @@ int main(int argc, char * argv[]) {
             return static_cast<int>(libdnf5::cli::ExitCode::ERROR);
         }
 
-        // Run selected command
-        command->run();
+        {
+            auto download_cb = std::make_unique<dnfdaemon::client::DownloadCB>(context, *connection);
+            auto transaction_cb = std::make_unique<dnfdaemon::client::TransactionCB>(context, *connection);
+            download_cb->register_signals();
+            transaction_cb->register_signals();
 
-        connection->leaveEventLoop();
+            context.set_download_cb(download_cb.get());
+
+            // Run selected command
+            command->run();
+            context.set_download_cb(nullptr);
+
+            connection->leaveEventLoop();
+        }
     } catch (libdnf5::cli::ArgumentParserError & ex) {
         std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
         return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);

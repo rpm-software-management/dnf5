@@ -62,9 +62,6 @@ void Context::init_session(sdbus::IConnection & connection) {
         .storeResultsTo(session_object_path);
 
     session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);
-    // register progress bars callbacks
-    download_cb = std::make_unique<DownloadCB>(*this);
-    transaction_cb = std::make_unique<TransactionCB>(*this);
 #ifndef SDBUS_CPP_VERSION_2
     session_proxy->finishRegistration();
 #endif
