@@ -14,6 +14,19 @@ _do_dnf5_completion()
     fi
 
     mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
+
+    # In Bash, with a colon in COMP_WORDBREAKS, words containing colons are
+    # always completed as entire words if the word to complete contains a colon.
+    # This behavior is fixed by removing the colon-containing prefix from the items in COMPREPLY.
+    # A side effect is the removal of this prefix in the list of bash completion suggestions.
+    #
+    # The preferred solution is to remove the colon ':' from COMP_WORDBREAKS in .bashrc:
+    #    COMP_WORDBREAKS=${COMP_WORDBREAKS//:}
+    if [[ ${cur} == *:* && ${COMP_WORDBREAKS} == *:* ]]; then
+        # Remove colon-word prefix from items in COMPREPLY
+        local _colon_word=${cur%"${cur##*:}"}
+        COMPREPLY=("${COMPREPLY[@]#"$_colon_word"}")
+    fi
 }
 
 _complete_dnf5_cmds="dnf5"
