@@ -4,3 +4,7 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 add_subdirectory("actions")
 add_subdirectory("python_plugins_loader")
 add_subdirectory("rhsm")
+
+if(WITH_APPSTREAM)
+    add_subdirectory("appstream")
+endif()
