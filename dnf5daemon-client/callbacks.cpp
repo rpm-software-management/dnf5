@@ -33,38 +33,50 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
+DbusCallback::DbusCallback(Context & context, sdbus::IConnection & connection)
+    : session_object_path(context.get_session_object_path()) {
+    session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);
+}
 
 bool DbusCallback::signature_valid(sdbus::Signal & signal) {
     // check that signal is emitted by the correct session object
     sdbus::ObjectPath object_path;
     signal >> object_path;
-    return object_path == context.get_session_object_path();
+    return object_path == session_object_path;
 }
 
 
-DownloadCB::DownloadCB(Context & context) : DbusCallback(context) {
+DownloadCB::DownloadCB(Context & context, sdbus::IConnection & connection)
+    : DbusCallback(context, connection),
+      assume_yes(context.get_assumeyes_option()),
+      assume_no(context.get_assumeno_option()),
+      default_yes(context.get_defaultyes_option()) {}
+
+void DownloadCB::register_signals() {
     // register signal handlers
-    auto proxy = context.session_proxy.get();
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, [this](sdbus::Signal signal) -> void {
             this->add_new_download(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_END, [this](sdbus::Signal signal) -> void {
             this->end(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, [this](sdbus::Signal signal) -> void {
             this->progress(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, [this](sdbus::Signal signal) -> void {
             this->mirror_failure(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal signal) -> void {
             this->key_import(signal);
         });
+#ifndef SDBUS_CPP_VERSION_2
+    session_proxy->finishRegistration();
+#endif
 }
 
 
@@ -224,11 +236,11 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
         std::cerr << " From       : " + url << std::endl;
 
         // ask user for the key import confirmation
-        auto confirmed = libdnf5::cli::utils::userconfirm::userconfirm(context);
+        auto confirmed = libdnf5::cli::utils::userconfirm::userconfirm(*this);
 
         // signal the confirmation back to the server
         try {
-            context.session_proxy->callMethod("confirm_key")
+            session_proxy->callMethod("confirm_key")
                 .onInterface(dnfdaemon::INTERFACE_REPO)
                 .withTimeout(static_cast<uint64_t>(-1))
                 .withArguments(key_id, confirmed);
@@ -238,61 +250,66 @@ void DownloadCB::key_import(sdbus::Signal & signal) {
     }
 }
 
-TransactionCB::TransactionCB(Context & context) : DbusCallback(context) {
+TransactionCB::TransactionCB(Context & context, sdbus::IConnection & connection) : DbusCallback(context, connection) {}
+
+
+void TransactionCB::register_signals() {
     // register signal handlers
-    auto proxy = context.session_proxy.get();
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, [this](sdbus::Signal signal) -> void {
             this->verify_start(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS, [this](sdbus::Signal signal) -> void {
             this->verify_progress(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP, [this](sdbus::Signal signal) -> void {
             this->verify_end(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START,
         [this](sdbus::Signal signal) -> void { this->transaction_start(signal); });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM,
         dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS,
         [this](sdbus::Signal signal) -> void { this->transaction_progress(signal); });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP, [this](sdbus::Signal signal) -> void {
             this->transaction_end(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, [this](sdbus::Signal signal) -> void {
             this->action_start(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, [this](sdbus::Signal signal) -> void {
             this->action_progress(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, [this](sdbus::Signal signal) -> void {
             this->action_end(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, [this](sdbus::Signal signal) -> void {
             this->script_start(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, [this](sdbus::Signal signal) -> void {
             this->script_stop(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, [this](sdbus::Signal signal) -> void {
             this->script_error(signal);
         });
-    proxy->registerSignalHandler(
+    session_proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_FINISHED, [this](sdbus::Signal signal) -> void {
             this->finished(signal);
         });
+#ifndef SDBUS_CPP_VERSION_2
+    session_proxy->finishRegistration();
+#endif
 }
 
 void TransactionCB::new_progress_bar(uint64_t total, const std::string & description) {

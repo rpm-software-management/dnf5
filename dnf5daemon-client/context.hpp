@@ -45,7 +45,7 @@ public:
 
     /// Initialize dbus connection and server session
     void init_session(sdbus::IConnection & connection);
-    sdbus::ObjectPath & get_session_object_path() { return session_object_path; };
+    sdbus::ObjectPath get_session_object_path() { return session_object_path; };
 
     // signal handlers
     void on_repositories_ready(const bool & result);
@@ -68,12 +68,12 @@ public:
     libdnf5::OptionString releasever{""};
 
     void reset_download_cb();
+    void set_download_cb(DownloadCB * download_cb) { this->download_cb = download_cb; }
 
 private:
     sdbus::ObjectPath session_object_path;
     dnfdaemon::RepoStatus repositories_status;
-    std::unique_ptr<DownloadCB> download_cb;
-    std::unique_ptr<TransactionCB> transaction_cb;
+    DownloadCB * download_cb{nullptr};
 };
 
 }  // namespace dnfdaemon::client
