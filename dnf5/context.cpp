@@ -1073,7 +1073,7 @@ std::vector<std::string> match_specs(
     bool installed,
     bool available,
     bool paths,
-    bool nevra_for_same_name,
+    bool only_nevra_for_same_name,
     const char * file_name_regex) {
     auto & base = ctx.get_base();
 
@@ -1127,18 +1127,23 @@ std::vector<std::string> match_specs(
         settings.set_with_binaries(false);
         matched_pkgs_query.resolve_pkg_spec(pattern + '*', settings, true);
 
+        std::set<std::string> package_names;
         for (const auto & package : matched_pkgs_query) {
-            auto [it, inserted] = result_set.insert(package.get_name());
+            auto [it, nevra_inserted] = result_set.insert(package.get_full_nevra());
 
-            // Package name was already present - not inserted. There are multiple packages with the same name.
-            // If requested, removes the name and inserts a full nevra for these packages.
-            if (nevra_for_same_name && !inserted) {
-                result_set.erase(it);
-                libdnf5::rpm::PackageQuery name_query(matched_pkgs_query);
-                name_query.filter_name({package.get_name()});
-                for (const auto & pkg : name_query) {
-                    result_set.insert(pkg.get_full_nevra());
-                    matched_pkgs_query.remove(pkg);
+            // If it is not disabled and there are multiple packages with the same name but different nevras,
+            // add the name to result_set.
+            if (!only_nevra_for_same_name && nevra_inserted) {
+                auto name = package.get_name();
+                if (name.length() < pattern.length()) {
+                    // The output must not include a package name shorter than the length of the input patter
+                    // (we don't want to shorten the user-specified input).
+                    continue;
+                }
+                auto [it, name_inserted] = package_names.insert(name);
+                if (!name_inserted) {
+                    // There are multiple packages with different nevra but this name.
+                    result_set.insert(name);
                 }
             }
         }
