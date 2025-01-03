@@ -285,8 +285,10 @@ private:
 
 DNF_API void run_transaction(libdnf5::rpm::Transaction & transaction);
 
-/// Returns the names of matching packages and paths of matching package file names and directories.
-/// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.
+/// Returns the nevras of matching packages and paths of matching package file names and directories.
+/// If `only_nevra_for_same_name` is false, and there are multiple packages with the same name in the output list,
+/// and the name is not shorter than the input pattern, the name is added to the output list for those packages
+/// in addition to the nevras.
 /// Only files whose names match `file_name_regex` are returned.
 /// NOTE: This function is intended to be used only for autocompletion purposes as the argument parser's
 /// complete hook argument. It does the base setup and repos loading inside.
@@ -296,7 +298,7 @@ DNF_API std::vector<std::string> match_specs(
     bool installed,
     bool available,
     bool paths,
-    bool nevra_for_same_name,
+    bool only_nevra_for_same_name,
     const char * file_name_regex = ".*\\.rpm");
 
 }  // namespace dnf5
