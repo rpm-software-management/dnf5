@@ -45,7 +45,11 @@ void HistoryInfoCommand::run() {
     std::vector<libdnf5::transaction::Transaction> transactions;
 
     if (ts_specs.empty()) {
-        transactions = list_transactions_from_specs(history, {"last"});
+        if (contains_pkgs->get_value().empty()) {
+            transactions = list_transactions_from_specs(history, {"last"});
+        } else {
+            transactions = history.list_all_transactions();
+        }
     } else {
         transactions = list_transactions_from_specs(history, ts_specs);
     }
