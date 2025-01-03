@@ -68,6 +68,10 @@ public:
     /// Get transaction item count for history transactions specified by transaction ids.
     static std::unordered_map<int64_t, int64_t> transactions_item_counts(
         const BaseWeakPtr & base, const std::vector<Transaction> & transactions);
+
+    /// Filter out transactions that don't contain any rpm with name from pkg_names
+    static void filter_transactions_by_pkg_names(
+        const BaseWeakPtr & base, std::vector<Transaction> & transactions, const std::vector<std::string> & pkg_names);
 };
 
 }  // namespace libdnf5::transaction

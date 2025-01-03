@@ -300,4 +300,70 @@ std::unordered_map<int64_t, int64_t> TransactionDbUtils::transactions_item_count
     return id_to_count;
 }
 
+static constexpr const char * SQL_TRANS_CONTAINS_RPM_NAME = R"**(
+    SELECT DISTINCT
+        "t"."id"
+    FROM
+        "trans_item" "ti"
+    JOIN
+        "trans" "t" ON ("ti"."trans_id" = "t"."id")
+    JOIN
+        "rpm" "i" USING ("item_id")
+    JOIN
+        "pkg_name" ON "i"."name_id" = "pkg_name"."id"
+)**";
+
+void TransactionDbUtils::filter_transactions_by_pkg_names(
+    const BaseWeakPtr & base, std::vector<Transaction> & transactions, const std::vector<std::string> & pkg_names) {
+    libdnf_assert(!pkg_names.empty(), "Cannot filter transactions, no package names provided.");
+
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = SQL_TRANS_CONTAINS_RPM_NAME;
+
+    sql += "WHERE (\"pkg_name\".\"name\" GLOB ?";
+    for (size_t i = 1; i < pkg_names.size(); i++) {
+        sql += "OR \"pkg_name\".\"name\" GLOB ?";
+    }
+    sql += ")";
+
+    // Limit to only selected transactions
+    if (!transactions.empty()) {
+        sql += "AND \"t\".\"id\" IN (";
+        for (size_t i = 0; i < transactions.size(); ++i) {
+            if (i == 0) {
+                sql += "?";
+            } else {
+                sql += ", ?";
+            }
+        }
+        sql += ")";
+    }
+
+    auto query = libdnf5::utils::SQLite3::Query(*conn, sql);
+
+    for (size_t i = 0; i < pkg_names.size(); ++i) {
+        // bind indexes from 1
+        query.bind(static_cast<int>(i + 1), pkg_names[i]);
+    }
+
+    for (size_t i = 0; i < transactions.size(); ++i) {
+        query.bind(static_cast<int>(i + pkg_names.size() + 1), transactions[i].get_id());
+    }
+
+    std::vector<int> ids_to_keep;
+    while (query.step() == libdnf5::utils::SQLite3::Statement::StepResult::ROW) {
+        ids_to_keep.push_back(query.get<int>("id"));
+    }
+
+    transactions.erase(
+        std::remove_if(
+            transactions.begin(),
+            transactions.end(),
+            [&ids_to_keep](auto trans) {
+                return std::find(ids_to_keep.begin(), ids_to_keep.end(), trans.get_id()) == ids_to_keep.end();
+            }),
+        transactions.end());
+}
+
 }  // namespace libdnf5::transaction

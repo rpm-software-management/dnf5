@@ -36,6 +36,7 @@ void HistoryInfoCommand::set_argument_parser() {
     auto & ctx = get_context();
     transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     reverse = std::make_unique<ReverseOption>(*this);
+    contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
 }
 
 void HistoryInfoCommand::run() {
@@ -47,6 +48,10 @@ void HistoryInfoCommand::run() {
         transactions = list_transactions_from_specs(history, {"last"});
     } else {
         transactions = list_transactions_from_specs(history, ts_specs);
+    }
+
+    if (!contains_pkgs->get_value().empty()) {
+        history.filter_transactions_by_pkg_names(transactions, contains_pkgs->get_value());
     }
 
     if (reverse->get_value()) {

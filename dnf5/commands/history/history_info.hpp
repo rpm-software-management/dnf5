@@ -34,6 +34,7 @@ public:
 
     std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
     std::unique_ptr<ReverseOption> reverse{nullptr};
+    std::unique_ptr<HistoryContainsPkgsOption> contains_pkgs{nullptr};
 };
 
 }  // namespace dnf5

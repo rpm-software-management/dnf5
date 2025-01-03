@@ -70,6 +70,16 @@ public:
 
 std::function<std::vector<std::string>(const char * arg)> create_history_id_autocomplete(Context & ctx);
 
+class HistoryContainsPkgsOption : public libdnf5::cli::session::AppendStringListOption {
+public:
+    explicit HistoryContainsPkgsOption(libdnf5::cli::session::Command & command)
+        : AppendStringListOption(
+              command,
+              "contains-pkgs",
+              '\0',
+              _("Show only transactions containing packages with specified names. List option, supports globs."),
+              _("PACKAGE_NAME,...")) {}
+};
 
 }  // namespace dnf5
 
