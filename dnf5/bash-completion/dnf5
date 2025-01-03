@@ -16,11 +16,9 @@ _do_dnf5_completion()
     mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
 }
 
-complete_cmds="dnf5"
-dnf_target=$(readlink -f "/usr/bin/dnf")
-
-if [ "$dnf_target" = "/usr/bin/dnf5" ]; then
-    complete_cmds+=" dnf"
+_complete_dnf5_cmds="dnf5"
+if [ "$(readlink -fn /usr/bin/dnf)" = "/usr/bin/dnf5" ]; then
+    _complete_dnf5_cmds+=" dnf"
 fi
 
-complete -F _do_dnf5_completion -o nosort -o nospace $complete_cmds
+complete -F _do_dnf5_completion -o nosort -o nospace $_complete_dnf5_cmds
