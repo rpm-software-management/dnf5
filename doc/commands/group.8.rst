@@ -98,7 +98,7 @@ Options for ``list`` and ``info``
 ``--hidden``
     | Show also hidden groups.
 
-``--contains-pkgs``
+``--contains-pkgs=PACKAGE_NAME,...``
     | Show only groups containing packages with specified names. List option, supports globs.
 
 
