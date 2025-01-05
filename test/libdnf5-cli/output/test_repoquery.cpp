@@ -44,6 +44,7 @@ void RepoqueryTest::test_format_set_with_simple_str() {
 
     CPPUNIT_ASSERT_EQUAL(std::string("test\n"), std::string(buf));
 
+    fclose(stream);
     free(buf);
 }
 
