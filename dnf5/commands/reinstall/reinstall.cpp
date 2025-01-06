@@ -48,7 +48,7 @@ void ReinstallCommand::set_argument_parser() {
             }
             return true;
         });
-    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
