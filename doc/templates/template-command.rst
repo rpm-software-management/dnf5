@@ -16,21 +16,18 @@ This page focuses on how to write a command with two options in dnf5.
 .. literalinclude:: command/template.hpp
     :language: c++
     :linenos:
-    :lines: 2,4-
 
 ``dnf5/command/template.cpp``
 
 .. literalinclude:: command/template.cpp
     :language: c++
     :linenos:
-    :lines: 2,4-
 
 ``dnf5/command/arguments.hpp``
 
 .. literalinclude:: command/arguments.hpp
     :language: c++
     :linenos:
-    :lines: 2,4-
 
 The command must be included and registered in ``dnf5/main.cpp``
 
