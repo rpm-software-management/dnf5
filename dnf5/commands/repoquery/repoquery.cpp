@@ -106,7 +106,7 @@ void RepoqueryCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([this, &ctx](const char * arg) {
         if (this->installed_option->get_value()) {
-            return match_specs(ctx, arg, true, false, false, true);
+            return match_specs(ctx, arg, true, false, false, false);
         } else {
             return match_specs(ctx, arg, false, true, true, false);
         }

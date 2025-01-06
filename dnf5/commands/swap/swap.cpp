@@ -51,7 +51,7 @@ void SwapCommand::set_argument_parser() {
         return true;
     });
     remove_spec_arg->set_complete_hook_func(
-        [&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, true); });
+        [&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, false); });
     cmd.register_positional_arg(remove_spec_arg);
 
     auto install_spec_arg = parser.add_new_positional_arg("install_spec", 1, nullptr, nullptr);
