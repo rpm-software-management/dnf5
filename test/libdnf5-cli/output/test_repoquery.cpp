@@ -21,7 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_repoquery.hpp"
 
 #include <libdnf5-cli/output/repoquery.hpp>
+#include <stdio.h>
+#include <stdlib.h>
 
+#include <string_view>
+#include <system_error>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoqueryTest);
 
@@ -33,151 +37,164 @@ void RepoqueryTest::setUp() {
 }
 
 
+namespace {
+
+class MemStream {
+public:
+    MemStream() {
+        stream = open_memstream(&buf, &len);
+        if (!stream) {
+            throw std::system_error(errno, std::system_category(), "open_memstream");
+        }
+    }
+
+    ~MemStream() {
+        CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
+        free(buf);
+    }
+
+    FILE * get_file() noexcept { return stream; }
+
+    std::string_view get_string_view() noexcept {
+        CPPUNIT_ASSERT_EQUAL(fflush(stream), 0);
+        return std::string_view(buf, len);
+    }
+
+private:
+    FILE * stream;
+    char * buf;
+    size_t len;
+};
+
+}  // namespace
+
+
 void RepoqueryTest::test_format_set_with_simple_str() {
-    FILE * stream = nullptr;
-    char * buf = nullptr;
-    size_t len = 0;
-    stream = open_memstream(&buf, &len);
-
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "test\n");
-    CPPUNIT_ASSERT_EQUAL(fflush(stream), 0);
-
-    CPPUNIT_ASSERT_EQUAL(std::string("test\n"), std::string(buf));
-
-    fclose(stream);
-    free(buf);
+    MemStream stream;
+    libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "test\n");
+    CPPUNIT_ASSERT_EQUAL(std::string_view("test\n"), stream.get_string_view());
 }
 
 
 void RepoqueryTest::test_format_set_with_tags() {
-    FILE * stream = nullptr;
-    char * buf = nullptr;
-    size_t len = 0;
-
     // One tag
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{name}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg\npkg-libs\nunresolvable\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{name}\n");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("pkg\npkg-libs\nunresolvable\n"), stream.get_string_view());
+    }
 
     // Duplicate tag
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{name}-%{name}-%{name}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("pkg-libs-pkg-libs-pkg-libs\npkg-pkg-pkg\nunresolvable-unresolvable-unresolvable\n"),
-        std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{name}-%{name}-%{name}\n");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("pkg-libs-pkg-libs-pkg-libs\npkg-pkg-pkg\nunresolvable-unresolvable-unresolvable\n"),
+            stream.get_string_view());
+    }
 
     // Different tags
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{name}-%{arch}-%{installsize}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("pkg-libs-x86_64-222\npkg-x86_64-222\nunresolvable-noarch-222\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{name}-%{arch}-%{installsize}\n");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("pkg-libs-x86_64-222\npkg-x86_64-222\nunresolvable-noarch-222\n"),
+            stream.get_string_view());
+    }
 }
 
 
 void RepoqueryTest::test_format_set_with_invalid_tags() {
-    FILE * stream = nullptr;
-    char * buf = nullptr;
-    size_t len = 0;
-
     // Incomplete tag
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{name\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%{name\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{name\n");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("%{name\n"), stream.get_string_view());
+    }
 
     // Not matching tag
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{asd}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%{asd}\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{asd}\n");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("%{asd}\n"), stream.get_string_view());
+    }
 
     // Incomplate tag with not matching tag and additional braces
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%%{ %% {{{%{asd}");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%%{ %% {{{%{asd}"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%%{ %% {{{%{asd}");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("%%{ %% {{{%{asd}"), stream.get_string_view());
+    }
 
     // Incomplate tag with matching tag and additional braces
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%%{}{}{{%{name}}");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%%{}{}{{pkg-libs}%%{}{}{{pkg}%%{}{}{{unresolvable}"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%%{}{}{{%{name}}");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("%%{}{}{{pkg-libs}%%{}{}{{pkg}%%{}{}{{unresolvable}"), stream.get_string_view());
+    }
 
     // fmt formatting strings are disabled
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%{name:^30}");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%{name:^30}"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%{name:^30}");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("%{name:^30}"), stream.get_string_view());
+    }
 }
 
 
 void RepoqueryTest::test_format_set_with_tags_with_spacing() {
-    FILE * stream = nullptr;
-    char * buf = nullptr;
-    size_t len = 0;
-
     // Tag with invalid format spec
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%aa20{name}%{evr}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("%aa20{name}1.2-3\n%aa20{name}1:1.3-4\n%aa20{name}1:2-3\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%aa20{name}%{evr}\n");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("%aa20{name}1.2-3\n%aa20{name}1:1.3-4\n%aa20{name}1:2-3\n"), stream.get_string_view());
+    }
 
     // One tag with align spec
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_set_with_format(stream, *pkgs, "%-20{name}%{evr}\n");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("pkg                 1.2-3\npkg-libs            1:1.3-4\nunresolvable        1:2-3\n"),
-        std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_set_with_format(stream.get_file(), *pkgs, "%-20{name}%{evr}\n");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("pkg                 1.2-3\npkg-libs            1:1.3-4\nunresolvable        1:2-3\n"),
+            stream.get_string_view());
+    }
 }
+
 
 void RepoqueryTest::test_pkg_attr_uniq_sorted() {
-    FILE * stream = nullptr;
-    char * buf = nullptr;
-    size_t len = 0;
-
     // requires
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "requires");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("prereq\nreq = 1:2-3\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream.get_file(), *pkgs, "requires");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("prereq\nreq = 1:2-3\n"), stream.get_string_view());
+    }
 
     // provides
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "provides");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("pkg = 1.2-3\npkg-libs = 1:1.3-4\nprv = 1:2-3\nunresolvable = 1:2-3\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream.get_file(), *pkgs, "provides");
+        CPPUNIT_ASSERT_EQUAL(
+            std::string_view("pkg = 1.2-3\npkg-libs = 1:1.3-4\nprv = 1:2-3\nunresolvable = 1:2-3\n"),
+            stream.get_string_view());
+    }
 
     // name
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "name");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg\npkg-libs\nunresolvable\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream.get_file(), *pkgs, "name");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("pkg\npkg-libs\nunresolvable\n"), stream.get_string_view());
+    }
 
     // deduplicated buildtimes
-    stream = open_memstream(&buf, &len);
-    libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "buildtime");
-    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
-    CPPUNIT_ASSERT_EQUAL(std::string("456\n"), std::string(buf));
-    free(buf);
+    {
+        MemStream stream;
+        libdnf5::cli::output::print_pkg_attr_uniq_sorted(stream.get_file(), *pkgs, "buildtime");
+        CPPUNIT_ASSERT_EQUAL(std::string_view("456\n"), stream.get_string_view());
+    }
 }
+
 
 void RepoqueryTest::test_requires_filelists() {
     CPPUNIT_ASSERT_EQUAL(libdnf5::cli::output::requires_filelists("asd"), false);
