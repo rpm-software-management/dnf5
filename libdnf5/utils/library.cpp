@@ -26,7 +26,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::utils {
 
 Library::Library(const std::string & path) : path(path) {
-    handle = dlopen(path.c_str(), RTLD_LAZY);
+    // the NODELETE is needed to not garbage plugin's libraries global data,
+    // like when the plugin uses glib, then it could break its type system
+    handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
     if (!handle) {
         const char * err_msg = dlerror();  // returns localized message, problem with later translation
         throw LibraryLoadingError(M_("Cannot load shared library \"{}\": {}"), path, std::string(err_msg));
