@@ -39,6 +39,7 @@ namespace {
 std::string perform_control_sequences(std::string target) {
     const char * raw_string = target.c_str();
 
+    std::string amount_str = "";
     size_t amount = 1;
     enum ControlSequence {
         EMPTY,
@@ -62,9 +63,11 @@ std::string perform_control_sequences(std::string target) {
         } else if (current_value == '[' && state == ESC) {
             state = CONTROL_SEQUENCE_INTRO;
             amount = 1;
-        } else if (isdigit(current_value) && state == CONTROL_SEQUENCE_INTRO) {
+            amount_str.clear();
+        } else if ((state == CONTROL_SEQUENCE_INTRO || state == CONTROL_SEQUENCE_AMOUNT) && isdigit(current_value)) {
             // current_value has to be one of: 0123456789
-            amount = static_cast<size_t>(current_value - '0');
+            amount_str += current_value;
+            amount = (size_t)stoi(amount_str);
             state = CONTROL_SEQUENCE_AMOUNT;
         } else if ((state == CONTROL_SEQUENCE_INTRO || state == CONTROL_SEQUENCE_AMOUNT) && current_value == 'A') {
             if (amount > current_row) {
@@ -81,6 +84,12 @@ std::string perform_control_sequences(std::string target) {
                 output[current_row].clear();
             }
             state = EMPTY;
+        } else if (state == CONTROL_SEQUENCE_AMOUNT && current_value == 'm') {
+            // This is a color control sequence, just skip it
+            state = EMPTY;
+        } else if (state == CONTROL_SEQUENCE_INTRO || state == CONTROL_SEQUENCE_AMOUNT) {
+            CPPUNIT_FAIL(fmt::format(
+                "Unknown control sequence: \\x1b[{}{} at position: {}", amount_str, current_value, input_pos));
         } else {
             while (current_row >= output.size()) {
                 output.push_back({});
