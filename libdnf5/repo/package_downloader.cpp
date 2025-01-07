@@ -146,6 +146,7 @@ void PackageDownloader::download() try {
 
     std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
     lr_targets.reserve(p_impl->targets.size());
+    std::vector<PackageTarget *> local_targets;
     for (auto & pkg_target : p_impl->targets) {
         if (use_cache_only && !pkg_target.package.is_available_locally()) {
             throw RepoCacheonlyError(
@@ -164,31 +165,11 @@ void PackageDownloader::download() try {
         }
 
         if (pkg_target.package.is_available_locally()) {
-            // Copy local packages to their destination directories
-            std::filesystem::path source = pkg_target.package.get_package_path();
-            std::filesystem::path destination = pkg_target.destination / source.filename();
-            std::error_code ec;
-            const bool same_file = std::filesystem::equivalent(source, destination, ec);
-            if (!same_file) {
-                std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing, ec);
-            }
-            if (auto * download_callbacks = pkg_target.package.get_base()->get_download_callbacks()) {
-                std::string msg;
-                DownloadCallbacks::TransferStatus status;
-                if (ec) {
-                    status = DownloadCallbacks::TransferStatus::ERROR;
-                    msg = ec.message();
-                } else {
-                    status = DownloadCallbacks::TransferStatus::ALREADYEXISTS;
-                    if (same_file) {
-                        msg = "Already downloaded";
-                    } else {
-                        msg = fmt::format("Copied from {}", source.string());
-                    }
-                }
-                pkg_target.need_call_end_callback = false;
-                download_callbacks->end(pkg_target.user_cb_data, status, msg.c_str());
-            }
+            // First only gather all local package targets, we cannot handle them right away because
+            // the download callbacks are not fully initialized (they don't contain all required downloads).
+            // This could cause problems for example when the first added pkg_target is local and we called
+            // the `end` callback right here the callbacks might think that they are finished.
+            local_targets.push_back(&pkg_target);
             continue;
         }
 
@@ -214,6 +195,34 @@ void PackageDownloader::download() try {
         }
 
         lr_targets.emplace_back(lr_target);
+    }
+
+    for (auto * local_pkg_target : local_targets) {
+        // Copy local packages to their destination directories
+        std::filesystem::path source = local_pkg_target->package.get_package_path();
+        std::filesystem::path destination = local_pkg_target->destination / source.filename();
+        std::error_code ec;
+        const bool same_file = std::filesystem::equivalent(source, destination, ec);
+        if (!same_file) {
+            std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing, ec);
+        }
+        if (auto * download_callbacks = local_pkg_target->package.get_base()->get_download_callbacks()) {
+            std::string msg;
+            DownloadCallbacks::TransferStatus status;
+            if (ec) {
+                status = DownloadCallbacks::TransferStatus::ERROR;
+                msg = ec.message();
+            } else {
+                status = DownloadCallbacks::TransferStatus::ALREADYEXISTS;
+                if (same_file) {
+                    msg = "Already downloaded";
+                } else {
+                    msg = fmt::format("Copied from {}", source.string());
+                }
+            }
+            local_pkg_target->need_call_end_callback = false;
+            download_callbacks->end(local_pkg_target->user_cb_data, status, msg.c_str());
+        }
     }
 
     // Adding items to the end of GSList is slow. We go from the back and add items to the beginning.
