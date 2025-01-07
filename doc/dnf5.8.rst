@@ -452,6 +452,7 @@ Application Plugins:
 
 Library Plugins:
     | :manpage:`libdnf5-actions(8)`, :ref:`Actions plugin <actions_plugin_ref-label>`
+    | :manpage:`libdnf5-expired-pgp-keys(8)`, :ref:`Expired PGP keys plugin <expired-pgp-keys_plugin_ref-label>`
 
 Configuration:
     | :manpage:`dnf5-conf(5)`, :ref:`DNF5 Configuration Reference <dnf5_conf-label>`
