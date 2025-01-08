@@ -1,10 +1,8 @@
 #ifndef DNF5_COMMANDS_TEMPLATE_ARGUMENTS_HPP
 #define DNF5_COMMANDS_TEMPLATE_ARGUMENTS_HPP
 
-
 #include <libdnf5-cli/session.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
-
 
 namespace dnf5 {
 
@@ -21,5 +19,4 @@ public:
 
 }  // namespace dnf5
 
-
-#endif  // DNF_COMMANDS_DOWNLOAD_TEMPLATE_ARGUMENTS_HPP
+#endif  // DNF_COMMANDS_TEMPLATE_ARGUMENTS_HPP
