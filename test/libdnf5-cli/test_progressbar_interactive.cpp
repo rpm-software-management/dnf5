@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_progressbar_interactive.hpp"
 
-#include "../shared/private_accessor.hpp"
 #include "../shared/utils.hpp"
 #include "utils/string.hpp"
 
@@ -101,10 +100,6 @@ std::string perform_control_sequences(std::string target) {
     return libdnf5::utils::string::join(output, "\n");
 }
 
-// Allows accessing private methods
-create_private_getter_template;
-create_getter(to_stream, &libdnf5::cli::progressbar::DownloadProgressBar::to_stream);
-
 }  //namespace
 
 void ProgressbarInteractiveTest::setUp() {
@@ -156,14 +151,15 @@ void ProgressbarInteractiveTest::test_download_progress_bar() {
     auto download_progress_bar_raw = download_progress_bar.get();
 
     std::ostringstream oss;
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
+
     Pattern expected = "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????";
     ASSERT_MATCHES(expected, oss.str());
 
     download_progress_bar_raw->set_ticks(10);
     download_progress_bar_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
     oss.str("");
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
 
     expected = "\\[0/0\\] test                    100% | ????? ??B\\/s |  10.0   B | ???????";
     ASSERT_MATCHES(expected, oss.str());
@@ -180,7 +176,7 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_messages() {
     download_progress_bar->add_message(libdnf5::cli::progressbar::MessageType::INFO, "test もで 諤奯ゞ");
 
     std::ostringstream oss;
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
     Pattern expected =
         "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????\n"
         ">>> test message1                                                     \n"
@@ -193,7 +189,7 @@ void ProgressbarInteractiveTest::test_download_progress_bar_with_messages() {
     download_progress_bar->pop_message();
 
     oss.str("");
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
     expected = "\\[0/0\\] test                     40% | ????? ??B\\/s |   4.0   B | ???????";
     ASSERT_MATCHES(expected, oss.str());
 }

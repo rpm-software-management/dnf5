@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_progressbar.hpp"
 
-#include "../shared/private_accessor.hpp"
 #include "../shared/utils.hpp"
 
 #include <libdnf5-cli/progressbar/download_progress_bar.hpp>
@@ -28,14 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ProgressbarTest);
-
-namespace {
-
-// Allows accessing private methods
-create_private_getter_template;
-create_getter(to_stream, &libdnf5::cli::progressbar::DownloadProgressBar::to_stream);
-
-}  //namespace
 
 void ProgressbarTest::setUp() {
     // MultiProgressBar behaves differently depending on interactivity
@@ -58,13 +49,13 @@ void ProgressbarTest::test_download_progress_bar() {
     auto download_progress_bar_raw = download_progress_bar.get();
 
     std::ostringstream oss;
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
     Pattern expected = "";
     ASSERT_MATCHES(expected, oss.str());
 
     download_progress_bar_raw->set_ticks(10);
     download_progress_bar_raw->set_state(libdnf5::cli::progressbar::ProgressBarState::SUCCESS);
-    (*download_progress_bar.*get(to_stream{}))(oss);
+    oss << *download_progress_bar;
 
     expected = "\\[0/0\\] test                    100% | ????? ??B\\/s |  10.0   B | ???????";
     ASSERT_MATCHES(expected, oss.str());
