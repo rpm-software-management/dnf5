@@ -11,23 +11,41 @@ This page focuses on how to write a command with two options in dnf5.
     the snippets, following the directory structure and naming shown above
     each one.
 
-``dnf5/command/template.hpp``
 
+The command header
+------------------
+    
 .. literalinclude:: command/template.hpp
     :language: c++
     :linenos:
+    :caption: ``dnf5/command/template.hpp``
 
-``dnf5/command/template.cpp``
+The command source
+------------------
 
 .. literalinclude:: command/template.cpp
     :language: c++
     :linenos:
+    :caption: ``dnf5/command/template.cpp``
 
-``dnf5/command/arguments.hpp``
+The argument class(es)
+----------------------
 
 .. literalinclude:: command/arguments.hpp
     :language: c++
     :linenos:
+    :caption: ``dnf5/command/arguments.hpp``
+
+Direct integration into dnf5 codebase
+-------------------------------------
+
+.. CAUTION::
+
+    If you are writing an external command to be included in a dnf5
+    plugin, **STOP** here and move on to the :ref:`dnf5 plugin template`.
+    The remainder of this page is only applicable when writing commands
+    to be included directly in the dnf5 codebase (in the ``dnf5/commands/``
+    subdirectory).
 
 The command must be included and registered in ``dnf5/main.cpp``
 
@@ -36,8 +54,9 @@ The command must be included and registered in ``dnf5/main.cpp``
     // new commands must be included in main.cpp
     #include "commands/template/template.hpp"
 
-    // commands must be registered like this
-    register_subcommand(std::make_unique<TemplateCommand>(*this), software_management_commands_group);
+    // commands are registered in the add_commands() function
+    context.add_and_initialize_command(
+        std::make_unique<TemplateCommand>(context));
 
 Following this example you should have an output like this.
 
@@ -49,13 +68,14 @@ Following this example you should have an output like this.
       install                                Install software
       upgrade                                Upgrade software
       ...
-      template                               A command that prints its name and arguments' name
+      template                               A command that prints its name and arguments'
+                                             name
 
 .. code-block::
 
     $ dnf5 template --help
     Usage:
-      dnf5 template [GLOBAL OPTIONS] [OPTIONS] [ARGUMENTS]
+      dnf5 template [GLOBAL OPTIONS] template [ARGUMENTS]
 
     Options:
       --bar                         print bar
