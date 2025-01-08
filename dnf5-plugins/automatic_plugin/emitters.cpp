@@ -222,6 +222,8 @@ void EmitterEmail::notify() {
 
                 curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
+                curl_easy_setopt(curl, CURLOPT_CRLF, 1L);
+
                 res = curl_easy_perform(curl);
                 fclose(payload_file);
                 if (res != CURLE_OK) {
