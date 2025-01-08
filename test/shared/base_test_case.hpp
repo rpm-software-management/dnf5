@@ -23,10 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_case_fixture.hpp"
 
-#include "libdnf5/utils/fs/temp.hpp"
-
+#include <libdnf5/advisory/advisory.hpp>
 #include <libdnf5/base/base.hpp>
+#include <libdnf5/comps/environment/environment.hpp>
+#include <libdnf5/comps/group/group.hpp>
+#include <libdnf5/repo/repo_query.hpp>
 #include <libdnf5/repo/repo_sack.hpp>
+#include <libdnf5/repo/repo_weak.hpp>
 #include <libdnf5/rpm/package.hpp>
 #include <libdnf5/rpm/package_sack.hpp>
 
@@ -67,8 +70,6 @@ public:
     }
     libdnf5::rpm::Package get_pkg_i(const std::string & nevra, size_t index);
 
-    libdnf5::rpm::Package add_system_pkg(
-        const std::string & relative_path, libdnf5::transaction::TransactionItemReason reason);
     libdnf5::rpm::Package add_cmdline_pkg(const std::string & relative_path);
 
     libdnf5::Base base;
