@@ -22,12 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF5_BASE_GOAL_HPP
 
 
-#include "../shared/base_test_case.hpp"
+#include "libdnf_private_test_case.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class BaseGoalTest : public BaseTestCase {
+class BaseGoalTest : public LibdnfPrivateTestCase {
     CPPUNIT_TEST_SUITE(BaseGoalTest);
 
 #ifndef WITH_PERFORMANCE_TESTS
