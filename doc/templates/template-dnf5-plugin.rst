@@ -1,3 +1,5 @@
+.. _dnf5 plugin template:
+
 DNF5 Plugin Template
 ====================
 
