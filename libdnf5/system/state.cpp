@@ -21,13 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
-#include "libdnf5/utils/fs/temp.hpp"
 
 #include <libdnf5/comps/group/package.hpp>
 #include <toml.hpp>
+
+#include <iostream>
 
 
 namespace toml {
@@ -301,24 +303,12 @@ StateLoadError::StateLoadError(const std::string & path, const std::string & err
     : libdnf5::Error(M_("Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"), path, error) {}
 
 
-State::State(const std::filesystem::path & path) : path(path) {
+State::State(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & path) : path(path), base(base) {
     load();
 }
 
 
 bool State::packages_import_required() {
-    // Importing will require write permission
-    std::error_code ec;
-    std::filesystem::create_directories(path, ec);
-    if (ec) {
-        return false;
-    }
-    try {
-        utils::fs::TempFile(path, "permissions-test");
-    } catch (const FileSystemError & e) {
-        return false;
-    }
-
     // TODO(mblaha) - detect by absence of toml file instead of empty nevra_states?
     // Because even empty nevra_states is a valid state.
     return nevra_states.empty();
@@ -710,7 +700,9 @@ void State::reset_packages_states(
     try {
         save();
     } catch (const FileSystemError & e) {
-        // TODO(mblaha) - log this? (will need access to the base)
+        auto msg = fmt::format("Failed to save system state: \"{}\"", e.what());
+        base->get_logger()->warning("{}", msg);
+        std::cerr << msg << std::endl;
     }
 }
 
