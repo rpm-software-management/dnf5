@@ -128,48 +128,61 @@ public:
         if (installs != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Installing:      {:4} package\n", " Installing:      {:4} packages\n", installs), installs)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Installing:      {:4} package\n", " Installing:      {:4} packages\n", installs),
+                    installs)
                     .c_str(),
                 fd);
         }
         if (reinstalls != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Reinstalling:    {:4} package\n", " Reinstalling:    {:4} packages\n", reinstalls), reinstalls)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Reinstalling:    {:4} package\n", " Reinstalling:    {:4} packages\n", reinstalls),
+                    reinstalls)
                     .c_str(),
                 fd);
         }
         if (upgrades != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Upgrading:       {:4} package\n", " Upgrading:       {:4} packages\n", upgrades), upgrades)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Upgrading:       {:4} package\n", " Upgrading:       {:4} packages\n", upgrades),
+                    upgrades)
                     .c_str(),
                 fd);
         }
         if (replaced != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Replacing:       {:4} package\n", " Replacing:       {:4} packages\n", replaced), replaced)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Replacing:       {:4} package\n", " Replacing:       {:4} packages\n", replaced),
+                    replaced)
                     .c_str(),
                 fd);
         }
         if (removes != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Removing:        {:4} package\n", " Removing:        {:4} packages\n", removes), removes)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Removing:        {:4} package\n", " Removing:        {:4} packages\n", removes),
+                    removes)
                     .c_str(),
                 fd);
         }
         if (downgrades != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Downgrading:     {:4} package\n", " Downgrading:     {:4} packages\n", downgrades), downgrades)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Downgrading:     {:4} package\n", " Downgrading:     {:4} packages\n", downgrades),
+                    downgrades)
                     .c_str(),
                 fd);
         }
         if (reason_changes != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
+                    // Keep the replaceble number aligned across all messages.
                     P_(" Changing reason: {:4} package\n", " Changing reason: {:4} packages\n", reason_changes),
                     reason_changes)
                     .c_str(),
@@ -178,7 +191,9 @@ public:
         if (skips != 0) {
             std::fputs(
                 libdnf5::utils::sformat(
-                    P_(" Skipping:        {:4} package\n", " Skipping:        {:4} packages\n", skips), skips)
+                    // Keep the replaceble number aligned across all messages.
+                    P_(" Skipping:        {:4} package\n", " Skipping:        {:4} packages\n", skips),
+                    skips)
                     .c_str(),
                 fd);
         }
