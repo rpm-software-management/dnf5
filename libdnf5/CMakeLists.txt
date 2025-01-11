@@ -54,8 +54,8 @@ target_link_libraries(libdnf5 PUBLIC stdc++)
 # install libdnf5.so
 install(TARGETS libdnf5 LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
-target_link_libraries(libdnf5 PRIVATE common)
-target_link_libraries(libdnf5_static PRIVATE common)
+target_link_libraries(libdnf5 PRIVATE common_obj)
+target_link_libraries(libdnf5_static PRIVATE common_obj)
 
 # link libraries and set pkg-config requires
 
