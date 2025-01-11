@@ -23,7 +23,7 @@ add_executable(${DNF5DAEMON_CLIENT_BIN} ${DNF5DAEMON_CLIENT_SOURCES})
 target_link_libraries(
     ${DNF5DAEMON_CLIENT_BIN}
     PRIVATE
-        common
+        common_obj
         libdnf5
         libdnf5-cli
         ${SDBUS_CPP_LIBRARIES}
