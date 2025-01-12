@@ -6,6 +6,13 @@ namespace dnf5 {
 
 using namespace libdnf5::cli;
 
+void TemplateCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("software_management_commands").register_argument(arg_parser_this_cmd);
+}
+
 void TemplateCommand::set_argument_parser() {
     // Context is the main object in dnf5.
     // It contains useful functions and pieces of information necessary to run
@@ -22,7 +29,7 @@ void TemplateCommand::set_argument_parser() {
     //
     // Set a description that would be displayed in the second column of the
     // help message would also add the command to the parser
-    cmd.set_short_description("A command that prints its name and arguments' name");
+    cmd.set_description("A command that prints its name and arguments' name");
 
     // Add foo and bar options
     //
@@ -30,23 +37,25 @@ void TemplateCommand::set_argument_parser() {
     // by giving up the ownership to dnf5's parser.
     // Set the default value here.
     foo_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+        parser.add_init_value(
+            std::unique_ptr<libdnf5::OptionBool>(
+                new libdnf5::OptionBool(false))));
 
     // Create an option by giving it a name. It will be shown in the help message.
     // Set long name, description and constant value.
     // Link the option to the TemplateCommand's class member.
     auto foo = parser.add_new_named_arg("foo");
     foo->set_long_name("foo");
-    foo->set_short_description("print foo");
+    foo->set_description("print foo");
     foo->set_const_value("true");
     foo->link_value(foo_option);
 
-    // Register the argument to the command template.
+    // Register the 'foo' argument to the command template.
     cmd.register_named_arg(foo);
 
     // Option 2: create a unique_ptr of type BarOption.
     // The long name, description, and other values were set in
-    // dnf5/command/arguments.hpp
+    // template.hpp when we derived the BarOption class.
     bar_option = std::make_unique<BarOption>(*this);
 }
 
