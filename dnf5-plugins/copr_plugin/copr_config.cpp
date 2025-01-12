@@ -24,7 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/os_release.hpp"
 
+#include <cstdlib>
 #include <filesystem>
+#include <set>
 
 
 namespace dnf5 {
@@ -49,12 +51,23 @@ void CoprConfig::load_all_configuration() {
     load_copr_config_file("/usr/share/dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.vendor.conf");
     load_copr_config_file(etc_dir / "dnf/plugins/copr.conf");
-    std::string pattern = etc_dir / "dnf/plugins/copr.d/*.conf";
-    glob_t glob_result;
-    glob(pattern.c_str(), GLOB_MARK, nullptr, &glob_result);
-    for (size_t i = 0; i < glob_result.gl_pathc; ++i) {
-        std::string file_path = glob_result.gl_pathv[i];
-        load_copr_config_file(file_path);
+
+    // Load configuration files from drop-in directory
+    {
+        // Create a set of configuration files sorted by name from the drop-in directory
+        const auto drop_in_dir = etc_dir / "dnf/plugins/copr.d/";
+        std::set<std::filesystem::path> drop_in_files;
+        std::error_code ec;
+        for (const auto & dentry : std::filesystem::directory_iterator(drop_in_dir, ec)) {
+            const auto & path = dentry.path();
+            if (dentry.is_regular_file() && path.extension() == ".conf") {
+                drop_in_files.insert(path);
+            }
+        }
+
+        for (const auto & path : drop_in_files) {
+            load_copr_config_file(path);
+        }
     }
 
     // For DNF4, we used to have:

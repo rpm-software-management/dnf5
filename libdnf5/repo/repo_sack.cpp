@@ -397,7 +397,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         const auto & error_lines = utils::string::split(format(e, FormatDetailLevel::Plain), "\n");
         for (const auto & line : error_lines) {
             if (!line.empty()) {
-                base->get_logger()->warning(' ' + line);
+                base->get_logger()->warning(" {}", line);
             }
         }
         return false;

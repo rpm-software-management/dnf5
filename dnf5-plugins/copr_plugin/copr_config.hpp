@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_COPR_COPR_CONFIG_HPP
 #define DNF5_COMMANDS_COPR_COPR_CONFIG_HPP
 
-#include <glob.h>
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/conf/config_parser.hpp>
 

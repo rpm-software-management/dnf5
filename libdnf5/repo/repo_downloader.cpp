@@ -388,6 +388,25 @@ const std::string & RepoDownloader::get_metadata_path(const std::string & metada
     return it != metadata_paths.end() ? it->second : empty;
 }
 
+bool RepoDownloader::is_appstream_metadata_type(const std::string & type) const {
+    /* TODO: make the list configurable with this default */
+    return utils::string::starts_with(type, "appstream") || utils::string::starts_with(type, "appdata");
+}
+
+std::vector<std::pair<std::string, std::string>> RepoDownloader::get_appstream_metadata() const {
+    std::vector<std::pair<std::string, std::string>> appstream_metadata;
+    /* The RepoDownloader::common_handle_setup() sets the expected names,
+       check for the starts_with() only here, to avoid copying the list here. */
+
+    for (auto it = metadata_paths.begin(); it != metadata_paths.end(); it++) {
+        const std::string type = it->first;
+        const std::string path = it->second;
+
+        if (is_appstream_metadata_type(type))
+            appstream_metadata.push_back(std::pair<std::string, std::string>(type, path));
+    }
+    return appstream_metadata;
+}
 
 LibrepoHandle RepoDownloader::init_local_handle() {
     LibrepoHandle h;
@@ -497,8 +516,34 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
 
         // download the rest metadata added by 3rd parties
         for (auto & item : optional_metadata) {
-            dlist.push_back(item.c_str());
+            // the appstream metadata is a "virtual" type, the list
+            // of the types is read from the repomd file
+            if (item.compare(libdnf5::METADATA_TYPE_APPSTREAM) != 0)
+                dlist.push_back(item.c_str());
         }
+        if (optional_metadata.extract(libdnf5::METADATA_TYPE_APPSTREAM)) {
+            // ideally, the repomd.xml file should be read and every type matching is_appstream_metadata_type()
+            // would be added from it, but the content is not known at this point and when it is known, then
+            // it's too late, thus declare some "expected" types to be downloaded here
+            dlist.push_back("appstream");
+            dlist.push_back("appstream-icons");
+            dlist.push_back("appstream-icons-48x48");
+            dlist.push_back("appstream-icons-48x48@2");
+            dlist.push_back("appstream-icons-64x64");
+            dlist.push_back("appstream-icons-64x64@2");
+            dlist.push_back("appstream-icons-128x128");
+            dlist.push_back("appstream-icons-128x128@2");
+            // consult the prefixes with the is_appstream_metadata_type()
+            dlist.push_back("appdata");
+            dlist.push_back("appdata-icons");
+            dlist.push_back("appdata-icons-48x48");
+            dlist.push_back("appdata-icons-48x48@2");
+            dlist.push_back("appdata-icons-64x64");
+            dlist.push_back("appdata-icons-64x64@2");
+            dlist.push_back("appdata-icons-128x128");
+            dlist.push_back("appdata-icons-128x128@2");
+        }
+
         dlist.push_back(nullptr);
         h.set_opt(LRO_YUMDLIST, dlist.data());
     }

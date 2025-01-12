@@ -52,7 +52,7 @@ struct SolvUserdata {
 namespace libdnf5::repo {
 
 using LibsolvRepo = ::Repo;
-enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, COMPS, OTHER };
+enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, COMPS, OTHER, APPSTREAM };
 
 
 class SolvError : public Error {
@@ -73,6 +73,7 @@ public:
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
     void load_repo_ext(RepodataType type, const RepoDownloader & downloader);
+    void load_repo_ext(RepodataType type, const std::string & in_type_name, const RepoDownloader & downloader);
 
     /// Loads system repository into the pool.
     ///
@@ -128,7 +129,7 @@ private:
     void write_main(bool load_after_write);
 
     /// Writes libsolv's .solvx cache file with extended libsolv repodata.
-    void write_ext(Id repodata_id, RepodataType type);
+    void write_ext(Id repodata_id, RepodataType type, const std::string & type_name);
 
     std::string solv_file_name(const char * type = nullptr);
     std::filesystem::path solv_file_path(const char * type = nullptr);
