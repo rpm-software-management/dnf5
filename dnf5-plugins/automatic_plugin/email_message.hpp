@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_PLUGINS_AUTOMATIC_PLUGIN_EMAIL_MESSAGE_HPP
 #define DNF5_PLUGINS_AUTOMATIC_PLUGIN_EMAIL_MESSAGE_HPP
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -38,7 +39,7 @@ public:
     /// Set the To header value
     void set_to(const std::vector<std::string> & to) { this->to = to; };
     /// Set the message body
-    void set_body(std::string_view body) { this->body = body; };
+    void set_body(std::stringstream & body);
 
     /// Return string representation of the message
     std::string str();
@@ -47,7 +48,7 @@ private:
     std::string subject;
     std::string from;
     std::vector<std::string> to;
-    std::string body;
+    std::vector<std::string> body;
 };
 
 }  // namespace dnf5
