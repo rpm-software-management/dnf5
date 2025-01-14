@@ -36,6 +36,7 @@ void HistoryInfoCommand::set_argument_parser() {
     auto & ctx = get_context();
     transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     reverse = std::make_unique<ReverseOption>(*this);
+    contains_pkgs = std::make_unique<HistoryContainsPkgsOption>(*this);
 }
 
 void HistoryInfoCommand::run() {
@@ -49,15 +50,27 @@ void HistoryInfoCommand::run() {
         transactions = list_transactions_from_specs(history, ts_specs);
     }
 
+    if (!contains_pkgs->get_value().empty()) {
+        history.filter_transactions_by_pkg_names(transactions, contains_pkgs->get_value());
+    }
+
     if (reverse->get_value()) {
         std::sort(transactions.begin(), transactions.end(), std::greater{});
     } else {
         std::sort(transactions.begin(), transactions.end());
     }
 
-    for (auto ts : transactions) {
-        libdnf5::cli::output::print_transaction_info(ts);
-        std::cout << std::endl;
+    if (!transactions.empty()) {
+        for (auto ts : transactions) {
+            libdnf5::cli::output::print_transaction_info(ts);
+            std::cout << std::endl;
+        }
+    } else {
+        if (ts_specs.empty()) {
+            std::cout << _("No match found, history info defaults to considering only the last transaction, specify "
+                           "\"1..last\" range to search all transactions.")
+                      << std::endl;
+        }
     }
 }
 

@@ -201,6 +201,8 @@ Changes to individual commands
   * Dropped. The functionality is replaced by the ``--help`` option.
 
 ``history``
+  * Subcommands are now mandatory: ``dnf history`` has to be now ``dnf5 history list``.
+  * The ``history`` commands now only accept transaction ID arguments; to filter by packages, use the ``--contains-pkgs=PACKAGE_NAME,...`` option, available for ``list`` and ``info``.
   * ``undo`` subcommand now accepts ``--ignore-extras`` and ``--ignore-installed`` like original ``history replay`` command.
   * ``userinstalled`` subcommand was dropped. It is replaced by ``dnf repoquery --userinstalled``.
   * ``store`` subcommand now creates a directory with transaction JSON file instead of a single transaction JSON file directly.
