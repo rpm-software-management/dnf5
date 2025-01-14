@@ -117,6 +117,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         text_buffer << "\r";
     }
 
+    // Number of lines that need to be cleared, including the last line even if it is empty
     mbar.num_of_lines_to_clear = 0;
     mbar.line_printed = false;
 
@@ -209,6 +210,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
 
         text_buffer << mbar.total;
+        // +1 for the divider line, +1 for the total bar line
         mbar.num_of_lines_to_clear += 2;
         if (mbar.total.is_finished()) {
             text_buffer << std::endl;
