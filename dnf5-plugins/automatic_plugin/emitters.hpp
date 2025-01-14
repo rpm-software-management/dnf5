@@ -35,7 +35,7 @@ public:
     Emitter(
         const ConfigAutomatic & config_automatic,
         const libdnf5::base::Transaction & transaction,
-        const std::stringstream & output_stream,
+        std::stringstream & output_stream,
         const bool success)
         : config_automatic(config_automatic),
           transaction(transaction),
@@ -56,7 +56,7 @@ protected:
     // resolved upgrade transaction
     const libdnf5::base::Transaction & transaction;
     // stream with captured upgrade outputs
-    const std::stringstream & output_stream;
+    std::stringstream & output_stream;
     const bool success;
 
     /// Return number of available upgrades.
