@@ -23,18 +23,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/format.hpp>
 
 #include <chrono>
+#include <string>
 
 namespace dnf5 {
 
 // TODO(mblaha): use some library to create an email instead of this template
-constexpr const char * MESSAGE_TEMPLATE =
+constexpr const char * EMAIL_HEADER_TEMPLATE =
     "Date: {date}\r\n"
     "To: {to}\r\n"
     "From: {from}\r\n"
     "Subject: {subject}\r\n"
     "X-Mailer: dnf5-automatic\r\n"
-    "\r\n"
-    "{body}";
+    "\r\n";
+
+void EmailMessage::set_body(std::stringstream & body) {
+    this->body.clear();
+    for (std::string line; std::getline(body, line);) {
+        this->body.push_back(line);
+    }
+}
 
 std::string EmailMessage::str() {
     const auto now = std::chrono::system_clock::now();
@@ -50,12 +57,15 @@ std::string EmailMessage::str() {
 
     std::string msg;
     msg = libdnf5::utils::sformat(
-        MESSAGE_TEMPLATE,
+        EMAIL_HEADER_TEMPLATE,
         fmt::arg("date", date),
         fmt::arg("to", to_str),
         fmt::arg("from", from),
-        fmt::arg("subject", subject),
-        fmt::arg("body", body));
+        fmt::arg("subject", subject));
+    for (const auto & line : body) {
+        msg.append(line).append("\r\n");
+    }
+
     return msg;
 }
 

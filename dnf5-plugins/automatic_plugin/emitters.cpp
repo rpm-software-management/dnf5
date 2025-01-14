@@ -167,7 +167,7 @@ void EmitterEmail::notify() {
     message.set_to(to);
     message.set_from(from);
     message.set_subject(subject);
-    message.set_body(output_stream.str());
+    message.set_body(output_stream);
 
     {
         // use curl to send the message
@@ -221,8 +221,6 @@ void EmitterEmail::notify() {
                 curl_easy_setopt(curl, CURLOPT_READDATA, payload_file);
 
                 curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-
-                curl_easy_setopt(curl, CURLOPT_CRLF, 1L);
 
                 res = curl_easy_perform(curl);
                 fclose(payload_file);
