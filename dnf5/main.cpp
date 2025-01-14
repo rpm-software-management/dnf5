@@ -150,9 +150,7 @@ void RootCommand::set_argument_parser() {
     auto quiet = parser.add_new_named_arg("quiet");
     quiet->set_long_name("quiet");
     quiet->set_short_name('q');
-    quiet->set_description(
-        _("In combination with a non-interactive command, shows just the relevant content. "
-          "Suppresses messages notifying about the current state or actions of dnf5."));
+    quiet->set_description(_("Show less messages."));
     quiet->set_parse_hook_func([&ctx](
                                    [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                    [[maybe_unused]] const char * option,
