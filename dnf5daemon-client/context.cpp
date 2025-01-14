@@ -37,7 +37,9 @@ void Context::init_session(sdbus::IConnection & connection) {
     // open dnf5daemon-server session
     auto cfg = static_cast<DaemonCommand *>(get_selected_command())->session_config();
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
+#ifndef SDBUS_CPP_VERSION_2
     session_manager_proxy->finishRegistration();
+#endif
 
     // set up the install root end setopts
     std::map<std::string, std::string> empty_options{};
@@ -47,12 +49,12 @@ void Context::init_session(sdbus::IConnection & connection) {
     for (auto & opt : setopts) {
         config[opt.first] = opt.second;
     }
-    cfg["config"] = config;
+    cfg["config"] = sdbus::Variant(config);
 
     if (!releasever.get_value().empty()) {
-        cfg["releasever"] = releasever.get_value();
+        cfg["releasever"] = sdbus::Variant(releasever.get_value());
     }
-    cfg["locale"] = setlocale(LC_MESSAGES, nullptr);
+    cfg["locale"] = sdbus::Variant(setlocale(LC_MESSAGES, nullptr));
 
     session_manager_proxy->callMethod("open_session")
         .onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER)
@@ -60,10 +62,9 @@ void Context::init_session(sdbus::IConnection & connection) {
         .storeResultsTo(session_object_path);
 
     session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);
-    // register progress bars callbacks
-    download_cb = std::make_unique<DownloadCB>(*this);
-    transaction_cb = std::make_unique<TransactionCB>(*this);
+#ifndef SDBUS_CPP_VERSION_2
     session_proxy->finishRegistration();
+#endif
 }
 
 

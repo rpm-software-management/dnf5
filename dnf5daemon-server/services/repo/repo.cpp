@@ -262,6 +262,52 @@ bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::
 
 void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+
+#ifdef SDBUS_CPP_VERSION_2
+    dbus_object
+        ->addVTable(
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"list"},
+                sdbus::Signature{"a{sv}"},
+                {"options"},
+                sdbus::Signature{"aa{sv}"},
+                {"repositories"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Repo::list, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"confirm_key"},
+                sdbus::Signature{"sb"},
+                {"key_id", "confirmed"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"enable"},
+                sdbus::Signature{"as"},
+                {"repo_ids"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Repo::enable, call, session.session_locale);
+                },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"disable"},
+                sdbus::Signature{"as"},
+                {"repo_ids"},
+                sdbus::Signature{""},
+                {},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
+                },
+                {}})
+        .forInterface(dnfdaemon::INTERFACE_REPO);
+#else
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO,
         "list",
@@ -290,6 +336,7 @@ void Repo::dbus_register() {
         dnfdaemon::INTERFACE_REPO, "disable", "as", {"repo_ids"}, "", {}, [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::disable, call, session.session_locale);
         });
+#endif
 }
 
 sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {

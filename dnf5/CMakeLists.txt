@@ -45,7 +45,7 @@ install(TARGETS dnf5 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
 
 if(WITH_SYSTEMD)
-  pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
+  include(sdbus_cpp)
   pkg_check_modules(LIBSYSTEMD REQUIRED libsystemd)
   add_definitions(-DWITH_SYSTEMD)
   target_link_libraries(dnf5 PRIVATE ${RPM_LIBRARIES} ${SDBUS_CPP_LIBRARIES} ${LIBSYSTEMD_LIBRARIES})
