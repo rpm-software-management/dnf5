@@ -106,25 +106,35 @@ void VersionlockAddCommand::run() {
             std::cerr << libdnf5::utils::sformat(_("No package found for \"{}\"."), spec) << std::endl;
             continue;
         }
-        libdnf5::rpm::PackageQuery installed_query(query);
-        installed_query.filter_installed();
-        if (!installed_query.empty()) {
-            // if spec is installed, add only installed version
-            query = installed_query;
-        }
-
-        std::unordered_set<std::string> versions{};
+        // The spec can resolve to multiple package names. Handle each name in
+        // the query separately.
+        std::set<std::string> package_names;
         for (const auto & pkg : query) {
-            auto evr = pkg.get_evr();
-            if (versions.contains(evr)) {
-                continue;
+            package_names.emplace(pkg.get_name());
+        }
+        for (const auto & name : package_names) {
+            libdnf5::rpm::PackageQuery name_query(query);
+            name_query.filter_name(name);
+            libdnf5::rpm::PackageQuery installed_query(name_query);
+            installed_query.filter_installed();
+            if (!installed_query.empty()) {
+                // if spec is installed, add only installed version
+                name_query = installed_query;
             }
-            versions.emplace(evr);
-            if (lock_version(vl_config, pkg, comment)) {
-                std::cout << libdnf5::utils::sformat(_("Adding versionlock on \"{0} = {1}\"."), pkg.get_name(), evr)
-                          << std::endl;
-            } else {
-                std::cerr << libdnf5::utils::sformat(_("Package \"{}\" is already locked."), spec) << std::endl;
+
+            std::unordered_set<std::string> versions{};
+            for (const auto & pkg : name_query) {
+                auto evr = pkg.get_evr();
+                if (versions.contains(evr)) {
+                    continue;
+                }
+                versions.emplace(evr);
+                if (lock_version(vl_config, pkg, comment)) {
+                    std::cout << libdnf5::utils::sformat(_("Adding versionlock on \"{0} = {1}\"."), pkg.get_name(), evr)
+                              << std::endl;
+                } else {
+                    std::cerr << libdnf5::utils::sformat(_("Package \"{}\" is already locked."), spec) << std::endl;
+                }
             }
         }
     }
