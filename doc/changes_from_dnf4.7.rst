@@ -219,6 +219,8 @@ Changes to individual commands
     * In DNF4, only packages not installed or with higher versions were listed. This behavior remains unchanged when the option is not used, reducing duplications in the "Installed Packages" section.
     * When using the ``--available`` option, DNF5 considers all versions available in enabled repositories, irrespective of the installed version.
 
+  * For installed packages print from which repository was the package installed and if the information is not available print ``<unknown>``. This differs to DNF4 which if the information wasn't available printed ``@System``.
+
 ``makecache``
   * Metadata is now stored in different directories, see the ``cachedir`` configuration option :ref:`changes <cachedir_option_conf_changes_ref-label>` for more details.
 
