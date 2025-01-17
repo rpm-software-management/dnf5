@@ -194,6 +194,10 @@ bool Dnf4Convert::read_package_states_from_history(
     path /= std::filesystem::path(config.get_persistdir_option().get_value()).relative_path();
     path /= "history.sqlite";
 
+    if (!std::filesystem::exists(path.native())) {
+        return false;
+    }
+
     logger.debug("Loading system state from dnf4 history database \"{}\"", path.string());
 
     // These arrays temporarily hold data read from sqlite database. They are converted
