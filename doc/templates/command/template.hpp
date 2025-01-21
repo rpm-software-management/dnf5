@@ -39,7 +39,7 @@ public:
     // This method needs to be overridden to run the command.
     void run() override;
 
-    // This method MAY be overridden to perform any configuration 
+    // This method MAY be overridden to perform any configuration
     // needed by the command.
     // void configure() override;
 
