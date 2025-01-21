@@ -75,7 +75,7 @@ Following this example you should have an output like this.
 
     $ dnf5 template --help
     Usage:
-      dnf5 [GLOBAL OPTIONS] template [ARGUMENTS]
+      dnf5 [GLOBAL OPTIONS] template [OPTIONS]
 
     Options:
       --bar                         print bar
