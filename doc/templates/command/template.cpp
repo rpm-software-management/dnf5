@@ -1,3 +1,5 @@
+// Adjust :lines: in template-command.rst if removing/modifying these comment lines!
+// clang-format off
 #include "template.hpp"
 
 #include <iostream>
@@ -39,7 +41,9 @@ void TemplateCommand::set_argument_parser() {
     // by giving up the ownership to dnf5's parser.
     // Set the default value here.
     foo_option = dynamic_cast<libdnf5::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+        parser.add_init_value(
+            std::unique_ptr<libdnf5::OptionBool>(
+                new libdnf5::OptionBool(false))));
 
     // Create an option by giving it a name. It will be shown in the help message.
     // Set long name, description and constant value.
