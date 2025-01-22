@@ -14,7 +14,7 @@ This page focuses on how to write a command with two options in dnf5.
 
 The command header
 ------------------
-    
+
 .. literalinclude:: command/template.hpp
     :language: c++
     :linenos:
