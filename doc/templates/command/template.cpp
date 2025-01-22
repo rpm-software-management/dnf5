@@ -38,8 +38,8 @@ void TemplateCommand::set_argument_parser() {
     // Option 1: as said in the header file here you should handle the pointer
     // by giving up the ownership to dnf5's parser.
     // Set the default value here.
-    foo_option = dynamic_cast<libdnf5::OptionBool *>(parser.add_init_value(
-        std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
+    foo_option = dynamic_cast<libdnf5::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
 
     // Create an option by giving it a name. It will be shown in the help message.
     // Set long name, description and constant value.
