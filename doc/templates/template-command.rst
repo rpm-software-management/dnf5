@@ -26,6 +26,7 @@ The command source
 .. literalinclude:: command/template.cpp
     :language: c++
     :linenos:
+    :lines: 3-
     :caption: ``dnf5/command/template.cpp``
 
 The argument class(es)
