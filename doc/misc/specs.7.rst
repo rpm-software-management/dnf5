@@ -194,6 +194,7 @@ Since `NEVRA` matching form is insufficient for modules, they are uniquely ident
 In case stream is not specified, the enabled or the default stream is used, in this order.
 In case profile is not specified, the system default profile or the 'default' profile is used.
 
+.. _transaction_spec-label:
 
 Transactions
 ============

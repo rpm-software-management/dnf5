@@ -37,30 +37,38 @@ and offers several operations on these transactions, like undoing and redoing th
 use the transactions in these commands, it is assumed that they were committed while using the
 ``history_record`` configuration option.
 
+For more information about ``<transaction-spec>`` see
+:manpage:`dnf5-specs(7)`, :ref:`Patterns specification <transaction_spec-label>`.
 
 Subcommands
 ===========
 
 ``list``
     | List info about recorded transactions in the system.
+    | If no ``<transaction-spec>`` is specified it uses all transactions.
 
 ``info``
     | Print details about specific transactions.
+    | If no ``<transaction-spec>`` is specified it uses the last transaction.
 
 ``undo``
     | Revert all actions from the specified transaction.
+    | Exactly one transaction must be specified by ``<transaction-spec>``.
 
 ``redo``
     | Repeat the specified transaction.
     | Automatically uses ``--ignore-extras`` and ``--ignore-installed``.
     | Unlike the rest of history commands it overrides reasons for transaction packages that are already installed.
     | This command is useful to finish interrupted transactons.
+    | Exactly one transaction must be specified by ``<transaction-spec>``.
 
 ``rollback``
     | Undo all transactions performed after the specified transaction.
+    | Exactly one transaction must be specified by ``<transaction-spec>``.
 
 ``store``
     | Store the transaction into a directory.
+    | If no ``<transaction-spec>`` is specified it uses the last transaction.
 
 
 Options for ``list`` and ``info``
