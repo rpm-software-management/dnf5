@@ -178,6 +178,8 @@ void ListCommand::run() {
         config.get_color_list_available_reinstall_option().get_value(),
         config.get_color_list_available_upgrade_option().get_value());
 
+    auto heading = "";
+    
     switch (pkg_narrow) {
         case PkgNarrow::ALL: {
             libdnf5::rpm::PackageQuery available(base_query);
@@ -197,8 +199,9 @@ void ListCommand::run() {
         }
         case PkgNarrow::INSTALLED: {
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Installed packages"), installed);
+                heading = _("Installed packages");
             }
+            package_matched |= sections->add_section(heading, installed);
             break;
         }
         case PkgNarrow::AVAILABLE: {
@@ -208,8 +211,9 @@ void ListCommand::run() {
                 base_query.filter_latest_evr();
             }
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Available packages"), base_query);
+                heading = _("Available packages");
             }
+            package_matched |= sections->add_section(heading, base_query);
             break;
         }
         case PkgNarrow::UPGRADES:
@@ -218,8 +222,9 @@ void ListCommand::run() {
             base_query.filter_arch(std::vector<std::string>{"src", "nosrc"}, libdnf5::sack::QueryCmp::NEQ);
             base_query.filter_latest_evr();
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Available upgrades"), base_query);
+                heading = _("Available upgrades");
             }
+            package_matched |= sections->add_section(heading, base_query);
             break;
         case PkgNarrow::OBSOLETES: {
             base_query.filter_priority();
@@ -236,21 +241,24 @@ void ListCommand::run() {
                 obsoletes.emplace(pkg.get_id(), obsoleted);
             }
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Obsoleting packages"), base_query, obsoletes);
+                heading = _("Obsoleting packages");
             }
+            package_matched |= sections->add_section(heading, base_query, obsoletes);
             break;
         }
         case PkgNarrow::AUTOREMOVE:
             installed.filter_unneeded();
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Autoremove packages"), installed);
+                heading = _("Autoremove packages");
             }
+            package_matched |= sections->add_section(heading, installed);
             break;
         case PkgNarrow::EXTRAS:
             base_query.filter_extras();
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Extra packages"), base_query);
+                heading = _("Extra packages");
             }
+            package_matched |= sections->add_section(heading, base_query);
             break;
         case PkgNarrow::RECENT:
             base_query.filter_available();
@@ -262,8 +270,9 @@ void ListCommand::run() {
             auto now = time(NULL);
             base_query.filter_recent(now - (recent_limit_days * 86400));
             if (!ctx.get_quiet()) {
-                package_matched |= sections->add_section(_("Recently added packages"), base_query);
+                heading = _("Recently added packages");
             }
+            package_matched |= sections->add_section(heading, base_query);
             break;
     }
 
