@@ -7,10 +7,12 @@ namespace dnf5 {
 using namespace libdnf5::cli;
 
 void TemplateCommand::set_parent_command() {
-    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
-    auto * arg_parser_this_cmd = get_argument_parser_command();
-    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
-    arg_parser_parent_cmd->get_group("software_management_commands").register_argument(arg_parser_this_cmd);
+    auto * parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * this_cmd = get_argument_parser_command();
+    parent_cmd->register_command(this_cmd);
+
+    auto & group = parent_cmd->get_group("software_management_commands");
+    group.register_argument(this_cmd);
 }
 
 void TemplateCommand::set_argument_parser() {
