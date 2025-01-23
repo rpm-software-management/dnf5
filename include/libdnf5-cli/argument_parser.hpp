@@ -853,6 +853,12 @@ public:
     /// potential completion matches, prints a table with the potential matches along with their short help descriptions.
     void complete(int argc, const char * const argv[], int complete_arg_idx);
 
+    /// Sets whether the description is added to the suggested arguments on completion.
+    void set_complete_add_description(bool enable) noexcept;
+
+    /// Returns whether the description is added to the suggested arguments on completion.
+    bool get_complete_add_description() noexcept;
+
 private:
     class LIBDNF_CLI_LOCAL ArgumentParserImpl;
     const std::unique_ptr<ArgumentParserImpl> p_impl;
