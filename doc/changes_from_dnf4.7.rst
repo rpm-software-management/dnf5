@@ -209,6 +209,7 @@ Changes to individual commands
   * ``store`` subcommand's ``--output`` option now accepts a directory path instead of a file. The default is ``./transaction``.
   * ``replay`` subcommand was moved to a standalone ``replay`` command, that now accepts a path to a directory instead of a file path.
     The directory can be created with ``--store`` option and in addition to the JSON transaction, it can contain packages, group and environments used in the transaction.
+  * ``info`` subcommand now prints a separate section for each selected transaction. It no longer merges all selected transactions into a single transaction section.
 
 ``info``
   * Dropped ``--all`` option since this behavior is the default one.
