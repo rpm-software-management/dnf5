@@ -13,7 +13,18 @@ _do_dnf5_completion()
         _init_completion -n "><=;|&(:" -- "$@" || return
     fi
 
-    mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
+    case ${COMP_TYPE} in
+        # <TAB> (code 9) - normal completion, the identical part of the suggestions is completed
+        # '%' (code 37) - menu completion, cyclically completes the suggestions from the list
+        # In these cases the list of suggestions is not printed and we do not want
+        # to complete the argument with a description (help).
+        9 | 37)
+            mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword},add_description=0" "${words[@]}")
+            ;;
+        *)
+            mapfile -t COMPREPLY <<<$("${1}" "--complete=${cword}" "${words[@]}")
+            ;;
+    esac
 
     # In Bash, with a colon in COMP_WORDBREAKS, words containing colons are
     # always completed as entire words if the word to complete contains a colon.
