@@ -44,12 +44,10 @@ public:
 
     OptionNumber<std::int32_t> & get_debuglevel_option();
     const OptionNumber<std::int32_t> & get_debuglevel_option() const;
-    /// @deprecated errorlevel option does nothing and is scheduled for removal
-    [[deprecated("errorlevel option does nothing and is scheduled for removal")]] OptionNumber<std::int32_t> &
-    get_errorlevel_option();
-    /// @deprecated errorlevel option does nothing and is scheduled for removal
-    [[deprecated("errorlevel option does nothing and is scheduled for removal")]] const OptionNumber<std::int32_t> &
-    get_errorlevel_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionNumber<std::int32_t> & get_errorlevel_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionNumber<std::int32_t> & get_errorlevel_option() const;
     OptionPath & get_installroot_option();
     const OptionPath & get_installroot_option() const;
     OptionPath & get_config_file_path_option();
@@ -178,8 +176,11 @@ public:
     const OptionStringList & get_history_record_packages_option() const;
     OptionString & get_rpmverbosity_option();
     const OptionString & get_rpmverbosity_option() const;
-    /// Option `strict` is deprecated. Please use skip_broken and skip_unavailable
+    /// @deprecated Use get_skip_broken_option() and get_skip_unavailable_option()
+    [[deprecated("Use get_skip_broken_option() and get_skip_unavailable_option()")]]
     OptionBool & get_strict_option();
+    /// @deprecated Use get_skip_broken_option() const and get_skip_unavailable_option() const
+    [[deprecated("Use get_skip_broken_option() const and get_skip_unavailable_option() const")]]
     const OptionBool & get_strict_option() const;
     /// Solver is allowed to skip transaction packages with broken dependencies
     OptionBool & get_skip_broken_option();
@@ -248,9 +249,11 @@ public:
     const OptionString & get_username_option() const;
     OptionString & get_password_option();
     const OptionString & get_password_option() const;
-    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
+    /// @deprecated Use get_pkg_gpgcheck_option()
+    [[deprecated("Use get_pkg_gpgcheck_option()")]]
     OptionBool & get_gpgcheck_option();
-    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
+    /// @deprecated Use get_pkg_gpgcheck_option() const
+    [[deprecated("Use get_pkg_gpgcheck_option() const")]]
     const OptionBool & get_gpgcheck_option() const;
     OptionBool & get_pkg_gpgcheck_option();
     const OptionBool & get_pkg_gpgcheck_option() const;
