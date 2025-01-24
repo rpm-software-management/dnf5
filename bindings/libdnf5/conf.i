@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::conf"
 #elif defined(SWIGRUBY)
-%module "libdnf5/conf"
+%module "libdnf5::conf"
 #endif
 
 %include <exception.i>

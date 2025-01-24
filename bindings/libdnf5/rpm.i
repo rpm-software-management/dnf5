@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::rpm"
 #elif defined(SWIGRUBY)
-%module "libdnf5/rpm"
+%module "libdnf5::rpm"
 #endif
 
 #if defined(SWIGRUBY)

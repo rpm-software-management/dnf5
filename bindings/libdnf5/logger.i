@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module(directors="1") "libdnf5::logger"
 #elif defined(SWIGRUBY)
-%module(directors="1") "libdnf5/logger"
+%module(directors="1") "libdnf5::logger"
 #endif
 
 %include <exception.i>

@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::repo"
 #elif defined(SWIGRUBY)
-%module(directors="1") "libdnf5/repo"
+%module(directors="1") "libdnf5::repo"
 #endif
 
 %include <exception.i>
