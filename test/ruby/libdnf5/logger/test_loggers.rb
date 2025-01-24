@@ -23,14 +23,14 @@ require 'stringio'
 require 'libdnf5/logger'
 
 # Tests overloading of log() method
-class LibdnfLoggerCB1 < Logger::Logger
+class LibdnfLoggerCB1 < Libdnf5::Logger::Logger
     def initialize(stream)
         super()
         @stream = stream
     end
 
     def log_line(level, message)
-       @stream.write("%s: %s\n" % [Logger::Logger::level_to_cstr(level), message])
+       @stream.write("%s: %s\n" % [Libdnf5::Logger::Logger::level_to_cstr(level), message])
     end
 
     def write(time, pid, level, message)
@@ -39,14 +39,14 @@ class LibdnfLoggerCB1 < Logger::Logger
 end
 
 # Tests overloading of write() method
-class LibdnfLoggerCB2 < Logger::Logger
+class LibdnfLoggerCB2 < Libdnf5::Logger::Logger
     def initialize(stream)
         super()
         @stream = stream
     end
 
     def write(time, pid, level, message)
-       @stream.write("%s: %s\n" % [Logger::Logger::level_to_cstr(level), message])
+       @stream.write("%s: %s\n" % [Libdnf5::Logger::Logger::level_to_cstr(level), message])
     end
 end
 
@@ -96,12 +96,12 @@ class TestLoggers < Test::Unit::TestCase
         #  1. Create a LogRouter instance with one MemoryBufferLogger instances attached.
         #  ====================
         # Create log router.
-        log_router = Logger::LogRouter.new()
+        log_router = Libdnf5::Logger::LogRouter.new()
         # Create circular memory buffer logger with capacity 10 messages (4 pre-allocated from start).
         max_items_to_keep = 10
         reserve = 4
-        memory_buffer_logger = Logger::MemoryBufferLogger.new(max_items_to_keep, reserve)
-        logger_uniq_ptr = Logger::LoggerUniquePtr.new(memory_buffer_logger)
+        memory_buffer_logger = Libdnf5::Logger::MemoryBufferLogger.new(max_items_to_keep, reserve)
+        logger_uniq_ptr = Libdnf5::Logger::LoggerUniquePtr.new(memory_buffer_logger)
         log_router.add_logger(logger_uniq_ptr)
 
         # Test the number of registered loggers.
@@ -111,13 +111,13 @@ class TestLoggers < Test::Unit::TestCase
         # 2. Write messages into log_router. They will be routed into memory_buffer_logger.
         # ====================
         for i in 0..1
-            log_router.log(Logger::Logger::Level_CRITICAL, "Critical message")
-            log_router.log(Logger::Logger::Level_ERROR, "Error message")
-            log_router.log(Logger::Logger::Level_WARNING, "Warning message")
-            log_router.log(Logger::Logger::Level_NOTICE, "Notice message")
-            log_router.log(Logger::Logger::Level_INFO, "Info message")
-            log_router.log(Logger::Logger::Level_DEBUG, "Debug message")
-            log_router.log(Logger::Logger::Level_TRACE, "Trace message")
+            log_router.log(Libdnf5::Logger::Logger::Level_CRITICAL, "Critical message")
+            log_router.log(Libdnf5::Logger::Logger::Level_ERROR, "Error message")
+            log_router.log(Libdnf5::Logger::Logger::Level_WARNING, "Warning message")
+            log_router.log(Libdnf5::Logger::Logger::Level_NOTICE, "Notice message")
+            log_router.log(Libdnf5::Logger::Logger::Level_INFO, "Info message")
+            log_router.log(Libdnf5::Logger::Logger::Level_DEBUG, "Debug message")
+            log_router.log(Libdnf5::Logger::Logger::Level_TRACE, "Trace message")
         end
 
         # ====================
@@ -131,14 +131,14 @@ class TestLoggers < Test::Unit::TestCase
         # Create StreamLogger instance and swap it with MemoryBufferLogger instance which was added
         # into LogRouter before.
         tmp_logger = LibdnfLoggerCB2.new(stream1)
-        tmp_logger_uniq_ptr = Logger::LoggerUniquePtr.new(tmp_logger)
+        tmp_logger_uniq_ptr = Libdnf5::Logger::LoggerUniquePtr.new(tmp_logger)
         # In the log_router is registered only instance of MemoryBufferLogger just now.
         # The index of the first logger is "0".
         log_router.swap_logger(tmp_logger_uniq_ptr, 0)
 
         # Create secondary StreamLogger instance and add it to LogRouter as another logger.
         log2_stream = LibdnfLoggerCB2.new(stream2)
-        log2_stream_uniq_ptr = Logger::LoggerUniquePtr.new(log2_stream)
+        log2_stream_uniq_ptr = Libdnf5::Logger::LoggerUniquePtr.new(log2_stream)
         log_router.add_logger(log2_stream_uniq_ptr)
 
         # Test the number of registered loggers.
@@ -153,7 +153,7 @@ class TestLoggers < Test::Unit::TestCase
         # ====================
         # 5. Write additional message into LogRouter instance.
         # ====================
-        log_router.log(Logger::Logger::Level_INFO, "Info additional message")
+        log_router.log(Libdnf5::Logger::Logger::Level_INFO, "Info additional message")
 
         # ====================
         # 6. Check content of streams of both StreamLogger instances.

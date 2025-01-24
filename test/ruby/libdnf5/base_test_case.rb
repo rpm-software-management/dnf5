@@ -30,7 +30,7 @@ PROJECT_SOURCE_DIR = ENV["PROJECT_SOURCE_DIR"]
 
 class BaseTestCase < Test::Unit::TestCase
     def setup()
-        @base = Base::Base.new()
+        @base = Libdnf5::Base::Base.new()
 
         @temp_dir = Dir.mktmpdir("libdnf5_ruby_unittest.")
 
@@ -57,7 +57,7 @@ class BaseTestCase < Test::Unit::TestCase
         repo.get_config().get_baseurl_option().set("file://" + repo_path)
 
         if load
-          @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
+          @repo_sack.load_repos(Libdnf5::Repo::Repo::Type_AVAILABLE)
         end
 
         return repo

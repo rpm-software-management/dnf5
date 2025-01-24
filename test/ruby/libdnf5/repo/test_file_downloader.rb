@@ -27,7 +27,7 @@ require 'base_test_case'
 class TestFileDownloader < BaseTestCase
     USER_DATA = 25
 
-    class DownloadCallbacks < Repo::DownloadCallbacks
+    class DownloadCallbacks < Libdnf5::Repo::DownloadCallbacks
         attr_accessor :start_cnt, :progress_cnt, :mirror_failure_cnt, :end_cnt
         attr_accessor :end_status, :end_msg
 
@@ -76,9 +76,9 @@ class TestFileDownloader < BaseTestCase
         dest_file_path = File.join(@temp_dir, "file_downloader.pub")
 
         dl_cbs = DownloadCallbacks.new()
-        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
+        @base.set_download_callbacks(Libdnf5::Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
 
-        file_downloader = Repo::FileDownloader.new(@base)
+        file_downloader = Libdnf5::Repo::FileDownloader.new(@base)
         file_downloader.add(source_url, dest_file_path, USER_DATA)
         file_downloader.download()
 

@@ -24,7 +24,7 @@ require 'base_test_case'
 
 
 class TestPackageDownloader < BaseTestCase
-    class PackageDownloadCallbacks < Repo::DownloadCallbacks
+    class PackageDownloadCallbacks < Libdnf5::Repo::DownloadCallbacks
         attr_accessor :user_cb_data_container
         attr_accessor :start_cnt, :progress_cnt, :mirror_failure_cnt, :end_cnt
         attr_accessor :user_data_array, :user_cb_data_array, :end_status, :end_msg
@@ -75,15 +75,15 @@ class TestPackageDownloader < BaseTestCase
     def test_package_downloader()
         repo = add_repo_rpm("rpm-repo1")
 
-        query = Rpm::PackageQuery.new(@base)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
         query.filter_name(["one"])
         query.filter_arch(["noarch"])
         assert_equal(2, query.size())
 
-        downloader = Repo::PackageDownloader.new(@base)
+        downloader = Libdnf5::Repo::PackageDownloader.new(@base)
 
         cbs = PackageDownloadCallbacks.new()
-        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(cbs))
+        @base.set_download_callbacks(Libdnf5::Repo::DownloadCallbacksUniquePtr.new(cbs))
 
         user_data = 2
         it = query.begin()

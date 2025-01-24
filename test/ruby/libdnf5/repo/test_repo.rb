@@ -27,7 +27,7 @@ require 'base_test_case'
 class TestRepo < BaseTestCase
     USER_DATA = 25
 
-    class DownloadCallbacks < Repo::DownloadCallbacks
+    class DownloadCallbacks < Libdnf5::Repo::DownloadCallbacks
         attr_accessor :start_cnt, :last_user_data
         attr_accessor :end_cnt, :end_error_message
         attr_accessor :progress_cnt, :fastest_mirror_cnt, :handle_mirror_failure_cnt
@@ -65,7 +65,7 @@ class TestRepo < BaseTestCase
         end
     end
 
-    class RepoCallbacks < Repo::RepoCallbacks
+    class RepoCallbacks < Libdnf5::Repo::RepoCallbacks
         attr_accessor :repokey_import_cnt
 
         def initialize()
@@ -88,12 +88,12 @@ class TestRepo < BaseTestCase
         assert_equal(USER_DATA, repo.get_user_data())
 
         dl_cbs = DownloadCallbacks.new()
-        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
+        @base.set_download_callbacks(Libdnf5::Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
 
         cbs = RepoCallbacks.new()
-        repo.set_callbacks(Repo::RepoCallbacksUniquePtr.new(cbs))
+        repo.set_callbacks(Libdnf5::Repo::RepoCallbacksUniquePtr.new(cbs))
 
-        @repo_sack.load_repos(Repo::Repo::Type_AVAILABLE)
+        @repo_sack.load_repos(Libdnf5::Repo::Repo::Type_AVAILABLE)
 
         assert_equal(USER_DATA, dl_cbs.last_user_data)
 
@@ -111,10 +111,10 @@ class TestRepo < BaseTestCase
         repo = add_repo_repomd(repoid, load=false)
 
         dl_cbs = DownloadCallbacks.new()
-        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
+        @base.set_download_callbacks(Libdnf5::Repo::DownloadCallbacksUniquePtr.new(dl_cbs))
 
         cbs = RepoCallbacks.new()
-        repo.set_callbacks(Repo::RepoCallbacksUniquePtr.new(cbs))
+        repo.set_callbacks(Libdnf5::Repo::RepoCallbacksUniquePtr.new(cbs))
 
         @repo_sack.load_repos()
 
