@@ -22,7 +22,7 @@ require 'libdnf5/base'
 
 class TestBase < Test::Unit::TestCase
     def test_base()
-        base = Base::Base.new()
+        base = Libdnf5::Base::Base.new()
         logger = base.get_logger()
         config = base.get_config()
         repo_sack = base.get_repo_sack()
@@ -31,7 +31,7 @@ class TestBase < Test::Unit::TestCase
 
     def test_weak_ptr()
         # Creates a new Base object
-        base = Base::Base.new()
+        base = Libdnf5::Base::Base.new()
 
         # Gets a WeakPtr pointing to Vars in the Base object
         vars = base.get_vars()

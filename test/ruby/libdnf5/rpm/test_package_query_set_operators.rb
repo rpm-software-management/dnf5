@@ -29,12 +29,12 @@ class TestPackageQuerySetOperators < BaseTestCase
 
     def test_update()
         # packages with releases: 1, 2
-        q1 = Rpm::PackageQuery.new(@base)
+        q1 = Libdnf5::Rpm::PackageQuery.new(@base)
         q1.filter_release(["1", "2"])
         assert_equal(2, q1.size())
 
         # packages with releases: 2, 3
-        q2 = Rpm::PackageQuery.new(@base)
+        q2 = Libdnf5::Rpm::PackageQuery.new(@base)
         q2.filter_release(["2", "3"])
         assert_equal(2, q2.size())
 
@@ -45,12 +45,12 @@ class TestPackageQuerySetOperators < BaseTestCase
 
     def test_difference()
         # packages with releases: 1, 2
-        q1 = Rpm::PackageQuery.new(@base)
+        q1 = Libdnf5::Rpm::PackageQuery.new(@base)
         q1.filter_release(["1", "2"])
         assert_equal(2, q1.size())
 
         # packages with releases: 2, 3
-        q2 = Rpm::PackageQuery.new(@base)
+        q2 = Libdnf5::Rpm::PackageQuery.new(@base)
         q2.filter_release(["2", "3"])
         assert_equal(2, q2.size())
 
@@ -61,12 +61,12 @@ class TestPackageQuerySetOperators < BaseTestCase
 
     def test_intersection()
         # packages with releases: 1, 2
-        q1 = Rpm::PackageQuery.new(@base)
+        q1 = Libdnf5::Rpm::PackageQuery.new(@base)
         q1.filter_release(["1", "2"])
         assert_equal(2, q1.size())
 
         # packages with releases: 2, 3
-        q2 = Rpm::PackageQuery.new(@base)
+        q2 = Libdnf5::Rpm::PackageQuery.new(@base)
         q2.filter_release(["2", "3"])
         assert_equal(2, q2.size())
 

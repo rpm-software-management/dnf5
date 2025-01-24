@@ -28,13 +28,13 @@ class TestPackageQuery < BaseTestCase
     end
 
     def test_size()
-        query = Rpm::PackageQuery.new(@base)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
         assert_equal(3, query.size(), 'Number of items in the newly created query')
     end
 
     def test_filter_name()
         # Test QueryCmp::EQ
-        query = Rpm::PackageQuery.new(@base)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
         query.filter_name(["pkg"])
         assert_equal(1, query.size())
 
@@ -50,8 +50,8 @@ class TestPackageQuery < BaseTestCase
         # ---
 
         # Test QueryCmp::GLOB
-        query = Rpm::PackageQuery.new(@base)
-        query.filter_name(["pk*"], Common::QueryCmp_GLOB)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
+        query.filter_name(["pk*"], Libdnf5::Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 
         actual = []
@@ -65,7 +65,7 @@ class TestPackageQuery < BaseTestCase
     end
 
     def test_implements_enumerable()
-        query = Rpm::PackageQuery.new(@base)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
         query.filter_name(["pkg"])
         assert_equal(1, query.size())
 
@@ -73,7 +73,7 @@ class TestPackageQuery < BaseTestCase
         assert_instance_of(Enumerator, query.each)
 
         # Using each() with a block should return the collection.
-        assert_instance_of(Rpm::PackageSet, query.each(&:get_name))
+        assert_instance_of(Libdnf5::Rpm::PackageSet, query.each(&:get_name))
 
         actual_nevra = query.map { |pkg| pkg.get_nevra }
 
@@ -81,8 +81,8 @@ class TestPackageQuery < BaseTestCase
 
         # ---
 
-        query = Rpm::PackageQuery.new(@base)
-        query.filter_name(["pk*"], Common::QueryCmp_GLOB)
+        query = Libdnf5::Rpm::PackageQuery.new(@base)
+        query.filter_name(["pk*"], Libdnf5::Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 
         # Test other method than each that comes with Enumerable
