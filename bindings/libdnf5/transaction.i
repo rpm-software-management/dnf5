@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::transaction"
 #elif defined(SWIGRUBY)
-%module "libdnf5/transaction"
+%module "libdnf5::transaction"
 #endif
 
 %include <exception.i>

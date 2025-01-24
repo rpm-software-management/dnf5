@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::advisory"
 #elif defined(SWIGRUBY)
-%module "libdnf5/advisory"
+%module "libdnf5::advisory"
 #endif
 
 #if defined(SWIGRUBY)

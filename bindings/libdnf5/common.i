@@ -3,7 +3,7 @@
 #elif defined(SWIGPERL)
 %module "libdnf5::common"
 #elif defined(SWIGRUBY)
-%module "libdnf5/common"
+%module "libdnf5::common"
 #endif
 
 %include <cstring.i>
