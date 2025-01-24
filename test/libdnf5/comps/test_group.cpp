@@ -161,7 +161,8 @@ void CompsGroupTest::test_merge() {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
-        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
+        Package("dnf-plugins-core", PackageType::OPTIONAL, ""),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
     CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
 }
 
@@ -195,7 +196,8 @@ void CompsGroupTest::test_merge_when_different_load_order() {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
-        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
+        Package("dnf-plugins-core", PackageType::OPTIONAL, ""),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
     CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
 }
 
@@ -224,7 +226,14 @@ void CompsGroupTest::test_merge_with_empty() {
     CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_installed());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, core_empty.get_packages().size());
+
+    std::vector<Package> exp_pkgs_core = {
+        Package("bash", PackageType::MANDATORY, ""),
+        Package("glibc", PackageType::MANDATORY, ""),
+        Package("dnf", PackageType::DEFAULT, ""),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
+        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core_empty.get_packages());
 }
 
 
