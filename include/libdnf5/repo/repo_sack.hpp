@@ -113,12 +113,13 @@ public:
     /// @param dir The directory into which to dump the debugdata.
     void dump_comps_debugdata(const std::string & dir);
 
-    /// @deprecated It is going to be removed, please use load_repos with allows specifying repo type.
     /// Downloads (if necessary) all enabled repository metadata and loads them in parallel.
     ///
     /// This is just a thin wrapper around load_repos.
     ///
     /// @param load_system Whether to load the system repository
+    /// @deprecated Use load_repos() which allows specifying repo type.
+    [[deprecated("Use load_repos() which allows specifying repo type.")]]
     void update_and_load_enabled_repos(bool load_system);
 
     /// Downloads (if necessary) repositories of selected type and loads them in parallel.

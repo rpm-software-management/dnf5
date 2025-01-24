@@ -35,9 +35,9 @@ class TransactionPackage;
 namespace libdnf5::rpm {
 
 
-/// @deprecated This alias is confusing, do not use it.
 /// Class represents one item in transaction set.
-using TransactionItem = base::TransactionPackage;
+/// @deprecated This alias is confusing, do not use it.
+using TransactionItem [[deprecated("This alias is confusing, do not use it.")]] = base::TransactionPackage;
 
 
 /// The base class for Transaction callbacks.

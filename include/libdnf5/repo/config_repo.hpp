@@ -79,9 +79,11 @@ public:
     const OptionChild<OptionString> & get_password_option() const;
     OptionChild<OptionStringAppendList> & get_protected_packages_option();
     const OptionChild<OptionStringAppendList> & get_protected_packages_option() const;
-    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
+    /// @deprecated Use get_pkg_gpgcheck_option()
+    [[deprecated("Use get_pkg_gpgcheck_option()")]]
     OptionChild<OptionBool> & get_gpgcheck_option();
-    /// @deprecated It is going to be removed, use get_pkg_gpgcheck_option()
+    /// @deprecated Use get_pkg_gpgcheck_option() const
+    [[deprecated("Use get_pkg_gpgcheck_option() const")]]
     const OptionChild<OptionBool> & get_gpgcheck_option() const;
     OptionChild<OptionBool> & get_pkg_gpgcheck_option();
     const OptionChild<OptionBool> & get_pkg_gpgcheck_option() const;
