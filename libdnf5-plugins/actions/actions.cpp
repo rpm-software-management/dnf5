@@ -47,7 +47,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{1, 2, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 3, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -81,14 +81,15 @@ enum class Hooks {
     REPOS_LOADED,
     PRE_ADD_CMDLINE_PACKAGES,
     POST_ADD_CMDLINE_PACKAGES,
+    GOAL_RESOLVED,
     PRE_TRANS,
     POST_TRANS
 };
 
 
-class Actions final : public plugin::IPlugin {
+class Actions final : public plugin::IPlugin2_1 {
 public:
-    Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
+    Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin2_1(data) {}
     virtual ~Actions() = default;
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -142,6 +143,11 @@ public:
         on_hook(post_add_cmdline_packages_actions);
     }
 
+    void goal_resolved(const libdnf5::base::Transaction & transaction) override {
+        current_hook = Hooks::GOAL_RESOLVED;
+        on_transaction(transaction, resolved_actions);
+    }
+
     void pre_transaction(const libdnf5::base::Transaction & transaction) override {
         current_hook = Hooks::PRE_TRANS;
         on_transaction(transaction, pre_trans_actions);
@@ -184,6 +190,7 @@ private:
     std::vector<Action> repos_loaded_actions;
     std::vector<Action> pre_add_cmdline_packages_actions;
     std::vector<Action> post_add_cmdline_packages_actions;
+    std::vector<Action> resolved_actions;
     std::vector<Action> pre_trans_actions;
     std::vector<Action> post_trans_actions;
 
@@ -607,6 +614,8 @@ void Actions::parse_action_files() {
                 hook = Hooks::PRE_ADD_CMDLINE_PACKAGES;
             } else if (line.starts_with("post_add_cmdline_packages:")) {
                 hook = Hooks::POST_ADD_CMDLINE_PACKAGES;
+            } else if (line.starts_with("goal_resolved:")) {
+                hook = Hooks::GOAL_RESOLVED;
             } else if (line.starts_with("pre_transaction:")) {
                 hook = Hooks::PRE_TRANS;
             } else if (line.starts_with("post_transaction:")) {
@@ -620,11 +629,11 @@ void Actions::parse_action_files() {
             }
 
             auto pkg_filter = line.substr(pkg_filter_pos, direction_pos - pkg_filter_pos - 1);
-            if (hook != Hooks::PRE_TRANS && hook != Hooks::POST_TRANS) {
+            if (hook != Hooks::GOAL_RESOLVED && hook != Hooks::PRE_TRANS && hook != Hooks::POST_TRANS) {
                 if (!pkg_filter.empty()) {
                     throw ActionsPluginError(
-                        M_("Error in file \"{}\" on line {}: Package filter can only be used in PRE_TRANS and "
-                           "POST_TRANS hooks"),
+                        M_("Error in file \"{}\" on line {}: Package filter can only be used in GOAL_RESOLVED, "
+                           "PRE_TRANS and POST_TRANS hooks"),
                         path.native(),
                         line_number);
                 }
@@ -689,6 +698,9 @@ void Actions::parse_action_files() {
                     break;
                 case Hooks::POST_ADD_CMDLINE_PACKAGES:
                     post_add_cmdline_packages_actions.emplace_back(std::move(act));
+                    break;
+                case Hooks::GOAL_RESOLVED:
+                    resolved_actions.emplace_back(std::move(act));
                     break;
                 case Hooks::PRE_TRANS:
                     pre_trans_actions.emplace_back(std::move(act));
@@ -1226,10 +1238,10 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                 json_object_object_add_ex(
                     jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
             } else if (domain == "packages" || domain == "trans_packages") {
-                if (domain == "trans_packages" && current_hook != Hooks::PRE_TRANS &&
-                    current_hook != Hooks::POST_TRANS) {
+                if (domain == "trans_packages" && current_hook != Hooks::GOAL_RESOLVED &&
+                    current_hook != Hooks::PRE_TRANS && current_hook != Hooks::POST_TRANS) {
                     throw JsonRequestError(
-                        "Domain \"trans_packages\" used outside the hooks \"pre_transaction\" and "
+                        "Domain \"trans_packages\" used outside the hooks \"goal_resolved\", \"pre_transaction\" and "
                         "\"post_transaction\"");
                 }
                 auto * jargs = get_object(request, "args");
