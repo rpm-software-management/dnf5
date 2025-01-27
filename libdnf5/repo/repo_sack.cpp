@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
 #include "utils/auth.hpp"
+#include "utils/deprecate.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
@@ -607,6 +608,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
 
 void RepoSack::update_and_load_enabled_repos(bool load_system) {
+    LIBDNF5_DEPRECATED("Use load_repos() which allows specifying repo type.");
     if (load_system) {
         load_repos();
     } else {

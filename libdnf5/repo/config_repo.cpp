@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/config_repo.hpp"
 
 #include "conf/config_utils.hpp"
+#include "utils/deprecate.hpp"
 
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -324,9 +325,11 @@ const OptionChild<OptionStringAppendList> & ConfigRepo::get_protected_packages_o
 }
 
 OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() {
+    LIBDNF5_DEPRECATED("Use get_pkg_gpgcheck_option()");
     return p_impl->pkg_gpgcheck;
 }
 const OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() const {
+    LIBDNF5_DEPRECATED("Use get_pkg_gpgcheck_option() const");
     return p_impl->pkg_gpgcheck;
 }
 
