@@ -105,6 +105,11 @@ public:
     /// It is called at the end of the `RepoSack::add_cmdline_packages` method.
     virtual void post_add_cmdline_packages();
 
+    /// The resolved hook.
+    /// It is called right after the goal is resolved.
+    /// @param transaction Contains the transaction that was resolved.
+    virtual void resolved(const libdnf5::base::Transaction & transaction);
+
     /// The pre_transaction hook.
     /// It is called just before the actual transaction starts.
     /// @param transaction Contains the transaction that will be started.

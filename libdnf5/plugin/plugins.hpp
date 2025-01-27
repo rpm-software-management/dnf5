@@ -62,6 +62,7 @@ public:
     void repos_loaded();
     void pre_add_cmdline_packages(const std::vector<std::string> & paths);
     void post_add_cmdline_packages();
+    void resolved(const libdnf5::base::Transaction & transaction);
     void pre_transaction(const libdnf5::base::Transaction & transaction);
     void post_transaction(const libdnf5::base::Transaction & transaction);
     void finish() noexcept;
@@ -110,6 +111,8 @@ public:
 
     void post_add_cmdline_packages();
 
+    void resolved(const libdnf5::base::Transaction & transaction);
+    
     void pre_transaction(const libdnf5::base::Transaction & transaction);
 
     void post_transaction(const libdnf5::base::Transaction & transaction);
@@ -189,6 +192,12 @@ inline void Plugin::pre_add_cmdline_packages(const std::vector<std::string> & pa
 inline void Plugin::post_add_cmdline_packages() {
     if (iplugin_instance) {
         iplugin_instance->post_add_cmdline_packages();
+    }
+}
+
+inline void Plugin::resolved(const libdnf5::base::Transaction & transaction) {
+    if (iplugin_instance) {
+        iplugin_instance->resolved(transaction);
     }
 }
 

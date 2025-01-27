@@ -53,6 +53,8 @@ void IPlugin::pre_add_cmdline_packages([[maybe_unused]] const std::vector<std::s
 
 void IPlugin::post_add_cmdline_packages() {}
 
+void IPlugin::resolved([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
+
 void IPlugin::pre_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
 
 void IPlugin::post_transaction([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}

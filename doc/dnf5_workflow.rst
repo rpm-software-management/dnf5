@@ -53,6 +53,7 @@ Typical DNF5 workflow consists of:
     #. libdnf5 plugin ``post_add_cmdline_packages`` hook
     #. resolve goal (resolve dependencies)
     #. run command specific ``goal_resolved`` step
+    #. libdnf5 plugin ``resolved`` hook
     #. print transaction table
     #. check for user approval
     #. download inbound transaction packages

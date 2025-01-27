@@ -3269,6 +3269,9 @@ base::Transaction Goal::resolve() {
 #endif
         ret);
 
+    auto & plugins = p_impl->base->p_impl->get_plugins();
+    plugins.resolved(transaction);
+
     return transaction;
 }
 

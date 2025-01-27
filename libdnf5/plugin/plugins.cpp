@@ -298,6 +298,14 @@ void Plugins::post_add_cmdline_packages() {
     }
 }
 
+void Plugins::resolved(const libdnf5::base::Transaction & transaction) {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->resolved(transaction);
+        }
+    }
+}
+
 void Plugins::pre_transaction(const libdnf5::base::Transaction & transaction) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
