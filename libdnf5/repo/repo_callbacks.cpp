@@ -31,4 +31,10 @@ bool RepoCallbacks::repokey_import(const libdnf5::rpm::KeyInfo &) {
 
 void RepoCallbacks::repokey_imported(const libdnf5::rpm::KeyInfo &) {}
 
+bool RepoCallbacks::repokey_remove(const libdnf5::rpm::KeyInfo &) {
+    return true;
+}
+
+void RepoCallbacks::repokey_removed(const libdnf5::rpm::KeyInfo &) {}
+
 }  // namespace libdnf5::repo

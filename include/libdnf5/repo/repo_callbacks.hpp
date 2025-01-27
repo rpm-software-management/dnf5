@@ -51,6 +51,14 @@ public:
     /// Called on successful repo key import.
     /// @param key_info The key that was successfully imported
     virtual void repokey_imported(const libdnf5::rpm::KeyInfo & key_info);
+
+    /// OpenPGP key remove callback. Allows to confirm or deny the removal.
+    /// @param key_info The key that is about to be removed
+    /// @return `true` to remove the key, `false` to not remove
+    virtual bool repokey_remove(const libdnf5::rpm::KeyInfo & key_info);
+    /// Called on successful repo key removal.
+    /// @param key_info The key that was successfully removed
+    virtual void repokey_removed(const libdnf5::rpm::KeyInfo & key_info);
 };
 
 }  // namespace libdnf5::repo
