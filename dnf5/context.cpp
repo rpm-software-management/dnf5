@@ -59,7 +59,7 @@ namespace dnf5 {
 namespace {
 
 // The `KeyImportRepoCB` class implements callback only for importing repository key.
-class KeyImportRepoCB : public libdnf5::repo::RepoCallbacks {
+class KeyImportRepoCB : public libdnf5::repo::RepoCallbacks2_1 {
 public:
     explicit KeyImportRepoCB(libdnf5::ConfigMain & config) : config(&config) {}
 
@@ -85,6 +85,34 @@ public:
 
     void repokey_imported([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
         std::cerr << _("The key was successfully imported.") << std::endl;
+    }
+
+    bool repokey_remove(const libdnf5::rpm::KeyInfo & key_info, const libdnf5::Message & removal_info) override {
+        if (config->get_assumeno_option().get_value()) {
+            return false;
+        }
+
+        std::cerr << libdnf5::utils::sformat(
+                         _("The following PGP key (0x{}) is about to be removed:"), key_info.get_short_key_id())
+                  << std::endl;
+        std::cerr << libdnf5::utils::sformat(_(" Reason     : {}\n"), removal_info.format(true));
+        for (auto & user_id : key_info.get_user_ids()) {
+            std::cerr << libdnf5::utils::sformat(_(" UserID     : \"{}\"\n"), user_id);
+        }
+        std::cerr << libdnf5::utils::sformat(_(" From       : {}\n"), key_info.get_url());
+
+        std::cerr << std::endl << _("As a result, installing packages signed with this key will fail.") << std::endl;
+        std::cerr << _("It is recommended to remove the expired key to allow importing") << std::endl;
+        std::cerr << _("an updated key. This might leave already installed packages unverifiable.") << std::endl
+                  << std::endl;
+
+        std::cerr << _("The system will now proceed with removing the key.") << std::endl;
+
+        return libdnf5::cli::utils::userconfirm::userconfirm(*config);
+    }
+
+    void repokey_removed([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
+        std::cerr << _("The key was successfully removed.") << std::endl;
     }
 
 private:

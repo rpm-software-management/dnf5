@@ -78,6 +78,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_without dnf5_plugins
 %bcond_without plugin_actions
 %bcond_without plugin_appstream
+%bcond_without plugin_expired_pgp_keys
 %bcond_without plugin_rhsm
 %bcond_without python_plugins_loader
 
@@ -624,6 +625,23 @@ Libdnf5 plugin that installs repository's Appstream data, for repositories which
 
 %endif
 
+# ========== libdnf5-plugin-expired-pgp-keys ==========
+
+%if %{with plugin_expired_pgp_keys}
+%package -n libdnf5-plugin-expired-pgp-keys
+Summary:        Libdnf5 plugin for detecting and removing expired PGP keys
+License:        LGPL-2.1-or-later
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
+
+%description -n libdnf5-plugin-expired-pgp-keys
+Libdnf5 plugin for detecting and removing expired PGP keys.
+
+%files -n libdnf5-plugin-expired-pgp-keys -f libdnf5-plugin-expired-pgp-keys.lang
+%{_libdir}/libdnf5/plugins/expired-pgp-keys.*
+%config %{_sysconfdir}/dnf/libdnf5-plugins/expired-pgp-keys.conf
+%{_mandir}/man8/libdnf5-expired-pgp-keys.8.*
+%endif
+
 # ========== libdnf5-plugin-plugin_rhsm ==========
 
 %if %{with plugin_rhsm}
@@ -825,6 +843,7 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
     -DWITH_PLUGIN_ACTIONS=%{?with_plugin_actions:ON}%{!?with_plugin_actions:OFF} \
     -DWITH_PLUGIN_APPSTREAM=%{?with_plugin_appstream:ON}%{!?with_plugin_appstream:OFF} \
+    -DWITH_PLUGIN_EXPIRED_PGP_KEYS=%{?with_plugin_expired_pgp_keys:ON}%{!?with_plugin_expired_pgp_keys:OFF} \
     -DWITH_PLUGIN_RHSM=%{?with_plugin_rhsm:ON}%{!?with_plugin_rhsm:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
@@ -915,6 +934,7 @@ popd
 %find_lang libdnf5
 %find_lang libdnf5-cli
 %find_lang libdnf5-plugin-actions
+%find_lang libdnf5-plugin-expired-pgp-keys
 %find_lang libdnf5-plugin-rhsm
 
 %ldconfig_scriptlets
