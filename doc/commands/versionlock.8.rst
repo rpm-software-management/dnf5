@@ -88,7 +88,7 @@ Versionlock file format
 
 The versionlock file is a TOML file stored in location `/etc/dnf/versionlock.toml`.
 The file must contain the `version` key, currently supported version is `1.0`.
-Then it contains `packages` - a list of locking entries. Each entry consist of the package name and a list of conditions. All the conditions must be true for a package to match (they are combined using logical AND). All entries are then combined together using logical OR operation.
+Then it contains `packages` - a list of locking entries. Each entry consist of the package name and a list of conditions. The package name specification supports the same glob pattern matching as the shell. All the conditions must be true for a package to match (they are combined using logical AND). All entries are then combined together using logical OR operation.
 
 
 Example of versionlock file
@@ -104,7 +104,7 @@ Example of versionlock file
     name = "bash"               # name of the package
     comment = "description"     # optional description of the entry
     [[packages.conditions]]     # conditions for the package "bash"
-    key = "evr"                 # epoch, version, evr, and arch keys are supported
+    key = "evr"                 # epoch, evr, and arch keys are supported
     comparator = "="            # <, <=, =, >=, >, and != operators are supported
     value = "0:5.2.15-5.fc39"   # pattern to match
 
@@ -127,6 +127,18 @@ Example of versionlock file
     key = "evr"
     comparator = ">="
     value = "3"
+
+    # keep all *nvidia* packages on version 3:570.*
+    [[packages]]
+    name = "*nvidia*"
+    [[packages.conditions]]
+    key = "evr"
+    comparator = ">="
+    value = "3:570"
+    [[packages.conditions]]
+    key = "evr"
+    comparator = "<"
+    value = "3:571"
 
 
 See Also
