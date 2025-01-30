@@ -48,6 +48,7 @@ namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
 constexpr plugin::Version PLUGIN_VERSION{1, 3, 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 1};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -92,7 +93,7 @@ public:
     Actions(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin2_1(data) {}
     virtual ~Actions() = default;
 
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -1985,7 +1986,7 @@ void Actions::on_transaction(const libdnf5::base::Transaction & transaction, con
 }  // namespace
 
 PluginAPIVersion libdnf_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 const char * libdnf_plugin_get_name(void) {

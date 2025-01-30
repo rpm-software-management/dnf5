@@ -29,6 +29,7 @@ namespace {
 
 constexpr const char * PLUGIN_NAME{"repoclosure"};
 constexpr PluginVersion PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Marek Blaha", "mblaha@redhat.com", "repoclosure command."};
@@ -37,7 +38,7 @@ class RepoclosureCmdPlugin : public IPlugin {
 public:
     using IPlugin::IPlugin;
 
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -71,7 +72,7 @@ std::vector<std::unique_ptr<Command>> RepoclosureCmdPlugin::create_commands() {
 
 
 PluginAPIVersion dnf5_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 const char * dnf5_plugin_get_name(void) {

@@ -7,8 +7,8 @@ using namespace dnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME{"template"};
-
 constexpr PluginVersion PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Fred Fedora", "dummy@email.com", "Plugin description."};
@@ -20,7 +20,7 @@ public:
     /// Fill in the API version of your plugin.
     /// This is used to check if the provided plugin API version is compatible with the application's plugin API version.
     /// MANDATORY to override.
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     /// Enter the name of your new plugin.
     /// This is used in log messages when an action or error related to the plugin occurs.
@@ -72,7 +72,7 @@ std::vector<std::unique_ptr<Command>> TemplateCmdPlugin::create_commands() {
 
 /// Return plugin's API version.
 PluginAPIVersion dnf5_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 /// Return plugin's name.

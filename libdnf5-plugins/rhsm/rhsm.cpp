@@ -32,6 +32,7 @@ namespace {
 
 constexpr const char * PLUGIN_NAME = "rhsm";
 constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{
@@ -43,7 +44,7 @@ public:
     Rhsm(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~Rhsm() = default;
 
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -142,7 +143,7 @@ void Rhsm::setup_enrollments() {
 }  // namespace
 
 PluginAPIVersion libdnf_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 const char * libdnf_plugin_get_name(void) {

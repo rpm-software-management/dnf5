@@ -27,6 +27,7 @@ namespace {
 
 constexpr const char * PLUGIN_NAME{"copr"};
 constexpr PluginVersion PLUGIN_VERSION{.major = 0, .minor = 1, .micro = 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", nullptr};
 constexpr const char * attrs_value[]{
@@ -38,7 +39,7 @@ class CoprCmdPlugin : public IPlugin {
 public:
     using IPlugin::IPlugin;
 
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -72,7 +73,7 @@ public:
 
 
 PluginAPIVersion dnf5_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 const char * dnf5_plugin_get_name(void) {
