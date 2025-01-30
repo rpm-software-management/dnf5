@@ -56,8 +56,7 @@ PluginLibrary::PluginLibrary(Context & context, const std::string & library_path
 
     const auto & application_plugin_api_version = dnf5::get_plugin_api_version();
     const auto & plugin_api_version = get_api_version();
-    if (plugin_api_version.major != application_plugin_api_version.major ||
-        plugin_api_version.minor < application_plugin_api_version.minor) {
+    if (plugin_api_version.major != application_plugin_api_version.major) {
         auto msg = fmt::format(
             "Unsupported plugin API combination. API version provided by plugin \"{}\" (\"{}\") is \"{}.{}\"."
             " API version in dnf5 is \"{}.{}\".",
