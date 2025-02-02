@@ -157,6 +157,15 @@ void ImplPtrTest::test_copy_constructor() {
         CPPUNIT_ASSERT_EQUAL(10, new_object->get_a());
         CPPUNIT_ASSERT(nullptr != src_object.get());
         CPPUNIT_ASSERT_EQUAL(10, src_object->get_a());
+
+        // Tests the copy constructor. The empty source object.
+        // No new `CTest` instance is created.
+        libdnf5::ImplPtr<CTest> empty_object;
+        CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
+        libdnf5::ImplPtr<CTest> new_empty_object_copy(empty_object);
+        CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
+        CPPUNIT_ASSERT(nullptr == empty_object.get());
+        CPPUNIT_ASSERT(nullptr == new_empty_object_copy.get());
     }
 
     // Tests that all instances of the `CTest` class are destroyed. No leaks.
@@ -174,6 +183,14 @@ void ImplPtrTest::test_move_constructor() {
         libdnf5::ImplPtr<CTest> new_object(std::move(src_object));
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
         CPPUNIT_ASSERT_EQUAL(10, new_object->get_a());
+        CPPUNIT_ASSERT(nullptr == src_object.get());
+
+        // Tests the move constructor. The empty source object.
+        // No new `CTest` instances are created.
+        libdnf5::ImplPtr<CTest> empty_object;
+        libdnf5::ImplPtr<CTest> new_object2(std::move(empty_object));
+        CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
+        CPPUNIT_ASSERT(nullptr == new_object2.get());
         CPPUNIT_ASSERT(nullptr == src_object.get());
     }
 
@@ -203,12 +220,23 @@ void ImplPtrTest::test_copy_assignment() {
 
         // Tests the copy assignment to empty (moved from) object. The source object remains unchanged.
         // A new `CTest` instance is created.
-        libdnf5::ImplPtr<CTest> empty_object;
-        CPPUNIT_ASSERT(nullptr == empty_object.get());
-        empty_object = dst_object;
+        libdnf5::ImplPtr<CTest> empty_dst_object;
+        CPPUNIT_ASSERT(nullptr == empty_dst_object.get());
+        empty_dst_object = dst_object;
         CPPUNIT_ASSERT_EQUAL(3, CTest::get_instance_counter());
-        CPPUNIT_ASSERT_EQUAL(10, empty_object->get_a());
+        CPPUNIT_ASSERT_EQUAL(10, empty_dst_object->get_a());
         CPPUNIT_ASSERT_EQUAL(10, dst_object->get_a());
+
+        // Tests the copy assignment from empty to non empty object.
+        // The old `CTest` instance in the destination is destroyed.
+        libdnf5::ImplPtr<CTest> empty_src_object;
+        CPPUNIT_ASSERT_EQUAL(3, CTest::get_instance_counter());
+        CPPUNIT_ASSERT(nullptr == empty_src_object.get());
+        CPPUNIT_ASSERT(nullptr != dst_object.get());
+        dst_object = empty_src_object;
+        CPPUNIT_ASSERT(nullptr == empty_src_object.get());
+        CPPUNIT_ASSERT(nullptr == dst_object.get());
+        CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
     }
 
     // Tests that all instances of the `CTest` class are destroyed. No leaks.
@@ -245,6 +273,16 @@ void ImplPtrTest::test_move_assignment() {
         CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
         CPPUNIT_ASSERT_EQUAL(10, empty_object->get_a());
         CPPUNIT_ASSERT(nullptr == dst_object.get());
+
+        // Tests the move assignment from empty to non empty object.
+        // The old `CTest` instance in the destination is destroyed.
+        libdnf5::ImplPtr<CTest> empty_src_object;
+        libdnf5::ImplPtr<CTest> non_empty_dst_object(new CTest(5));
+        CPPUNIT_ASSERT_EQUAL(2, CTest::get_instance_counter());
+        non_empty_dst_object = std::move(empty_src_object);
+        CPPUNIT_ASSERT(nullptr == empty_src_object.get());
+        CPPUNIT_ASSERT(nullptr == non_empty_dst_object.get());
+        CPPUNIT_ASSERT_EQUAL(1, CTest::get_instance_counter());
     }
 
     // Tests that all instances of the `CTest` class are destroyed. No leaks.
