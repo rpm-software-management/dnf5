@@ -89,6 +89,18 @@ LIBDNF_API const char * b_gettextmsg_get_id(struct BgettextMessage message) {
     return msgId;
 }
 
+LIBDNF_API const char * b_gettextmsg_get_plural_id(struct BgettextMessage message) {
+    if (!(*message.bgettextMsg & BGETTEXT_PLURAL)) {
+        return NULL;
+    }
+    const char * msgId = message.bgettextMsg + 1;
+    if (*message.bgettextMsg & BGETTEXT_DOMAIN) {
+        msgId = strchr(msgId, 0) + 1;
+    }
+    msgId = strchr(msgId, 0) + 1;  // skip message id
+    return msgId;
+}
+
 LIBDNF_API const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
     const char * markedMsg = message.bgettextMsg;
     if ((*markedMsg & ~(BGETTEXT_PLURAL | BGETTEXT_CONTEXT | BGETTEXT_DOMAIN)) == 0) {
