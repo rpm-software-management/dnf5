@@ -45,7 +45,12 @@ public:
     ImplPtr & operator=(const ImplPtr & src) {
         if (ptr != src.ptr) {
             if (ptr) {
-                *ptr = *src.ptr;
+                if (src.ptr) {
+                    *ptr = *src.ptr;
+                } else {
+                    delete ptr;
+                    ptr = nullptr;
+                }
             } else {
                 ptr = new T(*src.ptr);
             }
