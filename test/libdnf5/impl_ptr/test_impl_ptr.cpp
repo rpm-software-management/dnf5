@@ -63,7 +63,7 @@ int CTest::instance_counter = 0;
 
 
 static_assert(std::is_nothrow_default_constructible_v<libdnf5::ImplPtr<CTest>>);
-static_assert(std::is_nothrow_default_constructible_v<libdnf5::ImplPtr<CTest>>);
+static_assert(std::is_nothrow_constructible_v<libdnf5::ImplPtr<CTest>, CTest *>);
 static_assert(std::is_copy_constructible_v<libdnf5::ImplPtr<CTest>>);
 static_assert(std::is_copy_assignable_v<libdnf5::ImplPtr<CTest>>);
 
