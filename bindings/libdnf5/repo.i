@@ -15,6 +15,60 @@
 %import "common.i"
 %import "conf.i"
 
+#ifdef SWIGPYTHON
+
+%{
+#include <map>
+#include <string>
+#include <Python.h>
+
+static std::map<void*, PyObject*> user_data_map;
+
+extern "C" void* store_user_data(PyObject* py_obj) {
+    void* key = reinterpret_cast<void*>(py_obj);
+    user_data_map[key] = py_obj;
+    Py_XINCREF(py_obj);
+    return key;
+}
+
+extern "C" PyObject* retrieve_user_data(void* key) {
+    auto it = user_data_map.find(key);
+    if (it != user_data_map.end()) {
+        return it->second;
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+extern "C" void remove_user_data(void* key) {
+    auto it = user_data_map.find(key);
+    if (it != user_data_map.end()) {
+        Py_XDECREF(it->second);
+        user_data_map.erase(it);
+    }
+}
+%}
+
+%typemap(in) void* user_cb_data {
+    $1 = store_user_data($input);
+}
+
+%typemap(freearg) void* user_cb_data {
+    remove_user_data($1);
+}
+
+%typemap(directorin) void* {
+    $input = retrieve_user_data($1);
+    Py_XINCREF($input);
+}
+
+%typemap(directorout) void* {
+    $result = store_user_data($1);
+}
+
+%apply void* user_cb_data { void* };
+#endif
+
 #if SWIG_VERSION == 0x040200
 // https://github.com/swig/swig/issues/2744
 %fragment("SwigPyIterator_T");
