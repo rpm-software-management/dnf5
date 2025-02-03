@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
 #include <fmt/format.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <librepo/librepo.h>
 
 #include <algorithm>
@@ -215,7 +216,7 @@ void PackageDownloader::download() try {
             } else {
                 status = DownloadCallbacks::TransferStatus::ALREADYEXISTS;
                 if (same_file) {
-                    msg = "Already downloaded";
+                    msg = _("Already downloaded");
                 } else {
                     msg = fmt::format("Copied from {}", source.string());
                 }
