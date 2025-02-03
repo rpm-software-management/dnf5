@@ -54,6 +54,8 @@ LIBDNF_CLI_API std::ostream & cursor_show(std::ostream & stream);
 
 LIBDNF_CLI_API int get_width();
 LIBDNF_CLI_API bool is_interactive();
+LIBDNF_CLI_API void set_colorized(bool);
+LIBDNF_CLI_API bool is_colorized();
 
 
 }  // namespace libdnf5::cli::tty
