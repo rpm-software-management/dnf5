@@ -43,7 +43,7 @@ class Base::Impl {
 public:
     /// @return The system state object.
     /// @since 5.0
-    libdnf5::system::State & get_system_state() { return *system_state; }
+    libdnf5::system::State & get_system_state();
     libdnf5::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     solv::RpmPool & get_rpm_pool() {

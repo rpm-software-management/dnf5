@@ -307,18 +307,6 @@ State::State(const std::filesystem::path & path) : path(path) {
 
 
 bool State::packages_import_required() {
-    // Importing will require write permission
-    std::error_code ec;
-    std::filesystem::create_directories(path, ec);
-    if (ec) {
-        return false;
-    }
-    try {
-        utils::fs::TempFile(path, "permissions-test");
-    } catch (const FileSystemError & e) {
-        return false;
-    }
-
     // TODO(mblaha) - detect by absence of toml file instead of empty nevra_states?
     // Because even empty nevra_states is a valid state.
     return nevra_states.empty();
