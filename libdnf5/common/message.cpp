@@ -37,4 +37,19 @@ Message::~Message() = default;
 Message & Message::operator=(const Message & src) = default;
 Message & Message::operator=(Message && src) noexcept = default;
 
+
+EmptyMessage::EmptyMessage() = default;
+EmptyMessage::EmptyMessage(const EmptyMessage & src) = default;
+EmptyMessage::EmptyMessage(EmptyMessage && src) noexcept = default;
+
+EmptyMessage::~EmptyMessage() = default;
+
+EmptyMessage & EmptyMessage::operator=(const EmptyMessage & src) = default;
+EmptyMessage & EmptyMessage::operator=(EmptyMessage && src) noexcept = default;
+
+std::string EmptyMessage::format(
+    [[maybe_unused]] bool translate, [[maybe_unused]] const libdnf5::utils::Locale * locale) const {
+    return "";
+}
+
 }  // namespace libdnf5

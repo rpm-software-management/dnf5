@@ -54,6 +54,26 @@ private:
     ImplPtr<Impl> p_impl;
 };
 
+
+/// Class for passing an empty message.
+class LIBDNF_API EmptyMessage final : public Message {
+public:
+    EmptyMessage();
+    EmptyMessage(const EmptyMessage & src);
+    EmptyMessage(EmptyMessage && src) noexcept;
+    ~EmptyMessage() override;
+
+    EmptyMessage & operator=(const EmptyMessage & src);
+    EmptyMessage & operator=(EmptyMessage && src) noexcept;
+
+    /// Returns empty string
+    ///
+    /// @param translate  ignored
+    /// @param locale     ignored
+    /// @return empty string object
+    std::string format(bool translate, const libdnf5::utils::Locale * locale = nullptr) const override;
+};
+
 }  // namespace libdnf5
 
 #endif  // LIBDNF5_COMMON_MESSAGE_HPP
