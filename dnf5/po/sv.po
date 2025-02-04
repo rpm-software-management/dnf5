@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Göran Uddeborg <goeran@uddeborg.se>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Göran Uddeborg <goeran@uddeborg.se>, 2024, 2025.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-19 09:15+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-26 04:53+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/sv/>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "Hantera rekommendationer"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "Skriv ut detaljer om rekommendationer"
 
@@ -88,7 +88,7 @@ msgstr ""
 "Visa endast rekommendationer som innehåller paket med angivna namn. "
 "Listaflagga, stödjer ”glob”:ar."
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "PAKET_NAMN,..."
 
@@ -316,9 +316,26 @@ msgstr ""
 msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr "Se inte extra paket som dras in i transaktionen som fel."
 
+#: commands/history/arguments.hpp:80
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"Visa endast transaktioner som innehåller paket med angivna namn. Listflagga, "
+"stödjer ”glob”:ar."
+
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
 msgstr "Hantera transaktionshistoriken"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
+"Inga matchningar hittades, historikinformation tar som standard endast den "
+"senaste transaktionen i beaktande, ange intervallet \"1..last\" för att söka "
+"efter alla transaktioner."
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -346,7 +363,7 @@ msgid ""
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
 "Ogiltigt transaktions-ID-intervall \"{}\", \"ID\" eller \"ID..ID\" "
-"förväntas, där ID är \"NUMMER\", \"senaste\" eller \"senaste NUMMER\"."
+"förväntas, där ID är \"NUMMER\", \"last\" eller \"last-NUMMER\"."
 
 #: commands/install/install.cpp:41
 msgid "Install software"
@@ -764,11 +781,11 @@ msgstr "Lista över paketspecifikationer att lägga till versionslås för"
 msgid "No package found for \"{}\"."
 msgstr "Inga paket hittades för \"{}\"."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Lägger till versionslås på \"{0}={1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
 msgstr "Paketet \"{}\" är redan låst."
 
@@ -807,8 +824,8 @@ msgid "Package \"{}\" is already excluded."
 msgstr "Paketet \"{}\" är redan exkluderat."
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr "Importerar PGP-nyckel 0x{}:\n"
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "Importerar OpenPGP-nyckel 0x{}:\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
@@ -830,7 +847,7 @@ msgstr "Nyckeln importerades framgångsrikt."
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
 msgstr ", "
 
@@ -1132,8 +1149,8 @@ msgstr ""
 "anges flera gånger."
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
-msgstr "avaktivera kontroll av gpg-signatur (om RPM-policyn tillåter)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "avaktivera kontroll av OpenPGP-signatur (om RPM-policyn tillåter)"
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
@@ -1273,7 +1290,7 @@ msgstr ""
 "Total storlek på inkommande paket är {:.0f} {:s}. Behöver ladda ner {:.0f} {:"
 "s}."
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1281,7 +1298,7 @@ msgstr ""
 "Efter denna operation kommer {:.0f} {:s} extra att användas (install {:.0f} "
 "{:s}, remove {:.0f} {:s})."
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1289,39 +1306,39 @@ msgstr ""
 "Efter denna operation kommer {:.0f} {:s} att frigöras (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
 msgstr "======== Huvudkonfiguration: ========"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Inget matchande förråd för att skriva dumpkonfiguration: \"{}\""
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" Förrådskonfiguration: ========"
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
 msgstr "======== Variabler: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
 msgstr "Nya löv:"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
 msgstr "{} för att hoppa över otillgängliga paket"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} för att tillåta extra paket i transaktionen"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1331,27 +1348,27 @@ msgstr ""
 "transaktionspaket. Detta kan resultera i en tom transaktion eftersom "
 "alternativet bland annat kan ignorera misslyckade ta bort åtgärder."
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} för att inte begränsa transaktionen till de bästa kandidaterna"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} för att tillåta att ta bort installerade paket för att lösa problem"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
 msgstr "{} för att läsa in ytterligare fillistemetadata"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
 msgstr "{} för att hoppa över oinstallerbara paket"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
 msgstr "Du kan försöka lägga till till kommandoraden:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1359,7 +1376,7 @@ msgstr ""
 "Inga matchningar hittades för följande pluginnamnmönster när libdnf-plugins "
 "aktiverades: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1367,19 +1384,19 @@ msgstr ""
 "Inga matchningar hittades för följande pluginnamnsmönster när libdnf-plugins "
 "inaktiverades: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 startades med argument: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Lägg till \"--help\" för mer information om argumenten."
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1387,11 +1404,19 @@ msgstr ""
 "Det kan vara ett kommando från ett plugin, försök med: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"Argumentet är tillgängligt för kommandon: {}. (Det måste placeras efter "
+"kommandot.)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Inga läs-/körrättigheter i aktuell katalog, flyttar till /"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1402,23 +1427,23 @@ msgstr ""
 "downloadonly\" alternativen för att köra kommandot utan att ändra "
 "systemtillståndet."
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
 msgstr "Operationen kommer endast att lagra transaktionen i {}"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
 msgstr "Operationen kommer bara att ladda ner paket för transaktionen."
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
-"Testläge aktiverat: Endast paketnedladdningar, PGP-nyckelinstallationer och "
-"transaktionskontroller kommer att utföras."
+"Testläge aktiverat: Endast paketnedladdningar, OpenPGP-nyckelinstallationer "
+"och transaktionskontroller kommer att utföras."
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1426,15 +1451,15 @@ msgstr ""
 "Inga förråd laddades från installationsroten. För att använda värdsystemets "
 "konfiguration och förråd, skicka --use-host-config."
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
 msgstr "Kommandot returnerade fel: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
 msgstr "DNF5 färdig"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "Färdig!"
 

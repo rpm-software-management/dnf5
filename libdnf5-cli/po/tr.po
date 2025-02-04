@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-09-21 14:54+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-13 16:30+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/tr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -146,7 +146,7 @@ msgstr "Ad"
 msgid "Epoch"
 msgstr "Dönem"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
 msgstr "Sürüm"
 
@@ -178,7 +178,7 @@ msgstr "Kaynak"
 msgid "From repository"
 msgstr "Geldiği depo"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
 msgstr "Depo"
 
@@ -202,185 +202,209 @@ msgstr "Açıklama"
 msgid "Vendor"
 msgstr "Sağlayıcı"
 
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " (tam)"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "Eşleşme bulunamadı."
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "Eşleşen alanlar: "
+
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
 msgstr "İşlem Özeti:\n"
 
-#: output/transaction_table.cpp:131
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Kuruluyor:       {:4} paket\n"
 msgstr[1] " Kuruluyor:       {:4} paket\n"
 
-#: output/transaction_table.cpp:138
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Yeniden kuruluyor: {:4} paket\n"
 msgstr[1] " Yeniden kuruluyor: {:4} paket\n"
 
-#: output/transaction_table.cpp:145
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Yükseltiliyor:   {:4} paket\n"
 msgstr[1] " Yükseltiliyor:   {:4} paket\n"
 
-#: output/transaction_table.cpp:152
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
-msgid_plural " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Değiştiriliyor:  {:4} paket\n"
 msgstr[1] " Değiştiriliyor:  {:4} paket\n"
 
-#: output/transaction_table.cpp:159
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Kaldırılıyor:    {:4} paket\n"
 msgstr[1] " Kaldırılıyor:    {:4} paket\n"
 
-#: output/transaction_table.cpp:166
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Sürümü düşürülüyor: {:4} package\n"
 msgstr[1] " Sürümü düşürülüyor: {:4} package\n"
 
-#: output/transaction_table.cpp:173
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Sebep değiştiriliyor: {:4} package\n"
 msgstr[1] " Sebep değiştiriliyor: {:4} package\n"
 
-#: output/transaction_table.cpp:181
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Atlanıyor:       {:4} package\n"
 msgstr[1] " Atlanıyor:       {:4} package\n"
 
-#: output/transaction_table.cpp:262
+#: output/transaction_table.cpp:277
 msgid "Package"
 msgstr "Paket"
 
-#: output/transaction_table.cpp:268
+#: output/transaction_table.cpp:283
 msgid "Arch"
 msgstr "Mimari"
 
-#: output/transaction_table.cpp:286
+#: output/transaction_table.cpp:301
 msgid "Size"
 msgstr "Boyut"
 
-#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:358
+#: output/transaction_table.cpp:373
 msgid "replacing {}"
 msgstr "{} değiştiriliyor"
 
-#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
 msgstr " <ad-ayarlanmadı>"
 
-#: output/transaction_table.cpp:442
+#: output/transaction_table.cpp:457
 msgid "replacing "
 msgstr "değiştiriliyor "
 
-#: output/transaction_table.cpp:455
+#: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
 msgstr "Çakışan paketler atlanıyor:"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
 msgstr "Hatalı bağımlılıkları olan paketler atlanıyor:"
 
-#: output/transaction_table.cpp:518
+#: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
 msgstr "Bağımlılıklar kuruluyor:"
 
-#: output/transaction_table.cpp:520
+#: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
 msgstr "Zayıf bağımlılıklar kuruluyor:"
 
-#: output/transaction_table.cpp:522
+#: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
 msgstr "Grup/modül paketleri kuruluyor:"
 
-#: output/transaction_table.cpp:524
+#: output/transaction_table.cpp:539
 msgid "Installing:"
 msgstr "Kuruluyor:"
 
-#: output/transaction_table.cpp:528
+#: output/transaction_table.cpp:543
 msgid "Upgrading:"
 msgstr "Yükseltiliyor:"
 
-#: output/transaction_table.cpp:531
+#: output/transaction_table.cpp:546
 msgid "Downgrading:"
 msgstr "Sürümü düşürülüyor:"
 
-#: output/transaction_table.cpp:534
+#: output/transaction_table.cpp:549
 msgid "Reinstalling:"
 msgstr "Yeniden kuruluyor:"
 
-#: output/transaction_table.cpp:538
+#: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
 msgstr "Bağımlı paketler kaldırılıyor:"
 
-#: output/transaction_table.cpp:540
+#: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
 msgstr "Kullanılmayan bağımlılıklar kaldırılıyor:"
 
-#: output/transaction_table.cpp:542
+#: output/transaction_table.cpp:557
 msgid "Removing:"
 msgstr "Kaldırılıyor:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:561
 msgid "Changing reason:"
 msgstr "Sebep değiştiriliyor:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
 msgstr "Grup bağımlılıkları kuruluyor:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:595
 msgid "Installing groups:"
 msgstr "Gruplar kuruluyor:"
 
-#: output/transaction_table.cpp:584
+#: output/transaction_table.cpp:599
 msgid "Removing groups:"
 msgstr "Gruplar kaldırılıyor:"
 
-#: output/transaction_table.cpp:587
+#: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
 msgstr "Gruplar yükseltiliyor:"
 
-#: output/transaction_table.cpp:614
+#: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
 msgstr "Ortam grupları kuruluyor:"
 
-#: output/transaction_table.cpp:617
+#: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
 msgstr "Ortam grupları kaldırılıyor:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
 msgstr "Ortam grupları yükseltiliyor:"
 
-#: output/transaction_table.cpp:647
+#: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
 msgstr "Modül akışları etkinleştiriliyor:"
 
-#: output/transaction_table.cpp:650
+#: output/transaction_table.cpp:665
 msgid "Disabling modules:"
 msgstr "Modüller devre dışı bırakılıyor:"
 
-#: output/transaction_table.cpp:653
+#: output/transaction_table.cpp:668
 msgid "Resetting modules:"
 msgstr "Modüller sıfırlanıyor:"
 
-#: output/transaction_table.cpp:656
+#: output/transaction_table.cpp:671
 msgid "Switching module streams:"
 msgstr "Modül akışları değiştiriliyor:"
 
-#: output/transaction_table.cpp:730
+#: output/transaction_table.cpp:745
 msgid "Nothing to do."
 msgstr "Yapılacak bir şey yok."
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "Toplam"
 
 #: session.cpp:149
 msgid "Missing command"

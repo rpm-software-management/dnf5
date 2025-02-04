@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-11-20 14:32+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-20 02:09+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -88,7 +88,8 @@ msgstr "Komentotunnus \"{}\" ei sisällä alikomentoa tunnuksella \"{}\""
 
 #: argument_parser.cpp:981
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr "Komentotunnus \"{}\" ei sisällä nimettyä argumenttia tunnuksella \"{}\""
+msgstr ""
+"Komentotunnus \"{}\" ei sisällä nimettyä argumenttia tunnuksella \"{}\""
 
 #: argument_parser.cpp:989
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
@@ -146,7 +147,7 @@ msgstr "Nimi"
 msgid "Epoch"
 msgstr "Ajanjakso"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
 msgstr "Versio"
 
@@ -176,11 +177,11 @@ msgstr "Lähde"
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr "Tietovarastosta"
+msgstr "Ohjelmistolähteestä"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
-msgstr "Tietovarasto"
+msgstr "Ohjelmistolähde"
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
@@ -202,185 +203,209 @@ msgstr "Kuvaus"
 msgid "Vendor"
 msgstr "Toimittaja"
 
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " (tarkka)"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "Täsmäävyyksiä ei löytynyt."
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "Täsmäävät kentät: "
+
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
 msgstr "Transaktion yhteenveto:\n"
 
-#: output/transaction_table.cpp:131
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Asennetaan:      {:4} paketti\n"
 msgstr[1] " Asennetaan:      {:4} pakettia\n"
 
-#: output/transaction_table.cpp:138
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Asennetaan uudelleen:    {:4} paketti\n"
 msgstr[1] " Asennetaan uudelleen:    {:4} pakettia\n"
 
-#: output/transaction_table.cpp:145
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Päivitetään:       {:4} paketti\n"
 msgstr[1] " Päivitetään:       {:4} pakettia\n"
 
-#: output/transaction_table.cpp:152
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
-msgid_plural " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " Korvataan:       {:4} paketti\n"
 msgstr[1] " Korvataan:       {:4} pakettia\n"
 
-#: output/transaction_table.cpp:159
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Poistetaan:        {:4} paketti\n"
 msgstr[1] " Poistetaan:        {:4} pakettia\n"
 
-#: output/transaction_table.cpp:166
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Varhennetaan:     {:4} paketti\n"
 msgstr[1] " Varhennetaan:     {:4} pakettia\n"
 
-#: output/transaction_table.cpp:173
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Vaihdetaan syy: {:4} paketti\n"
 msgstr[1] " Vaihdetaan syy: {:4} pakettia\n"
 
-#: output/transaction_table.cpp:181
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Ohitetaan:        {:4} paketti\n"
 msgstr[1] " Ohitetaan:        {:4} pakettia\n"
 
-#: output/transaction_table.cpp:262
+#: output/transaction_table.cpp:277
 msgid "Package"
 msgstr "Paketti"
 
-#: output/transaction_table.cpp:268
+#: output/transaction_table.cpp:283
 msgid "Arch"
 msgstr "Arkkiteht."
 
-#: output/transaction_table.cpp:286
+#: output/transaction_table.cpp:301
 msgid "Size"
 msgstr "Koko"
 
-#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:358
+#: output/transaction_table.cpp:373
 msgid "replacing {}"
 msgstr "korvaa {}"
 
-#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
 msgstr " <nimi-ei-määritelty>"
 
-#: output/transaction_table.cpp:442
+#: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr "korvaa "
+msgstr "korvataan "
 
-#: output/transaction_table.cpp:455
+#: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
 msgstr "Ohitetaan ristiriidassa olevat paketit:"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
 msgstr "Ohitetaan rikkinäisiä riippuvuuksia omaavat paketit:"
 
-#: output/transaction_table.cpp:518
+#: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
 msgstr "Asennetaan riippuvuuksia:"
 
-#: output/transaction_table.cpp:520
+#: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
 msgstr "Asennetaan heikkoja riippuvuuksia:"
 
-#: output/transaction_table.cpp:522
+#: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
 msgstr "Asennetaan ryhmä-/moduulipaketteja:"
 
-#: output/transaction_table.cpp:524
+#: output/transaction_table.cpp:539
 msgid "Installing:"
 msgstr "Asennetaan:"
 
-#: output/transaction_table.cpp:528
+#: output/transaction_table.cpp:543
 msgid "Upgrading:"
 msgstr "Päivitetään:"
 
-#: output/transaction_table.cpp:531
+#: output/transaction_table.cpp:546
 msgid "Downgrading:"
-msgstr "Varhennetaan:"
+msgstr "Vanhennetaan:"
 
-#: output/transaction_table.cpp:534
+#: output/transaction_table.cpp:549
 msgid "Reinstalling:"
 msgstr "Asennetaan uudelleen:"
 
-#: output/transaction_table.cpp:538
+#: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
 msgstr "Poistetaan riippuvaiset paketit:"
 
-#: output/transaction_table.cpp:540
+#: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
 msgstr "Poistetaan käyttämättömiä riippuvuuksia:"
 
-#: output/transaction_table.cpp:542
+#: output/transaction_table.cpp:557
 msgid "Removing:"
 msgstr "Poistetaan:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:561
 msgid "Changing reason:"
 msgstr "Muutetaan syy:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
 msgstr "Asennetaan ryhmäriippuvuuksia:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:595
 msgid "Installing groups:"
 msgstr "Asennetaan ryhmiä:"
 
-#: output/transaction_table.cpp:584
+#: output/transaction_table.cpp:599
 msgid "Removing groups:"
 msgstr "Poistetaan ryhmiä:"
 
-#: output/transaction_table.cpp:587
+#: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
 msgstr "Päivitetään ryhmät:"
 
-#: output/transaction_table.cpp:614
+#: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
 msgstr "Asennetaan ympäristöryhmiä:"
 
-#: output/transaction_table.cpp:617
+#: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
 msgstr "Poistetaan ympäristöryhmiä:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
 msgstr "Päivitetään ympäristöryhmiä:"
 
-#: output/transaction_table.cpp:647
+#: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
 msgstr "Otetaan moduulivirtoja käyttöön:"
 
-#: output/transaction_table.cpp:650
+#: output/transaction_table.cpp:665
 msgid "Disabling modules:"
 msgstr "Poistetaan moduuleita käytöstä:"
 
-#: output/transaction_table.cpp:653
+#: output/transaction_table.cpp:668
 msgid "Resetting modules:"
 msgstr "Nollataan moduuleita:"
 
-#: output/transaction_table.cpp:656
+#: output/transaction_table.cpp:671
 msgid "Switching module streams:"
 msgstr "Vaihdetaan moduulivirtoja:"
 
-#: output/transaction_table.cpp:730
+#: output/transaction_table.cpp:745
 msgid "Nothing to do."
 msgstr "Ei mitään tehtävää."
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "Yhteensä"
 
 #: session.cpp:149
 msgid "Missing command"

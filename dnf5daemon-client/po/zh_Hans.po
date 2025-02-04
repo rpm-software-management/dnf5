@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Yang Yulin <yylteam@icloud.com>, 2024.
 # Wenyin Root <ruojiner@hotmail.com>, 2024.
+# caffiendo c <1728778012@qq.com>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-06 09:16+0000\n"
-"Last-Translator: Wenyin Root <ruojiner@hotmail.com>\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-15 02:53+0000\n"
+"Last-Translator: caffiendo c <1728778012@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate."
 "fedoraproject.org/projects/dnf5/dnf5daemon-client/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -25,7 +27,7 @@ msgstr "管理意见"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "打印公告细节"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
@@ -33,62 +35,62 @@ msgstr "列出意见"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr ""
+msgstr "显示包含任何版本已安装软件包的建议。"
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr ""
+msgstr "显示包含已安装软件包的较新版本的建议。 这是默认行为。"
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
-msgstr ""
+msgstr "显示包含已安装软件包的相同版本和旧版本的建议。"
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
-msgstr ""
+msgstr "显示包含已安装软件包的较新版本的建议，其中有较新版本可用。"
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
-msgstr ""
+msgstr "仅显示包含指定名称的包的建议。 列表选项，支持匹配符。"
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PACKAGE_NAME,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "与建议名称匹配的列表。"
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "仅显示引用 bugzilla 的建议。"
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "仅显示引用 CVE 的建议。"
 
 #: commands/advisory/arguments.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
-msgstr ""
+msgstr "限制为具有指定名称的公告中的软件包。 列表选项。"
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr ""
+msgstr "限制安全公告中的软件包。"
 
 #: commands/advisory/arguments.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr ""
+msgstr "限制错误修复建议中的软件包。"
 
 #: commands/advisory/arguments.hpp:135
 msgid "Limit to packages in enhancement advisories."
@@ -104,36 +106,38 @@ msgstr "仅限于新软件包公告中的软件包。"
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
-msgstr "限制为具有指定严重性的公告中的包。列表选项。可以是\"关键\", \"重要\", \"中等"
-"\", \"低\", \"无\" 。"
+msgstr ""
+"限制为具有指定严重性的公告中的包。列表选项。可以是\"critical\", "
+"\"important\", \"moderate\", \"low\", \"none\" 。"
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "严重警告,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
-msgstr ""
+msgstr "仅限于修复Bugzilla ID(例如123123)公告中的包，列表选项。"
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"仅限于修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)公告中的包，列表选项。"
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"
-msgstr ""
+msgstr "清除缓存错误: {}"
 
 #: commands/distro-sync/distro-sync.cpp:48
 msgid ""
@@ -142,49 +146,49 @@ msgstr "升级或降级已安装的软件至最新可用版本"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr ""
+msgstr "计算机软件包组管理"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
-msgstr ""
+msgstr "仅显示可用的软件包组。"
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr ""
+msgstr "仅显示已安装的软件组。"
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "同时显示已隐藏的软件包组。"
 
 #: commands/group/group_list.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
-msgstr ""
+msgstr "仅显示包含具有指定名称的软件包组。列表选项，支持通配符。"
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
-msgstr ""
+msgstr "仓库管理"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr ""
+msgstr "搜索符合条件的软件包"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr ""
+msgstr "解析JSON对象错误 \"{}\": {}"
 
 #: exception.cpp:28
 msgid ""
 "This command has to be run with superuser privileges (under the root user on "
 "most systems)."
-msgstr ""
+msgstr "该命令必须以管理员权限运行(大多数系统是在root用户下)。"
 
 #: main.cpp:157
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr ""
+msgstr "{}: 不符合格式的参数值: 最后一个字符不能是 '.': {}"
 
 #: main.cpp:259 main.cpp:296
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr "。添加 \"--help\" 参数来获取更多参数信息。"

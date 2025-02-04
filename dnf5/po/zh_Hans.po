@@ -5,27 +5,29 @@
 # Yang Yulin <yylteam@icloud.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Wenyin Root <ruojiner@hotmail.com>, 2024.
+# caffiendo c <1728778012@qq.com>, 2024.
+# hg wd <cut-punisher-stays@duck.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-06 09:16+0000\n"
-"Last-Translator: Wenyin Root <ruojiner@hotmail.com>\n"
-"Language-Team: Chinese (Simplified Han script) <https://translate."
-"fedoraproject.org/projects/dnf5/dnf5/zh_Hans/>\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-31 11:53+0000\n"
+"Last-Translator: hg wd <cut-punisher-stays@duck.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.fedoraproject.org/projects/dnf5/dnf5/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "管理意见"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "打印公告细节"
 
@@ -55,7 +57,7 @@ msgstr "打印公告摘要"
 
 #: commands/advisory/arguments.hpp:34
 msgid "Show advisories containing any version of installed packages."
-msgstr "显示包含任何版本已安装软件包的咨询。"
+msgstr "显示包含任何版本已安装软件包的建议。"
 
 #: commands/advisory/arguments.hpp:45
 msgid ""
@@ -80,13 +82,13 @@ msgid ""
 "supports globs."
 msgstr "仅显示包含指定名称的包的建议。 列表选项，支持匹配符。"
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "PACKAGE_NAME,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
-msgstr "与建议名称匹配的模式列表。"
+msgstr "与建议名称匹配的列表。"
 
 #: commands/advisory/arguments.hpp:100
 msgid "Show only advisories referencing a bugzilla."
@@ -106,11 +108,11 @@ msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory_shared.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr "限制安全公告中的包。"
+msgstr "限制安全公告中的软件包。"
 
 #: commands/advisory_shared.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr "限制错误修复建议中的包。"
+msgstr "限制错误修复建议中的软件包。"
 
 #: commands/advisory_shared.hpp:135
 msgid "Limit to packages in enhancement advisories."
@@ -124,36 +126,38 @@ msgstr "仅限于新软件包公告中的软件包。"
 msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
-msgstr "限制为具有指定严重性的公告中的包。列表选项。可以是\"关键\", \"重要\", \"中等"
-"\", \"低\", \"无\" 。"
+msgstr ""
+"限制为具有指定严重性的公告中的包。列表选项。可以是\"critical\", "
+"\"important\", \"moderate\", \"low\", \"none\" 。"
 
 #: commands/advisory_shared.hpp:155
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "严重警告,..."
 
 #: commands/advisory_shared.hpp:167
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
-msgstr ""
+msgstr "仅限于修复Bugzilla ID(例如123123)公告中的包，列表选项。"
 
 #: commands/advisory_shared.hpp:168
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory_shared.hpp:178
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"仅限于修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)公告中的包，列表选项。"
 
 #: commands/advisory_shared.hpp:180
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
-msgstr ""
+msgstr "删除最初作为依赖项安装的所有不需要的软件包。"
 
 #: commands/check-upgrade/check-upgrade.cpp:47
 msgid "Check for available package upgrades"
@@ -166,34 +170,37 @@ msgid ""
 "advisories is used it reports the lowest versions of packages that fix "
 "advisories matching selected advisory properties"
 msgstr ""
+"报告修复bugfix、enhancement、security或newpackage类型公告的软件包的最低版本。"
+"如果使用任何限制建议的选项，它会报告修复与所选建议属性匹配的建议的软件包的最"
+"低版本"
 
 #: commands/check/check.cpp:247
 msgid "Check for problems in the packagedb"
-msgstr ""
+msgstr "检查软件包数据库中的问题"
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
-msgstr ""
+msgstr "{}问题在软件包{}中被检查出"
 
 #: commands/clean/clean.cpp:90
 msgid "List of cache types to clean up. Supported types: {0}"
-msgstr ""
+msgstr "列出要清理的缓存类型。支持的类型有:{0}"
 
 #: commands/clean/clean.cpp:108
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
-msgstr ""
+msgstr "未知的缓存类型 \"{0}\"。支持的类型有: {1}"
 
 #: commands/clean/clean.cpp:165
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "在以下路径中清除仓库缓存失败 \"{0}\":{1}"
 
 #: commands/clean/clean.cpp:175
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
-msgstr ""
+msgstr "缓存目录 \"{}\" 不存在。未清除。"
 
 #: commands/clean/clean.cpp:180
 msgid "Cannot iterate cache directory \"{}\": {}"
-msgstr ""
+msgstr "无法遍历缓存目录 \"{}\": {}"
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
 msgid "Install debuginfo packages."
@@ -210,66 +217,66 @@ msgstr "降级软件"
 
 #: commands/download/download.cpp:105
 msgid "When running with --url, prints URLs from all available mirrors"
-msgstr ""
+msgstr "当加 --url 参数运行时，打印所有可用镜像源中的URL"
 
 #: commands/download/download.cpp:121
 msgid "Invalid urlprotocol option: {}"
-msgstr ""
+msgstr "无效的URL协议选项 : {}"
 
 #: commands/download/download.cpp:148 main.cpp:614
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
-msgstr ""
+msgstr "不支持的系统架构 \"{0}\"。请从中选择一个 {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
 #: commands/download/download.cpp:183
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
-msgstr ""
+msgstr "选项 \"--alldeps\" 应该与 \"--resolve\" 一起使用"
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
-msgstr ""
+msgstr "仅显示可用的环境。"
 
 #: commands/environment/arguments.hpp:40
 msgid "Show only installed environments."
-msgstr ""
+msgstr "仅显示已安装的环境。"
 
 #: commands/environment/arguments.hpp:47
 msgid "Pattern matching environment IDs."
-msgstr ""
+msgstr "模式匹配环境ID。"
 
 #: commands/environment/environment.cpp:35
 msgid "Manage comps environments"
-msgstr ""
+msgstr "计算机环境管理"
 
 #: commands/group/arguments.hpp:34
 msgid "Show only available groups."
-msgstr ""
+msgstr "仅显示可用的软件包组。"
 
 #: commands/group/arguments.hpp:41
 msgid "Show also hidden groups."
-msgstr ""
+msgstr "同时显示已隐藏的软件包组。"
 
 #: commands/group/arguments.hpp:48
 msgid "Show only installed groups."
-msgstr ""
+msgstr "仅显示已安装的软件组。"
 
 #: commands/group/arguments.hpp:59
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
-msgstr ""
+msgstr "仅显示包含具有指定名称的软件包组。列表选项，支持通配符。"
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
-msgstr ""
+msgstr "模式匹配软件包组ID。"
 
 #: commands/group/arguments.hpp:76
 msgid "Include optional packages from group."
-msgstr ""
+msgstr "包含软件包组中的可选软件包。"
 
 #: commands/group/arguments.hpp:83
 msgid "Operate on groups only, no packages are changed."
-msgstr ""
+msgstr "仅对软件包组进行操作，不更改任何软件包。"
 
 #: commands/history/arguments.hpp:37
 msgid "Transaction ID"
@@ -277,7 +284,7 @@ msgstr "事务 ID"
 
 #: commands/history/arguments.hpp:44
 msgid "Reverse the order of transactions."
-msgstr ""
+msgstr "对事务进行倒序操作。"
 
 #: commands/history/arguments.hpp:54
 msgid ""
@@ -285,40 +292,61 @@ msgid ""
 "as errors. This can result in an empty transaction because among other "
 "things the option can ignore failing Remove actions."
 msgstr ""
+"不要将已安装和存储的软件包事务的不匹配视为错误。这可能会导致清空事务，因为除"
+"其他事项外，该选项可以忽略失败的删除操作。"
 
 #: commands/history/arguments.hpp:67
 msgid "Don't consider extra packages pulled into the transaction as errors."
-msgstr ""
+msgstr "不要将事务中额外引入的软件包视为错误。"
+
+#: commands/history/arguments.hpp:80
+#, fuzzy
+#| msgid ""
+#| "Show only groups containing packages with specified names. List option, "
+#| "supports globs."
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr "仅显示包含具有指定名称的软件包组。列表选项，支持通配符。"
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
-msgstr ""
+msgstr "事务执行历史管理"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr "未找到匹配项，历史信息默认仅考虑最后一次操作，请设定“1..last”范围以搜索所有操"
+"作。"
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
 #: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:56
 msgid "No matching transaction ID found, exactly one required."
-msgstr ""
+msgstr "未找到匹配的事务ID，要求准确且唯一。"
 
 #: commands/history/history_redo.cpp:57
 #: commands/history/history_rollback.cpp:61
 #: commands/history/history_undo.cpp:60
 msgid "Matched more than one transaction ID, exactly one required."
-msgstr ""
+msgstr "匹配到多个事务ID，要求准确且唯一。"
 
 #: commands/history/history_store.cpp:68
 msgid "Multiple transactions selected for storing, only one allowed."
-msgstr ""
+msgstr "多个事务被选择存储，仅允许一个。"
 
 #: commands/history/history_store.cpp:80
 msgid "File \"{}\" already exists, it will be overwritten.\n"
-msgstr ""
+msgstr "文件 \"{}\" 已存在，它即将被覆盖。\n"
 
 #: commands/history/transaction_id.cpp:32
 msgid ""
 "Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
 "is \"NUMBER\", \"last\" or \"last-NUMBER\"."
 msgstr ""
+"不合法的事务ID范围 \"{}\"，应该为 \"ID\" 或 \"ID..ID\"，ID应该是 \"数字"
+"\"、\"last\" 或 \"last-数字\"。"
 
 #: commands/install/install.cpp:41
 msgid "Install software"
@@ -327,179 +355,174 @@ msgstr "安装软件"
 #: commands/leaves/leaves.cpp:42
 msgid ""
 "List groups of installed packages not required by other installed packages"
-msgstr ""
+msgstr "列出已安装软件包不需要的其它已安装软件包组"
 
 #: commands/list/list.cpp:44
 msgid "Lists packages depending on the packages' relation to the system"
-msgstr ""
+msgstr "根据软件包与系统的关系列出软件包"
 
 #: commands/list/list.cpp:47
 msgid "List of keys to match case insensitively"
-msgstr ""
+msgstr "不区分大小写匹配的密钥列表"
 
 #: commands/list/list.cpp:59
 msgid "Show all versions of the packages, not only the latest ones."
-msgstr ""
+msgstr "显示软件包的所有版本，而不仅仅是最新版本。"
 
 #: commands/list/list.cpp:65
 msgid "List installed packages."
-msgstr ""
+msgstr "列出已安装的软件包。"
 
 #: commands/list/list.cpp:69
 msgid "List available packages."
-msgstr ""
+msgstr "列出可安装的软件包。"
 
 #: commands/list/list.cpp:76
 msgid ""
 "List extras, that is packages installed on the system that are not available "
 "in any known repository."
 msgstr ""
+"列出额外的，即安装在系统上的软件包，这些软件包在任何已知的仓库中都不可用。"
 
 #: commands/list/list.cpp:84
 msgid ""
 "List packages installed on the system that are obsoleted by packages in any "
 "known repository."
-msgstr ""
+msgstr "列出系统上已安装的软件包，这些软件包在任何已知仓库中过时。"
 
 #: commands/list/list.cpp:89
 msgid "List packages recently added into the repositories."
-msgstr ""
+msgstr "列出最近添加进仓库的软件包。"
 
 #: commands/list/list.cpp:93
 msgid "List upgrades available for the installed packages."
-msgstr ""
+msgstr "列出已安装可升级的软件包。"
 
 #: commands/list/list.cpp:97
 msgid "List packages which will be removed by the 'dnf autoremove' command."
-msgstr ""
+msgstr "列出将会被 \"dnf autoremove\" 命令删除的软件包。"
 
 #: commands/list/list.cpp:194 commands/list/list.cpp:199
-#, fuzzy
-#| msgid "Installed"
 msgid "Installed packages"
-msgstr "已安装"
+msgstr "已安装的软件包"
 
 #: commands/list/list.cpp:195 commands/list/list.cpp:208
-#, fuzzy
-#| msgid "Available"
 msgid "Available packages"
-msgstr "可用的"
+msgstr "可安装的软件包"
 
 #: commands/list/list.cpp:216
-#, fuzzy
-#| msgid "Available"
 msgid "Available upgrades"
-msgstr "可用的"
+msgstr "可用升级"
 
 #: commands/list/list.cpp:232
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "已过时的软件包"
 
 #: commands/list/list.cpp:237
 msgid "Autoremove packages"
-msgstr ""
+msgstr "自动删除软件包"
 
 #: commands/list/list.cpp:241
 msgid "Extra packages"
-msgstr ""
+msgstr "额外的软件包"
 
 #: commands/list/list.cpp:252
 msgid "Recently added packages"
-msgstr ""
+msgstr "最近添加的软件包"
 
 #: commands/list/list.cpp:257
 msgid "No matching packages to list"
-msgstr ""
+msgstr "没有匹配的软件包可以列出"
 
 #: commands/mark/mark.cpp:38
-#, fuzzy
-#| msgid "Show advisories containing any version of installed packages."
 msgid "Change the reason of an installed package"
-msgstr "显示包含任何版本已安装软件包的咨询。"
+msgstr "已安装软件包的变更原因"
 
 #: commands/module/arguments.hpp:36
 msgid "Show enabled modules."
-msgstr ""
+msgstr "显示启用的模块。"
 
 #: commands/module/arguments.hpp:43
 msgid "Show disabled modules."
-msgstr ""
+msgstr "显示禁用的模块。"
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "模式匹配NSVCA模块。"
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
-msgstr ""
+msgstr "模块管理"
 
 #: commands/module/module_list.cpp:85
 msgid "No matches found for \"{}\"."
-msgstr ""
+msgstr "未找到与 \"{}\" 匹配的结果。"
 
 #: commands/offline/offline.cpp:190
 msgid "Manage offline transactions"
-msgstr ""
+msgstr "离线事务管理"
 
 #: commands/offline/offline.cpp:222
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
+"读取状态时出错: {}，重新运行用于启动离线事务的命令，例如 \"dnf5 system-"
+"upgrade download [OPTIONS]\" 。"
 
 #: commands/offline/offline.cpp:245
 msgid "Couldn't connect to D-Bus: {}"
-msgstr ""
+msgstr "无法连接到 D-Bus: {}"
 
 #: commands/offline/offline.cpp:274
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
-msgstr ""
+msgstr "准备系统执行离线事务，然后重新启动以开始事务。"
 
 #: commands/offline/offline.cpp:281
 msgid "Power off the system after the operation is complete"
-msgstr ""
+msgstr "操作完成后关闭系统"
 
 #: commands/offline/offline.cpp:292
 msgid "No offline transaction is stored."
-msgstr ""
+msgstr "没有已存储的离线事务。"
 
 #: commands/offline/offline.cpp:300
 msgid "System is not ready for offline transaction."
-msgstr ""
+msgstr "系统未准备好执行离线事务。"
 
 #: commands/offline/offline.cpp:303
 msgid "Data directory {} does not exist."
-msgstr ""
+msgstr "数据目录 {} 不存在。"
 
 #: commands/offline/offline.cpp:327
 msgid "{} is not wanted by system-update.target."
-msgstr ""
+msgstr "{} 在 system-update.target 中不被需要。"
 
 #: commands/offline/offline.cpp:336
 msgid "The system will now reboot to upgrade to release version "
-msgstr ""
+msgstr "系统将会重启到升级后的版本。 "
 
 #: commands/offline/offline.cpp:340
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
-msgstr ""
+msgstr "系统将在重启后通过以下命令执行离线事务:"
 
 #: commands/offline/offline.cpp:371
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
-msgstr ""
+msgstr "仅供内部使用，不打算由用户运行。在离线环境中执行事务。"
 
 #: commands/offline/offline.cpp:398
 msgid "Trigger file does not exist. Exiting."
-msgstr ""
+msgstr "触发器文件不存在。退出。"
 
 #: commands/offline/offline.cpp:402
 msgid "Another offline transaction tool is running. Exiting."
-msgstr ""
+msgstr "另一个离线事务工具运行中。退出。"
 
 #: commands/offline/offline.cpp:437
 msgid ""
@@ -507,174 +530,181 @@ msgid ""
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
+"警告: \"_execute\" 命令仅供内部使用且不允许用户直接使用。启动系统升级或离线事"
+"务，应该使用 \"dnf5 offline reboot\" 命令。"
 
 #: commands/offline/offline.cpp:444
 msgid "Use `dnf5 offline reboot` to begin the transaction."
-msgstr ""
+msgstr "使用 \"dnf5 offline reboot\" 命令开始这个事务。"
 
 #: commands/offline/offline.cpp:497
 msgid "Transaction failed: "
-msgstr ""
+msgstr "失败的事务: "
 
 #: commands/offline/offline.cpp:566
 msgid "Error reading journal: {}"
-msgstr ""
+msgstr "读取日志错误: {}"
 
 #: commands/offline/offline.cpp:572
 msgid "Add journal match failed: {}"
-msgstr ""
+msgstr "添加日志匹配错误: {}"
 
 #: commands/offline/offline.cpp:600
 msgid "No logs were found."
-msgstr ""
+msgstr "未找到任何日志。"
 
 #: commands/offline/offline.cpp:604
 msgid "The following boots appear to contain offline transaction logs:"
-msgstr ""
+msgstr "本次启动似乎包含离线事务日志:"
 
 #: commands/offline/offline.cpp:621
 msgid "Cannot find logs with this index."
-msgstr ""
+msgstr "该索引不能找到日志。"
 
 #: commands/offline/offline.cpp:628
 msgid "Unable to match systemd journal entry."
-msgstr ""
+msgstr "无法匹配systemd日志条目。"
 
 #: commands/offline/offline.cpp:640
 msgid "Show logs from past offline transactions"
-msgstr ""
+msgstr "显示之前的离线事务日志"
 
 #: commands/offline/offline.cpp:648
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
-msgstr ""
+msgstr "要显示哪个日志。不带任何参数运行以获取可用日志列表。"
 
 #: commands/offline/offline.cpp:663
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
-msgstr ""
+msgstr "systemd 不支持这个版本的DNF5，\"log\" 子命令不可用。"
 
 #: commands/offline/offline.cpp:668
 msgid "Show status of the current offline transaction"
-msgstr ""
+msgstr "显示当前离线事务的状态"
 
 #: commands/offline/offline.cpp:684
 msgid "An offline transaction was initiated by the following command:"
-msgstr ""
+msgstr "一个离线事务将在以下命令之后执行:"
 
 #: commands/offline/offline.cpp:686
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
-msgstr ""
+msgstr "运行 \"dnf5 offline reboot\" 以重启和执行离线事务。"
 
 #: commands/offline/offline.cpp:688
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
+"一个离线事务已经开始，但是并未结束。运行 \"dnf5 offline log\" 以获得更多信"
+"息。启动事务的命令是:"
 
 #: commands/offline/offline.cpp:693
 msgid "Unknown offline transaction status: "
-msgstr ""
+msgstr "未知的离线事务状态: "
 
 #: commands/provides/provides.cpp:48
 msgid "Find what package provides the given value"
-msgstr ""
+msgstr "查找提供指定内容的软件包"
 
 #: commands/reinstall/reinstall.cpp:40
 msgid "Reinstall software"
-msgstr ""
+msgstr "重新安装软件"
 
 #: commands/remove/remove.cpp:40
 msgid "Remove (uninstall) software"
-msgstr ""
+msgstr "删除（卸载）软件"
 
 #: commands/replay/replay.cpp:38
 msgid "Replay a transaction that was previously stored to a directory"
-msgstr ""
+msgstr "重新开始上一个存储在目录中的事务"
 
 #: commands/repo/arguments.hpp:35
 msgid "Show all repositories."
-msgstr ""
+msgstr "显示出所有仓库。"
 
 #: commands/repo/arguments.hpp:42
 msgid "Show enabled repositories (default)."
-msgstr ""
+msgstr "显示出所有已启用的仓库（默认）。"
 
 #: commands/repo/arguments.hpp:49
 msgid "Show disabled repositories."
-msgstr ""
+msgstr "显示出已禁用的仓库。"
 
 #: commands/repo/arguments.hpp:56
 msgid "Pattern matching repo IDs."
-msgstr ""
+msgstr "模式匹配仓库ID。"
 
 #: commands/repo/repo.cpp:38
 msgid "Manage repositories"
-msgstr ""
+msgstr "仓库管理"
 
 #: commands/repoquery/repoquery.cpp:80
 msgid "Search for packages matching various criteria"
-msgstr ""
+msgstr "搜索符合各种条件的软件包"
 
 #: commands/repoquery/repoquery.cpp:516
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
 msgstr ""
+"选项 \"--exactdeps\" 必须与 \"--whatrequires\" 或 \"--whatdepends\" 一起使用"
 
 #: commands/repoquery/repoquery.cpp:521
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
 msgstr ""
+"选项 \"--recursive\" 必须与 \"--whatrequires\" 或 \"--providers-"
+"of=requires\" 一起使用"
 
 #: commands/search/arguments.hpp:37
 msgid "Search also package description and URL."
-msgstr ""
+msgstr "同时搜索软件包描述和 URL。"
 
 #: commands/search/arguments.hpp:45
 msgid "Patterns"
-msgstr ""
+msgstr "模式"
 
 #: commands/search/search.cpp:44
 msgid "Search for software matching all specified strings"
-msgstr ""
+msgstr "搜索所有与指定字符串匹配的软件"
 
 #: commands/swap/swap.cpp:42
 msgid "Remove software and install another in one transaction"
-msgstr ""
+msgstr "在同一个事务中删除软件和安装另一个软件"
 
 #: commands/system-upgrade/system-upgrade.cpp:54
 msgid "Prepare system for upgrade to a new release"
-msgstr ""
+msgstr "准备将系统升级到新版本"
 
 #: commands/system-upgrade/system-upgrade.cpp:70
 msgid "Download everything needed to upgrade to a new release"
-msgstr ""
+msgstr "下载升级到新版所有需要的软件包"
 
 #: commands/system-upgrade/system-upgrade.cpp:78
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
-msgstr ""
+msgstr "如果新版本的软件包比当前安装的版本旧，则不安装"
 
 #: commands/system-upgrade/system-upgrade.cpp:97
 msgid "Need a --releasever greater than the current system version."
-msgstr ""
+msgstr "\"--releasever\" 参数后面的值需要大于当前系统版本。"
 
 #: commands/system-upgrade/system-upgrade.cpp:131
 msgid "Store a distro-sync transaction to be performed offline"
-msgstr ""
+msgstr "存储要离线执行的发行版同步事务"
 
 #: commands/system-upgrade/system-upgrade.cpp:153
 msgid "Store an upgrade transaction to be performed offline"
-msgstr ""
+msgstr "存储要离线执行的升级事务"
 
 #: commands/upgrade/upgrade.cpp:41
 msgid "Upgrade software"
-msgstr ""
+msgstr "升级软件"
 
 #: commands/upgrade/upgrade.cpp:48
 msgid ""
@@ -683,143 +713,149 @@ msgid ""
 "limiting advisories is used it upgrades packages only to the lowest versions "
 "that fix advisories that matching selected advisory property"
 msgstr ""
+"仅将软件包升级到修复bugfix、enhancement、security或newpackage类型公告的最低版"
+"本。如果使用任何限制建议的选项，它只会将软件包升级到修复与所选建议属性匹配的"
+"建议的最低版本"
 
 #. TODO(mblaha): add full command line
 #: commands/versionlock/utils.cpp:35
 msgid "Added by 'versionlock {}' command on {}"
-msgstr ""
+msgstr "\"versionlock {}\" 被命令 {} 添加"
 
 #: commands/versionlock/versionlock.cpp:40
 msgid "Manage versionlock configuration"
-msgstr ""
+msgstr "版本锁配置管理"
 
 #: commands/versionlock/versionlock_add.cpp:37
 msgid "Add new entry to versionlock configuration"
-msgstr ""
+msgstr "在版本锁配置中添加新条目"
 
 #: commands/versionlock/versionlock_add.cpp:43
 msgid "List of package specs to add versionlock for"
-msgstr ""
+msgstr "添加版本锁的软件包规格列表"
 
 #: commands/versionlock/versionlock_add.cpp:106
 #: commands/versionlock/versionlock_exclude.cpp:125
 msgid "No package found for \"{}\"."
-msgstr ""
+msgstr "\"{}\" 中未找到软件包。"
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
-msgstr ""
+msgstr "新增版本锁: \"{0} = {1}\"。"
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
-msgstr ""
+msgstr "软件包 \"{}\" 已经被锁定。"
 
 #: commands/versionlock/versionlock_clear.cpp:32
 msgid "Remove all entries from versionlock configuration"
-msgstr ""
+msgstr "删除版本锁配置中的所有条目"
 
 #: commands/versionlock/versionlock_delete.cpp:35
 msgid "Remove any matching versionlock configuration entries"
-msgstr ""
+msgstr "删除匹配到的版本锁条目"
 
 #: commands/versionlock/versionlock_delete.cpp:41
 msgid "List of package specs to remove versionlock for"
-msgstr ""
+msgstr "列出要删除版本锁的软件包规格"
 
 #: commands/versionlock/versionlock_delete.cpp:55
 msgid "Deleting versionlock entry:"
-msgstr ""
+msgstr "删除中的版本锁条目:"
 
 #: commands/versionlock/versionlock_exclude.cpp:37
 msgid "Add new exclude entry to versionlock configuration"
-msgstr ""
+msgstr "在版本锁配置中添加新的排除条目"
 
 #: commands/versionlock/versionlock_exclude.cpp:43
 msgid "List of package specs to add versionlock exclude for"
-msgstr ""
+msgstr "列出版本锁配置中排除的软件包规格条目"
 
 #: commands/versionlock/versionlock_exclude.cpp:88
 #: commands/versionlock/versionlock_exclude.cpp:100
 msgid "Adding versionlock exclude on \"{0} = {1}\"."
-msgstr ""
+msgstr "新增版本锁排除条目: \"{0} = {1}\"。"
 
 #: commands/versionlock/versionlock_exclude.cpp:139
 msgid "Package \"{}\" is already excluded."
-msgstr ""
+msgstr "软件包 \"{}\" 已经被排除。"
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr ""
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "导入 OpenPGP 密钥 0x{}:\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
-msgstr ""
+msgstr " 用户ID     : \"{}\"\n"
 
 #: context.cpp:78
 msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
+" 指纹 : {}\n"
+" 来源 : {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
-msgstr ""
+msgstr "该密钥成功导入。"
 
 #: context.cpp:262
 msgid "setopt: \"{}.{}\": {}"
-msgstr ""
+msgstr "设置选项: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: context.cpp:272
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
 msgstr ""
+"任何仓库未匹配到 {} 。通过 \"--use-host-config\" 选项使用指定域名中的仓库"
 
 #: context.cpp:276
 msgid "No matching repositories for {}"
-msgstr ""
+msgstr "任何仓库未匹配到 {}"
 
 #: context.cpp:322
 msgid "Updating and loading repositories:"
-msgstr ""
+msgstr "仓库更新和加载中:"
 
 #: context.cpp:332
 msgid "Repositories loaded."
-msgstr ""
+msgstr "仓库加载完成。"
 
 #: context.cpp:338
 msgid "Testing offline transaction"
-msgstr ""
+msgstr "离线事务测试中"
 
 #: context.cpp:342 context.cpp:497
 msgid "Transaction failed: {}"
-msgstr ""
+msgstr "失败的事务:{}"
 
 #: context.cpp:347 context.cpp:502
 msgid "  - {}"
-msgstr ""
+msgstr "  - {}"
 
 #: context.cpp:414
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
-msgstr ""
+msgstr "位置 \"{}\" 已包含存储的事务，将被覆盖。"
 
 #: context.cpp:443
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
-msgstr ""
+msgstr "已有一个离线事务在队列中，它将在以下命令中启动:"
 
 #: context.cpp:445
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
-msgstr ""
+msgstr "继续将取消旧的离线事务并替换为本次。"
 
 #: context.cpp:463
 msgid ""
@@ -827,6 +863,8 @@ msgid ""
 "reboot and run the transaction. To cancel the transaction and delete the "
 "downloaded files, use `dnf5 offline clean`."
 msgstr ""
+"已经存储的事务可以离线执行。运行 \"dnf5 offline reboot\" 以重新启动并运行事"
+"务。若要取消事务并删除已下载的文件，须使用 \"dnf5 offline clean\" 命令。"
 
 #: context.cpp:469
 msgid "Running transaction"
@@ -834,45 +872,43 @@ msgstr "执行事务"
 
 #: context.cpp:786
 msgid "Upgrading {}"
-msgstr ""
+msgstr "升级 {}"
 
 #: context.cpp:789
 msgid "Downgrading {}"
-msgstr ""
+msgstr "降级 {}"
 
 #: context.cpp:792
 msgid "Reinstalling {}"
-msgstr ""
+msgstr "重新安装 {}"
 
 #: context.cpp:805
 msgid "Unexpected action in TransactionPackage: {}"
-msgstr ""
+msgstr "软件包事务中出现意外操作: {}"
 
 #: context.cpp:811
-#, fuzzy
-#| msgid "Installed"
 msgid "Installing {}"
-msgstr "已安装"
+msgstr "安装{}"
 
 #: context.cpp:832
 msgid "Prepare transaction"
-msgstr ""
+msgstr "准备事务"
 
 #: context.cpp:852
 msgid "Removing {}"
-msgstr ""
+msgstr "删除 {}"
 
 #: context.cpp:855
 msgid "Cleanup {}"
-msgstr ""
+msgstr "清理 {}"
 
 #: context.cpp:873
 msgid "Unpack error: {}"
-msgstr ""
+msgstr "解压错误: {}"
 
 #: context.cpp:881
 msgid "Cpio error: {}"
-msgstr ""
+msgstr "Cpio 错误: {}"
 
 #: context.cpp:891
 msgid "Scriptlet output:"
@@ -880,84 +916,84 @@ msgstr "Scriptlet 输出："
 
 #: context.cpp:913
 msgid "Running {} scriptlet: {}"
-msgstr ""
+msgstr "运行 {}，脚本片段: {}"
 
 #: context.cpp:928
 msgid "Finished {} scriptlet: {}"
-msgstr ""
+msgstr "{} 运行完成，脚本片段: {}"
 
 #: context.cpp:934
 msgid "Non-critical error in {} scriptlet: {}"
-msgstr ""
+msgstr "非致命性错误: {} ，脚本片段: {}"
 
 #: context.cpp:943
 msgid "Error in {} scriptlet: {}"
-msgstr ""
+msgstr "{} 中出现错误，脚本片段: {}"
 
 #: context.cpp:973
 msgid "Verify package files"
-msgstr ""
+msgstr "验证软件包文件"
 
 #: library.cpp:33
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "无法加载共享库文件 \"{}\":{}"
 
 #: library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "无法获取符号的地址 \"{}\": {}"
 
 #: main.cpp:129
 msgid "Utility for packages maintaining"
-msgstr ""
+msgstr "维护软件包的实用工具"
 
 #: main.cpp:130
 msgid "DNF5 is a program for maintaining packages."
-msgstr ""
+msgstr "DNF5是一个维护软件包的程序。"
 
 #: main.cpp:131
 msgid "Unclassified options:"
-msgstr ""
+msgstr "未分类的选项:"
 
 #: main.cpp:134
 msgid "Global options:"
-msgstr ""
+msgstr "全局选项:"
 
 #: main.cpp:139
 msgid "Print help"
-msgstr ""
+msgstr "输出帮助信息"
 
 #: main.cpp:146
 msgid "Configuration file location"
-msgstr ""
+msgstr "配置文件存放位置"
 
 #: main.cpp:154
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
 "dnf5."
-msgstr ""
+msgstr "结合非交互式命令，仅显示相关内容。抑制通知dnf5当前状态或操作的消息。"
 
 #: main.cpp:169
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
-msgstr ""
+msgstr "完全从系统缓存运行，即使缓存已过期，也不要更新缓存。"
 
 #: main.cpp:176
 msgid "Force refreshing metadata before running the command."
-msgstr ""
+msgstr "在执行该命令前强制刷新元数据。"
 
 #: main.cpp:192
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
-msgstr ""
+msgstr "在如下路径中使仓库缓存过期失败 \"{0}\": {1}"
 
 #: main.cpp:206
 msgid "create additional repository using id and path"
-msgstr ""
+msgstr "使用ID和路径创建额外的仓库"
 
 #: main.cpp:214
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
-msgstr ""
+msgstr "repofrompath: 不正确的仓库ID和指定路径 \"{}\""
 
 #: main.cpp:226
 msgid "set arbitrary config and repo options"
@@ -973,27 +1009,32 @@ msgid ""
 "              they do not override it. However, specifying an empty value (e."
 "g. --setopt=tsflags=) will clear the option."
 msgstr ""
+"从配置文件覆盖配置选项。为了覆盖仓库的配置选项，使用 repoid.option 作为\n"
+"<option> 。选项值需要像excludepkgs、includepkgs、installonlypkgs和tsflags一样"
+"添加到原始值。\n"
+"这些值不会覆盖到它。然而如果指定一个空值(如\"--setopt=tsflags=\")则会清空该选"
+"项值 。"
 
 #: main.cpp:237 main.cpp:276
 msgid "{}: Badly formatted argument value \"{}\""
-msgstr ""
+msgstr "{}: 不符合格式的参数值 \"{}\""
 
 #: main.cpp:244
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr ""
+msgstr "{}: 不符合格式的参数值: 最后一个字符不能是 '.': {}"
 
 #: main.cpp:257
 msgid "setopt: \"{0}\": {1}"
-msgstr ""
+msgstr "设置选项: \"{0}\": {1}"
 
 #: main.cpp:269
 msgid "set arbitrary variable"
-msgstr ""
+msgstr "设置任意变量"
 
 #: main.cpp:283
 msgid "setvar: {}"
-msgstr ""
+msgstr "设置变量: {}"
 
 #: main.cpp:292
 msgid "automatically answer yes for all questions"
@@ -1005,17 +1046,17 @@ msgstr "全部问题自动应答为否"
 
 #: main.cpp:306
 msgid "try the best available package versions in transactions"
-msgstr ""
+msgstr "在事务中尝试最佳的软件包版本"
 
 #: main.cpp:313
 msgid "do not limit the transaction to the best candidate"
-msgstr "不将事务限制在最佳候选"
+msgstr "不限制事务的最佳候选"
 
 #: main.cpp:324
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
-msgstr ""
+msgstr "不要安装标记为文档(包含使用手册和文档信息)的文件"
 
 #: main.cpp:340
 msgid "exclude packages by name or glob"
@@ -1025,39 +1066,39 @@ msgstr "用全名或通配符排除软件包"
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
-msgstr ""
+msgstr "启用额外的仓库。列表选项。支持通配符，可以指定多次。"
 
 #: main.cpp:377
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
-msgstr ""
+msgstr "禁用仓库。列表选项。支持通配符，可以被指定多次。"
 
 #: main.cpp:395
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
-msgstr ""
+msgstr "仅启用特定存储库。列表选项。支持通配符，可以多次指定。"
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
-msgstr "禁用 gpg 签名检查 (如果 RPM 策略允许)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "禁用OpenPGP签名检查(如果 RPM 策略允许)"
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
-msgstr ""
+msgstr "禁用所有 libdnf5 插件"
 
 #: main.cpp:443
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
-msgstr ""
+msgstr "通过名称启用 libdnf5 插件。列表选项。支持通配符，可以被指定多次。"
 
 #: main.cpp:458
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
-msgstr ""
+msgstr "通过名称禁用 libdnf5 插件。列表选项。支持通配符，可以被指定多次。"
 
 #: main.cpp:475
 msgid "add a comment to transaction"
@@ -1067,7 +1108,7 @@ msgstr "为事务添加一个注释"
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
-msgstr ""
+msgstr "为操作添加注释。如果产生事务，则注释将存储在其中。"
 
 #: main.cpp:490
 msgid "set install root"
@@ -1077,7 +1118,7 @@ msgstr "设置目标根目录"
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
-msgstr ""
+msgstr "使用系统中的configuration、reposdir和var，而不是installroot"
 
 #: main.cpp:506
 msgid "override the value of $releasever in config and repo files"
@@ -1087,236 +1128,254 @@ msgstr "覆盖在配置文件和仓库文件中 $releasever 的值"
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
-msgstr ""
+msgstr "显示新安装的子软件包和事务完成后成为子软件包的软件包。"
 
 #: main.cpp:533
 msgid "Dump detailed solving results into files"
-msgstr ""
+msgstr "将详细的解决结果转储到文件中"
 
 #: main.cpp:542
 msgid "Print main configuration values to stdout"
-msgstr ""
+msgstr "打印主要的配置值到标准输出中"
 
 #: main.cpp:559
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
-msgstr ""
+msgstr "打印仓库配置值到标准输出。列表选项。支持通配符"
 
 #: main.cpp:574
 msgid "Print variable values to stdout"
-msgstr ""
+msgstr "打印变量值到标准输出"
 
 #: main.cpp:588
 msgid "Show DNF5 version and exit"
-msgstr ""
+msgstr "显示 DNF5 版本并退出"
 
 #: main.cpp:595
 msgid "Force the use of a different architecture."
-msgstr ""
+msgstr "强制使用不同的系统架构。"
 
 #: main.cpp:633
 msgid "Software Management Commands:"
-msgstr ""
+msgstr "软件管理命令:"
 
 #: main.cpp:640
 msgid "Query Commands:"
-msgstr ""
+msgstr "查询命令:"
 
 #: main.cpp:647
 msgid "Subcommands:"
-msgstr ""
+msgstr "子命令:"
 
 #: main.cpp:744
 msgid "{} version {}.{}.{}.{}"
-msgstr ""
+msgstr "{} 版本 {}.{}.{}.{}"
 
 #: main.cpp:747
 msgid "{} plugin API version {}.{}"
-msgstr ""
+msgstr "{} 插件API版本 {}.{}"
 
 #: main.cpp:752
 msgid "libdnf5 version {}.{}.{}.{}"
-msgstr ""
+msgstr "libdnf5 版本 {}.{}.{}.{}"
 
 #: main.cpp:755
 msgid "libdnf5 plugin API version {}.{}"
-msgstr ""
+msgstr "libdnf5 插件API版本 {}.{}"
 
 #: main.cpp:762
 msgid ""
 "\n"
 "Loaded {} plugins:"
 msgstr ""
+"\n"
+"已加载 {} 插件:"
 
 #: main.cpp:767
 msgid "  name: {}"
-msgstr ""
+msgstr "  名称: {}"
 
 #: main.cpp:770
 msgid "  version: {}.{}.{}"
-msgstr ""
+msgstr "  版本: {}.{}.{}"
 
 #: main.cpp:772
 msgid "  API version: {}.{}"
-msgstr ""
+msgstr "  API版本: {}.{}"
 
 #: main.cpp:810
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
-msgstr ""
+msgstr "本次要处理的软件包总大小为 {:.0f} {:s}. 还需下载 {:.0f} {:s}。"
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
+"此次操作完成之后，{:.0f} {:s} 额外的空间被使用 (安装 {:.0f} {:s}, 删除 "
+"{:.0f} {:s})。"
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
+"此次操作完成之后，{:.0f} {:s} 空间被释放 (安装 {:.0f} {:s}, 删除 {:.0f} {:"
+"s})。"
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
-msgstr ""
+msgstr "======== 主要配置: ========"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
-msgstr ""
+msgstr "无匹配到的仓库写入到配置中: \"{}\""
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
-msgstr ""
+msgstr "======== \"{}\" 仓库配置: ========"
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
-msgstr ""
+msgstr "======== 变量: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
-msgstr ""
+msgstr "新子软件包:"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
-msgstr ""
+msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
-msgstr ""
+msgstr "{} 跳过不可用软件包"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
-msgstr ""
+msgstr "{} 在本次事务中允许额外的软件包"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
 "option can ignore failing Remove actions."
 msgstr ""
+"{} 允许已安装和已存储的软件包事务之间不匹配。这可能会导致空事务，因为除其他事"
+"项外，该选项可以忽略失败的删除操作。"
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
-msgstr ""
+msgstr "{} 不将事务限制在最佳候选中"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
-msgstr ""
+msgstr "{} 允许删除和安装软件包来解决问题"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
-msgstr ""
+msgstr "{} 加载额外的文件列表元数据"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
-msgstr ""
+msgstr "{} 跳过不可删除的软件包"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
-msgstr ""
+msgstr "你可以尝试添加到命令行中:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
-msgstr ""
+msgstr "启用libdnf插件时，未匹配到以下插件的名称: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
-msgstr ""
+msgstr "禁用libdnf插件时，未匹配到以下插件的名称: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
-msgstr ""
+msgstr "--- DNF5 启动参数: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
-msgstr ""
+msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
-msgstr ""
+msgstr "{}。添加 \"--help\" 参数来获取更多的参数信息。"
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
-msgstr ""
+msgstr "它可能是插件提供的命令，尝试用: dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr "该参数可用于如下命令: {}。(参数必须放在命令的后面)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "没有当前目录的读取/执行权限，移动至 /"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
 "options to run the command without modifying the system state."
 msgstr ""
+"请求的操作需要超级用户权限。请使用有权限的用户来操作。或者使用 \"--"
+"assumeno\" 或 \"--downloadonly\" 参数运行该命令不修改当前系统状态。"
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
-msgstr ""
+msgstr "此操作仅将事务保存到: {}"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
-msgstr ""
+msgstr "该操作将仅下载这个事务的软件包。"
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
-msgstr ""
+msgstr "测试模式已启用: 仅执行软件包下载、OpenPGP密钥安装和事务检查。"
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
+"未从installroot加载任何仓库。要使用系统的配置和仓库 ，请加 --use-host-config "
+"参数。"
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
-msgstr ""
+msgstr "命令返回错误: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
-msgstr ""
+msgstr "DNF5 执行完毕"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "完成！"
 
 #: shared_options.cpp:32
 msgid "Allow removing of installed packages to resolve problems"
-msgstr ""
+msgstr "允许删除已安装的软件包以解决问题"
 
 #: shared_options.cpp:42
 msgid "Allow resolving of depsolve problems by skipping packages"
-msgstr ""
+msgstr "允许跳过安装软件包来解决软件包依赖问题"
 
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
-msgstr ""
+msgstr "允许跳过不可用的软件包"

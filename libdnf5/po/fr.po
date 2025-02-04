@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-10-15 17:15+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-09 18:58+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fr/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -632,8 +632,8 @@ msgid "Signature verification failed."
 msgstr "Échec de la vérification de la signature."
 
 #: base/transaction.cpp:89
-msgid "The repository does not have any PGP keys configured."
-msgstr "Le dépôt n'a aucune clé PGP configurée."
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "Aucune clé OpenPGP n'est configurée pour le dépôt."
 
 #: base/transaction.cpp:90
 msgid "Public key is not installed."
@@ -660,8 +660,9 @@ msgid "An error occurred importing key \"{}\": {}"
 msgstr "Une erreur s'est produite lors de l'importation de la clé \"{}\" : {}"
 
 #: base/transaction.cpp:1372
-msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr "La vérification PGP du paquet \"{}\" ({}) du dépôt \"{}\" a échoué : "
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr ""
+"La vérification OpenPGP du paquet \"{}\" ({}) du dépôt \"{}\" a échoué : "
 
 #: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
@@ -673,22 +674,22 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repository: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
-"Attention : vérifications PGP ignorées pour {0} paquet du dépôt : {1}"
+"Attention : vérifications OpenPGP ignorées pour {0} paquet du dépôt : {1}"
 msgstr[1] ""
-"Attention : vérifications PGP ignorées pour {0} paquets du dépôt : {1}"
+"Attention : vérifications OpenPGP ignorées pour {0} paquets du dépôt : {1}"
 
 #: base/transaction.cpp:1425
-msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Attention : vérifications PGP ignorées pour {0} paquet des dépôts : {1}"
+"Attention : vérifications OpenPGP ignorées pour {0} paquet des dépôts : {1}"
 msgstr[1] ""
-"Attention : vérifications PGP ignorées pour {0} paquets des dépôts : {1}"
+"Attention : vérifications OpenPGP ignorées pour {0} paquets des dépôts : {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -961,39 +962,39 @@ msgstr ""
 "La vitesse de téléchargement maximale est inférieure au minimum, modifiez la "
 "valeur de minrate ou throttle"
 
-#: repo/package_downloader.cpp:152
+#: repo/package_downloader.cpp:153
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Impossible de télécharger le paquet \"{0}\", l'option cacheonly est activée."
 
-#: repo/package_downloader.cpp:257
+#: repo/package_downloader.cpp:266
 msgid "Failed to download packages"
 msgstr "Échec du téléchargement des paquets"
 
-#: repo/repo.cpp:60
+#: repo/repo.cpp:59
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr ""
 "Échec du chargement du RPM \"{}\" : le fichier n'a pas l'extension \".rpm\""
 
-#: repo/repo.cpp:64
+#: repo/repo.cpp:63
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Échec de la tentative d'accès au RPM \"{}\" : {}"
 
-#: repo/repo.cpp:106
+#: repo/repo.cpp:105
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "ID de dépôt \"{}\" invalide : caractère '{}' inattendu"
 
-#: repo/repo.cpp:149
+#: repo/repo.cpp:148
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Aucune source (baseurl, mirrorlist ou metalink) n'est définie pour le dépôt "
 "\"{}\"."
 
-#: repo/repo.cpp:160
+#: repo/repo.cpp:159
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Le dépôt \"{}\" est du type non pris en charge \"{}\", ignoré."
 
-#: repo/repo.cpp:408
+#: repo/repo.cpp:410
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -1001,52 +1002,52 @@ msgstr ""
 "Échec du chargement du dépôt : données \"primary\" introuvables ou dans un "
 "format non pris en charge"
 
-#: repo/repo.cpp:466
+#: repo/repo.cpp:476
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Échec du chargement des comps \"{}\" : extension \".xml\" manquante"
 
-#: repo/repo.cpp:473
+#: repo/repo.cpp:483
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Échec du chargement des comps XML \"{}\" : {}"
 
-#: repo/repo.cpp:490
+#: repo/repo.cpp:500
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Échec du chargement du RPM \"{}\" : {}"
 
-#: repo/repo_cache.cpp:229
+#: repo/repo_cache.cpp:227
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Impossible de déterminer l'ID du dépôt dans le cache."
 
-#: repo/repo_cache_private.hpp:56
+#: repo/repo_cache_private.hpp:58
 msgid "Empty path to the repository cache directory."
 msgstr "Le chemin d'accès au répertoire du cache des dépôts est vide."
 
-#: repo/repo_downloader.cpp:139
+#: repo/repo_downloader.cpp:138
 msgid "Librepo error: {}"
 msgstr "Erreur librepo : {}"
 
-#: repo/repo_downloader.cpp:171
+#: repo/repo_downloader.cpp:170
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr ""
 "Échec du téléchargement des métadonnées ({}: \"{}\") pour le dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:242
+#: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Erreur lors de la vérification de la synchronisation du metalink \"{}\" du "
 "dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:272
+#: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Erreur lors de la vérification de la synchronisation du repomd ({}: \"{}\") "
 "du dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:335
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Erreur lors du chargement des métadonnées locales du dépôt \"{}\""
 
-#: repo/repo_downloader.cpp:456
+#: repo/repo_downloader.cpp:474
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1054,18 +1055,19 @@ msgstr ""
 "\"{}\""
 
 #: repo/repo_pgp.cpp:60
-msgid "Failed to import pgp keys into temporary keyring: {}"
-msgstr "Échec de l'importation des clés PGP dans le trousseau temporaire : {}"
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr ""
+"Échec de l'importation des clés OpenPGP dans le trousseau temporaire : {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-msgid "Failed to list pgp keys: {}"
-msgstr "Échec de la récupération de la liste des clés PGP : {}"
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Échec de la récupération de la liste des clés OpenPGP : {}"
 
-#: repo/repo_pgp.cpp:140
-msgid "Failed to import pgp keys: {}"
-msgstr "Échec de l'importation des clés PGP : {}"
+#: repo/repo_pgp.cpp:141
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Échec de l'importation des clés OpenPGP : {}"
 
-#: repo/repo_sack.cpp:146
+#: repo/repo_sack.cpp:147
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1073,54 +1075,54 @@ msgstr ""
 "Échec de la création du dépôt \"{}\" : l'ID est présent plus d'une fois dans "
 "la configuration"
 
-#: repo/repo_sack.cpp:517
+#: repo/repo_sack.cpp:518
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "L'option cacheonly est activée mais le dépôt \"{}\" n'est pas en cache"
 
-#: repo/solv_repo.cpp:261
+#: repo/solv_repo.cpp:266
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Échec du chargement du repomd du dépôt \"{}\" depuis \"{}\" : {}."
 
-#: repo/solv_repo.cpp:269
+#: repo/solv_repo.cpp:274
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Échec du chargement des primary du dépôt \"{}\" : {}."
 
-#: repo/solv_repo.cpp:316
+#: repo/solv_repo.cpp:322
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Type étendu de repodata non pris en charge pour le dépôt système : \"{}\"."
 
-#: repo/solv_repo.cpp:382
+#: repo/solv_repo.cpp:394
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du chargement de l'extension {} pour le dépôt \"{}\" à partir de "
 "\"{}\" : {}"
 
-#: repo/solv_repo.cpp:418
+#: repo/solv_repo.cpp:430
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Échec du chargement du dépôt système à partir de la racine \"{}\" : {}"
 
-#: repo/solv_repo.cpp:519
+#: repo/solv_repo.cpp:531
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du chargement du cache {} pour le dépôt \"{}\" à partir de \"{}\" : {}"
 
-#: repo/solv_repo.cpp:573
+#: repo/solv_repo.cpp:585
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Échec de l'écriture du cache primary pour le dépôt \"{}\" dans \"{}\" : {}"
 
-#: repo/solv_repo.cpp:595
+#: repo/solv_repo.cpp:607
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du rechargement du cache primary pour le dépôt \"{}\" à partir de "
 "\"{}\" : {}"
 
-#: repo/solv_repo.cpp:661
+#: repo/solv_repo.cpp:672
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Échec de l'écriture du cache {} pour le dépôt \"{}\" dans\"{}\" : {}"
 
-#: repo/solv_repo.cpp:682
+#: repo/solv_repo.cpp:693
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Échec du rechargement du cache {} pour le dépôt \"{}\" à partir de \"{}\" : "
@@ -1141,9 +1143,13 @@ msgstr "La chaîne NEVRA \"{}\" contient plusieurs ':'"
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr "Caractère '{}' invalide dans la chaîne NEVRA \"{}\""
 
-#: rpm/package.cpp:80
+#: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
 msgstr "Impossible de trouver un paquet avec ce rpmdbid"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<inconnu>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1172,11 +1178,11 @@ msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr ""
 "Échec de la définition du rootDir de la transaction RPM à la valeur \"{}\"."
 
-#: rpm/rpm_signature.cpp:283
+#: rpm/rpm_signature.cpp:287
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": la clé n'est pas une clé publique blindée."
 
-#: rpm/rpm_signature.cpp:288
+#: rpm/rpm_signature.cpp:292
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Échec de l'importation de la clé publique \"{}\" dans la rpmdb : {}"
 
@@ -1607,11 +1613,11 @@ msgid "Missing '=' on line {}"
 msgstr "'=' manquant à la ligne {}"
 
 #. returns localized message, problem with later translation
-#: utils/library.cpp:32
+#: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Impossible de charger la bibliothèque partagée \"{}\" : {}"
 
-#: utils/library.cpp:47
+#: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Impossible d'obtenir l'adresse du symbole \"{}\" : {}"
 

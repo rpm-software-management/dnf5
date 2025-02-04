@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: 2024-01-26 02:46+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -174,27 +174,27 @@ msgstr "Você pode escolher um dos chroots disponíveis explicitamente:"
 msgid "Can't parse Copr repo spec: "
 msgstr "Não foi possível analisar o spec do repositório do Copr: "
 
-#: copr_repo.cpp:339
+#: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
 msgstr "Não foi possível remover o arquivo do repositório {}"
 
-#: copr_repo.cpp:342
+#: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
 msgstr "Arquivo repo {} removido com sucesso"
 
-#: copr_repo.cpp:388
+#: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
 msgstr "Não é possível encontrar o item {} em {}"
 
-#: copr_repo.cpp:444
+#: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
 msgstr "Removendo arquivo de config antigo '{}'"
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr "Não foi possível remover"
 
-#: copr_repo.cpp:521
+#: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -202,18 +202,18 @@ msgstr ""
 "O arquivo repo do Copr '{}' tem um formato antigo, corrija habilitando-o "
 "novamente $ {} copr enable {}"
 
-#: copr_repo.cpp:555
+#: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "O ID de repo '{}' em '{}' é suspeito"
 
-#: copr_repo.cpp:562
+#: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "O ID de repo '{}' não pertence ao arquivo repo '{}'"
 
-#: copr_repo.cpp:612
+#: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Repositório Copr '{}' em '{}' desabilitado."
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
+#: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
 msgstr "Repositório '{}' não encontrado neste sistema"

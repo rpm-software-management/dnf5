@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,12 +74,12 @@ msgstr ""
 msgid "Transaction failed: "
 msgstr ""
 
-#: automatic.cpp:442
+#: automatic.cpp:444
 #, c++-format
 msgid "Unknown report emitter for dnf5 automatic: \"{}\"."
 msgstr ""
 
-#: automatic.cpp:457
+#: automatic.cpp:459
 #, c++-format
 msgid "Error: reboot command returned nonzero exit code: {}"
 msgstr ""
@@ -115,7 +115,7 @@ msgstr ""
 msgid "Failed to install upgrades."
 msgstr ""
 
-#: emitters.cpp:141 emitters.cpp:162
+#: emitters.cpp:142 emitters.cpp:163
 #, c++-format
 msgid "[{}] dnf5-automatic: {}"
 msgstr ""

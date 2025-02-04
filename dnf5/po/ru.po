@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
+# Dmitry Kiryanov <kagaminep@yandex.ru>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-14 15:38+0000\n"
-"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-19 03:44+0000\n"
+"Last-Translator: Dmitry Kiryanov <kagaminep@yandex.ru>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ru/>\n"
 "Language: ru\n"
@@ -17,13 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "Управление рекомендациями"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "Печать подробной информации о рекомендациях"
 
@@ -87,7 +88,7 @@ msgstr ""
 "Показывать только рекомендации, содержащие пакеты с указанными именами. "
 "Опция списка, поддерживает шаблоны поиска."
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "ИМЯ_ПАКЕТА,..."
 
@@ -319,9 +320,27 @@ msgstr ""
 msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr "Не считать дополнительные пакеты, попавшие в транзакцию, ошибкой."
 
+#: commands/history/arguments.hpp:80
+#, fuzzy
+#| msgid ""
+#| "Show only groups containing packages with specified names. List option, "
+#| "supports globs."
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"Показывать только группы, содержащие пакеты с указанными именами. Опция "
+"списка, поддерживает шаблоны поиска."
+
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
 msgstr "Управление историей транзакций"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -773,11 +792,11 @@ msgstr ""
 msgid "No package found for \"{}\"."
 msgstr "Для \"{}\" не найдено ни одного пакета."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Добавление блокировки версий на \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
 msgstr "Пакет \"{}\" уже заблокирован."
 
@@ -817,8 +836,8 @@ msgid "Package \"{}\" is already excluded."
 msgstr "Пакет \"{}\" уже исключен."
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr "Импорт PGP-ключа 0x{}:\n"
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "Импортирование ключа OpenPGP 0x{}:\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
@@ -840,7 +859,7 @@ msgstr "Ключ был успешно импортирован."
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
 msgstr ", "
 
@@ -1141,8 +1160,8 @@ msgstr ""
 "поиска, может быть указана несколько раз."
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
-msgstr "отключить проверку подписи gpg (если позволяет политика RPM)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "отключить проверку подписи OpenPGP (если позволяет политика RPM)"
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
@@ -1282,7 +1301,7 @@ msgstr ""
 "Общий размер входящих пакетов составляет {:.0f} {:s}. Необходимо загрузить "
 "{:.0f} {:s}."
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1290,7 +1309,7 @@ msgstr ""
 "После этой операции будут использоваться дополнительные {:.0f} {:s} "
 "(установка {:.0f} {:s}, удаление {:.0f} {:s})."
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1298,39 +1317,39 @@ msgstr ""
 "После этой операции будет освобождено {:.0f} {:s} (установка {:.0f} {:s}, "
 "удаление {:.0f} {:s})."
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
 msgstr "======== Основная конфигурация: ========"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Нет подходящего репозитория для создания дампа конфигурации: \"{}\""
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" конфигурация репозитория: ========"
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
 msgstr "======== Переменные: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
 msgstr "Новые leaves (многомерные выражения):"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
 msgstr "{}, чтобы пропускать недоступные пакеты"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
 msgstr "{}, чтобы разрешить дополнительные пакеты в транзакции"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1340,27 +1359,27 @@ msgstr ""
 "пакетами транзакций. Это может привести к пустой транзакции, поскольку, "
 "помимо прочего, опция может игнорировать неудачные действия \"Remove\"."
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{}, чтобы не ограничивать транзакцию лучшими кандидатами"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{}, чтобы разрешить удаление установленных пакетов для решения проблем"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
 msgstr "{}, чтобы загрузить дополнительные метаданные списков файлов"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
 msgstr "{}, чтобы пропустить неустанавливаемые пакеты"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
 msgstr "Можно попробовать добавить в командную строку:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1368,7 +1387,7 @@ msgstr ""
 "При включении плагинов libdnf не было найдено совпадений для следующих "
 "шаблонов имен плагинов: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1376,21 +1395,21 @@ msgstr ""
 "При отключении плагинов libdnf не было найдено совпадений для следующих "
 "шаблонов имен плагинов: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 запущен с аргументами: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ""
 "{}. Добавьте \"--help\" для получения дополнительной информации об "
 "аргументах."
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1398,11 +1417,18 @@ msgstr ""
 "Это может быть команда, предоставляемая плагином, попробуйте: dnf5 install "
 "'dnf5-command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"Аргумент доступен для команд: {}. (Он должен быть помещен после команды)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Нет доступа для чтения/выполнения в текущем каталоге, перемещение в /"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1413,23 +1439,23 @@ msgstr ""
 "используйте опции \"--assumeno\" или \"--downloadonly\", чтобы выполнить "
 "команду без изменения состояния системы."
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
 msgstr "Операция сохранит транзакцию только в {}"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
 msgstr "Операция будет загружать пакеты только для данной транзакции."
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
 "Включен тестовый режим: Будут выполняться только загрузка пакетов, установка "
-"ключей PGP и проверка транзакций."
+"ключей OpenPGP и проверка транзакций."
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1438,15 +1464,15 @@ msgstr ""
 "использовать конфигурацию и репозитории хост-системы, передайте --use-host-"
 "config."
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
 msgstr "Команда возвращена с ошибкой: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
 msgstr "DNF5 завершил работу"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "Завершено!"
 

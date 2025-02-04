@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,53 +138,53 @@ msgstr ""
 msgid "Can't parse Copr repo spec: "
 msgstr ""
 
-#: copr_repo.cpp:339
+#: copr_repo.cpp:341
 #, c++-format
 msgid "Can't remove the {} repo file"
 msgstr ""
 
-#: copr_repo.cpp:342
+#: copr_repo.cpp:344
 #, c++-format
 msgid "Repo file {} successfully removed"
 msgstr ""
 
-#: copr_repo.cpp:388
+#: copr_repo.cpp:390
 #, c++-format
 msgid "Can't find item {} in {}"
 msgstr ""
 
-#: copr_repo.cpp:444
+#: copr_repo.cpp:446
 #, c++-format
 msgid "Removing old config file '{}'"
 msgstr ""
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr ""
 
-#: copr_repo.cpp:521
+#: copr_repo.cpp:523
 #, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
 
-#: copr_repo.cpp:555
+#: copr_repo.cpp:557
 #, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr ""
 
-#: copr_repo.cpp:562
+#: copr_repo.cpp:564
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr ""
 
-#: copr_repo.cpp:612
+#: copr_repo.cpp:614
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr ""
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
+#: copr_repo.cpp:628 copr_repo.cpp:653
 #, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr ""
