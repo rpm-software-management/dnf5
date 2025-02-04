@@ -1,3 +1,43 @@
+# 5.2.9.0
+
+- Update translations from weblate
+- automatic: Translate end-of-lines in email emitter by DNF
+- ruby: Fix swig namespacing in Ruby.
+- Correct Ruby %module definition in swig files.
+- Documentation enhancements
+- Add a hint to `history info` without trans IDs when no match found
+- Add `--contains-pkgs=..` option to `history` `list` and `info`
+- During package download setup first add all downloads then handle local
+- Enhance `perform_control_sequences()` to handle colors
+- versionlock: Fix wildcards handling in `add` command
+- ruby: Implement Enumerable for libdnf5::advisory::AdvisorySet.
+- ruby: Implement Enumerable for libdnf5::rpm::ReldepList.
+- ruby: Implement Enumerable for libdnf5::rpm::PackageSet.
+- Implement each() for iterating over collection in ruby.
+- Add --json output to advisory info
+- I18N: Annotate indentation of the transaction summary
+- libdnf5: Load plugins with RTLD_NODELETE flag set
+- libdnf5: Add a plugin to download and install repo's Appstream data
+- Fix bash completion if colon is in the word to complete
+- Remove and rename global variables in bash completion
+- DNF5 bash completion: Offer package NAMEs in all cases
+- Bash completion: always offer NEVRAs for packages
+- repo: Fix logging metadata download errors handling
+- Copr plugin: Fix resource leak in load_all_configuration
+- Own /var/lib/dnf by libdnf5
+- Display remaining time as nonnegative number
+- automatic: Substitute variables in command_format
+- Bumb readthedocs ubuntu image version to fix the docs generation
+- automatic: add a default setting to not emit boring messages
+- Incorrect library name in libdnf5-cli.pc
+- Fix reporting disk space to be freed on a pure package removal
+- Support ProgressBar messages with wide characters
+- Add padding to ProgressBar messages to avoid overlapping
+- SWIG: support repo::DownloadCallbacks user_data
+- Remove redundant %python_provide statements
+- python3-libdnf5: Remove superfluous provides for python-libdnf
+- Update pre-commit hooks to latest versions in F41
+
 # 5.2.8.1
 
 - Update translations from weblate
