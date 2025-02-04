@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-10-02 02:53+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-14 18:20+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -145,7 +145,7 @@ msgstr "Nume"
 msgid "Epoch"
 msgstr "Epoca"
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
 msgstr "Versiunea"
 
@@ -177,7 +177,7 @@ msgstr "Sursa"
 msgid "From repository"
 msgstr "Din depozitul"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
 msgstr "Depozit"
 
@@ -201,193 +201,217 @@ msgstr "Descriere"
 msgid "Vendor"
 msgstr "Furnizor"
 
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " (corespondență exactă)"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "Nu s-au găsit potriviri."
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "Câmpuri cu potrivire: "
+
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
 msgstr "Rezumatul tranzacției:\n"
 
-#: output/transaction_table.cpp:131
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " Se instalează:     {:4} pachet\n"
 msgstr[1] " Se instalează:     {:4} pachete\n"
 msgstr[2] " Se instalează:     {:4} de pachete\n"
 
-#: output/transaction_table.cpp:138
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " Se reinstalează:   {:4} pachet\n"
 msgstr[1] " Se reinstalează:   {:4} de pachete\n"
 msgstr[2] " Se reinstalează:   {:4} pachete\n"
 
-#: output/transaction_table.cpp:145
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " Se actualizează:   {:4} pachet\n"
 msgstr[1] " Se actualizează:   {:4} pachete\n"
 msgstr[2] " Se actualizează:   {:4} de pachete\n"
 
-#: output/transaction_table.cpp:152
-msgid " Replacing:       {:4} package\n"
-msgid_plural " Replacing:       {:4} package\n"
-msgstr[0] " Se înlocuiește:    {:4} pachet\n"
-msgstr[1] " Se înlocuiește:    {:4} pachete\n"
-msgstr[2] " Se înlocuiește:    {:4} de pachete\n"
-
+#. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:159
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
+msgstr[0] " Se înlocuiește:    {:4} pachet\n"
+msgstr[1] " Se înlocuiesc:     {:4} pachete\n"
+msgstr[2] " Se înlocuiesc:     {:4} de pachete\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " Se elimină:        {:4} pachet\n"
 msgstr[1] " Se elimină:        {:4} pachete\n"
 msgstr[2] " Se elimină:        {:4} de pachete\n"
 
-#: output/transaction_table.cpp:166
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " Se retrogradează:  {:4} pachet\n"
 msgstr[1] " Se retrogradează:  {:4} pachete\n"
 msgstr[2] " Se retrogradează:  {:4} de pachete\n"
 
-#: output/transaction_table.cpp:173
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] " Schimbând motivul: {:4} pachet\n"
 msgstr[1] " Schimbând motivul: {:4} pachete\n"
 msgstr[2] " Schimbând motivul: {:4} de pachete\n"
 
-#: output/transaction_table.cpp:181
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] " Se omite:          {:4} pachet\n"
-msgstr[1] " Se omite:          {:4} pachete\n"
-msgstr[2] " Se omite:          {:4} de pachete\n"
+msgstr[1] " Se omit:           {:4} pachete\n"
+msgstr[2] " Se omit:           {:4} de pachete\n"
 
-#: output/transaction_table.cpp:262
+#: output/transaction_table.cpp:277
 msgid "Package"
 msgstr "Pachet"
 
-#: output/transaction_table.cpp:268
+#: output/transaction_table.cpp:283
 msgid "Arch"
 msgstr "Arhitectura"
 
-#: output/transaction_table.cpp:286
+#: output/transaction_table.cpp:301
 msgid "Size"
 msgstr "Dimensiune"
 
-#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:358
+#: output/transaction_table.cpp:373
 msgid "replacing {}"
 msgstr "se înlocuiește {}"
 
-#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
 msgstr " <nume-nedefinit>"
 
-#: output/transaction_table.cpp:442
+#: output/transaction_table.cpp:457
 msgid "replacing "
 msgstr "se înlocuiește "
 
-#: output/transaction_table.cpp:455
+#: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
 msgstr "Se omit pachetele cu conflicte:"
 
-#: output/transaction_table.cpp:457
+#: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
 msgstr "Se omit pachetele cu dependențe rupte:"
 
-#: output/transaction_table.cpp:518
+#: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
 msgstr "Se instalează dependențele:"
 
-#: output/transaction_table.cpp:520
+#: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
 msgstr "Se instalează dependențele slabe:"
 
-#: output/transaction_table.cpp:522
+#: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
 msgstr "Se instalează pachetele de grupuri/module:"
 
-#: output/transaction_table.cpp:524
+#: output/transaction_table.cpp:539
 msgid "Installing:"
 msgstr "Se instalează:"
 
-#: output/transaction_table.cpp:528
+#: output/transaction_table.cpp:543
 msgid "Upgrading:"
 msgstr "Se actualizează:"
 
-#: output/transaction_table.cpp:531
+#: output/transaction_table.cpp:546
 msgid "Downgrading:"
 msgstr "Se retrogradează:"
 
-#: output/transaction_table.cpp:534
+#: output/transaction_table.cpp:549
 msgid "Reinstalling:"
 msgstr "Se reinstalează:"
 
-#: output/transaction_table.cpp:538
+#: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
 msgstr "Se elimină pachetele dependente:"
 
-#: output/transaction_table.cpp:540
+#: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
 msgstr "Se elimină dependențele neutilizate:"
 
-#: output/transaction_table.cpp:542
+#: output/transaction_table.cpp:557
 msgid "Removing:"
 msgstr "Se elimină:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:561
 msgid "Changing reason:"
 msgstr "Schimbând motivul (tipul de operație):"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
 msgstr "Se instalează dependențele grupurilor:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:595
 msgid "Installing groups:"
 msgstr "Se instalează grupurile:"
 
-#: output/transaction_table.cpp:584
+#: output/transaction_table.cpp:599
 msgid "Removing groups:"
 msgstr "Se elimină grupurile:"
 
-#: output/transaction_table.cpp:587
+#: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
 msgstr "Se actualizează grupurile:"
 
-#: output/transaction_table.cpp:614
+#: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
 msgstr "Se instalează grupurile de mediu:"
 
-#: output/transaction_table.cpp:617
+#: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
 msgstr "Se elimină grupurile de mediu:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
 msgstr "Se actualizează grupurile de mediu:"
 
-#: output/transaction_table.cpp:647
+#: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
 msgstr "Se activează fluxurile de module:"
 
-#: output/transaction_table.cpp:650
+#: output/transaction_table.cpp:665
 msgid "Disabling modules:"
 msgstr "Se dezactivează modulele:"
 
-#: output/transaction_table.cpp:653
+#: output/transaction_table.cpp:668
 msgid "Resetting modules:"
 msgstr "Se reinițializează modulele:"
 
-#: output/transaction_table.cpp:656
+#: output/transaction_table.cpp:671
 msgid "Switching module streams:"
 msgstr "Se schimbă fluxurile de module:"
 
-#: output/transaction_table.cpp:730
+#: output/transaction_table.cpp:745
 msgid "Nothing to do."
 msgstr "Nimic de făcut."
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "Total"
 
 #: session.cpp:149
 msgid "Missing command"

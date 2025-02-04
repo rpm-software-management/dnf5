@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-20 13:53+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-20 02:09+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/fi/>\n"
@@ -18,14 +18,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
 msgstr "Copr-keskittimen (web-UI/API-palvelin) isäntänimi"
 
 #: copr.cpp:88
-#, c++-format
 msgid ""
 "Copr project ID to {}.  Use either a format OWNER/PROJECT or HUB/OWNER/"
 "PROJECT (if HUB is not specified, the default one, or --hub <ARG>, is used.  "
@@ -37,15 +36,14 @@ msgid ""
 msgstr ""
 "Copr-projektin tunnus vastaanottajalle {}. Käytä joko muotoa OMISTAJA/"
 "PROJEKTI tai KESKITIN/OMISTAJA/PROJEKTI (jos KESKITINtä ei ole määritetty, "
-"käytetään oletusmuotoa tai `--hub <ARG>`. OMISTAJA on joko käyttäjänimi tai @"
-"ryhmän nimi. PROJEKTI voi olla yksinkertainen projektin nimi tai "
-"\"projektihakemisto\", joka sisältää kaksoispisteet, esim. "
-"'projekti:muokattu:123', KESKITIN voi olla joko Copr-käyttöliittymän nimi ("
-"esim. copr.fedorainfracloud.org ) tai pikakuvake (esim. fedora). Esimerkki: "
-"\"fedora/@foo-joukkue/hienoprojekti\"."
+"käytetään oletusmuotoa tai `--hub <ARG>`. OMISTAJA on joko käyttäjänimi tai "
+"@ryhmän nimi. PROJEKTI voi olla yksinkertainen projektin nimi tai "
+"\"projektihakemisto\", joka sisältää kaksoispisteet, esim. 'projekti:"
+"muokattu:123', KESKITIN voi olla joko Copr-käyttöliittymän nimi (esim. copr."
+"fedorainfracloud.org ) tai pikakuvake (esim. fedora). Esimerkki: \"fedora/"
+"@foo-joukkue/hienoprojekti\"."
 
 #: copr.cpp:106
-#, c++-format
 msgid "Invalid PROJECT_SPEC format '{}'"
 msgstr "Virheellinen PROJECT_SPEC-muoto '{}'"
 
@@ -70,20 +68,20 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
-"Copr-tietovaraston käyttöönotto. Huomaa, että tämä tietovarasto ei ole\n"
+"Copr-ohjelmistolähteen käyttöönotto. Huomaa, että tämä ohjelmistolähde ei "
+"ole\n"
 "osa pääjakelua, ja laatu saattaa vaihdella.\n"
 "\n"
-"Fedora-projekti ei käytä mitään valtaa tämän tietovaraston sisällöstä\n"
+"Fedora-projekti ei käytä mitään valtaa tämän ohjelmistolähteen sisällöstä\n"
 "muutoin kuin kerrottu Coprin usein kysytyissä kysymyksissä\n"
 "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
 "in-copr>:ssa,\n"
 "eikä paketteja kata minkäänlainen laatu- tai turvallisuustaso.\n"
 "\n"
 "Älä lähetä näiden pakettien virheraportteja Fedoran Bugzillaan. Jos\n"
-"paketeissa on ongelmia, ota yhteyttä tietovaraston omistajaan.\n"
+"paketeissa on ongelmia, ota yhteyttä ohjelmistolähteen omistajaan.\n"
 
 #: copr_constants.hpp:41
-#, c++-format
 msgid ""
 "Maintainer of the enabled Copr repository decided to make\n"
 "it dependent on other repositories. Such repositories are\n"
@@ -98,40 +96,41 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
-"Käytössä olevan Copr-tietovaraston ylläpitäjä päätti tehdä sen "
+"Käytössä olevan Copr-ohjelmistolähteen ylläpitäjä päätti tehdä sen "
 "riippuvaiseksi\n"
-"muista tietovarastoista. Tällaiset tietovarastot ovat yleensä "
+"muista ohjelmistolähteistä. Tällaiset ohjelmistolähteet ovat yleensä "
 "välttämättömiä\n"
-"RPM:iden onnistuneeseen asentamiseen Copr-päätietovarastosta (ne tarjoavat\n"
+"RPM:iden onnistuneeseen asentamiseen Copr-pääohjelmistolähteestä (ne "
+"tarjoavat\n"
 "ajonaikaisia riippuvuuksia).\n"
 "\n"
-"Huomaa, että laatua ja virheilmoitusta koskeva huomautus yllä oleva pätee\n"
+"Huomaa, että laatua ja virheilmoitusta koskeva huomautus yllä pätee\n"
 "myös tähän, Fedora Project ei hallitse sisältöä.\n"
 "Tarkista luettelo:\n"
 "\n"
 "{}\n"
-"Nämä tietovarastot otetaan käyttöön yhdessä päätietovaraston kanssa.\n"
+"Nämä ohjelmistolähteet otetaan käyttöön yhdessä pääohjelmistolähteen "
+"kanssa.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr "tulosta hyödyllistä tietoa järjestelmistä, hyödyllistä vianjäljitykseen"
+msgstr ""
+"tulosta hyödyllistä tietoa järjestelmistä, hyödyllistä vianjäljitykseen"
 
 #: copr_disable.cpp:34
-#, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
-"poista määritetty Copr-tietovarasto käytöstä (jos sellainen on), säilytä "
+"poista määritetty Copr-ohjelmistolähde käytöstä (jos sellainen on), säilytä "
 "{}/*.repo-tiedosto - merkitse vain 'enabled=0'"
 
 #: copr_enable.cpp:37
-#, c++-format
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr ""
-"lataa tietovaraston tiedot Copr-palvelimelta ja asenna se {}/*.repo-"
+"lataa ohjelmistolähteen tiedot Copr-palvelimelta ja asenna se {}/*.repo-"
 "tiedostona"
 
 #: copr_enable.cpp:45
@@ -145,87 +144,78 @@ msgid "list Copr repositories"
 msgstr "listaa Copr-tietovarastot"
 
 #: copr_remove.cpp:34
-#, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
+"poista määritetty Copr-ohjelmistolähde järjestelmästä (poistaa {}/*.repo-"
+"tiedoston)"
 
 #: copr_repo.cpp:88
-#, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "Hakemistoa {} ei löydy Copr-projektista {}."
 
 #: copr_repo.cpp:94
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "Voit käyttää jotakin seuraavista käytettävissä olevista hakemistoista:"
 
 #: copr_repo.cpp:110
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "Chroot ei löytynyt annetusta Copr-projektista"
 
 #: copr_repo.cpp:112
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "Chrootia ei voi havaita, määritä se nimenomaisesti."
 
 #: copr_repo.cpp:118
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "Yritimme löytää nämä tietovarastot menestyksettä:"
 
 #: copr_repo.cpp:123
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "Voit valita yhden saatavilla olevista chrooteista nimenomaisesti:"
 
 #: copr_repo.cpp:197
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "Copr-tietovaraston määrityksiä ei voi jäsentää: "
 
-#: copr_repo.cpp:339
-#, c++-format
+#: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "Tietovarastotiedostoa {} ei voi poistaa"
 
-#: copr_repo.cpp:342
-#, c++-format
+#: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
 msgstr "Tietovarastotiedosto {} poistettu onnistuneesti"
 
-#: copr_repo.cpp:388
-#, c++-format
+#: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "Kohdetta {} ei löydy {}:sta"
 
-#: copr_repo.cpp:444
-#, c++-format
+#: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
 msgstr ""
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr "Ei voi poistaa"
 
-#: copr_repo.cpp:521
-#, c++-format
+#: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
 
-#: copr_repo.cpp:555
-#, c++-format
+#: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "Tietovaraston tunnus '{}' '{}':ssa on epäilyttävä"
 
-#: copr_repo.cpp:562
-#, c++-format
+#: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr ""
 
-#: copr_repo.cpp:612
-#, c++-format
+#: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr "Copr-tietovarasto '{}' '{}':ssa poistettu käytöstä."
+msgstr "Copr-ohjelmistolähde '{}' '{}':ssa poistettu käytöstä."
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
-#, c++-format
+#: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
-msgstr "Tietovarastoa '{}' ei löydy järjestelmästä"
+msgstr "Ohjelmistolähdettä '{}' ei löydy järjestelmästä"

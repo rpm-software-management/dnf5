@@ -1,0 +1,23 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# caffiendo c <1728778012@qq.com>, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-09 22:54+0000\n"
+"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate."
+"fedoraproject.org/projects/dnf5/dnf5-plugin-needs-restarting/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.4\n"
+
+#: needs_restarting.cpp:229
+msgid "Couldn't connect to D-Bus: {}"
+msgstr "无法连接到 D-Bus: {}"
