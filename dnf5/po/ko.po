@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2025.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-20 13:16+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-23 10:41+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ko/>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "권고 사항 관리"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "권고 사항에 대해 상세히 출력"
 
@@ -85,7 +85,7 @@ msgstr ""
 "지정된 이름을 갖는 꾸러미를 포함하는 권고만 표시합니다. 옵션을 나열하고, glob"
 "을 지원합니다."
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "꾸러미_이름,..."
 
@@ -223,7 +223,8 @@ msgstr "소프트웨어 하향설치"
 
 #: commands/download/download.cpp:105
 msgid "When running with --url, prints URLs from all available mirrors"
-msgstr "--url과 함께 사용하여 실행하면, 모든 사용 가능한 미러에서 URL을 출력합니다"
+msgstr ""
+"--url과 함께 사용하여 실행하면, 모든 사용 가능한 미러에서 URL을 출력합니다"
 
 #: commands/download/download.cpp:121
 msgid "Invalid urlprotocol option: {}"
@@ -308,9 +309,23 @@ msgstr ""
 msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr "연결에 포함된 추가 꾸러미를 오류로 고려하지 마세요."
 
+#: commands/history/arguments.hpp:80
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr "지정된 이름을 갖는 꾸러미가 포함된 연결만 표시합니다. 옵션 목록, glob을 "
+"지원합니다."
+
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
 msgstr "연결 기록 관리"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr "일치하는 내용이 없으며, 기록 정보는 최종 연결만 고려하고, 모든 연결을 "
+"검색하려면 \"1..last\" 범위를 지정하세요."
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -531,9 +546,9 @@ msgid ""
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
-"경고: `_execute` 명령은 내부적으로만 사용되며 사용자가 직접 실행하도록 "
-"의도하지 않았습니다. 시스템 향상/오프라인 연결을 시작하려면, `dnf5 offline "
-"reboot`를 실행하세요."
+"경고: `_execute` 명령은 내부적으로만 사용되며 사용자가 직접 실행하도록 의도하"
+"지 않았습니다. 시스템 향상/오프라인 연결을 시작하려면, `dnf5 offline reboot`"
+"를 실행하세요."
 
 #: commands/offline/offline.cpp:444
 msgid "Use `dnf5 offline reboot` to begin the transaction."
@@ -747,11 +762,11 @@ msgstr "versionlock을 추가하려는 꾸러미 상세 목록"
 msgid "No package found for \"{}\"."
 msgstr "\"{}\"를 위해 어떤 꾸러미도 찾을 수 없습니다."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "\"{0} = {1}\"에서 versionlock 추가하기."
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
 msgstr "꾸러미 {} 는 이미 잠겨졌습니다."
 
@@ -789,8 +804,8 @@ msgid "Package \"{}\" is already excluded."
 msgstr "꾸러미 {} 는 이미 제외되었습니다."
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr "PGP 키 0x{} 가져오기:\n"
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "OpenPGP 키 0x{} 가져오기:\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
@@ -812,7 +827,7 @@ msgstr "키를 성공적으로 가져왔습니다."
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
 msgstr ", "
 
@@ -1105,8 +1120,8 @@ msgstr ""
 "정할 수 있습니다."
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
-msgstr "gpg 서명 확인을 비활성화 (RPM 정책이 허용하는 경우)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
+msgstr "Opengpg 서명 확인을 비활성화 (RPM 정책이 허용하는 경우)"
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
@@ -1235,10 +1250,11 @@ msgstr "  API 버전: {}.{}"
 #: main.cpp:810
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
-msgstr "들어온 꾸러미의 크기 합계는 {:.0f} {:s}입니다. 내려받는 데 필요한 {:.0f} {:s}"
+msgstr ""
+"들어온 꾸러미의 크기 합계는 {:.0f} {:s}입니다. 내려받는 데 필요한 {:.0f} {:s}"
 "가 필요합니다."
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1246,7 +1262,7 @@ msgstr ""
 "이와 같은 동작 후에, {:.0f} {:s} 추가는 ({:.0f} {:s} 설치, {:.0f} {:s} 제거)"
 "에 사용됩니다."
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1254,39 +1270,39 @@ msgstr ""
 "이와 같은 동작 후에, {:.0f} {:s}는 ({:.0f} {:s} 설치, {:.0f} {:s} 제거)가 자"
 "유롭게 됩니다."
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
 msgstr "======== 주요 구성: ========"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "덤프 구성에 일치하는 저장소가 없습니다: \"{}\""
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" 저장소 구성: ========"
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
 msgstr "======== 변수: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
 msgstr "새로운 장:"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
 msgstr "{} 에서 사용 할 수 없는 꾸러미를 건너뛰려면"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} 를 연결에서 추가 꾸러미를 허용합니다"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1296,27 +1312,27 @@ msgstr ""
 "도 이 옵션이 실패한 제거 작업을 무시 할 수 있기 때문에 빈 연결이 나타 날 수 "
 "있습니다."
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} 연결을 최고의 후보로 제한하지 않습니다"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} 문제를 해결하도록 설치된 꾸러미의 제거를 허용합니다"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
 msgstr "{} 추가된 파일목록 메타자료를 적재합니다"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
 msgstr "{} 설치 할 수 없는 꾸러미를 건너뜁니다"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
 msgstr "당신은 명령 행에 다음을 추가 해 볼 수 있습니다:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1324,7 +1340,7 @@ msgstr ""
 "libdnf 플러그인을 활성화 중에 다음 플러그인 이름 유형을 위한 어떤 일치도 찾"
 "을 수 없습니다: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1332,19 +1348,19 @@ msgstr ""
 "libdnf 플러그인을 비활성화 하는 중에 다음 플러그인 이름 유형을 위해 어떤 일치"
 "도 찾을 수 없습니다: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5는 인수로 시작됩니다: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. 인수에 대한 더 많은 정보를 위해 \"--help\"를 추가합니다."
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1352,11 +1368,18 @@ msgstr ""
 "플러그인에 의해 제공된 명령일 수 있으며, 다음과 같이 시도하세요: dnf5 "
 "install 'dnf5-command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"인수는 명령을 위해 사용 할 수 있습니다: {}. (명령 뒤에 배치되어야 합니다.)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "현재 디렉토리에서 읽기/실행 접근이 없으며, /로 이동합니다"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1366,23 +1389,23 @@ msgstr ""
 "인하고, \"--assumeno\" 또는 \"--downloadonly\" 옵션을 사용하여 시스템 상태를 "
 "수정하지 않고 명령을 실행합니다."
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
 msgstr "동작은 {}의 연결만 저장합니다"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
 msgstr "동작은 연결을 위해 꾸러미만 내려받을 수 있습니다."
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
-"시험 방식이 활성화 되었습니다: 꾸러미 내려받기, PGP 키 설치 및 연결 점검만 수"
-"행됩니다."
+"시험 방식이 활성화 되었습니다: 꾸러미 내려받기, OpenPGP 키 설치 및 연결 점검"
+"만 수행됩니다."
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1390,15 +1413,15 @@ msgstr ""
 "installroot에서 어떤 저장소도 적재되지 않았습니다. 호스트 시스템의 구성 및 저"
 "장소를 사용하려면, --use-host-conifg를 전달하세요."
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
 msgstr "명령이 오류를 반환하였습니다: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
 msgstr "DNF5가 종료되었습니다"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "완료되었습니다!"
 

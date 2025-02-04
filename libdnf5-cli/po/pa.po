@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-11-19 09:15+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-04 12:49+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/pa/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -24,7 +24,7 @@ msgstr ""
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr ""
+msgstr "\"{}\" ਦੀ \"{}\" ਕਮਾਂਡ ਵਿੱਚ ਮਨਜ਼ੂਰੀ ਨਹੀਂ ਹੈ"
 
 #: argument_parser.cpp:66
 msgid "\"{}\" not allowed together with positional argument \"{}\""
@@ -117,15 +117,15 @@ msgstr "ਕਾਰਵਾਈ ਵਰਤੋਂਕਾਰ ਵਲੋਂ ਅਧੂਰੀ
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr ""
+msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਹੱਲ਼ ਕਰਨ ਲਈ ਅਸਫ਼ਲ ਹੈ"
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr ""
+msgstr "ਇਸ਼ਾਰਾ: [d] ਮੂਲ, [e] ਸਮਰ਼ਥ ਹੈ, [x] ਅਸਮਰੱਥ ਹੈ, [i] ਇੰਸਟਾਲ ਹੈ, [a] ਸਰਗਰਮ"
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr ""
+msgstr "ਇਸ਼ਾਰਾ: [d] ਮੂਲ, [e] ਸਮਰ਼ਥ ਹੈ, [x] ਅਸਮਰੱਥ ਹੈ, [i] ਇੰਸਟਾਲ ਹੈ"
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
@@ -142,7 +142,7 @@ msgstr "ਨਾਂ"
 msgid "Epoch"
 msgstr ""
 
-#: output/packageinfo.cpp:69 output/transaction_table.cpp:274
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
 msgstr "ਵਰਜ਼ਨ"
 
@@ -174,7 +174,7 @@ msgstr "ਸਰੋਤ"
 msgid "From repository"
 msgstr "ਰਿਪੋਜ਼ਟਰੀ ਤੋਂ"
 
-#: output/packageinfo.cpp:96 output/transaction_table.cpp:280
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
 msgstr "ਰਿਪੋਜ਼ਟਰੀ"
 
@@ -198,185 +198,209 @@ msgstr "ਵਰਨਣ"
 msgid "Vendor"
 msgstr "ਵੇਂਡਰ"
 
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr ""
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "ਕੋਈ ਮੇਲ ਨਹੀਂ ਲੱਭਿਆ ਹੈ।"
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "ਮਿਲਦੇ ਖੇਤਰ: "
+
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਦਾ ਸਾਰ:\n"
 
-#: output/transaction_table.cpp:131
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
 msgstr[0] " ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:      {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਇੰਸਟਾਲ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:138
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
 msgstr[0] " ਮੁੜ-ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:      {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਮੁੜ-ਇੰਸਟਾਲ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:145
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
 msgstr[0] " ਅੱਪਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:      {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਅੱਪਗਰੇਡ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:152
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
-msgid_plural " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
 msgstr[0] " ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:      {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਤਬਦੀਲ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:159
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
 msgstr[0] " ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ:      {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਹਟਾਏ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:166
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
 msgstr[0] " ਡਾਊਨਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:     {:4} ਪੈਕੇਜ\n"
 msgstr[1] " ਡਾਊਨਗਰੇਡ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:      {:4} ਪੈਕੇਜ\n"
 
-#: output/transaction_table.cpp:173
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: output/transaction_table.cpp:181
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: output/transaction_table.cpp:262
+#: output/transaction_table.cpp:277
 msgid "Package"
 msgstr "ਪੈਕੇਜ"
 
-#: output/transaction_table.cpp:268
+#: output/transaction_table.cpp:283
 msgid "Arch"
 msgstr "ਢਾਂਚਾ"
 
-#: output/transaction_table.cpp:286
+#: output/transaction_table.cpp:301
 msgid "Size"
 msgstr "ਆਕਾਰ"
 
-#: output/transaction_table.cpp:342 output/transaction_table.cpp:436
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
 msgstr "{} -> {}"
 
-#: output/transaction_table.cpp:358
+#: output/transaction_table.cpp:373
 msgid "replacing {}"
 msgstr "{} ਨੂੰ ਬਦਲਿਆ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: output/transaction_table.cpp:394 output/transaction_table.cpp:411
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
 msgstr ""
 
-#: output/transaction_table.cpp:442
-msgid "replacing "
-msgstr "ਬਦਲਿਆ ਜਾ ਰਿਹਾ ਹੈ "
-
-#: output/transaction_table.cpp:455
-msgid "Skipping packages with conflicts:"
-msgstr ""
-
 #: output/transaction_table.cpp:457
-msgid "Skipping packages with broken dependencies:"
-msgstr ""
+msgid "replacing "
+msgstr "ਨੂੰ ਬਦਲਿਆ ਜਾ ਰਿਹਾ ਹੈ "
 
-#: output/transaction_table.cpp:518
+#: output/transaction_table.cpp:470
+msgid "Skipping packages with conflicts:"
+msgstr "ਟਕਰਾ ਵਾਲੇ ਪੈਕੇਜ ਛੱਡੇ ਜਾ ਰਹੇ ਹਨ:"
+
+#: output/transaction_table.cpp:472
+msgid "Skipping packages with broken dependencies:"
+msgstr "ਨਾ ਹੱਲ਼ ਹੋਈ ਨਿਰਭਰਤਾ ਵਾਲੇ ਪੈਕੇਜ ਛੱਡੇ ਜਾ ਰਹੇ ਹਨ:"
+
+#: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
 msgstr "ਨਿਰਭਰਤਾਵਾਂ ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:520
+#: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
-msgstr ""
+msgstr "ਕਮਜ਼ੋਰ ਨਿਰਭਰਤਾਵਾਂ ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:522
+#: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
 msgstr "ਗਰੁੱਪ/ਮੋਡੀਊਲ ਪੈਕੇਜ ਇੰਸਟਾਲ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ:"
 
-#: output/transaction_table.cpp:524
+#: output/transaction_table.cpp:539
 msgid "Installing:"
-msgstr "ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
+msgstr "ਇੰਸਟਾਲ:"
 
-#: output/transaction_table.cpp:528
+#: output/transaction_table.cpp:543
 msgid "Upgrading:"
-msgstr "ਅੱਪਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
+msgstr "ਅੱਪਗਰੇਡ:"
 
-#: output/transaction_table.cpp:531
+#: output/transaction_table.cpp:546
 msgid "Downgrading:"
 msgstr "ਡਾਊਨਗਰੇਡ:"
 
-#: output/transaction_table.cpp:534
+#: output/transaction_table.cpp:549
 msgid "Reinstalling:"
 msgstr "ਮੁੜ-ਇੰਸਟਾਲ:"
 
-#: output/transaction_table.cpp:538
+#: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
 msgstr "ਨਿਰਭਰ ਪੈਕੇਜ ਹਟਾਏ ਜਾ ਰਹੇ ਹਨ:"
 
-#: output/transaction_table.cpp:540
+#: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
 msgstr "ਗ਼ੈਰ-ਵਰਤੀਆਂ ਨਿਰਭਰਤਾਵਾਂ ਨੂੰ ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:542
+#: output/transaction_table.cpp:557
 msgid "Removing:"
 msgstr "ਹਟਾਏ ਜਾ ਰਹੇ ਹਨ:"
 
-#: output/transaction_table.cpp:546
+#: output/transaction_table.cpp:561
 msgid "Changing reason:"
 msgstr "ਬਦਲਣ ਦਾ ਕਾਰਨ:"
 
-#: output/transaction_table.cpp:578
+#: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
 msgstr "ਗਰੁੱਪ ਨਿਰਭਰਤਾਵਾਂ ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:580
+#: output/transaction_table.cpp:595
 msgid "Installing groups:"
 msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਜਾ ਰਹੇ ਗਰੁੱਪ:"
 
-#: output/transaction_table.cpp:584
+#: output/transaction_table.cpp:599
 msgid "Removing groups:"
 msgstr "ਹਟਾਏ ਜਾ ਰਹੇ ਗਰੁੱਪ:"
 
-#: output/transaction_table.cpp:587
+#: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
 msgstr "ਅੱਪਗਰੇਡ ਕੀਤੇ ਜਾ ਰਹੇ ਗਰੁੱਪ:"
 
-#: output/transaction_table.cpp:614
+#: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
 msgstr "ਇਨਵਾਇਰਨਮੈਂਟ ਗਰੁੱਪਾਂ ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:617
+#: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
 msgstr "ਇਨਵਾਇਰਨਮੈਂਟ ਗਰੁੱਪਾਂ ਨੂੰ ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:620
+#: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
 msgstr "ਇਨਵਾਇਰਨਮੈਂਟ ਗਰੁੱਪਾਂ ਨੂੰ ਅੱਪਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:647
+#: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
-msgstr ""
+msgstr "ਮੋਡੀਊਲ ਸਟਰੀਮਾਂ ਨੂੰ ਸਮਰੱਥ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:650
+#: output/transaction_table.cpp:665
 msgid "Disabling modules:"
 msgstr "ਮੋਡੀਊਲ ਸਟਰੀਮ ਨੂੰ ਅਸਮਰੱਥ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:653
+#: output/transaction_table.cpp:668
 msgid "Resetting modules:"
 msgstr "ਮੋਡੀਊਲ ਸਟਰੀਮ ਨੂੰ ਮੁੜ-ਸੈੱਟ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:656
+#: output/transaction_table.cpp:671
 msgid "Switching module streams:"
 msgstr "ਮੋਡੀਊਲ ਸਟਰੀਮ ਨੂੰ ਬਦਲਿਆ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: output/transaction_table.cpp:730
+#: output/transaction_table.cpp:745
 msgid "Nothing to do."
 msgstr "ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ ਹੈ।"
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "ਕੁੱਲ"
 
 #: session.cpp:149
 msgid "Missing command"

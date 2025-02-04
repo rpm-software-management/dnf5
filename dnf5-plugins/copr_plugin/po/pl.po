@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: 2024-10-17 17:14+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -173,27 +173,27 @@ msgstr "Można wybrać jawnie jeden z dostępnych chrootów:"
 msgid "Can't parse Copr repo spec: "
 msgstr "Nie można przeanalizować specyfikacji repozytorium Copr: "
 
-#: copr_repo.cpp:339
+#: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
 msgstr "Nie można usunąć pliku repozytorium {}"
 
-#: copr_repo.cpp:342
+#: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
 msgstr "Plik repozytorium {} został pomyślnie usunięty"
 
-#: copr_repo.cpp:388
+#: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
 msgstr "Nie można znaleźć elementu {} w {}"
 
-#: copr_repo.cpp:444
+#: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
 msgstr "Usuwanie starego pliku konfiguracyjnego '{}'"
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr "Nie można usunąć"
 
-#: copr_repo.cpp:521
+#: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -201,18 +201,18 @@ msgstr ""
 "Plik repozytorium Copr '{}' ma stary format, napraw go, włączając go "
 "ponownie $ {} copr enable {}"
 
-#: copr_repo.cpp:555
+#: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Identyfikator repozytorium „{}” w „{}” jest podejrzany"
 
-#: copr_repo.cpp:562
+#: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Identyfikator repozytorium '{}' nie należy do repozytorium '{}'"
 
-#: copr_repo.cpp:612
+#: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Repozytorium Copr '{}' w '{}' wyłączone."
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
+#: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
 msgstr "Repozytorium '{}' nie zostało znalezione w tym systemie"

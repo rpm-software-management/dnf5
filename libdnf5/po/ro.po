@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-10-11 18:24+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-12 03:38+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -624,8 +624,8 @@ msgid "Signature verification failed."
 msgstr "Verificarea semnăturii a eșuat."
 
 #: base/transaction.cpp:89
-msgid "The repository does not have any PGP keys configured."
-msgstr "Depozitul nu are nicio cheie PGP configurată."
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "Depozitul nu are nicio cheie OpenPGP configurată."
 
 #: base/transaction.cpp:90
 msgid "Public key is not installed."
@@ -652,8 +652,9 @@ msgid "An error occurred importing key \"{}\": {}"
 msgstr "A apărut o eroare la importarea cheii „{}”: {}"
 
 #: base/transaction.cpp:1372
-msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr "Verificarea PGP pentru pachetul „{}” ({}) din depozitul „{}” a eșuat: "
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr ""
+"Verificarea OpenPGP pentru pachetul „{}” ({}) din depozitul „{}” a eșuat: "
 
 #: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
@@ -665,23 +666,26 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repository: {1}"
-msgstr[0] "Atenție: verificări PGP omise pentru {0} pachet din depozitul: {1}"
-msgstr[1] "Atenție: verificări PGP omise pentru {0} pachete din depozitul: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] ""
+"Atenție: verificări OpenPGP omise pentru {0} pachet din depozitul: {1}"
+msgstr[1] ""
+"Atenție: verificări OpenPGP omise pentru {0} pachete din depozitul: {1}"
 msgstr[2] ""
-"Atenție: verificări PGP omise pentru {0} de pachete din depozitul: {1}"
+"Atenție: verificări OpenPGP omise pentru {0} de pachete din depozitul: {1}"
 
 #: base/transaction.cpp:1425
-msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repositories: {1}"
-msgstr[0] "Atenție: verificări PGP omise pentru {0} pachet din depozitele: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] ""
+"Atenție: verificări OpenPGP omise pentru {0} pachet din depozitele: {1}"
 msgstr[1] ""
-"Atenție: verificări PGP omise pentru {0} pachete din depozitele: {1}"
+"Atenție: verificări OpenPGP omise pentru {0} pachete din depozitele: {1}"
 msgstr[2] ""
-"Atenție: verificări PGP omise pentru {0} de pachete din depozitele: {1}"
+"Atenție: verificări OpenPGP omise pentru {0} de pachete din depozitele: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -948,37 +952,37 @@ msgstr ""
 "Viteza maximă de descărcare este mai mică decât cea minimă, vă rugăm să "
 "modificați valoarea configurată a opțiunii „minrate” sau „throttle”"
 
-#: repo/package_downloader.cpp:152
+#: repo/package_downloader.cpp:153
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Nu se poate descărca pachetul „{0}”, opțiunea „cacheonly” este activată."
 
-#: repo/package_downloader.cpp:257
+#: repo/package_downloader.cpp:266
 msgid "Failed to download packages"
 msgstr "Descărcarea pachetelor a eșuat"
 
-#: repo/repo.cpp:60
+#: repo/repo.cpp:59
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Încărcarea RPM „{}” a eșuat: nu are extensia „.rpm”"
 
-#: repo/repo.cpp:64
+#: repo/repo.cpp:63
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Accesul la RPM „{}” a eșuat: {}"
 
-#: repo/repo.cpp:106
+#: repo/repo.cpp:105
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Id de depozit nevalid „{}”: caracter neașteptat „{}”"
 
-#: repo/repo.cpp:149
+#: repo/repo.cpp:148
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Depozitul „{}” nu are configurată sursa (baseurl, mirrorlist sau metalink)."
 
-#: repo/repo.cpp:160
+#: repo/repo.cpp:159
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Depozitul „{}” are tipul neacceptat „{}”, se omite."
 
-#: repo/repo.cpp:408
+#: repo/repo.cpp:410
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -986,51 +990,51 @@ msgstr ""
 "Încărcarea depozitului a eșuat: Datele „primary” nu sunt prezente sau sunt "
 "într-un format neacceptat"
 
-#: repo/repo.cpp:466
+#: repo/repo.cpp:476
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Încărcarea comps „{}” a eșuat: nu are extensia „.xml”"
 
-#: repo/repo.cpp:473
+#: repo/repo.cpp:483
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Încărcarea comps xml a eșuat „{}”: {}"
 
-#: repo/repo.cpp:490
+#: repo/repo.cpp:500
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Încărcarea RPM „{}” a eșuat: {}"
 
-#: repo/repo_cache.cpp:229
+#: repo/repo_cache.cpp:227
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nu s-a putut determina id-ul depozitului din cache."
 
-#: repo/repo_cache_private.hpp:56
+#: repo/repo_cache_private.hpp:58
 msgid "Empty path to the repository cache directory."
 msgstr "Rută goală către directorul cache al depozitului."
 
-#: repo/repo_downloader.cpp:139
+#: repo/repo_downloader.cpp:138
 msgid "Librepo error: {}"
 msgstr "Eroare librepo: {}"
 
-#: repo/repo_downloader.cpp:171
+#: repo/repo_downloader.cpp:170
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "Descărcarea metadatelor ({}: „{}”) pentru depozitul „{}” a eșuat"
 
-#: repo/repo_downloader.cpp:242
+#: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Eroare la verificarea dacă metalink „{}” este sincronizat pentru depozitul "
 "„{}”"
 
-#: repo/repo_downloader.cpp:272
+#: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Eroare la verificarea dacă repomd ({}: „{}”) este sincronizat pentru "
 "depozitul „{}”"
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:335
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Eroare la încărcarea metadatelor locale pentru depozitul „{}”"
 
-#: repo/repo_downloader.cpp:456
+#: repo/repo_downloader.cpp:474
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1038,18 +1042,18 @@ msgstr ""
 "depozitul „{}”"
 
 #: repo/repo_pgp.cpp:60
-msgid "Failed to import pgp keys into temporary keyring: {}"
-msgstr "Importare eșuată a cheilor pgp în inelul de chei temporar: {}"
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr "Importare eșuată a cheilor OpenPGP în inelul de chei temporar: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-msgid "Failed to list pgp keys: {}"
-msgstr "Eșec la listarea cheilor pgp: {}"
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Eșec la listarea cheilor OpenPGP: {}"
 
-#: repo/repo_pgp.cpp:140
-msgid "Failed to import pgp keys: {}"
-msgstr "Importare eșuată a cheilor pgp: {}"
+#: repo/repo_pgp.cpp:141
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Importare eșuată a cheilor OpenPGP: {}"
 
-#: repo/repo_sack.cpp:146
+#: repo/repo_sack.cpp:147
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1057,52 +1061,52 @@ msgstr ""
 "Nu s-a reușit crearea depozitului „{}”: Id-ul este prezent de mai multe ori "
 "în configurație"
 
-#: repo/repo_sack.cpp:517
+#: repo/repo_sack.cpp:518
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Opțiunea cache-only este activată, dar nu există cache pentru depozitul „{}”"
 
-#: repo/solv_repo.cpp:261
+#: repo/solv_repo.cpp:266
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Încărcarea repomd pentru repo „{}” de la „{}” a eșuat: {}."
 
-#: repo/solv_repo.cpp:269
+#: repo/solv_repo.cpp:274
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "Încărcarea „primary” pentru repo „{}” de la „{}” a eșuat: {}."
 
-#: repo/solv_repo.cpp:316
+#: repo/solv_repo.cpp:322
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "Tip repodata extins neacceptat pentru depozitul sistemului: „{}”."
 
-#: repo/solv_repo.cpp:382
+#: repo/solv_repo.cpp:394
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nu s-a reușit încărcarea extensiei {} pentru depozitul „{}” de la „{}”: {}"
 
-#: repo/solv_repo.cpp:418
+#: repo/solv_repo.cpp:430
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Încărcarea depozitului de sistem de la rădăcina „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:519
+#: repo/solv_repo.cpp:531
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nu s-a putut încărca cache-ul {} pentru depozitul repo „{}” din „{}”: {}"
 
-#: repo/solv_repo.cpp:573
+#: repo/solv_repo.cpp:585
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Scrierea cache-ului „primary” pentru depozitul „{}” în „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:595
+#: repo/solv_repo.cpp:607
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "A eșuat reîncărcarea cache-ului „primary” pentru depozitul „{}” din „{}”: {}"
 
-#: repo/solv_repo.cpp:661
+#: repo/solv_repo.cpp:672
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Scrierea cache-ului primar pentru depozitul „{}” din „{}” a eșuat: {}"
 
-#: repo/solv_repo.cpp:682
+#: repo/solv_repo.cpp:693
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "A eșuat reîncărcarea cache-ului {} pentru depozitul repo „{}” din „{}”: {}"
@@ -1122,9 +1126,13 @@ msgstr "Șirul NEVRA „{}” conține „:” de mai multe ori"
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr "Caracter nevalid „{}” în șirul NEVRA „{}”"
 
-#: rpm/package.cpp:80
+#: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
 msgstr "Pachetul cu rpmdbid nu a fost găsit"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<necunoscut>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1150,11 +1158,11 @@ msgstr "A apărut o problemă la deschiderea pachetului."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Definirea opțiunii „rootDir” a tranzacției rpm „{}” a eșuat."
 
-#: rpm/rpm_signature.cpp:283
+#: rpm/rpm_signature.cpp:287
 msgid "\"{}\": key is not an armored public key."
 msgstr "„{}\": cheia nu este o cheie publică blindată."
 
-#: rpm/rpm_signature.cpp:288
+#: rpm/rpm_signature.cpp:292
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Importarea cheii publice \"{}\" în rpmdb a eșuat: {}"
 
@@ -1576,11 +1584,11 @@ msgid "Missing '=' on line {}"
 msgstr "Lipsește „=” în linia {}"
 
 #. returns localized message, problem with later translation
-#: utils/library.cpp:32
+#: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nu se poate încărca biblioteca partajată „{}”: {}"
 
-#: utils/library.cpp:47
+#: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nu se poate obține adresa simbolului „{}”: {}"
 

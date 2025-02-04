@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-04 12:49+0000\n"
+"Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/pa/>\n"
+"Language: pa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9.1\n"
+
+#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+msgid ""
+"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
+"format expected"
+msgstr ""
+"\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
+"ਫਾਰਮੈਟ ਦੀ ਆਸ ਸੀ"
+
+#: actions.cpp:581
+msgid ""
+"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+msgstr ""
+
+#: actions.cpp:590
+msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਚੋਣ \"{}\""
+
+#: actions.cpp:616
+msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਹੁੱਕ \"{}\""
+
+#: actions.cpp:626
+msgid ""
+"Error in file \"{}\" on line {}: Package filter can only be used in "
+"PRE_TRANS and POST_TRANS hooks"
+msgstr ""
+
+#: actions.cpp:636
+msgid ""
+"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+msgstr ""
+"\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਪੈਕੇਜ ਫਿਲਟਰ ਦੇ ਬਿਨਾਂ ਦਿਸ਼ਾ ਵਰਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ"
+
+#: actions.cpp:653
+msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤੀ ਪੈਕੇਜ ਦਿਸ਼ਾ \"{}\""
+
+#: actions.cpp:664
+msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਅਣਪਛਾਤਾ ਮੋਡ \"{}\""
+
+#: actions.cpp:670
+msgid "Error in file \"{}\" on line {}: Missing command"
+msgstr "\"{}\" ਫ਼ਾਇਲ ਵਿੱਚ {} ਲਾਈਨ ਉੱਤੇ ਗਲਤੀ ਹੈ: ਕੋਈ ਕਮਾਂਡ ਨਹੀਂ ਹੈ"
+
+#: actions.cpp:1760
+msgid "Cannot create pipe: {}"
+msgstr ""

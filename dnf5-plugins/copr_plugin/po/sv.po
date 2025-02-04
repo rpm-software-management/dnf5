@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: 2024-01-26 02:46+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -171,27 +171,27 @@ msgstr "Du kan välja en av dessa tillgängliga chroots uttryckligen:"
 msgid "Can't parse Copr repo spec: "
 msgstr "Kunde inte analysera Copr-förråds-specifikation: "
 
-#: copr_repo.cpp:339
+#: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
 msgstr "Kunde inte ta bort {} förråds fil"
 
-#: copr_repo.cpp:342
+#: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
 msgstr "Förråds fil {} har tagits bort framgångsrikt"
 
-#: copr_repo.cpp:388
+#: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
 msgstr "Kan inte hitta objekt {} i {}"
 
-#: copr_repo.cpp:444
+#: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
 msgstr "Tar bort äldre konfigurationsfil '{}'"
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr "Kan inte ta bort"
 
-#: copr_repo.cpp:521
+#: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -199,18 +199,18 @@ msgstr ""
 "Copr förrådsfil '{}' har ett äldre format, fixa detta genom att återaktivera "
 "detta förråd med $ {} copr enable {}"
 
-#: copr_repo.cpp:555
+#: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Repo-id '{}' i '{}' är misstänkt"
 
-#: copr_repo.cpp:562
+#: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Repo-id '{}' tillhör inte '{}'-förrådsfilen"
 
-#: copr_repo.cpp:612
+#: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr-förråd '{}' i '{}' är inaktiverat."
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
+#: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
 msgstr "Förråd '{}' hittas inte på detta system"

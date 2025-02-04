@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -702,7 +702,9 @@ msgid "Signature verification failed."
 msgstr "Ověření podpisu selhalo."
 
 #: base/transaction.cpp:89
-msgid "The repository does not have any PGP keys configured."
+#, fuzzy
+#| msgid "The repository does not have any PGP keys configured."
+msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Repozitář nemá nakonfigurované žádné klíče PGP."
 
 #: base/transaction.cpp:90
@@ -730,7 +732,9 @@ msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
 #: base/transaction.cpp:1372
-msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+#, fuzzy
+#| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
@@ -746,9 +750,9 @@ msgstr ""
 #: base/transaction.cpp:1422
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
-msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repository: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
@@ -756,9 +760,9 @@ msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 #: base/transaction.cpp:1425
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
-msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repositories: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
@@ -1025,37 +1029,37 @@ msgstr ""
 "Maximální rychlost stahování je nižší než minimální. Změňte prosím "
 "konfiguraci minrate nebo throttle"
 
-#: repo/package_downloader.cpp:152
+#: repo/package_downloader.cpp:153
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nelze stáhnout balíček \"{0}\", je aktivována volba cacheonly."
 
-#: repo/package_downloader.cpp:257
+#: repo/package_downloader.cpp:266
 msgid "Failed to download packages"
 msgstr "Stažení balíčků se nezdařilo"
 
-#: repo/repo.cpp:60
+#: repo/repo.cpp:59
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:64
+#: repo/repo.cpp:63
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Nepodařilo se získat přístup k RPM \"{}\": {}"
 
-#: repo/repo.cpp:106
+#: repo/repo.cpp:105
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Neplatné ID repozitáře \"{}\": neočekávaný znak \"{}\""
 
-#: repo/repo.cpp:149
+#: repo/repo.cpp:148
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Repozitář \"{}\" nemá nastaven žádný zdroj (baseurl, mirrorlist nebo "
 "metalink)."
 
-#: repo/repo.cpp:160
+#: repo/repo.cpp:159
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Repozitář \"{}\" má nepodporovaný typ \"{}\", přeskakuji."
 
-#: repo/repo.cpp:408
+#: repo/repo.cpp:410
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -1063,54 +1067,54 @@ msgstr ""
 "Nepodařilo se načíst repozitář: \"primární\" data nejsou k dispozici nebo "
 "jsou v nepodporovaném formátu"
 
-#: repo/repo.cpp:466
+#: repo/repo.cpp:476
 #, fuzzy
 #| msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:473
+#: repo/repo.cpp:483
 #, fuzzy
 #| msgid "Failed to load RPM \"{}\": {}"
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo.cpp:490
+#: repo/repo.cpp:500
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:229
+#: repo/repo_cache.cpp:227
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nelze určit ID repozitáře v mezipaměti."
 
-#: repo/repo_cache_private.hpp:56
+#: repo/repo_cache_private.hpp:58
 msgid "Empty path to the repository cache directory."
 msgstr "Prázdná cesta k adresáři mezipaměti repozitáře."
 
-#: repo/repo_downloader.cpp:139
+#: repo/repo_downloader.cpp:138
 msgid "Librepo error: {}"
 msgstr "Chyba Librepo: {}"
 
-#: repo/repo_downloader.cpp:171
+#: repo/repo_downloader.cpp:170
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:242
+#: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda je metalink \"{}\" synchronizován pro úložiště \"{}\""
 
-#: repo/repo_downloader.cpp:272
+#: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda jsou repomd ({}: \"{}\") synchronizována pro "
 "repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:335
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Chyba při načítání místních metadat pro repozitář „{}“"
 
-#: repo/repo_downloader.cpp:456
+#: repo/repo_downloader.cpp:474
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1118,18 +1122,24 @@ msgstr ""
 "nebo metalink)"
 
 #: repo/repo_pgp.cpp:60
-msgid "Failed to import pgp keys into temporary keyring: {}"
+#, fuzzy
+#| msgid "Failed to import pgp keys into temporary keyring: {}"
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
 msgstr "Nepodařilo se importovat pgp klíče do dočasného svazku klíčů: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-msgid "Failed to list pgp keys: {}"
+#, fuzzy
+#| msgid "Failed to list pgp keys: {}"
+msgid "Failed to list OpenPGP keys: {}"
 msgstr "Nepodařilo se vypsat pgp klíče: {}"
 
-#: repo/repo_pgp.cpp:140
-msgid "Failed to import pgp keys: {}"
+#: repo/repo_pgp.cpp:141
+#, fuzzy
+#| msgid "Failed to import pgp keys: {}"
+msgid "Failed to import OpenPGP keys: {}"
 msgstr "Nepodařilo se importovat pgp klíče: {}"
 
-#: repo/repo_sack.cpp:146
+#: repo/repo_sack.cpp:147
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1137,53 +1147,53 @@ msgstr ""
 "Nepodařilo se vytvořit repozitář \"{}\": ID je v konfiguraci přítomno více "
 "než jednou"
 
-#: repo/repo_sack.cpp:517
+#: repo/repo_sack.cpp:518
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 
-#: repo/solv_repo.cpp:261
+#: repo/solv_repo.cpp:266
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Nepodařilo se načíst repomd pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:269
+#: repo/solv_repo.cpp:274
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Nepodařilo se načíst primární repozitář pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:316
+#: repo/solv_repo.cpp:322
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nepodporovaný typ rozšířených dat repozitáře pro systémový repozitář: \"{}\"."
 
-#: repo/solv_repo.cpp:382
+#: repo/solv_repo.cpp:394
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst rozšíření {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:418
+#: repo/solv_repo.cpp:430
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 "Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
 
-#: repo/solv_repo.cpp:519
+#: repo/solv_repo.cpp:531
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:573
+#: repo/solv_repo.cpp:585
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nepodařilo se zapsat primární mezipaměť pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:595
+#: repo/solv_repo.cpp:607
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst primární mezipaměť pro repozitář \"{}\" z \"{}\": "
 "{}"
 
-#: repo/solv_repo.cpp:661
+#: repo/solv_repo.cpp:672
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Nepodařilo se zapsat mezipaměť {} pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:682
+#: repo/solv_repo.cpp:693
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
@@ -1202,9 +1212,13 @@ msgstr "Řetězec NEVRA \"{}\" obsahuje ':' vícekrát"
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr "Neplatný znak '{}' v řetězci NEVRA \"{}\""
 
-#: rpm/package.cpp:80
+#: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
 msgstr "Balíček s rpmdbid nebyl nalezen"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr ""
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1230,11 +1244,11 @@ msgstr "Nastal problém při otevírání balíčku."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Selhalo nastavení rpm transakce rootDir \"{}\"."
 
-#: rpm/rpm_signature.cpp:283
+#: rpm/rpm_signature.cpp:287
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": klíč není veřejný klíč jako prostý text kódovaný base64."
 
-#: rpm/rpm_signature.cpp:288
+#: rpm/rpm_signature.cpp:292
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Nepodařilo se importovat veřejný klíč „{}“ do rpmdb: {}"
 
@@ -1643,11 +1657,11 @@ msgid "Missing '=' on line {}"
 msgstr "Na řádku {} chybí '='"
 
 #. returns localized message, problem with later translation
-#: utils/library.cpp:32
+#: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: utils/library.cpp:47
+#: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 

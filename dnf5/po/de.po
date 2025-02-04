@@ -4,13 +4,14 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-05 21:08+0000\n"
-"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-30 23:38+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/de/>\n"
 "Language: de\n"
@@ -18,13 +19,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "Verwalte Adversories"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "Details zu Hinweisen ausgeben"
 
@@ -86,7 +87,7 @@ msgstr ""
 "Nur Hinweise anzeigen, die Pakete mit den angegebenen Namen enthalten. "
 "Listenoption, unterstützt Platzhalter."
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "PAKET_NAME,..."
 
@@ -318,9 +319,27 @@ msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr ""
 "Betrachten Sie in die Transaktion aufgenommene Zusatzpakete nicht als Fehler."
 
+#: commands/history/arguments.hpp:80
+#, fuzzy
+#| msgid ""
+#| "Show only groups containing packages with specified names. List option, "
+#| "supports globs."
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"Nur Gruppen anzeigen, die Pakete mit den angegebenen Namen enthalten. "
+"Listenoption, unterstützt Platzhalter."
+
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
 msgstr "Transaktions-Historie verwalten"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -772,11 +791,11 @@ msgstr "Liste der Paketspezifikationen, denen Versionlock hinzugefügt wird"
 msgid "No package found for \"{}\"."
 msgstr "Kein Paket für \"{}\" gefunden."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Hinzufügen von Versionssperre an \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
 msgstr "Paket {} ist bereits gesperrt."
 
@@ -817,8 +836,8 @@ msgid "Package \"{}\" is already excluded."
 msgstr "Paket \"{}\" ist bereits ausgenommen."
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr "Importiere PGP Schlüssel 0x{}:\n"
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "OpenPGP-Schlüssel 0x{} wird importiert:\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
@@ -840,7 +859,7 @@ msgstr "Der Schlüssel wurde erfolgreich importiert."
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
 msgstr ", "
 
@@ -1146,9 +1165,9 @@ msgstr ""
 "kann mehrfach spezifiziert werden."
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
-"deaktiviere die GPG-Signaturüberprüfung (falls die RPM-Richtlinie dies "
+"OpenPGP-Signaturüberprüfung deaktivieren (falls die RPM-Richtlinie dies "
 "zulässt)"
 
 #: main.cpp:433
@@ -1290,7 +1309,7 @@ msgstr ""
 "Die vollständige Größe eingehender Pakete ist {:.0f} {:s}. Heruntergeladen "
 "werden müssen {:.0f} {:s}."
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1298,7 +1317,7 @@ msgstr ""
 "Nach dieser Operation werden {:.0f} {:s} mehr benötigt (installiere {:.0f} {:"
 "s}, entferne {:.0f} {:s})."
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1306,39 +1325,39 @@ msgstr ""
 "Nach dieser Operation werden {:.0f} {:s} frei (installiere {:.0f} {:s}, "
 "entferne {:.0f} {:s})."
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
 msgstr "======== Hauptkonfiguration: ========"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Kein passender Repo um Konfigurations-Speicherinhalt abzuladen \"{}\""
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" Repository-Konfiguration: ========"
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
 msgstr "======== Variablen: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
 msgstr "Neue leaves:"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
 msgstr "{}, um nicht-verfügbare Pakete zu überspringen"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} um weitere Pakete in der Transaktion zu erlauben"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1348,29 +1367,29 @@ msgstr ""
 "Transaktionspaketen zu erlauben. Dies kann zu einer leeren Transaktion "
 "führen, weil die Option fehlgeschlagene Remove-Aktionen ignorieren kann."
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
 msgstr ""
 "{}, um die Transaktionen nicht auf die besten Kandidaten zu beschränken"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{}, um das Entfernen installierter Pakete zur Problemlösung zu erlauben"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
 msgstr "{}, um zusätzliche Dateilisten-Metadaten zu laden"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
 msgstr "{}, um deinstallierbare Pakete zu überspringen"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
 msgstr "Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1378,7 +1397,7 @@ msgstr ""
 "Bei der Aktivierung von libdnf-Plugins wurden keine Übereinstimmungen für "
 "die folgenden Plugin-Namensmuster gefunden: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1386,21 +1405,21 @@ msgstr ""
 "Bei der Deaktivierung von libdnf-Plugins wurden keine Übereinstimmungen für "
 "die folgenden Plugin-Namensmuster gefunden: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 wurde mit den Argumenten gestartet: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ""
 "{}. Fügen Sie \"--help\" hinzu, um weitere Informationen zu den Argumenten "
 "zu erhalten."
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1408,11 +1427,19 @@ msgstr ""
 "Es könnte ein Befehl sein, dass von einem Plugin bereitgestellt wird. "
 "Versuche: dnf install 'dnf5-command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"Das Argument ist für Befehle verfügbar:{}. (Es muss nach dem Befehl "
+"platziert werden.)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Kein Lese/Schreib-Zugriff im aktuellen Verzeichnis. Verschiebe nach /"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1423,23 +1450,23 @@ msgstr ""
 "Optionen \"--assumeno\" oder \"--downloadonly\", um den Befehl auszuführen, "
 "ohne den Systemzustand zu verändern."
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
 msgstr "Die Operation wird nur gespeichert in {}"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
 msgstr "Diese Operation wird nur Pakete für diese Transaktion herunterladen."
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
-"Test Modus aktiviert: Nur Paket-Downloads, PGP-Schlüssel Installationen und "
-"Transaktions-Überprüfung wird ausgeführt."
+"Testmodus aktiviert: Es werden nur Paket-Downloads, OpenPGP-"
+"Schlüsselinstallationen und Transaktionsprüfungen durchgeführt."
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1448,15 +1475,15 @@ msgstr ""
 "Konfiguration und die Paketquellen des Host-Systems zu nutzen fügen Sie --"
 "use-host-config hinzu."
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
 msgstr "Befehl hat folgenden Fehler zurückgegeben: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
 msgstr "DNF5 ist fertig"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "Abgeschlossen!"
 

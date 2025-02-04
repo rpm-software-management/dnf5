@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
 "PO-Revision-Date: 2024-01-26 02:46+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -172,27 +172,27 @@ msgstr "შეგიძლიათ აირჩიოთ ერთ-ერთი
 msgid "Can't parse Copr repo spec: "
 msgstr "ვერ დავამუშავე Copr რეპოს სპეციფიკაცია: "
 
-#: copr_repo.cpp:339
+#: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
 msgstr "ვერ წავშალე რეპო ფაილი {}"
 
-#: copr_repo.cpp:342
+#: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
 msgstr "რეპო ფაილ {} წარმატებით წაიშალა"
 
-#: copr_repo.cpp:388
+#: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
 msgstr "ვერ ვიპოვე {} ელემენტი {}-ში"
 
-#: copr_repo.cpp:444
+#: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
 msgstr "ვშლი ძველ კონფიგურაციის ფაილს '{}'"
 
-#: copr_repo.cpp:447
+#: copr_repo.cpp:449
 msgid "Can't remove"
 msgstr "ვერ წავშალე"
 
-#: copr_repo.cpp:521
+#: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -200,18 +200,18 @@ msgstr ""
 "Copr-ის რეპოფაილი '{}' ძველ ფორმატშია. გაასწორეთ ის მისი თავიდან ჩართვით "
 "ბრძანების გაშვებით: $ {} copr enable {}"
 
-#: copr_repo.cpp:555
+#: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "რეპოს id '{}' '{}'-ში საეჭვოა"
 
-#: copr_repo.cpp:562
+#: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "რეპოს id '{}' რეპოფაილს '{}' არ ეკუთვნის"
 
-#: copr_repo.cpp:612
+#: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr რეპო '{}' '{}'-ში გათიშულია."
 
-#: copr_repo.cpp:626 copr_repo.cpp:651
+#: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
 msgstr "რეპოზიტორია '{}' ამ სისტემაზე აღმოჩენილი არაა"

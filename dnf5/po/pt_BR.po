@@ -6,14 +6,14 @@
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 # Gabriel Elyas <gabrielelyas@protonmail.com>, 2024.
-# Ciro Mota <ciro.mota@gmail.com>, 2024.
+# Ciro Mota <ciro.mota@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-05 11:38+0000\n"
-"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2025-01-28 02:25+0000\n"
+"Last-Translator: Ciro Mota <ciro.mota@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -21,13 +21,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
 msgstr "Gerenciar avisos"
 
-#: commands/advisory/advisory_info.hpp:33
+#: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
 msgstr "Mostra detalhes sobre os avisos"
 
@@ -90,7 +90,7 @@ msgstr ""
 "Mostra apenas os avisos que contenham pacotes com nomes específicos. Opção "
 "de lista, suporta caracteres curinga."
 
-#: commands/advisory/arguments.hpp:83
+#: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
 msgstr "NOME_PACOTE,..."
 
@@ -319,9 +319,26 @@ msgstr ""
 msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr "Não considerar pacotes extras incluídos na transação como erros."
 
+#: commands/history/arguments.hpp:80
+msgid ""
+"Show only transactions containing packages with specified names. List "
+"option, supports globs."
+msgstr ""
+"Mostra apenas grupos contendo pacotes com nomes especificados. Opção de "
+"lista, suporta caracteres curinga."
+
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
 msgstr "Gerenciar histórico de transações"
+
+#: commands/history/history_info.cpp:70
+msgid ""
+"No match found, history info defaults to considering only the last "
+"transaction, specify \"1..last\" range to search all transactions."
+msgstr ""
+"Nenhuma correspondência encontrada, as informações do histórico consideram "
+"por padrão apenas a última transação, especifique o intervalo \"1..última\" "
+"para pesquisar todas as transações."
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -774,11 +791,11 @@ msgstr "Lista de specs de pacotes para adicionar versionlock"
 msgid "No package found for \"{}\"."
 msgstr "Nenhum pacote encontrado para \"{}\"."
 
-#: commands/versionlock/versionlock_add.cpp:124
+#: commands/versionlock/versionlock_add.cpp:133
 msgid "Adding versionlock on \"{0} = {1}\"."
 msgstr "Adicionando versionlock a \"{0} = {1}\"."
 
-#: commands/versionlock/versionlock_add.cpp:127
+#: commands/versionlock/versionlock_add.cpp:136
 msgid "Package \"{}\" is already locked."
 msgstr "O pacote \"{}\" já está bloqueado."
 
@@ -816,8 +833,8 @@ msgid "Package \"{}\" is already excluded."
 msgstr "O pacote \"{}\" já foi excluído."
 
 #: context.cpp:73
-msgid "Importing PGP key 0x{}:\n"
-msgstr "Importando chave PGP 0x{}\n"
+msgid "Importing OpenPGP key 0x{}:\n"
+msgstr "Importando chave OpenPGP 0x{}\n"
 
 #: context.cpp:75
 msgid " UserID     : \"{}\"\n"
@@ -839,7 +856,7 @@ msgstr "A chave foi importada com sucesso."
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268
+#: context.cpp:268 main.cpp:1317
 msgid ", "
 msgstr ", "
 
@@ -1138,9 +1155,9 @@ msgstr ""
 "pode ser especificado várias vezes."
 
 #: main.cpp:417
-msgid "disable gpg signature checking (if RPM policy allows)"
+msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
-"desabilita a verificação de assinatura gpg (se a política RPM permitir)"
+"desabilita a verificação de assinatura OpenPGP (se a política RPM permitir)"
 
 #: main.cpp:433
 msgid "Disable all libdnf5 plugins"
@@ -1278,18 +1295,18 @@ msgstr "  Versão da API: {}.{}"
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
-"O tamanho total dos pacotes recebidos é {:.0f} {:s}. É necessário "
-"descarregar {:.0f} {:s}."
+"O tamanho total dos pacotes recebidos é {:.0f} {:s}. É necessário fazer o "
+"download de {:.0f} {:s}."
 
-#: main.cpp:828
+#: main.cpp:827
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
-"Após esta operação, {:.0f} {:s} extra será utilizado (instalar {:.0f} {:s}, "
-"remover {:.0f} {:s})."
+"Após esta operação, {:.0f} {:s} adicionais serão utilizados (instalar {:.0f} "
+"{:s}, remover {:.0f} {:s})."
 
-#: main.cpp:837
+#: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1297,40 +1314,40 @@ msgstr ""
 "Após esta operação, {:.0f} {:s} será liberado (instalar {:.0f} {:s}, remover "
 "{:.0f} {:s})."
 
-#: main.cpp:849
+#: main.cpp:850
 msgid "======== Main configuration: ========"
 msgstr "====== Configuração principal: ======"
 
-#: main.cpp:886
+#: main.cpp:887
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr ""
 "Nenhum repositório correspondente para descarregar a configuração: “{}”"
 
-#: main.cpp:891
+#: main.cpp:892
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "====== Configuração do repositório \"{}\": ======="
 
-#: main.cpp:911
+#: main.cpp:912
 msgid "======== Variables: ========"
 msgstr "======== Variáveis: ========"
 
-#: main.cpp:951
+#: main.cpp:952
 msgid "New leaves:"
 msgstr "Novas folhas:"
 
-#: main.cpp:953
+#: main.cpp:954
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:997
+#: main.cpp:998
 msgid "{} to skip unavailable packages"
 msgstr "{} para ignorar pacotes indisponíveis"
 
-#: main.cpp:1005
+#: main.cpp:1006
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} para permitir pacotes extras na transação"
 
-#: main.cpp:1018
+#: main.cpp:1019
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1340,28 +1357,28 @@ msgstr ""
 "durante transações. Isso pode resultar em uma transação vazia porque, entre "
 "outras coisas, a opção pode ignorar ações de remoção com falha."
 
-#: main.cpp:1065
+#: main.cpp:1066
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} para não limitar a transação aos melhores candidatos"
 
-#: main.cpp:1072
+#: main.cpp:1073
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{} para permitir a remoção de pacotes instalados para resolver problemas"
 
-#: main.cpp:1080
+#: main.cpp:1082
 msgid "{} to load additional filelists metadata"
 msgstr "{} para carregar metadados de listas de arquivos adicionais"
 
-#: main.cpp:1087
+#: main.cpp:1089
 msgid "{} to skip uninstallable packages"
 msgstr "{} para ignorar pacotes desinstaláveis"
 
-#: main.cpp:1093
+#: main.cpp:1095
 msgid "You can try to add to command line:"
 msgstr "Você pode tentar adicionar à linha de comando:"
 
-#: main.cpp:1111
+#: main.cpp:1113
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1369,7 +1386,7 @@ msgstr ""
 "Nenhum plug-in foi encontrado para os seguintes padrões de nome ao ativar "
 "plug-ins libdnf: {}"
 
-#: main.cpp:1112
+#: main.cpp:1114
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1377,19 +1394,19 @@ msgstr ""
 "Nenhum plug-in foi encontrado para os seguintes padrões de nome ao desativar "
 "plug-ins libdnf: {}"
 
-#: main.cpp:1208
+#: main.cpp:1210
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 iniciado com os argumentos: \"{}\" ---"
 
-#: main.cpp:1259
+#: main.cpp:1261
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1262 main.cpp:1445
+#: main.cpp:1264 main.cpp:1493
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Adicione \"--help\" para mais informações sobre os argumentos."
 
-#: main.cpp:1269
+#: main.cpp:1273
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1397,11 +1414,19 @@ msgstr ""
 "Pode ser um comando fornecido por um plugin, tente: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1311
+#: main.cpp:1315
+msgid ""
+"The argument is available for commands: {}. (It has to be placed after the "
+"command.)"
+msgstr ""
+"O argumento está disponível para comandos: {}. (Ele deve ser colocado depois "
+"do comando.)"
+
+#: main.cpp:1359
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Sem acesso de leitura/execução no diretório atual, movendo para /"
 
-#: main.cpp:1368
+#: main.cpp:1416
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1412,23 +1437,23 @@ msgstr ""
 "assumeno\" ou \"--downloadonly\" para executar o comando sem modificar o "
 "estado do sistema."
 
-#: main.cpp:1409
+#: main.cpp:1457
 msgid "The operation will only store the transaction in {}"
 msgstr "A operação apenas armazena a transação em {}"
 
-#: main.cpp:1411
+#: main.cpp:1459
 msgid "The operation will only download packages for the transaction."
 msgstr "A operação só fará o download de pacotes para a transação."
 
-#: main.cpp:1416
+#: main.cpp:1464
 msgid ""
-"Test mode enabled: Only package downloads, PGP key installations and "
+"Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
 "Modo de teste ativado: Apenas serão efetuados downloads de pacotes, "
-"instalações de chaves PGP e verificações de transações."
+"instalações de chaves OpenPGP e verificações de transações."
 
-#: main.cpp:1433
+#: main.cpp:1481
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1436,15 +1461,15 @@ msgstr ""
 "Nenhum repositório foi carregado a partir da installroot. Para utilizar a "
 "configuração e os repositórios do sistema host, passe --use-host-config."
 
-#: main.cpp:1455
+#: main.cpp:1503
 msgid "Command returned error: {}"
 msgstr "O comando retornou o erro: {}"
 
-#: main.cpp:1463
+#: main.cpp:1511
 msgid "DNF5 finished"
 msgstr "DNF5 concluído"
 
-#: main.cpp:1467
+#: main.cpp:1515
 msgid "Complete!"
 msgstr "Concluído!"
 

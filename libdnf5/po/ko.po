@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 03:01+0000\n"
-"PO-Revision-Date: 2024-10-05 02:52+0000\n"
+"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"PO-Revision-Date: 2024-12-12 03:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -603,8 +603,8 @@ msgid "Signature verification failed."
 msgstr "서명 검증이 실패함."
 
 #: base/transaction.cpp:89
-msgid "The repository does not have any PGP keys configured."
-msgstr "저장소는 구성된 어떤 PGP 키를 갖고 있지 않습니다."
+msgid "The repository does not have any OpenPGP keys configured."
+msgstr "저장소는 구성된 어떤 OpenPGP 키를 갖고 있지 않습니다."
 
 #: base/transaction.cpp:90
 msgid "Public key is not installed."
@@ -631,8 +631,8 @@ msgid "An error occurred importing key \"{}\": {}"
 msgstr "키를 가져오는 중에 발생하였습니다 \"{}\": {}"
 
 #: base/transaction.cpp:1372
-msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
-msgstr "repo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
+msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+msgstr "Openrepo \"{}에서 꾸러미 \"{}\" ({})를 위한 PGP 점검이 실패했습니다: "
 
 #: base/transaction.cpp:1400
 msgid "Import of the key didn't help, wrong key?"
@@ -644,16 +644,16 @@ msgid ", "
 msgstr ", "
 
 #: base/transaction.cpp:1422
-msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repository: {1}"
-msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 PGP 점검을 건너뜀: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
+msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 OpenPGP 점검을 건너뜀: {1}"
 
 #: base/transaction.cpp:1425
-msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
+msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
-"Warning: skipped PGP checks for {0} packages from repositories: {1}"
-msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 PGP 점검을 건너뜀: {1}"
+"Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
+msgstr[0] "경고: 저장소에서 {0} 꾸러미를 위해 OpenPGP 점검을 건너뜀: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -910,38 +910,38 @@ msgstr ""
 "최대 내려받기 속도가 최저보다 낮으며, minrate 또는 throttle의 구성을 변경해 "
 "주세요"
 
-#: repo/package_downloader.cpp:152
+#: repo/package_downloader.cpp:153
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "\"{0}\" 꾸러미를 내려받을 수 없으며, cacheonly 옵션이 활성화 되었습니다."
 
-#: repo/package_downloader.cpp:257
+#: repo/package_downloader.cpp:266
 msgid "Failed to download packages"
 msgstr "꾸러미를 내려받는 데 실패함"
 
-#: repo/repo.cpp:60
+#: repo/repo.cpp:59
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "적재하는 데 실패함 RPM \"{}\": \".rpm\" 확장을 가지지 않습니다"
 
-#: repo/repo.cpp:64
+#: repo/repo.cpp:63
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "접근 하는 데 실패함 RPM \"{}\": {}"
 
-#: repo/repo.cpp:106
+#: repo/repo.cpp:105
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "잘못된 저장소 id \"{}\": 예상치 못한 문자 '{}'"
 
-#: repo/repo.cpp:149
+#: repo/repo.cpp:148
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "저장소 \"{}\"는 원천(baseurl, mirrorlist 또는 metalink) 구성을 갖고 있지 않습"
 "니다."
 
-#: repo/repo.cpp:160
+#: repo/repo.cpp:159
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "저장소 \"{}는 미지원 유형 \"{}\"을 가지며, 건너뜁니다."
 
-#: repo/repo.cpp:408
+#: repo/repo.cpp:410
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -949,49 +949,49 @@ msgstr ""
 "저장소를 적재 하는 데 실패함: \"primary\" 자료는 표시되지 않거나 미지원되는 "
 "형식"
 
-#: repo/repo.cpp:466
+#: repo/repo.cpp:476
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "comps를 적재하는 데 실패함 \"{}: \".xml\" 확장을 가지고 있지 않습니다"
 
-#: repo/repo.cpp:473
+#: repo/repo.cpp:483
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "xml Comps를 적재하는 데 실패함 \"{}\": {}"
 
-#: repo/repo.cpp:490
+#: repo/repo.cpp:500
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "적재하는 데 실패함 RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:229
+#: repo/repo_cache.cpp:227
 msgid "Unable to determine id of the repository in the cache."
 msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 
-#: repo/repo_cache_private.hpp:56
+#: repo/repo_cache_private.hpp:58
 msgid "Empty path to the repository cache directory."
 msgstr "저장소 캐쉬 디렉토리에 빈 경로."
 
-#: repo/repo_downloader.cpp:139
+#: repo/repo_downloader.cpp:138
 msgid "Librepo error: {}"
 msgstr "Librepo 오류: {}"
 
-#: repo/repo_downloader.cpp:171
+#: repo/repo_downloader.cpp:170
 msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
 msgstr "저장소 \"{}\"를 위한 메타자료 ({}: \"{}\")를 내려받는 데 실패함"
 
-#: repo/repo_downloader.cpp:242
+#: repo/repo_downloader.cpp:241
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "만약 metalink \"{}\"가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:272
+#: repo/repo_downloader.cpp:271
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "만약 repomd ({}: \"{}\")가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:335
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "저장소 \"{}\"를 위해 로컬 메타자료를 적재 중에 오류"
 
-#: repo/repo_downloader.cpp:456
+#: repo/repo_downloader.cpp:474
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -999,64 +999,64 @@ msgstr ""
 "수 없습니다"
 
 #: repo/repo_pgp.cpp:60
-msgid "Failed to import pgp keys into temporary keyring: {}"
-msgstr "pgp 키를 임시 키링에 가져오는 데 실패함: {}"
+msgid "Failed to import OpenPGP keys into temporary keyring: {}"
+msgstr "Openpgp 키를 임시 키링에 가져오는 데 실패함: {}"
 
 #: repo/repo_pgp.cpp:66 repo/repo_pgp.cpp:93
-msgid "Failed to list pgp keys: {}"
-msgstr "pgp 키를 나열하는 데 실패함: {}"
+msgid "Failed to list OpenPGP keys: {}"
+msgstr "Openpgp 키를 나열하는 데 실패함: {}"
 
-#: repo/repo_pgp.cpp:140
-msgid "Failed to import pgp keys: {}"
-msgstr "pgp 키를 가져오는 데 실패함: {}"
+#: repo/repo_pgp.cpp:141
+msgid "Failed to import OpenPGP keys: {}"
+msgstr "Openpgp 키를 가져오는 데 실패함: {}"
 
-#: repo/repo_sack.cpp:146
+#: repo/repo_sack.cpp:147
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:517
+#: repo/repo_sack.cpp:518
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 
-#: repo/solv_repo.cpp:261
+#: repo/solv_repo.cpp:266
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 repomd를 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:269
+#: repo/solv_repo.cpp:274
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 우선 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:316
+#: repo/solv_repo.cpp:322
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "시스템 repo를 위한 확장된 repodate 유형이 지원되지 않습니다: \"{}\"."
 
-#: repo/solv_repo.cpp:382
+#: repo/solv_repo.cpp:394
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 확장을 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:418
+#: repo/solv_repo.cpp:430
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "root에서 시스템 repo를 적재하는 데 실패함 \"{}\": {}"
 
-#: repo/solv_repo.cpp:519
+#: repo/solv_repo.cpp:531
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:573
+#: repo/solv_repo.cpp:585
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 기본 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:595
+#: repo/solv_repo.cpp:607
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 기본 캐쉬를 재-적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:661
+#: repo/solv_repo.cpp:672
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 {} 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:682
+#: repo/solv_repo.cpp:693
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 재-적재하는 데 실패함: {}"
 
@@ -1073,9 +1073,13 @@ msgstr "NEVRA 문자열 \"{}\"은 ':'를 여러 번 포함합니다"
 msgid "Invalid character '{}' in NEVRA string \"{}\""
 msgstr "NEVRA 문자열 \"{}\"에서 잘못된 문자 \"{}\""
 
-#: rpm/package.cpp:80
+#: rpm/package.cpp:81
 msgid "Package with rpmdbid was not found"
 msgstr "rpmdbid를 갖는 꾸러미는 찾을 수 없습니다"
+
+#: rpm/package.cpp:478
+msgid "<unknown>"
+msgstr "<알 수 없음>"
 
 #: rpm/reldep.cpp:116 rpm/reldep.cpp:123
 msgid "Cannot parse a dependency string"
@@ -1101,11 +1105,11 @@ msgstr "꾸러미를 여는 중에 문제가 발생되었습니다."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "rpm 연결 rootDIR 설정하는 데 실패함 \"{}\"."
 
-#: rpm/rpm_signature.cpp:283
+#: rpm/rpm_signature.cpp:287
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": 키는 강화된 공개 키가 아닙니다."
 
-#: rpm/rpm_signature.cpp:288
+#: rpm/rpm_signature.cpp:292
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "공개 키 \"{}\"를 rpmdb로 가져오는 데 실패함: {}"
 
@@ -1519,11 +1523,11 @@ msgid "Missing '=' on line {}"
 msgstr "행 {}에서 누락된 '='"
 
 #. returns localized message, problem with later translation
-#: utils/library.cpp:32
+#: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "공유된 라이브러리를 적재 할 수 없습니다 \"{}\": {}"
 
-#: utils/library.cpp:47
+#: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "기호의 주소를 획득 할 수 없습니다 \"{}\": {}"
 
