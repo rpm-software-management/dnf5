@@ -28,8 +28,11 @@
 }
 
 %{
+    #include "libdnf5/common/message.hpp"
     #include "libdnf5/common/weak_ptr.hpp"
 %}
+%include "libdnf5/common/message.hpp"
+
 %include "libdnf5/common/weak_ptr.hpp"
 #if defined(SWIGPYTHON)
 %extend libdnf5::WeakPtr {
