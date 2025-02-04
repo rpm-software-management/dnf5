@@ -1,3 +1,76 @@
+# 5.2.9.0
+
+- Update translations from weblate
+- ruby: Fix swig namespacing in Ruby.
+- Correct Ruby %module definition in swig files.
+- doc: Versionlock name specification supports globs
+- doc: `history info` no longer merges transactions
+- Docs: Explain template.cpp in more detail
+- Docs: Disable clang-format in template.cpp
+- Docs: Formatting fixes
+- Docs: Shorten template command variable names
+- Docs: Template command formatting fixes
+- Docs: Fix sample output of template command
+- Docs: Correct sample output of template command
+- Docs: Update command template page
+- Docs: Update command template code
+- docs: Don't exclude lines from template code
+- doc: Enhance history documentation
+- Add a hint to `history info` without trans IDs when no match found
+- Add docs for history `--contains-pkgs=..` option
+- Add `--contains-pkgs=..` option to `history` `list` and `info`
+- During package download setup first add all downloads then handle local
+- Test MultiProgressBar with already finished downloads
+- Enhance `perform_control_sequences()` to handle colors
+- Add couple explaining comments to `MultiProgressBar::operator<<`
+- automatic: fix documentation on automatic.conf location in sample config
+- versionlock: Fix wildcards handling in `add` command
+- ruby: Implement Enumerable for libdnf5::advisory::AdvisorySet.
+- ruby: Implement Enumerable for libdnf5::rpm::ReldepList.
+- ruby: Implement Enumerable for libdnf5::rpm::PackageSet.
+- Implement each() for iterating over collection in ruby.
+- Increase CMake minimum required version to 3.21
+- Optimize build process: No libdnf5_static.a object files archive
+- CMakeLists.txt: common is object library -> rename to common_obj
+- Add --json output to advisory info
+- I18N: Annotate indentation of the transaction summary
+- Unit tests: Fix One Definition Rule violation caused by overlinking
+- libdnf5: Load plugins with RTLD_NODELETE flag set
+- libdnf5: Add a plugin to download and install repo's Appstream data
+- automatic: Fix end-of-lines in messages sent by email emitter
+- libdnf5-cli unit tests: Use only public API methods
+- Fix bash completion if colon is in the word to complete
+- Remove and rename global variables in bash completion
+- DNF5 bash completion: Offer package NAMEs in all cases
+- Bash completion: always offer NEVRAs for packages
+- repo: Fix logging metadata download errors handling
+- Copr plugin: Fix resource leak in load_all_configuration
+- Own /var/lib/dnf by libdnf5
+- Unit tests: MemStream class for open_memstream, optimization
+- Unit test: Fix res leak, missing fclose in output/test_repoquery
+- doc: "dnf history userinstalled" replaced with "dnf repoquery --userinstalled"
+- Display remaining time as nonnegative number
+- automatic: Substitute variables in command_format
+- Bumb readthedocs ubuntu image version to fix the docs generation
+- automatic: add a default setting to not emit boring messages
+- Incorrect library name in libdnf5-cli.pc
+- Fix reporting disk space to be freed on a pure package removal
+- Unit tests: Fix problematic nasty hack in run_tests
+- Python API: add_new_download return None regression test
+- Support ProgressBar messages with wide characters
+- Add padding to ProgressBar messages to avoid overlapping
+- Fix plural typo
+- test_transaction: Move PackageDownloadCallbacks to anonymous namespace
+- Unit tests for repo::FileDownloader
+- Unit tests: repo::DownloadCallbacks "user_data"
+- Perl unit tests: Define "constants" as package vars in BaseTestCase
+- Unit tests: Unification, use name "temp_dir" for all languages
+- SWIG: support repo::DownloadCallbacks user_data
+- Remove redundant %python_provide statements
+- python3-libdnf5: Remove superfluous provides for python-libdnf
+- clang-format
+- Update pre-commit hooks to latest versions in F41
+
 # 5.2.8.1
 
 - Update translations from weblate
