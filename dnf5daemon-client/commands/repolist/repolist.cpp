@@ -107,17 +107,17 @@ void RepolistCommand::run() {
 
     // prepare options from command line arguments
     dnfdaemon::KeyValueMap options = {};
-    options["enable_disable"] = enable_disable_option->get_value();
+    options["enable_disable"] = sdbus::Variant(enable_disable_option->get_value());
     std::vector<std::string> patterns;
     if (!patterns_options->empty()) {
-        options["enable_disable"] = "all";
+        options["enable_disable"] = sdbus::Variant("all");
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
             auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
             patterns.emplace_back(option->get_value());
         }
     }
-    options["patterns"] = patterns;
+    options["patterns"] = sdbus::Variant(patterns);
 
     std::vector<std::string> attrs{"id", "name", "enabled"};
     if (command == "repoinfo") {
@@ -147,7 +147,7 @@ void RepolistCommand::run() {
             "mirrors"};
         attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
     }
-    options["repo_attrs"] = attrs;
+    options["repo_attrs"] = sdbus::Variant(attrs);
 
     // call list() method on repo interface via dbus
     dnfdaemon::KeyValueMapList repositories;

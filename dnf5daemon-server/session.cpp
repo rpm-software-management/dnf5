@@ -133,8 +133,8 @@ void Session::setup_base() {
 Session::Session(
     sdbus::IConnection & connection,
     dnfdaemon::KeyValueMap session_configuration,
-    std::string object_path,
-    std::string sender)
+    const sdbus::ObjectPath & object_path,
+    const std::string & sender)
     : connection(connection),
       session_configuration(session_configuration),
       object_path(object_path),
@@ -159,7 +159,10 @@ Session::Session(
     for (auto & s : services) {
         s->dbus_register();
     }
+
+#ifndef SDBUS_CPP_VERSION_2
     dbus_object->finishRegistration();
+#endif
 }
 
 Session::~Session() {
@@ -264,15 +267,18 @@ bool Session::read_all_repos() {
 bool Session::check_authorization(
     const std::string & actionid, const std::string & sender, bool allow_user_interaction) {
     // create proxy for PolicyKit1 object
-    const std::string destination_name = "org.freedesktop.PolicyKit1";
-    const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
-    const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
+    const SDBUS_SERVICE_NAME_TYPE destination_name{"org.freedesktop.PolicyKit1"};
+    const sdbus::ObjectPath object_path{"/org/freedesktop/PolicyKit1/Authority"};
+    const SDBUS_INTERFACE_NAME_TYPE interface_name{"org.freedesktop.PolicyKit1.Authority"};
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
+
+#ifndef SDBUS_CPP_VERSION_2
     polkit_proxy->finishRegistration();
+#endif
 
     // call CheckAuthorization method
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
-    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
+    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sdbus::Variant(sender)}}};
     std::map<std::string, std::string> details{};
     // allow polkit to ask user to enter root password
     uint flags = allow_user_interaction ? 1 : 0;

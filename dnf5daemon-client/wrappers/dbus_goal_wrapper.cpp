@@ -59,7 +59,7 @@ DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> tra
         auto ti_replaces = ti_attrs.find("replaces");
         if (ti_replaces != ti_attrs.end()) {
             std::vector<DbusPackageWrapper> replaces;
-            std::vector<int> replaces_id = ti_replaces->second;
+            std::vector<int> replaces_id = std::vector<int>(ti_replaces->second);
             for (const auto & pkg_id : replaces_id) {
                 auto replaced_pkg_idx = transaction_packages_by_id.find(pkg_id);
                 if (replaced_pkg_idx != transaction_packages_by_id.end()) {
