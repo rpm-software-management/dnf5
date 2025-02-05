@@ -1228,12 +1228,36 @@ int main(int argc, char * argv[]) try {
         dnf5::load_cmdline_aliases(context);
 
         // Argument completion handler
-        // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument
-        // at position <index>.
+        // If the argument at position 1 is "--complete=<index>[,add_description=1/0]", this is a request to complete
+        // the argument at position <index>.
         // The first two arguments are not subject to completion (skip them). The original arguments of the program
         // (including the program name) start from position 2.
         if (argc >= 2 && strncmp(argv[1], "--complete=", 11) == 0) {
-            context.get_argument_parser().complete(argc - 2, argv + 2, std::stoi(argv[1] + 11));
+            const char * current_pos = argv[1] + 11;
+            auto & arg_parser = context.get_argument_parser();
+
+            int complete_arg_idx;
+            try {
+                std::size_t used_chars;
+                complete_arg_idx = std::stoi(current_pos, &used_chars);
+                current_pos += used_chars;
+            } catch (const std::logic_error &) {
+                std::cerr << libdnf5::utils::sformat(
+                                 _("Invalid \"index\" in \"--complete=<index>[,...]\": {}"), argv[1])
+                          << std::endl;
+                return static_cast<int>(libdnf5::cli::ExitCode::ARGPARSER_ERROR);
+            }
+
+            if (strncmp(current_pos, ",add_description=", 17) == 0) {
+                current_pos += 17;
+                if (*current_pos == '1') {
+                    arg_parser.set_complete_add_description(true);
+                } else if (*current_pos == '0') {
+                    arg_parser.set_complete_add_description(false);
+                }
+            }
+
+            arg_parser.complete(argc - 2, argv + 2, complete_arg_idx);
             return 0;
         }
 
