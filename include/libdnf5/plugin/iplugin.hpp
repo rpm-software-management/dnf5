@@ -125,6 +125,18 @@ private:
     ImplPtr<Impl> p_impl;
 };
 
+/// @brief Extended plugin interface with additional hooks introduced in version 2.1 of the plugin API.
+class LIBDNF_PLUGIN_API IPlugin2_1 : public IPlugin {
+public:
+    explicit IPlugin2_1(IPluginData & data);
+    ~IPlugin2_1();
+
+    /// The goal resolved hook.
+    /// It is called right after the goal is resolved.
+    /// @param transaction Contains the transaction that was resolved.
+    virtual void goal_resolved(const libdnf5::base::Transaction & transaction);
+};
+
 }  // namespace libdnf5::plugin
 
 

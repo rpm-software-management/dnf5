@@ -32,6 +32,7 @@ namespace {
 
 constexpr const char * PLUGIN_NAME{"appstream"};
 constexpr libdnf5::plugin::Version PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
+constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Milan Crha", "mcrha@redhat.com", "install repo Appstream data."};
@@ -41,7 +42,7 @@ public:
     AppstreamPlugin(libdnf5::plugin::IPluginData & data, libdnf5::ConfigParser &) : IPlugin(data) {}
     virtual ~AppstreamPlugin() = default;
 
-    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return REQUIRED_PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -103,7 +104,7 @@ void AppstreamPlugin::install_appstream(libdnf5::repo::Repo * repo) {
 
 
 PluginAPIVersion libdnf_plugin_get_api_version(void) {
-    return PLUGIN_API_VERSION;
+    return REQUIRED_PLUGIN_API_VERSION;
 }
 
 const char * libdnf_plugin_get_name(void) {

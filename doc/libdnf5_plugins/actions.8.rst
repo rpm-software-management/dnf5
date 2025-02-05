@@ -26,7 +26,7 @@ Description
 ===========
 
 This plugin allows defining actions to be executed through libdnf5 callbacks hooks.
-Each action is hooked to one specific callback. Actions for ``pre_transaction`` and
+Each action is hooked to one specific callback. Actions for ``goal_resolved``, ``pre_transaction`` and
 ``post_transaction`` callbacks may define a (glob-like) filtering rule on the package
 NEVRA or package files, as well as whether the package is incoming or outgoing.
 
@@ -55,6 +55,7 @@ Each non-comment line defines an action and consists of five items separated by 
    * ``repos_loaded``  (added in version 1.0.0)
    * ``pre_add_cmdline_packages``  (added in version 1.0.0)
    * ``post_add_cmdline_packages``  (added in version 1.0.0)
+   * ``goal_resolved`` (added in version 1.3.0)
    * ``pre_transaction``
    * ``post_transaction``
 
@@ -63,7 +64,7 @@ Each non-comment line defines an action and consists of five items separated by 
 
    Empty filter means executing the command once with no information about the package.
    The "*" filter means executing the command for each package in the transaction that matches the ``direction`` filter.
-   The filter can be non-empty only for ``pre_transaction`` and ``post_transaction`` callbacks.
+   The filter can be non-empty only for ``goal_resolved``, ``pre_transaction`` and ``post_transaction`` callbacks.
 
 ``direction``
    Filters packages by their direction (coming into the system/going out of the system) in a transaction.

@@ -63,4 +63,10 @@ Base & IPlugin::get_base() const noexcept {
     return p_impl->get_base();
 }
 
+IPlugin2_1::IPlugin2_1(IPluginData & data) : IPlugin(data) {}
+
+IPlugin2_1::~IPlugin2_1() = default;
+
+void IPlugin2_1::goal_resolved([[maybe_unused]] const libdnf5::base::Transaction & transaction) {}
+
 }  // namespace libdnf5::plugin
