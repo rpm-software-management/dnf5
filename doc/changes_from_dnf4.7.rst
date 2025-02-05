@@ -215,6 +215,9 @@ Changes to individual commands
   * Dropped ``--all`` option since this behavior is the default one.
   * Dropped ``--updates`` option, only ``--upgrades`` is available now.
 
+``install``
+  * Dropped ``install-n``, ``install-na`` and ``install-nevra`` command variants.
+
 ``list``
   * Dropped ``--all`` option since this behavior is the default one.
   * Changed the behavior of the ``--available`` option.
@@ -270,6 +273,7 @@ Changes to individual commands
 ``repoquery``
   * Dropped: ``-a/--all``, ``--alldeps``, ``--nevra`` options. Their behavior is and has been the default for both DNF4 and DNF5, so the options are no longer needed.
   * Dropped: ``--envra``, ``--nvr``, ``--unsatisfied`` options. They are no longer supported.
+  * Dropped: ``repoquery-n``, ``repoquery-na`` and ``repoquery-nevra`` command variants.
   * Dropped: ``--archlist`` alias for ``--arch``.
   * Dropped: ``-f`` alias for ``--file``. Also, the arguments to ``--file`` are separated by commas instead of spaces.
   * Moved ``--groupmember`` option to the ``info`` and ``list`` subcommands of the ``group`` and ``advisory`` commands, renaming it to ``--contains-pkgs``.
