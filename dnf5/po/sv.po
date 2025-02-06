@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2025-01-26 04:53+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -827,7 +827,7 @@ msgstr "Paketet \"{}\" är redan exkluderat."
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "Importerar OpenPGP-nyckel 0x{}:\n"
 
-#: context.cpp:75
+#: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
 msgstr " Användar-ID     : \"{}\"\n"
 
@@ -843,15 +843,58 @@ msgstr ""
 msgid "The key was successfully imported."
 msgstr "Nyckeln importerades framgångsrikt."
 
-#: context.cpp:262
+#: context.cpp:96
+msgid "The following PGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: context.cpp:98
+#, fuzzy
+#| msgid " UserID     : \"{}\"\n"
+msgid " Reason     : {}\n"
+msgstr " Användar-ID     : \"{}\"\n"
+
+#: context.cpp:102
+#, fuzzy
+#| msgid ""
+#| " Fingerprint: {}\n"
+#| " From       : {}\n"
+msgid " From       : {}\n"
+msgstr ""
+" Fingeravtryck: {}\n"
+" Från       : {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr ""
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: context.cpp:115
+#, fuzzy
+#| msgid "The key was successfully imported."
+msgid "The key was successfully removed."
+msgstr "Nyckeln importerades framgångsrikt."
+
+#: context.cpp:290
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268 main.cpp:1317
+#: context.cpp:296 main.cpp:1317
 msgid ", "
 msgstr ", "
 
-#: context.cpp:272
+#: context.cpp:300
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -859,31 +902,31 @@ msgstr ""
 "Inga matchande förråd för {}. För att använda förråd från ett värdsystem, "
 "skicka --use-host-config"
 
-#: context.cpp:276
+#: context.cpp:304
 msgid "No matching repositories for {}"
 msgstr "Inga matchande förråd för {}"
 
-#: context.cpp:322
+#: context.cpp:350
 msgid "Updating and loading repositories:"
 msgstr "Uppdaterar och laddar förråd:"
 
-#: context.cpp:332
+#: context.cpp:360
 msgid "Repositories loaded."
 msgstr "Förråd laddade."
 
-#: context.cpp:338
+#: context.cpp:366
 msgid "Testing offline transaction"
 msgstr "Testar offline transaktion"
 
-#: context.cpp:342 context.cpp:497
+#: context.cpp:370 context.cpp:525
 msgid "Transaction failed: {}"
 msgstr "Transaktionen misslyckades: {}"
 
-#: context.cpp:347 context.cpp:502
+#: context.cpp:375 context.cpp:530
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:414
+#: context.cpp:442
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
@@ -891,14 +934,14 @@ msgstr ""
 "Platsen ”{}” innehåller redan en lagrad transaktion, den kommer att skrivas "
 "över."
 
-#: context.cpp:443
+#: context.cpp:471
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Det finns redan en offlinetransaktion i kö, initierad av följande kommando:"
 
-#: context.cpp:445
+#: context.cpp:473
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -906,7 +949,7 @@ msgstr ""
 "Om du fortsätter avbryts den gamla offlinetransaktionen och ersätts med den "
 "här."
 
-#: context.cpp:463
+#: context.cpp:491
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -916,71 +959,71 @@ msgstr ""
 "att starta om och köra transaktionen. För att avbryta transaktionen och ta "
 "bort de nedladdade filerna, använd `dnf5 offline clean`."
 
-#: context.cpp:469
+#: context.cpp:497
 msgid "Running transaction"
 msgstr "Kör transaktionen"
 
-#: context.cpp:786
+#: context.cpp:814
 msgid "Upgrading {}"
 msgstr "Uppgraderar {}"
 
-#: context.cpp:789
+#: context.cpp:817
 msgid "Downgrading {}"
 msgstr "Nedgraderar {}"
 
-#: context.cpp:792
+#: context.cpp:820
 msgid "Reinstalling {}"
 msgstr "Ominstallerar {}"
 
-#: context.cpp:805
+#: context.cpp:833
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Oväntad åtgärd i TransactionPackage: {}"
 
-#: context.cpp:811
+#: context.cpp:839
 msgid "Installing {}"
 msgstr "Installerar {}"
 
-#: context.cpp:832
+#: context.cpp:860
 msgid "Prepare transaction"
 msgstr "Förbereder transaktion"
 
-#: context.cpp:852
+#: context.cpp:880
 msgid "Removing {}"
 msgstr "Tar bort {}"
 
-#: context.cpp:855
+#: context.cpp:883
 msgid "Cleanup {}"
 msgstr "Rensar upp {}"
 
-#: context.cpp:873
+#: context.cpp:901
 msgid "Unpack error: {}"
 msgstr "Uppackningsfel: {}"
 
-#: context.cpp:881
+#: context.cpp:909
 msgid "Cpio error: {}"
 msgstr "Cpio fel: {}"
 
-#: context.cpp:891
+#: context.cpp:919
 msgid "Scriptlet output:"
 msgstr "Skriptutdata:"
 
-#: context.cpp:913
+#: context.cpp:941
 msgid "Running {} scriptlet: {}"
 msgstr "Kör {} skriptlet: {}"
 
-#: context.cpp:928
+#: context.cpp:956
 msgid "Finished {} scriptlet: {}"
 msgstr "Slutfört {} skriptlet: {}"
 
-#: context.cpp:934
+#: context.cpp:962
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Icke-kritisk fel i {} skriptlet: {}"
 
-#: context.cpp:943
+#: context.cpp:971
 msgid "Error in {} scriptlet: {}"
 msgstr "Fel i {} skriptlet: {}"
 
-#: context.cpp:973
+#: context.cpp:1001
 msgid "Verify package files"
 msgstr "Verifiera paketfiler"
 

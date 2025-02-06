@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-09-21 14:54+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -26,45 +26,49 @@ msgstr ""
 "행 {}에서 파일 \"{}\" 오류: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" 형식이 "
 "예상됩니다"
 
-#: actions.cpp:581
+#: actions.cpp:589
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 \"enabled\" 옵션 값 \"{}\""
 
-#: actions.cpp:590
+#: actions.cpp:598
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 옵션 \"{}\""
 
-#: actions.cpp:616
+#: actions.cpp:626
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 인용 부호 \"{}\""
 
-#: actions.cpp:626
+#: actions.cpp:636
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Package filter can only be used in "
+#| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
-"PRE_TRANS and POST_TRANS hooks"
+"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
 msgstr ""
 "행 {}에서 파일 \"{}\" 오류: 꾸러미 필터는 PRE_TRANS 및 POST_TRANS 인용 부호에"
 "서만 사용 될 수 있습니다"
 
-#: actions.cpp:636
+#: actions.cpp:646
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "행 {}에서 파일 \"{}\" 오류: 꾸러미 필터 없이 방향을 사용 할 수 없습니다"
 
-#: actions.cpp:653
+#: actions.cpp:663
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 꾸러미 방향 \"{}\""
 
-#: actions.cpp:664
+#: actions.cpp:674
 msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
 msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 방식 \"{}\""
 
-#: actions.cpp:670
+#: actions.cpp:680
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "행 {}에서 파일 \"{}\" 오류: 누락된 명령"
 
-#: actions.cpp:1760
+#: actions.cpp:1773
 msgid "Cannot create pipe: {}"
 msgstr "파이프를 생성 할 수 없습니다: {}"

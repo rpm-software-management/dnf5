@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,58 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
 #, c++-format
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
 msgstr ""
 
-#: actions.cpp:581
+#: actions.cpp:589
 #, c++-format
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 
-#: actions.cpp:590
+#: actions.cpp:598
 #, c++-format
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr ""
 
-#: actions.cpp:616
-#, c++-format
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr ""
-
 #: actions.cpp:626
 #, c++-format
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"PRE_TRANS and POST_TRANS hooks"
+msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr ""
 
 #: actions.cpp:636
 #, c++-format
 msgid ""
+"Error in file \"{}\" on line {}: Package filter can only be used in "
+"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+msgstr ""
+
+#: actions.cpp:646
+#, c++-format
+msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 
-#: actions.cpp:653
+#: actions.cpp:663
 #, c++-format
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 
-#: actions.cpp:664
+#: actions.cpp:674
 #, c++-format
 msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
 msgstr ""
 
-#: actions.cpp:670
+#: actions.cpp:680
 #, c++-format
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr ""
 
-#: actions.cpp:1760
+#: actions.cpp:1773
 #, c++-format
 msgid "Cannot create pipe: {}"
 msgstr ""

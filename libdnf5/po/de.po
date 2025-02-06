@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-12-30 23:38+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -929,7 +929,7 @@ msgstr "Fehlender ':' im Wert"
 msgid "Invalid module status: {}"
 msgstr "Ungültiger Modulstatus: {}"
 
-#: plugin/plugins.cpp:66
+#: plugin/plugins.cpp:65
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -938,19 +938,19 @@ msgstr ""
 "bereitgestellte API-Version ist \"{}.{}\". Die API-Version in libdnf ist "
 "\"{}.{}\"."
 
-#: plugin/plugins.cpp:115
+#: plugin/plugins.cpp:114
 msgid "Cannot find plugin library \"{}\""
 msgstr "Plugin-Bibliothek \"{}\" kann nicht gefunden werden"
 
-#: plugin/plugins.cpp:182
+#: plugin/plugins.cpp:181
 msgid "Invalid option value: enabled={}"
 msgstr "Ungültiger Optionswert: enabled={}"
 
-#: plugin/plugins.cpp:206
+#: plugin/plugins.cpp:205
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path darf nicht leer sein"
 
-#: plugin/plugins.cpp:231
+#: plugin/plugins.cpp:230
 msgid "Cannot load plugins: {}"
 msgstr "Kann Plugins nicht laden: {}"
 
@@ -1642,6 +1642,12 @@ msgstr "Shared-Library kann nicht geladen werden \"{}\": {}"
 #: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Adresse des Symbols kann nicht abgerufen werden \"{}\": {}"
+
+#: utils/locale.cpp:57
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Shared-Library kann nicht geladen werden \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

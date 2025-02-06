@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-11-05 21:08+0000\n"
 "Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.8.2\n"
 
-#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -27,49 +27,53 @@ msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
 "CMD\" Format erwartet"
 
-#: actions.cpp:581
+#: actions.cpp:589
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Wert \"{}\" der Option "
 "\"aktiviert\""
 
-#: actions.cpp:590
+#: actions.cpp:598
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannte Option \"{}\""
 
-#: actions.cpp:616
+#: actions.cpp:626
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Hook \"{}\""
 
-#: actions.cpp:626
+#: actions.cpp:636
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Package filter can only be used in "
+#| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
-"PRE_TRANS and POST_TRANS hooks"
+"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Paketfilter kann nur in PRE_TRANS und "
 "POST_TRANS Hooks genutzt werden"
 
-#: actions.cpp:636
+#: actions.cpp:646
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Richtung kann nicht ohne Paket Filter "
 "genutzt werden"
 
-#: actions.cpp:653
+#: actions.cpp:663
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr ""
 "Fehler in Datei \"{}\" in Zeile {}: Unbekannte Richtung des Pakets \"{}\""
 
-#: actions.cpp:664
+#: actions.cpp:674
 msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Unbekannter Modus \"{}\""
 
-#: actions.cpp:670
+#: actions.cpp:680
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Fehler in Datei \"{}\" in Zeile {}: Fehlendes Kommando"
 
-#: actions.cpp:1760
+#: actions.cpp:1773
 msgid "Cannot create pipe: {}"
 msgstr "Kann keine Pipe erstellen: {}"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-11-17 09:51+0000\n"
 "Last-Translator: ButterflyOfFire <butterflyoffire@users.noreply.translate."
 "fedoraproject.org>\n"
@@ -834,25 +834,25 @@ msgstr ""
 msgid "Invalid module status: {}"
 msgstr ""
 
-#: plugin/plugins.cpp:66
+#: plugin/plugins.cpp:65
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
 msgstr ""
 
-#: plugin/plugins.cpp:115
+#: plugin/plugins.cpp:114
 msgid "Cannot find plugin library \"{}\""
 msgstr ""
 
-#: plugin/plugins.cpp:182
+#: plugin/plugins.cpp:181
 msgid "Invalid option value: enabled={}"
 msgstr ""
 
-#: plugin/plugins.cpp:206
+#: plugin/plugins.cpp:205
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr ""
 
-#: plugin/plugins.cpp:231
+#: plugin/plugins.cpp:230
 msgid "Cannot load plugins: {}"
 msgstr ""
 
@@ -1458,6 +1458,10 @@ msgstr ""
 
 #: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr ""
+
+#: utils/locale.cpp:57
+msgid "Cannot set the locale \"{}\": {}"
 msgstr ""
 
 #: utils/locker.cpp:45

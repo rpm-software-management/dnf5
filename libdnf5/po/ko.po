@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-12-12 03:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -866,7 +866,7 @@ msgstr "값에서 누락된 ':'"
 msgid "Invalid module status: {}"
 msgstr "잘못된 모듈 상태: {}"
 
-#: plugin/plugins.cpp:66
+#: plugin/plugins.cpp:65
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -874,19 +874,19 @@ msgstr ""
 "미지원 플러그인 API 조합. 플러그인에 의해 제공되는 API 버전은 \"{}.{}\"입니"
 "다. libdnf에서 API 버전은 \"{}.{}\"입니다."
 
-#: plugin/plugins.cpp:115
+#: plugin/plugins.cpp:114
 msgid "Cannot find plugin library \"{}\""
 msgstr "플러그인 라이브러리 \"{}\"를 찾을 수 없습니다"
 
-#: plugin/plugins.cpp:182
+#: plugin/plugins.cpp:181
 msgid "Invalid option value: enabled={}"
 msgstr "잘못된 옵션 값: enabled={}"
 
-#: plugin/plugins.cpp:206
+#: plugin/plugins.cpp:205
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path는 비워 둘 수 없습니다"
 
-#: plugin/plugins.cpp:231
+#: plugin/plugins.cpp:230
 msgid "Cannot load plugins: {}"
 msgstr "플러그인을 적재 할 수 없습니다: {}"
 
@@ -1530,6 +1530,12 @@ msgstr "공유된 라이브러리를 적재 할 수 없습니다 \"{}\": {}"
 #: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "기호의 주소를 획득 할 수 없습니다 \"{}\": {}"
+
+#: utils/locale.cpp:57
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "공유된 라이브러리를 적재 할 수 없습니다 \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2025-01-03 15:05+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/dnf5/"
@@ -751,7 +751,7 @@ msgstr "\"{}\" ਪੈਕੇਜ ਪਹਿਲਾਂ ਹੀ ਅਲਹਿਦਾ ਕ�
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "OpenPGP ਕੁੰਜੀ 0x{} ਨੂੰ ਇੰਪੋਰਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:\n"
 
-#: context.cpp:75
+#: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
 msgstr " ਵਰਤੋਂਕਾਰ-ਆਈਡੀ     : \"{}\"\n"
 
@@ -767,64 +767,107 @@ msgstr ""
 msgid "The key was successfully imported."
 msgstr "ਕੁੰਜੀ ਨੂੰ ਕਾਮਯਾਬੀ ਨਾਲ ਇੰਪੋਰਟ ਕੀਤਾ ਗਿਆ।"
 
-#: context.cpp:262
+#: context.cpp:96
+msgid "The following PGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: context.cpp:98
+#, fuzzy
+#| msgid " UserID     : \"{}\"\n"
+msgid " Reason     : {}\n"
+msgstr " ਵਰਤੋਂਕਾਰ-ਆਈਡੀ     : \"{}\"\n"
+
+#: context.cpp:102
+#, fuzzy
+#| msgid ""
+#| " Fingerprint: {}\n"
+#| " From       : {}\n"
+msgid " From       : {}\n"
+msgstr ""
+" ਫਿੰਗਰਪਰਿੰਟ: {}\n"
+" ਵਲੋਂ       : {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr ""
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: context.cpp:115
+#, fuzzy
+#| msgid "The key was successfully imported."
+msgid "The key was successfully removed."
+msgstr "ਕੁੰਜੀ ਨੂੰ ਕਾਮਯਾਬੀ ਨਾਲ ਇੰਪੋਰਟ ਕੀਤਾ ਗਿਆ।"
+
+#: context.cpp:290
 msgid "setopt: \"{}.{}\": {}"
 msgstr ""
 
-#: context.cpp:268 main.cpp:1317
+#: context.cpp:296 main.cpp:1317
 msgid ", "
 msgstr ", "
 
-#: context.cpp:272
+#: context.cpp:300
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
 msgstr ""
 
-#: context.cpp:276
+#: context.cpp:304
 msgid "No matching repositories for {}"
 msgstr "{} ਲਈ ਕੋਈ ਵੀ ਮਿਲਦੀਆਂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਨਹੀਂ ਹਨ"
 
-#: context.cpp:322
+#: context.cpp:350
 msgid "Updating and loading repositories:"
 msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਅੱਪਡੇਟ ਤੇ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
 
-#: context.cpp:332
+#: context.cpp:360
 msgid "Repositories loaded."
 msgstr "ਰਿਪੋਜ਼ਟਰੀਆਂ ਨੂੰ ਲੋਡ ਕੀਤਾ।"
 
-#: context.cpp:338
+#: context.cpp:366
 msgid "Testing offline transaction"
 msgstr "ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਟੈਸਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:342 context.cpp:497
+#: context.cpp:370 context.cpp:525
 msgid "Transaction failed: {}"
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਫੇਲ੍ਹ ਹੈ: {}"
 
-#: context.cpp:347 context.cpp:502
+#: context.cpp:375 context.cpp:530
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:414
+#: context.cpp:442
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "\"{}\" ਟਿਕਾਣੇ ਵਿੱਚ ਪਹਿਲਾਂ ਹੀ ਸੰਭਾਲੀ ਹੋਈ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਹੈ, ਜਿਸ ਉੱਤੇ ਲਿਖਿਆ ਜਾਵੇਗਾ।"
 
-#: context.cpp:443
+#: context.cpp:471
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "ਅੱਗੇ ਦਿੱਤੀ ਕਮਾਂਡ ਵਲੋਂ ਸ਼ੁਰੂ ਕੀਤੀ ਗਈ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਪਹਿਲਾਂ ਹੀ ਲਾਈਨ ਵਿੱਚ ਹੈ:"
 
-#: context.cpp:445
+#: context.cpp:473
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr ""
 "ਜਾਰੀ ਰੱਖਣ ਨਾਲ ਪੁਰਾਣੀ ਆਫ਼ਲਾਈਨ ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਰੱਦ ਕੀਤਾ ਜਾਵੇਗਾ ਅਤੇ ਇਸ ਨਾਲ ਬਦਲਿਆ ਜਾਵੇਗਾ।"
 
-#: context.cpp:463
+#: context.cpp:491
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -834,71 +877,71 @@ msgstr ""
 "offline reboot` ਨੂੰ ਚਲਾਓ। ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਰੱਦ ਕਰਨ ਅਤੇ ਡਾਊਨਲੋਡ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਨੂੰ ਹਟਾਉਣ ਵਾਸਤੇ "
 "`dnf5 offline clean` ਨੂੰ ਵਰਤੋਂ।"
 
-#: context.cpp:469
+#: context.cpp:497
 msgid "Running transaction"
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਚੱਲ ਰਹੀ ਹੈ"
 
-#: context.cpp:786
+#: context.cpp:814
 msgid "Upgrading {}"
 msgstr "{} ਨੂੰ ਅੱਪਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:789
+#: context.cpp:817
 msgid "Downgrading {}"
 msgstr "{} ਨੂੰ ਡਾਊਨਗਰੇਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:792
+#: context.cpp:820
 msgid "Reinstalling {}"
 msgstr "{} ਨੂੰ ਮੁੜ-ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:805
+#: context.cpp:833
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr ""
 
-#: context.cpp:811
+#: context.cpp:839
 msgid "Installing {}"
 msgstr "{} ਨੂੰ ਇੰਸਟਾਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:832
+#: context.cpp:860
 msgid "Prepare transaction"
 msgstr "ਟਰਾਂਜ਼ੈਕਸ਼ਨ ਨੂੰ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:852
+#: context.cpp:880
 msgid "Removing {}"
 msgstr "{} ਨੂੰ ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: context.cpp:855
+#: context.cpp:883
 msgid "Cleanup {}"
 msgstr "{} ਦੀ ਸਫ਼ਾਈ"
 
-#: context.cpp:873
+#: context.cpp:901
 msgid "Unpack error: {}"
 msgstr "ਅਣ-ਪੈਕ ਗਲਤੀ: {}"
 
-#: context.cpp:881
+#: context.cpp:909
 msgid "Cpio error: {}"
 msgstr "Cpio ਗ਼ਲਤੀ: {}"
 
-#: context.cpp:891
+#: context.cpp:919
 msgid "Scriptlet output:"
 msgstr "ਸਕ੍ਰਿਪਟਲਿਟ ਆਉਟਪੁੱਟ:"
 
-#: context.cpp:913
+#: context.cpp:941
 msgid "Running {} scriptlet: {}"
 msgstr "ਸਕ੍ਰਿਪਟਲਿਟ {} ਚੱਲ ਰਿਹਾ ਹੈ: {}"
 
-#: context.cpp:928
+#: context.cpp:956
 msgid "Finished {} scriptlet: {}"
 msgstr "ਸਕ੍ਰਿਪਟਲਿਟ {} ਮੁਕੰਮਲ ਹੋਇਆ: {}"
 
-#: context.cpp:934
+#: context.cpp:962
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:943
+#: context.cpp:971
 msgid "Error in {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:973
+#: context.cpp:1001
 msgid "Verify package files"
 msgstr "ਪੈਕੇਜ ਫਾਇਲਾਂ ਦੀ ਜਾਂਚ"
 

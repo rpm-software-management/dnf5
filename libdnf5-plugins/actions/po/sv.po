@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-09-21 07:57+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:534 actions.cpp:542 actions.cpp:550 actions.cpp:558
+#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
 msgid ""
 "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
 "format expected"
@@ -27,44 +27,48 @@ msgstr ""
 "Fel i fil \"{}\" på rad {}: \"KROK:PKG_FILTER:RIKTNING:ALTERNATIV:KOMMANDO\" "
 "format förväntas"
 
-#: actions.cpp:581
+#: actions.cpp:589
 msgid ""
 "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänt \"aktiverat\" alternativvärde \"{}\""
 
-#: actions.cpp:590
+#: actions.cpp:598
 msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänt alternativ \"{}\""
 
-#: actions.cpp:616
+#: actions.cpp:626
 msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänd krok \"{}\""
 
-#: actions.cpp:626
+#: actions.cpp:636
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Package filter can only be used in "
+#| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
 "Error in file \"{}\" on line {}: Package filter can only be used in "
-"PRE_TRANS and POST_TRANS hooks"
+"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
 msgstr ""
 "Fel i fil \"{}\" på rad {}: Paketfilter kan endast användas i PRE_TRANS och "
 "POST_TRANS krokar"
 
-#: actions.cpp:636
+#: actions.cpp:646
 msgid ""
 "Error in file \"{}\" on line {}: Cannot use direction without package filter"
 msgstr "Fel i fil \"{}\" på rad {}: Kan inte använda riktning utan paketfilter"
 
-#: actions.cpp:653
+#: actions.cpp:663
 msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänd paketriktning \"{}\""
 
-#: actions.cpp:664
+#: actions.cpp:674
 msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
 msgstr "Fel i fil \"{}\" på rad {}: Okänt läge \"{}\""
 
-#: actions.cpp:670
+#: actions.cpp:680
 msgid "Error in file \"{}\" on line {}: Missing command"
 msgstr "Fel i fil \"{}\" på rad {}: Saknar kommando"
 
-#: actions.cpp:1760
+#: actions.cpp:1773
 msgid "Cannot create pipe: {}"
 msgstr "Kan inte skapa pipa: {}"

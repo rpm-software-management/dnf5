@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-12-20 02:09+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -840,7 +840,7 @@ msgstr "Paketti ”{}” on jo suljettu pois."
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "Tuodaan OpenPGP-avain 0x{}:\n"
 
-#: context.cpp:75
+#: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
 msgstr " Käyttäjätunniste     : ”{}”\n"
 
@@ -856,15 +856,58 @@ msgstr ""
 msgid "The key was successfully imported."
 msgstr "Avain tuotiin onnistuneesti."
 
-#: context.cpp:262
+#: context.cpp:96
+msgid "The following PGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: context.cpp:98
+#, fuzzy
+#| msgid " UserID     : \"{}\"\n"
+msgid " Reason     : {}\n"
+msgstr " Käyttäjätunniste     : ”{}”\n"
+
+#: context.cpp:102
+#, fuzzy
+#| msgid ""
+#| " Fingerprint: {}\n"
+#| " From       : {}\n"
+msgid " From       : {}\n"
+msgstr ""
+" Sormenjälki: {}\n"
+" Lähde: {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr ""
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: context.cpp:115
+#, fuzzy
+#| msgid "The key was successfully imported."
+msgid "The key was successfully removed."
+msgstr "Avain tuotiin onnistuneesti."
+
+#: context.cpp:290
 msgid "setopt: \"{}.{}\": {}"
 msgstr ""
 
-#: context.cpp:268 main.cpp:1317
+#: context.cpp:296 main.cpp:1317
 msgid ", "
 msgstr ""
 
-#: context.cpp:272
+#: context.cpp:300
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -872,50 +915,50 @@ msgstr ""
 "Ei vastaavia tietovarastoja {}:lle. Jos haluat käyttää tietovarastoja "
 "isäntäjärjestelmästä, välitä vaihtoehto `--use-host-config`"
 
-#: context.cpp:276
+#: context.cpp:304
 msgid "No matching repositories for {}"
 msgstr "Ei vastaavia tietovarastoja {}:lle"
 
-#: context.cpp:322
+#: context.cpp:350
 msgid "Updating and loading repositories:"
 msgstr "Päivitetään ja ladataan ohjelmistolähteet:"
 
-#: context.cpp:332
+#: context.cpp:360
 msgid "Repositories loaded."
 msgstr "Ohjelmistolähteet ladattu."
 
-#: context.cpp:338
+#: context.cpp:366
 msgid "Testing offline transaction"
 msgstr "Testataan ei-verkkotapahtumaa"
 
-#: context.cpp:342 context.cpp:497
+#: context.cpp:370 context.cpp:525
 msgid "Transaction failed: {}"
 msgstr "Tapahtuma epäonnistui: {}"
 
-#: context.cpp:347 context.cpp:502
+#: context.cpp:375 context.cpp:530
 msgid "  - {}"
 msgstr ""
 
-#: context.cpp:414
+#: context.cpp:442
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "Sijainti \"{}\" sisältää jo tallennetun tapahtuman, se korvataan."
 
-#: context.cpp:443
+#: context.cpp:471
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Jonossa on jo ei-verkkotapahtuma, joka on aloitettu seuraavalla komennolla:"
 
-#: context.cpp:445
+#: context.cpp:473
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr "Jatkaminen peruuttaa vanhan ei-verkkotapahtuman ja korvaa sen tällä."
 
-#: context.cpp:463
+#: context.cpp:491
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -926,71 +969,71 @@ msgstr ""
 "Käytä `dnf5 offline clean` peruuttaaksesi tapahtuman ja poistaaksesi ladatut "
 "tiedostot."
 
-#: context.cpp:469
+#: context.cpp:497
 msgid "Running transaction"
 msgstr "Suoritetaan transaktio"
 
-#: context.cpp:786
+#: context.cpp:814
 msgid "Upgrading {}"
 msgstr "Päivitetään {}"
 
-#: context.cpp:789
+#: context.cpp:817
 msgid "Downgrading {}"
 msgstr "Versiota alennetaan {}"
 
-#: context.cpp:792
+#: context.cpp:820
 msgid "Reinstalling {}"
 msgstr "Asennetaan uudelleen {}"
 
-#: context.cpp:805
+#: context.cpp:833
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Odottamaton toimenpide TransactionPackagessa: {}"
 
-#: context.cpp:811
+#: context.cpp:839
 msgid "Installing {}"
 msgstr "Asennetaan {}"
 
-#: context.cpp:832
+#: context.cpp:860
 msgid "Prepare transaction"
 msgstr "Valmistellaan transaktiota"
 
-#: context.cpp:852
+#: context.cpp:880
 msgid "Removing {}"
 msgstr "Poistetaan {}"
 
-#: context.cpp:855
+#: context.cpp:883
 msgid "Cleanup {}"
 msgstr "Puhdistus {}"
 
-#: context.cpp:873
+#: context.cpp:901
 msgid "Unpack error: {}"
 msgstr "Pakkauksen purkuvirhe: {}"
 
-#: context.cpp:881
+#: context.cpp:909
 msgid "Cpio error: {}"
 msgstr "Cpio-virhe: {}"
 
-#: context.cpp:891
+#: context.cpp:919
 msgid "Scriptlet output:"
 msgstr "Sovelman tuloste:"
 
-#: context.cpp:913
+#: context.cpp:941
 msgid "Running {} scriptlet: {}"
 msgstr "Suoritetaan sovelmaa {}: {}"
 
-#: context.cpp:928
+#: context.cpp:956
 msgid "Finished {} scriptlet: {}"
 msgstr "Valmis sovelma {}: {}"
 
-#: context.cpp:934
+#: context.cpp:962
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Ei-kriittinen virhe sovelmassa {}: {}"
 
-#: context.cpp:943
+#: context.cpp:971
 msgid "Error in {} scriptlet: {}"
 msgstr "Virhe sovelmassa {}: {}"
 
-#: context.cpp:973
+#: context.cpp:1001
 msgid "Verify package files"
 msgstr "Vahvista pakettitiedostot"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2024-09-19 09:54+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -906,7 +906,7 @@ msgstr "Отсутствует ':' в значении"
 msgid "Invalid module status: {}"
 msgstr "Неверный статус модуля: {}"
 
-#: plugin/plugins.cpp:66
+#: plugin/plugins.cpp:65
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -915,19 +915,19 @@ msgstr ""
 "плагином \"{}\" (\"{}\"), является \"{}.{}\". Версией API в libdnf является "
 "\"{}.{}\"."
 
-#: plugin/plugins.cpp:115
+#: plugin/plugins.cpp:114
 msgid "Cannot find plugin library \"{}\""
 msgstr "Невозможно найти библиотеку плагинов \"{}\""
 
-#: plugin/plugins.cpp:182
+#: plugin/plugins.cpp:181
 msgid "Invalid option value: enabled={}"
 msgstr "Недопустимое значение опции: enabled={}"
 
-#: plugin/plugins.cpp:206
+#: plugin/plugins.cpp:205
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path не может быть пустым"
 
-#: plugin/plugins.cpp:231
+#: plugin/plugins.cpp:230
 msgid "Cannot load plugins: {}"
 msgstr "Невозможно загрузить плагины: {}"
 
@@ -1594,6 +1594,12 @@ msgstr "Невозможно загрузить общую библиотеку 
 #: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Невозможно получить адрес символа \"{}\": {}"
+
+#: utils/locale.cpp:57
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Невозможно загрузить общую библиотеку \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

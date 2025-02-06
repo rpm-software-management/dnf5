@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2025-01-23 10:41+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -313,8 +313,9 @@ msgstr "연결에 포함된 추가 꾸러미를 오류로 고려하지 마세요
 msgid ""
 "Show only transactions containing packages with specified names. List "
 "option, supports globs."
-msgstr "지정된 이름을 갖는 꾸러미가 포함된 연결만 표시합니다. 옵션 목록, glob을 "
-"지원합니다."
+msgstr ""
+"지정된 이름을 갖는 꾸러미가 포함된 연결만 표시합니다. 옵션 목록, glob을 지원"
+"합니다."
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
@@ -324,8 +325,9 @@ msgstr "연결 기록 관리"
 msgid ""
 "No match found, history info defaults to considering only the last "
 "transaction, specify \"1..last\" range to search all transactions."
-msgstr "일치하는 내용이 없으며, 기록 정보는 최종 연결만 고려하고, 모든 연결을 "
-"검색하려면 \"1..last\" 범위를 지정하세요."
+msgstr ""
+"일치하는 내용이 없으며, 기록 정보는 최종 연결만 고려하고, 모든 연결을 검색하"
+"려면 \"1..last\" 범위를 지정하세요."
 
 #: commands/history/history_redo.cpp:53
 #: commands/history/history_rollback.cpp:57
@@ -807,7 +809,7 @@ msgstr "꾸러미 {} 는 이미 제외되었습니다."
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "OpenPGP 키 0x{} 가져오기:\n"
 
-#: context.cpp:75
+#: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
 msgstr " 사용자ID     : \"{}\"\n"
 
@@ -823,15 +825,58 @@ msgstr ""
 msgid "The key was successfully imported."
 msgstr "키를 성공적으로 가져왔습니다."
 
-#: context.cpp:262
+#: context.cpp:96
+msgid "The following PGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: context.cpp:98
+#, fuzzy
+#| msgid " UserID     : \"{}\"\n"
+msgid " Reason     : {}\n"
+msgstr " 사용자ID     : \"{}\"\n"
+
+#: context.cpp:102
+#, fuzzy
+#| msgid ""
+#| " Fingerprint: {}\n"
+#| " From       : {}\n"
+msgid " From       : {}\n"
+msgstr ""
+" 지문: {}\n"
+" 에서       : {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr ""
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: context.cpp:115
+#, fuzzy
+#| msgid "The key was successfully imported."
+msgid "The key was successfully removed."
+msgstr "키를 성공적으로 가져왔습니다."
+
+#: context.cpp:290
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:268 main.cpp:1317
+#: context.cpp:296 main.cpp:1317
 msgid ", "
 msgstr ", "
 
-#: context.cpp:272
+#: context.cpp:300
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -839,50 +884,50 @@ msgstr ""
 "{}를 위해 일치하는 저장소가 없습니다. 호스트 시스템에서 저장소를 사용하려면, "
 "--use-host-conifg 옵션을 전달하세요"
 
-#: context.cpp:276
+#: context.cpp:304
 msgid "No matching repositories for {}"
 msgstr "{}를 위해 일치하는 저장소가 없습니다"
 
-#: context.cpp:322
+#: context.cpp:350
 msgid "Updating and loading repositories:"
 msgstr "저장소 최신화 및 적재 중:"
 
-#: context.cpp:332
+#: context.cpp:360
 msgid "Repositories loaded."
 msgstr "저장소가 적재됨."
 
-#: context.cpp:338
+#: context.cpp:366
 msgid "Testing offline transaction"
 msgstr "오프라인 연결을 시험 중"
 
-#: context.cpp:342 context.cpp:497
+#: context.cpp:370 context.cpp:525
 msgid "Transaction failed: {}"
 msgstr "연결 실패함: {}"
 
-#: context.cpp:347 context.cpp:502
+#: context.cpp:375 context.cpp:530
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:414
+#: context.cpp:442
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "위치 \"{}\"는 이미 저장된 연결에 포함되어 있으며, 이는 덮어쓰게 됩니다."
 
-#: context.cpp:443
+#: context.cpp:471
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "오프라인 연결이 이미 대기 중이며, 다음 명령에 의해 시작되었습니다:"
 
-#: context.cpp:445
+#: context.cpp:473
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr "계속하기는 기존 오프라인 연결이 취소되고 해당 연결로 대체됩니다."
 
-#: context.cpp:463
+#: context.cpp:491
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -892,71 +937,71 @@ msgstr ""
 "재시작하고 연결을 실행합니다. 연결을 취소하고 내려받은 파일을 삭제하려면, "
 "`dnf5 offline clean`을 사용하세요."
 
-#: context.cpp:469
+#: context.cpp:497
 msgid "Running transaction"
 msgstr "연결 실행 중"
 
-#: context.cpp:786
+#: context.cpp:814
 msgid "Upgrading {}"
 msgstr "향상 중 {}"
 
-#: context.cpp:789
+#: context.cpp:817
 msgid "Downgrading {}"
 msgstr "하향 중 {}"
 
-#: context.cpp:792
+#: context.cpp:820
 msgid "Reinstalling {}"
 msgstr "재설치 중 {}"
 
-#: context.cpp:805
+#: context.cpp:833
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "연결꾸러미에서 예상치 못한 동작: {}"
 
-#: context.cpp:811
+#: context.cpp:839
 msgid "Installing {}"
 msgstr "설치 중 {}"
 
-#: context.cpp:832
+#: context.cpp:860
 msgid "Prepare transaction"
 msgstr "연결을 준비합니다"
 
-#: context.cpp:852
+#: context.cpp:880
 msgid "Removing {}"
 msgstr "제거 중 {}"
 
-#: context.cpp:855
+#: context.cpp:883
 msgid "Cleanup {}"
 msgstr "정리 {}"
 
-#: context.cpp:873
+#: context.cpp:901
 msgid "Unpack error: {}"
 msgstr "압축해제 오류: {}"
 
-#: context.cpp:881
+#: context.cpp:909
 msgid "Cpio error: {}"
 msgstr "Cpio 오류: {}"
 
-#: context.cpp:891
+#: context.cpp:919
 msgid "Scriptlet output:"
 msgstr "구현 출력:"
 
-#: context.cpp:913
+#: context.cpp:941
 msgid "Running {} scriptlet: {}"
 msgstr "{} 구현 실행 중: {}"
 
-#: context.cpp:928
+#: context.cpp:956
 msgid "Finished {} scriptlet: {}"
 msgstr "{} 구현 실행 완료: {}"
 
-#: context.cpp:934
+#: context.cpp:962
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "{} 구현에서 심각하지 않은 오류: {}"
 
-#: context.cpp:943
+#: context.cpp:971
 msgid "Error in {} scriptlet: {}"
 msgstr "{} 구현에서 오류: {}"
 
-#: context.cpp:973
+#: context.cpp:1001
 msgid "Verify package files"
 msgstr "꾸러미 파일을 확인합니다"
 

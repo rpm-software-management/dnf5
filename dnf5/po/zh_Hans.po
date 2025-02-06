@@ -11,11 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2025-01-31 11:53+0000\n"
 "Last-Translator: hg wd <cut-punisher-stays@duck.com>\n"
-"Language-Team: Chinese (Simplified Han script) <https://"
-"translate.fedoraproject.org/projects/dnf5/dnf5/zh_Hans/>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate."
+"fedoraproject.org/projects/dnf5/dnf5/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -317,7 +317,8 @@ msgstr "事务执行历史管理"
 msgid ""
 "No match found, history info defaults to considering only the last "
 "transaction, specify \"1..last\" range to search all transactions."
-msgstr "未找到匹配项，历史信息默认仅考虑最后一次操作，请设定“1..last”范围以搜索所有操"
+msgstr ""
+"未找到匹配项，历史信息默认仅考虑最后一次操作，请设定“1..last”范围以搜索所有操"
 "作。"
 
 #: commands/history/history_redo.cpp:53
@@ -784,7 +785,7 @@ msgstr "软件包 \"{}\" 已经被排除。"
 msgid "Importing OpenPGP key 0x{}:\n"
 msgstr "导入 OpenPGP 密钥 0x{}:\n"
 
-#: context.cpp:75
+#: context.cpp:75 context.cpp:100
 msgid " UserID     : \"{}\"\n"
 msgstr " 用户ID     : \"{}\"\n"
 
@@ -800,64 +801,107 @@ msgstr ""
 msgid "The key was successfully imported."
 msgstr "该密钥成功导入。"
 
-#: context.cpp:262
+#: context.cpp:96
+msgid "The following PGP key (0x{}) is about to be removed:"
+msgstr ""
+
+#: context.cpp:98
+#, fuzzy
+#| msgid " UserID     : \"{}\"\n"
+msgid " Reason     : {}\n"
+msgstr " 用户ID     : \"{}\"\n"
+
+#: context.cpp:102
+#, fuzzy
+#| msgid ""
+#| " Fingerprint: {}\n"
+#| " From       : {}\n"
+msgid " From       : {}\n"
+msgstr ""
+" 指纹 : {}\n"
+" 来源 : {}\n"
+
+#: context.cpp:104
+msgid "As a result, installing packages signed with this key will fail."
+msgstr ""
+
+#: context.cpp:105
+msgid "It is recommended to remove the expired key to allow importing"
+msgstr ""
+
+#: context.cpp:106
+msgid ""
+"an updated key. This might leave already installed packages unverifiable."
+msgstr ""
+
+#: context.cpp:109
+msgid "The system will now proceed with removing the key."
+msgstr ""
+
+#: context.cpp:115
+#, fuzzy
+#| msgid "The key was successfully imported."
+msgid "The key was successfully removed."
+msgstr "该密钥成功导入。"
+
+#: context.cpp:290
 msgid "setopt: \"{}.{}\": {}"
 msgstr "设置选项: \"{}.{}\": {}"
 
-#: context.cpp:268 main.cpp:1317
+#: context.cpp:296 main.cpp:1317
 msgid ", "
 msgstr ", "
 
-#: context.cpp:272
+#: context.cpp:300
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
 msgstr ""
 "任何仓库未匹配到 {} 。通过 \"--use-host-config\" 选项使用指定域名中的仓库"
 
-#: context.cpp:276
+#: context.cpp:304
 msgid "No matching repositories for {}"
 msgstr "任何仓库未匹配到 {}"
 
-#: context.cpp:322
+#: context.cpp:350
 msgid "Updating and loading repositories:"
 msgstr "仓库更新和加载中:"
 
-#: context.cpp:332
+#: context.cpp:360
 msgid "Repositories loaded."
 msgstr "仓库加载完成。"
 
-#: context.cpp:338
+#: context.cpp:366
 msgid "Testing offline transaction"
 msgstr "离线事务测试中"
 
-#: context.cpp:342 context.cpp:497
+#: context.cpp:370 context.cpp:525
 msgid "Transaction failed: {}"
 msgstr "失败的事务:{}"
 
-#: context.cpp:347 context.cpp:502
+#: context.cpp:375 context.cpp:530
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:414
+#: context.cpp:442
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "位置 \"{}\" 已包含存储的事务，将被覆盖。"
 
-#: context.cpp:443
+#: context.cpp:471
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "已有一个离线事务在队列中，它将在以下命令中启动:"
 
-#: context.cpp:445
+#: context.cpp:473
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr "继续将取消旧的离线事务并替换为本次。"
 
-#: context.cpp:463
+#: context.cpp:491
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -866,71 +910,71 @@ msgstr ""
 "已经存储的事务可以离线执行。运行 \"dnf5 offline reboot\" 以重新启动并运行事"
 "务。若要取消事务并删除已下载的文件，须使用 \"dnf5 offline clean\" 命令。"
 
-#: context.cpp:469
+#: context.cpp:497
 msgid "Running transaction"
 msgstr "执行事务"
 
-#: context.cpp:786
+#: context.cpp:814
 msgid "Upgrading {}"
 msgstr "升级 {}"
 
-#: context.cpp:789
+#: context.cpp:817
 msgid "Downgrading {}"
 msgstr "降级 {}"
 
-#: context.cpp:792
+#: context.cpp:820
 msgid "Reinstalling {}"
 msgstr "重新安装 {}"
 
-#: context.cpp:805
+#: context.cpp:833
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "软件包事务中出现意外操作: {}"
 
-#: context.cpp:811
+#: context.cpp:839
 msgid "Installing {}"
 msgstr "安装{}"
 
-#: context.cpp:832
+#: context.cpp:860
 msgid "Prepare transaction"
 msgstr "准备事务"
 
-#: context.cpp:852
+#: context.cpp:880
 msgid "Removing {}"
 msgstr "删除 {}"
 
-#: context.cpp:855
+#: context.cpp:883
 msgid "Cleanup {}"
 msgstr "清理 {}"
 
-#: context.cpp:873
+#: context.cpp:901
 msgid "Unpack error: {}"
 msgstr "解压错误: {}"
 
-#: context.cpp:881
+#: context.cpp:909
 msgid "Cpio error: {}"
 msgstr "Cpio 错误: {}"
 
-#: context.cpp:891
+#: context.cpp:919
 msgid "Scriptlet output:"
 msgstr "Scriptlet 输出："
 
-#: context.cpp:913
+#: context.cpp:941
 msgid "Running {} scriptlet: {}"
 msgstr "运行 {}，脚本片段: {}"
 
-#: context.cpp:928
+#: context.cpp:956
 msgid "Finished {} scriptlet: {}"
 msgstr "{} 运行完成，脚本片段: {}"
 
-#: context.cpp:934
+#: context.cpp:962
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "非致命性错误: {} ，脚本片段: {}"
 
-#: context.cpp:943
+#: context.cpp:971
 msgid "Error in {} scriptlet: {}"
 msgstr "{} 中出现错误，脚本片段: {}"
 
-#: context.cpp:973
+#: context.cpp:1001
 msgid "Verify package files"
 msgstr "验证软件包文件"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 03:00+0000\n"
+"POT-Creation-Date: 2025-02-06 03:02+0000\n"
 "PO-Revision-Date: 2025-01-10 17:01+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -896,7 +896,7 @@ msgstr "Arvossa puuttuva ':'"
 msgid "Invalid module status: {}"
 msgstr "Virheellinen moduulin tila: {}"
 
-#: plugin/plugins.cpp:66
+#: plugin/plugins.cpp:65
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -904,21 +904,21 @@ msgstr ""
 "Ei tuettu laajennuksen API-yhdistelmä. Liitännäisen \"{}\" (\"{}\") tarjoama "
 "API-versio on \"{}.{}\". API-versio libdnf:ssä on \"{}.{}\"."
 
-#: plugin/plugins.cpp:115
+#: plugin/plugins.cpp:114
 msgid "Cannot find plugin library \"{}\""
 msgstr "Laajennuskirjastoa \"{}\" ei löydy"
 
-#: plugin/plugins.cpp:182
+#: plugin/plugins.cpp:181
 msgid "Invalid option value: enabled={}"
 msgstr "Virheellinen vaihtoehdon arvo: enabled={}"
 
-#: plugin/plugins.cpp:206
+#: plugin/plugins.cpp:205
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr ""
 "Plugins::load_plugins(): määrityksen hakemiston polku config_dir_path ei saa "
 "olla tyhjä"
 
-#: plugin/plugins.cpp:231
+#: plugin/plugins.cpp:230
 msgid "Cannot load plugins: {}"
 msgstr "Laajennuksia ei voi ladata: {}"
 
@@ -1555,6 +1555,12 @@ msgstr "Jaettua kirjastoa ”{}” ei voi ladata: {}"
 #: utils/library.cpp:49
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Symbolin \"{}\" osoitetta ei voi saada: {}"
+
+#: utils/locale.cpp:57
+#, fuzzy
+#| msgid "Cannot load shared library \"{}\": {}"
+msgid "Cannot set the locale \"{}\": {}"
+msgstr "Jaettua kirjastoa ”{}” ei voi ladata: {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""
