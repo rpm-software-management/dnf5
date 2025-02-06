@@ -1,3 +1,21 @@
+# 5.2.10.0
+
+- Update translations from weblate
+- plugins: Provide the actual API version used
+- plugins: Check only major version of API for incompatibility
+- expired-pgp-keys: New plugin for detecting expired PGP keys
+- rpm_signature: Fix rpmdb_lookup comparison case mismatch
+- actions: Update with resolved hook
+- libdnf plugins: Add resolved hook
+- SWIG bindings for common::Message and common::EmptyMessage
+- EmptyMessage: class for passing an empty message
+- Message: base class for passing a message for formatting in the destination
+- utils::format: Support for user defined locale
+- SWIG bindings for utils::Locale
+- utils::Locale: class for passing C and CPP locale
+- utils::format: Support for formatting args according to BgettextMessage
+- bgettext: Add function b_gettextmsg_get_plural_id
+
 # 5.2.9.0
 
 - Update translations from weblate
