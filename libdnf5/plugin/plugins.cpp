@@ -76,6 +76,9 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
     iplugin_instance = new_instance(libdnf5::get_library_version(), get_iplugin_data(base), get_config_parser());
+    if (!iplugin_instance) {
+        throw PluginError(M_("Failed to create a libdnf plugin instance"));
+    }
 }
 
 PluginLibrary::~PluginLibrary() {

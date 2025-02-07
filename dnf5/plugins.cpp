@@ -74,6 +74,9 @@ PluginLibrary::PluginLibrary(Context & context, const std::string & library_path
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("dnf5_plugin_delete_instance"));
 
     iplugin_instance = new_instance(dnf5::get_application_version(), context);
+    if (!iplugin_instance) {
+        throw std::runtime_error("Failed to create a dnf plugin instance");
+    }
 }
 
 PluginLibrary::~PluginLibrary() {
