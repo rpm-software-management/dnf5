@@ -44,10 +44,10 @@ void * Library::get_address(const char * symbol) const {
     void * address = dlsym(handle, symbol);
     if (!address) {
         const char * err_msg = dlerror();  // returns localized message, problem with later translation
-        if (err_msg) {
-            throw LibrarySymbolNotFoundError(
-                M_("Cannot obtain address of symbol \"{}\": {}"), std::string(symbol), std::string(err_msg));
-        }
+        throw LibrarySymbolNotFoundError(
+            M_("Cannot obtain address of symbol \"{}\": {}"),
+            std::string(symbol),
+            err_msg ? std::string(err_msg) : "unknown error");
     }
     return address;
 }
