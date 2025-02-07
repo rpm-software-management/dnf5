@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "defs.h"
 
 #include <cstdint>
+#include <exception>
 #include <vector>
 
 namespace dnf5 {
@@ -82,24 +83,43 @@ private:
 
 extern "C" {
 
-/// Returns the version of the API required by the plugin.
+/// Returns the version of the API implemented by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
+///
+/// @return API version implemented by the plugin.
 DNF_PLUGIN_API dnf5::PluginAPIVersion dnf5_plugin_get_api_version(void);
 
-/// Returns the name of the plugin. It can be called at any time.
+/// Returns the name of the plugin.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
+///
+/// @return Plugin name
 DNF_PLUGIN_API const char * dnf5_plugin_get_name(void);
 
-/// Returns the version of the plugin. It can be called at any time.
+/// Returns the version of the plugin.
 /// Same result as IPlugin::get_version(), but can be called without creating an IPlugin instance.
+///
+/// @return Plugin version
 DNF_PLUGIN_API dnf5::PluginVersion dnf5_plugin_get_version(void);
 
-/// Creates a new plugin instance. Passes the API version to the plugin.
+/// Creates a new plugin instance.
+/// On failure, returns `nullptr` and saves the exception.
+///
+/// @param aplication_version Version of dnf application.
+/// @param context            Reference to the application context.
+/// @return Pointer to the new plugin instance or `nullptr`.
 DNF_PLUGIN_API dnf5::IPlugin * dnf5_plugin_new_instance(
     dnf5::ApplicationVersion application_version, dnf5::Context & context);
 
 /// Deletes plugin instance.
+///
+/// @param plugin_instance Plugin instance to delete.
 DNF_PLUGIN_API void dnf5_plugin_delete_instance(dnf5::IPlugin * plugin_instance);
+
+/// Returns a pointer to `std::exception_ptr` containing the last caught exception.
+/// If no exception has occurred yet, returns a pointer to an empty `std::exception_ptr`.
+///
+/// @return Pointer to the `std::exception_ptr` containing the last caught exception.
+DNF_PLUGIN_API std::exception_ptr * dnf5_plugin_get_last_exception(void);
 }
 
 #endif
