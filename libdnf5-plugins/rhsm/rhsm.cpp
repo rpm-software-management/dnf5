@@ -140,6 +140,9 @@ void Rhsm::setup_enrollments() {
     }
 }
 
+
+std::exception_ptr last_exception;
+
 }  // namespace
 
 PluginAPIVersion libdnf_plugin_get_api_version(void) {
@@ -160,9 +163,14 @@ plugin::IPlugin * libdnf_plugin_new_instance(
     libdnf5::ConfigParser & parser) try {
     return new Rhsm(data, parser);
 } catch (...) {
+    last_exception = std::current_exception();
     return nullptr;
 }
 
 void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
     delete plugin_object;
+}
+
+std::exception_ptr * libdnf_plugin_get_last_exception(void) {
+    return &last_exception;
 }

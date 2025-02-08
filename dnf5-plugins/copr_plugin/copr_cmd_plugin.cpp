@@ -69,6 +69,8 @@ public:
 };
 
 
+std::exception_ptr last_exception;
+
 }  // namespace
 
 
@@ -87,9 +89,14 @@ PluginVersion dnf5_plugin_get_version(void) {
 IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version, Context & context) try {
     return new CoprCmdPlugin(context);
 } catch (...) {
+    last_exception = std::current_exception();
     return nullptr;
 }
 
 void dnf5_plugin_delete_instance(IPlugin * plugin_object) {
     delete plugin_object;
+}
+
+std::exception_ptr * dnf5_plugin_get_last_exception(void) {
+    return &last_exception;
 }
