@@ -175,8 +175,6 @@ static void fetch_python_error_to_exception(const char * msg) {
     throw std::runtime_error(msg + pycomp_str.get_string());
 }
 
-}  // namespace
-
 /// Load Python plugin from path
 void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
     // Very High Level Embedding
@@ -316,6 +314,11 @@ void PythonPluginLoader::load_plugins() {
 }
 
 
+std::exception_ptr last_exception;
+
+}  // namespace
+
+
 PluginAPIVersion libdnf_plugin_get_api_version(void) {
     return REQUIRED_PLUGIN_API_VERSION;
 }
@@ -334,9 +337,14 @@ plugin::IPlugin * libdnf_plugin_new_instance(
     libdnf5::ConfigParser & parser) try {
     return new PythonPluginLoader(data, parser);
 } catch (...) {
+    last_exception = std::current_exception();
     return nullptr;
 }
 
 void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
     delete plugin_object;
+}
+
+std::exception_ptr * libdnf_plugin_get_last_exception(void) {
+    return &last_exception;
 }
