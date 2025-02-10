@@ -143,7 +143,7 @@ std::string Plugins::find_plugin_library(const std::string & plugin_name) {
     if (std::filesystem::exists(library_path)) {
         return library_path;
     }
-    throw PluginError(M_("Cannot find plugin library \"{}\""), library_name);
+    throw PluginError(M_("Cannot find plugin library \"{}\""), library_path.string());
 }
 
 void Plugins::load_plugin_library(
@@ -245,21 +245,13 @@ void Plugins::load_plugins(
     }
     std::sort(config_paths.begin(), config_paths.end());
 
-    std::string failed_filenames;
     for (const auto & path : config_paths) {
         try {
             load_plugin(path, plugin_enablement);
         } catch (const std::exception & ex) {
-            logger.error("Cannot load plugin \"{}\": {}", path.string(), ex.what());
-            if (!failed_filenames.empty()) {
-                failed_filenames += ", ";
-            }
-            failed_filenames += path.filename();
+            logger.error("Cannot load libdnf plugin enabled from \"{}\": {}", path.string(), ex.what());
+            std::throw_with_nested(PluginError(M_("Cannot load libdnf plugin enabled from: {}"), path.string()));
         }
-    }
-
-    if (!failed_filenames.empty()) {
-        throw PluginError(M_("Cannot load plugins: {}"), failed_filenames);
     }
 
     // Creates a PluginInfo for each loaded plugin.
