@@ -21,6 +21,9 @@ Requires:       dnf-data
 Recommends:     (dnf5-plugins if dnf-plugins-core)
 Recommends:     bash-completion
 Requires:       coreutils
+%if 0%{?fedora} > 41
+Recommends:     libdnf5-plugin-expired-pgp-keys
+%endif
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 Provides:       microdnf = %{version}-%{release}
@@ -632,6 +635,7 @@ Libdnf5 plugin that installs repository's Appstream data, for repositories which
 Summary:        Libdnf5 plugin for detecting and removing expired PGP keys
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
+Requires:       gnupg2
 
 %description -n libdnf5-plugin-expired-pgp-keys
 Libdnf5 plugin for detecting and removing expired PGP keys.
