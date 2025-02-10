@@ -171,7 +171,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     auto & logger = *get_base().get_logger();
     const auto & config = get_base().get_config();
 
-    if (!config.get_gpgcheck_option().get_value()) {
+    if (!config.get_pkg_gpgcheck_option().get_value()) {
         return;
     }
 
