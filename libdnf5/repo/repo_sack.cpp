@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv_repo.hpp"
 #include "utils/auth.hpp"
 #include "utils/fs/utils.hpp"
+#include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 #include "utils/xml.hpp"
@@ -366,6 +367,19 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         thread_sack_loader.join();  // waits for the thread_sack_loader to finish its execution
     };
 
+    // Ensures that when update_and_load_repos is unexpectedly exited due to an exception,
+    // the thread_sack_loader is properly terminated and joined.
+    utils::OnScopeExit finish_sack_loader_on_exit([&]() noexcept {
+        try {
+            if (thread_sack_loader.joinable()) {
+                // thread_sack_loader not yet joined -> update_and_load_repos exits due to exception
+                except_in_main_thread = true;
+                finish_sack_loader();
+            }
+        } catch (...) {
+        }
+    });
+
     auto catch_thread_sack_loader_exceptions = [&]() {
         if (except_ptr) {
             if (thread_sack_loader.joinable()) {
@@ -388,8 +402,6 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             }
         }
         if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
-            except_in_main_thread = true;
-            finish_sack_loader();
             throw;
         }
         base->get_logger()->warning(
@@ -523,10 +535,6 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             } catch (const RepoDownloadError & e) {
                 handle_repo_download_error(repo, e, false);
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-            } catch (const std::runtime_error & e) {
-                except_in_main_thread = true;
-                finish_sack_loader();
-                throw;
             }
         }
 
@@ -557,10 +565,6 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                     repos_with_bad_signature.emplace_back(repo);
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-            } catch (const std::runtime_error & e) {
-                except_in_main_thread = true;
-                finish_sack_loader();
-                throw;
             }
         }
 
@@ -583,10 +587,6 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                     repos_with_bad_signature.emplace_back(repo);
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-            } catch (const std::runtime_error & e) {
-                except_in_main_thread = true;
-                finish_sack_loader();
-                throw;
             }
         }
     };
