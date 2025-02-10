@@ -134,20 +134,13 @@ void Plugins::load_plugins(const std::string & dir_path) {
     }
     std::sort(lib_paths.begin(), lib_paths.end());
 
-    std::string failed_filenames;
     for (const auto & path : lib_paths) {
         try {
             load_plugin(path);
         } catch (const std::exception & ex) {
             logger->error("Cannot load dnf5 plugin \"{}\": {}", path.string(), ex.what());
-            if (!failed_filenames.empty()) {
-                failed_filenames += ", ";
-            }
-            failed_filenames += path.filename();
+            std::throw_with_nested(std::runtime_error("Cannot load dnf5 plugin: " + path.string()));
         }
-    }
-    if (!failed_filenames.empty()) {
-        throw std::runtime_error("Cannot load dnf5 plugins: " + failed_filenames);
     }
 }
 
