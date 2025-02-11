@@ -167,16 +167,18 @@ sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
 }
 
 sdbus::MethodReply Base::clean(sdbus::MethodCall & call) {
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+    // let the "expire-cache" do anyone, just as read_all_repos()
+    std::string cache_type{};
+    call >> cache_type;
+
+    if (cache_type != "expire-cache" &&
+        !session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
 
     bool success{false};
     std::string error_msg{};
 
-    // get the cache types and check its validity
-    std::string cache_type{};
-    call >> cache_type;
     if (ALLOWED_CACHE_TYPES.find(cache_type) == ALLOWED_CACHE_TYPES.end()) {
         error_msg = fmt::format("Unsupported cache type to clean up: \"{}\".", cache_type);
     } else {
