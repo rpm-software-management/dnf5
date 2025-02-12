@@ -9,7 +9,7 @@ message("Building bindings for go")
 function(add_go_module LIBRARY_NAME MODULE_NAME)
     set(TARGET_NAME "go_${MODULE_NAME}")
     set_source_files_properties(../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTIES CPLUSPLUS ON)
-    set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS}
+    list(APPEND CMAKE_SWIG_FLAGS
         -module ${TARGET_NAME} -cgo -intgosize 64 -package libdnf5
     )
     swig_add_library(${TARGET_NAME} LANGUAGE go SOURCES ../../${LIBRARY_NAME}/${MODULE_NAME}.i)
