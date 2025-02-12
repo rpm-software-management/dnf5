@@ -6,8 +6,8 @@ include(VERSION.cmake)
 project(dnf5 LANGUAGES CXX C VERSION ${VERSION_PRIME}.${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO})
 cmake_policy(VERSION ${CMAKE_VERSION})
 
-set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-set (SYSTEMD_DIR "/usr/lib/systemd/system")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(SYSTEMD_DIR "/usr/lib/systemd/system")
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 

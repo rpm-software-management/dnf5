@@ -12,7 +12,7 @@ include_directories(${Python3_INCLUDE_DIRS})
 
 function(add_python3_module LIBRARY_NAME MODULE_NAME)
     set(TARGET_NAME "python3_${MODULE_NAME}")
-    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+    list(APPEND SWIG_COMPILE_OPTIONS
         -Wno-redundant-decls
     )
     # Currently the SWIG_PYTHON_SILENT_MEMLEAK controls only whether message:
@@ -28,10 +28,10 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     # print the message
     # There is an issue reported on SWIG with the same root cause: https://github.com/swig/swig/issues/2037 it
     # also contains more details.
-    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+    list(APPEND SWIG_COMPILE_OPTIONS
         -DSWIG_PYTHON_SILENT_MEMLEAK
     )
-    set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS}
+    list(APPEND CMAKE_SWIG_FLAGS
         -doxygen
     )
     set_source_files_properties(../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTIES CPLUSPLUS ON)
