@@ -425,7 +425,7 @@ repository configuration file should aside from repo ID consists of baseurl, met
     List of directories that are searched for libdnf5 plugins to load. Plugins found in
     *any of the directories* in this configuration option are used.
 
-    Default: a Python version-specific path.
+    Default: ``/usr/lib64/libdnf5/plugins/``
 
 .. _plugins_options-label:
 
