@@ -1838,58 +1838,111 @@ private:
 
 
 void Actions::execute_command(CommandToRun & command) {
+    // Struct is used to pass a possible error from a child process before starting a new program.
+    struct ErrorMessage {
+        enum { BIND_STDIN, BIND_STDOUT, EXEC } error;  // what failed
+        int err_code;                                  // errno
+    };
+
     auto & base = get_base();
 
+    Pipe pipe_error_msg_from_child;
     Pipe pipe_out_from_child;
     Pipe pipe_to_child;
+
+    // Prepare a null-terminated array of arguments for the exec procedure.
+    // We don't want to risk throwing an exception in the child process, so we prepare it here.
+    std::vector<char *> args;
+    args.reserve(command.args.size() + 1);
+    for (auto & arg : command.args) {
+        args.push_back(arg.data());
+    }
+    args.push_back(nullptr);
 
     auto child_pid = fork();
     if (child_pid == -1) {
         base.get_logger()->error("Actions plugin: Cannot fork: {}", std::strerror(errno));
     } else if (child_pid == 0) {
+        pipe_error_msg_from_child.close_in();
         pipe_to_child.close_out();       // close writing end of the pipe on the child side
         pipe_out_from_child.close_in();  // close reading end of the pipe on the child side
 
         // bind stdin of the child process to the reading end of the pipe
         if (dup2(pipe_to_child.get_in(), fileno(stdin)) == -1) {
-            base.get_logger()->error("Actions plugin: Cannot bind command stdin: {}", std::strerror(errno));
+            ErrorMessage msg{ErrorMessage::BIND_STDIN, errno};
+            if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
+                // Ignore errors generated when sending an error.
+                // The process terminates which is detected as an error in the parent process anyway.
+            }
             _exit(255);
         }
         pipe_to_child.close_in();
 
         // bind stdout of the child process to the writing end of the pipe
         if (dup2(pipe_out_from_child.get_out(), fileno(stdout)) == -1) {
-            base.get_logger()->error("Actions plugin: Cannot bind command stdout: {}", std::strerror(errno));
+            ErrorMessage msg{ErrorMessage::BIND_STDOUT, errno};
+            if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
+            }
             _exit(255);
         }
         pipe_out_from_child.close_out();
 
-        std::vector<char *> args;
-        args.reserve(command.args.size() + 1);
-        for (auto & arg : command.args) {
-            args.push_back(arg.data());
-        }
-        args.push_back(nullptr);
-
         execvp(command.command.c_str(), args.data());  // replace the child process with the command
-        auto errnum = errno;
-
-        std::string args_string;
-        for (size_t i = 1; i < command.args.size(); ++i) {
-            args_string += ' ' + command.args[i];
+        ErrorMessage msg{ErrorMessage::EXEC, errno};
+        if (write(pipe_error_msg_from_child.get_out(), &msg, sizeof(msg)) != sizeof(msg)) {
         }
-        base.get_logger()->error(
-            "Actions plugin: Cannot execute \"{}{}\": {}", command.command, args_string, std::strerror(errnum));
         _exit(255);
     } else {
-        OnScopeExit finish([&pipe_to_child, &pipe_out_from_child, child_pid]() noexcept {
+        OnScopeExit finish([&pipe_error_msg_from_child, &pipe_to_child, &pipe_out_from_child, child_pid]() noexcept {
+            pipe_error_msg_from_child.close_in();
             pipe_to_child.close_out();
             pipe_out_from_child.close_in();
             waitpid(child_pid, nullptr, 0);
         });
 
+        pipe_error_msg_from_child.close_out();
         pipe_to_child.close_in();
         pipe_out_from_child.close_out();
+
+        // Check the pipe for errors. The child process will close it empty or write an error.
+        ErrorMessage err_msg;
+        auto ret = read(pipe_error_msg_from_child.get_in(), &err_msg, sizeof(err_msg));
+        if (ret == sizeof(err_msg)) {
+            switch (err_msg.error) {
+                case ErrorMessage::BIND_STDIN:
+                    base.get_logger()->error(
+                        "Actions plugin: Cannot bind command stdin: {}", std::strerror(err_msg.err_code));
+                    break;
+                case ErrorMessage::BIND_STDOUT:
+                    base.get_logger()->error(
+                        "Actions plugin: Cannot bind command stdout: {}", std::strerror(err_msg.err_code));
+                    break;
+                case ErrorMessage::EXEC:
+                    std::string args_string;
+                    bool first{true};
+                    for (size_t i = 1; i < command.args.size(); ++i) {
+                        if (!first) {
+                            args_string += ' ';
+                        }
+                        first = false;
+                        args_string += command.args[i];
+                    }
+                    base.get_logger()->error(
+                        "Actions plugin: File \"{}\" on line {}: Cannot execute \"{}\" arguments \"{}\": {}",
+                        command.action.file_path.string(),
+                        command.action.line_number,
+                        command.command,
+                        args_string,
+                        std::strerror(err_msg.err_code));
+            }
+            return;
+        } else if (ret != 0) {
+            base.get_logger()->error(
+                "Actions plugin: File \"{}\" on line {}: Error during preparation child process",
+                command.action.file_path.string(),
+                command.action.line_number);
+        }
+        pipe_error_msg_from_child.close_in();
 
         switch (command.action.mode) {
             case Action::Mode::PLAIN:
