@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <fcntl.h>
 #include <fmt/format.h>
 #include <json.h>
 #include <libdnf5/base/base.hpp>
@@ -1769,7 +1770,7 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
 class Pipe {
 public:
     Pipe() {
-        if (pipe(fds) == -1) {
+        if (pipe2(fds, O_CLOEXEC) == -1) {
             throw ActionsPluginError(M_("Cannot create pipe: {}"), std::string{std::strerror(errno)});
         }
     }
