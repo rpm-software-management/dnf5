@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/repo/repo_errors.hpp>
 #include <libdnf5/repo/repo_query.hpp>
 #include <libdnf5/rpm/package_query.hpp>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/patterns.hpp>
 #include <sys/wait.h>
@@ -63,6 +64,11 @@ struct Action {
     std::string command;
     std::vector<std::string> args;
     enum class Mode { PLAIN, JSON } mode;
+
+    // If `raise_error` is set to `true`, an exception is thrown if the action process failed to start or
+    // ended with a non-zero return code or an error occurred during communication (syntax error,
+    // communication interrupt, failed to set option in plain communication mode).
+    bool raise_error;
 };
 
 
@@ -222,10 +228,67 @@ class ActionsPluginError : public libdnf5::Error {
 };
 
 
+class ActionsPluginActionError : public ActionsPluginError {
+public:
+    template <AllowedErrorArgTypes... Args>
+    explicit ActionsPluginActionError(
+        std::filesystem::path file_path, int line_number, BgettextMessage format, Args... args)
+        : ActionsPluginError(format, std::forward<Args>(args)...),
+          file_path(file_path),
+          line_number(line_number) {}
+
+    const char * get_name() const noexcept override { return "ActionsPluginHookError"; }
+
+    const char * what() const noexcept override {
+        message = utils::sformat(
+            _("File \"{}\" on line {}: {}"),
+            file_path.string(),
+            line_number,
+            (formatter ? formatter(TM_(format, 1)) : TM_(format, 1)));
+        return message.c_str();
+    }
+
+private:
+    std::filesystem::path file_path;
+    int line_number;
+};
+
+
 // The ConfigError exception is handled internally. It will not leave the actions plugin.
 class ConfigError : public std::runtime_error {
     using runtime_error::runtime_error;
 };
+
+
+template <typename... Args>
+void process_action_error(Logger & log, const CommandToRun & command, BgettextMessage msg, Args &&... args) {
+    if (command.action.raise_error) {
+        throw ActionsPluginActionError(command.action.file_path, command.action.line_number, msg, args...);
+    } else {
+        log.error(
+            "Actions plugin: File \"{}\" on line {}: " + std::string(b_gettextmsg_get_id(msg)),
+            command.action.file_path.string(),
+            command.action.line_number,
+            args...);
+    }
+}
+
+
+template <typename... Args>
+void process_action_error(
+    Logger & log, const CommandToRun & command, const std::exception & ex, BgettextMessage msg, Args &&... args) {
+    if (command.action.raise_error) {
+        std::throw_with_nested(
+            ActionsPluginActionError(command.action.file_path, command.action.line_number, msg, args...));
+    } else {
+        log.error(
+            "Actions plugin: File \"{}\" on line {}: " + std::string(b_gettextmsg_get_id(msg)) + ": {}",
+            command.action.file_path.string(),
+            command.action.line_number,
+            args...,
+            ex.what());
+    }
+}
 
 
 bool CommandToRun::operator<(const CommandToRun & other) const noexcept {
@@ -572,6 +635,7 @@ void Actions::parse_action_files() {
 
             bool action_enabled{true};
             std::string mode = "plain";
+            std::string raise_error{"0"};
             auto options_str = line.substr(options_pos, command_pos - options_pos - 1);
             const auto options = split(options_str);
             for (const auto & opt : options) {
@@ -594,6 +658,8 @@ void Actions::parse_action_files() {
                     }
                 } else if (opt.starts_with("mode=")) {
                     mode = opt.substr(5);
+                } else if (opt.starts_with("raise_error=")) {
+                    raise_error = opt.substr(12);
                 } else {
                     throw ActionsPluginError(
                         M_("Error in file \"{}\" on line {}: Unknown option \"{}\""), path.native(), line_number, opt);
@@ -673,6 +739,17 @@ void Actions::parse_action_files() {
             } else {
                 throw ActionsPluginError(
                     M_("Error in file \"{}\" on line {}: Unknown mode \"{}\""), path.native(), line_number, mode);
+            }
+            if (raise_error == "0") {
+                act.raise_error = false;
+            } else if (raise_error == "1") {
+                act.raise_error = true;
+            } else {
+                throw ActionsPluginError(
+                    M_("Error in file \"{}\" on line {}: Unsupported value of the \"raise_error\" option: {}"),
+                    path.native(),
+                    line_number,
+                    raise_error);
             }
 
             act.args = split(line.substr(command_pos));
@@ -868,11 +945,10 @@ void Actions::process_command_output_line(const CommandToRun & command, std::str
         return;
     }
     if (eq_pos == std::string::npos) {
-        base.get_logger()->error(
-            "Actions plugin: Syntax error from hook in file \"{}\" on line {}: Missing equal sign (=) in command "
-            "output line \"{}\"",
-            command.action.file_path.string(),
-            command.action.line_number,
+        process_action_error(
+            *base.get_logger(),
+            command,
+            M_("Synax error: Missing equal sign (=) in action output line: {}"),
             std::string(line));
         return;
     }
@@ -882,33 +958,24 @@ void Actions::process_command_output_line(const CommandToRun & command, std::str
         try {
             set_conf(key, conf_value);
         } catch (const ConfigError & ex) {
-            base.get_logger()->error(
-                "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                command.action.file_path.string(),
-                command.action.line_number,
-                ex.what());
+            process_action_error(
+                *base.get_logger(), command, ex, M_("Cannot set option: Action output line: {}"), std::string(line));
         }
     } else if (line.starts_with("var.")) {
         std::string var_name(line.substr(4, eq_pos - 4));
         std::string var_value(line.substr(eq_pos + 1));
         base.get_vars()->set(var_name, var_value, libdnf5::Vars::Priority::PLUGIN);
     } else {
-        base.get_logger()->error(
-            "Actions plugin: Syntax error from hook in file \"{}\" on line {}: Command output line has to start with "
-            "\"tmp.\" or \"conf.\" or \"var.\": \"{}\"",
-            command.action.file_path.string(),
-            command.action.line_number,
+        process_action_error(
+            *base.get_logger(),
+            command,
+            M_("Syntax error: Action output line has to start with \"tmp.\" or \"conf.\" or \"var.\": {}"),
             std::string(line));
     }
 }
 
 
 class JsonRequestError : public std::runtime_error {
-    using runtime_error::runtime_error;
-};
-
-
-class WriteError : public std::runtime_error {
     using runtime_error::runtime_error;
 };
 
@@ -923,12 +990,11 @@ void Actions::process_json_communication(const CommandToRun & command, int in_fd
     do {
         auto ret = read(in_fd, read_buf + read_offset, sizeof(read_buf) - read_offset);
         if (ret < 0) {
-            auto err = std::strerror(errno);
-            base.get_logger()->error(
-                "Actions plugin: Error reading from pipe from hook in file \"{}\" on line {}: {}",
-                command.action.file_path.string(),
-                command.action.line_number,
-                err);
+            try {
+                throw SystemError(errno);
+            } catch (const SystemError & ex) {
+                process_action_error(*base.get_logger(), command, ex, M_("Error reading from action (from pipe)"));
+            }
             return;
         }
         auto len = static_cast<size_t>(ret) + read_offset;
@@ -942,11 +1008,10 @@ void Actions::process_json_communication(const CommandToRun & command, int in_fd
                     continue;
                 }
                 if (read_buf[i] != '{') {
-                    base.get_logger()->error(
-                        "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: Missing "
-                        "starting '{{' char",
-                        command.action.file_path.string(),
-                        command.action.line_number);
+                    process_action_error(
+                        *base.get_logger(),
+                        command,
+                        M_("Syntax error in json request from action: Missing starting '{{' char"));
                     return;
                 }
                 if (i > 0) {
@@ -968,32 +1033,26 @@ void Actions::process_json_communication(const CommandToRun & command, int in_fd
 
                 try {
                     process_json_command(command, jobj, out_fd);
-                } catch (const WriteError & ex) {
-                    base.get_logger()->error(
-                        "Actions plugin: Error in process request from hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        ex.what());
+                } catch (const SystemError & ex) {
+                    process_action_error(
+                        *base.get_logger(), command, ex, M_("Error during processing of a request from action."));
                     return;
                 }
             } else {
                 auto jerr = json_tokener_get_error(tok);
                 if (jerr != json_tokener_continue) {
-                    base.get_logger()->error(
-                        "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        json_tokener_error_desc(jerr));
+                    process_action_error(
+                        *base.get_logger(),
+                        command,
+                        M_("Syntax error in json request from action: {}"),
+                        std::string(json_tokener_error_desc(jerr)));
                     return;
                 }
             }
         } else {
             if (!first_read) {
-                base.get_logger()->error(
-                    "Actions plugin: Syntax error in json request from hook in file \"{}\" on line {}: Incomplete "
-                    "input",
-                    command.action.file_path.string(),
-                    command.action.line_number);
+                process_action_error(
+                    *base.get_logger(), command, M_("Syntax error in json request from action: Incomplete input"));
             }
             return;
         }
@@ -1068,7 +1127,7 @@ void write_buf(int out_fd, const char * buf, size_t length) {
     while (to_write > 0) {
         const auto written = write(out_fd, buf + (length - to_write), to_write);
         if (written < 0) {
-            throw WriteError(fmt::format("Cannot write response: {}", std::strerror(errno)));
+            throw SystemError(errno, M_("Cannot write response"));
         }
         to_write -= static_cast<size_t>(written);
     }
@@ -1771,7 +1830,7 @@ class Pipe {
 public:
     Pipe() {
         if (pipe2(fds, O_CLOEXEC) == -1) {
-            throw ActionsPluginError(M_("Cannot create pipe: {}"), std::string{std::strerror(errno)});
+            throw SystemError(errno, M_("Actions plugin: Cannot create pipe"));
         }
     }
 
@@ -1859,10 +1918,14 @@ void Actions::execute_command(CommandToRun & command) {
     }
     args.push_back(nullptr);
 
-    auto child_pid = fork();
+    int child_exit_status;
+
+    const auto child_pid = fork();
     if (child_pid == -1) {
-        base.get_logger()->error("Actions plugin: Cannot fork: {}", std::strerror(errno));
-    } else if (child_pid == 0) {
+        throw SystemError(errno, M_("Actions plugin: Cannot fork"));
+    }
+
+    if (child_pid == 0) {
         pipe_error_msg_from_child.close_in();
         pipe_to_child.close_out();       // close writing end of the pipe on the child side
         pipe_out_from_child.close_in();  // close reading end of the pipe on the child side
@@ -1893,11 +1956,15 @@ void Actions::execute_command(CommandToRun & command) {
         }
         _exit(255);
     } else {
-        OnScopeExit finish([&pipe_error_msg_from_child, &pipe_to_child, &pipe_out_from_child, child_pid]() noexcept {
+        OnScopeExit finish([&pipe_error_msg_from_child,
+                            &pipe_to_child,
+                            &pipe_out_from_child,
+                            &child_exit_status,
+                            child_pid]() noexcept {
             pipe_error_msg_from_child.close_in();
             pipe_to_child.close_out();
             pipe_out_from_child.close_in();
-            waitpid(child_pid, nullptr, 0);
+            waitpid(child_pid, &child_exit_status, 0);
         });
 
         pipe_error_msg_from_child.close_out();
@@ -1910,13 +1977,9 @@ void Actions::execute_command(CommandToRun & command) {
         if (ret == sizeof(err_msg)) {
             switch (err_msg.error) {
                 case ErrorMessage::BIND_STDIN:
-                    base.get_logger()->error(
-                        "Actions plugin: Cannot bind command stdin: {}", std::strerror(err_msg.err_code));
-                    break;
+                    throw SystemError(err_msg.err_code, M_("Actions plugin: Cannot bind command stdin"));
                 case ErrorMessage::BIND_STDOUT:
-                    base.get_logger()->error(
-                        "Actions plugin: Cannot bind command stdout: {}", std::strerror(err_msg.err_code));
-                    break;
+                    throw SystemError(err_msg.err_code, M_("Actions plugin: Cannot bind command stdout"));
                 case ErrorMessage::EXEC:
                     std::string args_string;
                     bool first{true};
@@ -1927,18 +1990,22 @@ void Actions::execute_command(CommandToRun & command) {
                         first = false;
                         args_string += command.args[i];
                     }
-                    base.get_logger()->error(
-                        "Actions plugin: File \"{}\" on line {}: Cannot execute \"{}\" arguments \"{}\": {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        command.command,
-                        args_string,
-                        std::strerror(err_msg.err_code));
+                    try {
+                        throw SystemError(err_msg.err_code);
+                    } catch (const SystemError & ex) {
+                        process_action_error(
+                            *base.get_logger(),
+                            command,
+                            ex,
+                            M_("Cannot execute action, command \"{}\" arguments \"{}\""),
+                            command.command,
+                            args_string);
+                    }
             }
             return;
         } else if (ret != 0) {
-            base.get_logger()->error(
-                "Actions plugin: File \"{}\" on line {}: Error during preparation child process",
+            throw ActionsPluginError(
+                M_("File \"{}\" on line {}: Error during preparation child process"),
                 command.action.file_path.string(),
                 command.action.line_number);
         }
@@ -1953,6 +2020,17 @@ void Actions::execute_command(CommandToRun & command) {
                 process_json_communication(command, pipe_out_from_child.get_in(), pipe_to_child.get_out());
                 break;
         }
+    }
+
+    // Check the exit status of the action.
+    if (WIFEXITED(child_exit_status)) {
+        // Terminated normally (exit, _exit, returning from main) -> check exit code
+        if (const int exit_status = WEXITSTATUS(child_exit_status); exit_status != 0) {
+            process_action_error(*base.get_logger(), command, M_("Exit code: {}"), exit_status);
+        }
+    } else if (WIFSIGNALED(child_exit_status)) {
+        const int signal_number = WTERMSIG(child_exit_status);
+        process_action_error(*base.get_logger(), command, M_("Terminated by signal: {}"), signal_number);
     }
 }
 
