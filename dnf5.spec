@@ -22,7 +22,7 @@ Recommends:     (dnf5-plugins if dnf-plugins-core)
 Recommends:     bash-completion
 Requires:       coreutils
 %if 0%{?fedora} > 41
-Recommends:     libdnf5-plugin-expired-pgp-keys
+Recommends:     (libdnf5-plugin-expired-pgp-keys if gnupg2)
 %endif
 
 %if 0%{?fedora} || 0%{?rhel} > 10
