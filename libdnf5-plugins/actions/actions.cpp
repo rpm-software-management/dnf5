@@ -222,22 +222,15 @@ private:
 
 
 class ActionsPluginError : public libdnf5::Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::plugin"; }
-    const char * get_name() const noexcept override { return "ActionsPluginError"; }
-};
-
-
-class ActionsPluginActionError : public ActionsPluginError {
 public:
     template <AllowedErrorArgTypes... Args>
-    explicit ActionsPluginActionError(
-        std::filesystem::path file_path, int line_number, BgettextMessage format, Args... args)
-        : ActionsPluginError(format, std::forward<Args>(args)...),
+    explicit ActionsPluginError(std::filesystem::path file_path, int line_number, BgettextMessage format, Args... args)
+        : Error(format, std::forward<Args>(args)...),
           file_path(file_path),
           line_number(line_number) {}
 
-    const char * get_name() const noexcept override { return "ActionsPluginHookError"; }
+    const char * get_domain_name() const noexcept override { return "libdnf5::plugin"; }
+    const char * get_name() const noexcept override { return "ActionsPluginError"; }
 
     const char * what() const noexcept override {
         message = utils::sformat(
@@ -254,6 +247,13 @@ private:
 };
 
 
+class ActionsPluginActionError : public ActionsPluginError {
+public:
+    using ActionsPluginError::ActionsPluginError;
+    const char * get_name() const noexcept override { return "ActionsPluginActionError"; }
+};
+
+
 // The ConfigError exception is handled internally. It will not leave the actions plugin.
 class ConfigError : public std::runtime_error {
     using runtime_error::runtime_error;
@@ -261,15 +261,33 @@ class ConfigError : public std::runtime_error {
 
 
 template <typename... Args>
+void log(
+    Logger & logger,
+    Logger::Level level,
+    const std::filesystem::path & file_path,
+    int line_number,
+    const std::string & format,
+    Args... args) {
+    logger.log(level, "Actions plugin: File \"{}\" on line {}: " + format, file_path.string(), line_number, args...);
+}
+
+template <typename... Args>
+void log_error(
+    Logger & logger,
+    const std::filesystem::path & file_path,
+    int line_number,
+    const std::string & format,
+    Args... args) {
+    log(logger, Logger::Level::ERROR, file_path, line_number, format, args...);
+}
+
+
+template <typename... Args>
 void process_action_error(Logger & log, const CommandToRun & command, BgettextMessage msg, Args &&... args) {
     if (command.action.raise_error) {
         throw ActionsPluginActionError(command.action.file_path, command.action.line_number, msg, args...);
     } else {
-        log.error(
-            "Actions plugin: File \"{}\" on line {}: " + std::string(b_gettextmsg_get_id(msg)),
-            command.action.file_path.string(),
-            command.action.line_number,
-            args...);
+        log_error(log, command.action.file_path, command.action.line_number, b_gettextmsg_get_id(msg), args...);
     }
 }
 
@@ -281,10 +299,11 @@ void process_action_error(
         std::throw_with_nested(
             ActionsPluginActionError(command.action.file_path, command.action.line_number, msg, args...));
     } else {
-        log.error(
-            "Actions plugin: File \"{}\" on line {}: " + std::string(b_gettextmsg_get_id(msg)) + ": {}",
-            command.action.file_path.string(),
+        log_error(
+            log,
+            command.action.file_path,
             command.action.line_number,
+            b_gettextmsg_get_id(msg) + std::string(": {}"),
             args...,
             ex.what());
     }
@@ -373,11 +392,8 @@ std::pair<std::string, bool> Actions::substitute(
         var_pos += 2;
         auto var_end_pos = in.find('}', var_pos);
         if (var_end_pos == std::string::npos) {
-            logger.error(
-                "Actions plugin: Syntax error: Incomplete variable name \"{}\" in file \"{}\" on line {}",
-                std::string(in.substr(var_pos - 2)),
-                file.native(),
-                line_number);
+            log_error(
+                logger, file, line_number, "Syntax error: Incomplete variable name \"{}\"", in.substr(var_pos - 2));
             error = true;
             break;
         }
@@ -485,11 +501,7 @@ std::pair<std::string, bool> Actions::substitute(
         if (var_value) {
             ret += *var_value;
         } else {
-            logger.error(
-                "Actions plugin: Unknown variable \"{}\" in file \"{}\" on line {}",
-                std::string(var_name),
-                file.native(),
-                line_number);
+            log_error(logger, file, line_number, "Unknown variable \"{}\"", var_name);
             error = true;
             break;
         }
@@ -603,33 +615,25 @@ void Actions::parse_action_files() {
             auto pkg_filter_pos = line.find(':');
             if (pkg_filter_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
-                    path.native(),
-                    line_number);
+                    path, line_number, M_("\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"));
             }
             ++pkg_filter_pos;
             auto direction_pos = line.find(':', pkg_filter_pos);
             if (direction_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
-                    path.native(),
-                    line_number);
+                    path, line_number, M_("\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"));
             }
             ++direction_pos;
             auto options_pos = line.find(':', direction_pos);
             if (options_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
-                    path.native(),
-                    line_number);
+                    path, line_number, M_("\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"));
             }
             ++options_pos;
             auto command_pos = line.find(':', options_pos);
             if (command_pos == std::string::npos) {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"),
-                    path.native(),
-                    line_number);
+                    path, line_number, M_("\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"));
             }
             ++command_pos;
 
@@ -651,18 +655,14 @@ void Actions::parse_action_files() {
                         action_enabled = installroot;
                     } else {
                         throw ActionsPluginError(
-                            M_("Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""),
-                            path.native(),
-                            line_number,
-                            value);
+                            path, line_number, M_("Unknown \"enabled\" option value \"{}\""), value);
                     }
                 } else if (opt.starts_with("mode=")) {
                     mode = opt.substr(5);
                 } else if (opt.starts_with("raise_error=")) {
                     raise_error = opt.substr(12);
                 } else {
-                    throw ActionsPluginError(
-                        M_("Error in file \"{}\" on line {}: Unknown option \"{}\""), path.native(), line_number, opt);
+                    throw ActionsPluginError(path, line_number, M_("Unknown option \"{}\""), opt);
                 }
             }
             if (!action_enabled) {
@@ -690,29 +690,22 @@ void Actions::parse_action_files() {
                 hook = Hooks::POST_TRANS;
             } else {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Unknown hook \"{}\""),
-                    path.native(),
-                    line_number,
-                    line.substr(0, pkg_filter_pos - 1));
+                    path, line_number, M_("Unknown hook \"{}\""), line.substr(0, pkg_filter_pos - 1));
             }
 
             auto pkg_filter = line.substr(pkg_filter_pos, direction_pos - pkg_filter_pos - 1);
             if (hook != Hooks::GOAL_RESOLVED && hook != Hooks::PRE_TRANS && hook != Hooks::POST_TRANS) {
                 if (!pkg_filter.empty()) {
                     throw ActionsPluginError(
-                        M_("Error in file \"{}\" on line {}: Package filter can only be used in GOAL_RESOLVED, "
-                           "PRE_TRANS and POST_TRANS hooks"),
-                        path.native(),
-                        line_number);
+                        path,
+                        line_number,
+                        M_("Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"));
                 }
             }
 
             auto direction = line.substr(direction_pos, options_pos - direction_pos - 1);
             if (pkg_filter.empty() && !direction.empty()) {
-                throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Cannot use direction without package filter"),
-                    path.native(),
-                    line_number);
+                throw ActionsPluginError(path, line_number, M_("Cannot use direction without package filter"));
             }
 
             Action act;
@@ -726,19 +719,14 @@ void Actions::parse_action_files() {
             } else if (direction == "") {
                 act.direction = Action::Direction::ALL;
             } else {
-                throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Unknown package direction \"{}\""),
-                    path.native(),
-                    line_number,
-                    direction);
+                throw ActionsPluginError(path, line_number, M_("Unknown package direction \"{}\""), direction);
             }
             if (mode == "plain") {
                 act.mode = Action::Mode::PLAIN;
             } else if (mode == "json") {
                 act.mode = Action::Mode::JSON;
             } else {
-                throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Unknown mode \"{}\""), path.native(), line_number, mode);
+                throw ActionsPluginError(path, line_number, M_("Unknown mode \"{}\""), mode);
             }
             if (raise_error == "0") {
                 act.raise_error = false;
@@ -746,16 +734,12 @@ void Actions::parse_action_files() {
                 act.raise_error = true;
             } else {
                 throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Unsupported value of the \"raise_error\" option: {}"),
-                    path.native(),
-                    line_number,
-                    raise_error);
+                    path, line_number, M_("Unsupported value of the \"raise_error\" option: {}"), raise_error);
             }
 
             act.args = split(line.substr(command_pos));
             if (act.args.empty()) {
-                throw ActionsPluginError(
-                    M_("Error in file \"{}\" on line {}: Missing command"), path.native(), line_number);
+                throw ActionsPluginError(path, line_number, M_("Missing command"));
             }
             act.command = act.args[0];
 
@@ -1237,11 +1221,8 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error(
-                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        ex.what());
+                    log_error(
+                        *logger, command.action.file_path, command.action.line_number, "JSON get.conf: {}", ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1584,11 +1565,8 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error(
-                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        ex.what());
+                    log_error(
+                        *logger, command.action.file_path, command.action.line_number, "JSON set.conf: {}", ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1628,11 +1606,8 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ReadOnlyVariableError & ex) {
-                    logger->error(
-                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
-                        command.action.line_number,
-                        ex.what());
+                    log_error(
+                        *logger, command.action.file_path, command.action.line_number, "JSON set.vars: {}", ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                     json_object_object_add_ex(
@@ -1733,10 +1708,11 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
                 } catch (const ConfigError & ex) {
-                    logger->error(
-                        "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                        command.action.file_path.string(),
+                    log_error(
+                        *logger,
+                        command.action.file_path,
                         command.action.line_number,
+                        "JSON new.repoconf: {}",
                         ex.what());
                     json_object_object_add_ex(
                         jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
@@ -1754,48 +1730,17 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
             auto * jargs = get_object(request, "args");
             auto level = get_string_view(jargs, "level");
             auto message = std::string(get_string_view(jargs, "message"));
-            if (level == "CRITICAL") {
-                logger->critical(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "ERROR") {
-                logger->error(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "WARNING") {
-                logger->warning(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "NOTICE") {
-                logger->notice(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "INFO") {
-                logger->info(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "DEBUG") {
-                logger->debug(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
-            } else if (level == "TRACE") {
-                logger->trace(
-                    "Actions plugin: Hook in file \"{}\" on line {}: {}",
-                    command.action.file_path.string(),
-                    command.action.line_number,
-                    message);
+            static const std::map<std::string_view, Logger::Level> STRING_TO_LOGGER_LEVEL_MAP{
+                {"CRITICAL", Logger::Level::CRITICAL},
+                {"ERROR", Logger::Level::ERROR},
+                {"WARNING", Logger::Level::WARNING},
+                {"NOTICE", Logger::Level::NOTICE},
+                {"INFO", Logger::Level::INFO},
+                {"DEBUG", Logger::Level::DEBUG},
+                {"TRACE", Logger::Level::TRACE},
+            };
+            if (auto it = STRING_TO_LOGGER_LEVEL_MAP.find(level); it != STRING_TO_LOGGER_LEVEL_MAP.end()) {
+                log(*logger, it->second, command.action.file_path, command.action.line_number, "Message: {}", message);
             } else {
                 json_object_object_add_ex(
                     jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
@@ -1813,11 +1758,7 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
         }
         throw JsonRequestError(fmt::format("Unknown operation \"{}\"", op));
     } catch (const JsonRequestError & ex) {
-        logger->error(
-            "Actions plugin: Hook in file \"{}\" on line {}: {}",
-            command.action.file_path.string(),
-            command.action.line_number,
-            ex.what());
+        log_error(*logger, command.action.file_path, command.action.line_number, "JSON request error: {}", ex.what());
         json_object_object_add_ex(jresult, "status", json_object_new_string("ERROR"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
         json_object_object_add_ex(
             jresult, "message", json_object_new_string(ex.what()), JSON_C_OBJECT_ADD_CONSTANT_KEY);
@@ -2005,9 +1946,7 @@ void Actions::execute_command(CommandToRun & command) {
             return;
         } else if (ret != 0) {
             throw ActionsPluginError(
-                M_("File \"{}\" on line {}: Error during preparation child process"),
-                command.action.file_path.string(),
-                command.action.line_number);
+                command.action.file_path, command.action.line_number, M_("Error during preparation child process"));
         }
         pipe_error_msg_from_child.close_in();
 
