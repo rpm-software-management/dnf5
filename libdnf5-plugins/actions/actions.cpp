@@ -1771,6 +1771,22 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
             write_json_object(jresult, out_fd);
             return;
         }
+        if (op == "stop") {
+            auto * jargs = get_object(request, "args");
+            auto message = std::string(get_string_view(jargs, "message"));
+            throw ActionsPluginActionStopRequest(
+                command.action.file_path, command.action.line_number, M_("Action calls for stop: {}"), message);
+        }
+        if (op == "error") {
+            json_object_object_add_ex(
+                jresult, "domain", json_object_new_string("error"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            auto * jargs = get_object(request, "args");
+            auto message = std::string(get_string_view(jargs, "message"));
+            process_action_error(*logger, command, M_("Action sent error message: {}"), message);
+            json_object_object_add_ex(jresult, "status", json_object_new_string("OK"), JSON_C_OBJECT_ADD_CONSTANT_KEY);
+            write_json_object(jresult, out_fd);
+            return;
+        }
         throw JsonRequestError(fmt::format("Unknown operation \"{}\"", op));
     } catch (const JsonRequestError & ex) {
         log_error(*logger, command.action.file_path, command.action.line_number, "JSON request error: {}", ex.what());
