@@ -254,6 +254,13 @@ public:
 };
 
 
+class ActionsPluginActionStopRequest : public ActionsPluginError, public libdnf5::plugin::StopRequest {
+public:
+    using ActionsPluginError::ActionsPluginError;
+    const char * get_name() const noexcept override { return "ActionsPluginActionStopRequest"; }
+};
+
+
 // The ConfigError exception is handled internally. It will not leave the actions plugin.
 class ConfigError : public std::runtime_error {
     using runtime_error::runtime_error;
@@ -949,11 +956,19 @@ void Actions::process_command_output_line(const CommandToRun & command, std::str
         std::string var_name(line.substr(4, eq_pos - 4));
         std::string var_value(line.substr(eq_pos + 1));
         base.get_vars()->set(var_name, var_value, libdnf5::Vars::Priority::PLUGIN);
+    } else if (line.starts_with("stop=")) {
+        std::string message(line.substr(eq_pos + 1));
+        throw ActionsPluginActionStopRequest(
+            command.action.file_path, command.action.line_number, M_("Action calls for stop: {}"), message);
+    } else if (line.starts_with("error=")) {
+        std::string message(line.substr(eq_pos + 1));
+        process_action_error(*base.get_logger(), command, M_("Action sent error message: {}"), message);
     } else {
         process_action_error(
             *base.get_logger(),
             command,
-            M_("Syntax error: Action output line has to start with \"tmp.\" or \"conf.\" or \"var.\": {}"),
+            M_("Syntax error: "
+               "Action output line must start with \"tmp.\" or \"conf.\" or \"var.\" or \"stop=\" or \"error=\": {}"),
             std::string(line));
     }
 }
