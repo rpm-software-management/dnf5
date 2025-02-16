@@ -49,7 +49,7 @@ using namespace libdnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr plugin::Version PLUGIN_VERSION{1, 3, 0};
+constexpr plugin::Version PLUGIN_VERSION{1, 4, 0};
 constexpr PluginAPIVersion REQUIRED_PLUGIN_API_VERSION{.major = 2, .minor = 1};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
