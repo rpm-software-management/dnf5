@@ -45,6 +45,22 @@ namespace libdnf5::plugin {
 
 class IPluginData;
 
+
+/// The `StopRequest` class is used to mark a plugin-generated exception as a stop request.
+/// The stop request is not caused by an error in the plugin runtime, but is a plugin request.
+/// The exception is marked by inheriting from the `StopRequest` class (using multiple inheritance).
+class LIBDNF_PLUGIN_API StopRequest {
+public:
+    StopRequest() noexcept;
+    StopRequest(const StopRequest & other) noexcept;
+    StopRequest(StopRequest && other) noexcept;
+    ~StopRequest();
+
+    StopRequest & operator=(const StopRequest & other) noexcept;
+    StopRequest & operator=(StopRequest && other) noexcept;
+};
+
+
 /// @brief A base class for implementing LIBDNF5 plugins that introduce additional logic into the library using hooks.
 class LIBDNF_PLUGIN_API IPlugin {
 public:
