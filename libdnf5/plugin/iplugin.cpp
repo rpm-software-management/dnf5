@@ -22,6 +22,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf5::plugin {
 
 
+StopRequest::StopRequest() noexcept = default;
+StopRequest::StopRequest(const StopRequest & other) noexcept = default;
+StopRequest::StopRequest(StopRequest && other) noexcept = default;
+StopRequest::~StopRequest() = default;
+StopRequest & StopRequest::operator=(const StopRequest & other) noexcept = default;
+StopRequest & StopRequest::operator=(StopRequest && other) noexcept = default;
+
+
 class IPlugin::Impl {
 public:
     explicit Impl(IPluginData & data) : data(&data) {}

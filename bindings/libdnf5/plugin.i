@@ -30,6 +30,7 @@
     }
 }
 
+%ignore libdnf5::plugin::StopRequest;
 %ignore PluginError;
 %ignore libdnf_plugin_get_api_version;
 %ignore libdnf_plugin_get_name;
