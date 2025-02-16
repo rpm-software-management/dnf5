@@ -317,6 +317,17 @@ void process_action_error(
 }
 
 
+const std::map<std::string_view, Logger::Level> STRING_TO_LOGGER_LEVEL_MAP{
+    {"CRITICAL", Logger::Level::CRITICAL},
+    {"ERROR", Logger::Level::ERROR},
+    {"WARNING", Logger::Level::WARNING},
+    {"NOTICE", Logger::Level::NOTICE},
+    {"INFO", Logger::Level::INFO},
+    {"DEBUG", Logger::Level::DEBUG},
+    {"TRACE", Logger::Level::TRACE},
+};
+
+
 bool CommandToRun::operator<(const CommandToRun & other) const noexcept {
     if (command == other.command) {
         if (args.size() == other.args.size()) {
@@ -956,6 +967,20 @@ void Actions::process_command_output_line(const CommandToRun & command, std::str
         std::string var_name(line.substr(4, eq_pos - 4));
         std::string var_value(line.substr(eq_pos + 1));
         base.get_vars()->set(var_name, var_value, libdnf5::Vars::Priority::PLUGIN);
+    } else if (line.starts_with("log.")) {
+        std::string level(line.substr(4, eq_pos - 4));
+        std::string message(line.substr(eq_pos + 1));
+        if (auto it = STRING_TO_LOGGER_LEVEL_MAP.find(level); it != STRING_TO_LOGGER_LEVEL_MAP.end()) {
+            log(*base.get_logger(),
+                it->second,
+                command.action.file_path,
+                command.action.line_number,
+                "Message: {}",
+                message);
+        } else {
+            process_action_error(
+                *base.get_logger(), command, M_("Action sent the wrong log level: {}"), std::string(line));
+        }
     } else if (line.starts_with("stop=")) {
         std::string message(line.substr(eq_pos + 1));
         throw ActionsPluginActionStopRequest(
@@ -1745,15 +1770,6 @@ void Actions::process_json_command(const CommandToRun & command, struct json_obj
             auto * jargs = get_object(request, "args");
             auto level = get_string_view(jargs, "level");
             auto message = std::string(get_string_view(jargs, "message"));
-            static const std::map<std::string_view, Logger::Level> STRING_TO_LOGGER_LEVEL_MAP{
-                {"CRITICAL", Logger::Level::CRITICAL},
-                {"ERROR", Logger::Level::ERROR},
-                {"WARNING", Logger::Level::WARNING},
-                {"NOTICE", Logger::Level::NOTICE},
-                {"INFO", Logger::Level::INFO},
-                {"DEBUG", Logger::Level::DEBUG},
-                {"TRACE", Logger::Level::TRACE},
-            };
             if (auto it = STRING_TO_LOGGER_LEVEL_MAP.find(level); it != STRING_TO_LOGGER_LEVEL_MAP.end()) {
                 log(*logger, it->second, command.action.file_path, command.action.line_number, "Message: {}", message);
             } else {
