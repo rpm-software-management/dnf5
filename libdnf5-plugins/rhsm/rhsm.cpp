@@ -105,7 +105,7 @@ void Rhsm::setup_enrollments() {
     bool same_content = false;
     do {
         int fd;
-        if ((fd = open(repofname, O_RDONLY)) == -1) {
+        if ((fd = open(repofname, O_RDONLY | O_CLOEXEC)) == -1) {
             break;
         }
         gsize length;

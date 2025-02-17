@@ -40,7 +40,7 @@ bool Locker::write_lock() {
 }
 
 bool Locker::lock(short int type) {
-    lock_fd = open(path.c_str(), O_CREAT | O_RDWR, 0660);
+    lock_fd = open(path.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0660);
     if (lock_fd == -1) {
         throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
     }
