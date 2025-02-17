@@ -4,6 +4,11 @@
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
+%if %{with dnf5_obsoletes_dnf}
+%global dnf_timer_prefix dnf
+%else
+%global dnf_timer_prefix dnf5
+%endif
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
@@ -270,13 +275,13 @@ upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %post
-%systemd_post dnf-makecache.timer
+%systemd_post %{dnf_timer_prefix}-makecache.timer
 
 %preun
-%systemd_preun dnf-makecache.timer
+%systemd_preun %{dnf_timer_prefix}-makecache.timer
 
 %postun
-%systemd_postun_with_restart dnf-makecache.timer
+%systemd_postun_with_restart %{dnf_timer_prefix}-makecache.timer
 
 %files -f dnf5.lang
 %{_bindir}/dnf5
@@ -284,8 +289,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/dnf
 %{_bindir}/yum
 %endif
-%{_unitdir}/dnf-makecache.service
-%{_unitdir}/dnf-makecache.timer
+%{_unitdir}/%{dnf_timer_prefix}-makecache.service
+%{_unitdir}/%{dnf_timer_prefix}-makecache.timer
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 %{_bindir}/microdnf
@@ -868,6 +873,8 @@ automatically and regularly from systemd timers, cron jobs or similar.
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
     -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
+    \
+    -DTIMER_PREFIX=%{dnf_timer_prefix} \
     \
     -DVERSION_PRIME=%{project_version_prime} \
     -DVERSION_MAJOR=%{project_version_major} \
