@@ -412,7 +412,7 @@ bool Package::is_available_locally() const {
 
 bool Package::is_cached() const {
     gboolean cached{FALSE};
-    if (auto fd = ::open(get_package_path().c_str(), O_RDONLY); fd != -1) {
+    if (auto fd = ::open(get_package_path().c_str(), O_RDONLY | O_CLOEXEC); fd != -1) {
         utils::OnScopeExit close_fd([fd]() noexcept { ::close(fd); });
         auto length = static_cast<unsigned long long>(lseek(fd, 0, SEEK_END));
         if (length == get_download_size()) {

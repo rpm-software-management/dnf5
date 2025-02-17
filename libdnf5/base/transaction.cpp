@@ -48,6 +48,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/format.hpp"
 #include "libdnf5/utils/locker.hpp"
 
+#include <fcntl.h>
 #include <fmt/format.h>
 #include <unistd.h>
 
@@ -1081,7 +1082,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 #endif
 
     int pipe_out_from_scriptlets[2];
-    if (pipe(pipe_out_from_scriptlets) == -1) {
+    if (pipe2(pipe_out_from_scriptlets, O_CLOEXEC) == -1) {
         logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));
         return TransactionRunResult::ERROR_RPM_RUN;
     }
