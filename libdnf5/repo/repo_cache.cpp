@@ -75,7 +75,7 @@ RepoCache::RemoveStatistics RepoCache::Impl::remove_recursive(const std::filesys
     RepoCache::RemoveStatistics status{};
     std::error_code ec;
     for (const auto & dir_entry : std::filesystem::directory_iterator(dir_path, ec)) {
-        if (dir_entry.is_directory()) {
+        if (dir_entry.is_directory() && !dir_entry.is_symlink()) {
             status += remove_recursive(dir_entry, log);
             status.p_impl->dirs_removed += remove(dir_entry, status.p_impl->errors, log);
         } else {
