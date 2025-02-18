@@ -29,10 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/module/module_sack.hpp"
 #endif
 
+#include "comps/comps_sack_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/dnf4convert/dnf4convert.hpp"
 #include "utils/fs/utils.hpp"
 
+#include "libdnf5/comps/comps_sack.hpp"
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
@@ -59,6 +61,7 @@ Base::Impl::Impl(const libdnf5::BaseWeakPtr & base, std::vector<std::unique_ptr<
     : rpm_advisory_sack(base),
       plugins(*base),
       log_router(std::move(loggers)),
+      comps_sack(base),
       repo_sack(base),
       rpm_package_sack(base),
 #ifdef WITH_MODULEMD
@@ -271,6 +274,9 @@ ConfigMain & Base::get_config() {
 }
 LogRouterWeakPtr Base::get_logger() {
     return {&p_impl->log_router, &p_impl->log_router_guard};
+}
+comps::CompsSackWeakPtr Base::get_comps_sack() {
+    return p_impl->comps_sack.get_weak_ptr();
 }
 repo::RepoSackWeakPtr Base::get_repo_sack() {
     return p_impl->repo_sack.get_weak_ptr();
