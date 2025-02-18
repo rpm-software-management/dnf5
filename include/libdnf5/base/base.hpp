@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/common/weak_ptr.hpp"
+#include "libdnf5/comps/comps_sack.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/conf/vars.hpp"
 #include "libdnf5/defs.h"
@@ -82,6 +83,7 @@ public:
     /// @return a reference to configuration
     ConfigMain & get_config();
     LogRouterWeakPtr get_logger();
+    comps::CompsSackWeakPtr get_comps_sack();
     repo::RepoSackWeakPtr get_repo_sack();
     rpm::PackageSackWeakPtr get_rpm_package_sack();
     /// Throws libdnf5::AssertionError when used with libdnf5 compiled without modules enabled.

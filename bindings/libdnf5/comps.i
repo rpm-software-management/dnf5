@@ -34,6 +34,7 @@
     #include "libdnf5/comps/group/query.hpp"
     #include "libdnf5/comps/environment/environment.hpp"
     #include "libdnf5/comps/environment/query.hpp"
+    #include "libdnf5/comps/comps_sack.hpp"
     #include "libdnf5/repo/repo_query.hpp"
     #include "libdnf5/repo/repo.hpp"
 %}
@@ -56,3 +57,6 @@ add_iterator(SetGroup)
 %template(SackQueryEnvironment) libdnf5::sack::Query<libdnf5::comps::Environment>;
 %include "libdnf5/comps/environment/query.hpp"
 add_iterator(SetEnvironment)
+
+%include "libdnf5/comps/comps_sack.hpp"
+%template(CompsSackWeakPtr) libdnf5::WeakPtr<libdnf5::comps::CompsSack, false>;
