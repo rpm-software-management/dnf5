@@ -48,7 +48,7 @@ def main():
     for in_file in os.listdir(os.path.join(DIR + "/api/python")):
         if in_file.endswith(".rst"):
             file = os.path.join("api/python/", in_file)
-            configure(file, file, {"autoclass": "autoapiclass"})
+            configure(file, file, {"automodule": "autoapimodule"})
 
     # run doxygen manually
     print("Running doxygen...")
