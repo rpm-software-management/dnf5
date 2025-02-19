@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "utils/auth.hpp"
 
+#include "libdnf5/conf/const.hpp"
+
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf5/conf/option_string.hpp>
 
@@ -54,6 +56,14 @@ void SystemUpgradeCommand::set_argument_parser() {
     cmd.register_named_arg(no_downgrade);
 
     // TODO(mblaha): set the releasever named arg as required (currently no API for this)
+}
+
+dnfdaemon::KeyValueMap SystemUpgradeCommand::session_config() {
+    dnfdaemon::KeyValueMap cfg = {};
+    cfg["load_system_repo"] = sdbus::Variant(true);
+    cfg["load_available_repos"] = sdbus::Variant(true);
+    cfg["optional_metadata_types"] = sdbus::Variant(std::vector<std::string>{libdnf5::METADATA_TYPE_COMPS});
+    return cfg;
 }
 
 void SystemUpgradeCommand::run() {
