@@ -128,7 +128,6 @@ private:
     WeakPtrGuard<RepoSack, false> sack_guard;
     repo::Repo * system_repo{nullptr};
     repo::Repo * cmdline_repo{nullptr};
-    repo::Repo * stored_transaction_repo{nullptr};
     bool repos_updated_and_loaded{false};
     friend RepoSack;
 };
@@ -173,27 +172,35 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 }
 
 
-RepoWeakPtr RepoSack::get_stored_transaction_repo() {
-    if (!p_impl->stored_transaction_repo) {
+RepoWeakPtr RepoSack::get_stored_transaction_repo(const std::string & repo_id) {
+    std::string real_repo_id = repo_id.empty() ? STORED_TRANSACTION_NAME : repo_id;
+    RepoWeakPtr stored_repo;
+    for (const auto & existing_repo : get_data()) {
+        if (existing_repo->get_id() == real_repo_id) {
+            stored_repo = existing_repo->get_weak_ptr();
+            break;
+        }
+    }
+    if (!stored_repo.is_valid()) {
         // Repo type is COMMANDLINE because we don't want to download download any packages. We want it to behave like commandline repo.
-        std::unique_ptr<Repo> repo(new Repo(p_impl->base, STORED_TRANSACTION_NAME, Repo::Type::COMMANDLINE));
+        std::unique_ptr<Repo> repo(new Repo(p_impl->base, real_repo_id, Repo::Type::COMMANDLINE));
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
-        p_impl->stored_transaction_repo = repo.get();
-        add_item(std::move(repo));
+        stored_repo = add_item_with_return(std::move(repo));
     }
 
-    return p_impl->stored_transaction_repo->get_weak_ptr();
+    return stored_repo;
 }
 
 
-void RepoSack::add_stored_transaction_comps(const std::string & path) {
-    auto stored_repo = get_stored_transaction_repo();
+void RepoSack::add_stored_transaction_comps(const std::string & path, const std::string & repo_id) {
+    auto stored_repo = get_stored_transaction_repo(repo_id);
     stored_repo->add_xml_comps(path);
 }
 
 
-libdnf5::rpm::Package RepoSack::add_stored_transaction_package(const std::string & path, bool calculate_checksum) {
-    auto stored_repo = get_stored_transaction_repo();
+libdnf5::rpm::Package RepoSack::add_stored_transaction_package(
+    const std::string & path, const std::string & repo_id, bool calculate_checksum) {
+    auto stored_repo = get_stored_transaction_repo(repo_id);
 
     auto pkg = stored_repo->add_rpm_package(path, calculate_checksum);
 
@@ -867,10 +874,6 @@ void RepoSack::internalize_repos() {
 
     if (p_impl->cmdline_repo) {
         p_impl->cmdline_repo->internalize();
-    }
-
-    if (p_impl->stored_transaction_repo) {
-        p_impl->stored_transaction_repo->internalize();
     }
 }
 
