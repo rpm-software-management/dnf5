@@ -2,10 +2,8 @@
 Python
 =============
 
+.. automodule:: libdnf5.base
+    :members:
 
-.. toctree::
-    libdnf5_advisory
-    libdnf5_base
-    libdnf5_conf
-    libdnf5_repo
-    libdnf5_rpm
+.. automodule:: libdnf5.advisory
+    :members:

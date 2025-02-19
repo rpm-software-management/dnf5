@@ -1,6 +1,7 @@
-Base
-====
+libdnf5::base
+=============
 
 
-.. doxygenclass:: libdnf5::Base
+.. doxygennamespace:: libdnf5::base
     :members:
+    :content-only:
