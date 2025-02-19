@@ -31,6 +31,7 @@ public:
     explicit SystemUpgradeCommand(Context & context) : TransactionCommand(context, "system-upgrade") {}
     void set_parent_command() override;
     void set_argument_parser() override;
+    dnfdaemon::KeyValueMap session_config() override;
     void run() override;
 
 private:

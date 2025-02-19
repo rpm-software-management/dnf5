@@ -22,6 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus.hpp"
 #include "package.hpp"
 
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
+
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -850,6 +853,18 @@ sdbus::MethodReply Rpm::system_upgrade(sdbus::MethodCall & call) {
             fmt::format(
                 "Unsupported system-upgrade mode \"{}\". Only \"distrosync\" and \"upgrade\" modes are supported.",
                 upgrade_mode));
+    }
+
+    libdnf5::comps::GroupQuery q_groups(*base);
+    q_groups.filter_installed(true);
+    for (const auto & grp : q_groups) {
+        goal.add_group_upgrade(grp.get_groupid());
+    }
+
+    libdnf5::comps::EnvironmentQuery q_environments(*base);
+    q_environments.filter_installed(true);
+    for (const auto & env : q_environments) {
+        goal.add_group_upgrade(env.get_environmentid());
     }
 
     auto reply = call.createReply();

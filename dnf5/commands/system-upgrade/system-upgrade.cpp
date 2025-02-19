@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../offline/offline.hpp"
 
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/utils/bgettext/bgettext-lib.h"
 
 #include <libdnf5-cli/output/transaction_table.hpp>
@@ -100,6 +102,8 @@ void SystemUpgradeDownloadCommand::configure() {
 
     ctx.set_load_system_repo(true);
     ctx.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    ctx.get_base().get_config().get_optional_metadata_types_option().add_item(
+        libdnf5::Option::Priority::RUNTIME, libdnf5::METADATA_TYPE_COMPS);
 }
 
 void SystemUpgradeDownloadCommand::run() {
@@ -111,6 +115,18 @@ void SystemUpgradeDownloadCommand::run() {
         goal->add_rpm_upgrade();
     } else {
         goal->add_rpm_distro_sync();
+    }
+
+    libdnf5::comps::GroupQuery q_groups(ctx.get_base());
+    q_groups.filter_installed(true);
+    for (const auto & grp : q_groups) {
+        goal->add_group_upgrade(grp.get_groupid());
+    }
+
+    libdnf5::comps::EnvironmentQuery q_environments(ctx.get_base());
+    q_environments.filter_installed(true);
+    for (const auto & env : q_environments) {
+        goal->add_group_upgrade(env.get_environmentid());
     }
 
     ctx.set_should_store_offline(true);
