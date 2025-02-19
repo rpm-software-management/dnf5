@@ -2,7 +2,5 @@ libdnf5.repo
 ============
 
 
-.. toctree::
-    libdnf5_repo_config_repo
-    libdnf5_repo_repo_query
-    libdnf5_repo_repo_sack
+.. automodule:: libdnf5.repo
+    :members:
