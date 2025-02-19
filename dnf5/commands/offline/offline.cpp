@@ -390,6 +390,9 @@ void OfflineExecuteCommand::pre_configure() {
     // checked when the transaction was prepared and serialized. This way, we
     // don't need to keep track of which packages need to be gpgchecked.
     ctx.get_base().get_config().get_pkg_gpgcheck_option().set(false);
+
+    // do not create repos from the system configuration
+    ctx.set_create_repos(false);
 }
 
 void OfflineExecuteCommand::configure() {

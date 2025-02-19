@@ -791,8 +791,8 @@ GoalProblem Goal::Impl::add_replay_to_goal(
         std::optional<libdnf5::rpm::Package> local_pkg;
         if (!package_replay.package_path.empty()) {
             // Package paths are relative to replay location
-            local_pkg =
-                base->get_repo_sack()->add_stored_transaction_package(replay_location / package_replay.package_path);
+            local_pkg = base->get_repo_sack()->add_stored_transaction_package(
+                replay_location / package_replay.package_path, package_replay.repo_id);
         }
 
         const auto nevras = rpm::Nevra::parse(package_replay.nevra, {rpm::Nevra::Form::NEVRA});
@@ -1043,7 +1043,8 @@ GoalProblem Goal::Impl::add_replay_to_goal(
         }
         if (!group_replay.group_path.empty()) {
             // Group paths are relative to replay location
-            base->get_repo_sack()->add_stored_transaction_comps(replay_location / group_replay.group_path);
+            base->get_repo_sack()->add_stored_transaction_comps(
+                replay_location / group_replay.group_path, group_replay.repo_id);
         }
 
         comps::GroupQuery group_query_installed(base);
@@ -1116,7 +1117,8 @@ GoalProblem Goal::Impl::add_replay_to_goal(
 
         if (!env_replay.environment_path.empty()) {
             // Environment paths are relative to replay location
-            base->get_repo_sack()->add_stored_transaction_comps(replay_location / env_replay.environment_path);
+            base->get_repo_sack()->add_stored_transaction_comps(
+                replay_location / env_replay.environment_path, env_replay.repo_id);
         }
         if (env_replay.action == transaction::TransactionItemAction::INSTALL) {
             group_specs.emplace_back(
