@@ -482,6 +482,7 @@ void Repo::add_xml_comps(const std::string & path) {
         throw RepoCompsError(
             M_("Failed to load xml Comps \"{}\": {}"), path, std::string(pool_errstr(p_impl->solv_repo->repo->pool)));
     }
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
