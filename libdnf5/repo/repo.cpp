@@ -501,7 +501,9 @@ rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
     }
 
     p_impl->solv_repo->set_needs_internalizing();
-    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    auto pkg_sack = p_impl->base->get_rpm_package_sack();
+    pkg_sack->p_impl->register_local_rpm_id(new_id);
+    pkg_sack->p_impl->invalidate_provides();
 
     return rpm::Package(p_impl->base, rpm::PackageId(new_id));
 }

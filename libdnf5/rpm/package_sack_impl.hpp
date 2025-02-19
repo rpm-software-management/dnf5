@@ -127,6 +127,9 @@ public:
     /// And sets `considered_uptodate` to` true`.
     void recompute_considered_in_pool();
 
+    void register_local_rpm_id(const Id id);
+    bool is_local_rpm_id(const Id id);
+
 private:
     bool provides_ready{false};
 
@@ -160,6 +163,9 @@ private:
     libdnf5::solv::SolvMap cached_solvables{0};
     int cached_solvables_size{0};
     PackageId running_kernel;
+
+    // ids of packages created from local rpm files
+    std::unordered_set<Id> local_rpm_ids;
 
     friend PackageSack;
     friend Package;

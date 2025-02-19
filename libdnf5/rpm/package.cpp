@@ -388,7 +388,8 @@ std::vector<std::string> Package::get_remote_locations(const std::set<std::strin
 std::string Package::get_package_path() const {
     Solvable * solvable = get_rpm_pool(p_impl->base).id2solvable(p_impl->id.id);
     if (auto repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
-        if (repo->get_type() == repo::Repo::Type::COMMANDLINE) {
+        if (repo->get_type() == repo::Repo::Type::COMMANDLINE ||
+            p_impl->base->get_rpm_package_sack()->p_impl->is_local_rpm_id(p_impl->id.id)) {
             // Command line packages are used from their original location.
             return get_location();
         }
