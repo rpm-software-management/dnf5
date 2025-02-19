@@ -392,6 +392,13 @@ void OfflineExecuteCommand::pre_configure() {
     // checked when the transaction was prepared and serialized. This way, we
     // don't need to keep track of which packages need to be gpgchecked.
     ctx.get_base().get_config().get_pkg_gpgcheck_option().set(false);
+
+    // Do not create repositories from the system configuration.
+    // They would be created as the AVAILABLE type, which is not suitable for
+    // adding packages from local RPM files. Libdnf5 will instead create
+    // COMMANDLINE-type repositories as needed based on the packages from the
+    // stored offline transaction.
+    ctx.set_create_repos(false);
 }
 
 void OfflineExecuteCommand::configure() {
