@@ -83,6 +83,15 @@ Each non-comment line defines an action and consists of five items separated by 
       * ``host-only`` - the action is only enabled for operations on the host
       * ``installroot-only`` - the action is only enabled for operations in the alternative "installroot"
 
+   * ``raise_error=<value>`` - the <value> specifies how the action process errors are handled. What happens if
+     the action process did not start or ended with a non-zero exit code or ended abnormally (received a signal)
+     or an error occurred during communication (syntax error, communication interrupt, failed to process the output
+     line in plain communication mode). If the option is not present, ``raise_error=0`` for backward compatibility.
+     (added in version 1.4.0)
+
+      * ``0`` - the errors are logged
+      * ``1`` - an exception is thrown out
+
 ``command``
    Any executable file with arguments.
 
@@ -147,10 +156,13 @@ The standard output of each executed action (command) is captured and processed.
 Each line of output can change the value of a base configuration option, the value
 of a configuration option in matching repositories, or a variable.
 It can also set or unset one actions plugin variable. The value of this variable is available
-for the following command using the ``${tmp.<actions_plugin_variable_name>}`` substitution.
+for the following commands using the ``${tmp.<actions_plugin_variable_name>}`` substitution.
 
 Actions should change the repositories configuration in the ``repos_configured`` hook.
 At this point, the repositories configuration is loaded but not yet applied.
+
+Since version 1.4.0, the output line can write a message to the logger, throw a stop exception
+and an error exception.
 
 Output line format
 ------------------
@@ -158,7 +170,12 @@ Output line format
 * tmp.<actions_plugin_variable_name> - removes the action plugins variable if it exists
 * conf.<option_name>=<value> -  sets the value of option <option_name> in the base configuration
 * conf.<repoid_pattern>.<option_name>=<value> -  sets the value of option <option_name> in the matching repositories (added in version 1.1.0)
-* var.<variable_name>=<value> - sets value of the vatiable <variable_name>
+* var.<variable_name>=<value> - sets value of the variable <variable_name>
+* stop=<message> - throws a stop exception with <message> (added in version 1.4.0)
+* error=<message> - the error <message> is logged or throws error exception whith <message> if "raise_error=1" (added in version 1.4.0)
+* log.<level>=<message> - writes <message> to the logger with priority <level> (added in version 1.4.0)
+
+    Levels: CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG, TRACE
 
 
 An example actions file:
