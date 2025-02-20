@@ -935,6 +935,11 @@ void RpmTransCB::script_start(
     [[maybe_unused]] const libdnf5::base::TransactionPackage * item,
     libdnf5::rpm::Nevra nevra,
     libdnf5::rpm::TransactionCallbacks::ScriptType type) {
+    if (!active_progress_bar) {
+        // Scripts could potentially be the first thing in a transaction if the verification stage
+        // is skipped, so create a progress bar for the scripts to use if one doesn't already exist.
+        new_progress_bar(static_cast<int64_t>(-1), _("Running scriptlets"));
+    }
     active_progress_bar->add_message(
         libdnf5::cli::progressbar::MessageType::INFO,
         libdnf5::utils::sformat(
