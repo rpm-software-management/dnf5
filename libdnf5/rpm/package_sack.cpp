@@ -637,4 +637,12 @@ rpm::Package PackageSack::get_running_kernel() {
     return rpm::Package(p_impl->base, p_impl->get_running_kernel_id());
 }
 
+void PackageSack::Impl::register_local_rpm_id(const Id id) {
+    local_rpm_ids.emplace(id);
+}
+
+bool PackageSack::Impl::is_local_rpm_id(const Id id) {
+    return local_rpm_ids.contains(id);
+}
+
 }  // namespace libdnf5::rpm

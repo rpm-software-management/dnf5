@@ -322,8 +322,8 @@ void OfflineRebootCommand::run() {
             .storeResultsTo(unit_object_path);
 
         auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
-        const auto & wants =
-            std::vector<std::string>{unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE)};
+        const auto wants =
+            std::vector<std::string>(unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE));
         if (std::find(wants.begin(), wants.end(), SYSTEMD_SERVICE_NAME) == wants.end()) {
             throw libdnf5::cli::CommandExitError(
                 1, M_("{} is not wanted by system-update.target."), SYSTEMD_SERVICE_NAME);
