@@ -69,6 +69,7 @@ public:
     void filter_uservisible(bool value);
     void filter_default(bool value);
     void filter_installed(bool value);
+    void filter_userinstalled();
 
 private:
     friend Group;

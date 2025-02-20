@@ -51,6 +51,9 @@ private:
         static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
         static bool is_default(const Group & obj) { return obj.get_default(); }
         static bool is_installed(const Group & obj) { return obj.get_installed(); }
+        static bool is_userinstalled(const Group & obj) {
+            return obj.get_reason() > transaction::TransactionItemReason::GROUP;
+        }
     };
 
     libdnf5::BaseWeakPtr base;
@@ -181,5 +184,10 @@ void GroupQuery::filter_default(bool value) {
 void GroupQuery::filter_installed(bool value) {
     filter(Impl::F::is_installed, value, sack::QueryCmp::EQ);
 }
+void GroupQuery::filter_userinstalled() {
+    filter(Impl::F::is_installed, true, sack::QueryCmp::EQ);
+    filter(Impl::F::is_userinstalled, true, sack::QueryCmp::EQ);
+}
+
 
 }  // namespace libdnf5::comps
