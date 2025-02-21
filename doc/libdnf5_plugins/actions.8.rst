@@ -166,16 +166,24 @@ and an error exception.
 
 Output line format
 ------------------
-* tmp.<actions_plugin_variable_name>=<value> - sets the value of action plugins variable <actions_plugin_variable_name>
-* tmp.<actions_plugin_variable_name> - removes the action plugins variable if it exists
-* conf.<option_name>=<value> -  sets the value of option <option_name> in the base configuration
-* conf.<repoid_pattern>.<option_name>=<value> -  sets the value of option <option_name> in the matching repositories (added in version 1.1.0)
-* var.<variable_name>=<value> - sets value of the variable <variable_name>
-* stop=<message> - throws a stop exception with <message> (added in version 1.4.0)
-* error=<message> - the error <message> is logged or throws error exception whith <message> if "raise_error=1" (added in version 1.4.0)
-* log.<level>=<message> - writes <message> to the logger with priority <level> (added in version 1.4.0)
+* ``tmp.<actions_plugin_variable_name>=<value>`` - sets the value of action plugins variable <actions_plugin_variable_name>
 
-    Levels: CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG, TRACE
+* ``tmp.<actions_plugin_variable_name>`` - removes the action plugins variable if it exists
+
+* ``conf.<option_name>=<value>`` -  sets the value of option <option_name> in the base configuration
+
+* ``conf.<repoid_pattern>.<option_name>=<value>`` -  sets the value of option <option_name> in the matching repositories (added in version 1.1.0)
+
+* ``var.<variable_name>=<value>`` - sets value of the vatiable <variable_name>
+
+* ``stop=<message>`` - throws a stop exception with <message> (added in version 1.4.0)
+
+* ``error=<message>`` - the error <message> is logged or throws error exception whith <message> if ``raise_error=1``
+  (added in version 1.4.0)
+
+* ``log.<level>=<message>`` - writes <message> to the logger with priority <level> (added in version 1.4.0)
+
+    Levels: ``CRITICAL``, ``ERROR``, ``WARNING``, ``NOTICE``, ``INFO``, ``DEBUG``, ``TRACE``
 
 
 An example actions file:
