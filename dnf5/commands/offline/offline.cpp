@@ -477,16 +477,9 @@ void OfflineExecuteCommand::run() {
     // Adapted from Context::Impl::download_and_run:
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
-    //                           action of verifying package files if new package files are present in the transaction +
     //                           action of preparing transaction
     const auto & trans_packages = transaction.get_transaction_packages();
     auto num_of_actions = trans_packages.size() + 1;
-    for (auto & trans_pkg : trans_packages) {
-        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
-            ++num_of_actions;
-            break;
-        }
-    }
 
     callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
     transaction.set_callbacks(std::move(callbacks));

@@ -498,16 +498,9 @@ void Context::Impl::download_and_run(libdnf5::base::Transaction & transaction) {
 
     // Compute the total number of transaction actions (number of bars)
     // Total number of actions = number of packages in the transaction +
-    //                           action of verifying package files if new package files are present in the transaction +
     //                           action of preparing transaction
     const auto & trans_packages = transaction.get_transaction_packages();
     auto num_of_actions = trans_packages.size() + 1;
-    for (auto & trans_pkg : trans_packages) {
-        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
-            ++num_of_actions;
-            break;
-        }
-    }
 
     auto callbacks = std::make_unique<RpmTransCB>(owner);
     callbacks->get_multi_progress_bar()->set_total_num_of_bars(num_of_actions);
@@ -938,6 +931,7 @@ void RpmTransCB::script_start(
     if (!active_progress_bar) {
         // Scripts could potentially be the first thing in a transaction if the verification stage
         // is skipped, so create a progress bar for the scripts to use if one doesn't already exist.
+        multi_progress_bar.set_total_num_of_bars(multi_progress_bar.get_total_num_of_bars() + 1);
         new_progress_bar(static_cast<int64_t>(-1), _("Running scriptlets"));
     }
     active_progress_bar->add_message(
@@ -1003,6 +997,11 @@ void RpmTransCB::verify_progress(uint64_t amount, [[maybe_unused]] uint64_t tota
 }
 
 void RpmTransCB::verify_start([[maybe_unused]] uint64_t total) {
+    // Verification of new packages entering the system is the first step. However, this step may not be performed
+    // if the transaction does not contain new packages or if verification is disabled.
+    // If verification is performed, we increase the total number of progress bars in multi_progress_bar and
+    // create a progress bar for verification.
+    multi_progress_bar.set_total_num_of_bars(multi_progress_bar.get_total_num_of_bars() + 1);
     new_progress_bar(static_cast<int64_t>(total), _("Verify package files"));
 }
 
