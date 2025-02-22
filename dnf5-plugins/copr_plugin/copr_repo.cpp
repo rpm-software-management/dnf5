@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fnmatch.h>
 #include <libdnf5-cli/utils/userconfirm.hpp>
+#include <libdnf5/base/base.hpp>
 #include <libdnf5/conf/const.hpp>
 
 #include <filesystem>
@@ -37,11 +38,14 @@ namespace dnf5 {
 
 std::filesystem::path copr_repo_directory() {
     std::filesystem::path result;
+    libdnf5::Base base;
+
+    std::filesystem::path installroot = base.get_config().get_installroot_option().get_value();
     if (char * dir = getenv("TEST_COPR_CONFIG_DIR")) {
-        result = dir;
+        result = installroot.empty() ? dir : installroot / dir;
         return result / "yum.repos.d";
     }
-    return COPR_REPO_DIRECTORY;
+    return installroot.empty() ? COPR_REPO_DIRECTORY : installroot / COPR_REPO_DIRECTORY;
 }
 
 
