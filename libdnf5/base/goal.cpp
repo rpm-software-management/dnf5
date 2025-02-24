@@ -1221,6 +1221,46 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 group_query_name.filter_name(spec, cmp);
                 group_query |= group_query_name;
             }
+
+            comps::GroupQuery already_handled_groups(base, true);
+            // Check if there are other actions for selected groups,
+            // we don't want to have multiple actions per one group id.
+            for (const auto & group : group_query) {
+                for (auto & [key_action, value_group_items] : resolved_group_specs) {
+                    for (auto & group_item : value_group_items) {
+                        auto & group_q = std::get<comps::GroupQuery>(group_item);
+                        // We cannot simply compare the groups because they can have different libsolv ids,
+                        // we have to compare them by groupid.
+                        auto group_q_copy = group_q;
+                        group_q_copy.filter_groupid(group.get_groupid());
+                        if (!group_q_copy.empty()) {
+                            // If we have multiple different actions per group it always ends up as upgrade.
+                            // This is because there are only 3 actions: INSTALL, UPGRADE and REMOVE, any two
+                            // of them mean an UPGRADE.
+                            // (Given that groups are not versioned the UPGRADE action basically means synchronization
+                            //  with currently loaded metadata.)
+                            //  TODO(amatej): When we have REMOVE and INSTALL the behavior doesn't match doing the actions separately,
+                            //                consider adding REINSTALL action.
+                            if (action != key_action && key_action != GoalAction::UPGRADE) {
+                                group_q -= group_q_copy;
+                                action = GoalAction::UPGRADE;
+                            } else {
+                                // If there already is this action for this group set only the stronger reason
+                                auto & already_present_reason =
+                                    std::get<transaction::TransactionItemReason>(group_item);
+                                if (already_present_reason < reason) {
+                                    already_present_reason = reason;
+                                }
+                                already_handled_groups.add(group);
+                                spec_resolved = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            group_query -= already_handled_groups;
+
             if (!group_query.empty()) {
                 resolved_group_specs[action].push_back({spec, reason, std::move(group_query), settings});
                 spec_resolved = true;
