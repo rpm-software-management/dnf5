@@ -136,7 +136,7 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             std::string group_path;
             std::string repo_id;
             std::string joined_package_types;
-            comps::PackageType package_types;
+            comps::PackageType package_types = comps::PackageType();
             struct json_object * group = json_object_array_get_idx(json_groups, i);
 
             if (json_object_object_get_ex(group, "id", &value) != 0) {
@@ -162,11 +162,11 @@ TransactionReplay parse_transaction_replay(const std::string & json_serialized_t
             }
             if (json_object_object_get_ex(group, "package_types", &value) != 0) {
                 joined_package_types = json_object_get_string(value);
-                auto package_types_vec = libdnf5::utils::string::split(joined_package_types, ",");
-                std::for_each(package_types_vec.begin(), package_types_vec.end(), libdnf5::utils::string::trim);
-                package_types = comps::package_type_from_string(package_types_vec);
-            } else {
-                package_types = comps::PackageType();
+                if (!joined_package_types.empty()) {
+                    auto package_types_vec = libdnf5::utils::string::split(joined_package_types, ",");
+                    std::for_each(package_types_vec.begin(), package_types_vec.end(), libdnf5::utils::string::trim);
+                    package_types = comps::package_type_from_string(package_types_vec);
+                }
             }
 
             transaction_replay.groups.push_back(
