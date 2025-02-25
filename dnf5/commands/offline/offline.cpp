@@ -245,11 +245,13 @@ void reboot(bool poweroff = false) {
         const std::string error_message{ex.what()};
         throw libdnf5::cli::CommandExitError(1, M_("Couldn't connect to D-Bus: {}"), error_message);
     }
-    auto proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
-    if (poweroff) {
-        proxy->callMethod("PowerOff").onInterface(SYSTEMD_MANAGER_INTERFACE);
-    } else {
-        proxy->callMethod("Reboot").onInterface(SYSTEMD_MANAGER_INTERFACE);
+    if (connection != nullptr) {
+        auto proxy = sdbus::createProxy(*connection, SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+        if (poweroff) {
+            proxy->callMethod("PowerOff").onInterface(SYSTEMD_MANAGER_INTERFACE);
+        } else {
+            proxy->callMethod("Reboot").onInterface(SYSTEMD_MANAGER_INTERFACE);
+        }
     }
 #else
     std::cerr << "Can't connect to D-Bus; this build of DNF 5 does not support D-Bus." << std::endl;
@@ -313,7 +315,7 @@ void OfflineRebootCommand::run() {
         std::cerr << "Warning: couldn't connect to D-Bus: " << ex.what() << std::endl;
     }
     if (connection != nullptr) {
-        auto systemd_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
+        auto systemd_proxy = sdbus::createProxy(*connection, SYSTEMD_DESTINATION_NAME, SYSTEMD_OBJECT_PATH);
 
         sdbus::ObjectPath unit_object_path;
         systemd_proxy->callMethod("LoadUnit")
@@ -321,7 +323,7 @@ void OfflineRebootCommand::run() {
             .withArguments("system-update.target")
             .storeResultsTo(unit_object_path);
 
-        auto unit_proxy = sdbus::createProxy(SYSTEMD_DESTINATION_NAME, unit_object_path);
+        auto unit_proxy = sdbus::createProxy(*connection, SYSTEMD_DESTINATION_NAME, unit_object_path);
         const auto wants =
             std::vector<std::string>(unit_proxy->getProperty("Wants").onInterface(SYSTEMD_UNIT_INTERFACE));
         if (std::find(wants.begin(), wants.end(), SYSTEMD_SERVICE_NAME) == wants.end()) {
