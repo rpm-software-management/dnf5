@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_path.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/sdbus_compat.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -167,6 +168,24 @@ public:
         }
         const auto & message =
             fmt::format("[{}/{}] {} {}...", amount + 1, total, action, item.get_package().get_name());
+        plymouth.message(message);
+    }
+
+    void script_start(
+        const libdnf5::base::TransactionPackage * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type) override {
+        RpmTransCB::script_start(item, nevra, type);
+
+        // Report only pre/post transaction scriptlets. With all scriptlets
+        // being reported the output flickers way too much to be usable.
+        using ScriptType = libdnf5::rpm::TransactionCallbacks::ScriptType;
+        if (type != ScriptType::PRE_TRANSACTION && type != ScriptType::POST_TRANSACTION) {
+            return;
+        }
+
+        const auto message = fmt::format(
+            "Running {} scriptlet: {}...", script_type_to_string(type), to_full_nevra_string(nevra).c_str());
         plymouth.message(message);
     }
 
