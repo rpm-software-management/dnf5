@@ -165,7 +165,8 @@ public:
                         item.get_action())));
                 break;
         }
-        const auto & message = fmt::format("[{}/{}] {} {}...", amount, total, action, item.get_package().get_name());
+        const auto & message =
+            fmt::format("[{}/{}] {} {}...", amount + 1, total, action, item.get_package().get_name());
         plymouth.message(message);
     }
 
