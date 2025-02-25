@@ -2533,7 +2533,6 @@ void Goal::Impl::add_group_upgrade_to_goal(
 
     rpm::PackageQuery query_installed(base);
     query_installed.filter_installed();
-    rpm::PackageSet remove_candidates(base);
 
     for (auto installed_group : group_query) {
         auto group_id = installed_group.get_groupid();
@@ -2594,23 +2593,8 @@ void Goal::Impl::add_group_upgrade_to_goal(
                 // upgrade all packages installed with the group
                 pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
                 add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
-            } else {
-                // remove those packages that are not part of the group any more
-                // and are not user-installed
-                rpm::PackageQuery query(query_installed);
-                auto nevra_pair = query.resolve_pkg_spec(pkg_name, pkg_settings, false);
-                if (nevra_pair.first) {
-                    for (const auto & pkg : query) {
-                        if (pkg.get_reason() <= transaction::TransactionItemReason::GROUP) {
-                            remove_candidates.add(pkg);
-                        }
-                    }
-                }
             }
         }
-    }
-    if (!remove_candidates.empty()) {
-        remove_group_packages(remove_candidates);
     }
 }
 
@@ -2712,10 +2696,6 @@ void Goal::Impl::add_environment_upgrade_to_goal(
     comps::EnvironmentQuery available_environments(base);
     available_environments.filter_installed(false);
 
-    comps::GroupQuery query_installed(base);
-    query_installed.filter_installed(true);
-    std::vector<GroupSpec> remove_group_specs;
-
     std::vector<GroupSpec> env_group_specs;
     auto group_settings = libdnf5::GoalJobSettings(settings);
     group_settings.set_group_search_environments(false);
@@ -2781,28 +2761,6 @@ void Goal::Impl::add_environment_upgrade_to_goal(
                     auto group_state = system_state.get_group_state(grp);
                     env_group_specs.emplace_back(
                         GoalAction::UPGRADE, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
-                } catch (const system::StateNotFoundError &) {
-                    continue;
-                }
-            }
-        }
-
-        // remove non-userinstalled groups that are not part of environment any more
-        for (const auto & grp : old_groups) {
-            if (std::find(available_groups.begin(), available_groups.end(), grp) == available_groups.end()) {
-                try {
-                    auto group_state = system_state.get_group_state(grp);
-                    if (!group_state.userinstalled) {
-                        auto grp_environments = system_state.get_group_environments(grp);
-                        grp_environments.erase(environment_id);
-                        if (grp_environments.empty()) {
-                            env_group_specs.emplace_back(
-                                GoalAction::REMOVE,
-                                transaction::TransactionItemReason::DEPENDENCY,
-                                grp,
-                                group_settings);
-                        }
-                    }
                 } catch (const system::StateNotFoundError &) {
                     continue;
                 }
