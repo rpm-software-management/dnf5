@@ -129,10 +129,7 @@ private:
 class PlymouthTransCB : public RpmTransCB {
 public:
     PlymouthTransCB(Context & context, PlymouthOutput plymouth) : RpmTransCB(context), plymouth(std::move(plymouth)) {}
-    void elem_progress(
-        [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
-        [[maybe_unused]] uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
+    void elem_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total) override {
         RpmTransCB::elem_progress(item, amount, total);
 
         plymouth.progress(static_cast<int>(100 * static_cast<double>(amount) / static_cast<double>(total)));
