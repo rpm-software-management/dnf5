@@ -427,12 +427,13 @@ void OfflineExecuteCommand::run() {
     const auto & system_releasever = offline_data.get_system_releasever();
     const auto & target_releasever = offline_data.get_target_releasever();
 
-    dnf5::offline::log_status(
-        ctx,
-        "Starting offline transaction. This will take a while.",
-        libdnf5::offline::OFFLINE_STARTED_ID,
-        system_releasever,
-        target_releasever);
+    const std::string message = "Starting offline transaction. This will take a while.";
+    dnf5::offline::log_status(ctx, message, libdnf5::offline::OFFLINE_STARTED_ID, system_releasever, target_releasever);
+
+    PlymouthOutput plymouth;
+    plymouth.set_mode();
+    plymouth.progress(0);
+    plymouth.message(_(message.c_str()));
 
     std::cout
         << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
@@ -470,7 +471,6 @@ void OfflineExecuteCommand::run() {
     libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
     libdnf5::cli::output::print_transaction_table(cli_output_transaction);
 
-    PlymouthOutput plymouth;
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
 
     // Adapted from Context::Impl::download_and_run:
