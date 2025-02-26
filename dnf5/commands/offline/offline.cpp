@@ -97,7 +97,7 @@ namespace dnf5 {
 class PlymouthOutput {
 public:
     bool ping() { return plymouth({"--ping"}); }
-    bool set_mode() { return plymouth({"change-mode", "--system-upgrade"}); }
+    bool set_mode(const std::string & mode) { return plymouth({"change-mode", "--" + mode}); }
     bool message(const std::string & message) {
         if (last_message.has_value() && message == last_message) {
             plymouth({"hide-message", "--text", last_message.value()});
@@ -454,13 +454,18 @@ void OfflineExecuteCommand::run() {
     const auto & system_releasever = offline_data.get_system_releasever();
     const auto & target_releasever = offline_data.get_target_releasever();
 
-    const std::string message = "Starting offline transaction. This will take a while.";
+    std::string message = _("Starting offline transaction. This will take a while.");
+    std::string mode{"updates"};
+    if (offline_data.get_verb() == "system-upgrade download") {
+        mode = "system-upgrade";
+        message = _("Starting system upgrade. This will take a while.");
+    }
+
     dnf5::offline::log_status(ctx, message, libdnf5::offline::OFFLINE_STARTED_ID, system_releasever, target_releasever);
 
     PlymouthOutput plymouth;
-    plymouth.set_mode();
     plymouth.progress(0);
-    plymouth.message(_(message.c_str()));
+    plymouth.message(message.c_str());
 
     std::cout
         << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
@@ -497,6 +502,12 @@ void OfflineExecuteCommand::run() {
 
     libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
     libdnf5::cli::output::print_transaction_table(cli_output_transaction);
+
+    // Postponing switching the plymouth mode after transaction is resolved
+    // enables us to show the "Starting transaction..." message to the user.
+    // Once the mode is switched to updates/system-upgrade, all the messages
+    // are suppressed (in the default plymouth theme - currently bgrt in Fedora).
+    plymouth.set_mode(mode);
 
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
 
