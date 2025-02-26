@@ -95,7 +95,7 @@ namespace dnf5 {
 /// contact it.
 class PlymouthOutput {
 public:
-    bool ping() { return plymouth({"ping"}); }
+    bool ping() { return plymouth({"--ping"}); }
     bool set_mode() { return plymouth({"change-mode", "--system-upgrade"}); }
     bool message(const std::string & message) {
         if (last_message.has_value() && message == last_message) {
