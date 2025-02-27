@@ -391,7 +391,14 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         }
     };
 
-    auto handle_repo_download_error = [&](const Repo * repo, const RepoDownloadError & e, bool report_key_err) {
+    auto handle_repo_exception = [&](const Repo * repo, std::exception_ptr ep, bool report_key_err) {
+        // Use an exception_ptr to preserve the original type of the exception, in case we re-throw it.
+        std::exception e;
+        try {
+            std::rethrow_exception(ep);
+        } catch (const std::exception & exception) {
+            e = exception;
+        }
         if (report_key_err) {
             try {
                 std::rethrow_if_nested(e);
@@ -403,7 +410,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             }
         }
         if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
-            throw;
+            std::rethrow_exception(ep);
         }
         base->get_logger()->warning(
             "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"):", repo->get_id());
@@ -419,7 +426,8 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     std::vector<Repo *> repos_with_bad_signature;
 
     for (int run_count = 0; run_count < 2; ++run_count) {
-        std::vector<Repo *> repos_for_processing;  // array of repositories for processing
+        // Set of repositories for processing. Use a set here since we don't want duplicate entries.
+        std::set<Repo *> repos_for_processing_set;
 
         if (run_count == 0) {
             // First run.
@@ -428,7 +436,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             for (const auto & repo : repos) {
                 switch (repo->get_type()) {
                     case Repo::Type::AVAILABLE:
-                        repos_for_processing.emplace_back(repo.get());
+                        repos_for_processing_set.insert(repo.get());
                         break;
                     case Repo::Type::SYSTEM:
                         send_to_sack_loader(repo.get());
@@ -463,8 +471,18 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             // import local keys files
             for (auto & [repo, key_url] : local_keys_files) {
                 unsigned local_path_start_idx = key_url.starts_with("file:///") ? 7 : 5;
-                utils::fs::File file(key_url.substr(local_path_start_idx), "r");
-                repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                try {
+                    utils::fs::File file{key_url.substr(local_path_start_idx), "r"};
+                    repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                    repos_for_processing_set.insert(repo);
+                } catch (const std::runtime_error & e) {
+                    const auto & wrapping_error = std::runtime_error(fmt::format(
+                        "Failed to read key from {} for repository \"{}\": {}",
+                        key_url,
+                        repo->get_config().get_id(),
+                        e.what()));
+                    handle_repo_exception(repo, std::make_exception_ptr(wrapping_error), false);
+                }
             }
 
             if (!remote_keys_files.empty()) {
@@ -481,15 +499,24 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
                 // import downloaded keys files
                 for (const auto & [repo, key_url, temp_file] : remote_keys_files) {
-                    utils::fs::File file(temp_file.get_path(), "r");
-                    repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                    try {
+                        utils::fs::File file{temp_file.get_path(), "r"};
+                        repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                        repos_for_processing_set.insert(repo);
+                    } catch (const std::runtime_error & e) {
+                        const auto & wrapping_error = std::runtime_error(fmt::format(
+                            "Failed to download key from {} for repository \"{}\": {}",
+                            key_url,
+                            repo->get_config().get_id(),
+                            e.what()));
+                        handle_repo_exception(repo, std::make_exception_ptr(wrapping_error), false);
+                    }
                 }
             }
 
             import_keys = false;
-
-            repos_for_processing = std::move(repos_with_bad_signature);
         }
+        std::vector<Repo *> repos_for_processing{repos_for_processing_set.begin(), repos_for_processing_set.end()};
 
         std::string prev_repo_id;
         bool root_cache_tried = false;
@@ -533,8 +560,8 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                     ++idx;
                 }
 
-            } catch (const RepoDownloadError & e) {
-                handle_repo_download_error(repo, e, false);
+            } catch (const RepoDownloadError &) {
+                handle_repo_exception(repo, std::current_exception(), false);
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             }
         }
@@ -561,8 +588,8 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                     ++idx;
                 }
 
-            } catch (const RepoDownloadError & e) {
-                if (handle_repo_download_error(repo, e, import_keys)) {
+            } catch (const RepoDownloadError &) {
+                if (handle_repo_exception(repo, std::current_exception(), import_keys)) {
                     repos_with_bad_signature.emplace_back(repo);
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
@@ -584,7 +611,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                 send_to_sack_loader(repo);
             } catch (const RepoDownloadError & e) {
-                if (handle_repo_download_error(repo, e, import_keys)) {
+                if (handle_repo_exception(repo, std::current_exception(), import_keys)) {
                     repos_with_bad_signature.emplace_back(repo);
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
