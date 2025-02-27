@@ -284,8 +284,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/dnf
 %{_bindir}/yum
 %endif
-%{_unitdir}/dnf5-makecache.service
-%{_unitdir}/dnf5-makecache.timer
+%{_unitdir}/dnf*-makecache.service
+%{_unitdir}/dnf*-makecache.timer
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 %{_bindir}/microdnf
@@ -897,6 +897,8 @@ for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
     filename=$(basename $file)
     ln -sr $file $dir/${filename/dnf5/dnf}
 done
+mv %{buildroot}%{_unitdir}/dnf5-makecache.service %{buildroot}%{_unitdir}/dnf-makecache.service
+mv %{buildroot}%{_unitdir}/dnf5-makecache.timer %{buildroot}%{_unitdir}/dnf-makecache.timer
 %endif
 
 # own dirs and files that dnf5 creates on runtime
