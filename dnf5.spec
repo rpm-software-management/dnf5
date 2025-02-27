@@ -271,13 +271,25 @@ upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %post
+%if %{with dnf5_obsoletes_dnf}
+%systemd_post dnf-makecache.timer
+%else
 %systemd_post dnf5-makecache.timer
+%endif
 
 %preun
+%if %{with dnf5_obsoletes_dnf}
+%systemd_preun dnf-makecache.timer
+%else
 %systemd_preun dnf5-makecache.timer
+%endif
 
 %postun
+%if %{with dnf5_obsoletes_dnf}
+%systemd_postun_with_restart dnf-makecache.timer
+%else
 %systemd_postun_with_restart dnf5-makecache.timer
+%endif
 
 %files -f dnf5.lang
 %{_bindir}/dnf5
@@ -285,8 +297,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/dnf
 %{_bindir}/yum
 %endif
-%{_unitdir}/dnf5-makecache.service
-%{_unitdir}/dnf5-makecache.timer
+%{_unitdir}/dnf*-makecache.service
+%{_unitdir}/dnf*-makecache.timer
 
 %if 0%{?fedora} || 0%{?rhel} > 10
 %{_bindir}/microdnf
@@ -898,6 +910,11 @@ for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
     filename=$(basename $file)
     ln -sr $file $dir/${filename/dnf5/dnf}
 done
+# Make "dnf-makecache" the "real" unit name, but keep compatibility for playbooks that refer to dnf5-makecache
+mv %{buildroot}%{_unitdir}/dnf5-makecache.service %{buildroot}%{_unitdir}/dnf-makecache.service
+mv %{buildroot}%{_unitdir}/dnf5-makecache.timer %{buildroot}%{_unitdir}/dnf-makecache.timer
+ln -s dnf-makecache.service %{buildroot}%{_unitdir}/dnf5-makecache.service
+ln -s dnf-makecache.timer %{buildroot}%{_unitdir}/dnf5-makecache.timer
 %endif
 
 # own dirs and files that dnf5 creates on runtime
