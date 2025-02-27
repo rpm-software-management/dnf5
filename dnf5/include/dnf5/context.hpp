@@ -161,6 +161,9 @@ public:
     void set_json_output_requested(bool json_output);
     bool get_json_output_requested() const;
 
+    void set_create_repos(bool create_repos);
+    bool get_create_repos() const;
+
     libdnf5::Base & get_base();
 
     std::vector<std::pair<std::string, std::string>> & get_setopts();

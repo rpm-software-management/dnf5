@@ -1407,20 +1407,24 @@ int main(int argc, char * argv[]) try {
             }
 
             auto repo_sack = base.get_repo_sack();
-            repo_sack->create_repos_from_system_configuration();
-            any_repos_from_system_configuration = repo_sack->size() > 0;
 
-            auto vars = base.get_vars();
-            for (auto & id_path_pair : context.get_repos_from_path()) {
-                id_path_pair.first = vars->substitute(id_path_pair.first);
-                id_path_pair.second = vars->substitute(id_path_pair.second);
-            }
-            repo_sack->create_repos_from_paths(context.get_repos_from_path(), libdnf5::Option::Priority::COMMANDLINE);
-            for (const auto & [id, path] : context.get_repos_from_path()) {
-                context.get_setopts().emplace_back(id + ".enabled", "1");
-            }
+            if (context.get_create_repos()) {
+                repo_sack->create_repos_from_system_configuration();
+                any_repos_from_system_configuration = repo_sack->size() > 0;
 
-            context.apply_repository_setopts();
+                auto vars = base.get_vars();
+                for (auto & id_path_pair : context.get_repos_from_path()) {
+                    id_path_pair.first = vars->substitute(id_path_pair.first);
+                    id_path_pair.second = vars->substitute(id_path_pair.second);
+                }
+                repo_sack->create_repos_from_paths(
+                    context.get_repos_from_path(), libdnf5::Option::Priority::COMMANDLINE);
+                for (const auto & [id, path] : context.get_repos_from_path()) {
+                    context.get_setopts().emplace_back(id + ".enabled", "1");
+                }
+
+                context.apply_repository_setopts();
+            }
 
             // Run selected command
             command->configure();

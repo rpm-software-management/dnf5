@@ -215,6 +215,9 @@ public:
     }
     bool get_json_output_requested() const { return json_output; }
 
+    void set_create_repos(bool create_repos) { this->create_repos = create_repos; }
+    bool get_create_repos() const { return create_repos; }
+
     libdnf5::Base & get_base() { return base; };
 
     std::vector<std::pair<std::string, std::string>> & get_setopts() { return setopts; }
@@ -249,6 +252,7 @@ private:
 
     bool should_store_offline = false;
     bool json_output = false;
+    bool create_repos = true;
 
     bool quiet{false};
     bool dump_main_config{false};
@@ -720,6 +724,14 @@ void Context::set_json_output_requested(bool json_output) {
 
 bool Context::get_json_output_requested() const {
     return p_impl->get_json_output_requested();
+}
+
+void Context::set_create_repos(bool create_repos) {
+    p_impl->set_create_repos(create_repos);
+}
+
+bool Context::get_create_repos() const {
+    return p_impl->get_create_repos();
 }
 
 libdnf5::Base & Context::get_base() {
