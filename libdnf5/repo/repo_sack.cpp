@@ -192,8 +192,20 @@ void RepoSack::add_stored_transaction_comps(const std::string & path) {
 }
 
 
-libdnf5::rpm::Package RepoSack::add_stored_transaction_package(const std::string & path, bool calculate_checksum) {
-    auto stored_repo = get_stored_transaction_repo();
+libdnf5::rpm::Package RepoSack::add_stored_transaction_package(
+    const std::string & path, const std::string & repo_id, bool calculate_checksum) {
+    RepoWeakPtr stored_repo;
+    if (!repo_id.empty()) {
+        for (const auto & existing_repo : get_data()) {
+            if (existing_repo->get_id() == repo_id) {
+                stored_repo = existing_repo->get_weak_ptr();
+                break;
+            }
+        }
+    }
+    if (!stored_repo.is_valid()) {
+        stored_repo = get_stored_transaction_repo();
+    }
 
     auto pkg = stored_repo->add_rpm_package(path, calculate_checksum);
 

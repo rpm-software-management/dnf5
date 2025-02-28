@@ -183,7 +183,7 @@ private:
     /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
     /// @return Newly created rpm::Package object in cmdline repo
     LIBDNF_LOCAL libdnf5::rpm::Package add_stored_transaction_package(
-        const std::string & path, bool calculate_checksum = false);
+        const std::string & path, const std::string & repo_id, bool calculate_checksum = false);
 
     LIBDNF_LOCAL void internalize_repos();
 

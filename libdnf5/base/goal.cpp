@@ -791,8 +791,8 @@ GoalProblem Goal::Impl::add_replay_to_goal(
         std::optional<libdnf5::rpm::Package> local_pkg;
         if (!package_replay.package_path.empty()) {
             // Package paths are relative to replay location
-            local_pkg =
-                base->get_repo_sack()->add_stored_transaction_package(replay_location / package_replay.package_path);
+            local_pkg = base->get_repo_sack()->add_stored_transaction_package(
+                replay_location / package_replay.package_path, package_replay.repo_id);
         }
 
         const auto nevras = rpm::Nevra::parse(package_replay.nevra, {rpm::Nevra::Form::NEVRA});

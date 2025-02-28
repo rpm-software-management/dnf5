@@ -482,6 +482,7 @@ void Repo::add_xml_comps(const std::string & path) {
         throw RepoCompsError(
             M_("Failed to load xml Comps \"{}\": {}"), path, std::string(pool_errstr(p_impl->solv_repo->repo->pool)));
     }
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
@@ -500,8 +501,13 @@ rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
             M_("Failed to load RPM \"{}\": {}"), path, std::string(pool_errstr(p_impl->solv_repo->repo->pool)));
     }
 
+    // repo altered by adding an rpm package should not be written back to the cache
+    get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
+
     p_impl->solv_repo->set_needs_internalizing();
-    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    auto pkg_sack = p_impl->base->get_rpm_package_sack();
+    pkg_sack->p_impl->register_local_rpm_id(new_id);
+    pkg_sack->p_impl->invalidate_provides();
 
     return rpm::Package(p_impl->base, rpm::PackageId(new_id));
 }
