@@ -133,7 +133,10 @@ public:
     void elem_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total) override {
         RpmTransCB::elem_progress(item, amount, total);
 
-        plymouth.progress(static_cast<int>(100 * static_cast<double>(amount) / static_cast<double>(total)));
+        if (total != 0) {
+            // Reserve the last 10% of the progress bar for post-transaction callbacks.
+            plymouth.progress(static_cast<int>(90 * static_cast<double>(amount) / static_cast<double>(total)));
+        }
 
         std::string action;
         switch (item.get_action()) {
@@ -187,10 +190,30 @@ public:
         const auto message = fmt::format(
             "Running {} scriptlet: {}...", script_type_to_string(type), to_full_nevra_string(nevra).c_str());
         plymouth.message(message);
+
+        if (type == ScriptType::POST_TRANSACTION) {
+            // Post-transaction scriptlets take a considerable amount of time,
+            // and there was no indication to the user that the process hadn't
+            // stalled. Let's try to utilize the 90-99% portion of the
+            // progress bar for them.
+            if (post_trans_scriptlets_count < post_trans_scriptlets_total) {
+                ++post_trans_scriptlets_count;
+            }
+            plymouth.progress(
+                90 + static_cast<int>(
+                         9 * static_cast<double>(post_trans_scriptlets_count) /
+                         static_cast<double>(post_trans_scriptlets_total)));
+        }
     }
 
 private:
     PlymouthOutput plymouth;
+    // Estimated total number of post-transaction scriptlets during a system
+    // upgrade (based on observations from F41).
+    // There is no reliable way to determine the exact number of scriptlets
+    // that will be executed.
+    const int post_trans_scriptlets_total = 40;
+    int post_trans_scriptlets_count = 0;
 };
 
 void OfflineCommand::pre_configure() {
