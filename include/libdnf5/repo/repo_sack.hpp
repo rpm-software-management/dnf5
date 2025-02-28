@@ -172,18 +172,18 @@ private:
 
     /// If not created yet, creates the stored transaction repository and returns it.
     /// @return The stored transaction repository.
-    LIBDNF_LOCAL libdnf5::repo::RepoWeakPtr get_stored_transaction_repo();
+    LIBDNF_LOCAL libdnf5::repo::RepoWeakPtr get_stored_transaction_repo(const std::string & repo_id);
 
     /// Add given path to comps to the stored_transaction repository.
     /// @param path Path to a local xml comps file to be inserted to stored_transaction repo.
-    LIBDNF_LOCAL void add_stored_transaction_comps(const std::string & path);
+    LIBDNF_LOCAL void add_stored_transaction_comps(const std::string & path, const std::string & repo_id);
 
     /// Add given path to rpm to the stored_transaction repository.
     /// @param path Path to a local rpm file to be inserted to stored_transaction repo.
     /// @param calculate_checksum Whether libsolv should calculate and store checksum of added packages. Setting to true significantly reduces performance.
     /// @return Newly created rpm::Package object in cmdline repo
     LIBDNF_LOCAL libdnf5::rpm::Package add_stored_transaction_package(
-        const std::string & path, bool calculate_checksum = false);
+        const std::string & path, const std::string & repo_id, bool calculate_checksum = false);
 
     LIBDNF_LOCAL void internalize_repos();
 
