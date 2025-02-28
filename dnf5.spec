@@ -320,6 +320,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_datadir}/bash-completion/completions/dnf*
 %license COPYING.md
 %license gpl-2.0.txt
+%doc AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md
 %{_mandir}/man8/dnf5.8.*
 %if %{with dnf5_obsoletes_dnf}
 %{_mandir}/man8/dnf.8.*
