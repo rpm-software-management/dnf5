@@ -133,7 +133,10 @@ public:
     void elem_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total) override {
         RpmTransCB::elem_progress(item, amount, total);
 
-        plymouth.progress(static_cast<int>(100 * static_cast<double>(amount) / static_cast<double>(total)));
+        if (total != 0) {
+            // Reserve the last 5% of the progress bar for post-transaction callbacks.
+            plymouth.progress(static_cast<int>(95 * static_cast<double>(amount) / static_cast<double>(total)));
+        }
 
         std::string action;
         switch (item.get_action()) {
@@ -541,6 +544,7 @@ void OfflineExecuteCommand::run() {
         transaction_complete_message = "Transaction complete! Cleaning up and rebooting...";
     }
 
+    plymouth.progress(100);
     plymouth.message(_(transaction_complete_message.c_str()));
     dnf5::offline::log_status(
         ctx, transaction_complete_message, libdnf5::offline::OFFLINE_FINISHED_ID, system_releasever, target_releasever);
