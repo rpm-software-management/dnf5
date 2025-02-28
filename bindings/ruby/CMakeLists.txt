@@ -7,7 +7,7 @@ message("Building bindings for ruby")
 
 
 find_package(Ruby REQUIRED)
-include_directories(${RUBY_INCLUDE_DIRS})
+include_directories(${Ruby_INCLUDE_DIRS})
 
 
 function(add_ruby_module LIBRARY_NAME MODULE_NAME)
@@ -20,9 +20,9 @@ function(add_ruby_module LIBRARY_NAME MODULE_NAME)
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
     target_link_libraries(${TARGET_NAME} PRIVATE ${C_LIBRARY_NAME})
-    target_link_libraries(${TARGET_NAME} PRIVATE ${RUBY_LIBRARY})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${Ruby_LIBRARY})
 
-    install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION "${RUBY_VENDORARCH_DIR}/${LIBRARY_NAME}")
+    install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION "${Ruby_VENDORARCH_DIR}/${LIBRARY_NAME}")
 endfunction()
 
 
