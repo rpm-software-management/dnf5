@@ -35,7 +35,7 @@ void CoprEnableCommand::set_argument_parser() {
 
     std::string desc = libdnf5::utils::sformat(
         _("download the repository info from a Copr server and install it as a {}/*.repo file"),
-        copr_repo_directory().native());
+        copr_repo_directory(ctx.get_base()).native());
 
     cmd.set_description(desc);
     cmd.set_long_description(desc);
