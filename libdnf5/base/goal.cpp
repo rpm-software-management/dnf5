@@ -1221,6 +1221,44 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 group_query_name.filter_name(spec, cmp);
                 group_query |= group_query_name;
             }
+
+            comps::GroupQuery already_handled_groups(base, true);
+            // Check if there are other actions for selected groups,
+            // we don't want to have multiple actions per one group id.
+            for (const auto & group : group_query) {
+                for (auto & [key_action, value_group_items] : resolved_group_specs) {
+                    for (auto & group_item : value_group_items) {
+                        auto & group_q = std::get<comps::GroupQuery>(group_item);
+                        // We cannot simply compare the groups because they can have different libsolv ids,
+                        // we have to compare them by groupid.
+                        auto group_q_copy = group_q;
+                        group_q_copy.filter_groupid(group.get_groupid());
+                        if (!group_q_copy.empty()) {
+                            // If we have multiple different actions per group it always ends up as upgrade.
+                            // This is because there are only 3 actions: INSTALL, UPGRADE and REMOVE, any two
+                            // of them mean an UPGRADE.
+                            // (Given that groups are not versioned the UPGRADE action basically means synchronization
+                            //  with currently loaded metadata.)
+                            if (action != key_action && key_action != GoalAction::UPGRADE) {
+                                group_q -= group_q_copy;
+                                action = GoalAction::UPGRADE;
+                            } else {
+                                // If there already is this action for this group set only the stronger reason
+                                auto & already_present_reason =
+                                    std::get<transaction::TransactionItemReason>(group_item);
+                                if (already_present_reason < reason) {
+                                    already_present_reason = reason;
+                                }
+                                already_handled_groups.add(group);
+                                spec_resolved = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            group_query -= already_handled_groups;
+
             if (!group_query.empty()) {
                 resolved_group_specs[action].push_back({spec, reason, std::move(group_query), settings});
                 spec_resolved = true;
@@ -2493,7 +2531,6 @@ void Goal::Impl::add_group_upgrade_to_goal(
 
     rpm::PackageQuery query_installed(base);
     query_installed.filter_installed();
-    rpm::PackageSet remove_candidates(base);
 
     for (auto installed_group : group_query) {
         auto group_id = installed_group.get_groupid();
@@ -2554,23 +2591,8 @@ void Goal::Impl::add_group_upgrade_to_goal(
                 // upgrade all packages installed with the group
                 pkg_settings.set_nevra_forms({rpm::Nevra::Form::NAME});
                 add_up_down_distrosync_to_goal(transaction, GoalAction::UPGRADE, pkg_name, pkg_settings);
-            } else {
-                // remove those packages that are not part of the group any more
-                // and are not user-installed
-                rpm::PackageQuery query(query_installed);
-                auto nevra_pair = query.resolve_pkg_spec(pkg_name, pkg_settings, false);
-                if (nevra_pair.first) {
-                    for (const auto & pkg : query) {
-                        if (pkg.get_reason() <= transaction::TransactionItemReason::GROUP) {
-                            remove_candidates.add(pkg);
-                        }
-                    }
-                }
             }
         }
-    }
-    if (!remove_candidates.empty()) {
-        remove_group_packages(remove_candidates);
     }
 }
 
@@ -2672,10 +2694,6 @@ void Goal::Impl::add_environment_upgrade_to_goal(
     comps::EnvironmentQuery available_environments(base);
     available_environments.filter_installed(false);
 
-    comps::GroupQuery query_installed(base);
-    query_installed.filter_installed(true);
-    std::vector<GroupSpec> remove_group_specs;
-
     std::vector<GroupSpec> env_group_specs;
     auto group_settings = libdnf5::GoalJobSettings(settings);
     group_settings.set_group_search_environments(false);
@@ -2741,28 +2759,6 @@ void Goal::Impl::add_environment_upgrade_to_goal(
                     auto group_state = system_state.get_group_state(grp);
                     env_group_specs.emplace_back(
                         GoalAction::UPGRADE, transaction::TransactionItemReason::DEPENDENCY, grp, group_settings);
-                } catch (const system::StateNotFoundError &) {
-                    continue;
-                }
-            }
-        }
-
-        // remove non-userinstalled groups that are not part of environment any more
-        for (const auto & grp : old_groups) {
-            if (std::find(available_groups.begin(), available_groups.end(), grp) == available_groups.end()) {
-                try {
-                    auto group_state = system_state.get_group_state(grp);
-                    if (!group_state.userinstalled) {
-                        auto grp_environments = system_state.get_group_environments(grp);
-                        grp_environments.erase(environment_id);
-                        if (grp_environments.empty()) {
-                            env_group_specs.emplace_back(
-                                GoalAction::REMOVE,
-                                transaction::TransactionItemReason::DEPENDENCY,
-                                grp,
-                                group_settings);
-                        }
-                    }
                 } catch (const system::StateNotFoundError &) {
                     continue;
                 }
@@ -3305,7 +3301,6 @@ void Goal::reset() {
     p_impl->rpm_filepaths.clear();
     p_impl->resolved_group_specs.clear();
     p_impl->resolved_environment_specs.clear();
-    p_impl->group_specs.clear();
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
     p_impl->serialized_transaction.reset();
     p_impl->revert_transactions.reset();
