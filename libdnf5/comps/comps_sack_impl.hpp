@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/comps/comps_sack.hpp"
+#include "libdnf5/comps/environment/query.hpp"
+#include "libdnf5/comps/group/query.hpp"
 
 namespace libdnf5::comps {
 
@@ -30,11 +32,32 @@ class CompsSack::Impl {
 public:
     explicit Impl(const BaseWeakPtr & base) : base(base) {}
 
+    const std::set<std::string> get_user_environment_excludes();
+    void add_user_environment_excludes(const std::set<std::string> & excludes);
+    void add_user_environment_excludes(const EnvironmentQuery & excludes);
+    void remove_user_environment_excludes(const std::set<std::string> & excludes);
+    void remove_user_environment_excludes(const EnvironmentQuery & excludes);
+    void set_user_environment_excludes(const std::set<std::string> & excludes);
+    void set_user_environment_excludes(const EnvironmentQuery & excludes);
+    void clear_user_environment_excludes();
+
+    const std::set<std::string> get_user_group_excludes();
+    void add_user_group_excludes(const std::set<std::string> & excludes);
+    void add_user_group_excludes(const GroupQuery & excludes);
+    void remove_user_group_excludes(const std::set<std::string> & excludes);
+    void remove_user_group_excludes(const GroupQuery & excludes);
+    void set_user_group_excludes(const std::set<std::string> & excludes);
+    void set_user_group_excludes(const GroupQuery & excludes);
+    void clear_user_group_excludes();
+
 private:
     friend comps::CompsSack;
 
     BaseWeakPtr base;
     WeakPtrGuard<comps::CompsSack, false> sack_guard;
+
+    std::set<std::string> user_environment_excludes;    // environments explicitly excluded by API user
+    std::set<std::string> user_group_excludes;          // groups explicitly excluded by API user
 };
 
 
