@@ -32,6 +32,15 @@ class CompsSack::Impl {
 public:
     explicit Impl(const BaseWeakPtr & base) : base(base) {}
 
+    /// Sets excluded groups and environments according to the configuration.
+    ///
+    /// Uses the `disable_excludes`, `excludegroups` and `excludeenvironments` configuration options
+    /// to calculate the `config_group_excludes` and `config_environment_excludes` sets.
+    void load_config_excludes();
+
+    const std::set<std::string> get_config_environment_excludes();
+    const std::set<std::string> get_config_group_excludes();
+
     const std::set<std::string> get_user_environment_excludes();
     void add_user_environment_excludes(const std::set<std::string> & excludes);
     void add_user_environment_excludes(const EnvironmentQuery & excludes);
@@ -56,6 +65,8 @@ private:
     BaseWeakPtr base;
     WeakPtrGuard<comps::CompsSack, false> sack_guard;
 
+    std::set<std::string> config_environment_excludes;  // environments explicitly excluded by config
+    std::set<std::string> config_group_excludes;        // groups explicitly excluded by config
     std::set<std::string> user_environment_excludes;    // environments explicitly excluded by API user
     std::set<std::string> user_group_excludes;          // groups explicitly excluded by API user
 };
