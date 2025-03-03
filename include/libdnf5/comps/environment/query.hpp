@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_COMPS_ENVIRONMENT_QUERY_HPP
 
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/common/sack/query.hpp"
 #include "libdnf5/comps/environment/environment.hpp"
 #include "libdnf5/defs.h"
@@ -34,9 +35,13 @@ namespace libdnf5::comps {
 
 class LIBDNF_API EnvironmentQuery : public libdnf5::sack::Query<Environment> {
 public:
+    using ExcludeFlags = libdnf5::sack::ExcludeFlags;
+
     // Create new query with newly composed environments (using only solvables from currently enabled repositories)
     explicit EnvironmentQuery(const libdnf5::BaseWeakPtr & base, bool empty = false);
     explicit EnvironmentQuery(libdnf5::Base & base, bool empty = false);
+    explicit EnvironmentQuery(const libdnf5::BaseWeakPtr & base, ExcludeFlags flags, bool empty = false);
+    explicit EnvironmentQuery(libdnf5::Base & base, ExcludeFlags flags, bool empty = false);
 
     ~EnvironmentQuery();
 

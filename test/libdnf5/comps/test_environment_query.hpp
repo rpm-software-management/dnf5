@@ -32,6 +32,7 @@ class CompsEnvironmentQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_query_all);
     CPPUNIT_TEST(test_query_filter_environmentid);
     CPPUNIT_TEST(test_query_filter_name);
+    CPPUNIT_TEST(test_query_excludes);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -39,6 +40,7 @@ public:
     void test_query_all();
     void test_query_filter_environmentid();
     void test_query_filter_name();
+    void test_query_excludes();
 };
 
 #endif

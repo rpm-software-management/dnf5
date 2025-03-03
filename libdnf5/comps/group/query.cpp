@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/base/base.hpp"
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/common/sack/exclude_flags.hpp"
 #include "libdnf5/comps/group/group.hpp"
 
 extern "C" {
@@ -56,12 +57,14 @@ private:
     libdnf5::BaseWeakPtr base;
 };
 
-GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_unique<Impl>(base)) {
+GroupQuery::GroupQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty)
+    : p_impl(std::make_unique<Impl>(base)) {
     if (empty) {
         return;
     }
 
     libdnf5::solv::CompsPool & pool = get_comps_pool(base);
+    auto sack = base->get_comps_sack();
 
     // Map of available groups:
     //     For each groupid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
@@ -73,18 +76,27 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_
     std::pair<std::string, std::string> solvable_name_pair;
     std::string_view repoid;
 
+    std::set<std::string> user_excludes = sack->get_user_group_excludes();
+
     // Loop over all solvables
     FOR_POOL_SOLVABLES(solvable_id) {
         solvable = pool.id2solvable(solvable_id);
 
-        // Do not include solvables from disabled repositories
+        // Do not include solvables from disabled repositories (unless ExcludeFlags::USE_DISABLED_REPOSITORIES).
         // TODO(pkratoch): Test this works
-        if (solvable->repo->disabled) {
+        if (solvable->repo->disabled &&
+            !static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES)) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "group"
         solvable_name_pair = solv::CompsPool::split_solvable_name(pool.lookup_str(solvable_id, SOLVABLE_NAME));
         if (solvable_name_pair.first != "group") {
+            continue;
+        }
+
+        // Check user excludes
+        if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) &&
+            user_excludes.contains(solvable_name_pair.second)) {
             continue;
         }
 
@@ -116,7 +128,11 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : p_impl(std::make_
     }
 }
 
-GroupQuery::GroupQuery(libdnf5::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
+GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : GroupQuery(base, ExcludeFlags::APPLY_EXCLUDES, empty) {}
+GroupQuery::GroupQuery(libdnf5::Base & base, bool empty)
+    : GroupQuery(base.get_weak_ptr(), ExcludeFlags::APPLY_EXCLUDES, empty) {}
+GroupQuery::GroupQuery(libdnf5::Base & base, ExcludeFlags flags, bool empty)
+    : GroupQuery(base.get_weak_ptr(), flags, empty) {}
 
 GroupQuery::~GroupQuery() = default;
 
