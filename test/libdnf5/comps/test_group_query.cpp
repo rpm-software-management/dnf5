@@ -150,3 +150,42 @@ void CompsGroupQueryTest::test_query_filter_package_name() {
     expected = {get_group("critical-path-standard"), get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 }
+
+
+void CompsGroupQueryTest::test_query_excludes() {
+    auto sack = base.get_comps_sack();
+
+    // Set user excludes to group "standard" -> user excludes are groups: "standard"
+    GroupQuery q_excludes1(base);
+    q_excludes1.filter_groupid("standard");
+    sack->set_user_group_excludes(q_excludes1);
+    GroupQuery q_groups(base);
+    std::vector<Group> expected = {get_group("core"), get_group("critical-path-standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Add group "core" to user excludes -> user excludes are groups: "standard", "core"
+    GroupQuery q_excludes2(base);
+    q_excludes2.filter_groupid("core");
+    sack->add_user_group_excludes(q_excludes2);
+    q_groups = GroupQuery(base);
+    expected = {get_group("critical-path-standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Remove group "standard" from user excludes -> user excludes are groups: "core"
+    sack->remove_user_group_excludes(q_excludes1);
+    q_groups = GroupQuery(base);
+    expected = {get_group("critical-path-standard"), get_group("standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Set user excludes to group "standard" -> user excludes are groups: "standard"
+    sack->set_user_group_excludes(q_excludes1);
+    q_groups = GroupQuery(base);
+    expected = {get_group("core"), get_group("critical-path-standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Clear user excludes -> user excludes are empty
+    sack->clear_user_group_excludes();
+    q_groups = GroupQuery(base);
+    expected = {get_group("core"), get_group("critical-path-standard"), get_group("standard")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+}
