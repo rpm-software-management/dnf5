@@ -644,6 +644,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
     fix_group_missing_xml();
 
     base->get_rpm_package_sack()->load_config_excludes_includes();
+    base->get_comps_sack()->load_config_excludes();
 #ifdef WITH_MODULEMD
     base->get_module_sack()->p_impl->module_filtering();
 #endif

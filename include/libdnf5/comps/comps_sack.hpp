@@ -49,6 +49,19 @@ public:
     /// @since 5.2.12.1
     libdnf5::BaseWeakPtr get_base() const;
 
+    /// Loads excluded comps from the configuration.
+    /// Uses the `disable_excludes`, `excludegroups` and `excludeenvironments` configuration options for calculation.
+    /// @since 5.2.12.1
+    void load_config_excludes();
+
+    /// Returns config excluded environments
+    /// @since 5.2.12.1
+    const std::set<std::string> get_config_environment_excludes();
+
+    /// Returns config excluded groups
+    /// @since 5.2.12.1
+    const std::set<std::string> get_config_group_excludes();
+
     /// Returns user excluded environments
     /// @since 5.2.12.1
     const std::set<std::string> get_user_environment_excludes();
@@ -96,6 +109,7 @@ public:
     void clear_user_group_excludes();
 
 private:
+    friend EnvironmentQuery;
     friend GroupQuery;
 
     class LIBDNF_LOCAL Impl;
