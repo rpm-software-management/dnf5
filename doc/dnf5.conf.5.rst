@@ -218,6 +218,28 @@ repository configuration file should aside from repo ID consists of baseurl, met
 
     Defaults to true.
 
+.. _excludeenvs_options-label:
+
+``excludeenvs``
+    :ref:`list <list-label>`
+
+    Exclude environments, specified by an id or a glob and separated by a comma, from all operations.
+
+    Can be disabled using ``disable_excludes`` config option.
+
+    Default: ``[]``.
+
+.. _excludegroups_options-label:
+
+``excludegroups``
+    :ref:`list <list-label>`
+
+    Exclude groups, specified by an id or a glob and separated by a comma, from all operations.
+
+    Can be disabled using ``disable_excludes`` config option.
+
+    Default: ``[]``.
+
 .. _group_package_types_options-label:
 
 ``group_package_types``
@@ -940,7 +962,7 @@ configuration.
 ``disable_excludes``
     :ref:`list <list-label>`
 
-    Used to disable packages filtering. It can include a list of repository IDs (globs allowed) for which repository-specific excludes are ignored. If it contains the special value ``main``, excludes from the main configuration files are bypassed. If it contains the special value ``*``, no excludes filtering is applied at all.
+    Used to disable package, group and environment filtering. It can include a list of repository IDs (globs allowed) for which repository-specific package excludes are ignored. If it contains the special value ``main``, excludes from the main configuration files are bypassed. If it contains the special value ``*``, no excludes filtering is applied at all.
 
 .. _enablegroups_options-label:
 

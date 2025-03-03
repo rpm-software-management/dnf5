@@ -25,6 +25,41 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5::comps {
 
+void CompsSack::Impl::load_config_excludes() {
+    const auto & main_config = base->get_config();
+
+    const auto & disable_excludes = main_config.get_disable_excludes_option().get_value();
+    if (std::find(disable_excludes.begin(), disable_excludes.end(), "*") != disable_excludes.end()) {
+        return;
+    }
+    if (std::find(disable_excludes.begin(), disable_excludes.end(), "main") != disable_excludes.end()) {
+        return;
+    }
+
+    for (const auto & name : main_config.get_excludeenvs_option().get_value()) {
+        EnvironmentQuery query(base, EnvironmentQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_environmentid(name, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & environment : query.list()) {
+            config_environment_excludes.insert(environment.get_environmentid());
+        }
+    }
+    for (const auto & name : main_config.get_excludegroups_option().get_value()) {
+        GroupQuery query(base, GroupQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_groupid(name, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & group : query.list()) {
+            config_group_excludes.insert(group.get_groupid());
+        }
+    }
+}
+
+const std::set<std::string> CompsSack::Impl::get_config_environment_excludes() {
+    return config_environment_excludes;
+}
+
+const std::set<std::string> CompsSack::Impl::get_config_group_excludes() {
+    return config_group_excludes;
+}
+
 const std::set<std::string> CompsSack::Impl::get_user_environment_excludes() {
     return user_environment_excludes;
 }
@@ -154,6 +189,18 @@ CompsSack::CompsSack(const BaseWeakPtr & base) : p_impl{new Impl(base)} {}
 CompsSack::CompsSack(libdnf5::Base & base) : CompsSack(base.get_weak_ptr()) {}
 
 CompsSack::~CompsSack() = default;
+
+void CompsSack::load_config_excludes() {
+    p_impl->load_config_excludes();
+}
+
+const std::set<std::string> CompsSack::get_config_environment_excludes() {
+    return p_impl->get_config_environment_excludes();
+}
+
+const std::set<std::string> CompsSack::get_config_group_excludes() {
+    return p_impl->get_config_group_excludes();
+}
 
 const std::set<std::string> CompsSack::get_user_environment_excludes() {
     return p_impl->get_user_environment_excludes();

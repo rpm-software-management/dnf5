@@ -230,6 +230,10 @@ public:
     const OptionPath & get_cachedir_option() const;
     OptionBool & get_fastestmirror_option();
     const OptionBool & get_fastestmirror_option() const;
+    OptionStringAppendList & get_excludeenvs_option();
+    const OptionStringAppendList & get_excludeenvs_option() const;
+    OptionStringAppendList & get_excludegroups_option();
+    const OptionStringAppendList & get_excludegroups_option() const;
     OptionStringAppendList & get_excludepkgs_option();
     const OptionStringAppendList & get_excludepkgs_option() const;
     OptionStringAppendList & get_includepkgs_option();

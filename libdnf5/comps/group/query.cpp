@@ -76,6 +76,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty)
     std::pair<std::string, std::string> solvable_name_pair;
     std::string_view repoid;
 
+    std::set<std::string> config_excludes = sack->get_config_group_excludes();
     std::set<std::string> user_excludes = sack->get_user_group_excludes();
 
     // Loop over all solvables
@@ -94,6 +95,11 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty)
             continue;
         }
 
+        // Check config excludes
+        if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) &&
+            config_excludes.contains(solvable_name_pair.second)) {
+            continue;
+        }
         // Check user excludes
         if (!static_cast<bool>(flags & libdnf5::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) &&
             user_excludes.contains(solvable_name_pair.second)) {
