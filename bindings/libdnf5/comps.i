@@ -19,12 +19,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
 
@@ -36,11 +33,28 @@
     #include "libdnf5/comps/environment/query.hpp"
     #include "libdnf5/repo/repo_query.hpp"
     #include "libdnf5/repo/repo.hpp"
+
+    // Exceptions
+    #include "libdnf5/repo/file_downloader.hpp"
+    #include "libdnf5/repo/package_downloader.hpp"
+    #include "libdnf5/repo/repo_cache.hpp"
+    #include "libdnf5/repo/repo_errors.hpp"
+    #include "libdnf5/transaction/transaction.hpp"
+    #include "libdnf5/transaction/transaction_item_action.hpp"
+    #include "libdnf5/transaction/transaction_item_state.hpp"
 %}
 
 #define CV __perl_CV
 
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_comps_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
+
+%ignore libdnf5::comps::InvalidPackageType::InvalidPackageType;
 %include "libdnf5/comps/group/package_type.hpp"
+
 %include "libdnf5/comps/group/package.hpp"
 %include "libdnf5/comps/group/group.hpp"
 %template(VectorPackage) std::vector<libdnf5::comps::Package>;
@@ -56,3 +70,5 @@ add_iterator(SetGroup)
 %template(SackQueryEnvironment) libdnf5::sack::Query<libdnf5::comps::Environment>;
 %include "libdnf5/comps/environment/query.hpp"
 add_iterator(SetEnvironment)
+
+%exception;

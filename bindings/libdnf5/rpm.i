@@ -27,15 +27,11 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
-
 
 %{
     #include "libdnf5/rpm/arch.hpp"
@@ -52,15 +48,27 @@
     #include "libdnf5/rpm/rpm_signature.hpp"
     #include "libdnf5/rpm/transaction_callbacks.hpp"
     #include "libdnf5/rpm/versionlock_config.hpp"
+
+    // Exceptions
+    #include "libdnf5/repo/repo_cache.hpp"
+    #include "libdnf5/repo/repo_errors.hpp"
+    #include "libdnf5/repo/file_downloader.hpp"
+    #include "libdnf5/repo/package_downloader.hpp"
 %}
 
 #define CV __perl_CV
+
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_rpm_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
 
 %include "libdnf5/rpm/arch.hpp"
 
 %include "libdnf5/rpm/checksum.hpp"
 
-%ignore NevraIncorrectInputError;
+%ignore libdnf5::rpm::NevraIncorrectInputError::NevraIncorrectInputError;
 %include "libdnf5/rpm/nevra.hpp"
 
 %template(VectorNevra) std::vector<libdnf5::rpm::Nevra>;
@@ -117,8 +125,8 @@ add_ruby_each(libdnf5::rpm::ReldepList)
 %include "libdnf5/rpm/transaction_callbacks.hpp"
 wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf5::rpm::TransactionCallbacks);
 
-%ignore KeyImportError;
-%ignore SignatureCheckError;
+%ignore libdnf5::rpm::KeyImportError::KeyImportError;
+%ignore libdnf5::rpm::SignatureCheckError::SignatureCheckError;
 %include "libdnf5/rpm/rpm_signature.hpp"
 
 %template(VectorKeyInfo) std::vector<libdnf5::rpm::KeyInfo>;
@@ -130,3 +138,5 @@ wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf5::rpm::TransactionCallback
 common.create_attributes_from_getters_and_setters(Changelog)
 %}
 #endif
+
+%exception;
