@@ -14,6 +14,9 @@ target_link_libraries(libdnf5-cli PUBLIC ${LIBFMT_LIBRARIES})
 find_package(CURL 7.62.0 REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
+find_package(ZLIB REQUIRED)
+
+target_link_libraries(config-manager_cmd_plugin PRIVATE ZLIB::ZLIB)
 target_link_libraries(config-manager_cmd_plugin PRIVATE libdnf5 libdnf5-cli)
 target_link_libraries(config-manager_cmd_plugin PRIVATE dnf5)
 
