@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf5/repo/file_downloader.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <zlib.h>
 
 #include <regex>
 #include <string_view>
@@ -52,27 +53,6 @@ std::string get_url_part(const std::string & url, CURLUPart what_part) {
     }
     curl_url_cleanup(c_url);
     return ret;
-}
-
-
-// Computes CRC32 checksum of input string.
-// Slow bitwise implementation. Used to calculate the hash of the omitted middle part of a long `repoid` if the `repoid`
-// is generated from a URL. Not used for cryptography.
-uint32_t crc32(std::string_view input) {
-    const uint32_t polynomial = 0x04C11DB7;
-    uint32_t crc = 0;
-
-    for (auto ch : input) {
-        crc ^= static_cast<uint32_t>(ch) << 24;
-        for (int i = 0; i < 8; ++i) {
-            if ((crc & 0x80000000) != 0) {
-                crc = (crc << 1) ^ polynomial;
-            } else {
-                crc <<= 1;
-            }
-        }
-    }
-    return crc;
 }
 
 
@@ -116,9 +96,12 @@ std::string generate_repoid_from_url(const std::string & url) {
     // Limits the length of the repository id.
     // Copies the first and last 100 characters. The substring in between is replaced by a crc32 hash.
     if (ret.size() > 250) {
-        std::string_view tmp{ret};
+        size_t sz = ret.size();
         ret = fmt::format(
-            "{}-{:08X}-{}", tmp.substr(0, 100), crc32(tmp.substr(100, tmp.size() - 200)), tmp.substr(tmp.size() - 100));
+            "{}-{:08X}-{}",
+            ret.substr(0, 100),
+            crc32_z(0, ((const unsigned char *)ret.c_str()) + 100, sz - 200),
+            ret.substr(sz - 100));
     }
 
     return ret;
