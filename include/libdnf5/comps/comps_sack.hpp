@@ -26,6 +26,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/comps/group/query.hpp"
 #include "libdnf5/defs.h"
 
+#include <set>
+#include <string>
+
 namespace libdnf5::comps {
 
 
@@ -46,7 +49,55 @@ public:
     /// @since 5.2.12.1
     libdnf5::BaseWeakPtr get_base() const;
 
+    /// Returns user excluded environments
+    /// @since 5.2.12.1
+    const std::set<std::string> get_user_environment_excludes();
+
+    /// Add environments to user excluded environments
+    /// @param excludes: environments to add to excludes
+    /// @since 5.2.12.1
+    void add_user_environment_excludes(const EnvironmentQuery & excludes);
+
+    /// Remove environments from user excluded environments
+    /// @param excludes: environments to remove from excludes
+    /// @since 5.2.12.1
+    void remove_user_environment_excludes(const EnvironmentQuery & excludes);
+
+    /// Resets user excluded environments to a new value
+    /// @param excludes: environments to exclude
+    /// @since 5.2.12.1
+    void set_user_environment_excludes(const EnvironmentQuery & excludes);
+
+    /// Clear user excluded environments
+    /// @since 5.2.12.1
+    void clear_user_environment_excludes();
+
+    /// Returns user excluded groups
+    /// @since 5.2.12.1
+    const std::set<std::string> get_user_group_excludes();
+
+    /// Add groups to user excluded groups
+    /// @param excludes: groups to add to excludes
+    /// @since 5.2.12.1
+    void add_user_group_excludes(const GroupQuery & excludes);
+
+    /// Remove groups from user excluded groups
+    /// @param excludes: groups to remove from excludes
+    /// @since 5.2.12.1
+    void remove_user_group_excludes(const GroupQuery & excludes);
+
+    /// Resets user excluded groups to a new value
+    /// @param excludes: groups to exclude
+    /// @since 5.2.12.1
+    void set_user_group_excludes(const GroupQuery & excludes);
+
+    /// Clear user excluded groups
+    /// @since 5.2.12.1
+    void clear_user_group_excludes();
+
 private:
+    friend GroupQuery;
+
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };

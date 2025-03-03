@@ -21,8 +21,125 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_sack_impl.hpp"
 
+#include "libdnf5/comps/group/query.hpp"
+
 namespace libdnf5::comps {
 
+const std::set<std::string> CompsSack::Impl::get_user_environment_excludes() {
+    return user_environment_excludes;
+}
+
+void CompsSack::Impl::add_user_environment_excludes(const std::set<std::string> & excludes) {
+    for (const auto & exclude : excludes) {
+        EnvironmentQuery query(base, EnvironmentQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_environmentid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & environment : query.list()) {
+            user_environment_excludes.insert(environment.get_environmentid());
+        }
+    }
+}
+
+void CompsSack::Impl::add_user_environment_excludes(const EnvironmentQuery & excludes) {
+    for (const auto & environment : excludes) {
+        user_environment_excludes.insert(environment.get_environmentid());
+    }
+}
+
+void CompsSack::Impl::remove_user_environment_excludes(const std::set<std::string> & excludes) {
+    for (const auto & exclude : excludes) {
+        EnvironmentQuery query(base, EnvironmentQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_environmentid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & environment : query.list()) {
+            user_environment_excludes.erase(environment.get_environmentid());
+        }
+    }
+}
+
+void CompsSack::Impl::remove_user_environment_excludes(const EnvironmentQuery & excludes) {
+    for (const auto & environment : excludes) {
+        user_environment_excludes.erase(environment.get_environmentid());
+    }
+}
+
+void CompsSack::Impl::set_user_environment_excludes(const std::set<std::string> & excludes) {
+    user_environment_excludes = std::set<std::string>();
+    for (const auto & exclude : excludes) {
+        EnvironmentQuery query(base, EnvironmentQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_environmentid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & environment : query.list()) {
+            user_environment_excludes.insert(environment.get_environmentid());
+        }
+    }
+}
+
+void CompsSack::Impl::set_user_environment_excludes(const EnvironmentQuery & excludes) {
+    user_environment_excludes = std::set<std::string>();
+    for (const auto & environment : excludes) {
+        user_environment_excludes.insert(environment.get_environmentid());
+    }
+}
+
+void CompsSack::Impl::clear_user_environment_excludes() {
+    user_environment_excludes = std::set<std::string>();
+}
+
+const std::set<std::string> CompsSack::Impl::get_user_group_excludes() {
+    return user_group_excludes;
+}
+
+void CompsSack::Impl::add_user_group_excludes(const std::set<std::string> & excludes) {
+    for (const auto & exclude : excludes) {
+        GroupQuery query(base, GroupQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_groupid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & group : query.list()) {
+            user_group_excludes.insert(group.get_groupid());
+        }
+    }
+}
+
+void CompsSack::Impl::add_user_group_excludes(const GroupQuery & excludes) {
+    for (const auto & group : excludes) {
+        user_group_excludes.insert(group.get_groupid());
+    }
+}
+
+void CompsSack::Impl::remove_user_group_excludes(const std::set<std::string> & excludes) {
+    for (const auto & exclude : excludes) {
+        GroupQuery query(base, GroupQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_groupid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & group : query.list()) {
+            user_group_excludes.erase(group.get_groupid());
+        }
+    }
+}
+
+void CompsSack::Impl::remove_user_group_excludes(const GroupQuery & excludes) {
+    for (const auto & group : excludes) {
+        user_group_excludes.erase(group.get_groupid());
+    }
+}
+
+void CompsSack::Impl::set_user_group_excludes(const std::set<std::string> & excludes) {
+    user_group_excludes = std::set<std::string>();
+    for (const auto & exclude : excludes) {
+        GroupQuery query(base, GroupQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        query.filter_groupid(exclude, libdnf5::sack::QueryCmp::GLOB);
+        for (const auto & group : query.list()) {
+            user_group_excludes.insert(group.get_groupid());
+        }
+    }
+}
+
+void CompsSack::Impl::set_user_group_excludes(const GroupQuery & excludes) {
+    user_group_excludes = std::set<std::string>();
+    for (const auto & group : excludes) {
+        user_group_excludes.insert(group.get_groupid());
+    }
+}
+
+void CompsSack::Impl::clear_user_group_excludes() {
+    user_group_excludes = std::set<std::string>();
+}
 
 CompsSackWeakPtr CompsSack::get_weak_ptr() {
     return CompsSackWeakPtr(this, &p_impl->sack_guard);
@@ -38,5 +155,44 @@ CompsSack::CompsSack(libdnf5::Base & base) : CompsSack(base.get_weak_ptr()) {}
 
 CompsSack::~CompsSack() = default;
 
+const std::set<std::string> CompsSack::get_user_environment_excludes() {
+    return p_impl->get_user_environment_excludes();
+}
+
+void CompsSack::add_user_environment_excludes(const EnvironmentQuery & excludes) {
+    p_impl->add_user_environment_excludes(excludes);
+}
+
+void CompsSack::remove_user_environment_excludes(const EnvironmentQuery & excludes) {
+    p_impl->remove_user_environment_excludes(excludes);
+}
+
+void CompsSack::set_user_environment_excludes(const EnvironmentQuery & excludes) {
+    p_impl->set_user_environment_excludes(excludes);
+}
+
+void CompsSack::clear_user_environment_excludes() {
+    p_impl->clear_user_environment_excludes();
+}
+
+const std::set<std::string> CompsSack::get_user_group_excludes() {
+    return p_impl->get_user_group_excludes();
+}
+
+void CompsSack::add_user_group_excludes(const GroupQuery & excludes) {
+    p_impl->add_user_group_excludes(excludes);
+}
+
+void CompsSack::remove_user_group_excludes(const GroupQuery & excludes) {
+    p_impl->remove_user_group_excludes(excludes);
+}
+
+void CompsSack::set_user_group_excludes(const GroupQuery & excludes) {
+    p_impl->set_user_group_excludes(excludes);
+}
+
+void CompsSack::clear_user_group_excludes() {
+    p_impl->clear_user_group_excludes();
+}
 
 }  // namespace libdnf5::comps
