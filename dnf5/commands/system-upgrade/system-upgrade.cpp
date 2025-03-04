@@ -81,6 +81,8 @@ void SystemUpgradeDownloadCommand::set_argument_parser() {
     no_downgrade_arg->set_const_value("true");
     no_downgrade_arg->link_value(no_downgrade);
     cmd.register_named_arg(no_downgrade_arg);
+
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
 }
 
 void SystemUpgradeDownloadCommand::configure() {
@@ -110,6 +112,7 @@ void SystemUpgradeDownloadCommand::run() {
     auto & ctx = get_context();
 
     const auto & goal = ctx.get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
 
     if (no_downgrade->get_value()) {
         goal->add_rpm_upgrade();
