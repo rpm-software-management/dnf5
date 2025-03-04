@@ -128,8 +128,11 @@ public:
     const OptionBool & get_exit_on_lock_option() const;
     OptionBool & get_allow_vendor_change_option();
     const OptionBool & get_allow_vendor_change_option() const;
-    OptionSeconds & get_metadata_timer_sync_option();
-    const OptionSeconds & get_metadata_timer_sync_option() const;
+    /// @deprecated The metadata_timer_sync option does nothing
+    [[deprecated("The metadata_timer_sync option does nothing")]] OptionSeconds & get_metadata_timer_sync_option();
+    /// @deprecated The metadata_timer_sync option does nothing
+    [[deprecated("The metadata_timer_sync option does nothing")]] const OptionSeconds & get_metadata_timer_sync_option()
+        const;
     OptionStringList & get_disable_excludes_option();
     const OptionStringList & get_disable_excludes_option() const;
     OptionEnum & get_multilib_policy_option();  // :api

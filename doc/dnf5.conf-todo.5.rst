@@ -218,10 +218,6 @@ This section does not track any deprecated option. For such options see :ref:`De
 Repo Options
 ============
 
-.. _metadata_timer_sync_options-label:
-
-``metadata_timer_sync``
-
 .. _module_hotfixes_repo_options-label:
 
 ``module_hotfixes``
