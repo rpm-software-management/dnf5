@@ -52,9 +52,6 @@ Changes to individual options
 ``-4/-6``
   * Dropped. Now only the ``ip_resolve`` configuration option is available.
 
-``--color``
-  * Dropped. Now only the ``color`` configuration option is available.
-
 .. TODO(jkolarik): Not implemented yet
    ``-d, --debuglevel``
      * Dropped. Now only the ``debuglevel`` configuration option is available.
