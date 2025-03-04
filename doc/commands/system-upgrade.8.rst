@@ -63,6 +63,9 @@ Options
 ``--no-downgrade``
     | Behave like ``dnf5 update``: do not install packages from the new release if they are older than what is currently installed. This is the opposite of the default behavior, which behaves like ``dnf5 distro-sync``, always installing packages from the new release, even if they are older than the currently-installed version.
 
+``--allowerasing``
+    | Allow removing of installed packages to resolve any potential dependency problems.
+
 ``--number=<boot number>``
     | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
 

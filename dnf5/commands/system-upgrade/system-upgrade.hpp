@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_SYSTEM_UPGRADE_HPP
 
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 #include <libdnf5/transaction/offline.hpp>
 
 namespace dnf5 {
@@ -43,6 +44,7 @@ public:
 
 private:
     libdnf5::OptionBool * no_downgrade{nullptr};
+    std::unique_ptr<AllowErasingOption> allow_erasing;
     std::filesystem::path datadir{libdnf5::offline::DEFAULT_DATADIR};
     std::string target_releasever;
     std::string system_releasever;
