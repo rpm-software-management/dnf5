@@ -747,9 +747,11 @@ const OptionBool & ConfigMain::get_allow_vendor_change_option() const {
 }
 
 OptionSeconds & ConfigMain::get_metadata_timer_sync_option() {
+    LIBDNF5_DEPRECATED("The metadata_timer_sync option does nothing");
     return p_impl->metadata_timer_sync;
 }
 const OptionSeconds & ConfigMain::get_metadata_timer_sync_option() const {
+    LIBDNF5_DEPRECATED("The metadata_timer_sync option does nothing");
     return p_impl->metadata_timer_sync;
 }
 

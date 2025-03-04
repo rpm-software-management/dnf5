@@ -394,6 +394,9 @@ To address this, the functionality has been split into two configuration options
 
 Additionally, corresponding command-line options ``--skip-broken`` and ``--skip-unavailable`` have been introduced for commands where applicable.
 
+Deprecation of the ``metadata_timer_sync`` option
+-------------------------------------------------
+The ``metadata_timer_sync`` configuration option is now obsoleted by the ``dnf5-makecache.timer`` systemd timer settings.
 
 Changes to individual options
 -----------------------------
