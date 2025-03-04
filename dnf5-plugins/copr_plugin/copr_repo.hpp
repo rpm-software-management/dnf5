@@ -227,7 +227,7 @@ private:
 
 using CoprRepoCallback = std::function<void(CoprRepo &)>;
 void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb);
-std::filesystem::path copr_repo_directory();
+std::filesystem::path copr_repo_directory(libdnf5::Base * base);
 
 void copr_repo_disable(libdnf5::Base & base, const std::string & repo_spec);
 void copr_repo_remove(libdnf5::Base & base, const std::string & repo_spec);
