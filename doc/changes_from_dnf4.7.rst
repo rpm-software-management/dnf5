@@ -237,6 +237,7 @@ Changes to individual commands
 
 ``makecache``
   * Metadata is now stored in different directories, see the ``cachedir`` configuration option :ref:`changes <cachedir_option_conf_changes_ref-label>` for more details.
+  * The ``--timer`` option has been dropped in favor of the systemd ``OnUnitInactiveSec`` setting in ``dnf5-makecache.timer`` and the ``ConditionACPower`` setting in ``dnf5-makecache.service``.
 
 ``mark``
   * Renaming subcommands to be more intuitive: ``install`` -> ``user``, ``remove`` -> ``dependency``.
