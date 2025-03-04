@@ -40,6 +40,13 @@ Strict behavior
   * The ``strict`` configuration option is no longer considered, see the :ref:`strict option deprecation <strict_option_conf_changes_ref-label>` for more information.
 
 
+No value separator after short options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Short options do not have a separator between the option name and the option
+value. E.g. ``dnf -x package`` is equivalent to ``dnf --exclude package`` and
+``dnf --exclude=package`` long forms. But ``dnf -x=package`` means
+``dnf --exclude =package``.
+
 Changes to individual options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``-4/-6``
