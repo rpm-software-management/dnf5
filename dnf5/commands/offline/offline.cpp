@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/base/goal.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/conf/option_path.hpp>
+#include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/sdbus_compat.hpp>
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
@@ -95,8 +96,8 @@ namespace dnf5 {
 /// contact it.
 class PlymouthOutput {
 public:
-    bool ping() { return plymouth({"ping"}); }
-    bool set_mode() { return plymouth({"change-mode", "--system-upgrade"}); }
+    bool ping() { return plymouth({"--ping"}); }
+    bool set_mode(const std::string & mode) { return plymouth({"change-mode", "--" + mode}); }
     bool message(const std::string & message) {
         if (last_message.has_value() && message == last_message) {
             plymouth({"hide-message", "--text", last_message.value()});
@@ -129,13 +130,13 @@ private:
 class PlymouthTransCB : public RpmTransCB {
 public:
     PlymouthTransCB(Context & context, PlymouthOutput plymouth) : RpmTransCB(context), plymouth(std::move(plymouth)) {}
-    void elem_progress(
-        [[maybe_unused]] const libdnf5::base::TransactionPackage & item,
-        [[maybe_unused]] uint64_t amount,
-        [[maybe_unused]] uint64_t total) override {
+    void elem_progress(const libdnf5::base::TransactionPackage & item, uint64_t amount, uint64_t total) override {
         RpmTransCB::elem_progress(item, amount, total);
 
-        plymouth.progress(static_cast<int>(100 * static_cast<double>(amount) / static_cast<double>(total)));
+        if (total != 0) {
+            // Reserve the last 5% of the progress bar for post-transaction callbacks.
+            plymouth.progress(static_cast<int>(95 * static_cast<double>(amount) / static_cast<double>(total)));
+        }
 
         std::string action;
         switch (item.get_action()) {
@@ -168,7 +169,26 @@ public:
                         item.get_action())));
                 break;
         }
-        const auto & message = fmt::format("[{}/{}] {} {}...", amount, total, action, item.get_package().get_name());
+        const auto & message =
+            fmt::format("[{}/{}] {} {}...", amount + 1, total, action, item.get_package().get_name());
+        plymouth.message(message);
+    }
+
+    void script_start(
+        const libdnf5::base::TransactionPackage * item,
+        libdnf5::rpm::Nevra nevra,
+        libdnf5::rpm::TransactionCallbacks::ScriptType type) override {
+        RpmTransCB::script_start(item, nevra, type);
+
+        // Report only pre/post transaction scriptlets. With all scriptlets
+        // being reported the output flickers way too much to be usable.
+        using ScriptType = libdnf5::rpm::TransactionCallbacks::ScriptType;
+        if (type != ScriptType::PRE_TRANSACTION && type != ScriptType::POST_TRANSACTION) {
+            return;
+        }
+
+        const auto message = fmt::format(
+            "Running {} scriptlet: {}...", script_type_to_string(type), to_full_nevra_string(nevra).c_str());
         plymouth.message(message);
     }
 
@@ -437,12 +457,18 @@ void OfflineExecuteCommand::run() {
     const auto & system_releasever = offline_data.get_system_releasever();
     const auto & target_releasever = offline_data.get_target_releasever();
 
-    dnf5::offline::log_status(
-        ctx,
-        "Starting offline transaction. This will take a while.",
-        libdnf5::offline::OFFLINE_STARTED_ID,
-        system_releasever,
-        target_releasever);
+    std::string message = _("Starting offline transaction. This will take a while.");
+    std::string mode{"updates"};
+    if (offline_data.get_verb() == "system-upgrade download") {
+        mode = "system-upgrade";
+        message = _("Starting system upgrade. This will take a while.");
+    }
+
+    dnf5::offline::log_status(ctx, message, libdnf5::offline::OFFLINE_STARTED_ID, system_releasever, target_releasever);
+
+    PlymouthOutput plymouth;
+    plymouth.progress(0);
+    plymouth.message(message.c_str());
 
     std::cout
         << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
@@ -480,7 +506,12 @@ void OfflineExecuteCommand::run() {
     libdnf5::cli::output::TransactionAdapter cli_output_transaction(transaction);
     libdnf5::cli::output::print_transaction_table(cli_output_transaction);
 
-    PlymouthOutput plymouth;
+    // Postponing switching the plymouth mode after transaction is resolved
+    // enables us to show the "Starting transaction..." message to the user.
+    // Once the mode is switched to updates/system-upgrade, all the messages
+    // are suppressed (in the default plymouth theme - currently bgrt in Fedora).
+    plymouth.set_mode(mode);
+
     auto callbacks = std::make_unique<PlymouthTransCB>(ctx, plymouth);
 
     // Adapted from Context::Impl::download_and_run:
@@ -520,6 +551,7 @@ void OfflineExecuteCommand::run() {
         transaction_complete_message = "Transaction complete! Cleaning up and rebooting...";
     }
 
+    plymouth.progress(100);
     plymouth.message(_(transaction_complete_message.c_str()));
     dnf5::offline::log_status(
         ctx, transaction_complete_message, libdnf5::offline::OFFLINE_FINISHED_ID, system_releasever, target_releasever);
