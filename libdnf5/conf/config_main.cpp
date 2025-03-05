@@ -237,6 +237,8 @@ class ConfigMain::Impl {
     OptionNumber<std::uint32_t> retries{10};
     OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf5::xdg::get_user_cache_dir() / "libdnf5"};
     OptionBool fastestmirror{false};
+    OptionStringAppendList excludeenvs{std::vector<std::string>{}};
+    OptionStringAppendList excludegroups{std::vector<std::string>{}};
     OptionStringAppendList excludepkgs{std::vector<std::string>{}};
     OptionStringAppendList includepkgs{std::vector<std::string>{}};
     OptionStringAppendList exclude_from_weak{std::vector<std::string>{}};
@@ -412,6 +414,8 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("cachedir", cachedir);
     owner.opt_binds().add("fastestmirror", fastestmirror);
     owner.opt_binds().add("excludepkgs", excludepkgs);
+    owner.opt_binds().add("excludeenvs", excludeenvs);
+    owner.opt_binds().add("excludegroups", excludegroups);
     owner.opt_binds().add("exclude", excludepkgs);  //compatibility with yum
     owner.opt_binds().add("includepkgs", includepkgs);
     owner.opt_binds().add("exclude_from_weak", exclude_from_weak);
@@ -1067,6 +1071,20 @@ OptionBool & ConfigMain::get_fastestmirror_option() {
 }
 const OptionBool & ConfigMain::get_fastestmirror_option() const {
     return p_impl->fastestmirror;
+}
+
+OptionStringAppendList & ConfigMain::get_excludeenvs_option() {
+    return p_impl->excludeenvs;
+}
+const OptionStringAppendList & ConfigMain::get_excludeenvs_option() const {
+    return p_impl->excludeenvs;
+}
+
+OptionStringAppendList & ConfigMain::get_excludegroups_option() {
+    return p_impl->excludegroups;
+}
+const OptionStringAppendList & ConfigMain::get_excludegroups_option() const {
+    return p_impl->excludegroups;
 }
 
 OptionStringAppendList & ConfigMain::get_excludepkgs_option() {

@@ -159,7 +159,8 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
     const auto patterns =
         dnfdaemon::key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>());
     if (patterns.size() > 0) {
-        libdnf5::comps::GroupQuery patterns_query(base->get_weak_ptr(), true);
+        libdnf5::comps::GroupQuery patterns_query(
+            base->get_weak_ptr(), libdnf5::sack::ExcludeFlags::IGNORE_EXCLUDES, true);
         const auto match_group_id = dnfdaemon::key_value_map_get<bool>(options, "match_group_id", true);
         if (match_group_id) {
             libdnf5::comps::GroupQuery query_id(query);

@@ -1207,7 +1207,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
         sack::QueryCmp cmp = settings.get_ignore_case() ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
         bool spec_resolved{false};
         if (settings.get_group_search_groups()) {
-            comps::GroupQuery group_query(base, true);
+            comps::GroupQuery group_query(base, sack::ExcludeFlags::IGNORE_EXCLUDES, true);
             comps::GroupQuery spec_groups_query(base_groups_query);
             // for REMOVE / UPGRADE actions take only installed groups into account
             // for INSTALL only available groups
@@ -1224,7 +1224,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                 group_query |= group_query_name;
             }
 
-            comps::GroupQuery already_handled_groups(base, true);
+            comps::GroupQuery already_handled_groups(base, sack::ExcludeFlags::IGNORE_EXCLUDES, true);
             // Check if there are other actions for selected groups,
             // we don't want to have multiple actions per one group id.
             for (const auto & group : group_query) {
@@ -1269,7 +1269,7 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
             }
         }
         if (settings.get_group_search_environments()) {
-            comps::EnvironmentQuery environment_query(base, true);
+            comps::EnvironmentQuery environment_query(base, sack::ExcludeFlags::IGNORE_EXCLUDES, true);
             comps::EnvironmentQuery spec_environments_query(base_environments_query);
             spec_environments_query.filter_installed(action != GoalAction::INSTALL);
             if (settings.get_group_with_id()) {
