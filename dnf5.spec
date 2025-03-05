@@ -158,6 +158,7 @@ BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 BuildRequires:  pkgconfig(rpm) >= 4.17.0
 BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
 BuildRequires:  toml11-static
+BuildRequires:  zlib-devel
 
 %if %{with clang}
 BuildRequires:  clang
