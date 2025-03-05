@@ -1237,8 +1237,8 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                         group_q_copy.filter_groupid(group.get_groupid());
                         if (!group_q_copy.empty()) {
                             // If we have multiple different actions per group it always ends up as upgrade.
-                            // This is because there are only 3 actions: INSTALL, UPGRADE and REMOVE, any two
-                            // of them mean an UPGRADE.
+                            // This is because there are only 3 actions: INSTALL (together with INSTALL_BY_COMPS),
+                            // UPGRADE and REMOVE, any two of them mean an UPGRADE.
                             // (Given that groups are not versioned the UPGRADE action basically means synchronization
                             //  with currently loaded metadata.)
                             //  TODO(amatej): When we have REMOVE and INSTALL the behavior doesn't match doing the actions separately,
@@ -1246,6 +1246,11 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                             if (action != key_action && key_action != GoalAction::UPGRADE) {
                                 group_q -= group_q_copy;
                                 action = GoalAction::UPGRADE;
+                                // INSTALL and INSTALL_BY_COMPS should result in INSTALL instead of UPGRADE.
+                                if ((action == GoalAction::INSTALL && key_action == GoalAction::INSTALL_BY_COMPS) ||
+                                    (action == GoalAction::INSTALL_BY_COMPS && key_action == GoalAction::INSTALL)) {
+                                    action = GoalAction::INSTALL;
+                                }
                             } else {
                                 // If there already is this action for this group set only the stronger reason
                                 auto & already_present_reason =
