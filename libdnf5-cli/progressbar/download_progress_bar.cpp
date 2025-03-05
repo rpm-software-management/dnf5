@@ -71,6 +71,12 @@ std::ostream & operator<<(std::ostream & stream, DownloadProgressBar & bar) {
 void DownloadProgressBar::to_stream(std::ostream & stream) {
     update();
 
+    if (!is_finished() && !tty::is_interactive()) {
+        // don't spam non-interactive terminal with progressbar's progress
+        // only print the final form
+        return;
+    }
+
     // set the default delimiters
     number_widget.set_delimiter_before("");
     description_widget.set_delimiter_before(" ");
@@ -110,42 +116,37 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
     std::size_t bar_width = get_bar_width(widgets);
     if (bar_width > terminal_width) {
         widgets.erase(std::remove(widgets.begin(), widgets.end(), &progress_widget), widgets.end());
+        bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, hide speed widget
-    bar_width = get_bar_width(widgets);
     if (bar_width > terminal_width) {
         widgets.erase(std::remove(widgets.begin(), widgets.end(), &speed_widget), widgets.end());
         speed_widget.set_delimiter_before(" ");
+        bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, hide time widget
-    bar_width = get_bar_width(widgets);
     if (bar_width > terminal_width) {
         widgets.erase(std::remove(widgets.begin(), widgets.end(), &time_widget), widgets.end());
+        bar_width = get_bar_width(widgets);
     }
 
     // if bar is finished, hide the progress widget
     if (get_state() != ProgressBarState::STARTED) {
         widgets.erase(std::remove(widgets.begin(), widgets.end(), &progress_widget), widgets.end());
+        bar_width = get_bar_width(widgets);
     }
 
     // if bar doesn't fit terminal width, reduce description width
-    bar_width = get_bar_width(widgets);
     if (bar_width > terminal_width) {
         description_widget.set_total_width(description_widget.get_total_width() + terminal_width - bar_width);
+        bar_width = get_bar_width(widgets);
     }
 
-    if (get_state() == ProgressBarState::STARTED && !tty::is_interactive()) {
-        // don't spam non-interactive terminal with progressbar's progress
-        // only print the final form
-        return;
-        // stream;
-    }
-
-    bar_width = get_bar_width(widgets);
     if (bar_width < terminal_width) {
         description_widget.set_total_width(description_widget.get_total_width() + terminal_width - bar_width);
+        bar_width = get_bar_width(widgets);
     }
 
     bool color_used = false;
