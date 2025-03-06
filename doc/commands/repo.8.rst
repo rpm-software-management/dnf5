@@ -68,6 +68,6 @@ Examples
 ``dnf5 repo list --disabled *-debuginfo``
     | Print disabled repositories related to debugging.
 
-``dnf5 config-manger setopt repo_id.enabled=0``
-    | Persistently disable repository using the config-manger plugin command.
+``dnf5 config-manager setopt repo_id.enabled=0``
+    | Persistently disable repository using the config-manager plugin command.
     | See :manpage:`dnf5-config-manager(8)` for more details.
