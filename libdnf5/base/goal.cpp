@@ -1245,11 +1245,12 @@ GoalProblem Goal::Impl::resolve_group_specs(std::vector<GroupSpec> & specs, base
                             //                consider adding REINSTALL action.
                             if (action != key_action && key_action != GoalAction::UPGRADE) {
                                 group_q -= group_q_copy;
-                                action = GoalAction::UPGRADE;
                                 // INSTALL and INSTALL_BY_COMPS should result in INSTALL instead of UPGRADE.
                                 if ((action == GoalAction::INSTALL && key_action == GoalAction::INSTALL_BY_COMPS) ||
                                     (action == GoalAction::INSTALL_BY_COMPS && key_action == GoalAction::INSTALL)) {
                                     action = GoalAction::INSTALL;
+                                } else {
+                                    action = GoalAction::UPGRADE;
                                 }
                             } else {
                                 // If there already is this action for this group set only the stronger reason
