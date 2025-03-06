@@ -38,7 +38,7 @@ jobs:
     trigger: release
     dist_git_branches:
       - fedora-rawhide
-    copy_upstream_release_description: true
+    copy_upstream_release_description: false
     packages: [dnf5]
   - job: koji_build
     trigger: commit
