@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-09-19 09:54+0000\n"
 "Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Неподдерживаемый аргумент для действия REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1545
+#: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Неверное значение конфигурации для multilib_policy: {}"
 
@@ -589,78 +589,78 @@ msgstr "Проблема: "
 msgid "Problem {}: "
 msgstr "Проблема {}: "
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:80
 msgid "This transaction has been already run before."
 msgstr "Эта транзакция уже выполнялась ранее."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr "Невозможно запустить транзакцию с разрешением проблем."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
 msgstr "Сбой проверки транзакций rpm."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Не удалось получить блокировку транзакции rpm. Выполняется другая транзакция."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:85
 msgid "Rpm transaction failed."
 msgstr "Сбой транзакции rpm."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:86
 msgid "Signature verification failed."
 msgstr "Сбой проверки подписей."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 #, fuzzy
 #| msgid "The repository does not have any PGP keys configured."
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "В репозитории не настроено ни одного ключа PGP."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Public key is not installed."
 msgstr "Публичный ключ не установлен."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:92
 msgid "Canceled by the user."
 msgstr "Отменено пользователем."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid "Public key import failed."
 msgstr "Сбой импорта публичного ключа."
 
-#: base/transaction.cpp:979
+#: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
 msgstr "Недопустимый tsflag: {}"
 
-#: base/transaction.cpp:1317
+#: base/transaction.cpp:1318
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Публичный ключ \"{}\" уже присутствует, не импортируется."
 
-#: base/transaction.cpp:1338
+#: base/transaction.cpp:1339
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Произошла ошибка при импорте ключа \"{}\": {}"
 
-#: base/transaction.cpp:1372
+#: base/transaction.cpp:1373
 #, fuzzy
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "Сбой проверки PGP для пакета \"{}\" ({}) из репозитория \"{}\": "
 
-#: base/transaction.cpp:1400
+#: base/transaction.cpp:1401
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Импорт ключа не помог, неправильный ключ?"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1422
+#: base/transaction.cpp:1423
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 #| msgid_plural ""
@@ -675,7 +675,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Предупреждение: пропущены проверки PGP для {0} пакетов из репозиториев: {1}"
 
-#: base/transaction.cpp:1425
+#: base/transaction.cpp:1426
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {0} packages from repository: {1}"
 #| msgid_plural ""
@@ -725,23 +725,23 @@ msgstr "Не удалось сохранить xml-документ для гр�
 msgid "Invalid package type: {}"
 msgstr "Недопустимый тип пакета: {}"
 
-#: conf/config_main.cpp:56
+#: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
 msgstr "Ввод пуст. Должен содержать значение."
 
-#: conf/config_main.cpp:62
+#: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
 msgstr "Входное значение '{}' не должно быть отрицательным"
 
-#: conf/config_main.cpp:67
+#: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
 msgstr "Не удалось преобразовать '{}' в байты"
 
-#: conf/config_main.cpp:83
+#: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
 msgstr "Неизвестная единица '{}'"
 
-#: conf/config_main.cpp:278
+#: conf/config_main.cpp:279
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Значение дросселя {} находится вне допустимого диапазона {} ... {}"
 
@@ -906,7 +906,7 @@ msgstr "Отсутствует ':' в значении"
 msgid "Invalid module status: {}"
 msgstr "Неверный статус модуля: {}"
 
-#: plugin/plugins.cpp:65
+#: plugin/plugins.cpp:67
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -915,23 +915,29 @@ msgstr ""
 "плагином \"{}\" (\"{}\"), является \"{}.{}\". Версией API в libdnf является "
 "\"{}.{}\"."
 
-#: plugin/plugins.cpp:114
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr ""
+
+#: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
 msgstr "Невозможно найти библиотеку плагинов \"{}\""
 
-#: plugin/plugins.cpp:181
+#: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
 msgstr "Недопустимое значение опции: enabled={}"
 
-#: plugin/plugins.cpp:205
+#: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path не может быть пустым"
 
-#: plugin/plugins.cpp:230
-msgid "Cannot load plugins: {}"
+#: plugin/plugins.cpp:253
+#, fuzzy
+#| msgid "Cannot load plugins: {}"
+msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Невозможно загрузить плагины: {}"
 
-#: repo/config_repo.cpp:566
+#: repo/config_repo.cpp:569
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Сбой вычисления SHA256"
 
@@ -951,11 +957,17 @@ msgstr ""
 "Максимальная скорость загрузки ниже минимальной, пожалуйста, измените "
 "конфигурацию minrate или throttle"
 
-#: repo/package_downloader.cpp:153
+#: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Невозможно загрузить пакет \"{0}\", активирована опция \"cacheonly\"."
 
-#: repo/package_downloader.cpp:266
+#: repo/package_downloader.cpp:219
+#, fuzzy
+#| msgid "Failed to download files"
+msgid "Already downloaded"
+msgstr "Не удалось загрузить файлы"
+
+#: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
 msgstr "Не удалось загрузить пакеты"
 
@@ -997,7 +1009,7 @@ msgstr "Не удалось загрузить Компы \"{}\": не имее�
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Не удалось загрузить xml-компы \"{}\": {}"
 
-#: repo/repo.cpp:500
+#: repo/repo.cpp:501
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Не удалось загрузить RPM \"{}\": {}"
 
@@ -1056,7 +1068,7 @@ msgstr "Не удалось перечислить pgp-ключи: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Не удалось импортировать pgp-ключи: {}"
 
-#: repo/repo_sack.cpp:147
+#: repo/repo_sack.cpp:148
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1064,7 +1076,7 @@ msgstr ""
 "Не удалось создать репозиторий \"{}\": Идентификатор присутствует в "
 "конфигурации более одного раза"
 
-#: repo/repo_sack.cpp:518
+#: repo/repo_sack.cpp:565
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Включено только кэширование, но нет кэша для репозитория \"{}\""
 
@@ -1237,7 +1249,7 @@ msgstr "Невозможно понизить версию пакета \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Невозможно установить пакет \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+#: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
 msgstr "{}"
 
@@ -1264,7 +1276,7 @@ msgstr ""
 "Загрузка TOML-файла состояния системы {} не удалась (см. dnf5-system-"
 "state(7)): {}"
 
-#: system/state.cpp:614
+#: system/state.cpp:602
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "Неподдерживаемая версия TOML \"{}\", максимальная поддерживаемая версия - "
@@ -1591,7 +1603,7 @@ msgstr "Отсутствует '=' в строке {}"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Невозможно загрузить общую библиотеку \"{}\": {}"
 
-#: utils/library.cpp:49
+#: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Невозможно получить адрес символа \"{}\": {}"
 

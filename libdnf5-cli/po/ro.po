@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-14 18:20+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-19 11:30+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
@@ -31,86 +31,86 @@ msgstr "„{}” nu este permis în comanda „{}”"
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "„{}” nu este permis împreună cu argumentul pozițional „{}”"
 
-#: argument_parser.cpp:110
+#: argument_parser.cpp:111
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Id-ul argumentului „{}” este deja înregistrat în grupul „{}”"
 
-#: argument_parser.cpp:237
+#: argument_parser.cpp:238
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Caracter „.” nevalid în id-ul argumentului „{}”"
 
-#: argument_parser.cpp:345 argument_parser.cpp:350
+#: argument_parser.cpp:346 argument_parser.cpp:351
 msgid "Too few values for positional argument \"{}\""
 msgstr "Prea puține valori pentru argumentul pozițional „{}”"
 
-#: argument_parser.cpp:511
+#: argument_parser.cpp:512
 msgid "Missing value for named argument \"--{}\""
 msgstr "Lipsește valoarea pentru argumentul numit „--{}”"
 
-#: argument_parser.cpp:519
+#: argument_parser.cpp:520
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Valoare neașteptată pentru argumentul numit „--{}”"
 
-#: argument_parser.cpp:561
+#: argument_parser.cpp:562
 msgid "Missing value for named argument \"-{}\""
 msgstr "Lipsește valoarea pentru argumentul numit „-{}”"
 
 #. print usage
-#: argument_parser.cpp:657
+#: argument_parser.cpp:658
 msgid "Usage:"
 msgstr "Utilizare:"
 
-#: argument_parser.cpp:665
+#: argument_parser.cpp:666
 msgid "Description:"
 msgstr "Descriere:"
 
-#: argument_parser.cpp:915
+#: argument_parser.cpp:943
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "Id de comandă „{}” deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:926
+#: argument_parser.cpp:954
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Id-ul argumentului numit „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:936
+#: argument_parser.cpp:964
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Id-ul argumentului pozițional „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:946
+#: argument_parser.cpp:974
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Id-ul grupului „{}” este deja înregistrat pentru comanda „{}”"
 
-#: argument_parser.cpp:973
+#: argument_parser.cpp:1001
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține subcomanda cu id-ul „{}”"
 
-#: argument_parser.cpp:981
+#: argument_parser.cpp:1009
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține un argument numit cu id-ul „{}”"
 
-#: argument_parser.cpp:989
+#: argument_parser.cpp:1017
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține un argument pozițional cu id-ul „{}”"
 
-#: argument_parser.cpp:996
+#: argument_parser.cpp:1024
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține grupul cu id-ul „{}”"
 
-#: argument_parser.cpp:1103 argument_parser.cpp:1307
+#: argument_parser.cpp:1131 argument_parser.cpp:1335
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Argument necunoscut „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1118 argument_parser.cpp:1322
+#: argument_parser.cpp:1146 argument_parser.cpp:1350
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Lipsește argumentul pozițional „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1525
+#: argument_parser.cpp:1553
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Argumentul numit cu id-ul de rută „{}” nu a fost găsit"
 
-#: argument_parser.cpp:1535
+#: argument_parser.cpp:1563
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Argumentul pozițional cu id-ul de rută „{}” nu a fost găsit"
 

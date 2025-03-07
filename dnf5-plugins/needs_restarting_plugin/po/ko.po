@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-04-27 17:14+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,6 +18,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.4\n"
 
-#: needs_restarting.cpp:229
+#: needs_restarting.cpp:230
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus로 연결 할 수 없음: {}"

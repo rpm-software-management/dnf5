@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-10-24 02:52+0000\n"
 "Last-Translator: ButterflyOfFire <butterflyoffire@users.noreply.translate."
 "fedoraproject.org>\n"
@@ -20,6 +20,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: needs_restarting.cpp:229
+#: needs_restarting.cpp:230
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Ur izmir ara ad yeqqen ɣer D-Bus: {}"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2025-01-24 15:06+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-23 16:58+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -280,8 +280,8 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Afișează numai grupurile care conțin pachete cu numele specificate. Opțiune "
-"listă, acceptă caractere joker."
+"Afișează numai grupurile care conțin pachetele cu numele specificate. "
+"Opțiune listă, acceptă caractere joker."
 
 #: commands/group/arguments.hpp:67
 msgid "Pattern matching group IDS."
@@ -486,11 +486,11 @@ msgstr "Gestionează modulele"
 msgid "No matches found for \"{}\"."
 msgstr "Nu s-au găsit potriviri pentru „{}”."
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "Gestionează tranzacțiile fără conexiune la rețea"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -499,11 +499,11 @@ msgstr ""
 "pentru a iniția tranzacția fără conexiune, de exemplu «dnf5 system-upgrade "
 "download [OPȚIUNI]»."
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Nu s-a putut realiza conectarea la D-Bus: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -511,33 +511,33 @@ msgstr ""
 "Pregătește sistemul pentru a efectua tranzacția fără conexiune și îl "
 "repornește pentru a începe tranzacția."
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "Oprește sistemul după finalizarea operațiunii"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "Nu este stocată nicio tranzacție fără conexiune."
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "Sistemul nu este pregătit pentru tranzacția fără conexiune."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "Directorul de date {} nu există."
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 "{} nu este una dintre dependențele (Wants/WantedBy) ale system-update.target."
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 "Sistemul va reporni acum pentru a face actualizarea la noua versiune lansată "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -545,7 +545,7 @@ msgstr ""
 "Sistemul va reporni acum pentru a efectua tranzacția fără conexiune inițiată "
 "de următoarea comandă:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -553,15 +553,15 @@ msgstr ""
 "Numai pentru uz intern, nu este destinată a fi executată de către "
 "utilizator. Execută tranzacția în mediul fără conexiune."
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "Fișierul de declanșare nu există. Se iese."
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Un alt instrument de tranzacționare fără conexiune rulează. Se iese."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -572,51 +572,51 @@ msgstr ""
 "iniția actualizarea/tranzacția fără conexiune a sistemului, trebuie să "
 "executați «dnf5 offline reboot»."
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Utilizați comanda «dnf5 offline reboot» pentru a începe tranzacția."
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "Tranzacția a eșuat: "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "Eroare la citirea fișierului de jurnal: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "Adăugarea potrivirii în jurnal a eșuat: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "Nu a fost găsit niciun jurnal."
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Următoarele porniri par să conțină jurnale de tranzacții fără conexiune:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "Nu se poate găsi niciun jurnal cu acest index."
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "Nu s-a găsit nicio intrare care să corespundă în jurnalul systemd."
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "Afișează jurnalele din tranzacțiile efectuate fără conexiune în trecut"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Ce jurnal să fie afișat. Executați-o fără niciun argument pentru a obține o "
 "listă a jurnalelor disponibile."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -624,23 +624,23 @@ msgstr ""
 "systemd nu este acceptat în această versiune a DNF 5; subcomanda „log” nu "
 "este disponibilă."
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "Afișează starea tranzacției efectuate fără conexiune, curente"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr ""
 "O tranzacție fără conexiune la rețea a fost inițiată prin următoarea comandă:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Rulați «dnf5 offline reboot» pentru a reporni și a efectua tranzacția fără "
 "conexiune la rețea."
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -649,7 +649,7 @@ msgstr ""
 "finalizată. Rulați «dnf5 offline log» pentru mai multe informații. Comanda "
 "care a inițiat tranzacția a fost:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "Stare necunoscută a tranzacției fără conexiune la rețea: "
 
@@ -725,16 +725,16 @@ msgstr "Caută software care să corespundă tuturor șirurilor specificate"
 msgid "Remove software and install another in one transaction"
 msgstr "Elimină software-ul și instalează altul într-o singură tranzacție"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "Pregătește sistemul pentru actualizarea la o nouă versiune"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr ""
 "Descarcă tot ce este necesar pentru a face actualizarea la o nouă versiune"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
@@ -742,18 +742,18 @@ msgstr ""
 "Nu instalează pachete din noua versiune dacă acestea sunt mai vechi decât "
 "cele instalate în prezent"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr ""
 "Aveți nevoie de o versiune „--releasever” mai mare decât versiunea curentă a "
 "sistemului."
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr ""
 "Stochează o tranzacție distro-sync pentru a fi efectuată fără conexiune"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr ""
 "Stochează o tranzacție de actualizare pentru a fi efectuată fără conexiune"
@@ -857,8 +857,8 @@ msgid ""
 " Fingerprint: {}\n"
 " From       : {}\n"
 msgstr ""
-" AmprentaDigitală: {}\n"
-" De la           : {}\n"
+" AmprentaDigitală:  {}\n"
+" De la           :  {}\n"
 
 #: context.cpp:87
 msgid "The key was successfully imported."
@@ -866,56 +866,48 @@ msgstr "Cheia a fost importată cu succes."
 
 #: context.cpp:96
 msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr ""
+msgstr "Următoarea cheie PGP (0x{}) este pe cale să fie eliminată:"
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " ID-utilizator   : \"{}\"\n"
+msgstr " Motiv           :  {}\n"
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " From       : {}\n"
-msgstr ""
-" AmprentaDigitală: {}\n"
-" De la           : {}\n"
+msgstr " De la           :  {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
-msgstr ""
+msgstr "Ca urmare, instalarea pachetelor semnate cu această cheie va eșua."
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr ""
+msgstr "Este recomandat să eliminați cheia expirată pentru a permite importul"
 
 #: context.cpp:106
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
+"o cheie actualizată. Acest lucru ar putea face ca pachetele deja instalate "
+"să fie neverificabile."
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."
-msgstr ""
+msgstr "Sistemul va începe acum operația de eliminare a cheii."
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully imported."
 msgid "The key was successfully removed."
-msgstr "Cheia a fost importată cu succes."
+msgstr "Cheia a fost eliminată cu succes."
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -923,38 +915,38 @@ msgstr ""
 "Nu există depozite care să corespundă cu {}. Pentru a utiliza depozitele "
 "dintr-un sistem gazdă, utilizați opțiunea „--use-host-config”."
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "Niciun depozit care să coincidă cu {}"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "Se actualizează și se încarcă depozitele:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "Depozite încărcate."
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "Se testează tranzacția fără conexiune"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "Tranzacția a eșuat: {}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "Locația „{}” conține deja o tranzacție stocată, aceasta va fi suprascrisă."
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
@@ -962,7 +954,7 @@ msgstr ""
 "Există deja o tranzacție fără conexiune în așteptare, inițiată de următoarea "
 "comandă:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -970,7 +962,7 @@ msgstr ""
 "Continuarea va anula vechea tranzacție fără conexiune la rețea și o va "
 "înlocui cu aceasta."
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -980,71 +972,75 @@ msgstr ""
 "offline reboot» pentru a reporni și a executa tranzacția. Pentru a anula "
 "tranzacția și a șterge fișierele descărcate, utilizați «dnf5 offline clean»."
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
 msgstr "Tranzacție în derulare"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr "Se actualizează {}"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "Se retrogradează {}"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr "Se reinstalează {}"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Acțiune neașteptată în TransactionPackage: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
 msgstr "Se instalează {}"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "Pregătirea tranzacției"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr "Se elimină {}"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "Curățare {}"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "Eroare la despachetare: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "Eroare cpio: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "Ieșire scriptlet:"
 
-#: context.cpp:941
+#: context.cpp:947
+msgid "Running scriptlets"
+msgstr "Se execută scripturile"
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr "Se execută scriptul {}: {}"
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "Scriptlet finalizat {}: {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Eroare necritică în scriptul {}: {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "Eroare în scriptlet-ul {}: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "Verifică fișierele pachetului"
 
@@ -1052,7 +1048,7 @@ msgstr "Verifică fișierele pachetului"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nu se poate încărca biblioteca partajată „{}”: {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nu se poate obține adresa simbolului „{}”: {}"
 
@@ -1457,15 +1453,19 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- «dnf5» lansat cu argumentele: „{}” ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "Argument „index” nevalid în „--complete=<index>[,...]”: {}"
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Adăugați „--help” pentru mai multe informații despre argumente."
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1473,7 +1473,7 @@ msgstr ""
 "Ar putea fi o comandă furnizată de un modul, încercați: «dnf5 install 'dnf5-"
 "command({})'»"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1481,12 +1481,12 @@ msgstr ""
 "Argumentul este disponibil pentru comenzile: {}; (trebuie să fie plasat după "
 "comandă)."
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr ""
 "Nu există acces de citire/executare în directorul curent, se deplasează la /"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1497,15 +1497,15 @@ msgstr ""
 "assumeno” sau „--downloadonly” pentru a executa comanda fără a modifica "
 "starea sistemului."
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "Operația va stoca tranzacția doar în {}"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr "Operația va descărca doar pachetele pentru tranzacție."
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1513,7 +1513,7 @@ msgstr ""
 "Modul de testare activat: Vor fi efectuate numai descărcări de pachete, "
 "instalări de chei OpenPGP și verificări ale tranzacțiilor."
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1521,15 +1521,15 @@ msgstr ""
 "Nu au fost încărcate depozite din installroot. Pentru a utiliza configurația "
 "și depozitele sistemului gazdă, introduceți „--use-host-config”."
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "Comanda a returnat o eroare: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "«dnf5» a terminat"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "Gata!"
 

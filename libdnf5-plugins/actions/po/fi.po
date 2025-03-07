@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Jan Kuparinen <copper_fin@hotmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-11-20 13:17+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-28 22:06+0000\n"
+"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/fi/>\n"
 "Language: fi\n"
@@ -17,62 +18,172 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.10.2\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
-msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+#: actions.cpp:237
+#, fuzzy
+#| msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
+msgid "File \"{}\" on line {}: {}"
+msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon koukku \"{}\""
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
+#| "CMD\" format expected"
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
 msgstr ""
 "Virhe tiedostossa \"{}\" rivillä {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
 "CMD\" -muoto odotettavissa"
 
-#: actions.cpp:589
-msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+#: actions.cpp:676
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+msgid "Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon `enabled` -vaihtoehdon arvo "
 "\"{}\""
 
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon vaihtoehto \"{}\""
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr ""
 
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon koukku \"{}\""
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr ""
 
-#: actions.cpp:636
+#: actions.cpp:720
 #, fuzzy
 #| msgid ""
 #| "Error in file \"{}\" on line {}: Package filter can only be used in "
 #| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
 "Virhe tiedostossa \"{}\" rivillä {}: Pakettisuodatinta voidaan käyttää vain "
 "PRE_TRANS- ja POST_TRANS-koukuissa"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+#: actions.cpp:726
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Cannot use direction without package "
+#| "filter"
+msgid "Cannot use direction without package filter"
 msgstr ""
 "Virhe tiedostossa \"{}\" rivillä {}: Suuntaa ei voi käyttää ilman "
 "pakettisuodatinta"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+#: actions.cpp:740
+#, fuzzy
+#| msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+msgid "Unknown package direction \"{}\""
 msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon paketin suunta \"{}\""
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon tila \"{}\""
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr ""
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "Virhe tiedostossa \"{}\" rivillä {}: Puuttuva komento"
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr ""
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Puuttuva komento"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr ""
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr ""
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr ""
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr ""
+
+#: actions.cpp:995
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr ""
+
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr ""
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr ""
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr ""
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr ""
+
+#: actions.cpp:1154
+#, fuzzy
+#| msgid "Cannot create pipe: {}"
+msgid "Cannot write response"
 msgstr "Putkea ei voi luoda: {}"
+
+#: actions.cpp:1821
+#, fuzzy
+#| msgid "Cannot create pipe: {}"
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Putkea ei voi luoda: {}"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr ""
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr ""
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr ""
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr ""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr ""
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr ""
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr ""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon vaihtoehto \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "Virhe tiedostossa \"{}\" rivillä {}: Tuntematon tila \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "Virhe tiedostossa \"{}\" rivillä {}: Puuttuva komento"

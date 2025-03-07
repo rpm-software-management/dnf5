@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
-# "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
+# "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024, 2025.
 # Ciro Mota <ciro.mota@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-30 12:08+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-03-01 03:12+0000\n"
 "Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/pt_BR/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -178,7 +178,7 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Mostra apenas grupos contendo pacotes com nomes especificados. Opção de "
+"Mostrar apenas grupos contendo pacotes com nomes especificados. Opção de "
 "lista, suporta caracteres curinga."
 
 #: commands/repo/repo.cpp:37
@@ -201,13 +201,13 @@ msgstr ""
 "Este comando tem que ser executado com privilégios de superusuário (como "
 "usuário root na maioria dos sistemas)."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Formatação inválida no valor de argumento: O último caractere da chave "
 "não pode ser '.': {}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Adicione \"--help\" para mais informações sobre os argumentos."

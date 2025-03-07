@@ -1,14 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-09-22 03:36+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-19 09:09+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ka/>\n"
 "Language: ka\n"
@@ -16,62 +18,149 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "ფაილი \"{}\" ხაზზე {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "მოველოდი ფორმატს \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\""
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "უცნობი \"enabled\" პარამეტრის მნიშვნელობა \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "უცნობი პარამეტრი \"{}\""
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "უცნობი ჰუკი \"{}\""
+
+#: actions.cpp:720
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
-"შეცდომა ფაილში \"{}\" ხაზზე {}: მოველოდი ფორმატს \"HOOK:PKG_FILTER:DIRECTION:"
-"OPTIONS:CMD\""
+"პაკეტების ფილტრი, მხოლოდ, GOAL_RESOLVED, PRE_TRANS და POST_TRANS ჰუკებში "
+"შეგიძლიათ, გამოიყენოთ"
 
-#: actions.cpp:589
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "მიმართულებას პაკეტების ფილტრის გარეშე ვერ გამოიყენებთ"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "უცნობი პაკეტის მიმართულება \"{}\""
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "უცნობი რეჟიმი \"{}\""
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "მხარდაუჭერელი მნიშნელობა პარამეტრისთვის \"raise_error\": {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "ნაკლული ბრძანება"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+"სინტაქსის შეცდომა: აკლია ტოლობის ნიშანი(=) ქმედების გამოტანის ხაზზე: {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "პარამეტრის დაყენება შეუძლებელია: ქმედების გამოტანილი ხაზი: {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "ქმედებამ გააგზავნა არასწორი ჟურნალის დონე: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "ქმედების გამოძახებები გასაჩერებლად: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "ქმედების გამოგზავნილი შეცდომის შეტყობინება: {}"
+
+#: actions.cpp:995
 msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
-"შეცდომა ფაილში \"{}\" ფაილში {}: უცნობი \"enabled\" პარამეტრის მნიშვნელობა "
-"\"{}\""
+"სინტაქსის შეცდომა: ქმედების გამოტანის ხაზი უნდა იწყებოდეს ერთ-ერთი "
+"სტრიქონით: \"tmp.\", \"conf.\", \"var.\", \"stop=\", ან \"error=\": {}"
 
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პარამეტრი \"{}\""
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "ქმედებიდან (გადაცემის არხიდან) წაკითხვის შეცდომა"
 
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი ჰუკი \"{}\""
-
-#: actions.cpp:636
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
-"შეცდომა ფაილში \"{}\" ხაზზე {}: პაკეტების ფილტრი, მხოლოდ, PRE_TRANS და "
-"POST_TRANS ჰუკებში შეგიძლიათ, გამოიყენოთ"
+"სინტაქსის შეცდომა json ტიპის მოთხოვნაში ქმედებიდან: აკლია დამწყები '{{' "
+"სიმბოლო"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "შეცდომა ქმედებიდან მოთხოვნის დამუშავებისას."
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "სინტაქისს შეცდომა json მოთხოვნაში ქმედებიდან: {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "სინტაქსის შეცდომა json მოთხოვნაში ქმედებიდან: შეყვანა დაუსრულებელია"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "პასუხის ჩაწერა შეუძლებელია"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "ქმედების დამატება: ვერ შევქმენი ფაიფი"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "ქმედების დამატება: დაფორკვა შეუძლებელია"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
 msgstr ""
-"შეცდომა ფაილში \"{}\" ხაზზე {}: მიმართულებას პაკეტების ფილტრის გარეშე ვერ "
-"გამოიყენებთ"
+"ქმედების დამატება: ბრძანების სტანდარტულ შეყვანაზე მიმაგრება შეუძლებელია"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პაკეტის მიმართულება \"{}\""
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "ქმედების დამატება: ბრძანების გამოტანის არხზე მიმაგრება შეუძლებელია"
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი რეჟიმი \"{}\""
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "ქმედების შესრულება შეუძლებელია. ბრძანება \"{}\". არგუმენტები \"{}\""
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: ნაკლული ბრძანება"
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "შეცდომა შვილი პროცესის მომზადებისას"
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
-msgstr "ვერ შევქმენი ფაიფი: {}"
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "გასვლის კოდი: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "შეწყდა სიგნალით: {}"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი პარამეტრი \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: უცნობი რეჟიმი \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "შეცდომა ფაილში \"{}\" ხაზზე {}: ნაკლული ბრძანება"

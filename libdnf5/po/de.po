@@ -5,14 +5,15 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
-# Ettore Atalan <atalanttore@googlemail.com>, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2024, 2025.
+# J C <valsu@vivaldi.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-30 23:38+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-23 02:57+0000\n"
+"Last-Translator: J C <valsu@vivaldi.net>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/de/>\n"
 "Language: de\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -35,7 +36,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nicht unterstütztes Argument für die REMOVE Aktion: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1545
+#: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Fehlerhafter Konfigurationswert für multilib_policy: {}"
 
@@ -612,106 +613,98 @@ msgstr "Problem: "
 msgid "Problem {}: "
 msgstr "Problem {}: "
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:80
 msgid "This transaction has been already run before."
 msgstr "Diese Transaktion wurde bereits zuvor ausgeführt."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr "Kann Transaktionen mit Auflösungsproblemen nicht ausführen."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
 msgstr "Rpm Transaktionsprüfung fehlgeschlagen."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Rpm Transaktionssperre konnte nicht in Kraft gesetzt werden. Eine andere "
 "Transaktion wird bereits durchgeführt."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:85
 msgid "Rpm transaction failed."
 msgstr "Rpm Transaktion fehlgeschlagen."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:86
 msgid "Signature verification failed."
 msgstr "Verifizierung der Signatur fehlgeschlagen."
 
-#: base/transaction.cpp:89
-#, fuzzy
-#| msgid "The repository does not have any PGP keys configured."
+#: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Das Repository hat keine OpenPGP-Schlüssel konfiguriert."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Public key is not installed."
 msgstr "Öffentlicher Schlüssel ist nicht installiert."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:92
 msgid "Canceled by the user."
 msgstr "Vom Nutzer abgebrochen."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid "Public key import failed."
 msgstr "Importieren des öffentlichen Schlüssels fehlgeschlagen."
 
-#: base/transaction.cpp:979
+#: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
 msgstr "Ungültiges tsflag: {}"
 
-#: base/transaction.cpp:1317
+#: base/transaction.cpp:1318
 msgid "Public key \"{}\" is already present, not importing."
 msgstr ""
 "Öffentlicher Schlüssel \"{}\" ist bereits vorhanden. Er wird nicht "
 "importiert."
 
-#: base/transaction.cpp:1338
+#: base/transaction.cpp:1339
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Beim Importieren des Schlüssels \"{}\" ist ein Fehler aufgetreten: {}"
 
-#: base/transaction.cpp:1372
-#, fuzzy
-#| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
+#: base/transaction.cpp:1373
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "OpenPGP-Prüfung für Paket „{}“ ({}) aus Repository „{}“ ist fehlgeschlagen: "
 
-#: base/transaction.cpp:1400
+#: base/transaction.cpp:1401
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Das Importieren des Schlüssels hat nicht geholfen? Falscher Schlüssel?"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1422
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {0} package from repository: {1}"
-#| msgid_plural ""
-#| "Warning: skipped PGP checks for {0} packages from repository: {1}"
+#: base/transaction.cpp:1423
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Paket aus dem Repository: {1}"
+"Warnung: Übersprungene OpenPGP-Prüfungen für {0} Paket aus dem Repository: "
+"{1}"
 msgstr[1] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Pakete aus dem Repository: {1}"
+"Warnung: Übersprungene OpenPGP-Prüfungen für {0} Pakete aus dem Repository: "
+"{1}"
 
-#: base/transaction.cpp:1425
-#, fuzzy
-#| msgid "Warning: skipped PGP checks for {0} package from repositories: {1}"
-#| msgid_plural ""
-#| "Warning: skipped PGP checks for {0} packages from repositories: {1}"
+#: base/transaction.cpp:1426
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
 msgstr[0] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Paket aus dem Repositories: {1}"
+"Warnung: Übersprungene OpenPGP-Prüfungen für {0} Paket aus dem Repositories: "
+"{1}"
 msgstr[1] ""
-"Warnung: Übersprungene PGP Prüfungen für {0} Pakete aus den Repositories: {1}"
+"Warnung: Übersprungene OpenPGP-Prüfungen für {0} Pakete aus den "
+"Repositories: {1}"
 
 #: common/exception.cpp:78
 msgid "System error"
@@ -748,23 +741,23 @@ msgstr ""
 msgid "Invalid package type: {}"
 msgstr "Ungültiger Pakettyp: {}"
 
-#: conf/config_main.cpp:56
+#: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
 msgstr "Eingabe ist leer. Sie muss einen Wert enthalten."
 
-#: conf/config_main.cpp:62
+#: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
 msgstr "Eingabewert '{}' darf nicht negativ sein"
 
-#: conf/config_main.cpp:67
+#: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
 msgstr "Konnte {} nicht in Bytes konvertieren"
 
-#: conf/config_main.cpp:83
+#: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
 msgstr "Unbekannte Einheit '{}'"
 
-#: conf/config_main.cpp:278
+#: conf/config_main.cpp:279
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Der Reglerwert {} liegt außerhalb des erlaubten Bereichs {} ... {}"
 
@@ -929,7 +922,7 @@ msgstr "Fehlender ':' im Wert"
 msgid "Invalid module status: {}"
 msgstr "Ungültiger Modulstatus: {}"
 
-#: plugin/plugins.cpp:65
+#: plugin/plugins.cpp:67
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -938,23 +931,27 @@ msgstr ""
 "bereitgestellte API-Version ist \"{}.{}\". Die API-Version in libdnf ist "
 "\"{}.{}\"."
 
-#: plugin/plugins.cpp:114
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Erstellung einer libdnf Plugininstanz fehlgeschlagen"
+
+#: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
 msgstr "Plugin-Bibliothek \"{}\" kann nicht gefunden werden"
 
-#: plugin/plugins.cpp:181
+#: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
 msgstr "Ungültiger Optionswert: enabled={}"
 
-#: plugin/plugins.cpp:205
+#: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path darf nicht leer sein"
 
-#: plugin/plugins.cpp:230
-msgid "Cannot load plugins: {}"
-msgstr "Kann Plugins nicht laden: {}"
+#: plugin/plugins.cpp:253
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Kann libdnf Plugin nicht laden von: {}"
 
-#: repo/config_repo.cpp:566
+#: repo/config_repo.cpp:569
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Die Berechnung von SHA256 ist fehlgeschlagen"
 
@@ -975,13 +972,17 @@ msgstr ""
 "Downloadgeschwindigkeit. Bitte passen Sie die Einstellung von minrate oder "
 "throttle an"
 
-#: repo/package_downloader.cpp:153
+#: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Kann das Paket \"{0}\" nicht herunterladen, die Option cacheonly ist "
 "aktiviert."
 
-#: repo/package_downloader.cpp:266
+#: repo/package_downloader.cpp:219
+msgid "Already downloaded"
+msgstr "Bereits heruntergeladen"
+
+#: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
 msgstr "Herunterladen der Pakete fehlgeschlagen"
 
@@ -1026,7 +1027,7 @@ msgstr ""
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Laden der XML Comps \"{}\" fehlgeschlagen: {}"
 
-#: repo/repo.cpp:500
+#: repo/repo.cpp:501
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Laden von RPM \"{}\" fehlgeschlagen: {}"
 
@@ -1084,7 +1085,7 @@ msgstr "Auflisten der OpenPGP-Schlüssel ist fehlgeschlagen: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Importieren der OpenPGP-Schlüssel ist fehlgeschlagen: {}"
 
-#: repo/repo_sack.cpp:147
+#: repo/repo_sack.cpp:148
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1092,7 +1093,7 @@ msgstr ""
 "Erstellen von Repo \"{}\" fehlgeschlagen: ID ist mehr als einmal in der "
 "Konfiguration enthalten"
 
-#: repo/repo_sack.cpp:518
+#: repo/repo_sack.cpp:565
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Cache-only ist aktiviert, aber kein Cache für Repository \"{}\""
 
@@ -1277,7 +1278,7 @@ msgstr "Kann Paket \"{}\" nicht herabstufen"
 msgid "Cannot install package \"{}\""
 msgstr "Kann Paket \"{}\" nicht installieren"
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+#: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
 msgstr "{}"
 
@@ -1304,7 +1305,7 @@ msgstr ""
 "Laden der System Status TOML Datei {} fehlgeschlagen (siehe dnf5-system-"
 "state(7)): {}"
 
-#: system/state.cpp:614
+#: system/state.cpp:602
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "Nicht unterstützte TOML-Version \"{}\", die höchstmöglich unterstützte "
@@ -1639,15 +1640,13 @@ msgstr "Fehlendes '=' in Zeile {}"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Shared-Library kann nicht geladen werden \"{}\": {}"
 
-#: utils/library.cpp:49
+#: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Adresse des Symbols kann nicht abgerufen werden \"{}\": {}"
 
 #: utils/locale.cpp:57
-#, fuzzy
-#| msgid "Cannot load shared library \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
-msgstr "Shared-Library kann nicht geladen werden \"{}\": {}"
+msgstr "Sprachumgebung „{}“ kann nicht festgelegt werden: {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

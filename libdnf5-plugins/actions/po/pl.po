@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-17 09:45+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 14:19+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/pl/>\n"
@@ -17,59 +17,145 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "Plik \"{}\" w linii {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "Oczekiwano formatu „HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD”"
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Nieznana wartość opcji „enabled” „{}”"
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "Nieznana opcja „{}”"
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "Nieznany hook „{}”"
+
+#: actions.cpp:720
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
-"Błąd w pliku „{}” w wierszu {}: oczekiwano formatu „HOOK:PKG_FILTER:"
-"DIRECTION:OPTIONS:CMD”"
+"Filtr pakietów można stosować tylko w hookach GOAL_RESOLVED, PRE_TRANS i "
+"POST_TRANS"
 
-#: actions.cpp:589
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "Nie można użyć kierunku bez filtra pakietów"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "Nieznany kierunek pakietu „{}”"
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "Nieznany tryb „{}”"
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Nieobsługiwana wartość opcji „raise_error”: {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Brak polecenia"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr "Błąd składni: Brak znaku równości (=) w wierszu wyjściowym akcji: {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "Nie można ustawić opcji: Linia wyjściowa akcji: {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "Akcja wysłała zły poziom dziennika logów: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "Akcja wzywa do zatrzymania: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "Akcja wysłała komunikat o błędzie: {}"
+
+#: actions.cpp:995
 msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
-msgstr "Błąd w pliku „{}” w wierszu {}: Nieznana wartość opcji „enabled” „{}”"
-
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "Błąd w pliku „{}” w linii {}: Nieznana opcja „{}”"
-
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "Błąd w pliku „{}” w linii {}: Nieznany hook „{}”"
-
-#: actions.cpp:636
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
-"Błąd w pliku „{}” w wierszu {}: Filtr pakietów może być używany tylko w "
-"hookach PRE_TRANS i POST_TRANS"
+"Błąd składni: wiersz wyjściowy akcji musi zaczynać się od „tmp.” lub „conf.” "
+"lub „var.” lub „stop=\" lub „error=\": {}"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
-msgstr ""
-"Błąd w pliku „{}” w linii {}: Nie można użyć kierunku bez filtra pakietów"
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Błąd odczytu z akcji (z potoku)"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr "Błąd w pliku „{}” w linii {}: Nieznany kierunek pakietu „{}”"
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr "Błąd składni w żądaniu json z akcji: Brak początkowego znaku '{{'"
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "Błąd w pliku „{}” w linii {}: Nieznany tryb „{}”"
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Wystąpił błąd podczas przetwarzania żądania akcji."
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "Błąd w pliku „{}” w wierszu {}: Brak polecenia"
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "Błąd składni w żądaniu json z akcji: {}"
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
-msgstr "Nie można utworzyć potoku: {}"
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "Błąd składni w żądaniu json z akcji: Niekompletne dane wejściowe"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "Nie można zapisać odpowiedzi"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Wtyczka akcji: Nie można utworzyć potoku"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Wtyczka akcji: Nie można rozwidlić"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "Wtyczka akcji: Nie można powiązać do stdin polecenia"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Wtyczka akcji: Nie można powiązać do stdout polecenia"
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "Nie można wykonać akcji, polecenie „{}” argumenty „{}”"
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Błąd podczas przygotowywania procesu potomnego"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "Kod wyjścia: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "Zakończony sygnałem: {}"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "Błąd w pliku „{}” w linii {}: Nieznana opcja „{}”"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "Błąd w pliku „{}” w linii {}: Nieznany tryb „{}”"
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "Błąd w pliku „{}” w wierszu {}: Brak polecenia"

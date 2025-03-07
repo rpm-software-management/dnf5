@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Jingge Chen <mariocanfly@hotmail.com>, 2025.
+# caffiendo c <1728778012@qq.com>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 14:19+0000\n"
+"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5-plugin-actions/zh_CN/>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10\n"
+
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "文件\"{}\"在第{}行的： {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "预期格式 \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\""
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "未知的 \"已启用\" 选项值 \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "未知选项 \"{}\""
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "未知钩子 \"{}\""
+
+#: actions.cpp:720
+msgid ""
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
+msgstr "包过滤器只能在 GOAL_RESOLVED、PRE_TRANS 和 POST_TRANS 钩子中使用"
+
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "在没有包过滤器的情况下无法使用方向"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "未知软件包方向 \"{}\""
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "未知模式 \"{}\""
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "不支持的 \"raise_error\" 选项的值： {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "缺少命令"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr "语法错误：操作输出行中缺少等号（=）：{}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "无法设置选项： 操作输出行： {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "操作发送了错误的日志级别： {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "操作要求停止： {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "操作发送了错误信息： {}"
+
+#: actions.cpp:995
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+"语法错误： 操作输出行必须以 \"tmp. \"或 \"conf. \"或 \"var. \"或 \"stop=\"或 "
+"\"error=\"开头： {}"
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "从操作（管道）读取数据时出错"
+
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr "操作的 json 请求中出现语法错误： 缺少起始字符 '{{'"
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "处理操作的请求时出错。"
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "操作的 json 请求中出现语法错误： {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "来自操作的json请求中存在语法错误：输入不完整"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "无法写入响应"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Actions插件：无法创建管道"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Actions插件：无法分叉"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "Actions插件：无法绑定命令stdin"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Actions插件：无法绑定命令stdout"
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "无法执行操作，命令 \"{}\" 参数 \"{}\""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "准备子进程时出错"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "退出码: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "终止信号: {}"

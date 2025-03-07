@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2025-01-25 03:44+0000\n"
 "Last-Translator: Inci sakura <incisakura@icloud.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/dnf5/"
@@ -478,11 +478,11 @@ msgstr "モジュールを管理"
 msgid "No matches found for \"{}\"."
 msgstr "\"{}\" に一致する結果を見つかりませんでした。"
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "オフライン トランザクションを管理"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -491,11 +491,11 @@ msgstr ""
 "使用されたコマンドを再実行してください。例: `dnf5 system-upgrade download "
 "[OPTIONS]`。"
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus に接続できませんでした: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -503,31 +503,31 @@ msgstr ""
 "オフライン トランザクションを実行するためにシステムを準備し、再起動してトラン"
 "ザクションを実行します。"
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "操作完了後にシステムの電源をオフにます"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "保存されたオフライン トランザクションがありません。"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "システムはまだオフライン トランザクションの準備をできていません。"
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "データ ディレクトリ {} が存在しません。"
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr "{} は system-update.target に要求されていません。"
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr "システムはリリース バージョンのアップグレードのため再起動します "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -535,7 +535,7 @@ msgstr ""
 "システムは、以下のコマンドによって開始されたオフライン トランザクションを実行"
 "するために再起動します:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -543,15 +543,15 @@ msgstr ""
 "内部用、ユーザーが実行することを考慮していません。オフライン環境でトランザク"
 "ションを実行します。"
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "トリガー ファイルが存在しません。終了します。"
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "別のオフライン トランザクション ツールが実行中です。終了します。"
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -561,50 +561,50 @@ msgstr ""
 "ていません。システムのアップグレード/オフライン トランザクションを開始するに"
 "は、`dnf5 offline reboot` を実行してください。"
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "`dnf5 offline reboot` でトランザクションを開始します。"
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "トランザクション失敗: "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "ジャーナル読み取り中にエラーが発生しました: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "ジャーナルの一致追加に失敗しました: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "ログを見つかりませんでした。"
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "下記の起動にオフライン トランザクション ログが含まれているようです:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "このインデックスのログを見つかりませんでした。"
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "systemd ジャーナル エントリに一致しません。"
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "過去のオフライン トランザクションのログを表示します"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "表示させたいログ。引数なしで実行すると、利用可能なすべてのログが表示されま"
 "す。"
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -612,22 +612,22 @@ msgstr ""
 "この dnf5 のビルドは systemd をサポートされていません。`log` サブコマンドは利"
 "用できません。"
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "現在のオフライン トランザクションの状態を表示します"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr "オフライン トランザクションは以下のコマンドによって開始されました:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "`dnf5 offline reboot` を実行してオフライン トランザクションを実行してくださ"
 "い。"
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -636,7 +636,7 @@ msgstr ""
 "offline log` を実行して更なる情報を確認できます。トランザクションはこちらのコ"
 "マンドによって初期化されました:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "不明なオフライン トランザクション状態: "
 
@@ -712,16 +712,16 @@ msgstr "所定な文字列に一致するソフトウェアを検索します"
 msgid "Remove software and install another in one transaction"
 msgstr "一度のトランザクションでソフトウェアの削除とインストールを行います"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "新しいリリースへのアップグレードのためにシステムを準備します"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr ""
 "新しいリリースにアップグレードするための必要なものをすべてダウンロードします"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
@@ -729,15 +729,15 @@ msgstr ""
 "新しいリリースから現在インストール済みのよりも古いパッケージをインストールし"
 "ません"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr "現在のシステムバージョンよりも大きい --releasever が必要です。"
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr "オフラインで実行するための distro-sync トランザクションを保存します"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "オフラインで実行するためのアップグレード トランザクションを保存します"
 
@@ -882,15 +882,15 @@ msgstr ""
 msgid "The key was successfully removed."
 msgstr "キーが正常にインポートされました。"
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -898,38 +898,38 @@ msgstr ""
 "{} に一致するリポジトリがありません。ホストシステムのリポジトリを使用するに"
 "は、--use-host-config オプションを指定してください"
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "{} に一致するリポジトリがありません"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "リポジトリの更新を読み込み中:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "リポジトリを読み込みました。"
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "オフライン トランザクションを検証中"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "トランザクションが失敗しました: {}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "\"{}\" にはすでに保存されたトランザクションがあったため、上書きされます。"
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
@@ -937,7 +937,7 @@ msgstr ""
 "すでに待機中に以下のコマンドによって開始されたオフライン トランザクションがあ"
 "ります:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -945,7 +945,7 @@ msgstr ""
 "続行すると、古いオフライン トランザクションがキャンセルされ、これに置き換えら"
 "れます。"
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -956,71 +956,77 @@ msgstr ""
 "キャンセルし、ダウンロードしたファイルを削除するには、`dnf5 offline clean` を"
 "実行してください。"
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
 msgstr "トランザクションを実行中"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr "更新中 {}"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "ダウングレード中 {}"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr "再インストール中 {}"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "トランザクション パッケージに予期しないアクション: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
 msgstr "インストール中 {}"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "トランザクションの準備"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr "削除中 {}"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "クリーンアップ {}"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "解凍エラー: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "cpio エラー: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "scriptlet 出力:"
 
-#: context.cpp:941
+#: context.cpp:947
+#, fuzzy
+#| msgid "Running {} scriptlet: {}"
+msgid "Running scriptlets"
+msgstr "{} scriptlet を実行中: {}"
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr "{} scriptlet を実行中: {}"
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "{} scriptlet を実行完了: {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "{} scriptlet で非致命エラー: {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "{} scriptlet でエラー: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "パッケージ ファイルを検証"
 
@@ -1028,7 +1034,7 @@ msgstr "パッケージ ファイルを検証"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "共有ライブラリ \"{}\" を読み込めませんでした: {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "シンボル \"{}\" のアドレスを取得できませんでした: {}"
 
@@ -1410,15 +1416,19 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 起動引数: \"{}\" ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr ""
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}。"
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}。 引数に関する詳細を表示するには \"--help\" を追加してください。"
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1426,18 +1436,18 @@ msgstr ""
 "これはプラグインによって提供されるコマンドの可能性があります。次を試してくだ"
 "さい: dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 "引数は以下のコマンドで利用可能: {}. (コマンドの後で指定する必要があります)"
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr "現在のディレクトリに読み取り/実行権限がないため、/ に移動します"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1447,17 +1457,17 @@ msgstr ""
 "ンするか、システム状態を変更せずにコマンドを実行するには \"--assumeno\" また"
 "は \"--downloadonly\" オプションを使用してください。"
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "この操作では、トランザクションを {} への保存のみがされます"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr ""
 "この操作では、トランザクションのためのパッケージのダウンロードのみがされま"
 "す。"
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1465,7 +1475,7 @@ msgstr ""
 "テスト モードが有効です: パッケージのダウンロード、OpenPGP キーのインストー"
 "ル、およびトランザクションのチェックのみが行われます。"
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1473,15 +1483,15 @@ msgstr ""
 "installroot からリポジトリを読み込みませんでした。ホスト システムの設定とリポ"
 "ジトリを利用するには、--use-host-config を渡してください。"
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "コマンドがエラーを返しました: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "DNF5 が終了しました"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "完了しました！"
 

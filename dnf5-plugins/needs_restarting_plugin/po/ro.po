@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-10-01 12:38+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,6 +19,6 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: needs_restarting.cpp:229
+#: needs_restarting.cpp:230
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Nu s-a putut realiza conectarea la D-Bus: {}"

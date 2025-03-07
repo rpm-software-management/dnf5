@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2025-01-23 08:17+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -477,11 +477,11 @@ msgstr "Modülleri yönet"
 msgid "No matches found for \"{}\"."
 msgstr "\"{}\" için eşleşme bulunamadı."
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "Çevrim dışı işlemleri yönet"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -490,11 +490,11 @@ msgstr ""
 "kullandığınız komutu yeniden çalıştırın, örn. `dnf5 system-upgrade download "
 "[SEÇENEKLER]`."
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "D-Bus ile bağlantı kuulamadı: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -502,31 +502,31 @@ msgstr ""
 "Sistemi çevrim dışı işlemi gerçekleştirmek için hazırla ve işlemi başlatmak "
 "için yeniden başlat."
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "İşlem tamamlandıktan sonra sistemi kapat"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "Çevrim dışı işlem kaydedilmedi."
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "Sistem çevrim dışı işlem için hazır değil."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "{} veri dizini yok."
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr "{} system-update.target tarafından istenmiyor."
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr "Sistem şimdi yayın sürümüne yükseltmek için yeniden başlatılacak: "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -534,7 +534,7 @@ msgstr ""
 "Sistem şimdi şu komutla başlatılan çevrim dışı işlemi gerçekleştirmek için "
 "yeniden başlatılacak:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -542,15 +542,15 @@ msgstr ""
 "Yalnızca dahili kullanım içindir, kullanıcı tarafından çalıştırılması "
 "amaçlanmamıştır. İşlemi çevrim dışı ortamda çalıştırın."
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "Tetikleme dosyası yok. Çıkılıyor."
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Başka bir çevrim dışı işlem aracı çalışıyor. Çıkılıyor."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -561,50 +561,50 @@ msgstr ""
 "çevrim dışı işlemi başlatmak için `dnf5 offline reboot` komutunu "
 "çalıştırmalısınız."
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "İşlemi başlatmak için `dnf5 offline reboot` komutunu kullanın."
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "İşlem başarısız: "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "Günlük okunurken hata oluştu: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "Günlüğe eşleşme eklenemedi: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "Günlük kaydı bulunamadı."
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "Şu önyüklemeler çevrim dışı işlem günlükleri içeriyor gibi görünüyor:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "Bu indekse sahip günlük kaydı bulunamıyor."
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "systemd günlük girdisi eşleştirilemedi."
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "Geçmiş çevrim dışı işlemlerin günlüklerini göster"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Hangi günlüğün gösterileceği. Kullanılabilir günlüklerin bir listesini almak "
 "için herhangi bir argüman olmadan çalıştırın."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -612,22 +612,22 @@ msgstr ""
 "systemd, bu DNF 5 derlemesinde desteklenmiyor; `log` alt komutu "
 "kullanılabilir değil."
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "Geçerli çevrim dışı işlemin durumunu göster"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr "Bir çevrim dışı işlem şu komutla başlatıldı:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Yeniden başlatmak ve çevrim dışı işlemi gerçekleştirmek için `dnf5 offline "
 "reboot` komutunu çalıştırın."
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -635,7 +635,7 @@ msgstr ""
 "Çevrim dışı bir işlem başlatıldı, ancak tamamlanmadı. Daha fazla bilgi için "
 "`dnf5 offline log` komutunu çalıştırın. İşlemi başlatan komut şuydu:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "Bilinmeyen çevrim dışı işlem durumu: "
 
@@ -711,30 +711,30 @@ msgstr "Belirtilen tüm dizgelerle eşleşen yazılımları ara"
 msgid "Remove software and install another in one transaction"
 msgstr "Tek bir işlemde yazılım kaldır ve başka bir yazılım kur"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "Sistemi yeni bir sürüme yükseltmek için hazırla"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr "Yeni bir sürüme yükseltmek için gereken her şeyi indir"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
 msgstr ""
 "Yeni sürümdeki paketler şu anda kurulu olanlardan daha eskiyse onları kurma"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr "Geçerli sistem sürümünden daha büyük bir --releasever belirtilmelidir."
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr "Dağıtım eşzamanlama işlemini çevrim dışı gerçekleştirmek için kaydet"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "Yükseltme işlemini çevrim dışı gerçekleştirmek için kaydet"
 
@@ -881,15 +881,15 @@ msgstr ""
 msgid "The key was successfully removed."
 msgstr "Anahtar başarıyla içe aktarıldı."
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -897,44 +897,44 @@ msgstr ""
 "{} için eşleşen depo yok. Bir ana sistemdeki depoları kullanmak için --use-"
 "host-config seçeneğini belirtin"
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "{} için eşleşen depo yok"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "Depolar güncelleniyor ve yükleniyor:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "Depolar yüklendi."
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "Çevrim dışı işlem test ediliyor"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "İşlem başarısız: {}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "\"{}\" konumu zaten kayıtlı bir işlem içeriyor, bu işlemin üzerine yazılacak."
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "Şu komutla başlatılan çevrim dışı bir işlem zaten sıraya alındı:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -942,7 +942,7 @@ msgstr ""
 "Devam edilirse eski çevrim dışı işlem iptal edilecek ve bu işlemle "
 "değiştirilecektir."
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -953,71 +953,77 @@ msgstr ""
 "kullanın. İşlemi iptal etmek ve indirilen dosyaları silmek için `dnf5 "
 "offline clean` komutunu kullanın."
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
 msgstr "İşlem çalıştırılıyor"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr "{} yükseltiliyor"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "{} eski sürüme düşürülüyor"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr "{} yeniden kuruluyor"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "TransactionPackage içinde beklenmeyen eylem: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
 msgstr "{} kuruluyor"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "İşlemi hazırla"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr "{} kaldırılıyor"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "{} temizleniyor"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "Paket açma hatası: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "Cpio hatası: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "Betik çıktısı:"
 
-#: context.cpp:941
+#: context.cpp:947
+#, fuzzy
+#| msgid "Running {} scriptlet: {}"
+msgid "Running scriptlets"
+msgstr "{} betiği çalıştırılıyor: {}"
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr "{} betiği çalıştırılıyor: {}"
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "{} betiği tamamlandı: {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "{} betiğinde önemli olmayan hata: {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "{} betiğinde hata: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "Paket dosyalarını doğrula"
 
@@ -1025,7 +1031,7 @@ msgstr "Paket dosyalarını doğrula"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "\"{}\" paylaşılan kütüphanesi yüklenemiyor: {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "\"{}\" simgesinin adresi alınamıyor: {}"
 
@@ -1424,16 +1430,20 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 şu argümanlarla başlatıldı: \"{}\" ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr ""
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ""
 "{}. Argümanlar hakkında daha fazla bilgi için \"--help\" seçeneğini ekleyin."
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1441,18 +1451,18 @@ msgstr ""
 "Bir eklenti tarafından sağlanan bir komut olabilir, şunu deneyin: dnf5 "
 "install 'dnf5-command({})'"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 "Argüman şu komutlar için kullanılabilir: {}. (Komuttan sonra yer almalıdır.)"
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Geçerli dizinde okuma/çalıştırma izni yok, /'a taşınıyor"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1463,15 +1473,15 @@ msgstr ""
 "değiştirmeden komutu çalıştırmak için \"--assumeno\" veya \"--downloadonly\" "
 "seçeneklerini kullanın."
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "İşlem yalnızca {} içine kaydedilecektir"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr "Yalnızca işlem için gerekli paketler indirilecektir."
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1479,7 +1489,7 @@ msgstr ""
 "Test kipi etkinleştirildi: Yalnızca paket indirmeleri, OpenPGP anahtar "
 "kurulumları ve işlem denetimleri gerçekleştirilecektir."
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1487,15 +1497,15 @@ msgstr ""
 "Kurulum kökünden hiçbir depo yüklenmedi. Ana sistemin yapılandırmasını ve "
 "depolarını kullanmak için --use-host-config seçeneğini belirtin."
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "Komut hata döndürdü: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "DNF5 tamamlandı"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "Tamamlandı!"
 

@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-09 22:53+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-16 03:38+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "მხარდაუჭერელი არგუმენტი ქმედებისთვის REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1545
+#: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "არასწორი კონფიგურაციის მნიშვნელობა multilib_policy-სთვის: {}"
 
@@ -593,74 +593,74 @@ msgstr "პრობლემა: "
 msgid "Problem {}: "
 msgstr "პრობლემა {}: "
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:80
 msgid "This transaction has been already run before."
 msgstr "ეს ტრანზაქცია ადრე უკვე იყო გაშვებული."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr "შეუძლებელია ტრანზაქციის გაშვება პრობლემების გადაწყვეტით."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
 msgstr "Rpm-ის ტრანზაქციის შემოწმება ჩავარდა."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "შეცდომა rpm-ის ტრანზაქციის ბლოკის მიღებისას. მიმდინარეობს სხვა ტრანზაქცია."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:85
 msgid "Rpm transaction failed."
 msgstr "Rpm-ის ტრანზაქცია ჩავარდა."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:86
 msgid "Signature verification failed."
 msgstr "ხელმოწერის გადამოწმება ჩავარდა."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "რეპოზიტორიას OpenPGP გასაღებები მითითებული არ აქვს."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Public key is not installed."
 msgstr "საჯარო გასაღები დაყენებული არაა."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:92
 msgid "Canceled by the user."
 msgstr "გაუქმდა მომხმარებლის მიერ."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid "Public key import failed."
 msgstr "საჯარო გასაღების შემოტანა ჩავარდა."
 
-#: base/transaction.cpp:979
+#: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
 msgstr "არასწორი tsflag: {}"
 
-#: base/transaction.cpp:1317
+#: base/transaction.cpp:1318
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "საჯარო გასაღები \"{}\" უკვე არსებობს. შემოტანა არ მოხდება."
 
-#: base/transaction.cpp:1338
+#: base/transaction.cpp:1339
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "შეცდომა გასაღების \"{}\" შემოტანისას: {}"
 
-#: base/transaction.cpp:1372
+#: base/transaction.cpp:1373
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr "OpenPGP-ის შემოწმება პაკეტისთვის \"{}\" ({}) რეპოდან \"{}\" ჩავარდა: "
 
-#: base/transaction.cpp:1400
+#: base/transaction.cpp:1401
 msgid "Import of the key didn't help, wrong key?"
 msgstr "გასაღების შემოტანამ არაფერს უშველა. გასაღები არასწორია?"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1422
+#: base/transaction.cpp:1423
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
@@ -671,7 +671,7 @@ msgstr[1] ""
 "გაფრთხილება: OpenPGP-ით შემოწმების გამოტოვება {0} პაკეტისთვის "
 "რეპოზიტორიებიდან: {1}"
 
-#: base/transaction.cpp:1425
+#: base/transaction.cpp:1426
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
@@ -717,23 +717,23 @@ msgstr "ჩავარდა XML დოკუმენტისს შენა
 msgid "Invalid package type: {}"
 msgstr "არასწორი პაკეტის ტიპი: {}"
 
-#: conf/config_main.cpp:56
+#: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
 msgstr "არაფერი შეგიყვანიათ. ის მნიშვნელობას უნდა შეიცავდეს."
 
-#: conf/config_main.cpp:62
+#: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
 msgstr "შეყვანილი მნიშვნელობა '{}' არ შეიძლება, უარყოფითი იყოს"
 
-#: conf/config_main.cpp:67
+#: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
 msgstr "'{}'-ის ბაიტებად გარდაქმნის შეცდომა"
 
-#: conf/config_main.cpp:83
+#: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
 msgstr "უცნობი ერთეული '{}'"
 
-#: conf/config_main.cpp:278
+#: conf/config_main.cpp:279
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "შეზღუდვის მნიშვნელობა {} დაშვებული დიაპაზონის ({} ... {}) გარეთაა"
 
@@ -900,7 +900,7 @@ msgstr "მნიშვნელობაში ':' აკლია"
 msgid "Invalid module status: {}"
 msgstr "არასწორი მოდულის სტატუსი: {}"
 
-#: plugin/plugins.cpp:65
+#: plugin/plugins.cpp:67
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -909,23 +909,27 @@ msgstr ""
 "მოითხოვს, არის \"{}\" (\"{}\") is \"{}.{}\". libdnf-ში არსებული API-ის "
 "ვერსია კი არის \"{}.{}\"."
 
-#: plugin/plugins.cpp:114
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Libdnf-ის დამატების გაშვებული ასლის შექმნა ჩავარდა"
+
+#: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
 msgstr "ვერ ვიპოვე დამატების ბიბლიოთეკა \"{}\""
 
-#: plugin/plugins.cpp:181
+#: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
 msgstr "არასწორი პარამეტრის მნიშვნელობა: enabled={}"
 
-#: plugin/plugins.cpp:205
+#: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path ცარიელი ვერ იქნება"
 
-#: plugin/plugins.cpp:230
-msgid "Cannot load plugins: {}"
-msgstr "დამატებების ჩატვირთვის შეცდომა: {}"
+#: plugin/plugins.cpp:253
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Libdnf-ის დამატების ჩატვირთვის შეცდომა მდებარეობიდან: {}"
 
-#: repo/config_repo.cpp:566
+#: repo/config_repo.cpp:569
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256-ის გამოთვლის შეცდომა"
 
@@ -945,11 +949,15 @@ msgstr ""
 "გადმოწერის მაქსიმალური სიჩქარე მინიმუმზე ნაკლებია. გთხოვთ შეცვალოთ minrate-"
 "ის ან throttle -ისკონფიგურაცია"
 
-#: repo/package_downloader.cpp:153
+#: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "პაკეტის \"{0}\" გადმოწერა შეუძლებელია. აქტიურია პარამეტრ cacheonly."
 
-#: repo/package_downloader.cpp:266
+#: repo/package_downloader.cpp:219
+msgid "Already downloaded"
+msgstr "უკვე გადმოწერილია"
+
+#: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
 msgstr "პაკეტების გადმოწერის შეცდომა"
 
@@ -991,7 +999,7 @@ msgstr "ჩავარდა წაკითხვა comps ფაილის�
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "ჩავარდა ჩატვირთვა XML Comps ფაილისთვის \"{}\": {}"
 
-#: repo/repo.cpp:500
+#: repo/repo.cpp:501
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "RPM-ის \"{}\" ჩატვირთვის შეცდომა: {}"
 
@@ -1046,7 +1054,7 @@ msgstr "OpenPGP გასაღების ჩამოთვლა ჩავ�
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "ჩავარდა შემოტანა OpenPGP გასაღებებისათვის: {}"
 
-#: repo/repo_sack.cpp:147
+#: repo/repo_sack.cpp:148
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1054,7 +1062,7 @@ msgstr ""
 "რეპოს \"{}\" შექმნა ჩავარდა: კონფიგურაციაში, ეს ID-ები, ერთზე მეტჯერაა "
 "ნახსენები"
 
-#: repo/repo_sack.cpp:518
+#: repo/repo_sack.cpp:565
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "მხოლოდ-კეში ჩართულია, მაგრამ რეპოზიტორიას \"{}\" კეში არ გააჩნია"
 
@@ -1227,7 +1235,7 @@ msgstr "ვერ ჩამოვწიე ვერსია პაკეტი
 msgid "Cannot install package \"{}\""
 msgstr "ვერ დავაყენე პაკეტი \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+#: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
 msgstr "{}"
 
@@ -1254,7 +1262,7 @@ msgstr ""
 "სისტემის მდგომარეობის TOML ფაილის {} ჩატვირთვა ჩავარდა (იხ: dnf5-system-"
 "state(7)): {}"
 
-#: system/state.cpp:614
+#: system/state.cpp:602
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 "TOML-ის მხარდაუჭერელი ვერსია \"{}\". მაქსიმალური მხარდაჭერილი ვერსიაა \"{}\""
@@ -1577,15 +1585,13 @@ msgstr "აკლია '=' ხაზზე {}"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "გაზიარებული ბიბლიოთეკის ფაილის ჩატვირთვის შეცდომა \"{}\": {}"
 
-#: utils/library.cpp:49
+#: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
 
 #: utils/locale.cpp:57
-#, fuzzy
-#| msgid "Cannot load shared library \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
-msgstr "გაზიარებული ბიბლიოთეკის ფაილის ჩატვირთვის შეცდომა \"{}\": {}"
+msgstr "ვერ დავაყენე ენა \"{}\": {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

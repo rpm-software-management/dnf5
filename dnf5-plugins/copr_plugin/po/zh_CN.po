@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # caffiendo c <1728778012@qq.com>, 2024.
 # ashton su <suguyu45@gmail.com>, 2024.
+# Jingge Chen <mariocanfly@hotmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-24 09:17+0000\n"
-"Last-Translator: ashton su <suguyu45@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <https://translate."
-"fedoraproject.org/projects/dnf5/dnf5-plugin-copr/zh_CN/>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 09:31+0000\n"
+"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5-plugin-copr/zh_CN/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.10\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -104,101 +105,104 @@ msgstr ""
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
-msgstr ""
+msgstr "打印关于系统的有用信息，用于调试"
 
 #: copr_disable.cpp:34
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
+"禁用指定的 Copr 版本库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
 
 #: copr_enable.cpp:37
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
-msgstr ""
+msgstr "从 Copr 服务器下载版本库信息，并将其安装为 {}/*.repo 文件"
 
 #: copr_enable.cpp:45
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"以 NAME-RELEASE-ARCH 格式指定的 Chroot，例如 \"fedora-rawhide-ppc64le\"。  未"
+"指定时，\"dnf copr \"命令会尝试检测。"
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
-msgstr ""
+msgstr "列出 Copr 资源库"
 
 #: copr_remove.cpp:34
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
-msgstr ""
+msgstr "从系统中移除指定的 Copr 版本库（移除 {}/*.repo 文件）"
 
 #: copr_repo.cpp:88
 msgid "Directory '{}' not found in '{}' Copr project."
-msgstr ""
+msgstr "目录 '{}' 不在 '{}' Copr 项目中。"
 
 #: copr_repo.cpp:94
 msgid "You can use one of these available directories:"
-msgstr ""
+msgstr "您可以使用其中一个可用的目录："
 
 #: copr_repo.cpp:110
 msgid "Chroot not found in the given Copr project"
-msgstr ""
+msgstr "在给定的 Copr 项目中未发现 Chroot"
 
 #: copr_repo.cpp:112
 msgid "Unable to detect chroot, specify it explicitly."
-msgstr ""
+msgstr "无法检测到 chroot，请明确指定。"
 
 #: copr_repo.cpp:118
 msgid "We tried to find these repos without a success:"
-msgstr ""
+msgstr "我们试图找到这些 repos，但没有成功："
 
 #: copr_repo.cpp:123
 msgid "You can choose one of the available chroots explicitly:"
-msgstr ""
+msgstr "您可以从可用的 chroots 中明确选择一个："
 
 #: copr_repo.cpp:197
 msgid "Can't parse Copr repo spec: "
-msgstr ""
+msgstr "无法解析 Copr 仓库配置： "
 
 #: copr_repo.cpp:341
 msgid "Can't remove the {} repo file"
-msgstr ""
+msgstr "无法删除 {} repo 文件"
 
 #: copr_repo.cpp:344
 msgid "Repo file {} successfully removed"
-msgstr ""
+msgstr "成功删除仓库文件 {}"
 
 #: copr_repo.cpp:390
 msgid "Can't find item {} in {}"
-msgstr ""
+msgstr "项目 {} 在 {} 中找不到"
 
 #: copr_repo.cpp:446
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "删除旧的配置文件 '{}'"
 
 #: copr_repo.cpp:449
 msgid "Can't remove"
-msgstr ""
+msgstr "无法移除"
 
 #: copr_repo.cpp:523
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
-msgstr ""
+msgstr "Copr repofile '{}' 的格式已过时，重新启用即可修复 $ {} copr enable {}"
 
 #: copr_repo.cpp:557
 msgid "Repo id '{}' in '{}' is suspicious"
-msgstr ""
+msgstr "仓库 ID '{}' （'{}'中）有些可疑"
 
 #: copr_repo.cpp:564
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "仓库 ID '{}' 不属于 '{}' 仓库配置文件"
 
 #: copr_repo.cpp:614
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr ""
+msgstr "Copr 存储库 '{}' （位于 '{}' ） 已禁用。"
 
 #: copr_repo.cpp:628 copr_repo.cpp:653
 msgid "Repository '{}' not found on this system"
-msgstr ""
+msgstr "本系统未找到存储库 '{}'"

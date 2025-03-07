@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-10-10 02:54+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-19 11:30+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -177,8 +177,8 @@ msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
-"Afișează numai grupurile care conțin pachete cu numele specificate. Opțiune "
-"listă, acceptă caractere jokers."
+"Afișează numai grupurile care conțin pachetele cu numele specificate. "
+"Opțiune listă, acceptă caractere joker."
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -200,13 +200,13 @@ msgstr ""
 "Această comandă trebuie să fie executată cu privilegii de superutilizator "
 "(sub utilizatorul root pe majoritatea sistemelor)."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Valoare argument formatată greșit: Ultimul caracter al cheii nu poate fi "
 "„.”: {}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Adăugați „--help” pentru mai multe informații despre argumente."

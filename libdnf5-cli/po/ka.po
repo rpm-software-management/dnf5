@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-12-13 06:02+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -28,86 +28,86 @@ msgstr "\"{}\" დაუშვებელია ბრძანებაში 
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "\"{}\" დაუშვებელია პოზიციურ არგუმენტთან \"{}\" ერთად"
 
-#: argument_parser.cpp:110
+#: argument_parser.cpp:111
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "არგუმენტის id \"{}\" უკვე რეგისტრირებულია ჯგუფში \"{}\""
 
-#: argument_parser.cpp:237
+#: argument_parser.cpp:238
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "არასწორი სიმბოლო '.' არგუმენტში id-ით \"{}\""
 
-#: argument_parser.cpp:345 argument_parser.cpp:350
+#: argument_parser.cpp:346 argument_parser.cpp:351
 msgid "Too few values for positional argument \"{}\""
 msgstr "არასაკმარისი მნიშვნელობა პოზიციური არგუმენტისთვის \"{}\""
 
-#: argument_parser.cpp:511
+#: argument_parser.cpp:512
 msgid "Missing value for named argument \"--{}\""
 msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
-#: argument_parser.cpp:519
+#: argument_parser.cpp:520
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "მოულოდნელი მნიშვნელობა მითითებული არგუმენტისთვის \"--{}\""
 
-#: argument_parser.cpp:561
+#: argument_parser.cpp:562
 msgid "Missing value for named argument \"-{}\""
 msgstr "აკლია მნიშვნელობა მითითებული არგუმენტისთვის \"-{}\""
 
 #. print usage
-#: argument_parser.cpp:657
+#: argument_parser.cpp:658
 msgid "Usage:"
 msgstr "გამოყენება:"
 
-#: argument_parser.cpp:665
+#: argument_parser.cpp:666
 msgid "Description:"
 msgstr "აღწერა:"
 
-#: argument_parser.cpp:915
+#: argument_parser.cpp:943
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "ბრძანების ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:926
+#: argument_parser.cpp:954
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "მითითებული არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:936
+#: argument_parser.cpp:964
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "პოზიციური არგუმენტის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:946
+#: argument_parser.cpp:974
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "ჯგუფის ID \"{}\" უკვე რეგისტრირებულია ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:973
+#: argument_parser.cpp:1001
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "ბრძანება ID-ით \"{}\" ქვებრძანებას ID-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:981
+#: argument_parser.cpp:1009
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr "ბრძანება ID-ით \"{}\" მითითებულ არგუმენტს ID-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:989
+#: argument_parser.cpp:1017
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "ბრძანება ID-ით \"{}\" პოზიციურ არგუმენტს ID-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:996
+#: argument_parser.cpp:1024
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "ბრძანება ID-ით \"{}\" ჯგუფს ID-ით \"{}\" არ შეიცავს"
 
-#: argument_parser.cpp:1103 argument_parser.cpp:1307
+#: argument_parser.cpp:1131 argument_parser.cpp:1335
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "უცნობი არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1118 argument_parser.cpp:1322
+#: argument_parser.cpp:1146 argument_parser.cpp:1350
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "აკლია პოზიციური არგუმენტი \"{}\" ბრძანებისთვის \"{}\""
 
-#: argument_parser.cpp:1525
+#: argument_parser.cpp:1553
 msgid "Named argument with path id \"{}\" not found"
 msgstr "მითითებული არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
 
-#: argument_parser.cpp:1535
+#: argument_parser.cpp:1563
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "პოზიციური არგუმენტი ბილიკის ID-ით \"{}\" არ არსებობს"
 

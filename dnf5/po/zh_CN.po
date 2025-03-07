@@ -5,23 +5,23 @@
 # Yang Yulin <yylteam@icloud.com>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Wenyin Root <ruojiner@hotmail.com>, 2024.
-# caffiendo c <1728778012@qq.com>, 2024.
+# caffiendo c <1728778012@qq.com>, 2024, 2025.
 # hg wd <cut-punisher-stays@duck.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2025-01-31 11:53+0000\n"
-"Last-Translator: hg wd <cut-punisher-stays@duck.com>\n"
-"Language-Team: Chinese (Simplified) <https://translate."
-"fedoraproject.org/projects/dnf5/dnf5/zh_CN/>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-25 00:33+0000\n"
+"Last-Translator: caffiendo c <1728778012@qq.com>\n"
+"Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5/zh_CN/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -300,14 +300,10 @@ msgid "Don't consider extra packages pulled into the transaction as errors."
 msgstr "不要将事务中额外引入的软件包视为错误。"
 
 #: commands/history/arguments.hpp:80
-#, fuzzy
-#| msgid ""
-#| "Show only groups containing packages with specified names. List option, "
-#| "supports globs."
 msgid ""
 "Show only transactions containing packages with specified names. List "
 "option, supports globs."
-msgstr "仅显示包含具有指定名称的软件包组。列表选项，支持通配符。"
+msgstr "仅显示事务中包含具有指定名称的软件包。列表选项，支持通配符。"
 
 #: commands/history/history.cpp:41
 msgid "Manage transaction history"
@@ -459,11 +455,11 @@ msgstr "模块管理"
 msgid "No matches found for \"{}\"."
 msgstr "未找到与 \"{}\" 匹配的结果。"
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "离线事务管理"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -471,61 +467,61 @@ msgstr ""
 "读取状态时出错: {}，重新运行用于启动离线事务的命令，例如 \"dnf5 system-"
 "upgrade download [OPTIONS]\" 。"
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "无法连接到 D-Bus: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr "准备系统执行离线事务，然后重新启动以开始事务。"
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "操作完成后关闭系统"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "没有已存储的离线事务。"
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "系统未准备好执行离线事务。"
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "数据目录 {} 不存在。"
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr "{} 在 system-update.target 中不被需要。"
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr "系统将会重启到升级后的版本。 "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr "系统将在重启后通过以下命令执行离线事务:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr "仅供内部使用，不打算由用户运行。在离线环境中执行事务。"
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "触发器文件不存在。退出。"
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "另一个离线事务工具运行中。退出。"
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -534,67 +530,67 @@ msgstr ""
 "警告: \"_execute\" 命令仅供内部使用且不允许用户直接使用。启动系统升级或离线事"
 "务，应该使用 \"dnf5 offline reboot\" 命令。"
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "使用 \"dnf5 offline reboot\" 命令开始这个事务。"
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "失败的事务: "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "读取日志错误: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "添加日志匹配错误: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "未找到任何日志。"
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr "本次启动似乎包含离线事务日志:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "该索引不能找到日志。"
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "无法匹配systemd日志条目。"
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "显示之前的离线事务日志"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr "要显示哪个日志。不带任何参数运行以获取可用日志列表。"
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr "systemd 不支持这个版本的DNF5，\"log\" 子命令不可用。"
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "显示当前离线事务的状态"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr "一个离线事务将在以下命令之后执行:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr "运行 \"dnf5 offline reboot\" 以重启和执行离线事务。"
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -602,7 +598,7 @@ msgstr ""
 "一个离线事务已经开始，但是并未结束。运行 \"dnf5 offline log\" 以获得更多信"
 "息。启动事务的命令是:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "未知的离线事务状态: "
 
@@ -677,29 +673,29 @@ msgstr "搜索所有与指定字符串匹配的软件"
 msgid "Remove software and install another in one transaction"
 msgstr "在同一个事务中删除软件和安装另一个软件"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "准备将系统升级到新版本"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr "下载升级到新版所有需要的软件包"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
 msgstr "如果新版本的软件包比当前安装的版本旧，则不安装"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr "\"--releasever\" 参数后面的值需要大于当前系统版本。"
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr "存储要离线执行的发行版同步事务"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "存储要离线执行的升级事务"
 
@@ -803,105 +799,95 @@ msgstr "该密钥成功导入。"
 
 #: context.cpp:96
 msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr ""
+msgstr "以下PGP密钥 (0x{}) 即将被移除："
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " 用户ID     : \"{}\"\n"
+msgstr " 原因     : \"{}\"\n"
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " From       : {}\n"
-msgstr ""
-" 指纹 : {}\n"
-" 来源 : {}\n"
+msgstr " 来源     : {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
-msgstr ""
+msgstr "因此，安装该签名的包会失败。"
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr ""
+msgstr "建议删除过期的密钥以允许导入"
 
 #: context.cpp:106
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
-msgstr ""
+msgstr "一个更新的密钥。这可能会使已安装的软件包无法验证。"
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."
-msgstr ""
+msgstr "系统现在将继续移除该钥匙。"
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully imported."
 msgid "The key was successfully removed."
-msgstr "该密钥成功导入。"
+msgstr "该密钥成功被移除。"
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "设置选项: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
 msgstr ""
 "任何仓库未匹配到 {} 。通过 \"--use-host-config\" 选项使用指定域名中的仓库"
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "任何仓库未匹配到 {}"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "仓库更新和加载中:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "仓库加载完成。"
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "离线事务测试中"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "失败的事务:{}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "位置 \"{}\" 已包含存储的事务，将被覆盖。"
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "已有一个离线事务在队列中，它将在以下命令中启动:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr "继续将取消旧的离线事务并替换为本次。"
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -910,71 +896,75 @@ msgstr ""
 "已经存储的事务可以离线执行。运行 \"dnf5 offline reboot\" 以重新启动并运行事"
 "务。若要取消事务并删除已下载的文件，须使用 \"dnf5 offline clean\" 命令。"
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
 msgstr "执行事务"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr "升级 {}"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "降级 {}"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr "重新安装 {}"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "软件包事务中出现意外操作: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
 msgstr "安装{}"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "准备事务"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr "删除 {}"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "清理 {}"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "解压错误: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "Cpio 错误: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "Scriptlet 输出："
 
-#: context.cpp:941
+#: context.cpp:947
+msgid "Running scriptlets"
+msgstr "运行脚本"
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr "运行 {}，脚本片段: {}"
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "{} 运行完成，脚本片段: {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "非致命性错误: {} ，脚本片段: {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "{} 中出现错误，脚本片段: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "验证软件包文件"
 
@@ -982,7 +972,7 @@ msgstr "验证软件包文件"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "无法加载共享库文件 \"{}\":{}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "无法获取符号的地址 \"{}\": {}"
 
@@ -1345,31 +1335,35 @@ msgstr "禁用libdnf插件时，未匹配到以下插件的名称: {}"
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 启动参数: \"{}\" ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "无效的 \"index\" 在 \"--complete=<index>[,...]\": {}"
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}。添加 \"--help\" 参数来获取更多的参数信息。"
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
 msgstr "它可能是插件提供的命令，尝试用: dnf5 install 'dnf5-command({})'"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr "该参数可用于如下命令: {}。(参数必须放在命令的后面)"
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr "没有当前目录的读取/执行权限，移动至 /"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1378,21 +1372,21 @@ msgstr ""
 "请求的操作需要超级用户权限。请使用有权限的用户来操作。或者使用 \"--"
 "assumeno\" 或 \"--downloadonly\" 参数运行该命令不修改当前系统状态。"
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "此操作仅将事务保存到: {}"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr "该操作将仅下载这个事务的软件包。"
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr "测试模式已启用: 仅执行软件包下载、OpenPGP密钥安装和事务检查。"
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1400,15 +1394,15 @@ msgstr ""
 "未从installroot加载任何仓库。要使用系统的配置和仓库 ，请加 --use-host-config "
 "参数。"
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "命令返回错误: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "DNF5 执行完毕"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "完成！"
 

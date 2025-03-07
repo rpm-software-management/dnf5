@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-12-12 03:38+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-19 11:30+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Argument neacceptat pentru acțiunea REMOVE: {} „{}”"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1545
+#: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Valoare de configurare incorectă pentru multilib_policy: {}"
 
@@ -596,76 +596,76 @@ msgstr "Problemă: "
 msgid "Problem {}: "
 msgstr "Problema {}: "
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:80
 msgid "This transaction has been already run before."
 msgstr "Această tranzacție a fost deja efectuată înainte."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr "Nu se poate executa tranzacția cu rezolvarea problemelor."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
 msgstr "Verificarea tranzacției RPM a eșuat."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr ""
 "Nu s-a reușit obținerea blocării tranzacției RPM. O altă tranzacție este în "
 "desfășurare."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:85
 msgid "Rpm transaction failed."
 msgstr "Tranzacția RPM a eșuat."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:86
 msgid "Signature verification failed."
 msgstr "Verificarea semnăturii a eșuat."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Depozitul nu are nicio cheie OpenPGP configurată."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Public key is not installed."
 msgstr "Cheia publică nu este instalată."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:92
 msgid "Canceled by the user."
 msgstr "Anulată de către utilizator."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid "Public key import failed."
 msgstr "Importarea cheii publice a eșuat."
 
-#: base/transaction.cpp:979
+#: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
 msgstr "tsflag nevalid: {}"
 
-#: base/transaction.cpp:1317
+#: base/transaction.cpp:1318
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Cheia publică „{}” este deja prezentă, nu se importă."
 
-#: base/transaction.cpp:1338
+#: base/transaction.cpp:1339
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "A apărut o eroare la importarea cheii „{}”: {}"
 
-#: base/transaction.cpp:1372
+#: base/transaction.cpp:1373
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Verificarea OpenPGP pentru pachetul „{}” ({}) din depozitul „{}” a eșuat: "
 
-#: base/transaction.cpp:1400
+#: base/transaction.cpp:1401
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Importarea cheii nu a ajutat, cheie greșită?"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ", "
 
-#: base/transaction.cpp:1422
+#: base/transaction.cpp:1423
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
@@ -676,7 +676,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Atenție: verificări OpenPGP omise pentru {0} de pachete din depozitul: {1}"
 
-#: base/transaction.cpp:1425
+#: base/transaction.cpp:1426
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repositories: {1}"
@@ -725,23 +725,23 @@ msgstr ""
 msgid "Invalid package type: {}"
 msgstr "Tip de pachet nevalid: {}"
 
-#: conf/config_main.cpp:56
+#: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
 msgstr "Intrarea este goală. Trebuie să conțină o valoare."
 
-#: conf/config_main.cpp:62
+#: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
 msgstr "Valoarea din intrarea „{}” nu trebuie să fie negativă"
 
-#: conf/config_main.cpp:67
+#: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
 msgstr "Nu s-a putut converti „{}” în octeți"
 
-#: conf/config_main.cpp:83
+#: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
 msgstr "Unitate necunoscută „{}”"
 
-#: conf/config_main.cpp:278
+#: conf/config_main.cpp:279
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 "Valoarea limitei vitezei de descărcare {} este în afara intervalului permis "
@@ -907,7 +907,7 @@ msgstr "Lipsește „:” din valoare"
 msgid "Invalid module status: {}"
 msgstr "Stare nevalidă a modulului: {}"
 
-#: plugin/plugins.cpp:65
+#: plugin/plugins.cpp:67
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -915,24 +915,28 @@ msgstr ""
 "Combinație API/modul neacceptată. Versiunea API furnizată de modulul "
 "„{}” („{}”) este „{}.{}”. Versiunea API în libdnf este „{}.{}”."
 
-#: plugin/plugins.cpp:114
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr "Crearea unei instanțe de modul libdnf a eșuat"
+
+#: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
 msgstr "Nu se poate găsi biblioteca modulului „{}”"
 
-#: plugin/plugins.cpp:181
+#: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
 msgstr "Valoare nevalidă a opțiunii: enabled={}"
 
-#: plugin/plugins.cpp:205
+#: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr ""
 "Plugins::load_plugins(): valoarea opțiunii config_dir_path nu poate fi goală"
 
-#: plugin/plugins.cpp:230
-msgid "Cannot load plugins: {}"
-msgstr "Nu se pot încărca modulele: {}"
+#: plugin/plugins.cpp:253
+msgid "Cannot load libdnf plugin enabled from: {}"
+msgstr "Nu se poate încărca modulul libdnf activat de la: {}"
 
-#: repo/config_repo.cpp:566
+#: repo/config_repo.cpp:569
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Calculul SHA256 a eșuat"
 
@@ -952,12 +956,16 @@ msgstr ""
 "Viteza maximă de descărcare este mai mică decât cea minimă, vă rugăm să "
 "modificați valoarea configurată a opțiunii „minrate” sau „throttle”"
 
-#: repo/package_downloader.cpp:153
+#: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
 "Nu se poate descărca pachetul „{0}”, opțiunea „cacheonly” este activată."
 
-#: repo/package_downloader.cpp:266
+#: repo/package_downloader.cpp:219
+msgid "Already downloaded"
+msgstr "Deja descărcat(e)"
+
+#: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
 msgstr "Descărcarea pachetelor a eșuat"
 
@@ -998,7 +1006,7 @@ msgstr "Încărcarea comps „{}” a eșuat: nu are extensia „.xml”"
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Încărcarea comps xml a eșuat „{}”: {}"
 
-#: repo/repo.cpp:500
+#: repo/repo.cpp:501
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Încărcarea RPM „{}” a eșuat: {}"
 
@@ -1053,7 +1061,7 @@ msgstr "Eșec la listarea cheilor OpenPGP: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Importare eșuată a cheilor OpenPGP: {}"
 
-#: repo/repo_sack.cpp:147
+#: repo/repo_sack.cpp:148
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1061,7 +1069,7 @@ msgstr ""
 "Nu s-a reușit crearea depozitului „{}”: Id-ul este prezent de mai multe ori "
 "în configurație"
 
-#: repo/repo_sack.cpp:518
+#: repo/repo_sack.cpp:565
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Opțiunea cache-only este activată, dar nu există cache pentru depozitul „{}”"
@@ -1237,7 +1245,7 @@ msgstr "Nu se poate retrograda pachetul „{}”"
 msgid "Cannot install package \"{}\""
 msgstr "Nu se poate instala pachetul „{}”"
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+#: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
 msgstr "{}"
 
@@ -1264,7 +1272,7 @@ msgstr ""
 "Încărcarea fișierului TOML de stare a sistemului {} a eșuat (consultați dnf5-"
 "system-state(7)): {}"
 
-#: system/state.cpp:614
+#: system/state.cpp:602
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Versiune TOML neacceptată „{}”, versiunea maximă acceptată este „{}”"
 
@@ -1481,26 +1489,26 @@ msgstr "Tip neașteptat de „rpms”, se aștepta o matrice"
 
 #: transaction/transaction_sr.cpp:202
 msgid "Cannot parse NEVRA for rpm \"{}\""
-msgstr "Nu se poate analiza NEVRA pentru RPM „{}”"
+msgstr "Nu se poate analiza NEVRA pentru rpm-ul „{}”"
 
 #: transaction/transaction_sr.cpp:210
 msgid "Either \"nevra\" or \"package_path\" object key is required in an rpm"
-msgstr "Cheia obiectului „nevra” sau „package_path” este necesară într-un RPM"
+msgstr "Cheia obiectului „nevra” sau „package_path” este necesară într-un rpm"
 
 #: transaction/transaction_sr.cpp:215
 msgid "Missing object key \"action\" in an rpm"
-msgstr "Lipsește cheia obiectului „action” într-un RPM"
+msgstr "Lipsește cheia obiectului „action” într-un rpm"
 
 #: transaction/transaction_sr.cpp:220
 msgid "Missing object key \"reason\" in an rpm"
-msgstr "Lipsește cheia obiectului „reason” într-un RPM"
+msgstr "Lipsește cheia obiectului „reason” într-un rpm"
 
 #: transaction/transaction_sr.cpp:227
 msgid ""
 "Missing mandatory object key \"group_id\" in an rpm with reason \"Group\" "
 "and action \"Reason Change\""
 msgstr ""
-"Lipsește cheia obiect obligatorie „group_id” într- un RPM cu motivul „Group” "
+"Lipsește cheia obiect obligatorie „group_id” într- un rpm cu motivul „Group” "
 "și acțiunea „Reason Change”"
 
 #: utils/fs/file.cpp:86
@@ -1588,15 +1596,13 @@ msgstr "Lipsește „=” în linia {}"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nu se poate încărca biblioteca partajată „{}”: {}"
 
-#: utils/library.cpp:49
+#: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nu se poate obține adresa simbolului „{}”: {}"
 
 #: utils/locale.cpp:57
-#, fuzzy
-#| msgid "Cannot load shared library \"{}\": {}"
 msgid "Cannot set the locale \"{}\": {}"
-msgstr "Nu se poate încărca biblioteca partajată „{}”: {}"
+msgstr "Nu se poate configura configurația regională „{}”: {}"
 
 #: utils/locker.cpp:45
 msgid "Failed to open lock file \"{}\""

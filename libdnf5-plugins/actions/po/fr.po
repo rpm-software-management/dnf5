@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Pierre GRASSER <pierre.grasser@proton.me>, 2024.
-# Léane GRASSER <leane.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-09-23 12:56+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 09:31+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/fr/>\n"
@@ -17,64 +17,153 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "Fichier \"{}\", ligne {} : {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "Format \"HOOK:FILTRE_A_PAQUETS:DIRECTION:OPTIONS:CMD\" attendu"
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Valeur d'option \"enabled\" inconnue : \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "Option \"{}\" inconnue"
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "Hook \"{}\" inconnu"
+
+#: actions.cpp:720
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
-"Erreur dans le fichier \"{}\" à la ligne {} : format \"HOOK:FILTRE_PKG:"
-"DIRECTION:OPTIONS:CMD\" attendu"
+"Les filtres à paquets ne peuvent être utilisés que dans les hooks "
+"GOAL_RESOLVED, PRE_TRANS et POST_TRANS"
 
-#: actions.cpp:589
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "Impossible d'utiliser la direction sans filtre à paquets"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "Direction de paquet \"{}\" inconnue"
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "Mode \"{}\" inconnu"
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Valeur non prise en charge pour l'option \"raise_error\" : {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Commande manquante"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+"Problème de syntaxe : Signe égal (=) manquant dans la ligne de sortie de "
+"l'action : {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "Impossible de définir une option : Ligne de sortie de l'action : {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "L'action a envoyé un niveau de journalisation incorrect : {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "L'action demande un arrêt : {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "L'action a envoyé un message d'erreur : {}"
+
+#: actions.cpp:995
 msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
-"Erreur dans le fichier \"{}\" à la ligne {} : valeur d'option activée \"{}\" "
-"inconnue"
+"Problème de syntaxe : La ligne de sortie de l'action doit commencer par "
+"\"tmp.\", \"conf.\", \"var.\", \"stop=\" ou \"error=\" : {}"
 
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "Erreur dans le fichier \"{}\" à la ligne {} : option \"{}\" inconnue"
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Erreur lors de la lecture des données de l'action (à partir du pipe)"
 
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "Erreur dans le fichier \"{}\" à la ligne {} : hook \"{}\" inconnu"
-
-#: actions.cpp:636
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
-"Erreur dans le fichier \"{}\" à la ligne {} : le filtre à paquets peut être "
-"utilisé uniquement dans les hooks PRE_TRANS et POST_TRANS"
+"Problème de syntaxe dans la requête JSON de l'action : Caractères \"{{\" de "
+"début manquants"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Erreur lors du traitement d'une requête de l'action."
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "Problème de syntaxe dans une requête JSON de l'action : {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
 msgstr ""
-"Erreur dans le fichier \"{}\" à la ligne {} : impossible d'utiliser la "
-"direction sans filtre à paquets"
+"Problème de syntaxe dans une requête JSON de l'action : Entrée incomplète"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "Impossible d'écrire la réponse"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Plugin Actions : Impossible de créer un pipe"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Plugin Actions : Impossible de fork"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
 msgstr ""
-"Erreur dans le fichier \"{}\" à la ligne {} : direction de paquet \"{}\" "
-"inconnue"
+"Plugin Actions : Impossible d'associer l'entrée standard de la commande"
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "Erreur dans le fichier \"{}\" à la ligne {} : mode \"{}\" inconnu"
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr ""
+"Plugin Actions : Impossible d'associer la sortie standard de la commande"
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "Erreur dans le fichier \"{}\" à la ligne {} : commande manquante"
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "Impossible d'exécuter l'action, commande \"{}\" arguments \"{}\""
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
-msgstr "Impossible de créer un pipe : {}"
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Erreur lors de la préparation du processus enfant"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "Code de sortie : {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "Terminé par le signal : {}"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr ""
+#~ "Erreur dans le fichier \"{}\" à la ligne {} : option \"{}\" inconnue"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "Erreur dans le fichier \"{}\" à la ligne {} : mode \"{}\" inconnu"
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "Erreur dans le fichier \"{}\" à la ligne {} : commande manquante"

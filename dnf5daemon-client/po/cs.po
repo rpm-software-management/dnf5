@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-02-02 12:15+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
@@ -204,13 +204,13 @@ msgstr ""
 "Tento příkaz musí být spuštěn s oprávněními superuživatele (na většině "
 "systémů pod uživatelem root)."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Špatně naformátovaná hodnota argumentu: Poslední klíčový znak nemůže být "
 "'.': {}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Přidejte \"--help\" pro více informací o argumentech."

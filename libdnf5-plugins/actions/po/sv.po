@@ -2,14 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-09-21 07:57+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 09:31+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/sv/>\n"
 "Language: sv\n"
@@ -17,58 +19,145 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "FIl \"{}\" på radio {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "\"KROK:PKG_FILTER:RIKTNING:ALTERNATIV:KOMMANDO\" format förväntas"
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Okänt \"aktiverat\" alternativvärde \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "Okänt alternativ \"{}\""
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "Okänd krok \"{}\""
+
+#: actions.cpp:720
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
-"Fel i fil \"{}\" på rad {}: \"KROK:PKG_FILTER:RIKTNING:ALTERNATIV:KOMMANDO\" "
-"format förväntas"
+"Paketfilter kan endast användas i GOAL_RESOLVED, PRE_TRANS och POST_TRANS "
+"krokar"
 
-#: actions.cpp:589
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "Kan inte använda riktning utan paketfilter"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "Okänd paketriktning \"{}\""
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "Okänt läge \"{}\""
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Värde som inte stöds för \"raise_error\" alternativet: {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Saknar kommando"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr "Syntaxfel: Likhetstecken (=) saknas i åtgärdens utdatarad: {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "Kan inte ställa in alternativ: Åtgärdsutgångsrad: {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "Åtgärd har skickat fel loggnivå: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "Åtgärd kräver stopp: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "Åtgärd har skickat felmeddelande: {}"
+
+#: actions.cpp:995
 msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
-msgstr "Fel i fil \"{}\" på rad {}: Okänt \"aktiverat\" alternativvärde \"{}\""
-
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "Fel i fil \"{}\" på rad {}: Okänt alternativ \"{}\""
-
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "Fel i fil \"{}\" på rad {}: Okänd krok \"{}\""
-
-#: actions.cpp:636
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
-"Fel i fil \"{}\" på rad {}: Paketfilter kan endast användas i PRE_TRANS och "
-"POST_TRANS krokar"
+"Syntaxfel: Åtgärdsutgångsraden måste börja med \"tmp.\" eller \"conf.\" "
+"eller \"var.\" eller \"stop=\" eller \"error=\": {}"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
-msgstr "Fel i fil \"{}\" på rad {}: Kan inte använda riktning utan paketfilter"
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Fel vid läsning från åtgärd (från pipe)"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr "Fel i fil \"{}\" på rad {}: Okänd paketriktning \"{}\""
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr "Syntaxfel i json-begäran från åtgärd: Startande '{{' tecken saknas"
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "Fel i fil \"{}\" på rad {}: Okänt läge \"{}\""
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Fel under bearbetning av en begäran från åtgärd."
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "Fel i fil \"{}\" på rad {}: Saknar kommando"
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "Syntaxfel i json-begäran från åtgärd: {}"
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
-msgstr "Kan inte skapa pipa: {}"
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "Syntaxfel i json-begäran från åtgärd: ofullständig inmatning"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "Kan inte skriva svar"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Åtgärdsplugin: Kan inte skapa pipa"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Åtgärdsplugin: Kan inte gaffla"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "Åtgärdsplugin: Kan inte binda kommandot stdin"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Åtgärdsplugin: Kan inte binda kommandot stdout"
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "Kan inte exekvera åtgärd, kommando \"{}\" argument \"{}\""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Fel under förberedelse av barn process"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "Utgångskod: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "Terminerad av signal: {}"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "Fel i fil \"{}\" på rad {}: Okänt alternativ \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "Fel i fil \"{}\" på rad {}: Okänt läge \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "Fel i fil \"{}\" på rad {}: Saknar kommando"
