@@ -1,3 +1,92 @@
+# 5.2.11.0
+
+- Update translations from weblate
+- offline: Reserve last 5% of progress bar for scriptlets
+- offline: Set correct plymouth mode
+- offline: Inform user about scriptlets execution
+- offline: Correct item number to plymouth message
+- offline: Add initial settings of the plymouth
+- offline: Fix plymouth ping command
+- offline: Remove superfluous [[maybe_unused]] attributes
+- Revert "Packit: use GH's release notes for downstream changelog"
+- Replace in-tree crc32() with a call to zlib
+- doc: fix typo
+- Goal: Fix handling duplicit group actions
+- progressbar: Messages printing on narrow terminal
+- progressbar: Small optimizations
+- Goal: Handle INSTALL and INSTALL_BY_COMPS group actions as INSTALL
+- Use actual repository ID in stored transactions
+- dnf5: Make creating repositories optional
+- repo: Invalidate provides after adding a comps xml
+- doc: Document dropping of makecache --timer option
+- conf: Deprecate metadata_timer_sync option
+- system-upgrade: Add --allowerasing switch
+- repo: ignore key download errors if skip_if_unavailable
+- doc: No value separator after short options
+- Don't remove packages/groups during group/environment upgrade
+- Goal: handle duplicate group actions
+- Remove duplicit clear of `group_specs`
+- Update groups and environments during system upgrade
+- Group package type can be present but empty
+- FindRuby no longer provides upper-case RUBY_* variables.
+- doc: Removal of send_error_messages in automatic
+- offline: Use connection for creating D-Bus proxies
+- offline: Fix constructing vector from D-Bus value
+- Enable automatic PR reviews
+- expired-pgp-keys: Drop checking for gpg command
+- l10n: Rename zh_Hans to zh_CN
+- Actions plugin doc: Use inline literals in Output line format section
+- Actions plugin documentation: extension in version 1.4.0
+- Fix total number of transaction progress bars
+- Create progress bar in script callback if one doesn't already exist
+- Create a pipe and open files with the close-on-exec flag
+- Document Python API by module
+- Document cpp API by namespace
+- Actions plugin: Increase version to 1.4
+- Actions plugin: Support for "log" command in output line in plain mode
+- Actions plugin: Action can send stop request or error msg in JSON mode
+- Actions plugin: Action can send stop request or error msg in plain mode
+- libdnf5 plugin API: Add `StopRequest` class
+- Actions plugin: Unify exceptions and log messages
+- Actions plugin: Introduce `raise_error` option
+- Actions plugin: Move logging code out of child process
+- Actions plugin: Create pipes with close-on-exec flag
+- expired-pgp-keys: Recommend the plugin only if gpg is already installed
+- Fix RepoCache::Impl::remove_recursive: Do not follow symlinks
+- Update `expired-pgp-keys` plugin to not use deprecated API
+- doc: Add page dedicated to deprecations
+- Add runtime warning to `stderr` when calling deprecated API
+- Disable deprecation warning for test of deprecated getters
+- doc: Add `ConfigMain` to both cpp and python API docs
+- Unify marking of depraceted API
+- Document `list` command changed handling of installed packages repos
+- Fix default value of `pluginpath`
+- CMake: Use list(APPEND FOO) over set(FOO ${FOO} ...)
+- load_plugins: Preserve original exception with failure information
+- Implement *_plugin_get_last_exception in all plugins
+- Plugin API: *_plugin_get_last_exception: Return pointer to last exception
+- expired-pgp-keys: Install the plugin by default on Fedora 42+
+- RepoSack::update_and_load_repos: Properly thread_sack_loader termination
+- system::State: remove unnecessary permissions check
+- dnf4convert: exit when the database doesn't exist
+- Load `libdnf5::system::State` only when required
+- Doc: document dropped repoquery and install command variants
+- Mark 'Already downloaded' for translations
+- plugins: Check if the plugin instantiation was successful
+- Library::get_address: Always throw exception if address is NULL
+- DNF5 bash completion: "menu completion" support
+- DNF5: Support for suggesting command line args without description
+- cli::ArgumentParser: Support for suggesting args without description
+- daemon-client: Separate context and callbacks
+- dnfdaemon: Properly leave event loop
+- dnfdaemon-client: Use correct data type for callbacks
+- dnfdaemon: Register interface methods for sdbus-cpp-2
+- dnfdaemon: Make signal handlers compatible
+- dnfdaemon: Explicit sdbus::Variant conversion
+- dnfdaemon: sdbus::Variant constructor is explicit
+- dnfdaemon: sdbus-cpp v. 2 requires strong types
+- cmake: Move sdbus-c++ check to one place
+
 # 5.2.10.0
 
 - Update translations from weblate
