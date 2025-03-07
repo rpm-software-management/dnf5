@@ -1,16 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Joan Aymà <joan@ayma.cat>, 2024.
+# Joan Aymà <joan@ayma.cat>, 2024, 2025.
 # David Medina <dmedinacpnl@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2025-01-23 15:06+0000\n"
-"Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-26 09:38+0000\n"
+"Last-Translator: Joan Aymà <joan@ayma.cat>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ca/>\n"
 "Language: ca\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
-msgstr "Maneja els avisos"
+msgstr "Gestiona els avisos"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
@@ -30,7 +30,7 @@ msgstr "Mostra els detalls dels avisos"
 
 #: commands/advisory/advisory_list.hpp:35
 msgid "List advisories"
-msgstr "Enumera els avisos"
+msgstr "Llista els avisos"
 
 #: commands/advisory/advisory_summary.cpp:44
 msgid "All"
@@ -90,7 +90,7 @@ msgstr ""
 
 #: commands/advisory/arguments.hpp:83 commands/history/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr "NOM_DE_PAQUET,..."
+msgstr "NOM_DEL_PAQUET,..."
 
 #: commands/advisory/arguments.hpp:90
 msgid "List of patterns matched against advisory names."
@@ -494,11 +494,11 @@ msgstr "Gestiona els mòduls"
 msgid "No matches found for \"{}\"."
 msgstr "Cap coincidència amb \"{}\"."
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "Gestiona les transaccions fora de línia"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -506,11 +506,11 @@ msgstr ""
 "Error llegint l'estat: {}. Torna a executar l'ordre que has just per iniciar "
 "la transacció fora de línia, p.e. `dnf5 system-upgrade download [OPCIONS]`."
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "No s'ha pogut connectar al D-Bus: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -518,32 +518,32 @@ msgstr ""
 "Prepara el sistema per fer la transacció fora de línia i el reinicia per "
 "començar la transacció."
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "Apaga el sistema després que l'operació hagi completat"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "No hi ha cap transacció desada."
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "El sistema no està preparat per una transacció fora de línia."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "El directori de dades {} no existeix."
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr "{} no és requerit per system-update.target."
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 "El sistema es reiniciarà ara per actualitzar a la versió de llançament "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -551,7 +551,7 @@ msgstr ""
 "Ara el sistema es reiniciarà per fer la transacció fora de línia iniciada "
 "per l'ordre següent:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -559,15 +559,16 @@ msgstr ""
 "Només per a ús intern, no destinat a ser executat per l'usuari. Executeu la "
 "transacció a l'entorn fora de línia."
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "El fitxer activador no existeix. Se'n surt."
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
-msgstr "S'executa una altra eina de transaccions fora de línia. Se'n surt."
+msgstr ""
+"S'està executant una altra eina de transaccions fora de línia. Sortint."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -577,52 +578,52 @@ msgstr ""
 "executada directament per l'usuari. Per iniciar l'actualització del sistema "
 "o la transacció fora de línia, hauríeu d'executar 'dnf5 offline reboot'."
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Useu 'dnf5 offline reboot' per començar la transacció."
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "Ha fallat la transacció: "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "Error en llegir el diari: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "Ha fallat afegir la coincidència del diari: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "No s'ha trobat cap registre."
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Les arrencades següents semblen contenir registres de transaccions fora de "
 "línia:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "No es pot trobar cap registre amb aquest índex."
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "No es pot fer coincidir l'entrada de diari del sistema."
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "Mostra els registres de transaccions fora de línia anteriors"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Quin registre mostrar. Executeu-ho sense cap argument per obtenir una llista "
 "dels registres disponibles."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -630,22 +631,22 @@ msgstr ""
 "systemd no és compatible amb aquesta compilació de DNF 5; la subordre 'log' "
 "no està disponible."
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "Mostra l'estat de la transacció fora de línia actual"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr "S'ha iniciat una transacció fora de línia amb l'ordre següent:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Executeu 'dnf5 offline reboot' per reiniciar i fer la transacció fora de "
 "línia."
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -654,7 +655,7 @@ msgstr ""
 "'dnf5 offline log' per obtenir més informació. L'ordre que ha iniciat la "
 "transacció:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "Estat desconegut de la transacció fora de línia: "
 
@@ -731,15 +732,15 @@ msgstr "Cerca programari que coincideixi amb totes les cadenes especificades"
 msgid "Remove software and install another in one transaction"
 msgstr "Suprimeix programari i n'instal·la un altre en una transacció"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "Es prepara el sistema per actualitzar-lo a una versió nova"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr "Es baixa tot el necessari per actualitzar a una versió nova"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
@@ -747,16 +748,16 @@ msgstr ""
 "No s'instal·len paquets de la nova versió si són més antics que el que està "
 "instal·lat actualment"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr "Cal un --releasever més elevat que la versió actual del sistema."
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr ""
 "Desa una transacció de sincronització de distribució per fer-la fora de línia"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr "Desa una transacció d'actualització per fer-la fora de línia"
 
@@ -869,56 +870,49 @@ msgstr "La clau s'ha importat correctament."
 
 #: context.cpp:96
 msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr ""
+msgstr "La següent clau PGP (0x{}) està a punt de suprimir-se:"
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " ID d'usuari     : {}\n"
+msgstr " Raó     : {}\n"
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " From       : {}\n"
-msgstr ""
-" Empremta: {}\n"
-" De       : {}\n"
+msgstr " De       : {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
 msgstr ""
+"Com a resultat, la instal·lació de paquets signats amb aquesta clau fallarà."
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr ""
+msgstr "Es recomana suprimir la clau caducada per permetre la importació"
 
 #: context.cpp:106
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
+"d'una clau actualitzada. Això pot deixar els paquets ja instal·lats com a no "
+"verificables."
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."
-msgstr ""
+msgstr "Ara el sistema procedirà a suprimir la clau."
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully imported."
 msgid "The key was successfully removed."
-msgstr "La clau s'ha importat correctament."
+msgstr "La clau s'ha suprimit correctament."
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -926,44 +920,44 @@ msgstr ""
 "No hi ha dipòsits coincidents per a {}. Per usar dipòsits d'un sistema "
 "amfitrió, apliqueu l'opció --use-host-config"
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "No hi ha dipòsits coincidents per a {}"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "Actualització i càrrega de dipòsits:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "Dipòsits carregats."
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "Es prova la transacció fora de línia"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "Ha fallat la transacció: {}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "La ubicació {} ja conté una transacció desada. Se sobreescriurà."
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Ja hi ha una transacció fora de línia a la cua, iniciada per l'ordre següent:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -971,7 +965,7 @@ msgstr ""
 "Si continueu, es cancel·larà transacció anterior fora de línia i la "
 "substituirà per aquesta."
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -981,71 +975,75 @@ msgstr ""
 "per reiniciar i executar la transacció. Per cancel·lar la transacció i "
 "suprimir els fitxers baixats, useu 'dnf5 offline clean'."
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
-msgstr "S'executa la transacció"
+msgstr "Executant la transacció"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
-msgstr "S'actualitza {}"
+msgstr "Actualitzant {}"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "Es degrada {}"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
-msgstr "Es reinstal·la {}"
+msgstr "Reinstal·lant {}"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Acció inesperada a TransactionPackage: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
-msgstr "S'instal·la {}"
+msgstr "Instal·lant {}"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "Es prepara la transacció"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
-msgstr "Se suprimeix {}"
+msgstr "Suprimint {}"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "Es neteja {}"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "Error de desempaquetat: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "Error de Cpio: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "Sortida de l'scriptlet:"
 
-#: context.cpp:941
-msgid "Running {} scriptlet: {}"
-msgstr "S'executa l'scriptlet de {}: {}"
+#: context.cpp:947
+msgid "Running scriptlets"
+msgstr "Executant scriptlets"
 
-#: context.cpp:956
+#: context.cpp:952
+msgid "Running {} scriptlet: {}"
+msgstr "Executant l'scriptlet de {}: {}"
+
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "S'ha acabat l'scriptlet de {} : {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Error no crític a l'scriptlet de {} : {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "Error a l'scriptlet de {}: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "Verificació dels fitxers dels paquets"
 
@@ -1053,7 +1051,7 @@ msgstr "Verificació dels fitxers dels paquets"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "No es pot carregar la biblioteca compartida {}: {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "No es pot obtenir l'adreça del símbol {}: {}"
 
@@ -1454,15 +1452,19 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 llançat amb arguments: {} ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "Índex no vàlid a \"--complete=<index>[,...]\": {}"
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Afegiu '--help' per obtenir més informació sobre els arguments."
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1470,7 +1472,7 @@ msgstr ""
 "Pot ser una ordre proporcionada per un connector, proveu: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1478,11 +1480,11 @@ msgstr ""
 "L'argument està disponible per a les ordres següents: {}. (S'ha de col·locar "
 "després de l'ordre.)"
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr "No hi ha accés de lectura o execució al directori actual, es passa a /"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1492,15 +1494,15 @@ msgstr ""
 "a usuari amb drets elevats o useu les opcions '--assumeno' o '--"
 "downloadonly' per executar l'ordre sense modificar l'estat del sistema."
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "L'operació només desarà la transacció a {}"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr "L'operació només baixarà els paquets per a la transacció."
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1508,7 +1510,7 @@ msgstr ""
 "Mode de prova activat: només es faran baixades de paquets, instal·lacions de "
 "claus OpenPGP i comprovacions de transaccions."
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1516,15 +1518,15 @@ msgstr ""
 "No s'ha carregat cap dipòsit des de l'arrel de la instal·lació. Per usar la "
 "configuració i els dipòsits del sistema amfitrió, apliqueu --use-host-config."
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "L'ordre ha retornat un error: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "El DNF5 ha acabat"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "Completat!"
 

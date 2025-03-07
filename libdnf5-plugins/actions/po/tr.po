@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-09-21 14:54+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,59 +19,169 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
-msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+#: actions.cpp:237
+#, fuzzy
+#| msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
+msgid "File \"{}\" on line {}: {}"
+msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kanca \"{}\""
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:"
+#| "CMD\" format expected"
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata: \"KANCA:PKT_FİLTRESİ::YÖN:KOMUT\" "
 "biçimi bekleniyor"
 
-#: actions.cpp:589
-msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+#: actions.cpp:676
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
+msgid "Unknown \"enabled\" option value \"{}\""
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Bilinmeyen \"enabled\" seçeneği değeri "
 "\"{}\""
 
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "\"{}\" dosyasının {} satırında hata: \"{}\" seçeneği bilinmiyor"
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr ""
 
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kanca \"{}\""
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr ""
 
-#: actions.cpp:636
+#: actions.cpp:720
 #, fuzzy
 #| msgid ""
 #| "Error in file \"{}\" on line {}: Package filter can only be used in "
 #| "PRE_TRANS and POST_TRANS hooks"
 msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Paket filtresi yalnızca PRE_TRANS ve "
 "POST_TRANS kancalarında kullanılabilir"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
+#: actions.cpp:726
+#, fuzzy
+#| msgid ""
+#| "Error in file \"{}\" on line {}: Cannot use direction without package "
+#| "filter"
+msgid "Cannot use direction without package filter"
 msgstr ""
 "\"{}\" dosyasının {}. satırında hata. Paket filtresi olmadan yön kullanılamaz"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+#: actions.cpp:740
+#, fuzzy
+#| msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
+msgid "Unknown package direction \"{}\""
 msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen paket yönü \"{}\""
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kip \"{}\""
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr ""
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "\"{}\" dosyasının {} satırında hata: Eksik komut"
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr ""
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
+#: actions.cpp:760
+msgid "Missing command"
+msgstr ""
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr ""
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr ""
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr ""
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr ""
+
+#: actions.cpp:995
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr ""
+
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr ""
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr ""
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr ""
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr ""
+
+#: actions.cpp:1154
+#, fuzzy
+#| msgid "Cannot create pipe: {}"
+msgid "Cannot write response"
 msgstr "Boru (pipe) oluşturulamıyor: {}"
+
+#: actions.cpp:1821
+#, fuzzy
+#| msgid "Cannot create pipe: {}"
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Boru (pipe) oluşturulamıyor: {}"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr ""
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr ""
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr ""
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr ""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr ""
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr ""
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr ""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "\"{}\" dosyasının {} satırında hata: \"{}\" seçeneği bilinmiyor"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "\"{}\" dosyasının {}. satırında hata. Bilinmeyen kip \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "\"{}\" dosyasının {} satırında hata: Eksik komut"

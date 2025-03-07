@@ -1,0 +1,31 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Joan Aymà <joan@ayma.cat>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-24 18:43+0000\n"
+"Last-Translator: Joan Aymà <joan@ayma.cat>\n"
+"Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-builddep/ca/>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10\n"
+
+#: builddep.cpp:84
+msgid ""
+"Invalid value for macro definition \"{}\". \"macro expr\" format expected."
+msgstr ""
+"Valor invàlid per la definició de macro \"{}\". S'esperava el format \"macro "
+"expr\"."
+
+#. failed to parse some of inputs (invalid spec, no package matched...)
+#: builddep.cpp:341
+msgid "Failed to parse some inputs."
+msgstr "Ha fallat a l'analitzar alguna entrada."

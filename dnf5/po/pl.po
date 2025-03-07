@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2025-01-29 20:13+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-27 19:57+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/pl/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -480,7 +480,7 @@ msgstr "Pokaż wyłączone moduły."
 
 #: commands/module/arguments.hpp:50
 msgid "Pattern matching module NSVCAs."
-msgstr ""
+msgstr "Moduł dopasowania wzorców NSVCA."
 
 #: commands/module/module.cpp:43
 msgid "Manage modules"
@@ -490,11 +490,11 @@ msgstr "Zarządzaj modułami"
 msgid "No matches found for \"{}\"."
 msgstr "Nie znaleziono wyników dla „{}”."
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr "Zarządzaj transakcjami offline"
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
@@ -502,11 +502,11 @@ msgstr ""
 "Błąd odczytu stanu: {}. Uruchom ponownie polecenie użyte do zainicjowania "
 "transakcji offline, np. `dnf5 system-upgrade download [OPTIONS]`."
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr "Nie można połączyć się z D-Bus: {}"
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
@@ -514,33 +514,33 @@ msgstr ""
 "Przygotuj system do wykonania transakcji offline i uruchom ponownie, aby "
 "rozpocząć transakcję."
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr "Po zakończeniu operacji wyłącz system"
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr "Żadna transakcja offline nie jest przechowywana."
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 msgid "System is not ready for offline transaction."
 msgstr "System nie jest gotowy do przeprowadzenia transakcji offline."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr "Katalog danych {} nie istnieje."
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr "{} nie jest pożądany przez system-update.target."
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 "System zostanie teraz uruchomiony ponownie w celu uaktualnienia do wersji "
 "wydania "
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
@@ -548,7 +548,7 @@ msgstr ""
 "System zostanie teraz uruchomiony ponownie w celu wykonania transakcji "
 "offline zainicjowanej następującym poleceniem:"
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
@@ -556,15 +556,15 @@ msgstr ""
 "Tylko do użytku wewnętrznego, nieprzeznaczony do uruchomienia przez "
 "użytkownika. Wykonaj transakcję w środowisku offline."
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr "Plik wyzwalacza nie istnieje. Wyjście."
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr "Inne narzędzie do transakcji offline jest uruchomione. Wyjście."
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
@@ -575,52 +575,52 @@ msgstr ""
 "użytkownika. Aby zainicjować transakcję aktualizacji systemu/offline, należy "
 "uruchomić `dnf5 offline reboot`."
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr "Aby rozpocząć transakcję, użyj polecenia `dnf5 offline reboot`."
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 msgid "Transaction failed: "
 msgstr "Transakcja się nie powiodła "
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr "Błąd podczas odczytu dziennika: {}"
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr "Dodanie dopasowania dziennika nie powiodło się: {}"
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr "Nie znaleziono żadnych dzienników."
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 "Następujące operacje rozruchu wydają się zawierać dzienniki transakcji "
 "offline:"
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr "Nie można znaleźć dzienników o tym indeksie."
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr "Nie można dopasować wpisu dziennika systemd."
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr "Pokaż logi z poprzednich transakcji offline"
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 "Który dziennik pokazać. Uruchom bez żadnych argumentów, aby uzyskać listę "
 "dostępnych dzienników."
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
@@ -628,23 +628,23 @@ msgstr ""
 "systemd nie jest obsługiwany w tej kompilacji DNF 5; podpolecenie `log` jest "
 "niedostępne."
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr "Pokaż status bieżącej transakcji offline"
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr ""
 "Transakcja offline została zainicjowana za pomocą następującego polecenia:"
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 "Uruchom `dnf5 offline reboot`, aby ponownie uruchomić komputer i wykonać "
 "transakcję offline."
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
@@ -653,7 +653,7 @@ msgstr ""
 "offline log`, aby uzyskać więcej informacji. Polecenie, które zainicjowało "
 "transakcję, to:"
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr "Nieznany status transakcji offline: "
 
@@ -729,15 +729,15 @@ msgstr "Wyszukaj oprogramowanie pasujące do wszystkich określonych ciągów"
 msgid "Remove software and install another in one transaction"
 msgstr "Usuń oprogramowanie i zainstaluj inne w jednej transakcji"
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr "Przygotowuje system do aktualizacji do nowego wydania"
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr "Pobierz wszystko, co jest potrzebne do uaktualnienia do nowej wersji"
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
@@ -745,17 +745,17 @@ msgstr ""
 "Nie instaluj pakietów z nowej wersji, jeśli są starsze od aktualnie "
 "zainstalowanych"
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr "Wymagana jest wersja --releasever większa niż bieżąca wersja systemu."
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr ""
 "Przechowuj transakcję synchronizacji dystrybucji, która będzie wykonywana w "
 "trybie offline"
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr ""
 "Przechowuj transakcję uaktualnienia, która zostanie wykonana w trybie offline"
@@ -864,56 +864,50 @@ msgstr "Klucz został pomyślnie zaimportowany."
 
 #: context.cpp:96
 msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr ""
+msgstr "Następujący klucz PGP (0x{}) zostanie wkrótce usunięty:"
 
 #: context.cpp:98
-#, fuzzy
-#| msgid " UserID     : \"{}\"\n"
 msgid " Reason     : {}\n"
-msgstr " Identyfikator użytkownika: \"{}\"\n"
+msgstr " Powód     : {}\n"
 
 #: context.cpp:102
-#, fuzzy
-#| msgid ""
-#| " Fingerprint: {}\n"
-#| " From       : {}\n"
 msgid " From       : {}\n"
-msgstr ""
-" Odcisk palca: {}\n"
-" Od       : {}\n"
+msgstr " Z       : {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
 msgstr ""
+"W rezultacie instalacja pakietów podpisanych tym kluczem zakończy się "
+"niepowodzeniem."
 
 #: context.cpp:105
 msgid "It is recommended to remove the expired key to allow importing"
-msgstr ""
+msgstr "Zaleca się usunięcie wygasłego klucza, aby umożliwić importowanie"
 
 #: context.cpp:106
 msgid ""
 "an updated key. This might leave already installed packages unverifiable."
 msgstr ""
+"zaktualizowany klucz. To może sprawić, że zainstalowane pakiety staną się "
+"niemożliwe do zweryfikowania."
 
 #: context.cpp:109
 msgid "The system will now proceed with removing the key."
-msgstr ""
+msgstr "System przystąpi teraz do usuwania klucza."
 
 #: context.cpp:115
-#, fuzzy
-#| msgid "The key was successfully imported."
 msgid "The key was successfully removed."
-msgstr "Klucz został pomyślnie zaimportowany."
+msgstr "Klucz został pomyślnie usunięty."
 
-#: context.cpp:290
+#: context.cpp:294
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ", "
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -921,38 +915,38 @@ msgstr ""
 "Brak pasujących repozytoriów dla {}. Aby użyć repozytoriów z systemu hosta, "
 "przekaż opcję --use-host-config"
 
-#: context.cpp:304
+#: context.cpp:308
 msgid "No matching repositories for {}"
 msgstr "Brak pasujących repozytoriów dla {}"
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr "Aktualizowanie i ładowanie repozytoriów:"
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr "Załadowano repozytoria."
 
-#: context.cpp:366
+#: context.cpp:370
 msgid "Testing offline transaction"
 msgstr "Testowanie transakcji offline"
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 msgid "Transaction failed: {}"
 msgstr "Transakcja nie powiodła się: {}"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:442
+#: context.cpp:446
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "Lokalizacja „{}” zawiera już zapisaną transakcję, zostanie ona nadpisana."
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
@@ -960,7 +954,7 @@ msgstr ""
 "Istnieje już w kolejce transakcja offline zainicjowana następującym "
 "poleceniem:"
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -968,7 +962,7 @@ msgstr ""
 "Kontynuowanie spowoduje anulowanie starej transakcji offline i zastąpienie "
 "jej tą."
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -978,71 +972,75 @@ msgstr ""
 "reboot`, aby ponownie uruchomić i uruchomić transakcję. Aby anulować "
 "transakcję i usunąć pobrane pliki, użyj `dnf5 offline clean`."
 
-#: context.cpp:497
+#: context.cpp:501
 msgid "Running transaction"
 msgstr "Wykonywanie transakcji"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr "Aktualizowanie {}"
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr "Obniżanie wersji {}"
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr "Ponowna instalacja {}"
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Nieoczekiwana akcja w TransactionPackage: {}"
 
-#: context.cpp:839
+#: context.cpp:844
 msgid "Installing {}"
 msgstr "Instaluję {}"
 
-#: context.cpp:860
+#: context.cpp:865
 msgid "Prepare transaction"
 msgstr "Przygotowywanie transakcji"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr "Usuwam {}"
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr "Czyszczenie {}"
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr "Błąd rozpakowywania: {}"
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr "Błąd cpio: {}"
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr "Dane wyjściowe scriptletu:"
 
-#: context.cpp:941
+#: context.cpp:947
+msgid "Running scriptlets"
+msgstr "Uruchamianie scriptletów"
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr "Uruchamianie scriptletu {}: {}"
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr "Zakończono {} scriptlet: {}"
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Błąd niekrytyczny w scriptlecie {}: {}"
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr "Błąd w scriptlecie {}: {}"
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr "Weryfikowanie plików pakietu"
 
@@ -1050,7 +1048,7 @@ msgstr "Weryfikowanie plików pakietu"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nie można załadować biblioteki współdzielonej „{}”: {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nie można uzyskać adresu symbolu „{}”: {}"
 
@@ -1358,16 +1356,16 @@ msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
 msgstr ""
-"Po tej operacji zostanie użyte dodatkowo {:.0f} {:s} (zainstaluj {:.0f} {:"
-"s}, usuń {:.0f} {:s})."
+"Po tej operacji zostanie użyte dodatkowo {:.0f} {:s} (zainstaluje {:.0f} {:"
+"s}, usunie {:.0f} {:s})."
 
 #: main.cpp:838
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
 msgstr ""
-"Po tej operacji {:.0f} {:s} zostanie zwolniony (zainstaluj {:.0f} {:s}, usuń "
-"{:.0f} {:s})."
+"Po tej operacji {:.0f} {:s} zostanie zwolniony (zainstaluje {:.0f} {:s}, "
+"usunie {:.0f} {:s})."
 
 #: main.cpp:850
 msgid "======== Main configuration: ========"
@@ -1451,15 +1449,19 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- Uruchomiono DNF5 z argumentami: \"{}\" ---"
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr "Nieprawidłowy „indeks” w „--complete=<index>[,...]”: {}"
+
+#: main.cpp:1285
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Dodaj „--help”, aby uzyskać więcej informacji o argumentach."
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1467,19 +1469,19 @@ msgstr ""
 "Może to być polecenie dostarczone przez wtyczkę, spróbuj: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 "Argument jest dostępny dla poleceń: {}. (Musi być umieszczony po poleceniu.)"
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr ""
 "Brak dostępu do odczytu/wykonywania w bieżącym katalogu, przenoszenie do /"
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1489,15 +1491,15 @@ msgstr ""
 "użytkownik z podwyższonymi uprawnieniami lub użyj opcji „--assumeno” lub „--"
 "downloadonly”, aby uruchomić polecenie bez modyfikowania stanu systemu."
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr "Operacja zapisze transakcję tylko w {}"
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr "Operacja spowoduje pobranie wyłącznie pakietów dla transakcji."
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1505,7 +1507,7 @@ msgstr ""
 "Włączony tryb testowy: wykonywane będą tylko pobrania pakietów, instalacje "
 "kluczy OpenPGP i sprawdzanie transakcji."
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1513,15 +1515,15 @@ msgstr ""
 "Żadne repozytoria nie zostały załadowane z installroot. Aby użyć "
 "konfiguracji i repozytoriów systemu hosta, przekaż --use-host-config."
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr "Polecenie zwróciło błąd: {}"
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr "DNF5 zakończył działanie"
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr "Ukończono!"
 

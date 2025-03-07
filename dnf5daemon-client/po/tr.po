@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-10-08 08:41+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -196,14 +196,14 @@ msgstr ""
 "Bu komutun süper kullanıcı yetkileriyle (çoğu sistemdeki root kullanıcısı "
 "ile) çalıştırılması gerekmektedir."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Hatalı biçimlendirilen argüman değeri: Son anahtar karakter '.' olamaz: "
 "{}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
 ". Argümanlar hakkında daha fazla bilgi için \"--help\" seçeneğini ekleyin."

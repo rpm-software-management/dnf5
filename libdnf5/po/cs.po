@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nepodporovaný argument pro akci REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1545
+#: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
 
@@ -676,78 +676,78 @@ msgstr "Problém: "
 msgid "Problem {}: "
 msgstr "Problém {}: "
 
-#: base/transaction.cpp:79
+#: base/transaction.cpp:80
 msgid "This transaction has been already run before."
 msgstr "Tato transakce již proběhla dříve."
 
-#: base/transaction.cpp:80
+#: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
 msgstr "Nelze spustit transakci s nevyřešenými problémy."
 
-#: base/transaction.cpp:81
+#: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
 msgstr "Kontrola transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:83
+#: base/transaction.cpp:84
 msgid ""
 "Failed to obtain rpm transaction lock. Another transaction is in progress."
 msgstr "Nepodařilo se získat zámek rpm transakce. Probíhá další transakce."
 
-#: base/transaction.cpp:84
+#: base/transaction.cpp:85
 msgid "Rpm transaction failed."
 msgstr "Transakce Rpm se nezdařila."
 
-#: base/transaction.cpp:85
+#: base/transaction.cpp:86
 msgid "Signature verification failed."
 msgstr "Ověření podpisu selhalo."
 
-#: base/transaction.cpp:89
+#: base/transaction.cpp:90
 #, fuzzy
 #| msgid "The repository does not have any PGP keys configured."
 msgid "The repository does not have any OpenPGP keys configured."
 msgstr "Repozitář nemá nakonfigurované žádné klíče PGP."
 
-#: base/transaction.cpp:90
+#: base/transaction.cpp:91
 msgid "Public key is not installed."
 msgstr "Veřejný klíč není nainstalován."
 
-#: base/transaction.cpp:91
+#: base/transaction.cpp:92
 msgid "Canceled by the user."
 msgstr "Zrušeno uživatelem."
 
-#: base/transaction.cpp:92
+#: base/transaction.cpp:93
 msgid "Public key import failed."
 msgstr "Import veřejného klíče se nezdařil."
 
-#: base/transaction.cpp:979
+#: base/transaction.cpp:980
 msgid "Invalid tsflag: {}"
 msgstr "Neplatný tsflag: {}"
 
-#: base/transaction.cpp:1317
+#: base/transaction.cpp:1318
 msgid "Public key \"{}\" is already present, not importing."
 msgstr "Veřejný klíč \"{}\" již existuje, neimportuje se."
 
-#: base/transaction.cpp:1338
+#: base/transaction.cpp:1339
 msgid "An error occurred importing key \"{}\": {}"
 msgstr "Při importu klíče \"{}\" došlo k chybě: {}"
 
-#: base/transaction.cpp:1372
+#: base/transaction.cpp:1373
 #, fuzzy
 #| msgid "PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgid "OpenPGP check for package \"{}\" ({}) from repo \"{}\" has failed: "
 msgstr ""
 "Kontrola PGP pro balíček \"{}\" ({}) z repozitáře \"{}\" se nezdařila: "
 
-#: base/transaction.cpp:1400
+#: base/transaction.cpp:1401
 msgid "Import of the key didn't help, wrong key?"
 msgstr "Import klíče nepomohl, špatný klíč?"
 
-#: base/transaction.cpp:1419
+#: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
 msgstr ""
 
-#: base/transaction.cpp:1422
+#: base/transaction.cpp:1423
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
@@ -757,7 +757,7 @@ msgstr[0] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[1] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 msgstr[2] "Upozornění: vynechané PGP kontroly pro {} balík(y)."
 
-#: base/transaction.cpp:1425
+#: base/transaction.cpp:1426
 #, fuzzy
 #| msgid "Warning: skipped PGP checks for {} package(s)."
 msgid "Warning: skipped OpenPGP checks for {0} package from repositories: {1}"
@@ -801,23 +801,23 @@ msgstr ""
 msgid "Invalid package type: {}"
 msgstr "Neplatný typ balíčku: {}"
 
-#: conf/config_main.cpp:56
+#: conf/config_main.cpp:57
 msgid "Input is empty. Must contain a value."
 msgstr "Vstup je prázdný. Musí obsahovat hodnotu."
 
-#: conf/config_main.cpp:62
+#: conf/config_main.cpp:63
 msgid "Input value '{}' must not be negative"
 msgstr "Vstupní hodnota '{}' nesmí být záporná"
 
-#: conf/config_main.cpp:67
+#: conf/config_main.cpp:68
 msgid "Could not convert '{}' to bytes"
 msgstr "Nelze převést '{}' na bajty"
 
-#: conf/config_main.cpp:83
+#: conf/config_main.cpp:84
 msgid "Unknown unit '{}'"
 msgstr "Neznámá jednotka '{}'"
 
-#: conf/config_main.cpp:278
+#: conf/config_main.cpp:279
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Hodnota throttle {} je mimo povolený rozsah {} ... {}"
 
@@ -985,7 +985,7 @@ msgstr "V hodnotě chybí ':'"
 msgid "Invalid module status: {}"
 msgstr "Neplatný stav modulu: {}"
 
-#: plugin/plugins.cpp:65
+#: plugin/plugins.cpp:67
 msgid ""
 "Unsupported plugin API combination. API version provided by plugin "
 "\"{}\" (\"{}\") is \"{}.{}\". API version in libdnf is \"{}.{}\"."
@@ -993,23 +993,29 @@ msgstr ""
 "Nepodporovaná kombinace API pluginu. Verze API poskytovaná pluginem "
 "\"{}\" (\"{}\") je \"{}.{}\". Verze API v libdnf je \"{}.{}\"."
 
-#: plugin/plugins.cpp:114
+#: plugin/plugins.cpp:92
+msgid "Failed to create a libdnf plugin instance"
+msgstr ""
+
+#: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
 msgstr "Nelze najít knihovnu pluginu \"{}\""
 
-#: plugin/plugins.cpp:181
+#: plugin/plugins.cpp:213
 msgid "Invalid option value: enabled={}"
 msgstr "Neplatná hodnota volby: enabled={}"
 
-#: plugin/plugins.cpp:205
+#: plugin/plugins.cpp:237
 msgid "Plugins::load_plugins(): config_dir_path cannot be empty"
 msgstr "Plugins::load_plugins(): config_dir_path nemůže být prázdný"
 
-#: plugin/plugins.cpp:230
-msgid "Cannot load plugins: {}"
+#: plugin/plugins.cpp:253
+#, fuzzy
+#| msgid "Cannot load plugins: {}"
+msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nelze načíst pluginy: {}"
 
-#: repo/config_repo.cpp:566
+#: repo/config_repo.cpp:569
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Výpočet SHA256 se nezdařil"
 
@@ -1029,11 +1035,17 @@ msgstr ""
 "Maximální rychlost stahování je nižší než minimální. Změňte prosím "
 "konfiguraci minrate nebo throttle"
 
-#: repo/package_downloader.cpp:153
+#: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nelze stáhnout balíček \"{0}\", je aktivována volba cacheonly."
 
-#: repo/package_downloader.cpp:266
+#: repo/package_downloader.cpp:219
+#, fuzzy
+#| msgid "Failed to download files"
+msgid "Already downloaded"
+msgstr "Stažení souborů se nezdařilo"
+
+#: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
 msgstr "Stažení balíčků se nezdařilo"
 
@@ -1079,7 +1091,7 @@ msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo.cpp:500
+#: repo/repo.cpp:501
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
@@ -1139,7 +1151,7 @@ msgstr "Nepodařilo se vypsat pgp klíče: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Nepodařilo se importovat pgp klíče: {}"
 
-#: repo/repo_sack.cpp:147
+#: repo/repo_sack.cpp:148
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1147,7 +1159,7 @@ msgstr ""
 "Nepodařilo se vytvořit repozitář \"{}\": ID je v konfiguraci přítomno více "
 "než jednou"
 
-#: repo/repo_sack.cpp:518
+#: repo/repo_sack.cpp:565
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 
@@ -1328,7 +1340,7 @@ msgstr "Nelze odstranit balíček \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:585
+#: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
 msgstr "{}"
 
@@ -1353,7 +1365,7 @@ msgstr "Stav {} pro \"{}\" nebyl nalezen."
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 
-#: system/state.cpp:614
+#: system/state.cpp:602
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
 
@@ -1661,7 +1673,7 @@ msgstr "Na řádku {} chybí '='"
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: utils/library.cpp:49
+#: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2025-01-09 22:48+0000\n"
 "Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -33,96 +33,96 @@ msgstr "„{}” nie jest dozwolone w poleceniu „{}”"
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "„{}” nie jest dozwolone razem z argumentem pozycyjnym „{}”"
 
-#: argument_parser.cpp:110
+#: argument_parser.cpp:111
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Argument id „{}” jest już zarejestrowany w grupie „{}”"
 
-#: argument_parser.cpp:237
+#: argument_parser.cpp:238
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Nieprawidłowy znak „.” w argumencie o identyfikatorze „{}”"
 
-#: argument_parser.cpp:345 argument_parser.cpp:350
+#: argument_parser.cpp:346 argument_parser.cpp:351
 msgid "Too few values for positional argument \"{}\""
 msgstr "Zbyt mało wartości dla argumentu pozycyjnego „{}”"
 
-#: argument_parser.cpp:511
+#: argument_parser.cpp:512
 msgid "Missing value for named argument \"--{}\""
 msgstr "Brak wartości dla argumentu nazwanego „--{}”"
 
-#: argument_parser.cpp:519
+#: argument_parser.cpp:520
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Nieoczekiwana wartość dla argumentu nazwanego „--{}”"
 
-#: argument_parser.cpp:561
+#: argument_parser.cpp:562
 msgid "Missing value for named argument \"-{}\""
 msgstr "Brak wartości dla argumentu nazwanego „-{}”"
 
 #. print usage
-#: argument_parser.cpp:657
+#: argument_parser.cpp:658
 msgid "Usage:"
 msgstr "Użycie:"
 
-#: argument_parser.cpp:665
+#: argument_parser.cpp:666
 msgid "Description:"
 msgstr "Opis:"
 
-#: argument_parser.cpp:915
+#: argument_parser.cpp:943
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Identyfikator polecenia „{}” został już zarejestrowany dla polecenia „{}”"
 
-#: argument_parser.cpp:926
+#: argument_parser.cpp:954
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Nazwany argument o identyfikatorze „{}” jest już zarejestrowany dla "
 "polecenia „{}”"
 
-#: argument_parser.cpp:936
+#: argument_parser.cpp:964
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Identyfikator argumentu pozycyjnego „{}” został już zarejestrowany dla "
 "polecenia „{}”"
 
-#: argument_parser.cpp:946
+#: argument_parser.cpp:974
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Identyfikator grupy „{}” został już zarejestrowany dla polecenia „{}”"
 
-#: argument_parser.cpp:973
+#: argument_parser.cpp:1001
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze "
 "„{}”"
 
-#: argument_parser.cpp:981
+#: argument_parser.cpp:1009
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera nazwanego argumentu o "
 "identyfikatorze „{}”"
 
-#: argument_parser.cpp:989
+#: argument_parser.cpp:1017
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera argumentu pozycyjnego o "
 "identyfikatorze „{}”"
 
-#: argument_parser.cpp:996
+#: argument_parser.cpp:1024
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera grupy o identyfikatorze „{}”"
 
-#: argument_parser.cpp:1103 argument_parser.cpp:1307
+#: argument_parser.cpp:1131 argument_parser.cpp:1335
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Nieznany argument „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1118 argument_parser.cpp:1322
+#: argument_parser.cpp:1146 argument_parser.cpp:1350
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Brak argumentu pozycyjnego „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1525
+#: argument_parser.cpp:1553
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Nie znaleziono nazwanego argumentu o identyfikatorze ścieżki „{}”"
 
-#: argument_parser.cpp:1535
+#: argument_parser.cpp:1563
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Nie znaleziono argumentu pozycyjnego o identyfikatorze ścieżki „{}”"
 

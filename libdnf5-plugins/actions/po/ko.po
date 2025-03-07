@@ -1,14 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-09-21 14:54+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-19 09:09+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-actions/ko/>\n"
 "Language: ko\n"
@@ -16,59 +18,145 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
-#: actions.cpp:542 actions.cpp:550 actions.cpp:558 actions.cpp:566
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "행에서 \"{}\" 파일 {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" 형식이 예상됩니다"
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "알 수 없는 \"enabled\" 옵션 값 \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "알 수 없는 옵션 \"{}\""
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "알 수 없는 인용 부호 \"{}\""
+
+#: actions.cpp:720
 msgid ""
-"Error in file \"{}\" on line {}: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" "
-"format expected"
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
 msgstr ""
-"행 {}에서 파일 \"{}\" 오류: \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" 형식이 "
-"예상됩니다"
+"꾸러미 필터는 GOAL_RESOLVED, PRE_TRANS 및 POST_TRANS 인용 부호에서만 사용 될 "
+"수 있습니다"
 
-#: actions.cpp:589
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "꾸러미 필터 없이 방향을 사용 할 수 없습니다"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "알 수 없는 꾸러미 방향 \"{}\""
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "알 수 없는 방식 \"{}\""
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "\"raise_error\" 옵션의 미지원 값: {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "누락된 명령"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr "구문 오류: 실행 출력 행에서 누락된 동일 기호(=): {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "옵션을 설정 할 수 없음: 실행 출력 행: {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "동작이 잘못된 기록 단계로 보내졌습니다: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "멈춤을 위한 동작 호출: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "동작 오류 신호가 전송됨: {}"
+
+#: actions.cpp:995
 msgid ""
-"Error in file \"{}\" on line {}: Unknown \"enabled\" option value \"{}\""
-msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 \"enabled\" 옵션 값 \"{}\""
-
-#: actions.cpp:598
-msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
-msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 옵션 \"{}\""
-
-#: actions.cpp:626
-msgid "Error in file \"{}\" on line {}: Unknown hook \"{}\""
-msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 인용 부호 \"{}\""
-
-#: actions.cpp:636
-#, fuzzy
-#| msgid ""
-#| "Error in file \"{}\" on line {}: Package filter can only be used in "
-#| "PRE_TRANS and POST_TRANS hooks"
-msgid ""
-"Error in file \"{}\" on line {}: Package filter can only be used in "
-"GOAL_RESOLVED, PRE_TRANS and POST_TRANS hooks"
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
-"행 {}에서 파일 \"{}\" 오류: 꾸러미 필터는 PRE_TRANS 및 POST_TRANS 인용 부호에"
-"서만 사용 될 수 있습니다"
+"구문 오류: 동작 출력 행은 \"tmp.\" 또는 \"conf.\" 또는 \"var.\" 또는 "
+"\"stop=\" 또는 \"error=\" 와 함께 실행해야 합니다: {}"
 
-#: actions.cpp:646
-msgid ""
-"Error in file \"{}\" on line {}: Cannot use direction without package filter"
-msgstr ""
-"행 {}에서 파일 \"{}\" 오류: 꾸러미 필터 없이 방향을 사용 할 수 없습니다"
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "동작에서 읽기 오류 (파이프에서)"
 
-#: actions.cpp:663
-msgid "Error in file \"{}\" on line {}: Unknown package direction \"{}\""
-msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 꾸러미 방향 \"{}\""
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr "동작에서 json 요청 중에 구문 오류: 누락된 시작 '{{' 문자"
 
-#: actions.cpp:674
-msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
-msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 방식 \"{}\""
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "동작에서 요청을 처리하는 중에 발생한 오류."
 
-#: actions.cpp:680
-msgid "Error in file \"{}\" on line {}: Missing command"
-msgstr "행 {}에서 파일 \"{}\" 오류: 누락된 명령"
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "동작에서 json 요청의 구문 오류: {}"
 
-#: actions.cpp:1773
-msgid "Cannot create pipe: {}"
-msgstr "파이프를 생성 할 수 없습니다: {}"
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "동작에서 json 요청의 구문 오류: 불완전 입력"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "응답을 쓸 수 없습니다"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "동작 플러그인: 파이프를 생성 할 수 없습니다"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "동작 플러그인: 분기 할 수 없음"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr "동작 플러그인: 명령 stdin을 묶을 수 없습니다"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "동작 플러그인: 명령 stdout을 묶을 수 없습니다"
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "명령 \"{}\" 인수 \"{}인 동작을 실행 할 수 없습니다"
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "자식 프로세서 준비 중에 오류"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "종료 코드: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "신호로 종료됨: {}"
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown option \"{}\""
+#~ msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 옵션 \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Unknown mode \"{}\""
+#~ msgstr "행 {}에서 파일 \"{}\" 오류: 알 수 없는 방식 \"{}\""
+
+#~ msgid "Error in file \"{}\" on line {}: Missing command"
+#~ msgstr "행 {}에서 파일 \"{}\" 오류: 누락된 명령"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-10-17 17:14+0000\n"
 "Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -199,13 +199,13 @@ msgstr ""
 "To polecenie musi zostać uruchomione z uprawnieniami superużytkownika (w "
 "większości systemów z uprawnieniami użytkownika root)."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Nieprawidłowo sformatowana wartość argumentu: Ostatni znak klucza nie "
 "może być '.': {}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ". Aby uzyskać więcej informacji o argumentach, dodaj „--help”."

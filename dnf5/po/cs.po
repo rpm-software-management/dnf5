@@ -2,14 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
+# Petr Stourac <stouracp@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
-"PO-Revision-Date: 2024-02-06 09:36+0000\n"
-"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"PO-Revision-Date: 2025-02-20 12:27+0000\n"
+"Last-Translator: Petr Stourac <stouracp@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,13 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.10\n"
 
 #: commands/advisory/advisory.cpp:36
-#, fuzzy
-#| msgid "List advisories"
 msgid "Manage advisories"
-msgstr "Seznam doporučení"
+msgstr "Správa doporučení"
 
 #: commands/advisory/advisory_info.hpp:35
 msgid "Print details about advisories"
@@ -58,12 +57,12 @@ msgid "Show advisories containing any version of installed packages."
 msgstr "Zobrazí doporučení obsahující jakoukoli verzi nainstalovaných balíčků."
 
 #: commands/advisory/arguments.hpp:45
-#, fuzzy
-#| msgid "Show advisories containing newer versions of installed packages."
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr "Zobrazí doporučení obsahující novější verze nainstalovaných balíčků."
+msgstr ""
+"Zobrazí doporučení obsahující novější verze nainstalovaných balíčků. Toto je "
+"běžné chování."
 
 #: commands/advisory/arguments.hpp:57
 msgid ""
@@ -166,13 +165,11 @@ msgstr "CVE_ID,..."
 
 #: commands/autoremove/autoremove.cpp:38
 msgid "Remove all unneeded packages originally installed as dependencies."
-msgstr ""
+msgstr "Odebrat všechny nepotřebné balíčky instalované jako závislosti."
 
 #: commands/check-upgrade/check-upgrade.cpp:47
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
 msgid "Check for available package upgrades"
-msgstr "Povolit přeskočení nedostupných balíčků"
+msgstr "Zkontrolovat dostupnost aktualizací pro balíčky"
 
 #: commands/check-upgrade/check-upgrade.cpp:54
 msgid ""
@@ -183,10 +180,8 @@ msgid ""
 msgstr ""
 
 #: commands/check/check.cpp:247
-#, fuzzy
-#| msgid "Check discovered {} problem(s) in {} package(s)"
 msgid "Check for problems in the packagedb"
-msgstr "Zkontroluje zjištěné {} problémy v {} balíčcích"
+msgstr "Zkontroluje zjištěné  problémy v  databázi balíčků"
 
 #: commands/check/check.cpp:335
 msgid "Check discovered {} problem(s) in {} package(s)"
@@ -215,10 +210,8 @@ msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
 #: commands/debuginfo-install/debuginfo-install.cpp:45
-#, fuzzy
-#| msgid "Allow skipping unavailable packages"
 msgid "Install debuginfo packages."
-msgstr "Povolit přeskočení nedostupných balíčků"
+msgstr "nainstalovat debuginfo balíčky"
 
 #: commands/distro-sync/distro-sync.cpp:42
 msgid ""
@@ -494,148 +487,148 @@ msgstr "Zobrazí povolené moduly."
 msgid "No matches found for \"{}\"."
 msgstr "Nebyly nalezeny žádné shody pro \"{}\"."
 
-#: commands/offline/offline.cpp:190
+#: commands/offline/offline.cpp:191
 msgid "Manage offline transactions"
 msgstr ""
 
-#: commands/offline/offline.cpp:222
+#: commands/offline/offline.cpp:223
 msgid ""
 "Error reading state: {}. Rerun the command you used to initiate the offline "
 "transaction, e.g. `dnf5 system-upgrade download [OPTIONS]`."
 msgstr ""
 
-#: commands/offline/offline.cpp:245
+#: commands/offline/offline.cpp:246
 msgid "Couldn't connect to D-Bus: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:274
+#: commands/offline/offline.cpp:277
 msgid ""
 "Prepare the system to perform the offline transaction and reboot to start "
 "the transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:281
+#: commands/offline/offline.cpp:284
 msgid "Power off the system after the operation is complete"
 msgstr ""
 
-#: commands/offline/offline.cpp:292
+#: commands/offline/offline.cpp:295
 msgid "No offline transaction is stored."
 msgstr ""
 
-#: commands/offline/offline.cpp:300
+#: commands/offline/offline.cpp:303
 #, fuzzy
 #| msgid "Reverse the order of transactions."
 msgid "System is not ready for offline transaction."
 msgstr "Obrací pořadí transakcí."
 
-#: commands/offline/offline.cpp:303
+#: commands/offline/offline.cpp:306
 msgid "Data directory {} does not exist."
 msgstr ""
 
-#: commands/offline/offline.cpp:327
+#: commands/offline/offline.cpp:331
 msgid "{} is not wanted by system-update.target."
 msgstr ""
 
-#: commands/offline/offline.cpp:336
+#: commands/offline/offline.cpp:340
 msgid "The system will now reboot to upgrade to release version "
 msgstr ""
 
-#: commands/offline/offline.cpp:340
+#: commands/offline/offline.cpp:344
 msgid ""
 "The system will now reboot to perform the offline transaction initiated by "
 "the following command:"
 msgstr ""
 
-#: commands/offline/offline.cpp:371
+#: commands/offline/offline.cpp:375
 msgid ""
 "Internal use only, not intended to be run by the user. Execute the "
 "transaction in the offline environment."
 msgstr ""
 
-#: commands/offline/offline.cpp:398
+#: commands/offline/offline.cpp:409
 msgid "Trigger file does not exist. Exiting."
 msgstr ""
 
-#: commands/offline/offline.cpp:402
+#: commands/offline/offline.cpp:413
 msgid "Another offline transaction tool is running. Exiting."
 msgstr ""
 
-#: commands/offline/offline.cpp:437
+#: commands/offline/offline.cpp:448
 msgid ""
 "Warning: the `_execute` command is for internal use only and is not intended "
 "to be run directly by the user. To initiate the system upgrade/offline "
 "transaction, you should run `dnf5 offline reboot`."
 msgstr ""
 
-#: commands/offline/offline.cpp:444
+#: commands/offline/offline.cpp:455
 msgid "Use `dnf5 offline reboot` to begin the transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:497
+#: commands/offline/offline.cpp:501
 #, fuzzy
 #| msgid "Transaction ID"
 msgid "Transaction failed: "
 msgstr "ID transakce"
 
-#: commands/offline/offline.cpp:566
+#: commands/offline/offline.cpp:570
 msgid "Error reading journal: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:572
+#: commands/offline/offline.cpp:576
 msgid "Add journal match failed: {}"
 msgstr ""
 
-#: commands/offline/offline.cpp:600
+#: commands/offline/offline.cpp:604
 msgid "No logs were found."
 msgstr ""
 
-#: commands/offline/offline.cpp:604
+#: commands/offline/offline.cpp:608
 msgid "The following boots appear to contain offline transaction logs:"
 msgstr ""
 
-#: commands/offline/offline.cpp:621
+#: commands/offline/offline.cpp:625
 msgid "Cannot find logs with this index."
 msgstr ""
 
-#: commands/offline/offline.cpp:628
+#: commands/offline/offline.cpp:632
 msgid "Unable to match systemd journal entry."
 msgstr ""
 
-#: commands/offline/offline.cpp:640
+#: commands/offline/offline.cpp:644
 msgid "Show logs from past offline transactions"
 msgstr ""
 
-#: commands/offline/offline.cpp:648
+#: commands/offline/offline.cpp:652
 msgid ""
 "Which log to show. Run without any arguments to get a list of available logs."
 msgstr ""
 
-#: commands/offline/offline.cpp:663
+#: commands/offline/offline.cpp:667
 msgid ""
 "systemd is not supported in this build of DNF 5; the `log` subcommand is "
 "unavailable."
 msgstr ""
 
-#: commands/offline/offline.cpp:668
+#: commands/offline/offline.cpp:672
 msgid "Show status of the current offline transaction"
 msgstr ""
 
-#: commands/offline/offline.cpp:684
+#: commands/offline/offline.cpp:688
 msgid "An offline transaction was initiated by the following command:"
 msgstr ""
 
-#: commands/offline/offline.cpp:686
+#: commands/offline/offline.cpp:690
 msgid ""
 "Run `dnf5 offline reboot` to reboot and perform the offline transaction."
 msgstr ""
 
-#: commands/offline/offline.cpp:688
+#: commands/offline/offline.cpp:692
 msgid ""
 "An offline transaction was started, but it did not finish. Run `dnf5 offline "
 "log` for more information. The command that initiated the transaction was:"
 msgstr ""
 
-#: commands/offline/offline.cpp:693
+#: commands/offline/offline.cpp:697
 msgid "Unknown offline transaction status: "
 msgstr ""
 
@@ -713,29 +706,29 @@ msgstr ""
 msgid "Remove software and install another in one transaction"
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:54
+#: commands/system-upgrade/system-upgrade.cpp:56
 msgid "Prepare system for upgrade to a new release"
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:70
+#: commands/system-upgrade/system-upgrade.cpp:72
 msgid "Download everything needed to upgrade to a new release"
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:78
+#: commands/system-upgrade/system-upgrade.cpp:80
 msgid ""
 "Do not install packages from the new release if they are older than what is "
 "currently installed"
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:97
+#: commands/system-upgrade/system-upgrade.cpp:101
 msgid "Need a --releasever greater than the current system version."
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:131
+#: commands/system-upgrade/system-upgrade.cpp:150
 msgid "Store a distro-sync transaction to be performed offline"
 msgstr ""
 
-#: commands/system-upgrade/system-upgrade.cpp:153
+#: commands/system-upgrade/system-upgrade.cpp:172
 msgid "Store an upgrade transaction to be performed offline"
 msgstr ""
 
@@ -869,53 +862,53 @@ msgstr ""
 msgid "The key was successfully removed."
 msgstr "Klíč byl úspěšně importován."
 
-#: context.cpp:290
+#: context.cpp:294
 #, fuzzy
 #| msgid "setopt: \"{0}\": {1}"
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: context.cpp:296 main.cpp:1317
+#: context.cpp:300 main.cpp:1341
 msgid ", "
 msgstr ""
 
-#: context.cpp:300
+#: context.cpp:304
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
 msgstr ""
 
-#: context.cpp:304
+#: context.cpp:308
 #, fuzzy
 #| msgid "No matching repositories for \"{}\""
 msgid "No matching repositories for {}"
 msgstr "Žádné odpovídající repozitáře pro \"{}\""
 
-#: context.cpp:350
+#: context.cpp:354
 msgid "Updating and loading repositories:"
 msgstr ""
 
-#: context.cpp:360
+#: context.cpp:364
 msgid "Repositories loaded."
 msgstr ""
 
-#: context.cpp:366
+#: context.cpp:370
 #, fuzzy
 #| msgid "Reverse the order of transactions."
 msgid "Testing offline transaction"
 msgstr "Obrací pořadí transakcí."
 
-#: context.cpp:370 context.cpp:525
+#: context.cpp:374 context.cpp:522
 #, fuzzy
 #| msgid "Transaction ID"
 msgid "Transaction failed: {}"
 msgstr "ID transakce"
 
-#: context.cpp:375 context.cpp:530
+#: context.cpp:379 context.cpp:527
 msgid "  - {}"
 msgstr ""
 
-#: context.cpp:442
+#: context.cpp:446
 #, fuzzy
 #| msgid "File \"{}\" already exists, it will be overwritten.\n"
 msgid ""
@@ -923,96 +916,100 @@ msgid ""
 "overwritten."
 msgstr "Soubor \"{}\" již existuje, bude přepsán.\n"
 
-#: context.cpp:471
+#: context.cpp:475
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 
-#: context.cpp:473
+#: context.cpp:477
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr ""
 
-#: context.cpp:491
+#: context.cpp:495
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
 "downloaded files, use `dnf5 offline clean`."
 msgstr ""
 
-#: context.cpp:497
+#: context.cpp:501
 #, fuzzy
 #| msgid "Transaction ID"
 msgid "Running transaction"
 msgstr "ID transakce"
 
-#: context.cpp:814
+#: context.cpp:819
 msgid "Upgrading {}"
 msgstr ""
 
-#: context.cpp:817
+#: context.cpp:822
 msgid "Downgrading {}"
 msgstr ""
 
-#: context.cpp:820
+#: context.cpp:825
 msgid "Reinstalling {}"
 msgstr ""
 
-#: context.cpp:833
+#: context.cpp:838
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr ""
 
-#: context.cpp:839
+#: context.cpp:844
 #, fuzzy
 #| msgid "Installed"
 msgid "Installing {}"
 msgstr "Nainstalováno"
 
-#: context.cpp:860
+#: context.cpp:865
 #, fuzzy
 #| msgid "Transaction ID"
 msgid "Prepare transaction"
 msgstr "ID transakce"
 
-#: context.cpp:880
+#: context.cpp:885
 msgid "Removing {}"
 msgstr ""
 
-#: context.cpp:883
+#: context.cpp:888
 msgid "Cleanup {}"
 msgstr ""
 
-#: context.cpp:901
+#: context.cpp:906
 msgid "Unpack error: {}"
 msgstr ""
 
-#: context.cpp:909
+#: context.cpp:914
 msgid "Cpio error: {}"
 msgstr ""
 
-#: context.cpp:919
+#: context.cpp:924
 msgid "Scriptlet output:"
 msgstr ""
 
-#: context.cpp:941
+#: context.cpp:947
+msgid "Running scriptlets"
+msgstr ""
+
+#: context.cpp:952
 msgid "Running {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:956
+#: context.cpp:967
 msgid "Finished {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:962
+#: context.cpp:973
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:971
+#: context.cpp:982
 msgid "Error in {} scriptlet: {}"
 msgstr ""
 
-#: context.cpp:1001
+#: context.cpp:1017
 msgid "Verify package files"
 msgstr ""
 
@@ -1020,7 +1017,7 @@ msgstr ""
 msgid "Cannot load shared library \"{}\": {}"
 msgstr "Nelze načíst sdílenou knihovnu \"{}\": {}"
 
-#: library.cpp:48
+#: library.cpp:47
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "Nelze získat adresu symbolu \"{}\": {}"
 
@@ -1381,68 +1378,72 @@ msgstr ""
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr ""
 
-#: main.cpp:1261
+#: main.cpp:1246
+msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
+msgstr ""
+
+#: main.cpp:1285
 msgid "{}."
 msgstr ""
 
-#: main.cpp:1264 main.cpp:1493
+#: main.cpp:1288 main.cpp:1521
 #, fuzzy
 #| msgid ". Add \"--help\" for more information about the arguments."
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ". Přidejte \"--help\" pro více informací o argumentech."
 
-#: main.cpp:1273
+#: main.cpp:1297
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
 msgstr ""
 
-#: main.cpp:1315
+#: main.cpp:1339
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 
-#: main.cpp:1359
+#: main.cpp:1383
 msgid "No read/execute access in current directory, moving to /"
 msgstr ""
 
-#: main.cpp:1416
+#: main.cpp:1444
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
 "options to run the command without modifying the system state."
 msgstr ""
 
-#: main.cpp:1457
+#: main.cpp:1485
 msgid "The operation will only store the transaction in {}"
 msgstr ""
 
-#: main.cpp:1459
+#: main.cpp:1487
 msgid "The operation will only download packages for the transaction."
 msgstr ""
 
-#: main.cpp:1464
+#: main.cpp:1492
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
 msgstr ""
 
-#: main.cpp:1481
+#: main.cpp:1509
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
 msgstr ""
 
-#: main.cpp:1503
+#: main.cpp:1531
 msgid "Command returned error: {}"
 msgstr ""
 
-#: main.cpp:1511
+#: main.cpp:1539
 msgid "DNF5 finished"
 msgstr ""
 
-#: main.cpp:1515
+#: main.cpp:1543
 msgid "Complete!"
 msgstr ""
 

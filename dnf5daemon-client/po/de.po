@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 03:02+0000\n"
+"POT-Creation-Date: 2025-03-07 03:17+0000\n"
 "PO-Revision-Date: 2024-11-05 21:08+0000\n"
 "Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -201,14 +201,14 @@ msgstr ""
 "Dieser Befehl muss mit Superuser-Privilegien ausgeführt werden (auf den "
 "meisten Systemen unter dem Benutzer root)."
 
-#: main.cpp:157
+#: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Schlecht formatierter Argumentwert: Letzter Schlüsselwert kann nicht '.' "
 "sein: {}"
 
-#: main.cpp:259 main.cpp:296
+#: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
 ". Fügen Sie \"--help\" hinzu, um weitere Informationen zu den Argumenten zu "
