@@ -15,10 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
+import libdnf5
+
 import base_test_case
 
 
 class TestVars(base_test_case.BaseTestCase):
     def test_getting_undefined_variable(self):
         vars = self.base.get_vars()
-        self.assertRaises(IndexError, vars.get_value, "undefined")
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'map::at'):
+            vars.get_value("undefined")

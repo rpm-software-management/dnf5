@@ -31,7 +31,11 @@ class TestGoal(base_test_case.BaseTestCase):
         goal = libdnf5.base.Goal(base)
 
         # Try to resolve the goal without running base.setup()
-        self.assertRaises(RuntimeError, goal.resolve)
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap,
+                                    '^libdnf5/base/goal.cpp:[0-9]+:.*libdnf5::Goal::resolve\\(\\):'
+                                    ' API Assertion \'p_impl->base->is_initialized\\(\\)\' failed:'
+                                    ' Base instance was not fully initialized by Base::setup\\(\\)') as cm:
+            goal.resolve()
 
     def test_missing_rpm_goal_resolve(self):
         # Try to resolve the goal using unknown RPM package
@@ -39,7 +43,10 @@ class TestGoal(base_test_case.BaseTestCase):
         goal = libdnf5.base.Goal(self.base)
         goal.add_install('unknown_pkg.rpm')
 
-        self.assertRaises(RuntimeError, goal.resolve)
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap,
+                                    'Failed to access RPM "unknown_pkg.rpm":'
+                                    ' No such file or directory'):
+            goal.resolve()
 
     def test_invalid_url_goal_resolve(self):
         # Try to resolve the goal using invalid URL
@@ -47,22 +54,32 @@ class TestGoal(base_test_case.BaseTestCase):
         goal = libdnf5.base.Goal(self.base)
         goal.add_install('https://i-dont-exist.com')
 
-        self.assertRaises(RuntimeError, goal.resolve)
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'Failed to download files') as cm:
+            goal.resolve()
+        self.assertRegex(cm.exception.to_string(),
+                         '^libdnf5::repo::FileDownloadError: Failed to download files\n'
+                         ' libdnf5::repo::LibrepoError: Librepo error: Curl error \\([0-9]+\\):'
+                         ' Could not resolve hostname for https://i-dont-exist.com/')
 
     def test_unsupported_argument_add_remove(self):
         # Try passing unsupported argument to add_remove() method
 
         goal = libdnf5.base.Goal(self.base)
 
-        self.assertRaises(RuntimeError, goal.add_remove, 'pkg.rpm')
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'Unsupported argument for REMOVE action: pkg.rpm'):
+            goal.add_remove('pkg.rpm')
 
     def test_group_rpm_reason_change_without_id(self):
         # Try changing group reason without group_id
 
         goal = libdnf5.base.Goal(self.base)
 
-        self.assertRaises(RuntimeError, goal.add_rpm_reason_change, '@fake-group-spec',
-                          libdnf5.base.transaction.TransactionItemReason_GROUP, '')
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap,
+                                    '^libdnf5/base/goal.cpp:[0-9]+: void libdnf5::Goal::add_rpm_reason_change\\(.*\\):'
+                                    ' API Assertion \'reason != libdnf5::transaction::TransactionItemReason::GROUP || !group_id.empty\\(\\)\''
+                                    ' failed: group_id is required for setting reason "GROUP"'):
+            goal.add_rpm_reason_change(
+                '@fake-group-spec', libdnf5.base.transaction.TransactionItemReason_GROUP, '')
 
     def test_log_events_wrapper(self):
         # Try accessing transaction.get_resolve_logs()
