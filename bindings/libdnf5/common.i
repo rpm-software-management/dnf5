@@ -17,7 +17,9 @@
 %include <std_string.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
+
+%import "exception.i"
 
 %typemap(out) std::string * {
     if ($1 == nullptr) {
@@ -28,9 +30,18 @@
 }
 
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/common/message.hpp"
     #include "libdnf5/common/weak_ptr.hpp"
 %}
+
+// Deletes any previously defined general purpose exception handler
+%exception;
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
+
 %include "libdnf5/common/message.hpp"
 
 %include "libdnf5/common/weak_ptr.hpp"
@@ -41,19 +52,6 @@
     }
 }
 #endif
-
-// Cannot use %include <catch_error.i> here, SWIG includes each file only once,
-// but the exception handler actually does not get registered when this file is
-// %imported (as opposed to %included).
-%exception {
-    try {
-        $action
-    } catch (const std::out_of_range & e) {
-        SWIG_exception(SWIG_IndexError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
 
 %ignore std::vector::vector(size_type);
 %ignore std::vector::vector(unsigned int);
@@ -342,7 +340,8 @@ def create_attributes_from_getters_and_setters(cls):
 %}
 #endif
 
-%exception;  // beware this resets all exception handlers if you import this file after defining any
-
 // Base weak ptr is used across the codebase
 %include "libdnf5/base/base_weak.hpp"
+
+// Deletes any previously defined catches
+%catches();

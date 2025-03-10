@@ -10,31 +10,23 @@
 %include <std_common.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
+
 
 %import "advisory.i"
 %import "common.i"
 %import "comps.i"
 %import "conf.i"
+%import "exception.i"
 %import "plugin.i"
 %import "logger.i"
 %import "repo.i"
 %import "rpm.i"
 %import "transaction.i"
 
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
-
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/logger/memory_buffer_logger.hpp"
     #include "libdnf5/base/base.hpp"
     #include "libdnf5/base/solver_problems.hpp"
@@ -44,6 +36,12 @@
     #include "libdnf5/base/goal.hpp"
     #include "libdnf5/base/goal_elements.hpp"
 %}
+
+// Deletes any previously defined general purpose exception handler
+%exception;
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 #define CV __perl_CV
 
@@ -88,3 +86,6 @@ common.create_attributes_from_getters_and_setters(ResolveSpecSettings)
 common.create_attributes_from_getters_and_setters(GoalJobSettings)
 %}
 #endif
+
+// Deletes any previously defined catches
+%catches();

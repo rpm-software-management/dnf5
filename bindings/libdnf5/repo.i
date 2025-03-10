@@ -10,31 +10,23 @@
 %include <std_string.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
 
 %import "common.i"
 %import "conf.i"
+%import "exception.i"
 
 #if SWIG_VERSION == 0x040200
 // https://github.com/swig/swig/issues/2744
 %fragment("SwigPyIterator_T");
 #endif
 
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
-
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/logger/log_router.hpp"
     #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/logger/rotating_file_logger.hpp"
     #include "libdnf5/repo/config_repo.hpp"
     #include "libdnf5/repo/download_callbacks.hpp"
     #include "libdnf5/repo/file_downloader.hpp"
@@ -48,6 +40,10 @@
 
 #define CV __perl_CV
 
+// Deletes any previously defined exception handlers
+%exception;
+%catches();
+
 %{
 static inline void * integer_to_void_ptr(int value) noexcept {
     return reinterpret_cast<void *>(static_cast<intptr_t>(value));
@@ -57,6 +53,9 @@ static inline int void_ptr_to_int(void * value) noexcept {
     return static_cast<int>(reinterpret_cast<intptr_t>(value));
 }
 %}
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 %feature("valuewrapper") Package;
 
@@ -174,3 +173,6 @@ conf.create_config_option_attributes(ConfigRepo)
 common.create_attributes_from_getters_and_setters(RepoCacheRemoveStatistics)
 %}
 #endif
+
+// Deletes any previously defined catches
+%catches();
