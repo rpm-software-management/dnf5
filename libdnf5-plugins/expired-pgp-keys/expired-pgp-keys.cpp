@@ -145,11 +145,14 @@ static bool remove_pgp_key(const libdnf5::rpm::KeyInfo & key) {
     mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
     auto key_id = key.get_short_key_id();
     while ((h = rpmdbNextIterator(mi)) != nullptr) {
-        if (headerGetAsString(h, RPMTAG_VERSION) == libdnf5::utils::string::tolower(key_id)) {
+        char * version = headerGetAsString(h, RPMTAG_VERSION);
+        if (version && version == libdnf5::utils::string::tolower(key_id)) {
+            free(version);
             rpmtsAddEraseElement(ts, h, -1);
             retval = rpmtsRun(ts, nullptr, RPMPROB_FILTER_NONE) == 0;
             break;
         }
+        free(version);
     }
     rpmdbFreeIterator(mi);
     rpmtsFree(ts);
