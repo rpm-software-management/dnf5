@@ -6,29 +6,17 @@
 %module "libdnf5::conf"
 #endif
 
-%include <exception.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
 
 %import "common.i"
+%import "exception.i"
 %import "logger.i"
 
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::out_of_range & e) {
-        SWIG_exception(SWIG_IndexError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
-
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/conf/const.hpp"
     #include "libdnf5/conf/option_child.hpp"
     #include "libdnf5/conf/config_main.hpp"
@@ -36,13 +24,22 @@
     #include "libdnf5/common/weak_ptr.hpp"
     #include "libdnf5/logger/log_router.hpp"
     #include "libdnf5/logger/memory_buffer_logger.hpp"
+    #include "libdnf5/logger/rotating_file_logger.hpp"
     #include "libdnf5/version.hpp"
 %}
 
 #define CV __perl_CV
 #define final
 
+// Deletes any previously defined exception handlers
+%exception;
+%catches();
+
+// All used std::unique_ptr method are noexcept
 wrap_unique_ptr(StringUniquePtr, std::string);
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 %include "libdnf5/version.hpp"
 
@@ -134,7 +131,7 @@ import re
 def _config_option_getter(config_object, option_name):
     try:
         return getattr(config_object, option_name)().get_value()
-    except RuntimeError:
+    except Exception:
         return None
 
 def _config_option_setter(config_object, option_name, value):
@@ -154,4 +151,5 @@ create_config_option_attributes(ConfigMain)
 %}
 #endif
 
-%exception;  // beware this resets all exception handlers if you import this file after defining any
+// Deletes any previously defined catches
+%catches();
