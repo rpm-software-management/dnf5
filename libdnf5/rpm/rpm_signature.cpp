@@ -73,10 +73,13 @@ static bool rpmdb_lookup(const RpmTransactionPtr & ts_ptr, const KeyInfo & key) 
     mi = rpmtsInitIterator(ts_ptr.get(), RPMDBI_NAME, "gpg-pubkey", 0);
     auto key_id = key.get_short_key_id();
     while ((h = rpmdbNextIterator(mi)) != nullptr) {
-        if (headerGetAsString(h, RPMTAG_VERSION) == utils::string::tolower(key_id)) {
+        char * version = headerGetAsString(h, RPMTAG_VERSION);
+        if (version && version == utils::string::tolower(key_id)) {
+            free(version);
             retval = true;
             break;
         }
+        free(version);
     }
     rpmdbFreeIterator(mi);
     return retval;
