@@ -13,23 +13,14 @@
 %include <exception.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
 
 %import "common.i"
-
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
+%import "exception.i"
 
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/advisory/advisory.hpp"
     #include "libdnf5/advisory/advisory_package.hpp"
     #include "libdnf5/advisory/advisory_module.hpp"
@@ -41,6 +32,12 @@
 %}
 
 #define CV __perl_CV
+
+// Deletes any previously defined general purpose exception handlers
+%exception;
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 %include "libdnf5/advisory/advisory.hpp"
 %include "libdnf5/advisory/advisory_package.hpp"
@@ -66,3 +63,6 @@ add_iterator(AdvisorySet)
 fix_swigtype_trait(libdnf5::advisory::Advisory)
 #endif
 add_ruby_each(libdnf5::advisory::AdvisorySet)
+
+// Deletes any previously defined catches
+%catches();
