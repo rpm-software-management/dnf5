@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_RPM_SIGNATURE_HPP
 #define LIBDNF5_RPM_RPM_SIGNATURE_HPP
 
+#include "rpm_signature_errors.hpp"
+
 #include "libdnf5/base/base.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
 
@@ -29,20 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 namespace libdnf5::rpm {
-
-class LIBDNF_API SignatureCheckError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
-    const char * get_name() const noexcept override { return "SignatureCheckError"; }
-};
-
-class LIBDNF_API KeyImportError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
-    const char * get_name() const noexcept override { return "KeyImportError"; }
-};
 
 using RpmKeyPktPtr = std::unique_ptr<uint8_t, std::function<void(uint8_t * pkt)>>;
 

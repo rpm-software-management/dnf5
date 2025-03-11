@@ -21,7 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_RPM_NEVRA_HPP
 #define LIBDNF5_RPM_NEVRA_HPP
 
-#include "libdnf5/common/exception.hpp"
+#include "nevra_errors.hpp"
+
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/defs.h"
 
@@ -31,13 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf5::rpm {
-
-struct LIBDNF_API NevraIncorrectInputError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
-    const char * get_name() const noexcept override { return "NevraIncorrectInputError"; }
-};
-
 
 // @replaces hawkey:hawkey/__init__.py:class:Nevra
 struct LIBDNF_API Nevra {

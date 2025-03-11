@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_BASE_TRANSACTION_HPP
 #define LIBDNF5_BASE_TRANSACTION_HPP
 
+#include "transaction_errors.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
 #include "libdnf5/base/goal_elements.hpp"
 #include "libdnf5/base/log_event.hpp"
@@ -43,16 +45,6 @@ class TransactionGroup;
 class TransactionEnvironment;
 class TransactionModule;
 class TransactionPackage;
-
-/// Error related to processing transaction
-class LIBDNF_API TransactionError : public Error {
-public:
-    using Error::Error;
-    /// @return Error class' domain name"
-    const char * get_domain_name() const noexcept override { return "libdnf5::base"; }
-    /// @return Error class' name"
-    const char * get_name() const noexcept override { return "TransactionError"; }
-};
 
 
 class LIBDNF_API Transaction {

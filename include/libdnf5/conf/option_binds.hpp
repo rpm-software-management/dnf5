@@ -21,30 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_CONF_OPTION_BINDS_HPP
 
 #include "option.hpp"
+#include "option_binds_errors.hpp"
+
+#include "libdnf5/defs.h"
 
 #include <functional>
 #include <map>
 
 
 namespace libdnf5 {
-
-struct OptionBindsError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5"; }
-    const char * get_name() const noexcept override { return "OptionBindsError"; }
-};
-
-class OptionBindsOptionNotFoundError : public OptionBindsError {
-public:
-    explicit OptionBindsOptionNotFoundError(const std::string & id);
-    const char * get_name() const noexcept override { return "OptionBindsOptionNotFoundError"; }
-};
-
-class OptionBindsOptionAlreadyExistsError : public OptionBindsError {
-public:
-    explicit OptionBindsOptionAlreadyExistsError(const std::string & id);
-    const char * get_name() const noexcept override { return "OptionBindsOptionAlreadyExistsError"; }
-};
 
 /// Maps the options names (text names read from config file, command line, ...) to options objects.
 /// Supports user defined functions for processing new value and converting value to string.

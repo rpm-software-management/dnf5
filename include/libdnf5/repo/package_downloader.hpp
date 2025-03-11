@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_PACKAGE_DOWNLOADER_HPP
 #define LIBDNF5_REPO_PACKAGE_DOWNLOADER_HPP
 
+#include "package_downloader_errors.hpp"
+
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/defs.h"
 #include "libdnf5/rpm/package.hpp"
@@ -28,13 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 
 namespace libdnf5::repo {
-
-class PackageDownloadError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::repo"; }
-    const char * get_name() const noexcept override { return "PackageDownloadError"; }
-};
-
 
 class LIBDNF_API PackageDownloader {
 public:

@@ -20,7 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_TRANSACTION_ITEM_ACTION_HPP
 #define LIBDNF5_TRANSACTION_ITEM_ACTION_HPP
 
-#include "libdnf5/common/exception.hpp"
+#include "transaction_item_errors.hpp"
+
 #include "libdnf5/defs.h"
 
 #include <string>
@@ -45,15 +46,6 @@ enum class TransactionItemAction : int {
     DISABLE = 9,        // module disable
     RESET = 10,         // module reset
     SWITCH = 11         // module switch
-};
-
-
-class LIBDNF_API InvalidTransactionItemAction : public libdnf5::Error {
-public:
-    InvalidTransactionItemAction(const std::string & action);
-
-    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
-    const char * get_name() const noexcept override { return "InvalidTransactionItemAction"; }
 };
 
 

@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_FILE_DOWNLOADER_HPP
 #define LIBDNF5_REPO_FILE_DOWNLOADER_HPP
 
+#include "file_downloader_errors.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/config_main.hpp"
 #include "libdnf5/defs.h"
 #include "libdnf5/repo/repo_weak.hpp"
@@ -29,13 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 namespace libdnf5::repo {
-
-class FileDownloadError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::repo"; }
-    const char * get_name() const noexcept override { return "FileDownloadError"; }
-};
-
 
 class LIBDNF_API FileDownloader {
 public:

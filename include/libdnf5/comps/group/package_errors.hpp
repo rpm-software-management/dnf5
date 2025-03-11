@@ -17,24 +17,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-#define LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#ifndef LIBDNF5_COMPS_GROUP_PACKAGE_ERRORS_HPP
+#define LIBDNF5_COMPS_GROUP_PACKAGE_ERRORS_HPP
 
-#include "transaction_item_errors.hpp"
+#include "package_type.hpp"
 
+#include "libdnf5/common/exception.hpp"
 #include "libdnf5/defs.h"
 
 #include <string>
 
+namespace libdnf5::comps {
 
-namespace libdnf5::transaction {
+class LIBDNF_API InvalidPackageType : public libdnf5::Error {
+public:
+    InvalidPackageType(const std::string & type);
+    InvalidPackageType(const PackageType type);
 
-enum class TransactionItemState : int { STARTED = 1, OK = 2, ERROR = 3 };
+    const char * get_domain_name() const noexcept override { return "libdnf5::comps"; }
+    const char * get_name() const noexcept override { return "InvalidPackageType"; }
+};
 
+}  // namespace libdnf5::comps
 
-LIBDNF_API std::string transaction_item_state_to_string(TransactionItemState state);
-LIBDNF_API TransactionItemState transaction_item_state_from_string(const std::string & state);
-
-}  // namespace libdnf5::transaction
-
-#endif  // LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#endif
