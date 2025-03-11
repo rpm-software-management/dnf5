@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf5 {
 
-struct LIBDNF_API OptionBindsError : public Error {
+class LIBDNF_API OptionBindsError : public Error {
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf5"; }
     const char * get_name() const noexcept override { return "OptionBindsError"; }
