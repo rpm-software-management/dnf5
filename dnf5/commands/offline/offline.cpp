@@ -50,11 +50,13 @@ using namespace libdnf5::cli;
 
 const std::string & ID_TO_IDENTIFY_BOOTS = libdnf5::offline::OFFLINE_STARTED_ID;
 
+#ifdef WITH_SYSTEMD
 const SDBUS_SERVICE_NAME_TYPE SYSTEMD_DESTINATION_NAME{"org.freedesktop.systemd1"};
 const sdbus::ObjectPath SYSTEMD_OBJECT_PATH{"/org/freedesktop/systemd1"};
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.systemd1.Manager"};
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
 const std::string SYSTEMD_SERVICE_NAME{"dnf5-offline-transaction.service"};
+#endif
 
 int call(const std::string & command, const std::vector<std::string> & args) {
     std::vector<char *> c_args;
