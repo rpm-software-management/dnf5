@@ -26,4 +26,8 @@ class TestGlobalLogger(base_test_case.BaseTestCase):
         router = libdnf5.logger.LogRouter()
         global_logger = libdnf5.logger.GlobalLogger()
         global_logger.set(router, libdnf5.logger.Logger.Level_DEBUG)
-        self.assertRaises(RuntimeError, libdnf5.logger.GlobalLogger)
+        with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
+                                    '^libdnf5/logger/global_logger.cpp:[0-9]+: libdnf5::GlobalLogger::GlobalLogger\\(\\):'
+                                    ' API Assertion \'librepo_logger == nullptr\' failed:'
+                                    ' Only one GlobalLogger can exist at a time'):
+            libdnf5.logger.GlobalLogger()

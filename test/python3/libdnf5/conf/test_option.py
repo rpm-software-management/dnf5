@@ -72,7 +72,11 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         option = config.get_keepcache_option()
         option.lock('')
 
-        self.assertRaises(RuntimeError, option.set, False)
+        with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
+                                    '^libdnf5/conf/option.cpp:[0-9]+: void libdnf5::Option::assert_not_locked\\(\\) const:'
+                                    ' API Assertion \'!p_impl->locked\' failed:'
+                                    ' Attempting to write to a locked option'):
+            option.set(False)
 
     def test_get_unset_option_by_attribute(self):
         config = self.base.get_config()

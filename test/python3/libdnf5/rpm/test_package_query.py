@@ -149,7 +149,11 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         base = libdnf5.base.Base()
 
         # Try to create a package query without running base.setup()
-        self.assertRaises(RuntimeError, libdnf5.rpm.PackageQuery, base)
+        with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
+                                    'base/base_impl.hpp:[0-9]+: libdnf5::solv::RpmPool& libdnf5::Base::Impl::get_rpm_pool\\(\\):'
+                                    ' API Assertion \'pool\' failed:'
+                                    ' Base instance was not fully initialized by Base::setup()'):
+            libdnf5.rpm.PackageQuery(base)
 
     def test_pkg_get_changelogs(self):
         # Test wrapper for changelogs vector

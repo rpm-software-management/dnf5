@@ -34,7 +34,11 @@ class TestGroup(base_test_case.BaseTestCase):
         base = libdnf5.base.Base()
 
         # Try to create a group query without running base.setup()
-        self.assertRaises(RuntimeError, libdnf5.comps.GroupQuery, base)
+        with self.assertRaisesRegex(libdnf5.exception.UserAssertionError,
+                                    'base_impl.hpp:[0-9]+: libdnf5::solv::CompsPool& libdnf5::Base::Impl::get_comps_pool\\(\\):'
+                                    ' API Assertion \'comps_pool\' failed:'
+                                    ' Base instance was not fully initialized by Base::setup\\(\\)'):
+            libdnf5.comps.GroupQuery(base)
 
     def test_group_get_packages(self):
         self.add_repo_repomd("repomd-comps-core")
