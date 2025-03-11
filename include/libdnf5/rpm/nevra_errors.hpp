@@ -17,24 +17,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-#define LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 
-#include "transaction_item_errors.hpp"
+#ifndef LIBDNF5_RPM_NEVRA_ERRORS_HPP
+#define LIBDNF5_RPM_NEVRA_ERRORS_HPP
 
+#include "libdnf5/common/exception.hpp"
 #include "libdnf5/defs.h"
 
-#include <string>
+namespace libdnf5::rpm {
 
+struct LIBDNF_API NevraIncorrectInputError : public Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf5::rpm"; }
+    const char * get_name() const noexcept override { return "NevraIncorrectInputError"; }
+};
 
-namespace libdnf5::transaction {
+}  // namespace libdnf5::rpm
 
-enum class TransactionItemState : int { STARTED = 1, OK = 2, ERROR = 3 };
-
-
-LIBDNF_API std::string transaction_item_state_to_string(TransactionItemState state);
-LIBDNF_API TransactionItemState transaction_item_state_from_string(const std::string & state);
-
-}  // namespace libdnf5::transaction
-
-#endif  // LIBDNF5_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
+#endif  // LIBDNF5_RPM_NEVRA_ERRORS_HPP

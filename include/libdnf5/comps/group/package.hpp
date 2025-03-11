@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_COMPS_GROUP_PACKAGE_HPP
 #define LIBDNF5_COMPS_GROUP_PACKAGE_HPP
 
+#include "package_errors.hpp"
 #include "package_type.hpp"
 
 #include "libdnf5/defs.h"
