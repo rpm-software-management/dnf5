@@ -470,11 +470,6 @@ void OfflineExecuteCommand::run() {
     plymouth.progress(0);
     plymouth.message(message.c_str());
 
-    std::cout
-        << _("Warning: the `_execute` command is for internal use only and is not intended to be run directly by "
-             "the user. To initiate the system upgrade/offline transaction, you should run `dnf5 offline reboot`.")
-        << std::endl;
-
     std::filesystem::remove(libdnf5::offline::MAGIC_SYMLINK);
 
     if (offline_data.get_status() != libdnf5::offline::STATUS_READY) {
