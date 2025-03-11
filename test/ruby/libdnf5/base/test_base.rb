@@ -52,11 +52,36 @@ class TestBase < Test::Unit::TestCase
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
         # Raises an AssertionError that is not caught by the SWIG binding.
-        #assert_raise do
+        #ex = assert_raise(Libdnf5::Exception::AssertionError) do
         #    vars.get_value("test_variable")
         #end
-        #assert_raise do
+        #assert_match(/Dereferencing an invalidated WeakPtr/, ex.message)
+        #ex = assert_raise(Libdnf5::Exception::AssertionError) do
         #    vars2.get_value("test_variable")
         #end
+        #assert_match(/Dereferencing an invalidated WeakPtr/, ex.message)
+    end
+
+    def test_non_existing_config_load()
+        # Try to load configuration from non-existing path
+        base = Libdnf5::Base::Base.new()
+        base.get_config().get_config_file_path_option().set('this-path-does-not-exist.conf')
+
+        # Checking the exception.
+        ex = assert_raises(Libdnf5::Exception::MissingConfigErrorNested) do
+            base.load_config()
+        end
+        assert_match('Configuration file "this-path-does-not-exist.conf" not found', ex.message)
+        msg = /^libdnf5::MissingConfigError: Configuration file "this-path-does-not-exist.conf" not found\n/
+        nested_msg = / libdnf5::utils::fs::FileSystemError: cannot open file/
+        assert_match(/#{msg}#{nested_msg}/, ex.format(Libdnf5::Exception::FormatDetailLevel_WithDomainAndName))
+
+        # Checking the nested exception.
+        nested_ex = assert_raises(Libdnf5::Exception::FileSystemError) do
+            ex.rethrow_if_nested()
+        end
+        assert_match('cannot open file', nested_ex.message)
+        assert_match('libdnf5::utils::fs::FileSystemError: cannot open file',
+                     nested_ex.format(Libdnf5::Exception::FormatDetailLevel_WithDomainAndName))
     end
 end
