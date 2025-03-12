@@ -213,7 +213,7 @@ void FileDownloader::download() try {
 } catch (const RepoCacheonlyError & e) {
     throw;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(FileDownloadError(M_("Failed to download files")));
+    libdnf5::throw_with_nested(FileDownloadError(M_("Failed to download files")));
 }
 
 void FileDownloader::set_fail_fast(bool value) {
