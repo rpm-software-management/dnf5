@@ -578,7 +578,8 @@ void installed_copr_repositories(libdnf5::Base & base, CoprRepoCallback cb) {
             continue;
 
         warn_weird_copr_repo(repo);
-        copr_repos[repo_file_path].add_dnf_repo(repo);
+        auto [it, inserted] = copr_repos.emplace(repo_file_path, CoprRepo(base));
+        it->second.add_dnf_repo(repo);
     }
 
     for (auto & [key, copr_repo] : copr_repos)
