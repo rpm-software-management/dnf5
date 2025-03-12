@@ -72,7 +72,7 @@ To setup a development environment, complete the following steps:
 1. Install build requirements:
 
    ```
-   dnf builddep dnf5.spec #[--define '_without_<option> 1 ...]
+   dnf builddep dnf5 #[--define '_without_<option> 1 ...]
    ```
 
 2. Build DNF5:
