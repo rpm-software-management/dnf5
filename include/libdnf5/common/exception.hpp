@@ -256,6 +256,38 @@ enum FormatDetailLevel {
     WithDomainAndName,
 };
 
+
+/// A template of the `NestedException` class that is thrown by the `throw_with_nested` function.
+template <typename TException>
+class NestedException : public TException, public std::nested_exception {
+public:
+    explicit NestedException(const TException & ex) : TException(ex) {}
+    explicit NestedException(TException && ex) : TException(static_cast<TException &&>(ex)) {}
+};
+
+/// Throws an exception that also stores the currently active exception.
+///
+/// It does the same thing as `std::throw_with_nested(TException && ex)`, except that instead of
+/// an **unspecified** type that is publicly derived from both `std::nested_exception` and
+/// `std::decay<TException>::type`, it throws a type **`NestedException<std::decay<TException>::type>`**
+/// that is publicly derived from both `std::nested_exception` and `std::decay<TException>::type`.
+///
+/// In other words, it replaces the unspecified type (the type defined by the implementation in the standard library)
+/// with our specification. Knowing the type can simplify exception handling in some cases. For example, avoiding
+/// the need to define another type for SWIG.
+template <typename TException>
+[[noreturn]] inline void throw_with_nested(TException && ex) {
+    using TUpEx = typename std::decay<TException>::type;
+
+    using IsCopyConstructible = std::conjunction<std::is_copy_constructible<TUpEx>, std::is_move_constructible<TUpEx>>;
+    static_assert(IsCopyConstructible::value, "throw_with_nested argument must be CopyConstructible");
+
+    if constexpr (!std::is_final_v<TUpEx> && std::is_class_v<TUpEx> && !std::is_base_of_v<std::nested_exception, TUpEx>)
+        throw NestedException<TUpEx>{std::forward<TException>(ex)};
+    throw std::forward<TException>(ex);
+}
+
+
 /// Formats the error message of an exception.
 /// If the exception is nested, recurses to format the message of the exception it holds.
 LIBDNF_API std::string format(const std::exception & e, FormatDetailLevel detail);

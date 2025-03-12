@@ -166,7 +166,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
     }
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
-    throw_with_nested(RepoDownloadError(
+    libdnf5::throw_with_nested(RepoDownloadError(
         M_("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
 }
 
@@ -237,7 +237,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
     logger.debug("Sync check: repo \"{}\" in sync, metalink checksums match", config.get_id());
     return true;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(
+    libdnf5::throw_with_nested(RepoDownloadError(
         M_("Error checking if metalink \"{}\" is in sync for repository \"{}\""),
         get_source_info().second,
         config.get_id()));
@@ -267,7 +267,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
     return same;
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
-    throw_with_nested(RepoDownloadError(
+    libdnf5::throw_with_nested(RepoDownloadError(
         M_("Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""),
         src.first,
         src.second,
@@ -332,7 +332,8 @@ void RepoDownloader::load_local() try {
         }
     }
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
+    libdnf5::throw_with_nested(
+        RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
 }
 
 void RepoDownloader::reset_loaded() {

@@ -93,12 +93,13 @@ void ConfigParser::read(const std::string & file_path) try {
     ::libdnf5::read(*this, parser);
 } catch (const FileSystemError & e) {
     if (e.get_error_code() == ENOENT) {
-        std::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
+        libdnf5::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
     } else {
-        std::throw_with_nested(InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));
+        libdnf5::throw_with_nested(
+            InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));
     }
 } catch (const Error & e) {
-    std::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
+    libdnf5::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
 }
 
 
