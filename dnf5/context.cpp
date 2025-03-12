@@ -93,13 +93,13 @@ public:
         }
 
         std::cerr << libdnf5::utils::sformat(
-                         _("The following PGP key (0x{}) is about to be removed:"), key_info.get_short_key_id())
+                         _("The following OpenPGP key (0x{}) is about to be removed:"), key_info.get_short_key_id())
                   << std::endl;
         std::cerr << libdnf5::utils::sformat(_(" Reason     : {}\n"), removal_info.format(true));
         for (auto & user_id : key_info.get_user_ids()) {
             std::cerr << libdnf5::utils::sformat(_(" UserID     : \"{}\"\n"), user_id);
         }
-        std::cerr << libdnf5::utils::sformat(_(" From       : {}\n"), key_info.get_url());
+        std::cerr << libdnf5::utils::sformat(_(" Fingerprint: {}\n"), key_info.get_fingerprint());
 
         std::cerr << std::endl << _("As a result, installing packages signed with this key will fail.") << std::endl;
         std::cerr << _("It is recommended to remove the expired key to allow importing") << std::endl;
@@ -112,7 +112,8 @@ public:
     }
 
     void repokey_removed([[maybe_unused]] const libdnf5::rpm::KeyInfo & key_info) override {
-        std::cerr << _("The key was successfully removed.") << std::endl;
+        std::cerr << libdnf5::utils::sformat(_("Key 0x{} was successfully removed."), key_info.get_short_key_id())
+                  << std::endl;
     }
 
 private:
