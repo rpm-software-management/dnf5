@@ -237,7 +237,7 @@ Changes to individual commands
 
 ``makecache``
   * Metadata is now stored in different directories, see the ``cachedir`` configuration option :ref:`changes <cachedir_option_conf_changes_ref-label>` for more details.
-  * The ``--timer`` option has been dropped in favor of the systemd ``OnUnitInactiveSec`` setting in ``dnf5-makecache.timer`` and the ``ConditionACPower`` setting in ``dnf5-makecache.service``.
+  * The ``--timer`` option has been dropped in favor of the systemd ``OnUnitInactiveSec`` setting in ``dnf-makecache.timer`` and the ``ConditionACPower`` setting in ``dnf-makecache.service`` (these files are named ``dnf5-makecache.timer`` and ``dnf5-makecache.service`` on some systems).
 
 ``mark``
   * Renaming subcommands to be more intuitive: ``install`` -> ``user``, ``remove`` -> ``dependency``.
@@ -397,7 +397,7 @@ Additionally, corresponding command-line options ``--skip-broken`` and ``--skip-
 
 Deprecation of the ``metadata_timer_sync`` option
 -------------------------------------------------
-The ``metadata_timer_sync`` configuration option is now obsoleted by the ``dnf5-makecache.timer`` systemd timer settings.
+The ``metadata_timer_sync`` configuration option is now obsoleted by the ``dnf-makecache.timer`` systemd timer settings (named ``dnf5-makecache.timer`` on some systems).
 
 Changes to individual options
 -----------------------------
