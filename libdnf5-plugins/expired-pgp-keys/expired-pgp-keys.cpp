@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include "libdnf5/utils/fs/temp.hpp"
+
 #include <libdnf5/base/base.hpp>
 #include <libdnf5/base/transaction.hpp>
 #include <libdnf5/common/message.hpp>
@@ -136,29 +138,6 @@ static int64_t get_key_expire_timestamp(std::string raw_key) {
     return static_cast<int64_t>(std::stoull(expired_date_string));
 }
 
-/// Remove the system package corresponding to the PGP key from the given RPM header.
-static bool remove_pgp_key(const libdnf5::rpm::KeyInfo & key) {
-    bool retval{false};
-    auto ts = rpmtsCreate();
-    Header h;
-    rpmdbMatchIterator mi;
-    mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
-    auto key_id = key.get_short_key_id();
-    while ((h = rpmdbNextIterator(mi)) != nullptr) {
-        char * version = headerGetAsString(h, RPMTAG_VERSION);
-        if (version && version == libdnf5::utils::string::tolower(key_id)) {
-            free(version);
-            rpmtsAddEraseElement(ts, h, -1);
-            retval = rpmtsRun(ts, nullptr, RPMPROB_FILTER_NONE) == 0;
-            break;
-        }
-        free(version);
-    }
-    rpmdbFreeIterator(mi);
-    rpmtsFree(ts);
-    return retval;
-}
-
 void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction & transaction) const {
     auto & logger = *get_base().get_logger();
     const auto & config = get_base().get_config();
@@ -175,39 +154,85 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     auto current_timestamp = std::chrono::duration_cast<std::chrono::seconds>(current_date.time_since_epoch()).count();
 
     libdnf5::rpm::RpmSignature rpm_signature(get_base());
+
+    // Obtain callbacks for getting confirmation from a user.
+    // TODO: Where to get callbacks without repositories? E.g. if all are
+    // disabled? For now use calbacks of the first repository. The callbacks
+    // API should become independent from libdnf5::repo.
     libdnf5::repo::RepoQuery enabled_repos(get_base());
     enabled_repos.filter_enabled(true);
     enabled_repos.filter_type(libdnf5::repo::Repo::Type::AVAILABLE);
-
+    libdnf5::repo::RepoCallbacks2_1 * callbacks = nullptr;
     for (auto const & repo : enabled_repos) {
-        auto key_urls = repo->get_config().get_gpgkey_option().get_value();
-        if (key_urls.empty()) {
+        callbacks = dynamic_cast<libdnf5::repo::RepoCallbacks2_1 *>(repo->get_callbacks().get());
+        break;
+    }
+
+    // Iterate over all installed OpenPGP keys.
+    // TODO: Respect install root.
+    auto ts = rpmtsCreate();
+    Header h;
+    rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
+    std::vector<libdnf5::rpm::KeyInfo> keys_to_remove;
+
+    while ((h = rpmdbNextIterator(mi)) != nullptr) {
+        char * raw_key = headerGetAsString(h, RPMTAG_DESCRIPTION);
+        if (!raw_key)
             continue;
+
+        // Serialize raw key into a file becuse parse_key_file() requires a file.
+        // (Or use lr_gpg_import_key_from_memory() directly?)
+        auto key_tfile = libdnf5::utils::fs::TempFile("key");
+        auto & key_ffile = key_tfile.open_as_file("w+");
+        key_ffile.write(raw_key, strlen(raw_key));
+        key_ffile.flush();
+        free(raw_key);
+
+        // Parse the serialized key into a vector of KeyInfo objects (first
+        // signing subkey).
+        // Since RPM database stores each primary key with all its subkeys as
+        // a single gpg-pubkey package, parse_key_file() method always returns
+        // a vector of at most one KeyInfo object. The vector is empty if the
+        // primary key had no signing subkey.
+        // XXX: That effectivelly ignores expiration time of other subkeys.
+        auto parsed_keys = rpm_signature.parse_key_file(std::string({"file://"}) + key_tfile.get_path().string());
+        if (parsed_keys.empty())
+            continue;
+
+        // Check expiration time of the only subkey.
+        auto & key_info = parsed_keys.front();
+        auto key_timestamp = get_key_expire_timestamp(key_info.get_raw_key());
+        if (key_timestamp > 0 && key_timestamp < current_timestamp) {
+            if (callbacks && !callbacks->repokey_remove(key_info, ExpiryInfoMessage(key_timestamp))) {
+                // User declined removing this key.
+                continue;
+            }
+            if (rpmtsAddEraseElement(ts, h, -1) != 0) {
+                logger.error(
+                    "Expired PGP Keys Plugin: Failed to mark 0x{} key for removal.", key_info.get_short_key_id());
+            } else {
+                keys_to_remove.emplace_back(key_info);
+            }
         }
+    }
 
-        auto callbacks = dynamic_cast<libdnf5::repo::RepoCallbacks2_1 *>(repo->get_callbacks().get());
-
-        for (auto const & key_url : key_urls) {
-            for (auto & key_info : rpm_signature.parse_key_file(key_url)) {
-                if (rpm_signature.key_present(key_info)) {
-                    auto key_timestamp = get_key_expire_timestamp(key_info.get_raw_key());
-                    if (key_timestamp > 0 && key_timestamp < current_timestamp) {
-                        if (callbacks && !callbacks->repokey_remove(key_info, ExpiryInfoMessage(key_timestamp))) {
-                            continue;
-                        }
-                        logger.debug("Expired PGP Keys Plugin: Removing the 0x{} key.", key_info.get_short_key_id());
-                        auto removed = remove_pgp_key(key_info);
-                        if (!removed) {
-                            logger.error(
-                                "Expired PGP Keys Plugin: Failed to remove the 0x{} key.", key_info.get_short_key_id());
-                        } else if (callbacks) {
-                            callbacks->repokey_removed(key_info);
-                        }
-                    }
+    if (!keys_to_remove.empty()) {
+        if (rpmtsRun(ts, nullptr, RPMPROB_FILTER_NONE)) {
+            for (auto & key_info : keys_to_remove) {
+                logger.error("Expired PGP Keys Plugin: Failed to remove the 0x{} key.", key_info.get_short_key_id());
+            }
+        } else {
+            for (auto & key_info : keys_to_remove) {
+                logger.debug("Expired PGP Keys Plugin: 0x{} key removed.", key_info.get_short_key_id());
+                if (callbacks) {
+                    callbacks->repokey_removed(key_info);
                 }
             }
         }
     }
+
+    rpmdbFreeIterator(mi);
+    rpmtsFree(ts);
 }
 
 
