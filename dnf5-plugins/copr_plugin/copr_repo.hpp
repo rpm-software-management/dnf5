@@ -175,7 +175,7 @@ private:
 
 class CoprRepo {
 public:
-    CoprRepo() {};
+    explicit CoprRepo(libdnf5::Base & base) : base(&base) {}
 
     explicit CoprRepo(
         libdnf5::Base & base,
