@@ -31,6 +31,241 @@
     #include "libdnf5/common/message.hpp"
     #include "libdnf5/common/weak_ptr.hpp"
 %}
+
+// ===== Begin of exceptions wrapper =====
+%{
+// Implement ExceptionWrap class.
+namespace libdnf5::common {
+
+const char * ExceptionWrap::what() const noexcept {
+    if (!except_ptr) {
+        return "";
+    }
+
+    try {
+        std::rethrow_exception(except_ptr);
+    } catch (const std::exception & ex) {
+        return ex.what();
+    }
+}
+
+const char * ExceptionWrap::get_name() const noexcept {
+    if (!except_ptr) {
+        return "";
+    }
+
+    try {
+        std::rethrow_exception(except_ptr);
+    } catch (const libdnf5::Error & ex) {
+        return ex.get_name();
+    } catch (const std::exception &) {
+        return "";
+    }
+}
+
+const char * ExceptionWrap::get_domain_name() const noexcept {
+    if (!except_ptr) {
+        return "";
+    }
+
+    try {
+        std::rethrow_exception(except_ptr);
+    } catch (const libdnf5::Error & ex) {
+        return ex.get_domain_name();
+    } catch (const std::exception &) {
+        return "";
+    }
+}
+
+std::string ExceptionWrap::format(libdnf5::FormatDetailLevel detail) const {
+    if (!except_ptr) {
+        return "";
+    }
+
+    try {
+        std::rethrow_exception(except_ptr);
+    } catch (const std::exception & ex) {
+        return libdnf5::format(ex, detail);
+    }
+}
+
+std::string ExceptionWrap::to_string() const {
+    return format(libdnf5::FormatDetailLevel::WithDomainAndName);
+}
+
+void ExceptionWrap::rethrow_if_nested() const {
+    try {
+        rethrow_if_nested_original();
+    } catch (const std::exception &) {
+        throw ExceptionWrap();
+    }
+}
+
+}  // namespace libdnf5::common
+%}
+
+// Ignore macros
+%ignore LIBDNF_LOCATION;
+%ignore LIBDNF_ASSERTION_MACROS;
+%ignore libdnf_throw_assertion;
+%ignore libdnf_assert;
+%ignore libdnf_user_assert;
+// Ignore exception constructors
+%ignore libdnf5::SourceLocation;
+%ignore libdnf5::AssertionError::AssertionError;
+%ignore libdnf5::UserAssertionError::UserAssertionError;
+%ignore libdnf5::Error::Error;
+%ignore libdnf5::SystemError::SystemError;
+%ignore libdnf5::FileSystemError::FileSystemError;
+%ignore libdnf5::format;
+%include "libdnf5/common/exception.hpp"
+
+%define libdnf_exception_wrap_current()
+        auto * ex = new libdnf5::common::ExceptionWrap;
+#if defined(SWIGPYTHON)
+        SWIG_Python_Raise(SWIG_NewPointerObj(ex, SWIGTYPE_p_libdnf5__common__ExceptionWrap, SWIG_POINTER_OWN), "libdnf5::common::ExceptionWrap", SWIGTYPE_p_libdnf5__common__ExceptionWrap);
+#elif defined(SWIGPERL)
+        sv_setsv(get_sv("@", GV_ADD), SWIG_NewPointerObj(ex, SWIGTYPE_p_libdnf5__common__ExceptionWrap, SWIG_POINTER_OWN));
+#elif defined(SWIGRUBY)
+        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_libdnf5__common__ExceptionWrap, SWIG_NewPointerObj(ex, SWIGTYPE_p_libdnf5__common__ExceptionWrap, SWIG_POINTER_OWN)));
+#endif
+%enddef
+
+%exception {
+    try {
+        $action
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
+    }
+}
+
+
+#if defined(SWIGPYTHON)
+%extend libdnf5::common::ExceptionWrap {
+    std::string __str__() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::AssertionError {
+    std::string __str__() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::UserAssertionError {
+    std::string __str__() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::Error {
+    std::string __str__() const {
+        return $self->what();
+    }
+}
+#elif defined(SWIGPERL)
+%extend libdnf5::common::ExceptionWrap {
+    std::string stringify() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::AssertionError {
+    std::string stringify() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::UserAssertionError {
+    std::string stringify() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::Error {
+    std::string stringify() const {
+        return $self->what();
+    }
+}
+#elif defined(SWIGRUBY)
+%extend libdnf5::common::ExceptionWrap {
+    std::string to_s() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::AssertionError {
+    std::string to_s() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::UserAssertionError {
+    std::string to_s() const {
+        return $self->what();
+    }
+}
+
+%extend libdnf5::Error {
+    std::string to_s() const {
+        return $self->what();
+    }
+}
+#endif
+
+%ignore libdnf5::common::ExceptionWrap::ExceptionWrap;
+namespace libdnf5::common {
+
+class ExceptionWrap {
+public:
+    ExceptionWrap();
+
+    /// @return The basic error message.
+    const char * what() const noexcept;
+
+    /// @return The exception class name.
+    const char * get_name() const noexcept;
+
+    /// @return The domain name (namespace and enclosing class names) of the exception.
+    const char * get_domain_name() const noexcept;
+
+    /// Formats the error message of an exception.
+    /// If the exception is nested, recurses to format the message of the exception it holds.
+    ///
+    /// @param detail Defines the detail of the message.
+    /// @return Error message including messages from nested exceptions.
+    std::string format(libdnf5::FormatDetailLevel detail) const;
+
+    /// Formats the error message of an exception to string with domain and name.
+    /// If the exception is nested, recurses to format the message of the exception it holds.
+    ///
+    /// @return Detailed error message including messages from nested exceptions.
+    std::string to_string() const;
+
+    /// If a nested exception is contained, it is thrown in a new ExceptionWrap exception.
+    void rethrow_if_nested() const;
+
+private:
+    std::exception_ptr except_ptr;
+};
+
+}  // namespace libdnf5::common
+
+%catches(libdnf5::common::ExceptionWrap, libdnf5::Error, libdnf5::UserAssertionError, libdnf5::AssertionError) _Dummy::test();
+
+%ignore _Dummy;
+%inline %{
+class _Dummy {
+public:
+    void test() {}
+};
+%}
+
+// === End of exceptions wrapper
+
+
 %include "libdnf5/common/message.hpp"
 
 %include "libdnf5/common/weak_ptr.hpp"
@@ -41,19 +276,6 @@
     }
 }
 #endif
-
-// Cannot use %include <catch_error.i> here, SWIG includes each file only once,
-// but the exception handler actually does not get registered when this file is
-// %imported (as opposed to %included).
-%exception {
-    try {
-        $action
-    } catch (const std::out_of_range & e) {
-        SWIG_exception(SWIG_IndexError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
 
 %ignore std::vector::vector(size_type);
 %ignore std::vector::vector(unsigned int);
@@ -342,7 +564,7 @@ def create_attributes_from_getters_and_setters(cls):
 %}
 #endif
 
-%exception;  // beware this resets all exception handlers if you import this file after defining any
-
 // Base weak ptr is used across the codebase
 %include "libdnf5/base/base_weak.hpp"
+
+%exception;

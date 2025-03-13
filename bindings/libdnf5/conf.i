@@ -17,6 +17,16 @@
 %exception {
     try {
         $action
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
+    }
+}
+
+
+/*%exception {
+    try {
+        $action
     } catch (const libdnf5::UserAssertionError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const libdnf5::Error & e) {
@@ -26,7 +36,7 @@
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     }
-}
+}*/
 
 %{
     #include "libdnf5/conf/const.hpp"
@@ -42,16 +52,22 @@
 #define CV __perl_CV
 #define final
 
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_conf_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
+
 wrap_unique_ptr(StringUniquePtr, std::string);
 
 %include "libdnf5/version.hpp"
 
 %include "libdnf5/conf/const.hpp"
 
-%ignore libdnf5::OptionError;
-%ignore libdnf5::OptionInvalidValueError;
-%ignore libdnf5::OptionValueNotAllowedError;
-%ignore libdnf5::OptionValueNotSetError;
+%ignore libdnf5::OptionError::OptionError;
+%ignore libdnf5::OptionInvalidValueError::OptionInvalidValueError;
+%ignore libdnf5::OptionValueNotAllowedError::OptionValueNotAllowedError;
+%ignore libdnf5::OptionValueNotSetError::OptionValueNotSetError;
 %include "libdnf5/conf/option.hpp"
 %include "libdnf5/conf/option_bool.hpp"
 %include "libdnf5/conf/option_enum.hpp"
@@ -89,9 +105,9 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 
 
 %rename (OptionBinds_Item) libdnf5::OptionBinds::Item;
-%ignore libdnf5::OptionBindsError;
-%ignore libdnf5::OptionBindsOptionNotFoundError;
-%ignore libdnf5::OptionBindsOptionAlreadyExistsError;
+%ignore libdnf5::OptionBindsError::OptionBindsError;
+%ignore libdnf5::OptionBindsOptionNotFoundError::OptionBindsOptionNotFoundError;
+%ignore libdnf5::OptionBindsOptionAlreadyExistsError::OptionBindsOptionAlreadyExistsError;
 %ignore libdnf5::OptionBinds::add(const std::string & id, Option & option,
     Item::NewStringFunc new_string_func, Item::GetValueStringFunc get_value_string_func, bool add_value);
 %ignore libdnf5::OptionBinds::begin;
@@ -101,15 +117,15 @@ wrap_unique_ptr(StringUniquePtr, std::string);
 %ignore libdnf5::OptionBinds::find;
 %include "libdnf5/conf/option_binds.hpp"
 
-%ignore libdnf5::ConfigParserError;
-%ignore libdnf5::InaccessibleConfigError;
-%ignore libdnf5::MissingConfigError;
-%ignore libdnf5::InvalidConfigError;
-%ignore ConfigParserSectionNotFoundError;
-%ignore ConfigParserOptionNotFoundError;
+%ignore libdnf5::ConfigParserError::ConfigParserError;
+%ignore libdnf5::InaccessibleConfigError::InaccessibleConfigError;
+%ignore libdnf5::MissingConfigError::MissingConfigError;
+%ignore libdnf5::InvalidConfigError::InvalidConfigError;
+%ignore libdnf5::ConfigParserSectionNotFoundError::ConfigParserSectionNotFoundError;
+%ignore libdnf5::ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError;
 %include "libdnf5/conf/config_parser.hpp"
 
-%ignore libdnf5::ReadOnlyVariableError;
+%ignore libdnf5::ReadOnlyVariableError::ReadOnlyVariableError;
 %include "libdnf5/conf/vars.hpp"
 
 %include "libdnf5/conf/config.hpp"
@@ -134,7 +150,7 @@ import re
 def _config_option_getter(config_object, option_name):
     try:
         return getattr(config_object, option_name)().get_value()
-    except RuntimeError:
+    except Exception:
         return None
 
 def _config_option_setter(config_object, option_name, value):
@@ -154,4 +170,4 @@ create_config_option_attributes(ConfigMain)
 %}
 #endif
 
-%exception;  // beware this resets all exception handlers if you import this file after defining any
+%exception;

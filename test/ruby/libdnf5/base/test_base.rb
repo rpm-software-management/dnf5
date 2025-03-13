@@ -19,6 +19,7 @@ require 'test/unit'
 include Test::Unit::Assertions
 
 require 'libdnf5/base'
+require 'libdnf5/exception_utils'
 
 class TestBase < Test::Unit::TestCase
     def test_base()
@@ -51,12 +52,48 @@ class TestBase < Test::Unit::TestCase
         GC.start
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-        # Raises an AssertionError that is not caught by the SWIG binding.
-        #assert_raise do
-        #    vars.get_value("test_variable")
-        #end
-        #assert_raise do
-        #    vars2.get_value("test_variable")
-        #end
+        # Raises an AssertionError (that is not caught by the SWIG binding).
+        ex = assert_raise(Libdnf5::Common::ExceptionWrap) do
+            vars.get_value("test_variable")
+        end
+        assert_match(/Dereferencing an invalidated WeakPtr/, ex.message)
+
+
+        ex = assert_raise(Libdnf5::Common::ExceptionWrap) do
+            vars2.get_value("test_variable")
+        end
+        assert_match(/Dereferencing an invalidated WeakPtr/, ex.message)
+    end
+
+    def test_non_existing_config_load()
+        # Try to load configuration from non-existing path
+        base = Libdnf5::Base::Base.new()
+        base.get_config().get_config_file_path_option().set('this-path-does-not-exist.conf')
+
+        # Checking the exception.
+        exception = assert_raises(Libdnf5::Common::ExceptionWrap) do
+            base.load_config()
+        end
+        msg = /^libdnf5::MissingConfigError: Configuration file "this-path-does-not-exist.conf" not found\n/
+        nested_msg = / libdnf5::utils::fs::FileSystemError: cannot open file/
+        assert_match(/#{msg}#{nested_msg}/, exception.to_string())
+
+        # Checking the original (wrapped) exception.
+        orig_ex = assert_raises(Libdnf5::Conf::MissingConfigError) do
+            Libdnf5::Exception_utils::rethrow_original(exception)
+        end
+        assert_match('Configuration file "this-path-does-not-exist.conf" not found', orig_ex.message)
+
+        # Checking the nested exception.
+        nested_ex = assert_raises(Libdnf5::Common::ExceptionWrap) do
+            Libdnf5::Exception_utils::rethrow_if_nested(exception)
+        end
+        assert_match('libdnf5::utils::fs::FileSystemError: cannot open file', nested_ex.to_string())
+
+        # Checking the original (wrapped) nested exception.
+        nested_original_ex = assert_raises(Libdnf5::Common::FileSystemError) do
+            Libdnf5::Exception_utils::rethrow_original(nested_ex)
+        end
+        assert_match('cannot open file', nested_original_ex.message)
     end
 end

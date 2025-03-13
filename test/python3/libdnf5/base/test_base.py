@@ -48,15 +48,36 @@ class TestBase(unittest.TestCase):
         base = None
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-        # Raises an AssertionError that is not caught by the SWIG binding.
-        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
-        #    vars.get_value("test_variable")
-        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
-        #    vars2.get_value("test_variable")
+        # Raises an AssertionError (that is not caught by the SWIG binding).
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'Dereferencing an invalidated WeakPtr'):
+            vars.get_value("test_variable")
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'Dereferencing an invalidated WeakPtr'):
+            vars2.get_value("test_variable")
 
     def test_non_existing_config_load(self):
         # Try to load configuration from non-existing path
         base = libdnf5.base.Base()
         base.get_config().config_file_path = 'this-path-does-not-exist.conf'
 
-        self.assertRaises(RuntimeError, base.load_config)
+        # Checking the exception.
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap,
+                                    'Configuration file "this-path-does-not-exist.conf" not found') as cm:
+            base.load_config()
+        self.assertRegex(cm.exception.to_string(),
+                         '^libdnf5::MissingConfigError: Configuration file "this-path-does-not-exist.conf" not found\n'
+                         ' libdnf5::utils::fs::FileSystemError: cannot open file')
+
+        # Checking the original (wrapped) exception.
+        with self.assertRaisesRegex(libdnf5.conf.MissingConfigError,
+                                    'Configuration file "this-path-does-not-exist.conf" not found'):
+            libdnf5.exception_utils.rethrow_original(cm.exception)
+
+        # Checking the nested exception.
+        with self.assertRaisesRegex(libdnf5.common.ExceptionWrap, 'cannot open file') as cm_nested:
+            libdnf5.exception_utils.rethrow_if_nested(cm.exception)
+        self.assertRegex(cm_nested.exception.to_string(
+        ), '^libdnf5::utils::fs::FileSystemError: cannot open file')
+
+        # Checking the original (wrapped) nested exception.
+        with self.assertRaisesRegex(libdnf5.common.FileSystemError, 'cannot open file'):
+            libdnf5.exception_utils.rethrow_original(cm_nested.exception)

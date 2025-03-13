@@ -17,12 +17,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
 
@@ -46,10 +43,21 @@
 
 #define CV __perl_CV
 
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_transaction_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
+
 // enums
+%ignore libdnf5::transaction::InvalidTransactionItemAction::InvalidTransactionItemAction;
 %include "libdnf5/transaction/transaction_item_action.hpp"
+%ignore libdnf5::transaction::InvalidTransactionItemReason::InvalidTransactionItemReason;
 %include "libdnf5/transaction/transaction_item_reason.hpp"
+%ignore libdnf5::transaction::InvalidTransactionItemState::InvalidTransactionItemState;
 %include "libdnf5/transaction/transaction_item_state.hpp"
+%ignore libdnf5::transaction::InvalidTransactionItemType::InvalidTransactionItemType;
+%include "libdnf5/transaction/transaction_item_type.hpp"
 
 // transaction items
 %include "libdnf5/transaction/transaction_item.hpp"
@@ -61,7 +69,10 @@
 %template(TransactionHistoryWeakPtr) libdnf5::WeakPtr<libdnf5::transaction::TransactionHistory, false>;
 
 // transaction
+%ignore libdnf5::transaction::InvalidTransactionState::InvalidTransactionState;
 %include "libdnf5/transaction/transaction.hpp"
 
 %template(VectorTransaction) std::vector<libdnf5::transaction::Transaction>;
 %template(VectorTransactionPackage) std::vector<libdnf5::transaction::Package>;
+
+%exception;

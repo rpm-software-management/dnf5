@@ -20,12 +20,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
 
@@ -41,6 +38,12 @@
 %}
 
 #define CV __perl_CV
+
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_advisory_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
 
 %include "libdnf5/advisory/advisory.hpp"
 %include "libdnf5/advisory/advisory_package.hpp"
@@ -66,3 +69,5 @@ add_iterator(AdvisorySet)
 fix_swigtype_trait(libdnf5::advisory::Advisory)
 #endif
 add_ruby_each(libdnf5::advisory::AdvisorySet)
+
+%exception;

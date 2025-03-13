@@ -23,12 +23,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
 
@@ -42,11 +39,18 @@
     #include "libdnf5/repo/repo.hpp"
     #include "libdnf5/repo/repo_cache.hpp"
     #include "libdnf5/repo/repo_callbacks.hpp"
+    #include "libdnf5/repo/repo_errors.hpp"
     #include "libdnf5/repo/repo_query.hpp"
     #include "libdnf5/repo/repo_sack.hpp"
 %}
 
 #define CV __perl_CV
+
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_repo_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
 
 %{
 static inline void * integer_to_void_ptr(int value) noexcept {
@@ -112,7 +116,7 @@ wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
     }
 };
 %ignore libdnf5::repo::FileDownloader::add;
-%ignore FileDownloadError;
+%ignore libdnf5::repo::FileDownloadError::FileDownloadError;
 %include "libdnf5/repo/file_downloader.hpp"
 
 %extend libdnf5::repo::PackageDownloader {
@@ -124,11 +128,20 @@ wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf5::repo::DownloadCallbacks);
     }
 };
 %ignore libdnf5::repo::PackageDownloader::add;
-%ignore PackageDownloadError;
+%ignore libdnf5::repo::PackageDownloadError::PackageDownloadError;
 %include "libdnf5/repo/package_downloader.hpp"
 
-%ignore RepoCacheError;
+%ignore libdnf5::repo::RepoCacheError::RepoCacheError;
 %include "libdnf5/repo/repo_cache.hpp"
+
+%ignore libdnf5::repo::RepoCacheonlyError::RepoCacheonlyError;
+%ignore libdnf5::repo::RepoDownloadError::RepoDownloadError;
+%ignore libdnf5::repo::RepoPgpError::RepoPgpError;
+%ignore libdnf5::repo::RepoRpmError::RepoRpmError;
+%ignore libdnf5::repo::RepoCompsError::RepoCompsError;
+%ignore libdnf5::repo::RepoIdAlreadyExistsError::RepoIdAlreadyExistsError;
+%ignore libdnf5::repo::RepoError::RepoError;
+%include "libdnf5/repo/repo_errors.hpp"
 
 %extend libdnf5::repo::Repo {
   void set_user_data(int user_data) noexcept {
@@ -174,3 +187,5 @@ conf.create_config_option_attributes(ConfigRepo)
 common.create_attributes_from_getters_and_setters(RepoCacheRemoveStatistics)
 %}
 #endif
+
+%exception;

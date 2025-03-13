@@ -16,12 +16,9 @@
 %exception {
     try {
         $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::exception &) {
+        libdnf_exception_wrap_current()
+        SWIG_fail;
     }
 }
 
@@ -37,6 +34,12 @@ typedef int32_t pid_t;
 %}
 
 #define CV __perl_CV
+
+%inline %{
+    /// Fake function to force import of SWIG type "common.ExceptionWrap".
+    libdnf5::common::ExceptionWrap _libdnf_logger_dummy() { return libdnf5::common::ExceptionWrap(); }
+%}
+
 
 wrap_unique_ptr(LoggerUniquePtr, libdnf5::Logger);
 wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
@@ -61,3 +64,5 @@ wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf5::MemoryBufferLogger);
 %include "libdnf5/logger/global_logger.hpp"
 %include "libdnf5/logger/memory_buffer_logger.hpp"
 %include "libdnf5/logger/factory.hpp"
+
+%exception;
