@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_REPO_CACHE_HPP
 #define LIBDNF5_REPO_REPO_CACHE_HPP
 
+#include "repo_cache_errors.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
-#include "libdnf5/common/exception.hpp"
 #include "libdnf5/common/impl_ptr.hpp"
 #include "libdnf5/defs.h"
 
@@ -53,15 +54,6 @@ private:
 
     class LIBDNF_LOCAL Impl;
     ImplPtr<Impl> p_impl;
-};
-
-
-/// RepoCache exception
-class RepoCacheError : public Error {
-public:
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf5::repo"; }
-    const char * get_name() const noexcept override { return "RepoCacheError"; }
 };
 
 

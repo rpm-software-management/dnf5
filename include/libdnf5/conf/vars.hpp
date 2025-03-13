@@ -20,21 +20,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CONF_VARS_HPP
 #define LIBDNF5_CONF_VARS_HPP
 
+#include "vars_errors.hpp"
+
 #include "libdnf5/base/base_weak.hpp"
+#include "libdnf5/defs.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
+
 namespace libdnf5 {
-
-// Thrown when attempting to set a read-only variable
-class ReadOnlyVariableError : public Error {
-    using Error::Error;
-
-    const char * get_domain_name() const noexcept override { return "libdnf5"; }
-    const char * get_name() const noexcept override { return "ReadOnlyVariableError"; }
-};
 
 /// @class Vars
 ///

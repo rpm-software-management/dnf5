@@ -20,7 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_TRANSACTION_ITEM_TYPE_HPP
 #define LIBDNF5_TRANSACTION_ITEM_TYPE_HPP
 
-#include "libdnf5/common/exception.hpp"
+#include "transaction_item_errors.hpp"
+
 #include "libdnf5/defs.h"
 
 #include <string>
@@ -31,18 +32,8 @@ namespace libdnf5::transaction {
 enum class TransactionItemType : int { PACKAGE, GROUP, ENVIRONMENT, MODULE };
 
 
-class LIBDNF_API InvalidTransactionItemType : public libdnf5::Error {
-public:
-    InvalidTransactionItemType(const std::string & type);
-
-    const char * get_domain_name() const noexcept override { return "libdnf5::transaction"; }
-    const char * get_name() const noexcept override { return "InvalidTransactionItemType"; }
-};
-
-
 LIBDNF_API std::string transaction_item_type_to_string(TransactionItemType action);
 LIBDNF_API TransactionItemType transaction_item_type_from_string(const std::string & action);
-
 
 }  // namespace libdnf5::transaction
 

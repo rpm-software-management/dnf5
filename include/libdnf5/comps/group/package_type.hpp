@@ -35,15 +35,6 @@ enum class PackageType : int {
     OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
 };
 
-class LIBDNF_API InvalidPackageType : public libdnf5::Error {
-public:
-    InvalidPackageType(const std::string & type);
-    InvalidPackageType(const PackageType type);
-
-    const char * get_domain_name() const noexcept override { return "libdnf5::comps"; }
-    const char * get_name() const noexcept override { return "InvalidPackageType"; }
-};
-
 inline PackageType operator|(PackageType a, PackageType b) {
     return static_cast<PackageType>(
         static_cast<std::underlying_type<PackageType>::type>(a) |

@@ -20,18 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_CONF_OPTION_PATH_HPP
 #define LIBDNF5_CONF_OPTION_PATH_HPP
 
+#include "option_path_errors.hpp"
 #include "option_string.hpp"
+
+#include "libdnf5/defs.h"
 
 
 namespace libdnf5 {
-
-/// Exception that is generated when input path does not exist.
-class OptionPathNotFoundError : public OptionValueNotAllowedError {
-public:
-    using OptionValueNotAllowedError::OptionValueNotAllowedError;
-    const char * get_name() const noexcept override { return "OptionPathNotFoundError"; }
-};
-
 
 /// Option that stores file/directory path.
 /// Support default value, and path verification (absolute, existence).
