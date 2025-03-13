@@ -25,6 +25,7 @@ option(WITH_DNF5DAEMON_SERVER "Build package management service with a DBus inte
 option(WITH_LIBDNF5_CLI "Build library for working with a terminal in a command-line package manager" ON)
 option(WITH_DNF5 "Build dnf5 command-line package manager" ON)
 option(WITH_DNF5_PLUGINS "Build plugins for dnf5 command-line package manager" ON)
+option(WITH_DNF5_OBSOLETES_DNF "Build with DNF 5 providing files that may conflict with DNF 4" ON)
 option(WITH_PLUGIN_ACTIONS "Build a dnf5 actions plugin" ON)
 option(WITH_PLUGIN_APPSTREAM "Build with plugin to install repo's Appstream metadata" ON)
 option(WITH_PLUGIN_EXPIRED_PGP_KEYS "Build a libdnf5 expired pgp keys plugin" ON)
