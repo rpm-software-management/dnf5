@@ -170,7 +170,12 @@ man_pages = [
     ('dnf5.conf-deprecated.5', 'dnf5.conf-deprecated', 'Config Options that are deprecated in DNF5', AUTHORS, 5),
 ]
 
-rst_prolog = """
+dnf_makecache_timer_name = "dnf-makecache.timer" if "@WITH_DNF5_OBSOLETES_DNF@" == "ON" else "dnf5-makecache.timer"
+dnf_makecache_service_name = "dnf-makecache.service" if "@WITH_DNF5_OBSOLETES_DNF@" == "ON" else "dnf5-makecache.service"
+
+rst_prolog = f"""
 .. _DNF: https://github.com/rpm-software-management/dnf/
 .. _DNF5: https://github.com/rpm-software-management/dnf5/
+.. |DNF_MAKECACHE_TIMER_NAME_INLINE_LITERAL| replace:: ``{dnf_makecache_timer_name}``
+.. |DNF_MAKECACHE_SERVICE_NAME_INLINE_LITERAL| replace:: ``{dnf_makecache_service_name}``
 """
