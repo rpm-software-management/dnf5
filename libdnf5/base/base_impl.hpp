@@ -90,6 +90,7 @@ private:
     plugin::Plugins plugins;
     LogRouter log_router;
     ConfigMain config;
+    comps::CompsSack comps_sack;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
 #ifdef WITH_MODULEMD

@@ -101,3 +101,42 @@ void CompsEnvironmentQueryTest::test_query_filter_name() {
     expected = {get_environment("core"), get_environment("custom-environment")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
 }
+
+
+void CompsEnvironmentQueryTest::test_query_excludes() {
+    auto sack = base.get_comps_sack();
+
+    // Set user excludes to environment "standard" -> user excludes are groups: "standard"
+    EnvironmentQuery q_excludes1(base);
+    q_excludes1.filter_environmentid("custom-environment");
+    sack->set_user_environment_excludes(q_excludes1);
+    EnvironmentQuery q_groups(base);
+    std::vector<Environment> expected = {get_environment("core"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Add environment "core" to user excludes -> user excludes are groups: "standard", "core"
+    EnvironmentQuery q_excludes2(base);
+    q_excludes2.filter_environmentid("core");
+    sack->add_user_environment_excludes(q_excludes2);
+    q_groups = EnvironmentQuery(base);
+    expected = {get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Remove environment "custom-environment" from user excludes -> user excludes are groups: "core"
+    sack->remove_user_environment_excludes(q_excludes1);
+    q_groups = EnvironmentQuery(base);
+    expected = {get_environment("custom-environment"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Set user excludes to environment "custom-environment" -> user excludes are groups: "custom-environment"
+    sack->set_user_environment_excludes(q_excludes1);
+    q_groups = EnvironmentQuery(base);
+    expected = {get_environment("core"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+
+    // Clear user excludes -> user excludes are empty
+    sack->clear_user_environment_excludes();
+    q_groups = EnvironmentQuery(base);
+    expected = {get_environment("core"), get_environment("custom-environment"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
+}
