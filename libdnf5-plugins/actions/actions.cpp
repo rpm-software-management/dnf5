@@ -303,7 +303,7 @@ template <typename... Args>
 void process_action_error(
     Logger & log, const CommandToRun & command, const std::exception & ex, BgettextMessage msg, Args &&... args) {
     if (command.action.raise_error) {
-        std::throw_with_nested(
+        libdnf5::throw_with_nested(
             ActionsPluginActionError(command.action.file_path, command.action.line_number, msg, args...));
     } else {
         log_error(

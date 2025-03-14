@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "library.hpp"
 
 #include <fmt/format.h>
+#include <libdnf5/common/exception.hpp>
 
 #include <filesystem>
 
@@ -95,10 +96,10 @@ PluginLibrary::PluginLibrary(Context & context, const std::string & library_path
                 } catch (const std::exception & ex) {
                     *last_exception = nullptr;  // We no longer need to save the exception in the plugin.
                     logger.error("dnf5_plugin_new_instance: {}", ex.what());
-                    std::throw_with_nested(std::move(plugin_exception));
+                    libdnf5::throw_with_nested(std::move(plugin_exception));
                 } catch (...) {
                     *last_exception = nullptr;  // We no longer need to save the exception in the plugin.
-                    std::throw_with_nested(std::move(plugin_exception));
+                    libdnf5::throw_with_nested(std::move(plugin_exception));
                 }
             }
         }
@@ -166,7 +167,7 @@ void Plugins::load_plugins(const std::string & dir_path) {
             load_plugin(path);
         } catch (const std::exception & ex) {
             logger->error("Cannot load dnf5 plugin \"{}\": {}", path.string(), ex.what());
-            std::throw_with_nested(std::runtime_error("Cannot load dnf5 plugin: " + path.string()));
+            libdnf5::throw_with_nested(std::runtime_error("Cannot load dnf5 plugin: " + path.string()));
         }
     }
 }

@@ -264,7 +264,7 @@ void PackageDownloader::download() try {
 } catch (const RepoCacheonlyError & e) {
     throw;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
+    libdnf5::throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
 }
 
 void PackageDownloader::set_fail_fast(bool value) {

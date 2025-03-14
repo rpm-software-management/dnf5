@@ -99,10 +99,10 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
                 } catch (const std::exception & ex) {
                     *last_exception = nullptr;  // We no longer need to save the exception in the plugin.
                     logger.error("libdnf_plugin_new_instance: {}", ex.what());
-                    std::throw_with_nested(std::move(plugin_exception));
+                    libdnf5::throw_with_nested(std::move(plugin_exception));
                 } catch (...) {
                     *last_exception = nullptr;  // We no longer need to save the exception in the plugin.
-                    std::throw_with_nested(std::move(plugin_exception));
+                    libdnf5::throw_with_nested(std::move(plugin_exception));
                 }
             }
         }
@@ -250,7 +250,7 @@ void Plugins::load_plugins(
             load_plugin(path, plugin_enablement);
         } catch (const std::exception & ex) {
             logger.error("Cannot load libdnf plugin enabled from \"{}\": {}", path.string(), ex.what());
-            std::throw_with_nested(PluginError(M_("Cannot load libdnf plugin enabled from: {}"), path.string()));
+            libdnf5::throw_with_nested(PluginError(M_("Cannot load libdnf plugin enabled from: {}"), path.string()));
         }
     }
 
