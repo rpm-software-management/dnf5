@@ -54,6 +54,14 @@ public:
 };
 
 
+/// Exception is thrown when trying to write to a read-only system
+class ReadOnlySystemError : public Error {
+public:
+    using Error::Error;
+    const char * get_name() const noexcept override { return "ReadOnlySystemError"; }
+};
+
+
 /// Exception is thrown when libdnf5 fails to resolve the transaction.
 class LIBDNF_CLI_API GoalResolveError : public Error {
 public:

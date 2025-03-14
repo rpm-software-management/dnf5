@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/bootc.hpp"
 
-#include <filesystem>
 #include <unistd.h>
+
+#include <filesystem>
 
 namespace libdnf5::utils::bootc {
 
