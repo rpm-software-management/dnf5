@@ -30,9 +30,10 @@ namespace dnf5 {
 void CoprRemoveCommand::set_argument_parser() {
     CoprSubCommandWithID::set_argument_parser();
     auto & cmd = *get_argument_parser_command();
+    auto & base = get_context().get_base();
     std::string desc = libdnf5::utils::sformat(
         _("remove specified Copr repository from the system (removes the {}/*.repo file)"),
-        copr_repo_directory().native());
+        copr_repo_directory(&base).native());
     cmd.set_description(desc);
     cmd.set_long_description(desc);
 }
