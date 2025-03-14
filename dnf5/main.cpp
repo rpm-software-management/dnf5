@@ -75,6 +75,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/rpm/arch.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/bootc.hpp>
 #include <libdnf5/utils/locker.hpp>
 #include <libdnf5/version.hpp>
 #include <locale.h>
@@ -1491,6 +1492,14 @@ int main(int argc, char * argv[]) try {
                             context.print_error(_(
                                 "Test mode enabled: Only package downloads, OpenPGP key installations and transaction "
                                 "checks will be performed."));
+                        }
+                    }
+                    const auto & installroot = base.get_config().get_installroot_option().get_value();
+                    if (libdnf5::utils::bootc::is_bootc_system() && installroot == "/") {
+                        if (!libdnf5::utils::bootc::is_writable()) {
+                            throw libdnf5::cli::ReadOnlySystemError(
+                                M_("Error: this bootc system is configured to be read-only. For more information, run "
+                                   "`bootc --help`."));
                         }
                     }
                 }
