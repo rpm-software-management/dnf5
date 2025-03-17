@@ -433,7 +433,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         return false;
     };
 
-    std::vector<Repo *> repos_with_bad_signature;
+    std::map<Repo *, std::exception_ptr> repo_signature_errors;
 
     for (int run_count = 0; run_count < 2; ++run_count) {
         // Set of repositories for processing. Use a set here since we don't want duplicate entries.
@@ -459,14 +459,14 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             // It will try to download and import keys for repositories with a bad signature.
             // Repositories with a bad signature are moved to the array of repositories for processing.
 
-            if (!import_keys || repos_with_bad_signature.empty()) {
+            if (!import_keys || repo_signature_errors.empty()) {
                 break;
             }
 
             // Separates local and remote key files. Prepares local temporary files for storing downloaded remote keys.
             std::vector<std::tuple<Repo *, std::string>> local_keys_files;
             std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> remote_keys_files;
-            for (auto * repo : repos_with_bad_signature) {
+            for (const auto & [repo, _] : repo_signature_errors) {
                 for (const auto & key_url : repo->get_config().get_gpgkey_option().get_value()) {
                     if (key_url.starts_with("file:/")) {
                         local_keys_files.emplace_back(repo, key_url);
@@ -521,6 +521,13 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                             e.what()));
                         handle_repo_exception(repo, std::make_exception_ptr(wrapping_error), false);
                     }
+                }
+            }
+
+            // If we couldn't import any keys to resolve the signature error, re-handle the error.
+            for (const auto & [repo, ep] : repo_signature_errors) {
+                if (!repos_for_processing_set.contains(repo)) {
+                    handle_repo_exception(repo, ep, false);
                 }
             }
 
@@ -599,8 +606,9 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 }
 
             } catch (const RepoDownloadError &) {
-                if (handle_repo_exception(repo, std::current_exception(), import_keys)) {
-                    repos_with_bad_signature.emplace_back(repo);
+                const auto & ep = std::current_exception();
+                if (handle_repo_exception(repo, ep, import_keys)) {
+                    repo_signature_errors.insert({repo, ep});
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             }
@@ -620,9 +628,10 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
                 send_to_sack_loader(repo);
-            } catch (const RepoDownloadError & e) {
-                if (handle_repo_exception(repo, std::current_exception(), import_keys)) {
-                    repos_with_bad_signature.emplace_back(repo);
+            } catch (const RepoDownloadError &) {
+                const auto & ep = std::current_exception();
+                if (handle_repo_exception(repo, ep, import_keys)) {
+                    repo_signature_errors.insert({repo, ep});
                 }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             }
