@@ -397,7 +397,7 @@ Package management library.
 %else
 %exclude %{_sysconfdir}/dnf/dnf.conf
 %endif
-%ghost %{_sysconfdir}/dnf/versionlock.toml
+%ghost %attr(0644, root, root) %{_sysconfdir}/dnf/versionlock.toml
 %dir %{_datadir}/dnf5/libdnf.conf.d
 %dir %{_sysconfdir}/dnf/libdnf5.conf.d
 %dir %{_datadir}/dnf5/repos.override.d
@@ -408,7 +408,19 @@ Package management library.
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
 %dir %{_prefix}/lib/sysimage/libdnf5
-%verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/libdnf5/*
+%dir %{_prefix}/lib/sysimage/libdnf5
+%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/environments.toml
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/groups.toml
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/modules.toml
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/nevras.toml
+%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/offline
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/offline/offline-transaction-state.toml
+%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/offline/packages
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/offline/transaction.json
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/packages.toml
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system.toml
+%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
 %license lgpl-2.1.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
 %ghost %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
@@ -822,11 +834,11 @@ Alternative command-line interface "dnf upgrade" suitable to be executed
 automatically and regularly from systemd timers, cron jobs or similar.
 
 %files plugin-automatic -f dnf5-plugin-automatic.lang
-%ghost %{_sysconfdir}/motd.d/dnf5-automatic
+%ghost %attr(0644, root, root) %{_sysconfdir}/motd.d/dnf5-automatic
 %{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
-%ghost %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
-%ghost %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
+%ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
+%ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
 %{_mandir}/man8/dnf*-automatic.8.*
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
