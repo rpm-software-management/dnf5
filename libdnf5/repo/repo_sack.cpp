@@ -400,28 +400,31 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
     auto handle_repo_exception = [&](const Repo * repo, std::exception_ptr ep, bool report_key_err) {
         // Use an exception_ptr to preserve the original type of the exception, in case we re-throw it.
-        std::exception e;
+        std::exception exception;
         try {
             std::rethrow_exception(ep);
-        } catch (const std::exception & exception) {
-            e = exception;
-        }
-        if (report_key_err) {
-            try {
-                std::rethrow_if_nested(e);
-            } catch (const LibrepoError & lr_err) {
-                if (lr_err.get_code() == LRE_BADGPG) {
-                    return true;
+        } catch (const RepoDownloadError & rd_err) {
+            exception = rd_err;
+            if (report_key_err) {
+                try {
+                    std::rethrow_if_nested(rd_err);
+                } catch (const LibrepoError & lr_err) {
+                    if (lr_err.get_code() == LRE_BADGPG) {
+                        return true;
+                    }
+                } catch (...) {
                 }
-            } catch (...) {
             }
+        } catch (const std::exception & e) {
+            exception = e;
         }
+
         if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
             std::rethrow_exception(ep);
         }
         base->get_logger()->warning(
             "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"):", repo->get_id());
-        const auto & error_lines = utils::string::split(format(e, FormatDetailLevel::Plain), "\n");
+        const auto & error_lines = utils::string::split(format(exception, FormatDetailLevel::Plain), "\n");
         for (const auto & line : error_lines) {
             if (!line.empty()) {
                 base->get_logger()->warning(" {}", line);
