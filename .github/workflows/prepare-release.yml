@@ -6,6 +6,9 @@ on:
       version:
         required: true
         description: Version number for the new release
+      branch:
+        required: true
+        description: Branch to release from
 
 jobs:
   prepare-release:
@@ -15,8 +18,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ inputs.branch }}
 
       - name: Update translations from weblate
+        if: ${{ inputs.branch == 'main' }}
         uses: ./.github/actions/weblate-pull-translations
 
       - name: Prepare release content
@@ -32,4 +37,6 @@ jobs:
           commit-message: Release ${{ inputs.version }}
           title: Release ${{ inputs.version }}
           body: Update the changelog and the specfile for release ${{ inputs.version }}.
+          base: ${{ inputs.branch }}
+          branch-suffix: short-commit-hash
           delete-branch: true
