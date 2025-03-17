@@ -318,8 +318,6 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf*
-%dir %{_prefix}/lib/sysimage/libdnf5
-%verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/libdnf5/*
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/dnf5.8.*
@@ -409,6 +407,8 @@ Package management library.
 %dir %{_datadir}/dnf5/vars.d
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
+%dir %{_prefix}/lib/sysimage/libdnf5
+%verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/libdnf5/*
 %license lgpl-2.1.txt
 %ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
 %ghost %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
