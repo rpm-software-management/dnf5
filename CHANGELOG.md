@@ -1,3 +1,28 @@
+# 5.2.12.0
+
+- Update translations from weblate
+- repo: handle bad signature errors when no key could be imported
+- repo: fix bad GPG error handling
+- ci: Automatically backport labeled PRs to stable branches
+- packit: remove unnecessary references to main branch
+- actions: support releasing from non-main branches
+- Implement libdnf5::throw_with_nested: throws our nested exception type
+- spec: Move /usr/lib/sysimage/libdnf5 from dnf5 to libdnf5
+- libdnf5: OptionBindsError and NevraIncorrectInputError: struct to class
+- libdnf5 and libdnf5-cli: Move exception declarations to own header files
+- Fix: let copr plugin to respect the installroot option
+- Throw error when bootc system is read-only
+- Add bootc utility functions
+- Bump version to 5.2.12.0
+- doc: Templatize dnf-makecache.{timer,service} names
+- doc: dnf5-makecache.{timer,service} renamed to dnf-makecache
+- Rename dnf5-makecache timer to dnf-makecache when dnf5_obsoletes_dnf
+- Fix a memory leak when looking up for an OpenPGP key in RPM database
+- Fix dnf5 copr_plugin: always set `base` in `CoprRepo`
+- offline: only define systemd constants when building with systemd
+- spec: Set cmake minimal version to 3.21
+- Remove a warning from a code about an internal use of "dnf5 offline _execute"
+
 # 5.2.11.0
 
 - Update translations from weblate
