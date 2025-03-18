@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2025-03-01 03:12+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -1164,11 +1164,11 @@ msgstr "Ocorreu um problema ao abrir o pacote."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Falha ao definir o rootDir de transação rpm com \"{}\"."
 
-#: rpm/rpm_signature.cpp:287
+#: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": a chave não é uma chave pública blindada."
 
-#: rpm/rpm_signature.cpp:292
+#: rpm/rpm_signature.cpp:295
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Falha ao importar a chave pública \"{}\" para rpmdb: {}"
 

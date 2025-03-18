@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2025-02-23 02:57+0000\n"
 "Last-Translator: J C <valsu@vivaldi.net>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -1196,11 +1196,11 @@ msgstr "Beim Öffnen des Pakets ist ein Fehler aufgetreten."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "Setzen des rootDir \"{}\" für die rpm-Transaktion fehlgeschlagen."
 
-#: rpm/rpm_signature.cpp:287
+#: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": Schlüssel ist kein gesicherter öffentlicher Schlüssel."
 
-#: rpm/rpm_signature.cpp:292
+#: rpm/rpm_signature.cpp:295
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr ""
 "Importieren des öffentlichen Schlüssels \"{}\" in rpmdb fehlgeschlagen: {}"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2025-02-20 09:31+0000\n"
 "Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -107,20 +107,20 @@ msgstr ""
 msgid "print useful info about the system, useful for debugging"
 msgstr "打印关于系统的有用信息，用于调试"
 
-#: copr_disable.cpp:34
+#: copr_disable.cpp:35
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
 "禁用指定的 Copr 版本库（如果存在），保留 {}/*.repo 文件 - 仅标记 enabled=0"
 
-#: copr_enable.cpp:37
+#: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr "从 Copr 服务器下载版本库信息，并将其安装为 {}/*.repo 文件"
 
-#: copr_enable.cpp:45
+#: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
@@ -132,77 +132,77 @@ msgstr ""
 msgid "list Copr repositories"
 msgstr "列出 Copr 资源库"
 
-#: copr_remove.cpp:34
+#: copr_remove.cpp:35
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr "从系统中移除指定的 Copr 版本库（移除 {}/*.repo 文件）"
 
-#: copr_repo.cpp:88
+#: copr_repo.cpp:91
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "目录 '{}' 不在 '{}' Copr 项目中。"
 
-#: copr_repo.cpp:94
+#: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr "您可以使用其中一个可用的目录："
 
-#: copr_repo.cpp:110
+#: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
 msgstr "在给定的 Copr 项目中未发现 Chroot"
 
-#: copr_repo.cpp:112
+#: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
 msgstr "无法检测到 chroot，请明确指定。"
 
-#: copr_repo.cpp:118
+#: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
 msgstr "我们试图找到这些 repos，但没有成功："
 
-#: copr_repo.cpp:123
+#: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
 msgstr "您可以从可用的 chroots 中明确选择一个："
 
-#: copr_repo.cpp:197
+#: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
 msgstr "无法解析 Copr 仓库配置： "
 
-#: copr_repo.cpp:341
+#: copr_repo.cpp:344
 msgid "Can't remove the {} repo file"
 msgstr "无法删除 {} repo 文件"
 
-#: copr_repo.cpp:344
+#: copr_repo.cpp:347
 msgid "Repo file {} successfully removed"
 msgstr "成功删除仓库文件 {}"
 
-#: copr_repo.cpp:390
+#: copr_repo.cpp:393
 msgid "Can't find item {} in {}"
 msgstr "项目 {} 在 {} 中找不到"
 
-#: copr_repo.cpp:446
+#: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
 msgstr "删除旧的配置文件 '{}'"
 
-#: copr_repo.cpp:449
+#: copr_repo.cpp:452
 msgid "Can't remove"
 msgstr "无法移除"
 
-#: copr_repo.cpp:523
+#: copr_repo.cpp:526
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr "Copr repofile '{}' 的格式已过时，重新启用即可修复 $ {} copr enable {}"
 
-#: copr_repo.cpp:557
+#: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "仓库 ID '{}' （'{}'中）有些可疑"
 
-#: copr_repo.cpp:564
+#: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "仓库 ID '{}' 不属于 '{}' 仓库配置文件"
 
-#: copr_repo.cpp:614
+#: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr 存储库 '{}' （位于 '{}' ） 已禁用。"
 
-#: copr_repo.cpp:628 copr_repo.cpp:653
+#: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
 msgstr "本系统未找到存储库 '{}'"

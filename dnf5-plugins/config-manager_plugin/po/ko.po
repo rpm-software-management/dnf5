@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-10-10 02:54+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -18,39 +18,39 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: addrepo.cpp:153
+#: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: \"{}\" 파일이 존재하지 않습니다"
 
-#: addrepo.cpp:156
+#: addrepo.cpp:139
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: 잘못된 형식의 인수 값 \"{}\""
 
-#: addrepo.cpp:196
+#: addrepo.cpp:179
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "저장소 옵션을 설정 할 수 없습니다 \"{}={}\": {}"
 
-#: addrepo.cpp:204 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "다른 값으로 \"{}\" 옵션을 다시 설정합니다: \"{}\" != \"{}\""
 
-#: addrepo.cpp:270
+#: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
 msgstr "저장소 구성 디렉토리에 경로 누락"
 
-#: addrepo.cpp:320
+#: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 복사하는 데 실패했습니다 \"{}\": {}"
 
-#: addrepo.cpp:331
+#: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 내려받는 데 실패했습니다 \"{}\": {}"
 
-#: addrepo.cpp:359
+#: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -58,11 +58,11 @@ msgstr ""
 "추가된 저장소 구성 파일에서 오류. 저장소 옵션을 설정 할 수 없습니다 \"{}"
 "={}\": {}"
 
-#: addrepo.cpp:393
+#: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
 msgstr "잘못된 baseurl: {}={}"
 
-#: addrepo.cpp:401
+#: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -70,11 +70,11 @@ msgstr ""
 "--from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> 중의 하나는 비어있지-않는 URL로 설정되어야 합니다"
 
-#: addrepo.cpp:446
+#: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "저장소 구성 파일을 저장하는 데 실패함 \"{}\": {}"
 
-#: addrepo.cpp:468
+#: addrepo.cpp:451
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -82,7 +82,7 @@ msgstr ""
 "파일 \"{}\"이 이미 존재하고 ID \"{}\"를 갖는 저장소를 구성합니다. \"--add-or-"
 "replace\" 또는 \"--overwrite\"를 추가합니다."
 
-#: addrepo.cpp:471
+#: addrepo.cpp:454
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -90,11 +90,11 @@ msgstr ""
 "파일 \"{}\"은 이미 존재하고 ID \"{}\"인 저장소를 구성합니다. 덮어쓰도록 \"--"
 "overwrite\" 추가합니다."
 
-#: addrepo.cpp:491 addrepo.cpp:517
+#: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "id \"{}\"를 갖는 저장소는 이미 파일에서 구성되어 있습니다: {}"
 
-#: addrepo.cpp:503 setopt.cpp:263
+#: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "디렉토리에서 저장소를 읽을 수 없습니다 \"{}\": {}"
 

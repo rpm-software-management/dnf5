@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-01-26 02:46+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "print useful info about the system, useful for debugging"
 msgstr "skriv ut användbar information om systemet, användbart för felsökning"
 
-#: copr_disable.cpp:34
+#: copr_disable.cpp:35
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -118,7 +118,7 @@ msgstr ""
 "inaktivera specificerat Copr-förråd (om det finns), behåll {}/*.repo-filen - "
 "markera bara enabled=0"
 
-#: copr_enable.cpp:37
+#: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
@@ -126,7 +126,7 @@ msgstr ""
 "ladda ner förrådsinformationen från en Copr-server och installera den som en "
 "{}/*.repo-fil"
 
-#: copr_enable.cpp:45
+#: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
@@ -138,60 +138,60 @@ msgstr ""
 msgid "list Copr repositories"
 msgstr "lista Copr förråd"
 
-#: copr_remove.cpp:34
+#: copr_remove.cpp:35
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr "Ta bort speciferade Copr förråd från systemet (tar bort {}/*.repo fil)"
 
-#: copr_repo.cpp:88
+#: copr_repo.cpp:91
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "Katalog '{}' hittades inte i '{}' Copr projektet."
 
-#: copr_repo.cpp:94
+#: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr "Du kan använda en av dessa tillgängliga kataloger:"
 
-#: copr_repo.cpp:110
+#: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
 msgstr "Chroot hittas inte i det angivna Copr-projektet"
 
-#: copr_repo.cpp:112
+#: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
 msgstr "Kunde inte upptäcka chroot, ange det explicit."
 
-#: copr_repo.cpp:118
+#: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
 msgstr "Vi försökte hitta dessa förråd utan framgång:"
 
-#: copr_repo.cpp:123
+#: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
 msgstr "Du kan välja en av dessa tillgängliga chroots uttryckligen:"
 
-#: copr_repo.cpp:197
+#: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
 msgstr "Kunde inte analysera Copr-förråds-specifikation: "
 
-#: copr_repo.cpp:341
+#: copr_repo.cpp:344
 msgid "Can't remove the {} repo file"
 msgstr "Kunde inte ta bort {} förråds fil"
 
-#: copr_repo.cpp:344
+#: copr_repo.cpp:347
 msgid "Repo file {} successfully removed"
 msgstr "Förråds fil {} har tagits bort framgångsrikt"
 
-#: copr_repo.cpp:390
+#: copr_repo.cpp:393
 msgid "Can't find item {} in {}"
 msgstr "Kan inte hitta objekt {} i {}"
 
-#: copr_repo.cpp:446
+#: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
 msgstr "Tar bort äldre konfigurationsfil '{}'"
 
-#: copr_repo.cpp:449
+#: copr_repo.cpp:452
 msgid "Can't remove"
 msgstr "Kan inte ta bort"
 
-#: copr_repo.cpp:523
+#: copr_repo.cpp:526
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -199,18 +199,18 @@ msgstr ""
 "Copr förrådsfil '{}' har ett äldre format, fixa detta genom att återaktivera "
 "detta förråd med $ {} copr enable {}"
 
-#: copr_repo.cpp:557
+#: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Repo-id '{}' i '{}' är misstänkt"
 
-#: copr_repo.cpp:564
+#: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Repo-id '{}' tillhör inte '{}'-förrådsfilen"
 
-#: copr_repo.cpp:614
+#: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr-förråd '{}' i '{}' är inaktiverat."
 
-#: copr_repo.cpp:628 copr_repo.cpp:653
+#: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
 msgstr "Förråd '{}' hittas inte på detta system"

@@ -1,402 +1,405 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
-# Joungmin Lee <leejm516@gmail.com>, 2024.
-# 김인수 <simmon@nplob.com>, 2024.
+# H A <contact+fedora@hen.ee>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2024-12-13 06:02+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
-"libdnf5-cli/ko/>\n"
-"Language: ko\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: argument_parser.cpp:62
 msgid "\"{}\" not allowed together with named argument \"{}\""
-msgstr "\"{}\"는 명명된 인수 \"{}\"와 함께 허용 되지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:64
 msgid "\"{}\" not allowed in command \"{}\""
-msgstr "\"{}\"는 명령 \"{}\"에서 허용되지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:66
 msgid "\"{}\" not allowed together with positional argument \"{}\""
-msgstr "\"{}\"는 위치 인수 \"{}\"와 함께 허용되지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:111
 msgid "Argument id \"{}\" already registered in group \"{}\""
-msgstr "인수 id \"{}는 이미 그룹 \"{}\"에서 등록되어 있습니다"
+msgstr ""
 
 #: argument_parser.cpp:238
 msgid "Invalid character '.' in argument id \"{}\""
-msgstr "잘못된 문자 '.' (인수 id \"{}\"에서)"
+msgstr ""
 
 #: argument_parser.cpp:346 argument_parser.cpp:351
 msgid "Too few values for positional argument \"{}\""
-msgstr "위치 인수 \"{}\"를 위한 값이 너무 적습니다"
+msgstr ""
 
 #: argument_parser.cpp:512
 msgid "Missing value for named argument \"--{}\""
-msgstr "명명된 인수 \"--{}\"를 위해 누락된 값"
+msgstr ""
 
 #: argument_parser.cpp:520
 msgid "Unexpected value for named argument \"--{}\""
-msgstr "명명된 인수 \"--{}\"에 대해 예상치 못한 값"
+msgstr ""
 
 #: argument_parser.cpp:562
 msgid "Missing value for named argument \"-{}\""
-msgstr "명명된 인수 \"-{}\"에 대해 누락된 값"
+msgstr ""
 
 #. print usage
 #: argument_parser.cpp:658
 msgid "Usage:"
-msgstr "사용법:"
+msgstr ""
 
 #: argument_parser.cpp:666
 msgid "Description:"
-msgstr "설명:"
+msgstr ""
 
 #: argument_parser.cpp:943
 msgid "Command id \"{}\" already registered for command \"{}\""
-msgstr "명령 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
+msgstr ""
 
 #: argument_parser.cpp:954
 msgid "Named argument id \"{}\" already registered for command \"{}\""
-msgstr "명명된 인수 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
+msgstr ""
 
 #: argument_parser.cpp:964
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
-msgstr "위치 인수 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
+msgstr ""
 
 #: argument_parser.cpp:974
 msgid "Group id \"{}\" already registered for command \"{}\""
-msgstr "그룹 id \"{}\"는 이미 명령 \"{}\"를 위해 등록되어 있습니다"
+msgstr ""
 
 #: argument_parser.cpp:1001
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
-msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 하위 명령을 포함하지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:1009
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
-msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 명명된 인수를 포함하지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:1017
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
-msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 위치 인수를 포함하지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:1024
 msgid "Command id \"{}\" does not contain group with id \"{}\""
-msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 그룹을 포함하지 않습니다"
+msgstr ""
 
 #: argument_parser.cpp:1131 argument_parser.cpp:1335
 msgid "Unknown argument \"{}\" for command \"{}\""
-msgstr "알 수 없는 인수 \"{}\" (명령 \"{}\"용)"
+msgstr ""
 
 #: argument_parser.cpp:1146 argument_parser.cpp:1350
 msgid "Missing positional argument \"{}\" for command \"{}\""
-msgstr "누락된 위치 인수 \"{}\" (명령 \"{}\"용)"
+msgstr ""
 
 #: argument_parser.cpp:1553
 msgid "Named argument with path id \"{}\" not found"
-msgstr "경로 id \"{}\"를 갖는 명명된 인수를 찾지 못했습니다"
+msgstr ""
 
 #: argument_parser.cpp:1563
 msgid "Positional argument with path id \"{}\" not found"
-msgstr "경로 d \"{}\"를 갖는 위치 인수를 찾지 못했습니다"
+msgstr ""
 
 #: exception.cpp:30
 msgid "Operation aborted by the user."
-msgstr "사용자에 의해 작업이 중지되었습니다."
+msgstr ""
 
 #: exception.cpp:33
 msgid "Failed to resolve the transaction"
-msgstr "정상적인 연결 수행에 실패하였습니다"
+msgstr ""
 
 #: output/moduleinfo.cpp:36
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
-msgstr "힌트 : [d] efault, [e] nabled, [x] disabled, [i] stalled, [a] ctive"
+msgstr ""
 
 #: output/modulelist.cpp:39
 msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
-msgstr "힌트 : [d] efault, [e] nabled, [x] disabled, [i] stalled"
+msgstr ""
 
 #. Note for translators: This is a right-aligned column separator in
 #. a package properties table as in "Name    : bash".
 #: output/packageinfo.cpp:57
 msgid " : "
-msgstr " : "
+msgstr ""
 
 #. Add package
 #: output/packageinfo.cpp:63
 msgid "Name"
-msgstr "이름"
+msgstr ""
 
 #: output/packageinfo.cpp:68
 msgid "Epoch"
-msgstr "기간"
+msgstr ""
 
 #: output/packageinfo.cpp:69 output/transaction_table.cpp:289
 msgid "Version"
-msgstr "버전"
+msgstr ""
 
 #: output/packageinfo.cpp:70
 msgid "Release"
-msgstr "출시"
+msgstr ""
 
 #: output/packageinfo.cpp:71
 msgid "Architecture"
-msgstr "구조"
+msgstr ""
 
 #: output/packageinfo.cpp:75
 msgid "Obsoletes"
-msgstr "더 이상 사용하지 않음"
+msgstr ""
 
 #: output/packageinfo.cpp:85
 msgid "Download size"
-msgstr "내려받는 크기"
+msgstr ""
 
 #: output/packageinfo.cpp:89
 msgid "Installed size"
-msgstr "설치된 크기"
+msgstr ""
 
 #: output/packageinfo.cpp:91
 msgid "Source"
-msgstr "원천"
+msgstr ""
 
 #: output/packageinfo.cpp:94
 msgid "From repository"
-msgstr "저장소에서"
+msgstr ""
 
 #: output/packageinfo.cpp:96 output/transaction_table.cpp:295
 msgid "Repository"
-msgstr "저장소"
+msgstr ""
 
 #: output/packageinfo.cpp:98
 msgid "Summary"
-msgstr "요약"
+msgstr ""
 
 #: output/packageinfo.cpp:99
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: output/packageinfo.cpp:100
 msgid "License"
-msgstr "저작권"
+msgstr ""
 
 #: output/packageinfo.cpp:104
 msgid "Description"
-msgstr "설명"
+msgstr ""
 
 #: output/packageinfo.cpp:109
 msgid "Vendor"
-msgstr "제조사"
+msgstr ""
 
 #: output/search.cpp:45
 msgid " (exact)"
-msgstr " (정확한)"
+msgstr ""
 
 #: output/search.cpp:90
 msgid "No matches found."
-msgstr "일치 항목이 없습니다."
+msgstr ""
 
 #: output/search.cpp:101
 msgid "Matched fields: "
-msgstr "일치된 부분: "
+msgstr ""
 
 #: output/transaction_table.cpp:127
 msgid "Transaction Summary:\n"
-msgstr "연결 요약:\n"
+msgstr ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:132
 msgid " Installing:      {:4} package\n"
 msgid_plural " Installing:      {:4} packages\n"
-msgstr[0] " 설치 중:      {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:141
 msgid " Reinstalling:    {:4} package\n"
 msgid_plural " Reinstalling:    {:4} packages\n"
-msgstr[0] " 재설치 중:    {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:150
 msgid " Upgrading:       {:4} package\n"
 msgid_plural " Upgrading:       {:4} packages\n"
-msgstr[0] " 향상 중:       {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:159
 msgid " Replacing:       {:4} package\n"
 msgid_plural " Replacing:       {:4} packages\n"
-msgstr[0] " 교체 중:       {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:168
 msgid " Removing:        {:4} package\n"
 msgid_plural " Removing:        {:4} packages\n"
-msgstr[0] " 제거 중:        {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:177
 msgid " Downgrading:     {:4} package\n"
 msgid_plural " Downgrading:     {:4} packages\n"
-msgstr[0] " 하향 중:     {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:186
 msgid " Changing reason: {:4} package\n"
 msgid_plural " Changing reason: {:4} packages\n"
-msgstr[0] " 원인 변경 중: {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Keep the replaceble number aligned across all messages.
 #: output/transaction_table.cpp:195
 msgid " Skipping:        {:4} package\n"
 msgid_plural " Skipping:        {:4} packages\n"
-msgstr[0] " 건너뛰는 중:        {:4} 꾸러미\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: output/transaction_table.cpp:277
 msgid "Package"
-msgstr "꾸러미"
+msgstr ""
 
 #: output/transaction_table.cpp:283
 msgid "Arch"
-msgstr "구조"
+msgstr ""
 
 #: output/transaction_table.cpp:301
 msgid "Size"
-msgstr "크기"
+msgstr ""
 
 #: output/transaction_table.cpp:357 output/transaction_table.cpp:451
 msgid "{} -> {}"
-msgstr "{} -> {}"
+msgstr ""
 
 #: output/transaction_table.cpp:373
 msgid "replacing {}"
-msgstr "대체 중 {}"
+msgstr ""
 
 #: output/transaction_table.cpp:409 output/transaction_table.cpp:426
 msgid " <name-unset>"
-msgstr " <name-unset>"
+msgstr ""
 
 #: output/transaction_table.cpp:457
 msgid "replacing "
-msgstr "교체 "
+msgstr ""
 
 #: output/transaction_table.cpp:470
 msgid "Skipping packages with conflicts:"
-msgstr "충돌이 있는 꾸러미 건너뛰기:"
+msgstr ""
 
 #: output/transaction_table.cpp:472
 msgid "Skipping packages with broken dependencies:"
-msgstr "손상된 종속성이 있는 꾸러미 건너뛰기:"
+msgstr ""
 
 #: output/transaction_table.cpp:533
 msgid "Installing dependencies:"
-msgstr "종속 꾸러미 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:535
 msgid "Installing weak dependencies:"
-msgstr "취약한 종속 꾸러미 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:537
 msgid "Installing group/module packages:"
-msgstr "그룹/모듈 꾸러미 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:539
 msgid "Installing:"
-msgstr "설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:543
 msgid "Upgrading:"
-msgstr "향상 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:546
 msgid "Downgrading:"
-msgstr "하향설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:549
 msgid "Reinstalling:"
-msgstr "재설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:553
 msgid "Removing dependent packages:"
-msgstr "종속된 꾸러미 제거 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:555
 msgid "Removing unused dependencies:"
-msgstr "사용하지 않는 의존성 제거 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:557
 msgid "Removing:"
-msgstr "제거 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:561
 msgid "Changing reason:"
-msgstr "변경 원인:"
+msgstr ""
 
 #: output/transaction_table.cpp:593
 msgid "Installing groups dependencies:"
-msgstr "그룹 의존성 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:595
 msgid "Installing groups:"
-msgstr "그룹 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:599
 msgid "Removing groups:"
-msgstr "그룹 제거 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:602
 msgid "Upgrading groups:"
-msgstr "그룹 향상 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:629
 msgid "Installing environmental groups:"
-msgstr "환경 그룹 설치 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:632
 msgid "Removing environmental groups:"
-msgstr "환경 그룹 제거 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:635
 msgid "Upgrading environmental groups:"
-msgstr "환경 그룹 향상 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:662
 msgid "Enabling module streams:"
-msgstr "모듈 스트림 활성화:"
+msgstr ""
 
 #: output/transaction_table.cpp:665
 msgid "Disabling modules:"
-msgstr "모듈 비활성화:"
+msgstr ""
 
 #: output/transaction_table.cpp:668
 msgid "Resetting modules:"
-msgstr "모듈 재설정:"
+msgstr ""
 
 #: output/transaction_table.cpp:671
 msgid "Switching module streams:"
-msgstr "모듈 스트림 전환 중:"
+msgstr ""
 
 #: output/transaction_table.cpp:745
 msgid "Nothing to do."
-msgstr "처리가 필요하지 않습니다."
+msgstr ""
 
 #: progressbar/multi_progress_bar.cpp:36
 msgid "Total"
-msgstr "전체"
+msgstr ""
 
 #: session.cpp:149
 msgid "Missing command"
-msgstr "누락된 명령"
+msgstr ""
