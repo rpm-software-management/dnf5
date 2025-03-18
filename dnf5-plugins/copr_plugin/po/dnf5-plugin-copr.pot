@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,21 +79,21 @@ msgstr ""
 msgid "print useful info about the system, useful for debugging"
 msgstr ""
 
-#: copr_disable.cpp:34
+#: copr_disable.cpp:35
 #, c++-format
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
 
-#: copr_enable.cpp:37
+#: copr_enable.cpp:38
 #, c++-format
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr ""
 
-#: copr_enable.cpp:45
+#: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
@@ -103,88 +103,88 @@ msgstr ""
 msgid "list Copr repositories"
 msgstr ""
 
-#: copr_remove.cpp:34
+#: copr_remove.cpp:35
 #, c++-format
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 
-#: copr_repo.cpp:88
+#: copr_repo.cpp:91
 #, c++-format
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr ""
 
-#: copr_repo.cpp:94
+#: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr ""
 
-#: copr_repo.cpp:110
+#: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
 msgstr ""
 
-#: copr_repo.cpp:112
+#: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
 msgstr ""
 
-#: copr_repo.cpp:118
+#: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
 msgstr ""
 
-#: copr_repo.cpp:123
+#: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
 msgstr ""
 
-#: copr_repo.cpp:197
+#: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
-msgstr ""
-
-#: copr_repo.cpp:341
-#, c++-format
-msgid "Can't remove the {} repo file"
 msgstr ""
 
 #: copr_repo.cpp:344
 #, c++-format
+msgid "Can't remove the {} repo file"
+msgstr ""
+
+#: copr_repo.cpp:347
+#, c++-format
 msgid "Repo file {} successfully removed"
 msgstr ""
 
-#: copr_repo.cpp:390
+#: copr_repo.cpp:393
 #, c++-format
 msgid "Can't find item {} in {}"
 msgstr ""
 
-#: copr_repo.cpp:446
+#: copr_repo.cpp:449
 #, c++-format
 msgid "Removing old config file '{}'"
 msgstr ""
 
-#: copr_repo.cpp:449
+#: copr_repo.cpp:452
 msgid "Can't remove"
 msgstr ""
 
-#: copr_repo.cpp:523
+#: copr_repo.cpp:526
 #, c++-format
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
 
-#: copr_repo.cpp:557
+#: copr_repo.cpp:560
 #, c++-format
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr ""
 
-#: copr_repo.cpp:564
+#: copr_repo.cpp:567
 #, c++-format
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr ""
 
-#: copr_repo.cpp:614
+#: copr_repo.cpp:618
 #, c++-format
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr ""
 
-#: copr_repo.cpp:628 copr_repo.cpp:653
+#: copr_repo.cpp:632 copr_repo.cpp:657
 #, c++-format
 msgid "Repository '{}' not found on this system"
 msgstr ""

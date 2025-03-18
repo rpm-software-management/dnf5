@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-12-14 18:20+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -19,39 +19,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.8.4\n"
 
-#: addrepo.cpp:153
+#: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: tiedostoa \"{}\" ei ole olemassa"
 
-#: addrepo.cpp:156
+#: addrepo.cpp:139
 msgid "from-repofile: {}"
 msgstr ""
 
-#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Virheellisesti muotoiltu argumentin arvo \"{}\""
 
-#: addrepo.cpp:196
+#: addrepo.cpp:179
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Ohjelmistolähteen vaihtoehtoa \"{}={}\" ei voi asettaa: {}"
 
-#: addrepo.cpp:204 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Asettaa vaihtoehdon \"{}\" uudelleen eri arvolla: \"{}\" != \"{}\""
 
-#: addrepo.cpp:270
+#: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
 msgstr "Ohjelmistolähteen määrityshakemiston polku puuttuu"
 
-#: addrepo.cpp:320
+#: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Ohjelmistolähteen määritystiedoston \"{}\" kopioiminen epäonnistui: {}"
 
-#: addrepo.cpp:331
+#: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Ohjelmistolähteen määritystiedoston \"{}\" lataaminen epäonnistui: {}"
 
-#: addrepo.cpp:359
+#: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -59,11 +59,11 @@ msgstr ""
 "Virhe lisätyssä ohjelmistolähteen määritystiedostossa. Ohjelmistolähteen "
 "vaihtoehtoa \"{}={}\" ei voi asettaa: {}"
 
-#: addrepo.cpp:393
+#: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
 msgstr "Virheellinen perus-URL: {}={}"
 
-#: addrepo.cpp:401
+#: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -71,12 +71,12 @@ msgstr ""
 "Yksi vaihtoehdoista --from-repofile=<URL>, --set=baseurl=<URL>, --"
 "set=mirrorlist=<URL>, --set=metalink=<URL> on asetettava ei-tyhjäksi URL:ksi"
 
-#: addrepo.cpp:446
+#: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr ""
 "Ohjelmistolähteen määritystiedoston \"{}\" tallentaminen epäonnistui: {}"
 
-#: addrepo.cpp:468
+#: addrepo.cpp:451
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -84,7 +84,7 @@ msgstr ""
 "Tiedosto \"{}\" on jo olemassa ja määrittää tietovarastot tunnuksella "
 "\"{}\". Lisää `--add-or-replace` tai `--overwrite`."
 
-#: addrepo.cpp:471
+#: addrepo.cpp:454
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -92,12 +92,12 @@ msgstr ""
 "Tiedosto \"{}\" on jo olemassa ja määrittää tietovarastot tunnuksella "
 "\"{}\". Lisää `--overwrite` korvataksesi."
 
-#: addrepo.cpp:491 addrepo.cpp:517
+#: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr ""
 "Ohjelmistolähde, jonka tunnus on \"{}\", on jo määritetty tiedostossa: {}"
 
-#: addrepo.cpp:503 setopt.cpp:263
+#: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Tietovarastoja ei voi lukea hakemistosta \"{}\": {}"
 

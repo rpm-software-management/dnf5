@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-06-08 02:49+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "print useful info about the system, useful for debugging"
 msgstr "디버깅을 위해 유용한 시스템에 대해 유익한 정보를 출력합니다"
 
-#: copr_disable.cpp:34
+#: copr_disable.cpp:35
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -120,13 +120,13 @@ msgstr ""
 "지정된 Copr 저장소를 비활성화하고(만약 존재한다면), {}/*.repo를 유지합니다 - "
 "단지 enabled=0를 표시합니다"
 
-#: copr_enable.cpp:37
+#: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr "Copr 서버에서 저장소 정보를 내려받고 {}/*.repo 파일로 이를 설치합니다"
 
-#: copr_enable.cpp:45
+#: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
@@ -139,61 +139,61 @@ msgstr ""
 msgid "list Copr repositories"
 msgstr "Copr 저장소 목록"
 
-#: copr_remove.cpp:34
+#: copr_remove.cpp:35
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 "시스템에서 지정된 Copr 저장소를 제거합니다 ({}/*.repo 파일을 제거합니다)"
 
-#: copr_repo.cpp:88
+#: copr_repo.cpp:91
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "디렉토리 '{}'는 '{}' Copr 프로젝트에서 찾을 수 없습니다."
 
-#: copr_repo.cpp:94
+#: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr "당신은 이들 사용 가능한 디렉토리 중에 하나를 사용 할 수 있습니다:"
 
-#: copr_repo.cpp:110
+#: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
 msgstr "Chroot는 제공된 Copr 프로젝트에서 찾을 수 없습니다"
 
-#: copr_repo.cpp:112
+#: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
 msgstr "chroot를 탐지 할 수 없고, 명시적으로 지정합니다."
 
-#: copr_repo.cpp:118
+#: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
 msgstr "우리는 성공하지 못한 경우에 이들 저장소를 찾고자 시도합니다:"
 
-#: copr_repo.cpp:123
+#: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
 msgstr "당신은 사용 가능한 chroots 중의 하나를 명시적으로 선택 할 수 있습니다:"
 
-#: copr_repo.cpp:197
+#: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
 msgstr "Copr 저장소 상세를 구문 분석 할 수 없습니다: "
 
-#: copr_repo.cpp:341
+#: copr_repo.cpp:344
 msgid "Can't remove the {} repo file"
 msgstr "{} 저장소 파일을 제거 할 수 없습니다"
 
-#: copr_repo.cpp:344
+#: copr_repo.cpp:347
 msgid "Repo file {} successfully removed"
 msgstr "저장소 파일 {}이 성공적으로 제거되었습니다"
 
-#: copr_repo.cpp:390
+#: copr_repo.cpp:393
 msgid "Can't find item {} in {}"
 msgstr "항목 {}을 찾을 수 없습니다 ({}에서)"
 
-#: copr_repo.cpp:446
+#: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
 msgstr "오래된 config 파일 '{}'을 제거 중"
 
-#: copr_repo.cpp:449
+#: copr_repo.cpp:452
 msgid "Can't remove"
 msgstr "제거 할 수 없습니다"
 
-#: copr_repo.cpp:523
+#: copr_repo.cpp:526
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -201,18 +201,18 @@ msgstr ""
 "Copr repofile '{}'은 오래된 형식을 갖고 있으며, $ {} copr enable {}를 재-활성"
 "화 하여 수정합니다"
 
-#: copr_repo.cpp:557
+#: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "저장소 id '{}'('{}'에서)가 의심스럽습니다"
 
-#: copr_repo.cpp:564
+#: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "저장소 id '{}'는 '{}' repofile에 속하지 않습니다"
 
-#: copr_repo.cpp:614
+#: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Copr 저장소 '{}'('{}'에서)는 사용 할 수 없습니다."
 
-#: copr_repo.cpp:628 copr_repo.cpp:653
+#: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
 msgstr "저장소 '{}'는 이 시스템에서 찾을 수 없습니다"

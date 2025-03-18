@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-11-05 14:23+0000\n"
 "Last-Translator: Fabio D <fabio1977@arcor.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
@@ -20,41 +20,41 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.8.2\n"
 
-#: addrepo.cpp:153
+#: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: \"{}\" Datei existiert nicht"
 
-#: addrepo.cpp:156
+#: addrepo.cpp:139
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Schlecht formatierter Argumentwert \"{}\""
 
-#: addrepo.cpp:196
+#: addrepo.cpp:179
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Repository-Option kann nicht gesetzt werden \"{}={}\": {}"
 
-#: addrepo.cpp:204 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr ""
 "Setzt die \"{}\" Option wieder auf einen anderen Wert: \"{}\" != \"{}\""
 
-#: addrepo.cpp:270
+#: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
 msgstr "Fehlender Pfad zum Repository-Konfigurationsverzeichnis"
 
-#: addrepo.cpp:320
+#: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Kopieren der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
 
-#: addrepo.cpp:331
+#: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr ""
 "Herunterladen der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
 
-#: addrepo.cpp:359
+#: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -62,11 +62,11 @@ msgstr ""
 "Fehler in der hinzugefügten Repository-Konfigurationsdatei. Repository-"
 "Option kann nicht gesetzt werden \"{}={}\": {}"
 
-#: addrepo.cpp:393
+#: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
 msgstr "Ungültige Basis-URL: {}={}"
 
-#: addrepo.cpp:401
+#: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -75,11 +75,11 @@ msgstr ""
 "set=mirrorlist=<URL>, --set=metalink=<URL> muss auf eine nicht-leere URL "
 "gesetzt werden"
 
-#: addrepo.cpp:446
+#: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Speichern der Repository-Konfigurationsdatei \"{}\" fehlgeschlagen: {}"
 
-#: addrepo.cpp:468
+#: addrepo.cpp:451
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -87,7 +87,7 @@ msgstr ""
 "Datei \"{}\" existiert bereits und konfiguriert Repositories mit IDs\"{}\". "
 "Fügen Sie \"--add-or-replace\" oder \"--overwrite\" hinzu."
 
-#: addrepo.cpp:471
+#: addrepo.cpp:454
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -95,11 +95,11 @@ msgstr ""
 "Datei \"{}\" existiert bereits und konfiguriert Repositories mit IDs \"{}\". "
 "Fügen Sie \"--overwrite\" zum Überschreiben hinzu."
 
-#: addrepo.cpp:491 addrepo.cpp:517
+#: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Ein Repository mit ID \"{}\" ist bereits konfiguriert in Datei: {}"
 
-#: addrepo.cpp:503 setopt.cpp:263
+#: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
 msgstr "Kann Repositories nicht aus dem Verzeichnis \"{}\" lesen: {}"
 

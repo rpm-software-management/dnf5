@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2025-02-14 07:04+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -1113,11 +1113,11 @@ msgstr "꾸러미를 여는 중에 문제가 발생되었습니다."
 msgid "Failed to set rpm transaction rootDir \"{}\"."
 msgstr "rpm 연결 rootDIR 설정하는 데 실패함 \"{}\"."
 
-#: rpm/rpm_signature.cpp:287
+#: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."
 msgstr "\"{}\": 키는 강화된 공개 키가 아닙니다."
 
-#: rpm/rpm_signature.cpp:292
+#: rpm/rpm_signature.cpp:295
 msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "공개 키 \"{}\"를 rpmdb로 가져오는 데 실패함: {}"
 

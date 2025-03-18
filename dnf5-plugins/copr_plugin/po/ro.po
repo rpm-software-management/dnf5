@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-10-01 12:38+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -111,7 +111,7 @@ msgstr ""
 msgid "print useful info about the system, useful for debugging"
 msgstr "afișează informații utile despre sistem, utile pentru depanare"
 
-#: copr_disable.cpp:34
+#: copr_disable.cpp:35
 msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
@@ -119,7 +119,7 @@ msgstr ""
 "dezactivează depozitul Copr specificat (dacă există), păstrează fișierul {}/"
 "*.repo - doar îl marchează ca enabled=0"
 
-#: copr_enable.cpp:37
+#: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
@@ -127,7 +127,7 @@ msgstr ""
 "descarcă informațiile despre depozit de pe un server Copr și le instalează "
 "ca un fișier {}/*.repo"
 
-#: copr_enable.cpp:45
+#: copr_enable.cpp:46
 msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
@@ -140,61 +140,61 @@ msgstr ""
 msgid "list Copr repositories"
 msgstr "listează depozitele Copr"
 
-#: copr_remove.cpp:34
+#: copr_remove.cpp:35
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
 "elimină depozitul Copr specificat din sistem (elimină fișierul {}/*.repo)"
 
-#: copr_repo.cpp:88
+#: copr_repo.cpp:91
 msgid "Directory '{}' not found in '{}' Copr project."
 msgstr "Directorul „{}” nu a fost găsit în proiectul Copr „{}”."
 
-#: copr_repo.cpp:94
+#: copr_repo.cpp:97
 msgid "You can use one of these available directories:"
 msgstr "Puteți utiliza unul dintre aceste directoare disponibile:"
 
-#: copr_repo.cpp:110
+#: copr_repo.cpp:113
 msgid "Chroot not found in the given Copr project"
 msgstr "Chroot nu a fost găsit în proiectul Copr dat"
 
-#: copr_repo.cpp:112
+#: copr_repo.cpp:115
 msgid "Unable to detect chroot, specify it explicitly."
 msgstr "Nu se poate detecta chroot, specificați-l explicit."
 
-#: copr_repo.cpp:118
+#: copr_repo.cpp:121
 msgid "We tried to find these repos without a success:"
 msgstr "Am încercat să găsim aceste depozite fără succes:"
 
-#: copr_repo.cpp:123
+#: copr_repo.cpp:126
 msgid "You can choose one of the available chroots explicitly:"
 msgstr "Puteți alege în mod explicit unul dintre chroot-urile disponibile:"
 
-#: copr_repo.cpp:197
+#: copr_repo.cpp:200
 msgid "Can't parse Copr repo spec: "
 msgstr "Nu se pot analiza specificațiile repo Copr: "
 
-#: copr_repo.cpp:341
+#: copr_repo.cpp:344
 msgid "Can't remove the {} repo file"
 msgstr "Nu se poate elimina fișierul repo {}"
 
-#: copr_repo.cpp:344
+#: copr_repo.cpp:347
 msgid "Repo file {} successfully removed"
 msgstr "Fișierul repo {} a fost eliminat cu succes"
 
-#: copr_repo.cpp:390
+#: copr_repo.cpp:393
 msgid "Can't find item {} in {}"
 msgstr "Nu se poate găsi elementul {} în {}"
 
-#: copr_repo.cpp:446
+#: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
 msgstr "Se elimină fișierul de configurare vechi „{}”"
 
-#: copr_repo.cpp:449
+#: copr_repo.cpp:452
 msgid "Can't remove"
 msgstr "Nu se poate elimina"
 
-#: copr_repo.cpp:523
+#: copr_repo.cpp:526
 msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
@@ -202,18 +202,18 @@ msgstr ""
 "Fișierul repo Copr „{}” are un format vechi, reparați-l activându-l din nou "
 "«$ {} copr enable {}»"
 
-#: copr_repo.cpp:557
+#: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
 msgstr "Id-ul repo „{}” din „{}” este suspect"
 
-#: copr_repo.cpp:564
+#: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
 msgstr "Id-ul repo „{}” nu aparține fișierului repo „{}”"
 
-#: copr_repo.cpp:614
+#: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
 msgstr "Depozitul Copr „{}” în „{}” este dezactivat."
 
-#: copr_repo.cpp:628 copr_repo.cpp:653
+#: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
 msgstr "Depozitul „{}” nu a fost găsit pe acest sistem"

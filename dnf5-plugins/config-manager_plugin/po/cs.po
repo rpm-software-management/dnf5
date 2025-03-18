@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 03:17+0000\n"
+"POT-Creation-Date: 2025-03-18 03:20+0000\n"
 "PO-Revision-Date: 2024-02-02 13:11+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
@@ -18,39 +18,39 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.3.1\n"
 
-#: addrepo.cpp:153
+#: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
 msgstr "from-repofile: soubor \"{}\" neexistuje"
 
-#: addrepo.cpp:156
+#: addrepo.cpp:139
 msgid "from-repofile: {}"
 msgstr "from-repofile: {}"
 
-#: addrepo.cpp:186 setopt.cpp:83 setvar.cpp:49
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Špatně naformátovaná hodnota argumentu \"{}\""
 
-#: addrepo.cpp:196
+#: addrepo.cpp:179
 msgid "Cannot set repository option \"{}={}\": {}"
 msgstr "Nelze nastavit volbu repozitáře \"{}={}\": {}"
 
-#: addrepo.cpp:204 setopt.cpp:138
+#: addrepo.cpp:187 setopt.cpp:138
 msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
 msgstr "Nastaví volbu \"{}\" znovu s jinou hodnotou: \"{}\" != \"{}\""
 
-#: addrepo.cpp:270
+#: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
 msgstr "Chybí cesta ke konfiguračnímu adresáři repozitáře"
 
-#: addrepo.cpp:320
+#: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se zkopírovat konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:331
+#: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se stáhnout konfigurační soubor repozitáře „{}“: {}"
 
-#: addrepo.cpp:359
+#: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
@@ -58,11 +58,11 @@ msgstr ""
 "Chyba v přidaném konfiguračním souboru repozitáře. Nelze nastavit volbu "
 "úložiště \"{}={}\": {}"
 
-#: addrepo.cpp:393
+#: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
 msgstr "Špatná základní adresa URL: {}={}"
 
-#: addrepo.cpp:401
+#: addrepo.cpp:384
 msgid ""
 "One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
 "set=metalink=<URL> must be set to a non-empty URL"
@@ -70,11 +70,11 @@ msgstr ""
 "Jeden z --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, "
 "--set=metalink=<URL> musí být nastaven na neprázdnou adresu URL"
 
-#: addrepo.cpp:446
+#: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
 msgstr "Nepodařilo se uložit konfigurační soubor repozitáře \"{}\": {}"
 
-#: addrepo.cpp:468
+#: addrepo.cpp:451
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--add-or-replace\" or \"--overwrite\"."
@@ -82,7 +82,7 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Přidejte \"--"
 "add-or-replace\" nebo \"--overwrite\"."
 
-#: addrepo.cpp:471
+#: addrepo.cpp:454
 msgid ""
 "File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
 "\"--overwrite\" to overwrite."
@@ -90,11 +90,11 @@ msgstr ""
 "Soubor \"{}\" již existuje a konfiguruje repozitář s ID \"{}\". Chcete-li "
 "jej přepsat, přidejte \"--overwrite\"."
 
-#: addrepo.cpp:491 addrepo.cpp:517
+#: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Repozitář s ID \"{}\" již má konfiguraci v souboru: {}"
 
-#: addrepo.cpp:503 setopt.cpp:263
+#: addrepo.cpp:486 setopt.cpp:263
 #, fuzzy
 #| msgid "Cannot set repository option \"{}\": {}"
 msgid "Cannot read repositories from directory \"{}\": {}"
