@@ -646,36 +646,6 @@ LibrepoResult RepoDownloader::perform(LibrepoHandle & handle, bool set_gpg_home_
 }
 
 
-void RepoDownloader::download_url(const char * url, int fd) {
-    auto * download_callbacks = base->get_download_callbacks();
-
-    if (download_callbacks) {
-        user_cb_data = download_callbacks->add_new_download(user_data, url, -1);
-        prev_total_to_download = 0;
-        prev_downloaded = 0;
-        sum_prev_downloaded = 0;
-    }
-
-    GError * err_p{nullptr};
-    bool res = lr_download_url(get_cached_handle().get(), url, fd, &err_p);
-
-    if (res) {
-        if (download_callbacks) {
-            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
-        }
-    } else {
-        std::unique_ptr<GError> err(err_p);
-
-        if (download_callbacks) {
-            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, err->message);
-        }
-
-        // TODO(lukash) does the error from librepo contain the URL or do we need to add it here somehow?
-        throw LibrepoError(std::move(err));
-    }
-}
-
-
 std::pair<std::string, std::string> RepoDownloader::get_source_info() const {
     if (!config.get_metalink_option().empty() && !config.get_metalink_option().get_value().empty()) {
         return {"metalink", config.get_metalink_option().get_value()};
@@ -683,18 +653,6 @@ std::pair<std::string, std::string> RepoDownloader::get_source_info() const {
         return {"mirrorlist", config.get_mirrorlist_option().get_value()};
     } else {
         return {"baseurl", libdnf5::utils::string::join(config.get_baseurl_option().get_value(), ", ")};
-    }
-}
-
-
-void RepoDownloader::import_repo_keys() {
-    for (const auto & gpgkey_url : config.get_gpgkey_option().get_value()) {
-        auto tmp_file = libdnf5::utils::fs::TempFile("repokey");
-
-        download_url(gpgkey_url.c_str(), tmp_file.get_fd());
-
-        lseek(tmp_file.get_fd(), SEEK_SET, 0);
-        pgp.import_key(tmp_file.get_fd(), gpgkey_url);
     }
 }
 
@@ -865,15 +823,5 @@ time_t RepoDownloader::get_system_epoch() const {
     return st.st_mtime;
 }
 
-
-//void Downloader::download_url(ConfigMain * cfg, const char * url, int fd) {
-//    std::unique_ptr<LrHandle> lr_handle(new_remote_handle(*cfg));
-//    GError * err_p{nullptr};
-//    lr_download_url(lr_handle.get(), url, fd, &err_p);
-//    std::unique_ptr<GError> err(err_p);
-//
-//    if (err)
-//        throw LibrepoError(std::move(err));
-//}
 
 }  // namespace libdnf5::repo

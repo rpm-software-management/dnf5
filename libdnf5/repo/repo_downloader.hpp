@@ -90,13 +90,8 @@ private:
 
     LibrepoResult perform(LibrepoHandle & handle, bool set_gpg_home_dir);
 
-    void download_url(const char * url, int fd);
-
     std::pair<std::string, std::string> get_source_info() const;
 
-    void import_repo_keys();
-
-    std::string get_persistdir() const;
     void add_countme_flag(LibrepoHandle & handle);
     time_t get_system_epoch() const;
 
@@ -137,13 +132,6 @@ private:
 
     std::optional<LibrepoHandle> handle;
 };
-
-
-// TODO(lukash) if we want this, create a place for this downloader on the API
-//struct Downloader {
-//public:
-//    static void download_url(ConfigMain * cfg, const char * url, int fd);
-//};
 
 }  // namespace libdnf5::repo
 
