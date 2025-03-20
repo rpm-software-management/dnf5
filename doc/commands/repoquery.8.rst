@@ -88,7 +88,7 @@ Options
 ``--extras``
     | Limit to installed packages that are not present in any available repository.
 
-``--file=FILE,...``
+``-f, --file=FILE,...``
     | Limit to packages that own these files.
     | This is a list option.
 
@@ -223,7 +223,7 @@ Set what information is displayed about each package. The following are mutually
 ``--location``
     | Like ``--qf "%{location}"`` but deduplicated and sorted per line.
 
-``--info``
+``-i, --info``
     | Show detailed information about the package.
 
 ``--changelogs``
