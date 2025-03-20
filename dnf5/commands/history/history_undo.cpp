@@ -37,6 +37,7 @@ void HistoryUndoCommand::set_argument_parser() {
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     ignore_extras = std::make_unique<IgnoreExtrasOption>(*this);
     ignore_installed = std::make_unique<IgnoreInstalledOption>(*this);
+    create_store_option(*this);
 }
 
 void HistoryUndoCommand::configure() {

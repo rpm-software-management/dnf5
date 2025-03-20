@@ -200,7 +200,8 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
         // a vector of at most one KeyInfo object. The vector is empty if the
         // primary key had no signing subkey.
         // XXX: That effectivelly ignores expiration time of other subkeys.
-        auto parsed_keys = rpm_signature.parse_key_file(std::string({"file://"}) + key_tfile.get_path().string());
+        const std::string File_URI_scheme_prefix = "file://";
+        auto parsed_keys = rpm_signature.parse_key_file(File_URI_scheme_prefix + key_tfile.get_path().string());
         if (parsed_keys.empty())
             continue;
 
