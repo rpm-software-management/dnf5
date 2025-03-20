@@ -176,6 +176,8 @@ Options
 
 Following options are applicable in the general context for any ``dnf5`` command:
 
+.. _assumeno_option_ref-label:
+
 ``--assumeno``
     | Automatically answer no for all questions.
 
@@ -319,6 +321,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--version``
     | Display the version of the dnf5 application and libdnf5 library, along with successfully loaded plugins and their versions, and then exit.
 
+.. _assumeyes_option_ref-label:
+
 ``-y, --assumeyes``
     | Automatically answer yes for all questions.
 
@@ -396,6 +400,14 @@ Files
 Environment
 ===========
 
+``DNF5_FORCE_INTERACTIVE``
+    Override interactivity of the connected standard input/ouput. Set to `0` to pretend
+    that the input/output is not connected to an interactive terminal and DNF5
+    should not ask any questions. Set to `1` to force DNF5 to ask questions
+    even if the terminal is non-interractive. See
+    :ref:`--assumeno<assumeno_option_ref-label>` and
+    :ref:`--assumeyes<assumeyes_option_ref-label>` options.
+
 ``DNF5_PLUGINS_DIR``
     Override a directory with DNF5 application plugins. Set it to an empty
     string to disable loading the application plugins.
@@ -403,6 +415,12 @@ Environment
 ``LIBDNF_PLUGINS_CONFIG_DIR``
     Override a directory with libdnf5 plugin's configuration files.
 
+``TEMP``,
+``TEMPDIR``,
+``TMP``,
+``TMPDIR``
+    Override a path to a directory for temporary files. The directory must
+    exist. Default value is `/tmp`.
 
 See Also
 ========
