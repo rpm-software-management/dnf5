@@ -171,32 +171,34 @@ int Environment::get_order_int() const {
 
 
 std::vector<std::string> load_groups_from_pool(
-    libdnf5::solv::CompsPool & pool, Id environment_id, bool required = true) {
-    Solvable * solvable = pool.id2solvable(environment_id);
-    Offset offset;
-    if (required) {
-        offset = solvable->dep_requires;
-    } else {
-        offset = solvable->dep_suggests;
-    }
-
-    std::vector<std::string> groups;
+    libdnf5::solv::CompsPool & pool, const std::vector<EnvironmentId> & environment_ids, bool required = true) {
+    std::set<std::string> groups;
     std::string_view group_solvable_name;
 
-    if (offset) {
-        for (Id * r_id = solvable->repo->idarraydata + offset; *r_id; ++r_id) {
-            group_solvable_name = pool.id2str(*r_id);
-            groups.push_back(solv::CompsPool::split_solvable_name(group_solvable_name).second);
+    for (auto environment_id : environment_ids) {
+        Solvable * solvable = pool.id2solvable(environment_id.id);
+        Offset offset;
+        if (required) {
+            offset = solvable->dep_requires;
+        } else {
+            offset = solvable->dep_suggests;
+        }
+
+        if (offset) {
+            for (Id * r_id = solvable->repo->idarraydata + offset; *r_id; ++r_id) {
+                group_solvable_name = pool.id2str(*r_id);
+                groups.emplace(solv::CompsPool::split_solvable_name(group_solvable_name).second);
+            }
         }
     }
 
-    return groups;
+    return std::vector(groups.begin(), groups.end());
 }
 
 
 std::vector<std::string> Environment::get_groups() {
     if (p_impl->groups.empty()) {
-        p_impl->groups = load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids[0].id);
+        p_impl->groups = load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids);
     }
     return p_impl->groups;
 }
@@ -204,8 +206,7 @@ std::vector<std::string> Environment::get_groups() {
 
 std::vector<std::string> Environment::get_optional_groups() {
     if (p_impl->optional_groups.empty()) {
-        p_impl->optional_groups =
-            load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids[0].id, false);
+        p_impl->optional_groups = load_groups_from_pool(get_comps_pool(p_impl->base), p_impl->environment_ids, false);
     }
     return p_impl->optional_groups;
 }
