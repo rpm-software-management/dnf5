@@ -305,7 +305,7 @@ void RepoqueryCommand::set_argument_parser() {
         *this, "arch", '\0', "Limit to packages of these architectures.", "ARCH,...", "", false, ",");
 
     file = std::make_unique<libdnf5::cli::session::AppendStringListOption>(
-        *this, "file", '\0', "Limit to packages that own these files.", "FILE,...", "", false, ",");
+        *this, "file", 'f', "Limit to packages that own these files.", "FILE,...", "", false, ",");
 
     exactdeps = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this,
@@ -373,6 +373,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::unique_ptr<libdnf5::OptionBool>(new libdnf5::OptionBool(false))));
     auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
+    info->set_short_name('i');
     info->set_description("Show detailed information about the packages.");
     info->set_const_value("true");
     info->link_value(info_option);
