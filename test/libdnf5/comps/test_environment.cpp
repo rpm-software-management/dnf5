@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_environment.hpp"
 
+#include "../shared/utils.hpp"
+
 #include <libdnf5/comps/environment/query.hpp>
 #include <limits.h>
 
@@ -85,6 +87,13 @@ void CompsEnvironmentTest::test_merge() {
     CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
     CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+
+    std::set<std::string> expected = {"core", "core-2"};
+    const auto groups = minimal_env.get_groups();
+    CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
+    const auto optional_groups = minimal_env.get_optional_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
 void CompsEnvironmentTest::test_merge_when_different_load_order() {
@@ -106,6 +115,13 @@ void CompsEnvironmentTest::test_merge_when_different_load_order() {
     CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
     CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+
+    std::set<std::string> expected = {"core", "core-2"};
+    const auto groups = minimal_env.get_groups();
+    CPPUNIT_ASSERT_EQUAL(expected, std::set<std::string>(groups.begin(), groups.end()));
+    std::set<std::string> expected_optional = {"guest-agents", "guest-agents-2", "standard"};
+    const auto optional_groups = minimal_env.get_optional_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
 
@@ -128,6 +144,12 @@ void CompsEnvironmentTest::test_merge_with_empty() {
     CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_empty.get_order());
     CPPUNIT_ASSERT_EQUAL(3, minimal_empty.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_empty.get_installed());
+
+    std::vector<std::string> expected = {"core"};
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_empty.get_groups());
+    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    const auto optional_groups = minimal_empty.get_optional_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
 
@@ -150,6 +172,12 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
     CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env.get_order());
     CPPUNIT_ASSERT_EQUAL(3, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+
+    std::vector<std::string> expected = {"core"};
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
+    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    const auto optional_groups = minimal_env.get_optional_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
 
@@ -170,6 +198,12 @@ void CompsEnvironmentTest::test_merge_different_translations() {
     // translations that are missing in minimal-environment are taken from minimal-environment-different-translations
     CPPUNIT_ASSERT_EQUAL(std::string("Vähimmäisasennus"), minimal_env.get_translated_name("fi"));
     CPPUNIT_ASSERT_EQUAL(std::string("Perustoiminnot."), minimal_env.get_translated_description("fi"));
+
+    std::vector<std::string> expected = {"core"};
+    CPPUNIT_ASSERT_EQUAL(expected, minimal_env.get_groups());
+    std::set<std::string> expected_optional = {"guest-agents", "standard"};
+    const auto optional_groups = minimal_env.get_optional_groups();
+    CPPUNIT_ASSERT_EQUAL(expected_optional, std::set<std::string>(optional_groups.begin(), optional_groups.end()));
 }
 
 

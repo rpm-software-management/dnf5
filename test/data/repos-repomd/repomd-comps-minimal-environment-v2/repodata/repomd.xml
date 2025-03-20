@@ -9,8 +9,8 @@
     <open-size>167</open-size>
   </data>
   <data type="group">
-    <checksum type="sha256">97303fb05845cebac5d963f8a7c96e9d157311a54c58b6f7a41508c8b0b0e6e7</checksum>
-    <open-checksum type="sha256">97303fb05845cebac5d963f8a7c96e9d157311a54c58b6f7a41508c8b0b0e6e7</open-checksum>
+    <checksum type="sha256">269dec2f2ac42a8c288c9dbdda5d9c3a9356c68bf198750924b38e8b2e29ca02</checksum>
+    <open-checksum type="sha256">269dec2f2ac42a8c288c9dbdda5d9c3a9356c68bf198750924b38e8b2e29ca02</open-checksum>
     <location href="repodata/comps.xml" />
     <timestamp>1641802880</timestamp>
     <size>492</size>
