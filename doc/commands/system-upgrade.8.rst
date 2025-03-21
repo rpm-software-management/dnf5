@@ -73,6 +73,12 @@ Options
     | See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`
 
 
+Environment
+===========
+
+See :manpage:`dnf5-offline(8)`, :ref:`Offline command <offline_command_ref-label>`.
+
+
 Examples
 ========
 
