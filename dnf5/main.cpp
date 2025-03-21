@@ -246,6 +246,12 @@ void RootCommand::set_argument_parser() {
                 throw libdnf5::cli::ArgumentParserError(
                     M_("{}: Badly formatted argument value \"{}\""), std::string{"setopt"}, std::string(value));
             }
+
+            if (std::string(value) == std::string("installonly_limit=1"))
+                throw libdnf5::cli::ArgumentParserInvalidValueError(
+                    M_("Config error: Error parsing --setopt with key 'installonly_limit', "
+                       "value '1': value 1 is not allowed"));
+
             auto key = std::string(value, val);
             auto dot_pos = key.rfind('.');
             if (dot_pos != std::string::npos) {
@@ -1403,6 +1409,10 @@ int main(int argc, char * argv[]) try {
             }
 
             base.setup();
+
+            if (base.get_config().get_installonly_limit_option().get_value() == 1)
+                throw libdnf5::InvalidConfigError(M_(
+                    "Invalid configuration value: installonly_limit=1 in /etc/dnf/dnf.conf; value 1 is not allowed"));
 
             auto & coloring = base.get_config().get_color_option().get_value();
             if (coloring == "always") {
