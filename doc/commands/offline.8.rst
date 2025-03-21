@@ -72,6 +72,13 @@ Options
     | Used with the ``reboot`` subcommand.
 
 
+Environment
+===========
+
+``DNF_SYSTEM_UPGRADE_NO_REBOOT``
+    If set, the system won't be rebooted or powered off by DNF5 when the normal work flow would do so.
+
+
 Examples
 ========
 
