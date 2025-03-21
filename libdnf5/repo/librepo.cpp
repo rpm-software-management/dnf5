@@ -175,9 +175,12 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
     handle.set_opt(LRO_PROXYAUTHMETHODS, proxy_auth_methods);
 
     if (!config.get_proxy_username_option().empty()) {
-        auto userpwd = config.get_proxy_username_option().get_value();
-        if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, config.get_proxy_password_option().get_value());
+        auto proxy_username = config.get_proxy_username_option().get_value();
+        if (!proxy_username.empty()) {
+            if (config.get_proxy_password_option().get_priority() == libdnf5::Option::Priority::EMPTY)
+                throw libdnf5::MissingConfigError(M_("'proxy_username' is set but not 'proxy_password'"));
+            auto proxy_password = config.get_proxy_password_option().get_value();
+            auto userpwd = format_user_pass_string(proxy_username, proxy_password);
             handle.set_opt(LRO_PROXYUSERPWD, userpwd.c_str());
         }
     }
