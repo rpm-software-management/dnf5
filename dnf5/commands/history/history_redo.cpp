@@ -34,6 +34,7 @@ void HistoryRedoCommand::set_argument_parser() {
     auto & ctx = get_context();
     transaction_specs->get_arg()->set_complete_hook_func(create_history_id_autocomplete(ctx));
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    create_store_option(*this);
 }
 
 void HistoryRedoCommand::configure() {
