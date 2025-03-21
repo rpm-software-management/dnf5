@@ -978,6 +978,8 @@ pushd %{buildroot}%{_unitdir}/system-update.target.wants/
 popd
 %endif
 
+mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
+
 %find_lang dnf5
 %if %{with dnf5_plugins}
 %find_lang dnf5-plugin-automatic
