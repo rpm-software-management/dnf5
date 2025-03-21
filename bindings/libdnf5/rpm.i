@@ -13,31 +13,20 @@
 %mixin libdnf5::rpm::ReldepList "Enumerable";
 #endif
 
-%include <exception.i>
 %include <std_string.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
 
 %import "common.i"
 %import "conf.i"
+%import "exception.i"
 %import "repo.i"
 %import "transaction.i"
 
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
-
-
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     #include "libdnf5/rpm/arch.hpp"
     #include "libdnf5/rpm/checksum.hpp"
     #include "libdnf5/rpm/nevra.hpp"
@@ -55,6 +44,12 @@
 %}
 
 #define CV __perl_CV
+
+// Deletes any previously defined general purpose exception handler
+%exception;
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 %include "libdnf5/rpm/arch.hpp"
 
@@ -130,3 +125,6 @@ wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf5::rpm::TransactionCallback
 common.create_attributes_from_getters_and_setters(Changelog)
 %}
 #endif
+
+// Deletes any previously defined catches
+%catches();

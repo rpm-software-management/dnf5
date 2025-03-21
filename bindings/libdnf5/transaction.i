@@ -6,27 +6,17 @@
 %module "libdnf5::transaction"
 #endif
 
-%include <exception.i>
 %include <std_string.i>
 %include <std_vector.i>
 
-%include <shared.i>
+%include "shared.i"
 
 %import "common.i"
-
-%exception {
-    try {
-        $action
-    } catch (const libdnf5::UserAssertionError & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const libdnf5::Error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    } catch (const std::runtime_error & e) {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
+%import "exception.i"
 
 %{
+    #include "bindings/libdnf5/exception.hpp"
+
     // enums
     #include "libdnf5/transaction/transaction_item_action.hpp"
     #include "libdnf5/transaction/transaction_item_reason.hpp"
@@ -45,6 +35,12 @@
 %}
 
 #define CV __perl_CV
+
+// Deletes any previously defined general purpose exception handler
+%exception;
+
+// Set default exception handler
+%catches(libdnf5::UserAssertionError, std::runtime_error, std::out_of_range);
 
 // enums
 %include "libdnf5/transaction/transaction_item_action.hpp"
@@ -65,3 +61,6 @@
 
 %template(VectorTransaction) std::vector<libdnf5::transaction::Transaction>;
 %template(VectorTransactionPackage) std::vector<libdnf5::transaction::Package>;
+
+// Deletes any previously defined catches
+%catches();

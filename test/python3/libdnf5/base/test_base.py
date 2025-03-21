@@ -49,9 +49,9 @@ class TestBase(unittest.TestCase):
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
         # Raises an AssertionError that is not caught by the SWIG binding.
-        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
+        # with self.assertRaisesRegex(libdnf5.exception.AssertionError, 'Dereferencing an invalidated WeakPtr'):
         #    vars.get_value("test_variable")
-        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
+        # with self.assertRaisesRegex(libdnf5.exception.AssertionError, 'Dereferencing an invalidated WeakPtr'):
         #    vars2.get_value("test_variable")
 
     def test_non_existing_config_load(self):
@@ -59,4 +59,17 @@ class TestBase(unittest.TestCase):
         base = libdnf5.base.Base()
         base.get_config().config_file_path = 'this-path-does-not-exist.conf'
 
-        self.assertRaises(RuntimeError, base.load_config)
+        # Checking the exception.
+        with self.assertRaisesRegex(libdnf5.exception.MissingConfigErrorNested,
+                                    'Configuration file "this-path-does-not-exist.conf" not found') as cm:
+            base.load_config()
+        self.assertRegex(cm.exception.format(libdnf5.exception.FormatDetailLevel_WithDomainAndName),
+                         '^libdnf5::MissingConfigError: Configuration file "this-path-does-not-exist.conf" not found\n'
+                         ' libdnf5::utils::fs::FileSystemError: cannot open file')
+
+        # Checking the nested exception.
+        with self.assertRaisesRegex(libdnf5.exception.FileSystemError,
+                                    'cannot open file') as cm_nested:
+            cm.exception.rethrow_if_nested()
+        self.assertRegex(cm_nested.exception.format(libdnf5.exception.FormatDetailLevel_WithDomainAndName),
+                         '^libdnf5::utils::fs::FileSystemError: cannot open file')
