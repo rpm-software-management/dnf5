@@ -321,6 +321,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %license COPYING.md
 %license gpl-2.0.txt
 %doc AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md
+%if %{with man}
 %{_mandir}/man8/dnf5.8.*
 %if %{with dnf5_obsoletes_dnf}
 %{_mandir}/man8/dnf.8.*
@@ -368,6 +369,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man5/dnf*.conf.5.*
 %{_mandir}/man5/dnf*.conf-todo.5.*
 %{_mandir}/man5/dnf*.conf-deprecated.5.*
+%endif
 
 %if %{with systemd}
 %{_unitdir}/dnf5-offline-transaction.service
@@ -632,7 +634,9 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %{_libdir}/libdnf5/plugins/actions.*
 %config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
 %dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
+%if %{with man}
 %{_mandir}/man8/libdnf5-actions.8.*
+%endif
 %endif
 
 # ========== libdnf5-plugin-appstream ==========
@@ -669,7 +673,9 @@ Libdnf5 plugin for detecting and removing expired PGP keys.
 %files -n libdnf5-plugin-expired-pgp-keys -f libdnf5-plugin-expired-pgp-keys.lang
 %{_libdir}/libdnf5/plugins/expired-pgp-keys.*
 %config %{_sysconfdir}/dnf/libdnf5-plugins/expired-pgp-keys.conf
+%if %{with man}
 %{_mandir}/man8/libdnf5-expired-pgp-keys.8.*
+%endif
 %endif
 
 # ========== libdnf5-plugin-plugin_rhsm ==========
@@ -728,7 +734,9 @@ Command-line interface for dnf5daemon-server.
 %{_bindir}/dnf5daemon-client
 %license COPYING.md
 %license gpl-2.0.txt
+%if %{with man}
 %{_mandir}/man8/dnf5daemon-client.8.*
+%endif
 %endif
 
 
@@ -767,8 +775,10 @@ Package management service with a DBus interface.
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt
+%if %{with man}
 %{_mandir}/man8/dnf5daemon-server.8.*
 %{_mandir}/man8/dnf5daemon-dbus-api.8.*
+%endif
 %endif
 
 
@@ -802,6 +812,7 @@ config-manager, copr, repoclosure, and reposync commands.
 %{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
 %{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
 %{_libdir}/dnf5/plugins/reposync_cmd_plugin.so
+%if %{with man}
 %{_mandir}/man8/dnf*-builddep.8.*
 %{_mandir}/man8/dnf*-changelog.8.*
 %{_mandir}/man8/dnf*-config-manager.8.*
@@ -809,6 +820,7 @@ config-manager, copr, repoclosure, and reposync commands.
 %{_mandir}/man8/dnf*-needs-restarting.8.*
 %{_mandir}/man8/dnf*-repoclosure.8.*
 %{_mandir}/man8/dnf*-reposync.8.*
+%endif
 %{_datadir}/dnf5/aliases.d/compatibility-plugins.conf
 %{_datadir}/dnf5/aliases.d/compatibility-reposync.conf
 
@@ -840,7 +852,9 @@ automatically and regularly from systemd timers, cron jobs or similar.
 %{_datadir}/dnf5/dnf5-plugins/automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
 %ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
+%if %{with man}
 %{_mandir}/man8/dnf*-automatic.8.*
+%endif
 %{_unitdir}/dnf5-automatic.service
 %{_unitdir}/dnf5-automatic.timer
 %{_unitdir}/dnf-automatic.service
@@ -919,11 +933,13 @@ automatically and regularly from systemd timers, cron jobs or similar.
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
 ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_datadir}/bash-completion/completions/dnf
-for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
-    dir=$(dirname $file)
-    filename=$(basename $file)
-    ln -sr $file $dir/${filename/dnf5/dnf}
-done
+%if %{with man}
+    for file in %{buildroot}%{_mandir}/man[578]/dnf5[-.]*; do
+        dir=$(dirname $file)
+        filename=$(basename $file)
+        ln -sr $file $dir/${filename/dnf5/dnf}
+    done
+%endif
 # Make "dnf-makecache" the "real" unit name, but keep compatibility for playbooks that refer to dnf5-makecache
 mv %{buildroot}%{_unitdir}/dnf5-makecache.service %{buildroot}%{_unitdir}/dnf-makecache.service
 mv %{buildroot}%{_unitdir}/dnf5-makecache.timer %{buildroot}%{_unitdir}/dnf-makecache.timer
