@@ -979,6 +979,7 @@ popd
 %endif
 
 %find_lang dnf5
+%if %{with dnf5_plugins}
 %find_lang dnf5-plugin-automatic
 %find_lang dnf5-plugin-builddep
 %find_lang dnf5-plugin-changelog
@@ -987,13 +988,26 @@ popd
 %find_lang dnf5-plugin-needs-restarting
 %find_lang dnf5-plugin-repoclosure
 %find_lang dnf5-plugin-reposync
+%endif
+%if %{with dnf5daemon_client}
 %find_lang dnf5daemon-client
+%endif
+%if %{with dnf5daemon_server}
 %find_lang dnf5daemon-server
+%endif
 %find_lang libdnf5
+%if %{with libdnf_cli}
 %find_lang libdnf5-cli
+%endif
+%if %{with plugin_actions}
 %find_lang libdnf5-plugin-actions
+%endif
+%if %{with plugin_expired_pgp_keys}
 %find_lang libdnf5-plugin-expired-pgp-keys
+%endif
+%if %{with plugin_rhsm}
 %find_lang libdnf5-plugin-rhsm
+%endif
 
 %ldconfig_scriptlets
 
