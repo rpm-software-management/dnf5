@@ -54,6 +54,9 @@ void PackageSack::Impl::make_provides_ready() {
         return;
     }
 
+    // before swapping the considered map make sure it's uptodate
+    recompute_considered_in_pool();
+
     // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
     libdnf5::solv::SolvMap original_considered_map(0);
     get_rpm_pool(base).swap_considered_map(original_considered_map);
