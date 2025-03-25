@@ -350,6 +350,9 @@ void ModuleSack::Impl::make_provides_ready() {
         return;
     }
 
+    // before swapping the considered map make sure it's uptodate
+    recompute_considered_in_pool();
+
     // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
     Map * considered = pool->considered;
     pool->considered = nullptr;
