@@ -240,12 +240,7 @@ public:
     const SolvMap & get_considered_map() const noexcept { return considered; }
 
     /// Exchanges the internal map `considered` with `other_considered_map`.
-    /// The allocated size of `other_considered_map` must be >= nsolvables,
-    /// or 0 if we want to disable the use of the considered map.
     void swap_considered_map(SolvMap & other_considered_map) {
-        libdnf_assert(
-            other_considered_map.allocated_size() == 0 || other_considered_map.allocated_size() >= get_nsolvables(),
-            "The considered map is smaller than the number of solvables in the pool");
         considered.swap(other_considered_map);
         if (considered.allocated_size() == 0) {
             pool->considered = nullptr;
