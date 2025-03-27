@@ -94,6 +94,10 @@ public:
     // TODO(pkratoch): respect the display_order when listing environments
     std::string get_order() const;
 
+    /// @return The Environment display order as an integer or INT_MAX if the order is invalid.
+    /// @since 5.2.12.1
+    int get_order_int() const;
+
     /// @return std::vector of Group ids belonging to the Environment.
     /// @since 5.0
     //
@@ -151,6 +155,11 @@ private:
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
 };
+
+
+inline bool environment_display_order_cmp(Environment a, Environment b) {
+    return a.get_order_int() < b.get_order_int();
+}
 
 
 }  // namespace libdnf5::comps
