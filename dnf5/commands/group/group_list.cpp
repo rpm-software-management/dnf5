@@ -91,9 +91,12 @@ void GroupListCommand::run() {
 }
 
 void GroupListCommand::print(const libdnf5::comps::GroupQuery & query) {
+    std::vector<libdnf5::comps::Group> groups(query.list().begin(), query.list().end());
+    std::sort(groups.begin(), groups.end(), libdnf5::comps::group_display_order_cmp);
+
     std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> items;
-    items.reserve(query.list().size());
-    for (auto & obj : query.list()) {
+    items.reserve(groups.size());
+    for (auto & obj : groups) {
         items.emplace_back(new libdnf5::cli::output::GroupAdapter(obj));
     }
     libdnf5::cli::output::print_grouplist_table(items);

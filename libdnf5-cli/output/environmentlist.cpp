@@ -68,8 +68,6 @@ void print_environmentlist_table(std::vector<std::unique_ptr<IEnvironment>> & en
             environment->get_name().c_str(),
             environment->get_installed());
     }
-    auto cl = scols_table_get_column(table, COL_ENVIRONMENT_ID);
-    scols_sort_table(table, cl);
     scols_print_table(table);
     scols_unref_table(table);
 }

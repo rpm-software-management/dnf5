@@ -65,8 +65,6 @@ void print_grouplist_table(std::vector<std::unique_ptr<IGroup>> & group_list) {
         add_line_into_grouplist_table(
             table, group->get_groupid().c_str(), group->get_name().c_str(), group->get_installed());
     }
-    auto cl = scols_table_get_column(table, COL_GROUP_ID);
-    scols_sort_table(table, cl);
     scols_print_table(table);
     scols_unref_table(table);
 }

@@ -69,7 +69,10 @@ void EnvironmentInfoCommand::run() {
         query.filter_installed(false);
     }
 
-    for (auto environment : query.list()) {
+    std::vector<libdnf5::comps::Environment> environments(query.list().begin(), query.list().end());
+    std::sort(environments.begin(), environments.end(), libdnf5::comps::environment_display_order_cmp);
+
+    for (auto environment : environments) {
         libdnf5::cli::output::EnvironmentAdapter cli_env(environment);
         libdnf5::cli::output::print_environmentinfo_table(cli_env);
         std::cout << '\n';
