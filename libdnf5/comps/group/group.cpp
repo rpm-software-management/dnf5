@@ -38,6 +38,7 @@ extern "C" {
 
 #include <libxml/tree.h>
 #include <libxml/xmlerror.h>
+#include <limits.h>
 
 #include <set>
 #include <string>
@@ -151,6 +152,17 @@ std::string Group::get_translated_description() const {
 
 std::string Group::get_order() const {
     return get_comps_pool(p_impl->base).lookup_first_id_str<GroupId>(p_impl->group_ids, SOLVABLE_ORDER);
+}
+
+
+int Group::get_order_int() const {
+    try {
+        return std::stoi(get_order());
+    } catch (const std::invalid_argument &) {
+        return INT_MAX;
+    } catch (const std::out_of_range &) {
+        return INT_MAX;
+    }
 }
 
 

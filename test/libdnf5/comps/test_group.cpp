@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/comps/group/package.hpp>
 #include <libdnf5/comps/group/query.hpp>
+#include <limits.h>
 
 #include <filesystem>
 
@@ -70,6 +71,7 @@ void CompsGroupTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), core.get_order());
+    CPPUNIT_ASSERT_EQUAL(1, core.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string("it"), core.get_langonly());
     CPPUNIT_ASSERT_EQUAL(false, core.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core.get_default());
@@ -96,6 +98,7 @@ void CompsGroupTest::test_load() {
         std::string("最小限のインストールを拡張するユーティリティの共通セット"),
         standard.get_translated_description("ja"));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), standard.get_order());
+    CPPUNIT_ASSERT_EQUAL(1, standard.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string(""), standard.get_langonly());
     CPPUNIT_ASSERT_EQUAL(false, standard.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, standard.get_default());
@@ -121,6 +124,7 @@ void CompsGroupTest::test_load_defaults() {
     CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_translated_description("ja"));
     CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_order());
+    CPPUNIT_ASSERT_EQUAL(INT_MAX, core_empty.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_langonly());
     CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
@@ -146,6 +150,7 @@ void CompsGroupTest::test_merge() {
     CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("2"), core2.get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core2.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string("de"), core2.get_langonly());
     // When boolean attributes are missing in core-v2.xml, default values are taken
     CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
@@ -179,6 +184,7 @@ void CompsGroupTest::test_merge_when_different_load_order() {
     CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("2"), core2.get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core2.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string("de"), core2.get_langonly());
     // When boolean attributes are missing in core-v2.xml, default values are taken
     CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
@@ -212,6 +218,7 @@ void CompsGroupTest::test_merge_with_empty() {
     CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core_empty.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core_empty.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), core_empty.get_order());
+    CPPUNIT_ASSERT_EQUAL(1, core_empty.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string("it"), core_empty.get_langonly());
     // boolean attributes are missing in core-empty.xml -> default values are taken
     CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
@@ -237,6 +244,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("2"), core.get_order());
+    CPPUNIT_ASSERT_EQUAL(2, core.get_order_int());
     CPPUNIT_ASSERT_EQUAL(std::string("de"), core.get_langonly());
     CPPUNIT_ASSERT_EQUAL(true, core.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(true, core.get_default());

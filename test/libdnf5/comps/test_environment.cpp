@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_environment.hpp"
 
 #include <libdnf5/comps/environment/query.hpp>
+#include <limits.h>
 
 #include <filesystem>
 #include <fstream>
@@ -45,6 +46,7 @@ void CompsEnvironmentTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env.get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
 }
 
@@ -61,6 +63,7 @@ void CompsEnvironmentTest::test_load_defaults() {
     CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_translated_description("ja"));
     CPPUNIT_ASSERT_EQUAL(std::string(""), minimal_empty.get_order());
+    CPPUNIT_ASSERT_EQUAL(INT_MAX, minimal_empty.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_empty.get_installed());
 }
 
@@ -80,6 +83,7 @@ void CompsEnvironmentTest::test_merge() {
     CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
+    CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
 }
 
@@ -100,6 +104,7 @@ void CompsEnvironmentTest::test_merge_when_different_load_order() {
     CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
+    CPPUNIT_ASSERT_EQUAL(4, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
 }
 
@@ -121,6 +126,7 @@ void CompsEnvironmentTest::test_merge_with_empty() {
     CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_empty.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_empty.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_empty.get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_empty.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_empty.get_installed());
 }
 
@@ -142,6 +148,7 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
     CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality."), minimal_env.get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität."), minimal_env.get_translated_description("de"));
     CPPUNIT_ASSERT_EQUAL(std::string("3"), minimal_env.get_order());
+    CPPUNIT_ASSERT_EQUAL(3, minimal_env.get_order_int());
     CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
 }
 
