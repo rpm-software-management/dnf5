@@ -40,6 +40,13 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
 
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
+    size_t description_column_width = 0;
+    if (!libdnf5::cli::tty::is_interactive()) {
+        // Do not hardcode 80 as non-interactive screen width. Let libdnf5::cli::tty to decide
+        auto screen_width = size_t(libdnf5::cli::tty::get_width());
+        scols_table_reduce_termwidth(table.get(), screen_width);
+        description_column_width = screen_width - 41;
+    }
     scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
     scols_table_new_column(table.get(), "Command line", 0.7, SCOLS_FL_TRUNC);
     scols_table_new_column(table.get(), "Date and time", 0, 0);
@@ -53,7 +60,11 @@ void print_transaction_list(std::vector<libdnf5::transaction::Transaction> & ts_
     for (auto & ts : ts_list) {
         struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
-        scols_line_set_data(ln, 1, ts.get_description().c_str());
+        auto description = ts.get_description();
+        if (!libdnf5::cli::tty::is_interactive()) {
+            description.resize(description_column_width);
+        }
+        scols_line_set_data(ln, 1, description.c_str());
         scols_line_set_data(ln, 2, libdnf5::utils::string::format_epoch(ts.get_dt_start()).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
