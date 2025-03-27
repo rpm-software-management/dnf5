@@ -12,10 +12,10 @@
     <description xml:lang="de">Grundlegende Funktionalität v2.</description>
     <description xml:lang="ja">基本的な機能です。v2</description>
     <grouplist>
-      <groupid>core</groupid>
+      <groupid>core-2</groupid>
     </grouplist>
     <optionlist>
-      <groupid>guest-agents</groupid>
+      <groupid>guest-agents-2</groupid>
       <groupid>standard</groupid>
     </optionlist>
   </environment>
