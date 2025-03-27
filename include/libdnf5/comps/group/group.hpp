@@ -91,8 +91,6 @@ public:
 
     /// @return The Group display order.
     /// @since 5.0
-    //
-    // TODO(pkratoch): respect the display_order when listing groups
     std::string get_order() const;
 
     /// @return The Group display order as an integer or INT_MAX if the order is invalid.
