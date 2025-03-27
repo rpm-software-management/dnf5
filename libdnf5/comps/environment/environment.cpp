@@ -35,6 +35,7 @@ extern "C" {
 }
 
 #include <libxml/tree.h>
+#include <limits.h>
 
 #include <set>
 #include <string>
@@ -155,6 +156,17 @@ std::string Environment::get_translated_description() const {
 
 std::string Environment::get_order() const {
     return get_comps_pool(p_impl->base).lookup_first_id_str<EnvironmentId>(p_impl->environment_ids, SOLVABLE_ORDER);
+}
+
+
+int Environment::get_order_int() const {
+    try {
+        return std::stoi(get_order());
+    } catch (const std::invalid_argument &) {
+        return INT_MAX;
+    } catch (const std::out_of_range &) {
+        return INT_MAX;
+    }
 }
 
 
