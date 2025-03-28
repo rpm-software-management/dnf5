@@ -22,7 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "repo/download_data.hpp"
+#include "repo/librepo.hpp"
 
+#include "libdnf5/repo/repo_weak.hpp"
+#include "libdnf5/utils/fs/temp.hpp"
 
 namespace libdnf5::repo {
 
@@ -50,15 +53,25 @@ public:
     static void load_local(DownloadData & download_data);
     static LibrepoHandle & get_cached_handle(Repo & repo);
 
-    void download_metadata(const std::string & destdir);
+    /// Adds repos for which metadata will be downloaded in parallel
+    void add(
+        libdnf5::repo::Repo & repo,
+        const std::string & destdir,
+        std::function<void(libdnf5::repo::Repo * repo)> load_repo);
 
+    // Download the previously added repos.
+    std::unordered_map<Repo *, std::vector<std::string>> download();
 
 private:
     struct CallbackData {
+        std::function<void(libdnf5::repo::Repo * repo)> load_repo;
+        std::string destination;
+        std::optional<libdnf5::utils::fs::TempDir> temp_download_target;
         void * user_cb_data{nullptr};
         double prev_total_to_download;
         double prev_downloaded;
         double sum_prev_downloaded;
+        RepoWeakPtr repo;
     };
 
     static LibrepoHandle init_local_handle(const DownloadData & download_data);
@@ -76,6 +89,7 @@ private:
     static int mirror_failure_cb(void * data, const char * msg, const char * url);
     static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
+    std::vector<CallbackData> callback_data;
 };
 
 }  // namespace libdnf5::repo
