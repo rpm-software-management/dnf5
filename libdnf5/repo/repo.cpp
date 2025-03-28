@@ -20,10 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_errors.hpp"
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
+#include "download_data.hpp"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv_repo.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/const.hpp"
@@ -86,7 +88,7 @@ private:
     SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
     bool expired{false};
     std::unique_ptr<SolvRepo> solv_repo;
-    std::unique_ptr<RepoDownloader> downloader;
+    std::unique_ptr<repo::DownloadData> downloader;
 
     WeakPtrGuard<Repo, false> data_guard;
 };
@@ -95,7 +97,7 @@ Repo::Impl::Impl(const BaseWeakPtr & base, const std::string & id, Repo::Type ty
     : base(base),
       type(type),
       config(base->get_config(), id),
-      downloader(new RepoDownloader(base, config, type)) {}
+      downloader(new DownloadData(base, config, type)) {}
 
 Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type)
     : p_impl(std::make_unique<Impl>(base, id, type)) {
@@ -199,18 +201,18 @@ bool Repo::is_local() const {
 
 void Repo::read_metadata_cache() {
     p_impl->downloader->reset_loaded();
-    p_impl->downloader->load_local();
+    RepoDownloader::load_local(*p_impl->downloader);
 }
 
 std::vector<std::pair<std::string, std::string>> Repo::get_appstream_metadata() const {
-    return get_downloader().get_appstream_metadata();
+    return get_download_data().get_appstream_metadata();
 }
 
 bool Repo::is_in_sync() {
     if (!p_impl->config.get_metalink_option().empty() && !p_impl->config.get_metalink_option().get_value().empty()) {
-        return p_impl->downloader->is_metalink_in_sync();
+        return RepoDownloader::is_metalink_in_sync(*this);
     }
-    return p_impl->downloader->is_repomd_in_sync();
+    return RepoDownloader::is_repomd_in_sync(*this);
 }
 
 
@@ -635,7 +637,7 @@ libdnf5::repo::RepoWeakPtr Repo::get_weak_ptr() {
     return {this, &p_impl->data_guard};
 }
 
-RepoDownloader & Repo::get_downloader() const {
+DownloadData & Repo::get_download_data() const {
     return *p_impl->downloader;
 }
 

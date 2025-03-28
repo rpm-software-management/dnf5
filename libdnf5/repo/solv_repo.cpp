@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base/base_impl.hpp"
 #include "repo_cache_private.hpp"
+#include "repo_downloader.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf5/base/base.hpp"
@@ -323,12 +324,12 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
     }
 }
 
-void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
+void SolvRepo::load_repo_ext(RepodataType type, const DownloadData & download_data) {
     std::string type_name = "";
-    load_repo_ext(type, type_name, downloader);
+    load_repo_ext(type, type_name, download_data);
 }
 
-void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name, const RepoDownloader & downloader) {
+void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name, const DownloadData & download_data) {
     auto & logger = *base->get_logger();
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
@@ -338,12 +339,12 @@ void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name
     std::string ext_fn;
 
     if (type == RepodataType::COMPS) {
-        ext_fn = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
+        ext_fn = download_data.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
         if (ext_fn.empty()) {
-            ext_fn = downloader.get_metadata_path(type_name);
+            ext_fn = download_data.get_metadata_path(type_name);
         }
     } else {
-        ext_fn = downloader.get_metadata_path(type_name);
+        ext_fn = download_data.get_metadata_path(type_name);
     }
 
     if (ext_fn.empty()) {
