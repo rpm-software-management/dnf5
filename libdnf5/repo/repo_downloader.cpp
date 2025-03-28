@@ -159,17 +159,21 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
         M_("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
 }
 
-
 // Use metalink to check whether our metadata are still current.
-bool RepoDownloader::is_metalink_in_sync() try {
-    auto & logger = *base->get_logger();
+bool RepoDownloader::is_metalink_in_sync(Repo & repo) try {
+    auto & download_data = repo.get_download_data();
+    auto & logger = *(download_data.base)->get_logger();
+    auto & config = download_data.config;
 
     libdnf5::utils::fs::TempDir tmpdir("tmpdir");
 
-    LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
+    CallbackData cbd;
+    cbd.repo = repo.get_weak_ptr();
 
+    LibrepoHandle h(RepoDownloader::init_remote_handle(repo, tmpdir.get_path().c_str()));
     h.set_opt(LRO_FETCHMIRRORS, 1L);
-    perform(h, false);
+
+    perform(download_data, h, false, &cbd);
     LrMetalink * metalink;
     h.get_info(LRI_METALINK, &metalink);
     if (!metalink) {
@@ -201,7 +205,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
         hash.chksum.reset(solv_chksum_create(chk_type));
     }
 
-    std::ifstream repomd(repomd_filename, std::ifstream::binary);
+    std::ifstream repomd(download_data.repomd_filename, std::ifstream::binary);
     char buf[4096];
     int readed;
     while ((readed = static_cast<int>(repomd.readsome(buf, sizeof(buf)))) > 0) {
@@ -228,39 +232,42 @@ bool RepoDownloader::is_metalink_in_sync() try {
 } catch (const std::runtime_error & e) {
     libdnf5::throw_with_nested(RepoDownloadError(
         M_("Error checking if metalink \"{}\" is in sync for repository \"{}\""),
-        get_source_info().second,
-        config.get_id()));
+        repo.get_download_data().get_source_info().second,
+        repo.get_download_data().config.get_id()));
 }
 
-
 // Use repomd to check whether our metadata are still current.
-bool RepoDownloader::is_repomd_in_sync() try {
-    auto & logger = *base->get_logger();
+bool RepoDownloader::is_repomd_in_sync(Repo & repo) try {
+    auto & download_data = repo.get_download_data();
+    auto & logger = *(download_data.base)->get_logger();
+    auto & config = download_data.config;
     LrYumRepo * yum_repo;
 
     libdnf5::utils::fs::TempDir tmpdir("tmpdir");
 
     const char * dlist[] = LR_YUM_REPOMDONLY;
 
-    LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
+    LibrepoHandle h(RepoDownloader::init_remote_handle(repo, tmpdir.get_path().c_str()));
 
     h.set_opt(LRO_YUMDLIST, dlist);
-    auto result = perform(h, config.get_repo_gpgcheck_option().get_value());
+    CallbackData cbd;
+    cbd.repo = repo.get_weak_ptr();
+    auto result = perform(download_data, h, config.get_repo_gpgcheck_option().get_value(), &cbd);
     result.get_info(LRR_YUM_REPO, &yum_repo);
 
-    auto same = utils::fs::have_files_same_content_noexcept(repomd_filename.c_str(), yum_repo->repomd);
+    auto same = utils::fs::have_files_same_content_noexcept(download_data.repomd_filename.c_str(), yum_repo->repomd);
     if (same)
         logger.debug("Sync check: repo \"{}\" in sync, repomd matches", config.get_id());
     else
         logger.trace("Sync check: failed for repo \"{}\", repomd mismatch", config.get_id());
     return same;
 } catch (const std::runtime_error & e) {
-    auto src = get_source_info();
+    auto src = repo.get_download_data().get_source_info();
     libdnf5::throw_with_nested(RepoDownloadError(
         M_("Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""),
         src.first,
         src.second,
-        config.get_id()));
+        repo.get_config().get_id()));
 }
 
 void RepoDownloader::load_local(DownloadData & download_data) try {
