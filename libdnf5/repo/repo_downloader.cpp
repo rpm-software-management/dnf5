@@ -65,22 +65,22 @@ int RepoDownloader::progress_cb(void * data, double total_to_download, double do
     if (!data) {
         return 0;
     }
-    auto repo_downloader = static_cast<RepoDownloader *>(data);
-    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
+    auto download_callback_data = static_cast<CallbackData *>(data);
+    if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
         // "total_to_download" and "downloaded" from librepo are related to the currently downloaded file.
         // We add the size of previously downloaded files.
         // ignore zero progress events at the beginning of the download, so we don't start with 100% progress
-        if (total_to_download != 0 || repo_downloader->prev_total_to_download != 0) {
-            if (total_to_download != repo_downloader->prev_total_to_download) {
-                repo_downloader->prev_total_to_download = total_to_download;
-                repo_downloader->sum_prev_downloaded += repo_downloader->prev_downloaded;
+        if (total_to_download != 0 || download_callback_data->prev_total_to_download != 0) {
+            if (total_to_download != download_callback_data->prev_total_to_download) {
+                download_callback_data->prev_total_to_download = total_to_download;
+                download_callback_data->sum_prev_downloaded += download_callback_data->prev_downloaded;
             }
-            repo_downloader->prev_downloaded = downloaded;
+            download_callback_data->prev_downloaded = downloaded;
         }
-        total_to_download += repo_downloader->sum_prev_downloaded;
-        downloaded += repo_downloader->sum_prev_downloaded;
+        total_to_download += download_callback_data->sum_prev_downloaded;
+        downloaded += download_callback_data->sum_prev_downloaded;
 
-        return download_callbacks->progress(repo_downloader->user_cb_data, total_to_download, downloaded);
+        return download_callbacks->progress(download_callback_data->user_cb_data, total_to_download, downloaded);
     }
     return 0;
 }
@@ -89,8 +89,8 @@ void RepoDownloader::fastest_mirror_cb(void * data, LrFastestMirrorStages stage,
     if (!data) {
         return;
     }
-    auto repo_downloader = static_cast<RepoDownloader *>(data);
-    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
+    auto download_callback_data = static_cast<CallbackData *>(data);
+    if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
         const char * msg;
         std::string msg_string;
         if (ptr) {
@@ -111,7 +111,7 @@ void RepoDownloader::fastest_mirror_cb(void * data, LrFastestMirrorStages stage,
             msg = nullptr;
         }
         download_callbacks->fastest_mirror(
-            repo_downloader->user_cb_data, static_cast<DownloadCallbacks::FastestMirrorStage>(stage), msg);
+            download_callback_data->user_cb_data, static_cast<DownloadCallbacks::FastestMirrorStage>(stage), msg);
     }
 }
 
@@ -120,9 +120,10 @@ int RepoDownloader::mirror_failure_cb(
     if (!data) {
         return 0;
     }
-    auto repo_downloader = static_cast<RepoDownloader *>(data);
-    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(repo_downloader->user_cb_data, msg, url, metadata);
+
+    auto download_callback_data = static_cast<CallbackData *>(data);
+    if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
+        return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, metadata);
     }
     return 0;
 };
@@ -406,16 +407,6 @@ LibrepoHandle RepoDownloader::init_remote_handle(Repo & repo, const char * destd
             M_("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
     }
 
-    if (set_callbacks) {
-        if (base->get_download_callbacks()) {
-            h.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
-            h.set_opt(LRO_PROGRESSDATA, this);
-            h.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-            h.set_opt(LRO_FASTESTMIRRORDATA, this);
-            h.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
-        }
-    }
-
     return h;
 }
 
@@ -535,42 +526,45 @@ void RepoDownloader::apply_http_headers(DownloadData & download_data, LibrepoHan
     handle.set_opt(LRO_HTTPHEADER, lr_headers.get());
 }
 
-
-LibrepoResult RepoDownloader::perform(LibrepoHandle & handle, bool set_gpg_home_dir) {
+LibrepoResult RepoDownloader::perform(
+    DownloadData & download_data, LibrepoHandle & handle, bool set_gpg_home_dir, CallbackData * cbd) {
     if (set_gpg_home_dir) {
-        auto pubringdir = pgp.get_keyring_dir();
+        auto pubringdir = download_data.pgp.get_keyring_dir();
         handle.set_opt(LRO_GNUPGHOMEDIR, pubringdir.c_str());
     }
 
-    // Start and end is called only if progress callback is set in handle.
-    LrProgressCb progress_func;
-    handle.get_info(LRI_PROGRESSCB, &progress_func);
+    add_countme_flag(download_data, handle);
+    auto & config = download_data.config;
 
-    auto * download_callbacks = base->get_download_callbacks();
-
-    add_countme_flag(handle);
-
-    if (progress_func && download_callbacks) {
-        user_cb_data = download_callbacks->add_new_download(
-            user_data,
+    // Callbacks are set only if callback data (cbd) is passed
+    auto * download_callbacks = download_data.base->get_download_callbacks();
+    if (cbd && download_callbacks) {
+        cbd->user_cb_data = download_callbacks->add_new_download(
+            download_data.user_data,
             !config.get_name_option().get_value().empty()
                 ? config.get_name_option().get_value().c_str()
                 : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
             -1);
-        prev_total_to_download = 0;
-        prev_downloaded = 0;
-        sum_prev_downloaded = 0;
+        cbd->prev_total_to_download = 0;
+        cbd->prev_downloaded = 0;
+        cbd->sum_prev_downloaded = 0;
+
+        handle.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
+        handle.set_opt(LRO_PROGRESSDATA, cbd);
+        handle.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
+        handle.set_opt(LRO_FASTESTMIRRORDATA, &cbd);
+        handle.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
     }
 
     try {
         auto result = handle.perform();
-        if (progress_func && download_callbacks) {
-            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
+        if (cbd && download_callbacks) {
+            download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
         }
         return result;
     } catch (const LibrepoError & ex) {
-        if (progress_func && download_callbacks) {
-            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
+        if (cbd && download_callbacks) {
+            download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
         }
         throw;
     }
