@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf5/conf/const.hpp"
+#include "libdnf5/repo/repo.hpp"
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
@@ -261,13 +262,13 @@ bool RepoDownloader::is_repomd_in_sync() try {
         config.get_id()));
 }
 
+void RepoDownloader::load_local(DownloadData & download_data) try {
+    auto & config = download_data.config;
+    LibrepoHandle h(RepoDownloader::init_local_handle(download_data));
 
-void RepoDownloader::load_local() try {
-    LibrepoHandle h(init_local_handle());
+    auto result = perform(download_data, h, config.get_repo_gpgcheck_option().get_value(), NULL);
 
-    auto result = perform(h, config.get_repo_gpgcheck_option().get_value());
-
-    repomd_filename = libdnf5::utils::string::c_to_str(get_yum_repo(result)->repomd);
+    download_data.repomd_filename = libdnf5::utils::string::c_to_str(get_yum_repo(result)->repomd);
 
     // copy the mirrors out of the handle (handle_get_info() allocates new
     // space and passes ownership, so we copy twice in this case, as we want to
@@ -276,23 +277,23 @@ void RepoDownloader::load_local() try {
     h.get_info(LRI_MIRRORS, &lr_mirrors);
     if (lr_mirrors) {
         for (auto mirror = lr_mirrors; *mirror; ++mirror) {
-            mirrors.emplace_back(*mirror);
+            download_data.mirrors.emplace_back(*mirror);
         }
     }
     g_strfreev(lr_mirrors);
 
-    revision = libdnf5::utils::string::c_to_str(get_yum_repomd(result)->revision);
+    download_data.revision = libdnf5::utils::string::c_to_str(get_yum_repomd(result)->revision);
 
     GError * err_p{nullptr};
     // TODO(lukash) return time_t instead of converting to signed int
-    max_timestamp = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(result), &err_p));
+    download_data.max_timestamp = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(result), &err_p));
     if (err_p != nullptr) {
         throw libdnf5::repo::LibrepoError(std::unique_ptr<GError>(err_p));
     }
 
     for (auto elem = get_yum_repomd(result)->content_tags; elem; elem = g_slist_next(elem)) {
         if (elem->data) {
-            content_tags.emplace_back(static_cast<const char *>(elem->data));
+            download_data.content_tags.emplace_back(static_cast<const char *>(elem->data));
         }
     }
 
@@ -300,7 +301,7 @@ void RepoDownloader::load_local() try {
         if (elem->data) {
             auto distro_tag = static_cast<LrYumDistroTag *>(elem->data);
             if (distro_tag->tag) {
-                distro_tags.emplace_back(distro_tag->cpeid, distro_tag->tag);
+                download_data.distro_tags.emplace_back(distro_tag->cpeid, distro_tag->tag);
             }
         }
     }
@@ -308,39 +309,40 @@ void RepoDownloader::load_local() try {
     for (auto elem = get_yum_repomd(result)->records; elem; elem = g_slist_next(elem)) {
         if (elem->data) {
             auto rec = static_cast<LrYumRepoMdRecord *>(elem->data);
-            metadata_locations.emplace_back(rec->type, rec->location_href);
+            download_data.metadata_locations.emplace_back(rec->type, rec->location_href);
         }
     }
 
     for (auto * elem = get_yum_repo(result)->paths; elem; elem = g_slist_next(elem)) {
         if (elem->data) {
             auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
-            metadata_paths[yumrepopath->type] = yumrepopath->path;
+            download_data.metadata_paths[yumrepopath->type] = yumrepopath->path;
         }
     }
 } catch (const std::runtime_error & e) {
     libdnf5::throw_with_nested(
-        RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
+        RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), download_data.config.get_id()));
 }
 
 /// Returns a librepo handle, set as per the repo options.
 /// Note that destdir is None, and the handle is cached.
 // TODO(jrohel) The librepo handle callbacks are not set. If librepo itself downloads an extra file
 //              (eg metalink) we won't know about it.
-LibrepoHandle & RepoDownloader::get_cached_handle() {
-    if (!handle) {
-        handle = init_remote_handle(nullptr, true, false);
+LibrepoHandle & RepoDownloader::get_cached_handle(Repo & repo) {
+    auto & donwload_data = repo.get_download_data();
+    if (!donwload_data.handle) {
+        donwload_data.handle = RepoDownloader::init_remote_handle(repo, nullptr, true);
     }
-    apply_http_headers(*handle);
-    return *handle;
+    apply_http_headers(donwload_data, *donwload_data.handle);
+    return *donwload_data.handle;
 }
 
-LibrepoHandle RepoDownloader::init_local_handle() {
+LibrepoHandle RepoDownloader::init_local_handle(const DownloadData & download_data) {
     LibrepoHandle h;
 
-    common_handle_setup(h);
+    common_handle_setup(h, download_data);
 
-    std::string cachedir = config.get_cachedir();
+    std::string cachedir = download_data.config.get_cachedir();
     h.set_opt(LRO_DESTDIR, cachedir.c_str());
     const char * urls[] = {cachedir.c_str(), nullptr};
     h.set_opt(LRO_URLS, urls);
@@ -349,15 +351,18 @@ LibrepoHandle RepoDownloader::init_local_handle() {
     return h;
 }
 
-LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirror_setup, bool set_callbacks) {
+LibrepoHandle RepoDownloader::init_remote_handle(Repo & repo, const char * destdir, bool mirror_setup) {
+    auto & download_data = repo.get_download_data();
     LibrepoHandle h;
-    h.init_remote(config);
+    h.init_remote(download_data.config);
 
-    common_handle_setup(h);
+    RepoDownloader::common_handle_setup(h, download_data);
 
-    apply_http_headers(h);
+    apply_http_headers(download_data, h);
 
     h.set_opt(LRO_DESTDIR, destdir);
+
+    auto & config = download_data.config;
 
     enum class Source { NONE, METALINK, MIRRORLIST } source{Source::NONE};
     std::string tmp;
@@ -388,8 +393,8 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
             h.set_opt(LRO_FASTESTMIRRORCACHE, fastest_mirror_cache_dir.c_str());
         } else {
             // use already resolved mirror list
-            std::vector<const char *> c_mirrors(mirrors.size() + 1, nullptr);
-            str_vector_to_char_array(mirrors, c_mirrors.data());
+            std::vector<const char *> c_mirrors(download_data.mirrors.size() + 1, nullptr);
+            str_vector_to_char_array(download_data.mirrors, c_mirrors.data());
             h.set_opt(LRO_URLS, c_mirrors.data());
         }
     } else if (!config.get_baseurl_option().get_value().empty()) {
@@ -414,8 +419,8 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
     return h;
 }
 
-void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
-    auto optional_metadata = get_optional_metadata();
+void RepoDownloader::common_handle_setup(LibrepoHandle & h, const DownloadData & download_data) {
+    auto optional_metadata = download_data.get_optional_metadata();
 
     if (optional_metadata.extract(libdnf5::METADATA_TYPE_ALL)) {
         h.set_opt(LRO_YUMDLIST, LR_RPMMD_FULL);
@@ -475,12 +480,12 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
         h.set_opt(LRO_YUMDLIST, dlist.data());
     }
 
-    h.set_opt(LRO_PRESERVETIME, static_cast<long>(preserve_remote_time));
+    h.set_opt(LRO_PRESERVETIME, static_cast<long>(download_data.preserve_remote_time));
     h.set_opt(LRO_REPOTYPE, LR_YUMREPO);
     h.set_opt(LRO_INTERRUPTIBLE, 1L);
-    h.set_opt(LRO_GPGCHECK, config.get_repo_gpgcheck_option().get_value());
-    h.set_opt(LRO_MAXMIRRORTRIES, static_cast<long>(max_mirror_tries));
-    h.set_opt(LRO_MAXPARALLELDOWNLOADS, config.get_max_parallel_downloads_option().get_value());
+    h.set_opt(LRO_GPGCHECK, download_data.config.get_repo_gpgcheck_option().get_value());
+    h.set_opt(LRO_MAXMIRRORTRIES, static_cast<long>(download_data.max_mirror_tries));
+    h.set_opt(LRO_MAXPARALLELDOWNLOADS, download_data.config.get_max_parallel_downloads_option().get_value());
 
     LrUrlVars * repomd_substs = nullptr;
     repomd_substs = lr_urlvars_set(repomd_substs, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
@@ -488,24 +493,24 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
 
     LrUrlVars * substs = nullptr;
     // Deprecated, we have direct access to base, therefore we don't need to set explicitly substitutions
-    for (const auto & item : substitutions) {
+    for (const auto & item : download_data.substitutions) {
         substs = lr_urlvars_set(substs, item.first.c_str(), item.second.c_str());
     }
-    for (const auto & item : base->get_vars()->get_variables()) {
+    for (const auto & item : download_data.base->get_vars()->get_variables()) {
         substs = lr_urlvars_set(substs, item.first.c_str(), item.second.value.c_str());
     }
     h.set_opt(LRO_VARSUB, substs);
 
 #ifdef LRO_SUPPORTS_CACHEDIR
     // If zchunk is enabled, set librepo cache dir
-    if (config.get_main_config().get_zchunk_option().get_value()) {
-        h.set_opt(LRO_CACHEDIR, config.get_basecachedir_option().get_value().c_str());
+    if (download_data.config.get_main_config().get_zchunk_option().get_value()) {
+        h.set_opt(LRO_CACHEDIR, download_data.config.get_basecachedir_option().get_value().c_str());
     }
 #endif
 }
 
-void RepoDownloader::apply_http_headers(LibrepoHandle & handle) {
-    if (http_headers.empty()) {
+void RepoDownloader::apply_http_headers(DownloadData & download_data, LibrepoHandle & handle) {
+    if (download_data.http_headers.empty()) {
         handle.set_opt(LRO_HTTPHEADER, nullptr);
         return;
     }
@@ -519,10 +524,10 @@ void RepoDownloader::apply_http_headers(LibrepoHandle & handle) {
         }
     };
 
-    lr_headers.reset(new char * [http_headers.size() + 1] {});
+    lr_headers.reset(new char * [download_data.http_headers.size() + 1] {});
 
-    for (size_t i = 0; i < http_headers.size(); ++i) {
-        const auto & header = http_headers[i];
+    for (size_t i = 0; i < download_data.http_headers.size(); ++i) {
+        const auto & header = download_data.http_headers[i];
         lr_headers[i] = new char[header.size() + 1];
         strcpy(lr_headers[i], header.c_str());
     }
@@ -608,8 +613,9 @@ const std::array<const int, 3> COUNTME_BUCKETS = {{2, 5, 25}};
 ///
 /// In the below comments, the window's current position will be referred to
 /// as "this window" for brevity.
-void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
-    auto & logger = *base->get_logger();
+void RepoDownloader::add_countme_flag(DownloadData & download_data, LibrepoHandle & handle) {
+    auto & logger = *(download_data.base)->get_logger();
+    auto & config = download_data.config;
 
     // Bail out if not counting or not running as root (since the persistdir is
     // only root-writable)
@@ -714,7 +720,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
  * Some systems, such as containers that don't run an init system, may have the
  * file missing, empty or uninitialized, in which case this function returns 0.
  */
-time_t RepoDownloader::get_system_epoch() const {
+time_t RepoDownloader::get_system_epoch() {
     std::string filename = "/etc/machine-id";
     std::string id;
     struct stat st;
