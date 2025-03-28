@@ -35,11 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fstream>
 #include <random>
 
-
-#define METADATA_RELATIVE_DIR "repodata"
-#define PACKAGES_RELATIVE_DIR "packages"
-#define METALINK_FILENAME     "metalink.xml"
-#define MIRRORLIST_FILENAME   "mirrorlist"
 #define RECOGNIZED_CHKSUMS    {"sha512", "sha256"}
 
 
