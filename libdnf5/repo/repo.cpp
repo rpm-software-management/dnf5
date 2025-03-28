@@ -217,7 +217,21 @@ bool Repo::is_in_sync() {
 
 
 void Repo::download_metadata(const std::string & destdir) {
-    p_impl->downloader->download_metadata(destdir);
+    RepoDownloader repo_downloader{};
+    repo_downloader.add(*this, destdir, NULL);
+    // If there is an error there should be only the one map key (this repo) in the returned
+    // unordered map but iterate through all keys to be safe.
+    for (auto & [repo, errs] : repo_downloader.download()) {
+        if (!errs.empty()) {
+            auto src = repo->get_download_data().get_source_info();
+            throw libdnf5::repo::RepoDownloadError(
+                M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
+                src.first,
+                src.second,
+                repo->get_id(),
+                libdnf5::utils::string::join(errs, ", "));
+        }
+    }
 }
 
 void Repo::load() {
