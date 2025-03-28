@@ -165,7 +165,7 @@ void FileDownloader::download() try {
     for (auto & file_target : p_impl->targets) {
         LrHandle * handle;
         if (file_target.repo.is_valid()) {
-            handle = file_target.repo->get_downloader().get_cached_handle().get();
+            handle = RepoDownloader::get_cached_handle(*file_target.repo).get();
         } else {
             handle = local_handle.get();
         }

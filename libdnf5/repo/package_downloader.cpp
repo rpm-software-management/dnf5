@@ -175,7 +175,7 @@ void PackageDownloader::download() try {
         }
 
         auto * lr_target = lr_packagetarget_new_v3(
-            pkg_target.package.get_repo()->get_downloader().get_cached_handle().get(),
+            RepoDownloader::get_cached_handle(*pkg_target.package.get_repo()).get(),
             pkg_target.package.get_location().c_str(),
             pkg_target.destination.c_str(),
             static_cast<LrChecksumType>(pkg_target.package.get_checksum().get_type()),

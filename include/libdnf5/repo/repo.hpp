@@ -48,7 +48,7 @@ class PackageSack;
 namespace libdnf5::repo {
 
 class SolvRepo;
-class RepoDownloader;
+class DownloadData;
 
 
 /// RPM repository
@@ -324,6 +324,7 @@ private:
     friend class rpm::PackageSack;
     friend class FileDownloader;
     friend class PackageDownloader;
+    friend class RepoDownloader;
     friend class solv::Pool;
 
     /// Loads the repository objects into sacks.
@@ -363,7 +364,7 @@ private:
     /// @return Whether at least the repodata cache cloning was successful.
     LIBDNF_LOCAL bool clone_root_metadata();
 
-    LIBDNF_LOCAL RepoDownloader & get_downloader() const;
+    LIBDNF_LOCAL DownloadData & get_download_data() const;
 
     LIBDNF_LOCAL bool is_loaded() const;
 
