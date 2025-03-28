@@ -27,6 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_errors.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 
+#include <fmt/format.h>
+#include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/util.h>
@@ -38,6 +40,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #define RECOGNIZED_CHKSUMS {"sha512", "sha256"}
 
+namespace std {
+
+template <>
+struct default_delete<LrMetadataTarget> {
+    void operator()(LrMetadataTarget * ptr) noexcept { lr_metadatatarget_free(ptr); }
+};
+
+}  // namespace std
 
 namespace libdnf5::repo {
 
@@ -60,6 +70,32 @@ static LrYumRepoMd * get_yum_repomd(LibrepoResult & result) {
     return yum_repomd;
 }
 
+int RepoDownloader::end_cb(void * data, LrTransferStatus status, const char * msg) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+
+    auto download_callback_data = static_cast<CallbackData *>(data);
+    auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
+    if (cb_status == DownloadCallbacks::TransferStatus::SUCCESSFUL && download_callback_data) {
+        // move all downloaded object from tmpdir to destdir
+        for (auto & dir :
+             std::filesystem::directory_iterator(download_callback_data->temp_download_target->get_path())) {
+            auto tmp_item = dir.path();
+
+            auto target_item = download_callback_data->destination / tmp_item.filename();
+            std::filesystem::remove_all(target_item);
+
+            utils::fs::move_recursive(tmp_item, target_item);
+        }
+
+        if (download_callback_data->load_repo) {
+            download_callback_data->load_repo(download_callback_data->repo.get());
+        }
+    }
+    if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
+        return download_callbacks->end(download_callback_data->user_cb_data, cb_status, msg);
+    }
+    return 0;
+}
 
 int RepoDownloader::progress_cb(void * data, double total_to_download, double downloaded) {
     if (!data) {
@@ -115,6 +151,18 @@ void RepoDownloader::fastest_mirror_cb(void * data, LrFastestMirrorStages stage,
     }
 }
 
+int RepoDownloader::mirror_failure_cb(void * data, const char * msg, const char * url) {
+    if (!data) {
+        return 0;
+    }
+    auto download_callback_data = static_cast<CallbackData *>(data);
+    if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
+        // In this callback type we don't have the `metadata` type, pass NULL instead. The dnf5 callback accounts for this.
+        return download_callbacks->mirror_failure(download_callback_data->user_cb_data, msg, url, NULL);
+    }
+    return 0;
+};
+
 int RepoDownloader::mirror_failure_cb(
     void * data, const char * msg, const char * url, [[maybe_unused]] const char * metadata) {
     if (!data) {
@@ -134,29 +182,87 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
       code(lr_error->code) {}
 
 
+void RepoDownloader::add(
+    libdnf5::repo::Repo & repo,
+    const std::string & destdir,
+    std::function<void(libdnf5::repo::Repo * repo)> load_repo) {
+    auto & cbd = callback_data.emplace_back();
+    cbd.repo = repo.get_weak_ptr();
+    cbd.destination = destdir;
+    cbd.load_repo = load_repo;
+}
 
-
-
-void RepoDownloader::download_metadata(const std::string & destdir) try {
-    std::filesystem::create_directories(destdir);
-    libdnf5::utils::fs::TempDir tmpdir(destdir, "tmpdir");
-
-    LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
-    perform(h, config.get_repo_gpgcheck_option().get_value());
-
-    // move all downloaded object from tmpdir to destdir
-    for (auto & dir : std::filesystem::directory_iterator(tmpdir.get_path())) {
-        auto tmp_item = dir.path();
-
-        auto target_item = destdir / tmp_item.filename();
-        std::filesystem::remove_all(target_item);
-
-        utils::fs::move_recursive(tmp_item, target_item);
+std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() try {
+    if (callback_data.empty()) {
+        return {};
     }
+
+    //TODO(amatej): If we make this API public should we take cacheonly option into account?
+    //              PackageDownloader respects it.
+    //              For repos it is currently handled in update_and_load_repos so we don't
+    //              even attempt to download remote repos with cacheonly enabled.
+
+    GError * err{nullptr};
+    std::vector<std::tuple<RepoWeakPtr, std::unique_ptr<LrMetadataTarget>>> lr_targets;
+    for (auto & cbd : callback_data) {
+        std::filesystem::create_directories(cbd.destination);
+        auto & download_data = cbd.repo->get_download_data();
+        cbd.temp_download_target = libdnf5::utils::fs::TempDir{cbd.destination, "tmpdir"};
+
+        auto * download_callbacks = cbd.repo->get_base()->get_download_callbacks();
+        auto & config = cbd.repo->get_config();
+        if (download_callbacks) {
+            cbd.user_cb_data = download_callbacks->add_new_download(
+                download_data.user_data,
+                !config.get_name_option().get_value().empty()
+                    ? config.get_name_option().get_value().c_str()
+                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
+                -1);
+            cbd.prev_total_to_download = 0;
+            cbd.prev_downloaded = 0;
+            cbd.sum_prev_downloaded = 0;
+        }
+        download_data.handle = init_remote_handle(*cbd.repo, cbd.temp_download_target->get_path().c_str(), true);
+        download_data.handle->set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
+        download_data.handle->set_opt(LRO_FASTESTMIRRORDATA, &cbd);
+        add_countme_flag(download_data, *download_data.handle);
+        auto t = lr_metadatatarget_new2(
+            download_data.handle->get(),
+            &cbd,
+            static_cast<LrProgressCb>(progress_cb),
+            static_cast<LrMirrorFailureCb>(mirror_failure_cb),
+            static_cast<LrEndCb>(end_cb),
+            config.get_repo_gpgcheck_option().get_value() ? download_data.pgp.get_keyring_dir().c_str() : NULL,
+            0);
+        lr_targets.emplace_back(cbd.repo, t);
+    }
+
+    // Adding items to the end of GSList is slow. We go from the back and add items to the beginning.
+    GSList * list{nullptr};
+    for (auto it = lr_targets.rbegin(); it != lr_targets.rend(); ++it) {
+        list = g_slist_prepend(list, std::get<1>(*it).get());
+    }
+    std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
+
+
+    if (!lr_download_metadata(list, &err)) {
+        throw LibrepoError(std::unique_ptr<GError>(err));
+    }
+
+    std::unordered_map<Repo *, std::vector<std::string>> per_repo_errors;
+    for (auto & [repo, target] : lr_targets) {
+        std::vector<std::string> errors;
+        for (GList * err = target->err; err; err = g_list_next(err)) {
+            gchar * err_msg = (gchar *)err->data;
+            errors.emplace_back(err_msg);
+        }
+
+        per_repo_errors[repo.get()] = errors;
+    }
+
+    return per_repo_errors;
 } catch (const std::runtime_error & e) {
-    auto src = get_source_info();
-    libdnf5::throw_with_nested(RepoDownloadError(
-        M_("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
+    libdnf5::throw_with_nested(RepoDownloadError(M_("Failed to download metadata")));
 }
 
 // Use metalink to check whether our metadata are still current.
