@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF5_REPO_REPO_DOWNLOADER_HPP
 
 
+#include "repo/download_data.hpp"
 
 
 namespace libdnf5::repo {
@@ -42,29 +43,18 @@ public:
     static constexpr const char * MD_FILENAME_MODULES = "modules";
     static constexpr const char * MD_FILENAME_APPSTREAM = "appstream";
 
+    //TODO(amatej): make these non static and check all added repos metalink/repomd in parallel
+    static bool is_metalink_in_sync(Repo & repo);
+    static bool is_repomd_in_sync(Repo & repo);
 
+    static void load_local(DownloadData & download_data);
+    static LibrepoHandle & get_cached_handle(Repo & repo);
 
     void download_metadata(const std::string & destdir);
-    bool is_metalink_in_sync();
-    bool is_repomd_in_sync();
-    void load_local();
-    LibrepoHandle & get_cached_handle();
-
 
 
 private:
-    LibrepoHandle init_local_handle();
-    LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true, bool set_callbacks = true);
-    void common_handle_setup(LibrepoHandle & h);
-
-    void apply_http_headers(LibrepoHandle & handle);
-
     LibrepoResult perform(LibrepoHandle & handle, bool set_gpg_home_dir);
-
-    std::pair<std::string, std::string> get_source_info() const;
-
-    void add_countme_flag(LibrepoHandle & handle);
-    time_t get_system_epoch() const;
 
     struct CallbackData {
         void * user_cb_data{nullptr};
@@ -72,8 +62,18 @@ private:
         double prev_downloaded;
         double sum_prev_downloaded;
     };
+
+    static LibrepoHandle init_local_handle(const DownloadData & download_data);
+    static LibrepoHandle init_remote_handle(Repo & repo, const char * destdir, bool mirror_setup = true);
+    static void common_handle_setup(LibrepoHandle & h, const DownloadData & download_data);
+    static void apply_http_headers(DownloadData & download_data, LibrepoHandle & handle);
+    static void add_countme_flag(DownloadData & download_data, LibrepoHandle & handle);
+    static time_t get_system_epoch();
+
+    static int end_cb(void * data, LrTransferStatus status, const char * msg);
     static int progress_cb(void * data, double total_to_download, double downloaded);
     static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
+    static int mirror_failure_cb(void * data, const char * msg, const char * url);
     static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
 };
