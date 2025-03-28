@@ -66,11 +66,12 @@ private:
     void add_countme_flag(LibrepoHandle & handle);
     time_t get_system_epoch() const;
 
-    void * user_cb_data{nullptr};
-    double prev_total_to_download;
-    double prev_downloaded;
-    double sum_prev_downloaded;
-
+    struct CallbackData {
+        void * user_cb_data{nullptr};
+        double prev_total_to_download;
+        double prev_downloaded;
+        double sum_prev_downloaded;
+    };
     static int progress_cb(void * data, double total_to_download, double downloaded);
     static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
     static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
