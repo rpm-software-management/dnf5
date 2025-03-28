@@ -20,23 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_REPO_DOWNLOADER_HPP
 #define LIBDNF5_REPO_REPO_DOWNLOADER_HPP
 
-#include "librepo.hpp"
-#include "repo_pgp.hpp"
 
-#include "libdnf5/base/base_weak.hpp"
-#include "libdnf5/common/exception.hpp"
-#include "libdnf5/repo/config_repo.hpp"
-#include "libdnf5/repo/repo.hpp"
-#include "libdnf5/repo/repo_callbacks.hpp"
-
-#include <librepo/librepo.h>
-
-#include <map>
-#include <memory>
-#include <optional>
-#include <set>
-#include <string>
-#include <vector>
 
 
 namespace libdnf5::repo {
@@ -58,30 +42,17 @@ public:
     static constexpr const char * MD_FILENAME_MODULES = "modules";
     static constexpr const char * MD_FILENAME_APPSTREAM = "appstream";
 
-    RepoDownloader(const libdnf5::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type);
 
-    ~RepoDownloader();
 
     void download_metadata(const std::string & destdir);
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
     void load_local();
-    void reset_loaded();
-
     LibrepoHandle & get_cached_handle();
 
-    void set_callbacks(std::unique_ptr<libdnf5::repo::RepoCallbacks> && callbacks) noexcept;
-    void set_user_data(void * user_data) noexcept;
-    void * get_user_data() const noexcept;
-
-    const std::string & get_metadata_path(const std::string & metadata_type) const;
-    std::vector<std::pair<std::string, std::string>> get_appstream_metadata() const;
 
 
 private:
-    friend class Repo;
-    friend class RepoSack;
-
     LibrepoHandle init_local_handle();
     LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true, bool set_callbacks = true);
     void common_handle_setup(LibrepoHandle & h);
@@ -95,16 +66,6 @@ private:
     void add_countme_flag(LibrepoHandle & handle);
     time_t get_system_epoch() const;
 
-    std::set<std::string> get_optional_metadata() const;
-    bool is_appstream_metadata_type(const std::string & type) const;
-
-    libdnf5::BaseWeakPtr base;
-    const ConfigRepo & config;
-    Repo::Type repo_type;
-    RepoPgp pgp;
-
-    std::unique_ptr<RepoCallbacks> callbacks;
-    void * user_data{nullptr};
     void * user_cb_data{nullptr};
     double prev_total_to_download;
     double prev_downloaded;
@@ -114,23 +75,6 @@ private:
     static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
     static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
-    // download input
-    bool preserve_remote_time = false;
-    int max_mirror_tries = 0;  // try all mirrors
-    std::map<std::string, std::string> substitutions;
-    std::vector<std::string> http_headers;
-
-    // download output
-    std::string repomd_filename;
-    std::vector<std::string> mirrors;
-    std::string revision;
-    int max_timestamp{0};
-    std::vector<std::string> content_tags;
-    std::vector<std::pair<std::string, std::string>> distro_tags;
-    std::vector<std::pair<std::string, std::string>> metadata_locations;
-    std::map<std::string, std::string> metadata_paths;
-
-    std::optional<LibrepoHandle> handle;
 };
 
 }  // namespace libdnf5::repo
