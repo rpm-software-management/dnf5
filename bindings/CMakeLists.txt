@@ -17,6 +17,7 @@ endif()
 
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR})
 
 
 # SWIG is flooding logs with warnings we can't fix -> turn them off
@@ -51,7 +52,7 @@ endif()
 
 
 # list of all modules that will be included in libdnf5 bindings
-list(APPEND SWIG_LIBDNF5_MODULES advisory base common comps conf logger repo rpm transaction plugin utils)
+list(APPEND SWIG_LIBDNF5_MODULES advisory base common comps conf exception logger repo rpm transaction plugin utils)
 
 
 # list of all modules that will be included in libdnf5-cli bindings
