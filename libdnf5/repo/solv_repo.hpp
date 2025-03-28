@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF5_REPO_SOLV_REPO_HPP
 #define LIBDNF5_REPO_SOLV_REPO_HPP
 
-#include "repo_downloader.hpp"
+#include "download_data.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 
@@ -72,8 +72,8 @@ public:
     void load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
-    void load_repo_ext(RepodataType type, const RepoDownloader & downloader);
-    void load_repo_ext(RepodataType type, const std::string & in_type_name, const RepoDownloader & downloader);
+    void load_repo_ext(RepodataType type, const DownloadData & download_data);
+    void load_repo_ext(RepodataType type, const std::string & in_type_name, const DownloadData & download_data);
 
     /// Loads system repository into the pool.
     ///
