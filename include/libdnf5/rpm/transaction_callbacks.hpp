@@ -60,16 +60,19 @@ public:
     // TODO(jrohel): Are all scriptlets types present and correct?
     enum class ScriptType {
         UNKNOWN,
-        PRE_INSTALL,            // "%pre"
-        POST_INSTALL,           // "%post"
-        PRE_UNINSTALL,          // "%preun"
-        POST_UNINSTALL,         // "%postun"
-        PRE_TRANSACTION,        // "%pretrans"
-        POST_TRANSACTION,       // "%posttrans"
-        TRIGGER_PRE_INSTALL,    // "%triggerprein"
-        TRIGGER_INSTALL,        // "%triggerin"
-        TRIGGER_UNINSTALL,      // "%triggerun"
-        TRIGGER_POST_UNINSTALL  // "%triggerpostun"
+        PRE_INSTALL,             // "%pre"
+        POST_INSTALL,            // "%post"
+        PRE_UNINSTALL,           // "%preun"
+        POST_UNINSTALL,          // "%postun"
+        PRE_TRANSACTION,         // "%pretrans"
+        POST_TRANSACTION,        // "%posttrans"
+        TRIGGER_PRE_INSTALL,     // "%triggerprein"
+        TRIGGER_INSTALL,         // "%triggerin"
+        TRIGGER_UNINSTALL,       // "%triggerun"
+        TRIGGER_POST_UNINSTALL,  // "%triggerpostun"
+        SYSUSERS,                // sysusers.d integration
+        PREUN_TRANSACTION,       // "%preuntrans"
+        POSTUN_TRANSACTION       // "%postuntrans"
     };
 
     /// @param type  scriptlet type

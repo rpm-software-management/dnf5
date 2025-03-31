@@ -43,6 +43,12 @@ const char * TransactionCallbacks::script_type_to_string(ScriptType type) noexce
             return "trigger-uninstall";
         case ScriptType::TRIGGER_POST_UNINSTALL:
             return "trigger-post-uninstall";
+        case ScriptType::SYSUSERS:
+            return "sysusers";
+        case ScriptType::PREUN_TRANSACTION:
+            return "preun-transaction";
+        case ScriptType::POSTUN_TRANSACTION:
+            return "postun-transaction";
         case ScriptType::UNKNOWN:
             return "unknown";
     }
