@@ -476,6 +476,12 @@ TransactionCallbacks::ScriptType Transaction::rpm_tag_to_script_type(rpmTag_e ta
             return TransactionCallbacks::ScriptType::TRIGGER_UNINSTALL;
         case RPMTAG_TRIGGERPOSTUN:
             return TransactionCallbacks::ScriptType::TRIGGER_POST_UNINSTALL;
+        case RPMTAG_SYSUSERS:
+            return TransactionCallbacks::ScriptType::SYSUSERS;
+        case RPMTAG_PREUNTRANS:
+            return TransactionCallbacks::ScriptType::PREUN_TRANSACTION;
+        case RPMTAG_POSTUNTRANS:
+            return TransactionCallbacks::ScriptType::POSTUN_TRANSACTION;
         default:
             return TransactionCallbacks::ScriptType::UNKNOWN;
     }
