@@ -1050,6 +1050,7 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
     for (int i = 1; i < argc;) {
+        char unused_short_option = 0;
         if (owner.p_impl->complete_arg_ptr) {
             if (argv + i > owner.p_impl->complete_arg_ptr) {
                 return;
@@ -1093,6 +1094,9 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
                     }
                 }
             }
+            if (!used && !long_option) {
+                unused_short_option = tmp[short_option_idx];
+            }
         }
         if (!used) {
             for (auto & cmd : cmds) {
@@ -1125,11 +1129,17 @@ void ArgumentParser::CommandOrdinary::parse(const char * option, int argc, const
             used = true;
         }
         if (!used) {
+            std::string unknown_argument;
+            if (unused_short_option) {
+                unknown_argument = std::string("-") + std::string(1, unused_short_option);
+            } else {
+                unknown_argument = std::string(argv[i]);
+            }
             throw ArgumentParserUnknownArgumentError(
                 std::string(id),
-                std::string(argv[i]),
+                unknown_argument,
                 M_("Unknown argument \"{}\" for command \"{}\""),
-                std::string(argv[i]),
+                unknown_argument,
                 id);
         }
     }
