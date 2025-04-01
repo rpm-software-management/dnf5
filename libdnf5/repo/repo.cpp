@@ -520,6 +520,14 @@ bool Repo::clone_root_metadata() {
 
     auto repo_cachedir = p_impl->config.get_cachedir();
     auto base_cachedir = p_impl->config.get_basecachedir_option().get_value();
+    auto system_cachedir = p_impl->config.get_main_config().get_system_cachedir_option().get_value();
+
+    // return fast if the system_cachedir does not exist or is equivelent to base_cachedir
+    std::error_code ec;
+    if (!std::filesystem::exists(system_cachedir, ec) ||
+        std::filesystem::equivalent(base_cachedir, system_cachedir, ec)) {
+        return false;
+    }
 
     auto base_path_pos = repo_cachedir.find(base_cachedir);
     libdnf_assert(
@@ -529,8 +537,7 @@ bool Repo::clone_root_metadata() {
         base_cachedir);
 
     auto root_repo_cachedir = repo_cachedir;
-    root_repo_cachedir.replace(
-        base_path_pos, base_cachedir.size(), p_impl->config.get_main_config().get_system_cachedir_option().get_value());
+    root_repo_cachedir.replace(base_path_pos, base_cachedir.size(), system_cachedir);
 
     auto root_repodata_cachedir = std::filesystem::path(root_repo_cachedir) / CACHE_METADATA_DIR;
     try {
