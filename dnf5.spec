@@ -416,7 +416,6 @@ Package management library.
 %dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.2*
 %dir %{_prefix}/lib/sysimage/libdnf5
-%dir %{_prefix}/lib/sysimage/libdnf5
 %attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/environments.toml
 %verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/groups.toml
