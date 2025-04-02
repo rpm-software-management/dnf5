@@ -649,13 +649,13 @@ Libdnf5 plugin that allows to run actions (external executables) on hooks.
 %if %{with plugin_appstream}
 
 %package -n libdnf5-plugin-appstream
-Summary:        Libdnf5 plugin to install repo Appstream data
+Summary:        Libdnf5 plugin to install repository AppStream data
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(appstream) >= 0.16
 
 %description -n libdnf5-plugin-appstream
-Libdnf5 plugin that installs repository's Appstream data, for repositories which provide them.
+Libdnf5 plugin that installs repository's AppStream data, for repositories which provide them.
 
 %files -n libdnf5-plugin-appstream
 %{_libdir}/libdnf5/plugins/appstream.so
