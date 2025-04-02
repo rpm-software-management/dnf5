@@ -158,6 +158,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(resolve);
     cmd.register_named_arg(alldeps);
     create_destdir_option(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     cmd.register_named_arg(srpm);
     cmd.register_named_arg(url);
     cmd.register_named_arg(urlprotocol);
@@ -210,6 +211,14 @@ void DownloadCommand::run() {
         pkg_query.filter_latest_evr();
         if (!arch_option.empty()) {
             pkg_query.filter_arch(std::vector<std::string>(arch_option.begin(), arch_option.end()));
+        }
+
+        if (!pkg_query.size() && !ctx.get_base().get_config().get_skip_unavailable_option().get_value()) {
+            // User tried `dnf5 download non-sense` or `dnf download non-sense-wildcard*`
+            throw libdnf5::cli::CommandExitError(
+                1,
+                M_("No package \"{}\" available; You might want to use --skip-unavailable option."),
+                option->get_value());
         }
 
         for (const auto & pkg : pkg_query) {

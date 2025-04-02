@@ -50,6 +50,9 @@ Options
 ``--destdir=<path>``
     | Set directory used for downloading packages to. Default location is to the current working directory.
 
+``--skip-unavailable``
+    | Allow skipping packages that are not available in repositories. All available packages will be downloaded.
+
 ``--srpm``
     | Download the source rpm. Enables source repositories of all enabled binary repositories.
 
