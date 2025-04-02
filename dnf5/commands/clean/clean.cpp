@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <errno.h>
 #include <libdnf5-cli/argument_parser.hpp>
+#include <libdnf5-cli/utils/units.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -180,10 +181,14 @@ void CleanCommand::run() {
             libdnf5::utils::sformat(_("Cannot iterate cache directory \"{}\": {}"), cachedir.string(), ec.message()));
     }
 
+    const auto [bytes_removed_value, bytes_removed_unit] =
+        libdnf5::cli::utils::units::to_size(static_cast<int64_t>(statistics.get_bytes_removed()));
     std::cout << fmt::format(
-                     "Removed {} files, {} directories. {} errors occurred.",
+                     "Removed {} files, {} directories (total of {:.0f} {:s}). {} errors occurred.",
                      statistics.get_files_removed(),
                      statistics.get_dirs_removed(),
+                     bytes_removed_value,
+                     bytes_removed_unit,
                      statistics.get_errors())
               << std::endl;
 }

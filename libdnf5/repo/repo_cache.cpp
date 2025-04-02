@@ -37,9 +37,20 @@ constexpr const char * CACHE_ATTRS_DIR = "attrs";
 // Removes a file or empty directory.
 // In case of an error, the error_count increases by one.
 // Returns number of removed items (0 or 1).
-std::size_t remove(const std::filesystem::path & path, std::size_t & error_count, Logger & log) noexcept {
+std::size_t remove(
+    const std::filesystem::path & path, std::size_t & error_count, std::size_t & bytes_count, Logger & log) noexcept {
     try {
+        std::error_code ec;
+        auto size = std::filesystem::file_size(path, ec);
+        if (ec.value() == 21) {
+            // `path` is a directory. Allocated space is FS depended (usually 4096 bytes). Do not risk it
+            size = 0;
+        } else if (ec) {
+            // Usually error #2 (No such file or directory)
+            size = 0;
+        }
         if (std::filesystem::remove(path)) {
+            bytes_count += size;
             return 1;
         }
     } catch (const std::filesystem::filesystem_error & ex) {
@@ -62,10 +73,12 @@ inline std::filesystem::path get_attribute_filepath(
 RepoCache::RemoveStatistics RepoCache::Impl::cache_remove_attributes(const std::filesystem::path & path, Logger & log) {
     auto status = remove_recursive(path / CACHE_ATTRS_DIR, log);
     log.debug(
-        "Attributes removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
+        "Attributes removal from repository cache in path \"{}\" complete. "
+        "Removed {} files, {} directories (total of {} bytes). {} errors",
         path.native(),
         status.get_files_removed(),
         status.get_dirs_removed(),
+        status.get_bytes_removed(),  // Print actual bytes (instead of MiB, GiB, ...) for debug
         status.get_errors());
     return status;
 }
@@ -77,12 +90,12 @@ RepoCache::RemoveStatistics RepoCache::Impl::remove_recursive(const std::filesys
     for (const auto & dir_entry : std::filesystem::directory_iterator(dir_path, ec)) {
         if (dir_entry.is_directory() && !dir_entry.is_symlink()) {
             status += remove_recursive(dir_entry, log);
-            status.p_impl->dirs_removed += remove(dir_entry, status.p_impl->errors, log);
+            status.p_impl->dirs_removed += remove(dir_entry, status.p_impl->errors, status.p_impl->bytes_removed, log);
         } else {
-            status.p_impl->files_removed += remove(dir_entry, status.p_impl->errors, log);
+            status.p_impl->files_removed += remove(dir_entry, status.p_impl->errors, status.p_impl->bytes_removed, log);
         }
     }
-    status.p_impl->dirs_removed += remove(dir_path, status.p_impl->errors, log);
+    status.p_impl->dirs_removed += remove(dir_path, status.p_impl->errors, status.p_impl->bytes_removed, log);
     return status;
 }
 
@@ -90,6 +103,7 @@ RepoCache::RemoveStatistics RepoCache::Impl::remove_recursive(const std::filesys
 RepoCacheRemoveStatistics & RepoCacheRemoveStatistics::operator+=(const RepoCacheRemoveStatistics & rhs) noexcept {
     p_impl->files_removed += rhs.p_impl->files_removed;
     p_impl->dirs_removed += rhs.p_impl->dirs_removed;
+    p_impl->bytes_removed += rhs.p_impl->bytes_removed;
     p_impl->errors += rhs.p_impl->errors;
     return *this;
 }
@@ -108,6 +122,9 @@ std::size_t RepoCacheRemoveStatistics::get_files_removed() {
 }
 std::size_t RepoCacheRemoveStatistics::get_dirs_removed() {
     return p_impl->dirs_removed;
+}
+std::size_t RepoCacheRemoveStatistics::get_bytes_removed() {
+    return p_impl->bytes_removed;
 }
 std::size_t RepoCacheRemoveStatistics::get_errors() {
     return p_impl->errors;
@@ -133,13 +150,17 @@ RepoCache::RemoveStatistics RepoCache::remove_metadata() {
     auto & log = *p_impl->base->get_logger();
     auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_METADATA_DIR, log);
 
-    status.p_impl->files_removed += remove(p_impl->cache_dir / CACHE_MIRRORLIST_FILE, status.p_impl->errors, log);
-    status.p_impl->files_removed += remove(p_impl->cache_dir / CACHE_METALINK_FILE, status.p_impl->errors, log);
+    status.p_impl->files_removed +=
+        remove(p_impl->cache_dir / CACHE_MIRRORLIST_FILE, status.p_impl->errors, status.p_impl->bytes_removed, log);
+    status.p_impl->files_removed +=
+        remove(p_impl->cache_dir / CACHE_METALINK_FILE, status.p_impl->errors, status.p_impl->bytes_removed, log);
     log.debug(
-        "Metadata removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
+        "Metadata removal from repository cache in path \"{}\" complete. "
+        "Removed {} files, {} directories (total of {} bytes). {} errors",
         p_impl->cache_dir.native(),
         status.get_files_removed(),
         status.get_dirs_removed(),
+        status.get_bytes_removed(),
         status.get_errors());
     return status;
 }
@@ -149,10 +170,12 @@ RepoCache::RemoveStatistics RepoCache::remove_packages() {
     auto & log = *p_impl->base->get_logger();
     auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_PACKAGES_DIR, log);
     log.debug(
-        "Packages removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
+        "Packages removal from repository cache in path \"{}\" complete. "
+        "Removed {} files, {} directories (total of {} bytes). {} errors",
         p_impl->cache_dir.native(),
         status.get_files_removed(),
         status.get_dirs_removed(),
+        status.get_bytes_removed(),
         status.get_errors());
     return status;
 }
@@ -162,10 +185,12 @@ RepoCache::RemoveStatistics RepoCache::remove_solv_files() {
     auto & log = *p_impl->base->get_logger();
     auto status = p_impl->remove_recursive(p_impl->cache_dir / CACHE_SOLV_FILES_DIR, log);
     log.debug(
-        "Solv files removal from repository cache in path \"{}\" complete. Removed {} files, {} directories. {} errors",
+        "Solv files removal from repository cache in path \"{}\" complete. "
+        "Removed {} files, {} directories (total of {} bytes). {} errors",
         p_impl->cache_dir.native(),
         status.get_files_removed(),
         status.get_dirs_removed(),
+        status.get_bytes_removed(),
         status.get_errors());
     return status;
 }
