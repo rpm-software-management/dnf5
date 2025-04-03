@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "session.hpp"
 
 #include "callbacks.hpp"
+#include "const.hpp"
 #include "dbus.hpp"
 #include "services/advisory/advisory.hpp"
 #include "services/base/base.hpp"
@@ -110,6 +111,19 @@ void Session::setup_base() {
 
     // load configuration
     base->load_config();
+
+    // load dnf5daemon-server specific configuration file
+    std::filesystem::path dnfdaemon_conf_file_path{dnfdaemon::CONF_FILENAME};
+    if (std::filesystem::exists(dnfdaemon_conf_file_path)) {
+        libdnf5::ConfigParser parser;
+        parser.read(dnfdaemon_conf_file_path);
+        // Load options from the dnf5daemon-server.conf with greater priority than
+        // Priority::MAINCONFIG to by-pass cachedir option being automatically overriden
+        // from system_cachedir. With different cachedir and system_cachedir, quick
+        // clone_root_metadata() method is available.
+        base->get_config().load_from_parser(
+            parser, "main", *base->get_vars(), *base->get_logger(), libdnf5::Option::Priority::AUTOMATICCONFIG);
+    }
 
     // set variables
     if (session_configuration.find("releasever") != session_configuration.end()) {
