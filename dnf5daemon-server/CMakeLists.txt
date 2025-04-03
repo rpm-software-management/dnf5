@@ -30,7 +30,7 @@ target_link_libraries(
 )
 
 install(TARGETS ${DNF5DAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
-
+install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}" PATTERN ".gitkeep" EXCLUDE)
 
 add_subdirectory(polkit)
 add_subdirectory(dbus)
