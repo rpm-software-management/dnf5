@@ -40,6 +40,9 @@ public:
         EMPTY = 0,
         DEFAULT = 10,
         MAINCONFIG = 20,
+        // TODO(mblaha): we should have named this priority differently. This level is
+        // useful anytime an app needs to read main config options from multiple
+        // sources - e.g. automatic, dnf5daemon-server
         AUTOMATICCONFIG = 30,
         REPOCONFIG = 40,
         INSTALLROOT = 45,

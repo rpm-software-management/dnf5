@@ -30,3 +30,14 @@ Synopsis
 
 Description
 ===========
+
+dnf5daemon-server is D-Bus interface for libdnf5 package manager.
+
+
+Files
+=====
+
+``dnf5daemon-server configuration``
+    /etc/dnf/dnf5daemon-server.conf
+
+    Use the ``[main]`` section to override any main DNF5 configuration option. See :manpage:`dnf5.conf(5)`, :ref:`Main configuration options <conf_main_options-label>`.
