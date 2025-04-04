@@ -19,6 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/repo/repo_sack.hpp"
 
+#include "download_data.hpp"
+#include "repo_downloader.hpp"
+
 #include "libdnf5/repo/repo_errors.hpp"
 
 #ifdef WITH_MODULEMD
@@ -26,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #endif
 #include "conf/config.h"
 #include "repo_cache_private.hpp"
-#include "repo_downloader.hpp"
 #include "solv/pool.hpp"
 #include "solv/solver.hpp"
 #include "solv_repo.hpp"
@@ -435,6 +437,22 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
     std::map<Repo *, std::exception_ptr> repo_signature_errors;
 
+    auto load_downloaded_repo =
+        [&send_to_sack_loader, &import_keys, &handle_repo_exception, &repo_signature_errors](Repo * repo) -> void {
+        try {
+            auto cache_dir = repo->get_config().get_cachedir();
+            RepoCache(repo->get_base(), cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+            repo->mark_fresh();
+            repo->read_metadata_cache();
+        } catch (const RepoDownloadError &) {
+            const auto & ep = std::current_exception();
+            if (handle_repo_exception(&(*repo), ep, import_keys)) {
+                repo_signature_errors.insert({&(*repo), ep});
+            }
+        }
+        send_to_sack_loader(repo);
+    };
+
     for (int run_count = 0; run_count < 2; ++run_count) {
         // Set of repositories for processing. Use a set here since we don't want duplicate entries.
         std::set<Repo *> repos_for_processing_set;
@@ -483,7 +501,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 unsigned local_path_start_idx = key_url.starts_with("file:///") ? 7 : 5;
                 try {
                     utils::fs::File file{key_url.substr(local_path_start_idx), "r"};
-                    repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                    repo->get_download_data().pgp.import_key(file.get_fd(), key_url);
                     repos_for_processing_set.insert(repo);
                 } catch (const std::runtime_error & e) {
                     const auto & wrapping_error = std::runtime_error(fmt::format(
@@ -511,7 +529,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 for (const auto & [repo, key_url, temp_file] : remote_keys_files) {
                     try {
                         utils::fs::File file{temp_file.get_path(), "r"};
-                        repo->get_downloader().pgp.import_key(file.get_fd(), key_url);
+                        repo->get_download_data().pgp.import_key(file.get_fd(), key_url);
                         repos_for_processing_set.insert(repo);
                     } catch (const std::runtime_error & e) {
                         const auto & wrapping_error = std::runtime_error(fmt::format(
@@ -549,7 +567,7 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
                 bool valid_metadata{false};
                 try {
                     repo->read_metadata_cache();
-                    if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+                    if (!repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
                         // cache loaded
                         repo->recompute_expired();
                         valid_metadata = !repo->is_expired() ||
@@ -588,11 +606,12 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             auto * const repo = repos_for_processing[idx];
             catch_thread_sack_loader_exceptions();
             try {
-                if (!repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
+                if (!repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
                     repo->is_in_sync()) {
                     // the expired metadata still reflect the origin
                     utimes(
-                        repo->get_downloader().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+                        repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(),
+                        nullptr);
                     RepoCache(base, repo->get_config().get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
                     repo->mark_fresh();
                     repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
@@ -615,27 +634,33 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
         }
 
         // Prepares (downloads) remaining repositories.
-        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+        RepoDownloader repo_downloader{};
+        for (std::size_t idx = 0; idx < repos_for_processing.size(); idx++) {
             auto * const repo = repos_for_processing[idx];
-            catch_thread_sack_loader_exceptions();
-            try {
-                logger->debug("Downloading metadata for repo \"{}\"", repo->get_config().get_id());
-                auto cache_dir = repo->get_config().get_cachedir();
-                repo->download_metadata(cache_dir);
-                RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                repo->mark_fresh();
-                repo->read_metadata_cache();
+            repo_downloader.add(*repo, repo->get_config().get_cachedir(), load_downloaded_repo);
+        }
 
-                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-                send_to_sack_loader(repo);
-            } catch (const RepoDownloadError &) {
-                const auto & ep = std::current_exception();
-                if (handle_repo_exception(repo, ep, import_keys)) {
-                    repo_signature_errors.insert({repo, ep});
+        for (auto const & [repo, errs] : repo_downloader.download()) {
+            for (auto & err : errs) {
+                try {
+                    auto src = repo->get_download_data().get_source_info();
+                    throw libdnf5::repo::RepoDownloadError(
+                        M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
+                        src.first,
+                        src.second,
+                        repo->get_id(),
+                        err);
+                } catch (const RepoDownloadError &) {
+                    const auto & ep = std::current_exception();
+                    if (handle_repo_exception(&(*repo), ep, import_keys)) {
+                        repo_signature_errors.insert({&(*repo), ep});
+                    }
                 }
-                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             }
         }
+
+        catch_thread_sack_loader_exceptions();
+        repos_for_processing.clear();
     };
 
     finish_sack_loader();
