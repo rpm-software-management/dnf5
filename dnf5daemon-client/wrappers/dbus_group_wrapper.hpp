@@ -49,6 +49,7 @@ public:
     std::string get_name() const { return std::string{rawdata.at("name")}; }
     std::string get_description() const { return std::string{rawdata.at("description")}; }
     std::string get_order() const { return std::string{rawdata.at("order")}; }
+    int get_order_int() const { return int{rawdata.at("order_int")}; }
     std::string get_langonly() const { return std::string{rawdata.at("langonly")}; }
     bool get_installed() const { return bool{rawdata.at("installed")}; }
     bool get_uservisible() const { return bool{rawdata.at("uservisible")}; }

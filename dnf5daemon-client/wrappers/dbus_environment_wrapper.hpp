@@ -37,6 +37,7 @@ public:
     std::string get_name() const { return std::string{rawdata.at("name")}; }
     std::string get_description() const { return std::string{rawdata.at("description")}; }
     std::string get_order() const { return std::string{rawdata.at("order")}; }
+    int get_order_int() const { return int{rawdata.at("order_int")}; }
     // TODO(mblaha) proper installed value
     bool get_installed() const { return false; }
     std::set<std::string> get_repos() const;

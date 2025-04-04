@@ -66,6 +66,8 @@ public:
 
     std::string get_order() const override { return grp.get_order(); }
 
+    int get_order_int() const override { return grp.get_order_int(); }
+
     std::string get_langonly() const override { return grp.get_langonly(); }
 
     bool get_uservisible() const override { return grp.get_uservisible(); }
@@ -94,6 +96,8 @@ public:
 
     std::string get_order() const override { return env.get_order(); }
 
+    int get_order_int() const override { return env.get_order_int(); }
+
     std::vector<std::string> get_groups() override {
         if constexpr (requires { env.get_groups(); }) {
             return env.get_groups();
@@ -117,6 +121,11 @@ public:
 private:
     T env;
 };
+
+template <class T>
+bool comps_display_order_cmp(T & a, T & b) {
+    return a.get_order_int() < b.get_order_int();
+}
 
 }  // namespace libdnf5::cli::output
 

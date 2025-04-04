@@ -47,6 +47,7 @@ public:
     virtual std::string get_name() const = 0;
     virtual std::string get_description() const = 0;
     virtual std::string get_order() const = 0;
+    virtual int get_order_int() const = 0;
     virtual std::string get_langonly() const = 0;
     virtual bool get_uservisible() const = 0;
     virtual std::vector<std::unique_ptr<IGroupPackage>> get_packages() = 0;
@@ -63,6 +64,7 @@ public:
     virtual std::string get_name() const = 0;
     virtual std::string get_description() const = 0;
     virtual std::string get_order() const = 0;
+    virtual int get_order_int() const = 0;
     virtual std::vector<std::string> get_groups() = 0;
     virtual std::vector<std::string> get_optional_groups() = 0;
     virtual std::set<std::string> get_repos() const = 0;
