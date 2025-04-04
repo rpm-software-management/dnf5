@@ -70,7 +70,10 @@ void EnvironmentInfoCommand::run() {
     }
 
     std::vector<libdnf5::comps::Environment> environments(query.list().begin(), query.list().end());
-    std::sort(environments.begin(), environments.end(), libdnf5::comps::environment_display_order_cmp);
+    std::sort(
+        environments.begin(),
+        environments.end(),
+        libdnf5::cli::output::comps_display_order_cmp<libdnf5::comps::Environment>);
 
     for (auto environment : environments) {
         libdnf5::cli::output::EnvironmentAdapter cli_env(environment);

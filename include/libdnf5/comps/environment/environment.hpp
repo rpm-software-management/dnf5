@@ -155,11 +155,6 @@ private:
 };
 
 
-inline bool environment_display_order_cmp(Environment a, Environment b) {
-    return a.get_order_int() < b.get_order_int();
-}
-
-
 }  // namespace libdnf5::comps
 
 

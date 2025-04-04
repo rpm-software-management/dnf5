@@ -172,11 +172,6 @@ private:
 };
 
 
-inline bool group_display_order_cmp(Group a, Group b) {
-    return a.get_order_int() < b.get_order_int();
-}
-
-
 }  // namespace libdnf5::comps
 
 
