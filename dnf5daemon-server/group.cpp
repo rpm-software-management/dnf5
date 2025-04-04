@@ -26,11 +26,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 // map string group attribute name to actual attribute
 const std::map<std::string, GroupAttribute> group_attributes{
-    {"groupid", GroupAttribute::groupid}, {"name", GroupAttribute::name}, {"description", GroupAttribute::description}};
+    {"groupid", GroupAttribute::groupid},
+    {"name", GroupAttribute::name},
+    {"description", GroupAttribute::description},
+    {"order", GroupAttribute::order},
+    {"order_int", GroupAttribute::order_int},
+    {"langonly", GroupAttribute::langonly},
+    {"uservisible", GroupAttribute::uservisible},
+    {"default", GroupAttribute::is_default},
+    {"packages", GroupAttribute::packages},
+    {"installed", GroupAttribute::installed},
+    {"repos", GroupAttribute::repos},
+};
 
-
-dnfdaemon::KeyValueMap group_to_map(
-    const libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes) {
+dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_group;
     // add group id by default
     dbus_group.emplace(std::make_pair("groupid", libdnf_group.get_groupid()));
@@ -50,6 +59,42 @@ dnfdaemon::KeyValueMap group_to_map(
             case GroupAttribute::description:
                 dbus_group.emplace(attr, libdnf_group.get_description());
                 break;
+            case GroupAttribute::order:
+                dbus_group.emplace(attr, libdnf_group.get_order());
+                break;
+            case GroupAttribute::order_int:
+                dbus_group.emplace(attr, libdnf_group.get_order_int());
+                break;
+            case GroupAttribute::langonly:
+                dbus_group.emplace(attr, libdnf_group.get_langonly());
+                break;
+            case GroupAttribute::uservisible:
+                dbus_group.emplace(attr, libdnf_group.get_uservisible());
+                break;
+            case GroupAttribute::is_default:
+                dbus_group.emplace(attr, libdnf_group.get_default());
+                break;
+            case GroupAttribute::installed:
+                dbus_group.emplace(attr, libdnf_group.get_installed());
+                break;
+            case GroupAttribute::repos: {
+                auto repos_set = libdnf_group.get_repos();
+                std::vector<std::string> repos(repos_set.begin(), repos_set.end());
+                dbus_group.emplace(attr, repos);
+                break;
+            }
+            case GroupAttribute::packages: {
+                dnfdaemon::KeyValueMapList packages;
+                for (auto pkg : libdnf_group.get_packages()) {
+                    dnfdaemon::KeyValueMap package;
+                    package.emplace("name", pkg.get_name());
+                    package.emplace("type", static_cast<int>(pkg.get_type()));
+                    package.emplace("condition", pkg.get_condition());
+                    packages.push_back(std::move(package));
+                }
+                dbus_group.emplace(attr, packages);
+                break;
+            }
         }
     }
     return dbus_group;
