@@ -31,11 +31,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 enum class GroupAttribute {
     groupid,
     name,
-    description
+    description,
     // TODO(mblaha): translated_name, translated_description, packages, reason
+    order,
+    order_int,
+    langonly,
+    uservisible,
+    is_default,
+    packages,
+    installed,
+    repos,
 };
 
-dnfdaemon::KeyValueMap group_to_map(
-    const libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
+dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
 
 #endif

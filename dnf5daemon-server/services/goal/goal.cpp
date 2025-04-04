@@ -237,12 +237,13 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
         std::vector<std::string> grp_attrs{"name"};
         dnfdaemon::KeyValueMap trans_item_attrs{};
         for (auto & tsgrp : transaction.get_transaction_groups()) {
+            auto group = tsgrp.get_group();
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
                 dbus_transaction_item_type_to_string(dnfdaemon::DbusTransactionItemType::GROUP),
                 transaction_item_action_to_string(tsgrp.get_action()),
                 transaction_item_reason_to_string(tsgrp.get_reason()),
                 trans_item_attrs,
-                group_to_map(tsgrp.get_group(), grp_attrs)));
+                group_to_map(group, grp_attrs)));
         }
         for (auto & tsenv : transaction.get_transaction_environments()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
