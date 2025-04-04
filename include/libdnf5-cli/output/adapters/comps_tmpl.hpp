@@ -122,6 +122,11 @@ private:
     T env;
 };
 
+template <class T>
+bool comps_display_order_cmp(T & a, T & b) {
+    return a.get_order_int() < b.get_order_int();
+}
+
 }  // namespace libdnf5::cli::output
 
 #endif  // LIBDNF5_CLI_OUTPUT_ADAPTERS_COMPS_TMPL_HPP
