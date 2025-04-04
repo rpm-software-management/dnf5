@@ -189,30 +189,48 @@ std::vector<Package> Group::get_packages() {
 
     libdnf5::solv::CompsPool & pool = get_comps_pool(p_impl->base);
 
-    // Use only the first (highest priority) solvable for package lists
-    Solvable * solvable = pool.id2solvable(p_impl->group_ids[0].id);
+    std::set<const char *> package_ids_mandatory;
+    std::set<const char *> package_ids_default;
+    std::set<std::pair<const char *, const char *>> package_ids_conditional;
+    std::set<const char *> package_ids_optional;
 
-    // Load MANDATORY packages from solvable->requires
-    if (solvable->dep_requires) {
-        for (Id * r_id = solvable->repo->idarraydata + solvable->dep_requires; *r_id; ++r_id) {
-            p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::MANDATORY, "");
-        }
-    }
-    // Load DEFAULT and CONDITIONAL packages from solvable->recommends
-    if (solvable->dep_recommends) {
-        for (Id * r_id = solvable->repo->idarraydata + solvable->dep_recommends; *r_id; ++r_id) {
-            if (strcmp(pool.id2rel(*r_id), "") == 0) {
-                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::DEFAULT, "");
-            } else {
-                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::CONDITIONAL, pool.id2evr(*r_id));
+    for (auto group_id : p_impl->group_ids) {
+        Solvable * solvable = pool.id2solvable(group_id.id);
+
+        // Load MANDATORY packages from solvable->requires
+        if (solvable->dep_requires) {
+            for (Id * r_id = solvable->repo->idarraydata + solvable->dep_requires; *r_id; ++r_id) {
+                const auto package_name = pool.id2str(*r_id);
+                if (package_ids_mandatory.emplace(package_name).second) {
+                    p_impl->packages.emplace_back(package_name, PackageType::MANDATORY, "");
+                }
             }
         }
-    }
-    // Load OPTIONAL packages from solvable->suggests
-    if (solvable->dep_suggests) {
-        for (Id * r_id = solvable->repo->idarraydata + solvable->dep_suggests; *r_id; ++r_id) {
-            if (strcmp(pool.id2rel(*r_id), "") == 0) {
-                p_impl->packages.emplace_back(pool.id2str(*r_id), PackageType::OPTIONAL, "");
+        // Load DEFAULT and CONDITIONAL packages from solvable->recommends
+        if (solvable->dep_recommends) {
+            for (Id * r_id = solvable->repo->idarraydata + solvable->dep_recommends; *r_id; ++r_id) {
+                const auto package_name = pool.id2str(*r_id);
+                if (strcmp(pool.id2rel(*r_id), "") == 0) {
+                    if (package_ids_default.emplace(package_name).second) {
+                        p_impl->packages.emplace_back(package_name, PackageType::DEFAULT, "");
+                    }
+                } else {
+                    const auto condition = pool.id2evr(*r_id);
+                    if (package_ids_conditional.emplace(package_name, condition).second) {
+                        p_impl->packages.emplace_back(package_name, PackageType::CONDITIONAL, condition);
+                    }
+                }
+            }
+        }
+        // Load OPTIONAL packages from solvable->suggests
+        if (solvable->dep_suggests) {
+            for (Id * r_id = solvable->repo->idarraydata + solvable->dep_suggests; *r_id; ++r_id) {
+                const auto package_name = pool.id2str(*r_id);
+                if (strcmp(pool.id2rel(*r_id), "") == 0) {
+                    if (package_ids_optional.emplace(package_name).second) {
+                        p_impl->packages.emplace_back(package_name, PackageType::OPTIONAL, "");
+                    }
+                }
             }
         }
     }
