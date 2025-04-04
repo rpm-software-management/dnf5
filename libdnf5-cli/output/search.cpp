@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/patterns.hpp>
+#include <libsmartcols/libsmartcols.h>
 
 #include <algorithm>
 #include <iostream>
@@ -82,6 +83,14 @@ std::string construct_highlight_regex_format() {
     return replace_format.str();
 }
 
+/// Construct a bold format string for column header titles.
+/// In the end this is just wrapping text with bold highlighting markup.
+std::string bold_format(std::string text) {
+    std::stringstream replace_format;
+    replace_format << bold << text << reset;
+    return replace_format.str();
+}
+
 }  // namespace
 
 
@@ -97,19 +106,47 @@ void print_search_results(const SearchResults & results) {
         return std::regex_replace(text, patterns_regex, highlight_regex_format);
     };
 
-    for (auto const & result : results.group_results) {
-        std::cout << bold << _("Matched fields: ") << reset << construct_keys_string(result.matched_keys) << std::endl;
+    std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
+    if (!libdnf5::cli::tty::is_interactive()) {
+        // Do not hard-code 80 as non-interactive screen width. Let libdnf5::cli::tty to decide
+        auto screen_width = size_t(libdnf5::cli::tty::get_width());
+        scols_table_set_termwidth(table.get(), screen_width);
+        // The below is necessary to make the libsmartcols' truncation work with non-interactive terminal
+        scols_table_set_termforce(table.get(), SCOLS_TERMFORCE_ALWAYS);
+    }
+
+    const std::vector<std::tuple<const char *, double, int>> columns = {
+        {"Package", 0.15, 0}, {"Description", 0.7, SCOLS_FL_TRUNC}, {"Matched fields", 0.15, 0}};
+
+    for (auto [name, whint, flags] : columns) {
+        scols_table_new_column(table.get(), bold_format(name).c_str(), whint, flags);
+    }
+
+    if (libdnf5::cli::tty::is_coloring_enabled()) {
+        scols_table_enable_colors(table.get(), 1);
+        // If we do not do the below, libsmartcols eats our custom highlighting
+        scols_table_enable_noencoding(table.get(), 1);
+    }
+
+    for (auto const & result : results.group_results) {
+        auto matched_fields = construct_keys_string(result.matched_keys);
         for (auto const & package : result.matched_packages.packages) {
-            std::cout << " ";
+            struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
+            std::string name;
             if (results.options.show_duplicates) {
-                std::cout << highlight(package.get_full_nevra());
+                name = highlight(package.get_full_nevra());
             } else {
-                std::cout << highlight(package.get_name()) << "." << package.get_arch();
+                name = highlight(package.get_name()) + "." + package.get_arch();
             }
-            std::cout << ": " << highlight(package.get_summary()) << std::endl;
+            scols_line_set_data(ln, 0, name.c_str());
+            // Regretfully we can not use the highlight for the below because of truncation
+            scols_line_set_data(ln, 1, package.get_summary().c_str());
+            scols_line_set_data(ln, 2, matched_fields.c_str());
         }
     }
+
+    scols_print_table(table.get());
 }
 
 }  // namespace libdnf5::cli::output
