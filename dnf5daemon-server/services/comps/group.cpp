@@ -35,6 +35,7 @@ enum class GroupAttribute {
     description,
     // TODO(mblaha): translated name / translated description
     order,
+    order_int,
     langonly,
     uservisible,
     is_default,
@@ -49,6 +50,7 @@ const std::map<std::string, GroupAttribute> group_attributes{
     {"name", GroupAttribute::name},
     {"description", GroupAttribute::description},
     {"order", GroupAttribute::order},
+    {"order_int", GroupAttribute::order_int},
     {"langonly", GroupAttribute::langonly},
     {"uservisible", GroupAttribute::uservisible},
     {"default", GroupAttribute::is_default},
@@ -79,6 +81,9 @@ dnfdaemon::KeyValueMap group_to_map(libdnf5::comps::Group & libdnf_group, const 
                 break;
             case GroupAttribute::order:
                 dbus_group.emplace(attr, libdnf_group.get_order());
+                break;
+            case GroupAttribute::order_int:
+                dbus_group.emplace(attr, libdnf_group.get_order_int());
                 break;
             case GroupAttribute::langonly:
                 dbus_group.emplace(attr, libdnf_group.get_langonly());

@@ -74,7 +74,7 @@ void GroupListCommand::run() {
     }
     options["patterns"] = sdbus::Variant(patterns);
 
-    std::vector<std::string> attributes{"groupid", "name", "installed"};
+    std::vector<std::string> attributes{"groupid", "name", "installed", "order_int"};
     if (command == "info") {
         std::vector<std::string> more_attributes{
             "description", "order", "langonly", "uservisible", "repos", "packages"};
@@ -110,11 +110,10 @@ void GroupListCommand::run() {
         .storeResultsTo(raw_groups);
 
     std::vector<DbusGroupWrapper> groups{};
-    std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> cli_groups;
     for (auto & group : raw_groups) {
         groups.push_back(DbusGroupWrapper(group));
-        cli_groups.emplace_back(new libdnf5::cli::output::GroupAdapter(DbusGroupWrapper(group)));
     }
+    std::sort(groups.begin(), groups.end(), libdnf5::cli::output::comps_display_order_cmp<DbusGroupWrapper>);
 
     if (command == "info") {
         for (auto & group : groups) {
@@ -123,6 +122,11 @@ void GroupListCommand::run() {
             std::cout << '\n';
         }
     } else {
+        std::vector<std::unique_ptr<libdnf5::cli::output::IGroup>> cli_groups;
+        for (auto & sorted_group : groups) {
+            cli_groups.emplace_back(new libdnf5::cli::output::GroupAdapter(DbusGroupWrapper(sorted_group)));
+        }
+
         libdnf5::cli::output::print_grouplist_table(cli_groups);
     }
 }
