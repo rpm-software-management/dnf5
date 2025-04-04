@@ -66,6 +66,8 @@ public:
 
     std::string get_order() const override { return grp.get_order(); }
 
+    int get_order_int() const override { return grp.get_order_int(); }
+
     std::string get_langonly() const override { return grp.get_langonly(); }
 
     bool get_uservisible() const override { return grp.get_uservisible(); }
@@ -93,6 +95,8 @@ public:
     std::string get_description() const override { return env.get_description(); }
 
     std::string get_order() const override { return env.get_order(); }
+
+    int get_order_int() const override { return env.get_order_int(); }
 
     std::vector<std::string> get_groups() override {
         if constexpr (requires { env.get_groups(); }) {
