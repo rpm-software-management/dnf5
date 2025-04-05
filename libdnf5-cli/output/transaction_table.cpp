@@ -274,25 +274,30 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
     scols_table_enable_noheadings(*tb, 1);
     struct libscols_line * header_ln = scols_table_new_line(*tb, NULL);
 
-    auto column = scols_table_new_column(*tb, _("Package"), 0.3, 0);
+    // Let Package name to be truncated by `libsmartcols` first.
+    // It will be printed on its dedicated line if it is truncated
+    auto column = scols_table_new_column(*tb, _("Package"), 0.15, SCOLS_FL_TRUNC);
     auto header = scols_column_get_header(column);
     auto cell = scols_line_get_cell(header_ln, COL_NAME);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, _("Arch"), 6, 0);
+    // Do not set a fix column width (to do not truncate `Aarch64` & `ppc64le` by default)
+    column = scols_table_new_column(*tb, _("Arch"), 0.075, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_ARCH);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
+    // whint == 24 chars on 80 width displays. But is squeezed later if possible
     column = scols_table_new_column(*tb, _("Version"), 0.3, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_EVR);
     scols_cell_set_data(cell, scols_cell_get_data(header));
     scols_cell_set_color(cell, "bold");
 
-    column = scols_table_new_column(*tb, _("Repository"), 0.1, SCOLS_FL_TRUNC);
+    // whint == 24 chars on 80 width displays. But is squeezed later if possible
+    column = scols_table_new_column(*tb, _("Repository"), 0.3, SCOLS_FL_TRUNC);
     header = scols_column_get_header(column);
     cell = scols_line_get_cell(header_ln, COL_REPO);
     scols_cell_set_data(cell, scols_cell_get_data(header));
@@ -503,17 +508,75 @@ void TransactionTable::Impl::print_table() {
         return;
     }
     auto fd = scols_table_get_stream(*tb);
+    auto itr = scols_new_iter(SCOLS_ITER_FORWARD);
+    struct libscols_line * ln;
+
+    // Since output table content is finalized, maybe we can squeeze `Version` and `Repository` columns
+    size_t max_ver_len = 1, max_rep_len = 1;
+    for (size_t n = 0; n < scols_table_get_nlines(*tb); n++) {
+        ln = scols_table_get_line(*tb, n);
+        auto ver = scols_cell_get_data(scols_line_get_cell(ln, 2));
+        auto rep = scols_cell_get_data(scols_line_get_cell(ln, 3));
+        if (!ver or !rep) {
+            // Some lines (e.g. groups) do not have the `Version` or `Repository` data set
+            continue;
+        }
+        max_ver_len = std::max(max_ver_len, strlen(ver));
+        max_ver_len = std::max(max_ver_len, strlen(rep));
+    }
+    if (static_cast<double>(max_ver_len) < scols_column_get_whint(scols_table_get_column(*tb, 2)) * 80) {
+        scols_column_set_whint(scols_table_get_column(*tb, 2), static_cast<double>(max_ver_len));
+    }
+    if (static_cast<double>(max_rep_len) < scols_column_get_whint(scols_table_get_column(*tb, 3)) * 80) {
+        scols_column_set_whint(scols_table_get_column(*tb, 3), static_cast<double>(max_rep_len));
+    }
+
+    // Print transaction table main header first
+    ln = scols_table_get_line(*tb, 0);
+    scols_table_print_range(*tb, ln, ln);
+
     for (const auto & section : sections) {
+        // Iterate over all table lines, skip main header and print section
+        scols_reset_iter(itr, -1);
+        scols_table_next_line(*tb, itr, &ln);
         const auto header = section.get_header();
         if (!header.empty()) {
             std::fputs(section.get_header().c_str(), fd);
             std::fputc('\n', fd);
         }
-        scols_table_print_range(*tb, section.get_first_line(), section.get_last_line());
+        while (scols_table_next_line(*tb, itr, &ln) == 0) {
+            // Move the iterator to the 1st line of the section
+            if (ln == section.get_first_line())
+                break;
+        }
+        do {
+            if (!ln)
+                break;
+            auto cell = scols_line_get_cell(ln, 0);
+            if (!cell)
+                break;
+            auto data = scols_cell_get_data(cell);
+            if (!data)
+                break;
+            if (strlen(data) > scols_column_get_width(scols_table_get_column(*tb, 0))) {
+                // if package name is truncated, printed it on its own dedicated line
+                if (libdnf5::cli::tty::is_coloring_enabled()) {
+                    std::fputs(scols_cell_get_color(cell), fd);
+                }
+                std::fputs(scols_cell_get_data(cell), fd);
+                std::fputc('\n', fd);
+                // fill cell with empty string of the same lenght
+                scols_cell_set_data(cell, std::string(strlen(data), ' ').c_str());
+            }
+            scols_table_print_range(*tb, ln, ln);
+            if (ln == section.get_last_line())
+                break;
+        } while (scols_table_next_line(*tb, itr, &ln) == 0);
     }
     std::fputc('\n', fd);
     // add empty line after the transaction table
     std::fputc('\n', fd);
+    scols_free_iter(itr);
 }
 
 TransactionTableSection & TransactionTable::Impl::add_section(
