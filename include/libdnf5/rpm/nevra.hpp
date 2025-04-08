@@ -185,12 +185,12 @@ inline void copy_nevra_attributes(const F & from, T & to) {
 
 
 /// Compare alpha and numeric segments of two versions.
-/// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
+/// @return 1 if `lhs` > `rhs`, -1 if `lhs` < `rhs`, 0 if they are equal
 LIBDNF_API int rpmvercmp(const char * lhs, const char * rhs);
 
 
 /// Compare evr part of two objects
-/// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
+/// @return 1 if `lhs` > `rhs`, -1 if `lhs` < `rhs`, 0 if they are equal
 template <typename L, typename R>
 int evrcmp(const L & lhs, const R & rhs) {
     // handle empty epoch the same way as 0 epoch
