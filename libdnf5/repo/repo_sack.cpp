@@ -128,6 +128,7 @@ private:
     WeakPtrGuard<RepoSack, false> sack_guard;
     repo::Repo * system_repo{nullptr};
     repo::Repo * cmdline_repo{nullptr};
+    RepoWeakPtr stored_transaction_repo;
     bool repos_updated_and_loaded{false};
     friend RepoSack;
 };
@@ -177,7 +178,12 @@ RepoWeakPtr RepoSack::get_stored_transaction_repo(const std::string & repo_id) {
     RepoWeakPtr stored_repo;
     for (const auto & existing_repo : get_data()) {
         if (existing_repo->get_id() == real_repo_id) {
-            stored_repo = existing_repo->get_weak_ptr();
+            if (existing_repo->get_type() == Repo::Type::COMMANDLINE) {
+                stored_repo = existing_repo->get_weak_ptr();
+            } else {
+                stored_repo = p_impl->stored_transaction_repo;
+                real_repo_id = STORED_TRANSACTION_NAME;
+            }
             break;
         }
     }
@@ -186,6 +192,7 @@ RepoWeakPtr RepoSack::get_stored_transaction_repo(const std::string & repo_id) {
         std::unique_ptr<Repo> repo(new Repo(p_impl->base, real_repo_id, Repo::Type::COMMANDLINE));
         repo->get_config().get_build_cache_option().set(libdnf5::Option::Priority::RUNTIME, false);
         stored_repo = add_item_with_return(std::move(repo));
+        p_impl->stored_transaction_repo = stored_repo;
     }
 
     return stored_repo;
