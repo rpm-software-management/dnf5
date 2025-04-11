@@ -283,6 +283,11 @@ bool Nevra::operator==(const Nevra & other) const {
 }
 
 
+bool Nevra::operator<(const Nevra & other) const {
+    return cmp_nevra(*this, other);
+}
+
+
 std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra) {
     out << to_full_nevra_string(nevra);
     return out;
