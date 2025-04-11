@@ -20,10 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_errors.hpp"
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
+#include "download_data.hpp"
 #include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv_repo.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/conf/const.hpp"
@@ -86,7 +88,7 @@ private:
     SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
     bool expired{false};
     std::unique_ptr<SolvRepo> solv_repo;
-    std::unique_ptr<RepoDownloader> downloader;
+    std::unique_ptr<repo::DownloadData> downloader;
 
     WeakPtrGuard<Repo, false> data_guard;
 };
@@ -95,7 +97,7 @@ Repo::Impl::Impl(const BaseWeakPtr & base, const std::string & id, Repo::Type ty
     : base(base),
       type(type),
       config(base->get_config(), id),
-      downloader(new RepoDownloader(base, config, type)) {}
+      downloader(new DownloadData(base, config, type)) {}
 
 Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type)
     : p_impl(std::make_unique<Impl>(base, id, type)) {
@@ -199,23 +201,37 @@ bool Repo::is_local() const {
 
 void Repo::read_metadata_cache() {
     p_impl->downloader->reset_loaded();
-    p_impl->downloader->load_local();
+    RepoDownloader::load_local(*p_impl->downloader);
 }
 
 std::vector<std::pair<std::string, std::string>> Repo::get_appstream_metadata() const {
-    return get_downloader().get_appstream_metadata();
+    return get_download_data().get_appstream_metadata();
 }
 
 bool Repo::is_in_sync() {
     if (!p_impl->config.get_metalink_option().empty() && !p_impl->config.get_metalink_option().get_value().empty()) {
-        return p_impl->downloader->is_metalink_in_sync();
+        return RepoDownloader::is_metalink_in_sync(*this);
     }
-    return p_impl->downloader->is_repomd_in_sync();
+    return RepoDownloader::is_repomd_in_sync(*this);
 }
 
 
 void Repo::download_metadata(const std::string & destdir) {
-    p_impl->downloader->download_metadata(destdir);
+    RepoDownloader repo_downloader{};
+    repo_downloader.add(*this, destdir, NULL);
+    // If there is an error there should be only the one map key (this repo) in the returned
+    // unordered map but iterate through all keys to be safe.
+    for (auto & [repo, errs] : repo_downloader.download()) {
+        if (!errs.empty()) {
+            auto src = repo->get_download_data().get_source_info();
+            throw libdnf5::repo::RepoDownloadError(
+                M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
+                src.first,
+                src.second,
+                repo->get_id(),
+                libdnf5::utils::string::join(errs, ", "));
+        }
+    }
 }
 
 void Repo::load() {
@@ -628,7 +644,7 @@ libdnf5::repo::RepoWeakPtr Repo::get_weak_ptr() {
     return {this, &p_impl->data_guard};
 }
 
-RepoDownloader & Repo::get_downloader() const {
+DownloadData & Repo::get_download_data() const {
     return *p_impl->downloader;
 }
 
