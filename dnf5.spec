@@ -114,7 +114,7 @@ Provides:       dnf5-command(versionlock)
 %bcond_with    dnf5daemon_tests
 
 # Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 11
 %bcond_with    focus_new
 %else
 %bcond_without focus_new
