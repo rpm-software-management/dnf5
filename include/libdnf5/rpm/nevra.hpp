@@ -65,6 +65,15 @@ public:
     /// @return `true` if all Nevra attributes (`name`, `epoch`, `version`, `release` and `arch`) match.
     bool operator==(const Nevra & other) const;
 
+    /// Compares Nevra attributes in order: `name`, `epoch`, `version`, `release`, `arch`, and checks
+    /// if any is less than the corresponding attribute.
+    /// @return `true` if any of the attributes is less than the corresponding one. Return `false` otherwise.
+    bool operator<(const Nevra & other) const;
+
+    bool operator>(const Nevra & other) const { return other < *this; }
+    bool operator<=(const Nevra & other) const { return !(*this > other); }
+    bool operator>=(const Nevra & other) const { return !(*this < other); }
+
     // NOTE: required by cppunit asserts
     //friend std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
 
