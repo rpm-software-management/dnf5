@@ -771,6 +771,7 @@ Package management service with a DBus interface.
 %systemd_postun_with_restart dnf5daemon-server.service
 
 %files -n dnf5daemon-server -f dnf5daemon-server.lang
+%config(noreplace) %{_sysconfdir}/dnf/dnf5daemon-server.conf
 %{_sbindir}/dnf5daemon-server
 %{_unitdir}/dnf5daemon-server.service
 %{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.conf
