@@ -411,14 +411,14 @@ void SolvRepo::load_repo_ext(RepodataType type, const std::string & in_type_name
 void SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & pool = get_rpm_pool(base);
+    std::string real_rootdir{rootdir};
 
-    logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir.empty() ? "/" : rootdir);
     if (rootdir.empty()) {
         base->get_config().get_installroot_option().lock("installroot locked by loading system repo");
-        pool_set_rootdir(*pool, base->get_config().get_installroot_option().get_value().c_str());
-    } else {
-        pool_set_rootdir(*pool, rootdir.c_str());
+        real_rootdir = base->get_config().get_installroot_option().get_value();
     }
+    logger.debug("Loading system repo rpmdb from root \"{}\"", real_rootdir);
+    pool_set_rootdir(*pool, real_rootdir.c_str());
 
     int solvables_start = pool->nsolvables;
     int repodata_start = repo->nrepodata;
@@ -428,7 +428,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
     if (repo_add_rpmdb(repo, nullptr, flagsrpm) != 0) {
         throw SolvError(
             M_("Failed to load system repo from root \"{}\": {}"),
-            rootdir.empty() ? "/" : rootdir,
+            real_rootdir,
             std::string(pool_errstr(*get_rpm_pool(base))));
     }
 
