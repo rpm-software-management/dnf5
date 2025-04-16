@@ -101,7 +101,8 @@ void InstallCommand::run() {
         advisory_newpackage->get_value(),
         advisory_severity->get_value(),
         advisory_bz->get_value(),
-        advisory_cve->get_value());
+        advisory_cve->get_value(),
+        !ctx.get_base().get_config().get_skip_unavailable_option().get_value());
     if (advisories.has_value()) {
         settings.set_advisory_filter(std::move(advisories.value()));
     }

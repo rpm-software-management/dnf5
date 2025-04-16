@@ -171,7 +171,8 @@ void CheckUpgradeCommand::run() {
         advisory_newpackage->get_value(),
         advisory_severity->get_value(),
         advisory_bz->get_value(),
-        advisory_cve->get_value());
+        advisory_cve->get_value(),
+        false);
     if (advisories.has_value()) {
         upgrades_query.filter_latest_unresolved_advisories(
             std::move(advisories.value()), installed_query, libdnf5::sack::QueryCmp::GTE);
