@@ -413,3 +413,25 @@ void NevraTest::test_cmp_naevr() {
     std::sort(actual.begin(), actual.end(), libdnf5::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }
+
+
+void NevraTest::test_nevra_comparison_operators() {
+    TestPackage foo_0_1_1_noarch("foo-1-1.noarch");
+    TestPackage foo_0_2_1_noarch("foo-2-1.noarch");
+
+    CPPUNIT_ASSERT(foo_0_1_1_noarch < foo_0_2_1_noarch);
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_1_1_noarch < foo_0_1_1_noarch));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_2_1_noarch < foo_0_1_1_noarch));
+
+    CPPUNIT_ASSERT(foo_0_1_1_noarch <= foo_0_1_1_noarch);
+    CPPUNIT_ASSERT(foo_0_1_1_noarch <= foo_0_2_1_noarch);
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_2_1_noarch <= foo_0_1_1_noarch));
+
+    CPPUNIT_ASSERT(foo_0_2_1_noarch > foo_0_1_1_noarch);
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_1_1_noarch > foo_0_1_1_noarch));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_1_1_noarch > foo_0_2_1_noarch));
+
+    CPPUNIT_ASSERT(foo_0_2_1_noarch >= foo_0_1_1_noarch);
+    CPPUNIT_ASSERT(foo_0_2_1_noarch >= foo_0_2_1_noarch);
+    CPPUNIT_ASSERT_ASSERTION_FAIL(CPPUNIT_ASSERT(foo_0_1_1_noarch >= foo_0_2_1_noarch));
+}

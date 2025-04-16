@@ -31,6 +31,7 @@ class NevraTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_evrcmp);
     CPPUNIT_TEST(test_cmp_nevra);
     CPPUNIT_TEST(test_cmp_naevr);
+    CPPUNIT_TEST(test_nevra_comparison_operators);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -41,6 +42,7 @@ public:
     void test_evrcmp();
     void test_cmp_nevra();
     void test_cmp_naevr();
+    void test_nevra_comparison_operators();
 };
 
 #endif
