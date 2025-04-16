@@ -28,7 +28,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/advisory/advisory_query.hpp>
 #include <libdnf5/base/base_weak.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 
+#include <iostream>
 #include <optional>
 
 
@@ -43,7 +45,8 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
     bool advisory_newpackage,
     const std::vector<std::string> & advisory_severities,
     const std::vector<std::string> & advisory_bzs,
-    const std::vector<std::string> & advisory_cves) {
+    const std::vector<std::string> & advisory_cves,
+    const bool strict_names) {
     std::vector<std::string> advisory_types;
     if (advisory_security) {
         advisory_types.emplace_back("security");
@@ -66,6 +69,16 @@ inline std::optional<libdnf5::advisory::AdvisoryQuery> advisory_query_from_cli_i
         if (!advisory_names.empty()) {
             auto advisories_names = libdnf5::advisory::AdvisoryQuery(base);
             advisories_names.filter_name(advisory_names);
+            if (advisories_names.empty()) {
+                const BgettextMessage msg = M_("No advisory found matching the requested name: \"{}\"");
+                if (strict_names) {
+                    throw libdnf5::cli::CommandExitError(1, msg, libdnf5::utils::string::join(advisory_names, ", "));
+                } else {
+                    std::cerr << libdnf5::utils::sformat(
+                                     TM_(msg, 1), libdnf5::utils::string::join(advisory_names, ", "))
+                              << std::endl;
+                }
+            }
             advisories |= advisories_names;
         }
 
