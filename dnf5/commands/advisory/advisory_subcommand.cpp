@@ -90,7 +90,8 @@ void AdvisorySubCommand::run() {
         advisory_newpackage->get_value(),
         advisory_severity->get_value(),
         advisory_bz->get_value(),
-        advisory_cve->get_value());
+        advisory_cve->get_value(),
+        false);
 
     auto advisories = advisories_opt.value_or(libdnf5::advisory::AdvisoryQuery(ctx.get_base()));
 

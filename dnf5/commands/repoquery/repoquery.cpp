@@ -631,7 +631,8 @@ void RepoqueryCommand::run() {
         advisory_newpackage->get_value(),
         advisory_severity->get_value(),
         advisory_bz->get_value(),
-        advisory_cve->get_value());
+        advisory_cve->get_value(),
+        false);
     if (advisories.has_value()) {
         result_query.filter_advisories(advisories.value(), libdnf5::sack::QueryCmp::GTE);
     }
