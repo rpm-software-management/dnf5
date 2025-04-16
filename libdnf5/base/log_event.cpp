@@ -158,6 +158,8 @@ std::string LogEvent::to_string(
                     utils::sformat(_("Cannot perform {0}, no match for: {1}."), goal_action_to_string(action), *spec));
             }
             return ret.append(utils::sformat(_("No match for argument: {}"), *spec));
+        case GoalProblem::NOT_FOUND_IN_ADVISORIES:
+            return ret.append(utils::sformat(_("No match for argument '{0}' in selected advisories"), *spec));
         case GoalProblem::NOT_FOUND_IN_REPOSITORIES:
             return ret.append(utils::sformat(
                 _("No match for argument '{0}' in repositories '{1}'"),

@@ -1419,6 +1419,18 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
         // Apply advisory filters
         if (settings.get_advisory_filter() != nullptr) {
             query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
+            if (query.empty()) {
+                transaction.p_impl->add_resolve_log(
+                    action,
+                    GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                    settings,
+                    libdnf5::transaction::TransactionItemType::PACKAGE,
+                    spec,
+                    {},
+                    log_level);
+                return {
+                    skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_ADVISORIES, result_queue};
+            }
         }
 
         /// <name, <arch, std::vector<pkg Solvables>>>
@@ -1508,6 +1520,19 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             // Apply advisory filters
             if (settings.get_advisory_filter() != nullptr) {
                 query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
+                if (query.empty()) {
+                    transaction.p_impl->add_resolve_log(
+                        action,
+                        GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                        settings,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
+                        spec,
+                        {},
+                        log_level);
+                    return {
+                        skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                        result_queue};
+                }
             }
 
             rpm::PackageQuery available(query);
@@ -1584,6 +1609,19 @@ std::pair<GoalProblem, libdnf5::solv::IdQueue> Goal::Impl::add_install_to_goal(
             // Apply advisory filters
             if (settings.get_advisory_filter() != nullptr) {
                 query.filter_advisories(*settings.get_advisory_filter(), libdnf5::sack::QueryCmp::EQ);
+                if (query.empty()) {
+                    transaction.p_impl->add_resolve_log(
+                        action,
+                        GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                        settings,
+                        libdnf5::transaction::TransactionItemType::PACKAGE,
+                        spec,
+                        {},
+                        log_level);
+                    return {
+                        skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                        result_queue};
+                }
             }
             solv_map_to_id_queue(result_queue, *query.p_impl);
             rpm_goal.add_install(result_queue, skip_broken, best, clean_requirements_on_remove);
@@ -2291,6 +2329,17 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
     // Apply advisory filters
     if (settings.get_advisory_filter() != nullptr) {
         filter_candidates_for_advisory_upgrade(base, query, *settings.get_advisory_filter(), obsoletes);
+        if (query.empty()) {
+            transaction.p_impl->add_resolve_log(
+                action,
+                GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                libdnf5::Logger::Level::WARNING);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_ADVISORIES;
+        }
     }
 
     if (minimal) {
