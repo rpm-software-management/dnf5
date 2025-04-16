@@ -125,7 +125,8 @@ enum class GoalProblem : uint32_t {
     MALFORMED = (1 << 23),
     NOT_FOUND_DEBUGINFO = (1 << 24),
     NOT_FOUND_DEBUGSOURCE = (1 << 25),
-    MERGE_ERROR = (1 << 26)
+    MERGE_ERROR = (1 << 26),
+    NOT_FOUND_IN_ADVISORIES = (1 << 27)
 };
 
 /// Types of Goal actions
