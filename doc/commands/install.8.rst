@@ -74,6 +74,7 @@ Options
     | Consider only content contained in advisories with specified name.
     | This is a list option.
     | Expected values are advisory IDs, e.g. `FEDORA-2201-123`.
+    | The command fails with an error if there is no existing advisory in the list.
 
 ``--advisory-severities=ADVISORY_SEVERITY,...``
     | Consider only content contained in advisories with specified severity.
