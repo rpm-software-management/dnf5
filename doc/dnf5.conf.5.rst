@@ -1207,19 +1207,6 @@ configuration.
 
     Default: ``False``.
 
-.. _retries_options-label:
-
-``retries``
-    :ref:`integer <integer-label>`
-
-    Set the number of total retries for downloading packages.
-    The number is cumulative, so e.g. for ``retries=10``, DNF5 will fail after any package
-    download fails for eleventh time.
-
-    Setting this to ``0`` makes DNF5 try forever.
-
-    Default: ``10``.
-
 .. _skip_if_unavailable_options-label:
 
 ``skip_if_unavailable``

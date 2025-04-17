@@ -224,8 +224,10 @@ public:
     const OptionBool & get_build_cache_option() const;
 
     // Repo main config
-    OptionNumber<std::uint32_t> & get_retries_option();
-    const OptionNumber<std::uint32_t> & get_retries_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionNumber<std::uint32_t> & get_retries_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionNumber<std::uint32_t> & get_retries_option() const;
     OptionPath & get_cachedir_option();
     const OptionPath & get_cachedir_option() const;
     OptionBool & get_fastestmirror_option();

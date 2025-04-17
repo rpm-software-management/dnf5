@@ -91,8 +91,11 @@ public:
     const OptionChild<OptionBool> & get_repo_gpgcheck_option() const;
     OptionChild<OptionBool> & get_enablegroups_option();
     const OptionChild<OptionBool> & get_enablegroups_option() const;
-    OptionChild<OptionNumber<std::uint32_t>> & get_retries_option();
-    const OptionChild<OptionNumber<std::uint32_t>> & get_retries_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionChild<OptionNumber<std::uint32_t>> & get_retries_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionChild<OptionNumber<std::uint32_t>> & get_retries_option()
+        const;
     OptionChild<OptionNumber<std::uint32_t>> & get_bandwidth_option();
     const OptionChild<OptionNumber<std::uint32_t>> & get_bandwidth_option() const;
     OptionChild<OptionNumber<std::uint32_t>> & get_minrate_option();
