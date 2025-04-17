@@ -397,6 +397,11 @@ Deprecation of the ``metadata_timer_sync`` option
 -------------------------------------------------
 The ``metadata_timer_sync`` configuration option is now obsoleted by the |DNF_MAKECACHE_TIMER_NAME_INLINE_LITERAL| systemd timer settings.
 
+Deprecation of the ``retries`` option
+-------------------------------------
+The ``retries`` configuration option is now deprecated. In dnf4, despite being documented as the number of retries for downloading packages, it was only used to limit the number of package re-downloads due to deltarpm errors. Deltarpm is currently not implemented in DNF5.
+
+
 Changes to individual options
 -----------------------------
 ``best``
