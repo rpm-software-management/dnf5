@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2025-01-09 22:48+0000\n"
 "Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -110,19 +110,19 @@ msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera grupy o identyfikatorze „{}”"
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Nieznany argument „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Brak argumentu pozycyjnego „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Nie znaleziono nazwanego argumentu o identyfikatorze ścieżki „{}”"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Nie znaleziono argumentu pozycyjnego o identyfikatorze ścieżki „{}”"
 

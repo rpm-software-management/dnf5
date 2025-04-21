@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -788,11 +788,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): Nelze určit adresář běhového prostředí uživatele"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "nepodařilo se uložit xml dokument pro comps"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "Nepodařilo se uložit xml dokument pro skupinu \"{}\" do souboru \"{}\": {}"
@@ -817,7 +817,7 @@ msgstr "Nelze převést '{}' na bajty"
 msgid "Unknown unit '{}'"
 msgstr "Neznámá jednotka '{}'"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Hodnota throttle {} je mimo povolený rozsah {} ... {}"
 
@@ -833,11 +833,11 @@ msgstr "Sekce \"{}\" neobsahuje volbu \"{}\""
 msgid "Configuration file \"{}\" not found"
 msgstr "Konfigurační soubor \"{}\" nebyl nalezen"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "Nelze získat přístup ke konfiguračnímu souboru \"{}\""
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "Chyba v konfiguračním souboru \"{}\""
 
@@ -1035,6 +1035,10 @@ msgstr ""
 "Maximální rychlost stahování je nižší než minimální. Změňte prosím "
 "konfiguraci minrate nebo throttle"
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr ""
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr "Nelze stáhnout balíček \"{0}\", je aktivována volba cacheonly."
@@ -1095,11 +1099,11 @@ msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nelze určit ID repozitáře v mezipaměti."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "Prázdná cesta k adresáři mezipaměti repozitáře."
 
@@ -1122,11 +1126,11 @@ msgstr ""
 "Chyba při kontrole, zda jsou repomd ({}: \"{}\") synchronizována pro "
 "repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Chyba při načítání místních metadat pro repozitář „{}“"
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1159,7 +1163,7 @@ msgstr ""
 "Nepodařilo se vytvořit repozitář \"{}\": ID je v konfiguraci přítomno více "
 "než jednou"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 

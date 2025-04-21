@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2025-01-23 08:17+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -191,23 +191,23 @@ msgstr "Paket veri tabanındaki sorunları denetle"
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Bulunan {} sorunu {} pakette denetle"
 
-#: commands/clean/clean.cpp:90
+#: commands/clean/clean.cpp:91
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Temizlenecek önbellek türlerinin listesi. Desteklenen türler: {0}"
 
-#: commands/clean/clean.cpp:108
+#: commands/clean/clean.cpp:109
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Bilinmeyen önbellek türü \"{0}\". Desteklenen türler: {1}"
 
-#: commands/clean/clean.cpp:165
+#: commands/clean/clean.cpp:166
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "\"{0}\" yolunda depo önbelleği temizlenemedi: {1}"
 
-#: commands/clean/clean.cpp:175
+#: commands/clean/clean.cpp:176
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
 msgstr "\"{}\" önbellek dizini yok. Temizlenecek bir şey yok."
 
-#: commands/clean/clean.cpp:180
+#: commands/clean/clean.cpp:181
 msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr "\"{}\" önbellek dizini kullanılamıyor: {}"
 
@@ -234,14 +234,19 @@ msgstr ""
 msgid "Invalid urlprotocol option: {}"
 msgstr "Geçersiz urlprotocol seçeneği: {}"
 
-#: commands/download/download.cpp:148 main.cpp:615
+#: commands/download/download.cpp:148 main.cpp:624
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Desteklenmeyen mimari \"{0}\". Lütfen {1} seçeneklerinden birini seçin"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:183
+#: commands/download/download.cpp:184
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "\"--alldeps\" seçeneği \"--resolve\" ile birlikte kullanılmalıdır"
+
+#: commands/download/download.cpp:220
+msgid ""
+"No package \"{}\" available; You might want to use --skip-unavailable option."
+msgstr ""
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -333,15 +338,15 @@ msgstr ""
 "Eşleşme bulunamadı, geçmiş bilgisi öntanımlı olarak yalnızca son işlemi "
 "dikkate alır, tüm işlemleri aramak için \"1..last\" aralığını belirtin."
 
-#: commands/history/history_redo.cpp:53
-#: commands/history/history_rollback.cpp:57
-#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:56
+#: commands/history/history_redo.cpp:54
+#: commands/history/history_rollback.cpp:58
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
 msgid "No matching transaction ID found, exactly one required."
 msgstr "Eşleşen işlem kimliği bulunamadı, tam olarak bir tane gerekli."
 
-#: commands/history/history_redo.cpp:57
-#: commands/history/history_rollback.cpp:61
-#: commands/history/history_undo.cpp:60
+#: commands/history/history_redo.cpp:58
+#: commands/history/history_rollback.cpp:62
+#: commands/history/history_undo.cpp:61
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr "Birden fazla işlem kimliğiyle eşleşti, tam olarak bir tane gerekli."
 
@@ -678,7 +683,7 @@ msgstr "Depoları yönet"
 msgid "Search for packages matching various criteria"
 msgstr "Çeşitli ölçütlere uyan paketleri ara"
 
-#: commands/repoquery/repoquery.cpp:516
+#: commands/repoquery/repoquery.cpp:517
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -686,7 +691,7 @@ msgstr ""
 "\"--exactdeps\" seçeneği \"--whatrequires\" ya da \"--whatdepends\" ile "
 "birlikte kullanılmalıdır"
 
-#: commands/repoquery/repoquery.cpp:521
+#: commands/repoquery/repoquery.cpp:522
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -838,7 +843,7 @@ msgid "The key was successfully imported."
 msgstr "Anahtar başarıyla içe aktarıldı."
 
 #: context.cpp:96
-msgid "The following PGP key (0x{}) is about to be removed:"
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
 msgstr ""
 
 #: context.cpp:98
@@ -852,7 +857,7 @@ msgstr " Kullanıcı kimliği: \"{}\"\n"
 #| msgid ""
 #| " Fingerprint: {}\n"
 #| " From       : {}\n"
-msgid " From       : {}\n"
+msgid " Fingerprint: {}\n"
 msgstr ""
 " Parmak izi       : {}\n"
 " Nerden           : {}\n"
@@ -877,18 +882,18 @@ msgstr ""
 #: context.cpp:115
 #, fuzzy
 #| msgid "The key was successfully imported."
-msgid "The key was successfully removed."
+msgid "Key 0x{} was successfully removed."
 msgstr "Anahtar başarıyla içe aktarıldı."
 
-#: context.cpp:294
+#: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:300 main.cpp:1342
+#: context.cpp:301 main.cpp:1351
 msgid ", "
 msgstr ", "
 
-#: context.cpp:304
+#: context.cpp:305
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -896,44 +901,44 @@ msgstr ""
 "{} için eşleşen depo yok. Bir ana sistemdeki depoları kullanmak için --use-"
 "host-config seçeneğini belirtin"
 
-#: context.cpp:308
+#: context.cpp:309
 msgid "No matching repositories for {}"
 msgstr "{} için eşleşen depo yok"
 
-#: context.cpp:354
+#: context.cpp:355
 msgid "Updating and loading repositories:"
 msgstr "Depolar güncelleniyor ve yükleniyor:"
 
-#: context.cpp:364
+#: context.cpp:365
 msgid "Repositories loaded."
 msgstr "Depolar yüklendi."
 
-#: context.cpp:370
+#: context.cpp:371
 msgid "Testing offline transaction"
 msgstr "Çevrim dışı işlem test ediliyor"
 
-#: context.cpp:374 context.cpp:522
+#: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
 msgstr "İşlem başarısız: {}"
 
-#: context.cpp:379 context.cpp:527
+#: context.cpp:380 context.cpp:528
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:446
+#: context.cpp:447
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr ""
 "\"{}\" konumu zaten kayıtlı bir işlem içeriyor, bu işlemin üzerine yazılacak."
 
-#: context.cpp:475
+#: context.cpp:476
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "Şu komutla başlatılan çevrim dışı bir işlem zaten sıraya alındı:"
 
-#: context.cpp:477
+#: context.cpp:478
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -941,7 +946,7 @@ msgstr ""
 "Devam edilirse eski çevrim dışı işlem iptal edilecek ve bu işlemle "
 "değiştirilecektir."
 
-#: context.cpp:495
+#: context.cpp:496
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -952,77 +957,77 @@ msgstr ""
 "kullanın. İşlemi iptal etmek ve indirilen dosyaları silmek için `dnf5 "
 "offline clean` komutunu kullanın."
 
-#: context.cpp:501
+#: context.cpp:502
 msgid "Running transaction"
 msgstr "İşlem çalıştırılıyor"
 
-#: context.cpp:819
+#: context.cpp:820
 msgid "Upgrading {}"
 msgstr "{} yükseltiliyor"
 
-#: context.cpp:822
+#: context.cpp:823
 msgid "Downgrading {}"
 msgstr "{} eski sürüme düşürülüyor"
 
-#: context.cpp:825
+#: context.cpp:826
 msgid "Reinstalling {}"
 msgstr "{} yeniden kuruluyor"
 
-#: context.cpp:838
+#: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "TransactionPackage içinde beklenmeyen eylem: {}"
 
-#: context.cpp:844
+#: context.cpp:845
 msgid "Installing {}"
 msgstr "{} kuruluyor"
 
-#: context.cpp:865
+#: context.cpp:866
 msgid "Prepare transaction"
 msgstr "İşlemi hazırla"
 
-#: context.cpp:885
+#: context.cpp:886
 msgid "Removing {}"
 msgstr "{} kaldırılıyor"
 
-#: context.cpp:888
+#: context.cpp:889
 msgid "Cleanup {}"
 msgstr "{} temizleniyor"
 
-#: context.cpp:906
+#: context.cpp:907
 msgid "Unpack error: {}"
 msgstr "Paket açma hatası: {}"
 
-#: context.cpp:914
+#: context.cpp:915
 msgid "Cpio error: {}"
 msgstr "Cpio hatası: {}"
 
-#: context.cpp:924
+#: context.cpp:925
 msgid "Scriptlet output:"
 msgstr "Betik çıktısı:"
 
-#: context.cpp:947
+#: context.cpp:948
 #, fuzzy
 #| msgid "Running {} scriptlet: {}"
 msgid "Running scriptlets"
 msgstr "{} betiği çalıştırılıyor: {}"
 
-#: context.cpp:952
+#: context.cpp:953
 msgid "Running {} scriptlet: {}"
 msgstr "{} betiği çalıştırılıyor: {}"
 
-#: context.cpp:967
+#: context.cpp:968
 msgid "Finished {} scriptlet: {}"
 msgstr "{} betiği tamamlandı: {}"
 
-#: context.cpp:973
+#: context.cpp:974
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "{} betiğinde önemli olmayan hata: {}"
 
-#: context.cpp:982
+#: context.cpp:983
 msgid "Error in {} scriptlet: {}"
 msgstr "{} betiğinde hata: {}"
 
-#: context.cpp:1017
+#: context.cpp:1018
 msgid "Verify package files"
 msgstr "Paket dosyalarını doğrula"
 
@@ -1034,31 +1039,31 @@ msgstr "\"{}\" paylaşılan kütüphanesi yüklenemiyor: {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "\"{}\" simgesinin adresi alınamıyor: {}"
 
-#: main.cpp:130
+#: main.cpp:131
 msgid "Utility for packages maintaining"
 msgstr "Paket yönetimi programı"
 
-#: main.cpp:131
+#: main.cpp:132
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5, paketleri yönetmek için kullanılan bir programdır."
 
-#: main.cpp:132
+#: main.cpp:133
 msgid "Unclassified options:"
 msgstr "Sınıflandırılmayan seçenekler:"
 
-#: main.cpp:135
+#: main.cpp:136
 msgid "Global options:"
 msgstr "Genel seçenekler:"
 
-#: main.cpp:140
+#: main.cpp:141
 msgid "Print help"
 msgstr "Yardımı göster"
 
-#: main.cpp:147
+#: main.cpp:148
 msgid "Configuration file location"
 msgstr "Yapılandırma dosyası konumu"
 
-#: main.cpp:155
+#: main.cpp:156
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1068,7 +1073,7 @@ msgstr ""
 "Geçerli dnf5 durumu veya eylemleri hakkında bildirimde bulunan mesajları "
 "göstermez."
 
-#: main.cpp:170
+#: main.cpp:171
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1076,27 +1081,31 @@ msgstr ""
 "Tamamen sistem önbelleğinden çalış, önbelleği güncelleme ve süresi dolmuş "
 "olsa bile kullan."
 
-#: main.cpp:177
+#: main.cpp:180
+msgid "Control whether color is used."
+msgstr ""
+
+#: main.cpp:186
 msgid "Force refreshing metadata before running the command."
 msgstr "Komutu çalıştırmadan önce üst verileri yenilemeye zorla."
 
-#: main.cpp:193
+#: main.cpp:202
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "\"{0}\" yolundaki depo önbelleğinin süresi doldurulamadı: {1}"
 
-#: main.cpp:207
+#: main.cpp:216
 msgid "create additional repository using id and path"
 msgstr "kimlik ve yol kullanarak ek depo oluştur"
 
-#: main.cpp:215
+#: main.cpp:224
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: Yanlış depo kimliği ve yol belirtimi \"{}\""
 
-#: main.cpp:227
+#: main.cpp:236
 msgid "set arbitrary config and repo options"
 msgstr "herhangi bir yapılandırma ve depo seçeneğini ayarla"
 
-#: main.cpp:229
+#: main.cpp:238
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1114,46 +1123,46 @@ msgstr ""
 "              onu geçersiz kılmazlar. Ancak, boş bir değer belirtmek "
 "(örneğin --setopt=tsflags=) seçeneği temizleyecektir."
 
-#: main.cpp:238 main.cpp:277
+#: main.cpp:247 main.cpp:286
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: Yanlış biçimlendirilen argüman değeri \"{}\""
 
-#: main.cpp:245
+#: main.cpp:254
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: Hatalı biçimlendirilen argüman değeri: Son anahtar karakter '.' olamaz: "
 "{}"
 
-#: main.cpp:258
+#: main.cpp:267
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:270
+#: main.cpp:279
 msgid "set arbitrary variable"
 msgstr "herhangi bir değişken ayarla"
 
-#: main.cpp:284
+#: main.cpp:293
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:293
+#: main.cpp:302
 msgid "automatically answer yes for all questions"
 msgstr "tüm soruları kendiliğinden evet olarak yanıtla"
 
-#: main.cpp:300
+#: main.cpp:309
 msgid "automatically answer no for all questions"
 msgstr "tüm soruları kendiliğinden hayır olarak yanıtla"
 
-#: main.cpp:307
+#: main.cpp:316
 msgid "try the best available package versions in transactions"
 msgstr "işlemlerde en iyi kullanılabilir paket sürümlerini dene"
 
-#: main.cpp:314
+#: main.cpp:323
 msgid "do not limit the transaction to the best candidate"
 msgstr "işlemi en iyi aday ile sınırlandırma"
 
-#: main.cpp:325
+#: main.cpp:334
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1161,11 +1170,11 @@ msgstr ""
 "Belgelendirme (kılavuz sayfaları ve texinfo belgeleri) olarak işaretlenen "
 "dosyaları kurma"
 
-#: main.cpp:341
+#: main.cpp:350
 msgid "exclude packages by name or glob"
 msgstr "paketleri ad veya glob'a göre hariç tut"
 
-#: main.cpp:360
+#: main.cpp:369
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1173,7 +1182,7 @@ msgstr ""
 "İlave depoları etkinleştir. Liste seçeneği. Globları destekler, birden çok "
 "kez belirtilebilir."
 
-#: main.cpp:378
+#: main.cpp:387
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1181,7 +1190,7 @@ msgstr ""
 "Depoları devre dışı bırak. Liste seçeneği. Globları destekler, birden çok "
 "kez belirtilebilir."
 
-#: main.cpp:396
+#: main.cpp:405
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1189,15 +1198,15 @@ msgstr ""
 "Yalnızca belirli depoları etkinleştir. Liste seçeneği. Globları destekler, "
 "birden çok kez belirtilebilir."
 
-#: main.cpp:418
+#: main.cpp:427
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr "OpenPGP imza denetimini devre dışı bırak (RPM ilkesi izin veriyorsa)"
 
-#: main.cpp:434
+#: main.cpp:443
 msgid "Disable all libdnf5 plugins"
 msgstr "Tüm libdnf5 eklentilerini devre dışı bırak"
 
-#: main.cpp:444
+#: main.cpp:453
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1205,7 +1214,7 @@ msgstr ""
 "libdnf5 eklentilerini ada göre etkinleştir. Liste seçeneği. Globları "
 "destekler, birden çok kez belirtilebilir."
 
-#: main.cpp:459
+#: main.cpp:468
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1213,22 +1222,22 @@ msgstr ""
 "libdnf5 eklentilerini ada göre devre dışı bırak. Liste seçeneği. Globları "
 "destekler, birden çok kez belirtilebilir."
 
-#: main.cpp:476
+#: main.cpp:485
 msgid "add a comment to transaction"
 msgstr "işleme bir yorum ekle"
 
-#: main.cpp:478
+#: main.cpp:487
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
 msgstr ""
 "Eyleme bir yorum ekler. Bir işlem gerçekleşirse, yorum o işlemde kaydedilir."
 
-#: main.cpp:491
+#: main.cpp:500
 msgid "set install root"
 msgstr "kurulum kökünü ayarla"
 
-#: main.cpp:498
+#: main.cpp:507
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1236,12 +1245,12 @@ msgstr ""
 "installroot yerine ana sistemden yapılandırma, depo dizini ve değişkenleri "
 "kullan"
 
-#: main.cpp:507
+#: main.cpp:516
 msgid "override the value of $releasever in config and repo files"
 msgstr ""
 "yapılandırmadaki ve depo dosyalarındaki $releasever değerinin üstüne yaz"
 
-#: main.cpp:520
+#: main.cpp:529
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1249,62 +1258,62 @@ msgstr ""
 "Yeni kurulan yaprak (leaf) paketleri ve bir işlemden sonra yaprak haline "
 "gelen paketleri göster."
 
-#: main.cpp:534
+#: main.cpp:543
 msgid "Dump detailed solving results into files"
 msgstr "Ayrıntılı çözüm sonuçlarını dosyalara kaydet"
 
-#: main.cpp:543
+#: main.cpp:552
 msgid "Print main configuration values to stdout"
 msgstr "Ana yapılandırma değerlerini standart çıkışa yazdır"
 
-#: main.cpp:560
+#: main.cpp:569
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Depo yapılandırma değerlerini standart çıkışa yazdır. Liste seçeneği. "
 "Globları destekler"
 
-#: main.cpp:575
+#: main.cpp:584
 msgid "Print variable values to stdout"
 msgstr "Değişken değerlerini standart çıkışa yazdır"
 
-#: main.cpp:589
+#: main.cpp:598
 msgid "Show DNF5 version and exit"
 msgstr "DNF5 sürümünü göster ve çık"
 
-#: main.cpp:596
+#: main.cpp:605
 msgid "Force the use of a different architecture."
 msgstr "Farklı bir mimari kullanmaya zorla."
 
-#: main.cpp:634
+#: main.cpp:643
 msgid "Software Management Commands:"
 msgstr "Yazılım Yönetimi Komutları:"
 
-#: main.cpp:641
+#: main.cpp:650
 msgid "Query Commands:"
 msgstr "Sorgu Komutları:"
 
-#: main.cpp:648
+#: main.cpp:657
 msgid "Subcommands:"
 msgstr "Alt Komutlar:"
 
-#: main.cpp:745
+#: main.cpp:754
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} sürüm {}.{}.{}.{}"
 
-#: main.cpp:748
+#: main.cpp:757
 msgid "{} plugin API version {}.{}"
 msgstr "{} eklentisi API sürümü {}.{}"
 
-#: main.cpp:753
+#: main.cpp:762
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5 sürümü {}.{}.{}.{}"
 
-#: main.cpp:756
+#: main.cpp:765
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 eklentisi API sürümü {}.{}"
 
-#: main.cpp:763
+#: main.cpp:772
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1312,25 +1321,25 @@ msgstr ""
 "\n"
 "{} eklenti yüklendi:"
 
-#: main.cpp:768
+#: main.cpp:777
 msgid "  name: {}"
 msgstr "  ad: {}"
 
-#: main.cpp:771
+#: main.cpp:780
 msgid "  version: {}.{}.{}"
 msgstr "  sürüm: {}.{}.{}"
 
-#: main.cpp:773
+#: main.cpp:782
 msgid "  API version: {}.{}"
 msgstr "  API sürümü: {}.{}"
 
-#: main.cpp:811
+#: main.cpp:820
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
 "Gelen paketlerin toplam boyutu {:.0f} {:s}. {:.0f} {:s} indirme gerekiyor ."
 
-#: main.cpp:828
+#: main.cpp:837
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1338,7 +1347,7 @@ msgstr ""
 "Bu işlemden sonra ek olarak {:.0f} {:s} kullanılacak (kurulacak {:.0f} {:s}, "
 "kaldırılacak {:.0f} {:s})."
 
-#: main.cpp:839
+#: main.cpp:848
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1346,39 +1355,39 @@ msgstr ""
 "Bu işlemden sonra {:.0f} {:s} serbest kalacak (kurulacak {:.0f} {:s}, "
 "kaldırılacak {:.0f} {:s})."
 
-#: main.cpp:851
+#: main.cpp:860
 msgid "======== Main configuration: ========"
 msgstr "======== Ana yapılandırma: ========"
 
-#: main.cpp:888
+#: main.cpp:897
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "Yapılandırma dökümü için eşleşen depo yok: \"{}\""
 
-#: main.cpp:893
+#: main.cpp:902
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" repo yapılandırması: ========"
 
-#: main.cpp:913
+#: main.cpp:922
 msgid "======== Variables: ========"
 msgstr "======== Değişkenler: ========"
 
-#: main.cpp:953
+#: main.cpp:962
 msgid "New leaves:"
 msgstr "Yeni yaprak paketler:"
 
-#: main.cpp:955
+#: main.cpp:964
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:999
+#: main.cpp:1008
 msgid "{} to skip unavailable packages"
 msgstr "Kullanılabilir olmayan paketleri atlamak için {}"
 
-#: main.cpp:1007
+#: main.cpp:1016
 msgid "{} to allow extra packages in the transaction"
 msgstr "İşlemde ek paketlere izin vermek için {}"
 
-#: main.cpp:1020
+#: main.cpp:1029
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1388,28 +1397,28 @@ msgstr ""
 "için {}. Bu, boş bir işlemle sonuçlanabilir çünkü diğer şeylerin yanı sıra "
 "seçenek, başarısız olan kaldırma eylemlerini yok sayabilir."
 
-#: main.cpp:1067
+#: main.cpp:1076
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "İşlemi en iyi adaylarla sınırlamamak için {}"
 
-#: main.cpp:1074
+#: main.cpp:1083
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "Sorunları çözmek için kurulu paketlerin kaldırılmasına izin vermek için {}"
 
-#: main.cpp:1083
+#: main.cpp:1092
 msgid "{} to load additional filelists metadata"
 msgstr "Ek dosya listeleri üst verilerini yüklemek için {}"
 
-#: main.cpp:1090
+#: main.cpp:1099
 msgid "{} to skip uninstallable packages"
 msgstr "Kurulamayan paketleri atlamak için {}"
 
-#: main.cpp:1096
+#: main.cpp:1105
 msgid "You can try to add to command line:"
 msgstr "Komut satırına eklemeyi deneyebilirsiniz:"
 
-#: main.cpp:1114
+#: main.cpp:1123
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1417,7 +1426,7 @@ msgstr ""
 "libdnf eklentilerini etkinleştirirken şu eklenti adı desenleri için eşleşme "
 "bulunamadı: {}"
 
-#: main.cpp:1115
+#: main.cpp:1124
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1425,24 +1434,24 @@ msgstr ""
 "libdnf eklentilerini devre dışı bırakırken şu eklenti adı desenleri için "
 "eşleşme bulunamadı: {}"
 
-#: main.cpp:1211
+#: main.cpp:1220
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 şu argümanlarla başlatıldı: \"{}\" ---"
 
-#: main.cpp:1247
+#: main.cpp:1256
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr ""
 
-#: main.cpp:1286
+#: main.cpp:1295
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1289 main.cpp:1530
+#: main.cpp:1298 main.cpp:1550
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ""
 "{}. Argümanlar hakkında daha fazla bilgi için \"--help\" seçeneğini ekleyin."
 
-#: main.cpp:1298
+#: main.cpp:1307
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1450,18 +1459,18 @@ msgstr ""
 "Bir eklenti tarafından sağlanan bir komut olabilir, şunu deneyin: dnf5 "
 "install 'dnf5-command({})'"
 
-#: main.cpp:1340
+#: main.cpp:1349
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
 msgstr ""
 "Argüman şu komutlar için kullanılabilir: {}. (Komuttan sonra yer almalıdır.)"
 
-#: main.cpp:1384
+#: main.cpp:1393
 msgid "No read/execute access in current directory, moving to /"
 msgstr "Geçerli dizinde okuma/çalıştırma izni yok, /'a taşınıyor"
 
-#: main.cpp:1445
+#: main.cpp:1465
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1472,15 +1481,15 @@ msgstr ""
 "değiştirmeden komutu çalıştırmak için \"--assumeno\" veya \"--downloadonly\" "
 "seçeneklerini kullanın."
 
-#: main.cpp:1486
+#: main.cpp:1506
 msgid "The operation will only store the transaction in {}"
 msgstr "İşlem yalnızca {} içine kaydedilecektir"
 
-#: main.cpp:1488
+#: main.cpp:1508
 msgid "The operation will only download packages for the transaction."
 msgstr "Yalnızca işlem için gerekli paketler indirilecektir."
 
-#: main.cpp:1493
+#: main.cpp:1513
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1488,13 +1497,13 @@ msgstr ""
 "Test kipi etkinleştirildi: Yalnızca paket indirmeleri, OpenPGP anahtar "
 "kurulumları ve işlem denetimleri gerçekleştirilecektir."
 
-#: main.cpp:1501
+#: main.cpp:1521
 msgid ""
 "Error: this bootc system is configured to be read-only. For more "
 "information, run `bootc --help`."
 msgstr ""
 
-#: main.cpp:1518
+#: main.cpp:1538
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1502,15 +1511,15 @@ msgstr ""
 "Kurulum kökünden hiçbir depo yüklenmedi. Ana sistemin yapılandırmasını ve "
 "depolarını kullanmak için --use-host-config seçeneğini belirtin."
 
-#: main.cpp:1540
+#: main.cpp:1560
 msgid "Command returned error: {}"
 msgstr "Komut hata döndürdü: {}"
 
-#: main.cpp:1548
+#: main.cpp:1568
 msgid "DNF5 finished"
 msgstr "DNF5 tamamlandı"
 
-#: main.cpp:1552
+#: main.cpp:1572
 msgid "Complete!"
 msgstr "Tamamlandı!"
 
@@ -1525,6 +1534,15 @@ msgstr "Paketleri atlayarak bağımlılık sorunlarının çözülmesine izin ve
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
 msgstr "Kullanılabilir olmayan paketlerin atlanmasına izin ver"
+
+#, fuzzy
+#~| msgid ""
+#~| " Fingerprint: {}\n"
+#~| " From       : {}\n"
+#~ msgid " From       : {}\n"
+#~ msgstr ""
+#~ " Parmak izi       : {}\n"
+#~ " Nerden           : {}\n"
 
 #~ msgid ""
 #~ "Warning: the `_execute` command is for internal use only and is not "

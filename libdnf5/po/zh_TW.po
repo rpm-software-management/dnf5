@@ -2,19 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Shihfu Juan <xlion@xlion.tw>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# hsu zangmen <chzang55@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-08 00:38+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5/zh_TW/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -24,16 +28,16 @@ msgstr ""
 
 #: base/goal.cpp:472
 msgid "Unsupported argument for REMOVE action: {}"
-msgstr ""
+msgstr "REMOVE 動作己不支援的參數： {}"
 
 #. TODO(lukash) throw a proper exception
 #: base/goal.cpp:1593
 msgid "Incorrect configuration value for multilib_policy: {}"
-msgstr ""
+msgstr "multilib_policy 的組態設定值不正確： {}"
 
 #: base/goal_elements.cpp:352
 msgid "Install"
-msgstr ""
+msgstr "安裝"
 
 #: base/goal_elements.cpp:354
 msgid "Install via provide"
@@ -41,107 +45,107 @@ msgstr ""
 
 #: base/goal_elements.cpp:356
 msgid "Install by group"
-msgstr ""
+msgstr "依群組安裝"
 
 #: base/goal_elements.cpp:358
 msgid "Upgrade"
-msgstr ""
+msgstr "升級"
 
 #: base/goal_elements.cpp:360
 msgid "Upgrade all"
-msgstr ""
+msgstr "升級全部"
 
 #: base/goal_elements.cpp:362
 msgid "Upgrade minimal"
-msgstr ""
+msgstr "升級最小化"
 
 #: base/goal_elements.cpp:364
 msgid "Upgrade all minimal"
-msgstr ""
+msgstr "升級所有最小化"
 
 #: base/goal_elements.cpp:366
 msgid "Downgrade"
-msgstr ""
+msgstr "降級"
 
 #: base/goal_elements.cpp:368
 msgid "Reinstall"
-msgstr ""
+msgstr "重裝"
 
 #: base/goal_elements.cpp:370
 msgid "Install or reinstall"
-msgstr ""
+msgstr "安裝或者重裝"
 
 #: base/goal_elements.cpp:372
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: base/goal_elements.cpp:374
 msgid "Distrosync"
-msgstr ""
+msgstr "分散式同步"
 
 #: base/goal_elements.cpp:376
 msgid "Distrosync all"
-msgstr ""
+msgstr "全部分散式同步"
 
 #: base/goal_elements.cpp:378
 msgid "Reason Change"
-msgstr ""
+msgstr "變更動機"
 
 #: base/goal_elements.cpp:380
 msgid "Resolve"
-msgstr ""
+msgstr "解決"
 
 #: base/goal_elements.cpp:382
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 #: base/goal_elements.cpp:384
 msgid "Disable"
-msgstr ""
+msgstr "停用"
 
 #: base/goal_elements.cpp:386
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 #: base/goal_elements.cpp:388
 msgid "Parse serialized transaction"
-msgstr ""
+msgstr "解析序列化的處理事項"
 
 #: base/goal_elements.cpp:390
 msgid "Install action"
-msgstr ""
+msgstr "安裝動作"
 
 #: base/goal_elements.cpp:392
 msgid "Remove action"
-msgstr ""
+msgstr "移除動作"
 
 #: base/goal_elements.cpp:394
 msgid "Upgrade action"
-msgstr ""
+msgstr "升級動作"
 
 #: base/goal_elements.cpp:396
 msgid "Reinstall action"
-msgstr ""
+msgstr "重裝動作"
 
 #: base/goal_elements.cpp:398
 msgid "Reason change action"
-msgstr ""
+msgstr "變更原因動作"
 
 #: base/goal_elements.cpp:400
 msgid "Reason override"
-msgstr ""
+msgstr "覆寫原因"
 
 #: base/goal_elements.cpp:402
 msgid "Revert comps upgrade"
-msgstr ""
+msgstr "還原 Comps 升級"
 
 #: base/goal_elements.cpp:404
 msgid "Install debug RPMs"
-msgstr ""
+msgstr "安裝除錯 RPM包"
 
 #: base/goal_elements.cpp:406
 msgid "Transaction merge"
-msgstr ""
+msgstr "處理事項管理"
 
 #: base/log_event.cpp:141
 msgid "No packages to remove for argument: {}"
@@ -165,7 +169,7 @@ msgstr ""
 
 #: base/log_event.cpp:154
 msgid "No match for group package: {}"
-msgstr ""
+msgstr "找不到符合「{}」軟體包群組的項目"
 
 #: base/log_event.cpp:158
 msgid "Cannot perform {0}, no match for: {1}."
@@ -173,7 +177,7 @@ msgstr ""
 
 #: base/log_event.cpp:160
 msgid "No match for argument: {}"
-msgstr ""
+msgstr "沒有符合引數的項目: {}"
 
 #: base/log_event.cpp:163
 msgid "No match for argument '{0}' in repositories '{1}'"
@@ -221,11 +225,11 @@ msgstr ""
 
 #: base/log_event.cpp:207
 msgid "  * Maybe you meant: {}"
-msgstr ""
+msgstr "  * 或許您想要：{}"
 
 #: base/log_event.cpp:210
 msgid "There are following alternatives for '{0}': {1}"
-msgstr ""
+msgstr "以下可以用來替代「{0}」：{1}"
 
 #: base/log_event.cpp:217
 msgid ""
@@ -279,7 +283,7 @@ msgstr ""
 #. Format a leading line of the error message.
 #: base/log_event.cpp:276
 msgid "Unable to resolve argument '{}':"
-msgstr ""
+msgstr "無法解析 '{}' 引數:"
 
 #: base/log_event.cpp:280
 msgid ""
@@ -291,29 +295,31 @@ msgid_plural ""
 "  - Argument '{}' matches {} streams ('{}') of module '{}', but none of the "
 "streams are enabled or default."
 msgstr[0] ""
-msgstr[1] ""
+"\n"
+"  - 參數 '{}' 與模組 '{}' 的 {} 串流 ('{}')匹配，但是沒有一個串流是啟用或預設"
+"的。"
 
 #: base/log_event.cpp:287
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:296
 msgid "Modular dependency problems:\n"
-msgstr ""
+msgstr "模組依賴性問題：\n"
 
 #: base/log_event.cpp:303
 msgid "Modular dependency problems with the latest modules:\n"
-msgstr ""
+msgstr "最新模組的模組相依性問題：\n"
 
 #: base/log_event.cpp:310
 msgid "Modular dependency problems with the defaults:\n"
-msgstr ""
+msgstr "預設值的模組相依性問題：\n"
 
 #: base/log_event.cpp:325
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
-msgstr ""
+msgstr "此操作會將模組「{0}」的串流「{1}」切換至串流「{2}」。\n"
 
 #: base/log_event.cpp:330
 msgid ""
@@ -340,7 +346,7 @@ msgstr ""
 #: base/log_event.cpp:351 base/log_event.cpp:362
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:358
 msgid ""
@@ -350,51 +356,51 @@ msgstr ""
 
 #: base/log_event.cpp:365
 msgid "Transaction merge error: '{0}'"
-msgstr ""
+msgstr "處理事項合併錯誤：'{0}'"
 
 #: base/solver_problems.cpp:41
 msgid "{} does not belong to a distupgrade repository"
-msgstr ""
+msgstr "{} 不屬於 distupgrade 軟體庫"
 
 #: base/solver_problems.cpp:42
 msgid "{0} from {1} has inferior architecture"
-msgstr ""
+msgstr "來自 {1} 的 {0} 擁有較差的架構"
 
 #: base/solver_problems.cpp:43
 msgid "problem with installed package"
-msgstr ""
+msgstr "安裝的軟體包有問題"
 
 #: base/solver_problems.cpp:44 base/solver_problems.cpp:80
 msgid "conflicting requests"
-msgstr ""
+msgstr "有衝突的要求"
 
 #: base/solver_problems.cpp:45 base/solver_problems.cpp:81
 msgid "unsupported request"
-msgstr ""
+msgstr "不支援的要求"
 
 #: base/solver_problems.cpp:46 base/solver_problems.cpp:82
 msgid "nothing provides requested {}"
-msgstr ""
+msgstr "沒有軟體包提供要求項目{}"
 
 #: base/solver_problems.cpp:47
 msgid "package {} does not exist"
-msgstr ""
+msgstr "軟體包 {} 不存在"
 
 #: base/solver_problems.cpp:48 base/solver_problems.cpp:84
 msgid "{} is provided by the system"
-msgstr ""
+msgstr "{} 由系統提供"
 
 #: base/solver_problems.cpp:49 base/solver_problems.cpp:85
 msgid "some dependency problem"
-msgstr ""
+msgstr "有一些依賴關係問題"
 
 #: base/solver_problems.cpp:50
 msgid "cannot install the best update candidate for package {}"
-msgstr ""
+msgstr "無法安裝軟體包 {} 的最佳更新候選"
 
 #: base/solver_problems.cpp:51 base/solver_problems.cpp:87
 msgid "cannot install the best candidate for the job"
-msgstr ""
+msgstr "無法安裝工作的最佳候選"
 
 #: base/solver_problems.cpp:52
 msgid "package {0} from {1} is filtered out by modular filtering"
@@ -462,7 +468,7 @@ msgstr ""
 #: base/solver_problems.cpp:72
 msgid ""
 "The operation would result in removing the following protected packages: {}"
-msgstr ""
+msgstr "此動作可能會導致移除以下受保護的軟體包：{}"
 
 #: base/solver_problems.cpp:75
 msgid "The operation would result in removing of running kernel: {}"
@@ -478,7 +484,7 @@ msgstr ""
 
 #: base/solver_problems.cpp:79
 msgid "problem with installed module {}"
-msgstr ""
+msgstr "安裝的 {} 模組有問題"
 
 #: base/solver_problems.cpp:83
 msgid "module {} does not exist"
@@ -486,7 +492,7 @@ msgstr ""
 
 #: base/solver_problems.cpp:86
 msgid "cannot install the best update candidate for module {}"
-msgstr ""
+msgstr "無法安裝 {} 模組的最佳更新候選"
 
 #: base/solver_problems.cpp:88 base/solver_problems.cpp:91
 msgid "module {} is disabled"
@@ -626,7 +632,7 @@ msgstr[1] ""
 
 #: common/exception.cpp:78
 msgid "System error"
-msgstr ""
+msgstr "系統錯誤"
 
 #: common/exception.cpp:199
 msgid "General RuntimeError exception"
@@ -644,11 +650,11 @@ msgstr ""
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr ""
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 
@@ -672,7 +678,7 @@ msgstr ""
 msgid "Unknown unit '{}'"
 msgstr ""
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 
@@ -688,11 +694,11 @@ msgstr ""
 msgid "Configuration file \"{}\" not found"
 msgstr ""
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr ""
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr ""
 
@@ -777,11 +783,11 @@ msgstr ""
 
 #: module/module_db.cpp:76 module/module_db.cpp:85 module/module_sack.cpp:767
 msgid "No such module: {}"
-msgstr ""
+msgstr "沒有這個模組：{}"
 
 #: module/module_db.cpp:268
 msgid "Cannot enable multiple streams for module '{}'"
-msgstr ""
+msgstr "無法為模組 '{}' 啟用多個串流"
 
 #. TODO(pkratoch) replace with a proper and descriptive exception
 #. TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
@@ -792,11 +798,11 @@ msgstr ""
 #: module/module_goal_private.cpp:83 rpm/solv/goal_private.cpp:342
 #: rpm/solv/goal_private.cpp:764
 msgid "no solution possible"
-msgstr ""
+msgstr "沒有可行的解決方案"
 
 #: module/module_metadata.cpp:102
 msgid "Failed to update from string: {}"
-msgstr ""
+msgstr "無法從字串更新：{}"
 
 #: module/module_metadata.cpp:129
 msgid "Failed to resolve module metadata: {}"
@@ -872,6 +878,10 @@ msgstr ""
 msgid ""
 "Maximum download speed is lower than minimum, please change configuration of "
 "minrate or throttle"
+msgstr "最大下載速度低於最小下載速度。請調整 minrate 或 throttle 的設定檔"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
 msgstr ""
 
 #: repo/package_downloader.cpp:154
@@ -880,7 +890,7 @@ msgstr ""
 
 #: repo/package_downloader.cpp:219
 msgid "Already downloaded"
-msgstr ""
+msgstr "已經下載"
 
 #: repo/package_downloader.cpp:267
 msgid "Failed to download packages"
@@ -924,11 +934,11 @@ msgstr ""
 msgid "Failed to load RPM \"{}\": {}"
 msgstr ""
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr ""
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr ""
 
@@ -948,11 +958,11 @@ msgstr ""
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr ""
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -975,7 +985,7 @@ msgid ""
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 
@@ -1168,24 +1178,24 @@ msgstr ""
 
 #: transaction/Swdb.cpp:91
 msgid "In progress"
-msgstr ""
+msgstr "正在進行"
 
 #: transaction/Swdb.cpp:99 transaction/Swdb.cpp:126 transaction/Swdb.cpp:136
 #: transaction/Swdb.cpp:150 transaction/Swdb.cpp:273 transaction/Swdb.cpp:281
 msgid "Not in progress"
-msgstr ""
+msgstr "未在進行"
 
 #: transaction/Swdb.cpp:158
 msgid "No transaction in progress"
-msgstr ""
+msgstr "沒有正在進行的處理事項"
 
 #: transaction/Transformer.cpp:647
 msgid "Transformer: can't open history persist dir"
-msgstr ""
+msgstr "Transformer：無法開啟歷史持續目錄"
 
 #: transaction/Transformer.cpp:660
 msgid "Couldn't find a history database"
-msgstr ""
+msgstr "找不到歷史資料庫"
 
 #. TODO(dmach): replace with a better exception class
 #: transaction/db/comps_environment_group.cpp:100
@@ -1315,7 +1325,7 @@ msgstr ""
 
 #: transaction/transaction_sr.cpp:81
 msgid "Invalid minor version: \"{}\", number expected"
-msgstr ""
+msgstr "無效的次版號： \"{}\"，預期是數字"
 
 #: transaction/transaction_sr.cpp:84
 msgid "Missing key \"version\""
@@ -1377,59 +1387,59 @@ msgstr ""
 
 #: utils/fs/file.cpp:86
 msgid "cannot open file"
-msgstr ""
+msgstr "無法開啟檔案"
 
 #: utils/fs/file.cpp:99
 msgid "cannot open file from fd"
-msgstr ""
+msgstr "無法從 fd 開啟檔案"
 
 #: utils/fs/file.cpp:109
 msgid "cannot close file"
-msgstr ""
+msgstr "無法關閉檔案"
 
 #: utils/fs/file.cpp:139 utils/fs/file.cpp:168
 msgid "error reading file"
-msgstr ""
+msgstr "讀取檔案時發生錯誤"
 
 #: utils/fs/file.cpp:154 utils/fs/file.cpp:180
 msgid "error writing file"
-msgstr ""
+msgstr "寫入檔案錯誤"
 
 #: utils/fs/file.cpp:189
 msgid "error flushing file"
-msgstr ""
+msgstr "錯誤刷新檔案"
 
 #: utils/fs/file.cpp:198
 msgid "error seeking in file"
-msgstr ""
+msgstr "在檔案中尋找錯誤"
 
 #: utils/fs/file.cpp:209
 msgid "error retrieving file position"
-msgstr ""
+msgstr "檢索檔案位置錯誤"
 
 #: utils/fs/file.cpp:297
 msgid "error reading a line from file"
-msgstr ""
+msgstr "從檔案讀取行的錯誤"
 
 #: utils/fs/file.cpp:335
 msgid "error retrieving file descriptor"
-msgstr ""
+msgstr "擷取檔案描述符錯誤"
 
 #: utils/fs/temp.cpp:42
 msgid "cannot create temporary directory"
-msgstr ""
+msgstr "無法建立臨時目錄"
 
 #: utils/fs/temp.cpp:89
 msgid "cannot create temporary file"
-msgstr ""
+msgstr "無法建立暫存檔案"
 
 #: utils/fs/temp.cpp:142
 msgid "cannot close temporary file"
-msgstr ""
+msgstr "無法關閉臨時檔案"
 
 #: utils/iniparser.cpp:126
 msgid "Missing ']' on line {}"
-msgstr ""
+msgstr "在 {} 行缺少 ']'"
 
 #: utils/iniparser.cpp:129
 msgid "Empty section name on line {}"
@@ -1458,11 +1468,11 @@ msgstr ""
 #. returns localized message, problem with later translation
 #: utils/library.cpp:34
 msgid "Cannot load shared library \"{}\": {}"
-msgstr ""
+msgstr "無法載入共享函式庫 \"{}\"： {}"
 
 #: utils/library.cpp:48
 msgid "Cannot obtain address of symbol \"{}\": {}"
-msgstr ""
+msgstr "無法取得符號 \"{}\" 的位址： {}"
 
 #: utils/locale.cpp:57
 msgid "Cannot set the locale \"{}\": {}"

@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2024.
+# Tom FRANZO <tom@franzo.fr>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2024-11-04 16:02+0000\n"
-"Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-30 20:53+0000\n"
+"Last-Translator: Tom FRANZO <tom@franzo.fr>\n"
 "Language-Team: Basque <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/eu/>\n"
 "Language: eu\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -24,7 +25,7 @@ msgstr "Kudeatu aholkuak"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr ""
+msgstr "Aholkuei buruzko xehetasunak inprimatu"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
@@ -54,52 +55,57 @@ msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
 msgstr ""
+"Bertsio berriak eskuragarri dituzten instalatutako paketeentzako aholkuak "
+"erakutsi."
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
 msgstr ""
+"Zehaztutako izenak dituzten paketeak dituzten aholkuak soilik erakutsi. "
+"Zerrenda aukera da, globak onartzen ditu."
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
-msgstr ""
+msgstr "PAKETE_IZENA,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr ""
+msgstr "Aholkuen izenen aurka bat datozen patroien zerrenda."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr ""
+msgstr "Bugzilla bati erreferentzia egiten dioten aholkuak soilik erakutsi."
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr ""
+msgstr "CVE bati erreferentzia egiten dioten aholkuak soilik erakutsi."
 
 #: commands/advisory/arguments.hpp:113
 msgid "Limit to packages in advisories with specified name. List option."
 msgstr ""
+"Zehaztutako izena duten aholkuetako paketeetara mugatu. Zerrenda aukera."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
-msgstr ""
+msgstr "AHOLKU_IZENA,..."
 
 #: commands/advisory/arguments.hpp:121
 msgid "Limit to packages in security advisories."
-msgstr ""
+msgstr "Segurtasun-aholkuetako paketeetara mugatu."
 
 #: commands/advisory/arguments.hpp:128
 msgid "Limit to packages in bugfix advisories."
-msgstr ""
+msgstr "Akats-konponketa-aholkuetako paketeetara mugatu."
 
 #: commands/advisory/arguments.hpp:135
 msgid "Limit to packages in enhancement advisories."
-msgstr ""
+msgstr "Hobekuntza-aholkuetako paketeetara mugatu."
 
 #: commands/advisory/arguments.hpp:142
 msgid "Limit to packages in newpackage advisories."
-msgstr ""
+msgstr "Pakete-berri-aholkuetako paketeetara mugatu."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
@@ -108,30 +114,37 @@ msgid ""
 "Limit to packages in advisories with specified severity. List option. Can be "
 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
+"Zehaztutako larritasuna duten aholkuetako paketeetara mugatu. Zerrenda "
+"aukera. Balio posibleak: \"kritikoa\", \"garrantzitsua\", \"ertaina\", "
+"\"baxua\", \"bat ere ez"
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
-msgstr ""
+msgstr "AHOLKU_LARRITASUNA,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
 "Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
 "option."
 msgstr ""
+"Bugzilla ID bat konpontzen duten aholkuetako paketeetara mugatu, adibidez: "
+"123123. Zerrenda aukera."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
-msgstr ""
+msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
 "Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
 "Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
+"CVE (Common Vulnerabilities and Exposures) ID bat konpontzen duten "
+"aholkuetako paketeetara mugatu, adibidez: CVE-2201-0123. Zerrenda aukera."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
-msgstr ""
+msgstr "CVE_ID,..."
 
 #: commands/clean/clean.cpp:88
 msgid "Error cleaning the cache: {}"

@@ -1,0 +1,401 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# hsu zangmen <chzang55@gmail.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-08 00:38+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
+"projects/dnf5/libdnf5-cli/zh_TW/>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#: argument_parser.cpp:62
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr "\"{}\" 不可與已命名的參數 \"{}\" 一起使用"
+
+#: argument_parser.cpp:64
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr "指令 \"{}\" 中不允許使用 \"{}\""
+
+#: argument_parser.cpp:66
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr "\"{}\" 不可與位置參數 \"{}\" 一起使用"
+
+#: argument_parser.cpp:111
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr "參數 ID \"{}\" 已在群組 \"{}\" 中註冊"
+
+#: argument_parser.cpp:238
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr "參數 id \"{}\" 中的無效字符 '.'"
+
+#: argument_parser.cpp:346 argument_parser.cpp:351
+msgid "Too few values for positional argument \"{}\""
+msgstr "位置參數 \"{}\" 的值太少"
+
+#: argument_parser.cpp:512
+msgid "Missing value for named argument \"--{}\""
+msgstr "己命名參數 \"--{}\" 的值有缺少"
+
+#: argument_parser.cpp:520
+msgid "Unexpected value for named argument \"--{}\""
+msgstr "已命名參數 \"--{}\" 的非預期值"
+
+#: argument_parser.cpp:562
+msgid "Missing value for named argument \"-{}\""
+msgstr "命名參數 \"-{}\" 的值有缺少"
+
+#. print usage
+#: argument_parser.cpp:658
+msgid "Usage:"
+msgstr "用法:"
+
+#: argument_parser.cpp:666
+msgid "Description:"
+msgstr "描述："
+
+#: argument_parser.cpp:943
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr "指令 ID \"{}\" 已註冊為指令 \"{}\""
+
+#: argument_parser.cpp:954
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr "已為指令 \"{}\" 註冊命名的參數 ID \"{}\""
+
+#: argument_parser.cpp:964
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr "位置參數 id \"{}\" 已為指令 \"{}\" 進行註冊"
+
+#: argument_parser.cpp:974
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr "群組 ID\"{}\" 已為指令 \"{}\" 進行註冊"
+
+#: argument_parser.cpp:1001
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr "指令 ID \"{}\" 不包含 ID 為 \"{}\" 的子指令"
+
+#: argument_parser.cpp:1009
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr "指令 id \"{}\" 不包含 id 為 \"{}\" 的命名參數"
+
+#: argument_parser.cpp:1017
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr "指令 id \"{}\" 不包含位置參數 id \"{}\""
+
+#: argument_parser.cpp:1024
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr "指令 ID \"{}\" 不包含 ID 為 \"{}\" 的群組"
+
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr "指令 \"{}\" 的未知參數 \"{}\""
+
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr "命令 \"{}\" 缺少位置參數 \"{}\""
+
+#: argument_parser.cpp:1563
+msgid "Named argument with path id \"{}\" not found"
+msgstr "未找到路徑 ID 為 \"{}\" 的已命名參數"
+
+#: argument_parser.cpp:1573
+msgid "Positional argument with path id \"{}\" not found"
+msgstr "未找到路徑 ID 為 \"{}\" 的位置參數"
+
+#: exception.cpp:30
+msgid "Operation aborted by the user."
+msgstr "使用者己中止該操作。"
+
+#: exception.cpp:33
+msgid "Failed to resolve the transaction"
+msgstr "解決處理事項失敗"
+
+#: output/moduleinfo.cpp:36
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled, [a]ctive"
+msgstr "提示：[d] 預設、[e] 已啟用, [x] 已停用, [i] 已安裝, [a] 作用中"
+
+#: output/modulelist.cpp:39
+msgid "Hint: [d]efault, [e]nabled, [x]disabled, [i]nstalled"
+msgstr "提示：預設[d]、已啟用[e]、已停用[x]、已安裝[i]"
+
+#. Note for translators: This is a right-aligned column separator in
+#. a package properties table as in "Name    : bash".
+#: output/packageinfo.cpp:57
+msgid " : "
+msgstr " : "
+
+#. Add package
+#: output/packageinfo.cpp:63
+msgid "Name"
+msgstr "名稱"
+
+#: output/packageinfo.cpp:68
+msgid "Epoch"
+msgstr "時代"
+
+#: output/packageinfo.cpp:69 output/transaction_table.cpp:289
+msgid "Version"
+msgstr "版本"
+
+#: output/packageinfo.cpp:70
+msgid "Release"
+msgstr "發行版"
+
+#: output/packageinfo.cpp:71
+msgid "Architecture"
+msgstr "架構"
+
+#: output/packageinfo.cpp:75
+msgid "Obsoletes"
+msgstr "過時的"
+
+#: output/packageinfo.cpp:85
+msgid "Download size"
+msgstr "下載大小"
+
+#: output/packageinfo.cpp:89
+msgid "Installed size"
+msgstr "安裝後大小"
+
+#: output/packageinfo.cpp:91
+msgid "Source"
+msgstr "來源"
+
+#: output/packageinfo.cpp:94
+msgid "From repository"
+msgstr "來自軟體庫"
+
+#: output/packageinfo.cpp:96 output/transaction_table.cpp:295
+msgid "Repository"
+msgstr "軟體庫"
+
+#: output/packageinfo.cpp:98
+msgid "Summary"
+msgstr "摘要"
+
+#: output/packageinfo.cpp:99
+msgid "URL"
+msgstr "URL"
+
+#: output/packageinfo.cpp:100
+msgid "License"
+msgstr "授權"
+
+#: output/packageinfo.cpp:104
+msgid "Description"
+msgstr "細節"
+
+#: output/packageinfo.cpp:109
+msgid "Vendor"
+msgstr "廠商"
+
+#: output/search.cpp:45
+msgid " (exact)"
+msgstr " （精確的）"
+
+#: output/search.cpp:90
+msgid "No matches found."
+msgstr "找不到符合項目。"
+
+#: output/search.cpp:101
+msgid "Matched fields: "
+msgstr "符合欄位： "
+
+#: output/transaction_table.cpp:127
+msgid "Transaction Summary:\n"
+msgstr "處理事項摘要：\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:132
+msgid " Installing:      {:4} package\n"
+msgid_plural " Installing:      {:4} packages\n"
+msgstr[0] " 正在安裝：      {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:141
+msgid " Reinstalling:    {:4} package\n"
+msgid_plural " Reinstalling:    {:4} packages\n"
+msgstr[0] " 正在重新安裝：    {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:150
+msgid " Upgrading:       {:4} package\n"
+msgid_plural " Upgrading:       {:4} packages\n"
+msgstr[0] " 正在升級：       {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:159
+msgid " Replacing:       {:4} package\n"
+msgid_plural " Replacing:       {:4} packages\n"
+msgstr[0] " 正在取代：       {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:168
+msgid " Removing:        {:4} package\n"
+msgid_plural " Removing:        {:4} packages\n"
+msgstr[0] " 正在移除：        {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:177
+msgid " Downgrading:     {:4} package\n"
+msgid_plural " Downgrading:     {:4} packages\n"
+msgstr[0] " 正在降級：     {:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:186
+msgid " Changing reason: {:4} package\n"
+msgid_plural " Changing reason: {:4} packages\n"
+msgstr[0] " 正在變更原因：{:4} 軟體包\n"
+
+#. Keep the replaceble number aligned across all messages.
+#: output/transaction_table.cpp:195
+msgid " Skipping:        {:4} package\n"
+msgid_plural " Skipping:        {:4} packages\n"
+msgstr[0] " 正在略過：        {:4} 軟體包\n"
+
+#: output/transaction_table.cpp:277
+msgid "Package"
+msgstr "軟體包"
+
+#: output/transaction_table.cpp:283
+msgid "Arch"
+msgstr "架構"
+
+#: output/transaction_table.cpp:301
+msgid "Size"
+msgstr "大小"
+
+#: output/transaction_table.cpp:357 output/transaction_table.cpp:451
+msgid "{} -> {}"
+msgstr "{} -> {}"
+
+#: output/transaction_table.cpp:373
+msgid "replacing {}"
+msgstr "正在取代 {}"
+
+#: output/transaction_table.cpp:409 output/transaction_table.cpp:426
+msgid " <name-unset>"
+msgstr " <名稱未設定>"
+
+#: output/transaction_table.cpp:457
+msgid "replacing "
+msgstr "替換 "
+
+#: output/transaction_table.cpp:470
+msgid "Skipping packages with conflicts:"
+msgstr "略過有衝突的軟體包："
+
+#: output/transaction_table.cpp:472
+msgid "Skipping packages with broken dependencies:"
+msgstr "略過依賴關係損壞的軟體包："
+
+#: output/transaction_table.cpp:533
+msgid "Installing dependencies:"
+msgstr "將安裝依賴項目："
+
+#: output/transaction_table.cpp:535
+msgid "Installing weak dependencies:"
+msgstr "將安裝弱依賴項目："
+
+#: output/transaction_table.cpp:537
+msgid "Installing group/module packages:"
+msgstr "將安裝群組/模組軟體包："
+
+#: output/transaction_table.cpp:539
+msgid "Installing:"
+msgstr "正在安裝："
+
+#: output/transaction_table.cpp:543
+msgid "Upgrading:"
+msgstr "正在升級："
+
+#: output/transaction_table.cpp:546
+msgid "Downgrading:"
+msgstr "正在降級："
+
+#: output/transaction_table.cpp:549
+msgid "Reinstalling:"
+msgstr "正在重新安裝："
+
+#: output/transaction_table.cpp:553
+msgid "Removing dependent packages:"
+msgstr "正在移除相關的軟體包："
+
+#: output/transaction_table.cpp:555
+msgid "Removing unused dependencies:"
+msgstr "正在移除無用的依賴軟體包："
+
+#: output/transaction_table.cpp:557
+msgid "Removing:"
+msgstr "正在移除："
+
+#: output/transaction_table.cpp:561
+msgid "Changing reason:"
+msgstr "變更原因："
+
+#: output/transaction_table.cpp:593
+msgid "Installing groups dependencies:"
+msgstr "安裝群組相依性："
+
+#: output/transaction_table.cpp:595
+msgid "Installing groups:"
+msgstr "正在安裝群組："
+
+#: output/transaction_table.cpp:599
+msgid "Removing groups:"
+msgstr "正在移除群組："
+
+#: output/transaction_table.cpp:602
+msgid "Upgrading groups:"
+msgstr "正在升級群組："
+
+#: output/transaction_table.cpp:629
+msgid "Installing environmental groups:"
+msgstr "正在安裝系統環境群組："
+
+#: output/transaction_table.cpp:632
+msgid "Removing environmental groups:"
+msgstr "正在移除系統環境群組："
+
+#: output/transaction_table.cpp:635
+msgid "Upgrading environmental groups:"
+msgstr "正在升級系統環境群組："
+
+#: output/transaction_table.cpp:662
+msgid "Enabling module streams:"
+msgstr "正在啟用模組流道："
+
+#: output/transaction_table.cpp:665
+msgid "Disabling modules:"
+msgstr "正在停用模組："
+
+#: output/transaction_table.cpp:668
+msgid "Resetting modules:"
+msgstr "正在重設模組："
+
+#: output/transaction_table.cpp:671
+msgid "Switching module streams:"
+msgstr "正在切換模組流道："
+
+#: output/transaction_table.cpp:745
+msgid "Nothing to do."
+msgstr "無事可做。"
+
+#: progressbar/multi_progress_bar.cpp:36
+msgid "Total"
+msgstr "總計"
+
+#: session.cpp:149
+msgid "Missing command"
+msgstr "無效指令"

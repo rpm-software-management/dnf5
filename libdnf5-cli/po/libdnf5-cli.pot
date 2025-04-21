@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,22 +112,22 @@ msgstr ""
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 #, c++-format
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 #, c++-format
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr ""
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 #, c++-format
 msgid "Named argument with path id \"{}\" not found"
 msgstr ""
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 #, c++-format
 msgid "Positional argument with path id \"{}\" not found"
 msgstr ""

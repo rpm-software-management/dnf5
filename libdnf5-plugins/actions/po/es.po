@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Javier Francisco <fserrador@gmail.com>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-06 09:26+0000\n"
+"Last-Translator: Javier Francisco <fserrador@gmail.com>\n"
+"Language-Team: Spanish <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#: actions.cpp:237
+msgid "File \"{}\" on line {}: {}"
+msgstr "Archivo \"{}\" en línea {}: {}"
+
+#: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
+msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
+msgstr "Formato \"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" esperado"
+
+#: actions.cpp:676
+msgid "Unknown \"enabled\" option value \"{}\""
+msgstr "Opción \"enabled\" desconocida con valor \"{}\""
+
+#: actions.cpp:683
+msgid "Unknown option \"{}\""
+msgstr "Opción \"{}\" desconocida"
+
+#: actions.cpp:711
+msgid "Unknown hook \"{}\""
+msgstr "Enganche \"{}\" desconocido"
+
+#: actions.cpp:720
+msgid ""
+"Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
+"hooks"
+msgstr ""
+"Filtro de paquete solo puede ser utilizado en enganches GOAL_RESOLVED, "
+"PRE_TRANS y POST_TRANS"
+
+#: actions.cpp:726
+msgid "Cannot use direction without package filter"
+msgstr "No se puede utilizar dirección sin filtro de paquete"
+
+#: actions.cpp:740
+msgid "Unknown package direction \"{}\""
+msgstr "Dirección \"{}\" de paquete desconocida"
+
+#: actions.cpp:747
+msgid "Unknown mode \"{}\""
+msgstr "Modo \"{}\" desconodido"
+
+#: actions.cpp:755
+msgid "Unsupported value of the \"raise_error\" option: {}"
+msgstr "Valor no mantenido de la opción \"raise_error\": {}"
+
+#: actions.cpp:760
+msgid "Missing command"
+msgstr "Instrucción ausente"
+
+#: actions.cpp:953
+msgid "Synax error: Missing equal sign (=) in action output line: {}"
+msgstr ""
+"Error sintáctico: falta signo igual (=) en línea de salida de acción: {}"
+
+#: actions.cpp:964
+msgid "Cannot set option: Action output line: {}"
+msgstr "No se pude establecer opción: acción de linea de salida: {}"
+
+#: actions.cpp:982
+msgid "Action sent the wrong log level: {}"
+msgstr "Acción envía el nivel de boletín incorrecto: {}"
+
+#: actions.cpp:987 actions.cpp:1794
+msgid "Action calls for stop: {}"
+msgstr "Acción invoca para detener: {}"
+
+#: actions.cpp:990 actions.cpp:1801
+msgid "Action sent error message: {}"
+msgstr "Acción envía mensaje de error: {}"
+
+#: actions.cpp:995
+msgid ""
+"Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
+"\"var.\" or \"stop=\" or \"error=\": {}"
+msgstr ""
+"Error sintáctico: línea de salida de acción debe iniciar con \"tmp.\" o "
+"\"conf.\" o \"var.\" o\"stop=\" o \"error=\": {}"
+
+#: actions.cpp:1020
+msgid "Error reading from action (from pipe)"
+msgstr "Error al leer desde acción (desde conducto)"
+
+#: actions.cpp:1038
+msgid "Syntax error in json request from action: Missing starting '{{' char"
+msgstr ""
+"Error sintáctico en solicitud json desde acción: carácter '{{' de inicio "
+"ausente"
+
+#: actions.cpp:1062
+msgid "Error during processing of a request from action."
+msgstr "Error durante procesamiento de una solicitud desde acción."
+
+#: actions.cpp:1071
+msgid "Syntax error in json request from action: {}"
+msgstr "Error sintáctico en solicitud json desde acción: {}"
+
+#: actions.cpp:1079
+msgid "Syntax error in json request from action: Incomplete input"
+msgstr "Error sintáctico en solicitud json desde acción: entrada incompatible"
+
+#: actions.cpp:1154
+msgid "Cannot write response"
+msgstr "No se puede escribir respuesta"
+
+#: actions.cpp:1821
+msgid "Actions plugin: Cannot create pipe"
+msgstr "Complemento de acciones: no se puede crear conducto"
+
+#: actions.cpp:1913
+msgid "Actions plugin: Cannot fork"
+msgstr "Complemento de acciones: no se puede bifurcar"
+
+#: actions.cpp:1968
+msgid "Actions plugin: Cannot bind command stdin"
+msgstr ""
+"Complemento de acciones: no se puede vincular instrucción de entrada estándar"
+
+#: actions.cpp:1970
+msgid "Actions plugin: Cannot bind command stdout"
+msgstr "Complemento de acciones: no se puede vincular stdout de instrucción"
+
+#: actions.cpp:1988
+msgid "Cannot execute action, command \"{}\" arguments \"{}\""
+msgstr "No se puede ejecutar acción, instrucción \"{}\" argumentos \"{}\""
+
+#: actions.cpp:1996
+msgid "Error during preparation child process"
+msgstr "Error durante preparación de proceso heredado"
+
+#: actions.cpp:2015
+msgid "Exit code: {}"
+msgstr "Código de salida: {}"
+
+#: actions.cpp:2019
+msgid "Terminated by signal: {}"
+msgstr "Terminado por señal: {}"

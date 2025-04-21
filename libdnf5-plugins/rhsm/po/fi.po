@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-07 11:21+0100\n"
-"PO-Revision-Date: 2024-12-14 18:20+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2025-03-21 02:53+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-plugin-rhsm/fi/>\n"
 "Language: fi\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: rhsm.cpp:97
 msgid "Missing path to repository configuration directory"
-msgstr "Ohjelmistolähteen määrityshakemiston polku puuttuu"
+msgstr "Tietovaraston määrityshakemiston polku puuttuu"
 
 #: rhsm.cpp:134
 msgid "Cannot save repository configuration to file \"{}\": {}"
-msgstr "Ohjelmistolähteen kokoonpanoa ei voi tallentaa tiedostoon \"{}\": {}"
+msgstr "Tietovaraston kokoonpanoa ei voi tallentaa tiedostoon \"{}\": {}"

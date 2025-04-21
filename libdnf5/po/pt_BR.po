@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
 # "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2024.
 # Ciro Mota <ciro.mota@gmail.com>, 2025.
@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-03-01 03:12+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-01 03:07+0000\n"
+"Last-Translator: Ciro Mota <ciro.mota@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/dnf5/libdnf5/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -607,7 +607,7 @@ msgstr "Não é possível executar a transação com a resolução de problemas.
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
-msgstr "Falha na verificação da transação RPM."
+msgstr "A verificação da transação RPM falhou."
 
 #: base/transaction.cpp:84
 msgid ""
@@ -670,8 +670,7 @@ msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
 msgid_plural ""
 "Warning: skipped OpenPGP checks for {0} packages from repository: {1}"
 msgstr[0] ""
-"Aviso: ignoradas as verificações de OpenPGP para {0} pacote do repositório: "
-"{1}"
+"Aviso: ignorada a verificação de OpenPGP para {0} pacote do repositório: {1}"
 msgstr[1] ""
 "Aviso: ignoradas as verificações de OpenPGP para {0} pacotes dos "
 "repositórios: {1}"
@@ -711,11 +710,11 @@ msgstr ""
 "get_user_runtime_dir(): Não é possível determinar o diretório de tempo de "
 "execução (runtime) do usuário"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "falha ao salvar o documento xml para comps"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "Falha ao salvar o documento xml do grupo \"{}\" no arquivo \"{}\": {}"
 
@@ -739,7 +738,7 @@ msgstr "Não foi possível converter '{}' em bytes"
 msgid "Unknown unit '{}'"
 msgstr "Unidade desconhecida '{}'"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "O valor de aceleração {} está fora do intervalo permitido {} ... {}"
 
@@ -755,11 +754,11 @@ msgstr "A seção \"{}\" não contém a opção \"{}\""
 msgid "Configuration file \"{}\" not found"
 msgstr "Arquivo de configuração \"{}\" não encontrado"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "Não é possível acessar o arquivo de configuração \"{}\""
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "Erro no arquivo de configuração \"{}\""
 
@@ -952,6 +951,10 @@ msgstr ""
 "A velocidade máxima de download é inferior à mínima. Por favor, altere a "
 "configuração de minrate ou throttle"
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "'proxy_username' está definido, mas não 'proxy_password'"
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
@@ -1008,11 +1011,11 @@ msgstr "Falha ao carregar comps xml \"{}\": {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Falha ao carregar RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Não foi possível determinar o ID do repositório no cache."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "Caminho vazio para o diretório de cache do repositório."
 
@@ -1036,11 +1039,11 @@ msgstr ""
 "Erro ao verificar se repomd ({}: \"{}\") está sincronizado com o repositório "
 "\"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Erro ao carregar metadados locais para o repositório \"{}\""
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1067,7 +1070,7 @@ msgstr ""
 "Falha ao criar o repositório \"{}\": o ID está presente mais de uma vez na "
 "configuração"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Somente cache ativado, mas sem cache para o repositório \"{}\""
 

@@ -10,10 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-02-28 22:06+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-21 02:53+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/fi/>\n"
 "Language: fi\n"
@@ -21,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -316,7 +315,7 @@ msgstr[1] ""
 
 #: base/log_event.cpp:287
 msgid "', '"
-msgstr ""
+msgstr "', '"
 
 #: base/log_event.cpp:296
 msgid "Modular dependency problems:\n"
@@ -368,7 +367,7 @@ msgstr ""
 #: base/log_event.cpp:351 base/log_event.cpp:362
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/log_event.cpp:358
 msgid ""
@@ -598,7 +597,7 @@ msgstr "Tämä tapahtuma on jo suoritettu aiemmin."
 
 #: base/transaction.cpp:81
 msgid "Cannot run transaction with resolving problems."
-msgstr ""
+msgstr "Tapahtumaa ei voi suorittaa ratkaistavana olevien ongelmien kanssa."
 
 #: base/transaction.cpp:82
 msgid "Rpm transaction check failed."
@@ -659,7 +658,7 @@ msgstr "Avaimen tuonti ei auttanut; väärä avain?"
 #: base/transaction.cpp:1420
 msgctxt "It is a joining character for repositories IDs"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base/transaction.cpp:1423
 msgid "Warning: skipped OpenPGP checks for {0} package from repository: {1}"
@@ -702,11 +701,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): Käyttäjän ajonaikaista hakemistoa ei voida määrittää"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "xml-asiakirjan tallentaminen compsille epäonnistui"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "XML-asiakirjan tallentaminen tiedostoon \"{}\" ryhmälle \"{}\" epäonnistui: "
@@ -732,7 +731,7 @@ msgstr "'{}':ta ei voitu muuntaa tavuiksi"
 msgid "Unknown unit '{}'"
 msgstr "Tuntematon yksikkö '{}'"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Askelten arvo {} on sallitun alueen {} ... {} ulkopuolella"
 
@@ -748,11 +747,11 @@ msgstr "Osa \"{}\" ei sisällä vaihtoehtoa \"{}\""
 msgid "Configuration file \"{}\" not found"
 msgstr "Määritystiedostoa \"{}\" ei löytynyt"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "Määritystiedostoa \"{}\" ei voi käyttää"
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "Virhe määritystiedostossa \"{}\""
 
@@ -908,7 +907,7 @@ msgstr ""
 
 #: plugin/plugins.cpp:92
 msgid "Failed to create a libdnf plugin instance"
-msgstr ""
+msgstr "Libdnf-liitännäisesiintymän luominen epäonnistui"
 
 #: plugin/plugins.cpp:146
 msgid "Cannot find plugin library \"{}\""
@@ -949,6 +948,10 @@ msgid ""
 msgstr ""
 "Enimmäislatausnopeus on pienempi kuin vähimmäislataussnopeus. Muuta minrate-"
 "vähimmäisnopeuden tai throttle-askelten asetuksia"
+
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr ""
 
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
@@ -1009,11 +1012,11 @@ msgstr "xml Comps:n \"{}\" lataaminen epäonnistui: {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "RPM:n \"{}\" lataaminen epäonnistui: {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Välimuistissa olevan ohjelmistolähteen tunnusta ei voi määrittää."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "Tyhjä polku ohjelmistolähteen välimuistihakemistoon."
 
@@ -1038,11 +1041,11 @@ msgstr ""
 "Virhe tarkistettaessa, onko repomd ({}: \"{}\") synkronoitu "
 "ohjelmistolähteen \"{}\" kanssa"
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Virhe ladattaessa paikallisia metatietoja ohjelmistolähteelle \"{}\""
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1069,18 +1072,19 @@ msgstr ""
 "Tietovaraston \"{}\" luominen epäonnistui: Tunnus on useammin kuin kerran "
 "määrityksessä"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Vain välimuisti käytössä, mutta ei välimuistia ohjelmistolähteelle \"{}\""
 
 #: repo/solv_repo.cpp:266
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
-msgstr ""
+msgstr "repomdin lataaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: {}."
 
 #: repo/solv_repo.cpp:274
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
+"ensisijaisen lataaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: {}."
 
 #: repo/solv_repo.cpp:322
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
@@ -1110,10 +1114,14 @@ msgstr ""
 #: repo/solv_repo.cpp:607
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
+"Ensisijaisen välimuistin uudelleenlataaminen tietovarastolle \"{}\" \"{}\":"
+"sta epäonnistui: {}"
 
 #: repo/solv_repo.cpp:672
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
+"Välimuistin {} kirjoittaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: "
+"{}"
 
 #: repo/solv_repo.cpp:693
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
@@ -1165,7 +1173,7 @@ msgstr "Pakettia avatessa ilmeni virhe."
 
 #: rpm/rpm_signature.cpp:64
 msgid "Failed to set rpm transaction rootDir \"{}\"."
-msgstr ""
+msgstr "rpm-tapahtuman rootDir \"{}\":n asettaminen epäonnistui."
 
 #: rpm/rpm_signature.cpp:290
 msgid "\"{}\": key is not an armored public key."
@@ -1242,16 +1250,16 @@ msgstr "Pakettia \"{}\" ei voi asentaa"
 
 #: rpm/versionlock_config.cpp:284 system/state.cpp:573
 msgid "{}"
-msgstr ""
+msgstr "{}"
 
 #. TODO(lukash) throw proper exception class
 #: solv/pool.cpp:174
 msgid "Failed to convert epoch \"{}\" to number"
-msgstr ""
+msgstr "epochin \"{}\" muuntaminen numeroksi epäonnistui"
 
 #: solv/solver.cpp:79
 msgid "Writing debugsolver data into \"{}\" failed: {}"
-msgstr ""
+msgstr "debugsolverin tietojen kirjoittaminen \"{}\":iin epäonnistui: {}"
 
 #: system/state.cpp:280 system/state.cpp:289
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
@@ -1657,7 +1665,7 @@ msgstr "Tietokannan \"{}\" palauttaminen epäonnistui"
 
 #: utils/system.cpp:34
 msgid "failed to read rpm config files"
-msgstr ""
+msgstr "rpm-asetustiedostojen lukeminen epäonnistui"
 
 #: utils/system.cpp:52
 msgid "Failed to execute uname()"

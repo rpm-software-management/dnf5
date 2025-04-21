@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2024-12-13 06:02+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
@@ -98,19 +98,19 @@ msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 위치 인수를 포함하지 �
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "명령 id \"{}\"는 id \"{}\"를 갖는 그룹을 포함하지 않습니다"
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "알 수 없는 인수 \"{}\" (명령 \"{}\"용)"
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "누락된 위치 인수 \"{}\" (명령 \"{}\"용)"
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 msgid "Named argument with path id \"{}\" not found"
 msgstr "경로 id \"{}\"를 갖는 명명된 인수를 찾지 못했습니다"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "경로 d \"{}\"를 갖는 위치 인수를 찾지 못했습니다"
 

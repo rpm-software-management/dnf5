@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2024-12-14 18:20+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-21 02:53+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-config-manager/fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -25,7 +25,7 @@ msgstr "from-repofile: tiedostoa \"{}\" ei ole olemassa"
 
 #: addrepo.cpp:139
 msgid "from-repofile: {}"
-msgstr ""
+msgstr "from-repofile: {}"
 
 #: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
 msgid "{}: Badly formatted argument value \"{}\""
@@ -41,23 +41,23 @@ msgstr "Asettaa vaihtoehdon \"{}\" uudelleen eri arvolla: \"{}\" != \"{}\""
 
 #: addrepo.cpp:253
 msgid "Missing path to repository configuration directory"
-msgstr "Ohjelmistolähteen määrityshakemiston polku puuttuu"
+msgstr "Tietovaraston määrityshakemiston polku puuttuu"
 
 #: addrepo.cpp:303
 msgid "Failed to copy repository configuration file \"{}\": {}"
-msgstr "Ohjelmistolähteen määritystiedoston \"{}\" kopioiminen epäonnistui: {}"
+msgstr "Tietovaraston määritystiedoston \"{}\" kopioiminen epäonnistui: {}"
 
 #: addrepo.cpp:314
 msgid "Failed to download repository configuration file \"{}\": {}"
-msgstr "Ohjelmistolähteen määritystiedoston \"{}\" lataaminen epäonnistui: {}"
+msgstr "Tietovaraston määritystiedoston \"{}\" lataaminen epäonnistui: {}"
 
 #: addrepo.cpp:342
 msgid ""
 "Error in added repository configuration file. Cannot set repository option "
 "\"{}={}\": {}"
 msgstr ""
-"Virhe lisätyssä ohjelmistolähteen määritystiedostossa. Ohjelmistolähteen "
-"vaihtoehtoa \"{}={}\" ei voi asettaa: {}"
+"Virhe lisätyssä tietovaraston määritystiedostossa. Tietovaraston vaihtoehtoa "
+"\"{}={}\" ei voi asettaa: {}"
 
 #: addrepo.cpp:376
 msgid "Bad baseurl: {}={}"
@@ -73,8 +73,7 @@ msgstr ""
 
 #: addrepo.cpp:429
 msgid "Failed to save repository configuration file \"{}\": {}"
-msgstr ""
-"Ohjelmistolähteen määritystiedoston \"{}\" tallentaminen epäonnistui: {}"
+msgstr "Tietovaraston määritystiedoston \"{}\" tallentaminen epäonnistui: {}"
 
 #: addrepo.cpp:451
 msgid ""
@@ -94,8 +93,7 @@ msgstr ""
 
 #: addrepo.cpp:474 addrepo.cpp:500
 msgid "A repository with id \"{}\" already configured in file: {}"
-msgstr ""
-"Ohjelmistolähde, jonka tunnus on \"{}\", on jo määritetty tiedostossa: {}"
+msgstr "Tietovarasto, jonka tunnus on \"{}\", on jo määritetty tiedostossa: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
 msgid "Cannot read repositories from directory \"{}\": {}"
@@ -114,19 +112,18 @@ msgstr ""
 
 #: setopt.cpp:100 unsetopt.cpp:81
 msgid "{}: Empty repository id is not allowed: {}"
-msgstr ""
-"{}: Ohjelmistolähteen tunnuksen jättäminen tyhjäksi ei ole sallittua: {}"
+msgstr "{}: Tietovaraston tunnuksen jättäminen tyhjäksi ei ole sallittua: {}"
 
 #: setopt.cpp:109
 msgid "Cannot set repository option \"{}\": {}"
-msgstr "Ohjelmistolähteen vaihtoehtoa \"{}\" ei voi asettaa: {}"
+msgstr "Tietovaraston vaihtoehtoa \"{}\" ei voi asettaa: {}"
 
 #: setopt.cpp:116 setopt.cpp:179
 msgid ""
 "Sets the \"{}\" option of the repository \"{}\" again with a different "
 "value: \"{}\" != \"{}\""
 msgstr ""
-"Asettaa ohjelmistolähteen \"{}\" vaihtoehdon \"{}\" uudelleen eri arvolla: "
+"Asettaa tietovaraston \"{}\" vaihtoehdon \"{}\" uudelleen eri arvolla: "
 "\"{}\" != \"{}\""
 
 #: setopt.cpp:130
@@ -135,7 +132,7 @@ msgstr "Vaihtoehtoa ei voi asettaa: \"{}\": {}"
 
 #: setopt.cpp:170
 msgid "No matching repository to modify: {}"
-msgstr "Ei vastaavaa muokattavaa ohjelmistolähdettä: {}"
+msgstr "Ei vastaavaa muokattavaa tietovarastoa: {}"
 
 #: setvar.cpp:60
 msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
@@ -158,10 +155,14 @@ msgid ""
 "The path \"{}\" exists, but it is not a directory or a symlink to a "
 "directory."
 msgstr ""
+"Polku \"{}\" on olemassa, mutta se ei ole hakemisto tai symbolilinkki "
+"hakemistoon."
 
 #: shared.hpp:63
 msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
 msgstr ""
+"Polku \"{}\" on olemassa, mutta se on symbolilinkki ei-olemassa olevaan "
+"objektiin."
 
 #: shared.hpp:69
 msgid ""
@@ -177,7 +178,8 @@ msgstr "Muuttujan nimi voi sisältää vain ASCII-kirjaimia, numeroita ja '_': {
 
 #: unsetopt.cpp:93
 msgid "config-manager: Request to remove unsupported repository option: {}"
-msgstr "config-manager: Pyyntö poistaa ei-tuettu ohjelmistolähdeasetus: {}"
+msgstr ""
+"config-manager: Pyyntöä ei-tuetun tietovarastovaihtoehdon poistamiseksi : {}"
 
 #: unsetopt.cpp:105
 msgid "config-manager: Request to remove unsupported main option: {}"
@@ -203,31 +205,41 @@ msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Pyyntöä tietovarastovaihtoehdon poistamiseksi, mutta repoid "
+"ei ole läsnä ohituksissa: {}"
 
 #: unsetopt.cpp:194
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Pyyntöä tietovarastovaihtoehdon poistamiseksi mutta se ei "
+"ole läsnä ohituksissa: {}.{}"
 
 #: unsetopt.cpp:214
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Pyyntöä tietovarastovaihtoehdon poistamiseksi mutta "
+"ohituksia sisältävää tiedostoa ei löydy: {}"
 
 #: unsetvar.cpp:69
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: Pyyntöä muuttujan poistamiseksi, mutta vars-hakemistoa ei "
+"löytynyt: {}"
 
 #: unsetvar.cpp:82
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Pyyntöä muuttujan poistamiseksi, mutta se ei ole läsnä vars-"
+"hakemistossa: {}"
 
 #: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr ""
+msgstr "Muuttujatiedostoa \"{}\" ei voi poistaa: {}"
