@@ -1,3 +1,51 @@
+# 5.2.13.0
+
+- Update translations from weblate
+- daemon: Add the configuration file for the daemon
+- repo: Allow system_cachedir copy for the root user
+- Fix conditional which assumed RHEL 10 could support SOLVER_FLAG_FOCUS_NEW
+- repo: Log correct path when loading system repo
+- Unify duplicated group attributes handling
+- Add `order_int` support to dnf5 daemon
+- Move comps ordering to libdnf5-cli
+- Add new group/env API to its adapters and interfaces
+- comps: Test merging environment grouplists and optionlists
+- comps: Create env grouplist by merging grouplists of all its solvables
+- comps: Create group packagelist by merging packagelists of all its solvables
+- nevra: Fix description of evrcmp and rpmvercmp functions
+- SWIG: unit tests for exceptions
+- SWIG: Implement exception forwarding
+- libdnf5::FormatDetailLevel: Change to enum class and add doc strings
+- Disallow `dnf download non-sense` without `--skip-unavailable`
+- Show cleaned space bytes for `dnf clean`
+- spec: Remove a duplicate record for %{_prefix}/lib/sysimage/libdnf5
+- Fix `history list` with unknown terminal size
+- comps: Respect the display_order with listing groups and environments
+- comps: Add methods to get the integer value of the display_order
+- spec: Correct libdnf5-plugin-appstream description
+- dnfdaemon: Allow Base::clean("expire-cache") without admin privileges
+- Fix invalid hint for unknown short argument
+- Add missing rpm scriptlet types: sysusers and pre/postuntrans
+- solv: Drop the size check from swap_considered_map
+- Improve missing `proxy_password` message
+- Ask for superuser privileges on `history <undo|redo|rollback>`
+- RepoDownloader: remove unused code
+- expired-pgp-keys: Drop braced initialization to fix clang build
+- spec: Fix building without any libdnf5 plugin
+- spec: Conditional find_lang calls
+- spec: Fix building without dnf5 plugins
+- spec: Fix building without man pages
+- doc: DNF_SYSTEM_UPGRADE_NO_REBOOT environment variable
+- doc: Environment variables for a terminal and temporary files
+- Add `-i` and `-f` shoft options for repoquery
+- Reimplement `--color` flag
+- expired-pgp-keys: Respect install root
+- comps: Add configuration options for group and environment excludes
+- comps: Add group and environment excludes
+- comps: Add comps sack to later store comps excludes
+- spec: Package CHANGELOG and other project documentation files
+- spec: Set mode to ghost files
+
 # 5.2.12.0
 
 - Update translations from weblate
