@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2025-02-27 23:55+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -96,19 +96,19 @@ msgstr "Kommando-id \"{}\" innehåller inte positionsargument med id \"{}\""
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "Kommando-id \"{}\" innehåller inte grupp med id \"{}\""
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Okänt argument \"{}\" för kommando \"{}\""
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Saknar positionsargument \"{}\" för kommando \"{}\""
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Det namngivna argumentet med sökvägs-id \"{}\" hittades inte"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Positionsargument med sökvägs-id \"{}\" hittades inte"
 

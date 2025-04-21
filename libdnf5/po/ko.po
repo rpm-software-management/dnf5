@@ -2,15 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # 김인수 <simmon@nplob.com>, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-02-14 07:04+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-28 09:52+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
 "Language: ko\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -676,11 +677,11 @@ msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 "get_user_runtime_dir(): 사용자의 runtime 디렉토리를 결정 할 수 없습니다"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "comps를 위해 xml 문서를 저장하는 데 실패함"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "파일에 그룹 \"{}\"을 위해 xml 문서를 저장하는 데 실패함 \"{}\": {}"
 
@@ -704,7 +705,7 @@ msgstr "'{}'를 바이트로 변환 할 수 없습니다"
 msgid "Unknown unit '{}'"
 msgstr "알 수 없는 단위 '{}'"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "쓰로틀 값 {}은 허용된 범위 {} 밖에 있습니다 {} ... {}"
 
@@ -720,11 +721,11 @@ msgstr "부분 \"{}\"은 옵션 \"{}\"을 포함하지 않습니다"
 msgid "Configuration file \"{}\" not found"
 msgstr "구성 파일 \"{}\"을 찾을 수 없습니다"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "구성 파일 \"{}\"을 접근 할 수 없음"
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "구성 파일 \"{}\"에서 오류"
 
@@ -914,6 +915,10 @@ msgstr ""
 "최대 내려받기 속도가 최저보다 낮으며, minrate 또는 throttle의 구성을 변경해 "
 "주세요"
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "'proxy_username' 이 구성되어 있지만 'proxy_password'가 없습니다"
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
@@ -969,11 +974,11 @@ msgstr "xml Comps를 적재하는 데 실패함 \"{}\": {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "적재하는 데 실패함 RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "저장소 캐쉬 디렉토리에 빈 경로."
 
@@ -995,11 +1000,11 @@ msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "만약 repomd ({}: \"{}\")가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "저장소 \"{}\"를 위해 로컬 메타자료를 적재 중에 오류"
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1024,7 +1029,7 @@ msgid ""
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 

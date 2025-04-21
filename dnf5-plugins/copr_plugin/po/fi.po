@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2024.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2024.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2024-12-20 02:09+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-21 02:53+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5-plugin-copr/fi/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -68,18 +68,17 @@ msgid ""
 "Please do not file bug reports about these packages in Fedora\n"
 "Bugzilla. In case of problems, contact the owner of this repository.\n"
 msgstr ""
-"Copr-ohjelmistolähteen käyttöönotto. Huomaa, että tämä ohjelmistolähde ei "
-"ole\n"
+"Copr-tietovaraston käyttöönotto. Huomaa, että tämä tietovarasto ei ole\n"
 "osa pääjakelua, ja laatu saattaa vaihdella.\n"
 "\n"
-"Fedora-projekti ei käytä mitään valtaa tämän ohjelmistolähteen sisällöstä\n"
+"Fedora-projekti ei käytä mitään valtaa tämän tietovaraston sisällöstä\n"
 "muutoin kuin kerrottu Coprin usein kysytyissä kysymyksissä\n"
 "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
 "in-copr>:ssa,\n"
 "eikä paketteja kata minkäänlainen laatu- tai turvallisuustaso.\n"
 "\n"
-"Älä lähetä näiden pakettien virheraportteja Fedoran Bugzillaan. Jos\n"
-"paketeissa on ongelmia, ota yhteyttä ohjelmistolähteen omistajaan.\n"
+"Älä lähetä näiden pakettien vikaraportteja Fedoran Bugzillaan. Jos\n"
+"paketeissa on ongelmia, ota yhteyttä tietovaraston omistajaan.\n"
 
 #: copr_constants.hpp:41
 msgid ""
@@ -96,21 +95,19 @@ msgid ""
 "These repositories are being enabled together with the main\n"
 "repository.\n"
 msgstr ""
-"Käytössä olevan Copr-ohjelmistolähteen ylläpitäjä päätti tehdä sen "
+"Käytössä olevan Copr-tietovaraston ylläpitäjä päätti tehdä sen "
 "riippuvaiseksi\n"
-"muista ohjelmistolähteistä. Tällaiset ohjelmistolähteet ovat yleensä "
+"muista tietovarastoista. Tällaiset tietovarastot ovat yleensä "
 "välttämättömiä\n"
-"RPM:iden onnistuneeseen asentamiseen Copr-pääohjelmistolähteestä (ne "
-"tarjoavat\n"
+"RPM:iden onnistuneeseen asentamiseen Copr-päätietovarastosta (ne tarjoavat\n"
 "ajonaikaisia riippuvuuksia).\n"
 "\n"
-"Huomaa, että laatua ja virheilmoitusta koskeva huomautus yllä pätee\n"
+"Huomaa, että laatua ja vikailmoitusta koskeva huomautus yllä pätee\n"
 "myös tähän, Fedora Project ei hallitse sisältöä.\n"
 "Tarkista luettelo:\n"
 "\n"
 "{}\n"
-"Nämä ohjelmistolähteet otetaan käyttöön yhdessä pääohjelmistolähteen "
-"kanssa.\n"
+"Nämä tietovarastot otetaan käyttöön yhdessä päätietovaraston kanssa.\n"
 
 #: copr_debug.cpp:30
 msgid "print useful info about the system, useful for debugging"
@@ -122,15 +119,15 @@ msgid ""
 "disable specified Copr repository (if exists), keep {}/*.repo file - just "
 "mark enabled=0"
 msgstr ""
-"poista määritetty Copr-ohjelmistolähde käytöstä (jos sellainen on), säilytä "
-"{}/*.repo-tiedosto - merkitse vain 'enabled=0'"
+"poista määritetty Copr-tietovarasto käytöstä (jos sellainen on olemassa), "
+"säilytä {}/*.repo-tiedosto - merkitse vain 'enabled=0'"
 
 #: copr_enable.cpp:38
 msgid ""
 "download the repository info from a Copr server and install it as a {}/*."
 "repo file"
 msgstr ""
-"lataa ohjelmistolähteen tiedot Copr-palvelimelta ja asenna se {}/*.repo-"
+"lataa tietovaraston tiedot Copr-palvelimelta ja asenna se {}/*.repo-"
 "tiedostona"
 
 #: copr_enable.cpp:46
@@ -138,6 +135,8 @@ msgid ""
 "Chroot specified in the NAME-RELEASE-ARCH format, e.g. 'fedora-rawhide-"
 "ppc64le'.  When not specified, the 'dnf copr' command attempts to detect it."
 msgstr ""
+"Chroot määritelty muodossa NIMI-JULKAISU-ARKKI, esim. 'fedora-rawhide-"
+"ppc64le'. Jos sitä ei ole määritetty, komento 'dnf copr' yrittää havaita sen."
 
 #: copr_list.cpp:51
 msgid "list Copr repositories"
@@ -147,7 +146,7 @@ msgstr "listaa Copr-tietovarastot"
 msgid ""
 "remove specified Copr repository from the system (removes the {}/*.repo file)"
 msgstr ""
-"poista määritetty Copr-ohjelmistolähde järjestelmästä (poistaa {}/*.repo-"
+"poista määritetty Copr-tietovarasto järjestelmästä (poistaa {}/*.repo-"
 "tiedoston)"
 
 #: copr_repo.cpp:91
@@ -192,7 +191,7 @@ msgstr "Kohdetta {} ei löydy {}:sta"
 
 #: copr_repo.cpp:449
 msgid "Removing old config file '{}'"
-msgstr ""
+msgstr "Poistetaan vanhaa määritystiedostoa '{}'"
 
 #: copr_repo.cpp:452
 msgid "Can't remove"
@@ -203,6 +202,8 @@ msgid ""
 "Copr repofile '{}' has an old format, fix by re-enabling it $ {} copr enable "
 "{}"
 msgstr ""
+"Coprin repofilella '{}' on vanha muoto; korjaa ottamalla se uudelleen "
+"käyttöön $ {} copr enable {}"
 
 #: copr_repo.cpp:560
 msgid "Repo id '{}' in '{}' is suspicious"
@@ -210,12 +211,12 @@ msgstr "Tietovaraston tunnus '{}' '{}':ssa on epäilyttävä"
 
 #: copr_repo.cpp:567
 msgid "Repo id '{}' doesn't belong to '{}' repofile"
-msgstr ""
+msgstr "Tietovaraston tunnus '{}' ei kuulu repofile:een '{}'"
 
 #: copr_repo.cpp:618
 msgid "Copr repository '{}' in '{}' disabled."
-msgstr "Copr-ohjelmistolähde '{}' '{}':ssa poistettu käytöstä."
+msgstr "Copr-tietovarasto '{}' '{}':ssa poistettu käytöstä."
 
 #: copr_repo.cpp:632 copr_repo.cpp:657
 msgid "Repository '{}' not found on this system"
-msgstr "Ohjelmistolähdettä '{}' ei löydy järjestelmästä"
+msgstr "Tietovarastoa '{}' ei löydy järjestelmästä"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2024-12-13 16:30+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -99,19 +99,19 @@ msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip konumsal argüman içermiy
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "\"{}\" komut kimliği \"{}\" kimliğine sahip grup içermiyor"
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Bilinmeyen argüman \"{}\" (\"{}\" komutu için)"
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "\"{}\" konumsal argümanı eksik (\"{}\" komutu için)"
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 msgid "Named argument with path id \"{}\" not found"
 msgstr "\"{}\" yol kimliğine sahip belirtilen argüman bulunamadı"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "\"{}\" yol kimliğine sahip konumsal argüman bulunamadı"
 

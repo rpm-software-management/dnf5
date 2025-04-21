@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: 2025-02-19 11:30+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
@@ -98,19 +98,19 @@ msgstr "Id-ul de comandă „{}” nu conține un argument pozițional cu id-ul 
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "Id-ul de comandă „{}” nu conține grupul cu id-ul „{}”"
 
-#: argument_parser.cpp:1131 argument_parser.cpp:1335
+#: argument_parser.cpp:1141 argument_parser.cpp:1345
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Argument necunoscut „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1146 argument_parser.cpp:1350
+#: argument_parser.cpp:1156 argument_parser.cpp:1360
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Lipsește argumentul pozițional „{}” pentru comanda „{}”"
 
-#: argument_parser.cpp:1553
+#: argument_parser.cpp:1563
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Argumentul numit cu id-ul de rută „{}” nu a fost găsit"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1573
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Argumentul pozițional cu id-ul de rută „{}” nu a fost găsit"
 

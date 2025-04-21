@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-02-19 11:30+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-03-29 13:53+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -711,11 +711,11 @@ msgstr ""
 "get_user_runtime_dir(): Nu se poate determina directorul „runtime” al "
 "utilizatorului"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "nu s-a putut salva documentul xml pentru comps"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 "Nu s-a reușit salvarea documentului xml pentru grupul „{}” în fișierul „{}”: "
@@ -741,7 +741,7 @@ msgstr "Nu s-a putut converti „{}” în octeți"
 msgid "Unknown unit '{}'"
 msgstr "Unitate necunoscută „{}”"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 "Valoarea limitei vitezei de descărcare {} este în afara intervalului permis "
@@ -759,11 +759,11 @@ msgstr "Secțiunea „{}” nu conține opțiunea „{}”"
 msgid "Configuration file \"{}\" not found"
 msgstr "Fișierul de configurare „{}” nu a fost găsit"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "Nu se poate accesa fișierul de configurare „{}”"
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "Eroare în fișierul de configurare „{}”"
 
@@ -956,6 +956,10 @@ msgstr ""
 "Viteza maximă de descărcare este mai mică decât cea minimă, vă rugăm să "
 "modificați valoarea configurată a opțiunii „minrate” sau „throttle”"
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "„proxy_username” este definit, dar nu și „proxy_password”"
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
@@ -1010,11 +1014,11 @@ msgstr "Încărcarea comps xml a eșuat „{}”: {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Încărcarea RPM „{}” a eșuat: {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nu s-a putut determina id-ul depozitului din cache."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "Rută goală către directorul cache al depozitului."
 
@@ -1038,11 +1042,11 @@ msgstr ""
 "Eroare la verificarea dacă repomd ({}: „{}”) este sincronizat pentru "
 "depozitul „{}”"
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Eroare la încărcarea metadatelor locale pentru depozitul „{}”"
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1069,7 +1073,7 @@ msgstr ""
 "Nu s-a reușit crearea depozitului „{}”: Id-ul este prezent de mai multe ori "
 "în configurație"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Opțiunea cache-only este activată, dar nu există cache pentru depozitul „{}”"

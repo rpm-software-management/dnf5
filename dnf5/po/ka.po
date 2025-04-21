@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-03-16 13:57+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-05 08:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -199,23 +199,23 @@ msgstr "packagedb-ის პრობლემებზე შემოწმე
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "შეამოწმეთ {} აღმოჩენილი პრობლემა {} პაკეტში"
 
-#: commands/clean/clean.cpp:90
+#: commands/clean/clean.cpp:91
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "გასასუფთავებელი კეშის ტიპების სია. მხარდაჭერილი ტიპებია: {0}"
 
-#: commands/clean/clean.cpp:108
+#: commands/clean/clean.cpp:109
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "უცნობი კეშის ტიპი \"{0}\". მხარდაჭერილი ტიპებია: {1}"
 
-#: commands/clean/clean.cpp:165
+#: commands/clean/clean.cpp:166
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "რეპოზიტორიის კეშის გასუფთავება ჩავარდა ბილიკზე \"{0}\": {1}"
 
-#: commands/clean/clean.cpp:175
+#: commands/clean/clean.cpp:176
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
 msgstr "კეშის საქაღალდე \"{}\" არ არსებობს. გასასუფთავებელი არაფერია."
 
-#: commands/clean/clean.cpp:180
+#: commands/clean/clean.cpp:181
 msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr "კეშის საქაღალდის \"{}\" იტერაცია შეუძლებელია: {}"
 
@@ -242,15 +242,22 @@ msgstr ""
 msgid "Invalid urlprotocol option: {}"
 msgstr "არასწორი urlprotocol-ის პარამეტრი: {}"
 
-#: commands/download/download.cpp:148 main.cpp:615
+#: commands/download/download.cpp:148 main.cpp:624
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "მხარდაუჭერელი არქიტექტურა \"{0}\". აირჩიეთ ერთ-ერთი სიიდან {1}"
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:183
+#: commands/download/download.cpp:184
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr ""
 "პარამეტრი \"--alldeps\" პარამეტრ \"--resolve\"-თან ერთად უნდა გამოიყენოთ"
+
+#: commands/download/download.cpp:220
+msgid ""
+"No package \"{}\" available; You might want to use --skip-unavailable option."
+msgstr ""
+"პაკეტი \"{}\" ხელმისაწვდომი არაა. შეიძლება, უკეთესია, გამოიყენოთ პარამეტრი --"
+"skip-unavailable."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -344,15 +351,15 @@ msgstr ""
 "ტრანზაქციას ითვალისწინებს. მიუთითეთ \"1..last\" შუალედი, რომ ძებნა ყველა "
 "ტრანზაქციაში მოხდეს."
 
-#: commands/history/history_redo.cpp:53
-#: commands/history/history_rollback.cpp:57
-#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:56
+#: commands/history/history_redo.cpp:54
+#: commands/history/history_rollback.cpp:58
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
 msgid "No matching transaction ID found, exactly one required."
 msgstr "შესაბამისი ტრანზაქციის ID აღმოჩენილი არაა. საჭიროა ზუსტად ერთი."
 
-#: commands/history/history_redo.cpp:57
-#: commands/history/history_rollback.cpp:61
-#: commands/history/history_undo.cpp:60
+#: commands/history/history_redo.cpp:58
+#: commands/history/history_rollback.cpp:62
+#: commands/history/history_undo.cpp:61
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr "ემთხვევა ერთზე მეტი ტრანზაქციის ID. აუცილებელია ზუსტად ერთი."
 
@@ -688,7 +695,7 @@ msgstr "რეპოზიტორიების მართვა"
 msgid "Search for packages matching various criteria"
 msgstr "პაკეტების ძებნა სასურველი პირობებით"
 
-#: commands/repoquery/repoquery.cpp:516
+#: commands/repoquery/repoquery.cpp:517
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -696,7 +703,7 @@ msgstr ""
 "პარამეტრი \"--exactdeps\", მხოლოდ, \"--whatrequires\" ან \"--whatdepends\" "
 "პარამეტრებთან ერთად შეგიძლიათ, გამოიყენოთ"
 
-#: commands/repoquery/repoquery.cpp:521
+#: commands/repoquery/repoquery.cpp:522
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -850,16 +857,16 @@ msgid "The key was successfully imported."
 msgstr "გასაღები წარმატებით იქნა შემოტანილი."
 
 #: context.cpp:96
-msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr "წაიშლება შემდეგი PGP გასაღებები (0x{}):"
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
+msgstr "წაიშლება შემდეგი OpenPGP გასაღებები (0x{}):"
 
 #: context.cpp:98
 msgid " Reason     : {}\n"
 msgstr " მიზეზი     : {}\n"
 
 #: context.cpp:102
-msgid " From       : {}\n"
-msgstr " საიდან       : {}\n"
+msgid " Fingerprint: {}\n"
+msgstr " ანაბეჭდი: {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -881,18 +888,18 @@ msgid "The system will now proceed with removing the key."
 msgstr "სისტემა ახლა წაშლის გასაღებს."
 
 #: context.cpp:115
-msgid "The key was successfully removed."
-msgstr "გასაღები წარმატებით წაიშალა."
+msgid "Key 0x{} was successfully removed."
+msgstr "გასაღები 0x{} წარმატებით წაიშალა."
 
-#: context.cpp:294
+#: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:300 main.cpp:1342
+#: context.cpp:301 main.cpp:1351
 msgid ", "
 msgstr ", "
 
-#: context.cpp:304
+#: context.cpp:305
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -900,31 +907,31 @@ msgstr ""
 "{}-ის შესაბამისი რეპოზიტორიების გარეშე. იმისათვის, რომ რეპოზიტორიები ჰოსტის "
 "სისტემიდან გამოიყენოთ, გადაეცით პარამეტრი --use-host-config"
 
-#: context.cpp:308
+#: context.cpp:309
 msgid "No matching repositories for {}"
 msgstr "რეპოზიტორიები, რომლებიც {}-ს ემთხვევა, აღმოჩენილი არაა"
 
-#: context.cpp:354
+#: context.cpp:355
 msgid "Updating and loading repositories:"
 msgstr "განახლება და ჩატვირთვა რეპოზიტორიების:"
 
-#: context.cpp:364
+#: context.cpp:365
 msgid "Repositories loaded."
 msgstr "რეპოზიტორიები ჩაიტვირთა."
 
-#: context.cpp:370
+#: context.cpp:371
 msgid "Testing offline transaction"
 msgstr "ქსელის გარეშე ტრანზაქციის შემოწმება"
 
-#: context.cpp:374 context.cpp:522
+#: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
 msgstr "ტრანზაქცია ჩავარდა: {}"
 
-#: context.cpp:379 context.cpp:527
+#: context.cpp:380 context.cpp:528
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:446
+#: context.cpp:447
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
@@ -932,20 +939,20 @@ msgstr ""
 "მდებარეობა \"{}\" უკვე შეიცავს დამახსოვრებულ ტრანზაქციას. მას თავზე "
 "გადაეწერება."
 
-#: context.cpp:475
+#: context.cpp:476
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr "ქსელგარეშე ტრანზაქცია უკვე რიგშია. დაიწყო შემდეგ ბრძანების მიერ:"
 
-#: context.cpp:477
+#: context.cpp:478
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
 msgstr ""
 "გაგრძელება გააუქმებს ძველ ქსელგარეშე ტრანზაქციას და მას ამით ჩაანცვლებს."
 
-#: context.cpp:495
+#: context.cpp:496
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -956,75 +963,75 @@ msgstr ""
 "რომ გააუქმოთ ტრანზაქცია და წაშალოთ გადმოწერილი ფაილები, გაუშვით ბრძანება "
 "'dnf5 offline clean'."
 
-#: context.cpp:501
+#: context.cpp:502
 msgid "Running transaction"
 msgstr "ტრანზაქციის გაშვება"
 
-#: context.cpp:819
+#: context.cpp:820
 msgid "Upgrading {}"
 msgstr "ვანახლებ: {}"
 
-#: context.cpp:822
+#: context.cpp:823
 msgid "Downgrading {}"
 msgstr "ვერსიის ჩამოწევა: {}"
 
-#: context.cpp:825
+#: context.cpp:826
 msgid "Reinstalling {}"
 msgstr "თავიდან დაყენება: {}"
 
-#: context.cpp:838
+#: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "მოულოდნელი ქმედება TransactionPackage-ში: {}"
 
-#: context.cpp:844
+#: context.cpp:845
 msgid "Installing {}"
 msgstr "მიმდინარეობს დაყენება: {}"
 
-#: context.cpp:865
+#: context.cpp:866
 msgid "Prepare transaction"
 msgstr "ტრანზაქციის მომზადება"
 
-#: context.cpp:885
+#: context.cpp:886
 msgid "Removing {}"
 msgstr "მიმდინარეობს წაშლა: {}"
 
-#: context.cpp:888
+#: context.cpp:889
 msgid "Cleanup {}"
 msgstr "მოსუფთავება: {}"
 
-#: context.cpp:906
+#: context.cpp:907
 msgid "Unpack error: {}"
 msgstr "პაკეტის გაშლის შეცდომა: {}"
 
-#: context.cpp:914
+#: context.cpp:915
 msgid "Cpio error: {}"
 msgstr "Cpio-ის შეცდომა: {}"
 
-#: context.cpp:924
+#: context.cpp:925
 msgid "Scriptlet output:"
 msgstr "მინისკრიპტის გამოტანა:"
 
-#: context.cpp:947
+#: context.cpp:948
 msgid "Running scriptlets"
 msgstr "მინისტკრიპტების გაშვება"
 
-#: context.cpp:952
+#: context.cpp:953
 msgid "Running {} scriptlet: {}"
 msgstr "გაშვებულია {}-ის მინისკრიპტი: {}"
 
-#: context.cpp:967
+#: context.cpp:968
 msgid "Finished {} scriptlet: {}"
 msgstr "დასრულდა {}-ის მინისკრიპტი: {}"
 
-#: context.cpp:973
+#: context.cpp:974
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "არაკრიტიკული შეცდომა {}-ის მინისკრიპტში: {}"
 
-#: context.cpp:982
+#: context.cpp:983
 msgid "Error in {} scriptlet: {}"
 msgstr "შეცდომა {}-ის მინისკრიპტში: {}"
 
-#: context.cpp:1017
+#: context.cpp:1018
 msgid "Verify package files"
 msgstr "პაკეტის ფაილების შემოწმება"
 
@@ -1036,31 +1043,31 @@ msgstr "გაზიარებული ბიბლიოთეკის ფ�
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "სიმბოლოსთვს (\"{}\") მისამართის პოვნის შეცდომა: {}"
 
-#: main.cpp:130
+#: main.cpp:131
 msgid "Utility for packages maintaining"
 msgstr "პროგრამა პაკეტების სამართავად"
 
-#: main.cpp:131
+#: main.cpp:132
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 პროგრამაა პაკეტების სამართავად."
 
-#: main.cpp:132
+#: main.cpp:133
 msgid "Unclassified options:"
 msgstr "კლასგარეშე პარამეტრები:"
 
-#: main.cpp:135
+#: main.cpp:136
 msgid "Global options:"
 msgstr "გლობალური პარამეტრები:"
 
-#: main.cpp:140
+#: main.cpp:141
 msgid "Print help"
 msgstr "დახმარების გამოტანა"
 
-#: main.cpp:147
+#: main.cpp:148
 msgid "Configuration file location"
 msgstr "კონფიგურაციის ფაილის მდებარეობა"
 
-#: main.cpp:155
+#: main.cpp:156
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1069,7 +1076,7 @@ msgstr ""
 "არაინტერაქტიურ ბრძანებასთან ერთად აჩვენებს, მხოლოდ, შესაბამის შემცველობას. "
 "არ აჩვენებს შეტყობინებებს dnf5-ის ქმედებების მიმდინარე მდგომარების შესახებ."
 
-#: main.cpp:170
+#: main.cpp:171
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1077,27 +1084,31 @@ msgstr ""
 "მთლიანად სისტემური კეშიდან გაშვება. კეში არ განახლდება და გამოყენებული "
 "იქნება იმ შემთხვევაშიც კი, თუ მისი ვადა ამოწურულია."
 
-#: main.cpp:177
+#: main.cpp:180
+msgid "Control whether color is used."
+msgstr "მართვა, გამოიყენება თუ არა ფერები."
+
+#: main.cpp:186
 msgid "Force refreshing metadata before running the command."
 msgstr "ბრძანების გაშვებამდე მეტამონაცემების განახლების დაძალება."
 
-#: main.cpp:193
+#: main.cpp:202
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "რეპოზიტორიის კეშის მოძველებულად მონიშვნა ჩავარდა ბილიკზე \"{0}\": {1}"
 
-#: main.cpp:207
+#: main.cpp:216
 msgid "create additional repository using id and path"
 msgstr "დამატებითი რეპოზიტორიის შექმნა id-ით და ბილიკით"
 
-#: main.cpp:215
+#: main.cpp:224
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "repofrompath: არასწორი repoid და ბილიკის სპეციფიკაცია \"{}\""
 
-#: main.cpp:227
+#: main.cpp:236
 msgid "set arbitrary config and repo options"
 msgstr "სასურველი კონფგურაციისა და რეპოზიტორიის პარამეტრების დაყენება"
 
-#: main.cpp:229
+#: main.cpp:238
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1116,46 +1127,46 @@ msgstr ""
 "              არ გადაფარავენ მას. მაგრამ თუ მიუთითებთ ცარიელ მნიშვნელობას, "
 "(მაგ --setopt=tsflags=) ეს ამ პარამეტრს დააცარიელებს."
 
-#: main.cpp:238 main.cpp:277
+#: main.cpp:247 main.cpp:286
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა \"{}\""
 
-#: main.cpp:245
+#: main.cpp:254
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: ცუდად დაფორმატებული არგუმენტის მნიშვნელობა: ბოლო საკვანძო სიმბოლო ვერ "
 "იქნება '.': {}"
 
-#: main.cpp:258
+#: main.cpp:267
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: \"{0}\": {1}"
 
-#: main.cpp:270
+#: main.cpp:279
 msgid "set arbitrary variable"
 msgstr "შემთხვევითი ცვლადის დაყენება"
 
-#: main.cpp:284
+#: main.cpp:293
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:293
+#: main.cpp:302
 msgid "automatically answer yes for all questions"
 msgstr "ყველა კითხვისთვის დადებითი პასუხის გაცემა"
 
-#: main.cpp:300
+#: main.cpp:309
 msgid "automatically answer no for all questions"
 msgstr "ყველა კითხვისთვის უარყოფითი პასუხის გაცემა"
 
-#: main.cpp:307
+#: main.cpp:316
 msgid "try the best available package versions in transactions"
 msgstr "ტრანზაქციებში საუკეთესო ხელმისაწვდომი პაკეტის ვერსიების გამოყენება"
 
-#: main.cpp:314
+#: main.cpp:323
 msgid "do not limit the transaction to the best candidate"
 msgstr "ტრანზაქცია არ შეიზღუდება საუკეთესო კანდიდატზე"
 
-#: main.cpp:325
+#: main.cpp:334
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1163,11 +1174,11 @@ msgstr ""
 "არ დადგება ფაილები, რომლებიც დოკუმენტაციადაა მონიშნული (რომლებიც შეიცავს man "
 "გვერდებს და texinfo-ის დოკუმენტებს)"
 
-#: main.cpp:341
+#: main.cpp:350
 msgid "exclude packages by name or glob"
 msgstr "პაკეტების გამორიცხვა სახელით ან ნიღბით"
 
-#: main.cpp:360
+#: main.cpp:369
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1175,7 +1186,7 @@ msgstr ""
 "დამატებითი რეპოზიტორიების ჩართვა. სიის პარამეტრი. აქვს ვაილდკარდების "
 "მხარდაჭერა. შეიძლება მითითებული იყოს ერთზე მეტჯერაც."
 
-#: main.cpp:378
+#: main.cpp:387
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1183,7 +1194,7 @@ msgstr ""
 "რეპოზიტორიების გამორთვა. სიის პარამეტრი. აქვს ვაილდკარდების მხარდაჭერა. "
 "შეიძლება მითითებული იყოს ერთზე მეტჯერაც."
 
-#: main.cpp:396
+#: main.cpp:405
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1191,17 +1202,17 @@ msgstr ""
 "დამატებითი რეპოზიტორიების ჩართვა სახელის მითითებით. სიის პარამეტრი. აქვს "
 "ვაილდკარდების მხარდაჭერა. შეიძლება მითითებული იყოს ერთზე მეტჯერაც."
 
-#: main.cpp:418
+#: main.cpp:427
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
 "OpenPGP ხელმოწერების გადამოწმების გამორთვა (თუ RPM-ის პოლიტიკა ამის "
 "საშუალებას იძლევა)"
 
-#: main.cpp:434
+#: main.cpp:443
 msgid "Disable all libdnf5 plugins"
 msgstr "ყველა libdnf5-ის დამატების მოდულის გამორთვა"
 
-#: main.cpp:444
+#: main.cpp:453
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1209,7 +1220,7 @@ msgstr ""
 "'libdnf5'-ის დამატების ჩართვა მისი სახელით. სიის პარამეტრი. აქვს "
 "ვაილდკარდების მხარდაჭერა. შეიძლება მითითებული იყოს ერთზე მეტჯერაც."
 
-#: main.cpp:459
+#: main.cpp:468
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1217,11 +1228,11 @@ msgstr ""
 "'libdnf5'-ის დამატების გამორთვა მისი სახელით. სიის პარამეტრი. აქვს "
 "ვაილდკარდების მხარდაჭერა. შეიძლება მითითებული იყოს ერთზე მეტჯერაც."
 
-#: main.cpp:476
+#: main.cpp:485
 msgid "add a comment to transaction"
 msgstr "ტრანზაქციისთვის კომენტარის დამატება"
 
-#: main.cpp:478
+#: main.cpp:487
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1229,11 +1240,11 @@ msgstr ""
 "კომენტარის დამატება ქმედებისთვის. თუ ტრანზაქცია დასრულდება, კომენტარი მასში "
 "იქნება შენახული."
 
-#: main.cpp:491
+#: main.cpp:500
 msgid "set install root"
 msgstr "მიუთითეთ დაყენების root საქაღალდე"
 
-#: main.cpp:498
+#: main.cpp:507
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1241,11 +1252,11 @@ msgstr ""
 "კონფიგურაციის, რეპოების საქაღალდისა და ცვლადების ჰოსტის სისტემიდან "
 "გამოყენება დაყენების root საქაღალდის მაგიერ"
 
-#: main.cpp:507
+#: main.cpp:516
 msgid "override the value of $releasever in config and repo files"
 msgstr "$releasever-ის მნიშვნელობის გადაფარვა კონფიგურაციასა და რეპოს ფაილში"
 
-#: main.cpp:520
+#: main.cpp:529
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1253,62 +1264,62 @@ msgstr ""
 "ახალი დაყენებული არასავალდებულო პაკეტების ჩვენება და პაკეტების, რომლებიც "
 "არასავალდებულო გახდნენ ტრანზაქციის შემდეგ."
 
-#: main.cpp:534
+#: main.cpp:543
 msgid "Dump detailed solving results into files"
 msgstr "დეტალური ამოხსნის შედეგების ფაილებში ჩაწერა"
 
-#: main.cpp:543
+#: main.cpp:552
 msgid "Print main configuration values to stdout"
 msgstr "მთავარი კონფიგურაციის მნიშვნელობების გამოტანა stdout-ზე"
 
-#: main.cpp:560
+#: main.cpp:569
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "რეპოზიტორიის კონფიგურაციის ცვლილებების გამოტანა stdout-ზე. სიის პარამეტრი. "
 "აქვს ვაილდკარდების მხარდაჭერა"
 
-#: main.cpp:575
+#: main.cpp:584
 msgid "Print variable values to stdout"
 msgstr "ცვლადების მნიშვნელობების გამოტანა stdout-ზე"
 
-#: main.cpp:589
+#: main.cpp:598
 msgid "Show DNF5 version and exit"
 msgstr "DNF5-ის ვერსიის ჩვენება და გასვლა"
 
-#: main.cpp:596
+#: main.cpp:605
 msgid "Force the use of a different architecture."
 msgstr "სხვა არქიტექტურის ნაძალადევი გამოყენება."
 
-#: main.cpp:634
+#: main.cpp:643
 msgid "Software Management Commands:"
 msgstr "პროგრამების მართვის ბრძანებები:"
 
-#: main.cpp:641
+#: main.cpp:650
 msgid "Query Commands:"
 msgstr "გამოთხოვის ბრძანებები:"
 
-#: main.cpp:648
+#: main.cpp:657
 msgid "Subcommands:"
 msgstr "ქვებრძანებები:"
 
-#: main.cpp:745
+#: main.cpp:754
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} ვერსია {}.{}.{}.{}"
 
-#: main.cpp:748
+#: main.cpp:757
 msgid "{} plugin API version {}.{}"
 msgstr "{} დამატების API-ის ვერსია {}.{}"
 
-#: main.cpp:753
+#: main.cpp:762
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "libdnf5-ის ვერსია {}.{}.{}.{}"
 
-#: main.cpp:756
+#: main.cpp:765
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "libdnf5 დამატების API-ის ვერსია {}.{}"
 
-#: main.cpp:763
+#: main.cpp:772
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1316,25 +1327,25 @@ msgstr ""
 "\n"
 "ჩატვირთულია {} დამატება:"
 
-#: main.cpp:768
+#: main.cpp:777
 msgid "  name: {}"
 msgstr "  სახელი: {}"
 
-#: main.cpp:771
+#: main.cpp:780
 msgid "  version: {}.{}.{}"
 msgstr "  ვერსია: {}.{}.{}"
 
-#: main.cpp:773
+#: main.cpp:782
 msgid "  API version: {}.{}"
 msgstr "  API ვერსია: {}.{}"
 
-#: main.cpp:811
+#: main.cpp:820
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
 "შემომავალი პაკეტების ჯამური ზომაა {:.0f} {:s}. საჭიროა გადმოწერა {:.0f} {:s}."
 
-#: main.cpp:828
+#: main.cpp:837
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1342,7 +1353,7 @@ msgstr ""
 "ამ ოპერაციის შემდეგ დამატებით {:.0f} {:s} იქნება გამოყენებული (დაყენება "
 "{:.0f} {:s}, წაშლა {:.0f} {:s})."
 
-#: main.cpp:839
+#: main.cpp:848
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1350,39 +1361,39 @@ msgstr ""
 "ამ ოპერაციის შემდეგ, {:.0f} {:s} გათავისუფლდება (დაყენება {:.0f} {:s}, წაშლა "
 "{:.0f} {:s})."
 
-#: main.cpp:851
+#: main.cpp:860
 msgid "======== Main configuration: ========"
 msgstr "======== მთავარი კონფიგურაცია: ========"
 
-#: main.cpp:888
+#: main.cpp:897
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr "არ არსებობს ასეთი რეპო კონფიგურაციის გამოსატანად: \"{}\""
 
-#: main.cpp:893
+#: main.cpp:902
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== \"{}\" რეპოზიტორიის კონფიგურაცია: ========"
 
-#: main.cpp:913
+#: main.cpp:922
 msgid "======== Variables: ========"
 msgstr "======== ცვლადები: ========"
 
-#: main.cpp:953
+#: main.cpp:962
 msgid "New leaves:"
 msgstr "ახალი ფოთლები:"
 
-#: main.cpp:955
+#: main.cpp:964
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:999
+#: main.cpp:1008
 msgid "{} to skip unavailable packages"
 msgstr "{} ხელმიუწვდომელი პაკეტების გამოსატოვებლად"
 
-#: main.cpp:1007
+#: main.cpp:1016
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} ტრანზაქციაში დამატებითი პაკეტების შეტანის დასაშვებად"
 
-#: main.cpp:1020
+#: main.cpp:1029
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1393,27 +1404,27 @@ msgstr ""
 "ყველაფერთან ერთად ამ პარამეტრს ჩავარდნილი წაშლის ქმედებების გამოტოვება "
 "შეუძლია."
 
-#: main.cpp:1067
+#: main.cpp:1076
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} ტრანზაქციის საუკეთესო კანდიდატებზე შეზღუდვის მოსახსნელად"
 
-#: main.cpp:1074
+#: main.cpp:1083
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr "{} პრობლემების გადასაჭრელად დაყენებული პაკეტების წაშლის დასაშვებად"
 
-#: main.cpp:1083
+#: main.cpp:1092
 msgid "{} to load additional filelists metadata"
 msgstr "{} დამატებითი ფაილების სიის მეტამონაცემების ჩასატვირთად"
 
-#: main.cpp:1090
+#: main.cpp:1099
 msgid "{} to skip uninstallable packages"
 msgstr "{} ისეთი პაკეტების გამოსატოვებლად, რომლებიც არ იშლება"
 
-#: main.cpp:1096
+#: main.cpp:1105
 msgid "You can try to add to command line:"
 msgstr "შეგიძლიათ, სცადოთ, მიამატოთ ბრძანების სტრიქონს:"
 
-#: main.cpp:1114
+#: main.cpp:1123
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1421,7 +1432,7 @@ msgstr ""
 "დამთხვევები აღმოჩენილი არაა შემდეგი დამატების სახელის ნიმუშებისთვის libdnf-"
 "ის დამატებების ჩართვისას: {}"
 
-#: main.cpp:1115
+#: main.cpp:1124
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1429,24 +1440,24 @@ msgstr ""
 "დამთხვევები აღმოჩენილი არაა შემდეგი დამატების სახელის ნიმუშებისთვის libdnf-"
 "ის დამატებების გათიშვისას: {}"
 
-#: main.cpp:1211
+#: main.cpp:1220
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 გაეშვა არგუმენტებით: \"{}\" ---"
 
-#: main.cpp:1247
+#: main.cpp:1256
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "არასწორი \"index\" პარამეტრში \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1286
+#: main.cpp:1295
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1289 main.cpp:1530
+#: main.cpp:1298 main.cpp:1550
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr ""
 "{} დაამატეთ \"--help\" არგუმენტების შესახებ მეტი ინფორმაციის მისაღებად."
 
-#: main.cpp:1298
+#: main.cpp:1307
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1454,7 +1465,7 @@ msgstr ""
 "შეიძლება იყოს ბრძანება, რომელიც მოწოდებულია დამატების მიერ. სცადეთ dnf5 "
 "install 'dnf5-command({})'"
 
-#: main.cpp:1340
+#: main.cpp:1349
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1462,12 +1473,12 @@ msgstr ""
 "არგუმენტი ხელმისაწვდომია ბრძანებებისთვის: {}. (ის ბრძანების შემდეგ უნდა "
 "მოათავსოთ.)"
 
-#: main.cpp:1384
+#: main.cpp:1393
 msgid "No read/execute access in current directory, moving to /"
 msgstr ""
 "მიმდინარე საქაღალდიდან წაკითხვა/გაშვების წვდომა არ გაგაჩნიათ. /-ზე გადატანა"
 
-#: main.cpp:1445
+#: main.cpp:1465
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1478,15 +1489,15 @@ msgstr ""
 "assumeno\" ან \"--downloadonly\", რომ ბრძანება სისტემის მდგომარეობის "
 "ცვლილების გარეშე გაუშვათ."
 
-#: main.cpp:1486
+#: main.cpp:1506
 msgid "The operation will only store the transaction in {}"
 msgstr "ეს ოპერაცია, მხოლოდ, შეინახავს ტრანზაქციას საქაღალდეში {}"
 
-#: main.cpp:1488
+#: main.cpp:1508
 msgid "The operation will only download packages for the transaction."
 msgstr "ოპერაცია, მხოლოდ, გადმოწერს პაკეტებს ტრანზაქციისთვის."
 
-#: main.cpp:1493
+#: main.cpp:1513
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1494,7 +1505,7 @@ msgstr ""
 "სატესტო რეჟიმი ჩართულია: მოხდება პაკეტების, მხოლოდ, გადმოწერა, OpenPGP "
 "გასაღებების დაყენება და ტრანზაქციების შემოწმება."
 
-#: main.cpp:1501
+#: main.cpp:1521
 msgid ""
 "Error: this bootc system is configured to be read-only. For more "
 "information, run `bootc --help`."
@@ -1502,7 +1513,7 @@ msgstr ""
 "შეცდომა: ეს bootc სისტემა მორგებულია, რომ მხოლოდ-წაკითხვადი იყოს. მეტი "
 "ინფორმაციისთვის გაუშვით ბრძანება 'bootc --help'."
 
-#: main.cpp:1518
+#: main.cpp:1538
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1511,15 +1522,15 @@ msgstr ""
 "მასპინძელი სისტემის კონფიგურაციისა და რეპოზიტორიების გამოსაყენებლად გადაეცით "
 "პარამეტრი --use-host-config."
 
-#: main.cpp:1540
+#: main.cpp:1560
 msgid "Command returned error: {}"
 msgstr "ბრძანებამ დააბრუნა შეცდომა: {}"
 
-#: main.cpp:1548
+#: main.cpp:1568
 msgid "DNF5 finished"
 msgstr "DNF5 დასრულდა"
 
-#: main.cpp:1552
+#: main.cpp:1572
 msgid "Complete!"
 msgstr "დასრულებულია!"
 
@@ -1535,6 +1546,9 @@ msgstr ""
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
 msgstr "ხელმიუწვდომელი პაკეტების გამოტოვების დაშვება"
+
+#~ msgid " From       : {}\n"
+#~ msgstr " საიდან       : {}\n"
 
 #~ msgid ""
 #~ "Warning: the `_execute` command is for internal use only and is not "

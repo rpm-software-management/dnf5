@@ -9,9 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-02-26 09:38+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-01 03:07+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/sv/>\n"
 "Language: sv\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -693,11 +694,11 @@ msgstr "get_user_home_dir(): Kan inte fastställa användarens hemkatalog"
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr "get_user_runtime_dir(): Kan inte bestämma användarens körtidskatalog"
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr "misslyckades att spara xml dokument för composes"
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr "Misslyckades att spara xml dokument för grupp \"{} till fil \"{}: {}"
 
@@ -721,7 +722,7 @@ msgstr "Kan inte konvertera '{}' till bytes"
 msgid "Unknown unit '{}'"
 msgstr "Okänd enhet '{}'"
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr "Spjällvärdet {} är utanför det tillåtna intervallet {} ... {}"
 
@@ -737,11 +738,11 @@ msgstr "Avsnitt \"{}\" innehåller inte alternativet \"{}\""
 msgid "Configuration file \"{}\" not found"
 msgstr "Konfigurationsfil \"{}\" hittades inte"
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr "Kan inte komma åt konfigurationsfil \"{}\""
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr "Fel i konfigurationsfil \"{}\""
 
@@ -934,6 +935,10 @@ msgstr ""
 "Maximal nedladdningshastighet är lägre än minimum, vänligen ändra "
 "konfigurationen av minrate eller throttle"
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr "”proxy_username” är satt men inte ”proxy_password”"
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
@@ -988,11 +993,11 @@ msgstr "Misslyckades att ladda xml compose \"{}\": {}"
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Misslyckades att ladda RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Det går inte att bestämma id för förråd i cache."
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr "Tom sökväg till förrådets cachekatalog."
 
@@ -1015,11 +1020,11 @@ msgstr ""
 "Fel vid kontroll av om repomd ({}: \"{}\") är synkroniserat för förrådet "
 "\"{}\""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Fel vid laddning av lokal metadata för förråd \"{}\""
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1047,7 +1052,7 @@ msgstr ""
 "Misslyckades att skapa förråd \"{}\": Id finns mer än en gång i "
 "konfigurationen"
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Endast cache aktiverat men ingen cache för förråd \"{}\""
 

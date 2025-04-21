@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -644,11 +644,11 @@ msgstr ""
 msgid "get_user_runtime_dir(): Cannot determine the user's runtime directory"
 msgstr ""
 
-#: comps/environment/environment.cpp:312
+#: comps/environment/environment.cpp:325
 msgid "failed to save xml document for comps"
 msgstr ""
 
-#: comps/group/group.cpp:343
+#: comps/group/group.cpp:373
 msgid "Failed to save xml document for group \"{}\" to file \"{}\": {}"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Unknown unit '{}'"
 msgstr ""
 
-#: conf/config_main.cpp:279
+#: conf/config_main.cpp:281
 msgid "The throttle value {} is outside the allowed range {} ... {}"
 msgstr ""
 
@@ -688,11 +688,11 @@ msgstr ""
 msgid "Configuration file \"{}\" not found"
 msgstr ""
 
-#: conf/config_parser.cpp:98
+#: conf/config_parser.cpp:99
 msgid "Unable to access configuration file \"{}\""
 msgstr ""
 
-#: conf/config_parser.cpp:101
+#: conf/config_parser.cpp:102
 msgid "Error in configuration file \"{}\""
 msgstr ""
 
@@ -874,6 +874,10 @@ msgid ""
 "minrate or throttle"
 msgstr ""
 
+#: repo/librepo.cpp:181
+msgid "'proxy_username' is set but not 'proxy_password'"
+msgstr ""
+
 #: repo/package_downloader.cpp:154
 msgid "Cannot download the \"{0}\" package, cacheonly option is activated."
 msgstr ""
@@ -924,11 +928,11 @@ msgstr ""
 msgid "Failed to load RPM \"{}\": {}"
 msgstr ""
 
-#: repo/repo_cache.cpp:227
+#: repo/repo_cache.cpp:252
 msgid "Unable to determine id of the repository in the cache."
 msgstr ""
 
-#: repo/repo_cache_private.hpp:58
+#: repo/repo_cache_private.hpp:59
 msgid "Empty path to the repository cache directory."
 msgstr ""
 
@@ -948,11 +952,11 @@ msgstr ""
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 
-#: repo/repo_downloader.cpp:335
+#: repo/repo_downloader.cpp:336
 msgid "Error loading local metadata for repository \"{}\""
 msgstr ""
 
-#: repo/repo_downloader.cpp:474
+#: repo/repo_downloader.cpp:475
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -975,7 +979,7 @@ msgid ""
 "configuration"
 msgstr ""
 
-#: repo/repo_sack.cpp:565
+#: repo/repo_sack.cpp:575
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 

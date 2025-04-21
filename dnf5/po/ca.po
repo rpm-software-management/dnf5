@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 03:20+0000\n"
-"PO-Revision-Date: 2025-03-14 03:08+0000\n"
+"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"PO-Revision-Date: 2025-04-10 07:53+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5/ca/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: commands/advisory/advisory.cpp:36
 msgid "Manage advisories"
@@ -197,24 +197,24 @@ msgstr "Comprova si hi ha problemes a la base de dades de paquets"
 msgid "Check discovered {} problem(s) in {} package(s)"
 msgstr "Comprova {} problema/es descobert(s) en {} paquet(s)"
 
-#: commands/clean/clean.cpp:90
+#: commands/clean/clean.cpp:91
 msgid "List of cache types to clean up. Supported types: {0}"
 msgstr "Llista els tipus de memòria cau a netejar. Tipus suportats: {0}"
 
-#: commands/clean/clean.cpp:108
+#: commands/clean/clean.cpp:109
 msgid "Unknown cache type \"{0}\". Supported types: {1}"
 msgstr "Tipus de memòria cau\"{0}\" desconegut. Tipus suportats: {1}"
 
-#: commands/clean/clean.cpp:165
+#: commands/clean/clean.cpp:166
 msgid "Failed to cleanup repository cache in path \"{0}\": {1}"
 msgstr "Ha fallat al netejar la memòria cau a la ruta \"{0}\": {1}"
 
-#: commands/clean/clean.cpp:175
+#: commands/clean/clean.cpp:176
 msgid "Cache directory \"{}\" does not exist. Nothing to clean."
 msgstr ""
 "El directori de memòria cau \"{}\" no existeix. No hi ha res a netejar."
 
-#: commands/clean/clean.cpp:180
+#: commands/clean/clean.cpp:181
 msgid "Cannot iterate cache directory \"{}\": {}"
 msgstr ""
 "No ha estat possible iterar dins el directori de memòria cau \"{}\": {}"
@@ -243,14 +243,21 @@ msgstr ""
 msgid "Invalid urlprotocol option: {}"
 msgstr "Opció de protocol url invàlida: {}"
 
-#: commands/download/download.cpp:148 main.cpp:615
+#: commands/download/download.cpp:148 main.cpp:624
 msgid "Unsupported architecture \"{0}\". Please choose one from {1}"
 msgstr "Arquitectura \"{0}\" no suporta. Sisplau escull una de \"{1}\""
 
 #. TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
-#: commands/download/download.cpp:183
+#: commands/download/download.cpp:184
 msgid "Option \"--alldeps\" should be used with \"--resolve\""
 msgstr "L'opció \"--alldeps\" ha d'usar-se amb \"--resolve\""
+
+#: commands/download/download.cpp:220
+msgid ""
+"No package \"{}\" available; You might want to use --skip-unavailable option."
+msgstr ""
+"No hi ha cap paquet {} disponible. És possible que vulgueu usar l'opció --"
+"skip-unavailable."
 
 #: commands/environment/arguments.hpp:33
 msgid "Show only available environments."
@@ -344,16 +351,16 @@ msgstr ""
 "compte l'última transacció, especifiqueu l'interval \"1..últim\" per cercar "
 "totes les transaccions."
 
-#: commands/history/history_redo.cpp:53
-#: commands/history/history_rollback.cpp:57
-#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:56
+#: commands/history/history_redo.cpp:54
+#: commands/history/history_rollback.cpp:58
+#: commands/history/history_store.cpp:65 commands/history/history_undo.cpp:57
 msgid "No matching transaction ID found, exactly one required."
 msgstr ""
 "No s'ha trobat cap ID de transacció coincident, se'n requereix exactament un."
 
-#: commands/history/history_redo.cpp:57
-#: commands/history/history_rollback.cpp:61
-#: commands/history/history_undo.cpp:60
+#: commands/history/history_redo.cpp:58
+#: commands/history/history_rollback.cpp:62
+#: commands/history/history_undo.cpp:61
 msgid "Matched more than one transaction ID, exactly one required."
 msgstr ""
 "S'han trobat més d'un ID de transacció coincident, se'n requereix exactament "
@@ -698,7 +705,7 @@ msgstr "Gestioneu els dipòsits"
 msgid "Search for packages matching various criteria"
 msgstr "Cerca paquets que coincideixen amb diversos criteris"
 
-#: commands/repoquery/repoquery.cpp:516
+#: commands/repoquery/repoquery.cpp:517
 msgid ""
 "Option \"--exactdeps\" has to be used either with \"--whatrequires\" or \"--"
 "whatdepends\""
@@ -706,7 +713,7 @@ msgstr ""
 "L'opció \"--exactdeps\" s'ha d'usar amb \"--whatrequires\" o \"--"
 "whatdepends\""
 
-#: commands/repoquery/repoquery.cpp:521
+#: commands/repoquery/repoquery.cpp:522
 msgid ""
 "Option \"--recursive\" has to be used either with \"--whatrequires\" or \"--"
 "providers-of=requires\""
@@ -867,16 +874,16 @@ msgid "The key was successfully imported."
 msgstr "La clau s'ha importat correctament."
 
 #: context.cpp:96
-msgid "The following PGP key (0x{}) is about to be removed:"
-msgstr "La següent clau PGP (0x{}) està a punt de suprimir-se:"
+msgid "The following OpenPGP key (0x{}) is about to be removed:"
+msgstr "La següent clau OpenPGP (0x{}) està a punt de suprimir-se:"
 
 #: context.cpp:98
 msgid " Reason     : {}\n"
 msgstr " Raó     : {}\n"
 
 #: context.cpp:102
-msgid " From       : {}\n"
-msgstr " De       : {}\n"
+msgid " Fingerprint: {}\n"
+msgstr " Empremta: {}\n"
 
 #: context.cpp:104
 msgid "As a result, installing packages signed with this key will fail."
@@ -899,18 +906,18 @@ msgid "The system will now proceed with removing the key."
 msgstr "Ara el sistema procedirà a suprimir la clau."
 
 #: context.cpp:115
-msgid "The key was successfully removed."
-msgstr "La clau s'ha suprimit correctament."
+msgid "Key 0x{} was successfully removed."
+msgstr "La clau 0x{} s'ha suprimit correctament."
 
-#: context.cpp:294
+#: context.cpp:295
 msgid "setopt: \"{}.{}\": {}"
 msgstr "setopt: \"{}.{}\": {}"
 
-#: context.cpp:300 main.cpp:1342
+#: context.cpp:301 main.cpp:1351
 msgid ", "
 msgstr ", "
 
-#: context.cpp:304
+#: context.cpp:305
 msgid ""
 "No matching repositories for {}. To use repositories from a host system, "
 "pass --use-host-config option"
@@ -918,44 +925,44 @@ msgstr ""
 "No hi ha dipòsits coincidents per a {}. Per usar dipòsits d'un sistema "
 "amfitrió, apliqueu l'opció --use-host-config"
 
-#: context.cpp:308
+#: context.cpp:309
 msgid "No matching repositories for {}"
 msgstr "No hi ha dipòsits coincidents per a {}"
 
-#: context.cpp:354
+#: context.cpp:355
 msgid "Updating and loading repositories:"
 msgstr "Actualització i càrrega de dipòsits:"
 
-#: context.cpp:364
+#: context.cpp:365
 msgid "Repositories loaded."
 msgstr "Dipòsits carregats."
 
-#: context.cpp:370
+#: context.cpp:371
 msgid "Testing offline transaction"
 msgstr "Es prova la transacció fora de línia"
 
-#: context.cpp:374 context.cpp:522
+#: context.cpp:375 context.cpp:523
 msgid "Transaction failed: {}"
 msgstr "Ha fallat la transacció: {}"
 
-#: context.cpp:379 context.cpp:527
+#: context.cpp:380 context.cpp:528
 msgid "  - {}"
 msgstr "  - {}"
 
-#: context.cpp:446
+#: context.cpp:447
 msgid ""
 "Location \"{}\" already contains a stored transaction, it will be "
 "overwritten."
 msgstr "La ubicació {} ja conté una transacció desada. Se sobreescriurà."
 
-#: context.cpp:475
+#: context.cpp:476
 msgid ""
 "There is already an offline transaction queued, initiated by the following "
 "command:"
 msgstr ""
 "Ja hi ha una transacció fora de línia a la cua, iniciada per l'ordre següent:"
 
-#: context.cpp:477
+#: context.cpp:478
 msgid ""
 "Continuing will cancel the old offline transaction and replace it with this "
 "one."
@@ -963,7 +970,7 @@ msgstr ""
 "Si continueu, es cancel·larà transacció anterior fora de línia i la "
 "substituirà per aquesta."
 
-#: context.cpp:495
+#: context.cpp:496
 msgid ""
 "Transaction stored to be performed offline. Run `dnf5 offline reboot` to "
 "reboot and run the transaction. To cancel the transaction and delete the "
@@ -973,75 +980,75 @@ msgstr ""
 "per reiniciar i executar la transacció. Per cancel·lar la transacció i "
 "suprimir els fitxers baixats, useu 'dnf5 offline clean'."
 
-#: context.cpp:501
+#: context.cpp:502
 msgid "Running transaction"
 msgstr "Executant la transacció"
 
-#: context.cpp:819
+#: context.cpp:820
 msgid "Upgrading {}"
 msgstr "Actualitzant {}"
 
-#: context.cpp:822
+#: context.cpp:823
 msgid "Downgrading {}"
 msgstr "Es degrada {}"
 
-#: context.cpp:825
+#: context.cpp:826
 msgid "Reinstalling {}"
 msgstr "Reinstal·lant {}"
 
-#: context.cpp:838
+#: context.cpp:839
 msgid "Unexpected action in TransactionPackage: {}"
 msgstr "Acció inesperada a TransactionPackage: {}"
 
-#: context.cpp:844
+#: context.cpp:845
 msgid "Installing {}"
 msgstr "Instal·lant {}"
 
-#: context.cpp:865
+#: context.cpp:866
 msgid "Prepare transaction"
 msgstr "Es prepara la transacció"
 
-#: context.cpp:885
+#: context.cpp:886
 msgid "Removing {}"
 msgstr "Suprimint {}"
 
-#: context.cpp:888
+#: context.cpp:889
 msgid "Cleanup {}"
 msgstr "Es neteja {}"
 
-#: context.cpp:906
+#: context.cpp:907
 msgid "Unpack error: {}"
 msgstr "Error de desempaquetat: {}"
 
-#: context.cpp:914
+#: context.cpp:915
 msgid "Cpio error: {}"
 msgstr "Error de Cpio: {}"
 
-#: context.cpp:924
+#: context.cpp:925
 msgid "Scriptlet output:"
 msgstr "Sortida de l'scriptlet:"
 
-#: context.cpp:947
+#: context.cpp:948
 msgid "Running scriptlets"
 msgstr "Executant scriptlets"
 
-#: context.cpp:952
+#: context.cpp:953
 msgid "Running {} scriptlet: {}"
 msgstr "Executant l'scriptlet de {}: {}"
 
-#: context.cpp:967
+#: context.cpp:968
 msgid "Finished {} scriptlet: {}"
 msgstr "S'ha acabat l'scriptlet de {} : {}"
 
-#: context.cpp:973
+#: context.cpp:974
 msgid "Non-critical error in {} scriptlet: {}"
 msgstr "Error no crític a l'scriptlet de {} : {}"
 
-#: context.cpp:982
+#: context.cpp:983
 msgid "Error in {} scriptlet: {}"
 msgstr "Error a l'scriptlet de {}: {}"
 
-#: context.cpp:1017
+#: context.cpp:1018
 msgid "Verify package files"
 msgstr "Verificació dels fitxers dels paquets"
 
@@ -1053,31 +1060,31 @@ msgstr "No es pot carregar la biblioteca compartida {}: {}"
 msgid "Cannot obtain address of symbol \"{}\": {}"
 msgstr "No es pot obtenir l'adreça del símbol {}: {}"
 
-#: main.cpp:130
+#: main.cpp:131
 msgid "Utility for packages maintaining"
 msgstr "Utilitat per al manteniment de paquets"
 
-#: main.cpp:131
+#: main.cpp:132
 msgid "DNF5 is a program for maintaining packages."
 msgstr "DNF5 és un programa per a mantenir paquets."
 
-#: main.cpp:132
+#: main.cpp:133
 msgid "Unclassified options:"
 msgstr "Opcions no classificades:"
 
-#: main.cpp:135
+#: main.cpp:136
 msgid "Global options:"
 msgstr "Opcions globals:"
 
-#: main.cpp:140
+#: main.cpp:141
 msgid "Print help"
 msgstr "Imprimeix l'ajuda"
 
-#: main.cpp:147
+#: main.cpp:148
 msgid "Configuration file location"
 msgstr "Ubicació del fitxer de configuració"
 
-#: main.cpp:155
+#: main.cpp:156
 msgid ""
 "In combination with a non-interactive command, shows just the relevant "
 "content. Suppresses messages notifying about the current state or actions of "
@@ -1087,7 +1094,7 @@ msgstr ""
 "rellevant. Suprimeix els missatges que notifiquin sobre l'estat actual o les "
 "accions del dnf5."
 
-#: main.cpp:170
+#: main.cpp:171
 msgid ""
 "Run entirely from system cache, don't update the cache and use it even in "
 "case it is expired."
@@ -1095,27 +1102,31 @@ msgstr ""
 "Executa completament des de la memòria cau del sistema, no actualitza la "
 "memòria cau i l'usa fins i tot en cas que hagi caducat."
 
-#: main.cpp:177
+#: main.cpp:180
+msgid "Control whether color is used."
+msgstr "Controla si s'usa el color."
+
+#: main.cpp:186
 msgid "Force refreshing metadata before running the command."
 msgstr "Força l'actualització de metadades abans d'executar l'ordre."
 
-#: main.cpp:193
+#: main.cpp:202
 msgid "Failed to expire repository cache in path \"{0}\": {1}"
 msgstr "No s'ha pogut fer caducar la memòria cau del dipòsit al camí {0}: {1}"
 
-#: main.cpp:207
+#: main.cpp:216
 msgid "create additional repository using id and path"
 msgstr "crea un repositori addicional amb id i camí"
 
-#: main.cpp:215
+#: main.cpp:224
 msgid "repofrompath: Incorrect repoid and path specification \"{}\""
 msgstr "reporompath: repoid i especificació del camí incorrectes: {}"
 
-#: main.cpp:227
+#: main.cpp:236
 msgid "set arbitrary config and repo options"
 msgstr "estableix les opcions arbitràries «config» i «repo»"
 
-#: main.cpp:229
+#: main.cpp:238
 msgid ""
 "Override a configuration option from the configuration file. To override "
 "configuration options for repositories, use repoid.option for  the\n"
@@ -1133,45 +1144,45 @@ msgstr ""
 "              no l'anul·len. Tanmateix, si s'especifica un valor buit (per "
 "exemple, --setopt=tsflags=) s'esborrarà l'opció."
 
-#: main.cpp:238 main.cpp:277
+#: main.cpp:247 main.cpp:286
 msgid "{}: Badly formatted argument value \"{}\""
 msgstr "{}: format incorrecte del valor de l'argument \"{}\""
 
-#: main.cpp:245
+#: main.cpp:254
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
 "{}: valor de l'argument incorrecte: l'últim caràcter clau no pot ser '.': {}"
 
-#: main.cpp:258
+#: main.cpp:267
 msgid "setopt: \"{0}\": {1}"
 msgstr "setopt: '{0}': {1}"
 
-#: main.cpp:270
+#: main.cpp:279
 msgid "set arbitrary variable"
 msgstr "estableix una variable arbitrària"
 
-#: main.cpp:284
+#: main.cpp:293
 msgid "setvar: {}"
 msgstr "setvar: {}"
 
-#: main.cpp:293
+#: main.cpp:302
 msgid "automatically answer yes for all questions"
 msgstr "respon automàticament SÍ a totes les preguntes"
 
-#: main.cpp:300
+#: main.cpp:309
 msgid "automatically answer no for all questions"
 msgstr "respon automàticament NO a totes les preguntes"
 
-#: main.cpp:307
+#: main.cpp:316
 msgid "try the best available package versions in transactions"
 msgstr "prova les millors versions de paquets disponibles a les transaccions"
 
-#: main.cpp:314
+#: main.cpp:323
 msgid "do not limit the transaction to the best candidate"
 msgstr "no limitis la transacció al millor candidat"
 
-#: main.cpp:325
+#: main.cpp:334
 msgid ""
 "Don't install files that are marked as documentation (which includes man "
 "pages and texinfo documents)"
@@ -1179,11 +1190,11 @@ msgstr ""
 "No instal·lis fitxers marcats com a documentació (que inclou pàgines man i "
 "documents texinfo)"
 
-#: main.cpp:341
+#: main.cpp:350
 msgid "exclude packages by name or glob"
 msgstr "exclou els paquets per nom o glob"
 
-#: main.cpp:360
+#: main.cpp:369
 msgid ""
 "Enable additional repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1191,7 +1202,7 @@ msgstr ""
 "Habilita dipòsits addicionals. Té opció de llista. Admet globs, es pot "
 "especificar diverses vegades."
 
-#: main.cpp:378
+#: main.cpp:387
 msgid ""
 "Disable repositories. List option. Supports globs, can be specified multiple "
 "times."
@@ -1199,7 +1210,7 @@ msgstr ""
 "Inhabilita dipòsits addicionals. Té opció de llista. Admet globs, es pot "
 "especificar diverses vegades."
 
-#: main.cpp:396
+#: main.cpp:405
 msgid ""
 "Enable just specific repositories. List option. Supports globs, can be "
 "specified multiple times."
@@ -1207,17 +1218,17 @@ msgstr ""
 "Habilita només dipòsits específics. Té opció de llista. Admet globs, es pot "
 "especificar diverses vegades."
 
-#: main.cpp:418
+#: main.cpp:427
 msgid "disable OpenPGP signature checking (if RPM policy allows)"
 msgstr ""
 "inhabilita la comprovació de signatura OpenPGP (si la política d'RPM ho "
 "permet)"
 
-#: main.cpp:434
+#: main.cpp:443
 msgid "Disable all libdnf5 plugins"
 msgstr "Inhabilita tots els connectors de libdnf5"
 
-#: main.cpp:444
+#: main.cpp:453
 msgid ""
 "Enable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1225,7 +1236,7 @@ msgstr ""
 "Habilita els connectors de libdnf5 pel nom. Té opció de llista. Admet globs, "
 "es pot especificar diverses vegades."
 
-#: main.cpp:459
+#: main.cpp:468
 msgid ""
 "Disable libdnf5 plugins by name. List option. Supports globs, can be "
 "specified multiple times."
@@ -1233,11 +1244,11 @@ msgstr ""
 "Inhabilita els connectors de libdnf5 pel nom. Té opció de llista. Admet "
 "globs, es pot especificar diverses vegades."
 
-#: main.cpp:476
+#: main.cpp:485
 msgid "add a comment to transaction"
 msgstr "afegeix un comentari a la transacció"
 
-#: main.cpp:478
+#: main.cpp:487
 msgid ""
 "Adds a comment to the action. If a transaction takes place, the comment is "
 "stored in it."
@@ -1245,11 +1256,11 @@ msgstr ""
 "Afegeix un comentari a l'acció. Si es fa una transacció, el comentari s'hi "
 "desa."
 
-#: main.cpp:491
+#: main.cpp:500
 msgid "set install root"
 msgstr "estableix l'arrel de la instal·lació"
 
-#: main.cpp:498
+#: main.cpp:507
 msgid ""
 "use configuration, reposdir, and vars from the host system rather than the "
 "installroot"
@@ -1257,11 +1268,11 @@ msgstr ""
 "usa la configuració, reposdir i vars del sistema amfitrió en lloc de l'arrel "
 "de la instal·lació"
 
-#: main.cpp:507
+#: main.cpp:516
 msgid "override the value of $releasever in config and repo files"
 msgstr "substitueix el valor de $releasever als fitxers config i repo"
 
-#: main.cpp:520
+#: main.cpp:529
 msgid ""
 "Show newly installed leaf packages and packages that became leaves after a "
 "transaction."
@@ -1269,62 +1280,62 @@ msgstr ""
 "Mostra els paquets de fulles recentment instal·lats i els paquets que es van "
 "convertir en fulles després d'una transacció."
 
-#: main.cpp:534
+#: main.cpp:543
 msgid "Dump detailed solving results into files"
 msgstr "Aboca els resultats detallats de la resolució en fitxers"
 
-#: main.cpp:543
+#: main.cpp:552
 msgid "Print main configuration values to stdout"
 msgstr "Imprimeix els valors de configuració principals a la sortida estàndard"
 
-#: main.cpp:560
+#: main.cpp:569
 msgid ""
 "Print repository configuration values to stdout. List option. Supports globs"
 msgstr ""
 "Imprimeix els valors de configuració del dipòsit a la sortida estàndard. Té "
 "opció de llista. Admet globs"
 
-#: main.cpp:575
+#: main.cpp:584
 msgid "Print variable values to stdout"
 msgstr "Imprimeix els valors de les variables a la sortida estàndard"
 
-#: main.cpp:589
+#: main.cpp:598
 msgid "Show DNF5 version and exit"
 msgstr "Mostra la versió de DNF5 i surt"
 
-#: main.cpp:596
+#: main.cpp:605
 msgid "Force the use of a different architecture."
 msgstr "Força l'ús d'una arquitectura diferent."
 
-#: main.cpp:634
+#: main.cpp:643
 msgid "Software Management Commands:"
 msgstr "Ordres de gestió de programari:"
 
-#: main.cpp:641
+#: main.cpp:650
 msgid "Query Commands:"
 msgstr "Ordres de consulta:"
 
-#: main.cpp:648
+#: main.cpp:657
 msgid "Subcommands:"
 msgstr "Subordres:"
 
-#: main.cpp:745
+#: main.cpp:754
 msgid "{} version {}.{}.{}.{}"
 msgstr "{} versió {}.{}.{}.{}"
 
-#: main.cpp:748
+#: main.cpp:757
 msgid "{} plugin API version {}.{}"
 msgstr "{} versió de l'API del connector {}.{}"
 
-#: main.cpp:753
+#: main.cpp:762
 msgid "libdnf5 version {}.{}.{}.{}"
 msgstr "versió de libdnf5 {}.{}.{}.{}"
 
-#: main.cpp:756
+#: main.cpp:765
 msgid "libdnf5 plugin API version {}.{}"
 msgstr "versió de l'API del connector de libdnf5 {}.{}"
 
-#: main.cpp:763
+#: main.cpp:772
 msgid ""
 "\n"
 "Loaded {} plugins:"
@@ -1332,25 +1343,25 @@ msgstr ""
 "\n"
 "S'han carregat {} connectors:"
 
-#: main.cpp:768
+#: main.cpp:777
 msgid "  name: {}"
 msgstr "  nom: {}"
 
-#: main.cpp:771
+#: main.cpp:780
 msgid "  version: {}.{}.{}"
 msgstr "  versió: {}.{}.{}"
 
-#: main.cpp:773
+#: main.cpp:782
 msgid "  API version: {}.{}"
 msgstr "  Versió de l'API: {}.{}"
 
-#: main.cpp:811
+#: main.cpp:820
 msgid ""
 "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}."
 msgstr ""
 "La mida total dels paquets entrants és {:.0f} {:s}. Cal baixar {:.0f} {:s}."
 
-#: main.cpp:828
+#: main.cpp:837
 msgid ""
 "After this operation, {:.0f} {:s} extra will be used (install {:.0f} {:s}, "
 "remove {:.0f} {:s})."
@@ -1358,7 +1369,7 @@ msgstr ""
 "Després d'aquesta operació, s'usaran {:.0f} {:s} addicionals ({:.0f} "
 "d'instal·lació {:s}, {:.0f} {:s} de supressió)."
 
-#: main.cpp:839
+#: main.cpp:848
 msgid ""
 "After this operation, {:.0f} {:s} will be freed (install {:.0f} {:s}, remove "
 "{:.0f} {:s})."
@@ -1366,40 +1377,40 @@ msgstr ""
 "Després d'aquesta operació, s'alliberaran {:.0f} {:s} ({:.0f} d'instal·lació "
 "{:s}, {:.0f} {:s} de supressió)."
 
-#: main.cpp:851
+#: main.cpp:860
 msgid "======== Main configuration: ========"
 msgstr "======== Configuració principal: ========"
 
-#: main.cpp:888
+#: main.cpp:897
 msgid "No matching repo to dump configuration: \"{}\""
 msgstr ""
 "No hi ha cap dipòsit que coincideixi amb la configuració d'abocament: {}"
 
-#: main.cpp:893
+#: main.cpp:902
 msgid "======== \"{}\" repository configuration: ========"
 msgstr "======== Configuració del dipòsit {}: ========"
 
-#: main.cpp:913
+#: main.cpp:922
 msgid "======== Variables: ========"
 msgstr "======== Variables: ========"
 
-#: main.cpp:953
+#: main.cpp:962
 msgid "New leaves:"
 msgstr "Abandonaments nous:"
 
-#: main.cpp:955
+#: main.cpp:964
 msgid " {}"
 msgstr " {}"
 
-#: main.cpp:999
+#: main.cpp:1008
 msgid "{} to skip unavailable packages"
 msgstr "{} per ometre paquets no disponibles"
 
-#: main.cpp:1007
+#: main.cpp:1016
 msgid "{} to allow extra packages in the transaction"
 msgstr "{} per permetre paquets addicionals a la transacció"
 
-#: main.cpp:1020
+#: main.cpp:1029
 msgid ""
 "{} to allow mismatches between installed and stored transaction packages. "
 "This can result in an empty transaction because among other things the "
@@ -1409,28 +1420,28 @@ msgstr ""
 "transaccions desades. Això pot resultar en una transacció buida perquè, "
 "entre altres coses, l'opció pot ignorar les accions de supressió fallides."
 
-#: main.cpp:1067
+#: main.cpp:1076
 msgid "{} to not limit the transaction to the best candidates"
 msgstr "{} per no limitar la transacció als millors candidats"
 
-#: main.cpp:1074
+#: main.cpp:1083
 msgid "{} to allow removing of installed packages to resolve problems"
 msgstr ""
 "{} per permetre la supressió de paquets instal·lats per resoldre problemes"
 
-#: main.cpp:1083
+#: main.cpp:1092
 msgid "{} to load additional filelists metadata"
 msgstr "{} per carregar metadades addicionals de llistes de fitxers"
 
-#: main.cpp:1090
+#: main.cpp:1099
 msgid "{} to skip uninstallable packages"
 msgstr "{} per ometre paquets desinstal·lables"
 
-#: main.cpp:1096
+#: main.cpp:1105
 msgid "You can try to add to command line:"
 msgstr "Podeu provar d'afegir el següent a la línia d'ordres:"
 
-#: main.cpp:1114
+#: main.cpp:1123
 msgid ""
 "No matches were found for the following plugin name patterns while enabling "
 "libdnf plugins: {}"
@@ -1438,7 +1449,7 @@ msgstr ""
 "No s'han trobat coincidències per als patrons de nom de connectors següents "
 "mentre s'habilitaven els connectors de libdnf: {}"
 
-#: main.cpp:1115
+#: main.cpp:1124
 msgid ""
 "No matches were found for the following plugin name patterns while disabling "
 "libdnf plugins: {}"
@@ -1446,23 +1457,23 @@ msgstr ""
 "No s'han trobat coincidències per als patrons de nom de connectors següents "
 "mentre s'inhabilitaven els connectors de libdnf: {}"
 
-#: main.cpp:1211
+#: main.cpp:1220
 msgid "--- DNF5 launched with arguments: \"{}\" ---"
 msgstr "--- DNF5 llançat amb arguments: {} ---"
 
-#: main.cpp:1247
+#: main.cpp:1256
 msgid "Invalid \"index\" in \"--complete=<index>[,...]\": {}"
 msgstr "Índex no vàlid a \"--complete=<index>[,...]\": {}"
 
-#: main.cpp:1286
+#: main.cpp:1295
 msgid "{}."
 msgstr "{}."
 
-#: main.cpp:1289 main.cpp:1530
+#: main.cpp:1298 main.cpp:1550
 msgid "{}. Add \"--help\" for more information about the arguments."
 msgstr "{}. Afegiu '--help' per obtenir més informació sobre els arguments."
 
-#: main.cpp:1298
+#: main.cpp:1307
 msgid ""
 "It could be a command provided by a plugin, try: dnf5 install 'dnf5-"
 "command({})'"
@@ -1470,7 +1481,7 @@ msgstr ""
 "Pot ser una ordre proporcionada per un connector, proveu: dnf5 install 'dnf5-"
 "command({})'"
 
-#: main.cpp:1340
+#: main.cpp:1349
 msgid ""
 "The argument is available for commands: {}. (It has to be placed after the "
 "command.)"
@@ -1478,11 +1489,11 @@ msgstr ""
 "L'argument està disponible per a les ordres següents: {}. (S'ha de col·locar "
 "després de l'ordre.)"
 
-#: main.cpp:1384
+#: main.cpp:1393
 msgid "No read/execute access in current directory, moving to /"
 msgstr "No hi ha accés de lectura o execució al directori actual, es passa a /"
 
-#: main.cpp:1445
+#: main.cpp:1465
 msgid ""
 "The requested operation requires superuser privileges. Please log in as a "
 "user with elevated rights, or use the \"--assumeno\" or \"--downloadonly\" "
@@ -1492,15 +1503,15 @@ msgstr ""
 "a usuari amb drets elevats o useu les opcions '--assumeno' o '--"
 "downloadonly' per executar l'ordre sense modificar l'estat del sistema."
 
-#: main.cpp:1486
+#: main.cpp:1506
 msgid "The operation will only store the transaction in {}"
 msgstr "L'operació només desarà la transacció a {}"
 
-#: main.cpp:1488
+#: main.cpp:1508
 msgid "The operation will only download packages for the transaction."
 msgstr "L'operació només baixarà els paquets per a la transacció."
 
-#: main.cpp:1493
+#: main.cpp:1513
 msgid ""
 "Test mode enabled: Only package downloads, OpenPGP key installations and "
 "transaction checks will be performed."
@@ -1508,13 +1519,15 @@ msgstr ""
 "Mode de prova activat: només es faran baixades de paquets, instal·lacions de "
 "claus OpenPGP i comprovacions de transaccions."
 
-#: main.cpp:1501
+#: main.cpp:1521
 msgid ""
 "Error: this bootc system is configured to be read-only. For more "
 "information, run `bootc --help`."
 msgstr ""
+"Error: aquest sistema de bootc està configurat per ser només de lectura. Per "
+"obtenir-ne més informació, executeu bootc --help."
 
-#: main.cpp:1518
+#: main.cpp:1538
 msgid ""
 "No repositories were loaded from the installroot. To use the configuration "
 "and repositories of the host system, pass --use-host-config."
@@ -1522,15 +1535,15 @@ msgstr ""
 "No s'ha carregat cap dipòsit des de l'arrel de la instal·lació. Per usar la "
 "configuració i els dipòsits del sistema amfitrió, apliqueu --use-host-config."
 
-#: main.cpp:1540
+#: main.cpp:1560
 msgid "Command returned error: {}"
 msgstr "L'ordre ha retornat un error: {}"
 
-#: main.cpp:1548
+#: main.cpp:1568
 msgid "DNF5 finished"
 msgstr "El DNF5 ha acabat"
 
-#: main.cpp:1552
+#: main.cpp:1572
 msgid "Complete!"
 msgstr "Completat!"
 
@@ -1545,6 +1558,9 @@ msgstr "Permet la resolució de problemes de dependències ometent paquets"
 #: shared_options.cpp:54
 msgid "Allow skipping unavailable packages"
 msgstr "Permet ometre paquets no disponibles"
+
+#~ msgid " From       : {}\n"
+#~ msgstr " De       : {}\n"
 
 #~ msgid ""
 #~ "Warning: the `_execute` command is for internal use only and is not "
