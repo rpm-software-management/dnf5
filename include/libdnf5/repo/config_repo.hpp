@@ -132,10 +132,16 @@ public:
     const OptionChild<OptionString> & get_proxy_sslclientcert_option() const;
     OptionChild<OptionString> & get_proxy_sslclientkey_option();
     const OptionChild<OptionString> & get_proxy_sslclientkey_option() const;
-    OptionChild<OptionBool> & get_deltarpm_option();
-    const OptionChild<OptionBool> & get_deltarpm_option() const;
-    OptionChild<OptionNumber<std::uint32_t>> & get_deltarpm_percentage_option();
-    const OptionChild<OptionNumber<std::uint32_t>> & get_deltarpm_percentage_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionChild<OptionBool> & get_deltarpm_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionChild<OptionBool> & get_deltarpm_option() const;
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] OptionChild<OptionNumber<std::uint32_t>> &
+    get_deltarpm_percentage_option();
+    /// @deprecated The option does nothing
+    [[deprecated("The option does nothing")]] const OptionChild<OptionNumber<std::uint32_t>> &
+    get_deltarpm_percentage_option() const;
     OptionChild<OptionBool> & get_skip_if_unavailable_option();
     const OptionChild<OptionBool> & get_skip_if_unavailable_option() const;
     /// If true it will create libsolv cache that will speed up the next loading process

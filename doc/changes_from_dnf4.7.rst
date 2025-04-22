@@ -399,7 +399,11 @@ The ``metadata_timer_sync`` configuration option is now obsoleted by the |DNF_MA
 
 Deprecation of the ``retries`` option
 -------------------------------------
-The ``retries`` configuration option is now deprecated. In dnf4, despite being documented as the number of retries for downloading packages, it was only used to limit the number of package re-downloads due to deltarpm errors. Deltarpm is currently not implemented in DNF5.
+The ``retries`` configuration option is now deprecated. In dnf4, despite being documented as the number of retries for downloading packages, it was only used to limit the number of package re-downloads due to deltarpm errors. Deltarpm support is currently not planned for DNF5.
+
+Deprecation of the ``deltarpm`` and ``deltarpm_percentage`` options
+-------------------------------------------------------------------
+Support for delta RPMs is not planned for DNF5.
 
 
 Changes to individual options
@@ -420,10 +424,6 @@ Changes to individual options
   * The option was changed from ``bool`` to ``enum`` with options ``all``, ``metadata`` and ``none``.
 
     * This enables users to specify whether to use the cache exclusively for metadata or for both metadata and packages.
-
-``deltarpm``
-  * Default value is changed to ``false``.
-  * The support for delta RPMs is not implemented for now.
 
 ``disable_excludes``
   * To disable all configuration file excludes, the ``*`` glob character is used now instead of the ``all`` to unify the behavior with query objects on the API.
