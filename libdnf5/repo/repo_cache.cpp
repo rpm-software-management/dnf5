@@ -50,7 +50,8 @@ std::size_t remove(
             size = 0;
         }
         if (std::filesystem::remove(path)) {
-            bytes_count += size;
+            // Note: bytes_count will overflow on 32-bit systems if the total space removed exceeds 4GiB.
+            bytes_count += static_cast<std::size_t>(size);
             return 1;
         }
     } catch (const std::filesystem::filesystem_error & ex) {
