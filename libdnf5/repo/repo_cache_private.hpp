@@ -44,10 +44,10 @@ private:
     friend RepoCacheRemoveStatistics;
     friend RepoCache;
 
-    std::size_t files_removed;  // Number of removed files and links.
-    std::size_t dirs_removed;   // Number of removed directorires.
-    std::size_t bytes_removed;  // Number of removed bytes.
-    std::size_t errors;         // Numbes of errors.
+    std::size_t files_removed;     // Number of removed files and links.
+    std::size_t dirs_removed;      // Number of removed directorires.
+    std::uintmax_t bytes_removed;  // Number of removed bytes.
+    std::size_t errors;            // Numbes of errors.
 };
 
 class RepoCache::Impl {
