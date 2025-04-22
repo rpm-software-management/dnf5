@@ -38,7 +38,10 @@ constexpr const char * CACHE_ATTRS_DIR = "attrs";
 // In case of an error, the error_count increases by one.
 // Returns number of removed items (0 or 1).
 std::size_t remove(
-    const std::filesystem::path & path, std::size_t & error_count, std::size_t & bytes_count, Logger & log) noexcept {
+    const std::filesystem::path & path,
+    std::size_t & error_count,
+    std::uintmax_t & bytes_count,
+    Logger & log) noexcept {
     try {
         std::error_code ec;
         auto size = std::filesystem::file_size(path, ec);
@@ -123,7 +126,7 @@ std::size_t RepoCacheRemoveStatistics::get_files_removed() {
 std::size_t RepoCacheRemoveStatistics::get_dirs_removed() {
     return p_impl->dirs_removed;
 }
-std::size_t RepoCacheRemoveStatistics::get_bytes_removed() {
+std::uintmax_t RepoCacheRemoveStatistics::get_bytes_removed() {
     return p_impl->bytes_removed;
 }
 std::size_t RepoCacheRemoveStatistics::get_errors() {
