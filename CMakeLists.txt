@@ -69,6 +69,7 @@ endif()
 
 # includes
 include(GNUInstallDirs)
+include(CheckLibraryExists)
 
 
 # common dependencies
