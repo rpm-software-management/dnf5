@@ -596,6 +596,16 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 if (settings.get_advisory_filter() != nullptr) {
                     filter_candidates_for_advisory_upgrade(
                         base, query, *settings.get_advisory_filter(), cfg_main.get_obsoletes_option().get_value());
+                    if (query.empty()) {
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::NOT_FOUND_IN_ADVISORIES,
+                            settings,
+                            libdnf5::transaction::TransactionItemType::PACKAGE,
+                            {},
+                            {},
+                            libdnf5::Logger::Level::WARNING);
+                    }
                 }
 
                 // Make the smallest possible upgrade
