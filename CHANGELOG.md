@@ -1,3 +1,8 @@
+# 5.2.13.1
+
+- RepoCacheRemoveStatistics::get_bytes_removed return uintmax_t
+- ci: Use RSM_CI_APP_PRIVATE_KEY in do-release.yaml
+
 # 5.2.13.0
 
 - Update translations from weblate
