@@ -159,7 +159,11 @@ std::string LogEvent::to_string(
             }
             return ret.append(utils::sformat(_("No match for argument: {}"), *spec));
         case GoalProblem::NOT_FOUND_IN_ADVISORIES:
-            return ret.append(utils::sformat(_("No match for argument '{0}' in selected advisories"), *spec));
+            if (spec && !spec->empty()) {
+                return ret.append(utils::sformat(_("No match for argument '{0}' in selected advisories"), *spec));
+            } else {
+                return ret.append(_("No match in selected advisories"));
+            }
         case GoalProblem::NOT_FOUND_IN_REPOSITORIES:
             return ret.append(utils::sformat(
                 _("No match for argument '{0}' in repositories '{1}'"),
