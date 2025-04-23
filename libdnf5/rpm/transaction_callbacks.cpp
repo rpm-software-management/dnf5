@@ -24,31 +24,31 @@ namespace libdnf5::rpm {
 const char * TransactionCallbacks::script_type_to_string(ScriptType type) noexcept {
     switch (type) {
         case ScriptType::PRE_INSTALL:
-            return "pre-install";
+            return "%pre";
         case ScriptType::POST_INSTALL:
-            return "post-install";
+            return "%post";
         case ScriptType::PRE_UNINSTALL:
-            return "pre-uninstall";
+            return "%preun";
         case ScriptType::POST_UNINSTALL:
-            return "post-uninstall";
+            return "%postun";
         case ScriptType::PRE_TRANSACTION:
-            return "pre-transaction";
+            return "%pretrans";
         case ScriptType::POST_TRANSACTION:
-            return "post-transaction";
+            return "%posttrans";
         case ScriptType::TRIGGER_PRE_INSTALL:
-            return "trigger-pre-install";
+            return "%triggerprein";
         case ScriptType::TRIGGER_INSTALL:
-            return "trigger-install";
+            return "%triggerin";
         case ScriptType::TRIGGER_UNINSTALL:
-            return "trigger-uninstall";
+            return "%triggerun";
         case ScriptType::TRIGGER_POST_UNINSTALL:
-            return "trigger-post-uninstall";
+            return "%triggerpostun";
         case ScriptType::SYSUSERS:
             return "sysusers";
         case ScriptType::PREUN_TRANSACTION:
-            return "preun-transaction";
+            return "%preuntrans";
         case ScriptType::POSTUN_TRANSACTION:
-            return "postun-transaction";
+            return "%postuntrans";
         case ScriptType::UNKNOWN:
             return "unknown";
     }
