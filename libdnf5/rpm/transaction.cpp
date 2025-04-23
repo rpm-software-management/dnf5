@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction.hpp"
 
+#include "conf/config.h"
+
 #include "libdnf5/base/transaction.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/rpm/package_query.hpp"
@@ -409,6 +411,14 @@ int Transaction::ts_change_callback(int event, rpmte te, rpmte other, void * dat
         // explicit action caused by last_added_item
         rpmteSetUserdata(te, transaction->last_added_item);
         transaction->last_item_added_ts_element = true;
+#if defined(HAVE_RPMTE_SETVFYLEVEL)
+        // honor per-repo pkg_gpgcheck=0 in rpm's enforcing signature mode
+        auto pkg = transaction->last_added_item->get_package();
+        auto gpgcheck = pkg.get_repo()->get_config().get_pkg_gpgcheck_option();
+        if (gpgcheck.get_value() == false) {
+            rpmteSetVfyLevel(te, RPMSIG_DIGEST_TYPE);
+        }
+#endif
     } else {
         // action caused by librpm itself
         auto trigger_nevra = transaction->last_added_item->get_package().get_full_nevra();
