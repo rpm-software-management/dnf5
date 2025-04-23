@@ -106,10 +106,17 @@ static bool any_inbound_action(const libdnf5::base::Transaction & transaction) {
 }
 
 /// Retrieve the PGP key expiration timestamp, or return -1 if the expiration is not available.
-static int64_t get_key_expire_timestamp(std::string raw_key) {
+static int64_t get_key_expire_timestamp(std::string raw_key, const libdnf5::utils::fs::TempDir & gpg_home_dir) {
     // open gpg process to retrieve information about the key
     std::unique_ptr<FILE, int (*)(FILE *)> pipe(
-        popen(libdnf5::utils::sformat("echo \"{}\" | gpg --show-keys --with-colon", raw_key).c_str(), "r"), pclose);
+        popen(
+            libdnf5::utils::sformat(
+                "echo '{}' | gpg --quiet --homedir '{}' --show-keys --with-colon",
+                raw_key,
+                gpg_home_dir.get_path().string())
+                .c_str(),
+            "r"),
+        pclose);
     if (!pipe) {
         return -1;
     }
@@ -179,6 +186,9 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     Header h;
     rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
     std::vector<libdnf5::rpm::KeyInfo> keys_to_remove;
+    // Prepare a temporary GnuPG home directory. Otherwise, gpg command would
+    // create one and left it there.
+    auto gpg_home_dir = libdnf5::utils::fs::TempDir("libdnf5");
 
     while ((h = rpmdbNextIterator(mi)) != nullptr) {
         char * raw_key = headerGetAsString(h, RPMTAG_DESCRIPTION);
@@ -206,7 +216,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
 
         // Check expiration time of the only subkey.
         auto & key_info = parsed_keys.front();
-        auto key_timestamp = get_key_expire_timestamp(key_info.get_raw_key());
+        auto key_timestamp = get_key_expire_timestamp(key_info.get_raw_key(), gpg_home_dir);
         if (key_timestamp > 0 && key_timestamp < current_timestamp) {
             if (callbacks && !callbacks->repokey_remove(key_info, ExpiryInfoMessage(key_timestamp))) {
                 // User declined removing this key.
