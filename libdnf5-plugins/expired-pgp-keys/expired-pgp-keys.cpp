@@ -30,6 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/format_locale.hpp>
 #include <rpm/header.h>
 #include <rpm/rpmdb.h>
+#ifdef HAVE_RPM6
+#include <rpm/rpmpgp.h>
+#endif
 #include <rpm/rpmts.h>
 #include <string.h>
 
@@ -145,6 +148,29 @@ static int64_t get_key_expire_timestamp(std::string raw_key, const libdnf5::util
     return static_cast<int64_t>(std::stoull(expired_date_string));
 }
 
+#ifdef HAVE_RPM6
+// Remove a key from a key store of the transaction set using RPM v6
+// interface.
+// @return true on success, false otherwise.
+static bool rpm6_remove_key(rpmts ts, const std::filesystem::path & key_path) noexcept {
+    rpmPubkey rpm_key = rpmPubkeyRead(key_path.string().c_str());
+    if (!rpm_key)
+        return false;
+
+    rpmtxn txn = rpmtxnBegin(ts, RPMTXN_WRITE);
+    if (!txn) {
+        rpmPubkeyFree(rpm_key);
+        return false;
+    }
+
+    bool removed = (RPMRC_OK == rpmtxnDeletePubkey(txn, rpm_key));
+
+    rpmtxnEnd(txn);
+    rpmPubkeyFree(rpm_key);
+    return removed;
+}
+#endif
+
 void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction & transaction) const {
     auto & logger = *get_base().get_logger();
     const auto & config = get_base().get_config();
@@ -185,7 +211,9 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
     }
     Header h;
     rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_NAME, "gpg-pubkey", 0);
+#ifndef HAVE_RPM6
     std::vector<libdnf5::rpm::KeyInfo> keys_to_remove;
+#endif
     // Prepare a temporary GnuPG home directory. Otherwise, gpg command would
     // create one and left it there.
     auto gpg_home_dir = libdnf5::utils::fs::TempDir("libdnf5");
@@ -222,15 +250,27 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
                 // User declined removing this key.
                 continue;
             }
+#ifdef HAVE_RPM6
+            if (rpm6_remove_key(ts, key_tfile.get_path())) {
+                logger.debug("Expired PGP Keys Plugin: 0x{} key removed.", key_info.get_short_key_id());
+                if (callbacks) {
+                    callbacks->repokey_removed(key_info);
+                }
+            } else {
+                logger.error("Expired PGP Keys Plugin: Failed to remove the 0x{} key.", key_info.get_short_key_id());
+            }
+#else
             if (rpmtsAddEraseElement(ts, h, -1) != 0) {
                 logger.error(
                     "Expired PGP Keys Plugin: Failed to mark 0x{} key for removal.", key_info.get_short_key_id());
             } else {
                 keys_to_remove.emplace_back(key_info);
             }
+#endif
         }
     }
 
+#ifndef HAVE_RPM6
     if (!keys_to_remove.empty()) {
         if (rpmtsRun(ts, nullptr, RPMPROB_FILTER_NONE)) {
             for (auto & key_info : keys_to_remove) {
@@ -245,6 +285,7 @@ void ExpiredPgpKeys::process_expired_pgp_keys(const libdnf5::base::Transaction &
             }
         }
     }
+#endif
 
     rpmdbFreeIterator(mi);
     rpmtsFree(ts);

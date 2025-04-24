@@ -670,6 +670,9 @@ Summary:        Libdnf5 plugin for detecting and removing expired PGP keys
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       gnupg2
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+Requires:       rpm-libs%{?_isa} >= 5.99.90
+%endif
 
 %description -n libdnf5-plugin-expired-pgp-keys
 Libdnf5 plugin for detecting and removing expired PGP keys.
