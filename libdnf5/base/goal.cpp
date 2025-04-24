@@ -2829,7 +2829,11 @@ GoalProblem Goal::Impl::resolve_reverted_transactions(base::Transaction & transa
         {Action::INSTALL, Action::REMOVE},
         {Action::UPGRADE, Action::REPLACED},
         {Action::DOWNGRADE, Action::REPLACED},
-        {Action::REINSTALL, Action::REINSTALL},
+        // Revert REINSTALL as REMOVE because when normal (non-reverted) REINSTALL is
+        // performed it results in two actions: REINSTALL and REPLACED (of the same package).
+        // These get reverted as: REINSTALL -> REMOVE, REPLACED -> INSTALL of the same package,
+        // which keeps the consistency, its practically a reinstall.
+        {Action::REINSTALL, Action::REMOVE},
         {Action::REMOVE, Action::INSTALL},
         {Action::REPLACED, Action::INSTALL},
         {Action::REASON_CHANGE, Action::REASON_CHANGE},
