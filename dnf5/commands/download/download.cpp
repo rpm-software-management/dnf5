@@ -311,7 +311,9 @@ void DownloadCommand::run() {
         downloader.add(pkg);
     }
 
-    std::cout << "Downloading Packages:" << std::endl;
+    if (!ctx.get_quiet()) {
+        std::cout << "Downloading Packages:" << std::endl;
+    }
     downloader.download();
 }
 
