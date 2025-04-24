@@ -16,6 +16,9 @@ target_link_libraries(expired-pgp-keys PRIVATE libdnf5 libdnf5-cli)
 
 pkg_check_modules(RPM REQUIRED rpm)
 target_link_libraries(expired-pgp-keys PRIVATE ${RPM_LIBRARIES})
+if (RPM_VERSION VERSION_GREATER_EQUAL "5.99.90")
+    add_definitions(-DHAVE_RPM6)
+endif()
 
 install(TARGETS expired-pgp-keys LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/libdnf5/plugins/")
 
