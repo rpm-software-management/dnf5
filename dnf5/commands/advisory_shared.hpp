@@ -110,7 +110,7 @@ public:
               command,
               "advisories",
               '\0',
-              _("Limit to packages in advisories with specified name. List option."),
+              _("Include content contained in advisories with specified name. List option."),
               _("ADVISORY_NAME,...")) {}
 };
 
@@ -118,28 +118,28 @@ public:
 class SecurityOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit SecurityOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "security", '\0', _("Limit to packages in security advisories."), false) {}
+        : BoolOption(command, "security", '\0', _("Include content contained in security advisories."), false) {}
 };
 
 
 class BugfixOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit BugfixOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "bugfix", '\0', _("Limit to packages in bugfix advisories."), false) {}
+        : BoolOption(command, "bugfix", '\0', _("Include content contained in bugfix advisories."), false) {}
 };
 
 
 class EnhancementOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit EnhancementOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "enhancement", '\0', _("Limit to packages in enhancement advisories."), false) {}
+        : BoolOption(command, "enhancement", '\0', _("Include content contained in enhancement advisories."), false) {}
 };
 
 
 class NewpackageOption : public libdnf5::cli::session::BoolOption {
 public:
     explicit NewpackageOption(libdnf5::cli::session::Command & command)
-        : BoolOption(command, "newpackage", '\0', _("Limit to packages in newpackage advisories."), false) {}
+        : BoolOption(command, "newpackage", '\0', _("Include content contained in newpackage advisories."), false) {}
 };
 
 
@@ -150,7 +150,7 @@ public:
               command,
               "advisory-severities",
               '\0',
-              _("Limit to packages in advisories with specified severity. List option. Can be "
+              _("Include content contained in advisories with specified severity. List option. Can be "
                 "\"critical\", \"important\", \"moderate\", \"low\", \"none\"."),
               _("ADVISORY_SEVERITY,..."),
               "critical|important|moderate|low|none",
@@ -164,7 +164,7 @@ public:
               command,
               "bzs",
               '\0',
-              _("Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List option."),
+              _("Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. List option."),
               _("BUGZILLA_ID,...")) {}
 };
 
@@ -175,7 +175,7 @@ public:
               command,
               "cves",
               '\0',
-              _("Limit to packages in advisories that fix a CVE (Common Vulnerabilities and Exposures) "
+              _("Include content contained in advisories that fix a CVE (Common Vulnerabilities and Exposures) "
                 "ID, Eg. CVE-2201-0123. List option."),
               _("CVE_ID,...")) {}
 };
