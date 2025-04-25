@@ -33,6 +33,8 @@ Note, however, that DNF5 cannot yet interface with the following programming lan
  * Go - does not work, we are looking for contributors.
  * C - not implemented, not a priority for any of our existing API users.
 
+Join us on IRC at `#dnf` on [Libera.Chat](https://libera.chat). Questions should be asked there, issues discussed. Remember: `#dnf` is not a support channel, and prior research is expected from the questioner.
+
 
 Installing DNF5
 ---------------
