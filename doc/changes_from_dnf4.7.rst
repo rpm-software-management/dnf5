@@ -171,6 +171,12 @@ Changes to individual commands
       * Before: ``--save --setopt`` Now: ``setopt``
 
   * Existing repository files are not modified; drop-in override files are created instead.
+  * Dropped the ``--dump`` option:
+
+        * To dump main configuration options use ``dnf5 --dump-main-config`` command.
+        * To dump a repository configuration use ``dnf5 --dump-repo-config=REPO_ID`` command.
+
+  * Dropped the ``--dump-variables`` option, use ``dnf5 --dump-variables`` command instead.
   * See the :ref:`config-manager documentation <config_manager_plugin_ref-label>` for more information.
 
 ``debuginfo-install``
