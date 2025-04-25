@@ -39,15 +39,9 @@ as ``<package-file-spec>``.
 Options
 =======
 
-``--advisories=ADVISORY_NAME,...``
-    | Limit to packages in advisories with specified name.
-    | This is a list option.
-    | Expected values are advisory IDs, e.g. `FEDORA-2201-123`.
+.. include:: ../_shared/options/advisories.rst
 
-``--advisory-severities=ADVISORY_SEVERITY,...``
-    | Limit to packages in advisories with specified severity.
-    | This is a list option.
-    | Accepted values are: `critical`, `important`, `moderate`, `low`, `none`.
+.. include:: ../_shared/options/advisory-severities.rst
 
 ``--arch=ARCH,...``
     | Limit to packages of these architectures.
@@ -58,18 +52,11 @@ Options
     | This is the default behavior.
     | Can be combined with ``--installed`` to query both installed and available packages.
 
-``--bugfix``
-    | Limit to packages in bugfix advisories.
+.. include:: ../_shared/options/bugfix.rst
 
-``--bzs=BUGZILLA_ID,...``
-    | Limit to packages in advisories that fix a Bugzilla ID.
-    | This is a list option.
-    | Expected values are numeric IDs, e.g. `123123`.
+.. include:: ../_shared/options/bzs.rst
 
-``--cves=CVE_ID,...``
-    | Limit to packages in advisories that fix a CVE (Common Vulnerabilities and Exposures) ID.
-    | This is a list option.
-    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`.
+.. include:: ../_shared/options/cves.rst
 
 ``--disable-modular-filtering``
     | Include packages of inactive module streams.
@@ -78,8 +65,7 @@ Options
     | Limit to installed duplicate packages (i.e. more package versions for  the  same  name and architecture).
     | Installonly packages are excluded from this set.
 
-``--enhancement``
-    | Limit to packages in enhancement advisories.
+.. include:: ../_shared/options/enhancement.rst
 
 ``--exactdeps``
     | Limit to packages that require <capability> specified by --whatrequires or --whatdepends.
@@ -105,8 +91,7 @@ Options
 ``--leaves``
     | Limit to groups of installed packages not required by other installed packages.
 
-``--newpackage``
-    | Limit to packages in newpackage advisories.
+.. include:: ../_shared/options/newpackage.rst
 
 ``--providers-of=PACKAGE_ATTRIBUTE``
     | After filtering is finished get selected attribute of packages and output packages that provide it.
@@ -123,8 +108,7 @@ Options
     | It repeats the output extension as long as new packages are being added.
     | The added packages are limited by ``--available``, ``--installed`` and ``--arch`` options.
 
-``--security``
-    | Limit to packages in security advisories.
+.. include:: ../_shared/options/security.rst
 
 ``--srpm``
     | After filtering is finished use packages' corresponding source RPMs for output.

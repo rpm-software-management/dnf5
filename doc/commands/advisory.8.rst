@@ -70,32 +70,19 @@ Options
     | This is a list option.
     | Only installed packages are matched. Globs are supported.
 
-``--security``
-    | Consider only content contained in security advisories.
+.. include:: ../_shared/options/security.rst
 
-``--bugfix``
-    | Consider only content contained in bugfix advisories.
+.. include:: ../_shared/options/bugfix.rst
 
-``--enhancement``
-    | Consider only content contained in enhancement advisories.
+.. include:: ../_shared/options/enhancement.rst
 
-``--newpackage``
-    | Consider only content contained in newpackage advisories.
+.. include:: ../_shared/options/newpackage.rst
 
-``--advisory-severities=ADVISORY_SEVERITY,...``
-    | Consider only content contained in advisories with specified severity.
-    | This is a list option.
-    | Accepted values are: `critical`, `important`, `moderate`, `low`, `none`.
+.. include:: ../_shared/options/advisory-severities.rst
 
-``--bzs=BUGZILLA_ID,...``
-    | Consider only content contained in advisories that fix a ticket of given Bugzilla ID.
-    | This is a list option.
-    | Expected values are numeric IDs, e.g. `123123`.
+.. include:: ../_shared/options/bzs.rst
 
-``--cves=CVE_ID,...``
-    | Consider only content contained in advisories that fix a ticket of given CVE (Common Vulnerabilities and Exposures) ID.
-    | This is a list option.
-    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`.
+.. include:: ../_shared/options/cves.rst
 
 ``--with-bz``
     | Show only advisories referencing a Bugzilla ticket.
