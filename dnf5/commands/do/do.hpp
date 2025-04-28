@@ -44,6 +44,8 @@ private:
 
     enum class ItemType { AUTO, PACKAGE, GROUP, ENVIRONMENT } item_type{ItemType::AUTO};
 
+    std::vector<std::string> from_repos;
+
     std::string group_spec(ItemType type, const std::string & spec, libdnf5::GoalJobSettings & settings);
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
