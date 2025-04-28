@@ -89,6 +89,20 @@ void DoCommand::set_argument_parser() {
     }
 
     {
+        auto item_use_repo_opt = parser.add_new_named_arg("use-repo");
+        item_use_repo_opt->set_long_name("use-repo");
+        item_use_repo_opt->set_description(_("Use specified repositories. Dependencies from all enabled."));
+        item_use_repo_opt->set_has_value(true);
+        item_use_repo_opt->set_arg_value_help("<repoid>,...");
+        item_use_repo_opt->set_parse_hook_func(
+            [this](ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
+                use_repos = libdnf5::OptionStringList(value).get_value();
+                return true;
+            });
+        cmd.register_named_arg(item_use_repo_opt);
+    }
+
+    {
         auto items =
             parser.add_new_positional_arg("items", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
         items->set_description(_("List of items to take action on"));
@@ -97,6 +111,7 @@ void DoCommand::set_argument_parser() {
                                        int argc,
                                        const char * const argv[]) {
             libdnf5::GoalJobSettings settings;
+            settings.set_to_repo_ids(use_repos);
             switch (action) {
                 case Action::INSTALL:
                     for (int i = 0; i < argc; ++i) {
