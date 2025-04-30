@@ -87,11 +87,6 @@ Provides:       dnf5-command(versionlock)
 
 %bcond_without comps
 %bcond_without modulemd
-%if 0%{?rhel}
-%bcond_with    zchunk
-%else
-%bcond_without zchunk
-%endif
 %bcond_without systemd
 
 %bcond_with    html
@@ -135,7 +130,6 @@ Provides:       dnf5-command(versionlock)
 %endif
 %global sqlite_version 3.35.0
 %global swig_version 4
-%global zchunk_version 0.9.11
 
 
 # ========== build requires ==========
@@ -178,10 +172,6 @@ BuildRequires:  pkgconfig(libcomps)
 
 %if %{with modulemd}
 BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
-%endif
-
-%if %{with zchunk}
-BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
 %endif
 
 %if %{with systemd}
@@ -903,7 +893,6 @@ automatically and regularly from systemd timers, cron jobs or similar.
     \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
-    -DWITH_ZCHUNK=%{?with_zchunk:ON}%{!?with_zchunk:OFF} \
     -DWITH_SYSTEMD=%{?with_systemd:ON}%{!?with_systemd:OFF} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \
