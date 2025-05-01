@@ -53,7 +53,7 @@ bool userconfirm(Config & config) {
         if (choice.empty()) {
             return config.get_defaultyes_option().get_value();
         }
-        if (choice == "y" || choice == "Y") {
+        if (choice == "y" || choice == "Y" || choice == "yuh") {
             return true;
         }
         if (choice == "n" || choice == "N") {
