@@ -34,6 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/transaction/offline.hpp>
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/format.hpp>
 #include <sys/wait.h>
 
 #ifdef WITH_SYSTEMD
@@ -359,7 +360,8 @@ void OfflineRebootCommand::run() {
     const auto & target_releasever = offline_data.get_target_releasever();
 
     if (offline_data.get_verb() == "system-upgrade download") {
-        std::cout << _("The system will now reboot to upgrade to release version ") << target_releasever << "."
+        std::cout << libdnf5::utils::sformat(
+                         _("The system will now reboot to upgrade to release version {}."), target_releasever)
                   << std::endl;
     } else {
         std::cout
