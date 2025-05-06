@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/clean/clean.hpp"
 #include "commands/debuginfo-install/debuginfo-install.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
+#include "commands/do/do.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
 #include "commands/environment/environment.hpp"
@@ -677,6 +678,7 @@ static void add_commands(Context & context) {
     // First, add the "root" command.
     context.add_and_initialize_command(std::make_unique<RootCommand>(context));
 
+    context.add_and_initialize_command(std::make_unique<DoCommand>(context));
     context.add_and_initialize_command(std::make_unique<InstallCommand>(context));
     context.add_and_initialize_command(std::make_unique<UpgradeCommand>(context));
     context.add_and_initialize_command(std::make_unique<RemoveCommand>(context));
