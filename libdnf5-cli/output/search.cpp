@@ -107,7 +107,11 @@ void print_search_results(const SearchResults & results) {
             } else {
                 std::cout << highlight(package.get_name()) << "." << package.get_arch();
             }
-            std::cout << ": " << highlight(package.get_summary()) << std::endl;
+            std::cout << ": " << highlight(package.get_summary());
+            if (package.is_installed()) {
+                std::cout << " [installed]";
+            }
+            std::cout << std::endl;
         }
     }
 }
