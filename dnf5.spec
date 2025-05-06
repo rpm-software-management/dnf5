@@ -122,7 +122,7 @@ Provides:       dnf5-command(versionlock)
 # ========== versions of dependencies ==========
 
 %global libmodulemd_version 2.5.0
-%global librepo_version 1.18.0
+%global librepo_version 1.20.0
 %if %{with focus_new}
     %global libsolv_version 0.7.30
 %else
