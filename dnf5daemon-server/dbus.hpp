@@ -96,6 +96,7 @@ const SDBUS_SIGNAL_NAME_TYPE SIGNAL_WRITE_TO_FD_FINISHED{"write_to_fd_finished"}
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.Repo.conf_write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
+const char * const POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_trusted_transaction";
 const char * const POLKIT_CONFIRM_KEY_IMPORT = "org.rpm.dnf.v0.rpm.Repo.confirm_key";
 const char * const POLKIT_CONFIG_OVERRIDE = "org.rpm.dnf.v0.base.Config.override";
 
