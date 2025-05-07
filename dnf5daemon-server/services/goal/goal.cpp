@@ -342,10 +342,32 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
     return reply;
 }
 
+/// Returns true in case all inbound packages in the transaction comes from
+/// repository with gpg checks enforced.
+bool is_transaction_trusted(libdnf5::base::Transaction * transaction) {
+    for (const auto & tspkg : transaction->get_transaction_packages()) {
+        if (transaction_item_action_is_inbound(tspkg.get_action())) {
+            auto repo = tspkg.get_package().get_repo();
+            if (repo->get_type() == libdnf5::repo::Repo::Type::COMMANDLINE) {
+                // local rpm file installation is untrusted
+                return false;
+            }
+            if (!repo->get_config().get_pkg_gpgcheck_option().get_value()) {
+                // installation of a package from repo with gpg check disabled
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     transaction_resolved_assert();
-    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+    auto * transaction = session.get_transaction();
+    if (!session.check_authorization(
+            is_transaction_trusted(transaction) ? dnfdaemon::POLKIT_EXECUTE_RPM_TRUSTED_TRANSACTION
+                                                : dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION,
+            call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
 
@@ -376,7 +398,6 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
             comment = dnfdaemon::key_value_map_get<std::string>(options, "comment");
         }
 
-        auto * transaction = session.get_transaction();
         transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
         transaction->set_description("dnf5daemon-server");
         transaction->set_comment(comment);
