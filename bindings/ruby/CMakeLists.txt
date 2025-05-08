@@ -9,6 +9,12 @@ message("Building bindings for ruby")
 find_package(Ruby REQUIRED)
 include_directories(${Ruby_INCLUDE_DIRS})
 
+# The clang build is failing due to a deprecation warning, reported to swig:
+# https://github.com/swig/swig/issues/3170
+# Temporarily disable the warning to have a working clang build.
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-Wno-attribute-warning)
+endif()
 
 function(add_ruby_module LIBRARY_NAME MODULE_NAME)
     set(TARGET_NAME "ruby_${MODULE_NAME}")
