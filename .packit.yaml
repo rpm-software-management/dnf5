@@ -58,6 +58,8 @@ jobs:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
     packages: [dnf5]
+    additional_repos:
+      - "copr://rpmsoftwaremanagement/dnf-nightly"
   - job: copr_build
     identifier: "WITH_MODULEMD=OFF"
     trigger: pull_request
@@ -73,6 +75,8 @@ jobs:
       get-current-version:
         - bash -c 'rpmspec -q --queryformat "%{VERSION}\n" dnf5.spec | head -n1'
     packages: [dnf5-without-modules]
+    additional_repos:
+      - "copr://rpmsoftwaremanagement/dnf-nightly"
   - job: tests
     trigger: pull_request
     identifier: "dnf5-tests"
