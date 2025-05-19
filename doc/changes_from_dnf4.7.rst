@@ -292,7 +292,7 @@ Changes to individual commands
   * Dropped: ``--archlist`` alias for ``--arch``.
   * Dropped: ``-f`` alias for ``--file``. Also, the arguments to ``--file`` are separated by commas instead of spaces.
   * Moved ``--groupmember`` option to the ``info`` and ``list`` subcommands of the ``group`` and ``advisory`` commands, renaming it to ``--contains-pkgs``.
-  * ``--queryformat, --qf`` no longer prints an additional newline at the end of each formatted string, bringing it closer to the behavior of ``rpm --query``.
+  * ``--queryformat, --qf`` no longer prints an additional newline at the end of each formatted string, bringing it closer to the behavior of ``rpm --query``. To get the newline, use an explicit ``\n`` sequence in the formatting string.
   * ``--queryformat`` no longer supports ``size`` tag because it was printing install size for installed packages and download size for not-installed packages, which could be confusing.
   * Option ``--source`` was renamed to ``--sourcerpm``, and it now matches queryformat's ``sourcerpm`` tag.
   * Option ``--resolve`` was changed to ``--providers-of=PACKAGE_ATTRIBUTE``. It no longer interacts with the formatting options such as ``--requires``, ``--provides``, ``--suggests``, etc. Instead, it takes the PACKAGE_ATTRIBUTE value directly.

@@ -260,6 +260,8 @@ Set what information is displayed about each package. The following are mutually
     | * ``url`` - Display url of the package.
     | * ``vendor`` - Display vendor of the package.
     | * ``version`` - Display version of the package.
+    |
+    | The ``<format>`` string can also contain ``\n`` which will be replaced with a newline character on the output.
 
 Examples
 ========
