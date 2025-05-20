@@ -36,22 +36,6 @@ Note: While most of the following methods can be invoked successfully by a regul
 Interfaces
 ==========
 
-
-.. only:: sphinx4
-
-   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
-
-.. only:: not sphinx4
-
-   .. warning::
-      Sphinx 4 is required to build D-Bus documentation.
-
-      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml``:
-
-   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
-      :language: xml
-
-
 .. only:: sphinx4
 
    ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml
@@ -66,6 +50,19 @@ Interfaces
    .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.SessionManager.xml
       :language: xml
 
+.. only:: sphinx4
+
+   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml
+
+.. only:: not sphinx4
+
+   .. warning::
+      Sphinx 4 is required to build D-Bus documentation.
+
+      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml``:
+
+   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Base.xml
+      :language: xml
 
 .. only:: sphinx4
 
@@ -95,6 +92,38 @@ Interfaces
 
    .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml
       :language: xml
+
+.. only:: sphinx4
+
+   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
+
+
+.. only:: not sphinx4
+
+   .. warning::
+      Sphinx 4 is required to build D-Bus documentation.
+
+      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml``:
+
+   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Goal.xml
+      :language: xml
+
+
+.. only:: sphinx4
+
+   ..  dbus-doc:: dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml
+
+
+.. only:: not sphinx4
+
+   .. warning::
+      Sphinx 4 is required to build D-Bus documentation.
+
+      This is the content of ``dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml``:
+
+   .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.Offline.xml
+      :language: xml
+
 
 
 .. only:: sphinx4
