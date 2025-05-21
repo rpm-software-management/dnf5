@@ -52,7 +52,7 @@ relative to the host.
 
 Note: You may also want to use the command-line option ``--releasever=RELEASEVER`` when creating
 the installroot, otherwise the $releasever value is taken from the rpmdb within the installroot
-(and thus it is empty at the time of creation and the transaction will fail). If ``--releasever=/``
+(and thus it is empty at the time of creation and the transaction will fail). If ``--use-host-config``
 is used, the releasever will be detected from the host (/) system. The new installroot path at the
 time of creation does not contain the repository, releasever and dnf.conf files.
 
