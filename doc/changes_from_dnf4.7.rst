@@ -243,6 +243,8 @@ Changes to individual commands
 
   * The ``--timer`` option has been dropped in favor of the systemd ``OnUnitInactiveSec`` setting in |DNF_MAKECACHE_TIMER_NAME_INLINE_LITERAL| and the ``ConditionACPower`` setting in |DNF_MAKECACHE_SERVICE_NAME_INLINE_LITERAL|.
 
+  * Now tries to avoid downloading whenever possible (e.g. when the local metadata hasn't expired yet or when the metadata timestamp hasn't changed). Pass ``--refresh`` to force refreshing of metadata. This was the intended behavior in DNF4 also, but ``dnf4 makecache`` always refreshed repositories due to a `bug <https://github.com/rpm-software-management/dnf/issues/2242>`_.
+
 ``mark``
   * Renaming subcommands to be more intuitive: ``install`` -> ``user``, ``remove`` -> ``dependency``.
   * New ``weak`` subcommand to mark a package as a weak dependency.
