@@ -115,6 +115,16 @@ void Goal::dbus_register() {
                 [this](sdbus::MethodCall call) -> void {
                     session.get_threads_manager().handle_method(*this, &Goal::cancel, call, session.session_locale);
                 },
+                {}},
+            sdbus::MethodVTableItem{
+                sdbus::MethodName{"reset"},
+                sdbus::Signature{""},
+                {},
+                sdbus::Signature{""},
+                {"success", "error_msg"},
+                [this](sdbus::MethodCall call) -> void {
+                    session.get_threads_manager().handle_method(*this, &Goal::reset, call, session.session_locale);
+                },
                 {}})
         .forInterface(dnfdaemon::INTERFACE_GOAL);
 #else
