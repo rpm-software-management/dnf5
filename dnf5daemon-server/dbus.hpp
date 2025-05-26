@@ -61,6 +61,7 @@ const SDBUS_INTERFACE_NAME_TYPE INTERFACE_REPO{"org.rpm.dnf.v0.rpm.Repo"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_RPM{"org.rpm.dnf.v0.rpm.Rpm"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_GOAL{"org.rpm.dnf.v0.Goal"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_GROUP{"org.rpm.dnf.v0.comps.Group"};
+const SDBUS_INTERFACE_NAME_TYPE INTERFACE_HISTORY{"org.rpm.dnf.v0.History"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_ADVISORY{"org.rpm.dnf.v0.Advisory"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_OFFLINE{"org.rpm.dnf.v0.Offline"};
 const SDBUS_INTERFACE_NAME_TYPE INTERFACE_SESSION_MANAGER{"org.rpm.dnf.v0.SessionManager"};

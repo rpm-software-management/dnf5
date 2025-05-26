@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/base/base.hpp"
 #include "services/comps/group.hpp"
 #include "services/goal/goal.hpp"
+#include "services/history/history.hpp"
 #include "services/offline/offline.hpp"
 #include "services/repo/repo.hpp"
 #include "services/rpm/rpm.hpp"
@@ -167,6 +168,7 @@ Session::Session(
     services.emplace_back(std::make_unique<Goal>(*this));
     services.emplace_back(std::make_unique<Offline>(*this));
     services.emplace_back(std::make_unique<Group>(*this));
+    services.emplace_back(std::make_unique<History>(*this));
     services.emplace_back(std::make_unique<dnfdaemon::Advisory>(*this));
 
     // Register all provided services on d-bus

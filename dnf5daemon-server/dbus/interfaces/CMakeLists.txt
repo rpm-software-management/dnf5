@@ -6,3 +6,4 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.Advisory.xml ${CMAKE_C
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.comps.Group.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.comps.Group.xml COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.Base.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.Base.xml COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.Offline.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.Offline.xml COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.rpm.dnf.v0.History.xml ${CMAKE_CURRENT_BINARY_DIR}/org.rpm.dnf.v0.History.xml COPYONLY)
