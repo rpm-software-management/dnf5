@@ -643,43 +643,18 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             }
         }
 
-        // Prepares repositories that are expired but match the original.
-        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
-            auto * const repo = repos_for_processing[idx];
-            catch_thread_sack_loader_exceptions();
-            try {
-                if (!repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
-                    repo->is_in_sync()) {
-                    // the expired metadata still reflect the origin
-                    utimes(
-                        repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(),
-                        nullptr);
-                    RepoCache(base, repo->get_config().get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                    repo->mark_fresh();
-                    repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-
-                    logger->debug(
-                        "Using cache for repo \"{}\". It is expired, but matches the original.",
-                        repo->get_config().get_id());
-                    send_to_sack_loader(repo);
-                } else {
-                    ++idx;
-                }
-
-            } catch (const RepoDownloadError &) {
-                const auto & ep = std::current_exception();
-                if (handle_repo_exception(repo, ep, import_keys)) {
-                    repo_signature_errors.insert({repo, ep});
-                }
-                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-            }
-        }
-
         RepoDownloader repo_downloader{};
-        for (std::size_t idx = 0; idx < repos_for_processing.size(); idx++) {
-            auto * const repo = repos_for_processing[idx];
+        for (const auto & repo : repos_for_processing) {
             repo_downloader.add(*repo, repo->get_config().get_cachedir(), load_downloaded_repo);
         }
+        catch_thread_sack_loader_exceptions();
+
+        // Prepares repositories that are expired but match the original.
+        // Downloads only metalink/repomd and checks if given repo is still in sync.
+        report_parallel_download_errors(
+            std::get<0>(repo_downloader.download_repos_descriptions()), import_keys, repo_signature_errors);
+
+        catch_thread_sack_loader_exceptions();
 
         // Prepares (downloads) remaining repositories.
         report_parallel_download_errors(repo_downloader.download(), import_keys, repo_signature_errors);

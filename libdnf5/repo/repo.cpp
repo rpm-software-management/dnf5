@@ -209,10 +209,23 @@ std::vector<std::pair<std::string, std::string>> Repo::get_appstream_metadata() 
 }
 
 bool Repo::is_in_sync() {
-    if (!p_impl->config.get_metalink_option().empty() && !p_impl->config.get_metalink_option().get_value().empty()) {
-        return RepoDownloader::is_metalink_in_sync(*this);
+    RepoDownloader repo_downloader{};
+    repo_downloader.add(*this, std::filesystem::temp_directory_path(), NULL);
+    // If there is an error there should be only the one map key (this repo) in the returned
+    // unordered map but iterate through all keys to be safe.
+    const auto & [errors, in_sync] = repo_downloader.download_repos_descriptions();
+    for (auto & [repo, errs] : errors) {
+        if (!errs.empty()) {
+            auto src = repo->get_download_data().get_source_info();
+            throw libdnf5::repo::RepoDownloadError(
+                M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
+                src.first,
+                src.second,
+                repo->get_id(),
+                libdnf5::utils::string::join(errs, ", "));
+        }
     }
-    return RepoDownloader::is_repomd_in_sync(*this);
+    return in_sync;
 }
 
 
