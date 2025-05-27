@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <regex>
 #include <set>
 #include <utility>
 
@@ -45,6 +46,41 @@ std::size_t replace_all(std::string & inout, std::string_view what, std::string_
         inout.replace(pos, what.length(), with.data(), with.length());
     }
     return count;
+}
+
+// Function to replace occurrences of ${<index>} with strings from the array
+std::string format_string(const std::string & format, int argc, const char * const argv[]) {
+    const std::regex placeholder(R"(\$\{(\d+)\})");
+
+    std::string formatted;
+
+    // Search for all occurrences of ${<index>}
+    auto begin = format.cbegin();
+    auto end = format.cend();
+    std::smatch match;
+    while (std::regex_search(begin, end, match, placeholder)) {
+        formatted.append(begin, match[0].first);  // Append text before the placeholder
+        int index;
+        try {
+            index = std::stoi(match[1]);
+        } catch (const std::invalid_argument & ex) {
+            throw Error(
+                M_("Misconfigured alias \"{}\": cannot convert \"{}\" to a number"),
+                std::string(argv[0]),
+                match[0].str());
+        } catch (const std::out_of_range & ex) {
+            index = -1;
+        }
+        if (index < 0 || index >= argc) {
+            throw Error(
+                M_("Misconfigured alias \"{}\": index \"{}\" out of range"), std::string(argv[0]), match[0].str());
+        }
+        formatted += argv[index];  // Replace placeholder with corresponding string
+        begin = match[0].second;   // Continue after the last match
+    }
+    formatted.append(begin, end);  // Append the remaining text
+
+    return formatted;
 }
 
 std::pair<BgettextMessage, std::string> get_conflict_arg_msg(const ArgumentParser::Argument * conflict_arg) {
@@ -1232,13 +1268,20 @@ const ArgumentParser::Command::ParseHookFunc & ArgumentParser::CommandAlias::get
 }
 
 void ArgumentParser::CommandAlias::parse(const char * option, int argc, const char * const argv[]) {
+    const auto number_of_required_values = static_cast<int>(required_values.size());
+    if (argc <= number_of_required_values) {
+        throw ArgumentParserNamedArgMissingValueError(
+            M_("Missing value for command alias \"{}\""), std::string(option));
+    }
+
     // Invoke the attached named arguments
     for (auto & target_named_arg : attached_named_args) {
         auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
         const char * args[2];
         int args_count = 1;
         if (target_arg.get_has_value()) {
-            args[args_count++] = target_named_arg.value.c_str();
+            auto value = format_string(target_named_arg.value, number_of_required_values + 1, argv);
+            args[args_count++] = value.c_str();
         }
         args[0] = option;
         target_arg.parse_long(option, args_count, args);
@@ -1263,7 +1306,7 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
     }
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
-    for (int i = 1; i < argc;) {
+    for (int i = 1 + number_of_required_values; i < argc;) {
         if (owner.p_impl->complete_arg_ptr) {
             if (argv + i > owner.p_impl->complete_arg_ptr) {
                 return;
@@ -1373,6 +1416,10 @@ ArgumentParser::Command & ArgumentParser::CommandAlias::get_attached_command() n
 
 void ArgumentParser::CommandAlias::attach_named_arg(const std::string & id_path, const std::string & value) {
     attached_named_args.push_back({id_path, value});
+}
+
+void ArgumentParser::CommandAlias::add_required_value(const std::string & value_help, const std::string & descr) {
+    required_values.emplace_back(value_help, descr);
 }
 
 ArgumentParser::CommandAlias::CommandAlias(ArgumentParser & owner, const std::string & id, Command & attached_command)
