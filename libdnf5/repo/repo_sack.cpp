@@ -128,6 +128,12 @@ public:
     /// Handle a single repo exception according to the configuration.
     static bool handle_repo_exception(const Repo * repo, std::exception_ptr ep, bool report_key_err);
 
+    /// For the input unordered_map of errors handle each error according to the configuration.
+    static void report_parallel_download_errors(
+        const std::unordered_map<Repo *, std::vector<std::string>> && errors,
+        bool import_keys,
+        std::map<Repo *, std::exception_ptr> & repo_signature_errors);
+
 private:
     BaseWeakPtr base;
     WeakPtrGuard<RepoSack, false> sack_guard;
@@ -353,6 +359,30 @@ bool RepoSack::Impl::handle_repo_exception(const Repo * repo, std::exception_ptr
     }
     return false;
 };
+
+void RepoSack::Impl::report_parallel_download_errors(
+    const std::unordered_map<Repo *, std::vector<std::string>> && errors,
+    bool import_keys,
+    std::map<Repo *, std::exception_ptr> & repo_signature_errors) {
+    for (auto const & [repo, errs] : errors) {
+        for (auto & err : errs) {
+            try {
+                auto src = repo->get_download_data().get_source_info();
+                throw libdnf5::repo::RepoDownloadError(
+                    M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
+                    src.first,
+                    src.second,
+                    repo->get_id(),
+                    err);
+            } catch (const RepoDownloadError &) {
+                const auto & ep = std::current_exception();
+                if (handle_repo_exception(&(*repo), ep, import_keys)) {
+                    repo_signature_errors.insert({&(*repo), ep});
+                }
+            }
+        }
+    }
+}
 
 /**
  *
@@ -635,31 +665,14 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
             }
         }
 
-        // Prepares (downloads) remaining repositories.
         RepoDownloader repo_downloader{};
         for (std::size_t idx = 0; idx < repos_for_processing.size(); idx++) {
             auto * const repo = repos_for_processing[idx];
             repo_downloader.add(*repo, repo->get_config().get_cachedir(), load_downloaded_repo);
         }
 
-        for (auto const & [repo, errs] : repo_downloader.download()) {
-            for (auto & err : errs) {
-                try {
-                    auto src = repo->get_download_data().get_source_info();
-                    throw libdnf5::repo::RepoDownloadError(
-                        M_("Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"),
-                        src.first,
-                        src.second,
-                        repo->get_id(),
-                        err);
-                } catch (const RepoDownloadError &) {
-                    const auto & ep = std::current_exception();
-                    if (handle_repo_exception(&(*repo), ep, import_keys)) {
-                        repo_signature_errors.insert({&(*repo), ep});
-                    }
-                }
-            }
-        }
+        // Prepares (downloads) remaining repositories.
+        report_parallel_download_errors(repo_downloader.download(), import_keys, repo_signature_errors);
 
         catch_thread_sack_loader_exceptions();
         repos_for_processing.clear();
