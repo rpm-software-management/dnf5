@@ -34,6 +34,8 @@ namespace libdnf5::repo {
 ///                                       under which a lower-level exception can often be nested.
 class RepoDownloader {
 public:
+    using repo_loading_func = void(libdnf5::repo::Repo * repo, bool reusing);
+
     // Names of metadata files in rpm repository
     // Final metadata file name is (hash-) + this constant + ".xml" [+ compression suffix]
     static constexpr const char * MD_FILENAME_PRIMARY = "primary";
@@ -54,17 +56,14 @@ public:
     static LibrepoHandle & get_cached_handle(Repo & repo);
 
     /// Adds repos for which metadata will be downloaded in parallel
-    void add(
-        libdnf5::repo::Repo & repo,
-        const std::string & destdir,
-        std::function<void(libdnf5::repo::Repo * repo)> load_repo);
+    void add(libdnf5::repo::Repo & repo, const std::string & destdir, std::function<repo_loading_func> load_repo);
 
     // Download the previously added repos.
     std::unordered_map<Repo *, std::vector<std::string>> download();
 
 private:
     struct CallbackData {
-        std::function<void(libdnf5::repo::Repo * repo)> load_repo;
+        std::function<repo_loading_func> load_repo;
         std::string destination;
         std::optional<libdnf5::utils::fs::TempDir> temp_download_target;
         void * user_cb_data{nullptr};
