@@ -82,6 +82,7 @@ private:
         DownloadData & download_data, LibrepoHandle & handle, bool set_gpg_home_dir, CallbackData * cbdata);
     static void add_countme_flag(DownloadData & download_data, LibrepoHandle & handle);
     static time_t get_system_epoch();
+    static void configure_handle_dlist(LibrepoHandle & handle, std::set<std::string> && optional_metadata);
 
     static int end_cb(void * data, LrTransferStatus status, const char * msg);
     static int progress_cb(void * data, double total_to_download, double downloaded);
