@@ -93,7 +93,7 @@ private:
     static time_t get_system_epoch();
     static void configure_handle_dlist(LibrepoHandle & handle, std::set<std::string> && optional_metadata);
 
-    static int end_cb(void * data, LrTransferStatus status, const char * msg);
+    static int end_cb_full_download(void * data, LrTransferStatus status, const char * msg);
     static int progress_cb(void * data, double total_to_download, double downloaded);
     static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
     static int mirror_failure_cb(void * data, const char * msg, const char * url);
