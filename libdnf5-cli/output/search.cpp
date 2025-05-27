@@ -107,7 +107,7 @@ void print_search_results(const SearchResults & results) {
             } else {
                 std::cout << highlight(package.get_name()) << "." << package.get_arch();
             }
-            std::cout << ": " << highlight(package.get_summary()) << std::endl;
+            std::cout << "\t" << highlight(package.get_summary()) << std::endl;
         }
     }
 }
