@@ -61,7 +61,7 @@ static LrYumRepoMd * get_yum_repomd(LibrepoResult & result) {
     return yum_repomd;
 }
 
-int RepoDownloader::end_cb(void * data, LrTransferStatus status, const char * msg) {
+int RepoDownloader::end_cb_full_download(void * data, LrTransferStatus status, const char * msg) {
     libdnf_assert(data != nullptr, "data in callback must be set");
 
     auto download_callback_data = static_cast<CallbackData *>(data);
@@ -230,7 +230,7 @@ std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() 
     for (auto & cbd : callback_data) {
         auto & download_data = cbd.repo->get_download_data();
 
-        cbd.lr_target->endcb = end_cb;
+        cbd.lr_target->endcb = end_cb_full_download;
         cbd.lr_target->cbdata = &cbd;
         download_data.handle->set_opt(LRO_FASTESTMIRRORDATA, &cbd);
 
