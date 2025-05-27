@@ -523,9 +523,7 @@ LibrepoHandle RepoDownloader::init_remote_handle(Repo & repo, const char * destd
     return h;
 }
 
-void RepoDownloader::common_handle_setup(LibrepoHandle & h, const DownloadData & download_data) {
-    auto optional_metadata = download_data.get_optional_metadata();
-
+void RepoDownloader::configure_handle_dlist(LibrepoHandle & h, std::set<std::string> && optional_metadata) {
     if (optional_metadata.extract(libdnf5::METADATA_TYPE_ALL)) {
         h.set_opt(LRO_YUMDLIST, LR_RPMMD_FULL);
     } else {
@@ -583,7 +581,10 @@ void RepoDownloader::common_handle_setup(LibrepoHandle & h, const DownloadData &
         dlist.push_back(nullptr);
         h.set_opt(LRO_YUMDLIST, dlist.data());
     }
+}
 
+void RepoDownloader::common_handle_setup(LibrepoHandle & h, const DownloadData & download_data) {
+    configure_handle_dlist(h, download_data.get_optional_metadata());
     h.set_opt(LRO_PRESERVETIME, static_cast<long>(download_data.preserve_remote_time));
     h.set_opt(LRO_REPOTYPE, LR_YUMREPO);
     h.set_opt(LRO_INTERRUPTIBLE, 1L);
