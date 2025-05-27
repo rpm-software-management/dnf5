@@ -453,7 +453,11 @@ void RepoDownloader::load_local(DownloadData & download_data) try {
     auto & config = download_data.config;
     LibrepoHandle h(RepoDownloader::init_local_handle(download_data));
 
-    auto result = perform(download_data, h, config.get_repo_gpgcheck_option().get_value(), NULL);
+    if (config.get_repo_gpgcheck_option().get_value()) {
+        auto pubringdir = download_data.pgp.get_keyring_dir();
+        h.set_opt(LRO_GNUPGHOMEDIR, pubringdir.c_str());
+    }
+    auto result = h.perform();
 
     download_data.repomd_filename = libdnf5::utils::string::c_to_str(get_yum_repo(result)->repomd);
 
@@ -712,51 +716,6 @@ void RepoDownloader::apply_http_headers(DownloadData & download_data, LibrepoHan
 
     handle.set_opt(LRO_HTTPHEADER, lr_headers.get());
 }
-
-LibrepoResult RepoDownloader::perform(
-    DownloadData & download_data, LibrepoHandle & handle, bool set_gpg_home_dir, CallbackData * cbd) {
-    if (set_gpg_home_dir) {
-        auto pubringdir = download_data.pgp.get_keyring_dir();
-        handle.set_opt(LRO_GNUPGHOMEDIR, pubringdir.c_str());
-    }
-
-    add_countme_flag(download_data, handle);
-    auto & config = download_data.config;
-
-    // Callbacks are set only if callback data (cbd) is passed
-    auto * download_callbacks = download_data.base->get_download_callbacks();
-    if (cbd && download_callbacks) {
-        cbd->user_cb_data = download_callbacks->add_new_download(
-            download_data.user_data,
-            !config.get_name_option().get_value().empty()
-                ? config.get_name_option().get_value().c_str()
-                : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
-            -1);
-        cbd->prev_total_to_download = 0;
-        cbd->prev_downloaded = 0;
-        cbd->sum_prev_downloaded = 0;
-
-        handle.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
-        handle.set_opt(LRO_PROGRESSDATA, cbd);
-        handle.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-        handle.set_opt(LRO_FASTESTMIRRORDATA, &cbd);
-        handle.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
-    }
-
-    try {
-        auto result = handle.perform();
-        if (cbd && download_callbacks) {
-            download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
-        }
-        return result;
-    } catch (const LibrepoError & ex) {
-        if (cbd && download_callbacks) {
-            download_callbacks->end(cbd->user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
-        }
-        throw;
-    }
-}
-
 
 // COUNTME CONSTANTS
 //
