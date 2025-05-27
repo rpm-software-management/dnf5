@@ -28,7 +28,7 @@ Description
 It is possible to define custom aliases which can be then used as dnf commands or options to abbreviate longer
 command and option sequences.
 
-The aliases can be configured in the toml format and the configuration files are taken from these drop-in
+The aliases can be configured in the TOML format and the configuration files are loaded from these drop-in
 directories:
 
   - ``/usr/share/dnf5/aliases.d/``
@@ -39,11 +39,11 @@ directories:
 Syntax:
 -------
 
-Configuration file must begin with the attribute ``version`` with a value of a supported version, for example:
+The configuration file must begin with the ``version`` attribute set to a required version, for example:
 
 .. code-block:: none
 
-    version = '1.0'
+    version = '1.1'
 
 Each alias is defined in a separate section, using ``key = value`` pairs, for example:
 
@@ -83,9 +83,16 @@ Keys:
       compatible. Does not support locales.
     - ``group_id`` - A group this alias is part of if any.
     - ``complete`` - Whether bash autocompletion should be used for this alias, default is false.
-    - ``attached_named_args`` - Options that will be used with the command. The format is an array of inline
-      tables, each of which must contain an ``id_path`` key to specify the path to an option, and may contain also
-      a ``value`` key to specify the value of the option.
+    - ``required_values`` - Values (positional arguments) consumed by the command alias. The format is
+      an array of tables; each must include either `value_help.<locale>` for the active locale or
+      `value_help.C`, and may optionally include `descr.<locale>`. The default is an empty array.
+      Added in config file version 1.1.
+    - ``attached_named_args`` - Options that will be used with the command. The format is an array of tables,
+      each of which must contain an ``id_path`` key to specify the path to an option, and may contain also
+      a ``value`` key to specify the value of the option. The ``value`` can contain ``${index}`` placeholders,
+      which are replaced by values consumed by the command alias (as defined by ``required_values``).
+      Command arguments start at index 1. Index 0 refers to the command alias itself.
+      If no ``value`` key is provided, an empty string will be passed to named arguments that expect a value.
 
 The required keys are ``type``, and ``attached_command``.
 
@@ -125,6 +132,28 @@ Examples:
             { id_path = 'repo', value = 'fedora' },
             { id_path = 'list.showduplicates' }
         ]
+
+  - Alias ``whatrequires`` for ``repoquery --installed --whatrequires=<requires_first_argument>``:
+
+    .. code-block:: none
+
+        ['whatrequires']
+        type = 'command'
+        attached_command = 'repoquery'
+        descr = 'Alias for "repoquery --installed --whatrequires=<whatrequires_first_argument>"'
+        complete = true
+
+        [[whatrequires.required_values]]
+        value_help.C = 'CAPABILITY,...'
+        descr.C = 'Limit to packages that require any of <capabilities>.'
+        descr.cs_CZ = 'Omezí se na balíčky vyžadující něco z <capabilities>.'
+
+        [[whatrequires.attached_named_args]]
+        id_path = 'repoquery.installed'
+
+        [[whatrequires.attached_named_args]]
+        id_path = 'repoquery.whatrequires'
+        value='${1}'
 
 
 .. _aliases_misc_cloned_named_arg_ref-label:

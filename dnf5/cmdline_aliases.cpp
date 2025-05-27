@@ -632,7 +632,13 @@ void load_aliases_from_toml_file(
 
                     // Creates a new command
                     case ElementType::COMMAND: {
+                        bool error{false};
                         ArgParser::Command * attached_command{nullptr};
+                        struct RequiredValue {
+                            std::string value_help;
+                            std::string descr;
+                        };
+                        std::vector<RequiredValue> required_values;
                         std::optional<std::string> description;
                         ArgParser::Group * group{nullptr};
                         bool complete{false};
@@ -677,6 +683,54 @@ void load_aliases_from_toml_file(
                                 }
                             } else if (key == "complete") {
                                 complete = value.as_boolean();
+                            } else if (key == "required_values") {
+                                if (version == "1.0") {
+                                    auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" "
+                                           "in file \"{}\" on line {}: {}"),
+                                        key,
+                                        element_id_path,
+                                        config_file_path.native(),
+                                        location_first_line_num(location),
+                                        location_lines(location));
+                                    break;
+                                }
+                                const auto & req_values = value.as_array();
+                                for (const auto & required_value : req_values) {
+                                    std::optional<std::string> value_help;
+                                    std::string descr;
+                                    for (auto & [key, value] : required_value.as_table()) {
+                                        if (key == "value_help") {
+                                            value_help = get_string_locale(value, locale_name);
+                                        } else if (key == "descr") {
+                                            descr = get_string_locale(value, locale_name).value_or("");
+                                        } else {
+                                            const auto & location = value.location();
+                                            print_and_log_warning(
+                                                *logger,
+                                                M_("Unknown attribute \"{}\" of required value for alias \"{}\" "
+                                                   "in file \"{}\" on line {}: {}"),
+                                                key,
+                                                element_id_path,
+                                                config_file_path.native(),
+                                                location_first_line_num(location),
+                                                location_lines(location));
+                                        }
+                                    }
+                                    if (!value_help) {
+                                        error = true;
+                                        print_and_log_error(
+                                            *logger,
+                                            M_("Missing attribute \"value_help\" of required value for alias \"{}\" in "
+                                               "file \"{}\""),
+                                            element_id_path,
+                                            config_file_path.native());
+                                        break;
+                                    }
+                                    required_values.emplace_back(*value_help, descr);
+                                }
                             } else if (key == "attached_named_args") {
                                 attached_named_args = &value.as_array();
                             } else {
@@ -690,6 +744,10 @@ void load_aliases_from_toml_file(
                                     location_first_line_num(location),
                                     location_lines(location));
                             }
+                        }
+
+                        if (error) {
+                            continue;
                         }
 
                         if (!attached_command) {
@@ -706,6 +764,11 @@ void load_aliases_from_toml_file(
                             alias_cmd->set_description(*description);
                         }
                         alias_cmd->set_complete(complete);
+
+                        // Add required values to the command alias
+                        for (const auto & [value_help, descr] : required_values) {
+                            alias_cmd->add_required_value(value_help, descr);
+                        }
 
                         // Attach additional named arguments to the command alias
                         if (attached_named_args) {
