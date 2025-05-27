@@ -79,9 +79,15 @@ Keys:
     - ``descr`` - Description that will be shown in help.
     - ``group_id`` - A group this alias is part of if any.
     - ``complete`` - Whether bash autocompletion should be used for this alias, default is false.
+    - ``number_of_attached_values`` - Number of arguments consumed by the command alias. These arguments
+      can be used as values for attached named arguments. Default is 0. Added in config file version 1.1.
+      Ignored by versions of DNF that support only config file version 1.0.
     - ``attached_named_args`` - Options that will be used with the command. The format is an array of inline
       tables, each of which must contain an ``id_path`` key to specify the path to an option, and may contain also
-      a ``value`` key to specify the value of the option.
+      a ``value`` key to specify the value of the option. The ``value`` can contain ``${index}`` placeholders,
+      which are replaced by values consumed by the command alias (as defined by ``number_of_attached_values``).
+      Command arguments start at index 1. Index 0 refers to the command alias itself.
+      If no ``value`` key is provided, an empty string will be passed to named arguments that expect a value.
 
 The required keys are ``type``, and ``attached_command``.
 
@@ -117,6 +123,21 @@ Examples:
         attached_named_args = [
             { id_path = 'repo', value = 'fedora' },
             { id_path = 'list.showduplicates' }
+        ]
+
+  - Alias ``whatrequires`` for ``repoquery --installed --whatrequires=<requires_first_argument>``:
+
+    .. code-block:: none
+
+        ['whatrequires']
+        type = 'command'
+        attached_command = 'repoquery'
+        descr = 'Alias for "repoquery --installed --whatrequires=<whatrequires_first_argument>"'
+        complete = true
+        number_of_attached_values = 1
+        attached_named_args= [
+            { id_path = 'repoquery.installed' },
+            { id_path = 'repoquery.whatrequires', value='${1}' }
         ]
 
 

@@ -34,7 +34,7 @@ namespace dnf5 {
 
 namespace {
 
-constexpr const char * CONF_FILE_VERSION = "1.0";
+constexpr const char * CONF_FILE_SUPPORTED_VERSIONS[] = {"1.0", "1.1"};
 
 using ArgParser = libdnf5::cli::ArgumentParser;
 
@@ -124,14 +124,22 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
         const toml::ordered_value arg_parser_elements = toml::parse<toml::ordered_type_config>(config_file_path);
 #endif  // #ifdef TOML11_COMPAT
 
+        std::string version;
         try {
-            const auto version = toml::find<std::string>(arg_parser_elements, "version");
-            if (version != CONF_FILE_VERSION) {
-                auto msg = fmt::format(
+            version = toml::find<std::string>(arg_parser_elements, "version");
+            bool supported{false};
+            for (auto * supported_version : CONF_FILE_SUPPORTED_VERSIONS) {
+                if (version == supported_version) {
+                    supported = true;
+                    break;
+                }
+            }
+            if (!supported) {
+                const auto msg = fmt::format(
                     "Unsupported version \"{}\" in file \"{}\", \"{}\" expected",
                     version,
                     config_file_path.native(),
-                    CONF_FILE_VERSION);
+                    libdnf5::utils::string::join(CONF_FILE_SUPPORTED_VERSIONS, ", "));
                 logger->error("{}", msg);
                 std::cerr << msg << std::endl;
                 return;
@@ -644,6 +652,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     // Creates a new command
                     case ElementType::COMMAND: {
                         ArgParser::Command * attached_command{nullptr};
+                        int number_of_attached_values{0};
                         std::optional<std::string> description;
                         ArgParser::Group * group{nullptr};
                         bool complete{false};
@@ -702,6 +711,24 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 complete = value.as_boolean();
                             } else if (key == "attached_named_args") {
                                 attached_named_args = &value.as_array();
+                            } else if (key == "number_of_attached_values") {
+                                if (version == "1.0") {
+                                    auto location = value.location();
+                                    logger->warning(
+                                        "Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" "
+                                        "in file \"{}\" on line {}: {}",
+                                        key,
+                                        element_id_path,
+                                        config_file_path.native(),
+#ifdef TOML11_COMPAT
+                                        location.line(),
+                                        location.line_str());
+#else
+                                        location.first_line_number(),
+                                        libdnf5::utils::string::join(location.lines(), "\n"));
+#endif  // #ifdef TOML11_COMPAT
+                                }
+                                number_of_attached_values = static_cast<int>(value.as_integer());
                             } else {
                                 auto location = value.location();
                                 logger->warning(
@@ -742,6 +769,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 continue;
                             }
                         }
+
+                        alias_cmd->set_number_of_attached_values(number_of_attached_values);
 
                         if (group) {
                             group->register_argument(alias_cmd);
