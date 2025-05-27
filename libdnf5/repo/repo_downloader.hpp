@@ -98,8 +98,6 @@ private:
     static LibrepoHandle init_remote_handle(Repo & repo, const char * destdir, bool mirror_setup = true);
     static void common_handle_setup(LibrepoHandle & h, const DownloadData & download_data);
     static void apply_http_headers(DownloadData & download_data, LibrepoHandle & handle);
-    static LibrepoResult perform(
-        DownloadData & download_data, LibrepoHandle & handle, bool set_gpg_home_dir, CallbackData * cbdata);
     static void add_countme_flag(DownloadData & download_data, LibrepoHandle & handle);
     static time_t get_system_epoch();
     static void configure_handle_dlist(LibrepoHandle & handle, std::set<std::string> && optional_metadata);
