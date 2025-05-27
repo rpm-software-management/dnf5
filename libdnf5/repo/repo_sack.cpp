@@ -470,12 +470,22 @@ void RepoSack::Impl::update_and_load_repos(libdnf5::repo::RepoQuery & repos, boo
 
     std::map<Repo *, std::exception_ptr> repo_signature_errors;
 
-    auto load_downloaded_repo = [&send_to_sack_loader, &import_keys, &repo_signature_errors](Repo * repo) -> void {
+    auto load_downloaded_repo = [&send_to_sack_loader, &import_keys, &repo_signature_errors](
+                                    Repo * repo, bool reusing) -> void {
         try {
             auto cache_dir = repo->get_config().get_cachedir();
             RepoCache(repo->get_base(), cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
             repo->mark_fresh();
-            repo->read_metadata_cache();
+
+            if (reusing) {
+                const auto & primary_path =
+                    repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+                libdnf_user_assert(!primary_path.empty(), "The metadata cache must be read before it can be reused.");
+                // Mark that the expired metadata still reflect their origin
+                utimes(primary_path.c_str(), nullptr);
+            } else {
+                repo->read_metadata_cache();
+            }
         } catch (const RepoDownloadError &) {
             const auto & ep = std::current_exception();
             if (handle_repo_exception(&(*repo), ep, import_keys)) {

@@ -88,7 +88,7 @@ int RepoDownloader::end_cb(void * data, LrTransferStatus status, const char * ms
         }
 
         if (download_callback_data->load_repo) {
-            download_callback_data->load_repo(download_callback_data->repo.get());
+            download_callback_data->load_repo(download_callback_data->repo.get(), false);
         }
     }
     if (auto * download_callbacks = download_callback_data->repo->get_base()->get_download_callbacks()) {
@@ -183,9 +183,7 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
 
 
 void RepoDownloader::add(
-    libdnf5::repo::Repo & repo,
-    const std::string & destdir,
-    std::function<void(libdnf5::repo::Repo * repo)> load_repo) {
+    libdnf5::repo::Repo & repo, const std::string & destdir, std::function<repo_loading_func> load_repo) try {
     auto & cbd = callback_data.emplace_back();
     cbd.repo = repo.get_weak_ptr();
     cbd.destination = destdir;
