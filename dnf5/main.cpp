@@ -503,6 +503,14 @@ void RootCommand::set_argument_parser() {
     installroot->link_value(&config.get_installroot_option());
     global_options_group->register_argument(installroot);
 
+    auto withmounts = parser.add_new_named_arg("with-mounts");
+    withmounts->set_long_name("with-mounts");
+    withmounts->set_description(
+        _("mount pseudo filesystems in ABSOLUTE_PATH when using installroot"));
+    withmounts->set_const_value("true");
+    withmounts->link_value(&config.get_with_mounts_option());
+    global_options_group->register_argument(withmounts);
+
     auto use_host_config = parser.add_new_named_arg("use-host-config");
     use_host_config->set_long_name("use-host-config");
     use_host_config->set_description(
