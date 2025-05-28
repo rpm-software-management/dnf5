@@ -42,6 +42,8 @@ private:
     std::string install_pkg_spec;
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
+
+    std::vector<std::string> from_repos;
 };
 
 }  // namespace dnf5

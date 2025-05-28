@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "do.hpp"
 
+#include "../from_repo.hpp"
+
 #include <dnf5/shared_options.hpp>
 #include <libdnf5/conf/const.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
@@ -88,21 +90,7 @@ void DoCommand::set_argument_parser() {
         cmd.register_named_arg(item_type_opt);
     }
 
-    {
-        auto item_from_repo_opt = parser.add_new_named_arg("from-repo");
-        item_from_repo_opt->set_long_name("from-repo");
-        item_from_repo_opt->set_description(
-            _("The following items can be selected only from the specified repositories. All enabled repositories will "
-              "still be used to satisfy dependencies."));
-        item_from_repo_opt->set_has_value(true);
-        item_from_repo_opt->set_arg_value_help("<repoid>,...");
-        item_from_repo_opt->set_parse_hook_func(
-            [this](ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
-                from_repos = libdnf5::OptionStringList(value).get_value();
-                return true;
-            });
-        cmd.register_named_arg(item_from_repo_opt);
-    }
+    create_from_repo_option(*this, from_repos, false);
 
     {
         auto items =

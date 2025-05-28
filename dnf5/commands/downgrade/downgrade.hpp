@@ -41,8 +41,8 @@ public:
 
 private:
     std::vector<std::string> pkg_specs;
-
     std::unique_ptr<AllowErasingOption> allow_erasing;
+    std::vector<std::string> from_repos;
 };
 
 
