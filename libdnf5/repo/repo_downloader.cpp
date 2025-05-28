@@ -40,15 +40,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #define RECOGNIZED_CHKSUMS {"sha512", "sha256"}
 
-namespace std {
-
-template <>
-struct default_delete<LrMetadataTarget> {
-    void operator()(LrMetadataTarget * ptr) noexcept { lr_metadatatarget_free(ptr); }
-};
-
-}  // namespace std
-
 namespace libdnf5::repo {
 
 static void str_vector_to_char_array(const std::vector<std::string> & vec, const char * arr[]) {
@@ -188,6 +179,41 @@ void RepoDownloader::add(
     cbd.repo = repo.get_weak_ptr();
     cbd.destination = destdir;
     cbd.load_repo = load_repo;
+    std::filesystem::create_directories(cbd.destination);
+    cbd.temp_download_target = libdnf5::utils::fs::TempDir{cbd.destination, "tmpdir"};
+
+    auto & download_data = cbd.repo->get_download_data();
+    auto * download_callbacks = cbd.repo->get_base()->get_download_callbacks();
+    auto & config = cbd.repo->get_config();
+    if (download_callbacks) {
+        cbd.user_cb_data = download_callbacks->add_new_download(
+            download_data.user_data,
+            !config.get_name_option().get_value().empty()
+                ? config.get_name_option().get_value().c_str()
+                : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
+            -1);
+        cbd.prev_total_to_download = 0;
+        cbd.prev_downloaded = 0;
+        cbd.sum_prev_downloaded = 0;
+    }
+
+    download_data.handle = init_remote_handle(*cbd.repo, cbd.temp_download_target->get_path().c_str(), true);
+    download_data.handle->set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
+    add_countme_flag(download_data, *download_data.handle);
+
+    // We don't set the cbdata here yet because the callback_data vector
+    // can grow as repos are added which could change the addresses of each
+    // cbdata.
+    cbd.lr_target = std::unique_ptr<LrMetadataTarget>(lr_metadatatarget_new2(
+        download_data.handle->get(),
+        NULL,
+        static_cast<LrProgressCb>(progress_cb),
+        static_cast<LrMirrorFailureCb>(mirror_failure_cb),
+        NULL,
+        config.get_repo_gpgcheck_option().get_value() ? download_data.pgp.get_keyring_dir().c_str() : NULL,
+        0));
+} catch (const std::runtime_error & e) {
+    libdnf5::throw_with_nested(RepoDownloadError(M_("Failed to set up metadata download")));
 }
 
 std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() try {
@@ -200,62 +226,32 @@ std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() 
     //              For repos it is currently handled in update_and_load_repos so we don't
     //              even attempt to download remote repos with cacheonly enabled.
 
-    GError * err{nullptr};
-    std::vector<std::tuple<RepoWeakPtr, std::unique_ptr<LrMetadataTarget>>> lr_targets;
-    for (auto & cbd : callback_data) {
-        std::filesystem::create_directories(cbd.destination);
-        auto & download_data = cbd.repo->get_download_data();
-        cbd.temp_download_target = libdnf5::utils::fs::TempDir{cbd.destination, "tmpdir"};
-
-        auto * download_callbacks = cbd.repo->get_base()->get_download_callbacks();
-        auto & config = cbd.repo->get_config();
-        if (download_callbacks) {
-            cbd.user_cb_data = download_callbacks->add_new_download(
-                download_data.user_data,
-                !config.get_name_option().get_value().empty()
-                    ? config.get_name_option().get_value().c_str()
-                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
-                -1);
-            cbd.prev_total_to_download = 0;
-            cbd.prev_downloaded = 0;
-            cbd.sum_prev_downloaded = 0;
-        }
-        download_data.handle = init_remote_handle(*cbd.repo, cbd.temp_download_target->get_path().c_str(), true);
-        download_data.handle->set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-        download_data.handle->set_opt(LRO_FASTESTMIRRORDATA, &cbd);
-        add_countme_flag(download_data, *download_data.handle);
-        auto t = lr_metadatatarget_new2(
-            download_data.handle->get(),
-            &cbd,
-            static_cast<LrProgressCb>(progress_cb),
-            static_cast<LrMirrorFailureCb>(mirror_failure_cb),
-            static_cast<LrEndCb>(end_cb),
-            config.get_repo_gpgcheck_option().get_value() ? download_data.pgp.get_keyring_dir().c_str() : NULL,
-            0);
-        lr_targets.emplace_back(cbd.repo, t);
-    }
-
-    // Adding items to the end of GSList is slow. We go from the back and add items to the beginning.
     GSList * list{nullptr};
-    for (auto it = lr_targets.rbegin(); it != lr_targets.rend(); ++it) {
-        list = g_slist_prepend(list, std::get<1>(*it).get());
+    for (auto & cbd : callback_data) {
+        auto & download_data = cbd.repo->get_download_data();
+
+        cbd.lr_target->endcb = end_cb;
+        cbd.lr_target->cbdata = &cbd;
+        download_data.handle->set_opt(LRO_FASTESTMIRRORDATA, &cbd);
+
+        list = g_slist_prepend(list, cbd.lr_target.get());
     }
     std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
 
-
+    GError * err{nullptr};
     if (!lr_download_metadata(list, &err)) {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
 
     std::unordered_map<Repo *, std::vector<std::string>> per_repo_errors;
-    for (auto & [repo, target] : lr_targets) {
+    for (auto & cbd : callback_data) {
         std::vector<std::string> errors;
-        for (GList * err = target->err; err; err = g_list_next(err)) {
+        for (GList * err = cbd.lr_target->err; err; err = g_list_next(err)) {
             gchar * err_msg = (gchar *)err->data;
             errors.emplace_back(err_msg);
         }
 
-        per_repo_errors[repo.get()] = errors;
+        per_repo_errors[cbd.repo.get()] = errors;
     }
 
     return per_repo_errors;
