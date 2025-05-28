@@ -57,15 +57,25 @@ public:
     static constexpr const char * MD_FILENAME_MODULES = "modules";
     static constexpr const char * MD_FILENAME_APPSTREAM = "appstream";
 
-    //TODO(amatej): make these non static and check all added repos metalink/repomd in parallel
-    static bool is_metalink_in_sync(Repo & repo);
-    static bool is_repomd_in_sync(Repo & repo);
+    static bool is_metalink_in_sync(Repo & repo, LrMetalink * metalink);
+    static bool is_repomd_in_sync(Repo & repo, std::filesystem::path repomd);
 
     static void load_local(DownloadData & download_data);
     static LibrepoHandle & get_cached_handle(Repo & repo);
 
     /// Adds repos for which metadata will be downloaded in parallel
     void add(libdnf5::repo::Repo & repo, const std::string & destdir, std::function<repo_loading_func> load_repo);
+
+    // For each repo downloads metalink (or repomd if no metalink) and
+    // checks with local files if the repo needs to be downloaded.
+    // If the repo is determined to be in sync it won't be downloaded
+    // during the download() call.
+    // It returns a map with errors and a single bool signifying if
+    // all the added repos are in sync or not.
+    // NOTE(amatej): If the API should become public we might
+    // want to change it so that its possible to tell which
+    // repos will be donwloaded in the following download() call.
+    std::tuple<std::unordered_map<Repo *, std::vector<std::string>>, bool> download_repos_descriptions();
 
     // Download the previously added repos.
     std::unordered_map<Repo *, std::vector<std::string>> download();
@@ -81,6 +91,7 @@ private:
         double sum_prev_downloaded;
         RepoWeakPtr repo;
         std::unique_ptr<LrMetadataTarget> lr_target;
+        bool is_in_sync;
     };
 
     static LibrepoHandle init_local_handle(const DownloadData & download_data);
@@ -94,6 +105,7 @@ private:
     static void configure_handle_dlist(LibrepoHandle & handle, std::set<std::string> && optional_metadata);
 
     static int end_cb_full_download(void * data, LrTransferStatus status, const char * msg);
+    static int end_cb_sync_check(void * data, LrTransferStatus status, const char * msg);
     static int progress_cb(void * data, double total_to_download, double downloaded);
     static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
     static int mirror_failure_cb(void * data, const char * msg, const char * url);

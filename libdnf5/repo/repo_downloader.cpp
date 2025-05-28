@@ -88,6 +88,48 @@ int RepoDownloader::end_cb_full_download(void * data, LrTransferStatus status, c
     return 0;
 }
 
+int RepoDownloader::end_cb_sync_check(void * data, LrTransferStatus status, const char * msg) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+
+    auto cbd = static_cast<CallbackData *>(data);
+    auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
+    if (cb_status == DownloadCallbacks::TransferStatus::SUCCESSFUL && cbd) {
+        cbd->is_in_sync = false;
+        auto & repo = *cbd->repo.get();
+        auto & config = cbd->repo->get_config();
+        auto & download_data = cbd->repo->get_download_data();
+        if (!config.get_metalink_option().empty() && !config.get_metalink_option().get_value().empty()) {
+            LrMetalink * metalink;
+            download_data.handle->get_info(LRI_METALINK, &metalink);
+            cbd->is_in_sync = RepoDownloader::is_metalink_in_sync(repo, metalink);
+        } else {
+            std::filesystem::path repomd;
+            if (cbd->lr_target->repo) {
+                repomd = cbd->lr_target->repo->repomd;
+            }
+            cbd->is_in_sync = RepoDownloader::is_repomd_in_sync(repo, repomd);
+            if (!cbd->is_in_sync) {
+                // We have already downloaded the new repomd, when we will go download the
+                // rest of the metadata do just an update.
+                if (std::filesystem::exists(repomd)) {
+                    download_data.handle->set_opt(LRO_UPDATE, 1);
+                }
+            }
+        }
+
+        if (cbd->load_repo && cbd->is_in_sync) {
+            auto logger = repo.get_base()->get_logger();
+            logger->debug(
+                "Using cache for repo \"{}\". It is expired, but matches the original.", repo.get_config().get_id());
+            cbd->load_repo(cbd->repo.get(), true);
+        }
+    }
+    if (auto * download_callbacks = cbd->repo->get_base()->get_download_callbacks()) {
+        return download_callbacks->end(cbd->user_cb_data, cb_status, msg);
+    }
+    return 0;
+}
+
 int RepoDownloader::progress_cb(void * data, double total_to_download, double downloaded) {
     if (!data) {
         return 0;
@@ -216,6 +258,60 @@ void RepoDownloader::add(
     libdnf5::throw_with_nested(RepoDownloadError(M_("Failed to set up metadata download")));
 }
 
+std::tuple<std::unordered_map<Repo *, std::vector<std::string>>, bool>
+RepoDownloader::download_repos_descriptions() try {
+    if (callback_data.empty()) {
+        return {};
+    }
+
+    GSList * list{nullptr};
+    for (auto & cbd : callback_data) {
+        // If there is currently no metadata it cannot be up to date
+        if (cbd.repo->get_download_data().get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+            continue;
+        }
+
+        // Download only metalink or repomd
+        auto & download_data = cbd.repo->get_download_data();
+        auto & config = cbd.repo->get_config();
+        if (!config.get_metalink_option().empty() && !config.get_metalink_option().get_value().empty()) {
+            download_data.handle->set_opt(LRO_FETCHMIRRORS, 1L);
+        } else {
+            const char * dlist[] = LR_YUM_REPOMDONLY;
+            download_data.handle->set_opt(LRO_YUMDLIST, dlist);
+        }
+
+        cbd.lr_target->endcb = end_cb_sync_check;
+        cbd.lr_target->cbdata = &cbd;
+        download_data.handle->set_opt(LRO_FASTESTMIRRORDATA, &cbd);
+
+        list = g_slist_prepend(list, cbd.lr_target.get());
+    }
+    std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
+
+    GError * err{nullptr};
+    if (!lr_download_metadata(list, &err)) {
+        throw LibrepoError(std::unique_ptr<GError>(err));
+    }
+
+    std::unordered_map<Repo *, std::vector<std::string>> per_repo_errors;
+    bool all_in_sync = true;
+    for (auto & cbd : callback_data) {
+        std::vector<std::string> errors;
+        for (GList * err = cbd.lr_target->err; err; err = g_list_next(err)) {
+            gchar * err_msg = (gchar *)err->data;
+            errors.emplace_back(err_msg);
+        }
+
+        per_repo_errors[cbd.repo.get()] = errors;
+        all_in_sync &= cbd.is_in_sync;
+    }
+
+    return {per_repo_errors, all_in_sync};
+} catch (const std::runtime_error & e) {
+    libdnf5::throw_with_nested(RepoDownloadError(M_("Failed to download metadata")));
+}
+
 std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() try {
     if (callback_data.empty()) {
         return {};
@@ -228,7 +324,14 @@ std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() 
 
     GSList * list{nullptr};
     for (auto & cbd : callback_data) {
+        // Don't download repositories that are already in sync
+        if (cbd.is_in_sync) {
+            continue;
+        }
         auto & download_data = cbd.repo->get_download_data();
+        // Configure handle to download all the needed metadata
+        download_data.handle->set_opt(LRO_FETCHMIRRORS, 0L);
+        configure_handle_dlist(*download_data.handle, download_data.get_optional_metadata());
 
         cbd.lr_target->endcb = end_cb_full_download;
         cbd.lr_target->cbdata = &cbd;
@@ -260,22 +363,11 @@ std::unordered_map<Repo *, std::vector<std::string>> RepoDownloader::download() 
 }
 
 // Use metalink to check whether our metadata are still current.
-bool RepoDownloader::is_metalink_in_sync(Repo & repo) try {
+bool RepoDownloader::is_metalink_in_sync(Repo & repo, LrMetalink * metalink) try {
     auto & download_data = repo.get_download_data();
     auto & logger = *(download_data.base)->get_logger();
     auto & config = download_data.config;
 
-    libdnf5::utils::fs::TempDir tmpdir("tmpdir");
-
-    CallbackData cbd;
-    cbd.repo = repo.get_weak_ptr();
-
-    LibrepoHandle h(RepoDownloader::init_remote_handle(repo, tmpdir.get_path().c_str()));
-    h.set_opt(LRO_FETCHMIRRORS, 1L);
-
-    perform(download_data, h, false, &cbd);
-    LrMetalink * metalink;
-    h.get_info(LRI_METALINK, &metalink);
     if (!metalink) {
         logger.trace("Sync check: repo \"{}\" skipped, no metalink", config.get_id());
         return false;
@@ -337,25 +429,12 @@ bool RepoDownloader::is_metalink_in_sync(Repo & repo) try {
 }
 
 // Use repomd to check whether our metadata are still current.
-bool RepoDownloader::is_repomd_in_sync(Repo & repo) try {
+bool RepoDownloader::is_repomd_in_sync(Repo & repo, std::filesystem::path repomd) try {
     auto & download_data = repo.get_download_data();
     auto & logger = *(download_data.base)->get_logger();
     auto & config = download_data.config;
-    LrYumRepo * yum_repo;
 
-    libdnf5::utils::fs::TempDir tmpdir("tmpdir");
-
-    const char * dlist[] = LR_YUM_REPOMDONLY;
-
-    LibrepoHandle h(RepoDownloader::init_remote_handle(repo, tmpdir.get_path().c_str()));
-
-    h.set_opt(LRO_YUMDLIST, dlist);
-    CallbackData cbd;
-    cbd.repo = repo.get_weak_ptr();
-    auto result = perform(download_data, h, config.get_repo_gpgcheck_option().get_value(), &cbd);
-    result.get_info(LRR_YUM_REPO, &yum_repo);
-
-    auto same = utils::fs::have_files_same_content_noexcept(download_data.repomd_filename.c_str(), yum_repo->repomd);
+    auto same = utils::fs::have_files_same_content_noexcept(download_data.repomd_filename.c_str(), repomd.c_str());
     if (same)
         logger.debug("Sync check: repo \"{}\" in sync, repomd matches", config.get_id());
     else
