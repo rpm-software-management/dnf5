@@ -117,4 +117,44 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
     return paths;
 }
 
+//
+// mkdirp(path, mode) - Implements 'mkdir -p' like you have at the
+//                      shell.  The mode given is applied at each
+//                      level.
+//
+[[nodiscard]] int mkdirp(const std::string path, mode_t mode)
+{
+    bool first = true;
+    std::string subdir;
+    struct stat sb;
+
+    // handle all the parent directories
+    for (auto c : path) {
+        if (c == '/') {
+            // this just means we've seen the root directory
+            if (first) {
+                subdir += c;
+                first = false;
+                continue;
+            }
+
+            // we have a subdir, check to see if it exists
+            // if it does not exist, create it
+            if ((stat(subdir.c_str(), &sb) != 0) && (mkdir(subdir.c_str(), mode) == -1)) {
+                return -1;
+            }
+        }
+
+        subdir += c;
+    }
+
+    // final directory
+    if ((stat(path.c_str(), &sb) != 0) && (mkdir(path.c_str(), mode) == -1)) {
+        return -1;
+    }
+
+    return 0;
+}
+
+
 }  // namespace libdnf5::utils::fs
