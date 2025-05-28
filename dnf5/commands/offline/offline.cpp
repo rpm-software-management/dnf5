@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/bgettext/bgettext-lib.h>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/utils/format.hpp>
-#include <sys/wait.h>
+#include <libdnf5/utils/proc.hpp>
 
 #ifdef WITH_SYSTEMD
 #include <sdbus-c++/sdbus-c++.h>
@@ -58,37 +58,6 @@ const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_MANAGER_INTERFACE{"org.freedesktop.syste
 const SDBUS_INTERFACE_NAME_TYPE SYSTEMD_UNIT_INTERFACE{"org.freedesktop.systemd1.Unit"};
 const std::string SYSTEMD_SERVICE_NAME{"dnf5-offline-transaction.service"};
 #endif
-
-int call(const std::string & command, const std::vector<std::string> & args) {
-    std::vector<char *> c_args;
-    c_args.emplace_back(const_cast<char *>(command.c_str()));
-    for (const auto & arg : args) {
-        c_args.emplace_back(const_cast<char *>(arg.c_str()));
-    }
-    c_args.emplace_back(nullptr);
-
-    const auto pid = fork();
-    if (pid == -1) {
-        return -1;
-    }
-    if (pid == 0) {
-        int rc = execvp(command.c_str(), c_args.data());
-        exit(rc == 0 ? 0 : -1);
-    } else {
-        int status;
-        int rc = waitpid(pid, &status, 0);
-        if (rc == -1) {
-            return -1;
-        }
-        if (WIFEXITED(status)) {
-            return WEXITSTATUS(status);
-        }
-        if (WIFSIGNALED(status)) {
-            return 128 + WTERMSIG(status);
-        }
-        return -1;
-    }
-}
 
 namespace dnf5 {
 
@@ -122,7 +91,7 @@ private:
 
         bool dupe_cmd = (last_args != last_subcommand_args.end() && args == last_args->second);
         if ((alive && !dupe_cmd) || command == "--ping") {
-            alive = call(PATH_TO_PLYMOUTH, args) == 0;
+            alive = libdnf5::utils::proc::call(PATH_TO_PLYMOUTH, args) == 0;
             last_subcommand_args[command] = args;
         }
         return alive;
@@ -657,7 +626,7 @@ void show_log(size_t boot_index) {
     }
 
     const auto & boot_id = boot_entries[boot_index].boot_id;
-    const auto rc = call(PATH_TO_JOURNALCTL, {"--boot", boot_id});
+    const auto rc = libdnf5::utils::proc::call(PATH_TO_JOURNALCTL, {"--boot", boot_id});
 
     if (rc != 0 && rc != 141) {
         throw libdnf5::cli::CommandExitError(1, M_("Unable to match systemd journal entry."));
