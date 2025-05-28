@@ -44,6 +44,8 @@ private:
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
 
+    std::vector<std::string> from_repos;
+
     std::unique_ptr<AdvisoryOption> advisory_name;
     std::unique_ptr<SecurityOption> advisory_security;
     std::unique_ptr<BugfixOption> advisory_bugfix;

@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "swap.hpp"
 
+#include "../from_repo.hpp"
+
 #include <dnf5/shared_options.hpp>
 
 namespace fs = std::filesystem;
@@ -69,6 +71,8 @@ void SwapCommand::set_argument_parser() {
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
 
+    create_from_repo_option(*this, from_repos, true);
+
     create_offline_option(*this);
     create_store_option(*this);
 }
@@ -82,7 +86,9 @@ void SwapCommand::configure() {
 void SwapCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
-    goal->add_install(install_pkg_spec);
+    auto settings = libdnf5::GoalJobSettings();
+    settings.set_to_repo_ids(from_repos);
+    goal->add_install(install_pkg_spec, settings);
     goal->add_rpm_remove(remove_pkg_spec);
 }
 
