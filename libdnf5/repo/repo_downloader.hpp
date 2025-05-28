@@ -27,6 +27,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/repo/repo_weak.hpp"
 #include "libdnf5/utils/fs/temp.hpp"
 
+namespace std {
+
+template <>
+struct default_delete<LrMetadataTarget> {
+    void operator()(LrMetadataTarget * ptr) noexcept { lr_metadatatarget_free(ptr); }
+};
+
+}  // namespace std
+
 namespace libdnf5::repo {
 
 /// Handles downloading and loading of repository metadata.
@@ -71,6 +80,7 @@ private:
         double prev_downloaded;
         double sum_prev_downloaded;
         RepoWeakPtr repo;
+        std::unique_ptr<LrMetadataTarget> lr_target;
     };
 
     static LibrepoHandle init_local_handle(const DownloadData & download_data);
