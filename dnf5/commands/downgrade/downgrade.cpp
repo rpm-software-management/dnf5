@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "downgrade.hpp"
 
+#include "../from_repo.hpp"
+
 #include <dnf5/shared_options.hpp>
 
 namespace dnf5 {
@@ -55,6 +57,7 @@ void DowngradeCommand::set_argument_parser() {
     auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     create_allow_downgrade_options(*this);
+    create_from_repo_option(*this, from_repos, true);
     create_downloadonly_option(*this);
     create_offline_option(*this);
     create_store_option(*this);
@@ -69,8 +72,10 @@ void DowngradeCommand::configure() {
 void DowngradeCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
+    auto settings = libdnf5::GoalJobSettings();
+    settings.set_to_repo_ids(from_repos);
     for (const auto & spec : pkg_specs) {
-        goal->add_downgrade(spec);
+        goal->add_downgrade(spec, settings);
     }
 }
 

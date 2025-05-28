@@ -53,6 +53,8 @@ Options
 ``--no-allow-downgrade``
     | Disable downgrade of dependencies when resolving the requested operation.
 
+.. include:: ../_shared/options/from-repo.rst
+
 ``--downloadonly``
     | Download the resolved package set without executing an RPM transaction.
 
