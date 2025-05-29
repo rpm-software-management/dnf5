@@ -38,12 +38,10 @@ constexpr const char * CONF_FILE_VERSION = "1.0";
 
 using ArgParser = libdnf5::cli::ArgumentParser;
 
+
 #ifdef TOML11_COMPAT
+
 using BasicValue = toml::basic_value<toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>;
-#endif  // #ifdef TOML11_COMPAT
-
-
-#ifdef TOML11_COMPAT
 
 inline auto location_first_line_num(const toml::source_location & location) {
     return location.line();
@@ -54,6 +52,8 @@ inline std::string location_lines(const toml::source_location & location) {
 }
 
 #else  // #ifdef TOML11_COMPAT
+
+using BasicValue = toml::ordered_value;
 
 inline auto location_first_line_num(const toml::source_location & location) {
     return location.first_line_number();
@@ -72,11 +72,7 @@ bool attach_named_args(
     libdnf5::Logger & logger,
     const fs::path & path,
     ArgT & alias_arg,
-#ifdef TOML11_COMPAT
     const BasicValue::array_type & attached_named_args,
-#else
-    const toml::ordered_value::array_type & attached_named_args,
-#endif  // #ifdef TOML11_COMPAT
     const std::string & alias_id_path) {
     for (auto & attached_arg : attached_named_args) {
         std::optional<std::string> attached_arg_id_path;
