@@ -42,6 +42,28 @@ using ArgParser = libdnf5::cli::ArgumentParser;
 using BasicValue = toml::basic_value<toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>;
 #endif  // #ifdef TOML11_COMPAT
 
+#ifdef TOML11_COMPAT
+
+inline auto location_first_line_num(const toml::source_location & location) {
+    return location.line();
+}
+
+inline std::string location_lines(const toml::source_location & location) {
+    return location.line_str();
+}
+
+#else  // #ifdef TOML11_COMPAT
+
+inline auto location_first_line_num(const toml::source_location & location) {
+    return location.first_line_number();
+}
+
+inline std::string location_lines(const toml::source_location & location) {
+    return libdnf5::utils::string::join(location.lines(), "\n");
+}
+
+#endif  // #ifdef TOML11_COMPAT
+
 // Attach additional named arguments to the alias
 template <typename ArgT>
 bool attach_named_args(
@@ -69,13 +91,8 @@ bool attach_named_args(
                         *attached_arg_id_path,
                         e.what(),
                         path.native(),
-#ifdef TOML11_COMPAT
-                        location.line(),
-                        location.line_str());
-#else
-                        location.first_line_number(),
-                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                        location_first_line_num(location),
+                        location_lines(location));
                     logger.error("{}", msg);
                     std::cerr << msg << std::endl;
                     return false;
@@ -90,13 +107,8 @@ bool attach_named_args(
                     key,
                     alias_id_path,
                     path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
             }
         }
         if (!attached_arg_id_path) {
@@ -150,13 +162,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             auto msg = fmt::format(
                 "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}",
                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                loc.line(),
-                loc.line_str());
-#else
-                loc.first_line_number(),
-                libdnf5::utils::string::join(loc.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                location_first_line_num(loc),
+                location_lines(loc));
             std::cerr << msg << std::endl;
             return;
         } catch (const std::out_of_range & e) {
@@ -176,13 +183,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     "Unknown key \"{}\" in file \"{}\" on line {}: {}",
                     element_id_path,
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
                 continue;
             }
             auto element_id_pos = element_id_path.rfind('.');
@@ -196,13 +198,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 auto msg = fmt::format(
                     "Empty or bad element id path in file \"{}\" on line {}: {}",
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
                 logger->error("{}", msg);
                 std::cerr << msg << std::endl;
                 continue;
@@ -223,13 +220,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     element_parent_id_path,
                     e.what(),
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
                 logger->error("{}", msg);
                 std::cerr << msg << std::endl;
                 continue;
@@ -258,13 +250,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                         type,
                         element_id_path,
                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                        location.line(),
-                        location.line_str());
-#else
-                        location.first_line_number(),
-                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                        location_first_line_num(location),
+                        location_lines(location));
                     logger->error("{}", msg);
                     std::cerr << msg << std::endl;
                     continue;
@@ -294,13 +281,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 "Named argument \"{}\" already registered. Requested in file \"{}\" on line {}: {}",
                                 element_id_path,
                                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                location.line(),
-                                location.line_str());
-#else
-                                location.first_line_number(),
-                                libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                location_first_line_num(location),
+                                location_lines(location));
                             logger->error("{}", msg);
                             std::cerr << msg << std::endl;
                             break;
@@ -316,13 +298,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}",
                                 element_id_path,
                                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                location.line(),
-                                location.line_str());
-#else
-                                location.first_line_number(),
-                                libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                location_first_line_num(location),
+                                location_lines(location));
                             logger->error("{}", msg);
                             std::cerr << msg << std::endl;
                             break;
@@ -351,13 +328,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
@@ -409,13 +381,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         "long in file \"{}\" on line {}: {}",
                                         element_id_path,
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -432,13 +399,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         source_id_path,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -454,13 +416,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -474,13 +431,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
@@ -541,13 +493,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         "long in file \"{}\" on line {}: {}",
                                         element_id_path,
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -572,13 +519,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -594,13 +536,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
@@ -672,13 +609,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         attached_command_id_path,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -696,13 +628,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     logger->error("{}", msg);
                                     std::cerr << msg << std::endl;
                                     continue;
@@ -720,13 +647,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                         key,
                                         element_id_path,
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                 }
                                 number_of_attached_values = static_cast<int>(value.as_integer());
                             } else {
@@ -736,13 +658,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
@@ -784,13 +701,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 auto msg = fmt::format(
                     "Bad value type in file \"{}\" on line {}: {}",
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    loc.line(),
-                    loc.line_str());
-#else
-                    loc.first_line_number(),
-                    libdnf5::utils::string::join(loc.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(loc),
+                    location_lines(loc));
                 std::cerr << msg << std::endl;
             }
         }
@@ -799,7 +711,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
 #ifdef TOML11_COMPAT
         auto loc = e.location();
-        auto msg = fmt::format("Syntax error in file \"{}\" on line {}", config_file_path.native(), loc.line());
+        auto msg = fmt::format(
+            "Syntax error in file \"{}\" on line {}", config_file_path.native(), location_first_line_num(loc));
         std::cerr << msg << std::endl;
 #else
         for (const auto & err : e.errors()) {
