@@ -594,6 +594,14 @@ public:
 
         void attach_named_arg(const std::string & id_path, const std::string & value);
 
+        /// Sets the number of arguments consumed by the command alias.
+        /// These arguments can be used as values for attached named arguments.
+        void set_number_of_attached_values(int count);
+
+        /// Gets the number of arguments consumed by the command alias.
+        /// These arguments can be used as values for attached named arguments.
+        int get_number_of_attached_values();
+
     private:
         friend class ArgumentParser;
 
@@ -607,6 +615,8 @@ public:
             std::string value;
         };
         std::vector<AttachedNamedArg> attached_named_args;
+
+        int number_of_attached_values{0};
     };
 
     ArgumentParser(const ArgumentParser &) = delete;
