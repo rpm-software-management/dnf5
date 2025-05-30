@@ -42,12 +42,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/proc.hpp"
 
 #include <assert.h>
-#include <unistd.h>
+#include <err.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <errno.h>
-#include <err.h>
+#include <unistd.h>
 
 #include <atomic>
 #include <cstdlib>
@@ -232,18 +232,18 @@ void Base::setup() {
     if (installroot_path != "/" && with_mounts) {
         std::vector<std::string> dirs = {"run", "proc", "sys", "dev", "var", "tmp"};
         std::vector<std::string> tmpfsvols = {"run", "tmp", "dev"};
-        std::vector<std::string> hostdevs = {"null" "zero" "full" "urandom" "tty"};
+        std::vector<std::string> hostdevs = {"null", "zero", "full", "urandom", "tty"};
         auto tpath = installroot_path;
         int fd = -1;
 
         // create any required top level directories
         for (auto dir : dirs) {
             tpath = installroot_path / dir;
-            mode_t mode = S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH;
+            mode_t mode = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
 
             if (dir == "tmp") {
                 // set 1777 for mode on /tmp
-                mode = S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO;
+                mode = S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO;
             }
 
             if (libdnf5::utils::fs::mkdirp(tpath.c_str(), mode)) {
@@ -260,7 +260,7 @@ void Base::setup() {
             }
 
             if (dir == "tmp") {
-                if (chmod(tpath.c_str(), S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)) {
+                if (chmod(tpath.c_str(), S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO)) {
                     libdnf_throw_assertion("chmod(2) failure: {}", strerror(errno));
                 }
             }
@@ -268,7 +268,7 @@ void Base::setup() {
 
         // some things (e.g., authselect) rely on this mount
         tpath = installroot_path / "run/ostree-booted";
-        fd =  open(tpath.c_str(), O_WRONLY, O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+        fd = open(tpath.c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
         if (fd == -1) {
             warn("open");
@@ -291,7 +291,7 @@ void Base::setup() {
 
             // create the node if it does not exist
             tpath = installroot_path / "dev" / node;
-            fd = open(tpath.c_str(), O_WRONLY, O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+            fd = open(tpath.c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
             if (fd == -1) {
                 warn("open");
@@ -310,19 +310,19 @@ void Base::setup() {
         // add default symlinks
         tpath = installroot_path / "dev/stdin";
 
-        if (symlink(tpath.c_str(), "/proc/self/fd/0")) {
+        if (symlink("/proc/self/fd/0", tpath.c_str())) {
             libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
         }
 
         tpath = installroot_path / "dev/stdout";
 
-        if (symlink(tpath.c_str(), "/proc/self/fd/1")) {
+        if (symlink("/proc/self/fd/1", tpath.c_str())) {
             libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
         }
 
         tpath = installroot_path / "dev/stderr";
 
-        if (symlink(tpath.c_str(), "/proc/self/fd/2")) {
+        if (symlink("/proc/self/fd/2", tpath.c_str())) {
             libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
         }
     }
