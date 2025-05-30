@@ -1031,7 +1031,7 @@ configuration.
 ``max_parallel_downloads``
     :ref:`integer <integer-label>`
 
-    Maximum number of simultaneous package downloads. Max is ``20``.
+    Maximum number of simultaneous downloads. Max is ``20``.
 
     Default: ``3``.
 
