@@ -55,6 +55,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnf5/context.hpp"
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
+#include "signal_handlers.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -1205,6 +1206,7 @@ static bool user_has_privileges(dnf5::Context & context) {
 }
 
 int main(int argc, char * argv[]) try {
+    dnf5::install_signal_handlers();
     dnf5::set_locale();
 
     // Creates a vector of loggers with one circular memory buffer logger
