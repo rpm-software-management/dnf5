@@ -69,9 +69,20 @@ inline std::string location_lines(const toml::source_location & location) {
 
 
 template <typename... Args>
-void print_and_log_error(libdnf5::Logger & logger, BgettextMessage fmt_string, Args... args) {
-    logger.error(b_gettextmsg_get_id(fmt_string), args...);
+void print_and_log(
+    libdnf5::Logger & logger, libdnf5::Logger::Level level, BgettextMessage fmt_string, const Args &... args) {
+    logger.log(level, b_gettextmsg_get_id(fmt_string), args...);
     std::cerr << libdnf5::utils::format(true, fmt_string, 1, args...) << std::endl;
+}
+
+template <typename... Args>
+void print_and_log_warning(libdnf5::Logger & logger, BgettextMessage fmt_string, const Args &... args) {
+    print_and_log(logger, libdnf5::Logger::Level::WARNING, fmt_string, args...);
+}
+
+template <typename... Args>
+void print_and_log_error(libdnf5::Logger & logger, BgettextMessage fmt_string, const Args &... args) {
+    print_and_log(logger, libdnf5::Logger::Level::ERROR, fmt_string, args...);
 }
 
 
@@ -107,9 +118,10 @@ bool attach_named_args(
                 arg_value = value.as_string();
             } else {
                 const auto location = value.location();
-                logger.warning(
-                    "Unknown attribute \"{}\" of attached named argument for alias \"{}\" "
-                    "in file \"{}\" on line {}: {}",
+                print_and_log_warning(
+                    logger,
+                    M_("Unknown attribute \"{}\" of attached named argument for alias \"{}\" "
+                       "in file \"{}\" on line {}: {}"),
                     key,
                     alias_id_path,
                     path.native(),
@@ -174,8 +186,9 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     continue;
                 }
                 const auto location = element_options.location();
-                logger->warning(
-                    "Unknown key \"{}\" in file \"{}\" on line {}: {}",
+                print_and_log_warning(
+                    *logger,
+                    M_("Unknown key \"{}\" in file \"{}\" on line {}: {}"),
                     element_id_path,
                     config_file_path.native(),
                     location_first_line_num(location),
@@ -312,8 +325,9 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 header = value.as_string();
                             } else {
                                 const auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}",
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
@@ -412,8 +426,10 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 complete = value.as_boolean();
                             } else {
                                 const auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: {}",
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of named argument \"{}\" "
+                                       "in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
@@ -513,8 +529,10 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 attached_named_args = &value.as_array();
                             } else {
                                 const auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: {}",
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of named argument \"{}\" "
+                                       "in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
@@ -618,8 +636,9 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 attached_named_args = &value.as_array();
                             } else {
                                 const auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}",
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
