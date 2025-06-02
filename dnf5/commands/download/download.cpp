@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download.hpp"
 
+#include "../from_repo.hpp"
 #include "dnf5/shared_options.hpp"
 
 #include <libdnf5/conf/option_string.hpp>
@@ -157,6 +158,7 @@ void DownloadCommand::set_argument_parser() {
     cmd.register_named_arg(arch);
     cmd.register_named_arg(resolve);
     cmd.register_named_arg(alldeps);
+    create_from_repo_option(*this, from_repos, true);
     create_destdir_option(*this);
     auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
     cmd.register_named_arg(srpm);
@@ -206,7 +208,11 @@ void DownloadCommand::run() {
         libdnf5::rpm::PackageQuery pkg_query(full_pkg_query);
         auto option = dynamic_cast<libdnf5::OptionString *>(pattern.get());
         pkg_query.resolve_pkg_spec(option->get_value(), {}, true);
-        pkg_query.filter_available();
+        if (from_repos.empty()) {
+            pkg_query.filter_available();
+        } else {
+            pkg_query.filter_repo_id(from_repos, libdnf5::sack::QueryCmp::GLOB);
+        }
         pkg_query.filter_priority();
         pkg_query.filter_latest_evr();
         if (!arch_option.empty()) {

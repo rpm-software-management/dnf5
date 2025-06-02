@@ -47,6 +47,8 @@ Options
 ``--alldeps``
     | To be used together with ``--resolve``, it downloads all dependencies, not skipping the already installed ones.
 
+.. include:: ../_shared/options/from-repo.rst
+
 ``--destdir=<path>``
     | Set directory used for downloading packages to. Default location is to the current working directory.
 
