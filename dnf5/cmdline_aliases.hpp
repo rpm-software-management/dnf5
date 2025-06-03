@@ -27,7 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 /// Creates groups and aliases of command line arguments as defined in configuration files
-void load_cmdline_aliases(Context & context, const std::filesystem::path & config_dir_path);
+void load_cmdline_aliases(
+    Context & context, const std::filesystem::path & config_dir_path, const std::string & locale_name);
 
 }  // namespace dnf5
 

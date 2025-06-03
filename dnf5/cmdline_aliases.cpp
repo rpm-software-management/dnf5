@@ -26,8 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/format_locale.hpp>
 #include <toml.hpp>
 
+#include <array>
 #include <iostream>
 #include <optional>
+#include <type_traits>
 #include <vector>
 
 namespace fs = std::filesystem;
@@ -36,7 +38,7 @@ namespace dnf5 {
 
 namespace {
 
-constexpr const char * CONF_FILE_VERSION = "1.0";
+constexpr std::array<const char *, 2> CONF_FILE_SUPPORTED_VERSIONS = {"1.0", "1.1"};
 
 using ArgParser = libdnf5::cli::ArgumentParser;
 
@@ -68,11 +70,28 @@ inline std::string location_lines(const toml::source_location & location) {
 #endif  // #ifdef TOML11_COMPAT
 
 
+// If the `arg` is of type `std::array<const char*, 2>`, it joins the elements with a `delimiter` string;
+// otherwise, it returns the original value.
+template <typename T>
+auto join_if_array(const T & arg, const char * delimiter) {
+    if constexpr (std::is_same_v<T, std::array<const char *, 2>>) {
+        return libdnf5::utils::string::join(arg, delimiter);
+    } else {
+        return arg;
+    }
+}
+
+constexpr BgettextMessage ARRAY_ITEMS_DELIMITER = M_(", ");
+
 template <typename... Args>
 void print_and_log(
     libdnf5::Logger & logger, libdnf5::Logger::Level level, BgettextMessage fmt_string, const Args &... args) {
-    logger.log(level, b_gettextmsg_get_id(fmt_string), args...);
-    std::cerr << libdnf5::utils::format(true, fmt_string, 1, args...) << std::endl;
+    static const auto array_delim = b_gettextmsg_get_id(ARRAY_ITEMS_DELIMITER);
+    static const auto array_delim_localized = b_dmgettext(NULL, ARRAY_ITEMS_DELIMITER, 1);
+
+    logger.log(level, b_gettextmsg_get_id(fmt_string), join_if_array(args, array_delim)...);
+    std::cerr << libdnf5::utils::format(true, fmt_string, 1, join_if_array(args, array_delim_localized)...)
+              << std::endl;
 }
 
 template <typename... Args>
@@ -83,6 +102,23 @@ void print_and_log_warning(libdnf5::Logger & logger, BgettextMessage fmt_string,
 template <typename... Args>
 void print_and_log_error(libdnf5::Logger & logger, BgettextMessage fmt_string, const Args &... args) {
     print_and_log(logger, libdnf5::Logger::Level::ERROR, fmt_string, args...);
+}
+
+
+std::optional<std::string> get_string_locale(const BasicValue & value, const std::string & locale_name) {
+    if (value.is_string()) {
+        return value.as_string();
+    }
+
+    const auto & table = value.as_table();
+    if (auto it = table.find(locale_name); it != table.end()) {
+        return it->second.as_string();
+    }
+    if (auto it = table.find("C"); it != table.end()) {
+        return it->second.as_string();
+    }
+
+    return {};
 }
 
 
@@ -143,7 +179,8 @@ bool attach_named_args(
     return true;
 }
 
-void load_aliases_from_toml_file(Context & context, const fs::path & config_file_path) {
+void load_aliases_from_toml_file(
+    Context & context, const fs::path & config_file_path, const std::string & locale_name) {
     auto & arg_parser = context.get_argument_parser();
     auto logger = context.get_base().get_logger();
 
@@ -155,15 +192,23 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
         const toml::ordered_value arg_parser_elements = toml::parse<toml::ordered_type_config>(config_file_path);
 #endif  // #ifdef TOML11_COMPAT
 
+        std::string version;
         try {
-            const auto version = toml::find<std::string>(arg_parser_elements, "version");
-            if (version != CONF_FILE_VERSION) {
+            version = toml::find<std::string>(arg_parser_elements, "version");
+            bool supported{false};
+            for (auto * supported_version : CONF_FILE_SUPPORTED_VERSIONS) {
+                if (version == supported_version) {
+                    supported = true;
+                    break;
+                }
+            }
+            if (!supported) {
                 print_and_log_error(
                     *logger,
-                    M_("Unsupported version \"{}\" in file \"{}\", \"{}\" expected"),
+                    M_("Unsupported version \"{}\" in file \"{}\". Supported versions: {}"),
                     version,
                     config_file_path.native(),
-                    CONF_FILE_VERSION);
+                    CONF_FILE_SUPPORTED_VERSIONS);
                 return;
             }
         } catch (const toml::type_error & e) {
@@ -322,7 +367,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             if (key == "type") {
                                 continue;
                             } else if (key == "header") {
-                                header = value.as_string();
+                                header = get_string_locale(value, locale_name);
                             } else {
                                 const auto location = value.location();
                                 print_and_log_warning(
@@ -500,11 +545,11 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 }
                                 short_name = tmp[0];
                             } else if (key == "descr") {
-                                description = value.as_string();
+                                description = get_string_locale(value, locale_name);
                             } else if (key == "has_value") {
                                 has_value = value.as_boolean();
                             } else if (key == "value_help") {
-                                value_help = value.as_string();
+                                value_help = get_string_locale(value, locale_name);
                             } else if (key == "const_value") {
                                 const_value = value.as_string();
                             } else if (key == "group_id") {
@@ -613,7 +658,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                     continue;
                                 }
                             } else if (key == "descr") {
-                                description = value.as_string();
+                                description = get_string_locale(value, locale_name);
                             } else if (key == "group_id") {
                                 const std::string group_id = value.as_string();
                                 try {
@@ -707,7 +752,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
 }  // namespace
 
-void load_cmdline_aliases(Context & context, const std::filesystem::path & config_dir_path) {
+void load_cmdline_aliases(
+    Context & context, const std::filesystem::path & config_dir_path, const std::string & locale) {
     auto logger = context.get_base().get_logger();
 
     std::vector<fs::path> config_paths;
@@ -719,9 +765,10 @@ void load_cmdline_aliases(Context & context, const std::filesystem::path & confi
     }
     std::sort(config_paths.begin(), config_paths.end());
 
+    const std::string locale_name = locale.substr(0, locale.find('.'));  // Strip encoding (e.g. ".UTF-8") from locale
     std::string failed_filenames;
     for (const auto & path : config_paths) {
-        load_aliases_from_toml_file(context, path);
+        load_aliases_from_toml_file(context, path, locale_name);
     }
 }
 
