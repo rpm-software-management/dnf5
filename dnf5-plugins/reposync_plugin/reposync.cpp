@@ -110,7 +110,7 @@ void ReposyncCommand::set_argument_parser() {
         *this, "urls", 'u', "Print URLs where the rpms can be downloaded instead of downloading", false);
 
     gpgcheck_option = std::make_unique<libdnf5::cli::session::BoolOption>(
-        *this, "gpgcheck", 'g', "Remove packages that fail GPG signature checking after downloading", false);
+        *this, "gpgcheck", 'g', "Remove packages that fail OpenPGP signature checking after downloading", false);
 
     download_metadata_option = std::make_unique<libdnf5::cli::session::BoolOption>(
         *this, "download-metadata", '\0', "Download all repository metadata", false);
