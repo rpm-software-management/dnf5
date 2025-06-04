@@ -41,13 +41,13 @@ Syntax:
 
 The configuration file must begin with the ``version`` attribute set to a required version, for example:
 
-.. code-block:: none
+.. code-block:: TOML
 
     version = '1.1'
 
 Each alias is defined in a separate section, using ``key = value`` pairs, for example:
 
-.. code-block:: none
+.. code-block:: TOML
 
     ['in']
     type = 'command'
@@ -102,7 +102,7 @@ The required keys are ``type``, and ``attached_command``.
 Examples:
   - Alias ``grouplist`` for ``group list``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['grouplist']
         type = 'command'
@@ -112,7 +112,7 @@ Examples:
 
   - Alias ``group.ls`` for ``group list``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['group.ls']
         type = 'command'
@@ -123,7 +123,7 @@ Examples:
 
   - Alias ``list-fedora-all`` for ``--repo=fedora list --showduplicates``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['list-fedora-all']
         type = 'command'
@@ -138,7 +138,7 @@ Examples:
 
   - Alias ``whatrequires`` for ``repoquery --installed --whatrequires=<requires_first_argument>``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['whatrequires']
         type = 'command'
@@ -179,7 +179,7 @@ The required keys are ``type``, either ``long_name`` or ``short_name``, and ``so
 Examples:
   - Alias ``--nobest`` for ``--no-best``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['nobest']
         type = 'cloned_named_arg'
@@ -188,7 +188,7 @@ Examples:
 
   - Alias ``repoquery --list`` or ``repoquery -l`` for ``repoquery --files``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['repoquery.list']
         type = 'cloned_named_arg'
@@ -233,7 +233,7 @@ The required keys are ``type``, and either ``long_name`` or ``short_name``.
 Examples:
   - Alias ``list --all-available`` for ``list --showduplicates --available``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['list.all-available']
         type = 'named_arg'
@@ -245,7 +245,7 @@ Examples:
 
   - Alias ``download --dest=DESTDIR`` for ``download --destdir=DESTDIR``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['download.dest']
         type = 'named_arg'
@@ -258,7 +258,7 @@ Examples:
 
   - Alias ``--settsflags=TS_FLAGS`` for ``--setopt=tsflags=TS_FLAGS``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['settsflags']
         type = 'named_arg'
@@ -293,7 +293,7 @@ The aliases are added to the group using the ``group_id`` key in their respectiv
 Examples:
   - Group ``query-aliases`` for subcommand ``repo`` containing aliases ``repo.ls`` and ``repo.if``:
 
-    .. code-block:: none
+    .. code-block:: TOML
 
         ['repo.query-aliases']
         type = 'group'
