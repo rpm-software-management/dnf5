@@ -43,6 +43,11 @@ void move_recursive(const std::filesystem::path & src, const std::filesystem::pa
 [[nodiscard]] std::vector<std::filesystem::path> create_sorted_file_list(
     const std::vector<std::filesystem::path> & directories, std::string_view file_extension);
 
+// mkdirp(path, mode) - Implements 'mkdir -p' like you have at the
+//                      shell.  The mode given is applied at each
+//                      level.
+[[nodiscard]] int mkdirp(const std::string path, mode_t mode);
+
 }  // namespace libdnf5::utils::fs
 
 #endif  // LIBDNF5_UTILS_FS_UTILS_HPP
