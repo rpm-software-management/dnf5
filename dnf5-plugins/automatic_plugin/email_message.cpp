@@ -44,7 +44,8 @@ void EmailMessage::set_body(std::stringstream & body) {
 }
 
 std::string EmailMessage::str() {
-    const auto now = std::chrono::system_clock::now();
+    // RFC 5322 requires dates with integral seconds.
+    const auto now = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
     std::string date = fmt::format("{:%a, %d %b %Y %H:%M:%S %z}", now);
 
     std::string to_str;
