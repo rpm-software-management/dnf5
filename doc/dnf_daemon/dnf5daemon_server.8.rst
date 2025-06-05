@@ -17,9 +17,9 @@
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
-##################################################
- Package management service with a DBus interface
-##################################################
+###################################################
+ Package management service with a D-Bus interface
+###################################################
 
 
 Synopsis

@@ -17,15 +17,15 @@
     along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#################################
- Dbus API bindings for dnfdaemon
-#################################
+##################################
+ D-Bus API bindings for dnfdaemon
+##################################
 
 
 Synopsis
 ========
 
-Dbus methods and arguments. Generated from dbus XMLs.
+D-Bus methods and arguments. Generated from D-Bus XMLs.
 
 
 Description
