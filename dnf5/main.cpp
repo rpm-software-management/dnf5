@@ -745,9 +745,10 @@ static void load_plugins(Context & context) {
 }
 
 static void load_cmdline_aliases(Context & context) {
-    load_cmdline_aliases(context, INSTALL_PREFIX "/share/dnf5/aliases.d");
-    load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d");
-    load_cmdline_aliases(context, libdnf5::xdg::get_user_config_dir() / "dnf5/aliases.d");
+    std::string locale_name = setlocale(LC_MESSAGES, NULL);
+    load_cmdline_aliases(context, INSTALL_PREFIX "/share/dnf5/aliases.d", locale_name);
+    load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d", locale_name);
+    load_cmdline_aliases(context, libdnf5::xdg::get_user_config_dir() / "dnf5/aliases.d", locale_name);
 }
 
 static void print_versions(Context & context) {

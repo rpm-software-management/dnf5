@@ -594,12 +594,23 @@ public:
 
         void attach_named_arg(const std::string & id_path, const std::string & value);
 
+        /// Add required value (positional argument) consumed by the command alias.
+        /// These arguments can be used as values for attached named arguments.
+        void add_required_value(const std::string & value_help, const std::string & descr);
+
     private:
         friend class ArgumentParser;
 
         LIBDNF_CLI_LOCAL CommandAlias(ArgumentParser & owner, const std::string & id, Command & attached_command);
 
         Command & attached_command;
+
+        // A command can have values (positional arguments) that can be passed to the attached named arguments.
+        struct RequiredValue {
+            std::string value_help;
+            std::string descr;
+        };
+        std::vector<RequiredValue> required_values;
 
         // A command can invoke named arguments - for aliases
         struct AttachedNamedArg {

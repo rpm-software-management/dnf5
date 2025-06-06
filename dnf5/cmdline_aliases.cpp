@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include <libdnf5/common/preserve_order_map.hpp>
+#include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
+#include <libdnf5/utils/format_locale.hpp>
 #include <toml.hpp>
 
 #include <iostream>
@@ -34,13 +36,72 @@ namespace dnf5 {
 
 namespace {
 
-constexpr const char * CONF_FILE_VERSION = "1.0";
+constexpr const char * CONF_FILE_SUPPORTED_VERSIONS[] = {"1.0", "1.1"};
 
 using ArgParser = libdnf5::cli::ArgumentParser;
 
+
 #ifdef TOML11_COMPAT
+
 using BasicValue = toml::basic_value<toml::discard_comments, libdnf5::PreserveOrderMap, std::vector>;
+
+inline auto location_first_line_num(const toml::source_location & location) {
+    return location.line();
+}
+
+inline std::string location_lines(const toml::source_location & location) {
+    return location.line_str();
+}
+
+#else  // #ifdef TOML11_COMPAT
+
+using BasicValue = toml::ordered_value;
+
+inline auto location_first_line_num(const toml::source_location & location) {
+    return location.first_line_number();
+}
+
+inline std::string location_lines(const toml::source_location & location) {
+    return libdnf5::utils::string::join(location.lines(), "\n");
+}
+
 #endif  // #ifdef TOML11_COMPAT
+
+
+template <typename... Args>
+void print_and_log(
+    libdnf5::Logger & logger, libdnf5::Logger::Level level, BgettextMessage fmt_string, const Args &... args) {
+    logger.log(level, b_gettextmsg_get_id(fmt_string), args...);
+    std::cerr << libdnf5::utils::format(true, fmt_string, 1, args...) << std::endl;
+}
+
+template <typename... Args>
+void print_and_log_warning(libdnf5::Logger & logger, BgettextMessage fmt_string, const Args &... args) {
+    print_and_log(logger, libdnf5::Logger::Level::WARNING, fmt_string, args...);
+}
+
+template <typename... Args>
+void print_and_log_error(libdnf5::Logger & logger, BgettextMessage fmt_string, const Args &... args) {
+    print_and_log(logger, libdnf5::Logger::Level::ERROR, fmt_string, args...);
+}
+
+
+std::optional<std::string> get_string_locale(const BasicValue & value, const std::string & locale_name) {
+    if (value.is_string()) {
+        return value.as_string();
+    }
+
+    const auto & table = value.as_table();
+    if (auto it = table.find(locale_name); it != table.end()) {
+        return it->second.as_string();
+    }
+    if (auto it = table.find("C"); it != table.end()) {
+        return it->second.as_string();
+    }
+
+    return {};
+}
+
 
 // Attach additional named arguments to the alias
 template <typename ArgT>
@@ -48,11 +109,7 @@ bool attach_named_args(
     libdnf5::Logger & logger,
     const fs::path & path,
     ArgT & alias_arg,
-#ifdef TOML11_COMPAT
     const BasicValue::array_type & attached_named_args,
-#else
-    const toml::ordered_value::array_type & attached_named_args,
-#endif  // #ifdef TOML11_COMPAT
     const std::string & alias_id_path) {
     for (auto & attached_arg : attached_named_args) {
         std::optional<std::string> attached_arg_id_path;
@@ -63,47 +120,38 @@ bool attach_named_args(
                 try {
                     alias_arg.get_argument_parser().get_named_arg(*attached_arg_id_path, false);
                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                    auto location = value.location();
-                    auto msg = fmt::format(
-                        "Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                    const auto location = value.location();
+                    print_and_log_error(
+                        logger,
+                        M_("Attached named argument \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                         *attached_arg_id_path,
                         e.what(),
                         path.native(),
-#ifdef TOML11_COMPAT
-                        location.line(),
-                        location.line_str());
-#else
-                        location.first_line_number(),
-                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                    logger.error("{}", msg);
-                    std::cerr << msg << std::endl;
+                        location_first_line_num(location),
+                        location_lines(location));
                     return false;
                 }
             } else if (key == "value") {
                 arg_value = value.as_string();
             } else {
-                auto location = value.location();
-                logger.warning(
-                    "Unknown attribute \"{}\" of attached named argument for alias \"{}\" in file \"{}\" on line {}: "
-                    "{}",
+                const auto location = value.location();
+                print_and_log_warning(
+                    logger,
+                    M_("Unknown attribute \"{}\" of attached named argument for alias \"{}\" "
+                       "in file \"{}\" on line {}: {}"),
                     key,
                     alias_id_path,
                     path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
             }
         }
         if (!attached_arg_id_path) {
-            auto msg = fmt::format(
-                "Missing attribute \"id_path\" for alias \"{}\" in file \"{}\"", alias_id_path, path.native());
-            logger.error("{}", msg);
-            std::cerr << msg << std::endl;
+            print_and_log_error(
+                logger,
+                M_("Missing attribute \"id_path\" for alias \"{}\" in file \"{}\""),
+                alias_id_path,
+                path.native());
             return false;
         }
 
@@ -112,7 +160,8 @@ bool attach_named_args(
     return true;
 }
 
-void load_aliases_from_toml_file(Context & context, const fs::path & config_file_path) {
+void load_aliases_from_toml_file(
+    Context & context, const fs::path & config_file_path, const std::string & locale_name) {
     auto & arg_parser = context.get_argument_parser();
     auto logger = context.get_base().get_logger();
 
@@ -124,37 +173,37 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
         const toml::ordered_value arg_parser_elements = toml::parse<toml::ordered_type_config>(config_file_path);
 #endif  // #ifdef TOML11_COMPAT
 
+        std::string version;
         try {
-            const auto version = toml::find<std::string>(arg_parser_elements, "version");
-            if (version != CONF_FILE_VERSION) {
-                auto msg = fmt::format(
+            version = toml::find<std::string>(arg_parser_elements, "version");
+            bool supported{false};
+            for (auto * supported_version : CONF_FILE_SUPPORTED_VERSIONS) {
+                if (version == supported_version) {
+                    supported = true;
+                    break;
+                }
+            }
+            if (!supported) {
+                const auto msg = fmt::format(
                     "Unsupported version \"{}\" in file \"{}\", \"{}\" expected",
                     version,
                     config_file_path.native(),
-                    CONF_FILE_VERSION);
+                    libdnf5::utils::string::join(CONF_FILE_SUPPORTED_VERSIONS, ", "));
                 logger->error("{}", msg);
                 std::cerr << msg << std::endl;
                 return;
             }
         } catch (const toml::type_error & e) {
-            logger->error("{}", e.what());
             auto loc = e.location();
-            auto msg = fmt::format(
-                "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}",
+            print_and_log_error(
+                *logger,
+                M_("Bad value type of attribute \"version\" in file \"{}\" on line {}: {}"),
                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                loc.line(),
-                loc.line_str());
-#else
-                loc.first_line_number(),
-                libdnf5::utils::string::join(loc.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-            std::cerr << msg << std::endl;
+                location_first_line_num(loc),
+                location_lines(loc));
             return;
         } catch (const std::out_of_range & e) {
-            auto msg = fmt::format("Missing attribute \"version\" in file \"{}\"", config_file_path.native());
-            logger->error("{}", msg);
-            std::cerr << msg << std::endl;
+            print_and_log_error(*logger, M_("Missing attribute \"version\" in file \"{}\""), config_file_path.native());
             return;
         }
 
@@ -163,18 +212,14 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 if (element_id_path == "version") {
                     continue;
                 }
-                auto location = element_options.location();
-                logger->warning(
-                    "Unknown key \"{}\" in file \"{}\" on line {}: {}",
+                const auto location = element_options.location();
+                print_and_log_warning(
+                    *logger,
+                    M_("Unknown key \"{}\" in file \"{}\" on line {}: {}"),
                     element_id_path,
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                    location_first_line_num(location),
+                    location_lines(location));
                 continue;
             }
             auto element_id_pos = element_id_path.rfind('.');
@@ -184,19 +229,13 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 element_id_pos = 0;
             }
             if (element_id_pos == element_id_path.size()) {
-                auto location = element_options.location();
-                auto msg = fmt::format(
-                    "Empty or bad element id path in file \"{}\" on line {}: {}",
+                const auto location = element_options.location();
+                print_and_log_error(
+                    *logger,
+                    M_("Empty or bad element id path in file \"{}\" on line {}: {}"),
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                logger->error("{}", msg);
-                std::cerr << msg << std::endl;
+                    location_first_line_num(location),
+                    location_lines(location));
                 continue;
             }
 
@@ -209,21 +248,15 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             try {
                 element_parent_cmd = &arg_parser.get_command(element_parent_id_path);
             } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                auto location = element_options.location();
-                auto msg = fmt::format(
-                    "Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                const auto location = element_options.location();
+                print_and_log_error(
+                    *logger,
+                    M_("Parent command \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                     element_parent_id_path,
                     e.what(),
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    location.line(),
-                    location.line_str());
-#else
-                    location.first_line_number(),
-                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                logger->error("{}", msg);
-                std::cerr << msg << std::endl;
+                    location_first_line_num(location),
+                    location_lines(location));
                 continue;
             }
 
@@ -244,30 +277,23 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                 } else if (type == "command") {
                     element_type = ElementType::COMMAND;
                 } else {
-                    auto location = el_type.location();
-                    auto msg = fmt::format(
-                        "Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}",
+                    const auto location = el_type.location();
+                    print_and_log_error(
+                        *logger,
+                        M_("Unknown type \"{}\" of element \"{}\" in file \"{}\" on line {}: {}"),
                         type,
                         element_id_path,
                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                        location.line(),
-                        location.line_str());
-#else
-                        location.first_line_number(),
-                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                    logger->error("{}", msg);
-                    std::cerr << msg << std::endl;
+                        location_first_line_num(location),
+                        location_lines(location));
                     continue;
                 }
             } catch (const std::out_of_range & e) {
-                auto msg = fmt::format(
-                    "Missing attribute \"type\" for element \"{}\" in file \"{}\"",
+                print_and_log_error(
+                    *logger,
+                    M_("Missing attribute \"type\" for element \"{}\" in file \"{}\""),
                     element_id_path,
                     config_file_path.native());
-                logger->error("{}", msg);
-                std::cerr << msg << std::endl;
                 continue;
             }
 
@@ -281,20 +307,14 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     for (auto * tmp : element_parent_cmd->get_named_args()) {
                         if (tmp->get_id() == element_id) {
                             found = true;
-                            auto location = element_options.location();
-                            auto msg = fmt::format(
-                                "Named argument \"{}\" already registered. Requested in file \"{}\" on line {}: {}",
+                            const auto location = element_options.location();
+                            print_and_log_error(
+                                *logger,
+                                M_("Named argument \"{}\" already registered. Requested in file \"{}\" on line {}: {}"),
                                 element_id_path,
                                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                location.line(),
-                                location.line_str());
-#else
-                                location.first_line_number(),
-                                libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
+                                location_first_line_num(location),
+                                location_lines(location));
                             break;
                         }
                     }
@@ -303,20 +323,14 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     for (auto * tmp : element_parent_cmd->get_commands()) {
                         if (tmp->get_id() == element_id) {
                             found = true;
-                            auto location = element_options.location();
-                            auto msg = fmt::format(
-                                "Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}",
+                            const auto location = element_options.location();
+                            print_and_log_error(
+                                *logger,
+                                M_("Command \"{}\" already registered. Requested in file \"{}\" on line {}: {}"),
                                 element_id_path,
                                 config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                location.line(),
-                                location.line_str());
-#else
-                                location.first_line_number(),
-                                libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
+                                location_first_line_num(location),
+                                location_lines(location));
                             break;
                         }
                     }
@@ -335,31 +349,26 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             if (key == "type") {
                                 continue;
                             } else if (key == "header") {
-                                header = value.as_string();
+                                header = get_string_locale(value, locale_name);
                             } else {
-                                auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}",
+                                const auto location = value.location();
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of group \"{}\" in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
                         if (!header) {
-                            auto msg = fmt::format(
-                                "Missing attribute \"header\" for element \"{}\" in file \"{}\"",
+                            print_and_log_error(
+                                *logger,
+                                M_("Missing attribute \"header\" for element \"{}\" in file \"{}\""),
                                 element_id_path,
                                 config_file_path.native());
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
                             continue;
                         }
 
@@ -395,21 +404,16 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             } else if (key == "short_name") {
                                 const std::string tmp = value.as_string();
                                 if (tmp.length() != 1) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "The \"short_name\" attribute of named argument \"{}\" must be one character "
-                                        "long in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("The \"short_name\" attribute of named argument \"{}\" "
+                                           "must be one character long "
+                                           "in file \"{}\" on line {}: {}"),
                                         element_id_path,
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                                 short_name = tmp[0];
@@ -418,21 +422,15 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 try {
                                     source = &arg_parser.get_named_arg(source_id_path, false);
                                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Source \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                                         source_id_path,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                             } else if (key == "group_id") {
@@ -440,60 +438,49 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
                                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                             } else if (key == "complete") {
                                 complete = value.as_boolean();
                             } else {
-                                auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: {}",
+                                const auto location = value.location();
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of named argument \"{}\" "
+                                       "in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
                         if (!source) {
-                            auto msg = fmt::format(
-                                "Missing attribute \"source\" for named argument \"{}\" in file \"{}\"",
+                            print_and_log_error(
+                                *logger,
+                                M_("Missing attribute \"source\" for named argument \"{}\" in file \"{}\""),
                                 element_id_path,
                                 config_file_path.native());
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
                             continue;
                         }
 
                         if ((!long_name || long_name->empty()) && (!short_name || short_name == '\0')) {
-                            auto msg = fmt::format(
-                                "At least one of the attributes \"long_name\" and \"short_name\" must be set for named "
-                                "argument \"{}\" in file \"{}\"",
+                            print_and_log_error(
+                                *logger,
+                                M_("At least one of the attributes \"long_name\" and \"short_name\" must be set "
+                                   "for named argument \"{}\" in file \"{}\""),
                                 element_id_path,
                                 config_file_path.native());
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
                             continue;
                         }
 
@@ -527,30 +514,24 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             } else if (key == "short_name") {
                                 const std::string tmp = value.as_string();
                                 if (tmp.length() != 1) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "The \"short_name\" attribute of named argument \"{}\" must be one character "
-                                        "long in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("The \"short_name\" attribute of named argument \"{}\" must be one "
+                                           "character long in file \"{}\" on line {}: {}"),
                                         element_id_path,
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                                 short_name = tmp[0];
                             } else if (key == "descr") {
-                                description = value.as_string();
+                                description = get_string_locale(value, locale_name);
                             } else if (key == "has_value") {
                                 has_value = value.as_boolean();
                             } else if (key == "value_help") {
-                                value_help = value.as_string();
+                                value_help = get_string_locale(value, locale_name);
                             } else if (key == "const_value") {
                                 const_value = value.as_string();
                             } else if (key == "group_id") {
@@ -558,21 +539,15 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
                                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                             } else if (key == "complete") {
@@ -580,30 +555,26 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             } else if (key == "attached_named_args") {
                                 attached_named_args = &value.as_array();
                             } else {
-                                auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of named argument \"{}\" in file \"{}\" on line {}: {}",
+                                const auto location = value.location();
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of named argument \"{}\" "
+                                       "in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
                         if ((!long_name || long_name->empty()) && (!short_name || short_name == '\0')) {
-                            auto msg = fmt::format(
-                                "At least one of the attributes \"long_name\" and \"short_name\" must be set for named "
-                                "argument \"{}\" in file \"{}\"",
+                            print_and_log_error(
+                                *logger,
+                                M_("At least one of the attributes \"long_name\" and \"short_name\" must be set "
+                                   "for named argument \"{}\" in file \"{}\""),
                                 element_id_path,
                                 config_file_path.native());
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
                             continue;
                         }
 
@@ -643,7 +614,13 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
                     // Creates a new command
                     case ElementType::COMMAND: {
+                        bool error{false};
                         ArgParser::Command * attached_command{nullptr};
+                        struct RequiredValue {
+                            std::string value_help;
+                            std::string descr;
+                        };
+                        std::vector<RequiredValue> required_values;
                         std::optional<std::string> description;
                         ArgParser::Group * group{nullptr};
                         bool complete{false};
@@ -656,76 +633,111 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                                 try {
                                     attached_command = &arg_parser.get_command(attached_command_id_path);
                                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "Attached command \"{}\" not found: {}: Requested in file \"{}\" on line {}: "
-                                        "{}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Attached command \"{}\" not found: {}: "
+                                           "Requested in file \"{}\" on line {}: {}"),
                                         attached_command_id_path,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                             } else if (key == "descr") {
-                                description = value.as_string();
+                                description = get_string_locale(value, locale_name);
                             } else if (key == "group_id") {
                                 const std::string group_id = value.as_string();
                                 try {
                                     group = &element_parent_cmd->get_group(group_id);
                                 } catch (const libdnf5::cli::ArgumentParserNotFoundError & e) {
-                                    auto location = value.location();
-                                    auto msg = fmt::format(
-                                        "Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}",
+                                    const auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Group \"{}\" not found: {}: Requested in file \"{}\" on line {}: {}"),
                                         group_id,
                                         e.what(),
                                         config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                        location.line(),
-                                        location.line_str());
-#else
-                                        location.first_line_number(),
-                                        libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                                    logger->error("{}", msg);
-                                    std::cerr << msg << std::endl;
+                                        location_first_line_num(location),
+                                        location_lines(location));
                                     continue;
                                 }
                             } else if (key == "complete") {
                                 complete = value.as_boolean();
+                            } else if (key == "required_values") {
+                                if (version == "1.0") {
+                                    auto location = value.location();
+                                    print_and_log_error(
+                                        *logger,
+                                        M_("Used config file version \"1.0\" for attribute \"{}\" of command \"{}\" "
+                                           "in file \"{}\" on line {}: {}"),
+                                        key,
+                                        element_id_path,
+                                        config_file_path.native(),
+                                        location_first_line_num(location),
+                                        location_lines(location));
+                                    break;
+                                }
+                                const auto & req_values = value.as_array();
+                                for (const auto & required_value : req_values) {
+                                    std::optional<std::string> value_help;
+                                    std::string descr;
+                                    for (auto & [key, value] : required_value.as_table()) {
+                                        if (key == "value_help") {
+                                            value_help = get_string_locale(value, locale_name);
+                                        } else if (key == "descr") {
+                                            descr = get_string_locale(value, locale_name).value_or("");
+                                        } else {
+                                            const auto & location = value.location();
+                                            print_and_log_warning(
+                                                *logger,
+                                                M_("Unknown attribute \"{}\" of required value for alias \"{}\" "
+                                                   "in file \"{}\" on line {}: {}"),
+                                                key,
+                                                element_id_path,
+                                                config_file_path.native(),
+                                                location_first_line_num(location),
+                                                location_lines(location));
+                                        }
+                                    }
+                                    if (!value_help) {
+                                        error = true;
+                                        print_and_log_error(
+                                            *logger,
+                                            M_("Missing attribute \"value_help\" of required value for alias \"{}\" in "
+                                               "file \"{}\""),
+                                            element_id_path,
+                                            config_file_path.native());
+                                        break;
+                                    }
+                                    required_values.emplace_back(*value_help, descr);
+                                }
                             } else if (key == "attached_named_args") {
                                 attached_named_args = &value.as_array();
                             } else {
-                                auto location = value.location();
-                                logger->warning(
-                                    "Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}",
+                                const auto location = value.location();
+                                print_and_log_warning(
+                                    *logger,
+                                    M_("Unknown attribute \"{}\" of command \"{}\" in file \"{}\" on line {}: {}"),
                                     key,
                                     element_id_path,
                                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                                    location.line(),
-                                    location.line_str());
-#else
-                                    location.first_line_number(),
-                                    libdnf5::utils::string::join(location.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
+                                    location_first_line_num(location),
+                                    location_lines(location));
                             }
                         }
 
+                        if (error) {
+                            continue;
+                        }
+
                         if (!attached_command) {
-                            auto msg = fmt::format(
-                                "Missing attribute \"attached_command\" for command \"{}\" in file \"{}\"",
+                            print_and_log_error(
+                                *logger,
+                                M_("Missing attribute \"attached_command\" for command \"{}\" in file \"{}\""),
                                 element_id_path,
                                 config_file_path.native());
-                            logger->error("{}", msg);
-                            std::cerr << msg << std::endl;
                             continue;
                         }
                         auto * alias_cmd = arg_parser.add_new_command_alias(element_id, *attached_command);
@@ -734,6 +746,11 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                             alias_cmd->set_description(*description);
                         }
                         alias_cmd->set_complete(complete);
+
+                        // Add required values to the command alias
+                        for (const auto & [value_help, descr] : required_values) {
+                            alias_cmd->add_required_value(value_help, descr);
+                        }
 
                         // Attach additional named arguments to the command alias
                         if (attached_named_args) {
@@ -750,19 +767,13 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
                     }
                 }
             } catch (const toml::type_error & e) {
-                logger->error("{}", e.what());
                 auto loc = e.location();
-                auto msg = fmt::format(
-                    "Bad value type in file \"{}\" on line {}: {}",
+                print_and_log_error(
+                    *logger,
+                    M_("Bad value type in file \"{}\" on line {}: {}"),
                     config_file_path.native(),
-#ifdef TOML11_COMPAT
-                    loc.line(),
-                    loc.line_str());
-#else
-                    loc.first_line_number(),
-                    libdnf5::utils::string::join(loc.lines(), "\n"));
-#endif  // #ifdef TOML11_COMPAT
-                std::cerr << msg << std::endl;
+                    location_first_line_num(loc),
+                    location_lines(loc));
             }
         }
     } catch (const toml::syntax_error & e) {
@@ -770,7 +781,11 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
 #ifdef TOML11_COMPAT
         auto loc = e.location();
-        auto msg = fmt::format("Syntax error in file \"{}\" on line {}", config_file_path.native(), loc.line());
+        auto msg = libdnf5::utils::format(
+            true,
+            M_("Syntax error in file \"{}\" on line {}"),
+            config_file_path.native(),
+            location_first_line_num(loc));
         std::cerr << msg << std::endl;
 #else
         for (const auto & err : e.errors()) {
@@ -782,7 +797,8 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
 }  // namespace
 
-void load_cmdline_aliases(Context & context, const std::filesystem::path & config_dir_path) {
+void load_cmdline_aliases(
+    Context & context, const std::filesystem::path & config_dir_path, const std::string & locale) {
     auto logger = context.get_base().get_logger();
 
     std::vector<fs::path> config_paths;
@@ -794,9 +810,10 @@ void load_cmdline_aliases(Context & context, const std::filesystem::path & confi
     }
     std::sort(config_paths.begin(), config_paths.end());
 
+    const std::string locale_name = locale.substr(0, locale.find('.'));  // Strip encoding (e.g. ".UTF-8") from locale
     std::string failed_filenames;
     for (const auto & path : config_paths) {
-        load_aliases_from_toml_file(context, path);
+        load_aliases_from_toml_file(context, path, locale_name);
     }
 }
 
