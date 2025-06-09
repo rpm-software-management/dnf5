@@ -45,7 +45,7 @@ DNF5 is available since Fedora 38. To install the DNF5 package manager, use eith
 | --------------------------- | ------- |
 | 37 | `sudo dnf copr enable rpmsoftwaremanagement/dnf-nightly && sudo dnf install dnf5`[^dnf-nightly] |
 | 38 or newer                 | `sudo dnf install dnf5` |
-[^dnf-nightly]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nigthly
+[^dnf-nightly]: https://copr.fedorainfracloud.org/coprs/rpmsoftwaremanagement/dnf-nightly
 
 Note: `dnf-nightly` provides nightly builds for the entire DNF stack. Once you enable this repository you will start receiving updates for DNF, libdnf, and for the other packages of the stack.
 
