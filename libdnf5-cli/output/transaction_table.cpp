@@ -363,8 +363,7 @@ TransactionTable::Impl::Impl(ITransaction & transaction) {
         }
         for (auto & replaced : tspkg->get_replaces()) {
             // highlight incoming packages with epoch/version change
-            if (pkg->get_epoch() != replaced->get_epoch() ||
-                pkg->get_version() != replaced->get_version()) {
+            if (pkg->get_epoch() != replaced->get_epoch() || pkg->get_version() != replaced->get_version()) {
                 auto cl_evr = scols_line_get_cell(ln, COL_EVR);
                 scols_cell_set_color(cl_evr, "bold");
             }
