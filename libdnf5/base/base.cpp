@@ -240,22 +240,17 @@ void Base::setup() {
         std::vector<std::string> dirs = {"run", "proc", "sys", "dev", "var", "tmp"};
         std::vector<std::string> tmpfsvols = {"run", "tmp", "dev"};
         std::vector<std::string> hostdevs = {"null", "zero", "full", "urandom", "tty"};
-        auto tpath = installroot_path;
+        std::filesystem::path tpath = installroot_path;
+        std::filesystem::path rootpath = "/";
+        std::filesystem::path epath;
         int fd = -1;
 
         // create any required top level directories
         for (auto dir : dirs) {
             tpath = installroot_path / dir;
-            mode_t mode = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
+            epath = rootpath / dir;
 
-            if (dir == "tmp") {
-                // set 1777 for mode on /tmp
-                mode = S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO;
-            }
-
-            if (libdnf5::utils::fs::mkdirp(tpath.c_str(), mode)) {
-                libdnf_throw_assertion("mkdir(2) failure: {}", strerror(errno));
-            }
+            std::filesystem::create_directory(tpath, epath);
         }
 
         // mount tmpfs filesystems
