@@ -38,13 +38,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/conf/config_parser.hpp"
 #include "libdnf5/conf/const.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
+#include "libdnf5/utils/proc.hpp"
+#include "libdnf5-cli/argument_parser_errors.hpp"
+
+#include <assert.h>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include <atomic>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <mutex>
 #include <string_view>
 #include <vector>
+
+const std::filesystem::path PATH_TO_MOUNT{"/usr/bin/mount"};
 
 namespace fs = std::filesystem;
 
@@ -181,6 +194,13 @@ void Base::setup() {
     // Resolve installroot configuration
     std::string vars_installroot{"/"};
     const std::filesystem::path installroot_path{p_impl->config.get_installroot_option().get_value()};
+    const bool with_mounts{p_impl->config.get_with_mounts_option().get_value()};
+
+    if (installroot_path.empty() && with_mounts) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--with-mounts\" has to be used with \"--installroot=ABSOLUTE_PATH\""));
+    }
+
     if (!p_impl->config.get_use_host_config_option().get_value()) {
         // Prepend installroot to each reposdir and varsdir
         std::vector<std::string> installroot_reposdirs;
@@ -212,6 +232,100 @@ void Base::setup() {
         const std::filesystem::path system_cachedir_path{p_impl->config.get_system_cachedir_option().get_value()};
         const auto full_path = installroot_path / system_cachedir_path.relative_path();
         p_impl->config.get_system_cachedir_option().set(Option::Priority::INSTALLROOT, full_path.string());
+    }
+
+    // have with-mounts, mount specials
+    if (installroot_path != "/" && with_mounts) {
+        std::vector<std::string> dirs = {"run", "proc", "sys", "dev", "var", "tmp"};
+        std::vector<std::string> tmpfsvols = {"run", "tmp", "dev"};
+        std::vector<std::string> hostdevs = {"null", "zero", "full", "urandom", "tty"};
+        std::filesystem::path tpath = installroot_path;
+        std::filesystem::path rootpath = "/";
+        std::filesystem::path epath;
+        int fd = -1;
+
+        // create any required top level directories
+        for (auto dir : dirs) {
+            tpath = installroot_path / dir;
+            epath = rootpath / dir;
+
+            std::filesystem::create_directory(tpath, epath);
+        }
+
+        // mount tmpfs filesystems
+        for (auto dir : tmpfsvols) {
+            tpath = installroot_path / dir;
+
+            if (libdnf5::utils::proc::call(PATH_TO_MOUNT, {"-t", "tmpfs", "tmpfs", tpath.c_str()})) {
+                libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+            }
+
+            if (dir == "tmp") {
+                if (chmod(tpath.c_str(), S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO)) {
+                    libdnf_throw_assertion("chmod(2) failure: {}", strerror(errno));
+                }
+            }
+        }
+
+        // some things (e.g., authselect) rely on this mount
+        tpath = installroot_path / "run/ostree-booted";
+        fd = open(tpath.c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+        if (fd == -1) {
+            warn("open");
+        }
+
+        if (close(fd) < 0) {
+            warn("close");
+        }
+
+        // bind mount /proc
+        tpath = installroot_path / "proc";
+
+        if (libdnf5::utils::proc::call(PATH_TO_MOUNT, {"--options-source", "disable", "-n", "--bind", "/proc", tpath.c_str()})) {
+            libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+        }
+
+        // pull in host devices
+        for (auto node : hostdevs) {
+            std::string hostdev = std::format("/dev/{}", node);
+
+            // create the node if it does not exist
+            tpath = installroot_path / "dev" / node;
+            fd = open(tpath.c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+            if (fd == -1) {
+                warn("open");
+            }
+
+            if (close(fd) < 0) {
+                warn("close");
+            }
+
+            // bind mount it from the host
+            if (libdnf5::utils::proc::call(PATH_TO_MOUNT, {"--bind", hostdev.c_str(), tpath.c_str()})) {
+                libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+            }
+        }
+
+        // add default symlinks
+        tpath = installroot_path / "dev/stdin";
+
+        if (symlink("/proc/self/fd/0", tpath.c_str())) {
+            libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+        }
+
+        tpath = installroot_path / "dev/stdout";
+
+        if (symlink("/proc/self/fd/1", tpath.c_str())) {
+            libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+        }
+
+        tpath = installroot_path / "dev/stderr";
+
+        if (symlink("/proc/self/fd/2", tpath.c_str())) {
+            libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
+        }
     }
 
     // Add protected packages from files from installroot
