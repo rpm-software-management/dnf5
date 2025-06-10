@@ -136,7 +136,7 @@ void EmitterCommandEmail::notify() {
         if (!email_to.empty()) {
             email_to += " ";
         }
-        email_to += email;
+        email_to += quote(email);
     }
     std::string subject = libdnf5::utils::sformat(
         _("[{}] dnf5-automatic: {}"), config_automatic.config_emitters.system_name.get_value(), short_message());
@@ -146,7 +146,7 @@ void EmitterCommandEmail::notify() {
         fmt::arg("body", quote(output_stream.str())),
         fmt::arg("subject", quote(subject)),
         fmt::arg("email_from", quote(email_from)),
-        fmt::arg("email_to", quote(email_to)));
+        fmt::arg("email_to", email_to));
 
     FILE * command_pipe = popen(command_string.c_str(), "w");
     if (command_pipe) {
