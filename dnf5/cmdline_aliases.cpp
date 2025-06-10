@@ -801,10 +801,12 @@ void load_aliases_from_toml_file(
         auto loc = e.location();
         auto msg = libdnf5::utils::format(
             true,
-            M_("Syntax error in file \"{}\" on line {}"),
+            M_("Syntax error in file \"{}\" on line {}:"),
+            1,
             config_file_path.native(),
             location_first_line_num(loc));
         std::cerr << msg << std::endl;
+        std::cerr << e.what() << std::endl;
 #else
         for (const auto & err : e.errors()) {
             std::cerr << err;
