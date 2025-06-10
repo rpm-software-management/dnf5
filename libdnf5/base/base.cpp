@@ -40,6 +40,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/bootc.hpp"
 #include "libdnf5/utils/proc.hpp"
+#include "libdnf5-cli/argument_parser_errors.hpp"
 
 #include <assert.h>
 #include <err.h>
@@ -195,6 +196,12 @@ void Base::setup() {
     std::string vars_installroot{"/"};
     const std::filesystem::path installroot_path{p_impl->config.get_installroot_option().get_value()};
     const bool with_mounts{p_impl->config.get_with_mounts_option().get_value()};
+
+    if (installroot_path.empty() && with_mounts) {
+        throw libdnf5::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option \"--with-mounts\" has to be used with \"--installroot=ABSOLUTE_PATH\""));
+    }
+
     if (!p_impl->config.get_use_host_config_option().get_value()) {
         // Prepend installroot to each reposdir and varsdir
         std::vector<std::string> installroot_reposdirs;
