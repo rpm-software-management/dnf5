@@ -282,7 +282,7 @@ void Base::setup() {
         // bind mount /proc
         tpath = installroot_path / "proc";
 
-        if (libdnf5::utils::proc::call(PATH_TO_MOUNT, {"--bind", "/proc", tpath.c_str()})) {
+        if (libdnf5::utils::proc::call(PATH_TO_MOUNT, {"--options-source", "disable", "-n", "--bind", "/proc", tpath.c_str()})) {
             libdnf_throw_assertion("libdnf5::utils::proc::call() failure: {}", strerror(errno));
         }
 
