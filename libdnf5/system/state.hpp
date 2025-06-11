@@ -306,6 +306,9 @@ private:
     /// @since 5.0
     std::filesystem::path get_system_state_path();
 
+    /// Removes ".new" suffix from existing system state files
+    void rename_new_system_state_files(bool skip_missing);
+
     /// Cache to speed-up searching the group packages in group_states map
     /// @return The map {package_name -> [id of groups the package_name is part of]}
     /// @since 5.0
