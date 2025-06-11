@@ -32,6 +32,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/utils/format.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <unordered_map>
+
 void History::dbus_register() {
     auto dbus_object = session.get_dbus_object();
 #ifdef SDBUS_CPP_VERSION_2
@@ -100,13 +102,17 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     libdnf5::transaction::TransactionHistory history(base);
     std::vector<libdnf5::transaction::Transaction> transactions;
 
-    bool timestamp_used = options.contains("since");
-    int64_t timestamp;
-    if (timestamp_used) {
+    if (options.contains("since")) {
+        // only interested in transactions newer than the timestamp
         // TODO(mblaha): Add a new method TransactionHistory::list_transactions_since()
         // to retrieve transactions newer than a given point in time
-        timestamp = dnfdaemon::key_value_map_get<int64_t>(options, "since");
-        transactions = history.list_all_transactions();
+        int64_t timestamp = dnfdaemon::key_value_map_get<int64_t>(options, "since");
+        auto all_transactions = history.list_all_transactions();
+        for (auto & trans : all_transactions) {
+            if (trans.get_dt_end() > timestamp) {
+                transactions.emplace_back(std::move(trans));
+            }
+        }
     } else {
         // if timestamp is not present, use only the latest transaction
         auto trans_ids = history.list_transaction_ids();
@@ -120,12 +126,18 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     // get all installed packages NAs and installonly pkgs NEVRAs
     libdnf5::rpm::PackageQuery installed_query(base);
     installed_query.filter_installed();
-    std::map<std::string, libdnf5::rpm::Package> installed_na;
+    std::unordered_map<std::string, libdnf5::rpm::Package> installed_na;
     for (const auto & pkg : installed_query) {
         installed_na.emplace(pkg.get_na(), pkg);
     }
+    installed_query.filter_installonly();
+    std::unordered_set<std::string> installonly_names;
+    for (const auto & pkg : installed_query) {
+        installonly_names.emplace(pkg.get_name());
+        installed_na.emplace(pkg.get_full_nevra(), pkg);
+    }
 
-    std::unordered_set<std::string> seen_na{};
+    std::unordered_set<std::string> seen_pkg{};
 
     dnfdaemon::KeyValueMapList out_installed;
     dnfdaemon::KeyValueMapList out_removed;
@@ -139,10 +151,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
         if (transaction.get_state() != libdnf5::transaction::TransactionState::OK) {
             continue;
         }
-        // only interested in transactions newer than the timestamp
-        if (timestamp_used && transaction.get_dt_end() <= timestamp) {
-            continue;
-        }
+        std::string pkg_key;
         for (const auto & pkg : transaction.get_packages()) {
             const auto action = pkg.get_action();
             // only interested in actions on a previously installed package or
@@ -151,14 +160,20 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                 continue;
             }
 
-            std::string na = pkg.get_name() + "." + pkg.get_arch();
-            auto added = seen_na.insert(na);
+            if (installonly_names.contains(pkg.get_name())) {
+                // for installonly packages use their full NEVRA as the key
+                pkg_key = pkg.to_string();
+            } else {
+                // NA otherwise
+                pkg_key = pkg.get_name() + "." + pkg.get_arch();
+            }
+            auto added = seen_pkg.insert(pkg_key);
             if (!added.second) {
-                // only interested in the first occurence of given NA
+                // only interested in the first occurence of given key
                 continue;
             }
 
-            auto installed_pkg = installed_na.find(na);
+            auto installed_pkg = installed_na.find(pkg_key);
             if (action == Action::INSTALL) {
                 // check if the package is still installed
                 if (installed_requested && installed_pkg != installed_na.end()) {
@@ -168,12 +183,12 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                 // package was REMOVEd or REPLACED
                 // check the current installed version of the package
                 if (installed_pkg != installed_na.end()) {
-                    if (libdnf5::rpm::cmp_nevra(pkg, installed_na.at(na))) {
+                    if (libdnf5::rpm::cmp_nevra(pkg, installed_na.at(pkg_key))) {
                         if (upgraded_requested) {
                             upgrades_set.add(installed_pkg->second);
                             upgrades.emplace_back(pkg, installed_pkg->second);
                         }
-                    } else if (libdnf5::rpm::cmp_nevra(installed_na.at(na), pkg)) {
+                    } else if (libdnf5::rpm::cmp_nevra(installed_na.at(pkg_key), pkg)) {
                         if (downgraded_requested) {
                             auto replace_pkg = package_to_map(installed_pkg->second, pkg_attrs);
                             replace_pkg.emplace("original_evr", get_evr(pkg));
