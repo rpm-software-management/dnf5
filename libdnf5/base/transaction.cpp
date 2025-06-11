@@ -1070,17 +1070,6 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
 
     auto logger = base->get_logger().get();
 
-#ifdef WITH_MODULEMD
-    if (!modules.empty()) {
-        module_db->save();
-        try {
-            base->p_impl->get_system_state().save();
-        } catch (const FileSystemError & ex) {
-            logger->error("Cannot save system state: {}", ex.what());
-        }
-    }
-#endif
-
     int pipe_out_from_scriptlets[2];
     if (pipe2(pipe_out_from_scriptlets, O_CLOEXEC) == -1) {
         logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));
@@ -1113,6 +1102,13 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     if (ret == 0) {
         // set the new system state
         auto & system_state = base->p_impl->get_system_state();
+
+#ifdef WITH_MODULEMD
+        if (!modules.empty()) {
+            // this updates the module system state
+            module_db->save();
+        }
+#endif
 
         rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         installed_query.filter_installed();
