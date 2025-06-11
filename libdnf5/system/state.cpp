@@ -19,8 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "system/state.hpp"
 
+#include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf5/base/base.hpp"
 #include "libdnf5/common/exception.hpp"
 #include "libdnf5/utils/bgettext/bgettext-mark-domain.h"
 #include "libdnf5/utils/fs/file.hpp"
@@ -566,6 +568,36 @@ static std::string toml_format(const toml::ordered_value & value) {
 #endif  // #ifdef TOML11_COMPAT
 
 
+static std::filesystem::path suffix_new(std::filesystem::path p) {
+    p += ".new";
+    return p;
+}
+
+
+static void remove_new_suffix(std::filesystem::path p, bool skip_missing) {
+    std::filesystem::path p_target = p;
+    auto p_new = suffix_new(p);
+
+    if (std::filesystem::exists(p_new) || !skip_missing) {
+        utils::fs::move_recursive(p_new, p_target);
+    }
+}
+
+
+void State::rename_new_system_state_files(bool skip_missing) {
+    // package state file has to be always renamed first, logic in load() relies on this
+    remove_new_suffix(get_package_state_path(), skip_missing);
+
+    remove_new_suffix(get_nevra_state_path(), skip_missing);
+    remove_new_suffix(get_group_state_path(), skip_missing);
+    remove_new_suffix(get_environment_state_path(), skip_missing);
+    remove_new_suffix(get_system_state_path(), skip_missing);
+#ifdef WITH_MODULEMD
+    remove_new_suffix(get_module_state_path(), skip_missing);
+#endif
+}
+
+
 void State::save() {
     std::error_code ec;
     std::filesystem::create_directories(path, ec);
@@ -573,15 +605,21 @@ void State::save() {
         throw FileSystemError(errno, path, M_("{}"), ec.message());
     }
 
-    utils::fs::File(get_package_state_path(), "w").write(toml_format(make_top_value("packages", package_states)));
-    utils::fs::File(get_nevra_state_path(), "w").write(toml_format(make_top_value("nevras", nevra_states)));
-    utils::fs::File(get_group_state_path(), "w").write(toml_format(make_top_value("groups", group_states)));
-    utils::fs::File(get_environment_state_path(), "w")
+    utils::fs::File(suffix_new(get_package_state_path()), "w")
+        .write(toml_format(make_top_value("packages", package_states)));
+    utils::fs::File(suffix_new(get_nevra_state_path()), "w").write(toml_format(make_top_value("nevras", nevra_states)));
+    utils::fs::File(suffix_new(get_group_state_path()), "w").write(toml_format(make_top_value("groups", group_states)));
+    utils::fs::File(suffix_new(get_environment_state_path()), "w")
         .write(toml_format(make_top_value("environments", environment_states)));
 #ifdef WITH_MODULEMD
-    utils::fs::File(get_module_state_path(), "w").write(toml_format(make_top_value("modules", module_states)));
+    utils::fs::File(suffix_new(get_module_state_path()), "w")
+        .write(toml_format(make_top_value("modules", module_states)));
 #endif
-    utils::fs::File(get_system_state_path(), "w").write(toml_format(make_top_value("system", system_state)));
+    utils::fs::File(suffix_new(get_system_state_path()), "w")
+        .write(toml_format(make_top_value("system", system_state)));
+
+    // Once all new files were written replace the current files
+    rename_new_system_state_files(false);
 }
 
 
@@ -607,9 +645,52 @@ static T load_toml_data(const std::string & path, const std::string & key) {
 }
 
 
+// In a given directory find all files endig with ".new" suffix and return them
+static std::vector<std::filesystem::path> gather_suffix_new_files(const std::filesystem::path & directory) {
+    std::vector<std::filesystem::path> new_files;
+    if (!std::filesystem::exists(directory) || !std::filesystem::is_directory(directory)) {
+        return new_files;
+    }
+
+    for (const auto & entry : std::filesystem::directory_iterator(directory)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".new") {
+            new_files.push_back(entry.path());
+        }
+    }
+    return new_files;
+}
+
+
 void State::load() {
     std::string path;
     try {
+        auto new_suffix_files = gather_suffix_new_files(this->path);
+        if (!new_suffix_files.empty()) {
+            auto logger = base->get_logger();
+            logger->warning("System state: unfinished update found");
+
+            try {
+                // package_state new file is renamed first, if it exists the .new system state
+                // files are likely incomplete and we cannot use them
+                if (std::filesystem::exists(suffix_new(get_package_state_path()))) {
+                    // TODO(amatej): Once https://github.com/rpm-software-management/dnf5/issues/1610 is done we should
+                    //               suggest to rebuild the system state, some information is likely missing because
+                    //               system state update happens after the transaction is finished.
+                    logger->error("System state: cannot use partially written system state files");
+                    for (const auto & f : new_suffix_files) {
+                        std::filesystem::remove(f);
+                    }
+                } else {
+                    logger->warning(
+                        "System state: update interruption happened during renaming which means all the new system "
+                        "state files were written, using them.");
+                    rename_new_system_state_files(true);
+                }
+            } catch (const std::filesystem::filesystem_error & ex) {
+                logger->error("System state: cannot recover: ", ex.what());
+            }
+        }
+
         path = get_package_state_path();
         package_states = load_toml_data<std::map<std::string, PackageState>>(path, "packages");
         path = get_nevra_state_path();
