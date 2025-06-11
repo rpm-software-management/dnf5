@@ -301,7 +301,7 @@ StateLoadError::StateLoadError(const std::string & path, const std::string & err
     : libdnf5::Error(M_("Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"), path, error) {}
 
 
-State::State(const std::filesystem::path & path) : path(path) {
+State::State(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & path) : path(path), base(base) {
     load();
 }
 

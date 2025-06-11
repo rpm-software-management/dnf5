@@ -317,7 +317,9 @@ libdnf5::system::State & Base::Impl::get_system_state() {
     }
 
     std::filesystem::path system_state_dir{config.get_system_state_dir_option().get_value()};
-    system_state.emplace(config.get_installroot_option().get_value() / system_state_dir.relative_path());
+    // Getting the base from repo_sack is not ideal
+    system_state.emplace(
+        repo_sack.get_base(), config.get_installroot_option().get_value() / system_state_dir.relative_path());
 
     // TODO(mblaha) - this is temporary override of modules state by reading
     // dnf4 persistor from /etc/dnf/modules.d/

@@ -108,16 +108,18 @@ void StateTest::test_state_version() {
     libdnf5::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "aaa"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf5::system::State(temp_dir->get_path()), libdnf5::system::InvalidVersionError);
+    CPPUNIT_ASSERT_THROW(
+        libdnf5::system::State(base.get_weak_ptr(), temp_dir->get_path()), libdnf5::system::InvalidVersionError);
 
     libdnf5::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "4.0"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf5::system::State(temp_dir->get_path()), libdnf5::system::UnsupportedVersionError);
+    CPPUNIT_ASSERT_THROW(
+        libdnf5::system::State(base.get_weak_ptr(), temp_dir->get_path()), libdnf5::system::UnsupportedVersionError);
 }
 
 void StateTest::test_state_read() {
-    libdnf5::system::State state(temp_dir->get_path());
+    libdnf5::system::State state(base.get_weak_ptr(), temp_dir->get_path());
 
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::USER, state.get_package_reason("pkg.x86_64"));
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::DEPENDENCY, state.get_package_reason("pkg-libs.x86_64"));
@@ -149,7 +151,7 @@ void StateTest::test_state_read() {
 
 void StateTest::test_state_write() {
     const auto path = temp_dir->get_path() / "write_test";
-    libdnf5::system::State state(path);
+    libdnf5::system::State state(base.get_weak_ptr(), path);
 
     state.set_package_reason("pkg.x86_64", transaction::TransactionItemReason::USER);
     state.set_package_reason("pkg-libs.x86_64", transaction::TransactionItemReason::DEPENDENCY);
