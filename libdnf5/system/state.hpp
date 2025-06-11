@@ -119,7 +119,7 @@ public:
     /// where the state is stored.
     /// @param dir_path The directory where the state is stored.
     /// @since 5.0
-    State(const std::filesystem::path & path);
+    State(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & path);
 
     /// @return The reason for a package NA (Name.Arch).
     /// @param na The NA to get the reason for.
@@ -322,6 +322,7 @@ private:
 #endif
     SystemState system_state;
     std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
+    BaseWeakPtr base;
 };
 
 }  // namespace libdnf5::system
