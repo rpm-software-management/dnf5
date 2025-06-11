@@ -119,7 +119,7 @@ public:
     /// where the state is stored.
     /// @param dir_path The directory where the state is stored.
     /// @since 5.0
-    State(const std::filesystem::path & path);
+    State(const libdnf5::BaseWeakPtr & base, const std::filesystem::path & path);
 
     /// @return The reason for a package NA (Name.Arch).
     /// @param na The NA to get the reason for.
@@ -306,6 +306,9 @@ private:
     /// @since 5.0
     std::filesystem::path get_system_state_path();
 
+    /// Removes ".new" suffix from existing system state files
+    void rename_new_system_state_files(bool skip_missing);
+
     /// Cache to speed-up searching the group packages in group_states map
     /// @return The map {package_name -> [id of groups the package_name is part of]}
     /// @since 5.0
@@ -322,6 +325,7 @@ private:
 #endif
     SystemState system_state;
     std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
+    BaseWeakPtr base;
 };
 
 }  // namespace libdnf5::system
