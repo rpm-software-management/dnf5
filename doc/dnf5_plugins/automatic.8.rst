@@ -182,7 +182,7 @@ The command email emitter configuration. Variables usable in format string argum
 ``email_to``
     list, default: ``root``
 
-    List of recipients of the message.
+    Comma-separated list of recipients of the message.
 
 ``stdin_format``
     format string, default: ``{body}``
