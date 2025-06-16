@@ -82,6 +82,8 @@ Options
     | Query installed packages.
     | Can be combined with ``--available`` to query both installed and available packages.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 ``--installonly``
     | Limit to installed installonly packages.
 
