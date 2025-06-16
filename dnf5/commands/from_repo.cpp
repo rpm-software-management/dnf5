@@ -58,4 +58,32 @@ void create_from_repo_option(Command & command, std::vector<std::string> & from_
     command.get_argument_parser_command()->register_named_arg(from_repo_opt);
 }
 
+
+libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
+    Command & command, std::vector<std::string> & from_repos, bool detect_conflict) {
+    auto & parser = command.get_context().get_argument_parser();
+    auto * from_repo_opt = parser.add_new_named_arg("installed-from-repo");
+    from_repo_opt->set_long_name("installed-from-repo");
+    from_repo_opt->set_description(
+        _("Filters installed packages by the ID of the repository they were installed from."));
+    from_repo_opt->set_has_value(true);
+    from_repo_opt->set_arg_value_help(_("REPO_ID,..."));
+    from_repo_opt->set_parse_hook_func(
+        [&from_repos, detect_conflict](
+            libdnf5::cli::ArgumentParser::NamedArg *, [[maybe_unused]] const char * option, const char * value) {
+            if (!detect_conflict || from_repos.empty()) {
+                from_repos = libdnf5::OptionStringList(value).get_value();
+            } else {
+                if (from_repos != libdnf5::OptionStringList(value).get_value()) {
+                    throw libdnf5::cli::ArgumentParserConflictingArgumentsError(
+                        M_("\"--installed-from_repo\" already defined with diferent value"));
+                }
+            }
+            return true;
+        });
+    command.get_argument_parser_command()->register_named_arg(from_repo_opt);
+    return from_repo_opt;
+}
+
+
 }  // namespace dnf5

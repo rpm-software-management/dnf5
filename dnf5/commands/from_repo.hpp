@@ -35,6 +35,13 @@ namespace dnf5 {
 // if "--from-repo" was already defined with a different value.
 void create_from_repo_option(Command & command, std::vector<std::string> & from_repos, bool detect_conflict);
 
+// Creates a new named argument "--installed-from-repo=REPO_ID,...".
+// When the argument is used, the list of REPO_IDs is split and the items are stored in the `from_repos` vector.
+// If `detect_conflict` is true, a `libdnf5::cli::ArgumentParserConflictingArgumentsError` exception is thrown
+// if "--from-repo" was already defined with a different value.
+libdnf5::cli::ArgumentParser::NamedArg * create_installed_from_repo_option(
+    Command & command, std::vector<std::string> & from_repos, bool detect_conflict);
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_FROM_REPO_HPP
