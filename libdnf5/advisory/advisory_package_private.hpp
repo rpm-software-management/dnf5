@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include "libdnf5/advisory/advisory_package.hpp"
+#include "libdnf5/rpm/nevra.hpp"
 
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>
@@ -51,7 +52,7 @@ public:
     bool get_relogin_suggested() const { return relogin_suggested; };
 
     //TODO(amatej): Is this the correct name?
-    /// Compare NEVRAs of two AdvisoryPackages
+    /// Compare NEVRAs of two AdvisoryPackages using libsolv ids.
     ///
     /// @param first        First AdvisoryPackage to compare.
     /// @param second       Second AdvisoryPackage to compare.
@@ -77,6 +78,18 @@ public:
         if (adv_pkg.p_impl->name != s->name)
             return adv_pkg.p_impl->name < s->name;
         return adv_pkg.p_impl->arch < s->arch;
+    }
+
+    /// Compare Name and Architecture of AdvisoryPackage and libdnf5::rpm::Nevra
+    ///
+    /// @param adv_pkg      AdvisoryPackage to compare.
+    /// @param nevra        libdnf5::rpm::Nevra to compare.
+    /// @return True if AdvisoryPackage has smaller name or architecture than libdnf5::rpm::Nevra, False otherwise.
+    static bool name_arch_compare_lower_nevra(const AdvisoryPackage & adv_pkg, const rpm::Nevra & nevra) {
+        if (adv_pkg.get_name() != nevra.get_name()) {
+            return adv_pkg.get_name() < nevra.get_name();
+        }
+        return adv_pkg.get_arch() < nevra.get_arch();
     }
 
     //TODO(amatej): Is this the correct name?

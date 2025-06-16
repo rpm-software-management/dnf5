@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../shared/utils.hpp"
 
+#include <libdnf5/rpm/nevra.hpp>
 #include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/rpm/package_set.hpp>
 
@@ -108,6 +109,46 @@ void AdvisoryAdvisoryQueryTest::test_filter_packages() {
 
     adv_query = AdvisoryQuery(base);
     adv_query.filter_packages(pkg_query, libdnf5::sack::QueryCmp::LT);
+    expected = {get_advisory("PKG-OLDER")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
+}
+
+void AdvisoryAdvisoryQueryTest::test_filter_packages_nevra() {
+    // Tests filter_packages method
+    libdnf5::rpm::PackageQuery pkg_query(base);
+    std::vector<libdnf5::rpm::Nevra> nevras;
+    for (const auto & pkg : pkg_query) {
+        libdnf5::rpm::Nevra nevra;
+        nevra.set_name(pkg.get_name());
+        nevra.set_epoch(pkg.get_epoch());
+        nevra.set_version(pkg.get_version());
+        nevra.set_release(pkg.get_release());
+        nevra.set_arch(pkg.get_arch());
+        nevras.emplace_back(std::move(nevra));
+    }
+
+    AdvisoryQuery adv_query = AdvisoryQuery(base);
+    adv_query.filter_packages(nevras, libdnf5::sack::QueryCmp::GT);
+    std::vector<Advisory> expected = {get_advisory("PKG-NEWER")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
+
+    adv_query = AdvisoryQuery(base);
+    adv_query.filter_packages(nevras, libdnf5::sack::QueryCmp::GTE);
+    expected = {get_advisory("DNF-2019-1"), get_advisory("PKG-NEWER")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
+
+    adv_query = AdvisoryQuery(base);
+    adv_query.filter_packages(nevras, libdnf5::sack::QueryCmp::EQ);
+    expected = {get_advisory("DNF-2019-1")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
+
+    adv_query = AdvisoryQuery(base);
+    adv_query.filter_packages(nevras, libdnf5::sack::QueryCmp::LTE);
+    expected = {get_advisory("DNF-2019-1"), get_advisory("PKG-OLDER")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
+
+    adv_query = AdvisoryQuery(base);
+    adv_query.filter_packages(nevras, libdnf5::sack::QueryCmp::LT);
     expected = {get_advisory("PKG-OLDER")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
