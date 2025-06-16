@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
+#include "../from_repo.hpp"
+
 #include "libdnf5-cli/output/adapters/package_tmpl.hpp"
 
 #include <dnf5/shared_options.hpp>
@@ -132,6 +134,11 @@ void RepoqueryCommand::set_argument_parser() {
     installed->set_const_value("true");
     installed->link_value(installed_option);
     cmd.register_named_arg(installed);
+
+    {
+        auto * option = create_installed_from_repo_option(*this, installed_from_repos, true);
+        only_outputs_installed->push_back(option);
+    }
 
     // FILTERS ONLY FOR INSTALLED PACKAGES:
 
@@ -460,8 +467,9 @@ void RepoqueryCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
     system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
-                         duplicates->get_value() || leaves_option->get_value() || unneeded->get_value() ||
-                         extras->get_value() || upgrades->get_value() || installonly->get_value();
+                         !installed_from_repos.empty() || duplicates->get_value() || leaves_option->get_value() ||
+                         unneeded->get_value() || extras->get_value() || upgrades->get_value() ||
+                         installonly->get_value();
     context.set_load_system_repo(system_repo_needed);
     context.update_repo_metadata_from_advisory_options(
         advisory_name->get_value(),
@@ -598,6 +606,10 @@ void RepoqueryCommand::run() {
         installonly_query.filter_installonly();
         result_query -= installonly_query;
         result_query.filter_duplicates();
+    }
+
+    if (!installed_from_repos.empty()) {
+        result_query.filter_from_repo_id(installed_from_repos, libdnf5::sack::QueryCmp::GLOB);
     }
 
     if (unneeded->get_value()) {

@@ -40,6 +40,8 @@ Options
 ``--showduplicates``
     | Show all versions of the packages, not only the latest one.
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 ``--installed``
     | List only installed packages.
 

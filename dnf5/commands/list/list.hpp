@@ -63,6 +63,8 @@ private:
 
     // show all NEVRAs, not only the latest one
     std::unique_ptr<libdnf5::cli::session::BoolOption> show_duplicates{nullptr};
+
+    std::vector<std::string> installed_from_repos;
 };
 
 

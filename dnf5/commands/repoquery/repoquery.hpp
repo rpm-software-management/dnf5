@@ -91,6 +91,8 @@ private:
     std::unique_ptr<AdvisorySeverityOption> advisory_severity{nullptr};
     std::unique_ptr<BzOption> advisory_bz{nullptr};
     std::unique_ptr<CveOption> advisory_cve{nullptr};
+
+    std::vector<std::string> installed_from_repos;
 };
 
 
