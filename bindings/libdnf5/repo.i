@@ -169,6 +169,8 @@ add_iterator(SetRepoWeakPtr)
 %pythoncode %{
 conf.create_config_option_attributes(ConfigRepo)
 %}
+// Add configuration options iterator for Python.
+add_config_iterator(ConfigRepo)
 #endif
 
 // Add attributes for getters/setters in Python.
