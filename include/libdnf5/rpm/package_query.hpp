@@ -822,6 +822,30 @@ public:
     void filter_repo_id(
         const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
 
+    /// Filters packages by the `id` of the repository they were installed from.
+    /// This also removes any packages from the query that are not currently installed.
+    ///
+    /// @param pattern          A string the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2.14
+    //
+    void filter_from_repo_id(
+        const std::string & pattern, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ) {
+        filter_from_repo_id(std::vector<std::string>{pattern}, cmp_type);
+    };
+
+    /// Filters packages by the `id` of the repository they were installed from.
+    /// This also removes any packages from the query that are not currently installed.
+    ///
+    /// @param patterns         A vector of strings the filter is matched against.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`.
+    /// @since 5.2.14
+    //
+    void filter_from_repo_id(
+        const std::vector<std::string> & patterns, libdnf5::sack::QueryCmp cmp_type = libdnf5::sack::QueryCmp::EQ);
+
     /// Filter packages by advisories they are included in.
     ///
     /// @param advisory_query   AdvisoryQuery with Advisories that contain package lists the filter is matched against.
