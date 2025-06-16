@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf5/utils/patterns.hpp"
 
+#include <libdnf5/rpm/nevra.hpp>
 #include <solv/evr.h>
 
 // For glob support
@@ -226,6 +227,53 @@ void AdvisoryQuery::filter_severity(const std::string & severity, sack::QueryCmp
 void AdvisoryQuery::filter_severity(const std::vector<std::string> & severities, sack::QueryCmp cmp_type) {
     filter_dataiterator_internal(
         *get_rpm_pool(p_impl->base), UPDATE_SEVERITY, *AdvisorySet::p_impl, cmp_type, severities);
+}
+
+void AdvisoryQuery::filter_packages(const std::vector<libdnf5::rpm::Nevra> & nevras, sack::QueryCmp cmp_type) {
+    auto & pool = get_rpm_pool(p_impl->base);
+    libdnf5::solv::SolvMap filter_result(pool.get_nsolvables());
+    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr_string();
+
+    bool cmp_not = (cmp_type & libdnf5::sack::QueryCmp::NOT) == libdnf5::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparisons easier and more effective
+        cmp_type = cmp_type - libdnf5::sack::QueryCmp::NOT;
+    }
+
+    switch (cmp_type) {
+        case libdnf5::sack::QueryCmp::EQ:
+            //TODO(amatej): faster EQ specific version (we can compare whole NEVRA)
+        case libdnf5::sack::QueryCmp::GT:
+        case libdnf5::sack::QueryCmp::LT:
+        case libdnf5::sack::QueryCmp::GTE:
+        case libdnf5::sack::QueryCmp::LTE: {
+            for (const auto & nevra : nevras) {
+                auto low = std::lower_bound(
+                    adv_pkgs.begin(), adv_pkgs.end(), nevra, AdvisoryPackage::Impl::name_arch_compare_lower_nevra);
+                while (low != adv_pkgs.end() && low->get_name() == nevra.get_name() &&
+                       low->get_arch() == nevra.get_arch()) {
+                    int evr_cmp = libdnf5::rpm::evrcmp(*low, nevra);
+
+                    if (((evr_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
+                        ((evr_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
+                        ((evr_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
+                        filter_result.add_unsafe((*low).get_advisory_id().id);
+                    }
+                    ++low;
+                }
+            }
+
+        } break;
+        default:
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        *AdvisorySet::p_impl -= filter_result;
+    } else {
+        *AdvisorySet::p_impl &= filter_result;
+    }
 }
 
 void AdvisoryQuery::filter_packages(const libdnf5::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
