@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 #include "libdnf5/advisory/advisory_set_iterator.hpp"
+#include "libdnf5/rpm/nevra.hpp"
 
 
 namespace libdnf5::advisory {
@@ -132,6 +133,25 @@ std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_name_a
     }
 
     std::sort(out.begin(), out.end(), AdvisoryPackage::Impl::nevra_compare_lower_id);
+
+    return out;
+}
+
+std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_name_arch_evr_string(
+    bool only_applicable) const {
+    std::vector<AdvisoryPackage> out;
+    for (Id candidate_id : *p_impl) {
+        Advisory advisory2 = Advisory(p_impl->base, AdvisoryId(candidate_id));
+        auto collections = advisory2.get_collections();
+        for (auto & collection : collections) {
+            if (only_applicable && !collection.is_applicable()) {
+                continue;
+            }
+            collection.get_packages(out);
+        }
+    }
+
+    std::sort(out.begin(), out.end(), libdnf5::rpm::cmp_naevr<AdvisoryPackage>);
 
     return out;
 }

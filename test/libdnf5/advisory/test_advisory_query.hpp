@@ -33,6 +33,7 @@ class AdvisoryAdvisoryQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_filter_name);
     CPPUNIT_TEST(test_filter_type);
     CPPUNIT_TEST(test_filter_packages);
+    CPPUNIT_TEST(test_filter_packages_nevra);
     CPPUNIT_TEST(test_filter_cve);
     CPPUNIT_TEST(test_filter_bugzilla);
     CPPUNIT_TEST(test_filter_reference);
@@ -48,6 +49,7 @@ public:
     void test_filter_name();
     void test_filter_type();
     void test_filter_packages();
+    void test_filter_packages_nevra();
     void test_filter_cve();
     void test_filter_bugzilla();
     void test_filter_reference();

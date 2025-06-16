@@ -126,6 +126,14 @@ public:
     /// @since 5.0
     std::vector<AdvisoryPackage> get_advisory_packages_sorted_by_name_arch_evr(bool only_applicable = false) const;
 
+    /// Gather AdvisoryPackages for each Advisory in the set.
+    /// The AdvisoryPackages are sorted by name, arch and evr. name and arch are
+    /// compared as strings, evr uses libdnf5::rpm::evrcmp() function.
+    ///
+    /// @param only_applicable Whether to return only AdvisoryPackages from applicable AdvisoryCollections.
+    std::vector<AdvisoryPackage> get_advisory_packages_sorted_by_name_arch_evr_string(
+        bool only_applicable = false) const;
+
 private:
     friend AdvisorySetIterator;
     friend class AdvisoryQuery;
