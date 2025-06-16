@@ -38,6 +38,7 @@ public:
 
 private:
     std::vector<std::string> pkg_specs;
+    std::vector<std::string> installed_from_repos;
 };
 
 }  // namespace dnf5
