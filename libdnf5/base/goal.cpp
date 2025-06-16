@@ -1890,6 +1890,25 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
     // keep only available packages
     query -= query_installed;
+
+    // filtering from_repo_ids
+    if (!settings.get_from_repo_ids().empty()) {
+        query_installed.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
+        if (query_installed.empty()) {
+            // TODO(jrohel) no solution for the spec => mark result - not from repository
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REINSTALL,
+                GoalProblem::NOT_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                log_level);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
+        }
+    }
+
     if (query.empty()) {
         transaction.p_impl->add_resolve_log(
             GoalAction::REINSTALL,
@@ -1944,8 +1963,6 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             }
         }
     }
-
-    // TODO(jmracek) Implement filtering from_repo_ids
 
     if (!settings.get_to_repo_ids().empty()) {
         relevant_available.filter_repo_id(settings.get_to_repo_ids(), sack::QueryCmp::GLOB);
@@ -2209,14 +2226,14 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
 GoalProblem Goal::Impl::add_remove_to_goal(
     base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
+    auto & cfg_main = base->get_config();
+    const bool skip_unavailable =
+        settings.get_skip_unavailable() == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
     rpm::PackageQuery query(base);
     query.filter_installed();
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto & cfg_main = base->get_config();
-        bool skip_unavailable =
-            settings.get_skip_unavailable() == GoalSetting::AUTO ? true : settings.resolve_skip_unavailable(cfg_main);
         auto problem = transaction.p_impl->report_not_found(
             GoalAction::REMOVE,
             spec,
@@ -2225,11 +2242,21 @@ GoalProblem Goal::Impl::add_remove_to_goal(
         return skip_unavailable ? GoalProblem::NO_PROBLEM : problem;
     }
 
+    // filtering from_repo_ids
     if (!settings.get_from_repo_ids().empty()) {
-        // TODO(jmracek) keep only packages installed from repo_id -requires swdb
+        query.filter_from_repo_id(settings.get_from_repo_ids(), sack::QueryCmp::GLOB);
+        // Report when package is not installed from repositories
         if (query.empty()) {
-            // TODO(jmracek) no solution for the spec => mark result - not from repository
-            return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+            // TODO(jrohel) no solution for the spec => mark result - not from repository
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REMOVE,
+                GoalProblem::NOT_INSTALLED,
+                settings,
+                libdnf5::transaction::TransactionItemType::PACKAGE,
+                spec,
+                {},
+                skip_unavailable ? libdnf5::Logger::Level::WARNING : libdnf5::Logger::Level::ERROR);
+            return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
         }
     }
     rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
