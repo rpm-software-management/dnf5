@@ -41,6 +41,8 @@ set the ``clean_requirements_on_remove`` configuration option to ``False``.
 Options
 =======
 
+.. include:: ../_shared/options/installed-from-repo.rst
+
 ``--no-autoremove``
     | Disable removal of dependencies that are no longer used.
 

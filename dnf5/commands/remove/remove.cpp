@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
+#include "../from_repo.hpp"
+
 #include <dnf5/shared_options.hpp>
 
 namespace dnf5 {
@@ -38,6 +40,8 @@ void RemoveCommand::set_argument_parser() {
 
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Remove (uninstall) software"));
+
+    create_installed_from_repo_option(*this, installed_from_repos, true);
 
     auto noautoremove = parser.add_new_named_arg("no-autoremove");
     noautoremove->set_long_name("no-autoremove");
@@ -74,6 +78,7 @@ void RemoveCommand::run() {
     // Limit remove spec capabity to prevent multiple matches. Remove command should not match anything after performing
     // a remove action with the same spec. NEVRA and filenames are the only types that have no overlaps.
     libdnf5::GoalJobSettings settings;
+    settings.set_from_repo_ids(installed_from_repos);
     settings.set_with_nevra(true);
     settings.set_with_provides(false);
     settings.set_with_filenames(true);
