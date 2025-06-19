@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 upgrade [options] [<package-spec>|@<group-spec>|@<environment-spec>...]``
+``dnf5 upgrade [options] [<package-spec-NPFB>|@<group-spec>|@<environment-spec>...]``
 
 
 Description

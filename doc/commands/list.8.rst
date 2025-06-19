@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 list [options] [<package-spec>...]``
+``dnf5 list [options] [<package-spec-NI>...]``
 
 
 Description

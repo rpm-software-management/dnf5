@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 distro-sync [options] [<package-spec>...]``
+``dnf5 distro-sync [options] [<package-spec-NPFB>...]``
 
 
 Description
@@ -35,7 +35,7 @@ The ``distro-sync`` command in ``DNF5`` serves to synchronize the installed pack
 with their latest available version from any enabled repository. It upgrades, downgrades
 or keeps packages as needed.
 
-Optional ``package-spec`` arguments could be passed to select only specific packages to be synced.
+Optional ``<package-spec-NPFB>`` arguments could be passed to select only specific packages to be synced.
 
 
 Options

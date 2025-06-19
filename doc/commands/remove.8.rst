@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 remove [options] <package-file-spec>|@<group-spec>|@<environment-spec>...``
+``dnf5 remove [options] <package-spec-NF>|@<group-spec>|@<environment-spec>...``
 
 
 Description
