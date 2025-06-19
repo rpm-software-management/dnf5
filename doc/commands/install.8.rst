@@ -38,6 +38,16 @@ and their dependencies are installed on the system.
 If the specified packages are already installed, DNF5 does not check their dependencies again and
 simply verifies that the packages themselves are present.
 
+When ``package-spec-NPFB`` to specify the exact version of the package is given, DNF will install the
+desired version, no matter which version of the package is already installed. The former version of
+the package will be removed in the case of non-installonly package.
+
+On the other hand if ``package-spec-NPFB`` specifies only a name and obsoletes are enabled, DNF also
+takes into account packages obsoleting that name.
+Note that this can lead to seemingly unexpected results if the version of an installed package is obsoleted
+and the installed package also has newer version available. It creates a split in upgrade-path and both ways
+are considered correct, the resulting package is picked simply by lexicographical order.
+
 When installing groups defined in ``group-spec`` arguments, ``DNF5`` ensures that the groups and
 their packages are installed on the system. Installs only group packages matching configured package
 type. See :manpage:`dnf5-conf(5)`, :ref:`group_package_types <group_package_types_options-label>`.
