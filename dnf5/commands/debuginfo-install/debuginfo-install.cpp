@@ -50,11 +50,11 @@ void DebuginfoInstallCommand::set_argument_parser() {
 
     patterns_to_debuginfo_install_options = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(
-        "patterns",
+        "package-spec-NPFB",
         ArgumentParser::PositionalArg::AT_LEAST_ONE,
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         patterns_to_debuginfo_install_options);
-    patterns_arg->set_description("Patterns");
+    patterns_arg->set_description("List of package-spec-NPFB to install the associated debuginfo packages for");
     cmd.register_positional_arg(patterns_arg);
 }
 
