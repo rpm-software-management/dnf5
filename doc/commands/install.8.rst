@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 install [options] <package-spec>|@<group-spec>|@<environment-spec>...``
+``dnf5 install [options] <package-spec-NPFB>|@<group-spec>|@<environment-spec>...``
 
 
 Description
@@ -33,7 +33,7 @@ Description
 
 The ``install`` command in ``DNF5`` is used for installing packages, groups or environments.
 
-When installing packages defined in ``package-spec`` arguments, ``DNF5`` ensures that the packages
+When installing packages defined in ``package-spec-NPFB`` arguments, ``DNF5`` ensures that the packages
 and their dependencies are installed on the system.
 If the specified packages are already installed, DNF5 does not check their dependencies again and
 simply verifies that the packages themselves are present.

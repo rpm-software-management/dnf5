@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 versionlock <subcommand> <package-spec>...``
+``dnf5 versionlock <subcommand> <package-spec-N>...``
 
 
 Description
@@ -52,10 +52,10 @@ Subcommands
 ===========
 
 ``add``
-    | Add a versionlock for all available packages matching the spec. It means that only versions of packages represented by ``package-spec`` are available for transaction operations. The NEVRAs to lock to are first searched among installed packages and then (if none is found) in all currently available packages.
+    | Add a versionlock for all available packages matching the spec. It means that only versions of packages represented by ``package-spec-N`` are available for transaction operations. The NEVRAs to lock to are first searched among installed packages and then (if none is found) in all currently available packages.
 
 ``exclude``
-    | Add an exclude (within versionlock) for the available packages matching the spec. It means that packages represented by ``package-spec`` will be excluded from transaction operations.
+    | Add an exclude (within versionlock) for the available packages matching the spec. It means that packages represented by ``package-spec-N`` will be excluded from transaction operations.
 
 ``clear``
     | Remove all versionlock entries.

@@ -25,13 +25,13 @@
 Synopsis
 ========
 
-``dnf5 check-upgrade [options] [<package-spec>...]``
+``dnf5 check-upgrade [options] [<package-spec-N>...]``
 
 
 Description
 ===========
 
-Non-interactively checks for available updates of specified packages. If no ``<package-spec>``
+Non-interactively checks for available updates of specified packages. If no ``<package-spec-N>``
 is provided, it checks for updates for the entire system.
 
 ``DNF5`` will exit with code `100`` if updates are available and list them; `0` if no updates

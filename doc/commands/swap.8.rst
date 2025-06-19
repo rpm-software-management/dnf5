@@ -33,6 +33,7 @@ Description
 
 The ``swap`` command in ``DNF5`` is used for removing a package while installing
 a different one in a single transaction.
+Both ``<remove-spec>`` and ``<install-spec>`` are ``<package-spec-NPFB>``
 
 
 Options
@@ -52,3 +53,9 @@ Examples
 
 ``dnf5 swap mlocate plocate``
     | Remove the ``mlocate`` package and install the ``plocate`` instead in the single transaction.
+
+
+See Also
+========
+
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`

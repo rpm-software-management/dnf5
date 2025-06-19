@@ -329,8 +329,8 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``-y, --assumeyes``
     | Automatically answer yes for all questions.
 
-``-x PACKAGE-SPEC,..., --exclude=PACKAGE-SPEC,...``
-    | Exclude packages specified in ``PACKAGE-SPEC`` arguments from the transaction.
+``-x PACKAGE-SPEC-N,..., --exclude=PACKAGE-SPEC-N,...``
+    | Exclude packages specified in ``PACKAGE-SPEC-N`` arguments from the transaction.
     | This is a list option.
 
 

@@ -44,7 +44,7 @@ In the `group`, there are four levels of packages:
 
 `default`
     | These are packages installed together with mandatory packages.
-    | They can be excluded, f.e. using the ``--exclude=PACKAGE-SPEC,...`` argument.
+    | They can be excluded, f.e. using the ``--exclude=PACKAGE-SPEC-N,...`` argument.
 
 `optional`
     | These packages are not installed by default.
@@ -61,3 +61,4 @@ See Also
 
     | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
     | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
