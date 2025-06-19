@@ -43,8 +43,9 @@ void ListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Lists packages depending on the packages' relation to the system"));
 
-    auto specs = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    specs->set_description(_("List of keys to match case insensitively"));
+    auto specs =
+        parser.add_new_positional_arg("package-spec-NI", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
+    specs->set_description(_("List of package-spec-NI to match (case insensitively)"));
     specs->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {

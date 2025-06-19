@@ -95,8 +95,8 @@ void RepoqueryCommand::set_argument_parser() {
     // ARGUMENT
 
     auto keys =
-        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_description("List of keys to match");
+        parser.add_new_positional_arg("package-spec-NIF", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
+    keys->set_description("List of package-spec-NIF to match");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {
