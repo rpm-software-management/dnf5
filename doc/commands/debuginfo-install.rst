@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 debuginfo-install [options] <patterns>...``
+``dnf5 debuginfo-install [options] <package-spec-NPFB>...``
 
 
 Description
@@ -39,12 +39,6 @@ it enables repository using pattern <ID>-debuginfo.
 
 When regular upgrade of debuginfo packages is expected, then it requires enabling
 of debug repository permanently using `config-manager` command.
-
-Arguments
-=========
-
-``<pattern>``
-    The pattern to install the associated debuginfo package for.
 
 Options
 =======
@@ -70,3 +64,9 @@ Examples
 
 ``dnf upgrade --enablerepo=*-debuginfo "*-debuginfo"``
     Upgrade all debuginfo packages.
+
+
+See Also
+========
+
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`

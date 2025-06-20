@@ -41,8 +41,9 @@ void DowngradeCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Downgrade software"));
 
-    auto keys = parser.add_new_positional_arg("spec", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    keys->set_description("List of package specs to downgrade");
+    auto keys = parser.add_new_positional_arg(
+        "package-spec-NPFB", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of package-spec-NPFB to downgrade");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {

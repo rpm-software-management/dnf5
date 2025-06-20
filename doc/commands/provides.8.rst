@@ -25,14 +25,13 @@
 Synopsis
 ========
 
-``dnf5 provides [global options] <package-spec>...``
+``dnf5 provides [global options] <package-spec-PFB>...``
 
 
 Description
 ===========
 
-The ``provides`` command in ``DNF5`` finds the packages providing the given ``<package-spec>``.
-It can match specs by ``Provides`` or by filename.
+The ``provides`` command in ``DNF5`` finds the packages providing the given ``<package-spec-PFB>``.
 
 
 Examples

@@ -89,11 +89,11 @@ void ChangelogCommand::set_argument_parser() {
 
     pkgs_spec_to_show_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
-        "pkg_spec",
+        "package-spec-NI",
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         pkgs_spec_to_show_options);
-    keys->set_description("List of packages specifiers");
+    keys->set_description("List of package-spec-NI to show changelogs for");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
 
     since->add_conflict_argument(*count);

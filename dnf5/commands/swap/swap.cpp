@@ -44,7 +44,7 @@ void SwapCommand::set_argument_parser() {
     cmd.set_description(_("Remove software and install another in one transaction"));
 
     auto remove_spec_arg = parser.add_new_positional_arg("remove_spec", 1, nullptr, nullptr);
-    remove_spec_arg->set_description("The spec that will be removed");
+    remove_spec_arg->set_description("The package-spec-NPFB that will be removed");
     remove_spec_arg->set_parse_hook_func([this](
                                              [[maybe_unused]] ArgumentParser::PositionalArg * arg,
                                              [[maybe_unused]] int argc,
@@ -57,7 +57,7 @@ void SwapCommand::set_argument_parser() {
     cmd.register_positional_arg(remove_spec_arg);
 
     auto install_spec_arg = parser.add_new_positional_arg("install_spec", 1, nullptr, nullptr);
-    install_spec_arg->set_description("The spec that will be installed");
+    install_spec_arg->set_description("The package-spec-NPFB that will be installed");
     install_spec_arg->set_parse_hook_func([this](
                                               [[maybe_unused]] ArgumentParser::PositionalArg * arg,
                                               [[maybe_unused]] int argc,

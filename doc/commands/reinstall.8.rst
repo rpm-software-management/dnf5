@@ -25,14 +25,14 @@
 Synopsis
 ========
 
-``dnf5 reinstall [global options] <package-spec>...``
+``dnf5 reinstall [global options] <package-spec-NPFB>...``
 
 
 Description
 ===========
 
 The ``reinstall`` command in ``DNF5`` is used for reinstalling packages defined in
-``package-spec`` arguments.
+``package-spec-NPFB`` arguments.
 
 
 Options

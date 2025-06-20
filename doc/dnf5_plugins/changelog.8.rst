@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 changelog [options] [<package-spec>...]``
+``dnf5 changelog [options] [<package-spec-NI>...]``
 
 
 Description
@@ -56,3 +56,9 @@ Examples
 
 ``dnf5 changelog --count=5 bash``
     | Display the 3 latest changelogs for the ``bash`` package.
+
+
+See Also
+========
+
+    | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`

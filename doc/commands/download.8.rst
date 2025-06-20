@@ -25,14 +25,14 @@
 Synopsis
 ========
 
-``dnf5 download [options] <package-spec>...``
+``dnf5 download [options] <package-spec-NPFB>...``
 
 
 Description
 ===========
 
 The ``download`` command in ``DNF5`` is used for downloading binary and source packages
-defined in ``package-spec`` arguments to the current working directory.
+defined in ``package-spec-NPFB`` arguments to the current working directory.
 
 
 Options

@@ -25,14 +25,14 @@
 Synopsis
 ========
 
-``dnf5 mark <subcommand> [global options] [<group-id>] <package-spec>...``
+``dnf5 mark <subcommand> [global options] [<group-id>] <package-spec-NPFB>...``
 
 
 Description
 ===========
 
 The ``mark`` command in ``DNF5`` is used to change reason of installed packages
-defined in ``package-spec`` arguments.
+defined in ``package-spec-NPFB`` arguments.
 
 
 Subcommands

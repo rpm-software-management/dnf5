@@ -54,10 +54,38 @@ Note: Curly brackets (``{}``) are not supported. You can still use them in
 shells that support them and let the shell do the expansion, but if quoted or
 escaped, ``DNF5`` will not expand them.
 
+Packages
+========
+
+Many commands take a ``<package-spec*>`` parameter that selects a package for
+the operation. Depending on the command the ``<package-spec*>`` argument is
+matched against:
+
+- :ref:`NEVRA [N] <nevra_matching_ref-label>` or case Insentive NEVRA [NI]
+- Provides [P]
+- :ref:`File provides [F] <file_provides_ref-label>`
+- :ref:`Binaries [B] <binaries_matching_ref-label>`
+
+sequentially until a match is found.
+
+For example ``<package-spec-NP>`` is first matched againts NEVRAs and if no
+matching NEVRA is found it is matched againts Provides.
+
+When ``<package-spec>`` is a package name or a provide, the user can provide
+additional restriction rules for matching the arguments. Basic version comparisons
+can be used for this purpose (=, >, <, >=, <=), like this ``<package-spec> >= <version>``,
+where the ``<version>`` argument is in a ``[EPOCH:]VERSION[-RELEASE]`` format
+as specified in the :ref:`NEVRA matching <nevra_matching_ref-label>` section.
+
+To build more complex expressions, a rich dependency feature
+is also supported, which is always enclosed in parentheses. Boolean
+operators and nesting can be used, f.e. ``(<spec1> or (<spec2> and <spec3>))``.
+For more information, please see :ref:`RPM boolean dependencies <rpm_bool_deps_ref-label>`.
+
 .. _nevra_matching_ref-label:
 
 NEVRA matching
-==============
+--------------
 
 Each package can be uniquely identified by the `NEVRA` string. It consists of
 5 parts of information:
@@ -109,57 +137,26 @@ not tried. If none of the forms match any packages, an attempt is made to match
 the ``<package-spec>`` against full package NEVRAs. This is only relevant
 if globs are present in the ``<package-spec>``.
 
-``<package-spec>`` matches NEVRAs the same way ``<package-name-spec>`` does,
-but in case matching NEVRAs fails, it attempts to match against provides and
-file provides of packages as well.
-
 You can specify globs as part of any of the five NEVRA components. You can also
 specify a glob pattern to match over multiple NEVRA components (in other words,
 to match across the NEVRA separators). In that case, however, you need to write
 the spec to match against full package NEVRAs, as it is not possible to split
 such spec into NEVRA forms.
 
-
-Packages
-========
-
-Many commands take a ``<package-spec>`` parameter that selects a package for
-the operation. The ``<package-spec>`` argument is matched against package
-NEVRAs, provides and file provides.
-
-When ``<package-spec>`` is a package name or a provide, the user can provide
-additional restriction rules for matching the arguments. Basic version comparisons
-can be used for this purpose (=, >, <, >=, <=), like this ``<package-spec> >= <version>``,
-where the ``<version>`` argument is in a ``[EPOCH:]VERSION[-RELEASE]`` format
-as specified above in the :ref:`NEVRA matching <nevra_matching_ref-label>` section.
-
-To build more complex expressions, a rich dependency feature
-is also supported, which is always enclosed in parentheses. Boolean
-operators and nesting can be used, f.e. ``(<spec1> or (<spec2> and <spec3>))``.
-For more information, please see :ref:`RPM boolean dependencies <rpm_bool_deps_ref-label>`.
-
-``<package-file-spec>`` is similar to ``<package-spec>``, except provides
-matching is not performed. Therefore, ``<package-file-spec>`` is matched only
-against NEVRAs and file provides.
-
-``<package-name-spec>`` is matched against NEVRAs only.
-
-
-Provides
-========
-
-``<provide-spec>`` in command descriptions means the command operates on
-packages providing the given spec. This can either be an explicit provide, an
-implicit provide (i.e. name of the package) or a file provide. The selection is
-case-sensitive and globbing is supported.
-
 .. _file_provides_ref-label:
 
-Specifying File Provides
-------------------------
+File Provides matching
+----------------------
 
 If a ``spec`` starts with either ``/`` or ``*/``, it is considered as a potential file provide.
 
+.. _binaries_matching_ref-label:
+
+Binaries matching
+-----------------
+
+Whether to consider package binaries during matching.
+Checks if given ``spec`` is a binary in ``/usr/bin/`` or ``/usr/sbin/``.
 
 Comps
 ======

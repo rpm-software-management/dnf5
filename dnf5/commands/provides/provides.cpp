@@ -47,8 +47,9 @@ void ProvidesCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description(_("Find what package provides the given value"));
 
-    auto * keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    keys->set_description("List of package specs to query");
+    auto * keys = parser.add_new_positional_arg(
+        "package-spec-PFB", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of package-spec-PFB to query");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {

@@ -61,11 +61,11 @@ void MarkUserCommand::set_argument_parser() {
 
     pkg_specs = parser.add_new_values();
     auto specs_arg = parser.add_new_positional_arg(
-        "specs",
+        "package-spec-NPFB",
         ArgumentParser::PositionalArg::AT_LEAST_ONE,
         parser.add_init_value(std::unique_ptr<libdnf5::Option>(new libdnf5::OptionString(nullptr))),
         pkg_specs);
-    specs_arg->set_description("List of package specs");
+    specs_arg->set_description("List of package-spec-NPFB to mark");
     specs_arg->set_complete_hook_func(
         [&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, false); });
     cmd.register_positional_arg(specs_arg);

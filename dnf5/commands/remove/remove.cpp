@@ -47,7 +47,7 @@ void RemoveCommand::set_argument_parser() {
     cmd.register_named_arg(noautoremove);
 
     auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    keys->set_description("List of <package-spec>|@<group-spec>|@<environment-spec> to remove");
+    keys->set_description("List of <package-spec-NF>|@<group-spec>|@<environment-spec> to remove");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             for (int i = 0; i < argc; ++i) {

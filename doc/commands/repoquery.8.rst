@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 repoquery [options] [<spec>...]``
+``dnf5 repoquery [options] [<package-spec-NIF>...]``
 
 
 Description

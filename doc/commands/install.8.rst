@@ -25,7 +25,7 @@
 Synopsis
 ========
 
-``dnf5 install [options] <package-spec>|@<group-spec>|@<environment-spec>...``
+``dnf5 install [options] <package-spec-NPFB>|@<group-spec>|@<environment-spec>...``
 
 
 Description
@@ -33,10 +33,20 @@ Description
 
 The ``install`` command in ``DNF5`` is used for installing packages, groups or environments.
 
-When installing packages defined in ``package-spec`` arguments, ``DNF5`` ensures that the packages
+When installing packages defined in ``package-spec-NPFB`` arguments, ``DNF5`` ensures that the packages
 and their dependencies are installed on the system.
 If the specified packages are already installed, DNF5 does not check their dependencies again and
 simply verifies that the packages themselves are present.
+
+When ``package-spec-NPFB`` to specify the exact version of the package is given, DNF will install the
+desired version, no matter which version of the package is already installed. The former version of
+the package will be removed in the case of non-installonly package.
+
+On the other hand if ``package-spec-NPFB`` specifies only a name and obsoletes are enabled, DNF also
+takes into account packages obsoleting that name.
+Note that this can lead to seemingly unexpected results if a package has multiple versions and some older
+version is being obsoleted. It creates a split in upgrade-path and both ways are considered correct,
+the resulting package is picked simply by lexicographical order.
 
 When installing groups defined in ``group-spec`` arguments, ``DNF5`` ensures that the groups and
 their packages are installed on the system. Installs only group packages matching configured package
