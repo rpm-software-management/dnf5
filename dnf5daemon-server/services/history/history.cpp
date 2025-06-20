@@ -95,6 +95,7 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     auto installed_requested = dnfdaemon::key_value_map_get<bool>(options, "installed_packages", true);
     auto removed_requested = dnfdaemon::key_value_map_get<bool>(options, "removed_packages", true);
     auto include_advisory = dnfdaemon::key_value_map_get<bool>(options, "include_advisory", true);
+    auto all_advisories = dnfdaemon::key_value_map_get<bool>(options, "all_advisories", false);
     auto pkg_attrs = dnfdaemon::key_value_map_get<std::vector<std::string>>(
         options, "package_attrs", std::vector<std::string>{"name", "summary", "evr", "arch"});
 
@@ -145,7 +146,8 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     // pair of (old, new)
     std::vector<std::pair<libdnf5::transaction::Package, libdnf5::rpm::Package>> upgrades;
     using Action = libdnf5::transaction::TransactionItemAction;
-    libdnf5::rpm::PackageSet upgrades_set{base};
+    libdnf5::rpm::PackageSet upgrades_installed{base};
+    std::vector<libdnf5::rpm::Nevra> upgrades_original;
     for (auto & transaction : transactions) {
         // skip unfinished or error transactions
         if (transaction.get_state() != libdnf5::transaction::TransactionState::OK) {
@@ -185,8 +187,18 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
                 if (installed_pkg != installed_na.end()) {
                     if (libdnf5::rpm::cmp_nevra(pkg, installed_na.at(pkg_key))) {
                         if (upgraded_requested) {
-                            upgrades_set.add(installed_pkg->second);
+                            upgrades_installed.add(installed_pkg->second);
                             upgrades.emplace_back(pkg, installed_pkg->second);
+
+                            if (all_advisories) {
+                                libdnf5::rpm::Nevra nevra;
+                                nevra.set_name(pkg.get_name());
+                                nevra.set_epoch(pkg.get_epoch());
+                                nevra.set_version(pkg.get_version());
+                                nevra.set_release(pkg.get_release());
+                                nevra.set_arch(pkg.get_arch());
+                                upgrades_original.emplace_back(std::move(nevra));
+                            }
                         }
                     } else if (libdnf5::rpm::cmp_nevra(installed_na.at(pkg_key), pkg)) {
                         if (downgraded_requested) {
@@ -208,22 +220,40 @@ sdbus::MethodReply History::recent_changes(sdbus::MethodCall & call) {
     std::map<std::string, dnfdaemon::KeyValueMapList> output;
     if (upgraded_requested) {
         // inject advisory to upgraded packages
-        std::unordered_map<std::string, libdnf5::advisory::AdvisoryPackage> advisories_by_nevra;
+        std::unordered_map<std::string, std::vector<std::string>> advisories_by_name;
         if (include_advisory) {
             auto advisories = libdnf5::advisory::AdvisoryQuery(base);
-            for (const auto & adv_pkg :
-                 advisories.get_advisory_packages_sorted(upgrades_set, libdnf5::sack::QueryCmp::EQ)) {
-                advisories_by_nevra.emplace(adv_pkg.get_nevra(), adv_pkg);
+            std::vector<libdnf5::advisory::AdvisoryPackage> adv_packages;
+            if (all_advisories) {
+                // filter out only advisories for versions newer than the originally installed
+                advisories.filter_packages(upgrades_original, libdnf5::sack::QueryCmp::GT);
+                // get installed advisories for upgraded packages
+                adv_packages =
+                    advisories.get_advisory_packages_sorted(upgrades_installed, libdnf5::sack::QueryCmp::LTE);
+            } else {
+                // get only advisories for installed versions
+                adv_packages = advisories.get_advisory_packages_sorted(upgrades_installed, libdnf5::sack::QueryCmp::EQ);
+            }
+            // advisory packages returned by get_advisory_packages_sorted are
+            // sorted by libsolv id, which is not equal to sorting by NEVRA
+            // strings.
+            // sort by NEVRA in descending order (thus reverting a,b order using a lambda)
+            std::sort(adv_packages.begin(), adv_packages.end(), [](const auto & a, const auto & b) {
+                return libdnf5::rpm::cmp_naevr(b, a);
+            });
+            for (const auto & adv_pkg : adv_packages) {
+                advisories_by_name[adv_pkg.get_name()].emplace_back(adv_pkg.get_advisory().get_name());
             }
         }
         dnfdaemon::KeyValueMapList out_upgraded;
         for (const auto & [old_pkg, new_pkg] : upgrades) {
             auto replace_pkg = package_to_map(new_pkg, pkg_attrs);
             replace_pkg.emplace("original_evr", get_evr(old_pkg));
-            auto advisory_pkg = advisories_by_nevra.find(new_pkg.get_nevra());
-            if (advisory_pkg != advisories_by_nevra.end()) {
-                auto advisory = advisory_pkg->second.get_advisory();
-                replace_pkg.emplace("advisory_name", advisory.get_name());
+            if (include_advisory) {
+                auto advisories = advisories_by_name.find(new_pkg.get_name());
+                if (advisories != advisories_by_name.end()) {
+                    replace_pkg.emplace("advisories", advisories->second);
+                }
             }
             out_upgraded.push_back(std::move(replace_pkg));
         }

@@ -42,9 +42,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         For upgraded and downgraded packages, the "original_evr" attribute
         is also included, containing the package EVR before the change.
 
-        If requested, upgraded packages may also include an "advisory_name"
-        field, indicating the name of the update that contains the upgraded
-        (i.e., currently installed) version of the package.
+        If requested, upgraded packages may also include an "advisories" list
+        field, indicating the name of the updates that contain the upgraded
+        (i.e., currently installed) version of the package. If the "all_advisories"
+        option is set, advisories for all versions between the original and currently
+        installed versions are also included.
 
         For removed packages, only the name, arch, and evr of the removed
         version are provided.
@@ -60,7 +62,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
             - removed_packages: boolean, default "true"
                 Whether to include removed packages in the output.
             - include_advisory: boolean, default "true"
-                Whether to include "advisory_name" to upgraded packages attributes.
+                Whether to include "advisories" to upgraded packages attributes.
+            - all_advisories: boolean, default "false"
+                Only make sense with include_advisory=true. Include also advisories
+                for all versions between the original and currently installed.
             - package_attrs: list of strings, default ["name", "summary", "evr", "arch"]
                 List of package attributes that are returned for each changed
                 package. Supported attributes are the same as in list() method of
