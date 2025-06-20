@@ -1,14 +1,14 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2024.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-02-27 23:55+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-11 09:23+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/sv/>\n"
 "Language: sv\n"
@@ -16,99 +16,111 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: argument_parser.cpp:62
+#: argument_parser.cpp:68
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr "Felkonfigurerat alias \"{}\": kan inte konvertera \"{}\" till ett tal"
+
+#: argument_parser.cpp:76
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "Felkonfigurerat alias \"{}\": index \"{}\" utanför intervallet"
+
+#: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "\"{}\" inte tillåtet tillsammans med det namngivna argumentet \"{}\""
 
-#: argument_parser.cpp:64
+#: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "\"{}\" inte tillåtet i kommandot \"{}\""
 
-#: argument_parser.cpp:66
+#: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "\"{}\" inte tillåtet tillsammans med positionsargument \"{}\""
 
-#: argument_parser.cpp:111
+#: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Argument-id \"{}\" redan registrerat i gruppen \"{}\""
 
-#: argument_parser.cpp:238
+#: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Ogiltigt tecken '.' i argument-id \"{}\""
 
-#: argument_parser.cpp:346 argument_parser.cpp:351
+#: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
 msgstr "För få värden för positionsargument \"{}\""
 
-#: argument_parser.cpp:512
+#: argument_parser.cpp:548
 msgid "Missing value for named argument \"--{}\""
 msgstr "Saknar värde för det namngivna argumentet \"--{}\""
 
-#: argument_parser.cpp:520
+#: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Oväntat värde för det namngivna argument \"--{}\""
 
-#: argument_parser.cpp:562
+#: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
 msgstr "Saknar värde för det namngivna argumentet \"-{}\""
 
 #. print usage
-#: argument_parser.cpp:658
+#: argument_parser.cpp:694
 msgid "Usage:"
 msgstr "Användning:"
 
-#: argument_parser.cpp:666
+#: argument_parser.cpp:702
 msgid "Description:"
 msgstr "Beskrivning:"
 
-#: argument_parser.cpp:943
+#: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr "Kommando-id \"{}\" redan registrerat för kommando \"{}\""
 
-#: argument_parser.cpp:954
+#: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr "Namngivet argument-id \"{}\" redan registrerat för kommando \"{}\""
 
-#: argument_parser.cpp:964
+#: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr "Positionsargument-id \"{}\" har redan registrerats för kommando \"{}\""
 
-#: argument_parser.cpp:974
+#: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Grupp-id \"{}\" redan registrerat för kommando \"{}\""
 
-#: argument_parser.cpp:1001
+#: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr "Kommando-id \"{}\" innehåller inte underkommando med id \"{}\""
 
-#: argument_parser.cpp:1009
+#: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
 "Kommando-id \"{}\" innehåller inte ett namngivet argument med id \"{}\""
 
-#: argument_parser.cpp:1017
+#: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr "Kommando-id \"{}\" innehåller inte positionsargument med id \"{}\""
 
-#: argument_parser.cpp:1024
+#: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr "Kommando-id \"{}\" innehåller inte grupp med id \"{}\""
 
-#: argument_parser.cpp:1141 argument_parser.cpp:1345
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Okänt argument \"{}\" för kommando \"{}\""
 
-#: argument_parser.cpp:1156 argument_parser.cpp:1360
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Saknar positionsargument \"{}\" för kommando \"{}\""
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1274
+msgid "Missing value for command alias \"{}\""
+msgstr "Saknar värde för kommandoaliaset \"{}\""
+
+#: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Det namngivna argumentet med sökvägs-id \"{}\" hittades inte"
 
-#: argument_parser.cpp:1573
+#: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Positionsargument med sökvägs-id \"{}\" hittades inte"
 

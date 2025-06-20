@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
 "PO-Revision-Date: 2024-02-06 09:36+0000\n"
 "Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/"
@@ -32,7 +32,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Nepodporovaný argument pro akci REMOVE: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1593
+#: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Nesprávná hodnota konfigurace pro multilib_policy: {}"
 
@@ -191,18 +191,28 @@ msgid "No match for argument: {}"
 msgstr "Žádná shoda pro argument: {}"
 
 #: base/log_event.cpp:163
+#, fuzzy
+#| msgid "No match for argument '{0}' in repositories '{1}'"
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Žádná shoda pro argument '{0}' v repozitářích '{1}'"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr ""
+
+#: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Žádná shoda pro argument '{0}' v repozitářích '{1}'"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr ""
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Balíčky je pro argument '{}' jsou dostupné, ale nejsou nainstalovány."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:184
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -210,27 +220,27 @@ msgstr ""
 "Balíčky pro argument '{}' jsou k dispozici, ale nainstalované pro jinou "
 "architekturu."
 
-#: base/log_event.cpp:182
+#: base/log_event.cpp:188
 #, fuzzy
 #| msgid "Argument '{}' matches only source packages."
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "Argument '{}' odpovídá pouze zdrojovým balíčkům."
 
-#: base/log_event.cpp:190
+#: base/log_event.cpp:196
 #, fuzzy
 #| msgid "Argument '{}' matches only excluded packages."
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
-#: base/log_event.cpp:198
+#: base/log_event.cpp:204
 #, fuzzy
 #| msgid "Argument '{}' matches only excluded packages."
 msgid ""
@@ -238,21 +248,21 @@ msgid ""
 "versionlock."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
-#: base/log_event.cpp:202
+#: base/log_event.cpp:208
 #, fuzzy
 #| msgid "Argument '{}' matches only excluded packages."
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr "Argument '{}' odpovídá pouze vyloučeným balíkům."
 
-#: base/log_event.cpp:207
+#: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
 msgstr "  * Možná jste měli na mysli: {}"
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:216
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "Existují následující alternativy pro '{0}': {1}"
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:223
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -260,7 +270,7 @@ msgstr ""
 "Nejnižší dostupná verze balíčku \"{}\" je již nainstalována, nelze ji "
 "downgradovat."
 
-#: base/log_event.cpp:223
+#: base/log_event.cpp:229
 #, fuzzy
 #| msgid ""
 #| "Packages for argument '{}' installed and available, but in a different "
@@ -272,7 +282,7 @@ msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi => "
 "nelze přeinstalovat"
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:235
 #, fuzzy
 #| msgid ""
 #| "Packages for argument '{}' installed and available, but in a different "
@@ -282,47 +292,47 @@ msgid ""
 msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi."
 
-#: base/log_event.cpp:235
+#: base/log_event.cpp:241
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr ""
 "Balíčky pro argument '{}' jsou nainstalované a dostupné, ale v jiné verzi."
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:243
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Balíčky pro argument '{}' jsou nainstalovány, ale nejsou dostupné."
 
-#: base/log_event.cpp:246
+#: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Balíček \"{}\" je již nainstalován s důvodem \"{}\"."
 
-#: base/log_event.cpp:248
+#: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
 msgstr "Balíček \"{}\" je již nainstalován."
 
-#: base/log_event.cpp:257
+#: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
 msgstr "Debug data zapsána do \"{}\""
 
-#: base/log_event.cpp:261
+#: base/log_event.cpp:267
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
 msgstr ""
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Akce {} pro argument \"{}\" není podporována."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:276
+#: base/log_event.cpp:282
 #, fuzzy
 #| msgid "Unable to resolve argument '{}':{}"
 msgid "Unable to resolve argument '{}':"
 msgstr "Nelze vyřešit argument '{}':{}"
 
-#: base/log_event.cpp:280
+#: base/log_event.cpp:286
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -349,25 +359,25 @@ msgstr[2] ""
 "  - Argument '{}' odpovídá {} streamům ('{}') modulu '{}', ale žádný ze "
 "streamů není povolen ani výchozí."
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:293
 msgid "', '"
 msgstr ""
 
-#: base/log_event.cpp:296
+#: base/log_event.cpp:302
 #, fuzzy
 #| msgid "some dependency problem"
 msgid "Modular dependency problems:\n"
 msgstr "nějaký problém se závislostí"
 
-#: base/log_event.cpp:303
+#: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr ""
 
-#: base/log_event.cpp:310
+#: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
 msgstr ""
 
-#: base/log_event.cpp:325
+#: base/log_event.cpp:331
 #, fuzzy
 #| msgid "The operation would result in removing of running kernel: {}"
 msgid ""
@@ -375,40 +385,40 @@ msgid ""
 "stream '{2}'\n"
 msgstr "Operace by vedla k odstranění běžícího jádra: {}"
 
-#: base/log_event.cpp:330
+#: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
 msgstr ""
 
-#: base/log_event.cpp:335
+#: base/log_event.cpp:341
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
 msgstr ""
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr ""
 
-#: base/log_event.cpp:348
+#: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:351 base/log_event.cpp:362
+#: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ""
 
-#: base/log_event.cpp:358
+#: base/log_event.cpp:364
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
 msgstr ""
 
-#: base/log_event.cpp:365
+#: base/log_event.cpp:371
 msgid "Transaction merge error: '{0}'"
 msgstr ""
 
@@ -1015,7 +1025,7 @@ msgstr "Plugins::load_plugins(): config_dir_path nemůže být prázdný"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Nelze načíst pluginy: {}"
 
-#: repo/config_repo.cpp:569
+#: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): Výpočet SHA256 se nezdařil"
 
@@ -1053,29 +1063,35 @@ msgstr "Stažení souborů se nezdařilo"
 msgid "Failed to download packages"
 msgstr "Stažení balíčků se nezdařilo"
 
-#: repo/repo.cpp:59
+#: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:63
+#: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "Nepodařilo se získat přístup k RPM \"{}\": {}"
 
-#: repo/repo.cpp:105
+#: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "Neplatné ID repozitáře \"{}\": neočekávaný znak \"{}\""
 
-#: repo/repo.cpp:148
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Repozitář \"{}\" nemá nastaven žádný zdroj (baseurl, mirrorlist nebo "
 "metalink)."
 
-#: repo/repo.cpp:159
+#: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Repozitář \"{}\" má nepodporovaný typ \"{}\", přeskakuji."
 
-#: repo/repo.cpp:410
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#, fuzzy
+#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
+
+#: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -1083,23 +1099,23 @@ msgstr ""
 "Nepodařilo se načíst repozitář: \"primární\" data nejsou k dispozici nebo "
 "jsou v nepodporovaném formátu"
 
-#: repo/repo.cpp:476
+#: repo/repo.cpp:505
 #, fuzzy
 #| msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "Nelze načíst RPM \"{}\": nemá příponu \".rpm\""
 
-#: repo/repo.cpp:483
+#: repo/repo.cpp:512
 #, fuzzy
 #| msgid "Failed to load RPM \"{}\": {}"
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo.cpp:501
+#: repo/repo.cpp:530
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "Nepodařilo se načíst RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:252
+#: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Nelze určit ID repozitáře v mezipaměti."
 
@@ -1107,30 +1123,38 @@ msgstr "Nelze určit ID repozitáře v mezipaměti."
 msgid "Empty path to the repository cache directory."
 msgstr "Prázdná cesta k adresáři mezipaměti repozitáře."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:214
 msgid "Librepo error: {}"
 msgstr "Chyba Librepo: {}"
 
-#: repo/repo_downloader.cpp:170
-msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr "Nepodařilo se stáhnout metadata ({}: \"{}\") pro repozitář \"{}\""
+#: repo/repo_downloader.cpp:258
+#, fuzzy
+#| msgid "Failed to resolve modules."
+msgid "Failed to set up metadata download"
+msgstr "Nepodařilo se vyřešit moduly."
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+#, fuzzy
+#| msgid "Failed to download files"
+msgid "Failed to download metadata"
+msgstr "Stažení souborů se nezdařilo"
+
+#: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda je metalink \"{}\" synchronizován pro úložiště \"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:446
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Chyba při kontrole, zda jsou repomd ({}: \"{}\") synchronizována pro "
 "repozitář \"{}\""
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:515
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Chyba při načítání místních metadat pro repozitář „{}“"
 
-#: repo/repo_downloader.cpp:475
+#: repo/repo_downloader.cpp:597
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1155,7 +1179,7 @@ msgstr "Nepodařilo se vypsat pgp klíče: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Nepodařilo se importovat pgp klíče: {}"
 
-#: repo/repo_sack.cpp:148
+#: repo/repo_sack.cpp:159
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1163,53 +1187,53 @@ msgstr ""
 "Nepodařilo se vytvořit repozitář \"{}\": ID je v konfiguraci přítomno více "
 "než jednou"
 
-#: repo/repo_sack.cpp:575
+#: repo/repo_sack.cpp:635
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "Povolena pouze mezipaměť, ale žádná mezipaměť pro repozitář \"{}\""
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:267
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "Nepodařilo se načíst repomd pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:274
+#: repo/solv_repo.cpp:275
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "Nepodařilo se načíst primární repozitář pro repozitář \"{}\" z \"{}\": {}."
 
-#: repo/solv_repo.cpp:322
+#: repo/solv_repo.cpp:323
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Nepodporovaný typ rozšířených dat repozitáře pro systémový repozitář: \"{}\"."
 
-#: repo/solv_repo.cpp:394
+#: repo/solv_repo.cpp:395
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst rozšíření {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:430
+#: repo/solv_repo.cpp:431
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr ""
 "Nepodařilo se načíst systémový repozitář z kořenového adresáře \"{}\": {}"
 
-#: repo/solv_repo.cpp:531
+#: repo/solv_repo.cpp:532
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "Nepodařilo se načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
 
-#: repo/solv_repo.cpp:585
+#: repo/solv_repo.cpp:586
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Nepodařilo se zapsat primární mezipaměť pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:607
+#: repo/solv_repo.cpp:608
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst primární mezipaměť pro repozitář \"{}\" z \"{}\": "
 "{}"
 
-#: repo/solv_repo.cpp:672
+#: repo/solv_repo.cpp:673
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "Nepodařilo se zapsat mezipaměť {} pro repozitář \"{}\" do \"{}\": {}"
 
-#: repo/solv_repo.cpp:693
+#: repo/solv_repo.cpp:694
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Nepodařilo se znovu načíst mezipaměť {} pro repozitář \"{}\" z \"{}\": {}"
@@ -1269,82 +1293,82 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Nepodařilo se importovat veřejný klíč „{}“ do rpmdb: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:112
+#: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
 msgstr "Nelze nastavit kořenový adresář \"{}\""
 
-#: rpm/transaction.cpp:123
+#: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Chyba %i při otevírání rpm databáze"
 
-#: rpm/transaction.cpp:132
+#: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "Funkce rpmdbCookie() nevrátila cookie databáze rpm."
 
-#: rpm/transaction.cpp:197
+#: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
 msgstr "Spravování rpm transakce se nezdařilo."
 
-#: rpm/transaction.cpp:233
+#: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "Nepodařilo se nastavit výstupní soubor skriptletu, nelze duplikovat "
 "deskriptor souboru: {}"
 
-#: rpm/transaction.cpp:252
+#: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 "Nepodařilo se nastavit výstupní soubor skriptletu, nelze otevřít soubor "
 "\"{}\": {}"
 
-#: rpm/transaction.cpp:273
+#: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 "Nepodařilo se přečíst hlavičku balíčku, nelze otevřít soubor \"{}\": {}"
 
-#: rpm/transaction.cpp:290
+#: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
 msgstr "Nepodařilo se přečíst hlavičku balíčku ze souboru \"{}\""
 
-#: rpm/transaction.cpp:303
+#: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
 msgstr "Nelze inicializovat iterátor rpm databáze"
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
 msgstr "Balíček nebyl nalezen v rpm databázi"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:323
+#: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:341
+#: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:360
+#: rpm/transaction.cpp:362
 #, fuzzy
 #| msgid "Cannot remove package \"{}\""
 msgid "Cannot upgrade package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:366
 #, fuzzy
 #| msgid "Cannot remove package \"{}\""
 msgid "Cannot downgrade package \"{}\""
 msgstr "Nelze odstranit balíček \"{}\""
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:370
 #, fuzzy
 #| msgid "Cannot reinstall package \"{}\""
 msgid "Cannot install package \"{}\""
 msgstr "Nelze přeinstalovat balíček \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:573
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
 msgstr "{}"
 
@@ -1357,19 +1381,19 @@ msgstr "Nepodařilo se převést epochu \"{}\" na číslo"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "Zápis dat debugsolveru do \"{}\" se nezdařil: {}"
 
-#: system/state.cpp:280 system/state.cpp:289
+#: system/state.cpp:282 system/state.cpp:291
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Neplatná verze TOML \"{}\", očekává se \"MAJOR.MINOR\""
 
-#: system/state.cpp:297
+#: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
 msgstr "Stav {} pro \"{}\" nebyl nalezen."
 
-#: system/state.cpp:301
+#: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 
-#: system/state.cpp:602
+#: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "Nepodporovaná verze TOML \"{}\", maximální podporovaná verze je \"{}\""
 

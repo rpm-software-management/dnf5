@@ -1,16 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Luna Jernberg <bittin@reimu.nl>, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2024, 2025.
 # Göran Uddeborg <goeran@uddeborg.se>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-10-08 08:44+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-01 13:57+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -85,39 +85,41 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Visa endast rekommendationer som refererar en CVE."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
+msgid ""
+"Include content contained in advisories with specified name. List option."
 msgstr ""
-"Begränsa till paket som har rekommendationer med angivna namn. Listflagga."
+"Inkludera innehåll i rekommendationer med angivet namn. Listalternativ."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "REKOMMENDATIONSNAMN,…"
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Begränsa till paket i säkerhetsrekommendationer."
+msgid "Include content contained in security advisories."
+msgstr "Inkludera innehåll som finns i säkerhetsrekommendationer."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Begränsa till paket i felrättningsrekommendationer."
+msgid "Include content contained in bugfix advisories."
+msgstr "Inkludera innehåll som finns i felrättningsrekommendationer."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Begränsa till paket i förbättringsrekommendationer."
+msgid "Include content contained in enhancement advisories."
+msgstr "Inkludera innehåll som finns i förbättringsrekommendationer."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Begränsa till paket i nya pakets-rekommendationer."
+msgid "Include content contained in newpackage advisories."
+msgstr "Inkludera innehåll som finns i nya pakets-rekommendationer."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Begränsa till paket i rekommendationer med den angivna allvarlighetsgraden. "
-"Listflagga. Kan vara ”critical”, ”important”, ”moderate”, ”low”, ”none”."
+"Inkludera innehåll som finns i rekommendationer med den angivna "
+"allvarlighetsgraden. Listflagga. Kan vara ”critical”, ”important”, "
+"”moderate”, ”low”, ”none”."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -125,11 +127,10 @@ msgstr "REKOMMENDATIONSALLVARLIGHET,…"
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Begränsa till paket i rekommendationer som löser ett Bugzilla-ID, t.ex. "
-"123123. Listflagga."
+"Inkludera innehåll som löser ett Bugzilla-ID, t.ex. 123123. Listflagga."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -137,11 +138,11 @@ msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Begränsa till paket med rekommendationer som fixar en CVE (Vanliga "
-"sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
+"Inkludera innehåll som finns i med i rekommendationer som fixar en CVE "
+"(Vanliga sårbarheter och exponeringar) ID, t.ex. CVE-2201-0123. Listflagga."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."

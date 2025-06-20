@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 김인수 <simmon@nplob.com>, 2024.
+# 김인수 <simmon@nplob.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Joungmin Lee <leejm516@gmail.com>, 2024.
 # Byoungchan Lee <byoungchan.lee@gmx.com>, 2024.
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-11-18 10:38+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-03 16:58+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -82,39 +82,39 @@ msgid "Show only advisories referencing a CVE."
 msgstr "CVE를 참조하는 권고만 표시합니다."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr "지정된 이름인 권고에서 꾸러미로 제한합니다. 옵션 목록."
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr "지정된 이름인 권고에서 담긴 내용을 포함합니다. 옵션 목록."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "권고_이름,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "보안 권고 사항에 해당하는 꾸러미들로 제한합니다."
+msgid "Include content contained in security advisories."
+msgstr "보안 권고 사항에 담긴 내용을 포함합니다."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "결점수정 권고의 꾸러미로 제한합니다."
+msgid "Include content contained in bugfix advisories."
+msgstr "결점수정 권고에 담긴 내용을 포함합니다."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "개선 권고의 꾸러미로 제한합니다."
+msgid "Include content contained in enhancement advisories."
+msgstr "개선 권고에 담긴 내용을 포함합니다."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "신규꾸러미 권고의 꾸러미로 제한합니다."
+msgid "Include content contained in newpackage advisories."
+msgstr "신규꾸러미 권고에 담긴 내용을 포함합니다."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"지정된 심각도를 갖는 권고의 꾸러미로 제한합니다. 옵션 목록. \"critical(심"
-"각)\", \"important(중요)\", \"moderate(보통)\", \"low(낮음)\", \"none(없"
-"음)\"이 될 수 있습니다."
+"지정된 심각도를 갖는 권고에 담긴 내용을 포함합니다. 옵션 목록. \"심각\", \"중"
+"요\", \"보통\", \"낮음\", \"없음\"이 될 수 있습니다."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -122,10 +122,10 @@ msgstr "권고_심각도,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"버그질라 ID (Eg. 123123)에서 수정된 권고의 꾸러미로 제한합니다. 옵션 목록."
+"버그질라 ID (Eg. 123123)에서 수정된 권고에 담긴 내용을 포함합니다. 옵션 목록."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -133,11 +133,11 @@ msgstr "버그질라_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"CVE(일반 취약점 및 노출) ID(예: CVE-2201-0123)로 수정된 권고의 꾸러미로 제한"
-"합니다. 옵션 목록."
+"CVE(일반 취약점 및 노출) ID(예: CVE-2201-0123)로 수정된 권고에 담긴 내용을 포"
+"함합니다. 옵션 목록."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."

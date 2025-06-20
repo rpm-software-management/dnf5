@@ -2,161 +2,155 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Angelo Schirinzi <odi-3@users.noreply.translate.fedoraproject.org>, 2025.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-04-25 14:44+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
+"libdnf5-plugin-actions/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11\n"
 
 #: actions.cpp:237
-#, c++-format
 msgid "File \"{}\" on line {}: {}"
-msgstr ""
+msgstr "File \"{}\" alla riga {}: {}"
 
 #: actions.cpp:636 actions.cpp:642 actions.cpp:648 actions.cpp:654
 msgid "\"HOOK:PKG_FILTER:DIRECTION:OPTIONS:CMD\" format expected"
-msgstr ""
+msgstr "Previsto formato \"HOOK:FILTRO_PKT:DIREZIONE:OPZIONI:CMD\""
 
 #: actions.cpp:676
-#, c++-format
 msgid "Unknown \"enabled\" option value \"{}\""
-msgstr ""
+msgstr "Valore sconosciuto per l'opzione \"enabled\": \"{}\""
 
 #: actions.cpp:683
-#, c++-format
 msgid "Unknown option \"{}\""
-msgstr ""
+msgstr "Opzione sconosciuta \"{}\""
 
 #: actions.cpp:711
-#, c++-format
 msgid "Unknown hook \"{}\""
-msgstr ""
+msgstr "Hook sconosciuto \"{}\""
 
 #: actions.cpp:720
 msgid ""
 "Package filter can only be used in GOAL_RESOLVED, PRE_TRANS and POST_TRANS "
 "hooks"
 msgstr ""
+"Il filtro pacchetto può essere usato solo negli hook GOAL_RESOLVED, "
+"PRE_TRANS e POST_TRANS"
 
 #: actions.cpp:726
 msgid "Cannot use direction without package filter"
-msgstr ""
+msgstr "Impossibile usare la direzione senza un filtro pacchetto"
 
 #: actions.cpp:740
-#, c++-format
 msgid "Unknown package direction \"{}\""
-msgstr ""
+msgstr "Direzione pacchetto sconosciuta \"{}\""
 
 #: actions.cpp:747
-#, c++-format
 msgid "Unknown mode \"{}\""
-msgstr ""
+msgstr "Modalità sconosciuta \"{}\""
 
 #: actions.cpp:755
-#, c++-format
 msgid "Unsupported value of the \"raise_error\" option: {}"
-msgstr ""
+msgstr "Valore non supportato per l'opzione \"raise_error\": {}"
 
 #: actions.cpp:760
 msgid "Missing command"
-msgstr ""
+msgstr "Comando mancante"
 
 #: actions.cpp:953
-#, c++-format
 msgid "Synax error: Missing equal sign (=) in action output line: {}"
 msgstr ""
+"Errore di sintassi: Manca il segno di uguale (=) nella riga di output "
+"dell'azione: {}"
 
 #: actions.cpp:964
-#, c++-format
 msgid "Cannot set option: Action output line: {}"
-msgstr ""
+msgstr "Impossibile impostare l'opzione: Riga di output dell'azione: {}"
 
 #: actions.cpp:982
-#, c++-format
 msgid "Action sent the wrong log level: {}"
-msgstr ""
+msgstr "L'azione ha inviato un livello di log errato: {}"
 
 #: actions.cpp:987 actions.cpp:1794
-#, c++-format
 msgid "Action calls for stop: {}"
-msgstr ""
+msgstr "L'azione richiede l'arresto: {}"
 
 #: actions.cpp:990 actions.cpp:1801
-#, c++-format
 msgid "Action sent error message: {}"
-msgstr ""
+msgstr "L'azione ha inviato un messaggio di errore: {}"
 
 #: actions.cpp:995
-#, c++-format
 msgid ""
 "Syntax error: Action output line must start with \"tmp.\" or \"conf.\" or "
 "\"var.\" or \"stop=\" or \"error=\": {}"
 msgstr ""
+"Errore di sintassi: La riga di output dell'azione deve iniziare con \"tmp.\" "
+"o \"conf.\" o \"var.\" o \"stop=\" o \"error=\": {}"
 
 #: actions.cpp:1020
 msgid "Error reading from action (from pipe)"
-msgstr ""
+msgstr "Errore durante la lettura dall'azione (dalla pipe)"
 
 #: actions.cpp:1038
-#, c++-format
 msgid "Syntax error in json request from action: Missing starting '{{' char"
 msgstr ""
+"Errore di sintassi nella richiesta JSON dall'azione: Manca il carattere "
+"iniziale '{{'"
 
 #: actions.cpp:1062
 msgid "Error during processing of a request from action."
-msgstr ""
+msgstr "Errore durante l'elaborazione di una richiesta dall'azione."
 
 #: actions.cpp:1071
-#, c++-format
 msgid "Syntax error in json request from action: {}"
-msgstr ""
+msgstr "Errore di sintassi nella richiesta JSON dall'azione: {}"
 
 #: actions.cpp:1079
 msgid "Syntax error in json request from action: Incomplete input"
-msgstr ""
+msgstr "Errore di sintassi nella richiesta JSON dall'azione: Input incompleto"
 
 #: actions.cpp:1154
 msgid "Cannot write response"
-msgstr ""
+msgstr "Impossibile scrivere la risposta"
 
 #: actions.cpp:1821
 msgid "Actions plugin: Cannot create pipe"
-msgstr ""
+msgstr "Plugin Azioni: Impossibile creare la pipe"
 
 #: actions.cpp:1913
 msgid "Actions plugin: Cannot fork"
-msgstr ""
+msgstr "Plugin Azioni: Impossibile eseguire il fork"
 
 #: actions.cpp:1968
 msgid "Actions plugin: Cannot bind command stdin"
-msgstr ""
+msgstr "Plugin Azioni: Impossibile associare lo stdin del comando"
 
 #: actions.cpp:1970
 msgid "Actions plugin: Cannot bind command stdout"
-msgstr ""
+msgstr "Plugin Azioni: Impossibile associare lo stdout del comando"
 
 #: actions.cpp:1988
-#, c++-format
 msgid "Cannot execute action, command \"{}\" arguments \"{}\""
-msgstr ""
+msgstr "Impossibile eseguire l'azione, comando \"{}\" argomenti \"{}\""
 
 #: actions.cpp:1996
 msgid "Error during preparation child process"
-msgstr ""
+msgstr "Errore durante la preparazione del processo figlio"
 
 #: actions.cpp:2015
-#, c++-format
 msgid "Exit code: {}"
-msgstr ""
+msgstr "Codice di uscita: {}"
 
 #: actions.cpp:2019
-#, c++-format
 msgid "Terminated by signal: {}"
-msgstr ""
+msgstr "Terminato dal segnale: {}"

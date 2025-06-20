@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-18 08:18+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
+"projects/dnf5/dnf5-plugin-repoclosure/zh_TW/>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.11.3\n"
+
+#: repoclosure.cpp:45
+msgid "Print list of unresolved dependencies for repositories"
+msgstr "列出軟體庫的未解決依賴關係清單"
+
+#: repoclosure.cpp:154
+msgid "No match for argument \"{}\"."
+msgstr "找不到符合引數「{}」的項目。"
+
+#: repoclosure.cpp:160
+msgid "Failed to resolve package specifications."
+msgstr "無法解析軟體包規格。"
+
+#: repoclosure.cpp:215
+msgid ""
+"Error: Repoclosure ended with unresolved dependencies ({}) across {} "
+"packages."
+msgstr "錯誤：Repoclosure 以未解決的依賴關係（{}）介於 {} 軟體包之間結束。"

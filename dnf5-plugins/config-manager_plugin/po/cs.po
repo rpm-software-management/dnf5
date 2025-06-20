@@ -2,13 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
+# Jonáš Loskot <alius@users.noreply.translate.fedoraproject.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-02-02 13:11+0000\n"
-"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-01 21:07+0000\n"
+"Last-Translator: Jonáš Loskot <alius@users.noreply.translate.fedoraproject."
+"org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
 "plugin-config-manager/cs/>\n"
 "Language: cs\n"
@@ -16,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: addrepo.cpp:136
 msgid "from-repofile: \"{}\" file does not exist"
@@ -95,14 +97,12 @@ msgid "A repository with id \"{}\" already configured in file: {}"
 msgstr "Repozitář s ID \"{}\" již má konfiguraci v souboru: {}"
 
 #: addrepo.cpp:486 setopt.cpp:263
-#, fuzzy
-#| msgid "Cannot set repository option \"{}\": {}"
 msgid "Cannot read repositories from directory \"{}\": {}"
-msgstr "Nelze nastavit volbu repozitáře \"{}\": {}"
+msgstr "Nelze číst repozitáře z adresáře „{}“: {}"
 
 #: config-manager.cpp:43
 msgid "Manage configuration"
-msgstr ""
+msgstr "Správa konfigurace"
 
 #: setopt.cpp:91 unsetopt.cpp:72
 msgid ""
@@ -178,52 +178,67 @@ msgstr "Název proměnné může obsahovat pouze písmena ASCII, čísla a '_': 
 #: unsetopt.cpp:93
 msgid "config-manager: Request to remove unsupported repository option: {}"
 msgstr ""
+"config-manager: Žádost o odstranění nepodporované možnosti repozitáře: {}"
 
 #: unsetopt.cpp:105
 msgid "config-manager: Request to remove unsupported main option: {}"
-msgstr ""
+msgstr "config-manager: Žádost o odstranění nepodporované hlavní možnosti: {}"
 
 #: unsetopt.cpp:140
 msgid ""
 "config-manager: Request to remove main option but it is not present in the "
 "config file: {}"
 msgstr ""
+"config-manager: Žádost o odstranění hlavní možnosti, ta se ale nenachází v "
+"konfiguračním souboru: {}"
 
 #: unsetopt.cpp:152
 msgid ""
 "config-manager: Request to remove main option but config file not found: {}"
 msgstr ""
+"config-manager: Žádost o odstranění hlavní možnosti, ale konfigurační soubor "
+"nebyl nalezen: {}"
 
 #: unsetopt.cpp:186
 msgid ""
 "config-manager: Request to remove repository option but repoid is not "
 "present in the overrides: {}"
 msgstr ""
+"config-manager: Žádost o odstranění možnosti repozitáře, ale repoid se "
+"nenachází v přepsáních: {}"
 
 #: unsetopt.cpp:194
 msgid ""
 "config-manager: Request to remove repository option but it is not present in "
 "the overrides: {}.{}"
 msgstr ""
+"config-manager: Žádost o odstranění možnosti repozitáře, ale ta se nenachází "
+"v přepsáních: {}.{}"
 
 #: unsetopt.cpp:214
 msgid ""
 "config-manager: Request to remove repository option but file with overrides "
 "not found: {}"
 msgstr ""
+"config-manager: Žádost o odstranění možnosti repozitáře, ale soubor s "
+"přepsáními nebyl nalezen: {}"
 
 #: unsetvar.cpp:69
 msgid ""
 "config-manager: Request to remove variable but vars directory was not found: "
 "{}"
 msgstr ""
+"config-manager: Žádost o odstranění proměnné, ale soubor adresář vars nebyl "
+"nalezen: {}"
 
 #: unsetvar.cpp:82
 msgid ""
 "config-manager: Request to remove variable but it is not present in the vars "
 "directory: {}"
 msgstr ""
+"config-manager: Žádost o odstranění proměnné, ale ta se nenachází v adresáři "
+"vars: {}"
 
 #: unsetvar.cpp:88
 msgid "Cannot remove variable file \"{}\": {}"
-msgstr "Nelze odstranit variabilní soubor \"{}\": {}"
+msgstr "Nelze odstranit variabilní soubor „{}“: {}"

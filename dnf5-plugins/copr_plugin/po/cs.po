@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Petr Ptacek <petr106@atlas.cz>, 2024.
+# Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-02-05 08:47+0000\n"
-"Last-Translator: Petr Ptacek <petr106@atlas.cz>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-15 09:07+0000\n"
+"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/dnf5/dnf5-"
 "plugin-copr/cs/>\n"
 "Language: cs\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: copr.cpp:48
 msgid "Copr hub (the web-UI/API server) hostname"
@@ -69,14 +70,14 @@ msgstr ""
 "Povolení úložiště Copr. Upozorňujeme, že toto úložiště není součástí\n"
 "hlavní distribuce a kvalita se může lišit.\n"
 "\n"
-"Projekt Fedora nevykonává žádnou moc nad obsahem\n"
-"toto úložiště nad rámec pravidel uvedených v Copr FAQ na adrese\n"
+"Projekt Fedora nemá žádnou moc nad obsahem\n"
+"tohoto úložiště nad rámec pravidel uvedených v Copr FAQ na adrese\n"
 "<https://docs.pagure.org/copr.copr/user_documentation.html#what-i-can-build-"
 "in-copr>,\n"
-"a balíčky nemají žádnou úroveň kvality ani zabezpečení.\n"
+"a balíčky nemusí dodržovat žádnou úroveň kvality ani zabezpečení.\n"
 "\n"
-"Prosím, neposílejte zprávy o chybách o těchto balíčcích ve Fedoře\n"
-"Bugzilla. V případě problémů kontaktujte vlastníka tohoto úložiště.\n"
+"Prosím, chyby v těchto balíčcích nehlaste do Bugzilly Fedory.\n"
+"V případě problémů kontaktujte vlastníka tohoto úložiště.\n"
 
 #: copr_constants.hpp:41
 msgid ""

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-02-19 11:30+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-01 13:57+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ro/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -83,38 +83,39 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Afișează numai avizele care fac referire la un CVE."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
+msgid ""
+"Include content contained in advisories with specified name. List option."
 msgstr ""
-"Limitează la pachetele din avizele cu numele specificat. Opțiune listă."
+"Include conținutul conținut în avizele cu numele specificat. Opțiune listă."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "NUME_AVIZ,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Limitează la pachetele din avizele de securitate."
+msgid "Include content contained in security advisories."
+msgstr "Include conținutul conținut în avizele de securitate."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Limitează la pachetele din avizele de remediere a erorilor."
+msgid "Include content contained in bugfix advisories."
+msgstr "Include conținutul conținut în avizele de remediere a erorilor."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Limitează la pachetele din avizele de îmbunătățire."
+msgid "Include content contained in enhancement advisories."
+msgstr "Include conținutul conținut în avizele de îmbunătățire."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Limitează la pachetele din avizele de pachete noi."
+msgid "Include content contained in newpackage advisories."
+msgstr "Include conținutul conținut în avizele de pachete noi."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Limitează la pachetele din avizele cu severitatea specificată. Opțiune "
+"Include conținutul conținut în avizele cu severitatea specificată. Opțiune "
 "listă. Poate fi „critical”, „important”, „moderate”, „low”, „none”."
 
 #: commands/advisory/arguments.hpp:157
@@ -123,10 +124,10 @@ msgstr "SEVERITATE_AVIZ,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Limitează la pachetele din avizele care corectează un ID Bugzilla, de "
+"Include conținutul conținut în avizele care corectează un ID Bugzilla, de "
 "exemplu 123123. Opțiune listă."
 
 #: commands/advisory/arguments.hpp:170
@@ -135,10 +136,10 @@ msgstr "ID_BUGZILLA,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Limitează la pachetele din avizele care corectează un ID CVE (Common "
+"Include conținutul conținut în avizele care corectează un ID CVE (Common "
 "Vulnerabilities and Exposures), de exemplu CVE-2201-0123. Opțiune listă."
 
 #: commands/advisory/arguments.hpp:182

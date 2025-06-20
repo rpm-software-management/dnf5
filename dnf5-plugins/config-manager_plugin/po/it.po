@@ -1,0 +1,256 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-07 17:34+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/dnf5/"
+"dnf5-plugin-config-manager/it/>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.3\n"
+
+#: addrepo.cpp:136
+msgid "from-repofile: \"{}\" file does not exist"
+msgstr "da-file-repo: il file \"{}\" non esiste"
+
+#: addrepo.cpp:139
+msgid "from-repofile: {}"
+msgstr "da-file-repo: {}"
+
+#: addrepo.cpp:169 setopt.cpp:83 setvar.cpp:49
+msgid "{}: Badly formatted argument value \"{}\""
+msgstr "{}: Valore dell'argomento \"{}\" formattato male"
+
+#: addrepo.cpp:179
+msgid "Cannot set repository option \"{}={}\": {}"
+msgstr "Impossibile impostare l'opzione del repository \"{}={}\": {}"
+
+#: addrepo.cpp:187 setopt.cpp:138
+msgid "Sets the \"{}\" option again with a different value: \"{}\" != \"{}\""
+msgstr ""
+"Imposta nuovamente l'opzione \"{}\" con un valore diverso: \"{}\" != \"{}\""
+
+#: addrepo.cpp:253
+msgid "Missing path to repository configuration directory"
+msgstr "Percorso mancante alla directory di configurazione del repository"
+
+#: addrepo.cpp:303
+msgid "Failed to copy repository configuration file \"{}\": {}"
+msgstr ""
+"Copia del file di configurazione del repository \"{}\" non riuscita: {}"
+
+#: addrepo.cpp:314
+msgid "Failed to download repository configuration file \"{}\": {}"
+msgstr ""
+"Scaricamento del file di configurazione del repository \"{}\" non riuscito: "
+"{}"
+
+#: addrepo.cpp:342
+msgid ""
+"Error in added repository configuration file. Cannot set repository option "
+"\"{}={}\": {}"
+msgstr ""
+"Errore nel file di configurazione del repository aggiunto. Impossibile "
+"impostare l'opzione del repository \"{}={}\": {}"
+
+#: addrepo.cpp:376
+msgid "Bad baseurl: {}={}"
+msgstr "Baseurl errato: {}={}"
+
+#: addrepo.cpp:384
+msgid ""
+"One of --from-repofile=<URL>, --set=baseurl=<URL>, --set=mirrorlist=<URL>, --"
+"set=metalink=<URL> must be set to a non-empty URL"
+msgstr ""
+"Una delle opzioni --from-repofile=<URL>, --set=baseurl=<URL>, --"
+"set=mirrorlist=<URL>, --set=metalink=<URL> deve essere impostata su un URL "
+"non vuoto"
+
+#: addrepo.cpp:429
+msgid "Failed to save repository configuration file \"{}\": {}"
+msgstr ""
+"Salvataggio del file di configurazione del repository \"{}\" non riuscito: {}"
+
+#: addrepo.cpp:451
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--add-or-replace\" or \"--overwrite\"."
+msgstr ""
+"Il file \"{}\" esiste già e configura i repository con ID \"{}\". Aggiungere "
+"\"--add-or-replace\" o \"--overwrite\"."
+
+#: addrepo.cpp:454
+msgid ""
+"File \"{}\" already exists and configures repositories with IDs \"{}\". Add "
+"\"--overwrite\" to overwrite."
+msgstr ""
+"Il file \"{}\" esiste già e configura i repository con ID \"{}\". Aggiungere "
+"\"--overwrite\" per sovrascrivere."
+
+#: addrepo.cpp:474 addrepo.cpp:500
+msgid "A repository with id \"{}\" already configured in file: {}"
+msgstr "Un repository con ID \"{}\" è già configurato nel file: {}"
+
+#: addrepo.cpp:486 setopt.cpp:263
+msgid "Cannot read repositories from directory \"{}\": {}"
+msgstr "Impossibile leggere i repository dalla directory \"{}\": {}"
+
+#: config-manager.cpp:43
+msgid "Manage configuration"
+msgstr "Gestisci configurazione"
+
+#: setopt.cpp:91 unsetopt.cpp:72
+msgid ""
+"{}: Badly formatted argument value: Last key character cannot be '.': {}"
+msgstr ""
+"{}: Valore argomento formattato in modo errato: l'ultimo carattere della "
+"chiave non può essere '.': {}"
+
+#: setopt.cpp:100 unsetopt.cpp:81
+msgid "{}: Empty repository id is not allowed: {}"
+msgstr "{}: L'ID del repository vuoto non è consentito: {}"
+
+#: setopt.cpp:109
+msgid "Cannot set repository option \"{}\": {}"
+msgstr "Impossibile impostare l'opzione del repository \"{}\": {}"
+
+#: setopt.cpp:116 setopt.cpp:179
+msgid ""
+"Sets the \"{}\" option of the repository \"{}\" again with a different "
+"value: \"{}\" != \"{}\""
+msgstr ""
+"Imposta nuovamente l'opzione \"{}\" del repository \"{}\" con un valore "
+"diverso: \"{}\" != \"{}\""
+
+#: setopt.cpp:130
+msgid "Cannot set option: \"{}\": {}"
+msgstr "Impossibile impostare l'opzione \"{}\": {}"
+
+#: setopt.cpp:170
+msgid "No matching repository to modify: {}"
+msgstr "Nessun repository corrispondente da modificare: {}"
+
+#: setvar.cpp:60
+msgid "Cannot set \"{}\": Variable \"{}\" is read-only"
+msgstr "Impossibile impostare \"{}\": la variabile \"{}\" è di sola lettura"
+
+#: setvar.cpp:68
+msgid "Sets the \"{}\" variable again with a different value: \"{}\" != \"{}\""
+msgstr ""
+"Imposta nuovamente la variabile \"{}\" con un valore diverso: \"{}\" != "
+"\"{}\""
+
+#: setvar.cpp:97 unsetvar.cpp:63
+msgid "Missing path to vars directory"
+msgstr "Percorso della directory delle variabili mancante"
+
+#: setvar.cpp:110
+msgid "Cannot write variable to file \"{}\": {}"
+msgstr "Impossibile scrivere la variabile nel file \"{}\": {}"
+
+#: shared.hpp:58
+msgid ""
+"The path \"{}\" exists, but it is not a directory or a symlink to a "
+"directory."
+msgstr ""
+"Il percorso \"{}\" esiste, ma non è una directory o un collegamento "
+"simbolico a una directory."
+
+#: shared.hpp:63
+msgid "The path \"{}\" exists, but it is a symlink to a non-existent object."
+msgstr ""
+"Il percorso \"{}\" esiste, ma è un collegamento simbolico a un oggetto "
+"inesistente."
+
+#: shared.hpp:69
+msgid ""
+"Directory \"{}\" does not exist. Add \"--create-missing-dir\" to create "
+"missing directories."
+msgstr ""
+"La directory \"{}\" non esiste. Aggiungere \"--create-missing-dir\" per "
+"creare le directory mancanti."
+
+#: shared.hpp:80
+msgid "Variable name can contain only ASCII letters, numbers and '_': {}"
+msgstr ""
+"Il nome della variabile può contenere solo lettere ASCII, numeri e '_': {}"
+
+#: unsetopt.cpp:93
+msgid "config-manager: Request to remove unsupported repository option: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione di un'opzione repository non "
+"supportata: {}"
+
+#: unsetopt.cpp:105
+msgid "config-manager: Request to remove unsupported main option: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione di un'opzione principale non "
+"supportata: {}"
+
+#: unsetopt.cpp:140
+msgid ""
+"config-manager: Request to remove main option but it is not present in the "
+"config file: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione dell'opzione principale ma non è "
+"presente nel file di configurazione: {}"
+
+#: unsetopt.cpp:152
+msgid ""
+"config-manager: Request to remove main option but config file not found: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione dell'opzione principale ma il file di "
+"configurazione non è stato trovato: {}"
+
+#: unsetopt.cpp:186
+msgid ""
+"config-manager: Request to remove repository option but repoid is not "
+"present in the overrides: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione dell'opzione repository ma l'ID del "
+"repository non è presente nelle sovrascritture: {}"
+
+#: unsetopt.cpp:194
+msgid ""
+"config-manager: Request to remove repository option but it is not present in "
+"the overrides: {}.{}"
+msgstr ""
+"config-manager: Richiesta di rimozione dell'opzione repository ma non è "
+"presente nelle sovrascritture: {}.{}"
+
+#: unsetopt.cpp:214
+msgid ""
+"config-manager: Request to remove repository option but file with overrides "
+"not found: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione dell'opzione repository ma il file "
+"con le sovrascritture non è stato trovato: {}"
+
+#: unsetvar.cpp:69
+msgid ""
+"config-manager: Request to remove variable but vars directory was not found: "
+"{}"
+msgstr ""
+"config-manager: Richiesta di rimozione della variabile ma la directory delle "
+"variabili non è stata trovata: {}"
+
+#: unsetvar.cpp:82
+msgid ""
+"config-manager: Request to remove variable but it is not present in the vars "
+"directory: {}"
+msgstr ""
+"config-manager: Richiesta di rimozione della variabile ma non è presente "
+"nella directory delle variabili: {}"
+
+#: unsetvar.cpp:88
+msgid "Cannot remove variable file \"{}\": {}"
+msgstr "Impossibile rimuovere il file della variabile \"{}\": {}"

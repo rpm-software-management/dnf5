@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Yang Yulin <yylteam@icloud.com>, 2024.
 # Wenyin Root <ruojiner@hotmail.com>, 2024.
-# caffiendo c <1728778012@qq.com>, 2024.
+# caffiendo c <1728778012@qq.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-12-15 02:53+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-07 17:34+0000\n"
 "Last-Translator: caffiendo c <1728778012@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/zh_CN/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -77,37 +77,38 @@ msgid "Show only advisories referencing a CVE."
 msgstr "仅显示引用 CVE 的建议。"
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr "限制为具有指定名称的公告中的软件包。 列表选项。"
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr "包含指定名称的建议中包含的内容。列表选项。"
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "限制安全公告中的软件包。"
+msgid "Include content contained in security advisories."
+msgstr "包括安全公告中包含的内容。"
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "限制错误修复建议中的软件包。"
+msgid "Include content contained in bugfix advisories."
+msgstr "包括错误修复建议中包含的内容。"
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "仅限于增强建议中的软件包。"
+msgid "Include content contained in enhancement advisories."
+msgstr "包括增强建议中包含的内容。"
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "仅限于新软件包公告中的软件包。"
+msgid "Include content contained in newpackage advisories."
+msgstr "包括新软件包公告中的内容。"
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"限制为具有指定严重性的公告中的包。列表选项。可以是\"critical\", "
+"包括具有指定严重程度的公告中所含的内容。列表选项。可以是\"critical\", "
 "\"important\", \"moderate\", \"low\", \"none\" 。"
 
 #: commands/advisory/arguments.hpp:157
@@ -116,9 +117,9 @@ msgstr "严重警告,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
-msgstr "仅限于修复Bugzilla ID(例如123123)公告中的包，列表选项。"
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
+msgstr "包含修复 Bugzilla ID(例如123123) 的建议中包含的内容。列表选项。"
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -126,10 +127,10 @@ msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"仅限于修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)公告中的包，列表选项。"
+"包含修复CVE(常见漏洞和暴露)ID(例如CVE-2201-0123)的建议中的内容，列表选项。"
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."

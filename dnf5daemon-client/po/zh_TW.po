@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # hsu zangmen <chzang55@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-04-02 03:01+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-18 10:16+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/dnf5/dnf5daemon-client/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -18,46 +18,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr "管理建議"
+msgstr "管理通報"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
-msgstr "列出有關建議的詳細資訊"
+msgstr "列出通報的相關詳細資訊"
 
 #: commands/advisory/advisory_list.hpp:34
 msgid "List advisories"
-msgstr "清單建議"
+msgstr "列出通報"
 
 #: commands/advisory/arguments.hpp:32
 msgid "Show advisories containing any version of installed packages."
-msgstr "顯示包含任何已安裝套件版本的公告。"
+msgstr "顯示已安裝軟體包的任何版本的通報。"
 
 #: commands/advisory/arguments.hpp:43
 msgid ""
 "Show advisories containing newer versions of installed packages. This is the "
 "default behavior."
-msgstr "顯示包含已安裝套件更新版本的公告。 這是預設行為。"
+msgstr "顯示已安裝軟體包有新版本的通報。這是預設行為。"
 
 #: commands/advisory/arguments.hpp:55
 msgid ""
 "Show advisories containing equal and older versions of installed packages."
-msgstr "顯示包含已安裝套件的相同及較舊版本的公告。"
+msgstr "顯示已安裝軟體包的相同版本與舊版的通報。"
 
 #: commands/advisory/arguments.hpp:67
 msgid ""
 "Show advisories containing newer versions of installed packages for which a "
 "newer version is available."
-msgstr "顯示包含已安裝套件的更新版本的公告。"
+msgstr "顯示已安裝軟體包有新版本可用的新版本通報。"
 
 #: commands/advisory/arguments.hpp:80
 msgid ""
 "Show only advisories containing packages with specified names. List option, "
 "supports globs."
-msgstr "只顯示包含指定名稱套件的公告。 清單選項，支援 globs。"
+msgstr "只顯示指定名稱軟體包的通報。列表選項，支援 globs。"
 
 #: commands/advisory/arguments.hpp:81
 msgid "PACKAGE_NAME,..."
@@ -65,49 +65,50 @@ msgstr "PACKAGE_NAME,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr "與諮詢名稱匹配的模式清單。"
+msgstr "根據通報名稱比對的樣式清單。"
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
-msgstr "只顯示參考 bugzilla 的建議。"
+msgstr "只顯示有引用 bugzilla 的通報。"
 
 #: commands/advisory/arguments.hpp:102
 msgid "Show only advisories referencing a CVE."
-msgstr "只顯示引用 CVE 的警告。"
+msgstr "只顯示有引用 CVE 的通報。"
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr "限制到具有指定名稱的 advisories 中的套件。 清單選項。"
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr "納入指定名稱通報中所含的內容。列表選項。"
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "ADVISORY_NAME,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "限制至安全公告中的套件。"
+msgid "Include content contained in security advisories."
+msgstr "納入安全性通報中所含的內容。"
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "限制至 Bug 修補公告中的套件。"
+msgid "Include content contained in bugfix advisories."
+msgstr "納入臭蟲修正通報中所含的內容。"
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "限制為增強建議中的套件。"
+msgid "Include content contained in enhancement advisories."
+msgstr "納入功能增強通報中所含的內容。"
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "限制為新套件公告中的套件。"
+msgid "Include content contained in newpackage advisories."
+msgstr "納入新軟體包通告中所含的內容。"
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"限制到具有指定嚴重性的公告中的套件。 清單選項可以是\"critical\", "
-"\"important\", \"moderate\", \"low\", \"none\"。"
+"納入指定嚴重程度的通報所含的內容。列表選項。可以是 "
+"\"critical\"、\"important\"、\"moderate\"、\"low\"、\"none\"。"
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -115,9 +116,9 @@ msgstr "ADVISORY_SEVERITY,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
-msgstr "限制修復 Bugzilla ID 的公告中的軟體包，Eg. 123123. 列表選項。"
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
+msgstr "納入修復 Bugzilla ID，如 123123，這類通報所含的內容。列表選項。"
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -125,11 +126,11 @@ msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"限制於修補 CVE (Common Vulnerabilities and Exposures) ID 的公告中的套件，例"
-"如 CVE-2201-0123。 清單選項。"
+"納入可修正 CVE（常見漏洞與暴露）ID，如 CVE-2201-0123，這類通報所含的內容。列"
+"表選項。"
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
@@ -154,7 +155,7 @@ msgstr "僅顯示可用的群組。"
 
 #: commands/group/group_list.hpp:43
 msgid "Show only installed groups."
-msgstr "僅顯示已安裝的群組。"
+msgstr "只顯示已安裝的群組。"
 
 #: commands/group/group_list.hpp:49
 msgid "Show also hidden groups."
@@ -164,7 +165,7 @@ msgstr "也顯示隱藏群組。"
 msgid ""
 "Show only groups containing packages with specified names. List option, "
 "supports globs."
-msgstr "只顯示包含指定名稱套件的群組。 清單選項，支援 globs。"
+msgstr "只顯示包含指定名稱軟體包的群組。清單選項，支援 globs。"
 
 #: commands/repo/repo.cpp:37
 msgid "Manage repositories"
@@ -176,7 +177,7 @@ msgstr "搜尋符合各種條件的套件"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "解析 JSON 物件 \"{}\" 時出錯： {}"
+msgstr "解析 JSON 物件 「{}」 時出錯： {}"
 
 #: exception.cpp:28
 msgid ""
@@ -187,7 +188,7 @@ msgstr "此命令需要以超級使用者權限執行（大部分系統是在 ro
 #: main.cpp:158
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
-msgstr "{}: 格式錯誤的參數值： 最後一個關鍵字不能是 '： {}"
+msgstr "{}：格式錯誤的引數值：最後一個鍵的字元不能是「.」：{}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."

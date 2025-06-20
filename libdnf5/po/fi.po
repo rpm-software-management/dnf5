@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
 "PO-Revision-Date: 2025-03-21 02:53+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/dnf5/"
@@ -33,7 +33,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "Ei tuettu argumentti toiminnolle POISTA: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1593
+#: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "Virheellinen määritysarvo multilib_policylle: {}"
 
@@ -182,20 +182,30 @@ msgid "No match for argument: {}"
 msgstr "Ei vastaavaa argumentille: {}"
 
 #: base/log_event.cpp:163
+#, fuzzy
+#| msgid "No match for argument '{0}' in repositories '{1}'"
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "Ei vastaavaa argumentille '{0}' tietovarastoissa '{1}'"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr ""
+
+#: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "Ei vastaavaa argumentille '{0}' tietovarastoissa '{1}'"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr ""
 "Toimintoa {0} ei voi suorittaa kohteelle {1} '{2}', koska sitä ei ole "
 "asennettu."
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "Paketit argumentille '{}' saatavilla, mutta ei asennettu."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:184
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
@@ -203,24 +213,24 @@ msgstr ""
 "Paketit argumentille '{}' saatavilla, mutta asennettu toiselle "
 "arkkitehtuurille."
 
-#: base/log_event.cpp:182
+#: base/log_event.cpp:188
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr "Toimintoa {0} ei voi suorittaa, koska {1} vastaa vain lähdepaketteja."
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "Argumentti '{}' vastaa vain lähdepaketteja."
 
-#: base/log_event.cpp:190
+#: base/log_event.cpp:196
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr ""
 "{0}:ta ei voi suorittaa, koska {1} vastaa vain poissuljettuja paketteja."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "Argumentti {} vastaa vain poissuljettuja paketteja."
 
-#: base/log_event.cpp:198
+#: base/log_event.cpp:204
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
@@ -228,20 +238,20 @@ msgstr ""
 "{0}:ta ei voi suorittaa, koska '{1}' vastaa vain paketteja, joka "
 "'versionlock' on sulkenut pois."
 
-#: base/log_event.cpp:202
+#: base/log_event.cpp:208
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr ""
 "Argumentti '{}' vastaa vain paketteja, joka 'versionlock' on sulkenut pois."
 
-#: base/log_event.cpp:207
+#: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
 msgstr "  * Kenties tarkoitit: {}"
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:216
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "'{0}':lle on olemassa seuraavat vaihtoehdot: {1}"
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:223
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -249,7 +259,7 @@ msgstr ""
 "Paketin \"{}\" alin saatavilla oleva versio on jo asennettu, sitä ei voi "
 "päivittää vanhempaan versioon."
 
-#: base/log_event.cpp:223
+#: base/log_event.cpp:229
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
@@ -257,34 +267,34 @@ msgstr ""
 "Asennetut paketit argumentille '{0}' eivät ole saatavilla d-tietovarastoissa "
 "samassa versiossa; saatavilla olevat versiot: {1}, ei voi asentaa uudelleen."
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:235
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr "{0}:ta ei voi suorittaa, koska '{1}' on asennettu eri versiona: '{2}'."
 
-#: base/log_event.cpp:235
+#: base/log_event.cpp:241
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr "Paketit argumentille '{}' asennettu ja saatavilla, mutta eri versiona."
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:243
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "Paketit argumentille '{}' asennettu, mutta eivät saatavilla."
 
-#: base/log_event.cpp:246
+#: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "Paketti \"{}\" on jo asennettu syyllä \"{}\"."
 
-#: base/log_event.cpp:248
+#: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
 msgstr "Paketti \"{}\" on jo asennettu."
 
-#: base/log_event.cpp:257
+#: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
 msgstr "Virheenkorjaustiedot kirjoitettu \"{}\":een"
 
-#: base/log_event.cpp:261
+#: base/log_event.cpp:267
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
@@ -292,16 +302,16 @@ msgstr ""
 "{0}:n päivitystä ei voi kumota, mutta siihen liittyvät pakettitoiminnot ovat "
 "kuitenkin. ({1}-tunnus: '{2}')."
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "Toimintoa {} argumentille \"{}\" ei tueta."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:276
+#: base/log_event.cpp:282
 msgid "Unable to resolve argument '{}':"
 msgstr "Argumenttia '{}' ei voi ratkaista:"
 
-#: base/log_event.cpp:280
+#: base/log_event.cpp:286
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -313,30 +323,30 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:293
 msgid "', '"
 msgstr "', '"
 
-#: base/log_event.cpp:296
+#: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
 msgstr "Modulaariset riippuvuusongelmat:\n"
 
-#: base/log_event.cpp:303
+#: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "Modulaariset riippuvuusongelmat uusimpien moduulien kanssa:\n"
 
-#: base/log_event.cpp:310
+#: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "Modulaariset riippuvuusongelmat oletusasetusten kanssa:\n"
 
-#: base/log_event.cpp:325
+#: base/log_event.cpp:331
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr ""
 "Toiminto johtaisi moduulin ”{0}” vaihtamiseen virrasta ”{1}” virtaan ”{2}”\n"
 
-#: base/log_event.cpp:330
+#: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -344,7 +354,7 @@ msgstr ""
 "Virhe: Moduulin käytössä olevia virtoja ei voi vaihtaa, ellei niitä ole "
 "nimenomaisesti otettu käyttöön kokoonpanon asetuksella module_stream_switch."
 
-#: base/log_event.cpp:335
+#: base/log_event.cpp:341
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
@@ -352,11 +362,11 @@ msgstr ""
 "Ylimääräinen paketti '{0}' (toiminnolla '{1}'), jota ei ole tallennetussa "
 "tapahtumassa, vedettiin tapahtumaan.\n"
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "Tiedostoa ei voi jäsentää: '{0}': {1}.\n"
 
-#: base/log_event.cpp:348
+#: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -364,12 +374,12 @@ msgstr ""
 "Vianmääritystietopakettia debuginfo ei löytynyt seuraaville paketeille, "
 "jotka on ratkaistu argumentilla '{0}': {1}"
 
-#: base/log_event.cpp:351 base/log_event.cpp:362
+#: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ", "
 
-#: base/log_event.cpp:358
+#: base/log_event.cpp:364
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -377,7 +387,7 @@ msgstr ""
 "Vianmäärityslähdepakettia debugsource ei löytynyt seuraaville paketeille, "
 "jotka on ratkaistu argumentilla '{0}': {1}"
 
-#: base/log_event.cpp:365
+#: base/log_event.cpp:371
 msgid "Transaction merge error: '{0}'"
 msgstr "Tapahtuman yhdistämisvirhe: '{0}'"
 
@@ -927,7 +937,7 @@ msgstr ""
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "Libdnf-laajennusta ei voi ladata kohteesta: {}"
 
-#: repo/config_repo.cpp:569
+#: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256:n laskenta epäonnistui"
 
@@ -967,31 +977,38 @@ msgstr "Ladattu jo"
 msgid "Failed to download packages"
 msgstr "Pakettien lataaminen epäonnistui"
 
-#: repo/repo.cpp:59
+#: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr ""
 "RPM-\"{}\":n lataaminen epäonnistui: sillä ei ole \".rpm\" -laajennusta"
 
-#: repo/repo.cpp:63
+#: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "RPM-\"{}\":n käyttö epäonnistui: {}"
 
-#: repo/repo.cpp:105
+#: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr ""
 "Virheellinen ohjelmistolähteen tunnus \"{}\": odottamaton merkki \"{}\""
 
-#: repo/repo.cpp:148
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "Tiertovarastolla \"{}\" ei ole asetettuna lähdettä (baseurl, peililuettelo "
 "tai metalinkki)."
 
-#: repo/repo.cpp:159
+#: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "Ohjelmistolähteen \"{}\" tyyppiä \"{}\" ei tueta, ohitetaan."
 
-#: repo/repo.cpp:410
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+#, fuzzy
+#| msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr ""
+"Ohjelmistolähteen \"{}\" metatietojen ({}: \"{}\") lataaminen epäonnistui"
+
+#: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -999,20 +1016,20 @@ msgstr ""
 "Ohjelmistolähteen lataaminen epäonnistui: \"ensisijaista\" dataa ei ole tai "
 "se ei ole tuetussa muodossa"
 
-#: repo/repo.cpp:476
+#: repo/repo.cpp:505
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr ""
 "comps:n \"{}\" lataaminen epäonnistui: sillä ei ole \".xml\" -laajennusta"
 
-#: repo/repo.cpp:483
+#: repo/repo.cpp:512
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "xml Comps:n \"{}\" lataaminen epäonnistui: {}"
 
-#: repo/repo.cpp:501
+#: repo/repo.cpp:530
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "RPM:n \"{}\" lataaminen epäonnistui: {}"
 
-#: repo/repo_cache.cpp:252
+#: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
 msgstr "Välimuistissa olevan ohjelmistolähteen tunnusta ei voi määrittää."
 
@@ -1020,32 +1037,39 @@ msgstr "Välimuistissa olevan ohjelmistolähteen tunnusta ei voi määrittää."
 msgid "Empty path to the repository cache directory."
 msgstr "Tyhjä polku ohjelmistolähteen välimuistihakemistoon."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:214
 msgid "Librepo error: {}"
 msgstr "Librepo-virhe: {}"
 
-#: repo/repo_downloader.cpp:170
-msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr ""
-"Ohjelmistolähteen \"{}\" metatietojen ({}: \"{}\") lataaminen epäonnistui"
+#: repo/repo_downloader.cpp:258
+#, fuzzy
+#| msgid "Failed to resolve module metadata: {}"
+msgid "Failed to set up metadata download"
+msgstr "Moduulin metatietojen ratkaiseminen epäonnistui: {}"
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+#, fuzzy
+#| msgid "Failed to download files"
+msgid "Failed to download metadata"
+msgstr "Tiedostojen lataaminen epäonnistui"
+
+#: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "Virhe tarkistettaessa, onko metalinkki \"{}\" synkronoitu "
 "ohjelmistolähteeseen \"{}\""
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:446
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "Virhe tarkistettaessa, onko repomd ({}: \"{}\") synkronoitu "
 "ohjelmistolähteen \"{}\" kanssa"
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:515
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "Virhe ladattaessa paikallisia metatietoja ohjelmistolähteelle \"{}\""
 
-#: repo/repo_downloader.cpp:475
+#: repo/repo_downloader.cpp:597
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1064,7 +1088,7 @@ msgstr "OpenPGP-avainten listaaminen epäonnistui: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "OpenPGP-avainten tuominen epäonnistui: {}"
 
-#: repo/repo_sack.cpp:148
+#: repo/repo_sack.cpp:159
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
@@ -1072,58 +1096,58 @@ msgstr ""
 "Tietovaraston \"{}\" luominen epäonnistui: Tunnus on useammin kuin kerran "
 "määrityksessä"
 
-#: repo/repo_sack.cpp:575
+#: repo/repo_sack.cpp:635
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr ""
 "Vain välimuisti käytössä, mutta ei välimuistia ohjelmistolähteelle \"{}\""
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:267
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "repomdin lataaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: {}."
 
-#: repo/solv_repo.cpp:274
+#: repo/solv_repo.cpp:275
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr ""
 "ensisijaisen lataaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: {}."
 
-#: repo/solv_repo.cpp:322
+#: repo/solv_repo.cpp:323
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr ""
 "Ei tuettu laajennettua repodata-tyyppiä järjestelmätietovarastolle: \"{}\"."
 
-#: repo/solv_repo.cpp:394
+#: repo/solv_repo.cpp:395
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "{} laajennuksen lataaminen \"{}\":sta tietovarastolle \"{}\" epäonnistui: {}"
 
-#: repo/solv_repo.cpp:430
+#: repo/solv_repo.cpp:431
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "Järjestelmätietovaraston lataaminen juurelta \"{}\" epäonnistui: {}"
 
-#: repo/solv_repo.cpp:531
+#: repo/solv_repo.cpp:532
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Tietovaraston \"{}\" välimuistin {} lataaminen \"{}\":sta epäonnistui: {}"
 
-#: repo/solv_repo.cpp:585
+#: repo/solv_repo.cpp:586
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Tietovaraston \"{}\" ensisijaisen välimuistin kirjoittaminen \"{}\":een "
 "epäonnistui: {}"
 
-#: repo/solv_repo.cpp:607
+#: repo/solv_repo.cpp:608
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Ensisijaisen välimuistin uudelleenlataaminen tietovarastolle \"{}\" \"{}\":"
 "sta epäonnistui: {}"
 
-#: repo/solv_repo.cpp:672
+#: repo/solv_repo.cpp:673
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr ""
 "Välimuistin {} kirjoittaminen tietovarastolle \"{}\" \"{}\":sta epäonnistui: "
 "{}"
 
-#: repo/solv_repo.cpp:693
+#: repo/solv_repo.cpp:694
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr ""
 "Tietovaraston \"{}\" välimuistin {} lataaminen \"{}\":sta epäonnistui: {}"
@@ -1184,71 +1208,71 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "Julkisen avaimen \"{}\" tuonti rpmdb:hen epäonnistui: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:112
+#: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
 msgstr "Juurihakemistoa \"{}\" ei voi asettaa"
 
-#: rpm/transaction.cpp:123
+#: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "Virhe %i avattaessa rpm-tietokantaa"
 
-#: rpm/transaction.cpp:132
+#: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "rpmdbCookie()-funktio ei palauttanut rpm-tietokannan evästettä."
 
-#: rpm/transaction.cpp:197
+#: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
 msgstr "rpm-tapahtuman tilaaminen epäonnistui."
 
-#: rpm/transaction.cpp:233
+#: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 
-#: rpm/transaction.cpp:252
+#: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr ""
 
-#: rpm/transaction.cpp:273
+#: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr ""
 
-#: rpm/transaction.cpp:290
+#: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
 msgstr "Paketin otsikon lukeminen tiedostosta \"{}\" epäonnistui"
 
-#: rpm/transaction.cpp:303
+#: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
 msgstr ""
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
 msgstr "Pakettia ei löytynyt rpm-tietokannasta"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:323
+#: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
 msgstr "Pakettia \"{}\" ei voi asentaa uudelleen"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:341
+#: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
 msgstr "Pakettia \"{}\" ei voi poistaa"
 
-#: rpm/transaction.cpp:360
+#: rpm/transaction.cpp:362
 msgid "Cannot upgrade package \"{}\""
 msgstr "Pakettia \"{}\" ei voi päivittää"
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:366
 msgid "Cannot downgrade package \"{}\""
 msgstr "Pakettia \"{}\" ei voi varhentaa"
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:370
 msgid "Cannot install package \"{}\""
 msgstr "Pakettia \"{}\" ei voi asentaa"
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:573
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
 msgstr "{}"
 
@@ -1261,19 +1285,19 @@ msgstr "epochin \"{}\" muuntaminen numeroksi epäonnistui"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "debugsolverin tietojen kirjoittaminen \"{}\":iin epäonnistui: {}"
 
-#: system/state.cpp:280 system/state.cpp:289
+#: system/state.cpp:282 system/state.cpp:291
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "Virheellinen TOML-versio \"{}\", odotettiin muotoa \"MAJOR.MINOR\""
 
-#: system/state.cpp:297
+#: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
 msgstr ""
 
-#: system/state.cpp:301
+#: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 
-#: system/state.cpp:602
+#: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr ""
 

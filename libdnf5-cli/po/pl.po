@@ -1,16 +1,16 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Paweł Marciniak <sunwire+fas@gmail.com>, 2024.
+# Paweł Marciniak <sunwire+fas@gmail.com>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Petr Pisar <ppisar@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-01-09 22:48+0000\n"
-"Last-Translator: Petr Pisar <ppisar@redhat.com>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-11 03:40+0000\n"
+"Last-Translator: Paweł Marciniak <sunwire+fas@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5-cli/pl/>\n"
 "Language: pl\n"
@@ -19,110 +19,124 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: argument_parser.cpp:62
+#: argument_parser.cpp:68
+msgid "Misconfigured alias \"{}\": cannot convert \"{}\" to a number"
+msgstr ""
+"Nieprawidłowo skonfigurowany alias „{}”: nie można przekonwertować „{}” na "
+"liczbę"
+
+#: argument_parser.cpp:76
+msgid "Misconfigured alias \"{}\": index \"{}\" out of range"
+msgstr "Nieprawidłowo skonfigurowany alias „{}”: indeks „{}” poza zakresem"
+
+#: argument_parser.cpp:98
 msgid "\"{}\" not allowed together with named argument \"{}\""
 msgstr "„{}” nie jest dozwolone razem z argumentem nazwanym „{}”"
 
-#: argument_parser.cpp:64
+#: argument_parser.cpp:100
 msgid "\"{}\" not allowed in command \"{}\""
 msgstr "„{}” nie jest dozwolone w poleceniu „{}”"
 
-#: argument_parser.cpp:66
+#: argument_parser.cpp:102
 msgid "\"{}\" not allowed together with positional argument \"{}\""
 msgstr "„{}” nie jest dozwolone razem z argumentem pozycyjnym „{}”"
 
-#: argument_parser.cpp:111
+#: argument_parser.cpp:147
 msgid "Argument id \"{}\" already registered in group \"{}\""
 msgstr "Argument id „{}” jest już zarejestrowany w grupie „{}”"
 
-#: argument_parser.cpp:238
+#: argument_parser.cpp:274
 msgid "Invalid character '.' in argument id \"{}\""
 msgstr "Nieprawidłowy znak „.” w argumencie o identyfikatorze „{}”"
 
-#: argument_parser.cpp:346 argument_parser.cpp:351
+#: argument_parser.cpp:382 argument_parser.cpp:387
 msgid "Too few values for positional argument \"{}\""
 msgstr "Zbyt mało wartości dla argumentu pozycyjnego „{}”"
 
-#: argument_parser.cpp:512
+#: argument_parser.cpp:548
 msgid "Missing value for named argument \"--{}\""
 msgstr "Brak wartości dla argumentu nazwanego „--{}”"
 
-#: argument_parser.cpp:520
+#: argument_parser.cpp:556
 msgid "Unexpected value for named argument \"--{}\""
 msgstr "Nieoczekiwana wartość dla argumentu nazwanego „--{}”"
 
-#: argument_parser.cpp:562
+#: argument_parser.cpp:598
 msgid "Missing value for named argument \"-{}\""
 msgstr "Brak wartości dla argumentu nazwanego „-{}”"
 
 #. print usage
-#: argument_parser.cpp:658
+#: argument_parser.cpp:694
 msgid "Usage:"
 msgstr "Użycie:"
 
-#: argument_parser.cpp:666
+#: argument_parser.cpp:702
 msgid "Description:"
 msgstr "Opis:"
 
-#: argument_parser.cpp:943
+#: argument_parser.cpp:979
 msgid "Command id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Identyfikator polecenia „{}” został już zarejestrowany dla polecenia „{}”"
 
-#: argument_parser.cpp:954
+#: argument_parser.cpp:990
 msgid "Named argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Nazwany argument o identyfikatorze „{}” jest już zarejestrowany dla "
 "polecenia „{}”"
 
-#: argument_parser.cpp:964
+#: argument_parser.cpp:1000
 msgid "Positional argument id \"{}\" already registered for command \"{}\""
 msgstr ""
 "Identyfikator argumentu pozycyjnego „{}” został już zarejestrowany dla "
 "polecenia „{}”"
 
-#: argument_parser.cpp:974
+#: argument_parser.cpp:1010
 msgid "Group id \"{}\" already registered for command \"{}\""
 msgstr "Identyfikator grupy „{}” został już zarejestrowany dla polecenia „{}”"
 
-#: argument_parser.cpp:1001
+#: argument_parser.cpp:1037
 msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera podpolecenia o identyfikatorze "
 "„{}”"
 
-#: argument_parser.cpp:1009
+#: argument_parser.cpp:1045
 msgid "Command id \"{}\" does not contain named argument with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera nazwanego argumentu o "
 "identyfikatorze „{}”"
 
-#: argument_parser.cpp:1017
+#: argument_parser.cpp:1053
 msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera argumentu pozycyjnego o "
 "identyfikatorze „{}”"
 
-#: argument_parser.cpp:1024
+#: argument_parser.cpp:1060
 msgid "Command id \"{}\" does not contain group with id \"{}\""
 msgstr ""
 "Polecenie o identyfikatorze „{}” nie zawiera grupy o identyfikatorze „{}”"
 
-#: argument_parser.cpp:1141 argument_parser.cpp:1345
+#: argument_parser.cpp:1177 argument_parser.cpp:1388
 msgid "Unknown argument \"{}\" for command \"{}\""
 msgstr "Nieznany argument „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1156 argument_parser.cpp:1360
+#: argument_parser.cpp:1192 argument_parser.cpp:1403
 msgid "Missing positional argument \"{}\" for command \"{}\""
 msgstr "Brak argumentu pozycyjnego „{}” dla polecenia „{}”"
 
-#: argument_parser.cpp:1563
+#: argument_parser.cpp:1274
+msgid "Missing value for command alias \"{}\""
+msgstr "Brak wartości dla aliasu polecenia „{}”"
+
+#: argument_parser.cpp:1610
 msgid "Named argument with path id \"{}\" not found"
 msgstr "Nie znaleziono nazwanego argumentu o identyfikatorze ścieżki „{}”"
 
-#: argument_parser.cpp:1573
+#: argument_parser.cpp:1620
 msgid "Positional argument with path id \"{}\" not found"
 msgstr "Nie znaleziono argumentu pozycyjnego o identyfikatorze ścieżki „{}”"
 

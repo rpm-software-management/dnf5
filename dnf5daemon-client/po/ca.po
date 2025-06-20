@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-03-13 03:10+0000\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-13 11:25+0000\n"
 "Last-Translator: David Medina <dmedinacpnl@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
@@ -84,40 +84,40 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Mostra solament els avisos amb referències a un CVE."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
+msgid ""
+"Include content contained in advisories with specified name. List option."
 msgstr ""
-"Limita a paquets amb avisos coincidents amb els noms especificats. Opció "
-"tipus llista."
+"Inclou el contingut dels avisos amb el nom especificat. Opció de llista."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "NOM_DE_L'AVÍS,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Limita solament a paquets amb avisos de seguretat. Opció tipus llista."
+msgid "Include content contained in security advisories."
+msgstr "Inclou el contingut dels avisos de seguretat."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Limita solament a paquets amb avisos de correccions d'errors."
+msgid "Include content contained in bugfix advisories."
+msgstr "Inclou el contingut dels avisos de correcció d'errors."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Limita a paquets amb avisos de millores."
+msgid "Include content contained in enhancement advisories."
+msgstr "Inclou el contingut dels avisos de millora."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Limita a paquets amb avisos de nou paquet."
+msgid "Include content contained in newpackage advisories."
+msgstr "Inclou el contingut dels avisos de paquets nous."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Limita a paquets amb avisos de la severitat específica. Opció tipus llista. "
-"Pot ser \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Inclou el contingut dels avisos amb una gravetat especificada. Opció de "
+"llista. Pot ser crític, important, moderat, baix o cap."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -125,11 +125,11 @@ msgstr "SEVERITAT_DE_L'AVÍS,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Limita a paquets amb avisos que arreglen algun ID d'error de Bugzilla, per "
-"exemple 123123. Opció tipus llista."
+"Inclou el contingut dels avisos que arreglen un identificador de Bugzilla, "
+"p. ex. 123123. Opció llista."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -137,11 +137,12 @@ msgstr "ID_DE_BUGZILLA,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Limita a paquets que inclouen avisos que arreglen un CVE (Vulnerabilitats i "
-"Exposicions Comunes), per exemple CVE-2201-0123. Opció tipus llista."
+"Inclou el contingut dels avisos que solucionen un cas de CVE "
+"(Vulnerabilitats i exposicions comunes), p. ex. CVE-2201-0123. Opció de "
+"llista."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
@@ -188,7 +189,7 @@ msgstr "Gestioneu els dipòsits"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr "Cerca per paquets coincidents amb diversos criteris"
+msgstr "cerca per paquets coincidents amb criteris diversos"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
@@ -210,4 +211,4 @@ msgstr ""
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
-msgstr ". Afegeix \"--help\" per més informació sobre els arguments."
+msgstr ". Afegiu \"--help\" per més informació sobre els arguments."

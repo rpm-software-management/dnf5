@@ -4,13 +4,14 @@
 # Dennis Koerner <dennis@bumblebeeman.dev>, 2024.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
 # Fabio D <fabio1977@arcor.de>, 2024.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2024-11-05 21:08+0000\n"
-"Last-Translator: Fabio D <fabio1977@arcor.de>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-05-01 13:57+0000\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/dnf5/"
 "dnf5daemon-client/de/>\n"
 "Language: de\n"
@@ -18,11 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: commands/advisory/advisory.cpp:35
 msgid "Manage advisories"
-msgstr "Verwalte Adversories"
+msgstr "Hinweise verwalten"
 
 #: commands/advisory/advisory_info.hpp:34
 msgid "Print details about advisories"
@@ -72,7 +73,7 @@ msgstr "PAKET_NAME,..."
 
 #: commands/advisory/arguments.hpp:88
 msgid "List of patterns matched against advisory names."
-msgstr "Liste der Muster die mit den Hinweisnamen übereinstimmen."
+msgstr "Liste der Muster, die mit den Hinweisnamen übereinstimmen."
 
 #: commands/advisory/arguments.hpp:95
 msgid "Show only advisories referencing a bugzilla."
@@ -83,40 +84,39 @@ msgid "Show only advisories referencing a CVE."
 msgstr "Nur Hinweise mit einer CVE-Referenz anzeigen."
 
 #: commands/advisory/arguments.hpp:113
-msgid "Limit to packages in advisories with specified name. List option."
-msgstr ""
-"Auf Pakete in Hinweisen mit angegebenem Namen beschränkt. Listenoption."
+msgid ""
+"Include content contained in advisories with specified name. List option."
+msgstr "Inhalte in Hinweisen mit angegebenem Namen einbeziehen. Listenoption."
 
 #: commands/advisory/arguments.hpp:114
 msgid "ADVISORY_NAME,..."
 msgstr "HINWEIS_NAME,..."
 
 #: commands/advisory/arguments.hpp:121
-msgid "Limit to packages in security advisories."
-msgstr "Auf Pakete mit Sicherheitshinweisen beschränken."
+msgid "Include content contained in security advisories."
+msgstr "Inhalte in Sicherheitshinweisen einbeziehen."
 
 #: commands/advisory/arguments.hpp:128
-msgid "Limit to packages in bugfix advisories."
-msgstr "Auf Pakete mit Hinweisen zu Fehlerkorrekturen beschränken."
+msgid "Include content contained in bugfix advisories."
+msgstr "Inhalte in Hinweisen zu Fehlerkorrekturen einbeziehen."
 
 #: commands/advisory/arguments.hpp:135
-msgid "Limit to packages in enhancement advisories."
-msgstr "Auf Pakete mit Hinweisen zu Verbesserungen beschränken."
+msgid "Include content contained in enhancement advisories."
+msgstr "Inhalte in Hinweisen zu Verbesserungen einbeziehen."
 
 #: commands/advisory/arguments.hpp:142
-msgid "Limit to packages in newpackage advisories."
-msgstr "Auf Pakete mit Hinweisen in neuen Paketen beschränken."
+msgid "Include content contained in newpackage advisories."
+msgstr "Inhalte in Hinweisen in neuen Paketen einbeziehen."
 
 #. Note for translators: "critical" etc. quoted words are
 #. literals that should not be translated.
 #: commands/advisory/arguments.hpp:155
 msgid ""
-"Limit to packages in advisories with specified severity. List option. Can be "
-"\"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+"Include content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 msgstr ""
-"Auf Pakete in Hinweisen mit angegebenem Schweregrad beschränken. "
-"Listenoption. Mögliche Werte \"critical\", \"important\", \"moderate\", "
-"\"low\", \"none\"."
+"Inhalte in Hinweisen mit angegebenem Schweregrad einbeziehen. Listenoption. "
+"Mögliche Werte \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
 
 #: commands/advisory/arguments.hpp:157
 msgid "ADVISORY_SEVERITY,..."
@@ -124,11 +124,11 @@ msgstr "HINWEIS_SCHWEREGRAD,..."
 
 #: commands/advisory/arguments.hpp:169
 msgid ""
-"Limit to packages in advisories that fix a Bugzilla ID, Eg. 123123. List "
-"option."
+"Include content contained in advisories that fix a Bugzilla ID, Eg. 123123. "
+"List option."
 msgstr ""
-"Auf Pakete mit Hinweisen beschränken, die eine Bugzilla-ID beheben, z.B. "
-"123123. Listenoption."
+"Inhalte in Hinweisen einbeziehen, die eine Bugzilla-ID beheben, z.B. 123123. "
+"Listenoption."
 
 #: commands/advisory/arguments.hpp:170
 msgid "BUGZILLA_ID,..."
@@ -136,11 +136,11 @@ msgstr "BUGZILLA_ID,..."
 
 #: commands/advisory/arguments.hpp:180
 msgid ""
-"Limit to packages in advisories that fix a CVE (Common Vulnerabilities and "
-"Exposures) ID, Eg. CVE-2201-0123. List option."
+"Include content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
 msgstr ""
-"Auf Pakete mit Hinweisen beschränken, die eine CVE-ID (Common "
-"Vulnerabilities and Exposures) beheben, z.B. CVE-2201-0123. Listenoption."
+"Inhalte in Hinweisen einbeziehen, die eine CVE-ID (Common Vulnerabilities "
+"and Exposures) beheben, z.B. CVE-2201-0123. Listenoption."
 
 #: commands/advisory/arguments.hpp:182
 msgid "CVE_ID,..."
@@ -154,12 +154,12 @@ msgstr "Fehler beim Bereinigen des Cache: {}"
 msgid ""
 "Upgrade or downgrade installed software to the latest available versions"
 msgstr ""
-"Aktualisiere oder downgrade installierte Software auf die letzten verfügbare "
-"Versionen"
+"Installierte Software auf die letzten verfügbare Versionen aktualisieren "
+"oder herunterstufen"
 
 #: commands/group/group.cpp:41
 msgid "Manage comps groups"
-msgstr "Comp-Gruppen verwalten"
+msgstr "Comps-Gruppen verwalten"
 
 #: commands/group/group_list.hpp:37
 msgid "Show only available groups."
@@ -187,11 +187,11 @@ msgstr "Paketquellen verwalten"
 
 #: commands/repoquery/repoquery.cpp:95
 msgid "search for packages matching various criteria"
-msgstr "suche nach Paketen die verschiedene Kriterien erfüllen"
+msgstr "nach Paketen suchen, die verschiedene Kriterien erfüllen"
 
 #: commands/repoquery/repoquery.cpp:159
 msgid "Error parsing JSON object \"{}\": {}"
-msgstr "Fehler beim Parsen von JSON-Objekt \"{}\": {}"
+msgstr "Fehler beim Parsen des JSON-Objekts »{}«: {}"
 
 #: exception.cpp:28
 msgid ""
@@ -205,11 +205,11 @@ msgstr ""
 msgid ""
 "{}: Badly formatted argument value: Last key character cannot be '.': {}"
 msgstr ""
-"{}: Schlecht formatierter Argumentwert: Letzter Schlüsselwert kann nicht '.' "
-"sein: {}"
+"{}: Fehlerhaft formatierter Argumentwert: Letzter Schlüsselwert kann nicht "
+"».« sein: {}"
 
 #: main.cpp:258 main.cpp:308
 msgid ". Add \"--help\" for more information about the arguments."
 msgstr ""
-". Fügen Sie \"--help\" hinzu, um weitere Informationen zu den Argumenten zu "
+". Fügen Sie »--help« hinzu, um weitere Informationen zu den Argumenten zu "
 "erhalten."

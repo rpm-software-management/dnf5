@@ -8,10 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 03:27+0000\n"
-"PO-Revision-Date: 2025-03-28 09:52+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"POT-Creation-Date: 2025-06-19 03:39+0000\n"
+"PO-Revision-Date: 2025-06-01 05:33+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/dnf5/"
 "libdnf5/ko/>\n"
 "Language: ko\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: advisory/advisory.cpp:81
 msgid ""
@@ -34,7 +33,7 @@ msgid "Unsupported argument for REMOVE action: {}"
 msgstr "제거(REMOVE) 동작을 위해 미지원된 인수: {}"
 
 #. TODO(lukash) throw a proper exception
-#: base/goal.cpp:1593
+#: base/goal.cpp:1641
 msgid "Incorrect configuration value for multilib_policy: {}"
 msgstr "multilib_policy용 잘못된 구성 값: {}"
 
@@ -183,41 +182,49 @@ msgid "No match for argument: {}"
 msgstr "인수와 일치하지 않습니다 :{}"
 
 #: base/log_event.cpp:163
+msgid "No match for argument '{0}' in selected advisories"
+msgstr "선택된 권고 사항에서 인수 '{0}'와 일치하지 않습니다"
+
+#: base/log_event.cpp:165
+msgid "No match in selected advisories"
+msgstr "선택된 권고 사항에서 일치 부분이 없습니다"
+
+#: base/log_event.cpp:169
 msgid "No match for argument '{0}' in repositories '{1}'"
 msgstr "저장소 '{1}'에서 인수 '{0}'와 일치하지 않습니다"
 
-#: base/log_event.cpp:169
+#: base/log_event.cpp:175
 msgid "Cannot perform {0} for {1} '{2}' because it is not installed."
 msgstr "설치되지 않았기 때문에 {1} '{2}'를 위해 {0}를 수행 할 수 없습니다."
 
-#: base/log_event.cpp:174
+#: base/log_event.cpp:180
 msgid "Packages for argument '{}' available, but not installed."
 msgstr "인수 '{}'에 해당하는 꾸러미가 존재하지만 설치되어 있지 않습니다."
 
-#: base/log_event.cpp:178
+#: base/log_event.cpp:184
 msgid ""
 "Packages for argument '{}' available, but installed for a different "
 "architecture."
 msgstr ""
 "인수 '{}'를 위한 꾸러미는 사용 할 수 있지만 다른 구조를 위해 설치되었습니다."
 
-#: base/log_event.cpp:182
+#: base/log_event.cpp:188
 msgid "Cannot perform {0} because '{1}' matches only source packages."
 msgstr "'{1}'은 원천 꾸러미만 일치하기 때문에 {0}를 수행 할 수 없습니다."
 
-#: base/log_event.cpp:186
+#: base/log_event.cpp:192
 msgid "Argument '{}' matches only source packages."
 msgstr "인수 '{}'는 원천 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:190
+#: base/log_event.cpp:196
 msgid "Cannot perform {0} because '{1}' matches only excluded packages."
 msgstr "'{1}' 는 예외적인 꾸러미만 일치하기 때문에 {0} 를 수행 할 수 없습니다."
 
-#: base/log_event.cpp:194
+#: base/log_event.cpp:200
 msgid "Argument '{}' matches only excluded packages."
 msgstr "인수 '{}' 는 예외적인 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:198
+#: base/log_event.cpp:204
 msgid ""
 "Cannot perform {0} because '{1}' matches only packages excluded by "
 "versionlock."
@@ -225,19 +232,19 @@ msgstr ""
 "'{1}'는 versionlock에 의해 예외적인 꾸러미만 일치하기 때문에 {0} 를 수행 할 "
 "수 없습니다."
 
-#: base/log_event.cpp:202
+#: base/log_event.cpp:208
 msgid "Argument '{}' matches only packages excluded by versionlock."
 msgstr "인수 '{}'는 versionlock에 의해 예외적인 꾸러미만 일치합니다."
 
-#: base/log_event.cpp:207
+#: base/log_event.cpp:213
 msgid "  * Maybe you meant: {}"
 msgstr "  * 다음을 의미 할 수도 있습니다: {}"
 
-#: base/log_event.cpp:210
+#: base/log_event.cpp:216
 msgid "There are following alternatives for '{0}': {1}"
 msgstr "다음 대안이 있습니다 '{0}': {1}"
 
-#: base/log_event.cpp:217
+#: base/log_event.cpp:223
 msgid ""
 "The lowest available version of the \"{}\" package is already installed, "
 "cannot downgrade it."
@@ -245,7 +252,7 @@ msgstr ""
 "\"{}\" 꾸러미의 최저 사용 가능 버전이 이미 설치되었으며, 이를 하향 할 수 없습"
 "니다."
 
-#: base/log_event.cpp:223
+#: base/log_event.cpp:229
 msgid ""
 "Installed packages for argument '{0}' are not available in repositories in "
 "the same version, available versions: {1}, cannot reinstall."
@@ -253,35 +260,35 @@ msgstr ""
 "인수 '{0}'를 위해 설치된 꾸러미는 동일한 버전의 저장소에서 사용 할 수 없으"
 "며, 사용 가능한 버전: {1}, 재설치 할 수 없습니다."
 
-#: base/log_event.cpp:229
+#: base/log_event.cpp:235
 msgid ""
 "Cannot perform {0} because '{1}' is installed in a different version: '{2}'."
 msgstr ""
 "'{1}'은 다른 버전으로 설치되었기 때문에 {0} 을 수행 할 수 없습니다: '{2}'."
 
-#: base/log_event.cpp:235
+#: base/log_event.cpp:241
 msgid ""
 "Packages for argument '{}' installed and available, but in a different "
 "version."
 msgstr "인수 '{}'를 위한 꾸러미가 설치되고 사용 할 수 있지만, 다른 버전입니다."
 
-#: base/log_event.cpp:237
+#: base/log_event.cpp:243
 msgid "Packages for argument '{}' installed, but not available."
 msgstr "인수 '{}'를 위한 꾸러미가 설치되었지만, 사용 할 수 없습니다."
 
-#: base/log_event.cpp:246
+#: base/log_event.cpp:252
 msgid "Package \"{}\" is already installed with reason \"{}\"."
 msgstr "꾸러미 \"{}\"가 이미 원인 \"{}\"으로 설치되어 있습니다."
 
-#: base/log_event.cpp:248
+#: base/log_event.cpp:254
 msgid "Package \"{}\" is already installed."
 msgstr "\"{}\" 꾸러미는 이미 설치되었습니다."
 
-#: base/log_event.cpp:257
+#: base/log_event.cpp:263
 msgid "Debug data written to \"{}\""
 msgstr "\"{}\"로 작성된 디버그 자료"
 
-#: base/log_event.cpp:261
+#: base/log_event.cpp:267
 msgid ""
 "{0} upgrade cannot be reverted, however associated package actions will be. "
 "({1} id: '{2}') ."
@@ -289,16 +296,16 @@ msgstr ""
 "{0} 향상은 되돌릴 수 없지만, 연관된 꾸러미 동작은 가능합니다 ({1} id: "
 "'{2}') ."
 
-#: base/log_event.cpp:267
+#: base/log_event.cpp:273
 msgid "{} action for argument \"{}\" is not supported."
 msgstr "인수 \"{}\"를 위한 {} 동작이 지원되지 않습니다."
 
 #. Format a leading line of the error message.
-#: base/log_event.cpp:276
+#: base/log_event.cpp:282
 msgid "Unable to resolve argument '{}':"
 msgstr "인수를 해결 할 수 없습니다 '{}':"
 
-#: base/log_event.cpp:280
+#: base/log_event.cpp:286
 msgid ""
 "\n"
 "  - Argument '{}' matches {} stream ('{}') of module '{}', but the stream is "
@@ -312,29 +319,29 @@ msgstr[0] ""
 "  - 인수 '{}'는 모듈 '{}'의 {} 스트림 ('{}')과 일치하지만, 스트림의 어떤 것"
 "도 활성화 되었거나 기본값이 아닙니다."
 
-#: base/log_event.cpp:287
+#: base/log_event.cpp:293
 msgid "', '"
 msgstr "', '"
 
-#: base/log_event.cpp:296
+#: base/log_event.cpp:302
 msgid "Modular dependency problems:\n"
 msgstr "모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:303
+#: base/log_event.cpp:309
 msgid "Modular dependency problems with the latest modules:\n"
 msgstr "최신 모듈을 갖는 모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:310
+#: base/log_event.cpp:316
 msgid "Modular dependency problems with the defaults:\n"
 msgstr "기본값과 함께 모듈식 의존성 문제:\n"
 
-#: base/log_event.cpp:325
+#: base/log_event.cpp:331
 msgid ""
 "The operation would result in switching of module '{0}' stream '{1}' to "
 "stream '{2}'\n"
 msgstr "이 작업은 '{0}' 모듈을 '{1}' 스트림에서 ‘{2}' 스트림으로 전환합니다\n"
 
-#: base/log_event.cpp:330
+#: base/log_event.cpp:336
 msgid ""
 "Error: It is not possible to switch enabled streams of a module unless "
 "explicitly enabled via configuration option module_stream_switch."
@@ -342,7 +349,7 @@ msgstr ""
 "오류: 환경설정 옵션 module_stream_switch를 통해 명시적으로 활성화하지 않으면 "
 "모듈의 활성화된 스트림 전환이 불가능합니다."
 
-#: base/log_event.cpp:335
+#: base/log_event.cpp:341
 msgid ""
 "Extra package '{0}' (with action '{1}') which is not present in the stored "
 "transaction was pulled into the transaction.\n"
@@ -350,11 +357,11 @@ msgstr ""
 "저장된 연결에서 존재하지 않는 추가 꾸러미 '{0}' (동작 '{1}'과 함께)는 연결로 "
 "참여되었습니다.\n"
 
-#: base/log_event.cpp:341
+#: base/log_event.cpp:347
 msgid "Cannot parse file: '{0}': {1}.\n"
 msgstr "파일을 구문 분석 할 수 없습니다: '{0}': {1}.\n"
 
-#: base/log_event.cpp:348
+#: base/log_event.cpp:354
 msgid ""
 "Could not find debuginfo package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -362,12 +369,12 @@ msgstr ""
 "인수에서 해결된 다음 꾸러미를 위한 debuginfo 꾸러미를 찾을 수 없습니다 "
 "'{0}': {1}"
 
-#: base/log_event.cpp:351 base/log_event.cpp:362
+#: base/log_event.cpp:357 base/log_event.cpp:368
 msgctxt "String for joining NEVRAs - e.g. `foo-4-4.noarch, bar-5-5.noarch`"
 msgid ", "
 msgstr ", "
 
-#: base/log_event.cpp:358
+#: base/log_event.cpp:364
 msgid ""
 "Could not find debugsource package for the following packages resolved from "
 "the argument '{0}': {1}"
@@ -375,7 +382,7 @@ msgstr ""
 "인수에서 해결된 다음 꾸러미를 위한 debugsource 꾸러미를 찾을 수 없습니다 "
 "'{0}': {1}"
 
-#: base/log_event.cpp:365
+#: base/log_event.cpp:371
 msgid "Transaction merge error: '{0}'"
 msgstr "연결 병합 오류: '{0}'"
 
@@ -895,7 +902,7 @@ msgstr "Plugins::load_plugins(): config_dir_path는 비워 둘 수 없습니다"
 msgid "Cannot load libdnf plugin enabled from: {}"
 msgstr "다음에서 활성화된 libdnf 플러그인을 적재 할 수 없습니다: {}"
 
-#: repo/config_repo.cpp:569
+#: repo/config_repo.cpp:581
 msgid "get_unique_id(): Computation of SHA256 failed"
 msgstr "get_unique_id(): SHA256 연산이 실패함"
 
@@ -932,29 +939,33 @@ msgstr "이미 내려받음"
 msgid "Failed to download packages"
 msgstr "꾸러미를 내려받는 데 실패함"
 
-#: repo/repo.cpp:59
+#: repo/repo.cpp:61
 msgid "Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"
 msgstr "적재하는 데 실패함 RPM \"{}\": \".rpm\" 확장을 가지지 않습니다"
 
-#: repo/repo.cpp:63
+#: repo/repo.cpp:65
 msgid "Failed to access RPM \"{}\": {}"
 msgstr "접근 하는 데 실패함 RPM \"{}\": {}"
 
-#: repo/repo.cpp:105
+#: repo/repo.cpp:107
 msgid "Invalid repository id \"{}\": unexpected character '{}'"
 msgstr "잘못된 저장소 id \"{}\": 예상치 못한 문자 '{}'"
 
-#: repo/repo.cpp:148
+#: repo/repo.cpp:150
 msgid "Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."
 msgstr ""
 "저장소 \"{}\"는 원천(baseurl, mirrorlist 또는 metalink) 구성을 갖고 있지 않습"
 "니다."
 
-#: repo/repo.cpp:159
+#: repo/repo.cpp:161
 msgid "Repository \"{}\" has unsupported type \"{}\", skipping."
 msgstr "저장소 \"{}는 미지원 유형 \"{}\"을 가지며, 건너뜁니다."
 
-#: repo/repo.cpp:410
+#: repo/repo.cpp:221 repo/repo.cpp:241 repo/repo_sack.cpp:372
+msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\": {}"
+msgstr "저장소를 위한 메타자료 ({}: \"{}\") 를 내려받는 데 실패함 \"{}\": {}"
+
+#: repo/repo.cpp:439
 msgid ""
 "Failed to load repository: \"primary\" data not present or in unsupported "
 "format"
@@ -962,19 +973,19 @@ msgstr ""
 "저장소를 적재 하는 데 실패함: \"primary\" 자료는 표시되지 않거나 미지원되는 "
 "형식"
 
-#: repo/repo.cpp:476
+#: repo/repo.cpp:505
 msgid "Failed to load comps \"{}\": doesn't have the \".xml\" extension"
 msgstr "comps를 적재하는 데 실패함 \"{}: \".xml\" 확장을 가지고 있지 않습니다"
 
-#: repo/repo.cpp:483
+#: repo/repo.cpp:512
 msgid "Failed to load xml Comps \"{}\": {}"
 msgstr "xml Comps를 적재하는 데 실패함 \"{}\": {}"
 
-#: repo/repo.cpp:501
+#: repo/repo.cpp:530
 msgid "Failed to load RPM \"{}\": {}"
 msgstr "적재하는 데 실패함 RPM \"{}\": {}"
 
-#: repo/repo_cache.cpp:252
+#: repo/repo_cache.cpp:255
 msgid "Unable to determine id of the repository in the cache."
 msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 
@@ -982,29 +993,33 @@ msgstr "캐쉬에서 저장소의 id를 결정 할 수 없습니다."
 msgid "Empty path to the repository cache directory."
 msgstr "저장소 캐쉬 디렉토리에 빈 경로."
 
-#: repo/repo_downloader.cpp:138
+#: repo/repo_downloader.cpp:214
 msgid "Librepo error: {}"
 msgstr "Librepo 오류: {}"
 
-#: repo/repo_downloader.cpp:170
-msgid "Failed to download metadata ({}: \"{}\") for repository \"{}\""
-msgstr "저장소 \"{}\"를 위한 메타자료 ({}: \"{}\")를 내려받는 데 실패함"
+#: repo/repo_downloader.cpp:258
+msgid "Failed to set up metadata download"
+msgstr "메타자료 내려받기를 설정 하는 데 실패함"
 
-#: repo/repo_downloader.cpp:241
+#: repo/repo_downloader.cpp:312 repo/repo_downloader.cpp:362
+msgid "Failed to download metadata"
+msgstr "메타자료를 내려받는 데 실패함"
+
+#: repo/repo_downloader.cpp:426
 msgid "Error checking if metalink \"{}\" is in sync for repository \"{}\""
 msgstr ""
 "만약 metalink \"{}\"가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:271
+#: repo/repo_downloader.cpp:446
 msgid "Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""
 msgstr ""
 "만약 repomd ({}: \"{}\")가 저장소 \"{}\"를 위해 동기화 중인지 확인 중에 오류"
 
-#: repo/repo_downloader.cpp:336
+#: repo/repo_downloader.cpp:515
 msgid "Error loading local metadata for repository \"{}\""
 msgstr "저장소 \"{}\"를 위해 로컬 메타자료를 적재 중에 오류"
 
-#: repo/repo_downloader.cpp:475
+#: repo/repo_downloader.cpp:597
 msgid ""
 "No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""
 msgstr ""
@@ -1023,53 +1038,53 @@ msgstr "Openpgp 키를 나열하는 데 실패함: {}"
 msgid "Failed to import OpenPGP keys: {}"
 msgstr "Openpgp 키를 가져오는 데 실패함: {}"
 
-#: repo/repo_sack.cpp:148
+#: repo/repo_sack.cpp:159
 msgid ""
 "Failed to create repo \"{}\": Id is present more than once in the "
 "configuration"
 msgstr "repo \"{}\"를 생성하는 데 실패함: Id는 구성에서 두 번 이상 존재합니다"
 
-#: repo/repo_sack.cpp:575
+#: repo/repo_sack.cpp:635
 msgid "Cache-only enabled but no cache for repository \"{}\""
 msgstr "캐쉬-전용이 활성화되었으나 저장소를 위한 캐쉬가 없습니다 \"{}\""
 
-#: repo/solv_repo.cpp:266
+#: repo/solv_repo.cpp:267
 msgid "Failed to load repomd for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 repomd를 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:274
+#: repo/solv_repo.cpp:275
 msgid "Failed to load primary for repo \"{}\" from \"{}\": {}."
 msgstr "\"{}\"에서 repo \"{}\"를 위해 우선 적재하는 데 실패함: {}."
 
-#: repo/solv_repo.cpp:322
+#: repo/solv_repo.cpp:323
 msgid "Unsupported extended repodata type for the system repo: \"{}\"."
 msgstr "시스템 repo를 위한 확장된 repodate 유형이 지원되지 않습니다: \"{}\"."
 
-#: repo/solv_repo.cpp:394
+#: repo/solv_repo.cpp:395
 msgid "Failed to load {} extension for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 확장을 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:430
+#: repo/solv_repo.cpp:431
 msgid "Failed to load system repo from root \"{}\": {}"
 msgstr "root에서 시스템 repo를 적재하는 데 실패함 \"{}\": {}"
 
-#: repo/solv_repo.cpp:531
+#: repo/solv_repo.cpp:532
 msgid "Failed to load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:585
+#: repo/solv_repo.cpp:586
 msgid "Failed to write primary cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 기본 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:607
+#: repo/solv_repo.cpp:608
 msgid "Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 기본 캐쉬를 재-적재하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:672
+#: repo/solv_repo.cpp:673
 msgid "Failed to write {} cache for repo \"{}\" to \"{}\": {}"
 msgstr "repo \"{}\"를 위한 {} 캐쉬를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: repo/solv_repo.cpp:693
+#: repo/solv_repo.cpp:694
 msgid "Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"
 msgstr "\"{}\"에서 repo \"{}\"를 위한 {} 캐쉬를 재-적재하는 데 실패함: {}"
 
@@ -1127,72 +1142,72 @@ msgid "Failed to import public key \"{}\" to rpmdb: {}"
 msgstr "공개 키 \"{}\"를 rpmdb로 가져오는 데 실패함: {}"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:112
+#: rpm/transaction.cpp:114
 msgid "Cannot set root directory \"{}\""
 msgstr "root 디렉토리 \"{}\"로 설정 할 수 없습니다"
 
-#: rpm/transaction.cpp:123
+#: rpm/transaction.cpp:125
 #, c-format
 msgid "Error %i opening rpm database"
 msgstr "rpm 데이타베이스를 여는 동안 오류 %i가 발생했습니다"
 
-#: rpm/transaction.cpp:132
+#: rpm/transaction.cpp:134
 msgid "The rpmdbCookie() function did not return cookie of rpm database."
 msgstr "rpmdbCookie() 함수는 rpm 데이타베이스의 쿠키를 반환하지 않습니다."
 
-#: rpm/transaction.cpp:197
+#: rpm/transaction.cpp:199
 msgid "Failed to order the rpm transaction."
 msgstr "rpm 연결을 명령하는 데 실패함."
 
-#: rpm/transaction.cpp:233
+#: rpm/transaction.cpp:235
 msgid ""
 "Failed to set scriptlet output file, cannot duplicate file descriptor: {}"
 msgstr ""
 "구현 출력 파일을 설정하는 데 실패함, 파일 설명자를 복제 할 수 없습니다: {}"
 
-#: rpm/transaction.cpp:252
+#: rpm/transaction.cpp:254
 msgid "Failed to set scriptlet output file, cannot open file \"{}\": {}"
 msgstr "구현 출력 파일을 설정하는 데 실패함, 파일을 열 수 없습니다 \"{}\": {}"
 
-#: rpm/transaction.cpp:273
+#: rpm/transaction.cpp:275
 msgid "Failed to read package header, cannot open file \"{}\": {}"
 msgstr "꾸러미 헤더를 읽는 데 실패함, 파일을 열 수 없습니다 \"{}\": {}"
 
-#: rpm/transaction.cpp:290
+#: rpm/transaction.cpp:292
 msgid "Failed to read package header from file \"{}\""
 msgstr "파일에서 꾸러미 헤더를 읽은 데 실패함 \"{}\""
 
-#: rpm/transaction.cpp:303
+#: rpm/transaction.cpp:305
 msgid "Cannot init rpm database iterator"
 msgstr "rpm 데이타베이스 반복자(database iterator)를 초기화 할 수 없습니다"
 
-#: rpm/transaction.cpp:307
+#: rpm/transaction.cpp:309
 msgid "Package was not found in rpm database"
 msgstr "꾸러미가 rpm 데이타베이스에서 찾을 수 없습니다"
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:323
+#: rpm/transaction.cpp:325
 msgid "Cannot reinstall package \"{}\""
 msgstr "꾸러미를 재설치 할 수 없습니다 \"{}\""
 
 #. TODO(jrohel): Why? Librpm does not provide this information.
-#: rpm/transaction.cpp:341
+#: rpm/transaction.cpp:343
 msgid "Cannot remove package \"{}\""
 msgstr "꾸러미를 제거 할 수 없습니다 \"{}\""
 
-#: rpm/transaction.cpp:360
+#: rpm/transaction.cpp:362
 msgid "Cannot upgrade package \"{}\""
 msgstr "꾸러미를 향상 할 수 없습니다 \"{}\""
 
-#: rpm/transaction.cpp:364
+#: rpm/transaction.cpp:366
 msgid "Cannot downgrade package \"{}\""
 msgstr "꾸러미를 하향 할 수 없습니다 \"{}\""
 
-#: rpm/transaction.cpp:368
+#: rpm/transaction.cpp:370
 msgid "Cannot install package \"{}\""
 msgstr "꾸러미를 설치 할 수 없습니다 \"{}\""
 
-#: rpm/versionlock_config.cpp:284 system/state.cpp:573
+#: rpm/versionlock_config.cpp:284 system/state.cpp:605
 msgid "{}"
 msgstr "{}"
 
@@ -1205,21 +1220,21 @@ msgstr "epoch \"{}\"를 숫자로 변환하는 데 실패함"
 msgid "Writing debugsolver data into \"{}\" failed: {}"
 msgstr "debugsolver 자료를 \"{}\"로 작성하는 데 실패함: {}"
 
-#: system/state.cpp:280 system/state.cpp:289
+#: system/state.cpp:282 system/state.cpp:291
 msgid "Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"
 msgstr "잘못된 TOML 버전 \"{}\", \"MAJOR.MINOR\" 예상됨"
 
-#: system/state.cpp:297
+#: system/state.cpp:299
 msgid "{} state for \"{}\" not found."
 msgstr "\"{}\"를 위한 {} 상태를 찾을 수 없습니다."
 
-#: system/state.cpp:301
+#: system/state.cpp:303
 msgid "Loading system state TOML file {} failed (see dnf5-system-state(7)): {}"
 msgstr ""
 "시스템 상태 TOML 파일 {}를 적재하는 데 실패했습니다 (dnf5-system-state(7)을 "
 "참고하세요): {}"
 
-#: system/state.cpp:602
+#: system/state.cpp:640
 msgid "Unsupported TOML version \"{}\", maximum supported version is \"{}\""
 msgstr "미지원 TOML 버전 \"{}\", 최대 지원된 버전은 \"{}\"입니다"
 
