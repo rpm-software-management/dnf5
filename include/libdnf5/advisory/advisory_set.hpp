@@ -132,6 +132,14 @@ private:
     LIBDNF_LOCAL AdvisorySet(const BaseWeakPtr & base, libdnf5::solv::SolvMap & solv_map);
     class LIBDNF_LOCAL Impl;
     std::unique_ptr<Impl> p_impl;
+
+    /// Gather AdvisoryPackages for each Advisory in the set.
+    /// The AdvisoryPackages are sorted by name, arch and evr. name and arch are
+    /// compared as strings, evr uses libdnf5::rpm::evrcmp() function.
+    ///
+    /// @param only_applicable Whether to return only AdvisoryPackages from applicable AdvisoryCollections.
+    LIBDNF_LOCAL std::vector<AdvisoryPackage> get_advisory_packages_sorted_by_name_arch_evr_string(
+        bool only_applicable = false) const;
 };
 
 }  // namespace libdnf5::advisory
