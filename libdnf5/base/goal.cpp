@@ -2333,7 +2333,6 @@ GoalProblem Goal::Impl::add_up_down_distrosync_to_goal(
                 libdnf5::Logger::Level::WARNING);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES;
         }
-        query |= installed;
     }
 
     // Apply advisory filters
